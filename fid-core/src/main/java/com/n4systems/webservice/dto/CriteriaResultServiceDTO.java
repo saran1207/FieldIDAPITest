@@ -13,6 +13,7 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	public static final String SIGNATURE = "SIGNATURE";
 	public static final String TYPE_DATE_FIELD = "DATE_FIELD";
 	public static final String TYPE_NUMBER_FIELD = "NUMBER_FIELD";
+	public static final String TYPE_SCORE = "SCORE";
 	
 	private long criteriaId;
 	private long stateId;
@@ -28,6 +29,7 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	private byte[] signatureImage;
 	private Date dateFieldValue;
 	private Float numberFieldValue;
+	private long scoreId;
 	
 	public long getCriteriaId() {
 		return criteriaId;
@@ -140,5 +142,12 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	public Float getNumberFieldValue() {
 		return numberFieldValue;
 	}
-	
+
+	public void setScoreId(long scoreId) {
+		this.scoreId = scoreId;
+	}
+
+	public long getScoreId() {
+		return scoreId;
+	}	
 }

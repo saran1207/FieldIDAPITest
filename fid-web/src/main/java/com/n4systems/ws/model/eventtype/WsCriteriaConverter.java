@@ -7,6 +7,8 @@ import com.n4systems.model.CriteriaType;
 import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.NumberFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.Score;
+import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.State;
@@ -16,13 +18,16 @@ import com.n4systems.ws.model.WsModelConverter;
 
 public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> {
 	private final WsModelConverter<State, WsState> stateConverter;
+	private final WsModelConverter<Score, WsScore> scoreConverter;	
 	
 	public WsCriteriaConverter() {
-		this(new WsStateConverter());
+		this(new WsStateConverter(), new WsScoreConverter());
 	}
 	
-	protected WsCriteriaConverter(WsModelConverter<State, WsState> stateConverter) {
+	protected WsCriteriaConverter(WsModelConverter<State, WsState> stateConverter
+			, WsModelConverter<Score, WsScore> scoreConverter) {
 		this.stateConverter = stateConverter;
+		this.scoreConverter = scoreConverter;
 	}
 	
 	@Override
@@ -44,6 +49,8 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 			wsModel = convertDateFieldCriteria((DateFieldCriteria)model);
 		} else if(model.getCriteriaType() == CriteriaType.NUMBER_FIELD) {
 			wsModel = convertNumberFieldCriteria((NumberFieldCriteria)model);
+		} else if(model.getCriteriaType() == CriteriaType.SCORE) {
+			wsModel = convertScoreCriteria((ScoreCriteria)model);
 		} else {
 			throw new NotImplementedException("Conversion not implemented for Criteria type: " + model.getClass().getName());
 		}
@@ -104,6 +111,12 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 	private WsCriteria convertNumberFieldCriteria(NumberFieldCriteria model) {
 		WsNumberFieldCriteria wsModel = new WsNumberFieldCriteria();
 		wsModel.setDecimalPlaces(model.getDecimalPlaces());
+		return wsModel;
+	}
+	
+	private WsCriteria convertScoreCriteria(ScoreCriteria model) {		
+		WsScoreCriteria wsModel = new WsScoreCriteria();
+		wsModel.setScores(scoreConverter.fromModels(model.getScoreGroup().getScores()));
 		return wsModel;
 	}
 }

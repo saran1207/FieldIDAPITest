@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.Score;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.State;
@@ -52,7 +53,10 @@ public class WsCriteriaConverterTest {
 		EasyMock.expect(stateConverter.fromModels(model.getStates().getStates())).andReturn(wsStates);
 		EasyMock.replay(stateConverter);
 		
-		WsCriteria wsModel = new WsCriteriaConverter(stateConverter).fromModel(model);
+		WsModelConverter<Score, WsScore> scoreConverter = EasyMock.createMock(WsModelConverter.class);
+		EasyMock.replay(scoreConverter);
+		
+		WsCriteria wsModel = new WsCriteriaConverter(stateConverter, scoreConverter).fromModel(model);
 		
 		EasyMock.verify(stateConverter);
 		
@@ -71,7 +75,10 @@ public class WsCriteriaConverterTest {
 		WsModelConverter<State, WsState> stateConverter = EasyMock.createMock(WsModelConverter.class);
 		EasyMock.replay(stateConverter);
 		
-		WsCriteria wsModel = new WsCriteriaConverter(stateConverter).fromModel(model);
+		WsModelConverter<Score, WsScore> scoreConverter = EasyMock.createMock(WsModelConverter.class);
+		EasyMock.replay(scoreConverter);
+		
+		WsCriteria wsModel = new WsCriteriaConverter(stateConverter, scoreConverter).fromModel(model);
 		
 		EasyMock.verify(stateConverter);
 		
@@ -88,7 +95,10 @@ public class WsCriteriaConverterTest {
 		WsModelConverter<State, WsState> stateConverter = EasyMock.createMock(WsModelConverter.class);
 		EasyMock.replay(stateConverter);
 		
-		WsCriteria wsModel = new WsCriteriaConverter(stateConverter).fromModel(model);
+		WsModelConverter<Score, WsScore> scoreConverter = EasyMock.createMock(WsModelConverter.class);
+		EasyMock.replay(scoreConverter);
+		
+		WsCriteria wsModel = new WsCriteriaConverter(stateConverter, scoreConverter).fromModel(model);
 		
 		EasyMock.verify(stateConverter);
 		
@@ -106,7 +116,10 @@ public class WsCriteriaConverterTest {
 		WsModelConverter<State, WsState> stateConverter = EasyMock.createMock(WsModelConverter.class);
 		EasyMock.replay(stateConverter);
 		
-		WsCriteria wsModel = new WsCriteriaConverter(stateConverter).fromModel(model);
+		WsModelConverter<Score, WsScore> scoreConverter = EasyMock.createMock(WsModelConverter.class);
+		EasyMock.replay(scoreConverter);
+		
+		WsCriteria wsModel = new WsCriteriaConverter(stateConverter,scoreConverter).fromModel(model);
 		
 		EasyMock.verify(stateConverter);
 		
@@ -125,7 +138,10 @@ public class WsCriteriaConverterTest {
 		WsModelConverter<State, WsState> stateConverter = EasyMock.createMock(WsModelConverter.class);
 		EasyMock.replay(stateConverter);
 		
-		WsCriteria wsModel = new WsCriteriaConverter(stateConverter).fromModel(model);
+		WsModelConverter<Score, WsScore> scoreConverter = EasyMock.createMock(WsModelConverter.class);
+		EasyMock.replay(scoreConverter);
+		
+		WsCriteria wsModel = new WsCriteriaConverter(stateConverter, scoreConverter).fromModel(model);
 		
 		EasyMock.verify(stateConverter);
 		
@@ -147,7 +163,10 @@ public class WsCriteriaConverterTest {
 		WsModelConverter<State, WsState> stateConverter = EasyMock.createMock(WsModelConverter.class);
 		EasyMock.replay(stateConverter);
 		
-		WsCriteria wsModel = new WsCriteriaConverter(stateConverter).fromModel(model);
+		WsModelConverter<Score, WsScore> scoreConverter = EasyMock.createMock(WsModelConverter.class);
+		EasyMock.replay(scoreConverter);
+		
+		WsCriteria wsModel = new WsCriteriaConverter(stateConverter, scoreConverter).fromModel(model);
 		
 		EasyMock.verify(stateConverter);
 		
@@ -169,7 +188,10 @@ public class WsCriteriaConverterTest {
 		WsModelConverter<State, WsState> stateConverter = EasyMock.createMock(WsModelConverter.class);
 		EasyMock.replay(stateConverter);
 		
-		WsCriteria wsModel = new WsCriteriaConverter(stateConverter).fromModel(model);
+		WsModelConverter<Score, WsScore> scoreConverter = EasyMock.createMock(WsModelConverter.class);
+		EasyMock.replay(scoreConverter);
+		
+		WsCriteria wsModel = new WsCriteriaConverter(stateConverter, scoreConverter).fromModel(model);
 		
 		EasyMock.verify(stateConverter);
 		

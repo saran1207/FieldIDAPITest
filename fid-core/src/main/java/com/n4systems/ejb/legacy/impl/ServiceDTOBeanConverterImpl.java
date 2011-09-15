@@ -54,6 +54,8 @@ import com.n4systems.model.Observation;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.Project;
 import com.n4systems.model.Recommendation;
+import com.n4systems.model.Score;
+import com.n4systems.model.ScoreCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.State;
@@ -704,6 +706,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			} else if(resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_NUMBER_FIELD)) {
 				result = new NumberFieldCriteriaResult();
 				((NumberFieldCriteriaResult)result).setValue(resultDTO.getNumberFieldValue());
+			} else if(resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_SCORE)){
+				result = new ScoreCriteriaResult();
+				((ScoreCriteriaResult)result).setScore(persistenceManager.find(Score.class, resultDTO.getScoreId()));
 			} else {
 				throw new NotImplementedException("Conversion of CriteriaResultServiceDTO [" + resultDTO.getType() + "] not implemented");
 			}
@@ -846,6 +851,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		} else if(criteriaResult instanceof NumberFieldCriteriaResult) {
 			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_NUMBER_FIELD);
 			criteriaResultServiceDTO.setNumberFieldValue(((NumberFieldCriteriaResult)criteriaResult).getValue());
+		} else if(criteriaResult instanceof ScoreCriteriaResult) {
+			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_SCORE);
+			criteriaResultServiceDTO.setScoreId(((ScoreCriteriaResult)criteriaResult).getScore().getId());
 		} else {
 			throw new NotImplementedException("Conversion of CriteriaResult [" + criteriaResult.getClass() + "] not implemented");
 		}
