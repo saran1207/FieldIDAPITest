@@ -3,28 +3,28 @@ package com.n4systems.exporting;
 import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.conversion.event.EventToViewConverter;
 import com.n4systems.api.model.EventView;
-import com.n4systems.exporting.beanutils.ExportMapMarshaler;
+import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.model.Event;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.persistence.loaders.ListLoader;
 
 public class EventExporter implements Exporter {
-	private final ExportMapMarshaler<EventView> marshaler;
+	private final ExportMapMarshaller<EventView> marshaller;
 	private final ListLoader<Event> eventLoader;
 	private final ModelToViewConverter<Event, EventView> converter;
 
-	public EventExporter(ListLoader<Event> eventLoader, ExportMapMarshaler<EventView> marshaler, ModelToViewConverter<Event, EventView> converter) {
+	public EventExporter(ListLoader<Event> eventLoader, ExportMapMarshaller<EventView> marshaller, ModelToViewConverter<Event, EventView> converter) {
 		this.eventLoader = eventLoader;
-		this.marshaler = marshaler;
+		this.marshaller = marshaller;
 		this.converter = converter;
 	}
 	
 	public EventExporter(ListLoader<Event> eventLoader, NextEventDateByEventLoader nextDateLoader) {
-		this(eventLoader, new ExportMapMarshaler<EventView>(EventView.class), new EventToViewConverter(nextDateLoader));
+		this(eventLoader, new ExportMapMarshaller<EventView>(EventView.class), new EventToViewConverter(nextDateLoader));
 	}
 
-	public EventExporter(ListLoader<Event> eventLoader, NextEventDateByEventLoader nextDateLoader, ExportMapMarshaler<EventView> exportMapMarshaler) {
+	public EventExporter(ListLoader<Event> eventLoader, NextEventDateByEventLoader nextDateLoader, ExportMapMarshaller<EventView> exportMapMarshaler) {
 		this(eventLoader, exportMapMarshaler, new EventToViewConverter(nextDateLoader));
 	}
 
@@ -35,7 +35,7 @@ public class EventExporter implements Exporter {
 		for (Event event : eventLoader.load()) {
 			try {
 				view = converter.toView(event);
-				mapWriter.write(marshaler.toBeanMap(view));
+				mapWriter.write(marshaller.toBeanMap(view));
 			} catch (Exception e) {
 				throw new ExportException(String.format("Unable to export event [%s]", event), e);
 			}

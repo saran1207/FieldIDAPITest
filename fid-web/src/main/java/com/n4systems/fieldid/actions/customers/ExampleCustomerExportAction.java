@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exporting.beanutils.ExportMapMarshaler;
+import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.downloaders.AbstractDownloadAction;
@@ -81,7 +81,7 @@ public class ExampleCustomerExportAction extends AbstractDownloadAction {
 
 	@Override
 	protected boolean initializeDownload() {
-		ExportMapMarshaler<FullExternalOrgView> marshaler = new ExportMapMarshaler<FullExternalOrgView>(FullExternalOrgView.class);
+		ExportMapMarshaller<FullExternalOrgView> marshaler = new ExportMapMarshaller<FullExternalOrgView>(FullExternalOrgView.class);
 		
 		MapWriter writer = null;
 		try {

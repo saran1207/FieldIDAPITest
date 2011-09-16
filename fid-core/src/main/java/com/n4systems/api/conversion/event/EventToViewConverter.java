@@ -10,8 +10,10 @@ import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.model.EventView;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
+import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
 import com.n4systems.model.orgs.BaseOrg;
 
 public class EventToViewConverter implements ModelToViewConverter<Event, EventView> {
@@ -19,6 +21,10 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 	
 	public EventToViewConverter(NextEventDateByEventLoader nextDateLoader) {
 		this.nextDateLoader = nextDateLoader;
+	}
+
+	public EventToViewConverter() {
+		this(new NextEventDateByEventPassthruLoader());
 	}
 
 	@Override
@@ -54,7 +60,11 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 		CriteriaResultView resultView = new CriteriaResultView();		
 		Criteria criteria = result.getCriteria();
 		
-		resultView.setSection(model.findSection(criteria).getDisplayName());
+		CriteriaSection section = model.findSection(criteria);
+		String sectionName = section!=null ? section.getDisplayName() : "undefined section for " + criteria.getDisplayName();
+		// FIXME DD : section should NEVER be null but somehow it is.  this could be an issue with my (ddick) local DB or 
+		// possibly an issue with saving criteria that aren't in any of event sections forms. hmmm...
+		resultView.setSection(sectionName);
 		resultView.setDisplayText(result.getCriteria().getDisplayText());
 		// NOTE : for exporting, we leave these fields blank.
 		resultView.setRecommendation("");		

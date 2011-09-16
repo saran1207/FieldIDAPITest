@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ModelToViewConverter;
-import com.n4systems.exporting.beanutils.ExportMapMarshaler;
+import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -39,7 +39,7 @@ public class EventExporterTest {
 		expect(converter.toView(model2)).andReturn(view2);
 		replay(converter);
 		
-		ExportMapMarshaler<EventView> marshaler = createMock(ExportMapMarshaler.class);
+		ExportMapMarshaller<EventView> marshaler = createMock(ExportMapMarshaller.class);
 		expect(marshaler.toBeanMap(view1)).andReturn(map1);
 		expect(marshaler.toBeanMap(view2)).andReturn(map2);
 		replay(marshaler);

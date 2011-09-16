@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Scope;
 
 import com.n4systems.model.security.SecurityFilter;
 
+// NOTE : thread scope is used as opposed to "request" because this bean is also used in background tasks that are not in the middle of a web request.
 @Scope("thread")
 public class SecurityContext {
 	private SecurityFilter userSecurityFilter;
@@ -31,9 +32,15 @@ public class SecurityContext {
 		this.tenantSecurityFilter = tenantSecurityFilter;
 	}
 
-	public void clear() {
+	public void set(SecurityContext securityContext) { 
+		userSecurityFilter = securityContext.getUserSecurityFilter();
+		tenantSecurityFilter = securityContext.getTenantSecurityFilter();
+	}
+	
+	public void reset() {
 		userSecurityFilter = null;
 		tenantSecurityFilter = null;
 	}
 	
+
 }

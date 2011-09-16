@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ModelToViewConverter;
-import com.n4systems.exporting.beanutils.ExportMapMarshaler;
+import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -25,7 +25,7 @@ public class AssetExporterTest {
 	@Test
 	public void test_export() throws ExportException, ConversionException, MarshalingException, IOException {
 		ListLoader<Asset> assetLoader = createMock(ListLoader.class);
-		ExportMapMarshaler<AssetView> marshaler = createMock(ExportMapMarshaler.class);
+		ExportMapMarshaller<AssetView> marshaler = createMock(ExportMapMarshaller.class);
 		ModelToViewConverter<Asset, AssetView> converter = createMock(ModelToViewConverter.class);
 		MapWriter writer = createMock(MapWriter.class);
 		

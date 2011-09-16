@@ -19,7 +19,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.EventExporter;
 import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.beanutils.CriteriaResultSerializationHandler;
-import com.n4systems.exporting.beanutils.ExportMapMarshaler;
+import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.beanutils.FilteredCriteriaResultSerializationHandler;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.exporting.beanutils.SerializationHandler;
@@ -102,7 +102,7 @@ public class EventImportAction extends AbstractImportAction {
 					return super.getSerializationHandlerForField(field, annotation);
 				}
 			};
-			EventExporter exporter = new EventExporter(eventLoader, nextDateLoader, new ExportMapMarshaler<EventView>(EventView.class, handlerFactory));
+			EventExporter exporter = new EventExporter(eventLoader, nextDateLoader, new ExportMapMarshaller<EventView>(EventView.class, handlerFactory));
 			
 			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat());
 			exporter.export(writer);

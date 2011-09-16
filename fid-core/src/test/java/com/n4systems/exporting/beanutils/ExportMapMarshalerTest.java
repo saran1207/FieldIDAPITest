@@ -23,7 +23,7 @@ public class ExportMapMarshalerTest {
 		
 		FullExternalOrgView orgView = new FullExternalOrgView();
 		
-		ExportMapMarshaler<FullExternalOrgView> marshaler = new  ExportMapMarshaler<FullExternalOrgView>(FullExternalOrgView.class, handlerFactory);
+		ExportMapMarshaller<FullExternalOrgView> marshaler = new  ExportMapMarshaller<FullExternalOrgView>(FullExternalOrgView.class, handlerFactory);
 		
 		expect(handlerFactory.createSortedSerializationHandlers(FullExternalOrgView.class)).andReturn(serialHandlers);
 		expect(serialHandlers[0].marshal(orgView)).andReturn(Collections.singletonMap("keyone", (Object)"valone"));
@@ -46,7 +46,7 @@ public class ExportMapMarshalerTest {
 	
 	@Test
 	public void test_full_conversion() throws MarshalingException, InstantiationException {
-		ExportMapMarshaler<TestExportBean> marshaler = new  ExportMapMarshaler<TestExportBean>(TestExportBean.class);
+		ExportMapMarshaller<TestExportBean> marshaler = new  ExportMapMarshaller<TestExportBean>(TestExportBean.class);
 		
 		Map<String, Object> beanMap = marshaler.toBeanMap(new TestExportBean("mytype", null, 42, new Date(), new ArrayList<Integer>()));
 		

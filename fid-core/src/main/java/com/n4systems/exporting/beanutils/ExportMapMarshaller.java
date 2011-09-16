@@ -3,7 +3,7 @@ package com.n4systems.exporting.beanutils;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ExportMapMarshaler<T> {
+public class ExportMapMarshaller<T> {
 	private final Class<T> beanClass;
 	private final SerializationHandlerFactory handlerFactory;
 	
@@ -11,11 +11,11 @@ public class ExportMapMarshaler<T> {
 	// exceptions out of the constructor
 	private SerializationHandler<?>[] handlers;
 	
-	public ExportMapMarshaler(Class<T> beanClass) {
+	public ExportMapMarshaller(Class<T> beanClass) {
 		this(beanClass, new SerializationHandlerFactory());
 	}
 	
-	public ExportMapMarshaler(Class<T> beanClass, SerializationHandlerFactory handlerFactory) {
+	public ExportMapMarshaller(Class<T> beanClass, SerializationHandlerFactory handlerFactory) {
 		this.beanClass = beanClass;
 		this.handlerFactory = handlerFactory;	
 	}

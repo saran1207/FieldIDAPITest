@@ -66,7 +66,8 @@ public class ExcelExportPage extends SetupPage {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 	SessionUser sessionUser = FieldIDSession.get().getSessionUser();
-                	DownloadLink link = exportService.exportEventTypeToExcel(sessionUser.getId(), eventType, eventType.getName()+"_Events.xls");
+                	String reportName = eventType.getName()+"_Events.xls";
+					DownloadLink link = exportService.exportEventTypeToExcel(sessionUser.getId(), eventType, reportName);
             	}
             
             });

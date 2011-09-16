@@ -4,7 +4,7 @@ import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.conversion.orgs.CustomerOrgToViewConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToViewConverter;
 import com.n4systems.api.model.FullExternalOrgView;
-import com.n4systems.exporting.beanutils.ExportMapMarshaler;
+import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -15,7 +15,7 @@ import com.n4systems.persistence.loaders.ListLoader;
 public class CustomerExporter implements Exporter {
 	private final ListLoader<CustomerOrg> customerLoader;
 	private final DivisionOrgByCustomerListLoader divisionLoader;
-	private final ExportMapMarshaler<FullExternalOrgView> marshaler;
+	private final ExportMapMarshaller<FullExternalOrgView> marshaler;
 	private final ModelToViewConverter<CustomerOrg, FullExternalOrgView> customerConverter;
 	private final ModelToViewConverter<DivisionOrg, FullExternalOrgView> divisionConverter;
 	
@@ -23,7 +23,7 @@ public class CustomerExporter implements Exporter {
 		this (
 				customerLoader,
 				new DivisionOrgByCustomerListLoader(filter),
-				new ExportMapMarshaler<FullExternalOrgView>(FullExternalOrgView.class),
+				new ExportMapMarshaller<FullExternalOrgView>(FullExternalOrgView.class),
 				new CustomerOrgToViewConverter(),
 				new DivisionOrgToViewConverter()
 			);
@@ -33,7 +33,7 @@ public class CustomerExporter implements Exporter {
 	protected CustomerExporter(
 			ListLoader<CustomerOrg> customerLoader,
 			DivisionOrgByCustomerListLoader divisionLoader,
-			ExportMapMarshaler<FullExternalOrgView> marshaler,
+			ExportMapMarshaller<FullExternalOrgView> marshaler,
 			ModelToViewConverter<CustomerOrg, FullExternalOrgView> customerConverter, 
 			ModelToViewConverter<DivisionOrg, FullExternalOrgView> divisionConverter
 		) {

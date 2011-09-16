@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import com.n4systems.api.model.UserView;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exporting.beanutils.ExportMapMarshaler;
+import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.downloaders.AbstractDownloadAction;
@@ -62,7 +62,7 @@ public class ExampleUserExportAction extends AbstractDownloadAction {
 
 	@Override
 	protected boolean initializeDownload() {
-		ExportMapMarshaler<UserView> marshaler = new ExportMapMarshaler<UserView>(UserView.class);
+		ExportMapMarshaller<UserView> marshaler = new ExportMapMarshaller<UserView>(UserView.class);
 		
 		MapWriter writer = null;
 		try {

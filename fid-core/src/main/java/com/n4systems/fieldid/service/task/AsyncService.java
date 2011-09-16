@@ -9,8 +9,8 @@ public class AsyncService {
 	
 	// for running generic tasks.
 	@Async	
-	public <T> void run(AsyncTask<T> task) {
-		task.run();
+	public <T> T run(AsyncTask<T> task) {
+		return task.call();
 	}
 		
 }

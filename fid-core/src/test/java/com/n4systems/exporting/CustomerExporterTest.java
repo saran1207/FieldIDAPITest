@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.model.FullExternalOrgView;
-import com.n4systems.exporting.beanutils.ExportMapMarshaler;
+import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -25,7 +25,7 @@ public class CustomerExporterTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void test_export() throws Exception {
-		ExportMapMarshaler<FullExternalOrgView> marshaler = createMock(ExportMapMarshaler.class);
+		ExportMapMarshaller<FullExternalOrgView> marshaler = createMock(ExportMapMarshaller.class);
 		ListLoader<CustomerOrg> customerLoader = createMock(ListLoader.class);
 		ModelToViewConverter<CustomerOrg, FullExternalOrgView> customerConverter = createMock(ModelToViewConverter.class);
 		DivisionOrgByCustomerListLoader divisionLoader = createMock(DivisionOrgByCustomerListLoader.class);
