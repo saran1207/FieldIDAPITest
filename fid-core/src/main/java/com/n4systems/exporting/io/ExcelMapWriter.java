@@ -13,7 +13,6 @@ import jxl.write.DateFormat;
 import jxl.write.DateTime;
 import jxl.write.Label;
 import jxl.write.WritableCell;
-import jxl.write.WritableCellFeatures;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -138,9 +137,9 @@ public class ExcelMapWriter implements MapWriter {
 				cell = new Label(col, row, value.toString());
 			}					
 			
-			WritableCellFeatures writableCellFeatures = new WritableCellFeatures();
-			writableCellFeatures.setComment("("+row+","+col+")");
-			cell.setCellFeatures(writableCellFeatures);
+//			WritableCellFeatures writableCellFeatures = new WritableCellFeatures();
+//			writableCellFeatures.setComment("("+row+","+col+")");
+//			cell.setCellFeatures(writableCellFeatures);
 			return cell;
 		}
 		

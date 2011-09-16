@@ -24,6 +24,7 @@ import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.ExcelSheetManager;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.service.task.AsyncTaskFactory;
@@ -43,7 +44,14 @@ public class ExportService extends FieldIdPersistenceService {
 	@Autowired private AsyncService asyncService;
 	@Autowired private AsyncTaskFactory asyncTaskFactory;		
 	@Autowired private EventService eventService;
+	@Autowired private PersistenceService persistenceService;
 	
+	
+	/**
+	 * First attempt at Spring-ifying async transactions.   this needs serious refactoring before next service method is added.
+	 * suggestions : need to avoid creating runnables, need a DownloadService that handles all the link stuff automatically.  a couple of advices might make things cleaner.
+	 * may need to implement MailManager for this stuff...ask matt.  
+	 */
 	
 	@Transactional
 	public DownloadLink exportEventTypeToExcel(Long userId, final EventType eventType, final String fileName) {
@@ -53,11 +61,11 @@ public class ExportService extends FieldIdPersistenceService {
 		checkNotNull(user);		
 		final String dateFormat = user.getOwner().getPrimaryOrg().getDateFormat();
 		
-		DownloadLink link = createDownloadLink(user, fileName, ContentType.EXCEL);
+		final DownloadLink link = createDownloadLink(user, fileName, ContentType.EXCEL);
 
 		AsyncTask<?> task = asyncTaskFactory.createTask(new Callable<Void>() {
 			@Override public Void call() { 
-				generateEventByTypeExport(fileName, "FIXME DD : need to implement this downloadURL", eventType.getId(), dateFormat); 
+				generateEventByTypeExport(fileName, link.getId(), "FIXME DD : need to implement this downloadURL", eventType.getId(), dateFormat); 
 				return null;  // Void 
 			}
 		});
@@ -69,14 +77,21 @@ public class ExportService extends FieldIdPersistenceService {
 		return new ExcelMapWriter(new FileOutputStream(downloadFile), dateFormat).withExcelSheetManager(new EventExcelSheetManager());
 	}
 	
-	private void generateEventByTypeExport(String fileName, String downloadUrl, Long eventTypeId, String dateFormat) {
+	private void updateDownloadLinkState(Long linkId, DownloadState state) {
+		DownloadLink downloadLink = persistenceService.find(DownloadLink.class, linkId);
+		downloadLink.setState(state);
+		persistenceService.save(downloadLink);
+	}		
+	
+	private void generateEventByTypeExport(String fileName, Long downloadLinkId, String downloadUrl, Long eventTypeId, String dateFormat) {
 		MapWriter mapWriter = null;
 		try {
+			updateDownloadLinkState(downloadLinkId, DownloadState.INPROGRESS);
 			mapWriter = createMapWriter(new File(fileName), dateFormat);
 			export(mapWriter, eventTypeId);
+			updateDownloadLinkState(downloadLinkId, DownloadState.COMPLETED);
 		} catch (Exception e) {
-			e.printStackTrace();		// FIXME DD : what to do here??? how do i display errors to user?
-			// throw export exception?? new ExportException(String.format("Unable to export event [%s]", event.getId()), e);
+			updateDownloadLinkState(downloadLinkId, DownloadState.FAILED);
 		} finally {
 			StreamUtils.close(mapWriter);
 		}
@@ -135,4 +150,17 @@ public class ExportService extends FieldIdPersistenceService {
 		}
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
