@@ -48,9 +48,11 @@ public class ExportService extends FieldIdPersistenceService {
 	
 	
 	/**
-	 * First attempt at Spring-ifying async transactions.   this needs serious refactoring before next service method is added.
+	 * First attempt at Spring-ifying async transactions.   this needs serious refactoring before next service method is added.  it's ugly!!!!
 	 * suggestions : need to avoid creating runnables, need a DownloadService that handles all the link stuff automatically.  a couple of advices might make things cleaner.
 	 * may need to implement MailManager for this stuff...ask matt.  
+	 * 
+	 * TODO DD : TESTS are needed for this and all composing classes (particularly Excel??Managers).
 	 */
 	
 	@Transactional
@@ -65,7 +67,7 @@ public class ExportService extends FieldIdPersistenceService {
 
 		AsyncTask<?> task = asyncTaskFactory.createTask(new Callable<Void>() {
 			@Override public Void call() { 
-				generateEventByTypeExport(fileName, link.getId(), "FIXME DD : need to implement this downloadURL", eventType.getId(), dateFormat); 
+				generateEventByTypeExport(link.getFile(), link.getId(), "https://n4.derek.n4systems.net/fieldid/showDownloads.action?fileId=", eventType.getId(), dateFormat); 
 				return null;  // Void 
 			}
 		});
@@ -83,11 +85,11 @@ public class ExportService extends FieldIdPersistenceService {
 		persistenceService.save(downloadLink);
 	}		
 	
-	private void generateEventByTypeExport(String fileName, Long downloadLinkId, String downloadUrl, Long eventTypeId, String dateFormat) {
+	private void generateEventByTypeExport(File file, Long downloadLinkId, String downloadUrl, Long eventTypeId, String dateFormat) {
 		MapWriter mapWriter = null;
 		try {
 			updateDownloadLinkState(downloadLinkId, DownloadState.INPROGRESS);
-			mapWriter = createMapWriter(new File(fileName), dateFormat);
+			mapWriter = createMapWriter(file, dateFormat);
 			export(mapWriter, eventTypeId);
 			updateDownloadLinkState(downloadLinkId, DownloadState.COMPLETED);
 		} catch (Exception e) {
