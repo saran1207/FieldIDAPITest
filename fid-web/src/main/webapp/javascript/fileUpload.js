@@ -22,11 +22,13 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 
 	eval( "var func =  function() {$('"+frameId+"').remove();addUploadFile('${uploadFileType!}');};" );
 	
-	var div = new Element( 'div', { 'id':frameId, 'class':'fileUpload infoSet'} 
-		).insert( new Element( 'input', { 'type':'hidden', 'name':'uploadedFiles[' + frameCount + '].fileName', value:directory } ) 
-		).insert( new Element( 'img', {'alt':'fileName', 'src':'images/file-icon.png', 'width': '27px'} )
-		).insert( fileName + " | " 
-		).insert( new Element( 'a', { id: frameId + "_remove", href:"javascript:void(0)" } ).update( removeText )
+	var div = new Element( 'div', { 'id':frameId, 'class':'fileUpload imageUploadPreview attachementsPreview'} 
+		).insert( new Element( 'input', { 'type':'hidden', 'name':'uploadedFiles[' + frameCount + '].fileName', value:directory } )
+		).insert( new Element( 'div', {'class':'previewImageDisplay'} 
+			).insert( new Element( 'img', {'alt':'fileName', 'src':'images/file-icon.png', 'width': '27px'}))
+		).insert( new Element('span'
+			).insert( new Element('label').update( fileName + " | ")
+			).insert( new Element( 'a', { id: frameId + "_remove", href:"javascript:void(0)" } ).update( removeText ))
 		).insert( new Element( 'div', {'class':'commentContainer'} 
 			).insert( new Element( 'span' , {'class':"fieldHolder"}
 				).insert( new Element( 'textarea', {id: 'uploadedFiles[' + frameCount + '].comments', 'rows': '3', 'cols': '50', 'name': 'uploadedFiles[' + frameCount + '].comments'} ) )

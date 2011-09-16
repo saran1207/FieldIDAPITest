@@ -22,7 +22,7 @@
 				<div id="attached_${attachedFile_index}" class="fileUpload infoSet">
 					<@s.hidden id="attachedFile_${attachedFile_index}" name="attachments[${attachedFile_index}].id" />
 					<@s.hidden id="attachedFile_${attachedFile_index}" name="attachments[${attachedFile_index}].fileName" />
-					${attachments[attachedFile_index].fileName}
+					<label>${attachments[attachedFile_index].fileName}</label>
 					<a href="javascript:void(0)"  onclick="$('attached_${attachedFile_index}').remove();return false;"><@s.text name="label.remove"/></a>
 					<div>
 						<@s.textarea name="attachments[${attachedFile_index}].comments" id="attachments[${attachedFile_index}].comments"  cols="50" rows="3" theme="fieldidSimple"/>
@@ -33,7 +33,7 @@
 		</#list>
 	</div>
 <div class="uploaded">
-	<div id="uploadedfiles"
+	<div id="uploadedfiles" class="uploadedfiles" 
 			<#if (action.fieldErrors['uploadedFiles'])?exists> 
 				class="inputError"
 			</#if>
