@@ -1,19 +1,13 @@
 package com.n4systems.exporting.io;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import jxl.CellView;
 import jxl.Workbook;
-import jxl.write.DateFormat;
-import jxl.write.DateTime;
-import jxl.write.Label;
-import jxl.write.WritableCell;
-import jxl.write.WritableCellFormat;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -37,7 +31,6 @@ public class ExcelMapWriter implements MapWriter {
 	@Override
 	public void write(Map<String, ?> row) throws IOException {
 		try {
-			ensureSheetsExist();
 			writeTitleLine(row);
 			writeRow(row);
 		} catch(Exception e) {
@@ -45,10 +38,9 @@ public class ExcelMapWriter implements MapWriter {
 		}
 	}
 	
-	private final void ensureSheetsExist() {
-		if (workbook.getSheets().length==0) { 
-			excelSheetManager.createSheets(workbook);
-		}
+	private final void resetManagers() {
+		excelSheetManager.initialize(workbook);
+		excelSheetManager.setDateFormat(dateFormat);		
 	}
 
 	@Override
@@ -77,14 +69,9 @@ public class ExcelMapWriter implements MapWriter {
 	}
 	
 	private void writeRow(Map<String, ?> rowMap) throws RowsExceededException, WriteException {
-		ExcelCellManager cellManager = new ExcelCellManager(workbook);
+		resetManagers();		
 		for (int col = 0; col < titles.length; col++) {
-			// refactor this into sheetManager.addCell which contains a cellManager.
-			WritableSheet sheet = excelSheetManager.getSheetForColumn(titles[col]);
-			if (sheet!=null) {
-				WritableCell cell = cellManager.getCell(currentRow,sheet, titles, col, rowMap.get(titles[col]));
-				sheet.addCell(cell);
-			}
+			excelSheetManager.addCell(currentRow, titles, col, rowMap);			
 		}
 		currentRow++;
 	}
@@ -101,6 +88,7 @@ public class ExcelMapWriter implements MapWriter {
 	}
 	
 	public ExcelMapWriter withExcelSheetManager(ExcelSheetManager manager) { 
+		checkArgument(manager!=null);
 		this.excelSheetManager = manager;
 		return this;
 	}
@@ -108,42 +96,5 @@ public class ExcelMapWriter implements MapWriter {
 	
 	
 	
-	class ExcelCellManager {
-
-		private Map<String,AtomicInteger> sheetColumns = new HashMap<String,AtomicInteger>();
-
-		public ExcelCellManager(WritableWorkbook workbook) { 
-			for (WritableSheet sheet: workbook.getSheets()) {
-				sheetColumns.put(sheet.getName(), new AtomicInteger(0));
-			}				
-		}
-		
-		public WritableCell getCell(int row, WritableSheet sheet, String[] titles, int titleIndex, Object value) {
-			WritableCell cell;
-			
-			Integer col = sheetColumns.get(sheet.getName()).getAndIncrement();
-			
-			if (value == null) {
-				cell = new Label(col, row, "");
-			} else if (value instanceof Number) {
-				cell = new jxl.write.Number(col, row, ((Number)value).doubleValue());
-			} else if (value instanceof Boolean) {
-				cell = new jxl.write.Boolean(col, row, (Boolean)value);
-			} else if (value instanceof Date) {
-				cell = new DateTime(col, row, (Date)value, new WritableCellFormat(new DateFormat(dateFormat)), DateTime.GMT);			
-			} else if (value instanceof Number) {
-				cell = new jxl.write.Number(col, row, ((Number)value).doubleValue());
-			} else {
-				cell = new Label(col, row, value.toString());
-			}					
-			
-//			WritableCellFeatures writableCellFeatures = new WritableCellFeatures();
-//			writableCellFeatures.setComment("("+row+","+col+")");
-//			cell.setCellFeatures(writableCellFeatures);
-			return cell;
-		}
-		
-	}
-
 	
 }

@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import jxl.write.WritableSheet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +15,10 @@ import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.conversion.event.EventToViewConverter;
 import com.n4systems.api.model.EventView;
-import com.n4systems.exporting.beanutils.CriteriaResultSerializationHandler;
 import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.beanutils.MarshalingException;
+import com.n4systems.exporting.io.EventExcelSheetManager;
 import com.n4systems.exporting.io.ExcelMapWriter;
-import com.n4systems.exporting.io.ExcelSheetManager;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.PersistenceService;
@@ -100,7 +97,6 @@ public class ExportService extends FieldIdPersistenceService {
 	}
 								
 	private void export(MapWriter excelMapWriter, Long eventTypeId) throws ConversionException, IOException, MarshalingException  {	
-		System.out.println("starting task in thread " + Thread.currentThread().getId() + Thread.currentThread().getName() + "...");							
 		ExportMapMarshaller<EventView> exportMapMarshaller = new ExportMapMarshaller<EventView>(EventView.class);
 		ModelToViewConverter<Event,EventView> converter = new EventToViewConverter();
 			
@@ -110,8 +106,6 @@ public class ExportService extends FieldIdPersistenceService {
 			view = converter.toView(event);
 			excelMapWriter.write(exportMapMarshaller.toBeanMap(view));
 		}			
-		
-		System.out.println("...finished task");
 	}	
 
 	private DownloadLink createDownloadLink(User user, String name, ContentType type) {
@@ -124,44 +118,6 @@ public class ExportService extends FieldIdPersistenceService {
 		persistenceService.save(link);
 		return link;
 	}			
-	
-	
-	class EventExcelSheetManager extends ExcelSheetManager {
-		private final String DEFICIENCIES = "Deficiencies";
-		private final String RECOMMENDATIONS = "Recommendations";
-		private final String EVENTS = "Events";
-		private String[] sheetTitles = {EVENTS, RECOMMENDATIONS, DEFICIENCIES};			
-
-		public EventExcelSheetManager() {
-			super();			
-		}
-		
-		@Override
-		protected WritableSheet getSheetForColumn(String columnTitle) {			
-			if (columnTitle.endsWith(CriteriaResultSerializationHandler.RECOMMENDATIONS_SUFFIX)) {
-				return super.getSheetByName(RECOMMENDATIONS);
-			} else if (columnTitle.endsWith(CriteriaResultSerializationHandler.DEFICIENCIES_SUFFIX)) {
-				return super.getSheetByName(DEFICIENCIES);
-			}
-			return super.getSheetByName(EVENTS);
-		}
-		
-		@Override
-		protected String[] getSheetTitles() {
-			return sheetTitles;
-		}
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
