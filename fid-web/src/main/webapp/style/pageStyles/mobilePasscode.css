@@ -1,0 +1,34 @@
+.textContainer {
+	background-image: url("../../images/access-card-logo.png");
+}
+
+.initialMessage input {
+	margin-left: 0;
+}
+
+.largeForm {
+	width: 100%;
+}
+
+.largeForm .infoSet .fieldHolder input {
+	width: 600px;
+	font-size: 1.8em;
+}
+
+.largeForm .infoSet {
+	padding-left: 10px;
+}
+
+
+.passcodeActions {
+	margin-left: 250px;
+
+}
+
+.passcodeActions input{
+	display: block;
+	margin: 20px 0;
+	font-size: 1.5em;
+	padding: 2px 0;
+	width: 400px;
+}

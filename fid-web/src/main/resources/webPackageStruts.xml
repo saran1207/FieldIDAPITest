@@ -1481,14 +1481,22 @@
 			<result name="success" type="redirectAction">login</result>
 		</action>
 
-		<action name="editSecurityCard" method="edit" class="com.n4systems.fieldid.actions.user.ChangeSecurityCard">
+		<action name="viewMobilePasscode" method="show" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
+			<result name="success" type="freemarker">/templates/html/changeSecurityCard/show.ftl</result>
+		</action>
+
+		<action name="editMobilePasscode" method="edit" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
 			<result name="success" type="freemarker">/templates/html/changeSecurityCard/form.ftl</result>
 		</action>
 
-		<action name="updateSecurityCard" method="update" class="com.n4systems.fieldid.actions.user.ChangeSecurityCard">
+		<action name="updateMobilePasscode" method="update" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
 			<result name="input" type="freemarker">/templates/html/changeSecurityCard/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/changeSecurityCard/form.ftl</result>
-			<result name="success" type="redirectAction">editSecurityCard</result>
+			<result name="success" type="redirectAction">viewMobilePasscode</result>
+		</action>
+		
+		<action name="removeMobilePasscode" method="remove" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
+			<result name="success" type="freemarker">/templates/html/changeSecurityCard/show.ftl</result>
 		</action>
 
 		<action name="editPassword" method="edit" class="com.n4systems.fieldid.actions.users.ChangePasswordCrud">
@@ -1505,21 +1513,35 @@
 			<result name="success" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 		</action>
 		
-		<action name="adminEditRfid" method="edit" class="com.n4systems.fieldid.actions.users.AdminChangeSecurityCard">
-			<result name="success" type="freemarker">/templates/html/changeSecurityCard/adminRfidForm.ftl</result>
+				
+		<action name="adminMobilePasscode" method="show" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
+			<result name="success" type="freemarker">/templates/html/changeSecurityCard/adminShow.ftl</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">adminEditMobilePasscode</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+
+		<action name="adminEditMobilePasscode" method="edit" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
+			<result name="success" type="freemarker">/templates/html/changeSecurityCard/adminForm.ftl</result>
 		</action>
 		
-		<action name="adminUpdateSecurityCard" method="update" class="com.n4systems.fieldid.actions.users.AdminChangeSecurityCard">
-			<result name="input" type="freemarker">/templates/html/changeSecurityCard/adminRfidForm.ftl</result>
-			<result name="error" type="redirectAction">
-				<param name="actionName">adminEditRfid</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
+		<action name="adminUpdateMobilePasscode" method="update" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
+			<result name="input" type="freemarker">/templates/html/changeSecurityCard/adminForm.ftl</result>
+			<result name="error" type="freemarker">/templates/html/changeSecurityCard/adminForm.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">adminEditRfid</param>
+				<param name="actionName">adminMobilePasscode</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
+		
+		<action name="adminRemoveMobilePasscode" method="remove" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
+			<result name="success" type="redirectAction">
+				<param name="actionName">adminEditMobilePasscode</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
 
 		<action name="adminUpdatePassword" method="update" class="com.n4systems.fieldid.actions.users.AdminChangePasswordCrud">
 			<result name="input" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>

@@ -1,12 +1,17 @@
-${action.setPageType('user', 'change_rfid_number')!}
+${action.setPageType('user', 'change_mobile_passcode')!}
 
-<@s.form action="adminUpdateSecurityCard"  theme="fieldid" cssClass="crudForm" cssStyle="float:left;">
+<head> 
+	<@n4.includeStyle href="mobilePasscode" type="page"/>
+</head>
+
+<@s.form action="adminUpdateMobilePasscode"  theme="fieldid" cssClass="crudForm largeForm">
 	<@s.hidden name="uniqueID" />
 	<#include "/templates/html/common/_formErrors.ftl"/>
-	<p>
-		<label><@s.text name="label.new_security_card_number"/></label>
+
+	<div class="infoSet">
+		<span class="egColor"><@s.text name="message.mobile_passcode_instructions"/></span>
 		<@s.textfield name="securityCardNumber" />
-	</p>
+	</div>
 	
 	<div class="formAction borderLessFormAction">
 		<#if user.fullUser || user.admin>
