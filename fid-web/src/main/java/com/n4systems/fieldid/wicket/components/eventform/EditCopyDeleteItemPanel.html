@@ -1,7 +1,9 @@
 <wicket:panel>
+
     <div class="deleteLinkSection">
         <img wicket:id="deleteImage"/>
     </div>
+
     <div wicket:id="viewContainer">
         <div class="itemLinkTitle">
             <a wicket:id="viewLink" class="mainLink">
@@ -12,22 +14,28 @@
         </div>
         <wicket:enclosure child="editLink">
             <div class="editCopyLinks">
-                <a wicket:id="editLink">Edit</a> <wicket:enclosure>| <a wicket:id="copyLink">Copy</a></wicket:enclosure>
+                <a wicket:id="editLink"><wicket:message key="label.edit"/></a> <wicket:enclosure>| <a wicket:id="copyLink"><wicket:message key="label.copy"/></a></wicket:enclosure>
             </div>
         </wicket:enclosure>
     </div>
-    <div class="editForm">
+
+    <div class="editForm" wicket:id="editFormContainer">
         <form wicket:id="editForm">
             <div class="itemLinkTitle">
                 <input type="text" wicket:id="newText"/>
             </div>
             <div class="editCopyLinks">
-                <a wicket:id="storeLink">Store</a> | <a wicket:id="cancelLink">Cancel</a>
+                <a wicket:id="storeLink"><span wicket:id="storeLabel"></span></a> | <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
             </div>
         </form>
     </div>
-    <div class="reorderLinkSection">
-        <img wicket:id="reorderImage"/>
-    </div>
-    <div style="clear:both;"></div>
+
+    <wicket:enclosure>
+        <div class="reorderLinkSection">
+            <img wicket:id="reorderImage"/>
+        </div>
+    </wicket:enclosure>
+
+    <div style="width:0;height:0;clear:both;"></div>
+
 </wicket:panel>

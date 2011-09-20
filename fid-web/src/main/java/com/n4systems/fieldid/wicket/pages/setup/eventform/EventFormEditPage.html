@@ -1,6 +1,22 @@
 <wicket:extend>
     <title>Event Form Editor</title>
-    <head></head>
+    <head>
+
+        <script type="text/javascript">
+            var promptBeforeLeaving = true;
+
+            function onSuccessfulSessionRefresh() {
+                promptBeforeLeaving = false;
+                window.location.reload();
+            }
+
+            window.onbeforeunload = function() {
+                if (promptBeforeLeaving)
+                    return "It looks like you're about to leave this page. Please ensure that any changes are saved.";
+            }
+        </script>
+
+    </head>
     <body>
 
         <div class="savePanel" wicket:id="topSavePanel"></div>

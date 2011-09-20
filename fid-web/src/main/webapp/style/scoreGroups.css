@@ -1,0 +1,131 @@
+.newScoreGroupForm {
+    padding-left:5px;
+}
+
+.newScoreGroupForm input[type="text"] {
+    font-size: 12px;
+    width: 300px;
+    padding: 1px;
+    margin-top:5px;
+    margin-bottom:5px;}
+
+.blankInstructions {
+    font-size: 12px;
+    padding: 5px;
+    text-align:center;
+    color:#888;
+}
+
+div.deleteLinkSection {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 3px;
+    display: block;
+    float: left;
+}
+
+div.itemLinkTitle {
+    width: 78%;
+    display: block;
+    float: left;
+    padding-left: 5px;
+}
+
+div.score div.itemLinkTitle {
+    width:66%;
+}
+
+div.itemLinkTitle a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-decoration: none;
+    color: #000000;
+    width: 100%;
+    display:block;
+    outline: none;
+}
+
+div.editCopyLinks {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: block;
+    width: 15%;
+    float: left;
+    font-size: 10px;
+}
+
+div.score div.editCopyLinks {
+    width: 25%
+}
+
+.scoreGroups {
+    width:50%;
+    border:1px solid #ddd;
+    display:block;
+    float:left;
+}
+
+.scoreGroups .scoreGroup {
+    border-bottom:1px solid #ddd;
+}
+
+.scoreGroup .score {
+    border-bottom:1px solid #ddd;
+}
+
+.scores {
+    width:48%;
+    border:1px solid #ddd;
+    display:block;
+    float:left;
+}
+
+.selectedGroup {
+    background: #C8E4FF;
+}
+
+.editForm input[type='text'] {
+    margin-top:6px;
+}
+
+.scoreGroup .score {
+    padding: 3px 0 3px 3px;
+    font-size:12px;
+}
+
+.scoreGroups .input[type='text'] {
+    padding:2px;
+}
+
+.scoreGroup .newScore {
+    float:left;
+    width:auto;
+}
+
+.scoreGroupName {
+    font-size: 12px;
+    padding: 4px 0 4px 20px;
+    border-bottom:1px solid #ddd;
+}
+
+.saveButtonContainer {
+    display:block;
+    float:left;
+    padding: 5px 0 0 5px;
+}
+
+div.reorderLinkSection {
+    padding-bottom: 10px;
+    padding-right: 5px;
+    display: block;
+    float: right;
+}
+
+div.itemLinkTitle a div.subTitle {
+    color: #666;
+    display: inline;
+}
+
+.newScore input[type='text'] {
+    width: 120px;
+}

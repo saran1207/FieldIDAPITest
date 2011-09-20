@@ -1,21 +1,30 @@
 <wicket:panel>
 
+    <div wicket:id="blankInstructions" class="blankInstructions">
+        <wicket:message key="label.create_new_or_select_existing_score_group"/>
+    </div>
+
     <div class="scoreGroup">
 
         <form wicket:id="scoreGroupForm">
 
-            <input wicket:id="name">
+            <div class="scoreGroupName" wicket:id="nameLabel"></div>
 
-            <div wicket:id="scoreList">
+            <div wicket:id="sortableScoresContainer">
 
-                <div class="score" wicket:id="score"></div>
+                <div wicket:id="scoreList">
+                    <div class="score" wicket:id="score"></div>
+                </div>
 
             </div>
 
-            <input type="button" value="Add" wicket:id="addButton">
+            <div wicket:id="feedbackPanel"></div>
 
+            <div class="score newScore" wicket:id="newScore"></div>
 
-            <input type="submit" value="Save Group" wicket:id="submitButton">
+            <div class="saveButtonContainer">
+                <input type="button" wicket:message="value:label.save" wicket:id="saveButton">
+            </div>
 
         </form>
 

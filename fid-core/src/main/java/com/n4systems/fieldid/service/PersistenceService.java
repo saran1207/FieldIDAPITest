@@ -2,7 +2,9 @@ package com.n4systems.fieldid.service;
 
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.UnsecuredEntity;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,6 +137,12 @@ public class PersistenceService extends FieldIdService {
     @Transactional
     public <T> T load(Loader<T> loader) {
     	return loader.load(em);
+    }
+
+    @Transactional
+    public void archive(ArchivableEntityWithTenant archivableEntity) {
+        archivableEntity.setState(Archivable.EntityState.ARCHIVED);
+        update(archivableEntity);
     }
 
 }

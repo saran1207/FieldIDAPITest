@@ -50,7 +50,7 @@ public class CriteriaSectionsPanel extends SortableListPanel {
         });
 
         WebMarkupContainer sortableSectionContainer = new WebMarkupContainer("sortableSectionContainer");
-        sortableSectionContainer.add(sortableBehavior = makeSortableBehavior());
+        sortableSectionContainer.add(sortableBehavior = makeSortableBehavior("#criteriaSectionsPanel"));
         add(sortableSectionContainer);
         sortableSectionContainer.add(new ListView<CriteriaSection>("criteriaSections", getListModel()) {
             @Override
@@ -122,11 +122,6 @@ public class CriteriaSectionsPanel extends SortableListPanel {
         CriteriaSection movingSection = getListModel().getObject().remove(oldIndex);
         getListModel().getObject().add(newIndex, movingSection);
         target.addComponent(CriteriaSectionsPanel.this);
-    }
-
-    @Override
-    protected String getSortableContainmentCss() {
-        return "#criteriaSectionsPanel";
     }
 
     private void processCopy(int index) {

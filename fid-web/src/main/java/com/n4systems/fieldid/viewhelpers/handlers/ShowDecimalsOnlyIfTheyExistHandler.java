@@ -24,7 +24,7 @@ public class ShowDecimalsOnlyIfTheyExistHandler extends WebOutputHandler {
         return simplifyDouble((Double) value);
     }
 
-    public String simplifyDouble(Double d) {
+    public static String simplifyDouble(Double d) {
         if (d - d.intValue() != 0) {
             return d.toString();
         } else {

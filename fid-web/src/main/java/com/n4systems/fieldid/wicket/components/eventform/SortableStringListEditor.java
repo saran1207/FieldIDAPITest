@@ -92,7 +92,7 @@ public class SortableStringListEditor extends SortableListPanel {
             }
         });
 
-        sortableCriteriaContainer.add(sortableAjaxBehavior = makeSortableBehavior());
+        sortableCriteriaContainer.add(sortableAjaxBehavior = makeSortableBehavior("#" + getMarkupId()));
         add(sortableCriteriaContainer);
         stringList.setOutputMarkupId(true);
         add(new AddStringForm("addStringForm"));
@@ -140,11 +140,6 @@ public class SortableStringListEditor extends SortableListPanel {
 	protected int getIndexOfComponent(Component component) {
 		String listItem = (String) component.getDefaultModelObject();
 		return getStringList().indexOf(listItem);
-	}
-
-	@Override
-	protected String getSortableContainmentCss() {
-		return "#" + getMarkupId();
 	}
 
 	@Override

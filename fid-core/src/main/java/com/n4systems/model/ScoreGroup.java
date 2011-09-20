@@ -1,7 +1,7 @@
 package com.n4systems.model;
 
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import org.hibernate.annotations.IndexColumn;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="score_groups")
 @PrimaryKeyJoinColumn(name="id")
-public class ScoreGroup extends EntityWithTenant implements Listable {
+public class ScoreGroup extends ArchivableEntityWithTenant implements Listable {
 
     @Column(nullable=false)
     private String name;

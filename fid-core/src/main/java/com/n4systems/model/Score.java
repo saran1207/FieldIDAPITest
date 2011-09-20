@@ -1,7 +1,7 @@
 package com.n4systems.model;
 
 
-import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="scores")
 @PrimaryKeyJoinColumn(name="id")
-public class Score extends EntityWithTenant {
+public class Score extends ArchivableEntityWithTenant {
 
     @Column(name="name")
     private String name;

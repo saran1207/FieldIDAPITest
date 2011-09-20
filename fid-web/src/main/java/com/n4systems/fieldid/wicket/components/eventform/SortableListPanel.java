@@ -42,7 +42,7 @@ public abstract class SortableListPanel extends Panel {
         }
     }
 
-    protected SortableAjaxBehavior makeSortableBehavior() {
+    protected SortableAjaxBehavior makeSortableBehavior(String containmentCss) {
         SortableAjaxBehavior sortable = new SimpleSortableAjaxBehavior() {
             @Override
             public void onUpdate(Component component, int newIndexOfMovingItem, AjaxRequestTarget target) {
@@ -54,7 +54,7 @@ public abstract class SortableListPanel extends Panel {
                 onItemMoving(oldIndexOfMovingItem, newIndexOfMovingItem, target);
             }
         };
-        sortable.getSortableBehavior().setContainment(new SortableContainment(getSortableContainmentCss()));
+        sortable.getSortableBehavior().setContainment(new SortableContainment(containmentCss));
         sortable.getSortableBehavior().setAxis(SortableBehavior.AxisEnum.Y);
         sortable.setDisabled(true);
         return sortable;
@@ -63,7 +63,5 @@ public abstract class SortableListPanel extends Panel {
     protected abstract int getIndexOfComponent(Component component);
 
     protected abstract void onItemMoving(int oldIndex, int newIndex, AjaxRequestTarget target);
-
-    protected abstract String getSortableContainmentCss();
 
 }

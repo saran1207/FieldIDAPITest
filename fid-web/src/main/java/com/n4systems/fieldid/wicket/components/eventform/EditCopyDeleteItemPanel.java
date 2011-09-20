@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.TrimmedStringModel;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -21,8 +24,9 @@ public class EditCopyDeleteItemPanel extends Panel {
     private static final String DELETE_IMAGE = "images/small-x.png";
     private static final String REORDER_IMAGE = "images/reorder.png";
 
-    private EditForm editForm;
+    private WebMarkupContainer editFormContainer;
     private WebMarkupContainer viewContainer;
+    private FlatLabel storeLabel;
 
     public EditCopyDeleteItemPanel(String id, IModel<String> stringModel) {
         this(id, stringModel, true);
@@ -39,7 +43,7 @@ public class EditCopyDeleteItemPanel extends Panel {
     public EditCopyDeleteItemPanel(String id, IModel<String> titleModel, IModel<String> subTitleModel, final boolean displayCopyLink) {
         super(id, titleModel);        
         setOutputMarkupPlaceholderTag(true);
-        
+
         ContextImage deleteImage = new ContextImage("deleteImage", new PropertyModel<String>(this, "deleteImage")) {
             @Override
             public boolean isVisible() {
@@ -72,7 +76,7 @@ public class EditCopyDeleteItemPanel extends Panel {
                     onViewLinkClicked(target);
             }
         });
-        viewLink.add(new Label("linkLabel", new TrimmedModel(titleModel,23))); 
+        viewLink.add(new Label("linkLabel", new TrimmedStringModel(titleModel, 23)));
         if (subTitleModel != null) {
             viewLink.add(new Label("subTitle", subTitleModel));
         } else {
@@ -105,41 +109,14 @@ public class EditCopyDeleteItemPanel extends Panel {
 
         add(viewContainer);
 
-        editForm = new EditForm("editForm", titleModel);
-        add(editForm.setVisible(false));
+        editFormContainer = new WebMarkupContainer("editFormContainer");
+        editFormContainer.add(new EditForm("editForm", titleModel));
+        add(editFormContainer.setVisible(false));
     }
 
     protected String getTrimmedString(String str, int limit) {
 		return str != null && str.length() > limit ? str.substring(0,limit)+"..." : str;
 	}	
-    
-    // TODO DD : if this class is reused, should put in wicket util pkg somewhere. 
-    class TrimmedModel implements IModel<String> { 
-    	private IModel<String> model;
-		private int limit;
-
-		public TrimmedModel(IModel<String> model, int limit) { 
-    		this.model = model;
-    		this.limit = limit;
-    	}
-
-		@Override public void detach() {}
-
-		@Override
-		public String getObject() {
-			return getTrimmedString(model.getObject());
-		}
-
-		@Override
-		public void setObject(String object) {
-			model.setObject(object);
-		}
-
-		protected String getTrimmedString(String str) {
-			return str != null && str.length() > limit ? str.substring(0,limit)+"..." : str;
-		}	
-		
-    }
     
 	class EditForm extends Form {
 
@@ -148,14 +125,17 @@ public class EditCopyDeleteItemPanel extends Panel {
         public EditForm(String id, IModel<String> model) {
             super(id);
             this.stringModel = model;
+            setOutputMarkupPlaceholderTag(true);
             TextField<String> criteriaName;
             add(criteriaName = new RequiredTextField<String>("newText", stringModel));
             criteriaName.add(new StringValidator.MaximumLengthValidator(2000));
 
-            add(new AjaxSubmitLink("storeLink") {
+            AjaxSubmitLink storeLink;
+            add(storeLink = new AjaxSubmitLink("storeLink") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     setViewState(target);
+                    onStoreLinkClicked(target);
                 }
 
                 @Override
@@ -163,6 +143,7 @@ public class EditCopyDeleteItemPanel extends Panel {
                     onFormValidationError(target);
                 }
             });
+            storeLink.add(storeLabel = new FlatLabel("storeLabel", new FIDLabelModel("label.store")));
             add(new AjaxLink("cancelLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
@@ -185,14 +166,16 @@ public class EditCopyDeleteItemPanel extends Panel {
 
     protected void onFormValidationError(AjaxRequestTarget target) { }
 
+    protected void onStoreLinkClicked(AjaxRequestTarget target) { }
+
     private void setViewState(AjaxRequestTarget target) {
-        editForm.setVisible(false);
+        editFormContainer.setVisible(false);
         viewContainer.setVisible(true);
         target.addComponent(this);
     }
 
     private void setEditState(AjaxRequestTarget target) {
-        editForm.setVisible(true);
+        editFormContainer.setVisible(true);
         viewContainer.setVisible(false);
         target.addComponent(this);
     }
@@ -207,6 +190,10 @@ public class EditCopyDeleteItemPanel extends Panel {
 
     public String getReorderImage() {
         return REORDER_IMAGE;
+    }
+
+    public void setStoreLabel(IModel<String> storeLabelModel) {
+        storeLabel.setDefaultModel(storeLabelModel);
     }
 
 }

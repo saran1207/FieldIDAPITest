@@ -1,23 +1,6 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.EnclosureContainer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.PropertyModel;
-import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
-
+import com.n4systems.fieldid.service.event.ScoreService;
 import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
@@ -31,11 +14,31 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.CriteriaType;
 import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.ScoreCriteria;
+import com.n4systems.model.ScoreGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.UnitOfMeasureListLoader;
 import com.n4systems.model.stateset.StateSetLoader;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.EnclosureContainer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CriteriaPanel extends SortableListPanel {
 
@@ -46,6 +49,9 @@ public class CriteriaPanel extends SortableListPanel {
 
     private StateSet previouslySelectedStateSet;
     private boolean previousSetsResultValue;
+
+    @SpringBean
+    private ScoreService scoreService;
 
     public CriteriaPanel(String id) {
         super(id);
@@ -123,7 +129,7 @@ public class CriteriaPanel extends SortableListPanel {
         enclosureContainer.add(criteriaAddForm);
         add(enclosureContainer);
         add(feedbackPanel = new ContainerFeedbackPanel("feedbackPanel", this));
-        sortableCriteriaContainer.add(sortableAjaxBehavior = makeSortableBehavior());
+        sortableCriteriaContainer.add(sortableAjaxBehavior = makeSortableBehavior("#criteriaPanel"));
         add(sortableCriteriaContainer);
         feedbackPanel.setOutputMarkupId(true);
     }
@@ -161,6 +167,10 @@ public class CriteriaPanel extends SortableListPanel {
                         }
                     } else if (CriteriaType.UNIT_OF_MEASURE.equals(criteriaType)) {
                         ((UnitOfMeasureCriteria)criteria).setPrimaryUnit(getDefaultUnitOfMeasure());
+                    } else if (CriteriaType.SCORE.equals(criteriaType)) {
+                        if (!configureDefaultScoreGroup(target, (ScoreCriteria) criteria)) {
+                            return;
+                        }
                     }
 
                     if (criteriaName.length()>1000){
@@ -191,6 +201,16 @@ public class CriteriaPanel extends SortableListPanel {
                     return true;
                 }
 
+                private boolean configureDefaultScoreGroup(AjaxRequestTarget target, ScoreCriteria criteria) {
+                    StateSet stateSet = getDefaultStateSet();
+                    if (stateSet == null) {
+                        error("You must configure at least one Score Group to use Score criteria");
+                        target.addComponent(feedbackPanel);
+                        return false;
+                    }
+                    return true;
+                }
+
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
                     target.addComponent(feedbackPanel);
@@ -217,11 +237,6 @@ public class CriteriaPanel extends SortableListPanel {
         Criteria movingCriteria = getCriteriaSection().getCriteria().remove(oldIndex);
         getCriteriaSection().getCriteria().add(newIndex, movingCriteria);
         target.addComponent(this);
-    }
-
-    @Override
-    protected String getSortableContainmentCss() {
-        return "#criteriaPanel";
     }
 
     protected void onCriteriaAdded(AjaxRequestTarget target, Criteria criteria, int newIndex) { }
@@ -255,6 +270,14 @@ public class CriteriaPanel extends SortableListPanel {
             return null;
         }
         return stateSetList.get(0);
+    }
+
+    private ScoreGroup getDefaultScoreGroup() {
+        List<ScoreGroup> scoreGroups = scoreService.getScoreGroups();
+        if (scoreGroups.isEmpty()) {
+            return null;
+        }
+        return scoreGroups.get(0);
     }
 
     private UnitOfMeasure getDefaultUnitOfMeasure() {

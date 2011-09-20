@@ -2,13 +2,25 @@
 
     <div wicket:id="feedbackPanel"></div>
 
-    <div wicket:id="scoreGroups">
-        <div wicket:id="group"></div>
-    </div>
+    <div wicket:id="blankSlatePanel"></div>
 
-    <form wicket:id="newScoreGroupForm">
-        <input wicket:id="scoreGroupName">
-        <input type="submit" value="Save" wicket:id="submitButton">
-    </form>
+    <div wicket:id="groupsAndScoresContainer">
+
+        <div class="scoreGroups">
+
+            <div wicket:id="scoreGroups">
+            </div>
+
+            <form wicket:id="newScoreGroupForm" class="newScoreGroupForm">
+                <input type="text" wicket:id="scoreGroupName">
+                <input type="submit" wicket:message="value:label.save" wicket:id="submitButton">
+            </form>
+
+        </div>
+
+        <div class="scores" wicket:id="scoreGroup">
+        </div>
+
+    </div>
 
 </wicket:extend>

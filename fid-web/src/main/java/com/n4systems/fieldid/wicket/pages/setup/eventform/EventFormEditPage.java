@@ -7,15 +7,11 @@ import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.save.SavePanel;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
-import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
 import com.n4systems.model.StateSet;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -24,15 +20,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
-import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
-import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
 public class EventFormEditPage extends EventTypePage {
 
@@ -154,7 +145,7 @@ public class EventFormEditPage extends EventTypePage {
             protected void onSaveAndFinishClicked(AjaxRequestTarget target) {
                 saveEventForm();
                 FieldIDSession.get().storeInfoMessageForStruts("Event Form saved.");
-                getRequestCycle().setRequestTarget(new RedirectRequestTarget("/eventType.action?uniqueID=" + eventTypeId));
+                target.appendJavascript("promptBeforeLeaving = false; window.location='/fieldid/eventType.action?uniqueID=" + eventTypeId+"'");
             }
         };
     }

@@ -1,5 +1,19 @@
 <wicket:panel>
 
-    <select wicket:id="scoreGroupSelect"></select>
+
+    <div class="scoreGroupConfiguration">    
+        <select wicket:id="scoreGroupSelect"></select>
+    </div>
+
+    <div class="scoreGroupDetails">
+
+        <div wicket:id="scoreGroupsDisplayContainer">
+            <div wicket:id="scores" class="score newScore">
+                <span wicket:id="name">[Score Group Name]</span> (<span wicket:id="value">[Score Group Value]</span><span wicket:id="isNa"><wicket:message key="label.na"></wicket:message></span>)
+            </div>
+        </div>
+
+    </div>
+
 
 </wicket:panel>
