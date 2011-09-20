@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -13,6 +14,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -25,6 +27,7 @@ import com.n4systems.fieldid.wicket.components.renderer.DateFormatSampleChoiceRe
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.tenant.SystemSettings;
 import com.n4systems.util.ConfigurationProvider;
 
@@ -32,6 +35,7 @@ public class SystemSettingsPage extends FieldIDLoggedInPage {
 
     @SpringBean
     private SystemSettingsService systemSettingsService;
+    private WebMarkupContainer orderDetails;
 
     public SystemSettingsPage() {
     	this(null);
@@ -65,13 +69,17 @@ public class SystemSettingsPage extends FieldIDLoggedInPage {
 
         public SystemSettingsForm(String id, SystemSettings data) {
             super(id, new CompoundPropertyModel<SystemSettings>(data));
-
+            
             add(new FIDFeedbackPanel("feedbackPanel"));
-
+            
             add(new CheckBox("assignedTo"));
             add(new CheckBox("proofTestIntegration"));
             add(new CheckBox("manufacturerCertificate"));
-            add(new CheckBox("orderDetails"));
+            
+			boolean showOrderDetails = !FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Integration);
+			WebMarkupContainer orderDetails = new WebMarkupContainer("orderDetailsOption");
+			orderDetails.add(new CheckBox("orderDetails"));
+			add(orderDetails.setVisible(showOrderDetails));
             add(new Image("gpsLogo", new ContextRelativeResource("/images/gps-logo.png")));
             add(new CheckBox("gpsCapture"));
             add(new DropDownChoice<String>("dateFormat", getDateFormats(), new DateFormatSampleChoiceRenderer()).setNullValid(false));

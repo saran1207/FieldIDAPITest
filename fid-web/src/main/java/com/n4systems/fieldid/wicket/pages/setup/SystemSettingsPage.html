@@ -38,7 +38,7 @@
 				<p><wicket:message key="label.manufacturer_certificate_field_description"/></p>				
 			</div>
 			
-			<div class="extendedOption labelDescription">
+			<div wicket:id="orderDetailsOption" class="extendedOption labelDescription">
 				<label>
 					<input type="checkbox" wicket:id="orderDetails"/>
 					<span><wicket:message key="label.enable_order_details"/></span>
@@ -98,10 +98,7 @@
 		            <div  class="labelledInput">
 		                <label>&nbsp;</label>
 		               	<a wicket:id="overrides"><wicket:message key="label.identifier_overrides"/></a>
-		            </div>
-		            
-					            
-		            
+		            </div>		            
 				</span>	      
 				            
 			</div>            
