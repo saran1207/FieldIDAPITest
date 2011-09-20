@@ -62,8 +62,8 @@
             </#if>
 
 			<div class="recDefButtons">
-				<#assign recCount=(action.countRecommendations(currentCriteriaIndex))!0 />
-				<#assign defCount=(action.countDeficiencies(currentCriteriaIndex))!0 />
+				<#assign recCount=(action.countRecommendations(criteriaCount))!0 />
+				<#assign defCount=(action.countDeficiencies(criteriaCount))!0 />
 				<a id='recButton_${criteria.id}' href='#rec_${criteria.id}' title='${lightBoxProperties}' class='lightview' ><img id='recImage_${criteria.id}' src="<@s.url value="/images/rec.png"/>" /></a>
 				<a id='defButton_${criteria.id}' href='#def_${criteria.id}' title='${lightBoxProperties}' class='lightview' ><img id='defImage_${criteria.id}' src="<@s.url value="/images/def.png"/>" /></a>
 			</div>
