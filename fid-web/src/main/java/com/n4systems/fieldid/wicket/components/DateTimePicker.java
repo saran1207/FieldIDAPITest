@@ -19,6 +19,7 @@ import rfid.web.helper.SessionUser;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 
+@SuppressWarnings("serial")
 public class DateTimePicker extends Panel {
 
     private DateTextField dateTextField;
@@ -39,9 +40,9 @@ public class DateTimePicker extends Panel {
 
         add(dateTextField = new DateTextField("dateField", dateModel, javaDateFormat));
 
-        dateTextField.setOutputMarkupId(true);
+        getDateTextField().setOutputMarkupId(true);
 
-        ValidationBehavior.addValidationBehaviorToComponent(dateTextField);
+        ValidationBehavior.addValidationBehaviorToComponent(getDateTextField());
 
         Model<String> classModel = new Model<String>(includeTime ? "datetimepicker dateTime" : "datepicker date");
         dateTextField.add(new AttributeAppender("class", true, classModel, " "));
@@ -104,4 +105,8 @@ public class DateTimePicker extends Panel {
 
         return jsBuffer.toString();
     }
+
+	public DateTextField getDateTextField() {
+		return dateTextField;
+	}
 }

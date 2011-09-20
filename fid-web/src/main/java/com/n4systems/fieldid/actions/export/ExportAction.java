@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.actions.export;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -20,6 +22,8 @@ public class ExportAction extends AbstractAction {
 	@Autowired ExportService exportService;
 	
 	private Long eventTypeId;
+	private Long from;
+	private Long to;
 	private DownloadLink downloadLink;
 	private transient EventType eventType;
 
@@ -31,10 +35,18 @@ public class ExportAction extends AbstractAction {
 	
 	public String doExport() {
 		DownloadLink link = getDownloadLink();
-		exportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, link.getId() );
+		exportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId() );
 		return SUCCESS;
 	}
 	
+	private Date getToDate() {
+		return to==null ? new Date(Long.MAX_VALUE) : new Date(to);
+	}
+
+	private Date getFromDate() {
+		return from==null ? new Date(0) : new Date(from);
+	}
+
 	private String generateFileName() {
 		return String.format("%s_Events.xls", getEventType().getName());		
 	}
@@ -80,6 +92,22 @@ public class ExportAction extends AbstractAction {
 	public String getReportName() {
 		reportName = generateFileName();
 		return reportName;
+	}
+
+	public void setFrom(Long from) {
+		this.from = from;
+	}
+
+	public Long getFrom() {
+		return from;
+	}
+
+	public void setTo(Long to) {
+		this.to = to;
+	}
+
+	public Long getTo() {
+		return to;
 	}
 	
 }

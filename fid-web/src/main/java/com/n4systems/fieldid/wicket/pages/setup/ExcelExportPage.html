@@ -4,14 +4,22 @@
 
         <div id="formErrors" wicket:id="feedbackPanel"></div>
 
-        <h2><wicket:message key="label.search_settings"/></h2>
+        <h2><wicket:message key="label.exporttoexcel"/></h2>
 
         <div class="">
             <label for="criteria.eventType"><wicket:message key="label.eventtype"/></label>
-            <span class="fieldHolder">
-                <select wicket:id="eventType"></select>
-            </span>
-        </div>                
+            <select wicket:id="eventType"></select>
+        </div>
+        
+         <div class="">
+             <label for="fromDate"><wicket:message key="label.fdate"/></label>
+             <div wicket:id="fromDate"></div>
+         </div>
+         
+         <div class="">
+             <label for="toDate"><wicket:message key="label.tdate"/></label>
+             <div wicket:id="toDate"></div>
+         </div>
 
 		<div style="height:120px; display:block;">
 			<!--  placeHolder ..need a proper "minheight" implementation -->
