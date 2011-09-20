@@ -21,6 +21,8 @@ import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.DateFieldCriteria;
+import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Event;
@@ -203,6 +205,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             }
                         } else if (result instanceof NumberFieldCriteriaResult) {
                             stateView.setState(getNumberStringValue(result));
+                        } else if (result instanceof DateFieldCriteriaResult) {
+                        	stateView.setState(getDateStringValue((DateFieldCriteriaResult)result));
                         }
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
                         criteriaViews.add(stateView);
@@ -212,6 +216,10 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         }
 
 		return criteriaViews;
+	}
+
+	private String getDateStringValue(DateFieldCriteriaResult result) {
+		return formatDate(result.getValue(), ((DateFieldCriteria)result.getCriteria()).isIncludeTime());
 	}
 
 	private String getNumberStringValue(CriteriaResult result) {
