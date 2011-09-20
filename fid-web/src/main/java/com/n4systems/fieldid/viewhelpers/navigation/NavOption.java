@@ -79,7 +79,7 @@ public class NavOption {
 	public int hashCode() {
 		return name.hashCode();
 	}
-
+	
 	public String getConditionalView() {
 		return (conditionalView != null) ? conditionalView : "true";
 	}

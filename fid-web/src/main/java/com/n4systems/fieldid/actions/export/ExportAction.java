@@ -1,12 +1,17 @@
 package com.n4systems.fieldid.actions.export;
 
-import java.util.Date;
+import static com.google.common.base.Preconditions.*;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.export.ExportService;
 import com.n4systems.model.EventType;
 import com.n4systems.model.downloadlink.ContentType;
@@ -20,6 +25,7 @@ import com.n4systems.security.Permissions;
 public class ExportAction extends AbstractAction {
 
 	@Autowired ExportService exportService;
+	@Autowired EventService eventService;
 	
 	private Long eventTypeId;
 	private Long from;
@@ -32,17 +38,28 @@ public class ExportAction extends AbstractAction {
 	public ExportAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
+
+	public List<EventType> getEventTypes() {
+		return eventService.getEventTypes();
+	}
 	
+	@SkipValidation
+	public String doShow() { 
+		return SUCCESS;
+	}
+	
+	@SkipValidation
 	public String doExport() {
 		DownloadLink link = getDownloadLink();
 		exportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId() );
 		return SUCCESS;
 	}
-	
+		
 	private Date getToDate() {
 		return to==null ? new Date(Long.MAX_VALUE) : new Date(to);
 	}
 
+	
 	private Date getFromDate() {
 		return from==null ? new Date(0) : new Date(from);
 	}
@@ -53,16 +70,17 @@ public class ExportAction extends AbstractAction {
 
 	private EventType getEventType() {
 		if (eventType==null) { 
-			eventType = persistenceManager.find(EventType.class, eventTypeId);
+			eventType = persistenceManager.find(EventType.class, getEventTypeId());
 		}
 		return eventType;
 	}
 
-	public void setEventType(Long eventType) {
-		this.eventTypeId = eventType;
+	public void setEventTypeId(Long eventTypeId) {
+		this.eventTypeId = eventTypeId;
 	}
 
 	public Long getEventTypeId() {
+		checkNotNull(eventTypeId, "event type id must be supplied");
 		return eventTypeId;
 	}
 

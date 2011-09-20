@@ -1693,6 +1693,18 @@
 			</result>
 		</action>
 
+		<action name="exportEvent" method="show" class="com.n4systems.fieldid.actions.export.ExportAction">
+			<result name="success" type="freemarker">/templates/html/export/show.ftl</result>
+			<!--  pass parameters here?? -->
+			<result name="input" type="freemarker">/templates/html/export/show.ftl</result>
+		</action>
+
+		<action name="exportEventUpdate" method="export" class="com.n4systems.fieldid.actions.export.ExportAction">
+			<result name="input" type="freemarker">/templates/html/downloads/show.ftl</result>
+		
+			<result name="error" type="freemarker">/templates/html/export/show.ftl</result>			
+			<result name="success" type="redirectAction">exportEvent</result>			
+		</action>
 
 		<action name="myAccount" method="edit" class="com.n4systems.fieldid.actions.user.MyAccount">
 			<result name="success" type="freemarker">/templates/html/myAccount/edit.ftl</result>
@@ -2292,7 +2304,7 @@
 			</result>
 			<result name="error" type="redirectAction">showDownloads</result>
 		</action>
-
+	
 		<action name="showDownloads" method="show" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="input" type="freemarker">/templates/html/downloads/show.ftl</result>
 			<result name="success" type="freemarker">/templates/html/downloads/show.ftl</result>

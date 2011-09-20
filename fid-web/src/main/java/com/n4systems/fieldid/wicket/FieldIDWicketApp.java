@@ -53,9 +53,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("savedReport", RunSavedReportPage.class);
         
         mountBookmarkablePage("admin/addTenant", AddTenantPage.class);
-        
-        mountBookmarkablePage("setup/export", ExcelExportPage.class);        
-
+             
         getMarkupSettings().setStripWicketTags(true);
         getResourceSettings().addStringResourceLoader(0, new CustomerLanguageResourceLoader());
         getResourceSettings().addStringResourceLoader(0, new TenantOverridesResourceLoader());

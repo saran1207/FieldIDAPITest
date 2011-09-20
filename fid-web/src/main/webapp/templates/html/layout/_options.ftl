@@ -1,6 +1,6 @@
 <ul class="options <#if navOptions.filteredOptions.empty> emptyOptions</#if>">
 	<#list navOptions.filteredOptions as option>
-		<#if !option.entity || navOptions.entityLoaded() >
+		<#if !option.entity || navOptions.entityLoaded()  >
 			<#if option.conditionalView?eval >
 				<li class="<#if option.rightJustified >add</#if> <#if option.name == navOptions.currentAction>selected</#if>">
 					<#if option.name != navOptions.currentAction>
