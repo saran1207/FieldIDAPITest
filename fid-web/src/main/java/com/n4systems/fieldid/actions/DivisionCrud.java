@@ -130,7 +130,7 @@ public class DivisionCrud extends AbstractCrud {
 		
 		// if the address info was created by our loadMemberFields, 
 		// we need to nullify it or it'll screw with the delete process
-		if (division.getAddressInfo().isNew()) {
+		if (division.getAddressInfo() !=null && division.getAddressInfo().isNew()) {
 			division.setAddressInfo(null);
 		}
 		
