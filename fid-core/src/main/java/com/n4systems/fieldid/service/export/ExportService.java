@@ -28,8 +28,6 @@ import com.n4systems.fieldid.service.task.AsyncTaskFactory;
 import com.n4systems.fieldid.service.task.AsyncTaskFactory.AsyncTask;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
-import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.user.User;
@@ -53,18 +51,18 @@ public class ExportService extends FieldIdPersistenceService {
 	 */
 	
 	@Transactional
-	public DownloadLink exportEventTypeToExcel(Long userId, final EventType eventType, final String fileName) {
+	public DownloadLink exportEventTypeToExcel(Long userId, final Long eventTypeId, Long linkId) {
 		System.out.println("calling service in thread " + Thread.currentThread().getId() + Thread.currentThread().getName());
 		
 		final User user = userService.getUser(userId);
 		checkNotNull(user);		
 		final String dateFormat = user.getOwner().getPrimaryOrg().getDateFormat();
-		
-		final DownloadLink link = createDownloadLink(user, fileName, ContentType.EXCEL);
+
+		final DownloadLink link = persistenceService.find(DownloadLink.class,linkId);
 
 		AsyncTask<?> task = asyncTaskFactory.createTask(new Callable<Void>() {
 			@Override public Void call() { 
-				generateEventByTypeExport(link.getFile(), link.getId(), "https://n4.derek.n4systems.net/fieldid/showDownloads.action?fileId=", eventType.getId(), dateFormat); 
+				generateEventByTypeExport(link.getFile(), link.getId(), "https://n4.derek.n4systems.net/fieldid/showDownloads.action?fileId=", eventTypeId, dateFormat); 
 				return null;  // Void 
 			}
 		});
@@ -107,18 +105,5 @@ public class ExportService extends FieldIdPersistenceService {
 			excelMapWriter.write(exportMapMarshaller.toBeanMap(view));
 		}			
 	}	
-
-	private DownloadLink createDownloadLink(User user, String name, ContentType type) {
-		DownloadLink link = new DownloadLink();
-		link.setState(DownloadState.REQUESTED);
-		link.setContentType(type);
-		link.setTenant(user.getTenant());
-		link.setUser(user);
-		link.setName(name);
-		persistenceService.save(link);
-		return link;
-	}			
-	
-	
 	
 }

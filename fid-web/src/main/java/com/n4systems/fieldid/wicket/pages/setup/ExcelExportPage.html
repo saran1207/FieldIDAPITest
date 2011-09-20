@@ -1,6 +1,6 @@
 <wicket:extend>
 
-    <form wicket:id="excelExportForm" class="crudForm twoColumns pageSection">
+    <form wicket:id="form" class="crudForm twoColumns pageSection">
 
         <div id="formErrors" wicket:id="feedbackPanel"></div>
 
@@ -9,21 +9,16 @@
         <div class="">
             <label for="criteria.eventType"><wicket:message key="label.eventtype"/></label>
             <span class="fieldHolder">
-                <select class="chzn-select" wicket:id="eventType"></select>
+                <select wicket:id="eventType"></select>
             </span>
         </div>                
 
-		<div style="height:200px; display:block;">
+		<div style="height:120px; display:block;">
 			<!--  placeHolder ..need a proper "minheight" implementation -->
 		</div>
 		
-        <div class="formAction">
-            <input wicket:id="exportButton" type="submit" wicket:message="value:label.Run" />
-        </div>
+        <a wicket:id="exportToExcelLink" rel="ajax" title=' :: :: scrolling:true, autosize: true'><wicket:message key="label.exporttoexcel"/></a>    
 
-
-    </form>
-    
-	<script type="text/javascript"> jQuery(".chzn-select").chosen(); </script>    
+    </form>    	
     
 </wicket:extend>

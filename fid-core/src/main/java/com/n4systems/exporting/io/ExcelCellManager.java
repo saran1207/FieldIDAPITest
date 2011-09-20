@@ -47,12 +47,6 @@ class ExcelCellManager {
 			cell = new Label(col, row, value.toString());
 		}		
 		
-		if (sheet.getName().equals("Evenets"))  
-		System.out.println(sheet.getName() + " : " + value + " @ " + row + "," + col);
-		
-//		WritableCellFeatures writableCellFeatures = new WritableCellFeatures();
-//		writableCellFeatures.setComment("("+row+","+col+")");
-//		cell.setCellFeatures(writableCellFeatures);
 		return cell;
 	}
 

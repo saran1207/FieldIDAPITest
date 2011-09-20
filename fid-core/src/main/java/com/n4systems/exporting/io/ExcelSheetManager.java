@@ -18,10 +18,11 @@ public class ExcelSheetManager {
 	
 	private String[] sheetTitles = {"Sheet1"};
 
-	private ExcelCellManager excelCellManager = new ExcelCellManager();
+	protected ExcelCellManager excelCellManager = new ExcelCellManager();
 	Map<String, WritableSheet> sheets = new HashMap<String, WritableSheet>();
 	
 	public ExcelSheetManager() {
+		excelCellManager = new ExcelCellManager();
 	}
 	
 	public ExcelSheetManager(String... sheetTitles) { 
