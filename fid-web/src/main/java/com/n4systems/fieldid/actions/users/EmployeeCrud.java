@@ -85,6 +85,7 @@ public class EmployeeCrud extends UserCrud {
 		return super.doShow();
 	}
 	
+	@SkipValidation
 	public String doUnlock() {
 		try { 
 			user.unlock();
@@ -94,6 +95,7 @@ public class EmployeeCrud extends UserCrud {
 			return ERROR;
 		}
 		addFlashMessageText("message.user_unlocked");		
+		setupPermissions();
 		return SUCCESS;
 	}
 	
