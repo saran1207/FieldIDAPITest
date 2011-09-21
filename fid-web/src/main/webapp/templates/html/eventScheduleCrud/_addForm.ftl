@@ -30,11 +30,11 @@
 				<label class="label" for="type"><@s.text name="label.when_is_it_due"/></label>
 				<@s.textfield id="nextDate" name="nextDate" cssClass="datepicker" />
 				<span class="dateQuickLinks">
-					<a href="#" onclick="$('nextDate').value = formatDate(new Date());">Today</a> |
-					<a href="#" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1));">Tomorrow</a> |
-					<a href="#" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1));">Next Month</a> |
-					<a href="#" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6));">In 6 Months</a> |
-					<a href="#" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1));">Next Year</a>
+					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(new Date());">Today</a> |
+					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1));">Tomorrow</a> |
+					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1));">Next Month</a> |
+					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6));">In 6 Months</a> |
+					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1));">Next Year</a>
 				</span>
 			</div>	
 			
