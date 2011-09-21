@@ -25,7 +25,7 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 	var div = new Element( 'div', { 'id':frameId, 'class':'fileUpload imageUploadPreview attachementsPreview'} 
 		).insert( new Element( 'input', { 'type':'hidden', 'name':'uploadedFiles[' + frameCount + '].fileName', value:directory } )
 		).insert( new Element( 'div', {'class':'previewImageDisplay'} 
-			).insert( new Element( 'img', {'alt':'fileName', 'src':'images/file-icon.png', 'width': '27px'}))
+			).insert( new Element( 'img', {'alt':'fileName',  'class':'previewImage', 'src':'images/file-icon.png', 'width': '27px'}))
 		).insert( new Element('span'
 			).insert( new Element('label').update( fileName + " | ")
 			).insert( new Element( 'a', { id: frameId + "_remove", href:"javascript:void(0)" } ).update( removeText ))
@@ -35,6 +35,7 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 			)
 		);
 	
+	div.select('img[class="previewImage"]').each(function(x) {x.height=27; x.width=28;});	
 	$(frameId).replace( div );
 	$(frameId + "_remove").onclick = func;
 }
