@@ -6,7 +6,6 @@
 		
 		<@s.form id="download_name" action="saveEventExportDownloadName" namespace="/" theme="fieldidSimple">	
 			<@s.hidden name="linkId" value="${downloadLink.id}"/>
-			<@s.hidden name="eventTypeId" value="${eventTypeId}"/>
 			<@s.textfield id="reportName" name="reportName" maxlength="255"/>
 					
 			<div class="formActions">
