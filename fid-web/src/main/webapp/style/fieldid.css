@@ -1948,7 +1948,7 @@ div.unitOfMeasureName {
 #newScheduleForm {
 	overflow:hidden;
 	width:600px;
-	border:solid 1px #999;
+	border:solid 1px #DDD;
 	background-color:#fff;
 	z-index: 1;
 }
@@ -2007,7 +2007,7 @@ div.unitOfMeasureName {
 }
 
 #nextDate {
-	width: 150px;
+	width: 95px;
 }
 
 #startEvent{
