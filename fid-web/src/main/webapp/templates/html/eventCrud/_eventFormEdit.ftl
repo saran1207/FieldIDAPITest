@@ -23,10 +23,12 @@
 
             <#if criteriaResults?exists && criteriaResults[criteriaCount]?exists>
                 <#list criteriaCount .. criteriaResults?size as idx>
-                    <#assign criteriaResult = criteriaResults[criteriaCount]>
-                    <#if criteriaResult.criteriaId = criteria.id><#break></#if>
-                    <#assign criteriaCount=criteriaCount+1 />
-                    <#assign criteriaSkipped=criteriaSkipped+1/>
+                    <#if criteriaResults[criteriaCount]?exists>
+                        <#assign criteriaResult = criteriaResults[criteriaCount]>
+                        <#if criteriaResult.criteriaId = criteria.id><#break></#if>
+                        <#assign criteriaCount=criteriaCount+1 />
+                        <#assign criteriaSkipped=criteriaSkipped+1/>
+                    </#if>
                 </#list>
             </#if>
 
