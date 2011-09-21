@@ -122,6 +122,7 @@ public class UserLimitService extends FieldIdPersistenceService {
 	
 	public void updateUserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers) {
 		tenantSettingsService.updateUserLimits(new UserLimits(maxEmployeeUsers, maxLiteUsers, maxReadOnlyUsers));
+		userLimits = tenantSettingsService.getTenantSettings().getUserLimits();
 	}
 	
 }
