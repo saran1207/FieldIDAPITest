@@ -1693,17 +1693,26 @@
 			</result>
 		</action>
 
+		<action name="saveEventExportDownloadName" method="confirmDownloadName" class="com.n4systems.fieldid.actions.export.ExportAction">
+			<result name="success" type="redirectAction">
+				<param name="actionName">showDownloads</param>
+			</result>
+		</action>
+		
+
 		<action name="exportEvent" method="show" class="com.n4systems.fieldid.actions.export.ExportAction">
-			<result name="success" type="freemarker">/templates/html/export/show.ftl</result>
-			<!--  pass parameters here?? -->
-			<result name="input" type="freemarker">/templates/html/export/show.ftl</result>
+			<result name="success" type="freemarker">/templates/html/export/show.ftl</result>			
+			<result name="input" type="freemarker">/templates/html/export/show.ftl</result>			
 		</action>
 
 		<action name="exportEventUpdate" method="export" class="com.n4systems.fieldid.actions.export.ExportAction">
-			<result name="input" type="freemarker">/templates/html/downloads/show.ftl</result>
-		
+			<result name="success" type="redirectAction">
+				<param name="actionName">exportEvent</param>
+				<param name="eventTypeId">${eventTypeId}</param>
+				<param name="from">${from}</param>
+				<param name="to">${to}</param>
+			</result>
 			<result name="error" type="freemarker">/templates/html/export/show.ftl</result>			
-			<result name="success" type="redirectAction">exportEvent</result>			
 		</action>
 
 		<action name="myAccount" method="edit" class="com.n4systems.fieldid.actions.user.MyAccount">

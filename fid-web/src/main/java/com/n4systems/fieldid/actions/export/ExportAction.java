@@ -2,10 +2,11 @@ package com.n4systems.fieldid.actions.export;
 
 import static com.google.common.base.Preconditions.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -28,8 +29,9 @@ public class ExportAction extends AbstractAction {
 	@Autowired EventService eventService;
 	
 	private Long eventTypeId;
-	private Long from;
-	private Long to;
+	private String from;
+	private String to;
+	private Long linkId;
 	private DownloadLink downloadLink;
 	private transient EventType eventType;
 
@@ -43,31 +45,16 @@ public class ExportAction extends AbstractAction {
 		return eventService.getEventTypes();
 	}
 	
-	@SkipValidation
 	public String doShow() { 
 		return SUCCESS;
 	}
 	
-	@SkipValidation
 	public String doExport() {
-		DownloadLink link = getDownloadLink();
+		DownloadLink link = getDownloadLink();		
 		exportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId() );
 		return SUCCESS;
 	}
 		
-	private Date getToDate() {
-		return to==null ? new Date(Long.MAX_VALUE) : new Date(to);
-	}
-
-	
-	private Date getFromDate() {
-		return from==null ? new Date(0) : new Date(from);
-	}
-
-	private String generateFileName() {
-		return String.format("%s_Events.xls", getEventType().getName());		
-	}
-
 	private EventType getEventType() {
 		if (eventType==null) { 
 			eventType = persistenceManager.find(EventType.class, getEventTypeId());
@@ -75,6 +62,18 @@ public class ExportAction extends AbstractAction {
 		return eventType;
 	}
 
+	public String doConfirmDownloadName() {
+		DownloadLink link = persistenceManager.find(DownloadLink.class, getLinkId());		
+		if (link==null) { 
+			return ERROR;
+		}
+		if(!reportName.equals(link.getName()) && !reportName.isEmpty()) {
+			link.setName(reportName);
+			persistenceManager.update(link);
+		}
+		return SUCCESS;
+	}
+	
 	public void setEventTypeId(Long eventTypeId) {
 		this.eventTypeId = eventTypeId;
 	}
@@ -112,22 +111,51 @@ public class ExportAction extends AbstractAction {
 		return reportName;
 	}
 
-	public void setFrom(Long from) {
+	public void setFrom(String from) {
 		this.from = from;
 	}
 
-	public Long getFrom() {
+	public String getFrom() {
 		return from;
 	}
 
-	public void setTo(Long to) {
+	public void setTo(String to) {
 		this.to = to;
 	}
 
-	public Long getTo() {
+	public String getTo() {
 		return to;
 	}
 	
+	private Date getToDate() {
+		try {
+			return to==null ? new Date(Long.MAX_VALUE) : new SimpleDateFormat("MM/dd/yy").parse(to);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return new Date(Long.MAX_VALUE);		
+		}
+	}
+	
+	private Date getFromDate() {
+		try {
+			return from==null ? new Date(0) : new SimpleDateFormat("MM/dd/yy").parse(from);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return new Date(0);		
+		}
+	}
+
+	private String generateFileName() {
+		return reportName = String.format("%s_Events.xls", getEventType().getName());		
+	}
+
+	public void setLinkId(Long linkId) {
+		this.linkId = linkId;
+	}
+
+	public Long getLinkId() {
+		return linkId;
+	}
 }
 
 
