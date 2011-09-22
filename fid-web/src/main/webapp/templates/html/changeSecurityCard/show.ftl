@@ -16,9 +16,10 @@ ${action.setPageType('my_account', 'mobile_passcode')!}
 	</div>
 	
 <#else>
-<div>
 <div class="passcodeActions">
 <input type="button" onClick="location.href='<@s.url action="removeMobilePasscode"/>'" value="<@s.text name='label.disable_mobile_passcode' />" />
+</div>
+<div class="passcodeActions">
 <input type="button" onClick="location.href='<@s.url action="editMobilePasscode"/>'" value="<@s.text name='label.change_mobile_passcode' />" />
 </div>
 </#if>

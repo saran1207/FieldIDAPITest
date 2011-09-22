@@ -21,14 +21,15 @@
 
 
 .passcodeActions {
-	margin-left: 250px;
-
+	text-align:center;
+	margin: 0 auto;	
+	margin: 20px 0px;
 }
 
 .passcodeActions input{
-	display: block;
-	margin: 20px 0;
+	display: inline;
 	font-size: 1.5em;
 	padding: 2px 0;
 	width: 400px;
+	text-align:center;
 }
