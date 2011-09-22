@@ -20,6 +20,7 @@ ${action.setPageType('asset', 'show')!}
 
 
 <div class="columnLeft">
+	<#assign isMultiAdd=false>
 	<div>	
 		<#if asset.imageName?exists >
 			<p>
