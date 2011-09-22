@@ -51,7 +51,7 @@ public class CopyEventFactory {
 		newEvent.setProofTestInfo( copyProofTestInfo( event.getProofTestInfo() ) );
 		newEvent.setSubEvents( copySubEvents( event.getSubEvents() ) );
         newEvent.setEventForm(event.getEventForm());
-		
+
 		return newEvent;
 	}
 	
@@ -100,6 +100,7 @@ public class CopyEventFactory {
 		newEvent.setInfoOptionMap( new HashMap<String, String>( originalEvent.getInfoOptionMap() ) );
 		
 		newEvent.setCriteriaResults( copyCriteriaResults( originalEvent.getResults(), newEvent) );
+        newEvent.setEditable(originalEvent.isEditable());
 	}
 	
 	protected static List<FileAttachment> copyFileAttachments( List<FileAttachment> oldFileAttachments ) {

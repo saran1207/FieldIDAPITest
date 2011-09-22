@@ -162,6 +162,7 @@ public class MasterEvent {
 		event.setModified(subEvent.getModified());
 		event.setModifiedBy(subEvent.getModifiedBy());
         event.setEventForm(subEvent.getEventForm());
+        event.setEditable(subEvent.isEditable());
 
 		return event;
 	}
@@ -181,6 +182,7 @@ public class MasterEvent {
 		subEvent.setModified(event.getModified());
 		subEvent.setModifiedBy(event.getModifiedBy());
         subEvent.setEventForm(event.getEventForm());
+        subEvent.setEditable(event.isEditable());
 
 		return subEvent;
 	}
