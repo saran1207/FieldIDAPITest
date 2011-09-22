@@ -2286,6 +2286,7 @@ div.unitOfMeasureName {
 
 .egColor {
 	color: #999999;
+	padding : 0px 0px 0px 0px !important;
 }
 
 .labelDescription {

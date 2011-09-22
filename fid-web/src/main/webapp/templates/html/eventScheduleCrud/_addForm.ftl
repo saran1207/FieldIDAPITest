@@ -8,26 +8,25 @@
 		
 		<#include "../common/_formErrors.ftl"/>
 		
-		<div class="fluentSets schedulesAdd" id="newScheduleForm" style="display:none" >
+		<div class="fluentSets schedulesAdd newScheduleForm" id="newScheduleForm" style="display:none" >
 			<h2><@s.text name="label.add_a_schedule"/></h2>
-			<@s.hidden name="assetId"  />
+			<@s.hidden name="assetId"/>
 			<div class="infoSet"> 
-				<label class="label" for="type"><@s.text name="label.what_should_be_scheduled"/></label>
+				<label class="label"><@s.text name="label.what_should_be_scheduled"/></label>
 				<@s.select name="type" list="eventTypes" listKey="id" listValue="name"/>
 			</div>
 					
 			<#if securityGuard.projectsEnabled>
 				<div class="infoSet"> 
-					<label class="label" for="type">
-						<@s.text name="label.assign_to_a_job"/>
-						<span class="egColor">(<@s.text name="label.optional"/>)</span>
+					<label class="label" >
+						<@s.text name="label.assign_to_a_job"/><span class="egColor" style="width:auto;">(<@s.text name="label.optional"/>)</span>
 					</label>
 					<@s.select name="project" list="jobs" listKey="id" listValue="name" emptyOption="true"/>
 				</div>
 			</#if>
 			
 			<div class="infoSet">
-				<label class="label" for="type"><@s.text name="label.when_is_it_due"/></label>
+				<label class="label"><@s.text name="label.when_is_it_due"/></label>
 				<@s.textfield id="nextDate" name="nextDate" cssClass="datepicker" />
 				<span class="dateQuickLinks">
 					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(new Date());">Today</a> |
