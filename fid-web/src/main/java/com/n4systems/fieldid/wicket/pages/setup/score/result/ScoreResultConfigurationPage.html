@@ -1,16 +1,50 @@
 <wicket:extend>
 
-    <form wicket:id="scoreConfigurationForm">
+    <form wicket:id="scoreConfigurationForm" class="scoreResultConfig">
 
-        <select wicket:id="scoreCalculationType"></select> <input type="checkbox" wicket:id="useScoreForResult"> <wicket:message key="label.use_score_for_result"/>
+        <div class="totalTypeSection">
+            <div class="leftColumn">
+                <wicket:message key="label.total_the_score_using"/>
+            </div>
 
-        <br/>
+            <div class="rightColumn">
+                <select wicket:id="scoreCalculationType"></select>
+            </div>
+        </div>
 
-        Fail: <div wicket:id="failRangePanel"></div>
+        <div  class="rowContainer">
+            <div class="leftColumn">
+                <wicket:message key="label.use_score_for_result"/>
+            </div>
 
-        Pass: <div wicket:id="passRangePanel"></div>
+            <div class="rightColumn">
+                <input type="checkbox" wicket:id="useScoreForResult">
+            </div>
+        </div>
 
-        <input type="submit" wicket:id="submitButton" wicket:message="value:label.save">
+        <div class="rowContainer">
+            <div class="leftColumn">
+                <wicket:message key="label.set_the_result_to"/> <span class="failText"><wicket:message key="label.fail"/></span> <wicket:message key="label.if_score_total_is"/>
+            </div>
+
+            <div class="rightColumn">
+                <div wicket:id="failRangePanel"></div>
+            </div>
+        </div>
+
+        <div class="rowContainer">
+            <div class="leftColumn">
+                <wicket:message key="label.set_the_result_to"/> <span class="passText"><wicket:message key="label.pass"/></span> <wicket:message key="label.if_score_total_is"/>
+            </div>
+
+            <div class="rightColumn">
+                <div wicket:id="passRangePanel"></div>
+            </div>
+        </div>
+
+        <div class="formAction">
+            <input type="submit" wicket:id="submitButton" wicket:message="value:label.save"> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
 
     </form>
 

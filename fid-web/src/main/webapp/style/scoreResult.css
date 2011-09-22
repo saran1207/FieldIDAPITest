@@ -1,0 +1,59 @@
+.scoreResultConfig {
+    padding:10px;
+    font-size: 12px;
+}
+
+.scoreResultConfig select {
+    padding: 3px;
+}
+
+.scoreResultConfig .leftColumn {
+    width: 33%;
+    display:block;
+    float:left;
+    padding:8px 5px 1px 0;
+    text-align:right;
+    clear:both;
+}
+
+.scoreResultConfig .rightColumn {
+    width: 63%;
+    display:block;
+    float:left;
+    padding:3px;
+}
+
+.scoreResultConfig .rowContainer {
+    display:block;
+    overflow:hidden;
+    padding-top:8px;
+    padding-bottom:8px;
+}
+
+.scoreResultConfig .passText {
+    color:#00aa00;
+    font-weight:bold;
+}
+
+.scoreResultConfig .failText {
+    color:#aa0000;
+    font-weight:bold;
+}
+
+.scoreResultConfig .totalTypeSection {
+    border-bottom:1px solid #ccc;
+    display:block;
+    overflow:hidden;
+    padding-bottom:20px;
+}
+
+.scoreResultConfig input[type="text"] {
+    padding: 4px;
+    border: 1px solid #9C9C9C;
+    color: #555555;
+    width: 100px;
+}
+
+.scoreResultConfig input[type="checkbox"] {
+    margin-top:4px;
+}

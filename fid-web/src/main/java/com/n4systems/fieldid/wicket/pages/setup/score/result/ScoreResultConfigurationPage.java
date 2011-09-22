@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.score.result;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.model.EventForm;
@@ -10,6 +11,7 @@ import com.n4systems.model.ScoreCalculationType;
 import com.n4systems.model.ScoreResultRange;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RedirectToUrlException;
+import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -32,6 +34,7 @@ public class ScoreResultConfigurationPage extends EventTypePage {
         super(params);
 
         add(new ScoreConfigurationForm("scoreConfigurationForm"));
+        add(CSSPackageResource.getHeaderContribution("style/scoreResult.css"));
     }
 
     @Override
@@ -53,6 +56,7 @@ public class ScoreResultConfigurationPage extends EventTypePage {
             add(new ScoreResultRangePanel("failRangePanel", new PropertyModel<ScoreResultRange>(eventForm, "failRange")));
             add(new ScoreResultRangePanel("passRangePanel", new PropertyModel<ScoreResultRange>(eventForm, "passRange")));
 
+            add(new NonWicketLink("cancelLink", "eventType.action?uniqueID="+eventTypeId));
             add(new Button("submitButton"));
         }
 
@@ -65,7 +69,7 @@ public class ScoreResultConfigurationPage extends EventTypePage {
                 persistenceService.update(eventType);
             }
             persistenceService.update(eventForm);
-            FieldIDSession.get().storeInfoMessageForStruts("Scoring configuration saved successfully");
+            FieldIDSession.get().storeInfoMessageForStruts(new FIDLabelModel("label.score_config_saved").getObject());
             throw new RedirectToUrlException("/eventType.action?uniqueID=" + eventTypeId);
         }
 
