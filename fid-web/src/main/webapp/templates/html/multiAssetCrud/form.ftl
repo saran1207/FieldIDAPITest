@@ -15,6 +15,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/multiAddAsset.js" />"></script>
 	<@n4.includeStyle type="page" href="asset"/>
 	<@n4.includeStyle type="page" href="multiadd"/>
+	<@n4.includeStyle href="newCss/event/event_schedule"/>	
 	<script type="text/javascript">
 		var loading_holder = '${loaderDiv?js_string}';
 
@@ -37,6 +38,8 @@
 </#if>
 
 <div id="steps">
+	<#assign isMultiAdd=true>	
+
 	<div class="step">
 		<@s.form id="step1form" theme="fieldid" cssClass="fullForm fluidSets">
 			<#include "_step1.ftl" />

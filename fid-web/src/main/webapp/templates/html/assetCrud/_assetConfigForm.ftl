@@ -105,4 +105,8 @@
 			<@s.select name="publishedState" list="publishedStates" listKey="id" listValue="name" />
 		</div>
 	</#if>
+	
+	<#if isMultiAdd>
+		<#include "/templates/html/eventCrud/_schedules.ftl" />
+	</#if>	
 </div>

@@ -18,6 +18,7 @@
 	<@s.hidden name="lineItemId" />
 	<@s.hidden name="tagOptionId" />
 	<#assign isAddForm=true>
+	<#assign isMultiAdd=false>	
 	<#include "_assetForm.ftl" />
 	
 	<div class="formAction">
