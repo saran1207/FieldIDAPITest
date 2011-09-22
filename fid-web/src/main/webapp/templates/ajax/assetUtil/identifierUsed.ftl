@@ -8,5 +8,8 @@
 <#assign html>
 	<span class="warning"><@s.text name="label.identifier_in_use"/></span>
 </#assign>
-$$('#identifierRow_${id!} .identifierStatus').each( function(element) { element.update('${html?js_string}')});
+$$('#identifierRow_${id!} .identifierStatus').each( 
+	function(element) { 
+		element.update('${html?js_string}'); element.show();
+		});
 $('identifierRow_${id!}').addClassName('warning');

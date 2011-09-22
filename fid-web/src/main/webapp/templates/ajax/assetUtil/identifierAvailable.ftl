@@ -5,5 +5,8 @@
 		<#assign id=uniqueId />
 	</#if>
 </#if>
-$$('#identifierRow_${id!} .identifierStatus').each( function(element) { element.update('')});
+$$('#identifierRow_${id!} .identifierStatus').each( 
+	function(element) { 
+		element.update(''); element.hide();
+	});
 $('identifierRow_${id!}').removeClassName('warning');

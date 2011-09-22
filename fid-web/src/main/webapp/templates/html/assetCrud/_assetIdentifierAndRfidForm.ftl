@@ -16,10 +16,10 @@
 		<div class="infoSet">
 			<label for="identifier" class="label"> <#include "../common/_requiredMarker.ftl"/><span class="identifierLabel">${identifierLabel}</span></label>
 			<span class="fieldHolder withAdditionalContent">
-				<@s.textfield id="identifierText"  name="identifier" onchange="checkIdentifier('IdentifierText', '${uniqueID?default('')}');"/>
+				<@s.textfield id="identifierText"  name="identifier" onchange="checkIdentifier(this.id, '${uniqueID?default('')}');"/>
 				<a href="#" onclick="generateIdentifier('identifierText', ${uniqueID!'\'\''}, $('assetType').value);return false;"><@s.text name="label.generate" /></a>
 			</span>
-			<span class="fieldHolder identifierStatus"></span>
+			<span class="fieldHolder identifierStatus" style="display:none"></span>
 			
 		</div>		
 	</div>

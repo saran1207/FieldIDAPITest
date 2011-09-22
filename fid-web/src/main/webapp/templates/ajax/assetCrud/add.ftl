@@ -9,7 +9,7 @@
 				
 			<span  class="fieldHolder">
 				<span>
-					<@s.textfield name="identifier" id="subAssetIdentifier_${assetTypeId}" onchange="checkIdentifier('subAssetIdentifier_${assetTypeId}', -${assetTypeId});" theme="fieldidSimple" />
+					<@s.textfield name="identifier" id="subAssetIdentifier_${assetTypeId}" onchange="checkIdentifier(this.id, -${assetTypeId});" theme="fieldidSimple" />
 				
 					<span class="action">
 						<a href="generateIdentifier" target="_blank" onclick="generateIdentifier('subAssetIdentifier_${assetTypeId}', -${assetTypeId}, ${assetTypeId}); return false;" ><@s.text name="label.generate"/></a>
