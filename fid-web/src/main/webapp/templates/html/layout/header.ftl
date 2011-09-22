@@ -20,7 +20,7 @@
 						</li>
 					</#if>
 				<li>
-		  			<a href="http://www.n4systems.com/support" target="_blank"><@s.text name="label.support"/></a>
+		  			<a href="http://help.fieldid.com/" target="_blank"><@s.text name="label.support"/></a>
 				</li>
 				<#if userSecurityGuard.allowedAccessWebStore>
 					<li>

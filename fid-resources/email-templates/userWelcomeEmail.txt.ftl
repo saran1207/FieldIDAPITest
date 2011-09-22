@@ -15,6 +15,6 @@ Login Page: ${notification.signInUrl}
 Need Support? We're here to help
 ===============================================
 Get all of your Field ID questions answered:
-http://www.fieldid.com/support
+http://help.fieldid.com/
 
 Thanks for using Field ID!
