@@ -2,12 +2,12 @@ package com.n4systems.fieldid.wicket.pages.setup.score;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.ScoreService;
-import com.n4systems.fieldid.viewhelpers.handlers.ShowDecimalsOnlyIfTheyExistHandler;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.eventform.EditCopyDeleteItemPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Score;
 import com.n4systems.model.ScoreGroup;
+import com.n4systems.util.DoubleFormatter;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -126,7 +126,7 @@ public class ScoreGroupPanel extends Panel {
                     return new FIDLabelModel("label.indicates_na").getObject();
                 }
                 String hasAValueOf = new FIDLabelModel("label.has_a_value_of").getObject();
-                return hasAValueOf + " " + ShowDecimalsOnlyIfTheyExistHandler.simplifyDouble(model.getObject().getValue());
+                return hasAValueOf + " " + DoubleFormatter.simplifyDouble(model.getObject().getValue());
             }
 
             @Override

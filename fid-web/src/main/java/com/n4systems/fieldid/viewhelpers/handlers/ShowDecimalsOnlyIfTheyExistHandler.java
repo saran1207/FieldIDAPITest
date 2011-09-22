@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.util.DoubleFormatter;
 
 public class ShowDecimalsOnlyIfTheyExistHandler extends WebOutputHandler {
 
@@ -13,7 +14,7 @@ public class ShowDecimalsOnlyIfTheyExistHandler extends WebOutputHandler {
         if (!(value instanceof  Double)) {
             return value.toString();
         }
-        return simplifyDouble((Double) value);
+        return DoubleFormatter.simplifyDouble((Double) value);
     }
 
     @Override
@@ -21,15 +22,7 @@ public class ShowDecimalsOnlyIfTheyExistHandler extends WebOutputHandler {
         if (!(value instanceof  Double)) {
             return value.toString();
         }
-        return simplifyDouble((Double) value);
-    }
-
-    public static String simplifyDouble(Double d) {
-        if (d - d.intValue() != 0) {
-            return d.toString();
-        } else {
-            return d.intValue()+"";
-        }
+        return DoubleFormatter.simplifyDouble((Double) value);
     }
 
 }

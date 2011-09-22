@@ -8,12 +8,14 @@ import java.util.Map;
 
 import com.n4systems.fieldid.certificate.model.InspectionImage;
 import com.n4systems.model.OneClickCriteriaResult;
+import com.n4systems.model.ScoreCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
 import com.n4systems.services.signature.SignatureService;
+import com.n4systems.util.DoubleFormatter;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.n4systems.model.AbstractEvent;
@@ -53,7 +55,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	
 	private void addAbstractEventParameters() {
 		add("type", getEvent().getType().getName());
-		
+
+        add("score", getEvent().getScore());
 		add("comments", getEvent().getComments());
 		add("eventTypeDescription", getEvent().getType().getName());
 		add("eventInfoOptionMap", eventInfoOptions());
@@ -207,6 +210,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             stateView.setState(getNumberStringValue(result));
                         } else if (result instanceof DateFieldCriteriaResult) {
                         	stateView.setState(getDateStringValue((DateFieldCriteriaResult)result));
+                        } else if (result instanceof ScoreCriteriaResult) {
+                            stateView.setState(getScoreStringValue((ScoreCriteriaResult) result));
                         }
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
                         criteriaViews.add(stateView);
@@ -217,6 +222,13 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
 		return criteriaViews;
 	}
+
+    private String getScoreStringValue(ScoreCriteriaResult result) {
+        if (result.getScore().isNa()) {
+            return "N/A";
+        }
+        return DoubleFormatter.simplifyDouble(result.getScore().getValue());
+    }
 
 	private String getDateStringValue(DateFieldCriteriaResult result) {
 		return formatDate(result.getValue(), ((DateFieldCriteria)result.getCriteria()).isIncludeTime());
