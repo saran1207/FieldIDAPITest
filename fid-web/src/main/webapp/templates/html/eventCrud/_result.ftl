@@ -3,7 +3,7 @@
 	<label class="label" for="overrideResult"><@s.text name="label.result"/></label>
 	<span class="fieldHolder">
         <select id="overrideResult" name="modifiableEvent.overrideResult">
-            <#if action.hasAtLeastOneResultSettingCriteria()>
+            <#if action.isAutoResultAvailableForEvent()>
                 <option value="auto"><@s.text name="label.set_from_criteria"/></option>
             </#if>
             <#list results as result>

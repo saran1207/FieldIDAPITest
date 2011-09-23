@@ -6,7 +6,6 @@ import com.n4systems.fieldid.wicket.components.eventform.CriteriaDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.save.SavePanel;
-import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.model.Criteria;
@@ -166,32 +165,7 @@ public class EventFormEditPage extends EventTypePage {
     }
 
     private void saveEventForm() {
-        EventForm eventForm = new EventForm();
-        eventForm.setSections(createCopiesOf(criteriaSections));
-        eventForm.setTenant(FieldIDSession.get().getSessionUser().getTenant());
-
-        eventFormService.saveNewEventForm(eventTypeId, eventForm);
-    }
-
-    private List<CriteriaSection> createCopiesOf(List<CriteriaSection> criteriaSections) {
-        CriteriaSectionCopyUtil copyUtil = new CriteriaSectionCopyUtil();
-        List<CriteriaSection> copiedSections = new ArrayList<CriteriaSection>();
-        for (CriteriaSection section : criteriaSections) {
-            CriteriaSection criteriaSection = copyUtil.copySection(section);
-            filterRetiredCriteria(criteriaSection);
-            copiedSections.add(criteriaSection);
-        }
-        return copiedSections;
-    }
-
-    private void filterRetiredCriteria(CriteriaSection criteriaSection) {
-        List<Criteria> activeCriteria = new ArrayList<Criteria>();
-        for (Criteria criteria : criteriaSection.getCriteria()) {
-            if (!criteria.isRetired()) {
-                activeCriteria.add(criteria);
-            }
-        }
-        criteriaSection.setCriteria(activeCriteria);
+        eventFormService.saveNewEventForm(eventTypeId, criteriaSections);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.eventform.util;
+package com.n4systems.util.eventform;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -49,7 +49,7 @@ public class CriteriaResultWebModelConverter {
         			((DateFieldCriteria)result.getCriteria()).isIncludeTime());
         	webModel.setTextValue(dateStr);
         } else if (result instanceof ScoreCriteriaResult) {
-            webModel.setTextValue(((ScoreCriteriaResult)result).getScore().getName());
+            webModel.setStateId(((ScoreCriteriaResult) result).getScore().getId());
         } else if (result instanceof NumberFieldCriteriaResult) {
         	if(((NumberFieldCriteriaResult) result).getValue() != null) {
 	        	int decimalPlaces = ((NumberFieldCriteria) result.getCriteria()).getDecimalPlaces();

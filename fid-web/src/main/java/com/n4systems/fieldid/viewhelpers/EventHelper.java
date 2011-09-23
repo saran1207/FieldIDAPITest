@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.model.Score;
+import com.n4systems.model.ScoreCriteriaResult;
 import rfid.web.helper.SessionUser;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -192,14 +194,16 @@ public class EventHelper {
                 if (formResult.getSignatureFileId() != null) {
                 	((SignatureCriteriaResult)realResult).setImage(new SignatureService().loadSignatureImage(event.getTenant().getId(), formResult.getSignatureFileId()));
                 }
-            } else if(realResult instanceof DateFieldCriteriaResult) {
+            } else if (realResult instanceof DateFieldCriteriaResult) {
             	Date dateResult = dateConverter.convertDate(formResult.getTextValue(), ((DateFieldCriteria)realResult.getCriteria()).isIncludeTime());
             	((DateFieldCriteriaResult) realResult).setValue(dateResult);
-            } else if(realResult instanceof NumberFieldCriteriaResult) {
+            } else if (realResult instanceof NumberFieldCriteriaResult) {
             	if(formResult.getTextValue() != null && !formResult.getTextValue().isEmpty()) {
             		float numberResult = Float.parseFloat(formResult.getTextValue());
             		((NumberFieldCriteriaResult)realResult).setValue(numberResult);
             	}
+            } else if (realResult instanceof ScoreCriteriaResult) {
+                ((ScoreCriteriaResult)realResult).setScore(pm.find(Score.class, formResult.getStateId(), event.getTenant()));
             }
 
 			// and attach back onto the event

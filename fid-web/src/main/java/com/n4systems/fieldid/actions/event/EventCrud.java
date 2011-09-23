@@ -1074,9 +1074,13 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return userGrouper;
 	}
 
-    public boolean hasAtLeastOneResultSettingCriteria() {
+    public boolean isAutoResultAvailableForEvent() {
         if (event.getEventForm() == null)
             return false;
+
+        if (event.getEventForm().isUseScoreForResult()) {
+            return true;
+        }
 
         for (CriteriaSection section : event.getEventForm().getSections()) {
             for (Criteria criteria : section.getCriteria()) {

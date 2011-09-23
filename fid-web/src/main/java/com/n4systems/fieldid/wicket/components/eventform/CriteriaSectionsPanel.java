@@ -4,7 +4,7 @@ import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
-import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
+import com.n4systems.util.eventform.CriteriaSectionCopyUtil;
 import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
 import com.n4systems.model.CriteriaSection;
 import org.apache.wicket.Component;

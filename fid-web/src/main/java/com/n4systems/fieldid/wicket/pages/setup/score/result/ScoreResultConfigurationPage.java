@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.setup.score.result;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.model.EventForm;
@@ -50,6 +51,7 @@ public class ScoreResultConfigurationPage extends EventTypePage {
 
         public ScoreConfigurationForm(String id) {
             super(id, new CompoundPropertyModel<EventForm>(eventForm));
+            add(new FIDFeedbackPanel("feedbackPanel"));
 
             add(new CheckBox("useScoreForResult"));
             add(new DropDownChoice<ScoreCalculationType>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));

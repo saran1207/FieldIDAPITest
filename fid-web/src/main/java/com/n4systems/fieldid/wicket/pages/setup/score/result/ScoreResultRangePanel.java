@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.score.result;
 
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.setup.score.validator.MustHaveASecondValueIfUsingBetweenComparator;
 import com.n4systems.model.ScoreComparator;
 import com.n4systems.model.ScoreResultRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -23,7 +24,8 @@ public class ScoreResultRangePanel extends Panel {
 
         DropDownChoice<ScoreComparator> comparatorChoice;
 
-        add(comparatorChoice = new DropDownChoice<ScoreComparator>("comparatorSelect", new PropertyModel<ScoreComparator>(model, "comparator"), Arrays.asList(ScoreComparator.values()), createComparatorRenderer()));
+        PropertyModel<ScoreComparator> comparatorModel = new PropertyModel<ScoreComparator>(model, "comparator");
+        add(comparatorChoice = new DropDownChoice<ScoreComparator>("comparatorSelect", comparatorModel, Arrays.asList(ScoreComparator.values()), createComparatorRenderer()));
         comparatorChoice.add(new UpdateComponentOnChange() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -38,6 +40,7 @@ public class ScoreResultRangePanel extends Panel {
                 return model.getObject().getComparator().isBinary();
             }
         });
+        value2Field.add(new MustHaveASecondValueIfUsingBetweenComparator(comparatorModel));
         EnclosureContainer enclosureContainer = new EnclosureContainer("enclosureContainer", value2Field);
         add(enclosureContainer);
         enclosureContainer.add(value2Field);
