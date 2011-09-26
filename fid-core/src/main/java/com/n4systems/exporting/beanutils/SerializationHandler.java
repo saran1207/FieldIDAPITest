@@ -109,6 +109,8 @@ public abstract class SerializationHandler<T> {
 	 */
 	public abstract boolean handlesField(String title);
 
+    protected void resetState() {}
+
 	protected Object cleanImportValue(Object value) {
 		Object cleanValue = null;
 		if (value != null) {

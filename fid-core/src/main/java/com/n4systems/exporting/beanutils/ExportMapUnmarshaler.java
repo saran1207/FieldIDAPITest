@@ -66,7 +66,11 @@ public class ExportMapUnmarshaler<T> {
 			
 			handler.unmarshal(bean, title, value);
 		}
-		
+
+        for (SerializationHandler serializationHandler : titleHandlerMap.values()) {
+            serializationHandler.resetState();
+        }
+
 		return bean;
 	}
 	

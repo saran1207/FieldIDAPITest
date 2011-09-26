@@ -71,4 +71,10 @@ public class CollectionSerializationHandler<T> extends SerializationHandler<Coll
 	public boolean handlesField(String title) {
 		return title.equals(getExportField().title());
 	}
+
+    @Override
+    protected void resetState() {
+        collection = null;
+    }
+
 }
