@@ -10,6 +10,7 @@ import com.n4systems.model.CriteriaType;
 import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.OneClickCriteriaResult;
+import com.n4systems.model.ScoreCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
@@ -61,6 +62,8 @@ public class CriteriaResultFactory {
 			return populator.populate(new UnitOfMeasureCriteriaResult()); 		
 		case NUMBER_FIELD:
 			return populator.populate(new NumberFieldCriteriaResult());
+        case SCORE:
+            return populator.populate(new ScoreCriteriaResult());
 		default:
 			throw new IllegalStateException("can't create criteria result for type '" + criteriaType == null ? "NULL Type" : criteriaType +"'"); 
 		}

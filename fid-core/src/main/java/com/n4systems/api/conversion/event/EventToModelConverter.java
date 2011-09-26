@@ -10,6 +10,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.Score;
+import com.n4systems.model.ScoreCriteria;
+import com.n4systems.model.ScoreCriteriaResult;
+import com.n4systems.model.ScoreGroup;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Predicate;
@@ -214,7 +218,17 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	        	result.setValue(Float.parseFloat(criteriaResultView.getResultString()));
 				return result;
 			}
-		});
+
+            @Override
+            public CriteriaResult populate(ScoreCriteriaResult result) {
+				checkArgument(criteria.getCriteriaType() == CriteriaType.SCORE);
+				ScoreGroup scoreGroup = ((ScoreCriteria)criteria).getScoreGroup();
+				Score score = scoreGroup.getScore(criteriaResultView.getResultString());
+				checkNotNull(score, "Can't find score " + criteriaResultView.getResultString() + " for criteria " + criteria.getDisplayName() + ".  expected one of " + scoreGroup.getScores());
+				result.setScore(score);
+				return result;
+            }
+        });
 	} 
 	
 	public List<Recommendation> getRecommendations(CriteriaResultView criteriaResultView) {

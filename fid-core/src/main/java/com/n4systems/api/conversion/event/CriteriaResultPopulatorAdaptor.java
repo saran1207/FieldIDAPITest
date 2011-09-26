@@ -5,6 +5,7 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.OneClickCriteriaResult;
+import com.n4systems.model.ScoreCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
@@ -54,6 +55,11 @@ public class CriteriaResultPopulatorAdaptor implements CriteriaResultPopulator {
 
 	@Override
 	public CriteriaResult populate(NumberFieldCriteriaResult result) {
+		return result;
+	}
+
+	@Override
+	public CriteriaResult populate(ScoreCriteriaResult result) {
 		return result;
 	}
 

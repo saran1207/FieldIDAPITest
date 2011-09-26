@@ -5,6 +5,7 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.OneClickCriteriaResult;
+import com.n4systems.model.ScoreCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
@@ -22,4 +23,6 @@ public interface CriteriaResultPopulator {
 	public CriteriaResult populate(TextFieldCriteriaResult result);
 	public CriteriaResult populate(SignatureCriteriaResult result);
 	public CriteriaResult populate(NumberFieldCriteriaResult result);
+    public CriteriaResult populate(ScoreCriteriaResult result);
+
 }

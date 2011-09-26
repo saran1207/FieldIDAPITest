@@ -50,4 +50,13 @@ public class ScoreGroup extends ArchivableEntityWithTenant implements Listable {
     public String getDisplayName() {
         return name;
     }
+
+	public Score getScore(String scoreName) {
+		for (Score score: getScores()) {
+			if (score.getName().equalsIgnoreCase(scoreName)) {
+				return score;
+			}
+		}
+		return null;
+	}
 }
