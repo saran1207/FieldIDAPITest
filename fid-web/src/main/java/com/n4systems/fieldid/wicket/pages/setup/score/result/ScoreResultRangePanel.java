@@ -1,8 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.setup.score.result;
 
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.setup.score.validator.MustHaveASecondValueIfUsingBetweenComparator;
+import com.n4systems.fieldid.wicket.pages.setup.score.validator.SecondRangeValueValidator;
 import com.n4systems.model.ScoreComparator;
 import com.n4systems.model.ScoreResultRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -32,15 +33,20 @@ public class ScoreResultRangePanel extends Panel {
                 target.addComponent(ScoreResultRangePanel.this);
             }
         });
-        add(new TextField<Double>("value1", new PropertyModel<Double>(model, "value1")));
+        TextField<Double> value1Field;
         TextField<Double> value2Field;
+
+        PropertyModel<Double> value1Model = new PropertyModel<Double>(model, "value1");
+        add(value1Field = new TextField<Double>("value1", value1Model));
         add(value2Field = new TextField<Double>("value2", new PropertyModel<Double>(model, "value2")) {
             @Override
             public boolean isVisible() {
                 return model.getObject().getComparator().isBinary();
             }
         });
-        value2Field.add(new MustHaveASecondValueIfUsingBetweenComparator(comparatorModel));
+        value2Field.add(new SecondRangeValueValidator(comparatorModel, value1Field));
+        ValidationBehavior.addValidationBehaviorToComponent(value1Field);
+        ValidationBehavior.addValidationBehaviorToComponent(value2Field);
         EnclosureContainer enclosureContainer = new EnclosureContainer("enclosureContainer", value2Field);
         add(enclosureContainer);
         enclosureContainer.add(value2Field);
