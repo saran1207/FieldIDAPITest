@@ -1,5 +1,5 @@
 .newScoreGroupForm {
-    padding-left:5px;
+    padding: 1px 0 2px 5px;
 }
 
 .newScoreGroupForm input[type="text"] {
@@ -7,13 +7,15 @@
     width: 300px;
     padding: 1px;
     margin-top:5px;
-    margin-bottom:5px;}
+    margin-bottom:5px;
+}
 
 .blankInstructions {
     font-size: 12px;
     padding: 5px;
     text-align:center;
     color:#888;
+    height: 23px;
 }
 
 div.deleteLinkSection {

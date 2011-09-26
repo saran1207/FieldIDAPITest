@@ -488,3 +488,8 @@ span.fieldHolder img {
 .formAction a {
 	font-size: 12px;
 }
+
+.criteriaEditContainer .scoreName {
+    display:inline;
+    padding-right: 2px;
+}

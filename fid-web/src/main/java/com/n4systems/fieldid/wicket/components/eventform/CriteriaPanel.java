@@ -199,12 +199,13 @@ public class CriteriaPanel extends SortableListPanel {
                 }
 
                 private boolean configureDefaultScoreGroup(AjaxRequestTarget target, ScoreCriteria criteria) {
-                    StateSet stateSet = getDefaultStateSet();
-                    if (stateSet == null) {
+                    ScoreGroup scoreGroup = getDefaultScoreGroup();
+                    if (scoreGroup == null) {
                         error("You must configure at least one Score Group to use Score criteria");
                         target.addComponent(feedbackPanel);
                         return false;
                     }
+                    criteria.setScoreGroup(scoreGroup);
                     return true;
                 }
 
