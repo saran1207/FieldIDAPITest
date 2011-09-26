@@ -3,10 +3,12 @@ package com.n4systems.model.orgs;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.savers.Saver;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 
 public class OrgSaver extends Saver<BaseOrg> {
 
@@ -54,20 +56,18 @@ public class OrgSaver extends Saver<BaseOrg> {
 	
 	private void propogateSecurityInformation(BaseOrg entity, EntityManager em) {
 		if (entity instanceof CustomerOrg) {
-			CustomerOrg customer = (CustomerOrg)entity;
-			updateDivisionsSecurityInformation(customer, em);
+			updateDivisionsSecurityInformation((CustomerOrg) entity, em);
 		}
 	}
 
 	private void updateDivisionsSecurityInformation(CustomerOrg customer, EntityManager em) {
-		String updateQuery = "UPDATE " + BaseOrg.class.getName() + " SET secondaryOrg = :secondaryOrg WHERE customerOrg.id = :customer";
+		QueryBuilder<DivisionOrg> divisionOrgBuilder = new QueryBuilder<DivisionOrg>(DivisionOrg.class, new TenantOnlySecurityFilter(customer.getTenant().getId()));
+		divisionOrgBuilder.addWhere(WhereClauseFactory.create("customerOrg.id", customer.getId()));
 		
-		Query query = em.createQuery(updateQuery);
-		query.setParameter("secondaryOrg", customer.getSecondaryOrg());
-		query.setParameter("customer", customer.getId());
-		
-		query.executeUpdate();
-		
+		for (DivisionOrg division: divisionOrgBuilder.getResultList(em)) {
+			division.touch();
+			em.merge(division);
+		}
 	}
 
 	protected void ensureAddressInfoIsNotNull(BaseOrg entity) {

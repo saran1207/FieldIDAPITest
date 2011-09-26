@@ -145,7 +145,6 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			saver.save(secondaryOrg);
 
 			processImage();
-			refreshSessionUser();
 			addFlashMessageText("message.organizationsaved");
 		} catch (Exception e) {
 			logger.error(getLogLinePrefix() + "could not create organization", e);
@@ -259,7 +258,6 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			saver.update(organization);
 			
 			processImage();
-			refreshSessionUser();
 			addFlashMessageText("message.organizationsaved");
 		} catch (Exception e) {
 			logger.error(getLogLinePrefix() + "could not update organization", e);
