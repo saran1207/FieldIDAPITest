@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.ScoreService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.eventform.EditCopyDeleteItemPanel;
+import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Score;
 import com.n4systems.model.ScoreGroup;
@@ -64,7 +65,7 @@ public class ScoreGroupPanel extends Panel {
             score = new Score();
             setOutputMarkupId(true);
 
-            add(feedbackPanel = new FeedbackPanel("feedbackPanel"));
+            add(feedbackPanel = new ContainerFeedbackPanel("feedbackPanel", ScoreGroupForm.this));
             feedbackPanel.setOutputMarkupPlaceholderTag(true);
 
             add(new Label("nameLabel", new PropertyModel<String>(scoreGroupModel, "name")));

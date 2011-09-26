@@ -35,6 +35,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import java.util.Arrays;
@@ -63,6 +64,7 @@ public class CriteriaPanel extends SortableListPanel {
             protected void populateItem(final ListItem<Criteria> item) {
                 item.setOutputMarkupId(true);
                 item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "displayText"), new CriteriaTypeDescriptionModel(item.getModel())) {
+                    { setEditMaximumLength(1000); }
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
                         currentlySelectedIndex = item.getIndex();
@@ -150,6 +152,7 @@ public class CriteriaPanel extends SortableListPanel {
             AjaxButton submitButton;
             add(addTextField = new RequiredTextField<String>("criteriaName", new PropertyModel<String>(this, "criteriaName")));
             addTextField.setOutputMarkupId(true);
+            addTextField.add(new StringValidator.MaximumLengthValidator(1000));
             add(submitButton = new AjaxButton("submitButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -162,21 +165,15 @@ public class CriteriaPanel extends SortableListPanel {
                     }
 
                     if (CriteriaType.ONE_CLICK.equals(criteriaType)) {
-                        if (!configureDefaultStateSet(target, (OneClickCriteria)criteria)) {
+                        if (!configureDefaultStateSet(target, (OneClickCriteria) criteria)) {
                             return;
                         }
                     } else if (CriteriaType.UNIT_OF_MEASURE.equals(criteriaType)) {
-                        ((UnitOfMeasureCriteria)criteria).setPrimaryUnit(getDefaultUnitOfMeasure());
+                        ((UnitOfMeasureCriteria) criteria).setPrimaryUnit(getDefaultUnitOfMeasure());
                     } else if (CriteriaType.SCORE.equals(criteriaType)) {
                         if (!configureDefaultScoreGroup(target, (ScoreCriteria) criteria)) {
                             return;
                         }
-                    }
-
-                    if (criteriaName.length()>1000){
-                        error("Name length cannot exceed 100 characters.");
-                        target.addComponent(feedbackPanel);
-                        return;
                     }
 
                     criteria.setDisplayText(criteriaName);

@@ -16,10 +16,12 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
 
 public class ScoreGroupsPage extends FieldIDLoggedInPage {
 
@@ -29,14 +31,14 @@ public class ScoreGroupsPage extends FieldIDLoggedInPage {
     private WebMarkupContainer groupsAndScoresContainer;
     private ScoreGroupPanel scoreGroupPanel;
     private ScoreBlankSlatePanel scoreBlankSlatePanel;
+    private FIDFeedbackPanel feedbackPanel;
 
     public ScoreGroupsPage() {
-//        setJqueryEnabledOnPage(true);
         add(CSSPackageResource.getHeaderContribution("style/scoreGroups.css"));
         ScoreGroupsForTenantModel scoreGroupsForTenant = new ScoreGroupsForTenantModel();
         boolean hasScoreGroups = !scoreGroupsForTenant.getObject().isEmpty();
 
-        add(new FIDFeedbackPanel("feedbackPanel"));
+        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
         add(scoreBlankSlatePanel = new ScoreBlankSlatePanel("blankSlatePanel") {
             @Override
@@ -63,6 +65,12 @@ public class ScoreGroupsPage extends FieldIDLoggedInPage {
                 }
 
                 target.addComponent(groupsAndScoresContainer);
+                target.addComponent(feedbackPanel);
+            }
+
+            @Override
+            protected void onValidationError(AjaxRequestTarget target) {
+                target.addComponent(feedbackPanel);
             }
         });
         groupsAndScoresContainer.add(scoreGroupPanel = new ScoreGroupPanel("scoreGroup", new Model<ScoreGroup>()));
@@ -90,8 +98,11 @@ public class ScoreGroupsPage extends FieldIDLoggedInPage {
 
         public NewScoreGroupForm(String id) {
             super(id);
-            add(new TextFieldWithDescription<String>("scoreGroupName", new PropertyModel<String>(this, "newGroupName"),
+            TextField<String> groupNameField;
+            add(groupNameField = new TextFieldWithDescription<String>("scoreGroupName", new PropertyModel<String>(this, "newGroupName"),
                     new FIDLabelModel("label.sample_score_group_name")));
+
+            groupNameField.add(new StringValidator.MaximumLengthValidator(1024));
 
             add(new Button("submitButton"));
         }
@@ -102,7 +113,7 @@ public class ScoreGroupsPage extends FieldIDLoggedInPage {
             scoreGroup.setTenant(getTenant());
             scoreGroup.setName(newGroupName);
             scoreService.saveScoreGroup(scoreGroup);
-            FieldIDSession.get().info("Successfully saved group!");
+            FieldIDSession.get().info(new FIDLabelModel("label.group_saved").getObject());
             setResponsePage(ScoreGroupsPage.class);
         }
 

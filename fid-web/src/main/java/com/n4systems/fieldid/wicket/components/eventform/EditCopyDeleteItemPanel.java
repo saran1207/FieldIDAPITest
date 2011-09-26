@@ -27,6 +27,7 @@ public class EditCopyDeleteItemPanel extends Panel {
     private WebMarkupContainer editFormContainer;
     private WebMarkupContainer viewContainer;
     private FlatLabel storeLabel;
+    private TextField<String> newText;
 
     public EditCopyDeleteItemPanel(String id, IModel<String> stringModel) {
         this(id, stringModel, true);
@@ -126,9 +127,7 @@ public class EditCopyDeleteItemPanel extends Panel {
             super(id);
             this.stringModel = model;
             setOutputMarkupPlaceholderTag(true);
-            TextField<String> criteriaName;
-            add(criteriaName = new RequiredTextField<String>("newText", stringModel));
-            criteriaName.add(new StringValidator.MaximumLengthValidator(2000));
+            add(newText = new RequiredTextField<String>("newText", stringModel));
 
             AjaxSubmitLink storeLink;
             add(storeLink = new AjaxSubmitLink("storeLink") {
@@ -194,6 +193,10 @@ public class EditCopyDeleteItemPanel extends Panel {
 
     public void setStoreLabel(IModel<String> storeLabelModel) {
         storeLabel.setDefaultModel(storeLabelModel);
+    }
+
+    public void setEditMaximumLength(int maximumLength) {
+        newText.add(new StringValidator.MaximumLengthValidator(maximumLength));
     }
 
 }

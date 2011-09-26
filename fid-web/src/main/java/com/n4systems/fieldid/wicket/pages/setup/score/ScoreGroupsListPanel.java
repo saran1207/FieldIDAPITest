@@ -33,7 +33,10 @@ public class ScoreGroupsListPanel extends Panel {
             protected void populateItem(final ListItem<ScoreGroup> item) {
                 item.setOutputMarkupId(true);
                 item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "name")) {
-                    { setStoreLabel(new FIDLabelModel("label.save")); }
+                    {
+                        setStoreLabel(new FIDLabelModel("label.save"));
+                        setEditMaximumLength(1024);
+                    }
 
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
@@ -65,6 +68,11 @@ public class ScoreGroupsListPanel extends Panel {
                     protected void onStoreLinkClicked(AjaxRequestTarget target) {
                         persistenceService.update(item.getModelObject());
                     }
+
+                    @Override
+                    protected void onFormValidationError(AjaxRequestTarget target) {
+                        onValidationError(target);
+                    }
                 });
                 item.add(new AppendToClassIfCondition("selectedGroup", new Predicate() {
                     @Override
@@ -81,5 +89,6 @@ public class ScoreGroupsListPanel extends Panel {
     }
 
     protected void onScoreGroupSelected(IModel<ScoreGroup> model, AjaxRequestTarget target) { }
+    protected void onValidationError(AjaxRequestTarget target) { }
 
 }
