@@ -26,7 +26,6 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.Status;
@@ -66,8 +65,9 @@ public class ManagerBackedEventSaver implements EventSaver {
 			persistenceManager.save(parameterObject.event.getGroup(), parameterObject.userId);
 		}
 
+        Status calculatedStatus = calculateEventResultAndScore(parameterObject.event);
 		if (parameterObject.event.getStatus() == null) {
-			parameterObject.event.setStatus(calculateEventResult(parameterObject.event));
+            parameterObject.event.setStatus(calculatedStatus);
 		}
 		
 		setProofTestData(parameterObject.event, parameterObject.fileData);
@@ -170,16 +170,13 @@ public class ManagerBackedEventSaver implements EventSaver {
 		
 	}
 
-	private Status calculateEventResult(Event event) {
+	private Status calculateEventResultAndScore(Event event) {
         EventResultCalculator resultCalculator = new EventResultCalculator();
 		Status eventResult = resultCalculator.findEventResult(event);
 
 		for (SubEvent subEvent : event.getSubEvents()) {
             Status currentResult = resultCalculator.findEventResult(subEvent);
             eventResult = resultCalculator.adjustStatus(eventResult, currentResult);
-			if (eventResult == Status.FAIL) {
-				break;
-			}
 		}
 
 		return eventResult;
