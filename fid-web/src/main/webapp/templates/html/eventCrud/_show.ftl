@@ -119,13 +119,6 @@
 		<label><@s.text name="label.eventbook"/></label>
 		<span>${(event.book.name)!?html}</span>
 	</p>
-
-    <#if event.score?exists>
-        <p>
-            <label><@s.text name="label.score"/></label>
-            <span>${event.score}</span>
-        </p>
-    </#if>
 	
 	<#list event.infoOptionMap.keySet() as key >
 		<p>	
@@ -139,6 +132,14 @@
 	<#include "_event.ftl" />
 
     <h2><@s.text name="label.result"/></h2>
+
+    <#if event.score?exists>
+        <p class="scoreContainer">
+            <label><@s.text name="label.score"/></label>
+            <span>${event.score}</span>
+        </p>
+    </#if>
+
     <div class="resultContainer">
         <label><@s.text name="label.result"/></label>
 		<div <#if event.status.displayName== "Pass" > class="passColor" <#elseif event.status.displayName == "Fail"> class="failColor" <#else> class="naColor" </#if>>
@@ -146,8 +147,7 @@
 		</div>
 
     </div>
-
-	
+    
 	<#if event.proofTestInfo?exists >
 		<h2><@s.text name="label.prooftest"/></h2>
 		<p>

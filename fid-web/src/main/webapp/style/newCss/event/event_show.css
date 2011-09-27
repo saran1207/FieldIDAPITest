@@ -30,3 +30,13 @@
 .passColor p{
 	background-color:#DBF1BA;
 }
+
+.eventView p span{
+	padding: 5px 0;
+	float: left;
+	display: block;
+}
+
+.eventView .scoreContainer span{
+	padding-left: 25px;
+}
