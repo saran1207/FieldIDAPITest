@@ -65,6 +65,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 		this.legacyAssetManager = assetManager;
 	}
 
+	@Override
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), asset);
 		overrideHelper(new MassUpdateAssetHelper(getLoaderFactory()));
@@ -107,6 +108,11 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 				return INPUT;
 			}
 		}
+		
+		if (Boolean.TRUE.equals(select.get("owner")) && getOwnerId()==null) {
+			addFlashErrorText("error.ownerrequiredmassupdate");
+			return INPUT;
+		}		
 
 		asset.setIdentified(convertDate(identified));
 		assetWebModel.fillInAsset(asset);
