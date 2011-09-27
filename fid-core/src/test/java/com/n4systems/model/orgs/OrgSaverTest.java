@@ -3,7 +3,6 @@ package com.n4systems.model.orgs;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +12,6 @@ import javax.persistence.EntityManager;
 import org.junit.Test;
 
 import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.persistence.utils.TestQuery;
 import com.n4systems.testutils.DummyEntityManager;
 
 
@@ -40,41 +38,6 @@ public class OrgSaverTest {
 		};
 		
 		saver.save(new DummyEntityManager(), new PrimaryOrg());
-	}
-	
-	@Test
-	public void update_internal_org_updates_linked_orgs() {
-		PrimaryOrg mainOrg = OrgBuilder.aPrimaryOrg().buildPrimary();
-		
-		final List<ExternalOrg> linkedOrgs = Arrays.asList(OrgBuilder.aCustomerOrg().buildCustomerAsExternal(), OrgBuilder.aCustomerOrg().buildCustomerAsExternal());
-		
-		OrgSaver saver = new OrgSaver(new LinkedOrgListLoader() {
-			public List<ExternalOrg> load(EntityManager em) {
-				return linkedOrgs;
-			}
-		});
-		
-		EntityManager em = createMock(EntityManager.class);
-		
-		expect(em.merge(mainOrg)).andReturn(mainOrg);
-		
-		
-		em.persist(anyObject());
-		
-		for (ExternalOrg linkedOrg: linkedOrgs) {
-			expect(em.merge(linkedOrg)).andReturn(linkedOrg);
-			mockEMSecurityPropogationForCustomerUpdates(em);
-			em.persist(anyObject());
-		}
-		
-		replay(em);
-		
-		saver.update(em, mainOrg);
-		verify(em);
-	}
-
-	private void mockEMSecurityPropogationForCustomerUpdates(EntityManager em) {
-		expect(em.createQuery((String)anyObject())).andReturn(new TestQuery());
 	}
 	
 	@Test
