@@ -2,7 +2,7 @@
 
     <#list criteria.scoreGroup.scores as score>
 
-        <#if criteriaResult?exists && criteriaResult.stateId = score.id>
+        <#if criteriaResult?exists && criteriaResult.stateId?exists && criteriaResult.stateId = score.id>
             <#assign checkedStr = 'checked'/>
         <#else>
             <#assign checkedStr = ''/>
