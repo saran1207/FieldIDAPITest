@@ -1,4 +1,4 @@
-<div class="criteriaEditContainer">
+<div class="criteriaEditContainer scoreEditContainer">
 
     <#list criteria.scoreGroup.scores as score>
 
