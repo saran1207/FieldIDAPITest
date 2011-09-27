@@ -6,14 +6,17 @@
 			.uploadFileForm {
 				padding: 20px 10px 0 10px;
 				background-color: #F5FBFF;
-				height: 80px;
+				height: 85px;
 			}			
 			.uploadMessage{
 				margin-bottom: 5px;
 			}
-			
 			.error {
-				display: none;
+				padding-left: 9px;			
+			}
+			.error ul{
+				border: none;
+				font-weight: normal;
 			}
 			
 			.errorMessage {

@@ -59,7 +59,7 @@ function addUploadFile(type) {
 	}
 	
 	var frameId = 'frame_'+ frameCount;
-	var iframe = '<iframe id="' + frameId +'" class="fileUpload form" src="'+ uploadUrl + '?frameId=' + frameId + '&frameCount=' + frameCount + '&typeOfUpload=' + type + '" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="100" ></iframe>';
+	var iframe = '<iframe id="' + frameId +'" class="fileUpload form" src="'+ uploadUrl + '?frameId=' + frameId + '&frameCount=' + frameCount + '&typeOfUpload=' + type + '" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="105" ></iframe>';
 	$('uploadedfiles').insert( { bottom: iframe } );
 	frameCount++;
 	hasUploadForm = true;
