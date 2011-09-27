@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.EnclosureContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -37,7 +38,7 @@ public class ScoreResultRangePanel extends Panel {
         TextField<Double> value2Field;
 
         PropertyModel<Double> value1Model = new PropertyModel<Double>(model, "value1");
-        add(value1Field = new TextField<Double>("value1", value1Model));
+        add(value1Field = new RequiredTextField<Double>("value1", value1Model));
         add(value2Field = new TextField<Double>("value2", new PropertyModel<Double>(model, "value2")) {
             @Override
             public boolean isVisible() {

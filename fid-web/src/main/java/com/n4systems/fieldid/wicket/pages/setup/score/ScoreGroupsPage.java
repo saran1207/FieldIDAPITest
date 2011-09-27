@@ -99,7 +99,7 @@ public class ScoreGroupsPage extends FieldIDLoggedInPage {
         public NewScoreGroupForm(String id) {
             super(id);
             TextField<String> groupNameField;
-            add(groupNameField = new TextFieldWithDescription<String>("scoreGroupName", new PropertyModel<String>(this, "newGroupName"),
+            add(groupNameField = new TextFieldWithDescription("scoreGroupName", new PropertyModel<String>(this, "newGroupName"),
                     new FIDLabelModel("label.sample_score_group_name")));
 
             groupNameField.add(new StringValidator.MaximumLengthValidator(1024));

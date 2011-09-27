@@ -91,7 +91,7 @@ public class EventResultCalculator {
     }
 
     public Status adjustStatus(Status currentStatus, Status newStatus) {
-        if (newStatus == Status.FAIL) {
+        if (currentStatus == Status.FAIL || newStatus == Status.FAIL) {
 			currentStatus = Status.FAIL;
 		} else if (newStatus == Status.PASS) {
 			currentStatus = Status.PASS;

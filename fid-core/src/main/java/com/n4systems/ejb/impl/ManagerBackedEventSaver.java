@@ -115,6 +115,8 @@ public class ManagerBackedEventSaver implements EventSaver {
 	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		setProofTestData(event, fileData);
 		updateDeficiencies(event.getResults());
+
+        calculateEventResultAndScore(event);
 		
 		// writeSignatureImagesToDisk MUST be called prior persistenceManager.update(event, userId) as the image data in the 
 		// signatures is transient and won't be there afterwards
