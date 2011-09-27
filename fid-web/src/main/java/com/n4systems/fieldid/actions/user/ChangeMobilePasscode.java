@@ -10,7 +10,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.model.user.User;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
@@ -84,8 +84,8 @@ public class ChangeMobilePasscode extends AbstractCrud implements HasDuplicateRf
 		return securityCardNumber;
 	}
 	
-	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key="error.securitycardnumberrequired")
-	@StringLengthFieldValidator(type=ValidatorType.FIELD, message = "" , key = "errors.securitycardlength", minLength="4")
+	@RequiredFieldValidator(message = "", key="errors.passcoderequired")
+	@StringLengthFieldValidator(type=ValidatorType.FIELD, message = "" , key = "errors.passcodelength", minLength="4")
 	@CustomValidator(type = "duplicateRfidValidator", message = "", key = "errors.data.passcodeduplicate")
 	public void setSecurityCardNumber(String securityCardNumber) {
 		if (securityCardNumber == null || securityCardNumber.trim().length() == 0) {
