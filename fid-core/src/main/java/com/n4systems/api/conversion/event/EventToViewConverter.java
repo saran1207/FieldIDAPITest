@@ -58,19 +58,24 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 
 	private CriteriaResultView convertCriteriaResult(Event model, CriteriaResult result) {
 		CriteriaResultView resultView = new CriteriaResultView();		
-		Criteria criteria = result.getCriteria();
 		
+		Criteria criteria = result.getCriteria();
 		CriteriaSection section = model.findSection(criteria);
-		String sectionName = section!=null ? section.getDisplayName() : "undefined section for " + criteria.getDisplayName();
-		// FIXME DD : section should NEVER be null but somehow it is.  this could be an issue with my (ddick) local DB or 
-		// possibly an issue with saving criteria that aren't in any of event sections forms. hmmm...
+		String sectionName = section!=null ? section.getDisplayName() : "Undefined Section : " + criteria.getDisplayName();
 		resultView.setSection(sectionName);
 		resultView.setDisplayText(result.getCriteria().getDisplayText());
-		// NOTE : for exporting, we leave these fields blank.
-		resultView.setRecommendation("");		
-		resultView.setDeficiencyString("");
-		resultView.setResultString("");
+		resultView.setRecommendation(getRecommendation(criteria));		
+		resultView.setDeficiencyString(getDeficiency(criteria));
+		resultView.setResultString(result.getResultString());
 		return resultView;
+	}
+
+	private String getDeficiency(Criteria criteria) {
+		return criteria.getDeficiencies().size() > 0 ? criteria.getDeficiencies().get(0) : "";
+	}
+
+	private String getRecommendation(Criteria criteria) {
+		return criteria.getRecommendations().size() > 0 ? criteria.getRecommendations().get(0) : "";
 	}
 
 	protected void convertDirectFields(Event model, EventView view) {

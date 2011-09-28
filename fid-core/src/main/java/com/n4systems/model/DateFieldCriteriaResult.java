@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -23,5 +24,11 @@ public class DateFieldCriteriaResult extends CriteriaResult {
     public void setValue(Date value) {
         this.value = value;
     }
+
+	@Override
+	public String getResultString() {
+		return value == null ? "" : new SimpleDateFormat().format(value);
+	}
+    
 
 }

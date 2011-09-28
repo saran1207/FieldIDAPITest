@@ -3,16 +3,7 @@ package com.n4systems.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.IndexColumn;
 
@@ -22,7 +13,7 @@ import com.n4systems.util.StringUtils;
 @Entity
 @Table(name = "criteriaresults")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class CriteriaResult extends EntityWithTenant {
+public abstract class CriteriaResult extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
@@ -99,5 +90,7 @@ public class CriteriaResult extends EntityWithTenant {
     public Status getResult() {
         return null;
     }
+    
+    public abstract String getResultString();
 
 }

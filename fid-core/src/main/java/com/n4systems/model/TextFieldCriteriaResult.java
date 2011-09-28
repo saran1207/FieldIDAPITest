@@ -21,4 +21,9 @@ public class TextFieldCriteriaResult extends CriteriaResult {
         this.value = value;
     }
 
+	@Override
+	public String getResultString() {
+		return value!=null ? value : "";
+	}
+
 }

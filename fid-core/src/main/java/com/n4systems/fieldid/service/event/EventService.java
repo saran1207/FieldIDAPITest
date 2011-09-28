@@ -25,7 +25,8 @@ public class EventService extends FieldIdPersistenceService {
     @Transactional(readOnly = true)	
     public List<Event> getEventsByType(Long eventTypeId, Date from, Date to) {
 		QueryBuilder<Event> builder = getEventsByTypeBuilder(eventTypeId);
-		builder.addWhere(Comparator.GE, "fromDate", "date", from).addWhere(Comparator.LE, "toDate", "date", to); 				
+		builder.addWhere(Comparator.GE, "fromDate", "date", from).addWhere(Comparator.LE, "toDate", "date", to);
+		builder.setOrder("date", false);
 		return persistenceService.findAll(builder);
 	}
     

@@ -31,4 +31,17 @@ public class UnitOfMeasureCriteriaResult extends CriteriaResult {
     public void setSecondaryValue(String secondaryValue) {
         this.secondaryValue = secondaryValue;
     }
+
+	@Override
+	public String getResultString() {
+		StringBuffer buff = new StringBuffer();
+		if (primaryValue!=null) {
+			buff.append(primaryValue);
+		}
+		if (secondaryValue!=null) {
+			buff.append(" : ");
+			buff.append(secondaryValue);
+		}
+		return buff.toString();
+	}
 }

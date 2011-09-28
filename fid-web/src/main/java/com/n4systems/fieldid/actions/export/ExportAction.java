@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -129,7 +130,7 @@ public class ExportAction extends AbstractAction {
 	
 	private Date getToDate() {
 		try {
-			return to==null ? new Date(Long.MAX_VALUE) : new SimpleDateFormat("MM/dd/yy").parse(to);
+			return StringUtils.isBlank(null) ? new Date(Long.MAX_VALUE) : new SimpleDateFormat("MM/dd/yy").parse(to);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return new Date(Long.MAX_VALUE);		
@@ -138,7 +139,7 @@ public class ExportAction extends AbstractAction {
 	
 	private Date getFromDate() {
 		try {
-			return from==null ? new Date(0) : new SimpleDateFormat("MM/dd/yy").parse(from);
+			return StringUtils.isBlank(from) ? new Date(0) : new SimpleDateFormat("MM/dd/yy").parse(from);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return new Date(0);		

@@ -23,8 +23,14 @@ public class OneClickCriteriaResult extends CriteriaResult {
 		this.state = state;
 	}
 
+	@Override
 	public Status getResult() {
 		return ((OneClickCriteria)criteria).isPrincipal() ? state.getStatus() : null;
+	}
+
+	@Override
+	public String getResultString() {
+		return getResult() !=null ? getResult().toString() : "";
 	}
 
 }

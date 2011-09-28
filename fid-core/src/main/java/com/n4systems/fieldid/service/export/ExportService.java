@@ -53,8 +53,6 @@ public class ExportService extends FieldIdPersistenceService {
 	
 	@Transactional
 	public void exportEventTypeToExcel(Long userId, final Long eventTypeId, final Date from, final Date to, Long linkId) {
-		System.out.println("calling service in thread " + Thread.currentThread().getId() + Thread.currentThread().getName());
-		
 		final User user = userService.getUser(userId);
 		checkNotNull(user);		
 		final String dateFormat = user.getOwner().getPrimaryOrg().getDateFormat();

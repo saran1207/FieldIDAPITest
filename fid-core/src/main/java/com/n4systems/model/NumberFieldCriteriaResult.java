@@ -22,5 +22,10 @@ public class NumberFieldCriteriaResult extends CriteriaResult {
 	public String getFormattedValue() {
 		return String.format("%." + ((NumberFieldCriteria) getCriteria()).getDecimalPlaces() + "f", value);
 	}
+
+	@Override
+	public String getResultString() {
+		return getFormattedValue();
+	}
 	
 }

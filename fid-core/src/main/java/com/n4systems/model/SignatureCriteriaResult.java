@@ -33,4 +33,9 @@ public class SignatureCriteriaResult extends CriteriaResult {
 		this.image = image;
 	}
 
+	@Override
+	public String getResultString() {
+		return "";
+	}
+
 }

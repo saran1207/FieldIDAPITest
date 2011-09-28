@@ -20,5 +20,10 @@ public class ComboBoxCriteriaResult extends CriteriaResult {
 	public String getValue() {
 		return value;
 	}
+
+	@Override
+	public String getResultString() {
+		return value!=null?value:"";
+	}
 	
 }
