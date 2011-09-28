@@ -1,5 +1,7 @@
 package com.n4systems.model;
 
+import static com.google.common.base.Preconditions.*;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,7 +29,8 @@ public class ScoreCriteriaResult extends CriteriaResult {
 
 	@Override
 	public String getResultString() {
-		return score!=null ? score.getName() : "";
+		checkArgument(score!=null);
+		return score.getName(); 
 	}
 
 }

@@ -28,16 +28,17 @@ public class EventImporter extends AbstractImporter<EventView> {
 	}
 
 	@Override
-	protected void importView(Transaction transaction, EventView view) throws ConversionException {
-		Event event = converter.toModel(view, transaction);
-		
+	protected void importView(Transaction transaction, EventView view) throws ConversionException {		
 		try {
+			Event event = converter.toModel(view, transaction);
 			eventPersistenceFactory.createEventCreator().create(
 						new CreateEventParameterBuilder(event, modifiedBy)
 							.withANextEventDate(view.getNextEventDateAsDate())
 							.build());
+		} catch (ConversionException e) { 
+			throw e;
 		} catch (Exception e) {
-			throw new ConversionException("Could not create event", e);
+			throw new ConversionException("Could not create event ", e);
 		}
 	}
 

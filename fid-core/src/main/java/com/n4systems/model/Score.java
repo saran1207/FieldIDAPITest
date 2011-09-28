@@ -1,12 +1,12 @@
 package com.n4systems.model;
 
 
-import com.n4systems.model.parents.ArchivableEntityWithTenant;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
 @Entity
 @Table(name="scores")
@@ -44,5 +44,11 @@ public class Score extends ArchivableEntityWithTenant {
 
     public void setNa(boolean na) {
         this.na = na;
+    }
+    
+    @Override
+	public String toString() { 
+    	return  name + " : " +  
+    		(isNa() ? "n/a" :+ value);
     }
 }

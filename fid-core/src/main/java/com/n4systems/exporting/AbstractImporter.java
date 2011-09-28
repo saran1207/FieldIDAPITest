@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
@@ -16,7 +18,10 @@ import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.persistence.Transaction;
 
+
 public abstract class AbstractImporter<V extends ExternalModelView> implements Importer {
+	private static final Logger logger = Logger.getLogger(AbstractImporter.class);
+
 	protected static final int FIRST_DATA_ROW = 2;
 	
 	private final Class<V> viewClass;
@@ -72,6 +77,7 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 			}
 
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new ImportException("Failed to import view", e, currentRow);
 		} finally {
 			// clean up resources since this object could be holding a lot of them
