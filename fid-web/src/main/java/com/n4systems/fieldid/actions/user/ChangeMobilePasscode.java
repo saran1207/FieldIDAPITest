@@ -65,6 +65,7 @@ public class ChangeMobilePasscode extends AbstractCrud implements HasDuplicateRf
 		return SUCCESS;
 	}
 
+	@SkipValidation
 	public String doRemove() {
 		if( user != null ) {
 			
