@@ -745,13 +745,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 
 		return criteriaResults;
 	}
+
 	@Validations(customValidators = {
+            @CustomValidator(type = "observationsProcessingValidator"),
 			@CustomValidator(type = "allScoresMustBeEntered", message = "", key = "error.scores.required"),
 			@CustomValidator(type = "numberCriteriaValidator", message = "", key = "error.invalid_number_criteria")})
     public void setCriteriaResults(List<CriteriaResultWebModel> results) {
 		criteriaResults = results;
 	}
-
 
 	public String getProofTestType() {
 		getProofTestTypeEnum();
@@ -1143,5 +1144,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
     @Override
     public boolean isUseLegacyCss() {
         return false;
+    }
+
+    public EventHelper getEventHelper() {
+        return eventHelper;
     }
 }

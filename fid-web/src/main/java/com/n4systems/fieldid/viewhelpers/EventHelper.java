@@ -152,8 +152,11 @@ public class EventHelper {
 		for (CriteriaResultWebModel formResult: formCriteriaResults) {
 			
 			// clean the observations for this result
-			processObservations(formResult, event.getTenant(), modifiedBy);
-			
+			processObservations(formResult);
+
+            StrutsListHelper.setSecurity(formResult.getDeficiencies(), event.getTenant(), modifiedBy);
+            StrutsListHelper.setSecurity(formResult.getRecommendations(), event.getTenant(), modifiedBy);
+
 			// on edit the results will come in with an id
 			// we want to load the real result and then modify its fields
 			if (formResult.getId() != null) {
@@ -221,7 +224,7 @@ public class EventHelper {
 	 * @param result		A CriteriaResult
 	 * @param modifiedBy	A modifiedBy user to set on the result
 	 */
-	public void processObservations(CriteriaResultWebModel result, Tenant tenant, User modifiedBy) {
+	public void processObservations(CriteriaResultWebModel result) {
 		// these lists can have nulls in them
 		StrutsListHelper.clearNulls(result.getDeficiencies());
 		StrutsListHelper.clearNulls(result.getRecommendations());
@@ -229,9 +232,6 @@ public class EventHelper {
 		// remove blank comments
 		clearBlankObservationComment(result.getDeficiencies());
 		clearBlankObservationComment(result.getRecommendations());
-
-		StrutsListHelper.setSecurity(result.getDeficiencies(), tenant, modifiedBy);
-		StrutsListHelper.setSecurity(result.getRecommendations(), tenant, modifiedBy);
 	}
 
 	/**
