@@ -64,18 +64,18 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 		String sectionName = section!=null ? section.getDisplayName() : "Undefined Section : " + criteria.getDisplayName();
 		resultView.setSection(sectionName);
 		resultView.setDisplayText(result.getCriteria().getDisplayText());
-		resultView.setRecommendation(getRecommendation(criteria));		
-		resultView.setDeficiencyString(getDeficiency(criteria));
+		resultView.setRecommendation(getRecommendation(result));		
+		resultView.setDeficiencyString(getDeficiency(result));
 		resultView.setResultString(result.getResultString());
 		return resultView;
 	}
 
-	private String getDeficiency(Criteria criteria) {
-		return criteria.getDeficiencies().size() > 0 ? criteria.getDeficiencies().get(0) : "";
+	private String getDeficiency(CriteriaResult result) {
+		return result.getDeficiencies().size() > 0 ? result.getDeficiencies().get(0).getText() : "";
 	}
 
-	private String getRecommendation(Criteria criteria) {
-		return criteria.getRecommendations().size() > 0 ? criteria.getRecommendations().get(0) : "";
+	private String getRecommendation(CriteriaResult result) {
+		return result.getRecommendations().size() > 0 ? result.getRecommendations().get(0).getText() : "";
 	}
 
 	protected void convertDirectFields(Event model, EventView view) {
