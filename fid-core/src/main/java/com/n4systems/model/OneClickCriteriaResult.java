@@ -30,7 +30,7 @@ public class OneClickCriteriaResult extends CriteriaResult {
 
 	@Override
 	public String getResultString() {
-		return ((OneClickCriteria)criteria).isPrincipal() && state != null ? state.getDisplayText() : "";
+		return state != null ? state.getDisplayText() : "";
 	}
 	
 }

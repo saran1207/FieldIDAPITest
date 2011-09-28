@@ -55,8 +55,9 @@ public class EventExcelSheetManager extends ExcelSheetManager {
 				Object r = rowMap.get(recommendationTitle);
 				Object d = rowMap.get(deficiencyTitle);
 				if (r!=null && StringUtils.isNotBlank(r.toString())) { 
-					comment.append("recommend : " + rowMap.get(recommendationTitle));
-				} else if (d!=null && StringUtils.isNotBlank(d.toString())) {  
+					comment.append("recommend : " + rowMap.get(recommendationTitle)+"\n");
+				}
+				if (d!=null && StringUtils.isNotBlank(d.toString())) {  
 					comment.append("deficiency : " + rowMap.get(deficiencyTitle));
 				}
 			}
