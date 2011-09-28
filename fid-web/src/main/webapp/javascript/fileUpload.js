@@ -5,7 +5,7 @@ function startFileUpload() {
 
 function completedFileUpload() {
 	activeFileUploads--;
-	addUploadFile('${uploadFileType!}');
+	addUploadFile('${uploadFileType!}', false);
 }
 
 var uploadWarning = "";
@@ -20,7 +20,7 @@ function checkForUploads() {
 var removeText = '';
 function fileUploaded( frameId, frameCount, fileName, directory ){
 
-	eval( "var func =  function() {$('"+frameId+"').remove();addUploadFile('${uploadFileType!}');};" );
+	eval( "var func =  function() {$('"+frameId+"').remove();addUploadFile('${uploadFileType!}', true);};" );
 	
 	var div = new Element( 'div', { 'id':frameId, 'class':'fileUpload imageUploadPreview attachementsPreview'} 
 		).insert( new Element( 'input', { 'type':'hidden', 'name':'uploadedFiles[' + frameCount + '].fileName', value:directory } )
@@ -38,6 +38,7 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 	div.select('img[class="previewImage"]').each(function(x) {x.height=27; x.width=28;});	
 	$(frameId).replace( div );
 	$(frameId + "_remove").onclick = func;
+	$()
 }
 
 var frameCount = 0;
@@ -45,12 +46,12 @@ var activeFileUploads = 0;
 var uploadUrl = '' ;
 var uploadFileLimit = 10;
 var tooManyFileMessage = "Too many files already attached.";
-function addUploadFile(type) {
+function addUploadFile(type, isRemove) {
 	if (type == undefined) {
 		type = ""; 
 	}
 	
-	if ($$('.fileUpload').size() >= uploadFileLimit) {
+	if (!isRemove && $$('.imageUploadPreview').size() >= uploadFileLimit) {
 		return;
 	}
 	
