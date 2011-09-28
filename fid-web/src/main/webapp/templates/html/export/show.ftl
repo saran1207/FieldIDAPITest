@@ -58,7 +58,7 @@ ${action.setPageType('my_account', 'exportEvent')!}
 		</script>
 		
 		<script src="javascript/chosen/chosen.jquery.js" type="text/javascript"></script>
-		<script type="text/javascript"> jQuery(".chzn-select").chosen(); </script>
+		<script type="text/javascript"> jQuery(document).ready( function() { jQuery(".chzn-select").chosen(); } );</script>
 				
 </@s.form>
 
