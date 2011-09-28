@@ -27,7 +27,7 @@ public class ScoreCriteriaResult extends CriteriaResult {
 
 	@Override
 	public String getResultString() {
-		return score!=null && score.getValue()!=null ? Double.toString(score.getValue()) : "";
+		return score!=null ? score.getName() : "";
 	}
 
 }
