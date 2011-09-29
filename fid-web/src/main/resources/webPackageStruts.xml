@@ -1530,7 +1530,7 @@
 			<result name="input" type="freemarker">/templates/html/changeSecurityCard/adminForm.ftl</result>
 			<result name="error" type="freemarker">/templates/html/changeSecurityCard/adminForm.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">adminMobilePasscode</param>
+				<param name="actionName">viewUser</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
