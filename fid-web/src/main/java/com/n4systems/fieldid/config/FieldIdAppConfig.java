@@ -188,7 +188,7 @@ public class FieldIdAppConfig {
     }
     
     @Bean
-    @Scope(value="thread", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public UserLimitService userLimitService() {
     	return new UserLimitService();
     }
