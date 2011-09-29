@@ -7,7 +7,7 @@
 	</div>
 	<div class="subAssetActions">
 		<#if inEvent?exists>
-			<div id="subEvent_${subAsset.asset.id}" class="subAssetAction eventTypes eventTypesMiddle simpleContainer" onmouseover="positionDropdown(this);">
+			<div id="subEvent_${subAsset.asset.id}" class="subAssetAction eventTypes simpleContainer" onmouseover="positionDropdown(this);">
 				<a class="exitLink" href="javascript:void(0);"  ><@s.text name="label.start_event"/></a>
 				<ul id="subEvent_${subAsset.asset.id}_list" >
 					<#assign eventTypes=subAsset.asset.type.eventTypes  />

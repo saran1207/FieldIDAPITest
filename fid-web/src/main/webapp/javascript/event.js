@@ -232,8 +232,14 @@ function repositionCertLinks(list, link) {
 }
 
 function positionDropdown(a, groupId){
-	if(Prototype.Browser.IE){
+	if(Prototype.Browser.IE && groupId != null){
 		 $(groupId + "_list").setStyle({'left': "800px"});
+	} else if($(a.id + "_list") != null){
+		var list = $(a.id + "_list");
+		var actionsContainer = list.parentNode;
+		var coordinates = findPos(actionsContainer);		
+		list.setStyle({	'top': coordinates[1] - (a.offsetHeight - 15 - actionsContainer.offsetHeight)+ "px"});
+		list.setStyle({	'left': coordinates[0] - 60 + "px"});			
 	}
 }
 	
