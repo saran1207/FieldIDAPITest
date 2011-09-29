@@ -585,7 +585,8 @@ function positionDropDown(a, entityId){
 	var coordinates = findPos(actionsContainer);
 	
 	if(Prototype.Browser.IE){
-		list.setStyle({	'top': coordinates[1] - (a.offsetHeight - actionsContainer.offsetHeight)+ "px"});
+		list.setStyle({	'top': coordinates[1] + (actionsContainer.offsetHeight/2) + "px"});
+		//alert(actionsContainer.offsetHeight);
 	}
 	list.setStyle({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
 }
