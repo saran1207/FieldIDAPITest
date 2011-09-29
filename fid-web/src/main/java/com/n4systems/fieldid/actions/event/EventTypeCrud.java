@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.n4systems.fieldid.service.event.EventTypeService;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -51,11 +52,13 @@ public class EventTypeCrud extends AbstractCrud {
 	
 	private String nameFilter;
 	private Long groupFilter;
-	
-	public EventTypeCrud(PersistenceManager persistenceManager) {
+    private EventTypeService eventTypeService;
+
+    public EventTypeCrud(PersistenceManager persistenceManager, EventTypeService eventTypeService) {
 		super(persistenceManager);
-		
-	}
+
+        this.eventTypeService = eventTypeService;
+    }
 
 	@Override
 	protected void initMemberFields() {
@@ -240,11 +243,12 @@ public class EventTypeCrud extends AbstractCrud {
 
 	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
-			eventTypes = getLoaderFactory().createEventTypeListLoader()
-			                               .setNameFilter(nameFilter)
-			                               .setGroupFilter(groupFilter)
-			                               .setPostFetchFields("modifiedBy", "createdBy")
-			                               .load();
+//			eventTypes = getLoaderFactory().createEventTypeListLoader()
+//			                               .setNameFilter(nameFilter)
+//			                               .setGroupFilter(groupFilter)
+//			                               .setPostFetchFields("modifiedBy", "createdBy")
+//			                               .load();
+            eventTypes = eventTypeService.getEventTypes(groupFilter, nameFilter);
 		}
 
 		return eventTypes;
