@@ -184,4 +184,9 @@ public class BulkRegisterSafetyNetwork extends MultiAddAssetCrud {
     public void setUseDatesFromAssets(boolean useDatesFromAssets) {
         this.useDatesFromAssets = useDatesFromAssets;
     }
+    
+    @Override
+    public boolean isMultiAdd() {
+    	return false;
+    }
 }

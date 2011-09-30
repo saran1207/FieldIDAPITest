@@ -106,7 +106,7 @@
 		</div>
 	</#if>
 	
-	<#if isMultiAdd>
+	<#if multiAdd>
 		<#include "/templates/html/eventCrud/_schedules.ftl" />
 	</#if>	
 </div>
