@@ -12,7 +12,13 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 		super(selenium, AssetsSearchResultsPage.class);
 	}
 
+	@Override
 	public void setDisplayColumns(SearchDisplayColumns displayColumns) {
+		setDisplayColumns(displayColumns, false);
+	}
+
+	
+	public void setDisplayColumns(SearchDisplayColumns displayColumns, boolean isIntergationEnabled) {
 		setCheckBoxValue("//input[@id='chk_asset_search_identifier']", displayColumns.isIdentifier());
 		setCheckBoxValue("//input[@id='chk_asset_search_referencenumber']", displayColumns.isReferenceNumber());
 		setCheckBoxValue("//input[@id='chk_asset_search_rfidnumber']", displayColumns.isRfidNumber());
@@ -33,10 +39,13 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 		setCheckBoxValue("//input[@id='chk_asset_search_description']", displayColumns.isDescription());
 		setCheckBoxValue("//input[@id='chk_asset_search_published']", displayColumns.isSafetyNetwork());
 		setCheckBoxValue("//input[@id='chk_asset_next_scheduled_date']", displayColumns.isScheduledDate());
-		
-		setCheckBoxValue("//input[@id='chk_asset_search_order_description']", displayColumns.isOrderDescription());
-		setCheckBoxValue("//input[@id='chk_asset_search_order_number']", displayColumns.isOrderNumber());
-		setCheckBoxValue("//input[@id='chk_asset_search_purchaseorder']", displayColumns.isPurchaseOrder());
+		if(isIntergationEnabled) {
+			setCheckBoxValue("//input[@id='chk_asset_search_order_description']", displayColumns.isOrderDescription());
+			setCheckBoxValue("//input[@id='chk_asset_search_order_number']", displayColumns.isOrderNumber());
+		}else {
+			setCheckBoxValue("//input[@id='chk_asset_search_purchaseorder']", displayColumns.isPurchaseOrder());
+			setCheckBoxValue("//input[@id='chk_asset_search_non_intergration_order_number']", displayColumns.isOrderNumber());
+		}
 	}
 
 	public AssetPage clickResultInfo(String identifier) {
@@ -72,4 +81,5 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
     	selenium.click("//a[contains(., 'Import from Excel')]");
     	return new ImportPage(selenium);
     }
+
 }

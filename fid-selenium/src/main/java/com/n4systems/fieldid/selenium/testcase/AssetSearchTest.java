@@ -22,7 +22,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 
     @Override
     public void setupScenario(Scenario scenario) {
-        scenario.primaryOrgFor("test1").setExtendedFeatures(setOf(ExtendedFeature.AssignedTo, ExtendedFeature.Integration));
+        scenario.primaryOrgFor("test1").setExtendedFeatures(setOf(ExtendedFeature.AssignedTo, ExtendedFeature.OrderDetails));
 
         AssetType type = scenario.anAssetType()
                 .named("Chain Sling")
@@ -113,7 +113,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		assertTrue(page.hasSearchResults());		
 		List<String> expectedColumns = Arrays.asList("ID Number",  "Asset Type",  "Asset Status",  "Customer Name",  "Location",
 				"Date Identified",  "Last Event Date",  "RFID Number",  "Reference Number",  "Assigned To",  "Division",  "Organization",  
-				"Order Description",  "Order Number",  "Purchase Order",  "Asset Type Group",  "Network Last Event Date",  "Identified By",  
+				"Order Number",  "Purchase Order",  "Asset Type Group",  "Network Last Event Date",  "Identified By",  
 				"Modified By",  "Comments",  "Description",  "Safety Network", "");
 		assertEquals(expectedColumns, page.getResultColumnHeaders());
 	}
