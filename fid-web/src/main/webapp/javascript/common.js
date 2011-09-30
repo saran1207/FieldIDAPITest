@@ -582,22 +582,17 @@ onDocumentLoad(function() {
 function positionDropDown(a, entityId){
 	var list = $(a.id + "_list_" + entityId );
 	var actionsContainer = $("actionsContainer_"+entityId);
-	var coordinates = findPos(actionsContainer);
 	
-	if(Prototype.Browser.IE){
-		list.setStyle({	'top': coordinates[1] + (actionsContainer.offsetHeight/2) + "px"});
-		//alert(actionsContainer.offsetHeight);
-	}
-	list.setStyle({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
+	positionDropDownForElements(a, list, actionsContainer);
 }
 
 function positionDropDownForElements(a, list, actionsContainer) {
     var coordinates = findPos(actionsContainer);
 
-    if(Prototype.Browser.IE){
-        list.setStyle({	'top': coordinates[1] - (a.offsetHeight - actionsContainer.offsetHeight)+ "px"});
-    }
-    list.setStyle({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
+	if(Prototype.Browser.IE){
+		list.setStyle({	'top': coordinates[1] + (actionsContainer.offsetHeight/2) + "px"});
+	}
+	list.setStyle({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
 }
 
  function createBookmark(url, title) {
