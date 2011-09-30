@@ -51,13 +51,13 @@ public class AssetPage extends FieldIDPage {
 	}
 
 	public void clickSaveSchedule() {
-		selenium.click("//input[@id='newSchedule_label_save']");
+		selenium.click("//input[@id='newSchedule_label_addschedule']");
 		waitForAjax();
 	}
 
 	public void setSchedule(String date, String eventType, String job) {
 		if (date != null) {
-			selenium.type("//input[@id='newSchedule_nextDate']", date);
+			selenium.type("//input[@id='nextDate']", date);
 		}
 		if (eventType != null) {
 			selenium.select("//select[@id='newSchedule_type']", eventType);
