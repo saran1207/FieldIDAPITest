@@ -21,6 +21,7 @@
 	margin-top: 0;
 	overflow: hidden;
 	padding: 0;
+	border-bottom: none;
 }
 
 #mainContent .smallViewSection p label {
