@@ -2041,6 +2041,7 @@
 			</result>
 			<result name="savestartevent" type="freemarker">/templates/html/multiAssetCrud/renderOut.ftl</result>
 			<result name="error" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
 			<result name="savedWithOrder" type="redirectAction">
 				<param name="actionName">searchOrder</param>
 				<param name="tagOptionId">${tagOptionId}</param>

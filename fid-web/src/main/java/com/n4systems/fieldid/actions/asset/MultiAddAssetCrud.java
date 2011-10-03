@@ -85,6 +85,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private Integer maxAssets;
     private Long networkAssetTypeId;
     private Long vendorId;
+	private Long tagOptionId;
 
 	public MultiAddAssetCrud(PersistenceManager persistenceManager, OrderManager orderManager, 
 			LegacyAsset legacyAssetManager, AssetCodeMappingService assetCodeMappingServiceManager, EventScheduleManager eventScheduleManager) {
@@ -498,5 +499,13 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
     
     public boolean isMultiAdd() { 
     	return true;
-    }
+    }    
+    
+	public Long getTagOptionId() {
+		return tagOptionId; 
+	}
+
+	public void setTagOptionId(Long tagOptionId) {
+		this.tagOptionId = tagOptionId;
+	}
 }

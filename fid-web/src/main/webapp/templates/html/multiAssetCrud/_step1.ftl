@@ -9,6 +9,7 @@
 	<#include "/templates/html/assetCrud/_assetTypeForm.ftl"/>
 	<#include "/templates/html/assetCrud/_assetConfigForm.ftl"/>
 	<@s.hidden name="lineItemId" />
+	<@s.hidden name="tagOptionId" />
 	
 	<div class="stepAction">
 		<@s.submit theme="fieldidSimple" key="label.continue" onclick="validateForm1(); return false;"/>
