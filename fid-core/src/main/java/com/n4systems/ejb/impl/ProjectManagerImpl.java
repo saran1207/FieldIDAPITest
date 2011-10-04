@@ -40,7 +40,6 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 
 	public int attachAsset(Asset asset, Project project, Long modifiedBy) throws AssetAlreadyAttachedException {
-		persistenceManager.reattach(project);
 		if (project.getAssets().contains(asset)) {
 			throw new AssetAlreadyAttachedException();
 		}
@@ -50,7 +49,6 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 
 	public int detachAsset(Asset asset, Project project, Long modifiedBy) {
-		persistenceManager.reattach(project);
 		project.getAssets().remove(asset);
 		project = persistenceManager.update(project, modifiedBy);
 		return project.getAssets().size();
