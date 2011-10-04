@@ -202,7 +202,7 @@ public class EventHelper {
             	((DateFieldCriteriaResult) realResult).setValue(dateResult);
             } else if (realResult instanceof NumberFieldCriteriaResult) {
             	if(formResult.getTextValue() != null && !formResult.getTextValue().isEmpty()) {
-            		float numberResult = Float.parseFloat(formResult.getTextValue());
+            		double numberResult = Double.parseDouble(formResult.getTextValue());
             		((NumberFieldCriteriaResult)realResult).setValue(numberResult);
             	}
             } else if (realResult instanceof ScoreCriteriaResult) {

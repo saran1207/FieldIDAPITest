@@ -9,13 +9,13 @@ import javax.persistence.Table;
 @PrimaryKeyJoinColumn(name="id")
 public class NumberFieldCriteriaResult extends CriteriaResult {
 
-	private Float value;
+	private Double value;
 
-	public Float getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(Float value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 	

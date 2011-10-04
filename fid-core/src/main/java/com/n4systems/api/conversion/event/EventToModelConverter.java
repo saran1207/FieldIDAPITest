@@ -215,7 +215,7 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 
 			@Override
 			public CriteriaResult populate(NumberFieldCriteriaResult result) {
-	        	result.setValue(Float.parseFloat(criteriaResultView.getResultString()));
+	        	result.setValue(Double.parseDouble(criteriaResultView.getResultString()));
 				return result;
 			}
 
