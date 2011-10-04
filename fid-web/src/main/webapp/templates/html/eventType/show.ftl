@@ -108,7 +108,7 @@ ${action.setPageType('event_type', 'show')!}
                                                 <@s.text name="label.datefield"/>
                                             </#if>
                                             <#if criteria.criteriaType.name() == 'SCORE'>
-                                                <@s.text name="label.score"/>
+                                                <#include "_scoreCriteria.ftl"/>
                                             </#if>
                                             <#if criteria.criteriaType.name() == 'NUMBER_FIELD'>
                                                 <@s.text name="label.numberfield"/>
