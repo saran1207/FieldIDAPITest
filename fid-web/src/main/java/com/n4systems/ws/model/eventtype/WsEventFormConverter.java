@@ -20,6 +20,7 @@ public class WsEventFormConverter extends WsModelConverter<EventForm, WsEventFor
 		WsEventForm wsModel = new WsEventForm();
 		wsModel.setId(model.getId());
 		wsModel.setSections(sectionConverter.fromModels(model.getSections()));
+		wsModel.setUseScoreForResult(model.isUseScoreForResult());
 		return wsModel;
 	}
 }
