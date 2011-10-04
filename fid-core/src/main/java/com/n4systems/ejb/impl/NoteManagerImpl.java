@@ -30,7 +30,6 @@ public class NoteManagerImpl implements NoteManager {
 	}
 
 	public FileAttachment attachNote(FileAttachment note, Project project, Long modifiedBy) throws FileAttachmentException {
-		persistenceManager.reattach(project);
 
 		try {
 			note.setTenant(project.getTenant());
@@ -66,7 +65,6 @@ public class NoteManagerImpl implements NoteManager {
 
 	public int detachNote(FileAttachment note, Project project, Long modifiedBy) throws FileAttachmentException {
 
-		persistenceManager.reattach(project);
 		note = persistenceManager.find(FileAttachment.class, note.getId());
 		try {
 			if (note != null && project.getNotes().remove(note) ) {
