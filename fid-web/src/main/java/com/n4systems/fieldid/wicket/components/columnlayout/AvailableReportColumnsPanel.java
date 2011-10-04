@@ -1,12 +1,9 @@
 package com.n4systems.fieldid.wicket.components.columnlayout;
 
-import com.n4systems.fieldid.wicket.components.CollapsiblePanel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.columns.ColumnMapping;
-import com.n4systems.model.columns.ColumnMappingGroup;
-import com.n4systems.model.columns.CustomColumnCategory;
-import com.n4systems.model.columns.CustomColumnMapping;
-import com.n4systems.model.columns.ReportType;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -14,9 +11,13 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.n4systems.fieldid.wicket.components.CollapsiblePanel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.columns.ColumnMapping;
+import com.n4systems.model.columns.ColumnMappingGroup;
+import com.n4systems.model.columns.CustomColumnCategory;
+import com.n4systems.model.columns.CustomColumnMapping;
+import com.n4systems.model.columns.ReportType;
 
 public class AvailableReportColumnsPanel extends Panel {
 
@@ -62,7 +63,7 @@ public class AvailableReportColumnsPanel extends Panel {
 
     private CollapsiblePanel createCustomPanel(String componentId, String label, final CustomColumnCategory category, IModel<List<ColumnMapping>> columnsList) {
 
-        CollapsiblePanel assetAttributesContainer = new CollapsiblePanel(componentId, new FIDLabelModel(label), "images/columnlayout/arrow-down.png", "images/columnlayout/arrow-over.png") {
+        CollapsiblePanel assetAttributesContainer = new CollapsiblePanel(componentId, new FIDLabelModel(label), "images/columnlayout/arrow-over.png", "images/columnlayout/arrow-down.png") {
             @Override
             protected void onExpandedOrCollapsed(String title, Boolean expanded) {
                 setExpandedStatusForSection(title, expanded);
