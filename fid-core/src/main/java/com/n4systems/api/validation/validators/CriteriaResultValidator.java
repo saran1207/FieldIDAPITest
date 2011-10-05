@@ -1,5 +1,6 @@
 package com.n4systems.api.validation.validators;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -14,18 +15,7 @@ import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
-import com.n4systems.model.ComboBoxCriteria;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.EventType;
-import com.n4systems.model.NumberFieldCriteria;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.SignatureCriteria;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.TextFieldCriteria;
-import com.n4systems.model.UnitOfMeasureCriteria;
+import com.n4systems.model.*;
 import com.n4systems.model.security.SecurityFilter;
 
 
@@ -67,8 +57,23 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 			return validateUnitOfMeasure((UnitOfMeasureCriteria) criteria, section, value);
 		case NUMBER_FIELD:
 			return validateNumberField((NumberFieldCriteria) criteria, section, value);
+		case SCORE:
+			return validateScoreField((ScoreCriteria)criteria, section, value);
+		default :
+			return ValidationResult.fail("unsupported critera " + criteria.getClass().getSimpleName() + " : most likely you have added a criteria type without adding validation");
 		}
-		return ValidationResult.pass();
+	}
+
+	private ValidationResult validateScoreField(ScoreCriteria criteria, CriteriaSection section, CriteriaResultView value) {
+		List<Score> scores = criteria.getScoreGroup().getScores();
+		List<String> scoreNames = new ArrayList<String>();
+		for (Score score:scores) { 
+			if (score.getName().equals(value.getResultString())) {
+				return ValidationResult.pass();
+			}
+			scoreNames.add(score.getName());
+		}
+		return ValidationResult.fail(InvalidScoreFail, value.getResultString(),scoreNames);
 	}
 
 	private ValidationResult validateNumberField(NumberFieldCriteria criteria, CriteriaSection section, CriteriaResultView value) {

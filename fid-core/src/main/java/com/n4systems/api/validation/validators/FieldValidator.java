@@ -49,6 +49,7 @@ public interface FieldValidator {
 	public static final String MaxReadOnlyUsersFail = "You can not import more than %d read only users. (Attempted to import %d)";
 	public static final String MaxEmployeeUersFail = "You can not import more than %d employee (full) users. (Attempted to import %d)";
 	public static final String NotANumberFail = "You must enter a number";
+	public static final String InvalidScoreFail = "You must enter a valid score. Value was '%s' but expecting one of %s";
 	
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, SerializableField field, Map<String, Object> validationContext);
 }

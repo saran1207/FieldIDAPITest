@@ -37,7 +37,7 @@ public class EventExporter implements Exporter {
 				view = converter.toView(event);
 				mapWriter.write(marshaller.toBeanMap(view));
 			} catch (Exception e) {
-				throw new ExportException(String.format("Unable to export event [%s]", event), e);
+				throw new ExportException(String.format("Unable to export event [%s] due to %s", event, e.getLocalizedMessage()), e);
 			}
 		}
 	}

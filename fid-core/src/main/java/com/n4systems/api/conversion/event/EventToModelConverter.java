@@ -1,8 +1,6 @@
 package com.n4systems.api.conversion.event;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,10 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCriteria;
-import com.n4systems.model.ScoreCriteriaResult;
-import com.n4systems.model.ScoreGroup;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Predicate;
@@ -22,30 +16,7 @@ import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
 import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.model.EventView;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.CriteriaType;
-import com.n4systems.model.DateFieldCriteriaResult;
-import com.n4systems.model.Deficiency;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.NumberFieldCriteriaResult;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.Recommendation;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.State;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Status;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.*;
 import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
