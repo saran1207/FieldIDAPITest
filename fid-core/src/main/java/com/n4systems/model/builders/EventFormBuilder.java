@@ -25,7 +25,7 @@ public class EventFormBuilder extends EntityWithTenantBuilder<EventForm> {
     }
 
     public static EventFormBuilder anEventForm() {
-        return new EventFormBuilder(new ArrayList<CriteriaSection>(), false, ScoreCalculationType.SUM, null, null);
+        return new EventFormBuilder(new ArrayList<CriteriaSection>(), false, ScoreCalculationType.SUM, new ScoreResultRange(), new ScoreResultRange());
     }
 
     public EventFormBuilder withSections(CriteriaSection... sections) {
