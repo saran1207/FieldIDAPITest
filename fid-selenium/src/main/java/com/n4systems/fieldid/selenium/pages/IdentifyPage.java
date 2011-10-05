@@ -271,7 +271,8 @@ public class IdentifyPage extends FieldIDPage {
 			p.setLocation(selenium.getValue("//input[@id='location_freeformLocation']"));
 		}
 		p.setAssetStatus(selenium.getSelectedLabel("//select[@id='assetCreate_assetStatus']"));
-		p.setPurchaseOrder(selenium.getValue("//input[@id='assetCreate_purchaseOrder']"));
+		if(selenium.isElementPresent("//input[@id='assetCreate_purchaseOrder']"))
+			p.setPurchaseOrder(selenium.getValue("//input[@id='assetCreate_purchaseOrder']"));
 		p.setIdentified(selenium.getValue("//input[@id='identified']"));
 		p.setAssetType(selenium.getSelectedLabel("//select[@id='assetType']"));
 		p.setComments(selenium.getValue("//textarea[@id='comments']"));
@@ -326,7 +327,7 @@ public class IdentifyPage extends FieldIDPage {
 		if(p.getAssetStatus() != null) {
 			selenium.select("//select[@id='step1form_assetStatus']", p.getAssetStatus());
 		}
-		if(p.getPurchaseOrder() != null) {
+		if(p.getPurchaseOrder() != null && selenium.isElementPresent("//input[@id='step1form_purchaseOrder']")) {
 			selenium.type("//input[@id='step1form_purchaseOrder']", p.getPurchaseOrder());
 		}
 		if(p.getIdentified() != null) {
