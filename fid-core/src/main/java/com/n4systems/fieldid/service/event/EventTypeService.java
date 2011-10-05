@@ -21,7 +21,7 @@ public class EventTypeService extends FieldIdPersistenceService {
             builder.addSimpleWhere("group.id", eventTypeGroupId);
         }
 
-        if (StringUtils.isBlank(nameFilter)) {
+        if (!StringUtils.isBlank(nameFilter)) {
             builder.addWhere(WhereParameter.Comparator.LIKE, "nameFilter", "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH);
         }
 
