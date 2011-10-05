@@ -13,6 +13,8 @@ import com.n4systems.fieldid.selenium.pages.SafetyNetworkPage;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkRegisterAssetForm;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkVendorAssetListPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 
 public class SafetyNetworkRegisterAssetTest extends PageNavigatingTestCase<SafetyNetworkPage> {
@@ -30,6 +32,9 @@ public class SafetyNetworkRegisterAssetTest extends PageNavigatingTestCase<Safet
 	
 	@Override
 	public void setupScenario(Scenario scenario) {	
+		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY1);
+		primaryOrg.setExtendedFeatures(setOf(ExtendedFeature.OrderDetails));
+		
         scenario.aSafetyNetworkConnection()
 				.from(scenario.primaryOrgFor(COMPANY1))
 				.to(scenario.primaryOrgFor(COMPANY2))
