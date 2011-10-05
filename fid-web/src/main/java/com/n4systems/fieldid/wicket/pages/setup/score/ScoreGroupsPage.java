@@ -88,7 +88,7 @@ public class ScoreGroupsPage extends FieldIDLoggedInPage {
                 NavigationItemBuilder.aNavItem().page("eventTypes.action").label("nav.view_all").build(),
                 NavigationItemBuilder.aNavItem().page("buttonGroups.action").label("nav.button_groups").build(),
                 NavigationItemBuilder.aNavItem().page(ScoreGroupsPage.class).label("nav.score_groups").build(),
-                NavigationItemBuilder.aNavItem().page("eventTypesAdd.action").label("nav.add").onRight().build()));
+                NavigationItemBuilder.aNavItem().page("eventTypeAdd.action").label("nav.add").onRight().build()));
     }
 
 
