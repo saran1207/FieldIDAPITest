@@ -6,7 +6,10 @@ import static org.junit.Assert.assertTrue;
 import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.builders.AssetBuilder;
+import com.n4systems.model.orgs.PrimaryOrg;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +34,11 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
     @Override
     public void setupScenario(Scenario scenario) {
+    	
+		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor("test1");
+		
+		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.OrderDetails));
+		
         scenario.anAssetStatus().named("OMG PLS").build();
 
         scenario.anAssetStatus().named(NEW_STATUS).build();
