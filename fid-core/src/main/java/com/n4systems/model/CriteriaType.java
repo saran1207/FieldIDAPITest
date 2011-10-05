@@ -78,6 +78,6 @@ public enum CriteriaType implements Listable {
 
     @Override
     public String getDisplayName() {
-        return description;
+        return name();
     }
 }
