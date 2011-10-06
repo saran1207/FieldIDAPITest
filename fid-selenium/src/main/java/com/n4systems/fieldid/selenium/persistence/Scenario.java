@@ -41,6 +41,7 @@ import com.n4systems.model.builders.EventTypeGroupBuilder;
 import com.n4systems.model.builders.InfoFieldBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
 import com.n4systems.model.builders.JobBuilder;
+import com.n4systems.model.builders.NumberFieldCriteriaBuilder;
 import com.n4systems.model.builders.OneClickCriteriaBuilder;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.SelectCriteriaBuilder;
@@ -280,6 +281,10 @@ public class Scenario {
 		return createPersistentBuilder(builder);
 	}
 
+	public NumberFieldCriteriaBuilder aNumberFieldCriteria() {
+		NumberFieldCriteriaBuilder builder = NumberFieldCriteriaBuilder.aNumberFieldCriteria();
+		return createPersistentBuilder(builder);
+	}
 
     public ColumnLayoutBuilder aColumnLayout() {
         ColumnLayoutBuilder builder = ColumnLayoutBuilder.aColumnLayout();

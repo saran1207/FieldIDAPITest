@@ -21,6 +21,7 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.LineItemSaver;
+import com.n4systems.model.NumberFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Order;
 import com.n4systems.model.OrderSaver;
@@ -102,6 +103,7 @@ public class SaverMap {
         classToSaverMap.put(SelectCriteria.class, new CriteriaSaver());
         classToSaverMap.put(ComboBoxCriteria.class, new CriteriaSaver());
         classToSaverMap.put(DateFieldCriteria.class, new CriteriaSaver());
+        classToSaverMap.put(NumberFieldCriteria.class, new CriteriaSaver());
         classToSaverMap.put(EventSchedule.class, new EventScheduleSaver());
         classToSaverMap.put(StateSet.class, new StateSetSaver());
         classToSaverMap.put(State.class, new StateSaver());
