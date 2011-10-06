@@ -10,7 +10,6 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
-import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
@@ -18,9 +17,11 @@ import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.EventScheduleBuilder;
 import com.n4systems.model.builders.SubAssetBuilder;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public class MassUpdateAssetsTest extends FieldIDTestCase {
 
@@ -28,6 +29,11 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
 	@Override
 	public void setupScenario(Scenario scenario) {
+		PrimaryOrg primaryOrg = scenario.primaryOrgFor("test1");
+		primaryOrg.setExtendedFeatures(setOf(ExtendedFeature.OrderDetails));
+		scenario.save(primaryOrg);
+		
+		
 		AssetType type = scenario.anAssetType().named("Workman Harness").build();
 
 		AssetStatus status1 = scenario.anAssetStatus().named("In Service").build();
@@ -109,11 +115,8 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		
 		assertTrue("Asset wasn't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 1 assets removed.')]"));
 	
-		ReportingPage reportingPage = page.clickReportingLink();
-		reportingPage.enterIdentifier("9671111");
-		reportingPage.clickRunSearchButton();
-
-		assertTrue("Event wasn't successfully deleted", verifyAllEventsAreRemoved());
+		page.clickReportingLink();
+		assertTrue("Event wasn't successfully deleted", selenium.isElementPresent("//div[@class='initialMessage']"));
 	}
 
 	@Test
@@ -161,7 +164,4 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		return selenium.isElementPresent("//div[@class='initialMessage']");
 	}
 	
-	private boolean verifyAllEventsAreRemoved(){
-		return selenium.isElementPresent("//div[@class='emptyList']");
-	}
 }
