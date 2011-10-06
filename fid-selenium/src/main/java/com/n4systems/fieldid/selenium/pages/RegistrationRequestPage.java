@@ -9,7 +9,6 @@ public class RegistrationRequestPage extends FieldIDPage {
 	}
 
 	public LoginPage registerUser(String userId){
-		selenium.open("/fieldid/registerUser.action");
 		selenium.type("//input[@id='companyName']", "company_name");
 		selenium.type("registerUserCreate_firstName", "Our test user");
 		selenium.type("registerUserCreate_firstName", "Test");
