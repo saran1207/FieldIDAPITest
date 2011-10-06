@@ -562,8 +562,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		event.setAssetStatus(convertProductStatus(inspectionServiceDTO));
 		event.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, performedBy));
 		
-		event.getGpsLocation().setLatitude(inspectionServiceDTO.getLatitude());
-		event.getGpsLocation().setLongitude(inspectionServiceDTO.getLongitude());
+		
+		GpsLocation gpsLocation = new GpsLocation(inspectionServiceDTO.getLatitude(), inspectionServiceDTO.getLongitude());
+		
+		if(gpsLocation.isValid())
+		{
+			event.setGpsLocation(gpsLocation);
+		}
 
 		return event;
 	}
