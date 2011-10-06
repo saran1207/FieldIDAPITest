@@ -73,11 +73,11 @@ public enum CriteriaType implements Listable {
 
     @Override
     public Object getId() {
-        return reportIdentifier;
+        return name();
     }
 
     @Override
     public String getDisplayName() {
-        return name();
+        return description;
     }
 }
