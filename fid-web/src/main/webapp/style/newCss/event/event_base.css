@@ -57,8 +57,7 @@ label.eventFormLabel {
 .recDefButtons {
     display: block;
     float: right;
-    padding-left:10px;
-    margin-right:95px;
+    width : 14%;
 }
 
 .criteriaEditContainer {
