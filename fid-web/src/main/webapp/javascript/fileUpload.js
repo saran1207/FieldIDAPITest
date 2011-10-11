@@ -22,23 +22,24 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 
 	eval( "var func =  function() {$('"+frameId+"').remove();addUploadFile('${uploadFileType!}', true);};" );
 	
-	var div = new Element( 'div', { 'id':frameId, 'class':'fileUpload imageUploadPreview attachementsPreview'} 
+	var div = new Element( 'div', { 'id':frameId, 'class':'fileUpload assetUploadPreview attachementsPreview'} 
 		).insert( new Element( 'input', { 'type':'hidden', 'name':'uploadedFiles[' + frameCount + '].fileName', value:directory } )
 		).insert( new Element( 'div', {'class':'previewImageDisplay'} 
-			).insert( new Element( 'img', {'alt':'fileName',  'class':'previewImage', 'src':'images/file-icon.png', 'width': '27px'}))
-		).insert( new Element('span'
-			).insert( new Element('label').update( fileName + " | ")
+			).insert( new Element( 'img', {'alt':'fileName',  'class':'previewImage', 'src':'images/attachment-icon.png'}))
+		).insert( new Element('div', {'class':'previewImageLabel'}
+			).insert( new Element('div', {'id':'attachmentLabel_'+frameId, 'class':'attachmentLabel'}
+				).insert( new Element('span', {'class':'ellipsis_text'}).update( fileName ))
 			).insert( new Element( 'a', { id: frameId + "_remove", href:"javascript:void(0)" } ).update( removeText ))
 		).insert( new Element( 'div', {'class':'commentContainer'} 
-			).insert( new Element( 'span' , {'class':"fieldHolder"}
-				).insert( new Element( 'textarea', {id: 'uploadedFiles[' + frameCount + '].comments', 'rows': '3', 'cols': '50', 'name': 'uploadedFiles[' + frameCount + '].comments'} ) )
-			)
+			).insert( new Element( 'textarea', {id: 'uploadedFiles[' + frameCount + '].comments', 'rows': '3', 'cols': '50', 'name': 'uploadedFiles[' + frameCount + '].comments'} ) )
 		);
 	
-	div.select('img[class="previewImage"]').each(function(x) {x.height=27; x.width=28;});	
 	$(frameId).replace( div );
 	$(frameId + "_remove").onclick = func;
-	$()
+	
+	var ext =  fileName.slice(fileName.lastIndexOf('.'));
+	jQuery("#attachmentLabel_"+frameId).ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ ext });
+
 }
 
 var frameCount = 0;
@@ -51,7 +52,7 @@ function addUploadFile(type, isRemove) {
 		type = ""; 
 	}
 	
-	if (!isRemove && $$('.imageUploadPreview').size() >= uploadFileLimit) {
+	if (!isRemove && $$('.assetUploadPreview').size() >= uploadFileLimit) {
 		return;
 	}
 	

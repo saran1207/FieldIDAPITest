@@ -11,6 +11,7 @@
 		tooManyFileMessage = "<@s.text name="warning.max_files_uploaded"><@s.param>${fileUploadMax}</@s.param></@s.text>";
 		hasUploadForm = false;
 	</script>
+	<@n4.includeScript src="jquery.ThreeDots.min.js"/>
 </head>
 
 
@@ -19,12 +20,25 @@
 		<#list attachments as attachedFile >
 			<#if attachedFile?exists>
 				
-				<div id="attached_${attachedFile_index}" class="fileUpload infoSet">
+				<div id="attached_${attachedFile_index}" class="fileUpload assetUploadPreview attachementsPreview">
 					<@s.hidden id="attachedFile_${attachedFile_index}" name="attachments[${attachedFile_index}].id" />
 					<@s.hidden id="attachedFile_${attachedFile_index}" name="attachments[${attachedFile_index}].fileName" />
-					<label>${attachments[attachedFile_index].fileName}</label>
-					<a href="javascript:void(0)"  onclick="$('attached_${attachedFile_index}').remove();return false;"><@s.text name="label.remove"/></a>
-					<div>
+					
+				<div class="previewImageDisplay">
+					<img src="images/attachment-icon.png" class="previewImage" alt="uploadedFile"/>
+				</div>
+					<div class="previewImageLabel" >
+						<div id="imageLabel" class="attachmentLabel"> 
+							<span id="attached_${attachedFile_index}_label" class='ellipsis_text'>${attachments[attachedFile_index].fileName}</span>
+						</div>
+						<script type="text/javascript">						
+							var filename =  "${attachments[attachedFile_index].fileName}";
+							var ext =  filename.slice(filename.lastIndexOf('.'));
+							jQuery(".attachmentLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ ext });
+						</script>
+						<a href="javascript:void(0)"  onclick="$('attached_${attachedFile_index}').remove();return false;"><@s.text name="label.remove"/></a>
+					</div>
+					<div class="commentContainer">
 						<@s.textarea name="attachments[${attachedFile_index}].comments" id="attachments[${attachedFile_index}].comments"  cols="50" rows="3" theme="fieldidSimple"/>
 					</div>
 				</div>

@@ -20,28 +20,6 @@
 	font-size: 1em;
 }
 
-.fileUpload div {
-	overflow: hidden;
-}
-
-.fileUpload img {
-	margin-right: 10px;
-}
-
-
-.fileUpload div label {
-	float:left;
-	width:150px;
-	padding:5px 15px 5px 0;
-	display:block;
-}
-
-.fileUpload div span {
-	float:left;
-	padding:5px 0;
-	display:block;
-}
-
 .limitWarning {
 	background-color: #FFEBEB;
 	color: #FF0000;
@@ -56,7 +34,7 @@
 }
 
 .commentContainer{
-	padding-top:5px;
+	padding-top:10px;
 }
 
 .commentContainer span textarea{
@@ -107,18 +85,32 @@ p.fileUploadShow label{
 	background-position: 7px -3px;
 }
 
+.previewImageLabel {
+	margin-left: 20px;
+}
+
 .previewImageDisplay {
-	max-height: 30px;
-	max-width: 50px;
+	width: 20px;
 }
 
 .previewImageDisplay img{
 	position: absolute;
-	clip: rect(0 50px 40px 0px);
 }
 
-.imageUploadPreview span{ 
-	padding-left : 50px;
+.imageUploadPreview .imageLabel, .previewImageLabel .attachmentLabel{ 
+	float: left;
+	display: block;
+	width: 220px;
+	padding-right: 10px;
+}
+
+
+.imageUploadPreview .ellipsis_text, .previewImageLabel .ellipsis_text{
+	width: 200px;
+}
+
+.imageUploadPreview span a{ 
+	float: right;
 	display: block;
 }
 
