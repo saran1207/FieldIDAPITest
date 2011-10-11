@@ -39,10 +39,13 @@ public class OrgByNameLoader extends SecurityFilteredLoader<BaseOrg> {
 		
 		if (divisionName != null) {
 			addExternalOrgSecondaryClause(isUnderPrimary, builder);
+			builder.addWhere(WhereClauseFactory.createNotNull("customerOrg"));			
+			builder.addWhere(WhereClauseFactory.createNotNull("divisionOrg"));			
 			builder.addWhere(WhereClauseFactory.create("customerOrg.name", customerName));
 			builder.addWhere(WhereClauseFactory.create("name", divisionName));
 		} else if (customerName != null) {
 			addExternalOrgSecondaryClause(isUnderPrimary, builder);
+			builder.addWhere(WhereClauseFactory.createNotNull("customerOrg"));			
 			builder.addWhere(WhereClauseFactory.create("name", customerName));
 			builder.addWhere(WhereClauseFactory.createIsNull("divisionOrg"));
 		} else {
