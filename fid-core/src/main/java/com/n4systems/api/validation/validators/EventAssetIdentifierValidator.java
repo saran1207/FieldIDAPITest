@@ -9,7 +9,6 @@ import com.n4systems.persistence.loaders.ListLoader;
 
 public class EventAssetIdentifierValidator extends AssetIdentifierValidator {
 	
-
     @Override
 	protected <V extends ExternalModelView> ListLoader<Asset> createLoader(SecurityFilter filter, V view, String identifier) {        
         if (view instanceof EventView) { 

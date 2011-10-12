@@ -42,7 +42,6 @@ public class AssetIdentifierValidator implements FieldValidator {
 	            AssetType assetType = asset.getType();
 	            existsLoader.setAssetType(assetType);	// filter out assets that don't have this event type associated with them.
 	            Boolean load = existsLoader.load();
-	            System.out.println(load);
 	            return load;
 			} 
         };
