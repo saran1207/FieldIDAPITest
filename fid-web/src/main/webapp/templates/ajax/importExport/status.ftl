@@ -13,6 +13,7 @@
 $('importStatus').update('${html?js_string}');
 
 <#if importRunning>
+	
 	if( $('uploadForm') != null) {
 		$('uploadForm').disable();
 		updateTimer = setTimeout("updateStatus()", 5000);

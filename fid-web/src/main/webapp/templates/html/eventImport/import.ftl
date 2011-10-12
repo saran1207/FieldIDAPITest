@@ -1,6 +1,7 @@
 <title><@s.text name="label.startevent"/></title>
 <head>
-	<@n4.includeStyle type="page" href="assetImport"/>
+	<@n4.includeStyle type="page" href="import"/>
+	<@n4.includeScript src="importExport"/>
 </head>
 
 <@s.url id="updateUrl" namespace="/ajax" action="eventImportStatus" />

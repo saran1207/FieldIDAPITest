@@ -87,3 +87,44 @@
 	background-color: #EEEEEE;
 	border: 1px solid #CCCCCC;
 }
+
+.progressBarContainer{
+	border: 1px dotted #E3E3E3;
+	padding: 20px;
+	float: left;
+	width: 95%;
+}
+
+.percentBar {
+	width: 85%;
+    background-color: #F4FAFF;
+    border: 1px solid #79C5E5;
+    float: left;
+    padding: 2px;
+    margin-left: 50px;
+}
+
+.taskCount {
+	float: left;
+	margin:5px;
+	float: left;
+}
+
+.statusLabel {
+	padding-bottom: 10px;
+	font-size: 1.2em;
+	float: left;
+	width: 100%;
+	font-weight: bold;
+	margin-left: 50px;
+	
+}
+
+.importMessage{
+	color: #666666;
+	clear: both;
+	padding-left: 220px;
+	padding-top: 10px;
+	margin-left: 50px;
+}
+

@@ -411,7 +411,7 @@
 		</action>
 		
 		<action name="assetImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.asset.AssetImportAction">
-			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
+			<result name="success" type="freemarker">/templates/ajax/importExport/new_status.ftl</result>
 		</action>
 				
 		<action name="invitationExample" method="example" class="com.n4systems.fieldid.actions.safetyNetwork.SendInvitationAction">
@@ -424,7 +424,7 @@
 		</action>
 		
 		<action name="eventImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.event.EventImportAction">
-			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
+			<result name="success" type="freemarker">/templates/ajax/importExport/new_status.ftl</result>
 		</action>
 		
 		<action name="addSchedule" method="add" class="com.n4systems.fieldid.actions.event.AddEventScheduleAjaxAction">

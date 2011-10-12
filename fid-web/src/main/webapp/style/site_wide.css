@@ -162,8 +162,8 @@ em {
 	min-width:256px;
 }
 
-.percentBarUsed, .percentBar {
-	height:18px;
+.percentBarUsed, .percentBar{
+	height: 26px;
 }
 
 .borderedSets .infoSet {

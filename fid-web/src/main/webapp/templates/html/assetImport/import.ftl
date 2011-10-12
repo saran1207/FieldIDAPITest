@@ -1,6 +1,8 @@
 ${action.setPageType('asset', 'import')!}
 <head>
 	<@n4.includeStyle type="page" href="import"/>
+	<@n4.includeScript src="importExport"/>
+	
 </head>
 
 <@s.url id="updateUrl" namespace="/ajax" action="assetImportStatus" />
