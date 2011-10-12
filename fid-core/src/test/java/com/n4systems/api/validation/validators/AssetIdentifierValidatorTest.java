@@ -1,5 +1,17 @@
 package com.n4systems.api.validation.validators;
 
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
@@ -9,18 +21,6 @@ import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.eventtype.AssociatedEventTypeExistsLoader;
 import com.n4systems.model.security.SecurityFilter;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class AssetIdentifierValidatorTest {
 

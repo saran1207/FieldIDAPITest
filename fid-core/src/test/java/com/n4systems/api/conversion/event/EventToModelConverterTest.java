@@ -14,20 +14,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.model.EventView;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.State;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Status;
-import com.n4systems.model.asset.SmartSearchLoader;
+import com.n4systems.model.*;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
@@ -40,6 +27,7 @@ import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.safetynetwork.AssetsByIdOwnerTypeLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
@@ -206,12 +194,13 @@ public class EventToModelConverterTest {
 		
 		Asset asset = AssetBuilder.anAsset().build();
 		
-		SmartSearchLoader smartSearchLoader = createMock(SmartSearchLoader.class);
-		expect(smartSearchLoader.setSearchText(view.getIdentifier())).andReturn(smartSearchLoader);
-		expect(smartSearchLoader.load(transaction)).andReturn(Arrays.asList(asset));
-		replay(smartSearchLoader);
+		AssetsByIdOwnerTypeLoader loader = createMock(AssetsByIdOwnerTypeLoader.class);
+		expect(loader.setIdentifier(view.getIdentifier())).andReturn(loader);
+		expect(loader.setOwner(view.getOrganization(), view.getCustomer(), view.getDivision())).andReturn(loader);
+		expect(loader.load(transaction)).andReturn(Arrays.asList(asset));
+		replay(loader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, smartSearchLoader, null, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, loader, null, null, null, null) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -229,7 +218,7 @@ public class EventToModelConverterTest {
 		};
 		
 		assertEquals(asset, converter.toModel(view, transaction).getAsset());
-		verify(smartSearchLoader);
+		verify(loader);
 	}
 	
 	@Test

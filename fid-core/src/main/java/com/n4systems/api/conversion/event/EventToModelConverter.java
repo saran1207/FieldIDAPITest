@@ -17,12 +17,12 @@ import com.n4systems.api.conversion.ViewToModelConverter;
 import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.model.EventView;
 import com.n4systems.model.*;
-import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.safetynetwork.AssetsByIdOwnerTypeLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
@@ -32,14 +32,14 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	private static final String UNIT_OF_MEASURE_SEPARATOR_REGEX = "\\|";
 	
 	private final OrgByNameLoader orgLoader;
-	private final SmartSearchLoader assetLoader;
+	private final AssetsByIdOwnerTypeLoader assetLoader;
 	private final AssetStatusByNameLoader assetStatusLoader;
 	private final EventBookFindOrCreateLoader eventBookLoader;
 	private final UserByFullNameLoader userLoader;
 	
 	private EventType type;
 	
-	public EventToModelConverter(OrgByNameLoader orgLoader, SmartSearchLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, EventType type) {
+	public EventToModelConverter(OrgByNameLoader orgLoader, AssetsByIdOwnerTypeLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, EventType type) {
 		this.orgLoader = orgLoader;
 		this.assetLoader = assetLoader;
 		this.assetStatusLoader = assetStatusLoader;
@@ -244,9 +244,8 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		model.setStatus(status);
 	}
 
-	protected void resolveAsset(EventView view, Event model, Transaction transaction) {
-		// the validator will ensure this returns exactly 1 asset
-		Asset asset = assetLoader.setSearchText(view.getIdentifier()).load(transaction).get(0);
+	protected void resolveAsset(EventView view, Event model, Transaction transaction) {		
+		Asset asset = assetLoader.setIdentifier(view.getIdentifier()).setOwner(view.getOrganization(), view.getCustomer(), view.getDivision()).load(transaction).get(0);
 		model.setAsset(asset);
 	}
 

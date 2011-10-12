@@ -90,7 +90,7 @@ public class ImporterFactory {
 	protected EventToModelConverter createEventToModelConverter(EventType type) {
 		EventToModelConverter converter = new EventToModelConverter(
 				loaderFactory.createOrgByNameLoader(), 
-				loaderFactory.createSmartSearchListLoader(), 
+				loaderFactory.createAssetByIdOwnerTypeLoader(), 
 				loaderFactory.createAssetStatusByNameLoader(), 
 				loaderFactory.createEventBookFindOrCreateLoader(),
 				loaderFactory.createUserByFullNameLoader(), 

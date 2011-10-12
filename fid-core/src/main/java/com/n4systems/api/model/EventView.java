@@ -3,10 +3,10 @@ package com.n4systems.api.model;
 import java.util.Collection;
 import java.util.Date;
 
-import com.n4systems.api.validation.validators.AssetIdentifierValidator;
 import com.n4systems.api.validation.validators.AssetStatusExistsValidator;
 import com.n4systems.api.validation.validators.CriteriaResultValidator;
 import com.n4systems.api.validation.validators.DateValidator;
+import com.n4systems.api.validation.validators.EventAssetIdentifierValidator;
 import com.n4systems.api.validation.validators.EventStatusValidator;
 import com.n4systems.api.validation.validators.FullNameUserValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
@@ -19,7 +19,7 @@ import com.n4systems.exporting.beanutils.SerializableField;
 public class EventView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
 
-	@SerializableField(title = "Asset Identifier", order = 100, validators = { NotNullValidator.class, AssetIdentifierValidator.class })
+	@SerializableField(title = "Asset Identifier", order = 100, validators = { NotNullValidator.class, EventAssetIdentifierValidator.class })
 	private String identifier;
 
 	@SerializableField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
