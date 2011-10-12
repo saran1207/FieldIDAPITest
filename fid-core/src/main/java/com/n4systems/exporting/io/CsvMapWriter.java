@@ -53,7 +53,7 @@ public class CsvMapWriter implements MapWriter {
 	}
 	
 	@Override
-	public void write(Map<String, ?> row) throws IOException {
+	public void write(Map<String, Object> row) throws IOException {
 		writeTitleLine(row);
 		writeRow(row);
 	}

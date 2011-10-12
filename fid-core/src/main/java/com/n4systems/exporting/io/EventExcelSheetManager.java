@@ -18,7 +18,7 @@ public class EventExcelSheetManager extends ExcelSheetManager {
 
 	public EventExcelSheetManager() {
 		super();		
-		excelCellManager = new EventExcelCellManager();
+		setExcelCellManager(new EventExcelCellManager());
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class EventExcelSheetManager extends ExcelSheetManager {
 	
 	class EventExcelCellManager extends ExcelCellManager { 
 		@Override
-		public WritableCell getCell(int row, WritableSheet sheet, String[] titles, int titleIndex, Map<String, ?> rowMap) {
+		public WritableCell getCell(int row, WritableSheet sheet, String[] titles, int titleIndex, Map<String, Object> rowMap) {
 			// basically the same as default but we'll look for recommendations & deficiences and add them to comment of cell if they exist.
 			WritableCell cell = super.getCell(row, sheet, titles, titleIndex, rowMap);
 			

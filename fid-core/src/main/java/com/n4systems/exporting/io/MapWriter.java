@@ -15,5 +15,5 @@ public interface MapWriter extends Closeable {
 	 * 						do not have a corresponding title will be silently ignored.
 	 * @throws IOException
 	 */
-	public void write(Map<String, ?> row) throws IOException;
+	public void write(Map<String, Object> row) throws IOException;
 }

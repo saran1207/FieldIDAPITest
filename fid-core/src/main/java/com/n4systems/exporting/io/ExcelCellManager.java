@@ -16,7 +16,7 @@ import jxl.write.WritableWorkbook;
 class ExcelCellManager {
 
 	private Map<String,AtomicInteger> sheetColumns = new HashMap<String,AtomicInteger>();
-	private String dateFormat;
+	private String dateFormat = "mm/dd/yy";
 
 	public ExcelCellManager() { 
 	}
@@ -27,7 +27,7 @@ class ExcelCellManager {
 		}
 	}
 			
-	public WritableCell getCell(int row, WritableSheet sheet, String[] titles, int titleIndex, Map<String, ?> rowMap) {
+	public WritableCell getCell(int row, WritableSheet sheet, String[] titles, int titleIndex, Map<String, Object> rowMap) {
 		WritableCell cell;
 		Object value = rowMap.get(titles[titleIndex]);
 		

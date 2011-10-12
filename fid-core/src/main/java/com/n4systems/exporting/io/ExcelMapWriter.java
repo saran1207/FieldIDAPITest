@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import jxl.CellView;
@@ -12,8 +13,6 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
-
-import com.n4systems.util.MapUtils;
 
 public class ExcelMapWriter implements MapWriter {
 	private final String dateFormat;
@@ -29,7 +28,7 @@ public class ExcelMapWriter implements MapWriter {
 	}
 	
 	@Override
-	public void write(Map<String, ?> row) throws IOException {
+	public void write(Map<String, Object> row) throws IOException {
 		try {
 			writeTitleLine(row);
 			writeRow(row);
@@ -58,17 +57,21 @@ public class ExcelMapWriter implements MapWriter {
 		}
 	}
 
-	private void writeTitleLine(Map<String, ?> rowMap) throws RowsExceededException, WriteException   {
+	private void writeTitleLine(Map<String, Object> rowMap) throws RowsExceededException, WriteException   {
 		if (titles != null) {
 			return;
 		}
 		titles = rowMap.keySet().toArray(new String[0]);
 		
 		// We'll push the titles into a map so we can reuse the writeRow logic
-		writeRow(MapUtils.fillMapKeysAndValues(titles));
+		Map<String,Object> titleMap = new LinkedHashMap<String,Object>();
+		for (String title : titles) {
+			titleMap.put(title, title);
+		}
+		writeRow(titleMap);
 	}
 	
-	private void writeRow(Map<String, ?> rowMap) throws RowsExceededException, WriteException {
+	private void writeRow(Map<String, Object> rowMap) throws RowsExceededException, WriteException {
 		resetManagers();		
 		for (int col = 0; col < titles.length; col++) {
 			excelSheetManager.addCell(currentRow, titles, col, rowMap);			

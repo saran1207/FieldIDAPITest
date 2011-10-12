@@ -18,11 +18,11 @@ public class ExcelSheetManager {
 	
 	private String[] sheetTitles = {"Sheet1"};
 
-	protected ExcelCellManager excelCellManager = new ExcelCellManager();
+	private ExcelCellManager excelCellManager = new ExcelCellManager();
 	Map<String, WritableSheet> sheets = new HashMap<String, WritableSheet>();
 	
 	public ExcelSheetManager() {
-		excelCellManager = new ExcelCellManager();
+		setExcelCellManager(new ExcelCellManager());
 	}
 	
 	public ExcelSheetManager(String... sheetTitles) { 
@@ -37,7 +37,7 @@ public class ExcelSheetManager {
 			}
 		}
 		// do this AFTER you have added sheets!
-		excelCellManager.initialize(workbook);
+		getExcelCellManager().initialize(workbook);
 	}
 	
 	protected WritableSheet getSheetForColumn(String columnTitle) {
@@ -61,15 +61,23 @@ public class ExcelSheetManager {
 		sheets.clear();
 	}
 
-	public void addCell(int row, String[] titles, int col, Map<String, ?> rowMap) throws RowsExceededException, WriteException {
+	public void addCell(int row, String[] titles, int col, Map<String, Object> rowMap) throws RowsExceededException, WriteException {
 		WritableSheet sheet = getSheetForColumn(titles[col]);
 		if (sheet!=null) { 
-			sheet.addCell(excelCellManager.getCell(row, sheet, titles, col, rowMap));
+			sheet.addCell(getExcelCellManager().getCell(row, sheet, titles, col, rowMap));
 		}		
 	}
 
 	public void setDateFormat(String dateFormat) {
-		excelCellManager.setDateFormat(dateFormat);
+		getExcelCellManager().setDateFormat(dateFormat);
+	}
+
+	protected void setExcelCellManager(ExcelCellManager excelCellManager) {
+		this.excelCellManager = excelCellManager;
+	}
+
+	protected ExcelCellManager getExcelCellManager() {
+		return excelCellManager;
 	}
 
 }
