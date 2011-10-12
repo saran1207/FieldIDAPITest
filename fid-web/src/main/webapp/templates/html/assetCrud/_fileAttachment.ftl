@@ -11,7 +11,7 @@
 			$("newImage").value = "true";
 			$("imageDirectory").value = directory;
 			$("newImageLabel").update(fileName);
-			var fileext =  fileName.slice(fileName.lastIndexOf('.'))
+			var fileext =  fileName.slice(fileName.lastIndexOf('.'));
 			jQuery("#imageLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... ' + fileext });
 			$("previewImage").setAttribute("src", "images/asset-image-icon.png");
 		}
@@ -57,9 +57,9 @@
 					</div>
 					
 					<script type="text/javascript">
-						if($("imageDirectory") != null) {
+						if($("imageDirectory") != null && $("imageDirectory").value != "") {
 							var directory = $("imageDirectory").value;
-							var filename = directory.slice(directory.indexOf('/') + 1)
+							var filename = directory.slice(directory.indexOf('/') + 1);
 							$("newImageLabel").update(filename);
 							var fileext =  filename.slice(filename.lastIndexOf('.'));
 							jQuery("#imageLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ fileext });
