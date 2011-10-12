@@ -12,6 +12,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
@@ -21,6 +22,7 @@ import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.eventtype.AssociatedEventTypeExistsLoader;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.ListLoader;
 
 public class AssetIdentifierValidatorTest {
 
@@ -84,7 +86,8 @@ public class AssetIdentifierValidatorTest {
 	public void validate_fails_when_no_assets_found() {
         SmartSearchLoader smartSearchLoader = createMockSmartSearchLoaderReturning(Collections.<Asset>emptyList());
         replay(smartSearchLoader);
-        AssetIdentifierValidator validator = createTestIdentifierValidator(smartSearchLoader, null);
+        AssociatedEventTypeExistsLoader existsLoader = createMockAssociatedEventTypeExistsLoaderReturning(false);
+        AssetIdentifierValidator validator = createTestIdentifierValidator(smartSearchLoader, existsLoader);
 
 		assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, null, validationContext).isPassed());
 		verify(smartSearchLoader);
@@ -94,8 +97,14 @@ public class AssetIdentifierValidatorTest {
 	public void validate_fails_when_more_than_one_asset_found() {
         SmartSearchLoader smartSearchLoader = createMockSmartSearchLoaderReturning(Arrays.asList(asset, asset));
         replay(smartSearchLoader);
-        AssetIdentifierValidator validator = createTestIdentifierValidator(smartSearchLoader, null);
 
+        AssociatedEventTypeExistsLoader existsLoader = createMockAssociatedEventTypeExistsLoaderReturning(true);
+   		expect(existsLoader.setAssetType(asset.getType())).andReturn(existsLoader);        
+   		expect(existsLoader.load()).andReturn(true);        
+        replay(existsLoader);
+        
+        AssetIdentifierValidator validator = createTestIdentifierValidator(smartSearchLoader, existsLoader);
+        
 		assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, null, validationContext).isPassed());
 		verify(smartSearchLoader);
 	}
@@ -103,12 +112,15 @@ public class AssetIdentifierValidatorTest {
     private AssetIdentifierValidator createTestIdentifierValidator(final SmartSearchLoader smartSearchLoader, final AssociatedEventTypeExistsLoader associatedEventTypeExistsLoader) {
         return new AssetIdentifierValidator() {
             @Override
-            protected SmartSearchLoader createSmartSearchLoader(SecurityFilter filter) {
+            protected <V extends ExternalModelView> ListLoader<Asset> createLoader(SecurityFilter filter, V view, String identifier) {
+            	smartSearchLoader.setMaxResults(2);
+            	smartSearchLoader.setSearchText(identifier);            	
                 return smartSearchLoader;
             }
 
             @Override
-            protected AssociatedEventTypeExistsLoader createAssociatedEventTypeExistsLoader(SecurityFilter filter) {
+            protected AssociatedEventTypeExistsLoader createAssociatedEventTypeExistsLoader(SecurityFilter filter, EventType eventType) {
+           		associatedEventTypeExistsLoader.setEventType(eventType);
                 return associatedEventTypeExistsLoader;
             }
         };

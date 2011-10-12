@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -14,43 +15,24 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 
 public class AssetsByIdOwnerTypeLoader extends ListLoader<Asset> {
 
-	private String organization;
-	private String customer; 
-	private String division;
 	private String identifier;
+	private OrgByNameLoader orgByNameLoader;
 	
 	public AssetsByIdOwnerTypeLoader(SecurityFilter filter) {
 		super(filter);
+		orgByNameLoader = new OrgByNameLoader(filter);		
 	}
 	
 	@Override
 	public List<Asset> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, filter);
 		
+		// search for identifier...
 		builder.addWhere(WhereClauseFactory.create("identifier", identifier));
-				
-		boolean isUnderPrimary = true;
-		
+		// ...within the org/customer/division.
 		QueryBuilder<Long> subQueryBuilder = new QueryBuilder<Long>(BaseOrg.class, filter);
+		orgByNameLoader.createQueryForBuilder(subQueryBuilder, filter.getTenantId());
 		subQueryBuilder.setSimpleSelect("id", true);
-		
-		// FIXME DD : refactor this common stuff from OrgByNameLoader.
-		if (division != null) {
-			addExternalOrgSecondaryClause(isUnderPrimary, subQueryBuilder);
-			subQueryBuilder.addWhere(WhereClauseFactory.createNotNull("customerOrg"));			
-			subQueryBuilder.addWhere(WhereClauseFactory.createNotNull("divisionOrg"));
-			subQueryBuilder.addWhere(WhereClauseFactory.create("customerOrg.name", customer));
-			subQueryBuilder.addWhere(WhereClauseFactory.create("name", division));
-		} else if (customer != null) {
-			addExternalOrgSecondaryClause(isUnderPrimary, subQueryBuilder);
-			subQueryBuilder.addWhere(WhereClauseFactory.createNotNull("customerOrg"));			
-			subQueryBuilder.addWhere(WhereClauseFactory.create("name", customer));
-			subQueryBuilder.addWhere(WhereClauseFactory.createIsNull("divisionOrg"));
-		} else {
-			subQueryBuilder.addWhere(WhereClauseFactory.create("name", organization));
-			subQueryBuilder.addWhere(WhereClauseFactory.createIsNull("customerOrg"));
-			subQueryBuilder.addWhere(WhereClauseFactory.createIsNull("divisionOrg"));
-		}				
 		
 		SubSelectInClause subClause = new SubSelectInClause("owner", subQueryBuilder);
 		builder.addWhere(subClause);		
@@ -58,18 +40,10 @@ public class AssetsByIdOwnerTypeLoader extends ListLoader<Asset> {
 		return builder.getResultList(em);
 	}	
 	
-	private void addExternalOrgSecondaryClause(boolean isUnderPrimary, QueryBuilder<?> builder) {
-		if (isUnderPrimary) {
-			builder.addWhere(WhereClauseFactory.createIsNull("secondaryOrg"));
-		} else {
-			builder.addWhere(WhereClauseFactory.create("secondaryOrg.name", organization));
-		}
-	}	
-
 	public AssetsByIdOwnerTypeLoader setOwner(String organization, String customer, String division) { 
-		this.organization = organization;
-		this.customer = customer;
-		this.division = division;
+		orgByNameLoader.setOrganizationName(organization);
+		orgByNameLoader.setCustomerName(customer);
+		orgByNameLoader.setDivision(division);
 		return this;
 	}
 

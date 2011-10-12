@@ -36,7 +36,7 @@ public interface FieldValidator {
 	public static final String YNValidatorFail = "'%s' is not allowed for the field '%s'.  Valid values are 'Y' or 'N'.";
 	public static final String NoUserFoundValidationFail = "Could not find a user with the name '%s' for the field '%s'.";
 	public static final String MultipleUserFoundValidationFail = "Multiple users have been found matching the name '%s'.  The matching users are: '%s'.";
-	public static final String NoAssetFoundValidationFail = "Could not find an asset matching the identifier '%s' for the field '%s'.";
+	public static final String NoAssetFoundValidationFail = "Could not find an asset matching the identifier '%s' for the field '%s'.Either it doesn't exist or the event type is not associated with it.";
 	public static final String MultipleAssetFoundValidationFail = "Multiple assets have been found matching the identifier '%s' for the field '%s'.";
 	public static final String AssociatedEventTypeValidationFail = "The event type '%s' is not allowed for the asset type '%s'.";
 	public static final String OrgWithNameNotFoundValidationFail = "The %s with name '%s' was not found.";

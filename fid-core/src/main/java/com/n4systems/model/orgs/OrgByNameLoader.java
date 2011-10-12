@@ -27,16 +27,21 @@ public class OrgByNameLoader extends SecurityFilteredLoader<BaseOrg> {
 	
 	@Override
 	protected BaseOrg load(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<BaseOrg> builder = new QueryBuilder<BaseOrg>(BaseOrg.class, filter);
+		createQueryForBuilder(builder, filter.getTenantId());		
+		BaseOrg org = builder.getSingleResult(em);
+		return org;
+	}
+
+	public <V> QueryBuilder<V> createQueryForBuilder(QueryBuilder<V> builder, Long tenantId) {
 		/*
 		 * It's going to make this query a lot easier if we know if the 
 		 * organization is a primary or a secondary.  We'll start by checking 
 		 * the cached primary org.
 		 */
-		PrimaryOrg primaryOrg = tenantFinder.findPrimaryOrg(filter.getTenantId());
+		PrimaryOrg primaryOrg = tenantFinder.findPrimaryOrg(tenantId);
 		boolean isUnderPrimary = primaryOrg.getName().equals(organizationName);
-		
-		QueryBuilder<BaseOrg> builder = new QueryBuilder<BaseOrg>(BaseOrg.class, filter);
-		
+				
 		if (divisionName != null) {
 			addExternalOrgSecondaryClause(isUnderPrimary, builder);
 			builder.addWhere(WhereClauseFactory.createNotNull("customerOrg"));			
@@ -53,12 +58,10 @@ public class OrgByNameLoader extends SecurityFilteredLoader<BaseOrg> {
 			builder.addWhere(WhereClauseFactory.createIsNull("customerOrg"));
 			builder.addWhere(WhereClauseFactory.createIsNull("divisionOrg"));
 		}
-		
-		BaseOrg org = builder.getSingleResult(em);
-		return org;
+		return builder;
 	}
 
-	private void addExternalOrgSecondaryClause(boolean isUnderPrimary, QueryBuilder<BaseOrg> builder) {
+	private <V> void addExternalOrgSecondaryClause(boolean isUnderPrimary, QueryBuilder<V> builder) {
 		if (isUnderPrimary) {
 			builder.addWhere(WhereClauseFactory.createIsNull("secondaryOrg"));
 		} else {
