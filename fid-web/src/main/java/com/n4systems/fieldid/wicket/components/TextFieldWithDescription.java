@@ -26,8 +26,8 @@ public class TextFieldWithDescription extends TextField<String> implements IHead
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderOnDomReadyJavascript("$('"+getMarkupId()+"').observe('focus', clearDescription)");
-        response.renderOnDomReadyJavascript("$('"+getMarkupId()+"').observe('blur', replaceDescription)");
+        response.renderOnDomReadyJavascript("$('"+getMarkupId()+"').bind('focus', clearDescription)");
+        response.renderOnDomReadyJavascript("$('"+getMarkupId()+"').bind('blur', replaceDescription)");
     }
 
 }

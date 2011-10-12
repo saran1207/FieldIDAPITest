@@ -3,6 +3,10 @@ package com.n4systems.fieldid.wicket.components;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.border.Border;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WebRequest;
+
+import javax.servlet.ServletContext;
 
 public class NonWicketLink extends Border {
 
@@ -15,7 +19,7 @@ public class NonWicketLink extends Border {
 
 		linkContainer = new WebMarkupContainer("link");
 
-		String contextRoot = "/fieldid";
+		String contextRoot = determineContext();
 		if (!path.startsWith("/")) {
 			contextRoot += '/';
 		}
@@ -24,5 +28,13 @@ public class NonWicketLink extends Border {
 		add(linkContainer);
 		linkContainer.add(getBodyContainer());
 	}
+
+    private String determineContext() {
+        ServletContext servletContext = WebApplication.get().getServletContext();
+        if (servletContext != null) {
+            return ((WebRequest)getRequest()).getHttpServletRequest().getContextPath();
+        }
+        return "/fieldid";
+    }
 
 }

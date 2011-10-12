@@ -92,3 +92,10 @@ function kickOtherUserSubmit( event ) {
 
 onDocumentLoad(function() { new PeriodicalExecuter(testSession, minutesToSeconds(sessionTimeOut) + twoSeconds); });
 
+function interceptQuickLoginEvent(formId) {
+    $(formId).observe( 'submit', quickLoginSubmit );
+}
+
+function closeLoginLightbox() {
+    Lightview.hide();
+}

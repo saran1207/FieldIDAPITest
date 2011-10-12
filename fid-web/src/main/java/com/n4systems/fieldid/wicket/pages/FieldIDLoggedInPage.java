@@ -5,11 +5,14 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RedirectToUrlException;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -67,6 +70,11 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
         addClickTaleScripts();
 
+        add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout-jquery.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.colorbox.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.at_intervals.js"));
+        add(CSSPackageResource.getHeaderContribution("style/colorbox.css"));
+
         add(new BookmarkablePageLink<Void>("reportingLink", ReportingPage.class));
 
         add(new TopFeedbackPanel("topFeedbackPanel"));
@@ -97,9 +105,16 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));
         add(new WebMarkupContainer("safetyNetworkLinkContainer").setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork()));
 
-        add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout.js"));
-        
         add(new StaticImage("tenantLogo", new Model<String>( "/fieldid/file/downloadTenantLogo.action?uniqueID=" + getSessionUser().getTenant().getId() ) ) );
+
+        add(createRelogLink());
+    }
+
+    private Component createRelogLink() {
+        PageParameters pageParameters = new PageParameters();
+        pageParameters.add("user", FieldIDSession.get().getSessionUser().getUserName());
+        pageParameters.add("tenant", FieldIDSession.get().getSessionUser().getTenant().getName());
+        return new NonWicketLink("relogLink", "aHtml/login.action");
     }
 
     protected void storePageParameters(PageParameters params) {
@@ -191,6 +206,7 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         javascriptBuffer.append("loggedInUserName = '").append(getSessionUser().getUserName()).append("';\n");
         javascriptBuffer.append("tenantName = '").append(getSessionUser().getTenant().getName()).append("';\n");
         javascriptBuffer.append("sessionTimeOut = ").append(timeoutTime).append(";\n");
+        javascriptBuffer.append("sessionTestUrl = '/fieldid/ajax/testSession.action';").append(timeoutTime).append(";\n");
         javascriptBuffer.append("loginWindowTitle = '").append(loginLightboxTitle).append("';\n");
 
         container.getHeaderResponse().renderJavascript(javascriptBuffer.toString(), null);

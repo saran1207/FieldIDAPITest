@@ -23,11 +23,11 @@
 	<div class="actions">
 		<@s.submit name="hbutton.login" id="loginButton"/>
 		<@s.url action="login" namespace="/" id="cancelUrl"/>
-		<@s.submit key="hbutton.back_to_login" onclick="redirect('${cancelUrl}');"/>
+		<input type="button" value="<@s.text name='hbutton.back_to_login'/>" onclick="redirect('${cancelUrl}');"/>
 	</div>
 		
 </@s.form>
 
-<script type="text/javascript"> 
-	$('quickLoginForm').observe( 'submit', quickLoginSubmit );
+<script type="text/javascript">
+    interceptQuickLoginEvent('quickLoginForm');
 </script>

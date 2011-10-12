@@ -11,7 +11,7 @@
 		<@s.text name="message.loggedbackin"/>
 	<p>
 	<p class="easyForm" id="closeButtonHolder">
-		<input id="sessionTimeOutClose" type="submit" onclick="Lightview.hide()" value="<@s.text name="hbutton.close"/>" />
+		<input id="sessionTimeOutClose" type="submit" onclick="closeLoginLightbox()" value="<@s.text name="hbutton.close"/>" />
 	</p>
 </div>
 <style>
@@ -21,12 +21,12 @@
 	}
 </style>
 <script type="text/javascript">
-	new PeriodicalExecuter( 
-		function(pe) {
- 			pe.stop();
- 			Lightview.hide();
-            if (typeof (window.onSuccessfulSessionRefresh) == 'function') {
-                onSuccessfulSessionRefresh();
-            }
- 		}, 3 );
+    var interval = self.setInterval("onQuickLogin()", 750);
+    function onQuickLogin() {
+        interval = window.clearInterval(interval);
+        closeLoginLightbox();
+        if (typeof (window.onSuccessfulSessionRefresh) == 'function') {
+            onSuccessfulSessionRefresh();
+        }
+    }
 </script>
