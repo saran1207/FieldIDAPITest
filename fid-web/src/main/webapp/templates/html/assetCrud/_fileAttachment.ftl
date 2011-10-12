@@ -12,7 +12,7 @@
 			$("imageDirectory").value = directory;
 			$("newImageLabel").update(fileName);
 			var fileext =  fileName.slice(fileName.lastIndexOf('.'))
-			jQuery(".imageLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... ' + fileext });
+			jQuery("#imageLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... ' + fileext });
 			$("previewImage").setAttribute("src", "images/asset-image-icon.png");
 		}
 		
@@ -52,7 +52,7 @@
 					<img src="images/asset-image-icon.png" id="previewImage" alt="uploadedFile"/>
 				</div>
 				<div class="previewImageLabel" >
-					<div id="imageLabel" class="imageLabel"> 
+					<div id="imageLabel" class="assetImageLabel"> 
 						<span id="newImageLabel" class='ellipsis_text'> </span>
 					</div>
 					
@@ -62,7 +62,7 @@
 							var filename = directory.slice(directory.indexOf('/') + 1)
 							$("newImageLabel").update(filename);
 							var fileext =  filename.slice(filename.lastIndexOf('.'));
-							jQuery(".imageLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ fileext });
+							jQuery("#imageLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ fileext });
 						}
 					</script>
 				<@s.hidden name="removeImage" id="removeImage"/> 

@@ -99,7 +99,7 @@ p.fileUploadShow label{
 	position: absolute;
 }
 
-.imageUploadPreview .imageLabel, .previewImageLabel .attachmentLabel{ 
+.imageUploadPreview .assetImageLabel, .previewImageLabel .attachmentLabel{ 
 	float: left;
 	display: block;
 	width: 220px;
