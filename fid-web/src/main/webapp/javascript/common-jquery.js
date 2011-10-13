@@ -573,12 +573,12 @@ function positionDropDown(a, entityId){
 }
 
 function positionDropDownForElements(a, list, actionsContainer) {
-    var coordinates = findPos(actionsContainer);
+    var coordinates = findPos(actionsContainer[0]);
 
 	if($.browser.msie){
-		list.css({	'top': coordinates[1] + (actionsContainer.offsetHeight/2) + "px"});
+		list.css({	'top': coordinates[1] + (actionsContainer[0].offsetHeight/2) + "px"});
 	}
-	list.css({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
+	list.css({	'left': coordinates[0] - (130 - actionsContainer[0].offsetWidth) + "px"});
 }
 
  function createBookmark(url, title) {
