@@ -71,6 +71,15 @@
 			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
 		</layout>
 	</appender>
+	<appender name="MOBILE_ERROR" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/mobile_errors.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="MaxBackupIndex" value="30" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d: %m%n" />
+		</layout>
+	</appender>
 	<category name="org.springframework">
 		<priority value="INFO" />
 	</category>
@@ -105,6 +114,10 @@
 	<category name="AuditLog" additivity="false">
 		<priority value="INFO" />
 		<appender-ref ref="AUDIT_LOG" />
+	</category>
+	<category name="MobileErrorLogger" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="MOBILE_ERROR" />
 	</category>
 	<category name="com.n4systems.ejb.interceptor.TimingInterceptor" additivity="false">
 		<priority value="DEBUG" />
