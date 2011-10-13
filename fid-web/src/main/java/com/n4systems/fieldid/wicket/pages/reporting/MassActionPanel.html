@@ -61,23 +61,22 @@
     var maxSizeForMultiEvent = -1;
     var maxSizeForAssigningEventsToJobs = -1;
 
-    var totalResultsElement = $$('.totalResultsElement')[0];
+    var totalResultsElement = $('.totalResultsElement')[0];
     var totalResults = totalResultsElement == undefined ? 0 :parseInt(totalResultsElement.innerHTML);
 
     function numberOfSelectedItems() {
-        return parseInt($$('.selectedCounterElement')[0].innerHTML);
+        return parseInt($('.selectedCounterElement')[0].innerHTML);
     }
 
     function addGuardForTooManySelectedToElements(cssSelector, maxSelected, warningDiv) {
-        $$(cssSelector).each(function(element) {
-            element.observe('click', function(event) {
+        $(cssSelector).bind('click',
+            function(event) {
                 if (numberOfSelectedItems() == 0) {
-                    Event.stop(event); showQuickView("warning_nothingSelected", event);
+                    event.preventDefault(); showQuickView("warning_nothingSelected", event);
                 }
                 else if (numberOfSelectedItems() > maxSelected) {
-                    Event.stop(event); showQuickView(warningDiv, event);
+                    event.preventDefault(); showQuickView(warningDiv, event);
                 }
-            });
         });
     }
 
@@ -90,9 +89,9 @@
         addGuardForTooManySelectedToElements(".summaryReport", maxSizeForSummaryReport, 'warning_summaryReport');
     }
 
-    function repositionPrintList(list, link) {
-        var list =  $(list);
-        translate(list, $(link), -list.getHeight(), 0);
+    function repositionPrintList(listId, link) {
+        var list =  $('#'+listId);
+        translate(list, $(link), -list.height(), 0);
     }
 
 </script>

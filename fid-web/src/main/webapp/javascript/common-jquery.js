@@ -185,7 +185,7 @@ function findPos(obj) {
 function translate(target, relativeElement, offsetY, offsetX) {
 	var position = findPos(relativeElement);
 
-	target.setStyle({'top': position[1] + offsetY + "px",
+	target.css({'top': position[1] + offsetY + "px",
 					'left': position[0] + offsetX + "px"});
 }
 
@@ -221,50 +221,36 @@ $(document).ajaxComplete(
 	}
 );
 
-function openSection(idToOpen, openLinkId, closeLinkId, afterEvent) {
-	var openLink = $(openLinkId);
-	var closeLink = $(closeLinkId);
+function openSection(idToOpen, openLinkId, closeLinkId) {
+	var openLink = $('#'+openLinkId);
+	var closeLink = $('#'+closeLinkId);
 	
 	openLink.hide();
 	closeLink.show();
 	
 	closeLink.suspendedOnClick = closeLink.onclick;
 	closeLink.onclick = null;
-	
-	Effect.BlindDown(idToOpen, {
-		duration : 0.2,
-		afterFinish : function(effect) {
-			closeLink.onclick = closeLink.suspendedOnClick;
-			
-			if (afterEvent) {
-				afterEvent(this);
-			}
-		}
-	});
-	
+
+    $('#'+idToOpen).slideDown(200, function() {
+        closeLink.onclick = closeLink.suspendedOnClick;
+    });
+
 	return false;
 }
 
-function closeSection(idToClose, closeLinkId, openLinkId, afterEvent) {
-	var openLink = $(openLinkId);
-	var closeLink = $(closeLinkId);
+function closeSection(idToClose, closeLinkId, openLinkId) {
+    var openLink = $('#'+openLinkId);
+    var closeLink = $('#'+closeLinkId);
 	
 	openLink.show();
 	closeLink.hide();
 	
 	openLink.suspendedOnClick = openLink.onclick;
 	openLink.onclick = null;
-	
-	Effect.BlindUp(idToClose, {
-		duration : 0.2,
-		afterFinish : function(effect) {
-			openLink.onclick = openLink.suspendedOnClick;
-			
-			if (afterEvent) {
-				afterEvent(this);
-			}
-		}
-	});
+
+    $('#'+idToClose).slideUp(200, function() {
+        openLink.onclick = openLink.suspendedOnClick;
+    });
 	
 	return false;
 }
@@ -328,9 +314,9 @@ function showQuickView(elementId, event) {
 	}
 
 	hideAnyOpenQuickViewBoxes();
-	var quickViewBox = $(elementId);
-	quickViewBox.removeClassName("hidden");
-	quickViewBox.addClassName("quickView");
+	var quickViewBox = $("#"+elementId);
+	quickViewBox.removeClass("hidden");
+	quickViewBox.addClass("quickView");
 	var button = Event.findElement(event, "A");
 
 	quickViewBox.show();
@@ -339,7 +325,7 @@ function showQuickView(elementId, event) {
 
 	var position = button.cumulativeOffset();
 
-	quickViewBox.setStyle( {
+	quickViewBox.css( {
 		top : position['top'] + "px",
 		left : (position['left'] + 25) + "px"
 	});
@@ -374,7 +360,7 @@ function moveInsideViewPort(element) {
 	var boxTopRightCorner = element.getWidth() + element.viewportOffset().left;
 	if (boxTopRightCorner > document.viewport.getWidth()) {
 		var offset = boxTopRightCorner - document.viewport.getWidth();
-		element.setStyle( {
+		element.css( {
 			left : (position[0] - offset) + "px"
 		});
 	}
@@ -382,7 +368,7 @@ function moveInsideViewPort(element) {
 	var boxBottomLeftCorner = element.getHeight() + element.viewportOffset().top;
 	if (boxBottomLeftCorner > document.viewport.getHeight()) {
 		var offset = boxBottomLeftCorner - document.viewport.getHeight();
-		element.setStyle( {
+		element.css( {
 			top : (position[1] - offset) + "px"
 		});
 	}
@@ -590,9 +576,9 @@ function positionDropDownForElements(a, list, actionsContainer) {
     var coordinates = findPos(actionsContainer);
 
 	if($.browser.msie){
-		list.setStyle({	'top': coordinates[1] + (actionsContainer.offsetHeight/2) + "px"});
+		list.css({	'top': coordinates[1] + (actionsContainer.offsetHeight/2) + "px"});
 	}
-	list.setStyle({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
+	list.css({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
 }
 
  function createBookmark(url, title) {

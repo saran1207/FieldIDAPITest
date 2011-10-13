@@ -1,26 +1,24 @@
 function setTableSelected(tableId, checked) {
-    $$("#"+tableId + " tbody tr").each(function(row) {
+    $("#"+tableId + " tbody tr").each(function() {
         if (checked)
-            addSelectedClassToRow(row.id);
+            addSelectedClassToRow(this.id);
         else
-            removeSelectedClassFromRow(row.id);
+            removeSelectedClassFromRow(this.id);
     });
 
-    $$("#"+tableId + " tr input[type='checkbox']").each(function(checkbox) {
-        checkbox.checked = checked;
-    });
+    $("#"+tableId + " tr input[type='checkbox']").attr('checked', checked);
 }
 
 function addSelectedClassToRow(rowId) {
-    $(rowId).addClassName('multiSelected');
+    $('#'+rowId).addClass('multiSelected');
 }
 
 function removeSelectedClassFromRow(rowId) {
-    $(rowId).removeClassName('multiSelected');
+    $('#'+rowId).removeClass('multiSelected');
 }
 
 function showRowSelectionStatus(checkbox, rowId, tableId) {
-    if (checkbox.checked) {
+    if (checkbox[0].checked) {
         addSelectedClassToRow(rowId);
     } else {
         removeSelectedClassFromRow(rowId);
@@ -30,10 +28,8 @@ function showRowSelectionStatus(checkbox, rowId, tableId) {
 
 function checkHeaderBoxIfAllItemsAreSelected(tableId) {
     var allChecked = true;
-    $$("#"+tableId + " tbody tr input[type='checkbox']").each(function(checkbox) {
+    $("#"+tableId + " tbody tr input[type='checkbox']").each(function(checkbox) {
         allChecked = allChecked && checkbox.checked;
     });
-    $$("#"+tableId + " thead input[type='checkbox']").each(function(headerCheckbox) {
-        headerCheckbox.checked = allChecked;
-    });
+    $("#"+tableId + " thead input[type='checkbox']").attr('checked', allChecked);
 }

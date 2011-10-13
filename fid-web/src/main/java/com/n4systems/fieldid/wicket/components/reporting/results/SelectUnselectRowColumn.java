@@ -44,8 +44,8 @@ public class SelectUnselectRowColumn extends AbstractColumn<RowView> {
             @Override
             public void renderHead(IHeaderResponse response) {
                 super.renderHead(response);
-                String checkboxSelector = "$('" + selectCheckbox.getMarkupId() + "')";
-                response.renderOnDomReadyJavascript(checkboxSelector + ".observe('click', function() {  showRowSelectionStatus(" + checkboxSelector + ", '" + rowId + "', '" + dataTable.getMarkupId() + "') } )");
+                String checkboxSelector = "$('#" + selectCheckbox.getMarkupId() + "')";
+                response.renderOnDomReadyJavascript(checkboxSelector + ".bind('click', function() {  showRowSelectionStatus(" + checkboxSelector + ", '" + rowId + "', '" + dataTable.getMarkupId() + "') } )");
             }
         });
     }
