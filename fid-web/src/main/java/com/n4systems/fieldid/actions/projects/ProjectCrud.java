@@ -2,8 +2,6 @@ package com.n4systems.fieldid.actions.projects;
 
 import java.util.List;
 
-import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -18,6 +16,8 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.Asset;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Project;
@@ -325,9 +325,10 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		return page;
 	}
 
+	@Override
 	public boolean duplicateValueExists(String assetId) {
 		QueryBuilder<Project> query = new QueryBuilder<Project>(Project.class, new OpenSecurityFilter());
-		query.setCountSelect().addWhere(Comparator.EQ, "projectID", "projectID", assetId, WhereParameter.IGNORE_CASE);
+		query.setCountSelect().addWhere(Comparator.EQ, "projectID", "projectID", assetId, WhereParameter.IGNORE_CASE|WhereParameter.TRIM);
 		query.addSimpleWhere("tenant", getTenant());
 		if (uniqueID != null) {
 			query.addWhere(Comparator.NE, "id", "id", project.getId());

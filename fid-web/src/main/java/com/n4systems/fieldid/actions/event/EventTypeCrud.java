@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.n4systems.fieldid.service.event.EventTypeService;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -16,6 +15,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.viewhelpers.TrimmedString;
 import com.n4systems.fileprocessing.ProofTestType;
@@ -243,11 +243,6 @@ public class EventTypeCrud extends AbstractCrud {
 
 	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
-//			eventTypes = getLoaderFactory().createEventTypeListLoader()
-//			                               .setNameFilter(nameFilter)
-//			                               .setGroupFilter(groupFilter)
-//			                               .setPostFetchFields("modifiedBy", "createdBy")
-//			                               .load();
             eventTypes = eventTypeService.getEventTypes(groupFilter, nameFilter);
 		}
 
