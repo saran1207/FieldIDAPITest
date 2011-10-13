@@ -31,7 +31,7 @@ public class CustomerOrgListLoader extends ListLoader<CustomerOrg> {
 		}
 		
 		if(nameFilter != null && !nameFilter.isEmpty()) {
-			builder.addWhere(Comparator.LIKE, "nameFilter", "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH);
+			builder.addWhere(Comparator.LIKE, "nameFilter", "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.TRIM | WhereParameter.WILDCARD_BOTH);
 		}
 		
 		builder.addOrder("parent.name", "name", "code");

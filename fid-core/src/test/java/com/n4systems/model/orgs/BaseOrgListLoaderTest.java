@@ -63,7 +63,7 @@ public class BaseOrgListLoaderTest  {
 		
 		QueryBuilder<BaseOrg> mockQueryBuilder = createMock(QueryBuilder.class);
 		expect(mockQueryBuilder.addOrder("name")).andReturn(mockQueryBuilder);
-		expect(mockQueryBuilder.addWhere(same(Comparator.LIKE), (String)anyObject(), same("name"), same(SOME_NAME_TO_LOOK_UP), same(WhereParameter.WILDCARD_BOTH | WhereParameter.IGNORE_CASE))).andReturn(mockQueryBuilder);
+		expect(mockQueryBuilder.addWhere(same(Comparator.LIKE), (String)anyObject(), same("name"), same(SOME_NAME_TO_LOOK_UP), same(WhereParameter.WILDCARD_BOTH | WhereParameter.TRIM | WhereParameter.IGNORE_CASE))).andReturn(mockQueryBuilder);
 		expect(mockQueryBuilder.getPaginatedResults(mockEM, 1, 10)).andReturn(new SillyPager<BaseOrg>(new ArrayList<BaseOrg>()));
 		replay(mockQueryBuilder);
 		

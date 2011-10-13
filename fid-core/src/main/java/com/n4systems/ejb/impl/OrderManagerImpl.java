@@ -20,9 +20,9 @@ import com.n4systems.exceptions.OrderProcessingException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
+import com.n4systems.model.Order.OrderType;
 import com.n4systems.model.OrderKey;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.Order.OrderType;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.LegacyFindOrCreateCustomerOrgHandler;
@@ -56,11 +56,12 @@ public class OrderManagerImpl implements OrderManager {
 	
 	
 	
+	@Override
 	public Order findOrder(OrderType type, String orderNumber, Long tenantId, SecurityFilter filter) {
 		QueryBuilder<Order> builder = new QueryBuilder<Order>(Order.class, new OpenSecurityFilter());
 
 		builder.addSimpleWhere("tenant.id", tenantId);
-		builder.addWhere(WhereParameter.Comparator.EQ, "orderNumber", "orderNumber", orderNumber, WhereParameter.IGNORE_CASE);
+		builder.addWhere(WhereParameter.Comparator.EQ, "orderNumber", "orderNumber", orderNumber, WhereParameter.IGNORE_CASE|WhereParameter.TRIM);
 		builder.addSimpleWhere("orderType", type);
 
 		if (filter != null) {
@@ -77,6 +78,7 @@ public class OrderManagerImpl implements OrderManager {
 		return order;
 	}
 	
+	@Override
 	public LineItem findLineItem(Order order, String lineId) {
 		QueryBuilder<LineItem> builder = new QueryBuilder<LineItem>(LineItem.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("order", order);
@@ -92,6 +94,7 @@ public class OrderManagerImpl implements OrderManager {
 		return lineItems;
 	}
 	
+	@Override
 	public LineItem findLineItemById(Long lineItemId) {
 		LineItem lineItem = null;
 		try {
@@ -102,6 +105,7 @@ public class OrderManagerImpl implements OrderManager {
 		return lineItem;
 	}
 	
+	@Override
 	public List<LineItem> findLineItems(Order order) {
 		QueryBuilder<LineItem> builder = new QueryBuilder<LineItem>(LineItem.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("order", order);
@@ -117,6 +121,7 @@ public class OrderManagerImpl implements OrderManager {
 		return lineItems;
 	}
 	
+	@Override
 	public int countLineItems(Order order) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(LineItem.class, new OpenSecurityFilter());
 		builder.setCountSelect();
@@ -132,6 +137,7 @@ public class OrderManagerImpl implements OrderManager {
 		return (lineItems != null) ? lineItems.intValue() : 0;
 	}
 	
+	@Override
 	public int countAssetsTagged(LineItem lineItem) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(Asset.class, new OpenSecurityFilter());
 		builder.setCountSelect();
@@ -147,6 +153,7 @@ public class OrderManagerImpl implements OrderManager {
 		return (lineItems != null) ? lineItems.intValue() : 0;
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Order> processOrders(Map<String, Object> unmappedOrders) throws OrderProcessingException {
 
@@ -189,10 +196,12 @@ public class OrderManagerImpl implements OrderManager {
 		return orders;
 	}
 	
+	@Override
 	public Order processOrder(Tenant tenant, String sourceId, Map<String, Object> rawOrderData) throws OrderProcessingException {
 		return processOrder(tenant, sourceId, rawOrderData, null);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public Order processOrder(Tenant tenant, String sourceId, Map<String, Object> rawOrderData, Map<String, OrderKey> keyMappings) throws OrderProcessingException {
 		
@@ -303,10 +312,12 @@ public class OrderManagerImpl implements OrderManager {
 		return order;
 	}
 	
+	@Override
 	public LineItem processLineItem(Order order, String sourceId, Map<String, Object> rawLineItemData) throws OrderProcessingException {
 		return processLineItem(order, sourceId, rawLineItemData, null);
 	}
 	
+	@Override
 	public LineItem processLineItem(Order order, String sourceId, Map<String, Object> rawLineItemData, Map<String, OrderKey> keyMappings) throws OrderProcessingException {
 		// our order must exist
 		if(order == null || order.getId() == null) {
@@ -472,6 +483,7 @@ public class OrderManagerImpl implements OrderManager {
 		return dataMap;
 	}
 	
+	@Override
 	public LineItem createNonIntegrationShopOrder(String orderNumber, Long tenantId) {
 		final String NON_INTEGRATION_DESCRIPTION = "";
 		
@@ -496,6 +508,7 @@ public class OrderManagerImpl implements OrderManager {
 		return lineItem;
 	}
 
+	@Override
 	public Order processOrderFromPlugin(OrderResolver resolver, String orderNumber, OrderType type, Long tenantId) throws OrderProcessingException {
 		Order order = null;
 		

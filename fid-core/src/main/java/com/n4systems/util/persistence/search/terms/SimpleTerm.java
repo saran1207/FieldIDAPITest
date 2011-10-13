@@ -19,14 +19,15 @@ public class SimpleTerm<T> extends SingleTermDefiner {
 	protected WhereParameter<T> createWhere() {
 		WhereParameter<T> param = new WhereParameter<T>(WhereParameter.Comparator.EQ, field, value);
 		
-		// String fields are automatically ignore case
+		// String fields are automatically ignore case & trim.
 		if (value instanceof String) {
-			param.setOptions(WhereParameter.IGNORE_CASE);
+			param.setOptions(WhereParameter.IGNORE_CASE | WhereParameter.TRIM);
 		}
 		
 		return param;
 	}
 	
+	@Override
 	protected WhereClause<?> getWhereParameter() {
 		return createWhere();
 	}

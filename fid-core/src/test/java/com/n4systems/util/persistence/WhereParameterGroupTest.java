@@ -23,15 +23,21 @@ public class WhereParameterGroupTest {
 		WhereParameterGroup whereGroup = new WhereParameterGroup();
 		
 		whereGroup.getClauses().add(new WhereClause<Object>() {
+			@Override
 			public void bind(Query query) throws InvalidQueryException {}
 
+			@Override
 			public WhereClause.ChainOp getChainOperator() {
 				return ChainOp.AND;
 			}
+			@Override
 			public String getKey() { return null; }
+			@Override
 			public String getName() { return null; }
+			@Override
 			public Object getValue() { return null; }
 
+			@Override
 			public String getClause(FromTable table) throws InvalidQueryException {
 				return "clauseA";
 			}
@@ -48,15 +54,21 @@ public class WhereParameterGroupTest {
 		for (String clauseText: new String[] {"clauseA", "clauseB", "clauseC"}) {
 			final String clause = clauseText;
 			whereGroup.getClauses().add(new WhereClause<Object>() {
+				@Override
 				public void bind(Query query) throws InvalidQueryException {}
 	
+				@Override
 				public WhereClause.ChainOp getChainOperator() {
 					return ChainOp.AND;
 				}
+				@Override
 				public String getKey() { return null; }
+				@Override
 				public String getName() { return null; }
+				@Override
 				public Object getValue() { return null; }
 	
+				@Override
 				public String getClause(FromTable table) throws InvalidQueryException {
 					return clause;
 				}
@@ -65,5 +77,8 @@ public class WhereParameterGroupTest {
 		
 		assertEquals("(clauseA AND clauseB AND clauseC)", whereGroup.getClause(null));
 	}
+	
+	
+	
 	
 }

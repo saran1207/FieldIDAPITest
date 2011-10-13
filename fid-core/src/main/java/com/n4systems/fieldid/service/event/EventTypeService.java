@@ -1,12 +1,13 @@
 package com.n4systems.fieldid.service.event;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.EventType;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.List;
 
 public class EventTypeService extends FieldIdPersistenceService {
 
@@ -22,7 +23,7 @@ public class EventTypeService extends FieldIdPersistenceService {
         }
 
         if (!StringUtils.isBlank(nameFilter)) {
-            builder.addWhere(WhereParameter.Comparator.LIKE, "nameFilter", "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH);
+            builder.addWhere(WhereParameter.Comparator.LIKE, "nameFilter", "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH|WhereParameter.TRIM);
         }
 
         builder.addOrder("name");

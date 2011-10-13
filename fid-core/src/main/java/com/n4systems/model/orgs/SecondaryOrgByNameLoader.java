@@ -24,7 +24,7 @@ public class SecondaryOrgByNameLoader extends SecurityFilteredLoader<SecondaryOr
 		
 		Integer opts = null;
 		if (caseInsensitive) {
-			opts = WhereParameter.IGNORE_CASE;
+			opts = WhereParameter.IGNORE_CASE| WhereParameter.TRIM;
 		}
 		
 		builder.addWhere(Comparator.EQ, "name", "name", name, opts);

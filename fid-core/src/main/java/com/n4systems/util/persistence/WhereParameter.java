@@ -11,6 +11,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 	public static final int WILDCARD_LEFT = (1 << 0);
 	public static final int WILDCARD_RIGHT = (1 << 1);
 	public static final int IGNORE_CASE = (1 << 2);
+	public static final int TRIM = (1 << 3);
 	public static final int WILDCARD_BOTH = WILDCARD_LEFT | WILDCARD_RIGHT;
 
 	public enum Comparator {
@@ -97,6 +98,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 		}
 	}
 
+	@Override
 	public String getName() {
 		// if name is null, use the param name (or null)
 		return (name != null) ? name : (param != null) ? param.replace('.', '_') : null;
@@ -118,6 +120,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 		this.value = value;
 	}
 
+	@Override
 	public T getValue() {
 		return value;
 	}
@@ -130,6 +133,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 		return comparator;
 	}
 
+	@Override
 	public ChainOp getChainOperator() {
 		return chainOp;
 	}
@@ -146,6 +150,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 		this.options = options;
 	}
 
+	@Override
 	public void bind(Query query) throws InvalidQueryException {
 		if (literalParameter)
 			return;
@@ -177,6 +182,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 		}
 	}
 
+	@Override
 	public String getClause(FromTable table) throws InvalidQueryException {
 		return clausePrefix() + getComparison(table) + clauseSuffix();
 	}
@@ -218,13 +224,17 @@ public class WhereParameter<T> implements WhereClause<T> {
 
 	private String prepareParam(FromTable table) {
 		BitField bits = new BitField(options);
-		String prepParam = table.prepareField(param, dropAlias);
+		String param = table.prepareField(this.param, dropAlias);
 
 		if (bits.isSet(IGNORE_CASE)) {
-			prepParam = "lower(" + prepParam + ")";
+			param = applyFunction("lower", param);
 		}
 
-		return prepParam;
+		return param;
+	}
+
+	private String applyFunction(String fn, String param) {
+		return fn + "(" + param + ")";
 	}
 
 	private String prepareStringValue() throws InvalidQueryException {
@@ -235,6 +245,13 @@ public class WhereParameter<T> implements WhereClause<T> {
 		}
 
 		String prepValue = (String) value;
+		
+		if (bits.isSet(TRIM)) {
+			prepValue = prepValue.trim();
+		}
+		if (bits.isSet(IGNORE_CASE)) {
+			prepValue = prepValue.toLowerCase();
+		}
 
 		if (bits.isSet(WILDCARD_LEFT)) {
 			prepValue = WILDCARD_CHAR + prepValue;
@@ -243,11 +260,6 @@ public class WhereParameter<T> implements WhereClause<T> {
 		if (bits.isSet(WILDCARD_RIGHT)) {
 			prepValue = prepValue + WILDCARD_CHAR;
 		}
-
-		if (bits.isSet(IGNORE_CASE)) {
-			prepValue = prepValue.toLowerCase();
-		}
-
 		return prepValue;
 	}
 

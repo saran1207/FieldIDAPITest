@@ -73,6 +73,7 @@ public class AssetManagerImpl implements AssetManager {
 	}
 
 
+	@Override
 	public List<Asset> findAssetByIdentifiers(SecurityFilter filter, String searchValue) {
 		return findAssetByIdentifiers(filter, searchValue, null);
 	}
@@ -82,6 +83,7 @@ public class AssetManagerImpl implements AssetManager {
 	 * number of rfid number given in the search value variable. this will
 	 * filter on tenant, owner and division.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Asset> findAssetByIdentifiers(SecurityFilter filter, String searchValue, AssetType assetType) {
 		String queryString = "FROM Asset p WHERE ( UPPER( p.identifier ) = :searchValue OR UPPER( p.rfidNumber ) = :searchValue OR UPPER(p.customerRefNumber) = :searchValue ) AND " + filter.produceWhereClause(Asset.class, "p");
@@ -104,6 +106,7 @@ public class AssetManagerImpl implements AssetManager {
 
 	
 
+	@Override
 	public Asset findAssetAllFields(Long id, SecurityFilter filter) {
 		Asset asset =  findAsset(id, filter, "infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName");
 		asset = fillInSubAssetsOnAsset(asset);
@@ -117,10 +120,12 @@ public class AssetManagerImpl implements AssetManager {
 		return asset;
 	}
 
+	@Override
 	public Asset findAsset(Long id, SecurityFilter filter) {
 		return findAsset(id, filter, (String[]) null);
 	}
 
+	@Override
 	public Asset findAsset(Long id, SecurityFilter filter, String... postFetchFields) {
 
 		QueryBuilder<Asset> qBuilder = basicAssetQuery(filter);
@@ -148,13 +153,14 @@ public class AssetManagerImpl implements AssetManager {
 	 * Notice that the customer id passed in is not the "security filter"
 	 * customer id
 	 */
+	@Override
 	public Asset findAssetByIdentifier(String identifier, Long tenantId, Long customerId) throws NonUniqueAssetException {
 		Asset asset = null;
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
 		try {
 			QueryBuilder<Asset> qBuilder = basicAssetQuery(filter);
-			qBuilder.addWhere(Comparator.EQ, "identifier", "identifier", identifier.trim(), WhereParameter.IGNORE_CASE);
+			qBuilder.addWhere(Comparator.EQ, "identifier", "identifier", identifier.trim(), WhereParameter.IGNORE_CASE|WhereParameter.TRIM);
 			
 			if (customerId == null) {
 				qBuilder.addWhere(new WhereParameter<Long>(WhereParameter.Comparator.NULL, "owner.customerOrg"));
@@ -188,6 +194,7 @@ public class AssetManagerImpl implements AssetManager {
 	}
 
 	// TODO resolve this so it can only ever find 1 value for the mobile guid.
+	@Override
 	public Asset findAssetByGUID(String mobileGUID, SecurityFilter filter) {
 		Asset asset = null;
 		if (GUIDHelper.isNullGUID(mobileGUID)) {
@@ -209,6 +216,7 @@ public class AssetManagerImpl implements AssetManager {
 		return asset;
 	}
 
+	@Override
 	public List<Asset> findAssetsByRfidNumber(String rfidNumber, SecurityFilter filter, String... postFetchFields) {
 		if (rfidNumber == null) {
 			return null;
@@ -243,10 +251,11 @@ public class AssetManagerImpl implements AssetManager {
 	 * returns the Parent Asset of the given asset or null if there is no
 	 * parent asset.
 	 */
+	@Override
 	public Asset parentAsset(Asset asset) {
 		QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class, new OpenSecurityFilter()).addSimpleWhere("asset", asset);
 		try {
-			SubAsset p = (SubAsset)persistenceManager.find(query);
+			SubAsset p = persistenceManager.find(query);
 			if (p != null) {
 				Asset master = p.getMasterAsset();
 				return fillInSubAssetsOnAsset(master);
@@ -260,6 +269,7 @@ public class AssetManagerImpl implements AssetManager {
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getAllowedSubTypes(SecurityFilter filter, AssetType type) {
 		String jpql = "SELECT new com.n4systems.util.ListingPair(id, name ) FROM "+AssetType.class.getName()+" at";
@@ -270,9 +280,10 @@ public class AssetManagerImpl implements AssetManager {
 		query.setParameter("assetTypeId", type.getId());
 		query.setParameter("activeState", EntityState.ACTIVE);
 
-		return (List<ListingPair>) query.getResultList();
+		return query.getResultList();
 	}
 
+	@Override
 	public boolean partOfAMasterAsset(Long typeId) {
 		String str = "select count(a) From "+AssetType.class.getName()+" a, IN( a.subTypes ) s WHERE s.id = :typeId ";
 		Query query = em.createQuery(str);
@@ -290,6 +301,7 @@ public class AssetManagerImpl implements AssetManager {
 		}
 	}
 
+	@Override
 	public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterEventException {
 		asset = persistenceManager.reattach(asset);
 		asset = fillInSubAssetsOnAsset(asset);
@@ -366,6 +378,7 @@ public class AssetManagerImpl implements AssetManager {
 		return asset;
 	}
 
+	@Override
 	public AssetType archive(AssetType assetType, Long archivedBy, String deletingPrefix) {
 		if (testArchive(assetType).validToDelete()) {
 
@@ -390,6 +403,7 @@ public class AssetManagerImpl implements AssetManager {
 
 	}
 
+	@Override
 	public AssetTypeRemovalSummary testArchive(AssetType assetType) {
 		AssetTypeRemovalSummary summary = new AssetTypeRemovalSummary(assetType);
 		try {
@@ -441,12 +455,13 @@ public class AssetManagerImpl implements AssetManager {
 		return summary;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public void removeAsASubAssetType(AssetType assetType, Long archivedBy) {
 		Query masterTypeQuery = em.createQuery("select p From "+AssetType.class.getName()+" p, IN( p.subTypes ) st WHERE st = :assetType ");
 		masterTypeQuery.setParameter("assetType", assetType);
 
-		List<AssetType> masterTypes = (List<AssetType>) masterTypeQuery.getResultList();
+		List<AssetType> masterTypes = masterTypeQuery.getResultList();
 		for (AssetType masterType : masterTypes) {
 			AssetType assetTypeToRemoveFromSet = null;
 			for (AssetType subType : masterType.getSubTypes()) {
@@ -462,6 +477,7 @@ public class AssetManagerImpl implements AssetManager {
 		}
 	}
 
+	@Override
 	public void removeAssetCodeMappingsThatUse(AssetType assetType) {
 		QueryBuilder<AssetCodeMapping> assetCodeMappingQuery = new QueryBuilder<AssetCodeMapping>(AssetCodeMapping.class, new OpenSecurityFilter());
 		assetCodeMappingQuery.setSimpleSelect().addSimpleWhere("assetInfo", assetType);
@@ -474,6 +490,7 @@ public class AssetManagerImpl implements AssetManager {
 		}
 	}
 
+	@Override
 	public AssetRemovalSummary testArchive(Asset asset) {
 		AssetRemovalSummary summary = new AssetRemovalSummary(asset);
 		try {
@@ -508,6 +525,7 @@ public class AssetManagerImpl implements AssetManager {
 
 		
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> assetTypeIds) {
 		/*
@@ -523,9 +541,10 @@ public class AssetManagerImpl implements AssetManager {
 		query += "GROUP BY TRIM(name) HAVING COUNT(id) = :numberOfAssetTypes";
 
 		Query commonNamesQuery = em.createQuery(query).setParameter("assetTypes", assetTypeIds).setParameter("numberOfAssetTypes", countOfAssetTypes);
-		return new TreeSet<String>((List<String>) commonNamesQuery.getResultList());
+		return new TreeSet<String>(commonNamesQuery.getResultList());
 	}
 
+	@Override
 	public void deleteAssetTypeGroup(AssetTypeGroup group) {
 		AssetTypeGroup groupToDelete = persistenceManager.find(AssetTypeGroup.class, group.getId());
 
@@ -535,6 +554,7 @@ public class AssetManagerImpl implements AssetManager {
 		persistenceManager.delete(groupToDelete);
 	}
 
+	@Override
 	public AssetTypeGroupRemovalSummary testDelete(AssetTypeGroup group) {
 		AssetTypeGroupRemovalSummary summary = new AssetTypeGroupRemovalSummary(group);
 		QueryBuilder<AssetType> countQuery = new QueryBuilder<AssetType>(AssetType.class, new OpenSecurityFilter());
@@ -543,14 +563,17 @@ public class AssetManagerImpl implements AssetManager {
 		return summary;
 	}
 
+	@Override
 	public Asset fillInSubAssetsOnAsset(Asset asset) {
 		return new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 	}
 	
+	@Override
 	public List<SubAsset> findSubAssetsForAsset(Asset asset) {
 		return new FindSubAssets(persistenceManager, asset).findSubAssets();
 	}
 
+	@Override
 	public Asset mergeAssets(Asset winningAsset, Asset losingAsset, User user) {
 		AssetMerger merger = new AssetMerger(persistenceManager, this, new EventManagerImpl(em), user);
 		// reload the winning and losing assets so they are fully under managed scope.

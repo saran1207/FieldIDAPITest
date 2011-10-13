@@ -28,7 +28,7 @@ public class EventTypeListLoader extends ListLoader<EventType> {
 		QueryBuilder<EventType> builder = new QueryBuilder<EventType>(EventType.class, filter);
 		
 		if(nameFilter != null && !nameFilter.isEmpty()) {
-			builder.addWhere(Comparator.LIKE, "nameFilter", "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH);
+			builder.addWhere(Comparator.LIKE, "nameFilter", "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.TRIM | WhereParameter.WILDCARD_BOTH);
 		}
 		
 		if(groupFilter != null) {

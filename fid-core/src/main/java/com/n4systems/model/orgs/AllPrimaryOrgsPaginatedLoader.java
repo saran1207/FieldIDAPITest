@@ -25,7 +25,7 @@ public class AllPrimaryOrgsPaginatedLoader extends Loader<Pager<PrimaryOrg>> {
 		QueryBuilder<PrimaryOrg> builder  =  new QueryBuilder<PrimaryOrg>(PrimaryOrg.class, new OpenSecurityFilter());
 		
 		if(nameFilter != null && !nameFilter.isEmpty()) {
-			builder.addWhere(WhereClauseFactory.create(Comparator.LIKE, "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH, null));
+			builder.addWhere(WhereClauseFactory.create(Comparator.LIKE, "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.TRIM | WhereParameter.WILDCARD_BOTH, null));
 		}
 		
 		if(order != null && !order.isEmpty()) {

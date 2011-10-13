@@ -25,15 +25,15 @@ public class SmartSearchWhereClause extends WhereParameterGroup {
 	
 	private void init() {
 		if (useIdentifier) {
-			addClause(WhereClauseFactory.create("identifier", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
+			addClause(WhereClauseFactory.create("identifier", searchText, WhereParameter.IGNORE_CASE|WhereParameter.TRIM, ChainOp.OR));
 		}
 		
 		if (useRfidNumber) {
-			addClause(WhereClauseFactory.create("rfidNumber", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
+			addClause(WhereClauseFactory.create("rfidNumber", searchText, WhereParameter.IGNORE_CASE|WhereParameter.TRIM, ChainOp.OR));
 		}
 		
 		if (useRefNumber) {
-			addClause(WhereClauseFactory.create("customerRefNumber", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
+			addClause(WhereClauseFactory.create("customerRefNumber", searchText, WhereParameter.IGNORE_CASE|WhereParameter.TRIM, ChainOp.OR));
 		}
 	}
 	
