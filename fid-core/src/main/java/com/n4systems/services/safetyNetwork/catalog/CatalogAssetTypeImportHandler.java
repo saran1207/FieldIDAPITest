@@ -11,6 +11,7 @@ import java.util.UUID;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.CleanAssetTypeFactory;
 import com.n4systems.services.safetyNetwork.catalog.summary.AssetTypeImportSummary;
 import org.apache.commons.io.FileUtils;
@@ -38,6 +39,7 @@ public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 	private AssetTypeImportSummary summary;
 	private Map<Long, AssetTypeGroup> assetGroupMapping;
 	private Set<Long> importAssetTypeIds;
+	private User importUser;
 
 	
 	public CatalogAssetTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, LegacyAssetType assetTypeManager) {
@@ -114,6 +116,7 @@ public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 	}
 
 	private void saveAsset() throws FileAttachmentException, ImageAttachmentException {
+		importedAssetType.setCreatedBy(importUser);
 		importedAssetType = assetTypeManager.updateAssetType(importedAssetType, null, copiedAssetImage);
 		summary.getImportMapping().put(originalType.getId(), importedAssetType);
 	}
@@ -265,6 +268,11 @@ public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 
 	public CatalogAssetTypeImportHandler setImportAssetTypeIds(Set<Long> importAssetTypeIds) {
 		this.importAssetTypeIds = importAssetTypeIds;
+		return this;
+	}
+
+	public CatalogAssetTypeImportHandler setImportUser(User importUser) {
+		this.importUser = importUser;
 		return this;
 	}
 }

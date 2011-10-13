@@ -8,6 +8,7 @@ import java.util.Set;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.CleanStateSetFactory;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary;
@@ -22,6 +23,7 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 
 	private StateSetImportSummary summary = new StateSetImportSummary();
 	private Set<Long> eventTypeIds;
+	private User importUser;
 	
 	public CatalogStateSetsImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		this(persistenceManager, tenant, importCatalog, new StateSetImportSummary());
@@ -50,6 +52,7 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 	private void importStateSet(StateSet originalStateSet) {
 		Long originalId = originalStateSet.getId();
 		new CleanStateSetFactory(originalStateSet, tenant).clean();
+		originalStateSet.setCreatedBy(importUser);
 		persistenceManager.save(originalStateSet);
 		summary.getImportMapping().put(originalId, originalStateSet);
 		summary.createdStateSet(originalStateSet);
@@ -93,6 +96,11 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 
 	public CatalogStateSetsImportHandler setEventTypeIds(Set<Long> eventTypeIds) {
 		this.eventTypeIds = eventTypeIds;
+		return this;
+	}
+
+	public CatalogStateSetsImportHandler setImportUser(User importUser) {
+		this.importUser = importUser;
 		return this;
 	}
 }

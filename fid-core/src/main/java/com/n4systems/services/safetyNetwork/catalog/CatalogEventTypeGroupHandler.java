@@ -12,6 +12,7 @@ import com.n4systems.model.PrintOut;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.EventTypeGroupImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
@@ -27,6 +28,7 @@ public class CatalogEventTypeGroupHandler extends CatalogImportHandler {
 	private List<ListingPair> eventTypesToBeCreated;
 	private EventTypeGroupImportSummary summary;
 	private Set<Long> eventTypeIds;
+	private User importUser;
 	
 	public CatalogEventTypeGroupHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		this(persistenceManager, tenant, importCatalog, new EventTypeGroupImportSummary());
@@ -44,6 +46,7 @@ public class CatalogEventTypeGroupHandler extends CatalogImportHandler {
 			EventTypeGroup importedGroup = copyGroup(originalGroup);
 			try {
 				setDefaultCerts(importedGroup);
+				importedGroup.setCreatedBy(importUser);
 				persistenceManager.save(importedGroup);
 				summary.getImportMapping().put(originalGroup.getId(), importedGroup);
 				summary.createdGroup(importedGroup);
@@ -134,6 +137,11 @@ public class CatalogEventTypeGroupHandler extends CatalogImportHandler {
 
 	public CatalogEventTypeGroupHandler setEventTypeIds(Set<Long> eventTypeIds) {
 		this.eventTypeIds = eventTypeIds;
+		return this;
+	}
+
+	public CatalogEventTypeGroupHandler setImportUser(User importUser) {
+		this.importUser = importUser;
 		return this;
 	}
 	

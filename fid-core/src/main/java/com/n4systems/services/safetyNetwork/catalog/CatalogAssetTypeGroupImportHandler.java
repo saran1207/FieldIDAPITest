@@ -4,6 +4,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.AssetTypeGroupImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
@@ -23,6 +24,7 @@ public class CatalogAssetTypeGroupImportHandler extends CatalogImportHandler {
 	
 	private AssetTypeGroupImportSummary summary;
 	private Set<Long> assetTypeIds;
+	private User importUser;
 	
 	public CatalogAssetTypeGroupImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		this(persistenceManager, tenant, importCatalog, new AssetTypeGroupImportSummary());
@@ -61,6 +63,7 @@ public class CatalogAssetTypeGroupImportHandler extends CatalogImportHandler {
 		importedGroup.setName(originalGroup.getName());
 		importedGroup.setTenant(tenant);
 		importedGroup.setOrderIdx(getNextAvailableIndex());
+		importedGroup.setCreatedBy(importUser);		
 		
 		persistenceManager.save(importedGroup);
 		
@@ -111,6 +114,11 @@ public class CatalogAssetTypeGroupImportHandler extends CatalogImportHandler {
 		for (AssetTypeGroup groupToDelete : summary.getCreatedGroups()) {
 			persistenceManager.delete(groupToDelete);
 		}
+	}
+
+	public CatalogAssetTypeGroupImportHandler setImportUser(User importUser) {
+		this.importUser = importUser;
+		return this;
 	}
 	
 }

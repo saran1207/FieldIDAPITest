@@ -59,6 +59,7 @@ public class CatalogImportTask implements Runnable {
 			importCatalogService.setImportAssetTypeIds(importProductTypeIds);
 			importCatalogService.setImportEventTypeIds(importEventTypeIds);
 			importCatalogService.setImportAllRelations(usingPackages);
+			importCatalogService.setImportUser(getUser());
 			failed = !importCatalogService.importSelection();
 		} catch (Exception e) {
 			failed = true;

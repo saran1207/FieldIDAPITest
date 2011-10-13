@@ -14,6 +14,7 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.user.User;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.EventTypeImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
@@ -29,6 +30,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	private Map<Long, StateSet> importedStateSetMapping;
 	private Set<Long> originalEventTypeIds;
 	private EventTypeImportSummary summary = new EventTypeImportSummary();
+	private User importUser;
 	
 	public CatalogEventTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, EventTypeImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
@@ -68,6 +70,8 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 
 	private void save(EventType importedEventType) {
         persistenceManager.save(importedEventType.getEventForm());
+
+		importedEventType.setCreatedBy(importUser);
 		persistenceManager.save(importedEventType);
 	}
 
@@ -155,4 +159,10 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 		this.importedGroupMapping = importedGroupMapping;
 		return this;
 	}
+
+	public CatalogEventTypeImportHandler setImportUser(User importUser) {
+		this.importUser = importUser;
+		return this;
+	}
+
 }

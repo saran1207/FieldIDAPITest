@@ -6,6 +6,7 @@ import java.util.Set;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.model.assettype.AssetTypeScheduleSaver;
 import com.n4systems.services.safetyNetwork.catalog.CatalogAssetTypeGroupImportHandler;
 import com.n4systems.services.safetyNetwork.catalog.CatalogEventTypeGroupHandler;
@@ -16,7 +17,6 @@ import com.n4systems.services.safetyNetwork.catalog.CatalogStateSetsImportHandle
 import com.n4systems.services.safetyNetwork.catalog.summary.CatalogImportSummary;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import org.apache.log4j.Logger;
-
 
 public class ImportCatalogService {
 
@@ -32,6 +32,7 @@ public class ImportCatalogService {
 	private Set<Long> importEventTypeIds;
 	private boolean importAllRelations = false;
 	private CatalogImportSummary summary = new CatalogImportSummary();
+	private User importUser;
 	
 	
 	public ImportCatalogService(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, LegacyAssetType legacyAssetTypeManager) {
@@ -58,11 +59,11 @@ public class ImportCatalogService {
 
 
 	private void importCatalog() throws ImportFailureException {
-		importAssetTypeGroup.setAssetTypeIds(importAssetTypeIds).importCatalog();
-		importAssetType.setAssetGroupMapping(importAssetTypeGroup.getImportMapping()).setImportAssetTypeIds(importAssetTypeIds).importCatalog();
-		importEventTypeGroup.setEventTypeIds(importEventTypeIds).importCatalog();
-		importStateSets.setEventTypeIds(importEventTypeIds).importCatalog();
-		importEventType.setOriginalEventTypeIds(importEventTypeIds).setImportedGroupMapping(importEventTypeGroup.getImportMapping()).setImportedStateSetMapping(importStateSets.getImportMapping()).importCatalog();
+		importAssetTypeGroup.setAssetTypeIds(importAssetTypeIds).setImportUser(importUser).importCatalog();
+		importAssetType.setAssetGroupMapping(importAssetTypeGroup.getImportMapping()).setImportAssetTypeIds(importAssetTypeIds).setImportUser(importUser).importCatalog();
+		importEventTypeGroup.setEventTypeIds(importEventTypeIds).setImportUser(importUser).importCatalog();
+		importStateSets.setEventTypeIds(importEventTypeIds).setImportUser(importUser).importCatalog();
+		importEventType.setOriginalEventTypeIds(importEventTypeIds).setImportedGroupMapping(importEventTypeGroup.getImportMapping()).setImportedStateSetMapping(importStateSets.getImportMapping()).setImportUser(importUser).importCatalog();
 
 		if (importAllRelations) {
 			importAssetTypeEventTypeRelations.setImportedAssetTypeMapping(importAssetType.getImportedMap()).setImportedEventTypeMapping(importEventType.getImportMapping()).importCatalog();
@@ -121,6 +122,11 @@ public class ImportCatalogService {
 
 	public CatalogImportSummary getSummary() {
 		return summary;
+	}
+
+
+	public void setImportUser(User user) {
+		this.importUser = user;
 	}
 
 }
