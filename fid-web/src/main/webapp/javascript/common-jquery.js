@@ -170,16 +170,8 @@ function updateMessages(messages, errors, modifiedId) {
 }
 
 function findPos(obj) {
-    var curtop = 0;
-	var curleft = 0;
-	if (obj.offsetParent) {
-		do {
-			curleft += obj.offsetLeft;
-			curtop += obj.offsetTop;
-		} while (obj = obj.offsetParent);
-	}
-	return [ curleft, curtop ];
-
+    var offset = $(obj).offset();
+    return [ offset.left, offset.top ];
 }
 
 function translate(target, relativeElement, offsetY, offsetX) {
@@ -317,57 +309,38 @@ function showQuickView(elementId, event) {
 	var quickViewBox = $("#"+elementId);
 	quickViewBox.removeClass("hidden");
 	quickViewBox.addClass("quickView");
-	var button = Event.findElement(event, "A");
+	var button = event.target;
 
 	quickViewBox.show();
-	quickViewBox.absolutize();
-	
 
-	var position = button.cumulativeOffset();
+	var position = $(button).offset();
 
 	quickViewBox.css( {
+        position: "absolute",
 		top : position['top'] + "px",
 		left : (position['left'] + 25) + "px"
 	});
 
-	moveInsideViewPort(quickViewBox);
-
-	quickViewBox.fx = function(event) {
-		var clickid;
-
-		if (event.clickid != undefined) {
-			clickid = event.clickid;
-		} else {
-			var element = Event.element(event);
-			if (element.id != undefined
-					&& (element.id == elementId + "_img" || element.id == elementId
-							+ "_button")) {
-				clickid = elementId;
-			}
-		}
-
-		if (clickid != elementId) {
-			hideQuickView(elementId);
-		}
-	};
-	quickViewBox.bfx = quickViewBox.fx.bindAsEventListener(quickViewBox);
-	Element.extend(document).observe('click', quickViewBox.bfx);
+    var interval = setInterval(function() {
+        clearInterval(interval);
+        quickViewBox.fadeOut();
+    }, 1800);
 }
 
 function moveInsideViewPort(element) {
 	var position = findPos(element);
 	
-	var boxTopRightCorner = element.getWidth() + element.viewportOffset().left;
-	if (boxTopRightCorner > document.viewport.getWidth()) {
-		var offset = boxTopRightCorner - document.viewport.getWidth();
+	var boxTopRightCorner = $(element).width() + $(element).position().left;
+	if (boxTopRightCorner > $(window).width()) {
+		var offset = boxTopRightCorner - $(window).width();
 		element.css( {
 			left : (position[0] - offset) + "px"
 		});
 	}
 	
-	var boxBottomLeftCorner = element.getHeight() + element.viewportOffset().top;
-	if (boxBottomLeftCorner > document.viewport.getHeight()) {
-		var offset = boxBottomLeftCorner - document.viewport.getHeight();
+	var boxBottomLeftCorner = $(element).height() + $(element).position().top;
+	if (boxBottomLeftCorner > $(window).height()) {
+		var offset = boxBottomLeftCorner - $(window).height();
 		element.css( {
 			top : (position[1] - offset) + "px"
 		});
@@ -375,8 +348,8 @@ function moveInsideViewPort(element) {
 }
 
 function hideAnyOpenQuickViewBoxes() {
-	$$('.quickView').each( function(element) {
-			hideQuickViewElement(element);
+	$('.quickView').each( function() {
+			hideQuickViewElement(this);
 		});
 }
 
@@ -386,10 +359,9 @@ function hideQuickView(elementId) {
 }
 
 function hideQuickViewElement(quickViewBox) {
-	quickViewBox.hide();
-	quickViewBox.addClassName("hidden");
-	quickViewBox.removeClassName("quickView");
-	Element.extend(document).stopObserving('click', quickViewBox.bfx);
+	$(quickViewBox).hide();
+	$(quickViewBox).addClass("hidden");
+	$(quickViewBox).removeClass("quickView");
 }
 
 function alertErrors(errors) {
@@ -566,14 +538,14 @@ onDocumentLoad(function() {
 
 
 function positionDropDown(a, entityId){
-	var list = $(a.id + "_list_" + entityId );
-	var actionsContainer = $("actionsContainer_"+entityId);
+	var list = $("#"+ a.id + "_list_" + entityId );
+	var actionsContainer = $("#actionsContainer_"+entityId);
 	
 	positionDropDownForElements(a, list, actionsContainer);
 }
 
 function positionDropDownForElements(a, list, actionsContainer) {
-    var coordinates = findPos(actionsContainer[0]);
+    var coordinates = findPos(actionsContainer);
 
 	if($.browser.msie){
 		list.css({	'top': coordinates[1] + (actionsContainer[0].offsetHeight/2) + "px"});
@@ -621,4 +593,8 @@ function setAssignedToAsCurrentUser(thisUserId){
 			option.selected=true;
 		}
 	});
+}
+
+function closeLightbox() {
+    $.colorbox.close();
 }

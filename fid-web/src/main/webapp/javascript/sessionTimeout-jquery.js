@@ -31,6 +31,7 @@ function promptForLogin() {
         href: href,
         data: $.param(formParams),
         overlayClose:false,
+        hideClose:true,
         escKey: false,
         width:505,
         height:300
@@ -48,6 +49,7 @@ function quickLoginSubmit( event ) {
         href: form[0].action,
         data: data,
         overlayClose:false,
+        hideClose:true,
         escKey: false,
         width:505,
         height:300

@@ -6,19 +6,19 @@
 
         <ul id="print_list">
             <li>
-                <a wicket:id="printThisReportLink" class="lightview summaryReport" rel="ajax" title=" :: :: scrolling: false, autosize: true">
+                <a wicket:id="printThisReportLink" class="lightboxPrintLink summaryReport">
                     <wicket:message key="label.printreport"/>
                 </a>
             </li>
 
             <li>
-                <a wicket:id="printSelectedPdfReportsLink" class="lightview printAllPDFs" rel="ajax" title=" :: :: scrolling: false, autosize: true">
+                <a wicket:id="printSelectedPdfReportsLink" class="lightboxPrintLink printAllPDFs">
                     <wicket:message key="label.printselectedpdfreports"/>
                 </a>
             </li>
 
             <li>
-                <a wicket:id="printSelectedObservationReportsLink" class="lightview printAllPDFs" rel="ajax" title=" :: :: scrolling: false, autosize: true">
+                <a wicket:id="printSelectedObservationReportsLink" class="lightboxPrintLink printAllPDFs">
                     <wicket:message key="label.printselectedobservationcertificate"/>
                 </a>
             </li>
@@ -29,7 +29,7 @@
 
     </div>
 
-    | <a wicket:id="exportToExcelLink" class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><wicket:message key="label.exporttoexcel"/></a>
+    | <a wicket:id="exportToExcelLink" class='lightboxPrintLink exportToExcel'><wicket:message key="label.exporttoexcel"/></a>
 
     <wicket:enclosure>
         | <a wicket:id="massUpdateLink" class="massUpdate"><wicket:message key="label.massupdate"/></a>
@@ -72,10 +72,14 @@
         $(cssSelector).bind('click',
             function(event) {
                 if (numberOfSelectedItems() == 0) {
-                    event.preventDefault(); showQuickView("warning_nothingSelected", event);
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    showQuickView("warning_nothingSelected", event);
                 }
                 else if (numberOfSelectedItems() > maxSelected) {
-                    event.preventDefault(); showQuickView(warningDiv, event);
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    showQuickView(warningDiv, event);
                 }
         });
     }
@@ -89,9 +93,14 @@
         addGuardForTooManySelectedToElements(".summaryReport", maxSizeForSummaryReport, 'warning_summaryReport');
     }
 
-    function repositionPrintList(listId, link) {
+    function repositionPrintList(listId, linkId) {
         var list =  $('#'+listId);
-        translate(list, $(link), -list.height(), 0);
+        var link = $('#'+linkId);
+        translate(list, link, -list.height(), 0);
+    }
+
+    function addLightboxListeners() {
+        $('.lightboxPrintLink').colorbox({ ajax:true });
     }
 
 </script>

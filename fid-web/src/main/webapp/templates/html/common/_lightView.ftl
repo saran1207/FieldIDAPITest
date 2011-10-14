@@ -2,7 +2,7 @@
 <@n4.includeScript src='lightview'/>
 <@n4.includeScript>
 	function closeLightBox() {
-		Lightview.hide();
+		closeLightbox();
 	}
 </@n4.includeScript>
 

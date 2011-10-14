@@ -18,6 +18,7 @@ public class NonWicketLink extends Border {
 		setRenderBodyOnly(true);
 
 		linkContainer = new WebMarkupContainer("link");
+        linkContainer.setOutputMarkupId(true);
 
 		String contextRoot = determineContext();
 		if (!path.startsWith("/")) {
@@ -35,6 +36,10 @@ public class NonWicketLink extends Border {
             return ((WebRequest)getRequest()).getHttpServletRequest().getContextPath();
         }
         return "/fieldid";
+    }
+
+    protected String getLinkMarkupId() {
+        return linkContainer.getMarkupId();
     }
 
 }

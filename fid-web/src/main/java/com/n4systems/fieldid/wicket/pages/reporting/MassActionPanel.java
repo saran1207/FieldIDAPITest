@@ -30,6 +30,7 @@ public class MassActionPanel extends Panel implements IHeaderContributor {
         addSizeParameterLabel("maxSizeForMultiEvent", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, getTenantId()));
         addSizeParameterLabel("maxSizeForAssigningEventsToJobs", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS, getTenantId()));
 
+        variableAssignmentScriptBuffer.append("addLightboxListeners();");
         variableAssignmentScriptBuffer.append("addLimitGuards();");
 
         LegacyReportMassActionLink massUpdateLink;

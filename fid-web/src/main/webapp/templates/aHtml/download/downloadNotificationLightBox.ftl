@@ -11,13 +11,13 @@
 			<div class="formActions">
 				<@s.submit id="saveDownload" onClick="Lightview.hide();" key="hbutton.savetomydownloads" style="text-align:left"/>
 				&nbsp;<@s.text name="label.or" />&nbsp;
-				<a href="javascript:void(0);" onClick="Lightview.hide();"><@s.text name="hbutton.saveclosemessage" /></button>
+				<a href="javascript:void(0);" onClick="closeLightbox();"><@s.text name="hbutton.saveclosemessage" /></button>
 			</div>
 		</@s.form>
 	<#else>
 		<#list actionErrors as error >
 			${error}<br/>
 		</#list>
-		<button style="padding: 2px 5px;" onclick="Lightview.hide();"><@s.text name="hbutton.closemessage" /></button>
+		<button style="padding: 2px 5px;" onclick="closeLightbox();"><@s.text name="hbutton.closemessage" /></button>
 	</#if>
 </div>

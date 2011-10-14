@@ -40,10 +40,10 @@
       }
       
       e.data(name, { delay: delay }) // initialize data cache
-      
-      if(helper.should_work()) {
-        fn() // call fn immediately (setInterval applies the delay before calling fn for the first time)
-      }
+
+//      if(helper.should_work()) {
+//        fn() // call fn immediately (setInterval applies the delay before calling fn for the first time)
+//      }
 
       var interval_id = setInterval(function() {
         if(helper.should_stop()) {

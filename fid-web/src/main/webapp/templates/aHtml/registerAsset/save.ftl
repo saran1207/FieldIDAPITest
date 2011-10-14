@@ -4,12 +4,12 @@
 	
 	<script type="text/javascript">
         function redirect(url) {
-	        Lightview.hide();
+	        closeLightbox();
 	        window.parent.location=url;
         }
         
         function reload(){
-	        Lightview.hide();
+	        closeLightbox();
 	        window.parent.location.reload(true);
         }
 	</script>

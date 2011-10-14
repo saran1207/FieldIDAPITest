@@ -637,3 +637,6 @@ function setAssignedToAsCurrentUser(thisUserId){
 	});
 }
 
+function closeLightbox() {
+    Lightview.hide();
+}

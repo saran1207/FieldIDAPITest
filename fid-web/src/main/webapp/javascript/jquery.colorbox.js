@@ -26,6 +26,7 @@
         photo: false,
         href: false,
         title: false,
+        hideClose: false,
         rel: false,
         opacity: 0.9,
         preloading: true,
@@ -415,7 +416,7 @@
 					publicMethod.close();
 				}
 			});
-			
+
 			// Set Navigation Key Bindings
 			$(document).bind('keydown.' + prefix, function (e) {
 				var key = e.keyCode;
@@ -456,6 +457,12 @@
             top = $window.scrollTop();
             left = $window.scrollLeft();
             $box.css({position: 'absolute'});
+        }
+
+        if (settings.hideClose) {
+            $close.hide();
+        } else {
+            $close.show();
         }
 
 		// keeps the top and left positions within the browser's viewport.

@@ -49,7 +49,7 @@
 		<@s.hidden id="def_${criteria.id}_${criteria.deficiencies.size()}_state" name="criteriaResults[${currentCriteriaIndex}].deficiencies[${criteria.deficiencies.size()}].stateString" value="COMMENT" />
 	</p>
 	<p class="observationActions">
-		<button onclick="Lightview.hide(); return false;"><@s.text name="label.save"/></button>
+		<button onclick="closeLightbox(); return false;"><@s.text name="label.save"/></button>
 		<@s.text name="label.or"/>
 		<a href="javascript:void(0);" onclick="clearDeficiency( ${criteria.id}, ${criteria.deficiencies.size()})"><@s.text name="label.clear" /></a>
 	</p>

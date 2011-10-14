@@ -40,7 +40,7 @@
 
 <script type="text/javascript">
 	$('cancelLink').observe('click', function(){
-			Lightview.hide();
+			closeLightbox();
 			window.parent.location.reload(true);
 	});
 	
@@ -49,7 +49,7 @@
     		alert('Please enter one or more email addresses');
     		Event.stop(event);
     	}else{
-    		Lightview.hide();
+    		closeLightbox();
         	window.parent.location.reload(true);
     	}
 	})

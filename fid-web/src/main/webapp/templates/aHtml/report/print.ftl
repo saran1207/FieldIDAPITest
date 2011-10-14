@@ -13,7 +13,7 @@
 		</#if>
 	</p>
 	<p style="text-align:center">
-		<button onclick="Lightview.hide();"><@s.text name="label.ok"/></button>
+		<button onclick="closeLightbox();"><@s.text name="label.ok"/></button>
 	</p>
 	
 	
