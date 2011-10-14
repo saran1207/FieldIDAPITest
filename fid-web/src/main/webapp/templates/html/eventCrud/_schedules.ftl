@@ -36,13 +36,13 @@
 
 		<div class="infoSet">
 			<label class="label"><@s.text name="label.when_is_it_due"/></label>
-			<@s.textfield id="nextDate" name="newScheduleDate" cssClass="datepicker"/>
+			<@s.textfield id="nextDate" name="newScheduleDate" cssClass="datepicker" theme="fieldid"/>
 			<span class="dateQuickLinks">
 				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(new Date());">Today</a> |
-				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1));">Tomorrow</a> |
-				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1));">Next Month</a> |
-				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6));">In 6 Months</a> |
-				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1));">Next Year</a>
+				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1));"><@s.text name="label.tomorrow"/></a> |
+				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1));"><@s.text name="label.next_month"/></a> |
+				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6));"><@s.text name="label.in_6_months"/></a> |
+				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1));"><@s.text name="label.next_year"/></a>
 			</span>
 		</div>
 		<div class="blockSeparated"> 
