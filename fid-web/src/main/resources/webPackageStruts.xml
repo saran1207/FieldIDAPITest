@@ -2327,10 +2327,6 @@
 			<result name="error" type="freemarker">/templates/html/downloads/show.ftl</result>
 		</action>
 
-		<action name="showImportCustomers" method="show" class="com.n4systems.fieldid.actions.customers.CustomerImportAction">
-			<result name="success" type="freemarker">/templates/html/customerCrud/import.ftl</result>
-		</action>
-
 		<action name="showImportUsers" method="show" class="com.n4systems.fieldid.actions.users.UserImportAction">
 			<result name="success" type="freemarker">/templates/html/userCrud/import.ftl</result>
 		</action>
