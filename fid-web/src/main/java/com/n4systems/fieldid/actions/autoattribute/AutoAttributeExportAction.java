@@ -3,7 +3,9 @@ package com.n4systems.fieldid.actions.autoattribute;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -18,6 +20,7 @@ import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.ContentType;
@@ -44,6 +47,8 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 	private DownloadLink downloadLink;
 	private String reportName;
 	
+	private List<AssetType> assetTypes;
+	
 	public AutoAttributeExportAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
@@ -55,12 +60,12 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 
 	@Override
 	protected ImportSuccessNotification createSuccessNotification() {
-		return new AutoAttributeImportSuccessNotification(getUser());
+		return new AutoAttributeImportSuccessNotification(getCurrentUser());
 	}
 
 	@Override
 	protected ImportFailureNotification createFailureNotification() {
-		return new AutoAttributeImportFailureNotification(getUser());
+		return new AutoAttributeImportFailureNotification(getCurrentUser());
 	}
 	
 	public String doExport() {
@@ -173,5 +178,18 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 
 	public String getReportName() {
 		return reportName;
+	}
+	
+	public List<AssetType> getAssetTypes() {
+		if (assetTypes == null) {
+			assetTypes = new ArrayList<AssetType>();
+			List<AssetType> allAssetTypes = getLoaderFactory().createAssetTypeListLoader().setPostFetchFields("autoAttributeCriteria").load();
+			for(AssetType assetType: allAssetTypes) {
+				if(assetType.getAutoAttributeCriteria()!=null) {
+					assetTypes.add(assetType);
+				}
+			}
+		}
+		return assetTypes;
 	}
 }
