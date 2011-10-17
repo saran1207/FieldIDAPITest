@@ -40,9 +40,7 @@ public class ScoreGroupPanel extends SortableListPanel {
     private ScoreGroupForm scoreGroupForm;
     private IModel<ScoreGroup> scoreGroupModel;
     private SortableAjaxBehavior sortableBehavior;
-    private List<Score> scores = new ArrayList<Score>();
 	private Boolean reorderState = false;
-	private ListView<Score> listView;
 
 	public ScoreGroupPanel(String id, IModel<ScoreGroup> model) {
         super(id);
@@ -50,30 +48,33 @@ public class ScoreGroupPanel extends SortableListPanel {
         	model.setObject(new ScoreGroup());
         }        
         this.scoreGroupModel = model;
-        scores.addAll(scoreGroupModel.getObject().getScores()); 
-        setDefaultModel(new PropertyModel<List<Score>>(this, "scores"));
+        setDefaultModel();
         setOutputMarkupPlaceholderTag(true);
         add(new WebMarkupContainer("blankInstructions") {
             @Override
             public boolean isVisible() {
-                return scores.size() == 0;
+                return getScores().size() == 0;
             }
         });
 
         add(new TwoStateAjaxLink("reorderScoresButton", "Reorder Scores", "Done Reordering") {
-
+        	List<Score> scores;  // transient model backing while we are juggling the list around. 
 			@Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
                 target.addComponent(ScoreGroupPanel.this);
                 sortableBehavior.setDisabled(true);
                 reorderState = false;
-        		scoreGroupModel.getObject().setScores(scores);
-                persistenceService.update(scoreGroupModel.getObject());
+                getScoreGroup().setScores(scores);
+                persistenceService.update(getScoreGroup());
+                ScoreGroupPanel.this.setDefaultModel();
             }
 
             @Override
             protected void onEnterSecondaryState(AjaxRequestTarget target) {
                 target.addComponent(ScoreGroupPanel.this);
+                scores = new ArrayList<Score>();
+                scores.addAll(getScores());
+                ScoreGroupPanel.this.setDefaultModel(new PropertyModel<List<Score>>(this, "scores"));
                 sortableBehavior.setDisabled(false);
                 reorderState = true;
             }
@@ -83,7 +84,7 @@ public class ScoreGroupPanel extends SortableListPanel {
         
         WebMarkupContainer sortableScoresContainer = new WebMarkupContainer("sortableScoresContainer");
         	 
-        sortableScoresContainer.add(listView = new ListView<Score>("scoreList", getScoresModel()) {
+        sortableScoresContainer.add(new ListView<Score>("scoreList", getScoresModel()) {
             @Override
             protected void populateItem(final ListItem<Score> item) {
                 item.setOutputMarkupId(true);
@@ -91,7 +92,7 @@ public class ScoreGroupPanel extends SortableListPanel {
                     {setStoreLabel(new FIDLabelModel("label.save"));}
                     @Override
                     protected void onDeleteButtonClicked(AjaxRequestTarget target) {
-                    	scoreService.archiveScore(scoreGroupModel.getObject(), item.getModelObject());                    	
+                    	scoreService.archiveScore(getScoreGroup(), item.getModelObject());                    	
                        	target.addComponent(ScoreGroupPanel.this);
                     }
 
@@ -122,6 +123,10 @@ public class ScoreGroupPanel extends SortableListPanel {
         });
         
     }
+
+	private void setDefaultModel() {
+		setDefaultModel(new PropertyModel<List<Score>>(scoreGroupModel, "scores"));
+	}
  
 	@SuppressWarnings("unchecked")
 	private IModel<List<Score>> getScoresModel() {
@@ -137,7 +142,6 @@ public class ScoreGroupPanel extends SortableListPanel {
 	protected void onItemMoving(int oldIndex,	int newIndex, AjaxRequestTarget target) {
 		Score movingScore = getScores().remove(oldIndex);
 		getScores().add(newIndex, movingScore);
-		target.addComponent(this);		
 	}
 	
 
@@ -170,6 +174,10 @@ public class ScoreGroupPanel extends SortableListPanel {
 
     }
 
+	private ScoreGroup getScoreGroup() {
+		return scoreGroupModel.getObject();
+	}
+    
     private boolean isScoreGroupSelected() {
         return getDefaultModel() != null;
     }
@@ -194,7 +202,7 @@ public class ScoreGroupPanel extends SortableListPanel {
     			@Override
     			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
     				score.setTenant(FieldIDSession.get().getTenant());    			
-    				scores.add(score);
+//    				scores.add(score);
     				scoreService.addScore(ScoreGroupForm.this.getModelObject(), score);
     				score = new Score();
     				scoreGroupModel.detach();
