@@ -1,13 +1,14 @@
 <wicket:panel>
 
+
+	<div class="columnHeader">
+		<div wicket:id="reorderScoresButton"></div>
+	</div>
+	    		
     <div wicket:id="blankInstructions" class="blankInstructions">
         <wicket:message key="label.create_new_or_select_existing_score_group"/>
     </div>
-
-	<div class="columnHeader">
-		<div wicket:id="reorderSectionsButton"></div>
-	</div>
-	    		
+    
     <div class="scoreGroup">
 
     <div wicket:id="sortableScoresContainer">
@@ -19,9 +20,6 @@
     </div>
 
         <form wicket:id="scoreGroupForm">        
-
-            <div class="scoreGroupName" wicket:id="nameLabel"></div>
-
 
             <div wicket:id="feedbackPanel"></div>
 

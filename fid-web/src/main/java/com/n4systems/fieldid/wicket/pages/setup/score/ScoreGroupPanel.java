@@ -7,7 +7,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -41,36 +40,34 @@ public class ScoreGroupPanel extends SortableListPanel {
     private ScoreGroupForm scoreGroupForm;
     private IModel<ScoreGroup> scoreGroupModel;
     private SortableAjaxBehavior sortableBehavior;
-    private List<Score> scores;
-
+    private List<Score> scores = new ArrayList<Score>();
+	private Boolean reorderState = false;
 	private ListView<Score> listView;
 
 	public ScoreGroupPanel(String id, IModel<ScoreGroup> model) {
         super(id);
         if (model.getObject()==null) {
         	model.setObject(new ScoreGroup());
-        }
+        }        
         this.scoreGroupModel = model;
-        scores = new ArrayList<Score>();
         scores.addAll(scoreGroupModel.getObject().getScores()); 
         setDefaultModel(new PropertyModel<List<Score>>(this, "scores"));
         setOutputMarkupPlaceholderTag(true);
         add(new WebMarkupContainer("blankInstructions") {
             @Override
             public boolean isVisible() {
-                return !isScoreGroupSelected();
+                return scores.size() == 0;
             }
         });
 
-        add(new TwoStateAjaxLink("reorderSectionsButton", "Reorder Sections", "Done Reordering") {
-        	private Boolean reorderState = null;
+        add(new TwoStateAjaxLink("reorderScoresButton", "Reorder Scores", "Done Reordering") {
 
 			@Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
                 target.addComponent(ScoreGroupPanel.this);
                 sortableBehavior.setDisabled(true);
                 reorderState = false;
-                scoreGroupModel.getObject().setScores(scores);
+        		scoreGroupModel.getObject().setScores(scores);
                 persistenceService.update(scoreGroupModel.getObject());
             }
 
@@ -82,6 +79,8 @@ public class ScoreGroupPanel extends SortableListPanel {
             }
         });
         
+        
+        
         WebMarkupContainer sortableScoresContainer = new WebMarkupContainer("sortableScoresContainer");
         	 
         sortableScoresContainer.add(listView = new ListView<Score>("scoreList", getScoresModel()) {
@@ -92,8 +91,8 @@ public class ScoreGroupPanel extends SortableListPanel {
                     {setStoreLabel(new FIDLabelModel("label.save"));}
                     @Override
                     protected void onDeleteButtonClicked(AjaxRequestTarget target) {
-                       scoreService.archiveScore(scoreGroupModel.getObject(), item.getModelObject());
-                        target.addComponent(ScoreGroupPanel.this);
+                    	scoreService.archiveScore(scoreGroupModel.getObject(), item.getModelObject());                    	
+                       	target.addComponent(ScoreGroupPanel.this);
                     }
 
                     @Override
@@ -101,6 +100,10 @@ public class ScoreGroupPanel extends SortableListPanel {
                         persistenceService.update(item.getModelObject());
                         target.addComponent(ScoreGroupPanel.this);
                     }
+                    @Override
+					protected boolean isReorderState() {
+                    	return reorderState;
+                    };
                 });
             }
         });
@@ -118,12 +121,8 @@ public class ScoreGroupPanel extends SortableListPanel {
             }
         });
         
-        
-        
     }
-
-
-     
+ 
 	@SuppressWarnings("unchecked")
 	private IModel<List<Score>> getScoresModel() {
 		return (IModel<List<Score>>) getDefaultModel();
@@ -136,11 +135,7 @@ public class ScoreGroupPanel extends SortableListPanel {
     
 	@Override
 	protected void onItemMoving(int oldIndex,	int newIndex, AjaxRequestTarget target) {
-		ScoreGroup x = scoreGroupModel.getObject();
-		IModel<? extends List<Score>> xx = listView.getModel();
-		IModel<?> ll = listView.getDefaultModel();
 		Score movingScore = getScores().remove(oldIndex);
-movingScore.setName(movingScore.getName()+newIndex);
 		getScores().add(newIndex, movingScore);
 		target.addComponent(this);		
 	}
@@ -176,7 +171,7 @@ movingScore.setName(movingScore.getName()+newIndex);
     }
 
     private boolean isScoreGroupSelected() {
-        return getDefaultModelObject() != null;
+        return getDefaultModel() != null;
     }
 
 	class ScoreGroupForm extends Form<ScoreGroup> {
@@ -194,20 +189,19 @@ movingScore.setName(movingScore.getName()+newIndex);
     		add(feedbackPanel = new ContainerFeedbackPanel("feedbackPanel", ScoreGroupForm.this));
     		feedbackPanel.setOutputMarkupPlaceholderTag(true);
     		
-    		add(new Label("nameLabel", new PropertyModel<String>(scoreGroupModel, "name")));
-    		
     		add(new NewScorePanel("newScore", new PropertyModel<Score>(this, "score")));
     		add(new AjaxButton("saveButton") {
     			@Override
     			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-    				score.setTenant(FieldIDSession.get().getTenant());
+    				score.setTenant(FieldIDSession.get().getTenant());    			
+    				scores.add(score);
     				scoreService.addScore(ScoreGroupForm.this.getModelObject(), score);
     				score = new Score();
     				scoreGroupModel.detach();
     				target.addComponent(ScoreGroupPanel.this);
     			}
     			
-    			@Override
+				@Override
     			protected void onError(AjaxRequestTarget target, Form<?> form) {
     				target.addComponent(feedbackPanel);
     			}

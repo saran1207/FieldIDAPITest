@@ -37,6 +37,15 @@ img {
     border-color: #999;
 }
 
+div.columnHeader {
+    border-bottom: 1px solid #ddd;
+    font-size: 1.2em;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #f8f8f8;
+}
+
 .inputError {
 	background-color: #FFEBEB;
 	color: #FF0000;

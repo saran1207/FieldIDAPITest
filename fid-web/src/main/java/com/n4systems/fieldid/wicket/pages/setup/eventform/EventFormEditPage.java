@@ -1,5 +1,17 @@
 package com.n4systems.fieldid.wicket.pages.setup.eventform;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaDetailsPanel;
@@ -10,19 +22,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.EventForm;
 import com.n4systems.model.StateSet;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EventFormEditPage extends EventTypePage {
 
