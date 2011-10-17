@@ -4,19 +4,24 @@
         <wicket:message key="label.create_new_or_select_existing_score_group"/>
     </div>
 
+	<div class="columnHeader">
+		<div wicket:id="reorderSectionsButton"></div>
+	</div>
+	    		
     <div class="scoreGroup">
 
-        <form wicket:id="scoreGroupForm">
+    <div wicket:id="sortableScoresContainer">
+
+        <div wicket:id="scoreList">
+            <div class="score" wicket:id="score"></div>
+        </div>
+
+    </div>
+
+        <form wicket:id="scoreGroupForm">        
 
             <div class="scoreGroupName" wicket:id="nameLabel"></div>
 
-            <div wicket:id="sortableScoresContainer">
-
-                <div wicket:id="scoreList">
-                    <div class="score" wicket:id="score"></div>
-                </div>
-
-            </div>
 
             <div wicket:id="feedbackPanel"></div>
 

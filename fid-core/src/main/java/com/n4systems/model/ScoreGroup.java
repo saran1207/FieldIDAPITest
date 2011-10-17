@@ -1,9 +1,5 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.parents.ArchivableEntityWithTenant;
-import org.hibernate.annotations.IndexColumn;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +13,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.IndexColumn;
+
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
+
+@SuppressWarnings("serial")
 @Entity
 @Table(name="score_groups")
 @PrimaryKeyJoinColumn(name="id")

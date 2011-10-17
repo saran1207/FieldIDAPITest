@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
-import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -8,6 +7,8 @@ import org.apache.wicket.model.IModel;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 import org.odlabs.wiquery.ui.sortable.SortableBehavior;
 import org.odlabs.wiquery.ui.sortable.SortableContainment;
+
+import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 
 public abstract class SortableListPanel extends Panel {
 
@@ -43,6 +44,12 @@ public abstract class SortableListPanel extends Panel {
     }
 
     protected SortableAjaxBehavior makeSortableBehavior(String containmentCss) {
+        SortableAjaxBehavior sortable = makeSortableBehavior();
+        sortable.getSortableBehavior().setContainment(new SortableContainment(containmentCss));
+        return sortable;
+    }
+
+    protected SortableAjaxBehavior makeSortableBehavior() {
         SortableAjaxBehavior sortable = new SimpleSortableAjaxBehavior() {
             @Override
             public void onUpdate(Component component, int newIndexOfMovingItem, AjaxRequestTarget target) {
@@ -54,7 +61,6 @@ public abstract class SortableListPanel extends Panel {
                 onItemMoving(oldIndexOfMovingItem, newIndexOfMovingItem, target);
             }
         };
-        sortable.getSortableBehavior().setContainment(new SortableContainment(containmentCss));
         sortable.getSortableBehavior().setAxis(SortableBehavior.AxisEnum.Y);
         sortable.setDisabled(true);
         return sortable;

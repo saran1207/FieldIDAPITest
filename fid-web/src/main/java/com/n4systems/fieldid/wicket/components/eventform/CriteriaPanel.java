@@ -1,26 +1,8 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
-import com.n4systems.fieldid.service.event.ScoreService;
-import com.n4systems.fieldid.utils.Predicate;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
-import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
-import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
-import com.n4systems.util.eventform.CriteriaCopyUtil;
-import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.CriteriaType;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.ScoreCriteria;
-import com.n4systems.model.ScoreGroup;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.UnitOfMeasure;
-import com.n4systems.model.UnitOfMeasureCriteria;
-import com.n4systems.model.UnitOfMeasureListLoader;
-import com.n4systems.model.stateset.StateSetLoader;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -38,8 +20,18 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
-import java.util.Arrays;
-import java.util.List;
+import com.n4systems.fieldid.service.event.ScoreService;
+import com.n4systems.fieldid.utils.Predicate;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
+import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
+import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
+import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
+import com.n4systems.model.*;
+import com.n4systems.model.stateset.StateSetLoader;
+import com.n4systems.util.eventform.CriteriaCopyUtil;
 
 public class CriteriaPanel extends SortableListPanel {
 
@@ -110,6 +102,7 @@ public class CriteriaPanel extends SortableListPanel {
                 }));
             }
         });
+        
         add(new TwoStateAjaxLink("reorderCriteriaButton", "Reorder Criteria", "Done Reordering") {
             @Override
             protected void onEnterInitialState(AjaxRequestTarget target) {

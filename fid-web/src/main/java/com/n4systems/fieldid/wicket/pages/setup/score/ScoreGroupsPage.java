@@ -1,15 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.setup.score;
 
-import com.n4systems.fieldid.service.event.ScoreService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.TextFieldWithDescription;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.eventform.ScoreGroupsForTenantModel;
-import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
-import com.n4systems.model.ScoreGroup;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -22,6 +12,17 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
+
+import com.n4systems.fieldid.service.event.ScoreService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.TextFieldWithDescription;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.eventform.ScoreGroupsForTenantModel;
+import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
+import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.model.ScoreGroup;
 
 public class ScoreGroupsPage extends FieldIDLoggedInPage {
 
@@ -64,6 +65,11 @@ public class ScoreGroupsPage extends FieldIDLoggedInPage {
                     groupsAndScoresContainer.add(new ScoreGroupPanel("scoreGroup", model));
                 }
 
+                
+                // DD : change this to visibility and setting model instead of creating every time???
+//                groupsAndScoresContainer.setDefaultModelObject(model);
+//                groupsAndScoresContainer.setVisible(true);
+                
                 target.addComponent(groupsAndScoresContainer);
                 target.addComponent(feedbackPanel);
             }
@@ -73,6 +79,7 @@ public class ScoreGroupsPage extends FieldIDLoggedInPage {
                 target.addComponent(feedbackPanel);
             }
         });
+        
         groupsAndScoresContainer.add(scoreGroupPanel = new ScoreGroupPanel("scoreGroup", new Model<ScoreGroup>()));
         groupsAndScoresContainer.add(new NewScoreGroupForm("newScoreGroupForm"));
     }

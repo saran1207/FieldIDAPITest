@@ -8,6 +8,7 @@ import javax.persistence.Table;
 
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="scores")
 @PrimaryKeyJoinColumn(name="id")

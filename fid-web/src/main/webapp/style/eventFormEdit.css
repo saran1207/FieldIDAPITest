@@ -226,28 +226,6 @@ div.criteriaDetailsEditor div.reorderLinkSection {
     padding-bottom:3px;
 }
 
-.twoStateLink {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.twoStateLink a {
-    font-size: 0.8em;
-    background: #fff repeat-x url(../images/button_background.jpg);
-    border:1px solid #ddd;
-    padding: 5px 15px 5px 15px;
-    text-decoration:none;
-    color: #333;
-}
-
-.twoStateLink a.activated {
-	background: #fff repeat-x url(../images/button_background_activated.jpg);
-}
-
-.twoStateLink a:hover {
-    border-color: #999;
-}
-
 div.detailsHeader {
     padding-top: 14px;
     padding-bottom: 13px;
