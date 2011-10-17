@@ -26,19 +26,19 @@ ${action.setPageType('customer', 'import_export')!}
 		</table>
 	</div>
 	<div class="errorActions">
-		<input type="button" onClick="location.href='<@s.url action="customerImportExport" value="<@s.text name='button.re_upload_import_file' />" />
+		<input type="button" onClick="location.href='<@s.url action="customerImportExport"/>'" value="<@s.text name='button.re_upload_import_file' />" />
 		<span id="or"><@s.text name="label.or" /></span>
 		<a href="<@s.url action="home"/>"><@s.text name="label.cancel" /></a>		
 	</div>
 </#if>
 
 <#if task??>
-<div class="importProgress">
-		<div id="importStatus"></div>
-	
-		<script type="text/javascript">
-			updateUrl = '${updateUrl}';
-			getResponse(updateUrl, "get");
-		</script>
-</div>
+	<div class="importProgress">
+			<div id="importStatus"></div>
+		
+			<script type="text/javascript">
+				updateUrl = '${updateUrl}';
+				getResponse(updateUrl, "get");
+			</script>
+	</div>
 </#if>

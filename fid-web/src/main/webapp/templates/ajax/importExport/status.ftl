@@ -1,25 +1,22 @@
 <#assign html>
-	<div style="width:500px; text-align: center; font-weight: bold; padding-bottom: 10px;">
+	<div>
 		<h2><@s.text name="label.import_status" /></h2>
-		<@s.text name="${task.status.label}" />
 	</div>
 	
-	<div style="width:500px; float:left;">
+	<div class="progressBarContainer">
+		<label class="statusLabel"><@s.text name="${task.status.label}" /></label>
 		<@n4.percentbar progress="${task.currentRow}" total="${task.totalRows}"/>
+		<div class="taskCount">${task.currentRow} <@s.text name="label.of"/> ${task.totalRows}</div>
+		<div class="importMessage"><@s.text name="label.import_status_message"/></div>
 	</div>
-	<div style="float:left; margin:5px;">${task.currentRow} <@s.text name="label.of"/> ${task.totalRows}</div>
 </#assign>
 
 $('importStatus').update('${html?js_string}');
 
 <#if importRunning>
 	
-	if( $('uploadForm') != null) {
-		$('uploadForm').disable();
+	if( $('importStatus') != null) {
 		updateTimer = setTimeout("updateStatus()", 5000);
 	}
-<#else>
-	if( $('uploadForm') != null) {
-		$('uploadForm').enable();
-	}
+	
 </#if>

@@ -32,12 +32,12 @@ ${action.setPageType('asset', 'import')!}
 </#if>
 
 <#if task??>
-<div class="importProgress">
-		<div id="importStatus"></div>
-	
-		<script type="text/javascript">
-			updateUrl = '${updateUrl}';
-			getResponse(updateUrl, "get");
-		</script>
-</div>
+	<div class="importProgress">
+			<div id="importStatus"></div>
+		
+			<script type="text/javascript">
+				updateUrl = '${updateUrl}';
+				getResponse(updateUrl, "get");
+			</script>
+	</div>
 </#if>
