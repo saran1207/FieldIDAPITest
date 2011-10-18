@@ -109,6 +109,7 @@ p.fileUploadShow label{
 
 .imageUploadPreview .ellipsis_text, .previewImageLabel .ellipsis_text{
 	width: 200px;
+	word-wrap: break-word;
 }
 
 .imageUploadPreview span a{ 
