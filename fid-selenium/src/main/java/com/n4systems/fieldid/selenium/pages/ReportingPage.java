@@ -118,7 +118,7 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 	
 	public void clickViewEvent(String identifier){
 		selenium.click("//table[@class='list']//td//a[.='" +identifier+"']/../../..//a[.='View']");
-		waitForElementToBePresent("//iframe[@id='lightviewContent']");
+		waitForElementToBePresent("//iframe[@class='cboxIframe']");
 	}
 	
 	public EventPage clickEditEvent(String identifier) {
