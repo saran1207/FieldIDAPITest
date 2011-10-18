@@ -42,6 +42,7 @@ public class CriteriaPanel extends SortableListPanel {
 
     private StateSet previouslySelectedStateSet;
     private boolean previousSetsResultValue;
+    private ScoreGroup previouslySelectedScoreGroup;
 
     @SpringBean
     private ScoreService scoreService;
@@ -198,7 +199,11 @@ public class CriteriaPanel extends SortableListPanel {
                         target.addComponent(feedbackPanel);
                         return false;
                     }
-                    criteria.setScoreGroup(scoreGroup);
+                    if(previouslySelectedScoreGroup != null) {
+                    	criteria.setScoreGroup(previouslySelectedScoreGroup);
+                    } else {
+                    	criteria.setScoreGroup(scoreGroup);
+                    }
                     return true;
                 }
 
@@ -279,4 +284,9 @@ public class CriteriaPanel extends SortableListPanel {
         }
         return uoms.get(0);
     }
+
+	public void setPreviouslySelectedScoreGroup(ScoreGroup scoreGroup) {
+		this.previouslySelectedScoreGroup = scoreGroup;
+		
+	}
 }

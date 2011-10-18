@@ -1,12 +1,7 @@
 package com.n4systems.fieldid.wicket.components.eventform.details;
 
-import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.model.eventform.ScoreGroupsForTenantModel;
-import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCriteria;
-import com.n4systems.model.ScoreGroup;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -16,7 +11,13 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.List;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.eventform.ScoreGroupsForTenantModel;
+import com.n4systems.model.Score;
+import com.n4systems.model.ScoreCriteria;
+import com.n4systems.model.ScoreGroup;
 
 public class ScoreDetailsPanel extends Panel {
 
@@ -34,6 +35,7 @@ public class ScoreDetailsPanel extends Panel {
         scoreGroupSelect.add(new UpdateComponentOnChange() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+            	onScoreGroupSelected(ScoreDetailsPanel.this.scoreCriteriaModel.getObject().getScoreGroup());
                 target.addComponent(scoreGroupsDisplayContainer);
             }
         });
@@ -51,5 +53,7 @@ public class ScoreDetailsPanel extends Panel {
         scoreGroupsDisplayContainer.setOutputMarkupId(true);
         add(scoreGroupsDisplayContainer);
     }
+        
+    protected void onScoreGroupSelected(ScoreGroup scoreGroup) { }
 
 }

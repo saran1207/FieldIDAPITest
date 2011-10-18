@@ -1,5 +1,12 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
+import java.util.List;
+
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+
 import com.n4systems.fieldid.wicket.components.eventform.details.ComboBoxDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.DateFieldDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.NumberFieldDetailsPanel;
@@ -15,17 +22,12 @@ import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.NumberFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.ScoreCriteria;
+import com.n4systems.model.ScoreGroup;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasureCriteria;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-
-import java.util.List;
 
 public class CriteriaDetailsPanel extends Panel {
 
@@ -73,7 +75,13 @@ public class CriteriaDetailsPanel extends Panel {
         } else if (criteria instanceof DateFieldCriteria) {
             add(new DateFieldDetailsPanel("specificDetailsPanel", new Model<DateFieldCriteria>((DateFieldCriteria) criteria)));
         } else if (criteria instanceof ScoreCriteria) {
-            add(new ScoreDetailsPanel("specificDetailsPanel", new Model<ScoreCriteria>((ScoreCriteria) criteria)));
+            add(new ScoreDetailsPanel("specificDetailsPanel", new Model<ScoreCriteria>((ScoreCriteria) criteria)){
+            	@Override
+            	protected void onScoreGroupSelected(ScoreGroup scoreGroup) {
+            		CriteriaDetailsPanel.this.onScoreGroupSelected(scoreGroup);            		
+            	}
+            	
+            });
         } else if (criteria instanceof NumberFieldCriteria) {
         	add(new NumberFieldDetailsPanel("specificDetailsPanel", new Model<NumberFieldCriteria>((NumberFieldCriteria) criteria)));
         }
@@ -82,5 +90,6 @@ public class CriteriaDetailsPanel extends Panel {
     protected void onStateSetSelected(StateSet stateSet) { }
 
     protected void onSetsResultSelected(boolean setsResult) { }
-
+    
+    protected void onScoreGroupSelected(ScoreGroup scoreGroup) { }
 }

@@ -22,6 +22,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.ScoreGroup;
 import com.n4systems.model.StateSet;
 
 public class EventFormEditPage extends EventTypePage {
@@ -126,6 +127,11 @@ public class EventFormEditPage extends EventTypePage {
             @Override
             protected void onSetsResultSelected(boolean setsResult) {
                 criteriaPanel.setPreviousSetsResultValue(setsResult);
+            }
+            
+            @Override
+            protected void onScoreGroupSelected(ScoreGroup scoreGroup) {
+            	criteriaPanel.setPreviouslySelectedScoreGroup(scoreGroup);
             }
         });
         criteriaDetailsPanel.setVisible(false);
