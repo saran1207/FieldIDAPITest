@@ -49,38 +49,6 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
         add(sortableColumn = createColumnContainer("sortableColumn", new PropertyModel<List<WidgetDefinition>>(currentLayout, "columns[0].widgets")));
         add(sortableColumn2 = createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayout, "columns[1].widgets")));
-
-//        add(sortableColumn = new WebMarkupContainer("sortableColumn"));
-//
-//        WebMarkupContainer column2 = new WebMarkupContainer("sortableColumn2");
-//
-//        sortableColumn.add(new ListView<WidgetDefinition>("widgets", new PropertyModel<List<WidgetDefinition>>(currentLayout, "columns[0].widgets")) {
-//            @Override
-//            protected void populateItem(ListItem<WidgetDefinition> item) {
-//                item.setOutputMarkupId(true);
-//
-//                WidgetDefinition widgetDefinition = item.getModelObject();
-//                Widget widget = new Widget("widget", new PropertyModel<String>(item.getModel(), "name"));
-//
-//                // TODO: Extract this to someplace
-//                if (widgetDefinition.getWidgetType() == WidgetType.JOBS_ASSIGNED) {
-//                    widget.addContent(new JobsAssignedPanel(widget.getContentId()));
-//                } else if (widgetDefinition.getWidgetType() == WidgetType.SAMPLE) {
-//                    widget.addContent(new SamplePanel(widget.getContentId()));
-//                }
-//
-//                item.add(widget);
-//            }
-//        });
-
-//        sortableColumn.add(makeSortableBehavior(sortableColumn));
-//
-//        column2.add(makeSortableBehavior(column2));
-//
-//        add(column2);
-//
-//        sortableColumn.setOutputMarkupId(true);
-//        column2.setOutputMarkupId(true);
     }
 
     private WebMarkupContainer createColumnContainer(String containerId, IModel<List<WidgetDefinition>> widgetsModel) {
