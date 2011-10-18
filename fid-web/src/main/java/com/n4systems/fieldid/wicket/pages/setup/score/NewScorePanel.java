@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.setup.score;
 
-import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.setup.score.validator.MustHaveAValueIfNotNAValidator;
-import com.n4systems.model.Score;
+import java.util.Arrays;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -14,8 +12,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.Arrays;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.setup.score.validator.MustHaveAValueIfNotNAValidator;
+import com.n4systems.model.Score;
 
+@SuppressWarnings("serial")
 public class NewScorePanel extends Panel {
 
     public NewScorePanel(String id, final IModel<Score> model) {
@@ -27,11 +29,11 @@ public class NewScorePanel extends Panel {
 
     class ScoreForm extends Form<Score> {
 
-        public ScoreForm(String id, final IModel<Score> model) {
+		public ScoreForm(String id, final IModel<Score> model) {
             super(id, model);
             setOutputMarkupId(true);
 
-            TextField<Double> valueTextField;
+            final TextField<Double> valueTextField;
 
             add(new RequiredTextField<String>("name", new PropertyModel<String>(model, "name")));
 
@@ -41,16 +43,20 @@ public class NewScorePanel extends Panel {
                     return !model.getObject().isNa();
                 }
             });
+            valueTextField.setOutputMarkupId(true);
+            valueTextField.setOutputMarkupPlaceholderTag(true);
+      
 
-            DropDownChoice<Boolean> typeChoice;
+            final DropDownChoice<Boolean> typeChoice;
             add(typeChoice = new DropDownChoice<Boolean>("typeChoice", new PropertyModel<Boolean>(model, "na"), Arrays.<Boolean>asList(false, true), new ScoreNaChoiceRenderer()));
 
             typeChoice.add(new UpdateComponentOnChange() {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
-                    target.addComponent(ScoreForm.this);
+                    target.addComponent(valueTextField);
+                    target.addComponent(typeChoice);
                 }
-            });
+            });           
 
             valueTextField.add(new MustHaveAValueIfNotNAValidator(model));
         }

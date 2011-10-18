@@ -44,16 +44,13 @@ public class ScoreGroupPanel extends SortableListPanel {
 
 	public ScoreGroupPanel(String id, IModel<ScoreGroup> model) {
         super(id);
-        if (model.getObject()==null) {
-        	model.setObject(new ScoreGroup());
-        }        
         this.scoreGroupModel = model;
         setDefaultModel();
         setOutputMarkupPlaceholderTag(true);
         add(new WebMarkupContainer("blankInstructions") {
             @Override
             public boolean isVisible() {
-                return getScores().size() == 0;
+                return isScoreGroupSelected() && getScores().size() == 0;
             }
         });
 
@@ -179,7 +176,7 @@ public class ScoreGroupPanel extends SortableListPanel {
 	}
     
     private boolean isScoreGroupSelected() {
-        return getDefaultModel() != null;
+        return getDefaultModel().getObject() != null;
     }
 
 	class ScoreGroupForm extends Form<ScoreGroup> {
@@ -202,7 +199,6 @@ public class ScoreGroupPanel extends SortableListPanel {
     			@Override
     			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
     				score.setTenant(FieldIDSession.get().getTenant());    			
-//    				scores.add(score);
     				scoreService.addScore(ScoreGroupForm.this.getModelObject(), score);
     				score = new Score();
     				scoreGroupModel.detach();
