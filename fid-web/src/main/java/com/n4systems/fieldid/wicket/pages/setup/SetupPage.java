@@ -36,8 +36,7 @@ public abstract class SetupPage extends FieldIDLoggedInPage {
                 aNavItem().label("nav.import").page(ImportPage.class).cond(hasManageSystemConfig()).build(),
                 aNavItem().label("nav.templates").page(TemplatesPage.class).cond(hasManageSystemConfig()).build(),
                 aNavItem().label("nav.widgets").page(WidgetsPage.class).cond(hasManageSystemConfig()).build(),
-                aNavItem().label("nav.security").page(SecurityPage.class).cond(hasManageSystemConfig()).build(),
-                aNavItem().label("nav.data_log").page(DataLogPage.class).cond(hasManageSystemConfig()).build()));
+                aNavItem().label("nav.security").page(SecurityPage.class).cond(hasManageSystemConfig()).build()));
     }
 
     protected boolean hasManageSystemConfig() {

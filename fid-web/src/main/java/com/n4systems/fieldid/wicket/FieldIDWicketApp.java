@@ -39,7 +39,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/import", ImportPage.class);
         mountBookmarkablePage("setup/templates", TemplatesPage.class);
         mountBookmarkablePage("setup/widgets", WidgetsPage.class);
-        mountBookmarkablePage("setup/dataLog", DataLogPage.class);
         mountBookmarkablePage("setup/systemSettings", SystemSettingsPage.class);
         mountBookmarkablePage("setup/identifierOverrides", IdentifierOverridesPage.class);
         mountBookmarkablePage("setup/passwordPolicy", PasswordPolicyPage.class);
