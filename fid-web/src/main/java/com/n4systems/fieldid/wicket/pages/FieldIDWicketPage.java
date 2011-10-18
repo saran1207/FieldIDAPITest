@@ -22,16 +22,6 @@ public class FieldIDWicketPage extends WebPage {
         this(null);
     }
 
-    protected void addComponents() {}
-    
-    @Override
-	protected void onBeforeRender() {
-		if (!hasBeenRendered()) {
-			addComponents();
-		}
-        super.onBeforeRender();
-	}   
-    
     protected UserSecurityGuard getUserSecurityGuard() {
         return FieldIDSession.get().getUserSecurityGuard();
     }

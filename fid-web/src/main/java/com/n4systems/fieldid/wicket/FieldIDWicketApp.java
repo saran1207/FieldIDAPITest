@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -47,6 +48,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/scoreGroups", ScoreGroupsPage.class);
         mountBookmarkablePage("setup/scoreResults", ScoreResultConfigurationPage.class);
 
+        mountBookmarkablePage("dashboard", DashboardPage.class);
         mountBookmarkablePage("reporting", ReportingPage.class);
         mountBookmarkablePage("returnToReport", ReturnToReportPage.class);
         mountBookmarkablePage("savedReport", RunSavedReportPage.class);

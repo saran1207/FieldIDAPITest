@@ -2,16 +2,16 @@ package com.n4systems.fieldid.wicket;
 
 import static org.easymock.EasyMock.*;
 
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.junit.Before;
 
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 
 
 
-public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldIDLoggedInPage> extends WicketPageTest<T,F> {
+public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldIDFrontEndPage> extends WicketPageTest<T,F> {
 
 	private ConfigurationProvider configurationProvider = createMock(ConfigurationProvider.class);
 	
@@ -30,8 +30,8 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 	@Override
 	public F createFixture(IFixtureFactory<F> factory) {
 		F fixture = factory.createFixture("id");
-		if (fixture instanceof FieldIDLoggedInPage) { 
-			FieldIDLoggedInPage fieldIdPage = fixture;
+		if (fixture instanceof FieldIDFrontEndPage) {
+			FieldIDFrontEndPage fieldIdPage = fixture;
 			// TODO DD : FIX THIS STATIC METHOD WORKAROUND!   
 			fieldIdPage.setConfigurationProvider(configurationProvider);
 		}

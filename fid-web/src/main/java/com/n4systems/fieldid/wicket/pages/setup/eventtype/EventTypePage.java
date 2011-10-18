@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.eventtype;
 
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
 import com.n4systems.model.EventType;
@@ -13,7 +13,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
-public class EventTypePage extends FieldIDLoggedInPage {
+public class EventTypePage extends FieldIDFrontEndPage {
 
     protected Long eventTypeId;
     protected IModel<EventType> eventTypeModel;

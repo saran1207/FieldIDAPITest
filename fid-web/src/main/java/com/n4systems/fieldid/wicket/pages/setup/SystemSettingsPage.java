@@ -14,7 +14,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -26,12 +25,12 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.renderer.DateFormatSampleChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.tenant.SystemSettings;
 import com.n4systems.util.ConfigurationProvider;
 
-public class SystemSettingsPage extends FieldIDLoggedInPage {
+public class SystemSettingsPage extends FieldIDFrontEndPage {
 
     @SpringBean
     private SystemSettingsService systemSettingsService;

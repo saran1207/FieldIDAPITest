@@ -9,9 +9,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 
-public abstract class SetupPage extends FieldIDLoggedInPage {
+public abstract class SetupPage extends FieldIDFrontEndPage {
 
     protected SetupPage(PageParameters params) {
         super(params);

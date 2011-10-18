@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup.score;
 
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -21,10 +22,9 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventform.ScoreGroupsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import com.n4systems.model.ScoreGroup;
 
-public class ScoreGroupsPage extends FieldIDLoggedInPage {
+public class ScoreGroupsPage extends FieldIDFrontEndPage {
 
     @SpringBean
     private ScoreService scoreService;

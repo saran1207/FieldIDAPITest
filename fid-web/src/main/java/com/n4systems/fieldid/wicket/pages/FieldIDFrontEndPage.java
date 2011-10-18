@@ -10,7 +10,6 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.RedirectToUrlException;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
@@ -25,7 +24,6 @@ import org.apache.wicket.model.Model;
 
 import rfid.web.helper.SessionUser;
 
-import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
@@ -36,39 +34,35 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 
-public class FieldIDLoggedInPage extends FieldIDWicketPage {
+public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
 
     private static String versionString;
     private Label titleLabel;
 	private Label topTitleLabel;
     private ConfigurationProvider configurationProvider;
 
-    public FieldIDLoggedInPage() {
+    public FieldIDFrontEndPage() {
         this(null, null);
     }
 
-    public FieldIDLoggedInPage(ConfigurationProvider configurationProvider) {
+    public FieldIDFrontEndPage(ConfigurationProvider configurationProvider) {
         this(null, configurationProvider);
     }
 
-    public FieldIDLoggedInPage(PageParameters params) {
+    public FieldIDFrontEndPage(PageParameters params) {
     	this(params,null);
     }
     
     // UGH DD: this passing of configurationProvider is dog's breakfast.  next phase need to refactor this out into spring bean or some 
     //   non-static reference to ConfigContext that is currently throughout pages. 
-    public FieldIDLoggedInPage(PageParameters params, ConfigurationProvider configurationProvider) {
+    public FieldIDFrontEndPage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
         setConfigurationProvider(configurationProvider);
 
         SessionUser sessionUser = getSessionUser();
 
-        if (sessionUser == null) {
-            new UrlArchive("preLoginContext", getServletRequest(), getServletRequest().getSession()).storeUrl();
-            throw new RedirectToUrlException("/login.action");
-        }
-
         addClickTaleScripts();
+        addCssContainers();
 
         add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout-jquery.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.colorbox.js"));
@@ -108,6 +102,23 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         add(new StaticImage("tenantLogo", new Model<String>( "/fieldid/file/downloadTenantLogo.action?uniqueID=" + getSessionUser().getTenant().getId() ) ) );
 
         add(createRelogLink());
+    }
+
+    private void addCssContainers() {
+        add(new WebMarkupContainer("legacyCss") {
+            { setRenderBodyOnly(true); }
+            @Override
+            public boolean isVisible() {
+                return useLegacyCss();
+            }
+        });
+        add(new WebMarkupContainer("newCss") {
+            { setRenderBodyOnly(true); }
+            @Override
+            public boolean isVisible() {
+                return !useLegacyCss();
+            }
+        });
     }
 
     private Component createRelogLink() {
@@ -158,7 +169,7 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
     private String loadVersionNumber(boolean devMode) {
         try {
-            InputStream propsStream = FieldIDLoggedInPage.class.getResourceAsStream("/com/package.properties");
+            InputStream propsStream = FieldIDFrontEndPage.class.getResourceAsStream("/com/package.properties");
             Properties props = new Properties();
             props.load(propsStream);
             String versionNumber = props.getProperty("app.versionnumber");
@@ -236,6 +247,10 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
             checkComponentTag( tag, "img" );
             tag.put( "src", getDefaultModelObjectAsString() );
         }
+    }
+
+    protected boolean useLegacyCss() {
+        return true;
     }
 
 }

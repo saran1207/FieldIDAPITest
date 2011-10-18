@@ -6,8 +6,8 @@ import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCol
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.search.EventReportCriteriaModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -16,7 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-public class ReportingResultsPage extends FieldIDLoggedInPage {
+public class ReportingResultsPage extends FieldIDFrontEndPage {
 
     private EventReportCriteriaModel reportCriteriaModel;
 

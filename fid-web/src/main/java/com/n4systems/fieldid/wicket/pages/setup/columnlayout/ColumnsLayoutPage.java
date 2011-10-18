@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.columnlayout.AvailableReportColum
 import com.n4systems.fieldid.wicket.components.columnlayout.SelectedReportColumnsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.columnlayout.CustomColumnsModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.columns.ActiveColumnMapping;
 import com.n4systems.model.columns.ColumnLayout;
 import com.n4systems.model.columns.ColumnMapping;
@@ -40,7 +40,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-public class ColumnsLayoutPage extends FieldIDLoggedInPage {
+public class ColumnsLayoutPage extends FieldIDFrontEndPage {
 
     private ReportType reportType;
 

@@ -1,8 +1,13 @@
 package com.n4systems.fieldid.wicket.components.table;
 
-import com.n4systems.util.views.RowView;
+import com.n4systems.fieldid.wicket.components.reporting.results.SelectionStatusPanel;
+import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
@@ -16,19 +21,16 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
-
-import com.n4systems.fieldid.wicket.components.reporting.results.SelectionStatusPanel;
-import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.util.persistence.search.SortDirection;
-import com.n4systems.util.selection.MultiIdSelection;
+import org.apache.wicket.model.PropertyModel;
 
 public class SimpleDataTable<T> extends Panel {
 	
     private DataTable<T> table;
     private MultiIdSelection multiIdSelection;
     private SelectionStatusPanel selectionStatusPanel;
+    private boolean displayPagination = true;
     private Component topPaginationBar;
+    private String cssClass = "list";
 
     public SimpleDataTable(String id, final IColumn<T>[] columns,
         ISortableDataProvider<T> dataProvider, int rowsPerPage) {
@@ -74,6 +76,7 @@ public class SimpleDataTable<T> extends Panel {
             }
         };
         table.setOutputMarkupPlaceholderTag(true);
+        table.add(new AttributeAppender("class", true, new PropertyModel<String>(this, "cssClass"), " "));
 
 		table.addTopToolbar(new HeadersToolbar(table, dataProvider) {
             @Override
@@ -150,6 +153,11 @@ public class SimpleDataTable<T> extends Panel {
                 scrollToTopPaginationBar(target);
                 SimpleDataTable.this.onPageChanged(target);
             }
+
+            @Override
+            public boolean isVisible() {
+                return displayPagination;
+            }
         };
     }
 
@@ -169,4 +177,11 @@ public class SimpleDataTable<T> extends Panel {
         target.addComponent(selectionStatusPanel);
     }
 
+    public void setDisplayPagination(boolean displayPagination) {
+        this.displayPagination = displayPagination;
+    }
+
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
 }

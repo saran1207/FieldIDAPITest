@@ -580,3 +580,26 @@ table.list tr.multiSelected {
 	background-color: #ffebeb;
 	font-weight: bold;
 }
+
+.simpleTable table {
+	border-collapse: separate;
+	border-spacing: 0 2px;
+	border-bottom: 1px solid #ccc;
+	width: 100%;
+}
+
+.simpleTable table th {
+	font-weight: bold;
+}
+
+.decorated th {
+	background-color: #eee;
+}
+
+.simpleTable table td, .decorated th {
+	padding: 5px;
+}
+
+.simpleTable table tr:hover {
+	background-color: #eee;
+}

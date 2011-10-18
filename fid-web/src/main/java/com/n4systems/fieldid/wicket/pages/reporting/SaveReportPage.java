@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -16,7 +17,6 @@ import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.search.ColumnMappingView;
@@ -26,7 +26,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class SaveReportPage extends FieldIDLoggedInPage {
+public class SaveReportPage extends FieldIDFrontEndPage {
 
     @SpringBean
     private PersistenceManager persistenceManager;

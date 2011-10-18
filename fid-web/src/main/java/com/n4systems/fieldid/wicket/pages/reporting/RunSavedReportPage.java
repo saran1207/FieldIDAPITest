@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.fieldid.service.search.SavedReportService;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class RunSavedReportPage extends FieldIDLoggedInPage {
+public class RunSavedReportPage extends FieldIDFrontEndPage {
 
     @SpringBean
     private SavedReportService savedReportService;
