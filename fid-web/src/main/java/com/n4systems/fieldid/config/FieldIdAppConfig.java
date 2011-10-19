@@ -1,5 +1,15 @@
 package com.n4systems.fieldid.config;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.UserManager;
@@ -36,17 +46,9 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.dashboard.DashboardService;
+import com.n4systems.services.reporting.ReportingService;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ServiceLocator;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 public class FieldIdAppConfig {
@@ -249,5 +251,10 @@ public class FieldIdAppConfig {
     @Bean 
     public AsyncTaskFactory asyncTaskFactory() {
     	return new AsyncTaskFactory();
+    }
+    
+    @Bean 
+    public ReportingService reportingService() { 
+    	return new ReportingService();
     }
 }
