@@ -5,8 +5,6 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
@@ -24,6 +22,8 @@ import org.apache.wicket.model.Model;
 
 import rfid.web.helper.SessionUser;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
@@ -64,9 +64,13 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         addClickTaleScripts();
         addCssContainers();
 
-        add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout-jquery.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.colorbox.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.at_intervals.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout-jquery.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/json2.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/common-jquery.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.colorbox.js"));
         add(CSSPackageResource.getHeaderContribution("style/colorbox.css"));
 
         add(new BookmarkablePageLink<Void>("reportingLink", ReportingPage.class));
@@ -148,7 +152,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         identifySectionContainer.add(new WebMarkupContainer("addAssetLinkContainer").setVisible(!integration));
         add(identifySectionContainer);
     }
-
+    
     private Component createSetupLinkContainer(SessionUser sessionUser) {
         boolean hasSetupAccess = sessionUser.hasSetupAccess();
         boolean manageSystemConfig = sessionUser.hasAccess("managesystemconfig");

@@ -14,16 +14,17 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
-import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
-import com.n4systems.fieldid.wicket.components.dashboard.widgets.JobsAssignedPanel;
-import com.n4systems.fieldid.wicket.components.dashboard.widgets.SamplePanel;
+import com.n4systems.fieldid.wicket.components.dashboard.widgets.AssetsIdentifiedPanel;
 import com.n4systems.fieldid.wicket.pages.widgets.Widget;
+import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.services.dashboard.DashboardService;
 
-public class DashboardPage extends FieldIDFrontEndPage {
+// FIXME DD : temporary page used to develop widget and avoid conflict with other dashboard development. 
+//  this *must* be deleted by end of iteration and merged.
+public class DerekDashboardPage extends FieldIDFrontEndPage {
 
     @SpringBean
     private DashboardService dashboardService;
@@ -32,44 +33,43 @@ public class DashboardPage extends FieldIDFrontEndPage {
     private WebMarkupContainer sortableColumn2;
     private DashboardLayout currentLayout;
 
-    public DashboardPage() {
-        add(CSSPackageResource.getHeaderContribution("style/dashboard/dashboard.css"));
-
-        currentLayout = dashboardService.findLayout();
-
-        add(new AddWidgetPanel("addWidgetPanel", new PropertyModel<DashboardLayout>(this, "currentLayout")) {
-            @Override
-            protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) {
-                WidgetDefinition definition = new WidgetDefinition();
-                definition.setWidgetType(type);
-                definition.setName(type.getDisplayName());
-                currentLayout.getColumns().get(0).getWidgets().add(definition);
-                target.addComponent(sortableColumn);
-            }
-        });
-
+    public DerekDashboardPage() {
+        add(CSSPackageResource.getHeaderContribution("style/dashboard/dashboard.css"));        
+        
+        currentLayout = makeLayoutForWidget();
+        
         add(sortableColumn = createColumnContainer("sortableColumn", new PropertyModel<List<WidgetDefinition>>(currentLayout, "columns[0].widgets")));
         add(sortableColumn2 = createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayout, "columns[1].widgets")));
     }
 
-    private WebMarkupContainer createColumnContainer(String containerId, IModel<List<WidgetDefinition>> widgetsModel) {
+	private DashboardLayout makeLayoutForWidget() {
+		DashboardLayout layout = new DashboardLayout();
+
+        WidgetDefinition definition = new WidgetDefinition();
+        definition.setWidgetType(WidgetType.ASSETS_IDENTIFIED);
+        definition.setName(WidgetType.ASSETS_IDENTIFIED.getDisplayName());
+
+        DashboardColumn dashboardColumn = new DashboardColumn();
+        dashboardColumn.getWidgets().add(definition);
+
+        layout.getColumns().add(dashboardColumn);
+        layout.getColumns().add(new DashboardColumn());
+        
+        return layout;
+	}
+
+    @SuppressWarnings("serial")
+	private WebMarkupContainer createColumnContainer(String containerId, IModel<List<WidgetDefinition>> widgetsModel) {
         WebMarkupContainer container = new WebMarkupContainer(containerId);
 
         container.add(new ListView<WidgetDefinition>("widgets", widgetsModel) {
             @Override
             protected void populateItem(ListItem<WidgetDefinition> item) {
                 item.setOutputMarkupId(true);
-
                 WidgetDefinition widgetDefinition = item.getModelObject();
+                // FIXME DD : add widget factory here.
                 Widget widget = new Widget("widget", new PropertyModel<String>(item.getModel(), "name"));
-
-                // TODO: Extract this to someplace
-                if (widgetDefinition.getWidgetType() == WidgetType.JOBS_ASSIGNED) {
-                    widget.addContent(new JobsAssignedPanel(widget.getContentId()));
-                } else if (widgetDefinition.getWidgetType() == WidgetType.SAMPLE) {
-                    widget.addContent(new SamplePanel(widget.getContentId()));
-                }
-
+                widget.addContent(new AssetsIdentifiedPanel(widget.getContentId()));
                 item.add(widget);
             }
         });
@@ -79,6 +79,10 @@ public class DashboardPage extends FieldIDFrontEndPage {
         return container;
     }
 
+    
+    
+    
+    
     private SortableAjaxBehavior makeSortableBehavior(final Component container) {
         SimpleSortableAjaxBehavior simpleSortableAjaxBehavior = new SimpleSortableAjaxBehavior() {
             @Override

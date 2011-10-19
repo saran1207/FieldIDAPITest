@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket;
 
-import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -11,7 +10,11 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.spring.injection.annot.AnnotSpringInjector;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.odlabs.wiquery.core.commons.IWiQuerySettings;
+import org.odlabs.wiquery.core.commons.WiQuerySettings;
 
+import com.n4systems.fieldid.wicket.pages.DashboardPage;
+import com.n4systems.fieldid.wicket.pages.DerekDashboardPage;
 import com.n4systems.fieldid.wicket.pages.HomePage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
@@ -27,7 +30,7 @@ import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 
-public class FieldIDWicketApp extends WebApplication {
+public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings {
 
     @Override
     protected void init() {
@@ -49,6 +52,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/scoreResults", ScoreResultConfigurationPage.class);
 
         mountBookmarkablePage("dashboard", DashboardPage.class);
+        // FIXME DD : remove this by end of iteration...only for development purposes.
+        mountBookmarkablePage("derek", DerekDashboardPage.class);
         mountBookmarkablePage("reporting", ReportingPage.class);
         mountBookmarkablePage("returnToReport", ReturnToReportPage.class);
         mountBookmarkablePage("savedReport", RunSavedReportPage.class);
@@ -64,6 +69,8 @@ public class FieldIDWicketApp extends WebApplication {
 
         getApplicationSettings().setPageExpiredErrorPage(HomePage.class);
         getApplicationSettings().setInternalErrorPage(OopsPage.class);
+        
+               
     }
 
     @Override
@@ -80,5 +87,13 @@ public class FieldIDWicketApp extends WebApplication {
     public RequestCycle newRequestCycle(Request request, Response response) {
         return new FieldIDRequestCycle(this, (WebRequest) request, response);
     }
+
+	@Override
+	public WiQuerySettings getWiQuerySettings() {
+		WiQuerySettings wiQuerySettings = new WiQuerySettings();
+		// we do *NOT* want jquery imported again.  that is already done by base page.
+		wiQuerySettings.setAutoImportJQueryResource(false);
+		return wiQuerySettings;
+	}
 
 }
