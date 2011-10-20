@@ -15,6 +15,7 @@ import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
+import com.n4systems.fieldid.wicket.components.dashboard.widgets.CommonLinksPanel;
 import com.n4systems.fieldid.wicket.components.dashboard.widgets.JobsAssignedPanel;
 import com.n4systems.fieldid.wicket.components.dashboard.widgets.SamplePanel;
 import com.n4systems.fieldid.wicket.pages.widgets.Widget;
@@ -68,7 +69,10 @@ public class DashboardPage extends FieldIDFrontEndPage {
                     widget.addContent(new JobsAssignedPanel(widget.getContentId()));
                 } else if (widgetDefinition.getWidgetType() == WidgetType.SAMPLE) {
                     widget.addContent(new SamplePanel(widget.getContentId()));
+                } else if (widgetDefinition.getWidgetType() == WidgetType.COMMON_LINK) {
+                	widget.addContent(new CommonLinksPanel(widget.getContentId()));
                 }
+
 
                 item.add(widget);
             }
