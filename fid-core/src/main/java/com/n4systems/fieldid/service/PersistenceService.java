@@ -1,15 +1,8 @@
 package com.n4systems.fieldid.service;
 
-import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.BaseEntity;
-import com.n4systems.model.api.Archivable;
-import com.n4systems.model.api.UnsecuredEntity;
-import com.n4systems.model.parents.ArchivableEntityWithTenant;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.util.persistence.QueryBuilder;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -20,7 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Saveable;
+import com.n4systems.model.api.UnsecuredEntity;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
@@ -73,13 +69,13 @@ public class PersistenceService extends FieldIdService {
     @Transactional(readOnly = true)
 	public <T> List<T> findAll(QueryBuilder<T> queryBuilder) throws InvalidQueryException {
         Query query = queryBuilder.createQuery(em);
-        return (List<T>) query.getResultList();
+        return query.getResultList();
     }
 
     @Transactional(readOnly = true)
 	public <T> List<T> findAll(QueryBuilder<T> queryBuilder, int page, int pageSize) throws InvalidQueryException {
         Query query = queryBuilder.createQuery(em).setFirstResult(page*pageSize).setMaxResults(pageSize);
-        return (List<T>) query.getResultList();
+        return query.getResultList();
     }
 
     @Transactional
@@ -145,4 +141,13 @@ public class PersistenceService extends FieldIdService {
         update(archivableEntity);
     }
 
+    @Transactional
+    public List<?> runQuery(String queryString, Map<String,Object> params) {     	
+    	Query query = em.createQuery(queryString);
+    	for (Entry<String,Object> entry:params.entrySet()) {
+    		query.setParameter(entry.getKey(), entry.getValue());
+    	}    	    	
+    	return query.getResultList();    	
+    }
+    
 }

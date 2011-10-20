@@ -8,16 +8,16 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.api.NetworkEntity;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.stat.Statistics;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
@@ -27,7 +27,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
-import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public interface PersistenceManager {
@@ -163,4 +162,5 @@ public interface PersistenceManager {
 	public int executeUpdate(String updateStmt, Map<String,Object> parameters);
 	
 	public Statistics getHibernateStats();
+	
 }

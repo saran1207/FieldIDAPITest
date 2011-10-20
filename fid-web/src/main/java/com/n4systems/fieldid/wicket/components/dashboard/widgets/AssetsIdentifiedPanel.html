@@ -9,7 +9,8 @@
 	        	mode: "time",
 				timeformat : "%b %0d, %y",	        	
 				monthNames : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-	        	}
+	        	},
+	        grid: { hoverable: true, clickable: true }
 	    };		
 $(function() {
     var d1 = [];       
@@ -24,6 +25,7 @@ function updateGraph(newData) {
 </wicket:head>
 
 <wicket:panel>
+	<!-- FIXME DD : take out hard coded height styling -->
 	<div wicket:id="graph" style="height:300px;"/>
 	<form wicket:id="form"> 
 		<input type="button" wicket:id="update" value="Update"></input>
