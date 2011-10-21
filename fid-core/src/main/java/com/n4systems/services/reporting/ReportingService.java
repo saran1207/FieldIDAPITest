@@ -1,5 +1,6 @@
 package com.n4systems.services.reporting;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDataPeriod;
+import com.n4systems.util.chart.Chartable;
 import com.n4systems.util.persistence.GroupByClause;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -28,29 +30,7 @@ public class ReportingService extends FieldIdPersistenceService {
 	
     @SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-    public ChartData getAssetsIdentified(Date from, BaseOrg org) {
-//		String query = "select new " + AssetsIdentifiedReportRecord.class.getName() +  " ( " +   
-//			"	YEAR(identified), " +  
-//			"	QUARTER(identified), " +  
-//			"	SUM(1) as q  ) " +
-//			" from " + Asset.class.getName() + 
-//			"  where tenant.id = :tenantId " + 
-//			" 	and state = 'ACTIVE' " + 
-//			" 	and identified > 0 " + 
-////			"   and identifiedBy.id in (:users) " + 
-////			" 	and owner.id in (:ownerIds) " + 
-//// " order by year, quarter"		
-//			" group by YEAR(identified), QUARTER(identified)";  
-		
-
-		
-		// FIXME DD : put date, tenantId, ownerId's, etc... in params.
-//		Map<String, Object> params = Maps.newHashMap();
-//		params.put("tenantId", securityContext.getUserSecurityFilter().getTenantId());
-////		params.put("ownerIds", Lists.newArrayList(15536284L,15536163L,15511493L,15526015L,15536162L));
-////		params.put("users", Lists.newArrayList(310381L,310451L,310475L,310452L,311222L,311162L,15513566L,5513793L,15513031L));
-//		List<Chartable> results = (List<Chartable>) persistenceService.runQuery(query, params);
-    	
+    public ChartData<Calendar> getAssetsIdentified(Date from, BaseOrg org) {
 		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 		builder.setSelectArgument(new NewObjectSelect(AssetsIdentifiedReportRecord.class, "YEAR(identified)", "QUARTER(identified)", "COUNT(*)"));
 		builder.getGroupByArguments().add(new GroupByClause("YEAR(identified)", true));
@@ -65,13 +45,31 @@ public class ReportingService extends FieldIdPersistenceService {
 			// FIXME DD : handle correctly.
 			e.printStackTrace();
 		}
-		
-        return new ChartData(results).normalize(ChartDataPeriod.QUARTERLY);
-    }     
+		        
+        return new ChartData<Calendar>(results);
+//        return normalize( new ChartData<Calendar>(results), ChartDataPeriod.QUARTERLY);
+    }
     
-
-	private ChartData makeBogusDataSet() {
-		return new ChartData(10,12, 22, 33, 84,96);
+    private ChartData<Calendar> normalize(ChartData<Calendar> data , ChartDataPeriod period) {
+		return normalize(data, period, 0);
 	}
+
+	private ChartData<Calendar> normalize(ChartData<Calendar> data, ChartDataPeriod period, Number value) {
+    	if (data.isEmpty()) {		
+    		return data;
+    	}
+		Calendar start = data.getFirstX(); 
+		Calendar end = data.getLastX();
+		
+		for (Calendar time = start; time.compareTo(end)<=0; time = period.nextPeriod(time)) {
+			Chartable<Calendar> p = data.get(time);
+			if (p==null) { 
+				data.add(new AssetsIdentifiedReportRecord(time,value.longValue()));
+			}
+			System.out.println(data.get(time));
+		}
+		return data;
+    }
+
 
 }

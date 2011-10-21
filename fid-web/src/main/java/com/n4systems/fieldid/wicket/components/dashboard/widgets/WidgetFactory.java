@@ -76,7 +76,7 @@ public class WidgetFactory implements Serializable {
 	
 	private void profile(String action, WidgetType widgetType) {
 		// FIXME DD : what level should this be to most useful??
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss ");
 		logger.warn("Widget : " + widgetType + " " + action + " at " + sdf.format(new Date())); 
 	}
 
