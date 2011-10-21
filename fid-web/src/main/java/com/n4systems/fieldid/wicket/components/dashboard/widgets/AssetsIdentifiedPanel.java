@@ -7,8 +7,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.odlabs.wiquery.core.commons.WiQueryResourceManager;
-import org.odlabs.wiquery.core.javascript.JsQuery;
 import org.odlabs.wiquery.core.javascript.JsStatement;
 import org.odlabs.wiquery.core.options.Options;
 
@@ -45,45 +43,8 @@ public class AssetsIdentifiedPanel extends Panel {
 					response.renderOnLoadJavascript(javascriptBuffer.toString());
 				}
 			});
-    	}
-    	
-    	public Options getOptions() {
-    		return options;
-    	}
-    	
-    	public void setOptions(Options options) {
-    		this.options = options;
-    	}
-    	
-    	
-    	public void setChartData(double[][] data) {    		
-    		if (data != null) {
-    			
-    			String varValue = "d1";
-    			statement.append("var " + varValue + "= [");
-    			for (int i = 0; i < data.length; i++) {
-    				double[] ds = data[i];
-    				statement.append("[" + ds[0] + "," + ds[1] + "]");
-    				if (!(i == data.length - 1)) {
-    					statement.append(",");
-    				}
-    			}
-    			statement.append("]; ");
-    			
-    			statement.append(" $.plot(" + new JsQuery(this).$().append("," + "[" + varValue + "]" + ")").render());
-    		}
-    	}
-    	
-    	//@Override
-    	public void contribute(WiQueryResourceManager wiQueryResourceManager) {
-//      wiQueryResourceManager.addJavaScriptResource(FlotJavaScriptResourceReference.get());
-//      wiQueryResourceManager.addJavaScriptResource(ExCanvasJavaScriptResourceReference.get());
-    	}
-    	
-    	//@Override
-    	public JsStatement statement() {
-    		return this.statement;
-    	}
+    	}    	
+    	    	
     }
 
 

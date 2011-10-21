@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -16,8 +15,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
-import com.n4systems.fieldid.wicket.components.dashboard.widgets.AssetsIdentifiedPanel;
-import com.n4systems.fieldid.wicket.pages.widgets.Widget;
+import com.n4systems.fieldid.wicket.components.dashboard.widgets.WidgetFactory;
 import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
@@ -30,6 +28,8 @@ public class DerekDashboardPage extends FieldIDFrontEndPage {
 
     @SpringBean
     private DashboardService dashboardService;
+    @SpringBean 
+    private WidgetFactory widgetFactory;
 
     private WebMarkupContainer sortableColumn;
     private WebMarkupContainer sortableColumn2;
@@ -68,28 +68,18 @@ public class DerekDashboardPage extends FieldIDFrontEndPage {
         container.add(new ListView<WidgetDefinition>("widgets", widgetsModel) {
             @Override
             protected void populateItem(ListItem<WidgetDefinition> item) {
-                item.setOutputMarkupId(true);
-                WidgetDefinition widgetDefinition = item.getModelObject();
-                // FIXME DD : add widget factory here.
-                Widget widget = new Widget("widget", new PropertyModel<String>(item.getModel(), "name"));
-              widget.addContent(new AjaxLazyLoadPanel(widget.getContentId()) {					
-				@Override public Component getLazyLoadComponent(String markupId) {
-					return new AssetsIdentifiedPanel(markupId);
-				}
-			});
-//              widget.addContent(new AssetsIdentifiedPanel(widget.getContentId()));
-            item.add(widget);
+                item.setOutputMarkupId(true);                
+                WidgetDefinition widgetDefinition = item.getModelObject();                
+                item.add(widgetFactory.createWidget(widgetDefinition));			
             }
-        });
-        
-        
 
+        });
+       
         container.add(makeSortableBehavior(container));
         container.setOutputMarkupId(true);
         return container;
     }
 
-    
     private SortableAjaxBehavior makeSortableBehavior(final Component container) {
         SimpleSortableAjaxBehavior simpleSortableAjaxBehavior = new SimpleSortableAjaxBehavior() {
             @Override

@@ -7,7 +7,7 @@ public enum WidgetType implements Listable {
     SAMPLE("Sample"), 
     JOBS_ASSIGNED("Jobs Assigned"), 
     ASSETS_IDENTIFIED("Assets Identified"),
-    COMMON_LINK("Common Links"),
+    COMMON_LINKS("Common Links"),
     NEWS("FieldId News");
 
     private String description;

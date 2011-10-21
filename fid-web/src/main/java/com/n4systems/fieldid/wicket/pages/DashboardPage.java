@@ -70,7 +70,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
                     widget.addContent(new JobsAssignedPanel(widget.getContentId()));
                 } else if (widgetDefinition.getWidgetType() == WidgetType.SAMPLE) {
                     widget.addContent(new SamplePanel(widget.getContentId()));
-                } else if (widgetDefinition.getWidgetType() == WidgetType.COMMON_LINK) {
+                } else if (widgetDefinition.getWidgetType() == WidgetType.COMMON_LINKS) {
                 	widget.addContent(new CommonLinksPanel(widget.getContentId()));
                 }else if (widgetDefinition.getWidgetType() == WidgetType.NEWS) {
                 	widget.addContent(new NewsPanel(widget.getContentId()));
