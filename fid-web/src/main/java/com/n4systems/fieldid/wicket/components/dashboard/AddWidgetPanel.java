@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.wicket.components.dashboard;
 
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
-import com.n4systems.model.dashboard.DashboardLayout;
-import com.n4systems.model.dashboard.WidgetType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -12,6 +8,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
+import com.n4systems.model.dashboard.DashboardLayout;
+import com.n4systems.model.dashboard.WidgetType;
+
+@SuppressWarnings("serial")
 public class AddWidgetPanel extends Panel {
 
     private IModel<DashboardLayout> currentLayoutModel;
