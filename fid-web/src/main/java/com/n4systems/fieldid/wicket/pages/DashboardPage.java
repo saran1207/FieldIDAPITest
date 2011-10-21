@@ -17,6 +17,7 @@ import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
 import com.n4systems.fieldid.wicket.components.dashboard.widgets.CommonLinksPanel;
 import com.n4systems.fieldid.wicket.components.dashboard.widgets.JobsAssignedPanel;
+import com.n4systems.fieldid.wicket.components.dashboard.widgets.NewsPanel;
 import com.n4systems.fieldid.wicket.components.dashboard.widgets.SamplePanel;
 import com.n4systems.fieldid.wicket.pages.widgets.Widget;
 import com.n4systems.model.dashboard.DashboardLayout;
@@ -71,6 +72,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
                     widget.addContent(new SamplePanel(widget.getContentId()));
                 } else if (widgetDefinition.getWidgetType() == WidgetType.COMMON_LINK) {
                 	widget.addContent(new CommonLinksPanel(widget.getContentId()));
+                }else if (widgetDefinition.getWidgetType() == WidgetType.NEWS) {
+                	widget.addContent(new NewsPanel(widget.getContentId()));
                 }
 
 
