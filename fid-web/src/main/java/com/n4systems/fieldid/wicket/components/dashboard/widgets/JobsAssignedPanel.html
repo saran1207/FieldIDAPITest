@@ -2,11 +2,15 @@
 
     <div id="jobs" class="dashboardSection">
 
-        <div class="jobsAssignedDescription">
-            <wicket:message key="label.you_currently_have"/> <a wicket:id="assignedJobsLink"><span wicket:id="totalJobs"></span> <wicket:message key="label.open"/></a> <wicket:message key="label.jobs_assigned_to_you"/>
-        </div>
+        <wicket:enclosure child="jobsTable">
 
-        <div wicket:id="jobsTable" class="simpleTable decorated"></div>
+            <div class="jobsAssignedDescription">
+                <wicket:message key="label.you_currently_have"/> <a wicket:id="assignedJobsLink"><span wicket:id="totalJobs"></span> <wicket:message key="label.open"/></a> <wicket:message key="label.jobs_assigned_to_you"/>
+            </div>
+
+            <div wicket:id="jobsTable" class="simpleTable decorated"></div>
+
+        </wicket:enclosure>
 
         <div wicket:id="noJobsAssignedMessage">
             <wicket:message key="label.you_currently_have_no_jobs_assigned_to_you"/>

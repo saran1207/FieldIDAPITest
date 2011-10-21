@@ -40,7 +40,12 @@ public class JobsAssignedPanel extends Panel {
         add(assignedJobsLink = new NonWicketLink("assignedJobsLink", "jobs.action?justAssignedOn=true"));
         assignedJobsLink.add(new Label("totalJobs", openJobsForUserDataProvider.size() + ""));
 
-        SimpleDataTable<Project> jobsTable = new SimpleDataTable<Project>("jobsTable", columnsArray, openJobsForUserDataProvider, 5);
+        SimpleDataTable<Project> jobsTable = new SimpleDataTable<Project>("jobsTable", columnsArray, openJobsForUserDataProvider, 5) {
+            @Override
+            public boolean isVisible() {
+                return openJobsForUserDataProvider.size() > 0;
+            }
+        };
         add(jobsTable);
         jobsTable.setDisplayPagination(false);
         jobsTable.setCssClass("simpleTable decorated");
