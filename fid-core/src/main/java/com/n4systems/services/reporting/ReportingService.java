@@ -60,7 +60,7 @@ public class ReportingService extends FieldIdPersistenceService {
 		
 		// just to show that lazy loading works.
 		try {
-			Thread.sleep(25);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// FIXME DD : handle correctly.
 			e.printStackTrace();

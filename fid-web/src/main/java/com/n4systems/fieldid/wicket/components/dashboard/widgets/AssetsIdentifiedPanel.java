@@ -32,7 +32,7 @@ public class AssetsIdentifiedPanel extends Panel {
     	private JsStatement statement = new JsStatement();
     	private Options options;
     	
-    	public Flot(String id) {
+    	public Flot(final String id) {
     		super(id);
     		this.options = new Options();
             setOutputMarkupId(true).setMarkupId(getId());
@@ -41,7 +41,7 @@ public class AssetsIdentifiedPanel extends Panel {
 				@Override
 				public void renderHead(IHeaderResponse response) {
 					StringBuffer javascriptBuffer = new StringBuffer();
-					javascriptBuffer.append ("updateGraph("+data.toJavascriptString()+");");
+					javascriptBuffer.append ("dashboardWidgetFactory.createWithData('"+id + "'," + data.toJavascriptString()+");");
 					response.renderOnLoadJavascript(javascriptBuffer.toString());
 				}
 			});
