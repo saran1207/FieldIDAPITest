@@ -9,6 +9,7 @@
 			background-color: #eee;
 		}
 		.crudForm h2 { margin-top: 0; }
+		
 	</style>
 </head>
 ${action.setPageType('user', 'change_password')!}
@@ -17,14 +18,14 @@ ${action.setPageType('user', 'change_password')!}
 	<@s.hidden name="uniqueID"/>
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<h2><@s.text name="label.change_password"/></h2>
-	<p>
+	<div class="infoSet">
 		<label class='label'><@s.text name="label.newpassword"/></label>
 		<@s.password name="newPassword" />
-	</p>
-	<p>
+	</div>
+	<div class="infoSet">
 		<label class='label'><@s.text name="label.confirmpassword"/></label>
 		<@s.password name="confirmPassword" />
-	</p>
+	</div>
 	
 	<div class="formAction borderLessFormAction">
 		<@s.submit key="hbutton.save"/>
