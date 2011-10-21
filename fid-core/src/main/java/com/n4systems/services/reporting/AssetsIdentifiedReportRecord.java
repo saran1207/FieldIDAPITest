@@ -18,6 +18,8 @@ public class AssetsIdentifiedReportRecord implements Chartable<Calendar> {
 	public AssetsIdentifiedReportRecord(Integer year, Integer quarter, Long value) {
 		this.x = getCalendar(year, quarter);
 		this.value = value;
+		this.year = year;
+		this.quarter = quarter;
 	}
 		
 	public AssetsIdentifiedReportRecord(Calendar time, Long value) {
@@ -29,7 +31,7 @@ public class AssetsIdentifiedReportRecord implements Chartable<Calendar> {
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear();
 		calendar.set(Calendar.YEAR, year);
-		calendar.set(Calendar.MONTH, quarter*3);
+		calendar.set(Calendar.MONTH, (quarter*3));
 		return calendar;
 	}	
 	
@@ -69,10 +71,15 @@ public class AssetsIdentifiedReportRecord implements Chartable<Calendar> {
 	
 	// TODO DD : put this in chart helper class. 
     public long getJavascriptX() {	    	
-    	// NOTE : Flot JS charting library has different interpretation of time.  they are all GMT+0.
-        GregorianCalendar lGmtCalendar = new GregorianCalendar(new SimpleTimeZone(0,"GMT+0"));
-        lGmtCalendar.setTimeInMillis(x.getTimeInMillis());
-        return lGmtCalendar.getTimeInMillis();
+    	// arggh...javascript sucks at times.  we are forcing all data to toronto time.   (this may not be good
+    	//   for users in other time zones but i'm not sure how to handle this).
+    	
+    	// FIXME DD : dashboard.js should detect locale and set timezone accordingly.
+        GregorianCalendar calendar = new GregorianCalendar(new SimpleTimeZone(-3600000*4,"GMT-4"));
+        calendar.clear();
+		calendar.set(Calendar.YEAR, x.get(Calendar.YEAR));
+		calendar.set(Calendar.MONTH, x.get(Calendar.MONTH));        
+        return calendar.getTimeInMillis();
     }	
 
 	@Override

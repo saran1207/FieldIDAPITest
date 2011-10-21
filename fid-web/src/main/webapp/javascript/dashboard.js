@@ -43,7 +43,7 @@ var dashboardWidgetFactory = (function() {
 			                $("#tooltip").remove();
 			                var y = item.datapoint[1].toFixed(options.yaxis.decimals);
 			                var date = formatDate(new Date(item.datapoint[0]));
-			                showTooltip(item.pageX, item.pageY,  date + "<br>" + y);
+			                showTooltip(item.pageX, item.pageY,  y + "<br>" + date);
 			            }
 			        }
 			        else {
@@ -98,7 +98,7 @@ var dashboardWidgetFactory = (function() {
 			        xaxis: {
 			        	dateFormatter : formatDate,
 			        	mode: "time",
-						timeformat : "%b %0d, %y",			
+						timeformat : "%b %d, %y",			
 						monthNames : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 			        	},
 			        grid: { hoverable: true, clickable: true }
