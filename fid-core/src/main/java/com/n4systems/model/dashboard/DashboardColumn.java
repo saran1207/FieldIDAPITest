@@ -1,11 +1,12 @@
 package com.n4systems.model.dashboard;
 
-import com.n4systems.model.BaseEntity;
+import com.n4systems.model.parents.AbstractEntity;
 import org.hibernate.annotations.IndexColumn;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -14,10 +15,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "dashboard_columns")
-public class DashboardColumn extends BaseEntity {
+public class DashboardColumn extends AbstractEntity {
 
-
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dashboard_columns_widget_definitions",
                     joinColumns = @JoinColumn(name = "dashboard_column_id"),
                     inverseJoinColumns = @JoinColumn(name = "widget_definition_id"))

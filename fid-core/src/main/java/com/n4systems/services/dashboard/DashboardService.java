@@ -24,13 +24,12 @@ public class DashboardService extends FieldIdPersistenceService {
 
     @Transactional
     public void saveLayout(DashboardLayout layout) {
-        DashboardLayout currentLayout = findCurrentLayout();
-        if (currentLayout != null) {
-            persistenceService.remove(currentLayout);
+        if (layout.getId() != null) {
+            persistenceService.update(layout);
+        } else {
+            layout.setUser(findCurrentUser());
+            persistenceService.save(layout);
         }
-
-        layout.setUser(findCurrentUser());
-        persistenceService.save(layout);
     }
 
     private DashboardLayout findCurrentLayout() {
@@ -50,12 +49,12 @@ public class DashboardService extends FieldIdPersistenceService {
     private DashboardLayout createDefaultLayout() {
         DashboardLayout layout = new DashboardLayout();
 
-        WidgetDefinition jobsDefinition = new WidgetDefinition();
-        jobsDefinition.setWidgetType(WidgetType.JOBS_ASSIGNED);
-        jobsDefinition.setName("Jobs Assigned");
+        WidgetDefinition jobsWidget = new WidgetDefinition();
+        jobsWidget.setWidgetType(WidgetType.JOBS_ASSIGNED);
+        jobsWidget.setName("Jobs Assigned");
 
         DashboardColumn dashboardColumn = new DashboardColumn();
-        dashboardColumn.getWidgets().add(jobsDefinition);
+        dashboardColumn.getWidgets().add(jobsWidget);
 
         layout.getColumns().add(dashboardColumn);
         layout.getColumns().add(new DashboardColumn());

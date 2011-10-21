@@ -14,4 +14,8 @@ public abstract class SimpleSortableAjaxBehavior extends SortableAjaxBehavior {
     public void onRemove(Component sortedComponent, AjaxRequestTarget ajaxRequestTarget) {
     }
 
+    @Override
+    public void onUpdate(Component sortedComponent, int index, AjaxRequestTarget ajaxRequestTarget) {
+    }
+
 }

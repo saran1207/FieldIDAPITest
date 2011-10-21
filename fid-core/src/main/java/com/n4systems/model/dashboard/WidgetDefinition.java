@@ -1,19 +1,19 @@
 package com.n4systems.model.dashboard;
 
+import com.n4systems.model.parents.AbstractEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import com.n4systems.model.BaseEntity;
-
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "widget_definitions")
-public class WidgetDefinition extends BaseEntity {
+public class WidgetDefinition extends AbstractEntity {
 
-    @Column(name="report_type")
+    @Column(name="widget_type")
     @Enumerated(EnumType.STRING)
     private WidgetType widgetType;
 

@@ -1,6 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -13,6 +16,18 @@ public class Widget extends Panel {
         super(id);
         setOutputMarkupId(true);
         add(new Label("titleLabel", title));
+        addRemoveButton();
+    }
+
+    private void addRemoveButton() {
+        WebMarkupContainer removeButton;
+        add(removeButton = new WebMarkupContainer("removeButton"));
+        removeButton.add(new AjaxEventBehavior("onclick") {
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                onRemoveButtonClicked(target);
+            }
+        });
     }
 
     public void addContent(Component content) {
@@ -22,5 +37,7 @@ public class Widget extends Panel {
     public String getContentId() {
         return CONTENT_ID;
     }
+
+    protected void onRemoveButtonClicked(AjaxRequestTarget target) { }
 
 }

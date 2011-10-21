@@ -7,6 +7,7 @@ import org.hibernate.annotations.IndexColumn;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -19,7 +20,7 @@ import javax.persistence.Table;
 @Table(name = "dashboard_layouts")
 public class DashboardLayout extends EntityWithTenant {
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dashboard_layouts_dashboard_columns",
                     joinColumns = @JoinColumn(name = "dashboard_layout_id"),
                     inverseJoinColumns = @JoinColumn(name = "dashboard_column_id"))
