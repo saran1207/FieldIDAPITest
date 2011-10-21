@@ -40,14 +40,16 @@ public class AssetsIdentifiedReportRecord implements Chartable {
 	@Override
 	public Long getX() {
 		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
 		calendar.set(Calendar.YEAR, year);
-		calendar.set(Calendar.MONTH, quarter*4);		
+		calendar.set(Calendar.MONTH, quarter*3);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		return calendar.getTime().getTime();
 	}
 
 	@Override
 	public Long getY() {
-		return value;
+		return value; 
 	}
 
 	public void setQuarter(Integer quarter) {

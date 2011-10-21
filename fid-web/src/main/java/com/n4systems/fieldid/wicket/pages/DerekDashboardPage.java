@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -70,14 +69,17 @@ public class DerekDashboardPage extends FieldIDFrontEndPage {
                 WidgetDefinition widgetDefinition = item.getModelObject();
                 // FIXME DD : add widget factory here.
                 Widget widget = new Widget("widget", new PropertyModel<String>(item.getModel(), "name"));
-              widget.addContent(new AjaxLazyLoadPanel(widget.getContentId()) {					
-				@Override public Component getLazyLoadComponent(String markupId) {
-					return new AssetsIdentifiedPanel(markupId);
-				}
-			});
+//              widget.addContent(new AjaxLazyLoadPanel(widget.getContentId()) {					
+//				@Override public Component getLazyLoadComponent(String markupId) {
+//					return new AssetsIdentifiedPanel(markupId);
+//				}
+//			});
+                widget.addContent(new AssetsIdentifiedPanel(widget.getContentId()));
             item.add(widget);
             }
         });
+        
+        
 
         container.add(makeSortableBehavior(container));
         container.setOutputMarkupId(true);

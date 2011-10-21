@@ -2,10 +2,9 @@ package com.n4systems.fieldid.wicket.components.dashboard.widgets;
 
 import java.util.Date;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitButton;
+import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.core.commons.WiQueryResourceManager;
@@ -24,15 +23,7 @@ public class AssetsIdentifiedPanel extends Panel {
 	
     public AssetsIdentifiedPanel(String id) {
         super(id);
-        add(new Flot("graph"));
-		Form form = new Form("form" );
-		form.add(new AjaxSubmitButton("update") {
-			@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				ChartData data = reportingService.getAssetsIdentified(new Date(), new Date(), null);
-				target.appendJavascript("updateGraph("+data.toJavascriptString()+");");
-			} 			
-		});
-		add(form);    		
+        add(new Flot("graph"));		
     }
 
 
@@ -45,6 +36,15 @@ public class AssetsIdentifiedPanel extends Panel {
     		super(id);
     		this.options = new Options();
             setOutputMarkupId(true).setMarkupId(getId());
+			final ChartData data = reportingService.getAssetsIdentified(new Date(), null);
+			add(new AbstractBehavior () {
+				@Override
+				public void renderHead(IHeaderResponse response) {
+					StringBuffer javascriptBuffer = new StringBuffer();
+					javascriptBuffer.append ("updateGraph("+data.toJavascriptString()+");");
+					response.renderOnLoadJavascript(javascriptBuffer.toString());
+				}
+			});
     	}
     	
     	public Options getOptions() {
@@ -56,8 +56,7 @@ public class AssetsIdentifiedPanel extends Panel {
     	}
     	
     	
-    	public void setChartData(double[][] data) {
-    		
+    	public void setChartData(double[][] data) {    		
     		if (data != null) {
     			
     			String varValue = "d1";

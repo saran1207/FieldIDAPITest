@@ -344,7 +344,7 @@ public class QueryBuilder<E> {
 	
 	public QueryBuilder<E> addGroupBy(String ... params) {
 		for(String param: params) {
-			groupByArguments.add(new GroupByClause(param));
+			groupByArguments.add(new GroupByClause(param, false));
 		}
 		return this;
 	}
@@ -567,7 +567,7 @@ public class QueryBuilder<E> {
 			query.setMaxResults(maxResults);
 		}
 
-		List<E> resultList = (List<E>)query.getResultList();
+		List<E> resultList = query.getResultList();
 		PostFetcher.postFetchFields(resultList, getPostFetchPaths());
 		return resultList;
 	}
