@@ -1,12 +1,9 @@
 package com.n4systems.fieldid.wicket.components.dashboard.widgets;
 
-import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.common.base.CaseFormat;
+import com.n4systems.fieldid.wicket.pages.widgets.Widget;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.WidgetType;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
@@ -14,12 +11,14 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.Model;
 
-import com.google.common.base.CaseFormat;
-import com.n4systems.fieldid.wicket.pages.widgets.Widget;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.WidgetType;
+import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 public class WidgetFactory implements Serializable {
@@ -30,7 +29,7 @@ public class WidgetFactory implements Serializable {
 
 
 	public Widget createWidget(final WidgetDefinition widgetDefinition) {
-		Widget widget = new Widget("widget", new PropertyModel<String>(widgetDefinition, "name"));
+		Widget widget = new Widget("widget", new Model<WidgetDefinition>(widgetDefinition));
 		final WidgetType widgetType = widgetDefinition.getWidgetType();
 		widget.addContent(createWidgetPanel(widgetType, widget.getContentId()));
 		return widget;

@@ -369,7 +369,7 @@ form.quickLoginForm {
     clear:both;
 }
 
-.quickLoginForm input[type="submit"], .quickLoginForm button {
+.quickLoginForm input[type="submit"], .quickLoginForm input[type="button"], .quickLoginForm button {
     padding:5px 5px;
     font-size:1.2em;
     margin-left:10px;

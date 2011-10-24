@@ -1,3 +1,16 @@
 .jobsAssignedDescription {
-    padding-bottom:5px;
+    padding:2px 0 2px 0;
+    display:block;
+    float:right;
+    font-size:11px;
+}
+
+.jobsSection .simpleTable th {
+    background:#666;
+    color:#f7f7f7;
+}
+
+.noJobsAssigned {
+    text-align:center;
+    width:100%;
 }

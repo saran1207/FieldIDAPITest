@@ -7,6 +7,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.EnclosureContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -37,19 +38,22 @@ public class JobsAssignedPanel extends Panel {
 
         final OpenJobsForUserDataProvider openJobsForUserDataProvider = new OpenJobsForUserDataProvider();
 
-        NonWicketLink assignedJobsLink;
-        add(assignedJobsLink = new NonWicketLink("assignedJobsLink", "jobs.action?justAssignedOn=true"));
-        assignedJobsLink.add(new Label("totalJobs", openJobsForUserDataProvider.size() + ""));
-
         SimpleDataTable<Project> jobsTable = new SimpleDataTable<Project>("jobsTable", columnsArray, openJobsForUserDataProvider, 5) {
             @Override
             public boolean isVisible() {
                 return openJobsForUserDataProvider.size() > 0;
             }
         };
-        add(jobsTable);
         jobsTable.setDisplayPagination(false);
         jobsTable.setCssClass("simpleTable decorated");
+
+        EnclosureContainer jobsContainer = new EnclosureContainer("jobsAssignedEnclosure", jobsTable);
+        jobsContainer.add(jobsTable);
+        add(jobsContainer);
+
+        NonWicketLink assignedJobsLink;
+        jobsContainer.add(assignedJobsLink = new NonWicketLink("assignedJobsLink", "jobs.action?justAssignedOn=true"));
+        assignedJobsLink.add(new Label("totalJobs", openJobsForUserDataProvider.size() + ""));
 
         add(new WebMarkupContainer("noJobsAssignedMessage") {
             @Override
