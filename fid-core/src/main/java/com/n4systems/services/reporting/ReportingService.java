@@ -36,6 +36,12 @@ public class ReportingService extends FieldIdPersistenceService {
 		
 		List<AssetsIdentifiedReportRecord> results = persistenceService.findAll(builder);
 		        
+		// FIXME DD : just to test slow loading rendering...delete this later.
+		try {			
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {			
+			e.printStackTrace();
+		}
 		// TODO DD : get chart label from properties file?
         return Lists.newArrayList(new ChartData<Calendar>("Assets Identified", results));
     }

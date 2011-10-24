@@ -9,7 +9,10 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -35,7 +38,7 @@ public class WidgetFactory implements Serializable {
 	}
 	
 	private Panel createPanel(WidgetType type, String id) {
-		return createPanel(type,id,false);
+		return createPanel(type,id,true);
 	}
 	
 	private Panel createPanel(WidgetType type, String id, boolean checkForLazy) {
@@ -68,7 +71,11 @@ public class WidgetFactory implements Serializable {
 					logger.warn("can't create panel for type " + type, e);
 					return null;
 				}
-			}	
+			}
+			@Override public Component getLoadingComponent(String markupId) {
+				String img = "<img style='padding:10px 0 270px 10px' alt=\"Loading...\" src=\"" + RequestCycle.get().urlFor(AbstractDefaultAjaxBehavior.INDICATOR) + "\"/>";				
+				return new Label(markupId, img).setEscapeModelStrings(false);
+			}
 		};
 	}
 
