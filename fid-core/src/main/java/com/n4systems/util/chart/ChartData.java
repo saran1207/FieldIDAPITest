@@ -8,32 +8,42 @@ import java.util.TreeMap;
 @SuppressWarnings("serial")
 public class ChartData<X> implements Serializable {
 	TreeMap<X, Chartable<X>> data = new TreeMap<X, Chartable<X>>();
+	private String label;
 	
 	public ChartData() { 
 	}
 	
-	public ChartData(List<? extends Chartable<X>> data) {
+	public ChartData(String label) {
+		this.label = label;
+	}
+	
+	public ChartData(String label, List<? extends Chartable<X>> data) {
+		this.label = label;
+		add(data);
+	}
+	
+	public ChartData<X> add(List<? extends Chartable<X>> data) { 		
 		for (Chartable<X> chartable:data) { 
 			add(chartable);
 		}
+		return this;
 	}
 
-	public ChartData<X> add(final X x, final Number y) {
-		return add( new SimpleChartable<X>(x,y) );
-	}
-	
 	public ChartData<X> add(Chartable<X> chartable) { 
 		data.put(chartable.getX(), chartable);
 		return this;
 	}
 	
+	//	e.g. {data:[[0,12],[87,9.3]], label:'hello'}	
 	public String toJavascriptString() {
-		StringBuffer buff = new StringBuffer("[");		
+		StringBuffer buff = new StringBuffer("{data:[");
+		
 		for (Chartable<X> cdp:data.values()) { 
 			buff.append(cdp.toJavascriptString());
 			buff.append(",");
 		}
 		buff.append("]");
+		buff.append(label!=null ? ", label:'" + label + "'}" : "}");				
 		return buff.toString();
 	}
 

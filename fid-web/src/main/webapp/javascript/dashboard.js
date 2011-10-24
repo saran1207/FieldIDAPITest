@@ -84,9 +84,8 @@ var dashboardWidgetFactory = (function() {
 					bindTootlips(id);
 				}
 			},
-			update : function(newData, text) {
-				var d1 = [{data:newData, label:text}];
-			    $.plot($('#'+id), d1, options);				
+			update : function(newData, text) {				
+			    $.plot($('#'+id), newData, options);				
 			},
 			options : options = {
 			        lines: { show: true },

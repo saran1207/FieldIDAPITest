@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.dashboard.widgets;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -19,7 +20,7 @@ public class AssetsIdentifiedPanel extends ChartablePanel<Calendar> {
     }
 
     @Override
-    protected ChartData<Calendar> getChartData() {
+    protected List<ChartData<Calendar>> getChartData() {
     	return reportingService.getAssetsIdentified(new Date(), null);
     }
     

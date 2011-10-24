@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.Asset;
@@ -19,15 +20,15 @@ import com.n4systems.util.persistence.QueryBuilder;
 // CACHEABLE!!!  this is used for getting old data.
 
 public class ReportingService extends FieldIdPersistenceService {
-
 	
 	// TODO DD : unit tests...
 	
 	@Autowired
 	private PersistenceService persistenceService;
 	
+	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-    public ChartData<Calendar> getAssetsIdentified(Date from, BaseOrg org) {
+    public List<ChartData<Calendar>> getAssetsIdentified(Date from, BaseOrg org) {
 		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 		builder.setSelectArgument(new NewObjectSelect(AssetsIdentifiedReportRecord.class, "YEAR(identified)", "QUARTER(identified)", "COUNT(*)"));
 		builder.getGroupByArguments().add(new GroupByClause("YEAR(identified)", true));
@@ -35,7 +36,8 @@ public class ReportingService extends FieldIdPersistenceService {
 		
 		List<AssetsIdentifiedReportRecord> results = persistenceService.findAll(builder);
 		        
-        return new ChartData<Calendar>(results);
+		// TODO DD : get chart label from properties file?
+        return Lists.newArrayList(new ChartData<Calendar>("Assets Identified", results));
     }
 
 }
