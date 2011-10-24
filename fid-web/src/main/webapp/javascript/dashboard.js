@@ -19,8 +19,6 @@ var dashboardWidgetFactory = (function() {
 		return widget;
 	}	
 	
-	var previousPoint = null;
-	
 			
 	/**
 	 * widget object returned by factory 
@@ -29,8 +27,8 @@ var dashboardWidgetFactory = (function() {
 
 		/* private methods and properties */
 		var id = widgetId;
+		var previousPoint = null;	
 
-		// private method
 		function bindTootlips(id) {
 			$('#'+id).bind("plothover", function (event, pos, item) {
 			    $("#x").text(pos.x.toFixed(2));
@@ -84,7 +82,7 @@ var dashboardWidgetFactory = (function() {
 					bindTootlips(id);
 				}
 			},
-			update : function(newData, text) {				
+			update : function(newData) {				
 			    $.plot($('#'+id), newData, options);				
 			},
 			options : options = {

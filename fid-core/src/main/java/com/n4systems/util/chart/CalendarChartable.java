@@ -2,7 +2,6 @@ package com.n4systems.util.chart;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.SimpleTimeZone;
 
 @SuppressWarnings("serial")
 public class CalendarChartable extends SimpleChartable<Calendar> {
@@ -14,10 +13,12 @@ public class CalendarChartable extends SimpleChartable<Calendar> {
     @Override
 	public String getJavascriptX() {	    	
     	// FIXME DD : dashboard.js should detect locale and set timezone accordingly.
-        GregorianCalendar calendar = new GregorianCalendar(new SimpleTimeZone(-3600000*4,"GMT-4"));
+        GregorianCalendar calendar = new GregorianCalendar();
         calendar.clear();
 		calendar.set(Calendar.YEAR, getX().get(Calendar.YEAR));
-		calendar.set(Calendar.MONTH, getX().get(Calendar.MONTH));        
+		calendar.set(Calendar.MONTH, getX().get(Calendar.MONTH));   
+		calendar.set(Calendar.WEEK_OF_YEAR, getX().get(Calendar.WEEK_OF_YEAR));
+		calendar.set(Calendar.DAY_OF_YEAR, getX().get(Calendar.DAY_OF_YEAR));
         return new Long(calendar.getTimeInMillis()).toString();
     }	
     
@@ -26,7 +27,4 @@ public class CalendarChartable extends SimpleChartable<Calendar> {
 		return getX().getTime() + " : " + getY();
 	}
 	    
-
-	
-	
 }

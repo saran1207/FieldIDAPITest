@@ -72,7 +72,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
             protected void populateItem(final ListItem<WidgetDefinition> item) {
                 item.setOutputMarkupId(true);                
                 WidgetDefinition widgetDefinition = item.getModelObject();                
-                Widget widget = widgetFactory.createWidget(widgetDefinition).withRemoveBehaviour(new AjaxEventBehavior("onclick") {				
+                final Widget widget = widgetFactory.createWidget(widgetDefinition).withRemoveBehaviour(new AjaxEventBehavior("onclick") {				
 					@Override protected void onEvent(AjaxRequestTarget target) {
 						removeWidgetFromColumn(columnIndex, item.getIndex());
 						saveAndRepaintDashboard(target);

@@ -26,23 +26,22 @@ public class WidgetFactory implements Serializable {
 	
 	private static final Logger logger = Logger.getLogger(WidgetFactory.class);
 	
-	private Map<WidgetType, Class<? extends Widget>> config = new HashMap<WidgetType, Class<? extends Widget>>();
+	private Map<WidgetType, Class<? extends Panel>> config = new HashMap<WidgetType, Class<? extends Panel>>();
 
 
 	public Widget createWidget(final WidgetDefinition widgetDefinition) {
 		Widget widget = new Widget("widget", new PropertyModel<String>(widgetDefinition, "name"));
-		// FIXME DD : add remove button stuff here...
 		final WidgetType widgetType = widgetDefinition.getWidgetType();
-		widget.addContent(createPanel(widgetType, widget.getContentId()));
+		widget.addContent(createWidgetPanel(widgetType, widget.getContentId()));
 		return widget;
 	}
 	
-	private Panel createPanel(WidgetType type, String id) {
+	private Panel createWidgetPanel(WidgetType type, String id) {
 		return createPanel(type,id,true);
 	}
 	
 	private Panel createPanel(WidgetType type, String id, boolean checkForLazy) {
-		Class<? extends Panel> clazz = getWidgetPanelClass(type); 		
+		Class<? extends Panel> clazz = getPanelClass(type); 		
 		if (checkForLazy && ChartablePanel.class.isAssignableFrom(clazz)) {
 			return createLazyPanel(type, id);
 		} else { 
@@ -80,7 +79,7 @@ public class WidgetFactory implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Class<? extends Panel> getWidgetPanelClass(WidgetType type) {
+	private Class<? extends Panel> getPanelClass(WidgetType type) {
 		Class<? extends Panel> clazz = config.get(type);
 		if (clazz!=null) {
 			return clazz;		// found it in config!
@@ -97,7 +96,7 @@ public class WidgetFactory implements Serializable {
 		}
 	}
 	
-	public void configure(Map<WidgetType, Class<? extends Widget>> config) {
+	public void configure(Map<WidgetType, Class<? extends Panel>> config) {
 		this.config = config;
 	}
 	

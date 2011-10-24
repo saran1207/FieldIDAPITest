@@ -1,11 +1,8 @@
 package com.n4systems.fieldid.wicket.components.dashboard.widgets;
 
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
-import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
-import com.n4systems.fieldid.wicket.components.dashboard.subcomponents.LinkToJob;
-import com.n4systems.fieldid.wicket.data.jobs.OpenJobsForUserDataProvider;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.Project;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.CSSPackageResource;
@@ -17,8 +14,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.components.dashboard.subcomponents.LinkToJob;
+import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
+import com.n4systems.fieldid.wicket.data.jobs.OpenJobsForUserDataProvider;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.Project;
 
 public class JobsAssignedPanel extends Panel {
 

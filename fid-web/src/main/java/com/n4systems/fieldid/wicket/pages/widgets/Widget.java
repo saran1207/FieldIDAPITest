@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
+@SuppressWarnings("serial")
 public class Widget extends Panel {
 
     private static final String CONTENT_ID = "content";
@@ -25,7 +26,7 @@ public class Widget extends Panel {
     }
 
     public void addContent(Component content) {
-        add(content);
+        add(content);        
     }
 
     public String getContentId() {

@@ -53,7 +53,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
     	this(params,null);
     }
     
-    // UGH DD: this passing of configurationProvider is dog's breakfast.  next phase need to refactor this out into spring bean or some 
+    // UGH DD: nned to refactor configurationProvider more.  next phase need to refactor this out into spring bean or some 
     //   non-static reference to ConfigContext that is currently throughout pages. 
     public FieldIDFrontEndPage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
@@ -65,9 +65,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         addCssContainers();
 
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.at_intervals.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout-jquery.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/json2.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/common-jquery.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.colorbox.js"));

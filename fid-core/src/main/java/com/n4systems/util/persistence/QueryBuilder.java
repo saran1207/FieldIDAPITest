@@ -349,6 +349,14 @@ public class QueryBuilder<E> {
 		return this;
 	}
 	
+	public QueryBuilder<E> addGroupByClauses(List<GroupByClause> groupByClauses) {
+		for(GroupByClause clause: groupByClauses) {
+			groupByArguments.add(clause);
+		}
+		return this;
+	}
+	
+	
 	public Set<OrderClause> getOrderArguments() {
 		return orderArguments;
 	}
@@ -612,4 +620,5 @@ public class QueryBuilder<E> {
 		Long count = getCount(em);
 		return (count != null && count > 0);
 	}
+
 }
