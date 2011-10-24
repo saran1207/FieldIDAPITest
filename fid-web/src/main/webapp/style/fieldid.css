@@ -2221,7 +2221,6 @@ div.unitOfMeasureName {
 	padding-bottom: 10px;
 	padding-top: 2px;
 	background-repeat: no-repeat;
-	float: left;
 }
 
 .passColor p, .failColor p, .naColor p{
