@@ -13,10 +13,9 @@
 	<@s.text name="label.purchase_feature">
 		<@s.param>${action.getText(requiredFeature.label)}</@s.param>
 	</@s.text>
-	<@s.url id="homeUrl" action="home"  namespace="/"/>
-	
+
 	
 </div>
 <div class="byFeature">
-	<@s.submit theme="fieldidSimple" key="label.back_to_home" onclick="return redirect('${homeUrl}');"/>
+	<@s.submit theme="fieldidSimple" key="label.back_to_home" onclick="return redirect('/fieldid/w/dashboard');"/>
 </div>

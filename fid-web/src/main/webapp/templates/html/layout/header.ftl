@@ -42,7 +42,7 @@
 	<div id="pageNavigation">
 		<ul>
 			<li>
-				<a href="<@s.url action="home"  namespace="/"/>" class="speedLink" id="menuHome"><@s.text name="speed.home"/></a>
+				<a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><@s.text name="speed.home"/></a>
 			</li>
 		
 			<#if sessionUser.hasAccess("tag") == true >

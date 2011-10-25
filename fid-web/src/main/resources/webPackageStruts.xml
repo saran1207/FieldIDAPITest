@@ -1348,13 +1348,13 @@
 		<action name="login" method="add" class="com.n4systems.fieldid.actions.SignInAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="freemarker">/templates/html/login/form.ftl</result>
-			<result name="alreadyLoggedIn" type="redirectAction">home</result>			
+			<result name="alreadyLoggedIn" type="redirect">/w/dashboard</result>
 		</action>
 		
 		<action name="confirmKick" method="confirmKick" class="com.n4systems.fieldid.actions.SignInAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="error" type="freemarker">/templates/html/login/form.ftl</result>
-			<result name="success" type="redirectAction">home</result>
+			<result name="success" type="redirect">/w/dashboard</result>
 			<result name="redirect" type="redirect">
 				<param name="location">${previousUrl}</param>
 			</result>
@@ -1369,7 +1369,7 @@
 				<param name="k">${key}</param>
 			</result>
 			
-			<result name="success" type="redirectAction">home</result>
+			<result name="success" type="redirect">/w/dashboard</result>
 			<result name="redirect" type="redirect">
 				<param name="location">${previousUrl}</param>
 			</result>
@@ -2092,14 +2092,14 @@
 			<interceptor-ref name="loggedInStack" />
 			<result name="success" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
-			<result name="alreadyAccepted" type="redirectAction">home</result>
+			<result name="alreadyAccepted" type="redirect">/w/dashboard</result>
 		</action>
 
 		<action name="eulaAcceptanceCreate" method="create" class="com.n4systems.fieldid.actions.eula.EulaAcceptanceAction">
 			<interceptor-ref name="loggedInStack" />
 			<result name="input" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
-			<result name="success" type="redirectAction">home</result>
+			<result name="success" type="redirect">/w/dashboard</result>
 		</action>
 
 		<action name="divisions" method="list" class="com.n4systems.fieldid.actions.DivisionCrud">

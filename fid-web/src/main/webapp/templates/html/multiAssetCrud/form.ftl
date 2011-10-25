@@ -67,8 +67,7 @@
 	</div>
 	
 	<div id="cancelButton" class="stepAction" >
-		<@s.url id="cancelUrl" action="home" />
-		<@s.submit key="label.cancel_multi_add" id="cancel" onclick="return redirect('${cancelUrl}');"/>
+		<@s.submit key="label.cancel_multi_add" id="cancel" onclick="return redirect('/fieldid/w/dashboard');"/>
 	</div>
 
 </div>

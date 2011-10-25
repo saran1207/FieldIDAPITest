@@ -35,7 +35,7 @@
 	</div>
 		<div class="contentIndentation prominent">
 			<@s.url id="cancelUrl" action="step3" quickSetupWizardCatalogImport="true"/>
-			<input type="button" onclick="return redirect('<@s.url namespace="/" action="home"/>');" value="<@s.text name="label.proceed_to_my_fieldid_account"/>"/>
+			<input type="button" onclick="return redirect('/fieldid/w/dashboard');" value="<@s.text name="label.proceed_to_my_fieldid_account"/>"/>
 			<@s.text name="label.or"/>
 			<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.back"/></a>
 		</div>

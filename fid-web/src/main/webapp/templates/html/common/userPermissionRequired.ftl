@@ -5,5 +5,5 @@
 		<p>Please contact your Field ID administrator for more information.</p>
 	</#if>
 	
-	<p><@s.text name="label.return_to"/> <a href="<@s.url action="home" namespace="/"/>" ><@s.text name="label.home"/></a></p>
+	<p><@s.text name="label.return_to"/> <a href="/fieldid/w/dashboard" ><@s.text name="label.home"/></a></p>
 </div>		

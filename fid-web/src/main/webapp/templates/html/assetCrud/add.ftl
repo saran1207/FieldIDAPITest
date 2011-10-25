@@ -33,7 +33,7 @@
 		</#if>
 		<span id="cancelAction">
 			<@s.text name="label.or"/>
-			<a href="<@s.url action="home"/>"><@s.text name="label.cancel"/></a>
+			<a href="/fieldid/w/dashboard"><@s.text name="label.cancel"/></a>
 		</span>			
 	</div>
 </@s.form>

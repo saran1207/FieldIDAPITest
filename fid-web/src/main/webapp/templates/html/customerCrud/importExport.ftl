@@ -27,7 +27,7 @@ ${action.setPageType('customer', 'import_export')!}
 			
 			<@s.submit id="submitImport" key="label.start_import"/>
 			<span id="or"><@s.text name="label.or" /></span>
-			<a href="<@s.url action="home"/>"><@s.text name="label.cancel" /></a>
+			<a href="/fieldid/w/dashboard"><@s.text name="label.cancel" /></a>
 		</@s.form>
 		
 	</div>
