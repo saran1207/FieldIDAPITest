@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.pages.DashboardPage;
+import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
@@ -9,11 +12,6 @@ import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.protocol.http.HttpSessionStore;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.session.ISessionStore;
-
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.pages.HomePage;
-import com.n4systems.model.builders.UserBuilder;
-import com.n4systems.model.user.User;
 
 
 public class FieldIdTestableApp extends WebApplication {
@@ -38,7 +36,7 @@ public class FieldIdTestableApp extends WebApplication {
 	
 	@Override
 	public Class<? extends Page> getHomePage() {
-		return HomePage.class;
+		return DashboardPage.class;
 	}
 	
 	@Override

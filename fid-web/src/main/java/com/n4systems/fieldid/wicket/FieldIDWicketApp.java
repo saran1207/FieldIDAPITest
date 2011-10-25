@@ -15,7 +15,6 @@ import org.odlabs.wiquery.core.commons.WiQuerySettings;
 
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.DerekDashboardPage;
-import com.n4systems.fieldid.wicket.pages.HomePage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
@@ -67,7 +66,7 @@ public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings
         InjectorHolder.setInjector(new AnnotSpringInjector(new SpringContextLocator()));
         addComponentInstantiationListener(new SpringComponentInjector(this));
 
-        getApplicationSettings().setPageExpiredErrorPage(HomePage.class);
+        getApplicationSettings().setPageExpiredErrorPage(DashboardPage.class);
         getApplicationSettings().setInternalErrorPage(OopsPage.class);
         
                
@@ -75,7 +74,7 @@ public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings
 
     @Override
     public Class<? extends Page> getHomePage() {
-        return HomePage.class;
+        return DashboardPage.class;
     }
 
     @Override
