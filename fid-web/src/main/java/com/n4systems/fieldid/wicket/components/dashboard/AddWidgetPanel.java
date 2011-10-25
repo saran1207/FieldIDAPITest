@@ -1,17 +1,17 @@
 package com.n4systems.fieldid.wicket.components.dashboard;
 
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
+import com.n4systems.model.dashboard.DashboardLayout;
+import com.n4systems.model.dashboard.WidgetType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
-import com.n4systems.model.dashboard.DashboardLayout;
-import com.n4systems.model.dashboard.WidgetType;
 
 @SuppressWarnings("serial")
 public class AddWidgetPanel extends Panel {
@@ -33,11 +33,16 @@ public class AddWidgetPanel extends Panel {
         public AddWidgetForm(String id) {
             super(id);
 
+            add(new Label("displayingWidgets", new PropertyModel<Integer>(currentLayoutModel, "widgetCount")));
+            add(new Label("totalWidgets", WidgetType.values().length+""));
+
             final UnusedWidgetsModel unusedWidgetsModel = new UnusedWidgetsModel(currentLayoutModel);
-            add(new DropDownChoice<WidgetType>("widgetTypeSelect", new PropertyModel<WidgetType>(this, "selectedType"), unusedWidgetsModel, new ListableChoiceRenderer<WidgetType>()));
-            add(new AjaxButton("addButton") {
+            DropDownChoice<WidgetType> widgetTypeSelect;
+            add(widgetTypeSelect = new DropDownChoice<WidgetType>("widgetTypeSelect", new PropertyModel<WidgetType>(this, "selectedType"), unusedWidgetsModel, new ListableChoiceRenderer<WidgetType>()));
+
+            widgetTypeSelect.add(new OnChangeAjaxBehavior() {
                 @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                protected void onUpdate(AjaxRequestTarget target) {
                     if (selectedType != null) {
                         onWidgetTypeSelected(target, selectedType);
                         unusedWidgetsModel.detach();
@@ -46,6 +51,7 @@ public class AddWidgetPanel extends Panel {
                     }
                 }
             });
+            widgetTypeSelect.setNullValid(true);
         }
     }
 

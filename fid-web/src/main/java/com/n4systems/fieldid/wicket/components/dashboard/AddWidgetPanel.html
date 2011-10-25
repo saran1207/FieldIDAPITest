@@ -1,7 +1,18 @@
 <wicket:panel>
 
-    <form wicket:id="addWidgetForm">
-        <select wicket:id="widgetTypeSelect"></select> <button wicket:id="addButton">Add</button>
-    </form>
+    <div class="addWidgetForm">
+
+        <form wicket:id="addWidgetForm">
+
+            Displaying
+            <span style="font-weight:bold" wicket:id="displayingWidgets"></span>
+            of
+            <span style="font-weight:bold" wicket:id="totalWidgets"></span>
+            Widgets
+
+            <select wicket:id="widgetTypeSelect"></select>
+        </form>
+
+    </div>
 
 </wicket:panel>

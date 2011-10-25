@@ -6,12 +6,13 @@
 
 .widget {
     margin: 0 1em 1em 0;
+    line-height: 19px;
 }
 
 .widget-header {
     padding-bottom: 4px;
-    padding-left: 0.2em;
-    margin:0.3em;
+    padding-left: 20px;
+    margin: 0.1em 0.1em 0 0.1em;
 }
 
 .widget-header:hover {
@@ -23,10 +24,10 @@
 }
 
 .widget .widget-content {
-    padding: 1em;
-    margin: 0.3em;
-    font-size:12px;
-    color:#666;
+    padding: 10px 20px 20px 20px;
+    margin: 0 0.1em 0.1em 0.1em;
+    font-size: 12px;
+    color: #666;
 }
 
 .widget .widget-content .small-text {
@@ -41,12 +42,16 @@
 }
 
 .widget-buttons {
-    display:block;
-    float:right;
+    display: block;
+    float: right;
+    padding-right:20px;
 }
 
 .pageContent .ui-sortable-placeholder {
-    border: 3px dotted #e3e3e3; visibility: visible !important; height: 50px !important;
+    border: 3px dashed #e3e3e3; visibility: visible !important; height: 50px !important;
+    background: #fdfdfd;
+    margin-right:13px;
+    margin-bottom:13px;
 }
 
 .ui-sortable-placeholder * {
@@ -56,7 +61,7 @@
 .widget .ui-widget-header {
     background:#f7f7f7;
     border:none;
-    padding: 5px 0 4px 8px;
+    padding: 5px 0 4px 20px;
     font-size: 16px;
     font-weight: bold;
     color: #585858;
@@ -64,4 +69,21 @@
 
 .widget .widget-content {
     background:#f7f7f7;
+}
+
+img.widget-drag-image {
+    display:block;
+    padding-left:230px;
+}
+
+.addWidgetForm {
+    text-align:right;
+    display:block;
+    float:right;
+    width:800px;
+    padding:2px 10px 6px 0;
+}
+
+.addWidgetForm select {
+    padding:3px;
 }

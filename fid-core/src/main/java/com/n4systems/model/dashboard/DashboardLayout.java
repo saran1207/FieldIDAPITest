@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "dashboard_layouts")
@@ -45,6 +46,15 @@ public class DashboardLayout extends EntityWithTenant {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Transient
+    public int getWidgetCount() {
+        int widgetCount = 0;
+        for (DashboardColumn column : columns) {
+            widgetCount += column.getWidgets().size();
+        }
+        return widgetCount;
     }
 
 }

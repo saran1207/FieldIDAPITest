@@ -25,6 +25,7 @@ public class Widget extends Panel {
         setOutputMarkupId(true);
         add(new Label("titleLabel", new PropertyModel<String>(widgetDefinition, "name")));
         addButtons();
+        add(new ContextImage("dragImage", "images/dashboard/drag.png"));
     }
 
     private void addButtons() {
