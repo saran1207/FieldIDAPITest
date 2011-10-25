@@ -15,7 +15,6 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDataGranularity;
-import com.n4systems.util.chart.SimpleChartable;
 import com.n4systems.util.persistence.GroupByClause;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -33,23 +32,21 @@ public class ReportingService extends FieldIdPersistenceService {
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
     public List<ChartData<Calendar>> getAssetsIdentified(ChartDataGranularity granularity, BaseOrg org) {
-		QueryBuilder<AssetsIdentifiedReportRecord> builder = getBuilderForGranularity(granularity, org);
+		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
+		
+		builder.setSelectArgument(new NewObjectSelect(AssetsIdentifiedReportRecord.class, "YEAR(identified)", "QUARTER(identified)", "WEEK(identified)", "DAYOFYEAR(identified)", "COUNT(*)"));
+		builder.addGroupByClauses(getGroupByClauses(granularity));
+		builder.addWhere(Comparator.GE, "identified", "identified", getEarliestAssetDate());
+		if (org!=null) { 
+			builder.addSimpleWhere("owner.id", org.getId());
+		}
+		builder.addOrder("identified");
 		
 		List<AssetsIdentifiedReportRecord> results = persistenceService.findAll(builder);
 				
         return Lists.newArrayList(new ChartData<Calendar>().withGranularity(granularity).add(results));
     }
 
-	private QueryBuilder<AssetsIdentifiedReportRecord> getBuilderForGranularity(ChartDataGranularity period, BaseOrg org) {
-		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
-		
-		builder.setSelectArgument(new NewObjectSelect(AssetsIdentifiedReportRecord.class, "YEAR(identified)", "QUARTER(identified)", "WEEK(identified)", "DAYOFYEAR(identified)", "COUNT(*)"));
-		builder.addGroupByClauses(getGroupByClauses(period));
-		builder.addWhere(Comparator.GE, "identified", "identified", getEarliestAssetDate());	
-		builder.addOrder("identified");
-		
-		return builder;		
-	}
 
 	// TODO DD : put in util pkg.
 	private Date getEarliestAssetDate() {
@@ -89,18 +86,12 @@ public class ReportingService extends FieldIdPersistenceService {
 		return result;
 	}
 
-	@Deprecated  // for testing only.
-	private void makeTestCalendarData(ChartData<Calendar> chartData) {
-		for (int i= 0 ; i < 100; i++) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(i);			
-			chartData.add(new SimpleChartable<Calendar>(calendar,new Long(i)) {
-				@Override protected String getJavascriptX() {
-					return ""+getX().getTimeInMillis();
-				}
-			});
-		}
-	}
+	
+	
+	
+	
+	
+	
 
 	
 

@@ -4,13 +4,18 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+
 
 @SuppressWarnings("serial")
 public class ChartData<X> implements Serializable {
-	private static final int LIMIT_FOR_GRANULAR_DATA = 30;
+	private static final Logger logger = Logger.getLogger(ChartData.class);
+	
+	private static final int LIMIT_FOR_GRANULAR_DATA = 200;	// put a reasonable limit on the number of points per graph... 
 	
 	TreeMap<X, Chartable<X>> data = new TreeMap<X, Chartable<X>>();
 	private String label;
+	// TODO DD : refactor out of here...these are only applicable for Calendar based charts. 
 	private transient ChartDataGranularity granularity;
 	private transient Integer dataLimit;
 	
@@ -34,9 +39,8 @@ public class ChartData<X> implements Serializable {
 	}
 
 	public ChartData<X> add(Chartable<X> chartable) {
-		if (data.size()<limitedSize()) {
-			data.put(chartable.getX(), chartable);
-		}
+		data.put(chartable.getX(), chartable);
+		trim();
 		return this;
 	}
 	
@@ -82,15 +86,9 @@ public class ChartData<X> implements Serializable {
 		return this;
 	}
 
-	private void trim() {
+	private void trim() {		
 		int count = data.size()-limitedSize();  // remove the first N entries if data is > limit.
-		for (X key:data.keySet()) {
-			if (count<=0) {
-				break;
-			}
-			data.remove(key);
-			count--;			
-		}		
+		// TODO DD : optimization... remove data just in case you pass a huge result set.  
 	}
 
 	public ChartData<X> withDataLimit(int dataLimit) {
@@ -100,6 +98,9 @@ public class ChartData<X> implements Serializable {
 	}
 
 	public Long getMinX() {
+		if (data.size()==0){ 
+			return null; 
+		}
 		if (granularity!=null) { 
 			Long last = data.lastEntry().getValue().getLongX();
 			return last-granularity.delta();
@@ -108,9 +109,14 @@ public class ChartData<X> implements Serializable {
 		}		
 	}
 	
-	public Long[] getPanRange() {
-		return new Long[]{data.firstEntry().getValue().getLongX(), 
-			data.lastEntry().getValue().getLongX() };
+	public Long getPanMin() {
+		return data.size()>0 ? 
+				data.firstEntry().getValue().getLongX() : null; 
+	}
+	
+	public Long getPanMax() {
+		return data.size()>0 ? 
+				data.lastEntry().getValue().getLongX() : null; 
 	}
 	
 }	 

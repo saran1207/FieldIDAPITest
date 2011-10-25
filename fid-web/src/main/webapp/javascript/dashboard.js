@@ -35,15 +35,7 @@ var dashboardWidgetFactory = (function() {
 		var previousPoint = null;	
 		var options = x;
 		
-		function bindTootlips(id) {
-			/*FIXME DD : take this out by end of dev.  for debugging only... */
-			$('#'+id).bind('plotpan', function (event, plot) {
-			        var axes = plot.getAxes();
-			        $(".message").html("Panning to x: "  + axes.xaxis.min.toFixed(2)
-			                           + "...." + axes.xaxis.max.toFixed(2));
-			    });
-			/*FIXME DD ------------------------------------------------------ */
-			
+		function bindTootlips(id) {		
 			$('#'+id).bind("plothover", function (event, pos, item) {
 			    $("#x").text(pos.x.toFixed(2));
 			    $("#y").text(pos.y.toFixed(2));

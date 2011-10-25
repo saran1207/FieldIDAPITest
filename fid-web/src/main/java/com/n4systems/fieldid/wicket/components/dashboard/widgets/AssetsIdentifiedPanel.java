@@ -3,11 +3,14 @@ package com.n4systems.fieldid.wicket.components.dashboard.widgets;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.ReportingService;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDataGranularity;
@@ -18,6 +21,7 @@ public class AssetsIdentifiedPanel extends ChartablePanel<Calendar> {
 	@SpringBean
 	private ReportingService reportingService;
 	private ChartDataGranularity period = ChartDataGranularity.ALL;
+	private BaseOrg owner;
 	
     public AssetsIdentifiedPanel(String id) {
         super(id);
@@ -25,16 +29,17 @@ public class AssetsIdentifiedPanel extends ChartablePanel<Calendar> {
         addPeriodButton("quarter", ChartDataGranularity.QUARTER);
         addPeriodButton("month", ChartDataGranularity.MONTH);
         addPeriodButton("week", ChartDataGranularity.WEEK);
+        add(new OrgForm("ownerForm"));
         setOutputMarkupId(true);
     }
 
     private void addPeriodButton(String id, final ChartDataGranularity period) {
-        add(new Button(id).add(new AjaxEventBehavior("onclick") {
-			@Override protected void onEvent(AjaxRequestTarget target) {
+        add(new IndicatingAjaxLink(id) {
+			@Override public void onClick(AjaxRequestTarget target) {
 				setPeriod(period);
 				target.addComponent(AssetsIdentifiedPanel.this);
-			}
-        }));
+			}        	
+        });         
 	}
     
     private void setPeriod(ChartDataGranularity period) {
@@ -43,10 +48,23 @@ public class AssetsIdentifiedPanel extends ChartablePanel<Calendar> {
 
 	@Override
     protected List<ChartData<Calendar>> getChartData() {
-    	return reportingService.getAssetsIdentified(period, null/*org filter not done yet*/);
+    	return reportingService.getAssetsIdentified(period, owner);
     }
 
+	class OrgForm extends Form {
 
+		public OrgForm(String id) {
+			super(id);
+			add(new OrgPicker("ownerPicker", new PropertyModel<BaseOrg>(AssetsIdentifiedPanel.this, "owner")) { 
+				@Override protected void closePicker(AjaxRequestTarget target) {
+					super.closePicker(target);
+					target.addComponent(AssetsIdentifiedPanel.this);
+				}
+			});
+		}
+		
+	}
+	
 }
 
 
