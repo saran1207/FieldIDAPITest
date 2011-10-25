@@ -4,7 +4,6 @@ import com.n4systems.model.api.Listable;
 
 public enum WidgetType implements Listable {
 
-    SAMPLE("Sample", false),
     JOBS_ASSIGNED("Assigned Jobs", false),
     ASSETS_IDENTIFIED("Assets Identified", true),
     COMMON_LINKS("Common Links", false),

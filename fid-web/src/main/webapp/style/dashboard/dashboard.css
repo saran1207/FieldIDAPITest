@@ -87,3 +87,7 @@ img.widget-drag-image {
 .addWidgetForm select {
     padding:3px;
 }
+
+.column .ui-widget-content {
+    border: 1px solid #e3e3e3;
+}
