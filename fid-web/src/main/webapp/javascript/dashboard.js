@@ -30,6 +30,12 @@ var dashboardWidgetFactory = (function() {
 		var previousPoint = null;	
 
 		function bindTootlips(id) {
+			$('#'+id).bind('plotpan', function (event, plot) {
+			        var axes = plot.getAxes();
+			        $(".message").html("Panning to x: "  + axes.xaxis.min.toFixed(2)
+			                           + " &ndash; " + axes.xaxis.max.toFixed(2));
+			    });
+			
 			$('#'+id).bind("plothover", function (event, pos, item) {
 			    $("#x").text(pos.x.toFixed(2));
 			    $("#y").text(pos.y.toFixed(2));
@@ -85,20 +91,27 @@ var dashboardWidgetFactory = (function() {
 			update : function(newData) {				
 			    $.plot($('#'+id), newData, options);				
 			},
+			// TODO DD : add java-->javascript translation.  i.e. pass in hashmap of option key/values.
 			options : options = {
+					series: { lines: { show: true }, shadowSize: 0 },					
 			        lines: { show: true },
 			        points: { show: true },
-			        selection: { mode: "x" },
-			        yaxis : { 
+			        yaxis : {
+			        	panRange: false, 			        	
 			        	decimals: "0"
 			        },
 			        xaxis: {
+			        	panRange: [952732800000,1321660800000], 
 			        	dateFormatter : formatDate,
+			        	min : 1321660800000-((1321660800000-952732800000)/2),
 			        	mode: "time",
 						timeformat : "%b %d, %y",			
 						monthNames : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 			        	},
-			        grid: { hoverable: true, clickable: true }
+					grid: { hoverable: true, clickable: true },
+			        pan: {
+			        	interactive: true
+			        },			        
 			    },						
 		};
 		

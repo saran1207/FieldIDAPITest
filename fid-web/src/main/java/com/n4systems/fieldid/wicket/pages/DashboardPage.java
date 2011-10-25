@@ -47,6 +47,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
 	public DashboardPage() {
         add(CSSPackageResource.getHeaderContribution("style/dashboard/dashboard.css"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.js"));        
+        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.navigate.js"));        
         add(JavascriptPackageResource.getHeaderContribution("javascript/dashboard.js"));
 
         currentLayout = dashboardService.findLayout();
