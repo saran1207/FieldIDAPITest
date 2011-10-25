@@ -19,6 +19,7 @@ import com.n4systems.util.chart.SimpleChartable;
 import com.n4systems.util.persistence.GroupByClause;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 // CACHEABLE!!!  this is used for getting old data.
 
@@ -36,29 +37,26 @@ public class ReportingService extends FieldIdPersistenceService {
 		
 		List<AssetsIdentifiedReportRecord> results = persistenceService.findAll(builder);
 				
-		ChartData<Calendar> chartData = new ChartData<Calendar>();
-		
-		for (int i= 0 ; i < 100; i++) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(i);			
-			chartData.add(new SimpleChartable<Calendar>(calendar,new Long(i)) {
-				@Override protected String getJavascriptX() {
-					return ""+getX().getTimeInMillis();
-				}
-			});
-		}
-		        
-        return Lists.newArrayList(new ChartData<Calendar>().add(results));
+        return Lists.newArrayList(new ChartData<Calendar>().withGranularity(granularity).add(results));
     }
 
 	private QueryBuilder<AssetsIdentifiedReportRecord> getBuilderForGranularity(ChartDataGranularity period, BaseOrg org) {
 		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 		
 		builder.setSelectArgument(new NewObjectSelect(AssetsIdentifiedReportRecord.class, "YEAR(identified)", "QUARTER(identified)", "WEEK(identified)", "DAYOFYEAR(identified)", "COUNT(*)"));
-//		builder.addWhere(Comparator.GE, "identified", "identified", getFromDate(period));
 		builder.addGroupByClauses(getGroupByClauses(period));
+		builder.addWhere(Comparator.GE, "identified", "identified", getEarliestAssetDate());	
+		builder.addOrder("identified");
 		
 		return builder;		
+	}
+
+	// TODO DD : put in util pkg.
+	private Date getEarliestAssetDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(Calendar.YEAR,2007);
+		return calendar.getTime();
 	}
 
 	private List<GroupByClause> getGroupByClauses(ChartDataGranularity granularity) {
@@ -91,36 +89,19 @@ public class ReportingService extends FieldIdPersistenceService {
 		return result;
 	}
 
-	private Date getFromDate(ChartDataGranularity period) {
-		if (period==null) { 
-			return new Date(0);
+	@Deprecated  // for testing only.
+	private void makeTestCalendarData(ChartData<Calendar> chartData) {
+		for (int i= 0 ; i < 100; i++) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(i);			
+			chartData.add(new SimpleChartable<Calendar>(calendar,new Long(i)) {
+				@Override protected String getJavascriptX() {
+					return ""+getX().getTimeInMillis();
+				}
+			});
 		}
-
-		Calendar today = Calendar.getInstance();
-		int day = today.get(Calendar.DAY_OF_YEAR);
-		int year = today.get(Calendar.YEAR);
-		
-		// try to get around 30 data points per plot. 
-		Calendar from = today;
-		switch (period) { 
-			case DAY:
-				from.add(Calendar.MONTH, -1);
-				break;
-			case WEEK:
-				from.add(Calendar.YEAR, -1);
-				break;
-			case MONTH: 
-				from.add(Calendar.YEAR, -2);
-				break;
-			case QUARTER:
-				from.add(Calendar.YEAR, -4);
-				break;
-			case YEAR:
-			case ALL:
-				from.clear();
-				break;
-		}
-		return from.getTime();
 	}
+
+	
 
 }

@@ -9,17 +9,22 @@ public class CalendarChartable extends SimpleChartable<Calendar> {
 	public CalendarChartable(Calendar x, Number y) {
 		super(x,y);
 	}
-
+	
     @Override
-	public String getJavascriptX() {	    	
-    	// FIXME DD : dashboard.js should detect locale and set timezone accordingly.
+	public Long getLongX() {
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.clear();
 		calendar.set(Calendar.YEAR, getX().get(Calendar.YEAR));
 		calendar.set(Calendar.MONTH, getX().get(Calendar.MONTH));   
 		calendar.set(Calendar.WEEK_OF_YEAR, getX().get(Calendar.WEEK_OF_YEAR));
 		calendar.set(Calendar.DAY_OF_YEAR, getX().get(Calendar.DAY_OF_YEAR));
-        return new Long(calendar.getTimeInMillis()).toString();
+        return calendar.getTimeInMillis();
+    }
+
+    @Override
+	public String getJavascriptX() {	    	
+    	// FIXME DD : dashboard.js should detect locale and set timezone accordingly.
+    	return ""+getLongX();
     }	
     
 	@Override

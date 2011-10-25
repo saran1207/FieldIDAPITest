@@ -61,5 +61,10 @@ public class AssetsIdentifiedReportRecord implements Chartable<Calendar> {
 		return chartable.toJavascriptString();
 	}
 	
+	@Override 
+	public Long getLongX() {
+		return chartable.getLongX();
+	}
+
 
 }

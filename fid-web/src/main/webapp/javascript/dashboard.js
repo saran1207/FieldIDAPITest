@@ -1,7 +1,7 @@
 /**
 + * requires.... 
  *   jquery.flot.js 
- *  
+ *   jquery.flot.navigate.js
  */
 
 var dashboardWidgetFactory = (function() { 
@@ -9,12 +9,17 @@ var dashboardWidgetFactory = (function() {
 	// instead of passing id, why not pass reference to element???
 	var create = function(id) { 
 		var widget = dashboardWidget(id);
-	    widget.setTooltips(true);
 		return widget;
 	};
 	
-	var createWithData = function(id,data) {
-		var widget = create(id);
+	var createWithData = function(id,data,xx) {
+		var widget = dashboardWidget(id,xx);
+		if(!xx.yaxis.panRange) {
+			xx.yaxis.panRange=false;
+		}
+		if(xx.grid.hoverable) { 
+			widget.setTooltips(true);
+		}
 		widget.update(data);
 		return widget;
 	}	
@@ -23,18 +28,21 @@ var dashboardWidgetFactory = (function() {
 	/**
 	 * widget object returned by factory 
 	 */	
-	function dashboardWidget(widgetId) {
+	function dashboardWidget(widgetId, x) {
 
 		/* private methods and properties */
 		var id = widgetId;
 		var previousPoint = null;	
-
+		var options = x;
+		
 		function bindTootlips(id) {
+			/*FIXME DD : take this out by end of dev.  for debugging only... */
 			$('#'+id).bind('plotpan', function (event, plot) {
 			        var axes = plot.getAxes();
 			        $(".message").html("Panning to x: "  + axes.xaxis.min.toFixed(2)
-			                           + " &ndash; " + axes.xaxis.max.toFixed(2));
+			                           + "...." + axes.xaxis.max.toFixed(2));
 			    });
+			/*FIXME DD ------------------------------------------------------ */
 			
 			$('#'+id).bind("plothover", function (event, pos, item) {
 			    $("#x").text(pos.x.toFixed(2));
@@ -90,29 +98,7 @@ var dashboardWidgetFactory = (function() {
 			},
 			update : function(newData) {				
 			    $.plot($('#'+id), newData, options);				
-			},
-			// TODO DD : add java-->javascript translation.  i.e. pass in hashmap of option key/values.
-			options : options = {
-					series: { lines: { show: true }, shadowSize: 0 },					
-			        lines: { show: true },
-			        points: { show: true },
-			        yaxis : {
-			        	panRange: false, 			        	
-			        	decimals: "0"
-			        },
-			        xaxis: {
-			        	panRange: [952732800000,1321660800000], 
-			        	dateFormatter : formatDate,
-			        	min : 1321660800000-((1321660800000-952732800000)/2),
-			        	mode: "time",
-						timeformat : "%b %d, %y",			
-						monthNames : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-			        	},
-					grid: { hoverable: true, clickable: true },
-			        pan: {
-			        	interactive: true
-			        },			        
-			    },						
+			},	
 		};
 		
 	};

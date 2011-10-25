@@ -38,6 +38,10 @@ public class SimpleChartable<X> implements Chartable<X> {
 	protected String getJavascriptX() {
 		return getX().toString();
 	}
-	
+
+	@Override
+	public Long getLongX() {
+		return new Long(getJavascriptX());
+	}	
 	
 }
