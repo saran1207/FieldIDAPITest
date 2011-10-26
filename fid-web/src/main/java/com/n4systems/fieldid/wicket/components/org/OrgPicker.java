@@ -122,12 +122,9 @@ public class OrgPicker extends Panel {
         add(new AjaxLink("clearLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                orgModel.setObject(null);
-                if (browsePanel != null) {
-                    browsePanel.clearSelections();
-                }
-                target.addComponent(OrgPicker.this);
+                cancelPicker(target);
             }
+		
         });
 
         add(chooseLink = new AjaxLink("chooseLink") {
@@ -145,5 +142,13 @@ public class OrgPicker extends Panel {
         orgPickerContainer.setVisible(false);
         target.addComponent(OrgPicker.this);
     }
+    
+	protected void cancelPicker(AjaxRequestTarget target) {
+		orgModel.setObject(null);
+        if (browsePanel != null) {
+            browsePanel.clearSelections();
+        }
+        target.addComponent(OrgPicker.this);
+	}    
 
 }

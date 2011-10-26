@@ -60,6 +60,10 @@ public class AssetsIdentifiedPanel extends ChartablePanel<Calendar> {
 					super.closePicker(target);
 					target.addComponent(AssetsIdentifiedPanel.this);
 				}
+				@Override protected void cancelPicker(AjaxRequestTarget target) {
+					super.cancelPicker(target);
+					target.addComponent(AssetsIdentifiedPanel.this);
+				}
 			});
 		}
 		
