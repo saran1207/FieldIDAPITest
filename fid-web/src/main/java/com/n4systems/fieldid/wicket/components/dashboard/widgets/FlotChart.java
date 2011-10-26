@@ -22,9 +22,9 @@ public class FlotChart<X> extends WebMarkupContainer {
 	
 	public FlotChart(final String id, IModel<List<ChartData<X>>> model) {
 		super(id, model);
-		this.options = new FlotOptions();
-		
+		this.options = new FlotOptions();				
         setOutputMarkupId(true).setMarkupId(createNextMarkupId());
+        
 		add(new AbstractBehavior () {
 			// TODO DD : not sure if this needs to be in renderHead or just hooked into render.????  which is better...
 			@Override
@@ -33,7 +33,7 @@ public class FlotChart<X> extends WebMarkupContainer {
 				javascriptBuffer.append ("dashboardWidgetFactory.createWithData('"+getMarkupId() + "'," + 
 						getChartDataJavascriptString() + "," +   // TODO DD : use jsonRenderer for chartData too.
 						jsonRenderer.render(getUpdatedOptions()) + 
-						");");
+				");");
 				response.renderOnLoadJavascript(javascriptBuffer.toString());
 			}
 		

@@ -6,25 +6,6 @@
 
 var dashboardWidgetFactory = (function() { 
 	
-	// instead of passing id, why not pass reference to element???
-	var create = function(id) { 
-		var widget = dashboardWidget(id);
-		return widget;
-	};
-	
-	var createWithData = function(id,data,xx) {
-		var widget = dashboardWidget(id,xx);
-		if(!xx.yaxis.panRange) {
-			xx.yaxis.panRange=false;
-		}
-		if(xx.grid.hoverable) { 
-			widget.setTooltips(true);
-		}
-		widget.update(data);
-		return widget;
-	}	
-	
-			
 	/**
 	 * widget object returned by factory 
 	 */	
@@ -56,7 +37,7 @@ var dashboardWidgetFactory = (function() {
 			            previousPoint = null;            
 			        }
 				});
-		}
+		};
 		
 		// TODO : refactor this out of here...should be part of options.
 		function formatDate(d) { 
@@ -64,7 +45,7 @@ var dashboardWidgetFactory = (function() {
 			var month = d.getMonth();
 			var year = d.getFullYear();
 			return options.xaxis.monthNames[month] + ' ' + day + ' ' + year; 
-		}
+		};
 		
 		function showTooltip(x, y, contents) {
 		    $('<div id="tooltip">' + contents + '</div>').css( {
@@ -78,7 +59,7 @@ var dashboardWidgetFactory = (function() {
 		        'background-color': '#fee',
 		        opacity: 0.80
 		    }).appendTo("body").fadeIn(200);
-		}		
+		};		
 		
 		/* public methods exposed */
 		return { 	
@@ -90,14 +71,33 @@ var dashboardWidgetFactory = (function() {
 			},
 			update : function(newData) {				
 			    $.plot($('#'+id), newData, options);				
-			},	
+			}
 		};
 		
+	}
+	
+	// instead of passing id, why not pass reference to element???
+	var create = function(id) { 
+		var widget = dashboardWidget(id);
+		return widget;
 	};
+	
+	var createWithData = function(id,data,options) {
+		var widget = dashboardWidget(id,options);
+		if(!options.yaxis.panRange) {
+			options.yaxis.panRange=false;
+		}
+		if(options.grid.hoverable) { 
+			widget.setTooltips(true);
+		}
+		widget.update(data);
+		return widget;
+	};	
+	
 			
 	return { 
 		create : create,
-		createWithData : createWithData,
+		createWithData : createWithData
 	};
 
 	

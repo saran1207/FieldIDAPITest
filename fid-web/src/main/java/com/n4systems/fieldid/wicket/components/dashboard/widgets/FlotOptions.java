@@ -21,8 +21,8 @@ public class FlotOptions implements Serializable {
 	}
 	
 	class Axis implements Serializable  {
-		public Long[] panRange = new Long[0];	//{952732800000L,1321660800000L};
-		public Long min = Long.MAX_VALUE;			//1321660800000L-((1321660800000L-952732800000L)/2);
+		public Long[] panRange = null;	
+		public Long min = Long.MAX_VALUE;		
 		public String mode = "time";
 		public String timeFormat = "%b %d, %y";
 		public String decimals = "0";
@@ -31,7 +31,9 @@ public class FlotOptions implements Serializable {
 	
 	class Grid implements Serializable  {
 		public Boolean hoverable = true;
-		public Boolean clickable = true;		
+		public Boolean clickable = true;	
+		public String colour;
+		public String tickColor;
 	}
 	
 	class Pan implements Serializable  { 
