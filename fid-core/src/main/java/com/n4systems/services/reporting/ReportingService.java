@@ -88,7 +88,7 @@ public class ReportingService extends FieldIdPersistenceService {
 
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-    public List<ChartData<Calendar>> getUpcomingScheduledEvents() {
+    public List<ChartData<Calendar>> getUpcomingScheduledEvents(Integer period, BaseOrg owner) {
 		
 		QueryBuilder<UpcomingScheduledEventsRecord> builder = new QueryBuilder<UpcomingScheduledEventsRecord>(EventSchedule.class, securityContext.getUserSecurityFilter());
 		
@@ -98,21 +98,20 @@ public class ReportingService extends FieldIdPersistenceService {
 		WhereParameterGroup filtergroup = new WhereParameterGroup("filtergroup");
 		
 		filtergroup.addClause(WhereClauseFactory.create(Comparator.GE, "fromDate", "nextDate", today, null, ChainOp.AND));
-		filtergroup.addClause(WhereClauseFactory.create(Comparator.LE, "toDate", "nextDate", DateUtils.addDays(today, 30), null, ChainOp.AND));
+		filtergroup.addClause(WhereClauseFactory.create(Comparator.LE, "toDate", "nextDate", DateUtils.addDays(today, period), null, ChainOp.AND));
 		
 		builder.addWhere(filtergroup);
-		builder.addWhere(Comparator.EQ, "status", "status", ScheduleStatus.SCHEDULED);
+		builder.addSimpleWhere("status", ScheduleStatus.SCHEDULED);
+
+		if(owner != null) {
+			builder.addSimpleWhere("owner", owner);
+		}
 
 		builder.addGroupBy("nextDate");
 		List<UpcomingScheduledEventsRecord> results = persistenceService.findAll(builder);
 		
-		
         return Lists.newArrayList(new ChartData<Calendar>().add(results));
 	}
-
-
-	
-	
 	
 	// TODO DD : put in util pkg.
 	private Date getEarliestAssetDate() {
