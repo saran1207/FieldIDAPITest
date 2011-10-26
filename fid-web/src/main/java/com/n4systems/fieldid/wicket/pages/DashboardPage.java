@@ -12,8 +12,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
@@ -21,6 +19,7 @@ import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
 import com.n4systems.fieldid.wicket.components.dashboard.widgets.WidgetFactory;
 import com.n4systems.fieldid.wicket.pages.widgets.Widget;
+import com.n4systems.fieldid.wicket.util.JavascriptPackageResourceIE;
 import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
@@ -47,10 +46,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
 	public DashboardPage() {
         add(CSSPackageResource.getHeaderContribution("style/dashboard/dashboard.css"));
-       	WebClientInfo clientInfo = (WebClientInfo)WebRequestCycle.get().getClientInfo();
-       	if (clientInfo.getProperties().isBrowserInternetExplorer()) {
-       		add(JavascriptPackageResource.getHeaderContribution("javascript/flot/excanvas.js"));
-       	}
+       	add(JavascriptPackageResourceIE.getHeaderContribution("javascript/flot/excanvas.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.min.js"));                
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.navigate.min.js"));        
         add(JavascriptPackageResource.getHeaderContribution("javascript/dashboard.js"));
