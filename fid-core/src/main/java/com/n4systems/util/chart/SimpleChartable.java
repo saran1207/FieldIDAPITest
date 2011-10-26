@@ -1,8 +1,9 @@
 package com.n4systems.util.chart;
 
 
+
 @SuppressWarnings("serial")
-public class SimpleChartable<X> implements Chartable<X> {
+public abstract class SimpleChartable<X> implements Chartable<X> {
 
 	private X x;
 	private Number y;
@@ -32,16 +33,12 @@ public class SimpleChartable<X> implements Chartable<X> {
 	
 	@Override 
 	public String toJavascriptString() { 	
-		return "[" + getJavascriptX() + "," + y+"]";
+		return "[" + getLongX() + "," + y+"]";
 	}
 
 	protected String getJavascriptX() {
 		return getX().toString();
 	}
-
-	@Override
-	public Long getLongX() {
-		return new Long(getJavascriptX());
-	}	
+	
 	
 }

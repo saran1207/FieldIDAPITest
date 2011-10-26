@@ -17,15 +17,16 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.util.chart.CalendarChartManager;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDataGranularity;
 import com.n4systems.util.persistence.GroupByClause;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.util.persistence.WhereParameterGroup;
 
 // CACHEABLE!!!  this is used for getting old data.
 
@@ -51,17 +52,9 @@ public class ReportingService extends FieldIdPersistenceService {
 		
 		List<AssetsIdentifiedReportRecord> results = persistenceService.findAll(builder);
 				
-        return Lists.newArrayList(new ChartData<Calendar>().withGranularity(granularity).add(results));
+        return Lists.newArrayList(new ChartData<Calendar>().withChartManager(new CalendarChartManager(granularity)).add(results));
     }
 
-
-	// TODO DD : put in util pkg.
-	private Date getEarliestAssetDate() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.set(Calendar.YEAR,2007);
-		return calendar.getTime();
-	}
 
 	private List<GroupByClause> getGroupByClauses(ChartDataGranularity granularity) {
 		ArrayList<GroupByClause> result = Lists.newArrayList();
@@ -115,6 +108,18 @@ public class ReportingService extends FieldIdPersistenceService {
 		
 		
         return Lists.newArrayList(new ChartData<Calendar>().add(results));
+	}
+
+
+	
+	
+	
+	// TODO DD : put in util pkg.
+	private Date getEarliestAssetDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(Calendar.YEAR,2007);
+		return calendar.getTime();
 	}
 
 	

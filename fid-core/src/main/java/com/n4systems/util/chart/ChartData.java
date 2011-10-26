@@ -11,13 +11,9 @@ import org.apache.log4j.Logger;
 public class ChartData<X> implements Serializable {
 	private static final Logger logger = Logger.getLogger(ChartData.class);
 	
-	private static final int LIMIT_FOR_GRANULAR_DATA = 200;	// put a reasonable limit on the number of points per graph... 
-	
-	TreeMap<X, Chartable<X>> data = new TreeMap<X, Chartable<X>>();
+	private TreeMap<X, Chartable<X>> data = new TreeMap<X, Chartable<X>>();
 	private String label;
-	// TODO DD : refactor out of here...these are only applicable for Calendar based charts. 
-	private transient ChartDataGranularity granularity;
-	private transient Integer dataLimit;
+	private ChartManager<X> chartManager = null;
 	
 	public ChartData() { 
 	}
@@ -37,21 +33,19 @@ public class ChartData<X> implements Serializable {
 		}
 		return this;
 	}
-
+	
 	public ChartData<X> add(Chartable<X> chartable) {
 		data.put(chartable.getX(), chartable);
 		trim();
 		return this;
 	}
 	
-	private int limitedSize() {
-		return dataLimit != null ? dataLimit : 
-			granularity != null ? LIMIT_FOR_GRANULAR_DATA : 
-				Integer.MAX_VALUE;
-	}
-
 	//	e.g. {data:[[0,12],[87,9.3]], label:'hello'}	
 	public String toJavascriptString() {
+		if (data.size()>500) {
+			// just to warn of potential performance problems. 
+			logger.warn("Very large dataset returned for chart (" + data.size() + ")" );
+		}
 		StringBuffer buff = new StringBuffer("{data:[");
 		
 		for (Chartable<X> cdp:data.values()) { 
@@ -79,45 +73,52 @@ public class ChartData<X> implements Serializable {
 		return data.get(x);
 	}
 
-	public ChartData<X> withGranularity(ChartDataGranularity granularity) {
-		// trim size here...max 100 pts...??
-		this.granularity = granularity;
-		trim();
+	public ChartData<X> withChartManager(ChartManager<X> chartManager) {
+		this.chartManager = chartManager;  // advised not to change this after you build & use it.   set only once.
 		return this;
 	}
-
+	
 	private void trim() {		
-		int count = data.size()-limitedSize();  // remove the first N entries if data is > limit.
-		// TODO DD : optimization... remove data just in case you pass a huge result set.  
-	}
-
-	public ChartData<X> withDataLimit(int dataLimit) {
-		this.dataLimit = dataLimit;
-		trim();
-		return this;
+		// TODO DD : optimization... remove data just in case you get a huge result set.  
+	//	int count = data.size()-getChartManager().getLimit();  // remove the first N entries if data is > limit.
 	}
 
 	public Long getMinX() {
 		if (data.size()==0){ 
 			return null; 
 		}
-		if (granularity!=null) { 
-			Long last = data.lastEntry().getValue().getLongX();
-			return last-granularity.delta();
-		} else { 
-			return data.firstEntry().getValue().getLongX();
-		}		
+		return getChartManager().getMinX(this);
 	}
 	
 	public Long getPanMin() {
-		return data.size()>0 ? 
-				data.firstEntry().getValue().getLongX() : null; 
+		if (data.size()==0){ 
+			return null; 
+		}
+		return getChartManager().getPanMin(this); 
 	}
 	
 	public Long getPanMax() {
-		return data.size()>0 ? 
-				data.lastEntry().getValue().getLongX() : null; 
+		if (data.size()==0){ 
+			return null; 
+		}
+		return getChartManager().getPanMax(this); 
 	}
+
+	private ChartManager<X> getChartManager() {
+		if (chartManager==null) { 
+			chartManager=new SimpleChartManager<X>();
+		}
+		return chartManager;
+	}
+
+	public Chartable<X> getFirstEntry() {
+		return data.size()>0 ? data.firstEntry().getValue() : null;
+	}
+
+	public Chartable<X> getLastEntry() {
+		return data.size()>0 ? data.lastEntry().getValue() : null;
+	}
+
 	
 }	 
 

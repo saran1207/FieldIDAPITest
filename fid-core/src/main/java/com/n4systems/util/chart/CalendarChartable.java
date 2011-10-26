@@ -23,7 +23,6 @@ public class CalendarChartable extends SimpleChartable<Calendar> {
 
     @Override
 	public String getJavascriptX() {	    	
-    	// FIXME DD : dashboard.js should detect locale and set timezone accordingly.
     	return ""+getLongX();
     }	
     
