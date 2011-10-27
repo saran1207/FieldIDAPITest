@@ -5,6 +5,11 @@ import java.util.List;
 
 import com.n4systems.util.chart.ChartData;
 
+// NOTE : don't use primitives for fields....use objects so they can be null. 
+//  if a field is null it will not be rendered.
+// e.g.   public boolean showImage;    // BOO-URNS!
+//        public Boolean showImage;    // Yay
+
 @SuppressWarnings("serial")
 public class FlotOptions<X> implements Serializable {
 
@@ -32,7 +37,8 @@ public class FlotOptions<X> implements Serializable {
 		public String timeFormat;
 		public String decimals;
 		public String[] monthNames;
-		public String[][] ticks;				
+		public String[][] ticks;
+		public Integer tickLength;				
 	}
 	
 	class Grid implements Serializable  {
@@ -40,6 +46,7 @@ public class FlotOptions<X> implements Serializable {
 		public Boolean clickable;	
 		public String colour;
 		public String tickColor;
+		public Boolean show;
 	}
 	
 	class Pan implements Serializable  { 

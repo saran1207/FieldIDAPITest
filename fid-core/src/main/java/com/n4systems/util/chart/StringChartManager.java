@@ -4,6 +4,12 @@ package com.n4systems.util.chart;
 @SuppressWarnings("serial")
 public class StringChartManager implements ChartManager<String> {
 	
+	private boolean transpose;
+
+	public StringChartManager(boolean transpose) { 
+		this.transpose = transpose;
+	}
+	
 	@Override
 	public Integer getLimit() {
 		return null;
@@ -30,8 +36,10 @@ public class StringChartManager implements ChartManager<String> {
 	}
 
 	@Override
-	public Chartable<String> preprocess(Chartable<String> chartable, int index) {		
-		return new StringChartable(chartable.getX(), chartable.getY(), (long) index);
+	public Chartable<String> preprocess(Chartable<String> chartable, int index) {
+		return !transpose ? 
+				new StringChartable(chartable.getX(), chartable.getY(), (long) index) : 
+				new StringChartable(chartable.getX(), (long) index, chartable.getY().longValue());
 	}
 
 }

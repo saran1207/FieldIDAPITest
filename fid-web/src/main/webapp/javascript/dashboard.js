@@ -1,5 +1,5 @@
 /**
-+ * requires.... 
+ * requires.... 
  *   jquery.flot.js 
  *   jquery.flot.navigate.js
  */
@@ -9,18 +9,15 @@ var dashboardWidgetFactory = (function() {
 	/**
 	 * widget object returned by factory 
 	 */	
-	function dashboardWidget(widgetId, x) {
+	function dashboardWidget(widgetId, opts) {
 
 		/* private methods and properties */
 		var id = widgetId;
 		var previousPoint = null;	
-		var options = x;
+		var options = opts;
 		
 		function bindTootlips(id) {		
 			$('#'+id).bind("plothover", function (event, pos, item) {
-			    $("#x").text(pos.x.toFixed(2));
-			    $("#y").text(pos.y.toFixed(2));
-
 			        if (item) {
 			            if (previousPoint != item.datapoint) {
 			                previousPoint = item.datapoint;

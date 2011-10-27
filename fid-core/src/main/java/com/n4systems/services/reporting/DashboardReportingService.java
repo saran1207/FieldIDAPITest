@@ -132,13 +132,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		builder.setSelectArgument(new NewObjectSelect(AssetsStatusReportRecord.class, "assetStatus.name", "COUNT(*)"));		
 		builder.addWhere(Comparator.GE, "identified", "identified", getEarliestAssetDate());
 		builder.addGroupBy("assetStatus.name");
-//		if (org!=null) { 
-//			builder.addSimpleWhere("owner.id", org.getId());
-//		}
+		if (org!=null) { 
+			builder.addSimpleWhere("owner.id", org.getId());
+		}
 		
 		List<AssetsStatusReportRecord> results = persistenceService.findAll(builder);
 				
-        return Lists.newArrayList(new ChartData<String>().withChartManager(new StringChartManager()).add(results));
+        return Lists.newArrayList(new ChartData<String>().withChartManager(new StringChartManager(true)).add(results));
 	}
 	
 	
