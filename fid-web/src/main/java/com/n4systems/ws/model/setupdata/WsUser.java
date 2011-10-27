@@ -1,9 +1,11 @@
 package com.n4systems.ws.model.setupdata;
 
-import static com.n4systems.webservice.dto.MobileDTOHelper.isValidServerId;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.n4systems.ws.model.WsModel;
 
+@XmlRootElement
 public class WsUser extends WsModel {
 	
 	private String userId;
@@ -27,6 +29,7 @@ public class WsUser extends WsModel {
 		this.userId = userId;
 	}
 	
+	@XmlElement(name="UserId")
 	public String getUserId() {
 		return userId;
 	}
@@ -35,6 +38,7 @@ public class WsUser extends WsModel {
 		this.hashPassword = hashPassword;
 	}
 
+	@XmlElement(name="HashPassword")
 	public String getHashPassword() {
 		return hashPassword;
 	}
@@ -43,7 +47,8 @@ public class WsUser extends WsModel {
 		this.hashSecurityCardNumber = hashSecurityCardNumber;
 	}
 
-	public String HashSecurityCardNumber() {
+	@XmlElement(name="HashSecurityCardNumber")
+	public String getHashSecurityCardNumber() {
 		return hashSecurityCardNumber;
 	}
 
@@ -51,6 +56,7 @@ public class WsUser extends WsModel {
 		this.allowedToIdentify = allowedToIdentify;
 	}
 
+	@XmlElement(name="AllowedToIdentify")
 	public boolean isAllowedToIdentify() {
 		return allowedToIdentify;
 	}
@@ -59,6 +65,7 @@ public class WsUser extends WsModel {
 		this.allowedToInspect = allowedToInspect;
 	}
 
+	@XmlElement(name="AllowedToInspect")
 	public boolean isAllowedToInspect() {
 		return allowedToInspect;
 	}
@@ -67,58 +74,52 @@ public class WsUser extends WsModel {
 		this.attachedToPrimaryOrg = attachedToPrimaryOrg;
 	}
 
+	@XmlElement(name="AttachedToPrimaryOrg")
 	public boolean isAttachedToPrimaryOrg() {
 		return attachedToPrimaryOrg;
-	}
-	
-	public long getOwnerId() {
-		return ownerId;
 	}
 	
 	public void setOwnerId(long ownerId) {
 		this.ownerId = ownerId;
 	}
 	
-	public boolean ownerIdExists() {
-		return isValidServerId(ownerId);
-	}
-	
-	public long getCustomerId() {
-		return customerId;
+	@XmlElement(name="OwnerId")
+	public long getOwnerId() {
+		return ownerId;
 	}
 	
 	public void setCustomerId(long customerId) {
 		this.customerId = customerId;
 	}
 	
-	public boolean customerExists() {
-		return isValidServerId( customerId );
-	}
-	
-	public long getDivisionId() {
-		return divisionId;
+	@XmlElement(name="CustomerId")
+	public long getCustomerId() {
+		return customerId;
 	}
 	
 	public void setDivisionId(long divisionId) {
 		this.divisionId = divisionId;
-	}
+	}	
 	
-	public boolean divisionExists() {
-		return isValidServerId( divisionId );
-	}
-	
-	public long getOrgId() {
-		return orgId;
+	@XmlElement(name="DivisionId")
+	public long getDivisionId() {
+		return divisionId;
 	}
 	
 	public void setOrgId(long orgId) {
 		this.orgId = orgId;
 	}
-
+	
+	@XmlElement(name="OrgId")
+	public long getOrgId() {
+		return orgId;
+	}
+	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
+	@XmlElement(name="FirstName")
 	public String getFirstName() {
 		return firstName;
 	}
@@ -127,6 +128,7 @@ public class WsUser extends WsModel {
 		this.lastName = lastName;
 	}
 
+	@XmlElement(name="LastName")
 	public String getLastName() {
 		return lastName;
 	}
@@ -135,6 +137,7 @@ public class WsUser extends WsModel {
 		this.deleted = deleted;
 	}
 
+	@XmlElement(name="Deleted")
 	public boolean isDeleted() {
 		return deleted;
 	}	

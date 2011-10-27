@@ -23,6 +23,7 @@ import com.n4systems.ws.model.eventtype.WsTextFieldCriteria;
 import com.n4systems.ws.model.eventtype.WsUnitOfMeasureCriteria;
 import com.n4systems.ws.model.lastmod.WsLastModified;
 import com.n4systems.ws.model.org.WsOrg;
+import com.n4systems.ws.model.setupdata.WsUser;
 import com.n4systems.ws.model.unitofmeasure.WsUnitOfMeasure;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.api.json.JSONJAXBContext;
@@ -55,7 +56,8 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
 		WsSignatureCriteria.class,
 		WsDateFieldCriteria.class,
 		WsNumberFieldCriteria.class,
-		WsScoreCriteria.class
+		WsScoreCriteria.class,
+		WsUser.class
 	};
 	
 	private final JAXBContext context;

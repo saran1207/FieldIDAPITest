@@ -27,6 +27,10 @@ public class WsUserConverter extends WsModelConverter<User, WsUser> {
 		
 		populateOwners(model.getOwner(), wsModel);
 		
+		wsModel.setFirstName(model.getFirstName());
+		wsModel.setLastName(model.getLastName());
+		wsModel.setDeleted(model.isArchived());
+		
 		return wsModel;
 	}
 	

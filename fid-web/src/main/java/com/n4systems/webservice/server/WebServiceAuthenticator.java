@@ -33,6 +33,7 @@ public class WebServiceAuthenticator {
 					ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(loginUser.getTenant().getId());	
 					authenticationResponse.setAuthenticationResult(AuthenticationResponse.AuthenticationResult.SUCCESSFUL);
 					authenticationResponse.setUser(converter.convert(loginUser));
+					authenticationResponse.setUserId(loginUser.getId());
 					authenticationResponse.setTenant(converter.convert(loginUser.getOwner().getPrimaryOrg()));
 				} else {
 					authenticationResponse.setAuthenticationMessage("Authentication failed.");

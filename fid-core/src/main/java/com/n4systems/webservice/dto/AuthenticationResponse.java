@@ -7,7 +7,8 @@ public class AuthenticationResponse extends RequestResponse {
 	private AuthenticationResult authenticationResult = AuthenticationResult.NOT_SUCCESSFUL;
 	private String authenticationMessage;
 	private TenantServiceDTO tenant;
-	private UserServiceDTO user;
+	private UserServiceDTO user; //Depreciated
+	private long userId;
 
 	public AuthenticationResult getAuthenticationResult() {
 		return authenticationResult;
@@ -40,4 +41,12 @@ public class AuthenticationResponse extends RequestResponse {
 	public void setAuthenticationMessage(String authenticationMessage) {
 		this.authenticationMessage = authenticationMessage;
 	}	
+
+	public long getUserId() {
+		return userId;
+	}	
+	
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
 }
