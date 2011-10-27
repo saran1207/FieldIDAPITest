@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.components.columnlayout.SelectedReportColumn
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.columnlayout.CustomColumnsModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
 import com.n4systems.model.columns.ActiveColumnMapping;
 import com.n4systems.model.columns.ColumnLayout;
 import com.n4systems.model.columns.ColumnMapping;
@@ -28,6 +29,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -167,15 +169,10 @@ public class ColumnsLayoutPage extends FieldIDFrontEndPage {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     saveColumnLayout();
-                    getResponse().redirect("/fieldid/w/setup/templates");
+                    setResponsePage(TemplatesPage.class);
                 }
             });
-            add(new AjaxLink("cancelLink") {
-                @Override
-                public void onClick(AjaxRequestTarget target) {
-                    getResponse().redirect("/fieldid/w/setup/templates");
-                }
-            });
+            add(new BookmarkablePageLink<Void>("cancelLink", TemplatesPage.class));
         }
 
     }
