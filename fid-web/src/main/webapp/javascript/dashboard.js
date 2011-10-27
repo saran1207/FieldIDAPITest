@@ -15,17 +15,18 @@ var dashboardWidgetFactory = (function() {
 		var id = widgetId;
 		var previousPoint = null;	
 		var options = opts;
+		var tooltipContent = null; 
 		
-		function bindTootlips(id) {		
+		function bindTootlips(id) {
 			$('#'+id).bind("plothover", function (event, pos, item) {
 			        if (item) {
 			            if (previousPoint != item.datapoint) {
 			                previousPoint = item.datapoint;
 			                
 			                $("#tooltip").remove();
-			                var y = item.datapoint[1].toFixed(options.yaxis.decimals);
-			                var date = formatDate(new Date(item.datapoint[0]));
-			                showTooltip(item.pageX, item.pageY,  y + "<br>" + date);
+			                if (tooltipContent) {
+			                	showTooltip(item.pageX, item.pageY, tooltipContent(item.datapoint, options));
+			                }
 			            }
 			        }
 			        else {
@@ -35,15 +36,7 @@ var dashboardWidgetFactory = (function() {
 			        }
 				});
 		};
-		
-		// TODO : refactor this out of here...should be part of options.
-		function formatDate(d) { 
-			var day = d.getDate();
-			var month = d.getMonth();
-			var year = d.getFullYear();
-			return options.xaxis.monthNames[month] + ' ' + day + ' ' + year; 
-		};
-		
+					
 		function showTooltip(x, y, contents) {
 		    $('<div id="tooltip">' + contents + '</div>').css( {
 		        position: 'absolute',
@@ -60,18 +53,41 @@ var dashboardWidgetFactory = (function() {
 		
 		/* public methods exposed */
 		return { 	
-			setTooltips : function(tooltips) { 
+			setTooltip : function(fn) { 
+				tooltipContent = fn;
+			},
+			showTooltips : function(show) { 
 				$('#'+id).unbind("plothover");
-				if (tooltips) { 
-					bindTootlips(id);
-				}
+				if (show) {	bindTootlips(id);}
 			},
 			update : function(newData) {				
 			    $.plot($('#'+id), newData, options);				
 			}
 		};
 		
-	}
+	}			
+
+	// TODO : refactor this out of here...should be part of options.
+	function formatDate(d,months) { 
+		var day = d.getDate();
+		var month = d.getMonth();
+		var year = d.getFullYear();
+		return months[month] + ' ' + day + ' ' + year; 
+	};
+	
+	var dateTooltipContent = function(datapoint, options) { 
+	    var y = datapoint[1].toFixed(options.yaxis.decimals);
+	    var date = formatDate(new Date(datapoint[0]), options.xaxis.monthNames);
+	    return y + "<br>" + date;		
+	};
+	
+	var horizLabelTooltipContent = function(datapoint, options) {
+		// assumes a 0...N list.  otherwise i would have to search ticks list for index.
+	    var value = datapoint[0].toFixed(0);
+	    var index = datapoint[1].toFixed(0);
+	    var label = options.yaxis.ticks[index][1];
+	    return label + " : " + value;		
+	};
 	
 	// instead of passing id, why not pass reference to element???
 	var create = function(id) { 
@@ -84,8 +100,11 @@ var dashboardWidgetFactory = (function() {
 		if(!options.yaxis.panRange) {
 			options.yaxis.panRange=false;
 		}
-		if(options.grid.hoverable) { 
-			widget.setTooltips(true);
+		widget.showTooltips(options.grid.hoverable);
+		if (options.xaxis.mode == "time") {
+			widget.setTooltip(dateTooltipContent);
+		} else if (options.bars.horizontal) {
+			widget.setTooltip(horizLabelTooltipContent);
 		}
 		widget.update(data);
 		return widget;
@@ -93,6 +112,8 @@ var dashboardWidgetFactory = (function() {
 	
 			
 	return { 
+		horizTooltip : horizLabelTooltipContent,
+		dateTooltip : dateTooltipContent,
 		create : create,
 		createWithData : createWithData
 	};
