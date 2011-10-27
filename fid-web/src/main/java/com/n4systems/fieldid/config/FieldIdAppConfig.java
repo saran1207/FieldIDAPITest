@@ -47,7 +47,7 @@ import com.n4systems.fieldid.wicket.components.dashboard.widgets.WidgetFactory;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.dashboard.DashboardService;
-import com.n4systems.services.reporting.ReportingService;
+import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ServiceLocator;
 
@@ -255,8 +255,8 @@ public class FieldIdAppConfig {
     }
     
     @Bean 
-    public ReportingService reportingService() { 
-    	return new ReportingService();
+    public DashboardReportingService reportingService() { 
+    	return new DashboardReportingService();
     }
     
     @Bean

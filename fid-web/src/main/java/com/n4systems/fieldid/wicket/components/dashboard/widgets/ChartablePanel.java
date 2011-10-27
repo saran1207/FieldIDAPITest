@@ -16,12 +16,14 @@ public abstract class ChartablePanel<X> extends Panel {
 			@Override protected List<ChartData<X>> load() {
 				return getChartData();
 			}			
-		}));		
+		}, createOptions())  );		
 	}
 	
 	protected abstract List<ChartData<X>> getChartData();
 	
-		
+	protected FlotOptions createOptions() {
+		return new LineGraphFlotOptions();
+	}
 	
 
 }

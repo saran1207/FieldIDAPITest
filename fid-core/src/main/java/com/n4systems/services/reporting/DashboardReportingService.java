@@ -20,6 +20,7 @@ import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.chart.CalendarChartManager;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDataGranularity;
+import com.n4systems.util.chart.StringChartManager;
 import com.n4systems.util.persistence.GroupByClause;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -30,7 +31,7 @@ import com.n4systems.util.persistence.WhereParameterGroup;
 
 // CACHEABLE!!!  this is used for getting old data.
 
-public class ReportingService extends FieldIdPersistenceService {
+public class DashboardReportingService extends FieldIdPersistenceService {
 	
 	// TODO DD : unit tests...
 	
@@ -113,6 +114,34 @@ public class ReportingService extends FieldIdPersistenceService {
         return Lists.newArrayList(new ChartData<Calendar>().add(results));
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<ChartData<String>> getAssetsStatus(BaseOrg org) {
+		QueryBuilder<AssetsStatusReportRecord> builder = new QueryBuilder<AssetsStatusReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
+		
+//		SELECT u.status, u.v, @rownum:=@rownum+1 AS rownum
+//		FROM (
+//		   select ass.name as status, count(*) as v from assets a, assetstatus ass 
+//		where a.tenant_id = 15511493
+//		    and a.state = 'ACTIVE'
+//		    and a.assetstatus_id=ass.id
+//		group by ass.name
+//
+//		) u,
+//		(SELECT @rownum:=0) r		
+		
+		builder.setSelectArgument(new NewObjectSelect(AssetsStatusReportRecord.class, "assetStatus.name", "COUNT(*)"));		
+		builder.addWhere(Comparator.GE, "identified", "identified", getEarliestAssetDate());
+		builder.addGroupBy("assetStatus.name");
+//		if (org!=null) { 
+//			builder.addSimpleWhere("owner.id", org.getId());
+//		}
+		
+		List<AssetsStatusReportRecord> results = persistenceService.findAll(builder);
+				
+        return Lists.newArrayList(new ChartData<String>().withChartManager(new StringChartManager()).add(results));
+	}
+	
+	
 	// TODO DD : put in util pkg.
 	private Date getEarliestAssetDate() {
 		Calendar calendar = Calendar.getInstance();
@@ -121,6 +150,6 @@ public class ReportingService extends FieldIdPersistenceService {
 		return calendar.getTime();
 	}
 
-	
+
 
 }

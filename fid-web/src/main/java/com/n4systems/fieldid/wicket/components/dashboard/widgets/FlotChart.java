@@ -17,12 +17,12 @@ public class FlotChart<X> extends WebMarkupContainer {
 	
 	static AtomicInteger markupId = new AtomicInteger(1);
 	
-	private FlotOptions options;
+	private FlotOptions<X> options;
 	private JsonRenderer jsonRenderer = new JsonRenderer();  // TODO DD: springify this bean.
 	
-	public FlotChart(final String id, IModel<List<ChartData<X>>> model) {
+	public FlotChart(final String id, IModel<List<ChartData<X>>> model, FlotOptions<X> options) {
 		super(id, model);
-		this.options = new FlotOptions();				
+		this.options = options;				
         setOutputMarkupId(true).setMarkupId(createNextMarkupId());
         
 		add(new AbstractBehavior () {
@@ -31,7 +31,7 @@ public class FlotChart<X> extends WebMarkupContainer {
 			public void renderHead(IHeaderResponse response) {
 				StringBuffer javascriptBuffer = new StringBuffer();
 				javascriptBuffer.append ("dashboardWidgetFactory.createWithData('"+getMarkupId() + "'," + 
-						getChartDataJavascriptString() + "," +   // TODO DD : use jsonRenderer for chartData too.
+						getChartDataJavascriptString() + "," +   // TODO DD : use jsonRenderer for chartData just as it is used for options.
 						jsonRenderer.render(getUpdatedOptions()) + 
 				");");
 				response.renderOnLoadJavascript(javascriptBuffer.toString());
@@ -57,43 +57,18 @@ public class FlotChart<X> extends WebMarkupContainer {
 		return ((List<ChartData<X>>)getDefaultModelObject());
 	}
 	
-	public void setOptions(FlotOptions options) { 
+	public void setOptions(FlotOptions<X> options) { 
 		this.options = options;
 	}
 	
-	public FlotOptions getOptions() { 
+	public FlotOptions<X> getOptions() { 
 		return options;
 	}
 
 	// some options get updated depending on the data results...this is the hook to change them.
-	// otherwise you can just use   myFlotChart.getOptions().hoverable = true  for example.
-	private FlotOptions getUpdatedOptions() {
-		Long panMin = null;
-		Long panMax = null;
-		Long min = null;
-		for (Iterator<ChartData<X>> i = getChartData().iterator(); i.hasNext(); ) {
-			ChartData<X> chartData = i.next();
-			min = min(min, chartData.getMinX());
-			panMin = min(panMin, chartData.getPanMin());	
-			panMax = max(panMax, chartData.getPanMax());	
-		}
-		options.xaxis.min = min;
-		options.xaxis.panRange = new Long[]{panMin, panMax};
-		return options;
-	}
-	
-	
-	// TODO DD : put in utils? 
-	private Long max(Long a, Long b) {
-		// will return null if both are null. 
-		return a==null ? b : 
-			b==null ? a : 
-				a.compareTo(b) < 0 ? b : a;  
-	}
-	private Long min(Long a, Long b) { 
-		return a==null ? b : 
-			b==null ? a : 
-				a.compareTo(b) < 0 ? a : b;  
+	// for static configuration you can just use   myFlotChart.getOptions().hoverable = true  for example.
+	private FlotOptions<X> getUpdatedOptions() {
+		return options.update(getChartData());
 	}
 
 	private String createNextMarkupId() {

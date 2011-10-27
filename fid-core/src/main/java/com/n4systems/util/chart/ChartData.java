@@ -2,6 +2,8 @@ package com.n4systems.util.chart;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -18,18 +20,14 @@ public class ChartData<X> implements Serializable {
 	public ChartData() { 
 	}
 	
-	public ChartData(String label) {
-		this.label = label;
-	}
-	
-	public ChartData(String label, List<? extends Chartable<X>> data) {
-		this.label = label;
-		add(data);
-	}
-	
-	public ChartData<X> add(List<? extends Chartable<X>> data) { 		
+	public ChartData<X> add(List<? extends Chartable<X>> data) {
+		if (data.size()>500) {
+			// just to warn of potential performance problems. 
+			logger.warn("Very large dataset used for chart : (" + data.size() + ")" );
+		}		
+		int i = 0;
 		for (Chartable<X> chartable:data) { 
-			add(chartable);
+			add(getChartManager().preprocess(chartable, i++));
 		}
 		return this;
 	}
@@ -42,10 +40,6 @@ public class ChartData<X> implements Serializable {
 	
 	//	e.g. {data:[[0,12],[87,9.3]], label:'hello'}	
 	public String toJavascriptString() {
-		if (data.size()>500) {
-			// just to warn of potential performance problems. 
-			logger.warn("Very large dataset returned for chart (" + data.size() + ")" );
-		}
 		StringBuffer buff = new StringBuffer("{data:[");
 		
 		for (Chartable<X> cdp:data.values()) { 
@@ -119,6 +113,13 @@ public class ChartData<X> implements Serializable {
 		return data.size()>0 ? data.lastEntry().getValue() : null;
 	}
 
+	public int size() {
+		return data.size();
+	}
+
+	public Set<Entry<X, Chartable<X>>> getEntrySet() {
+		return data.entrySet();
+	}
 	
 }	 
 

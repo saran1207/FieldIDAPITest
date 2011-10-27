@@ -6,6 +6,7 @@ public enum WidgetType implements Listable {
 
     JOBS_ASSIGNED("Assigned Jobs", false),
     ASSETS_IDENTIFIED("Assets Identified", true),
+    ASSETS_STATUS("Assets By Status", false),
     COMMON_LINKS("Common Links", false),
     NEWS("FieldId News", false),
     UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", true);

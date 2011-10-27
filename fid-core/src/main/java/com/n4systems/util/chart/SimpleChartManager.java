@@ -22,5 +22,15 @@ public class SimpleChartManager<X> implements ChartManager<X> {
 	public Integer getLimit() {
 		return null;
 	}
+
+	@Override
+	public Long getLongX(X x) {
+		return null;
+	}
+
+	@Override
+	public Chartable<X> preprocess(Chartable<X> chartable, int index) {
+		return chartable;
+	}
 	
 }

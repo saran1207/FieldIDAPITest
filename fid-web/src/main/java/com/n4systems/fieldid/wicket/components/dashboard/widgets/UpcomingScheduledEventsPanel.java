@@ -12,13 +12,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import com.n4systems.fieldid.wicket.components.dashboard.widgets.AssetsIdentifiedPanel.OrgForm;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.services.reporting.ReportingService;
+import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.ChartData;
 
 public class UpcomingScheduledEventsPanel extends ChartablePanel<Calendar> {
 
 	@SpringBean
-	private ReportingService reportingService;
+	private DashboardReportingService reportingService;
 	private Integer period = 30;
 	private BaseOrg owner;
 

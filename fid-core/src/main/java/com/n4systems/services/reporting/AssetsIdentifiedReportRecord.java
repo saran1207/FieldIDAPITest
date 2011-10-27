@@ -37,10 +37,6 @@ public class AssetsIdentifiedReportRecord implements Chartable<Calendar> {
 		return calendar;
 	}	
 
-	public String getJavascriptX() {
-		return chartable.getJavascriptX();
-	}
-
 	@Override
 	public Calendar getX() {
 		return chartable.getX();

@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 @SuppressWarnings("serial")
-public class CalendarChartable extends SimpleChartable<Calendar> {
+public class CalendarChartable extends AbstractChartable<Calendar> {
 	
 	public CalendarChartable(Calendar x, Number y) {
 		super(x,y);
@@ -21,7 +21,7 @@ public class CalendarChartable extends SimpleChartable<Calendar> {
         return calendar.getTimeInMillis();
     }
 
-    @Override
+    
 	public String getJavascriptX() {	    	
     	return ""+getLongX();
     }	
