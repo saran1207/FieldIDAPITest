@@ -43,7 +43,7 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.components.dashboard.widgets.WidgetFactory;
+import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.dashboard.DashboardService;

@@ -1,11 +1,9 @@
-package com.n4systems.fieldid.wicket.components.dashboard.widgets;
+package com.n4systems.fieldid.wicket.components.chart;
 
 import java.util.Iterator;
 import java.util.List;
 
 import com.n4systems.util.chart.ChartData;
-
-//TODO DD : move this to wicket.pages pkg along with other stuff OR to general wicket.util.chart pkg?
 
 
 @SuppressWarnings("serial")
@@ -14,6 +12,7 @@ public class LineGraphFlotOptions<X> extends FlotOptions<X> {
 
 	public LineGraphFlotOptions() { 
 		super();
+		grid.height = 200;
 		points.show = true;
 		lines.show = true;
 		xaxis.min = Long.MAX_VALUE;

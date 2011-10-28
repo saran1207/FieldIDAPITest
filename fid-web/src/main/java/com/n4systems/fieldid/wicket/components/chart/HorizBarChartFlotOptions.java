@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.dashboard.widgets;
+package com.n4systems.fieldid.wicket.components.chart;
 
 import java.util.List;
 import java.util.Map.Entry;
@@ -6,13 +6,13 @@ import java.util.Map.Entry;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.Chartable;
 
-//TODO DD : move this to wicket.pages pkg along with other stuff OR to general wicket.util.chart pkg?
 
 @SuppressWarnings("serial")
 public class HorizBarChartFlotOptions<X> extends FlotOptions<X> {
 	
 	public HorizBarChartFlotOptions() {
 		series = null;
+		grid.height = 320;
 		bars.barWidth = 0.5;
 		bars.horizontal = true;
 		bars.show = true;

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.dashboard.widgets;
+package com.n4systems.fieldid.wicket.pages.widgets;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.CaseFormat;
-import com.n4systems.fieldid.wicket.pages.widgets.Widget;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 

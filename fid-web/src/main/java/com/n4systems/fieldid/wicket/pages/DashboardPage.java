@@ -17,8 +17,8 @@ import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
-import com.n4systems.fieldid.wicket.components.dashboard.widgets.WidgetFactory;
 import com.n4systems.fieldid.wicket.pages.widgets.Widget;
+import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
 import com.n4systems.fieldid.wicket.util.JavascriptPackageResourceIE;
 import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;

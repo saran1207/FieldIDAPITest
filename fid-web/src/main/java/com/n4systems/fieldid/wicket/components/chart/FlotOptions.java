@@ -1,6 +1,4 @@
-package com.n4systems.fieldid.wicket.components.dashboard.widgets;
-
-//TODO DD : move this to wicket.pages pkg along with other stuff OR to general wicket.util.chart pkg?
+package com.n4systems.fieldid.wicket.components.chart;
 
 import java.io.Serializable;
 import java.util.List;
@@ -43,25 +41,26 @@ public class FlotOptions<X> implements Serializable {
 		public Integer tickLength;				
 	}
 	
-	class Grid implements Serializable  {
+	public class Grid implements Serializable  {
 		public Boolean hoverable;
 		public Boolean clickable;	
 		public String colour;
 		public String tickColor;
 		public Boolean show;
+		public Integer height;
 	}
 	
-	class Pan implements Serializable  { 
+	public class Pan implements Serializable  { 
 		public Boolean interactive;
 	}
 	
-	class Series implements Serializable {
+	public class Series implements Serializable {
 		public Long stack;
 		public Lines lines;
 		public Bars bars;		
 	}
 	
-	class Bars implements Serializable { 
+	public class Bars implements Serializable { 
 		public Boolean show;
 		public Double barWidth;
 		public Boolean horizontal;

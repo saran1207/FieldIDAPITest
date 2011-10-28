@@ -1,16 +1,17 @@
-package com.n4systems.fieldid.wicket.components.dashboard.widgets;
+package com.n4systems.fieldid.wicket.components.chart;
 
-//TODO DD : move this to wicket.pages pkg along with other stuff OR to general wicket.util.chart pkg?
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.json.JsonRenderer;
@@ -18,15 +19,19 @@ import com.n4systems.util.json.JsonRenderer;
 @SuppressWarnings("serial")
 public class FlotChart<X> extends Panel {
 	
+	private static final Integer DEFAULT_CHART_HEIGHT = 200;
+
 	static AtomicInteger markupId = new AtomicInteger(1);
 	
 	private FlotOptions<X> options;
 	private JsonRenderer jsonRenderer = new JsonRenderer();  // TODO DD: springify this bean.
-	
-	public FlotChart(final String id, IModel<List<ChartData<X>>> model, FlotOptions<X> options) {
+	private Integer height;
+
+	public FlotChart(final String id, IModel<List<ChartData<X>>> model, FlotOptions<X> options, String css) {
 		super(id, model);
 		this.options = options;
-		add(new ChartMarkup("flot"));
+		this.height = options.grid.height !=null ? options.grid.height : DEFAULT_CHART_HEIGHT;
+		add(new ChartMarkup("flot").add(new AttributeAppender("class", true, new Model<String>(css), " ")));	                        				
 	}    	
 	    	
 	@SuppressWarnings("unchecked")
@@ -47,7 +52,7 @@ public class FlotChart<X> extends Panel {
 	private FlotOptions<X> getUpdatedOptions() {
 		return options.update(getChartData());
 	}
-
+	
 	
 	class ChartMarkup extends WebMarkupContainer {
 

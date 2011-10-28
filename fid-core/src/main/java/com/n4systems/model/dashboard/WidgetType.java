@@ -1,5 +1,6 @@
 package com.n4systems.model.dashboard;
 
+import com.google.common.base.CaseFormat;
 import com.n4systems.model.api.Listable;
 
 public enum WidgetType implements Listable {
@@ -32,6 +33,10 @@ public enum WidgetType implements Listable {
     @Deprecated
     public boolean isConfigurable() {
         return true;
+    }
+
+    public String getCamelCase() { 
+    	return  CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, toString());
     }
 
 }

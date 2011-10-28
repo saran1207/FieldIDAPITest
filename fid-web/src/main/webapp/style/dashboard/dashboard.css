@@ -91,3 +91,11 @@ img.widget-drag-image {
 .column .ui-widget-content {
     border: 1px solid #e3e3e3;
 }
+
+.flotChart { 
+	height : 200px;
+}
+
+.assetsStatusChart { 
+	height : 300px;
+}
