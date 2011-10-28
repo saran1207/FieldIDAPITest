@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.components.chart;
 import java.io.Serializable;
 import java.util.List;
 
-import com.n4systems.util.chart.ChartData;
+import com.n4systems.util.chart.ChartSeries;
 
 // NOTE : don't use primitives for fields....use objects so they can be null. 
 //  if a field is null it will not be rendered.
@@ -24,6 +24,8 @@ public class FlotOptions<X> implements Serializable {
 
 	class Lines implements Serializable { 
 		public Boolean show;
+		public Boolean fill;
+		public String fillColor;
 	}
 	
 	class Points  implements Serializable { 
@@ -47,7 +49,8 @@ public class FlotOptions<X> implements Serializable {
 		public String colour;
 		public String tickColor;
 		public Boolean show;
-		public Integer height;
+		public String borderColor = "#CDCDCD";
+		public Integer borderWidth = 1; 
 	}
 	
 	public class Pan implements Serializable  { 
@@ -75,7 +78,7 @@ public class FlotOptions<X> implements Serializable {
 		yaxis.monthNames = null;
 	}
 	
-	public FlotOptions<X> update(List<ChartData<X>> list) { 
+	public FlotOptions<X> update(List<ChartSeries<X>> list) { 
 		return this;
 	}
 	 

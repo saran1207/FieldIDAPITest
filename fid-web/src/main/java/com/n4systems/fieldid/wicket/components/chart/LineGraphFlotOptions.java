@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.components.chart;
 import java.util.Iterator;
 import java.util.List;
 
-import com.n4systems.util.chart.ChartData;
+import com.n4systems.util.chart.ChartSeries;
 
 
 @SuppressWarnings("serial")
@@ -12,9 +12,10 @@ public class LineGraphFlotOptions<X> extends FlotOptions<X> {
 
 	public LineGraphFlotOptions() { 
 		super();
-		grid.height = 200;
 		points.show = true;
 		lines.show = true;
+		lines.fill = true;
+		lines.fillColor = "#CAD1DC";
 		xaxis.min = Long.MAX_VALUE;
 		xaxis.mode = "time";
 		xaxis.timeFormat = "%b %d, %y";
@@ -29,12 +30,12 @@ public class LineGraphFlotOptions<X> extends FlotOptions<X> {
 	}
 
 	@Override
-	public FlotOptions<X> update(List<ChartData<X>> list) {
+	public FlotOptions<X> update(List<ChartSeries<X>> list) {
 		Long panMin = null;
 		Long panMax = null;
 		Long min = null;
-		for (Iterator<ChartData<X>> i = list.iterator(); i.hasNext(); ) {
-			ChartData<X> chartData = i.next();
+		for (Iterator<ChartSeries<X>> i = list.iterator(); i.hasNext(); ) {
+			ChartSeries<X> chartData = i.next();
 			min = min(min, chartData.getMinX());
 			panMin = min(panMin, chartData.getPanMin());	
 			panMax = max(panMax, chartData.getPanMax());	

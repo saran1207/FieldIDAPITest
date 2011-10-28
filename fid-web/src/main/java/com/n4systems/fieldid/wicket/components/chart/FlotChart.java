@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.chart;
 
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -13,7 +12,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import com.n4systems.util.chart.ChartData;
+import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.json.JsonRenderer;
 
 @SuppressWarnings("serial")
@@ -27,16 +26,15 @@ public class FlotChart<X> extends Panel {
 	private JsonRenderer jsonRenderer = new JsonRenderer();  // TODO DD: springify this bean.
 	private Integer height;
 
-	public FlotChart(final String id, IModel<List<ChartData<X>>> model, FlotOptions<X> options, String css) {
+	public FlotChart(final String id, IModel<List<ChartSeries<X>>> model, FlotOptions<X> options, String css) {
 		super(id, model);
 		this.options = options;
-		this.height = options.grid.height !=null ? options.grid.height : DEFAULT_CHART_HEIGHT;
 		add(new ChartMarkup("flot").add(new AttributeAppender("class", true, new Model<String>(css), " ")));	                        				
 	}    	
 	    	
 	@SuppressWarnings("unchecked")
-	private List<ChartData<X>> getChartData() {
-		return ((List<ChartData<X>>)getDefaultModelObject());
+	private List<ChartSeries<X>> getChartSeries() {
+		return ((List<ChartSeries<X>>)getDefaultModelObject());
 	}
 	
 	public void setOptions(FlotOptions<X> options) { 
@@ -50,7 +48,7 @@ public class FlotChart<X> extends Panel {
 	// some options get updated depending on the data results...this is the hook to change them.
 	// for static configuration you can just use   myFlotChart.getOptions().hoverable = true  for example.
 	private FlotOptions<X> getUpdatedOptions() {
-		return options.update(getChartData());
+		return options.update(getChartSeries());
 	}
 	
 	
@@ -66,23 +64,12 @@ public class FlotChart<X> extends Panel {
 				public void renderHead(IHeaderResponse response) {
 					StringBuffer javascriptBuffer = new StringBuffer();
 					javascriptBuffer.append ("dashboardWidgetFactory.createWithData('"+getMarkupId() + "'," + 
-							getChartDataJavascriptString() + "," +   // TODO DD : use jsonRenderer for chartData just as it is used for options.
+							jsonRenderer.render(getChartSeries()) + "," + 
 							jsonRenderer.render(getUpdatedOptions()) + 
 					");");
 					response.renderOnDomReadyJavascript(javascriptBuffer.toString());
 				}
 			
-				//	e.g.   [{data:[[3,6.4]], label:text}, {data:[[4,9.0],[6,2]]} ]
-				// the stuff in curly brackets are handled by chartData class.
-				protected String getChartDataJavascriptString() {
-					StringBuffer buff = new StringBuffer("[");		
-					for (Iterator<ChartData<X>> i = getChartData().iterator(); i.hasNext(); ) {
-						ChartData<X> chartData = i.next();
-						buff.append(chartData.toJavascriptString());
-						buff.append(i.hasNext() ? "," : "]");
-					}
-					return buff.toString();		
-				}
 			});
 			
 		}

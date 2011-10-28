@@ -16,7 +16,7 @@ import com.n4systems.fieldid.wicket.components.chart.LineGraphFlotOptions;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.chart.ChartData;
+import com.n4systems.util.chart.ChartSeries;
 
 @SuppressWarnings("serial")
 public abstract class ChartWidget<X> extends Widget {
@@ -39,15 +39,15 @@ public abstract class ChartWidget<X> extends Widget {
 	}
 
 	private final Component createFlotChartImpl(String id, String css) {		
-		LoadableDetachableModel<List<ChartData<X>>> model = new LoadableDetachableModel<List<ChartData<X>>>() {
-			@Override protected List<ChartData<X>> load() {
-				return getChartData();
+		LoadableDetachableModel<List<ChartSeries<X>>> model = new LoadableDetachableModel<List<ChartSeries<X>>>() {
+			@Override protected List<ChartSeries<X>> load() {
+				return getChartSeries();
 			}			
 		};		
 		return new FlotChart<X>(id, model, createOptions(), css);
 	}
 	
-	protected abstract List<ChartData<X>> getChartData();
+	protected abstract List<ChartSeries<X>> getChartSeries();
 	
 	protected FlotOptions<X> createOptions() {
 		return new LineGraphFlotOptions<X>();

@@ -4,39 +4,49 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
 
 @SuppressWarnings("serial")
-public class ChartData<X> implements Serializable {
-	private static final Logger logger = Logger.getLogger(ChartData.class);
+public class ChartSeries<X> implements Serializable {
+	private static final Logger logger = Logger.getLogger(ChartSeries.class);
+
+	// typical json representation might look like this..    { label: "Foo", data: [ [10, 1], [17, -14], [30, 5] ] }	
+	private ChartableMap<X> data = new ChartableMap<X>();
+//    lines: specific lines options       
+//    bars: specific bars options          these are other FLOT options i haven't included yet.
+//    points: specific points options
+	private String color = "#32578B";
+	private Integer xaxis;
+	private Integer yaxis;
+	private Boolean clickable;
+	private Boolean hoverable;
+	private Integer shadowSize;	
 	
-	private TreeMap<X, Chartable<X>> data = new TreeMap<X, Chartable<X>>();
 	private String label;
-	private ChartManager<X> chartManager = null;
 	
-	public ChartData() { 
+	private transient ChartManager<X> chartManager = null;
+	
+	public ChartSeries() { 
 	}
 	
-	public ChartData(String label) {
+	public ChartSeries(String label) {
 		this.label = label;
 	}
 	
-	public ChartData<X> add(List<? extends Chartable<X>> data) {
-		if (data.size()>500) {
-			// just to warn of potential performance problems. 
+	public ChartSeries<X> add(List<? extends Chartable<X>> data) {
+		if (data.size()>500) { 	// just to warn of potential performance problems. 
 			logger.warn("Very large dataset used for chart : (" + data.size() + ")" );
 		}		
 		int i = 0;
 		for (Chartable<X> chartable:data) { 
 			add(getChartManager().preprocess(chartable, i++));
-		}
+		}		
 		return this;
 	}
 	
-	public ChartData<X> add(Chartable<X> chartable) {
+	public ChartSeries<X> add(Chartable<X> chartable) {
 		data.put(chartable.getX(), chartable);
 		trim();
 		return this;
@@ -71,7 +81,7 @@ public class ChartData<X> implements Serializable {
 		return data.get(x);
 	}
 
-	public ChartData<X> withChartManager(ChartManager<X> chartManager) {
+	public ChartSeries<X> withChartManager(ChartManager<X> chartManager) {
 		this.chartManager = chartManager;  // advised not to change this after you build & use it.   set only once.
 		return this;
 	}
@@ -124,7 +134,13 @@ public class ChartData<X> implements Serializable {
 	public Set<Entry<X, Chartable<X>>> getEntrySet() {
 		return data.entrySet();
 	}
+
+
 	
+
+
+
+
 }	 
 
 

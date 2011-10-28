@@ -5,24 +5,24 @@ import java.util.Calendar;
 @SuppressWarnings("serial")
 public class CalendarChartManager extends SimpleChartManager<Calendar> {
 
-	private transient ChartDataGranularity granularity;
+	private transient ChartGranularity granularity;
 	
-	public CalendarChartManager(ChartDataGranularity granularity) {
+	public CalendarChartManager(ChartGranularity granularity) {
 		this.granularity = granularity;
 	}
 	
 	@Override
-	public Long getMinX(ChartData<Calendar> data) {
+	public Long getMinX(ChartSeries<Calendar> data) {
 		return data.getLastEntry().getLongX() - granularity.delta();
 	}
 
 	@Override
-	public Long getPanMin(ChartData<Calendar> data) {
+	public Long getPanMin(ChartSeries<Calendar> data) {
 		return data.getFirstEntry().getLongX();
 	}
 
 	@Override
-	public Long getPanMax(ChartData<Calendar> data) {
+	public Long getPanMax(ChartSeries<Calendar> data) {
 		return data.getLastEntry().getLongX(); 
 	}
 

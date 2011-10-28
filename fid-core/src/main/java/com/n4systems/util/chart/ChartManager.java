@@ -5,11 +5,11 @@ import java.io.Serializable;
 public interface ChartManager<X> extends Serializable {
 	
 	public Integer getLimit(); 		// trim down data above this threshold.
-	public Long getMinX(ChartData<X> data);
-	public Long getPanMin(ChartData<X> data);
-	public Long getPanMax(ChartData<X> data);
+	public Long getMinX(ChartSeries<X> data);
+	public Long getPanMin(ChartSeries<X> data);
+	public Long getPanMax(ChartSeries<X> data);
 	public Long getLongX(X x);
 	public Chartable<X> preprocess(Chartable<X> chartable, int index);
-// TODO DD : 	public ChartData<X> normalize(); 
+// TODO DD : 	public ChartSeries<X> normalize(); 
 
 }

@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.components.chart;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.n4systems.util.chart.ChartData;
+import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.Chartable;
 
 
@@ -12,7 +12,6 @@ public class HorizBarChartFlotOptions<X> extends FlotOptions<X> {
 	
 	public HorizBarChartFlotOptions() {
 		series = null;
-		grid.height = 320;
 		bars.barWidth = 0.5;
 		bars.horizontal = true;
 		bars.show = true;
@@ -22,9 +21,9 @@ public class HorizBarChartFlotOptions<X> extends FlotOptions<X> {
 	}	
 	
 	@Override
-	public FlotOptions<X> update(List<ChartData<X>> list) {
+	public FlotOptions<X> update(List<ChartSeries<X>> list) {
 		// CAVEAT : this only handles one chart...not sure what to do for multiple.
-		ChartData<X> chartData = list.iterator().next();
+		ChartSeries<X> chartData = list.iterator().next();
 		yaxis.ticks = new String[chartData.size()][2];
 		int i = 0;
 		for (Entry<X, Chartable<X>> entry: chartData.getEntrySet()) {			

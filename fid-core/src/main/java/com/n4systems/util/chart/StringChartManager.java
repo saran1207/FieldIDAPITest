@@ -16,17 +16,17 @@ public class StringChartManager implements ChartManager<String> {
 	}
 
 	@Override
-	public Long getMinX(ChartData<String> data) {
+	public Long getMinX(ChartSeries<String> data) {
 		return null;
 	}
 
 	@Override
-	public Long getPanMin(ChartData<String> data) {
+	public Long getPanMin(ChartSeries<String> data) {
 		return null;
 	}
 
 	@Override
-	public Long getPanMax(ChartData<String> data) {
+	public Long getPanMax(ChartSeries<String> data) {
 		return null;
 	}
 

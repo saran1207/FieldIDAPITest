@@ -4,17 +4,17 @@ package com.n4systems.util.chart;
 public class SimpleChartManager<X> implements ChartManager<X> {
 
 	@Override
-	public Long getMinX(ChartData<X> data) {
+	public Long getMinX(ChartSeries<X> data) {
 		return  data.getFirstEntry().getLongX();
 	}
 
 	@Override
-	public Long getPanMin(ChartData<X> data) {
+	public Long getPanMin(ChartSeries<X> data) {
 		return null;
 	}
 
 	@Override
-	public Long getPanMax(ChartData<X> data) {
+	public Long getPanMax(ChartSeries<X> data) {
 		return null;
 	}
 

@@ -12,29 +12,29 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.services.reporting.DashboardReportingService;
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartDataGranularity;
+import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.ChartGranularity;
 
 @SuppressWarnings("serial")
 public class AssetsIdentifiedWidget extends ChartWidget<Calendar> {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
-	private ChartDataGranularity granularity = ChartDataGranularity.ALL;
+	private ChartGranularity granularity = ChartGranularity.ALL;
 	private ConfigForm configForm;
 	
     public AssetsIdentifiedWidget(String id, WidgetDefinition widgetDefinition) {
 		super(id, new Model<WidgetDefinition>(widgetDefinition));			
 		setOutputMarkupId(true);		
-        addGranularityButton("year", ChartDataGranularity.YEAR);
-        addGranularityButton("quarter", ChartDataGranularity.QUARTER);
-        addGranularityButton("month", ChartDataGranularity.MONTH);
-        addGranularityButton("week", ChartDataGranularity.WEEK);
+        addGranularityButton("year", ChartGranularity.YEAR);
+        addGranularityButton("quarter", ChartGranularity.QUARTER);
+        addGranularityButton("month", ChartGranularity.MONTH);
+        addGranularityButton("week", ChartGranularity.WEEK);
         add(new OrgForm("ownerForm"));
     }
 
 	@SuppressWarnings("rawtypes")
-	private void addGranularityButton(String id, final ChartDataGranularity period) {
+	private void addGranularityButton(String id, final ChartGranularity period) {
         add(new IndicatingAjaxLink(id) {
 			@Override public void onClick(AjaxRequestTarget target) {
 				setGranularity(period);
@@ -43,12 +43,12 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar> {
         });         
 	}
     
-    private void setGranularity(ChartDataGranularity period) {
+    private void setGranularity(ChartGranularity period) {
     	this.granularity = period;
     }        	
     
 	@Override
-    protected List<ChartData<Calendar>> getChartData() {
+    protected List<ChartSeries<Calendar>> getChartSeries() {
     	return reportingService.getAssetsIdentified(granularity, owner);
     }
 

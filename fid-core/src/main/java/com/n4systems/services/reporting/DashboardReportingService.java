@@ -19,8 +19,8 @@ import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.chart.CalendarChartManager;
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartDataGranularity;
+import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.StringChartManager;
 import com.n4systems.util.persistence.GroupByClause;
 import com.n4systems.util.persistence.NewObjectSelect;
@@ -41,7 +41,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-    public List<ChartData<Calendar>> getAssetsIdentified(ChartDataGranularity granularity, BaseOrg org) {
+    public List<ChartSeries<Calendar>> getAssetsIdentified(ChartGranularity granularity, BaseOrg org) {
 		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 		
 		builder.setSelectArgument(new NewObjectSelect(AssetsIdentifiedReportRecord.class, "YEAR(identified)", "QUARTER(identified)", "WEEK(identified)", "DAYOFYEAR(identified)", "COUNT(*)"));
@@ -54,13 +54,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		List<AssetsIdentifiedReportRecord> results = persistenceService.findAll(builder);
 				
-        return Lists.newArrayList(new ChartData<Calendar>().withChartManager(new CalendarChartManager(granularity)).add(results));
+        return Lists.newArrayList(new ChartSeries<Calendar>().withChartManager(new CalendarChartManager(granularity)).add(results));
     }
 
 
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-    public List<ChartData<Calendar>> getUpcomingScheduledEvents(Integer period, BaseOrg owner) {
+    public List<ChartSeries<Calendar>> getUpcomingScheduledEvents(Integer period, BaseOrg owner) {
 		
 		QueryBuilder<UpcomingScheduledEventsRecord> builder = new QueryBuilder<UpcomingScheduledEventsRecord>(EventSchedule.class, securityContext.getUserSecurityFilter());
 		
@@ -82,11 +82,11 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		builder.addGroupBy("nextDate");
 		List<UpcomingScheduledEventsRecord> results = persistenceService.findAll(builder);
 		
-        return Lists.newArrayList(new ChartData<Calendar>().add(results));
+        return Lists.newArrayList(new ChartSeries<Calendar>().add(results));
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ChartData<String>> getAssetsStatus(BaseOrg org) {
+	public List<ChartSeries<String>> getAssetsStatus(BaseOrg org) {
 		QueryBuilder<AssetsStatusReportRecord> builder = new QueryBuilder<AssetsStatusReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 		
 //		SELECT u.status, u.v, @rownum:=@rownum+1 AS rownum
@@ -109,12 +109,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		List<AssetsStatusReportRecord> results = persistenceService.findAll(builder);
 				
-        return Lists.newArrayList(new ChartData<String>().withChartManager(new StringChartManager(true)).add(results));
+        return Lists.newArrayList(new ChartSeries<String>().withChartManager(new StringChartManager(true)).add(results));
 	}
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<ChartData<Calendar>> getCompletedEvents(ChartDataGranularity granularity/*TODO DD : use granularity/group by */, BaseOrg org) {
+	public List<ChartSeries<Calendar>> getCompletedEvents(ChartGranularity granularity/*TODO DD : use granularity/group by */, BaseOrg org) {
 		QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
 		builder.setSelectArgument(new NewObjectSelect(CompletedEventsReportRecord.class, "status", "COUNT(*)", "YEAR(date)", "QUARTER(date)", "WEEK(date)", "DAYOFYEAR(date)"));		
@@ -129,10 +129,10 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 //		for (Status status:status.values()) {
 			List<CompletedEventsReportRecord> results = persistenceService.findAll(builder);
 				
-        return Lists.newArrayList(new ChartData<Calendar>().withChartManager(new CalendarChartManager(granularity)).add(results));
+        return Lists.newArrayList(new ChartSeries<Calendar>().withChartManager(new CalendarChartManager(granularity)).add(results));
 	}
 		
-	private List<GroupByClause> getGroupByClauses(ChartDataGranularity granularity, String param) {
+	private List<GroupByClause> getGroupByClauses(ChartGranularity granularity, String param) {
 		ArrayList<GroupByClause> result = Lists.newArrayList();
 		
 		if (granularity==null) {

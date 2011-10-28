@@ -2,10 +2,21 @@ package com.n4systems.util.json;
 
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.Date;
+import java.util.TreeMap;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 public class JsonRendererTest {
 
@@ -25,6 +36,19 @@ public class JsonRendererTest {
 		Serializable bean = new FooBar();
 		String render = fixture.render(bean);
 		System.out.println(render);
+	}
+
+	@Test 
+	public void testRender_CustomMapSerializer() {
+		Serializable bean = new FooBar();
+		TreeMap<FooBar,Date> map = new TreeMap<FooBar,Date>();
+		map.put(new FooBar(), new Date());
+		GsonBuilder gb = new GsonBuilder();
+		gb.registerTypeAdapter(TreeMap.class, new TestSerializer());
+		Gson gson = gb.create();
+		String x = gson.toJson(map);
+		System.out.println(x);
+		
 	}
 
 	class FooBar implements Serializable {
@@ -66,6 +90,19 @@ public class JsonRendererTest {
 		}
 		
 	}
+	
+	
+	class TestSerializer implements JsonSerializer<TreeMap<FooBar,String>> {
+		@Override
+		public JsonElement serialize(TreeMap<FooBar,String> map, Type typeOfSrc, JsonSerializationContext context) {
+			JsonArray a = new JsonArray();
+			a.add(new JsonPrimitive(100));
+			a.add(new JsonPrimitive(44));
+	        return a;
+		}
+	}
+		
+	
 		
 	
 }

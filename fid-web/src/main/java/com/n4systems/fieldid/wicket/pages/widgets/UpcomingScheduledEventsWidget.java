@@ -10,7 +10,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.services.reporting.DashboardReportingService;
-import com.n4systems.util.chart.ChartData;
+import com.n4systems.util.chart.ChartSeries;
 
 @SuppressWarnings("serial")
 public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar> {
@@ -39,7 +39,7 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar> {
 	}
 
 	@Override
-	protected List<ChartData<Calendar>> getChartData() {
+	protected List<ChartSeries<Calendar>> getChartSeries() {
 		return reportingService.getUpcomingScheduledEvents(period, owner);
 	}
 	
