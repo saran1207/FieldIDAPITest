@@ -220,7 +220,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         javascriptBuffer.append("loggedInUserName = '").append(getSessionUser().getUserName()).append("';\n");
         javascriptBuffer.append("tenantName = '").append(getSessionUser().getTenant().getName()).append("';\n");
         javascriptBuffer.append("sessionTimeOut = ").append(timeoutTime).append(";\n");
-        javascriptBuffer.append("sessionTestUrl = '/fieldid/ajax/testSession.action';").append(timeoutTime).append(";\n");
+        javascriptBuffer.append("sessionTestUrl = '/fieldid/ajax/testSession.action';").append(";\n");
         javascriptBuffer.append("loginWindowTitle = '").append(loginLightboxTitle).append("';\n");
 
         container.getHeaderResponse().renderJavascript(javascriptBuffer.toString(), null);
