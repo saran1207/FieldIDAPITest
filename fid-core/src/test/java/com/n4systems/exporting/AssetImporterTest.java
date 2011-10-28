@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.MapReader;
@@ -37,14 +39,15 @@ public class AssetImporterTest {
 	public void test_import_throws_exception_when_run_import_called_before_validate() throws ImportException {
 		Validator<ExternalModelView> validator = createMock(Validator.class);
 		AssetToModelConverter converter = createMock(AssetToModelConverter.class);
-
+		EventScheduleManager eventScheduleManager = createMock(EventScheduleManager.class);
+		
 		expect(validator.getValidationContext()).andReturn(new HashMap<String, Object>());
 		expect(converter.getType()).andReturn(new AssetType());
 		
 		replay(validator);
 		replay(converter);
 		
-		AssetImporter importer = new AssetImporter(null, validator, null, converter);
+		AssetImporter importer = new AssetImporter(null, validator, null, converter, eventScheduleManager);
 		importer.runImport(null);
 		
 		verify(validator);
@@ -58,6 +61,7 @@ public class AssetImporterTest {
 		Validator<ExternalModelView> validator = createMock(Validator.class);
 		AssetToModelConverter converter = createMock(AssetToModelConverter.class);
 		final ExportMapUnmarshaler<AssetView> mapUnmarshaler = createMock(ExportMapUnmarshaler.class);
+		EventScheduleManager eventScheduleManager = createMock(EventScheduleManager.class);
 		
 		Map<String, Object> validationContext = new HashMap<String, Object>();
 		AssetType type = AssetTypeBuilder.anAssetType().named("test_type").build();
@@ -77,7 +81,7 @@ public class AssetImporterTest {
 		replay(converter);
 		replay(mapUnmarshaler);
 		
-		AssetImporter importer = new AssetImporter(reader, validator, createMock(AssetSaveService.class), converter) {
+		AssetImporter importer = new AssetImporter(reader, validator, createMock(AssetSaveService.class), converter, eventScheduleManager) {
 			protected ExportMapUnmarshaler<AssetView> createMapUnmarshaler() throws IOException, ParseException {
 				return mapUnmarshaler;
 			}
@@ -101,6 +105,7 @@ public class AssetImporterTest {
 		AssetToModelConverter converter = createMock(AssetToModelConverter.class);
 		AssetSaveService saver = createMock(AssetSaveService.class);
 		final ExportMapUnmarshaler<AssetView> mapUnmarshaler = createMock(ExportMapUnmarshaler.class);
+		EventScheduleManager eventScheduleManager = createMock(EventScheduleManager.class);
 		
 		Map<String, Object> validationContext = new HashMap<String, Object>();
 		AssetType type = AssetTypeBuilder.anAssetType().named("test_type").build();
@@ -119,14 +124,16 @@ public class AssetImporterTest {
 		expect(converter.toModel(view, transaction)).andReturn(asset);
 		expect(saver.setAsset(asset)).andReturn(saver);
 		expect(saver.createWithoutHistory()).andReturn(asset);
+		expect(eventScheduleManager.getAutoEventSchedules(asset)).andReturn(Collections.EMPTY_LIST);
 		
 		replay(reader);
 		replay(validator);
 		replay(converter);
 		replay(saver);
 		replay(mapUnmarshaler);
+		replay(eventScheduleManager);
 		
-		AssetImporter importer = new AssetImporter(reader, validator, saver, converter) {
+		AssetImporter importer = new AssetImporter(reader, validator, saver, converter, eventScheduleManager) {
 			protected ExportMapUnmarshaler<AssetView> createMapUnmarshaler() throws IOException, ParseException {
 				return mapUnmarshaler;
 			}
@@ -140,5 +147,6 @@ public class AssetImporterTest {
 		verify(converter);
 		verify(saver);
 		verify(mapUnmarshaler);
+		verify(eventScheduleManager);
 	}
 }

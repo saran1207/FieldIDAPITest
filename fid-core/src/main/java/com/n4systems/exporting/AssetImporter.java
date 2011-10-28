@@ -22,12 +22,16 @@ public class AssetImporter extends AbstractImporter<AssetView> {
 	private EventScheduleManager eventScheduleManager;
 
 	
-	public AssetImporter(MapReader mapReader, Validator<ExternalModelView> validator, AssetSaveService saver, AssetToModelConverter converter) {
+	public AssetImporter(MapReader mapReader, Validator<ExternalModelView> validator, AssetSaveService saver, AssetToModelConverter converter, EventScheduleManager eventScheduleManager) {
 		super(AssetView.class, mapReader, validator);
 		this.saver = saver;
 		this.converter = converter;
-		this.eventScheduleManager = ServiceLocator.getEventScheduleManager();
+		this.eventScheduleManager = eventScheduleManager;
 		validator.getValidationContext().put(AssetViewValidator.ASSET_TYPE_KEY, converter.getType());
+	}
+	
+	public AssetImporter(MapReader mapReader, Validator<ExternalModelView> validator, AssetSaveService saver, AssetToModelConverter converter) {
+		this(mapReader, validator, saver, converter, ServiceLocator.getEventScheduleManager());
 	}
 
 	@Override
