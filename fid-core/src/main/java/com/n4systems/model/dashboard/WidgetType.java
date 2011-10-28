@@ -4,19 +4,18 @@ import com.n4systems.model.api.Listable;
 
 public enum WidgetType implements Listable {
 
-	NEWS("FieldId News", false),
-    JOBS_ASSIGNED("Assigned Jobs", false),
-    ASSETS_IDENTIFIED("Assets Identified", true),
-    ASSETS_STATUS("Assets By Status", true),
-    COMMON_LINKS("Common Links", false),
-    UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", true);
+	NEWS("FieldId News"),
+    JOBS_ASSIGNED("Assigned Jobs"),
+    COMPLETED_EVENTS("Completed Events"),
+    ASSETS_IDENTIFIED("Assets Identified"),
+    ASSETS_STATUS("Assets By Status"),
+    COMMON_LINKS("Common Links"),
+    UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events");
 
     private String description;
-    private boolean configurable;
 
-    WidgetType(String description, boolean configurable) {
+    WidgetType(String description) {
         this.description = description;
-        this.configurable = configurable;
     }
 
     @Override
@@ -29,8 +28,10 @@ public enum WidgetType implements Listable {
         return description;
     }
 
+    // TODO DD : all widgets should be configurable?? 
+    @Deprecated
     public boolean isConfigurable() {
-        return configurable;
+        return true;
     }
 
 }

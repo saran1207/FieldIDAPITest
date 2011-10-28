@@ -12,6 +12,8 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.ChartData;
 
+//DELETE ME
+
 @SuppressWarnings("serial")
 public class AssetsStatusPanel extends ChartablePanel<String> {
 	

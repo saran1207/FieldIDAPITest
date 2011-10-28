@@ -15,6 +15,8 @@ import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDataGranularity;
 
+
+//DELETE ME
 @SuppressWarnings("serial")
 public class AssetsIdentifiedPanel extends ChartablePanel<Calendar> {
 	

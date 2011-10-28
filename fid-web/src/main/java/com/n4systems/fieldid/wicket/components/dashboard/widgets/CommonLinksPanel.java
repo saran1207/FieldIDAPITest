@@ -10,6 +10,8 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 
+//DELETE ME
+
 public class CommonLinksPanel extends Panel {
 
 	public CommonLinksPanel(String id) {

@@ -20,6 +20,10 @@ public class ChartData<X> implements Serializable {
 	public ChartData() { 
 	}
 	
+	public ChartData(String label) {
+		this.label = label;
+	}
+	
 	public ChartData<X> add(List<? extends Chartable<X>> data) {
 		if (data.size()>500) {
 			// just to warn of potential performance problems. 

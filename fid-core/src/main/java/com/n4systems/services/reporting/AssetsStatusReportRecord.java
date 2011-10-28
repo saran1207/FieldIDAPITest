@@ -8,11 +8,9 @@ import com.n4systems.util.chart.StringChartable;
 public class AssetsStatusReportRecord implements Chartable<String> {	
 
 	private Chartable<String> chartable;
-	private String status;
 	private static long i=0;
 	
 	public AssetsStatusReportRecord(String status, final Long count) {
-		this.status = status;
 		chartable = new StringChartable(status, count, i);
 	}
 		

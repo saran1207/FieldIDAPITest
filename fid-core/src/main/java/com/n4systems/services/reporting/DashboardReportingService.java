@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.orgs.BaseOrg;
@@ -44,7 +45,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 		
 		builder.setSelectArgument(new NewObjectSelect(AssetsIdentifiedReportRecord.class, "YEAR(identified)", "QUARTER(identified)", "WEEK(identified)", "DAYOFYEAR(identified)", "COUNT(*)"));
-		builder.addGroupByClauses(getGroupByClauses(granularity));
+		builder.addGroupByClauses(getGroupByClauses(granularity,"identified"));
 		builder.addWhere(Comparator.GE, "identified", "identified", getEarliestAssetDate());
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
@@ -56,36 +57,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         return Lists.newArrayList(new ChartData<Calendar>().withChartManager(new CalendarChartManager(granularity)).add(results));
     }
 
-
-	private List<GroupByClause> getGroupByClauses(ChartDataGranularity granularity) {
-		ArrayList<GroupByClause> result = Lists.newArrayList();
-		
-		if (granularity==null) {
-			return result; 
-		}
-		
-		result.add(	new GroupByClause("YEAR(identified)", true) );
-
-		switch (granularity) { 
-		case DAY:			
-			result.add(new GroupByClause("DAY(identified)", true));
-			break;
-		case WEEK:
-			result.add(new GroupByClause("WEEK(identified)", true));
-			break;
-		case MONTH:
-			result.add(new GroupByClause("MONTH(identified)", true));			
-			break;
-		case QUARTER:
-			result.add(new GroupByClause("QUARTER(identified)", true));
-			break;
-		case ALL:
-		case YEAR:
-		default:
-			// do nothing...default of group by year is good.
-		}
-		return result;
-	}
 
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
@@ -134,13 +105,63 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		builder.addGroupBy("assetStatus.name");
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
-		}
+		}		
 		
 		List<AssetsStatusReportRecord> results = persistenceService.findAll(builder);
 				
         return Lists.newArrayList(new ChartData<String>().withChartManager(new StringChartManager(true)).add(results));
 	}
 	
+	
+	@SuppressWarnings("unchecked")
+	public List<ChartData<Calendar>> getCompletedEvents(ChartDataGranularity granularity/*TODO DD : use granularity/group by */, BaseOrg org) {
+		QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
+		
+		builder.setSelectArgument(new NewObjectSelect(CompletedEventsReportRecord.class, "status", "COUNT(*)", "YEAR(date)", "QUARTER(date)", "WEEK(date)", "DAYOFYEAR(date)"));		
+		builder.addWhere(Comparator.GE, "date", "date", getEarliestAssetDate());
+		builder.addGroupByClauses(getGroupByClauses(granularity,"date"));
+		if (org!=null) { 
+			builder.addSimpleWhere("owner.id", org.getId());
+		}		
+		builder.addOrder("date");
+		
+//		ArrayList<ChartData<Calendar>> results = new ArrayList<ChartData<Calendar>>();
+//		for (Status status:status.values()) {
+			List<CompletedEventsReportRecord> results = persistenceService.findAll(builder);
+				
+        return Lists.newArrayList(new ChartData<Calendar>().withChartManager(new CalendarChartManager(granularity)).add(results));
+	}
+		
+	private List<GroupByClause> getGroupByClauses(ChartDataGranularity granularity, String param) {
+		ArrayList<GroupByClause> result = Lists.newArrayList();
+		
+		if (granularity==null) {
+			return result; 
+		}
+		
+		result.add(	new GroupByClause("YEAR("+param+")", true) );
+
+		switch (granularity) { 
+		case DAY:			
+			result.add(new GroupByClause("DAY("+param+")", true));
+			break;
+		case WEEK:
+			result.add(new GroupByClause("WEEK("+param+")", true));
+			break;
+		case MONTH:
+			result.add(new GroupByClause("MONTH("+param+")", true));			
+			break;
+		case QUARTER:
+			result.add(new GroupByClause("QUARTER("+param+")", true));
+			break;
+		case ALL:
+		case YEAR:
+		default:
+			// do nothing...default of group by year is good.
+		}
+		return result;
+	}
+
 	
 	// TODO DD : put in util pkg.
 	private Date getEarliestAssetDate() {

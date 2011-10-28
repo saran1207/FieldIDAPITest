@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.Chartable;
 
+//TODO DD : move this to wicket.pages pkg along with other stuff OR to general wicket.util.chart pkg?
 
 @SuppressWarnings("serial")
 public class HorizBarChartFlotOptions<X> extends FlotOptions<X> {

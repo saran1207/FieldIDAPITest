@@ -22,6 +22,7 @@ import com.n4systems.fieldid.wicket.data.jobs.OpenJobsForUserDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Project;
 
+//DELETE ME
 public class JobsAssignedPanel extends Panel {
 
     public JobsAssignedPanel(String id) {

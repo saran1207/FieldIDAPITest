@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.n4systems.util.chart.ChartData;
 
+//TODO DD : move this to wicket.pages pkg along with other stuff OR to general wicket.util.chart pkg?
+
 
 @SuppressWarnings("serial")
 public class LineGraphFlotOptions<X> extends FlotOptions<X> {
@@ -39,7 +41,9 @@ public class LineGraphFlotOptions<X> extends FlotOptions<X> {
 			panMax = max(panMax, chartData.getPanMax());	
 		}
 		xaxis.min = min;
-		xaxis.panRange = new Long[]{panMin, panMax};
+		if (panMin!=null && panMax!=null) {
+			xaxis.panRange = new Long[]{panMin, panMax};
+		}
 		return this; 
 	} 
 

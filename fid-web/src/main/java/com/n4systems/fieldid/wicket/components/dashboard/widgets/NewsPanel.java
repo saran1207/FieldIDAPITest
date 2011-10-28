@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
+//DELETE ME
 public class NewsPanel extends Panel {
 
 	public NewsPanel(String id) {
