@@ -4,11 +4,11 @@ import com.n4systems.model.api.Listable;
 
 public enum WidgetType implements Listable {
 
+	NEWS("FieldId News", false),
     JOBS_ASSIGNED("Assigned Jobs", false),
     ASSETS_IDENTIFIED("Assets Identified", true),
-    ASSETS_STATUS("Assets By Status", false),
+    ASSETS_STATUS("Assets By Status", true),
     COMMON_LINKS("Common Links", false),
-    NEWS("FieldId News", false),
     UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", true);
 
     private String description;

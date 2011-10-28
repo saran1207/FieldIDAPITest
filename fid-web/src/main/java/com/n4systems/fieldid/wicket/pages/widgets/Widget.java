@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import com.n4systems.model.dashboard.WidgetDefinition;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -9,15 +7,17 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.n4systems.model.dashboard.WidgetDefinition;
+
 @SuppressWarnings("serial")
-public class Widget extends Panel {
+public abstract class Widget extends Panel {
 
     private static final String CONTENT_ID = "content";
 
     private IModel<WidgetDefinition> widgetDefinition;
 
-    private ContextImage removeButton;
-    private ContextImage configureButton;
+    protected ContextImage removeButton;
+    protected ContextImage configureButton;
 
     public Widget(String id, IModel<WidgetDefinition> widgetDefinition) {
         super(id);
@@ -28,14 +28,9 @@ public class Widget extends Panel {
         add(new ContextImage("dragImage", "images/dashboard/drag.png"));
     }
 
-    private void addButtons() {
+	private void addButtons() {
         add(removeButton = new ContextImage("removeButton", "images/dashboard/x.png"));
         add(configureButton = new ContextImage("configureButton", "images/dashboard/config.png"));
-        configureButton.setVisible(widgetDefinition.getObject().getWidgetType().isConfigurable());
-    }
-
-    public void addContent(Component content) {
-        add(content);        
     }
 
     public String getContentId() {

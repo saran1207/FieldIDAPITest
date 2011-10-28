@@ -21,8 +21,8 @@ public abstract class ChartablePanel<X> extends Panel {
 	
 	protected abstract List<ChartData<X>> getChartData();
 	
-	protected FlotOptions createOptions() {
-		return new LineGraphFlotOptions();
+	protected FlotOptions<X> createOptions() {
+		return new LineGraphFlotOptions<X>();
 	}
 	
 

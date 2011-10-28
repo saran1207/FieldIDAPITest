@@ -67,7 +67,6 @@ var dashboardWidgetFactory = (function() {
 		
 	}			
 
-	// TODO : refactor this out of here...should be part of options.
 	function formatDate(d,months) { 
 		var day = d.getDate();
 		var month = d.getMonth();

@@ -7,13 +7,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.json.JsonRenderer;
 
 @SuppressWarnings("serial")
-public class FlotChart<X> extends WebMarkupContainer {
+public class FlotChart<X> extends Panel {
 	
 	static AtomicInteger markupId = new AtomicInteger(1);
 	
@@ -22,34 +23,8 @@ public class FlotChart<X> extends WebMarkupContainer {
 	
 	public FlotChart(final String id, IModel<List<ChartData<X>>> model, FlotOptions<X> options) {
 		super(id, model);
-		this.options = options;				
-        setOutputMarkupId(true).setMarkupId(createNextMarkupId());
-        
-		add(new AbstractBehavior () {
-			// TODO DD : not sure if this needs to be in renderHead or just hooked into render.????  which is better...
-			@Override
-			public void renderHead(IHeaderResponse response) {
-				StringBuffer javascriptBuffer = new StringBuffer();
-				javascriptBuffer.append ("dashboardWidgetFactory.createWithData('"+getMarkupId() + "'," + 
-						getChartDataJavascriptString() + "," +   // TODO DD : use jsonRenderer for chartData just as it is used for options.
-						jsonRenderer.render(getUpdatedOptions()) + 
-				");");
-				response.renderOnLoadJavascript(javascriptBuffer.toString());
-			}
-		
-			//	e.g.   [{data:[[3,6.4]], label:text}, {data:[[4,9.0],[6,2]]} ]
-			// the stuff in curly brackets are handled by chartData class.
-			protected String getChartDataJavascriptString() {
-				StringBuffer buff = new StringBuffer("[");		
-				for (Iterator<ChartData<X>> i = getChartData().iterator(); i.hasNext(); ) {
-					ChartData<X> chartData = i.next();
-					buff.append(chartData.toJavascriptString());
-					buff.append(i.hasNext() ? "," : "]");
-				}
-				return buff.toString();		
-			}
-
-		});
+		this.options = options;
+		add(new ChartMarkup("flot"));
 	}    	
 	    	
 	@SuppressWarnings("unchecked")
@@ -71,9 +46,46 @@ public class FlotChart<X> extends WebMarkupContainer {
 		return options.update(getChartData());
 	}
 
-	private String createNextMarkupId() {
-		return "flotChart_"+markupId.getAndIncrement();
-	}		
+	
+	class ChartMarkup extends WebMarkupContainer {
+
+		public ChartMarkup(String id) {
+			super(id);
+	        setOutputMarkupId(true).setMarkupId(createNextMarkupId());        
+	        setOutputMarkupPlaceholderTag(true);
+			add(new AbstractBehavior () {
+				// TODO DD : not sure if this needs to be in renderHead or just hooked into render.????  which is better...
+				@Override
+				public void renderHead(IHeaderResponse response) {
+					StringBuffer javascriptBuffer = new StringBuffer();
+					javascriptBuffer.append ("dashboardWidgetFactory.createWithData('"+getMarkupId() + "'," + 
+							getChartDataJavascriptString() + "," +   // TODO DD : use jsonRenderer for chartData just as it is used for options.
+							jsonRenderer.render(getUpdatedOptions()) + 
+					");");
+					response.renderOnDomReadyJavascript(javascriptBuffer.toString());
+				}
+			
+				//	e.g.   [{data:[[3,6.4]], label:text}, {data:[[4,9.0],[6,2]]} ]
+				// the stuff in curly brackets are handled by chartData class.
+				protected String getChartDataJavascriptString() {
+					StringBuffer buff = new StringBuffer("[");		
+					for (Iterator<ChartData<X>> i = getChartData().iterator(); i.hasNext(); ) {
+						ChartData<X> chartData = i.next();
+						buff.append(chartData.toJavascriptString());
+						buff.append(i.hasNext() ? "," : "]");
+					}
+					return buff.toString();		
+				}
+			});
+			
+		}
+		
+		private String createNextMarkupId() {
+			return "flotChart_"+markupId.getAndIncrement();
+		}		
+
+		
+	}
 	
 }
 		
