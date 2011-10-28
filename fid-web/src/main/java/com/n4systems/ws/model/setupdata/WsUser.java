@@ -14,13 +14,7 @@ public class WsUser extends WsModel {
 	private boolean allowedToIdentify;
 	private boolean allowedToInspect;
 	private boolean attachedToPrimaryOrg;
-	private long ownerId;
-	
-	//TODO Remove the following 3 fields here and in mobile.
-	private long customerId;
-	private long divisionId;
-	private long orgId;
-	
+	private long ownerId;	
 	private String firstName;
 	private String lastName;
 	private boolean deleted;
@@ -87,34 +81,7 @@ public class WsUser extends WsModel {
 	public long getOwnerId() {
 		return ownerId;
 	}
-	
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
-	}
-	
-	@XmlElement(name="CustomerId")
-	public long getCustomerId() {
-		return customerId;
-	}
-	
-	public void setDivisionId(long divisionId) {
-		this.divisionId = divisionId;
-	}	
-	
-	@XmlElement(name="DivisionId")
-	public long getDivisionId() {
-		return divisionId;
-	}
-	
-	public void setOrgId(long orgId) {
-		this.orgId = orgId;
-	}
-	
-	@XmlElement(name="OrgId")
-	public long getOrgId() {
-		return orgId;
-	}
-	
+		
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
