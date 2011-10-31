@@ -19,8 +19,8 @@ import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.chart.CalendarChartManager;
-import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.ChartGranularity;
+import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.StringChartManager;
 import com.n4systems.util.persistence.GroupByClause;
 import com.n4systems.util.persistence.NewObjectSelect;
@@ -30,7 +30,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.WhereParameterGroup;
 
-// CACHEABLE!!!  this is used for getting old data.
+// TODO DD : CACHEABLE!!!  this is used for getting old, unchangeable data.  use EMcache?
 
 public class DashboardReportingService extends FieldIdPersistenceService {
 	
@@ -54,7 +54,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		List<AssetsIdentifiedReportRecord> results = persistenceService.findAll(builder);
 				
-        return Lists.newArrayList(new ChartSeries<Calendar>().withChartManager(new CalendarChartManager(granularity)).add(results));
+        return Lists.newArrayList(new ChartSeries<Calendar>(results).withChartManager(new CalendarChartManager(granularity)));
     }
 
 
@@ -82,7 +82,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		builder.addGroupBy("nextDate");
 		List<UpcomingScheduledEventsRecord> results = persistenceService.findAll(builder);
 		
-        return Lists.newArrayList(new ChartSeries<Calendar>().add(results));
+        return Lists.newArrayList(new ChartSeries<Calendar>(results));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -109,7 +109,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		List<AssetsStatusReportRecord> results = persistenceService.findAll(builder);
 				
-        return Lists.newArrayList(new ChartSeries<String>().withChartManager(new StringChartManager(true)).add(results));
+        return Lists.newArrayList(new ChartSeries<String>(results).withChartManager(new StringChartManager(true)));
 	}
 	
 	
@@ -129,7 +129,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 //		for (Status status:status.values()) {
 			List<CompletedEventsReportRecord> results = persistenceService.findAll(builder);
 				
-        return Lists.newArrayList(new ChartSeries<Calendar>().withChartManager(new CalendarChartManager(granularity)).add(results));
+        return Lists.newArrayList(new ChartSeries<Calendar>(results).withChartManager(new CalendarChartManager(granularity)));
 	}
 		
 	private List<GroupByClause> getGroupByClauses(ChartGranularity granularity, String param) {

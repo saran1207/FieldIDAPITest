@@ -59,7 +59,7 @@ public class FlotOptions<X> implements Serializable {
 	
 	public class Series implements Serializable {
 		public Long stack;
-		public Lines lines;
+		public Lines lines = new Lines();
 		public Bars bars;		
 	}
 	

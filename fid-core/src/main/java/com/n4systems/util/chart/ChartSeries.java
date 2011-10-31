@@ -22,47 +22,40 @@ public class ChartSeries<X> implements Serializable {
 	private Integer yaxis;
 	private Boolean clickable;
 	private Boolean hoverable;
-	private Integer shadowSize;	
-	
+	private Integer shadowSize;		
 	private String label;
 	
+	// fields NOT included in Json representation.
 	private transient ChartManager<X> chartManager = null;
+	private transient boolean normalized = false;
 	
-	public ChartSeries() { 
+	public ChartSeries(List<? extends Chartable<X>> data) {
+		this(null,data);
 	}
 	
-	public ChartSeries(String label) {
+	public ChartSeries(String label, List<? extends Chartable<X>> data) {
 		this.label = label;
+		add(data);
 	}
 	
-	public ChartSeries<X> add(List<? extends Chartable<X>> data) {
-		if (data.size()>500) { 	// just to warn of potential performance problems. 
-			logger.warn("Very large dataset used for chart : (" + data.size() + ")" );
-		}		
-		int i = 0;
+	/*pkg protected */ChartSeries<X> add(List<? extends Chartable<X>> data) {
 		for (Chartable<X> chartable:data) { 
-			add(getChartManager().preprocess(chartable, i++));
-		}		
-		return this;
-	}
-	
-	public ChartSeries<X> add(Chartable<X> chartable) {
-		data.put(chartable.getX(), chartable);
-		trim();
-		return this;
-	}
-	
-	//	e.g. {data:[[0,12],[87,9.3]], label:'hello'}	
-	public String toJavascriptString() {
-		StringBuffer buff = new StringBuffer("{data:[");
-		
-		for (Chartable<X> cdp:data.values()) { 
-			buff.append(cdp.toJavascriptString());
-			buff.append(",");
+			add(chartable);
 		}
-		buff.append("]");
-		buff.append(label!=null ? ", label:'" + label + "'}" : "}");				
-		return buff.toString();
+		normalize();
+		return this;
+	}
+	
+	/*pkg protected */ChartSeries<X> add(Chartable<X> chartable) {
+		data.put(chartable.getX(), chartable);
+		return this;
+	}	
+
+	private void normalize() {
+		if (!normalized) {
+			normalized = true;
+			getChartManager().normalize(this);
+		}
 	}
 
 	public boolean isEmpty() {
@@ -83,14 +76,11 @@ public class ChartSeries<X> implements Serializable {
 
 	public ChartSeries<X> withChartManager(ChartManager<X> chartManager) {
 		this.chartManager = chartManager;  // advised not to change this after you build & use it.   set only once.
+		normalized = false;
+		normalize();
 		return this;
 	}
 	
-	private void trim() {		
-		// TODO DD : optimization... remove data just in case you get a huge result set.  
-	//	int count = data.size()-getChartManager().getLimit();  // remove the first N entries if data is > limit.
-	}
-
 	public Long getMinX() {
 		if (data.size()==0){ 
 			return null; 
@@ -135,11 +125,27 @@ public class ChartSeries<X> implements Serializable {
 		return data.entrySet();
 	}
 
+	public Long sumX() {
+		long sum = 0;
+		for (Chartable<X> chartable:data.getChartables()) { 
+			sum += chartable.getLongX();
+		}
+		return sum;
+	}
 
-	
+	public Double sumY() {
+		Double sum = 0.0;
+		for (Chartable<X> chartable:data.getChartables()) { 
+			sum += chartable.getY().doubleValue();
+		}
+		return sum;
+	}
 
-
-
+	public void remove(List<Chartable<X>> values) {
+		for (Chartable<X> chartable:values) {
+			data.remove(chartable.getX());
+		}
+	}
 
 }	 
 

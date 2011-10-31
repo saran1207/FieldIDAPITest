@@ -18,13 +18,10 @@ import com.n4systems.util.json.JsonRenderer;
 @SuppressWarnings("serial")
 public class FlotChart<X> extends Panel {
 	
-	private static final Integer DEFAULT_CHART_HEIGHT = 200;
-
 	static AtomicInteger markupId = new AtomicInteger(1);
 	
 	private FlotOptions<X> options;
 	private JsonRenderer jsonRenderer = new JsonRenderer();  // TODO DD: springify this bean.
-	private Integer height;
 
 	public FlotChart(final String id, IModel<List<ChartSeries<X>>> model, FlotOptions<X> options, String css) {
 		super(id, model);

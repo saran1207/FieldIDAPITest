@@ -1,17 +1,20 @@
 package com.n4systems.services.reporting;
 
+import com.n4systems.util.chart.AbstractChartable;
 import com.n4systems.util.chart.Chartable;
-import com.n4systems.util.chart.StringChartable;
 
 
 @SuppressWarnings("serial")
 public class AssetsStatusReportRecord implements Chartable<String> {	
 
 	private Chartable<String> chartable;
-	private static long i=0;
 	
 	public AssetsStatusReportRecord(String status, final Long count) {
-		chartable = new StringChartable(status, count, i);
+		chartable = new AbstractChartable<String>(status, count) {
+			@Override public Long getLongX() {
+				throw new IllegalStateException("this must be transformed by ChartManger because we don't know the LongX value until we have all the data collected/normalized.");
+			}			
+		};
 	}
 		
 	@Override

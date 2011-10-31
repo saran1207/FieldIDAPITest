@@ -14,8 +14,8 @@ public class LineGraphFlotOptions<X> extends FlotOptions<X> {
 		super();
 		points.show = true;
 		lines.show = true;
-		lines.fill = true;
-		lines.fillColor = "#CAD1DC";
+		lines.fill = true;  
+		lines.fillColor = "rgba(50, 87, 139, 0.40)";
 		xaxis.min = Long.MAX_VALUE;
 		xaxis.mode = "time";
 		xaxis.timeFormat = "%b %d, %y";
@@ -26,7 +26,7 @@ public class LineGraphFlotOptions<X> extends FlotOptions<X> {
 		grid.hoverable = Boolean.TRUE;
 		grid.clickable = Boolean.TRUE;
 		
-		pan.interactive = true;
+		pan.interactive = true;		
 	}
 
 	@Override
