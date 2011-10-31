@@ -1,11 +1,15 @@
 package com.n4systems.model.dashboard;
 
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.parents.AbstractEntity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @SuppressWarnings("serial")
@@ -17,8 +21,16 @@ public class WidgetDefinition extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private WidgetType widgetType;
 
-    @Column(name="name")
-    private String name;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="config_id")
+    private WidgetConfiguration config;
+
+    public WidgetDefinition() {}
+
+    public WidgetDefinition(WidgetType widgetType) {
+        this.widgetType = widgetType;
+        this.config = widgetType.createConfiguration();
+    }
 
     public WidgetType getWidgetType() {
         return widgetType;
@@ -28,11 +40,11 @@ public class WidgetDefinition extends AbstractEntity {
         this.widgetType = widgetType;
     }
 
-    public String getName() {
-        return name;
+    public WidgetConfiguration getConfig() {
+        return config;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setConfig(WidgetConfiguration config) {
+        this.config = config;
     }
 }

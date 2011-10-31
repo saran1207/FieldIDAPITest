@@ -1,0 +1,21 @@
+<wicket:extend>
+
+    <div wicket:id="orgsListContainer" class="orgsListContainer">
+
+        <div wicket:id="orgs" class="orgListItem">
+
+            <img wicket:id="deleteImage" class="removeOrgImage">
+
+            <div wicket:id="orgNameLabel" class="orgNameLabel"></div>
+
+        </div>
+
+    </div>
+
+    <div style="clear:both;"></div>
+
+    <div wicket:id="picker" class="orgPickerContainer"></div>
+
+    <input type="submit" wicket:id="addOrgButton" wicket:message="value:label.add">
+
+</wicket:extend>

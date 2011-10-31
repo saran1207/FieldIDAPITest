@@ -2,21 +2,25 @@ package com.n4systems.model.dashboard;
 
 import com.google.common.base.CaseFormat;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
 public enum WidgetType implements Listable {
 
-	NEWS("FieldId News"),
-    JOBS_ASSIGNED("Assigned Jobs"),
-    COMPLETED_EVENTS("Completed Events"),
-    ASSETS_IDENTIFIED("Assets Identified"),
-    ASSETS_STATUS("Assets By Status"),
-    COMMON_LINKS("Common Links"),
-    UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events");
+	NEWS("FieldId News", EventKPIWidgetConfiguration.class),
+    JOBS_ASSIGNED("Assigned Jobs", WidgetConfiguration.class),
+    COMPLETED_EVENTS("Completed Events", WidgetConfiguration.class),
+    ASSETS_IDENTIFIED("Assets Identified", WidgetConfiguration.class),
+    ASSETS_STATUS("Assets By Status", WidgetConfiguration.class),
+    COMMON_LINKS("Common Links", WidgetConfiguration.class),
+    UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", WidgetConfiguration.class);
 
     private String description;
+    private Class<? extends WidgetConfiguration> configurationClass;
 
-    WidgetType(String description) {
+    WidgetType(String description, Class<? extends WidgetConfiguration> configurationClass) {
         this.description = description;
+        this.configurationClass = configurationClass;
     }
 
     @Override
@@ -29,10 +33,14 @@ public enum WidgetType implements Listable {
         return description;
     }
 
-    // TODO DD : all widgets should be configurable?? 
-    @Deprecated
-    public boolean isConfigurable() {
-        return true;
+    public WidgetConfiguration createConfiguration() {
+        try {
+            WidgetConfiguration widgetConfiguration = configurationClass.newInstance();
+            widgetConfiguration.setName(description);
+            return widgetConfiguration;
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to create instance of configuration class: " + configurationClass);
+        }
     }
 
     public String getCamelCase() { 

@@ -141,6 +141,7 @@ public class OrgPicker extends Panel {
     protected void closePicker(AjaxRequestTarget target) {
         orgPickerContainer.setVisible(false);
         target.addComponent(OrgPicker.this);
+        onPickerClosed(target);
     }
     
 	protected void cancelPicker(AjaxRequestTarget target) {
@@ -149,6 +150,8 @@ public class OrgPicker extends Panel {
             browsePanel.clearSelections();
         }
         target.addComponent(OrgPicker.this);
-	}    
+	}
+
+    protected void onPickerClosed(AjaxRequestTarget target) {}
 
 }

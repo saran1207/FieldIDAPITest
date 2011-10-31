@@ -49,9 +49,7 @@ public class DashboardService extends FieldIdPersistenceService {
     private DashboardLayout createDefaultLayout() {
         DashboardLayout layout = new DashboardLayout();
 
-        WidgetDefinition jobsWidget = new WidgetDefinition();
-        jobsWidget.setWidgetType(WidgetType.JOBS_ASSIGNED);
-        jobsWidget.setName("Jobs Assigned");
+        WidgetDefinition jobsWidget = new WidgetDefinition(WidgetType.JOBS_ASSIGNED);
 
         DashboardColumn dashboardColumn = new DashboardColumn();
         dashboardColumn.getWidgets().add(jobsWidget);

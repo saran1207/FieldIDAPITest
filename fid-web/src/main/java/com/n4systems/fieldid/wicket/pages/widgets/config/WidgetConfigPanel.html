@@ -1,0 +1,22 @@
+<wicket:panel>
+
+    <div class="widgetConfiguration">
+
+        <h2><wicket:message key="label.widget_configuration"/></h2>
+
+        <form wicket:id="configForm">
+
+            <div class="leftColumn"><wicket:message key="label.widget_name"/></div><input type="text" wicket:id="name">
+
+            <wicket:child/>
+
+            <div class="formActions">
+                <input type="submit" wicket:id="saveButton" wicket:message="value:label.save">
+                <input type="submit" wicket:id="cancelButton" wicket:message="value:label.cancel">
+            </div>
+
+        </form>
+
+    </div>
+
+</wicket:panel>

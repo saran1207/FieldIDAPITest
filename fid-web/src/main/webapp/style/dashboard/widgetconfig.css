@@ -1,0 +1,63 @@
+.widgetConfiguration {
+    font-size: 12px;
+    height: 100%;
+    margin: 12px;
+}
+
+.widgetConfiguration h2 {
+    font-size:15px;
+    padding-bottom:10px;
+}
+
+.widgetConfiguration .leftColumn {
+    padding: 2px;
+    display:block;
+    float:left;
+    width:30%;
+}
+
+.widgetConfiguration .formActions {
+    clear:both;
+    padding-top:5px;
+}
+
+.widgetConfiguration input[type='submit'] {
+    margin-right:2.5px;
+    font-size:1.2em;
+    padding: 0 2px;
+}
+
+.widgetConfiguration .orgNameLabel {
+    display:block;
+    float:left;
+    padding-top:10px;
+}
+
+.orgsListContainer {
+    display:block;
+    overflow:hidden;
+    padding-top: 10px;
+    padding-bottom:10px;
+}
+
+.removeOrgImage {
+    display:block;
+    float:left;
+    padding-top: 10px;
+    padding-right: 10px;
+}
+
+.orgPickerContainer {
+    display:block;
+    float:left
+}
+
+.orgListItem {
+    padding-top:5px;
+    clear:both;
+}
+
+.widgetConfiguration input[type='text'] {
+    padding:2px;
+    border: 1px solid #999;
+}
