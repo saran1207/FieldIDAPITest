@@ -16,6 +16,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.Status;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.chart.CalendarChartManager;
@@ -119,17 +120,23 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		builder.setSelectArgument(new NewObjectSelect(CompletedEventsReportRecord.class, "status", "COUNT(*)", "YEAR(date)", "QUARTER(date)", "WEEK(date)", "DAYOFYEAR(date)"));		
 		builder.addWhere(Comparator.GE, "date", "date", getEarliestAssetDate());
-		builder.addGroupByClauses(getGroupByClauses(granularity,"date"));
+		builder.addGroupByClauses(getGroupByClauses(granularity,"date"));		
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
-		}		
+		}
 		builder.addOrder("date");
 		
-//		ArrayList<ChartData<Calendar>> results = new ArrayList<ChartData<Calendar>>();
-//		for (Status status:status.values()) {
-			List<CompletedEventsReportRecord> results = persistenceService.findAll(builder);
-				
-        return Lists.newArrayList(new ChartSeries<Calendar>(results).withChartManager(new CalendarChartManager(granularity)));
+		ArrayList<ChartSeries<Calendar>> results = new ArrayList<ChartSeries<Calendar>>();
+		// first add all events...
+		results.add(new ChartSeries<Calendar>("All", persistenceService.findAll(builder)).withChartManager(new CalendarChartManager(granularity)));	
+		
+		for (Status status:Status.values()) {
+			// ...then group them by status.
+			builder.addSimpleWhere("status", status);
+			List<CompletedEventsReportRecord> events = persistenceService.findAll(builder);
+			results.add(new ChartSeries<Calendar>(status.getDisplayName(), events).withChartManager(new CalendarChartManager(granularity)));	
+		}
+		return results;
 	}
 		
 	private List<GroupByClause> getGroupByClauses(ChartGranularity granularity, String param) {

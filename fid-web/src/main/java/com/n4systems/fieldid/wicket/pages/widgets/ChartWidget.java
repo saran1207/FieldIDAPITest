@@ -12,7 +12,7 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
 import com.n4systems.fieldid.wicket.components.chart.FlotOptions;
-import com.n4systems.fieldid.wicket.components.chart.LineGraphFlotOptions;
+import com.n4systems.fieldid.wicket.components.chart.LineGraphOptions;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.orgs.BaseOrg;
@@ -42,7 +42,7 @@ public abstract class ChartWidget<X> extends Widget {
 		LoadableDetachableModel<List<ChartSeries<X>>> model = new LoadableDetachableModel<List<ChartSeries<X>>>() {
 			@Override protected List<ChartSeries<X>> load() {
 				return getChartSeries();
-			}			
+			}
 		};		
 		return new FlotChart<X>(id, model, createOptions(), css);
 	}
@@ -50,7 +50,7 @@ public abstract class ChartWidget<X> extends Widget {
 	protected abstract List<ChartSeries<X>> getChartSeries();
 	
 	protected FlotOptions<X> createOptions() {
-		return new LineGraphFlotOptions<X>();
+		return new LineGraphOptions<X>();
 	}
 	
 	

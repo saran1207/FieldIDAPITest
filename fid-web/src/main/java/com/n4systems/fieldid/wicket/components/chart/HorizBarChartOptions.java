@@ -8,9 +8,9 @@ import com.n4systems.util.chart.Chartable;
 
 
 @SuppressWarnings("serial")
-public class HorizBarChartFlotOptions<X> extends FlotOptions<X> {
+public class HorizBarChartOptions<X> extends FlotOptions<X> {
 	
-	public HorizBarChartFlotOptions() {
+	public HorizBarChartOptions() {
 		series = null;
 		bars.barWidth = 0.5;
 		bars.horizontal = true;

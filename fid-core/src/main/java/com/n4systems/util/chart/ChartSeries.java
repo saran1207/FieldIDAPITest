@@ -17,7 +17,7 @@ public class ChartSeries<X> implements Serializable {
 //    lines: specific lines options       
 //    bars: specific bars options          these are other FLOT options i haven't included yet.
 //    points: specific points options
-	private String color = "#32578B";
+	public String color;
 	private Integer xaxis;
 	private Integer yaxis;
 	private Boolean clickable;

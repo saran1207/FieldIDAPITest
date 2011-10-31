@@ -7,15 +7,15 @@ import com.n4systems.util.chart.ChartSeries;
 
 
 @SuppressWarnings("serial")
-public class LineGraphFlotOptions<X> extends FlotOptions<X> {
+public class LineGraphOptions<X> extends FlotOptions<X> {
 
-
-	public LineGraphFlotOptions() { 
-		super();
+	public LineGraphOptions() { 
 		points.show = true;
+		
 		lines.show = true;
-		lines.fill = true;  
-		lines.fillColor = "rgba(50, 87, 139, 0.40)";
+		lines.fill = true;
+		lines.fillColor = "rgba(50, 87, 139, 0.30)";
+
 		xaxis.min = Long.MAX_VALUE;
 		xaxis.mode = "time";
 		xaxis.timeFormat = "%b %d, %y";
@@ -25,7 +25,7 @@ public class LineGraphFlotOptions<X> extends FlotOptions<X> {
 		
 		grid.hoverable = Boolean.TRUE;
 		grid.clickable = Boolean.TRUE;
-		
+				
 		pan.interactive = true;		
 	}
 

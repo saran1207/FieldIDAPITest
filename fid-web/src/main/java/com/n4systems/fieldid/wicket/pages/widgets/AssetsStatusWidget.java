@@ -6,7 +6,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.wicket.components.chart.FlotOptions;
-import com.n4systems.fieldid.wicket.components.chart.HorizBarChartFlotOptions;
+import com.n4systems.fieldid.wicket.components.chart.HorizBarChartOptions;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.ChartSeries;
@@ -25,7 +25,7 @@ public class AssetsStatusWidget extends ChartWidget<String> {
 
      @Override
     protected FlotOptions<String> createOptions() {
-    	HorizBarChartFlotOptions<String> options = new HorizBarChartFlotOptions<String>();
+    	HorizBarChartOptions<String> options = new HorizBarChartOptions<String>();
     	return options;
     }
 

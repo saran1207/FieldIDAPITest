@@ -21,18 +21,20 @@ public class FlotOptions<X> implements Serializable {
 	public Grid grid = new Grid();
 	public Pan pan = new Pan();
 	public Bars bars = new Bars();
+	public String[] colors;
+	
 
-	class Lines implements Serializable { 
+	public class Lines implements Serializable { 
 		public Boolean show;
 		public Boolean fill;
 		public String fillColor;
 	}
 	
-	class Points  implements Serializable { 
+	public class Points  implements Serializable { 
 		public Boolean show;
 	}
 	
-	class Axis implements Serializable  {
+	public class Axis implements Serializable  {
 		public Long[] panRange;	
 		public Long min;		
 		public String mode;
@@ -76,6 +78,7 @@ public class FlotOptions<X> implements Serializable {
 		yaxis.mode = null;
 		yaxis.timeFormat = null;
 		yaxis.monthNames = null;
+		colors = new String[] {"#32578B"};
 	}
 	
 	public FlotOptions<X> update(List<ChartSeries<X>> list) { 
