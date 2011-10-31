@@ -7,26 +7,25 @@ import com.n4systems.util.chart.ChartSeries;
 
 
 @SuppressWarnings("serial")
-public class LineGraphOptions<X> extends FlotOptions<X> {
+public class StackedBarChartOptions<X> extends FlotOptions<X> {
 
-	public LineGraphOptions() { 
-		points.show = true;
+	public StackedBarChartOptions() { 
+//		points.show = true;
 		
-		lines.show = true;
-		lines.fill = true;
-		lines.fillColor = "rgba(50, 87, 139, 0.20)";
-
-		xaxis.min = Long.MAX_VALUE;
 		xaxis.mode = "time";
 		xaxis.timeFormat = "%b %d, %y";
 		xaxis.monthNames = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};				
 		
-		yaxis.decimals = "0";
-		
-		grid.hoverable = Boolean.TRUE;
-		grid.clickable = Boolean.TRUE;
+		grid.clickable = true;
+		grid.hoverable = true;
 				
-		pan.interactive = true;		
+		series.stack = 0L;
+		series.lines.show = false;
+		series.lines.steps = false;
+		
+		series.bars.show = true;
+		series.bars.barWidth = 24*60*60*1000*31.0;
+		series.bars.align = "center";				
 	}
 
 	@Override

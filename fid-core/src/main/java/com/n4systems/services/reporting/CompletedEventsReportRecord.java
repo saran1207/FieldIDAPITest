@@ -17,7 +17,7 @@ public class CompletedEventsReportRecord implements Chartable<Calendar> {
 	private Integer day;   // day of year = 1..365(366)
 	private Status status;
 
-	public CompletedEventsReportRecord(Status status, Long value, Integer year, Integer quarter, Integer week, Integer day) {
+	public CompletedEventsReportRecord(Long value, Status status, Integer year, Integer quarter, Integer month, Integer week, Integer day) {
 		this.status = status;
 		this.year = year;		// store these just for debugging info...should be able to deduce from X. 
 		this.quarter = quarter;

@@ -28,6 +28,7 @@ public class FlotOptions<X> implements Serializable {
 		public Boolean show;
 		public Boolean fill;
 		public String fillColor;
+		public Boolean steps;
 	}
 	
 	public class Points  implements Serializable { 
@@ -62,13 +63,14 @@ public class FlotOptions<X> implements Serializable {
 	public class Series implements Serializable {
 		public Long stack;
 		public Lines lines = new Lines();
-		public Bars bars;		
+		public Bars bars = new Bars();
 	}
 	
 	public class Bars implements Serializable { 
 		public Boolean show;
 		public Double barWidth;
 		public Boolean horizontal;
+		public String align;
 	}
 
 	public FlotOptions() { 

@@ -14,28 +14,17 @@ public class AssetsIdentifiedReportRecord implements Chartable<Calendar> {
 	private int quarter;
 	private Integer week;
 	private Integer day;   // day of year = 1..365(366)
-	
-	public AssetsIdentifiedReportRecord(Integer year, Integer quarter, Integer week, Integer day, Long value) {
+	private Integer month;
+
+
+	public AssetsIdentifiedReportRecord(Long value, Integer year, Integer quarter, Integer month, Integer week, Integer day) {
 		this.year = year;		// store these just for debugging info...should be able to deduce from X. 
 		this.quarter = quarter;
+		this.month = month;
 		this.week = week;
 		this.day = day;
-		chartable = new CalendarChartable(getCalendar(year, quarter, week, day), value);
+		chartable = new CalendarChartable(value, year, quarter, month, week, day);
 	}
-		
-	public AssetsIdentifiedReportRecord(Calendar time, Long value) {
-		chartable = new CalendarChartable(time, value);
-	}
-
-	private Calendar getCalendar(Integer year, Integer quarter, Integer week, Integer day) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.set(Calendar.YEAR, year);
-		calendar.set(Calendar.MONTH, (quarter*3));		
-		calendar.set(Calendar.WEEK_OF_YEAR, week);
-		calendar.set(Calendar.DAY_OF_YEAR, day);		
-		return calendar;
-	}	
 
 	@Override
 	public Calendar getX() {

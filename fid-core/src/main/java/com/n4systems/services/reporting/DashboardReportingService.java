@@ -45,8 +45,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
     public List<ChartSeries<Calendar>> getAssetsIdentified(ChartGranularity granularity, BaseOrg org) {
 		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 		
-		builder.setSelectArgument(new NewObjectSelect(AssetsIdentifiedReportRecord.class, "YEAR(identified)", "QUARTER(identified)", "WEEK(identified)", "DAYOFYEAR(identified)", "COUNT(*)"));
-		builder.addGroupByClauses(getGroupByClauses(granularity,"identified"));
+		NewObjectSelect select = new NewObjectSelect(AssetsIdentifiedReportRecord.class);
+		List<String> args = Lists.newArrayList("COUNT(*)");
+		args.addAll(getSelectConstructorArgsByGranularity("identified", granularity));
+		select.setConstructorArgs(args);
+		
+		builder.setSelectArgument(select);
+		builder.addGroupByClauses(getGroupByClausesByGranularity(granularity,"identified"));
 		builder.addWhere(Comparator.GE, "identified", "identified", getEarliestAssetDate());
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
@@ -93,11 +98,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 //		SELECT u.status, u.v, @rownum:=@rownum+1 AS rownum
 //		FROM (
 //		   select ass.name as status, count(*) as v from assets a, assetstatus ass 
-//		where a.tenant_id = 15511493
-//		    and a.state = 'ACTIVE'
-//		    and a.assetstatus_id=ass.id
+//		where a.tenant_id = 15511493 and a.state = 'ACTIVE' and a.assetstatus_id=ass.id
 //		group by ass.name
-//
 //		) u,
 //		(SELECT @rownum:=0) r		
 		
@@ -111,16 +113,19 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		List<AssetsStatusReportRecord> results = persistenceService.findAll(builder);
 				
         return Lists.newArrayList(new ChartSeries<String>(results).withChartManager(new StringChartManager(true)));
-	}
+	}	
 	
-	
-	@SuppressWarnings("unchecked")
 	public List<ChartSeries<Calendar>> getCompletedEvents(ChartGranularity granularity/*TODO DD : use granularity/group by */, BaseOrg org) {
 		QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
-		builder.setSelectArgument(new NewObjectSelect(CompletedEventsReportRecord.class, "status", "COUNT(*)", "YEAR(date)", "QUARTER(date)", "WEEK(date)", "DAYOFYEAR(date)"));		
+		NewObjectSelect select = new NewObjectSelect(CompletedEventsReportRecord.class);
+		List<String> args = Lists.newArrayList("COUNT(*)", "status");
+		args.addAll(getSelectConstructorArgsByGranularity("date", granularity));
+		select.setConstructorArgs(args);
+		builder.setSelectArgument(select);
+		
 		builder.addWhere(Comparator.GE, "date", "date", getEarliestAssetDate());
-		builder.addGroupByClauses(getGroupByClauses(granularity,"date"));		
+		builder.addGroupByClauses(getGroupByClausesByGranularity(granularity,"date"));		
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
 		}
@@ -139,7 +144,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return results;
 	}
 		
-	private List<GroupByClause> getGroupByClauses(ChartGranularity granularity, String param) {
+	private List<GroupByClause> getGroupByClausesByGranularity(ChartGranularity granularity, String param) {
 		ArrayList<GroupByClause> result = Lists.newArrayList();
 		
 		if (granularity==null) {
@@ -169,6 +174,22 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return result;
 	}
 
+	private List<String> getSelectConstructorArgsByGranularity(String param, ChartGranularity granularity) {
+		// e.g. will return "YEAR(date)", "QUARTER(date)", "WEEK(date)", "DAYOFYEAR(date)" if you want all this data. 
+		//   for yearly data will return "YEAR(date)", "-1",  "-1",  "-1"   i.e. all other fields are irrelevant.
+		
+		String day = granularity.ordinal()<=ChartGranularity.DAY.ordinal() ? "DAYOFYEAR("+param+")" : "-1";
+		String week = granularity.ordinal()<=ChartGranularity.WEEK.ordinal() ? "WEEK("+param+")" : "-1";
+		String month = granularity.ordinal()<=ChartGranularity.MONTH.ordinal() ? "MONTH("+param+")" : "-1";
+		String quarter = granularity.ordinal()<=ChartGranularity.QUARTER.ordinal() ? "QUARTER("+param+")" : "-1";
+		String year = "YEAR("+param+")";   // year required for all calendars.  coarsest unit.
+
+//		HOUR(Calendar.HOUR_OF_DAY), DAY(Calendar.DAY_OF_YEAR), WEEK(Calendar.DAY_OF_WEEK), MONTH(Calendar.MONTH), QUARTER(Calendar.MONTH,3), YEAR(Calendar.YEAR), ALL(-1);
+		
+		return Lists.newArrayList(year, quarter, month, week, day);
+	}
+
+	
 	
 	// TODO DD : put in util pkg.
 	private Date getEarliestAssetDate() {
@@ -177,7 +198,5 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		calendar.set(Calendar.YEAR,2007);
 		return calendar.getTime();
 	}
-
-
 
 }

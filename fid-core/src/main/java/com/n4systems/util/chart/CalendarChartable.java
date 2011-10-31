@@ -3,6 +3,8 @@ package com.n4systems.util.chart;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.n4systems.util.time.DateUtils;
+
 @SuppressWarnings("serial")
 public class CalendarChartable extends AbstractChartable<Calendar> {
 	
@@ -10,13 +12,16 @@ public class CalendarChartable extends AbstractChartable<Calendar> {
 		super(x,y);
 	}
 	
+	public CalendarChartable(Long value, Integer year, Integer quarter, Integer month, Integer week, Integer day) {
+		super(DateUtils.getCalendar(year, quarter, month, week, day), value);		
+	}
+	
     @Override
 	public Long getLongX() {
+    	// will getX().getTimeInMillis be better???  damn browser time zone fuckups.
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.clear();
 		calendar.set(Calendar.YEAR, getX().get(Calendar.YEAR));
-		calendar.set(Calendar.MONTH, getX().get(Calendar.MONTH));   
-		calendar.set(Calendar.WEEK_OF_YEAR, getX().get(Calendar.WEEK_OF_YEAR));
 		calendar.set(Calendar.DAY_OF_YEAR, getX().get(Calendar.DAY_OF_YEAR));
         return calendar.getTimeInMillis();
     }

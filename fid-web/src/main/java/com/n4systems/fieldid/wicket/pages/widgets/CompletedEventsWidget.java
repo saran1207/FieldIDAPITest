@@ -48,7 +48,7 @@ public class CompletedEventsWidget extends ChartWidget<Calendar> {
 
     @Override
     protected FlotOptions<Calendar> createOptions() {
-    	LineGraphOptions<Calendar> options = new LineGraphOptions<Calendar>();
+    	FlotOptions<Calendar> options = new LineGraphOptions<Calendar>();
     	options.lines.fill = false;
     	options.colors = new String[]{"#32579DB", "#08973B", "#DED91B", "#F2302B" };
     	return options;
