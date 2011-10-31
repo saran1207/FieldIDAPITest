@@ -1,5 +1,6 @@
 package com.n4systems.api.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -53,7 +54,7 @@ public class EventView extends ExternalModelView {
 	private String comments;
 
 	@SerializableField(title = "Criteria", order = 1100, handler=CriteriaResultSerializationHandler.class, validators = {CriteriaResultValidator.class})
-	private Collection<CriteriaResultView> criteriaResults;
+	private Collection<CriteriaResultView> criteriaResults = new ArrayList<CriteriaResultView>();
 
 	public EventView() {}
 
