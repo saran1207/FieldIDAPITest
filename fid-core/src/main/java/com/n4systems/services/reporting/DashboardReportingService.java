@@ -30,6 +30,7 @@ import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.WhereParameterGroup;
+import com.n4systems.util.time.DateUtil;
 
 // TODO DD : CACHEABLE!!!  this is used for getting old, unchangeable data.  use EMcache?
 
@@ -52,7 +53,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		builder.setSelectArgument(select);
 		builder.addGroupByClauses(getGroupByClausesByGranularity(granularity,"identified"));
-		builder.addWhere(Comparator.GE, "identified", "identified", getEarliestAssetDate());
+		builder.addWhere(Comparator.GE, "identified", "identified", DateUtil.getEarliestAssetDate());
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
 		}
@@ -104,7 +105,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 //		(SELECT @rownum:=0) r		
 		
 		builder.setSelectArgument(new NewObjectSelect(AssetsStatusReportRecord.class, "assetStatus.name", "COUNT(*)"));		
-		builder.addWhere(Comparator.GE, "identified", "identified", getEarliestAssetDate());
+		builder.addWhere(Comparator.GE, "identified", "identified", DateUtil.getEarliestAssetDate());
 		builder.addGroupBy("assetStatus.name");
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
@@ -124,7 +125,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		builder.addWhere(Comparator.GE, "date", "date", getEarliestAssetDate());
+		builder.addWhere(Comparator.GE, "date", "date", DateUtil.getEarliestAssetDate());
 		builder.addGroupByClauses(getGroupByClausesByGranularity(granularity,"date"));		
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
@@ -188,15 +189,5 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		return Lists.newArrayList(year, quarter, month, week, day);
 	}
-
-	
-	
-	// TODO DD : put in util pkg.
-	private Date getEarliestAssetDate() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.set(Calendar.YEAR,2007);
-		return calendar.getTime();
-	}
-
+		
 }

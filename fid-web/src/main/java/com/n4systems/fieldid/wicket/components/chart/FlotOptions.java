@@ -23,7 +23,6 @@ public class FlotOptions<X> implements Serializable {
 	public Bars bars = new Bars();
 	public String[] colors;
 	
-
 	public class Lines implements Serializable { 
 		public Boolean show;
 		public Boolean fill;
@@ -33,6 +32,8 @@ public class FlotOptions<X> implements Serializable {
 	
 	public class Points  implements Serializable { 
 		public Boolean show;
+		public String symbol = "circle";
+		public Integer radius = 2;
 	}
 	
 	public class Axis implements Serializable  {
@@ -64,6 +65,7 @@ public class FlotOptions<X> implements Serializable {
 		public Long stack;
 		public Lines lines = new Lines();
 		public Bars bars = new Bars();
+		public Points points = new Points();
 	}
 	
 	public class Bars implements Serializable { 

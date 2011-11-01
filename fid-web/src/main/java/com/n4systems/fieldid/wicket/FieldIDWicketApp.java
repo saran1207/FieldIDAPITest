@@ -14,7 +14,6 @@ import org.odlabs.wiquery.core.commons.IWiQuerySettings;
 import org.odlabs.wiquery.core.commons.WiQuerySettings;
 
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
-import com.n4systems.fieldid.wicket.pages.DerekDashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
@@ -52,7 +51,6 @@ public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings
 
         mountBookmarkablePage("dashboard", DashboardPage.class);
         // FIXME DD : remove this by end of iteration...only for development purposes.
-        mountBookmarkablePage("derek", DerekDashboardPage.class);
         mountBookmarkablePage("reporting", ReportingPage.class);
         mountBookmarkablePage("returnToReport", ReturnToReportPage.class);
         mountBookmarkablePage("savedReport", RunSavedReportPage.class);

@@ -3,7 +3,7 @@ package com.n4systems.util.chart;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import com.n4systems.util.time.DateUtils;
+import com.n4systems.util.time.DateUtil;
 
 @SuppressWarnings("serial")
 public class CalendarChartable extends AbstractChartable<Calendar> {
@@ -13,7 +13,7 @@ public class CalendarChartable extends AbstractChartable<Calendar> {
 	}
 	
 	public CalendarChartable(Long value, Integer year, Integer quarter, Integer month, Integer week, Integer day) {
-		super(DateUtils.getCalendar(year, quarter, month, week, day), value);		
+		super(DateUtil.getCalendar(year, quarter, month, week, day), value);		
 	}
 	
     @Override

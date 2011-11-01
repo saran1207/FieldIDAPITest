@@ -1,19 +1,7 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
-import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
-import com.n4systems.fieldid.wicket.model.dashboard.CurrentLayoutModel;
-import com.n4systems.fieldid.wicket.pages.widgets.Widget;
-import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
-import com.n4systems.fieldid.wicket.util.AjaxCallback;
-import com.n4systems.fieldid.wicket.util.JavascriptPackageResourceIE;
-import com.n4systems.model.dashboard.DashboardColumn;
-import com.n4systems.model.dashboard.DashboardLayout;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.WidgetType;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
-import com.n4systems.services.dashboard.DashboardService;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,7 +17,20 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
-import java.util.List;
+import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
+import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
+import com.n4systems.fieldid.wicket.model.dashboard.CurrentLayoutModel;
+import com.n4systems.fieldid.wicket.pages.widgets.Widget;
+import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
+import com.n4systems.fieldid.wicket.util.AjaxCallback;
+import com.n4systems.fieldid.wicket.util.JavascriptPackageResourceIE;
+import com.n4systems.model.dashboard.DashboardColumn;
+import com.n4systems.model.dashboard.DashboardLayout;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.WidgetType;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import com.n4systems.services.dashboard.DashboardService;
 
 @SuppressWarnings("serial")
 public class DashboardPage extends FieldIDFrontEndPage {
@@ -52,9 +53,10 @@ public class DashboardPage extends FieldIDFrontEndPage {
 	public DashboardPage() {
         add(CSSPackageResource.getHeaderContribution("style/dashboard/dashboard.css"));
         add(CSSPackageResource.getHeaderContribution("style/dashboard/widgetconfig.css"));
-       	add(JavascriptPackageResourceIE.getHeaderContribution("javascript/flot/excanvas.js"));
+       	add(JavascriptPackageResourceIE.getHeaderContribution("javascript/flot/excanvas.min.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.min.js"));                
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.navigate.min.js"));        
+        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.symbol.min.js"));        
         add(JavascriptPackageResource.getHeaderContribution("javascript/dashboard.js"));
         
         add(configurationWindow = new FIDModalWindow("configurationWindow"));

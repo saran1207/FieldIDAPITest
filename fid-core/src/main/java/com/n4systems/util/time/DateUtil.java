@@ -1,8 +1,9 @@
 package com.n4systems.util.time;
 
 import java.util.Calendar;
+import java.util.Date;
 
-public class DateUtils {
+public class DateUtil {
 
 	public static Calendar getCalendar(Integer year, Integer quarter, Integer month, Integer week, Integer day) {
 		Calendar calendar = Calendar.getInstance();
@@ -20,5 +21,15 @@ public class DateUtils {
 			calendar.set(calendarParam, value.intValue());
 		}
 	}
+	
+	// TODO DD : put in util pkg.
+	public static Date getEarliestAssetDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(Calendar.YEAR,2007);
+		return calendar.getTime();
+	}
+
+	
 	
 }
