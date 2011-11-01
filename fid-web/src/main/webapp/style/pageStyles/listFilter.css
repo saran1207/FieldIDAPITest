@@ -50,4 +50,9 @@ div.formAction {
 	border-top: none;
 	background-color: #EEEEEE;
 	border-bottom: none;
+    float:left;
+}
+
+div.listFilter div.filterAction {
+    padding: 8px 10px 0 0;
 }
