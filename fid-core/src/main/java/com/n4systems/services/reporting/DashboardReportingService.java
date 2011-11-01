@@ -3,6 +3,7 @@ package com.n4systems.services.reporting;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -73,11 +74,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		builder.setSelectArgument(new NewObjectSelect(UpcomingScheduledEventsRecord.class, "nextDate", "COUNT(*)"));
 		Date today = new PlainDate();
+		Date endDate = DateUtils.addDays(today, period);
 		
 		WhereParameterGroup filtergroup = new WhereParameterGroup("filtergroup");
 		
 		filtergroup.addClause(WhereClauseFactory.create(Comparator.GE, "fromDate", "nextDate", today, null, ChainOp.AND));
-		filtergroup.addClause(WhereClauseFactory.create(Comparator.LE, "toDate", "nextDate", DateUtils.addDays(today, period), null, ChainOp.AND));
+		filtergroup.addClause(WhereClauseFactory.create(Comparator.LE, "toDate", "nextDate", endDate, null, ChainOp.AND));
 		
 		builder.addWhere(filtergroup);
 		builder.addSimpleWhere("status", ScheduleStatus.SCHEDULED);
@@ -89,7 +91,23 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		builder.addGroupBy("nextDate");
 		List<UpcomingScheduledEventsRecord> results = persistenceService.findAll(builder);
 		
-        return Lists.newArrayList(new ChartSeries<Calendar>(results));
+		List<UpcomingScheduledEventsRecord> fullResults = new ArrayList<UpcomingScheduledEventsRecord>();
+		
+		Iterator<UpcomingScheduledEventsRecord> iterator = results.iterator();
+		UpcomingScheduledEventsRecord record = iterator.next();
+		
+		for(Date i = today; i.before(DateUtils.addDays(endDate, 1)); i = DateUtils.addDays(i, 1) ) {
+			
+			if(record.getX().getTimeInMillis() == i.getTime()) {
+				fullResults.add(record);
+				if(iterator.hasNext())
+					record = iterator.next();
+			} else {
+				fullResults.add(new UpcomingScheduledEventsRecord(i, 0L));
+			}
+		}
+		
+        return Lists.newArrayList(new ChartSeries<Calendar>(fullResults));
 	}
 	
 	@SuppressWarnings("unchecked")
