@@ -143,6 +143,18 @@ div.loadingText {
     padding-bottom:20px;
 }
 
+.configureMessage {
+    font-size:16px;
+    font-weight:bold;
+    color:#999999;
+    text-align:center;
+    padding:5px 0 20px;
+}
+
+.configureArrow {
+	margin-left: 375px;
+}
+
 div.chartButtonsContainer {
     width:auto;
     float:right;

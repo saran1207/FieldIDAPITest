@@ -1,16 +1,4 @@
 <wicket:extend>
-	<table class="simpleTable decorated eventKpiTable">
-		<tr class="headers">
-			<th class="customerName"><wicket:message key="label.customer"/></th>
-			<th><wicket:message key="label.scheduled"/></th>
-			<th class="progressBar"><wicket:message key="label.completed"/></th>
-			<th><wicket:message key="label.failed"/></th>
-		</tr>
-		<tr wicket:id="customerEventKpiList">
-			<td><span wicket:id="customerName"></span></td>
-			<td class="centeredText"><span wicket:id="scheduledEvents"></span></td>
-			<td><div wicket:id="progressBar"></div><span class="completedPercentage" wicket:id="completedPercentage"></span></td>			
-			<td class="centeredText"><span wicket:id="failedSchedules"></span></td>
-		</tr>
-	</table>
+	<img wicket:id="arrow" class="configureArrow">
+	<div wicket:id="eventKpiContent"></div>
 </wicket:extend>
