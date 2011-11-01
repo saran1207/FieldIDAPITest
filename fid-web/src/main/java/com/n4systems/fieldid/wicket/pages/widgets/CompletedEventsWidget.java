@@ -18,7 +18,6 @@ public class CompletedEventsWidget extends ChartWidget<Calendar> {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
-	private ChartGranularity granularity = ChartGranularity.ALL;
 	
     public CompletedEventsWidget(String id, WidgetDefinition widgetDefinition) {
 		super(id, new Model<WidgetDefinition>(widgetDefinition));			

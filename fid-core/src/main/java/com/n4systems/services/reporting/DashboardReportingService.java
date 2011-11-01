@@ -116,7 +116,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         return Lists.newArrayList(new ChartSeries<String>(results).withChartManager(new StringChartManager(true)));
 	}	
 	
-	public List<ChartSeries<Calendar>> getCompletedEvents(ChartGranularity granularity/*TODO DD : use granularity/group by */, BaseOrg org) {
+	public List<ChartSeries<Calendar>> getCompletedEvents(ChartGranularity granularity, BaseOrg org) {
 		QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
 		NewObjectSelect select = new NewObjectSelect(CompletedEventsReportRecord.class);

@@ -27,6 +27,9 @@ public class LineGraphOptions<X> extends FlotOptions<X> {
 		grid.clickable = Boolean.TRUE;
 				
 		pan.interactive = true;		
+		
+		legend.position = "nw";
+		legend.noColumns = 4;
 	}
 
 	@Override
@@ -38,7 +41,7 @@ public class LineGraphOptions<X> extends FlotOptions<X> {
 			ChartSeries<X> chartData = i.next();
 			min = min(min, chartData.getMinX());
 			panMin = min(panMin, chartData.getPanMin());	
-			panMax = max(panMax, chartData.getPanMax());	
+			panMax = max(panMax, chartData.getPanMax());
 		}
 		xaxis.min = min;
 		if (panMin!=null && panMax!=null) {

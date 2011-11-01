@@ -15,9 +15,10 @@ public class HorizBarChartOptions<X> extends FlotOptions<X> {
 		bars.barWidth = 0.3;
 		bars.horizontal = true;
 		bars.show = true;
+		bars.lineWidth = 0;
 		yaxis.tickLength = 0;
-		grid.show = Boolean.TRUE;
-		grid.hoverable = Boolean.TRUE;
+		grid.show = true;
+		grid.hoverable = true;
 	}	
 	
 	@Override

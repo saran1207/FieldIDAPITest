@@ -21,6 +21,7 @@ public class FlotOptions<X> implements Serializable {
 	public Grid grid = new Grid();
 	public Pan pan = new Pan();
 	public Bars bars = new Bars();
+	public Legend legend = new Legend();
 	public String[] colors;
 	
 	public class Lines implements Serializable { 
@@ -44,7 +45,8 @@ public class FlotOptions<X> implements Serializable {
 		public String decimals;
 		public String[] monthNames;
 		public String[][] ticks;
-		public Integer tickLength;				
+		public Integer tickLength;
+		public String color = "#999999";
 	}
 	
 	public class Grid implements Serializable  {
@@ -73,7 +75,21 @@ public class FlotOptions<X> implements Serializable {
 		public Double barWidth;
 		public Boolean horizontal;
 		public String align;
+		public Integer lineWidth;
 	}
+	
+	public class Legend implements Serializable { 
+		public Boolean show;
+		public String labelFormatter;
+		public String position;
+		public Integer margin;
+		public String backgroundColor;
+		public String backgroundOpacity;
+		public String container;
+		public Integer noColumns;
+	}
+	
+	// ------------------------------------------------------------------------------------
 
 	public FlotOptions() { 
 		xaxis.decimals = null;		
