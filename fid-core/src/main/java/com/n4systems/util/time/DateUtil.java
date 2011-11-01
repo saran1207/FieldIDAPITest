@@ -30,6 +30,12 @@ public class DateUtil {
 		return calendar.getTime();
 	}
 
+	public static Calendar getCalendar(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar;
+	}
+
 	
 	
 }

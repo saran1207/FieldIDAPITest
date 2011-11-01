@@ -12,7 +12,7 @@ public class HorizBarChartOptions<X> extends FlotOptions<X> {
 	
 	public HorizBarChartOptions() {
 		series = null;
-		bars.barWidth = 0.5;
+		bars.barWidth = 0.3;
 		bars.horizontal = true;
 		bars.show = true;
 		yaxis.tickLength = 0;

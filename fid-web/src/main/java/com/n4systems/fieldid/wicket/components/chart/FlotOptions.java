@@ -33,7 +33,7 @@ public class FlotOptions<X> implements Serializable {
 	public class Points  implements Serializable { 
 		public Boolean show;
 		public String symbol = "circle";
-		public Integer radius = 2;
+		public Integer radius = 3;
 	}
 	
 	public class Axis implements Serializable  {

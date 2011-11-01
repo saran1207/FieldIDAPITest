@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
-import com.n4systems.fieldid.wicket.util.AjaxCallback;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -11,12 +7,16 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
+import com.n4systems.fieldid.wicket.util.AjaxCallback;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+
 @SuppressWarnings("serial")
 public abstract class Widget extends Panel {
 
-    private static final String CONTENT_ID = "content";
-
-    private IModel<WidgetDefinition> widgetDefinition;
+    @SuppressWarnings("unused")
+	private IModel<WidgetDefinition> widgetDefinition;
 
     protected ContextImage removeButton;
     protected ContextImage configureButton;
@@ -45,7 +45,7 @@ public abstract class Widget extends Panel {
         return this;
     }
 
-    public <T extends WidgetConfiguration> WidgetConfigPanel createConfigurationPanel(String id, IModel<T> config, final AjaxCallback<Boolean> saveCallback) {
+    public <T extends WidgetConfiguration> WidgetConfigPanel<T> createConfigurationPanel(String id, IModel<T> config, final AjaxCallback<Boolean> saveCallback) {
         return new WidgetConfigPanel<T>(id, config, saveCallback);
     }
 

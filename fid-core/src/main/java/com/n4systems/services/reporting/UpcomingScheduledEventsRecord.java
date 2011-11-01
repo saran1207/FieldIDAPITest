@@ -4,50 +4,16 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.n4systems.util.chart.CalendarChartable;
-import com.n4systems.util.chart.Chartable;
 
-public class UpcomingScheduledEventsRecord implements Chartable<Calendar> {
-	
-	private CalendarChartable chartable;
+@SuppressWarnings("serial")
+public class UpcomingScheduledEventsRecord extends CalendarChartable {
 	
 	public UpcomingScheduledEventsRecord(Date date, Long value) {
-		this.chartable = new CalendarChartable(getCalendar(date), value);
+		super(date, value);
 	}
 
 	public UpcomingScheduledEventsRecord(Calendar time, Long value) {
-		this.chartable = new CalendarChartable(time, value);
+		super(time, value);
 	}
 	
-	private Calendar getCalendar(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.setTime(date);
-		return calendar;
-	}
-	
-	@Override
-	public Calendar getX() {
-		return chartable.getX();
-	}
-
-	@Override
-	public Number getY() {
-		return chartable.getY();
-	}
-	
-	@Override
-	public String toString() { 
-		return chartable.toString();
-	}
-
-	@Override
-	public String toJavascriptString() {
-		return chartable.toJavascriptString();
-	}
-
-	@Override 
-	public Long getLongX() {
-		return chartable.getLongX();
-	}
-
 }

@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 public class StringChartManager implements ChartManager<String> {
 	
 	private boolean transpose;
-	private double otherThreshold = 0.02;
+	private double otherThreshold = 0.02;  // TODO DD : ask matt what proper threshold should be.
 
 	public StringChartManager() { 
 	}

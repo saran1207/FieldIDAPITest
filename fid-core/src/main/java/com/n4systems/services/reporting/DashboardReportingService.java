@@ -177,7 +177,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 	private List<String> getSelectConstructorArgsByGranularity(String param, ChartGranularity granularity) {
 		// e.g. will return "YEAR(date)", "QUARTER(date)", "WEEK(date)", "DAYOFYEAR(date)" if you want all this data. 
-		//   for yearly data will return "YEAR(date)", "-1",  "-1",  "-1"   i.e. all other fields are irrelevant.
+		//  so, for quarterly data will return "YEAR(date)", "QUARTER(date)",  "-1",  "-1"   because all other fields are irrelevant.
 		
 		String day = granularity.ordinal()<=ChartGranularity.DAY.ordinal() ? "DAYOFYEAR("+param+")" : "-1";
 		String week = granularity.ordinal()<=ChartGranularity.WEEK.ordinal() ? "WEEK("+param+")" : "-1";
@@ -185,8 +185,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		String quarter = granularity.ordinal()<=ChartGranularity.QUARTER.ordinal() ? "QUARTER("+param+")" : "-1";
 		String year = "YEAR("+param+")";   // year required for all calendars.  coarsest unit.
 
-//		HOUR(Calendar.HOUR_OF_DAY), DAY(Calendar.DAY_OF_YEAR), WEEK(Calendar.DAY_OF_WEEK), MONTH(Calendar.MONTH), QUARTER(Calendar.MONTH,3), YEAR(Calendar.YEAR), ALL(-1);
-		
 		return Lists.newArrayList(year, quarter, month, week, day);
 	}
 		

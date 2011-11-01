@@ -3,8 +3,6 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -32,25 +30,12 @@ public class CompletedEventsWidget extends ChartWidget<Calendar> {
         add(new OrgForm("ownerForm"));
     }
 
-	@SuppressWarnings("rawtypes")
-	private void addGranularityButton(String id, final ChartGranularity period) {
-        add(new IndicatingAjaxLink(id) {
-			@Override public void onClick(AjaxRequestTarget target) {
-				setGranularity(period);
-				target.addComponent(CompletedEventsWidget.this);
-			}        	
-        });         
-	}
-    
-    private void setGranularity(ChartGranularity period) {
-    	this.granularity = period;
-    }        	
-
+ 
     @Override
     protected FlotOptions<Calendar> createOptions() {
     	FlotOptions<Calendar> options = new LineGraphOptions<Calendar>();
     	options.lines.fill = false;
-    	options.colors = new String[]{"#32579DB", "#08973B", "#DED91B", "#F2302B" };
+    	options.colors = new String[]{"#32578B", "#5B8C62", "#B35045", "#999999" };
     	return options;
     }
     
