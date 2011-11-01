@@ -142,3 +142,39 @@ div.loadingText {
     font-weight:bold;
     padding-bottom:20px;
 }
+
+div.chartButtonsContainer {
+    width:auto;
+    float:right;
+    padding: 5px 0 8px 0;
+}
+
+.widget .widget-content a.chartButton {
+    color:#fff;
+}
+
+a.chartButton {
+    height:23px;
+    width:54px;
+    background-color: #6b6b6b;
+    margin-left: 5px;
+    padding-top:2px;
+    display:block;
+    float:left;
+    overflow:hidden;
+    text-align:center;
+}
+
+.widget .widget-content a.selected {
+    background-color: #60986B;
+}
+
+div.buttonsLabel {
+    display: block;
+    float: left;
+}
+
+.chartButtonsContainer .wicket-ajax-indicator {
+    display:block;
+    float:left;
+}

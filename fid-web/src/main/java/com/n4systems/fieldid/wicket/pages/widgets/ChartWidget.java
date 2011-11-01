@@ -5,12 +5,14 @@ import java.util.List;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
@@ -53,32 +55,46 @@ public abstract class ChartWidget<X> extends Widget {
     	this.granularity = period;
     }        	
     
-	
-	@SuppressWarnings("rawtypes")
-	protected void addGranularityButton(String id, final ChartGranularity period) {
-        add(new IndicatingAjaxLink(id) {
-			@Override public void onClick(AjaxRequestTarget target) {
-				setGranularity(period);
-				target.addComponent(ChartWidget.this);
-			}        	
-        });         
-	}
-
 	public void setPeriod(Integer period) {
 		this.period = period;
 	}
-		
-	protected void addPeriodButton(String id, final int period) {
-        add(new IndicatingAjaxLink(id) {
-			@Override public void onClick(AjaxRequestTarget target) {
-				setPeriod(period);
-				target.addComponent(ChartWidget.this);
-			}        	
-        });      		
-	}	
-	
 
-	private final Component createFlotChartImpl(String id, String css) {		
+	@SuppressWarnings("rawtypes")
+	protected void addGranularityButton(String id, final ChartGranularity granularity) {
+        IndicatingAjaxLink granularityButton = new IndicatingAjaxLink(id) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setGranularity(granularity);
+                target.addComponent(ChartWidget.this);
+            }
+        };
+        granularityButton.add(new AttributeAppender("class", true, new Model<String>("selected"), " ") {
+            @Override
+            public boolean isEnabled(Component component) {
+                return granularity == ChartWidget.this.granularity;
+            }
+        });
+        add(granularityButton);
+	}
+
+	protected void addPeriodButton(String id, final int period) {
+        IndicatingAjaxLink periodButton = new IndicatingAjaxLink(id) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setPeriod(period);
+                target.addComponent(ChartWidget.this);
+            }
+        };
+        periodButton.add(new AttributeAppender("class", true, new Model<String>("selected"), " ") {
+            @Override
+            public boolean isEnabled(Component component) {
+                return period == ChartWidget.this.period;
+            }
+        });
+        add(periodButton);
+	}
+
+	private Component createFlotChartImpl(String id, String css) {
 		LoadableDetachableModel<List<ChartSeries<X>>> model = new LoadableDetachableModel<List<ChartSeries<X>>>() {
 			@Override protected List<ChartSeries<X>> load() {
 				return getChartSeries();
@@ -92,8 +108,7 @@ public abstract class ChartWidget<X> extends Widget {
 	protected FlotOptions<X> createOptions() {
 		return new LineGraphOptions<X>();
 	}
-	
-	
+
 	class OrgForm extends Form {
 
 		public OrgForm(String id) {
@@ -109,8 +124,6 @@ public abstract class ChartWidget<X> extends Widget {
 				}
 			});
 		}
-		
-	}	
-	
-	
+	}
+    
 }

@@ -3,15 +3,23 @@
 	<div class="widget-panel">
 		<!-- FIXME DD : take out hard coded height styling -->	
 		<div wicket:id="chart"/>
-		<div>
-			<a class="" wicket:id="year" value="By Year">By Year</a> 
-			<a wicket:id="quarter" value="By Quarter">By Quarter</a> 
-			<a wicket:id="month" value="By Month">By Month</a> 
-			<a wicket:id="week" value="By Week">By Week</a> 
-			<form wicket:id="ownerForm">
-				<div wicket:id="ownerPicker"/>
-			</form> 
+		<div class="chartButtonsContainer">
+            <div class="buttonsLabel">
+                <wicket:message key="label.graph_by"/>
+            </div>
+			<a class="chartButton" wicket:id="year">Year</a>
+			<a class="chartButton" wicket:id="quarter">Quarter</a>
+			<a class="chartButton" wicket:id="month">Month</a>
+			<a class="chartButton" wicket:id="week">Week</a>
+
 		</div>
+
+        <div style="clear:both;"/>
+
+        <form wicket:id="ownerForm">
+            <div wicket:id="ownerPicker"/>
+        </form>
+
 	</div>		  	
 	
 </wicket:extend>
