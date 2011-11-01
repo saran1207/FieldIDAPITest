@@ -74,6 +74,7 @@
 img.widget-drag-image {
     display:block;
     padding-left:230px;
+    padding-bottom:4px;
 }
 
 .addWidgetForm {
@@ -107,4 +108,22 @@ img.widget-drag-image {
 
 .assetsStatusChart { 
 	height : 300px;
+}
+
+div.chartTooltip {
+    position: absolute;
+    display: none;
+    border: 2px solid #777777;
+    text-align: center;
+    padding: 4px;
+    background-color: #fff;
+    opacity: 0.80;
+}
+
+div.loadingText {
+    font-size:16px;
+    color:#cccccc;
+    text-align:center;
+    font-weight:bold;
+    padding-bottom:20px;
 }

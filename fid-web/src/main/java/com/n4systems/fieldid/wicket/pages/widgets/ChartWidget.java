@@ -2,10 +2,12 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 
 import java.util.List;
 
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -39,6 +41,10 @@ public abstract class ChartWidget<X> extends Widget {
 			public Component getLazyLoadComponent(String markupId) {
 				return createFlotChartImpl(markupId, css);
 			}
+            public Component getLoadingComponent(final String markupId) {
+                return new Label(markupId, "<div class='loadingText'>" + new FIDLabelModel("label.loading_ellipsis").getObject() +
+                    "</div>").setEscapeModelStrings(false);
+            }
 		};		
 	}
 	

@@ -38,16 +38,9 @@ var dashboardWidgetFactory = (function() {
 		};
 					
 		function showTooltip(x, y, contents) {
-		    $('<div id="tooltip">' + contents + '</div>').css( {
-		        position: 'absolute',
-		        display: 'none',
+		    $('<div id="tooltip" class="chartTooltip">' + contents + '</div>').css( {
 		        top: y + 5,
-		        left: x + 5,        
-		        border: '1px solid #fdd',
-		        'text-align': 'center',
-		        padding: '2px',
-		        'background-color': '#fee',
-		        opacity: 0.80
+		        left: x + 5
 		    }).appendTo("body").fadeIn(200);
 		};		
 		
@@ -77,7 +70,7 @@ var dashboardWidgetFactory = (function() {
 	var dateTooltipContent = function(datapoint, options) { 
 	    var y = datapoint[1].toFixed(options.yaxis.decimals);
 	    var date = formatDate(new Date(datapoint[0]), options.xaxis.monthNames);
-	    return y + "<br>" + date;		
+	    return date + ": " + y;
 	};
 	
 	var horizLabelTooltipContent = function(datapoint, options) {
