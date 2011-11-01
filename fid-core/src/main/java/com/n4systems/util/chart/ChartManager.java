@@ -9,4 +9,5 @@ public interface ChartManager<X> extends Serializable {
 	public Long getPanMax(ChartSeries<X> series);
 	public Long getLongX(X x);
 	public void normalize(ChartSeries<X> series);
+	public void updateOptions(ChartSeries<X> chartSeries, FlotOptions<X> options, int index);
 }

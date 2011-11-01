@@ -14,13 +14,13 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
-import com.n4systems.fieldid.wicket.components.chart.FlotOptions;
-import com.n4systems.fieldid.wicket.components.chart.LineGraphOptions;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.FlotOptions;
+import com.n4systems.util.chart.LineGraphOptions;
 
 @SuppressWarnings("serial")
 public abstract class ChartWidget<X> extends Widget {
@@ -32,6 +32,7 @@ public abstract class ChartWidget<X> extends Widget {
 	
 	public ChartWidget(String id, IModel<WidgetDefinition> model) {
 		super(id, model);
+		setOutputMarkupId(true);		
 		add(flotChart = createFlotChart(model.getObject().getWidgetType().getCamelCase()+"Chart"));
 	}
 

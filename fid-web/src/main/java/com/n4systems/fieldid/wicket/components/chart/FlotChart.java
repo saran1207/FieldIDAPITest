@@ -13,6 +13,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.FlotOptions;
 import com.n4systems.util.json.JsonRenderer;
 
 @SuppressWarnings("serial")
@@ -42,12 +43,6 @@ public class FlotChart<X> extends Panel {
 		return options;
 	}
 
-	// some options get updated depending on the data results...this is the hook to change them.
-	// for static configuration you can just use   myFlotChart.getOptions().hoverable = true  for example.
-	private FlotOptions<X> getUpdatedOptions() {
-		return options.update(getChartSeries());
-	}
-	
 	
 	class ChartMarkup extends WebMarkupContainer {
 
@@ -59,16 +54,24 @@ public class FlotChart<X> extends Panel {
 				// TODO DD : not sure if this needs to be in renderHead or just hooked into render.????  which is better...
 				@Override
 				public void renderHead(IHeaderResponse response) {
+					updateOptions(getChartSeries());					
 					StringBuffer javascriptBuffer = new StringBuffer();
 					javascriptBuffer.append ("dashboardWidgetFactory.createWithData('"+getMarkupId() + "'," + 
 							jsonRenderer.render(getChartSeries()) + "," + 
-							jsonRenderer.render(getUpdatedOptions()) + 
+							jsonRenderer.render(getOptions()) + 
 					");");
 					response.renderOnDomReadyJavascript(javascriptBuffer.toString());
 				}
-			
+
 			});
 			
+		}
+		
+		private void updateOptions(List<ChartSeries<X>> list) {
+			int i = 0;
+			for (ChartSeries<X> chartSeries:list) { 
+				chartSeries.updateOptions(options, i++);				
+			}
 		}
 		
 		private String createNextMarkupId() {

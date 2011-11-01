@@ -31,13 +31,13 @@ public enum ChartGranularity {
 			from.add(Calendar.MONTH, -1);
 			break;
 		case WEEK:
-			from.add(Calendar.YEAR, -1);
+			from.add(Calendar.MONTH, -6);
 			break;
 		case MONTH: 
-			from.add(Calendar.YEAR, -2);
+			from.add(Calendar.YEAR, -1);
 			break;
 		case QUARTER:
-			from.add(Calendar.YEAR, -4);
+			from.add(Calendar.YEAR, -2);
 			break;
 		case YEAR:
 		case ALL:

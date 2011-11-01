@@ -19,7 +19,6 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar> {
 	
     public AssetsIdentifiedWidget(String id, WidgetDefinition widgetDefinition) {
 		super(id, new Model<WidgetDefinition>(widgetDefinition));			
-		setOutputMarkupId(true);		
         addGranularityButton("year", ChartGranularity.YEAR);
         addGranularityButton("quarter", ChartGranularity.QUARTER);
         addGranularityButton("month", ChartGranularity.MONTH);

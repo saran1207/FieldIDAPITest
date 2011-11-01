@@ -81,27 +81,6 @@ public class ChartSeries<X> implements Serializable {
 		return this;
 	}
 	
-	public Long getMinX() {
-		if (data.size()==0){ 
-			return null; 
-		}
-		return getChartManager().getMinX(this);
-	}
-	
-	public Long getPanMin() {
-		if (data.size()==0){ 
-			return null; 
-		}
-		return getChartManager().getPanMin(this); 
-	}
-	
-	public Long getPanMax() {
-		if (data.size()==0){ 
-			return null; 
-		}
-		return getChartManager().getPanMax(this); 
-	}
-
 	private ChartManager<X> getChartManager() {
 		if (chartManager==null) { 
 			chartManager=new SimpleChartManager<X>();
@@ -147,6 +126,10 @@ public class ChartSeries<X> implements Serializable {
 		}
 	}
 
+	public void updateOptions(FlotOptions<X> options, int index) { 
+		getChartManager().updateOptions(this, options, index);		
+	}
+	
 }	 
 
 

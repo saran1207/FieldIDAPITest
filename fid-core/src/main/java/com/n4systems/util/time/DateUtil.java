@@ -5,6 +5,13 @@ import java.util.Date;
 
 public class DateUtil {
 
+	public static long SECONDINMILLIS = 1000;
+	public static long MINUTEINMILLIS = SECONDINMILLIS * 60;
+	public static long HOURINMILLIS = MINUTEINMILLIS * 60;
+	public static long DAYINMILLIS = HOURINMILLIS * 24;
+	public static long YEARINMILLIS = DAYINMILLIS * 365;
+	
+
 	public static Calendar getCalendar(Integer year, Integer quarter, Integer month, Integer week, Integer day) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear();
@@ -35,6 +42,16 @@ public class DateUtil {
 		calendar.setTime(date);
 		return calendar;
 	}
+
+	public static Calendar getDelta(Date a, Date b) {		
+		long delta = Math.abs(a.getTime()-b.getTime());
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(Calendar.YEAR, (int) (delta/YEARINMILLIS));
+		calendar.set(Calendar.DAY_OF_YEAR, (int) (delta/DAYINMILLIS)%365);
+		return calendar;
+	}
+	
 
 	
 	

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-
+// TODO DD : rename this --> BarChartManager.
 @SuppressWarnings("serial")
 public class StringChartManager implements ChartManager<String> {
 	
@@ -74,5 +74,17 @@ public class StringChartManager implements ChartManager<String> {
 		// TODO DD : localize this title.
 		series.add(createChartable("Other", underThresholdTotal, index++));				
 	}
+
+	@Override
+	public void updateOptions(ChartSeries<String> chartSeries, FlotOptions<String> options, int index) {
+		// CAVEAT : this only works for a single chartSeries...if you are plotting more than one code will need to be refactored to handle that.
+		options.yaxis.ticks = new String[chartSeries.size()][2];
+		int i = 0;
+		for (Entry<String, Chartable<String>> entry: chartSeries.getEntrySet()) {			
+			options.yaxis.ticks[i][0] = i+(options.bars.barWidth/2)+"";
+			options.yaxis.ticks[i][1] = entry.getValue().getX()+"";
+			i++;
+		}
+	}	
 
 }
