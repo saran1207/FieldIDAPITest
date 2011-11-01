@@ -95,6 +95,8 @@ img.widget-drag-image {
 
 .ui-progressbar {
 	overflow: hidden;
+	width: 175px;
+	float: left;
 }
 
 .ui-progressbar .ui-progressbar-value {
@@ -108,6 +110,19 @@ img.widget-drag-image {
 
 .assetsStatusChart { 
 	height : 300px;
+}
+.eventKpiTable .customerName {
+	max-width: 100px;
+}
+
+.eventKpiTable .progressBar {
+	width: 200px;
+}
+.eventKpiTable .completedPercentage {
+	padding-left: 3px;
+}
+.centeredText {
+	text-align: center;
 }
 
 div.chartTooltip {
