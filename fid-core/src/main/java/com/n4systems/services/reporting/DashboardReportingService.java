@@ -15,8 +15,8 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.chart.CalendarChartManager;
@@ -26,10 +26,10 @@ import com.n4systems.util.chart.StringChartManager;
 import com.n4systems.util.persistence.GroupByClause;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.WhereParameterGroup;
+import com.n4systems.util.persistence.WhereClause.ChainOp;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.time.DateUtil;
 
 // TODO DD : CACHEABLE!!!  this is used for getting old, unchangeable data.  use EMcache?
@@ -143,6 +143,37 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 			results.add(new ChartSeries<Calendar>(status.getDisplayName(), events).withChartManager(new CalendarChartManager(granularity)));	
 		}
 		return results;
+	}
+	
+	public EventKpiRecord getEventKpi(BaseOrg owner) {
+		EventKpiRecord eventKpiRecord = new EventKpiRecord();	
+		eventKpiRecord.setCustomer(owner);
+		
+		QueryBuilder<EventScheduleStatusCount> builder1 = new QueryBuilder<EventScheduleStatusCount>(EventSchedule.class, securityContext.getUserSecurityFilter());
+		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "status", "COUNT(*)"));
+		builder1.addSimpleWhere("owner.id", owner.getId());
+		builder1.addGroupBy("status");
+		List<EventScheduleStatusCount> statusCounts = persistenceService.findAll(builder1);
+		
+		for (EventScheduleStatusCount statusCount: statusCounts ) {
+			if(statusCount.status.equals(ScheduleStatus.COMPLETED))
+				eventKpiRecord.setCompleted(statusCount.count);
+			if(statusCount.status.equals(ScheduleStatus.IN_PROGRESS))
+				eventKpiRecord.setInProgress(statusCount.count);
+			if(statusCount.status.equals(ScheduleStatus.SCHEDULED))
+				eventKpiRecord.setScheduled(statusCount.count);			
+		}
+
+		QueryBuilder<EventSchedule> builder2 = new QueryBuilder<EventSchedule>(EventSchedule.class, securityContext.getUserSecurityFilter());
+		builder2.addSimpleWhere("owner.id", owner.getId());
+		builder2.addSimpleWhere("status", ScheduleStatus.COMPLETED);
+		builder2.addSimpleWhere("event.status", Status.FAIL);
+		
+		Long failedCount = persistenceService.count(builder2);
+		
+		eventKpiRecord.setFailed(failedCount);
+		
+		return eventKpiRecord;
 	}
 		
 	private List<GroupByClause> getGroupByClausesByGranularity(ChartGranularity granularity, String param) {

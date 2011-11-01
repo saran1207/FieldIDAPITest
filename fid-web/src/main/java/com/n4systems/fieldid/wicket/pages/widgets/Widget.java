@@ -48,5 +48,9 @@ public abstract class Widget extends Panel {
     public <T extends WidgetConfiguration> WidgetConfigPanel<T> createConfigurationPanel(String id, IModel<T> config, final AjaxCallback<Boolean> saveCallback) {
         return new WidgetConfigPanel<T>(id, config, saveCallback);
     }
+    
+    public IModel<WidgetDefinition> getWidgetDefinition() {
+    	return widgetDefinition;
+    }
 
 }

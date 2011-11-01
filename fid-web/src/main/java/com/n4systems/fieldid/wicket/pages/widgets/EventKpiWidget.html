@@ -1,0 +1,16 @@
+<wicket:extend>
+	<table class="simpleTable decorated">
+		<tr class="headers">
+			<th><wicket:message key="label.customer"/></th>
+			<th><wicket:message key="label.scheduled"/></th>
+			<th><wicket:message key="label.completed"/></th>
+			<th><wicket:message key="label.failed"/></th>
+		</tr>
+		<tr wicket:id="customerEventKpiList">
+			<td><span wicket:id="customerName"></span></td>
+			<td><span wicket:id="scheduledEvents"></span></td>
+			<td><div wicket:id="progressBar"></div><span wicket:id="completedPercentage"></span></td>			
+			<td><span wicket:id="failedSchedules"></span></td>
+		</tr>
+	</table>
+</wicket:extend>

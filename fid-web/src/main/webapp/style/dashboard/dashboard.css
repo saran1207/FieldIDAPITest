@@ -92,6 +92,15 @@ img.widget-drag-image {
     border: 1px solid #e3e3e3;
 }
 
+.ui-progressbar {
+	overflow: hidden;
+}
+
+.ui-progressbar .ui-progressbar-value {
+	background-color: #346CA1;
+	padding: 0;
+}
+
 .flotChart { 
 	height : 200px;
 }

@@ -46,11 +46,6 @@ public class NewsWidget extends Widget {
         return jsBuffer.toString();
 	}
 
-    @Override
-    public <T extends WidgetConfiguration> WidgetConfigPanel createConfigurationPanel(String id, IModel<T> config, AjaxCallback<Boolean> saveCallback) {
-        return new EventKPIConfigPanel(id, (IModel<EventKPIWidgetConfiguration>)config, saveCallback);
-    }
-
 }
 
 

@@ -7,13 +7,14 @@ import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
 public enum WidgetType implements Listable {
 
-	NEWS("FieldId News", EventKPIWidgetConfiguration.class),
+	NEWS("FieldId News", WidgetConfiguration.class),
     JOBS_ASSIGNED("Assigned Jobs", WidgetConfiguration.class),
     COMPLETED_EVENTS("Completed Events", WidgetConfiguration.class),
     ASSETS_IDENTIFIED("Assets Identified", WidgetConfiguration.class),
     ASSETS_STATUS("Assets By Status", WidgetConfiguration.class),
     COMMON_LINKS("Common Links", WidgetConfiguration.class),
-    UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", WidgetConfiguration.class);
+    UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", WidgetConfiguration.class),
+    EVENT_KPI("Event KPIs", EventKPIWidgetConfiguration.class);
 
     private String description;
     private Class<? extends WidgetConfiguration> configurationClass;
