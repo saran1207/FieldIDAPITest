@@ -6,13 +6,16 @@
 
         <form wicket:id="configForm">
 
-            <div class="leftColumn"><wicket:message key="label.widget_name"/></div><input type="text" wicket:id="name">
+            <div wicket:id="feedbackPanel"></div>
+
+            <div class="leftColumn"><wicket:message key="label.widget_title"/></div><input type="text" wicket:id="name">
 
             <wicket:child/>
 
-            <div class="formActions">
+            <div class="formAction">
                 <input type="submit" wicket:id="saveButton" wicket:message="value:label.save">
-                <input type="submit" wicket:id="cancelButton" wicket:message="value:label.cancel">
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
             </div>
 
         </form>

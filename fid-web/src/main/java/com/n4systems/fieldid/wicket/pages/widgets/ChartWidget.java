@@ -1,13 +1,19 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.components.chart.FlotChart;
+import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.util.chart.ChartGranularity;
+import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.FlotOptions;
+import com.n4systems.util.chart.LineGraphOptions;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
@@ -15,14 +21,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import com.n4systems.fieldid.wicket.components.chart.FlotChart;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.ChartSeries;
-import com.n4systems.util.chart.FlotOptions;
-import com.n4systems.util.chart.LineGraphOptions;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public abstract class ChartWidget<X> extends Widget {
@@ -61,7 +60,7 @@ public abstract class ChartWidget<X> extends Widget {
 
 	@SuppressWarnings("rawtypes")
 	protected void addGranularityButton(String id, final ChartGranularity granularity) {
-        IndicatingAjaxLink granularityButton = new IndicatingAjaxLink(id) {
+        AjaxLink granularityButton = new AjaxLink(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 setGranularity(granularity);
@@ -78,7 +77,7 @@ public abstract class ChartWidget<X> extends Widget {
 	}
 
 	protected void addPeriodButton(String id, final int period) {
-        IndicatingAjaxLink periodButton = new IndicatingAjaxLink(id) {
+        AjaxLink periodButton = new AjaxLink(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 setPeriod(period);

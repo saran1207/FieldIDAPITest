@@ -2,6 +2,9 @@
 	<div wicket:id="chart"/>
 	<div>
 		<div class="chartButtonsContainer">
+            <div class="buttonsLabel">
+                <wicket:message key="label.show_the_next"/>
+            </div>
             <a class="chartButton" wicket:id="7days">7 days</a>
             <a class="chartButton" wicket:id="30days">30 days</a>
             <a class="chartButton" wicket:id="60days">60 days</a>
@@ -12,7 +15,7 @@
 
 		<form wicket:id="ownerForm">
 			<div wicket:id="ownerPicker"/>
-		</form> 
+		</form>
 
 	</div>
 </wicket:extend>

@@ -136,6 +136,7 @@ div.chartButtonsContainer {
     width:auto;
     float:right;
     padding: 5px 0 8px 0;
+    font-size: 11px;
 }
 
 .widget .widget-content a.chartButton {
@@ -143,9 +144,9 @@ div.chartButtonsContainer {
 }
 
 a.chartButton {
-    height:23px;
+    height:20px;
     width:54px;
-    background-color: #6b6b6b;
+    background-color: #888888;
     margin-left: 5px;
     padding-top:2px;
     display:block;
