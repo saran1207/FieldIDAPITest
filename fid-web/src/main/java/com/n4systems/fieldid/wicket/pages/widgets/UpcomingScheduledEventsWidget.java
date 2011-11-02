@@ -36,6 +36,7 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar> {
 	protected FlotOptions<Calendar> createOptions() {
 		FlotOptions<Calendar> options = super.createOptions();
 		options.pan.interactive = false;
+		options.xaxis.timeformat = "%b %d";
 		return options;
 		
 	}
