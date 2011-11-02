@@ -55,7 +55,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		builder.setSelectArgument(select);
 		builder.addGroupByClauses(getGroupByClausesByGranularity(granularity,"identified"));
-		builder.addWhere(Comparator.GE, "identified", "identified", dateRange.getFromDate());
+		ChartDateRange range = dateRange==null ? ChartDateRange.FOREVER : dateRange;
+		builder.addWhere(Comparator.GE, "identified", "identified", range.getFromDate());
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
 		}

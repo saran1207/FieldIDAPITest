@@ -7,6 +7,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
@@ -14,13 +15,13 @@ import com.n4systems.util.chart.FlotOptions;
 import com.n4systems.util.chart.LineGraphOptions;
 
 @SuppressWarnings("serial")
-public class CompletedEventsWidget extends ChartWidget<Calendar> {
+public class CompletedEventsWidget extends ChartWidget<Calendar, WidgetConfiguration> {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
 	
-    public CompletedEventsWidget(String id, WidgetDefinition widgetDefinition) {
-		super(id, new Model<WidgetDefinition>(widgetDefinition));			
+    public CompletedEventsWidget(String id, WidgetDefinition<WidgetConfiguration> widgetDefinition) {
+		super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));			
         addGranularityButton("year", ChartGranularity.YEAR);
         addGranularityButton("quarter", ChartGranularity.QUARTER);
         addGranularityButton("month", ChartGranularity.MONTH);

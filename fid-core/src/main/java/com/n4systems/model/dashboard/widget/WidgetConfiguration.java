@@ -1,13 +1,14 @@
 package com.n4systems.model.dashboard.widget;
 
-import com.n4systems.model.parents.AbstractEntity;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.n4systems.model.parents.AbstractEntity;
+
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "widget_configurations")
 @Inheritance(strategy = InheritanceType.JOINED)

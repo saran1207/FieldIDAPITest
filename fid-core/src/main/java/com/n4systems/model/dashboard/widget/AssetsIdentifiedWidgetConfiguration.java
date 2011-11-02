@@ -25,8 +25,8 @@ public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration {
 	private BaseOrg org;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name="date_range")	
-	private ChartDateRange dateRange;
+	@Column(name="date_range", nullable=false)	
+	private ChartDateRange dateRange = ChartDateRange.FOREVER;
 	
 	@AllowSafetyNetworkAccess
 	public BaseOrg getOrg() {

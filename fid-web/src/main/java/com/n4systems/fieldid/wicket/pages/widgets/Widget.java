@@ -13,15 +13,14 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
 @SuppressWarnings("serial")
-public abstract class Widget extends Panel {
+public abstract class Widget<W extends WidgetConfiguration> extends Panel {
 
-    @SuppressWarnings("unused")
-	private IModel<WidgetDefinition> widgetDefinition;
+	private IModel<WidgetDefinition<W>> widgetDefinition;
 
     protected ContextImage removeButton;
     protected ContextImage configureButton;
 
-    public Widget(String id, IModel<WidgetDefinition> widgetDefinition) {
+    public Widget(String id, IModel<WidgetDefinition<W>> widgetDefinition) {
         super(id);
         this.widgetDefinition = widgetDefinition;
         setOutputMarkupId(true);
@@ -35,21 +34,21 @@ public abstract class Widget extends Panel {
         add(configureButton = new ContextImage("configureButton", "images/dashboard/config.png"));
     }
 
-	public Widget setRemoveBehaviour(AjaxEventBehavior behaviour) {
+	public Widget<W> setRemoveBehaviour(AjaxEventBehavior behaviour) {
 		removeButton.add(behaviour);
 		return this;
 	}
 
-    public Widget setConfigureBehaviour(AjaxEventBehavior behaviour) {
+    public Widget<W> setConfigureBehaviour(AjaxEventBehavior behaviour) {
         configureButton.add(behaviour);
         return this;
     }
 
-    public <T extends WidgetConfiguration> WidgetConfigPanel<T> createConfigurationPanel(String id, IModel<T> config, final AjaxCallback<Boolean> saveCallback) {
-        return new WidgetConfigPanel<T>(id, config, saveCallback);
+    public WidgetConfigPanel<W> createConfigurationPanel(String id, IModel<W> config, final AjaxCallback<Boolean> saveCallback) {
+        return new WidgetConfigPanel<W>(id, config, saveCallback);
     }
     
-    public IModel<WidgetDefinition> getWidgetDefinition() {
+    public IModel<WidgetDefinition<W>> getWidgetDefinition() {
     	return widgetDefinition;
     }
 

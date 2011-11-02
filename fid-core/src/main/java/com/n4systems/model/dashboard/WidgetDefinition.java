@@ -1,8 +1,5 @@
 package com.n4systems.model.dashboard;
 
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
-import com.n4systems.model.parents.AbstractEntity;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,10 +9,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import com.n4systems.model.parents.AbstractEntity;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "widget_definitions")
-public class WidgetDefinition extends AbstractEntity {
+public class WidgetDefinition<W extends WidgetConfiguration> extends AbstractEntity {
 
     @Column(name="widget_type")
     @Enumerated(EnumType.STRING)
@@ -27,7 +27,7 @@ public class WidgetDefinition extends AbstractEntity {
 
     public WidgetDefinition() {}
 
-    public WidgetDefinition(WidgetType widgetType) {
+	public WidgetDefinition(WidgetType widgetType) {
         this.widgetType = widgetType;
         this.config = widgetType.createConfiguration();
     }
@@ -40,11 +40,12 @@ public class WidgetDefinition extends AbstractEntity {
         this.widgetType = widgetType;
     }
 
-    public WidgetConfiguration getConfig() {
-        return config;
+    @SuppressWarnings("unchecked")
+    public W getConfig() {
+        return (W) config;
     }
 
-    public void setConfig(WidgetConfiguration config) {
+    public void setConfig(W config) {
         this.config = config;
     }
 }

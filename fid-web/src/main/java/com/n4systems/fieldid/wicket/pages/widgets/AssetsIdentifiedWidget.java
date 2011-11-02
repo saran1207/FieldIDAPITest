@@ -3,9 +3,13 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import com.n4systems.fieldid.wicket.pages.widgets.config.AssetsIdentifiedConfigPanel;
+import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
+import com.n4systems.fieldid.wicket.util.AjaxCallback;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
@@ -15,13 +19,13 @@ import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 
 @SuppressWarnings("serial")
-public class AssetsIdentifiedWidget extends ChartWidget<Calendar> {
+public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifiedWidgetConfiguration> {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
 	
-    public AssetsIdentifiedWidget(String id, WidgetDefinition widgetDefinition) {
-		super(id, new Model<WidgetDefinition>(widgetDefinition));			
+    public AssetsIdentifiedWidget(String id, WidgetDefinition<AssetsIdentifiedWidgetConfiguration> widgetDefinition) {
+		super(id, new Model<WidgetDefinition<AssetsIdentifiedWidgetConfiguration>>(widgetDefinition));			
         addGranularityButton("year", ChartGranularity.YEAR);
         addGranularityButton("quarter", ChartGranularity.QUARTER);
         addGranularityButton("month", ChartGranularity.MONTH);
@@ -34,14 +38,21 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar> {
     }
 
 	private ChartDateRange getChartDateRange() {
-		AssetsIdentifiedWidgetConfiguration config = (AssetsIdentifiedWidgetConfiguration) getWidgetDefinition().getObject().getConfig();
+		AssetsIdentifiedWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return config.getDateRange();
 	}
 
 	private BaseOrg getOrg() {
-		AssetsIdentifiedWidgetConfiguration config = (AssetsIdentifiedWidgetConfiguration) getWidgetDefinition().getObject().getConfig();
+		AssetsIdentifiedWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return config.getOrg();
 	}
+
+	@Override	
+	public WidgetConfigPanel<AssetsIdentifiedWidgetConfiguration> createConfigurationPanel(
+			String id, IModel<AssetsIdentifiedWidgetConfiguration> config, AjaxCallback<Boolean> saveCallback) {
+		return new AssetsIdentifiedConfigPanel(id, config, saveCallback);
+	}
+	
 	
 }
 

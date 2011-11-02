@@ -16,13 +16,13 @@ import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
 import com.n4systems.fieldid.wicket.util.AjaxCallback;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 
-public class EventKpiWidget extends Widget {
+@SuppressWarnings("serial")
+public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 	
-	public EventKpiWidget(String id, WidgetDefinition widgetDefinition) {
-        super(id, new Model<WidgetDefinition>(widgetDefinition));
+	public EventKpiWidget(String id, WidgetDefinition<EventKPIWidgetConfiguration> widgetDefinition) {
+        super(id, new Model<WidgetDefinition<EventKPIWidgetConfiguration>>(widgetDefinition));
 		setOutputMarkupId(true);
 		
 		List<BaseOrg> orgList = getOrgList();
@@ -41,7 +41,7 @@ public class EventKpiWidget extends Widget {
 	}
 	
 	private List<BaseOrg> getOrgList() {
-		EventKPIWidgetConfiguration config = (EventKPIWidgetConfiguration) getWidgetDefinition().getObject().getConfig();
+		EventKPIWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 
 		if(config == null) {
 			return new ArrayList<BaseOrg>();
@@ -51,8 +51,8 @@ public class EventKpiWidget extends Widget {
 	}
 	
     @Override
-    public <T extends WidgetConfiguration> WidgetConfigPanel createConfigurationPanel(String id, IModel<T> config, AjaxCallback<Boolean> saveCallback) {
-        return new EventKPIConfigPanel(id, (IModel<EventKPIWidgetConfiguration>)config, saveCallback);
+    public WidgetConfigPanel<EventKPIWidgetConfiguration> createConfigurationPanel(String id, IModel<EventKPIWidgetConfiguration> config, AjaxCallback<Boolean> saveCallback) {
+        return new EventKPIConfigPanel(id, config, saveCallback);
     }
 
 }

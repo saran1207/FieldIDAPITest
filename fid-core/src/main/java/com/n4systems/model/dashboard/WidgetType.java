@@ -6,7 +6,7 @@ import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
-public enum WidgetType implements Listable {
+public enum WidgetType implements Listable<String> {
 
 	NEWS("FieldId News", WidgetConfiguration.class),
     JOBS_ASSIGNED("Assigned Jobs", WidgetConfiguration.class),
@@ -26,7 +26,7 @@ public enum WidgetType implements Listable {
     }
 
     @Override
-    public Object getId() {
+    public String getId() {
         return name();
     }
 
@@ -46,7 +46,7 @@ public enum WidgetType implements Listable {
     }
 
     public String getCamelCase() { 
-    	return  CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, toString());
+    	return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, toString());
     }
 
 }
