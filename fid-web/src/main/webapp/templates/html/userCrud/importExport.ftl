@@ -2,16 +2,20 @@ ${action.setPageType('user', 'import_export')!}
 
 <head> 
 	<@n4.includeStyle type="page" href="import"/>
+	<@n4.includeStyle type="page" href="downloads" />
 </head>
 
 <div class="leftBox">
 	<div class="infoSet">
-		<h2>1. <@s.text name="label.download_template"/></h2>
+		<h2>1. <@s.text name="label.export_download_template"/></h2>
 		<p>
 			<@s.text name="message.download_template"><@s.param><@s.text name="label.users"/></@s.param></@s.text>
 		</p>
 		<div id="templateLink">
 			<p>
+				<@s.url id="exportExcel" action="userExport" namespace="/aHtml"/>
+				<a href='${exportExcel}' class='lightview' rel='ajax' title=' :: :: scrolling:true, autosize: true'><@s.text name="label.export_existing"><@s.param><@s.text name="label.users"/></@s.param></@s.text></a>
+				<@s.text name="label.or"/>
 				<a href='<@s.url action="downloadExampleUserExport" namespace="/file" />'><@s.text name="label_download_excel"/></a>
 			</p>
 		</div>

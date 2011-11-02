@@ -3,6 +3,8 @@ function updateUploadForm() {
 
 	$('downloadTemplate').href = $('templateUrl').value + "?criteriaId=" + assetTypeId
 
+	$('exportLink').href = $('exportUrl').value + "?criteriaId=" + assetTypeId
+
 	$('uploadAutoAttributeId').value = assetTypeId;
 }
 
