@@ -1,14 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import com.n4systems.fieldid.wicket.components.chart.FlotChart;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.ChartSeries;
-import com.n4systems.util.chart.FlotOptions;
-import com.n4systems.util.chart.LineGraphOptions;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -21,14 +14,27 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.List;
+import com.n4systems.fieldid.wicket.components.chart.FlotChart;
+import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.widgets.config.AssetsIdentifiedConfigPanel;
+import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
+import com.n4systems.fieldid.wicket.util.AjaxCallback;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.util.chart.ChartGranularity;
+import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.FlotOptions;
+import com.n4systems.util.chart.LineGraphOptions;
 
 @SuppressWarnings("serial")
 public abstract class ChartWidget<X> extends Widget {
 
 	protected Component flotChart;
 	protected BaseOrg owner;
-	protected ChartGranularity granularity = ChartGranularity.ALL;
+	protected ChartGranularity granularity = ChartGranularity.YEAR;
 	protected Integer period = 30;
 	
 	public ChartWidget(String id, IModel<WidgetDefinition> model) {
@@ -43,7 +49,8 @@ public abstract class ChartWidget<X> extends Widget {
 			public Component getLazyLoadComponent(String markupId) {
 				return createFlotChartImpl(markupId, css);
 			}
-            public Component getLoadingComponent(final String markupId) {
+            @Override
+			public Component getLoadingComponent(final String markupId) {
                 return new Label(markupId, "<div class='loadingText'>" + new FIDLabelModel("label.loading_ellipsis").getObject() +
                     "</div>").setEscapeModelStrings(false);
             }
@@ -107,9 +114,18 @@ public abstract class ChartWidget<X> extends Widget {
 	protected FlotOptions<X> createOptions() {
 		return new LineGraphOptions<X>();
 	}
-
+	
+	@Override	
+	public <T extends WidgetConfiguration> WidgetConfigPanel createConfigurationPanel(
+			String id, IModel<T> config, AjaxCallback<Boolean> saveCallback) {
+		return new AssetsIdentifiedConfigPanel(id, (IModel<AssetsIdentifiedWidgetConfiguration>)config, saveCallback);
+	}
+	
+	
+ 
 	class OrgForm extends Form {
 
+		@Deprecated // this will be moved to configuration panel.
 		public OrgForm(String id) {
 			super(id);
 			add(new OrgPicker("ownerPicker", new PropertyModel<BaseOrg>(ChartWidget.this, "owner")) { 

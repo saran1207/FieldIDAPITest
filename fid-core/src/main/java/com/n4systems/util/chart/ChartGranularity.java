@@ -6,7 +6,7 @@ import java.util.Calendar;
 
 public enum ChartGranularity {
 	
-	HOUR(Calendar.HOUR_OF_DAY), DAY(Calendar.DAY_OF_YEAR), WEEK(Calendar.DAY_OF_WEEK), MONTH(Calendar.MONTH), QUARTER(Calendar.MONTH,3), YEAR(Calendar.YEAR), ALL(-1);
+	HOUR(Calendar.HOUR_OF_DAY), DAY(Calendar.DAY_OF_YEAR), WEEK(Calendar.DAY_OF_WEEK), MONTH(Calendar.MONTH), QUARTER(Calendar.MONTH,3), YEAR(Calendar.YEAR);
 
 	private int cal;
 	private int multiplier;
@@ -40,8 +40,7 @@ public enum ChartGranularity {
 			from.add(Calendar.YEAR, -2);
 			break;
 		case YEAR:
-		case ALL:
-			from.set(Calendar.YEAR, 2007);
+			from.set(Calendar.YEAR, 2005);
 			break;
 		}
 		return today.getTimeInMillis()- from.getTimeInMillis();

@@ -16,21 +16,22 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.Status;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.Status;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.chart.CalendarChartManager;
+import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.StringChartManager;
 import com.n4systems.util.persistence.GroupByClause;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.time.DateUtil;
 
 // TODO DD : CACHEABLE!!!  this is used for getting old, unchangeable data.  use EMcache?
@@ -44,7 +45,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-    public List<ChartSeries<Calendar>> getAssetsIdentified(ChartGranularity granularity, BaseOrg org) {
+    public List<ChartSeries<Calendar>> getAssetsIdentified(ChartDateRange dateRange, ChartGranularity granularity, BaseOrg org) {
 		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 		
 		NewObjectSelect select = new NewObjectSelect(AssetsIdentifiedReportRecord.class);
@@ -54,7 +55,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		builder.setSelectArgument(select);
 		builder.addGroupByClauses(getGroupByClausesByGranularity(granularity,"identified"));
-		builder.addWhere(Comparator.GE, "identified", "identified", DateUtil.getEarliestAssetDate());
+		builder.addWhere(Comparator.GE, "identified", "identified", dateRange.getFromDate());
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
 		}
@@ -64,6 +65,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 				
         return Lists.newArrayList(new ChartSeries<Calendar>(results).withChartManager(new CalendarChartManager(granularity)));
     }
+
 
 
 	@SuppressWarnings("unchecked")
@@ -123,7 +125,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 //		(SELECT @rownum:=0) r		
 		
 		builder.setSelectArgument(new NewObjectSelect(AssetsStatusReportRecord.class, "assetStatus.name", "COUNT(*)"));		
-		builder.addWhere(Comparator.GE, "identified", "identified", DateUtil.getEarliestAssetDate());
+		builder.addWhere(Comparator.GE, "identified", "identified", DateUtil.getEarliestFieldIdDate());
 		builder.addGroupBy("assetStatus.name");
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
@@ -143,7 +145,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		builder.addWhere(Comparator.GE, "date", "date", DateUtil.getEarliestAssetDate());
+		builder.addWhere(Comparator.GE, "date", "date", DateUtil.getEarliestFieldIdDate());
 		builder.addGroupByClauses(getGroupByClausesByGranularity(granularity,"date"));		
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
@@ -216,7 +218,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		case QUARTER:
 			result.add(new GroupByClause("QUARTER("+param+")", true));
 			break;
-		case ALL:
 		case YEAR:
 		default:
 			// do nothing...default of group by year is good.
@@ -237,4 +238,5 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return Lists.newArrayList(year, quarter, month, week, day);
 	}
 		
+
 }

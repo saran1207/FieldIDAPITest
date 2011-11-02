@@ -30,10 +30,10 @@ public class DateUtil {
 	}
 	
 	// TODO DD : put in util pkg.
-	public static Date getEarliestAssetDate() {
+	public static Date getEarliestFieldIdDate() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear();
-		calendar.set(Calendar.YEAR,2007);
+		calendar.set(Calendar.YEAR,2005);
 		return calendar.getTime();
 	}
 
