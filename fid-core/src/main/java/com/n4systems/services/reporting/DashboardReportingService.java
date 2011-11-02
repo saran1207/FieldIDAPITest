@@ -94,11 +94,11 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		List<UpcomingScheduledEventsRecord> fullResults = new ArrayList<UpcomingScheduledEventsRecord>();
 		
 		Iterator<UpcomingScheduledEventsRecord> iterator = results.iterator();
-		UpcomingScheduledEventsRecord record = iterator.next();
+		UpcomingScheduledEventsRecord record = iterator.hasNext() ? iterator.next() : null;
 		
 		for(Date i = today; i.before(DateUtils.addDays(endDate, 1)); i = DateUtils.addDays(i, 1) ) {
 			
-			if(record.getX().getTimeInMillis() == i.getTime()) {
+			if(record != null && record.getX().getTimeInMillis() == i.getTime()) {
 				fullResults.add(record);
 				if(iterator.hasNext())
 					record = iterator.next();
