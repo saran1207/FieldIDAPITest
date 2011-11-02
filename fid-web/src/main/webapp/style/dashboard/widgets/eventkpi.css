@@ -1,0 +1,67 @@
+.eventKpiTable th {
+    background:#666;
+    color:#f7f7f7;
+    font-weight: bold;
+}
+
+.eventKpiTable .ui-progressbar {
+	height: 15px;
+    margin-top: 5px;
+	width: 155px;
+	float: left;	
+}
+
+.eventKpiTable .ui-widget-content {
+	background: none;
+	background-color: #CAD1DC;
+}
+
+.eventKpiTable .ui-progressbar .ui-progressbar-value {
+	background-color: #32578B;
+	padding: 0;
+}
+
+.eventKpiTable .customerName {
+	max-width: 100px;
+}
+
+.eventKpiTable td{
+	padding-top: 5px;
+}
+
+.eventKpiTable .progressBar {
+	width: 200px;
+}
+
+.eventKpiTable .completedPercentage, .eventKpiTable .completedSchedules {
+	float: left;
+	padding-top: 3px;	
+}
+
+.eventKpiTable .completedPercentage {
+	padding-left: 3px;
+}
+
+.eventKpiTable .completedSchedules {
+	padding-right: 3px;
+	text-align: right;
+	width: 17px;
+}
+
+.eventKpiTable .ui-corner-left {
+	-moz-border-radius-bottomleft: 0;
+	-moz-border-radius-topleft: 0;
+}
+
+.eventKpiTable .ui-corner-all {
+	-moz-border-radius: 0 0 0 0;
+}
+
+.eventKpiTable .ui-progressbar .ui-progressbar-value {
+	margin: 5px 0 0;
+	height: 30%;
+}
+
+.centeredText {
+	text-align: center;
+}

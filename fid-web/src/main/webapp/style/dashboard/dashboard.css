@@ -93,16 +93,6 @@ img.widget-drag-image {
     border: 1px solid #e3e3e3;
 }
 
-.ui-progressbar {
-	overflow: hidden;
-	width: 175px;
-	float: left;
-}
-
-.ui-progressbar .ui-progressbar-value {
-	background-color: #346CA1;
-	padding: 0;
-}
 
 .flotChart { 
 	height : 200px;
@@ -110,19 +100,6 @@ img.widget-drag-image {
 
 .assetsStatusChart { 
 	height : 200px;
-}
-.eventKpiTable .customerName {
-	max-width: 100px;
-}
-
-.eventKpiTable .progressBar {
-	width: 200px;
-}
-.eventKpiTable .completedPercentage {
-	padding-left: 3px;
-}
-.centeredText {
-	text-align: center;
 }
 
 div.chartTooltip {
