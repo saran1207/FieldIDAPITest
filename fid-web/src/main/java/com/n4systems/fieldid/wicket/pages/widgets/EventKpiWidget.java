@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.model.IModel;
@@ -23,7 +24,8 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 	public EventKpiWidget(String id, WidgetDefinition<EventKPIWidgetConfiguration> widgetDefinition) {
         super(id, new Model<WidgetDefinition<EventKPIWidgetConfiguration>>(widgetDefinition));
 		setOutputMarkupId(true);
-		
+		add(CSSPackageResource.getHeaderContribution("style/dashboard/widgets/eventkpi.css"));
+
 		List<BaseOrg> orgList = getOrgList();
 		ContextImage arrow;
 		add(arrow = new ContextImage("arrow", "images/dashboard/arrow.png"));

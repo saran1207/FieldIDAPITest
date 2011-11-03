@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.components.dashboard.subcomponents;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -23,7 +22,6 @@ public class EventKpiTable extends Panel {
 
 	public EventKpiTable(String id, List<BaseOrg> orgList) {
 		super(id);
-		add(CSSPackageResource.getHeaderContribution("style/dashboard/widgets/eventkpi.css"));
 		add(new ListView<EventKpiRecord>("customerEventKpiList", getCustomerEventKPIs(orgList)) {
 			
 			@Override
