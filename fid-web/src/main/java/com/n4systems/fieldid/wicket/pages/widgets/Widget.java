@@ -1,14 +1,14 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
-import com.n4systems.fieldid.wicket.util.AjaxCallback;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
@@ -19,19 +19,29 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
 
     protected ContextImage removeButton;
     protected ContextImage configureButton;
+    
 
     public Widget(String id, IModel<WidgetDefinition<W>> widgetDefinition) {
         super(id);
         this.widgetDefinition = widgetDefinition;
-        setOutputMarkupId(true);
+        setOutputMarkupId(true).setMarkupId(getCssClassWithSuffix("Widget"));
         add(new Label("titleLabel", new PropertyModel<String>(widgetDefinition, "config.name")));
+        add(new ContextImage("dragImage", "images/dashboard/drag.png"));        
         addButtons();
-        add(new ContextImage("dragImage", "images/dashboard/drag.png"));
+        add(createConfigPanel("config"));
     }
+    
+	private String getCssClassWithSuffix(String suffix) {
+		return getWidgetDefinition().getObject().getWidgetType().getCamelCase()+suffix;
+	}
 
 	private void addButtons() {
         add(removeButton = new ContextImage("removeButton", "images/dashboard/x.png"));
         add(configureButton = new ContextImage("configureButton", "images/dashboard/config.png"));
+        configureButton.setOutputMarkupId(true).setMarkupId(configureButton.getId());
+
+        String js = "$('.widget-content').slideToggle();$('.widget-config').slideToggle();";
+        configureButton.add(new SimpleAttributeModifier("onclick", js));        
     }
 
 	public Widget<W> setRemoveBehaviour(AjaxEventBehavior behaviour) {
@@ -39,17 +49,16 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
 		return this;
 	}
 
+	@Deprecated //not needed anymore??
     public Widget<W> setConfigureBehaviour(AjaxEventBehavior behaviour) {
         configureButton.add(behaviour);
         return this;
     }
 
-    public WidgetConfigPanel<W> createConfigurationPanel(String id, IModel<W> config, final AjaxCallback<Boolean> saveCallback) {
-        return new WidgetConfigPanel<W>(id, config, saveCallback);
-    }
-    
     public IModel<WidgetDefinition<W>> getWidgetDefinition() {
     	return widgetDefinition;
     }
+
+	protected abstract Component createConfigPanel(String id);
 
 }

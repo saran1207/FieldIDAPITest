@@ -24,11 +24,11 @@ public class WidgetFactory implements Serializable {
 	}		
 	
 	public Widget createWidget(final WidgetDefinition widgetDefinition, String id, boolean checkForLazy) {
-		Class<? extends Widget> clazz = getPanelClass(widgetDefinition.getWidgetType());
-		return createPanel(clazz, widgetDefinition, id);
+		Class<? extends Widget> clazz = getWidgetClass(widgetDefinition.getWidgetType());
+		return createWidget(clazz, widgetDefinition, id);
 	}
 	
-	private Widget createPanel(Class<? extends Widget> clazz, WidgetDefinition widgetDefinition, String id) {		
+	private Widget createWidget(Class<? extends Widget> clazz, WidgetDefinition widgetDefinition, String id) {		
 		try {
 			Constructor<? extends Widget> constructor = clazz.getDeclaredConstructor(String.class, WidgetDefinition.class);
 			return constructor.newInstance(id, widgetDefinition);			 		
@@ -40,7 +40,7 @@ public class WidgetFactory implements Serializable {
 
 
 	@SuppressWarnings("unchecked")
-	private Class<? extends Widget> getPanelClass(WidgetType type) {
+	private Class<? extends Widget> getWidgetClass(WidgetType type) {
 		Class<? extends Widget> clazz = config.get(type);
 		if (clazz!=null) {
 			return clazz;		// found it in config!

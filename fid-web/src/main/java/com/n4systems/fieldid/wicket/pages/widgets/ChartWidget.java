@@ -35,15 +35,15 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	
 	public ChartWidget(String id, IModel<WidgetDefinition<T>> model) {
 		super(id, model);
-		setOutputMarkupId(true);		
-		add(flotChart = createFlotChart(model.getObject().getWidgetType().getCamelCase()+"Chart"));
+		setOutputMarkupId(true);
+		add(flotChart = createFlotChart());
 	}
 
-	protected Component createFlotChart(final String css) {
+	protected Component createFlotChart() {
 		return new AjaxLazyLoadPanel("chart") {
 			@Override
 			public Component getLazyLoadComponent(String markupId) {
-				return createFlotChartImpl(markupId, css);
+				return createFlotChartImpl(markupId);
 			}
             @Override
 			public Component getLoadingComponent(final String markupId) {
@@ -96,15 +96,19 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
         add(periodButton);
 	}
 
-	private Component createFlotChartImpl(String id, String css) {
+	private Component createFlotChartImpl(String id) {
 		LoadableDetachableModel<List<ChartSeries<X>>> model = new LoadableDetachableModel<List<ChartSeries<X>>>() {
 			@Override protected List<ChartSeries<X>> load() {
 				return getChartSeries();
 			}
 		};		
-		return new FlotChart<X>(id, model, createOptions(), css);
+		return new FlotChart<X>(id, model, createOptions(), getFlotChartCss());
 	}
 	
+	private String getFlotChartCss() {
+		return getWidgetDefinition().getObject().getWidgetType().getCamelCase()+"Chart";
+	}
+
 	protected abstract List<ChartSeries<X>> getChartSeries();
 	
 	protected FlotOptions<X> createOptions() {

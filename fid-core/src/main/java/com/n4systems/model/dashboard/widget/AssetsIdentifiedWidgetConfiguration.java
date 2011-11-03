@@ -46,7 +46,7 @@ public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration {
 	}
 
 	@Override
-	public WidgetConfiguration copy() {
+	public AssetsIdentifiedWidgetConfiguration copy() {
 		AssetsIdentifiedWidgetConfiguration copy = (AssetsIdentifiedWidgetConfiguration) super.copy();
 		copy.setOrg(getOrg());
 		copy.setDateRange(getDateRange());

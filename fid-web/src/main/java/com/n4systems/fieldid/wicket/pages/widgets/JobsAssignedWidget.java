@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.CSSPackageResource;
@@ -70,5 +71,11 @@ public class JobsAssignedWidget extends Widget {
             }
         };
     }
+
+	@Override
+	protected Component createConfigPanel(String id) {
+		return new Label(id, "hello");
+	}
+
 
 }

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -26,6 +27,11 @@ public class CommonLinksWidget extends Widget {
 		
 		companySiteLink.setVisible(companySiteUrl != null && !companySiteUrl.isEmpty());
 		companySiteLink.add(new Label("companySiteLabel",  new FIDLabelModel("label.web_site", FieldIDSession.get().getPrimaryOrg().getDisplayName())));
+	}
+
+	@Override
+	protected Component createConfigPanel(String id) {
+		return new Label(id, "hello");
 	}
 
 }

@@ -2,6 +2,8 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 
 import java.util.List;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -33,6 +35,12 @@ public class AssetsStatusWidget extends ChartWidget<String,WidgetConfiguration> 
     protected List<ChartSeries<String>> getChartSeries() {
     	return reportingService.getAssetsStatus(owner);
     }
+
+	@Override
+	protected Component createConfigPanel(String id) {
+		return new Label(id, "hello");
+	}
+
 
 
 }

@@ -1,14 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import com.n4systems.fieldid.wicket.pages.widgets.config.EventKPIConfigPanel;
-import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
-import com.n4systems.fieldid.wicket.util.AjaxCallback;
-import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import com.n4systems.model.dashboard.WidgetDefinition;
@@ -45,6 +41,12 @@ public class NewsWidget extends Widget {
         
         return jsBuffer.toString();
 	}
+
+	@Override
+	protected Component createConfigPanel(String id) {
+		return new Label(id, "hello");
+	}
+
 
 }
 

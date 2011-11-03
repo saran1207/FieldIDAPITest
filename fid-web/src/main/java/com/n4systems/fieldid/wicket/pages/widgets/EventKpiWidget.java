@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -12,8 +13,6 @@ import org.apache.wicket.model.Model;
 import com.n4systems.fieldid.wicket.components.dashboard.subcomponents.EventKpiTable;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.widgets.config.EventKPIConfigPanel;
-import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
-import com.n4systems.fieldid.wicket.util.AjaxCallback;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
@@ -45,14 +44,16 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 
 		if(config == null) {
 			return new ArrayList<BaseOrg>();
-		}else {
+		} else {
 			return config.getOrgs();
 		}
 	}
-	
-    @Override
-    public WidgetConfigPanel<EventKPIWidgetConfiguration> createConfigurationPanel(String id, IModel<EventKPIWidgetConfiguration> config, AjaxCallback<Boolean> saveCallback) {
-        return new EventKPIConfigPanel(id, config, saveCallback);
-    }
 
+	@Override
+	protected Component createConfigPanel(String id) {
+		EventKPIWidgetConfiguration configCopy = getWidgetDefinition().getObject().getConfig().copy();
+		IModel<EventKPIWidgetConfiguration> configModel = new Model<EventKPIWidgetConfiguration>(configCopy);
+		return new EventKPIConfigPanel(id, configModel);        
+	}
+	
 }

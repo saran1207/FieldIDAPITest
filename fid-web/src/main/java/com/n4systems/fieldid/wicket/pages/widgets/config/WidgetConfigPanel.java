@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
-import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.util.AjaxCallback;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -16,18 +12,21 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+
+@SuppressWarnings("serial")
 public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
 
     @SpringBean
     private PersistenceService persistenceService;
 
-    private AjaxCallback<Boolean> closeCallback;
     private ConfigForm configForm;
 
-    public WidgetConfigPanel(String id, IModel<T> configModel, AjaxCallback<Boolean> closeCallback) {
+    public WidgetConfigPanel(String id, IModel<T> configModel) {
         super(id);
         setOutputMarkupId(true);
-        this.closeCallback = closeCallback;
 
         add(configForm = new ConfigForm("configForm", configModel));
     }
@@ -50,8 +49,8 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
             add(new AjaxButton("saveButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    persistenceService.update(model.getObject());
-                    closeCallback.call(target, true);
+                    persistenceService.update(getWidgetConfigurationToSave(model));
+                    target.addComponent(WidgetConfigPanel.this.getParent().getParent());
                 }
 
                 @Override
@@ -62,7 +61,7 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
             add(new AjaxLink("cancelLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    closeCallback.call(target, false);
+                   target.addComponent(WidgetConfigPanel.this.getParent());
                 }
             });
         }
@@ -73,4 +72,8 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
         configForm.add(component);
     }
 
+    protected T getWidgetConfigurationToSave(final IModel<T> model) {
+    	return model.getObject();
+    }
+    
 }

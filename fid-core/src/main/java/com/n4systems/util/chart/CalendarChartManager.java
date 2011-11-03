@@ -12,18 +12,21 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 	}
 	
 	@Override
-	public Long getMinX(ChartSeries<Calendar> series) {
-		return series.getLastEntry().getLongX() - granularity.delta();
+	public Long getMinX(ChartSeries<Calendar> series) {		
+		Chartable<Calendar> lastEntry = series.getLastEntry();
+		return lastEntry == null ? null : lastEntry.getLongX() - granularity.delta();
 	}
 
 	@Override
 	public Long getPanMin(ChartSeries<Calendar> series) {
-		return series.getFirstEntry().getLongX();
+		Chartable<Calendar> firstEntry = series.getFirstEntry();
+		return firstEntry == null ? null : firstEntry.getLongX();
 	}
 
 	@Override
-	public Long getPanMax(ChartSeries<Calendar> series) {
-		return series.getLastEntry().getLongX(); 
+	public Long getPanMax(ChartSeries<Calendar> series) {		
+		Chartable<Calendar> lastEntry = series.getLastEntry();
+		return lastEntry == null ? null : lastEntry.getLongX(); 
 	}
 
 	@Override

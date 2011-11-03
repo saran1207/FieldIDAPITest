@@ -93,12 +93,14 @@ img.widget-drag-image {
     border: 1px solid #e3e3e3;
 }
 
-
 .flotChart { 
 	height : 200px;
 }
 
-.assetsStatusChart { 
+.widgetContent { 
+}
+
+.assetsStatusWidget { 
 	height : 200px;
 }
 
@@ -167,4 +169,8 @@ div.buttonsLabel {
 .chartButtonsContainer .wicket-ajax-indicator {
     display:block;
     float:left;
+}
+
+.widgetConfig { 
+	display:none;
 }

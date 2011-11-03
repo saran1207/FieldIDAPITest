@@ -3,6 +3,8 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -38,8 +40,13 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar,WidgetCo
 		FlotOptions<Calendar> options = super.createOptions();
 		options.pan.interactive = false;
 		options.xaxis.timeformat = "%b %d";
-		return options;
-		
+		return options;		
 	}
+
+	@Override
+	protected Component createConfigPanel(String id) {
+		return new Label(id, "hello");
+	}
+
 	
 }

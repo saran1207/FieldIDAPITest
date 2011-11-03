@@ -77,7 +77,6 @@ public class FlotChart<X> extends Panel {
 		private String createNextMarkupId() {
 			return "flotChart_"+markupId.getAndIncrement();
 		}		
-
 		
 	}
 	

@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
-import com.n4systems.fieldid.wicket.util.AjaxCallback;
-import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
-import com.n4systems.model.orgs.BaseOrg;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -16,7 +14,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.List;
+import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
+import com.n4systems.model.orgs.BaseOrg;
 
 public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfiguration> {
 
@@ -27,8 +27,8 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
     private OrgPicker orgPicker;
     private AjaxButton addOrgButton;
 
-    public EventKPIConfigPanel(String id, final IModel<EventKPIWidgetConfiguration> configModel, AjaxCallback<Boolean> saveCallback) {
-        super(id, configModel, saveCallback);
+    public EventKPIConfigPanel(String id, final IModel<EventKPIWidgetConfiguration> configModel) {
+        super(id, configModel);
         this.configModel = configModel;
 
         orgsListContainer = new WebMarkupContainer("orgsListContainer");

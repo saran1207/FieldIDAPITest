@@ -3,13 +3,12 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.wicket.pages.widgets.config.AssetsIdentifiedConfigPanel;
-import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
-import com.n4systems.fieldid.wicket.util.AjaxCallback;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
@@ -29,9 +28,9 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifie
         addGranularityButton("year", ChartGranularity.YEAR);
         addGranularityButton("quarter", ChartGranularity.QUARTER);
         addGranularityButton("month", ChartGranularity.MONTH);
-        addGranularityButton("week", ChartGranularity.WEEK);
+        addGranularityButton("week", ChartGranularity.WEEK);        
     }
-
+    
 	@Override
     protected List<ChartSeries<Calendar>> getChartSeries() {
     	return reportingService.getAssetsIdentified(getChartDateRange(), granularity, getOrg());
@@ -47,12 +46,12 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifie
 		return config.getOrg();
 	}
 
-	@Override	
-	public WidgetConfigPanel<AssetsIdentifiedWidgetConfiguration> createConfigurationPanel(
-			String id, IModel<AssetsIdentifiedWidgetConfiguration> config, AjaxCallback<Boolean> saveCallback) {
-		return new AssetsIdentifiedConfigPanel(id, config, saveCallback);
+	@Override
+	protected Component createConfigPanel(String id) {
+		AssetsIdentifiedWidgetConfiguration configCopy = getWidgetDefinition().getObject().getConfig();
+		IModel<AssetsIdentifiedWidgetConfiguration> configModel = new Model<AssetsIdentifiedWidgetConfiguration>(configCopy);
+		return new AssetsIdentifiedConfigPanel(id, configModel);        
 	}
-	
 	
 }
 

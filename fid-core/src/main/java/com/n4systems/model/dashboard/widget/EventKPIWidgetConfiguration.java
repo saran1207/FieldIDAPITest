@@ -1,8 +1,5 @@
 package com.n4systems.model.dashboard.widget;
 
-import com.n4systems.model.orgs.BaseOrg;
-import org.hibernate.annotations.IndexColumn;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +9,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.IndexColumn;
+
+import com.n4systems.model.orgs.BaseOrg;
 
 @Entity
 @Table(name = "widget_configurations_event_kpi")
@@ -34,7 +35,7 @@ public class EventKPIWidgetConfiguration extends WidgetConfiguration {
     }
 
     @Override
-    public WidgetConfiguration copy() {
+    public EventKPIWidgetConfiguration copy() {
         EventKPIWidgetConfiguration copy = (EventKPIWidgetConfiguration) super.copy();
         copy.setOrgs(new ArrayList<BaseOrg>(orgs));
         return copy;
