@@ -34,7 +34,7 @@
 						<script type="text/javascript">						
 							var filename =  "${attachments[attachedFile_index].fileName}";
 							var ext =  filename.slice(filename.lastIndexOf('.'));
-							jQuery(".attachmentLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ ext });
+							/*jQuery(".attachmentLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ ext });*/
 						</script>
 						<a href="javascript:void(0)"  onclick="$('attached_${attachedFile_index}').remove();return false;"><@s.text name="label.remove"/></a>
 					</div>

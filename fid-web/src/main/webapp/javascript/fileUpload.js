@@ -38,7 +38,7 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 	$(frameId + "_remove").onclick = func;
 	
 	var ext =  fileName.slice(fileName.lastIndexOf('.'));
-	jQuery("#attachmentLabel_"+frameId).ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ ext });
+	/*jQuery("#attachmentLabel_"+frameId).ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ ext });*/
 
 }
 

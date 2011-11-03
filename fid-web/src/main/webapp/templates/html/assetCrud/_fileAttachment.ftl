@@ -12,7 +12,7 @@
 			$("imageDirectory").value = directory;
 			$("newImageLabel").update(fileName);
 			var fileext =  fileName.slice(fileName.lastIndexOf('.'));
-			jQuery("#imageLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... ' + fileext });
+			/*jQuery("#imageLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... ' + fileext });*/
 			$("previewImage").setAttribute("src", "images/asset-image-icon.png");
 		}
 		
@@ -27,9 +27,11 @@
             $("newImage").value = "false";
 			$("uploadFileForm").removeClassName("uploadedForm").addClassName("uploadFileForm");
 			$("imageLabel").removeAttribute("threedots");
+			/*
 			$$("span.threedots_ellipsis").each(function(element) {
 					element.remove();
 			});
+			*/
 			$("assetImageMsg").show();
 		}
 				
@@ -62,7 +64,7 @@
 							var filename = directory.slice(directory.indexOf('/') + 1);
 							$("newImageLabel").update(filename);
 							var fileext =  filename.slice(filename.lastIndexOf('.'));
-							jQuery("#imageLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ fileext });
+							/*jQuery("#imageLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ fileext });*/
 						}
 					</script>
 				<@s.hidden name="removeImage" id="removeImage"/> 
