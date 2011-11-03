@@ -3,21 +3,23 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
 @SuppressWarnings("serial")
-public class NewsWidget extends Widget {
+public class NewsWidget extends Widget<WidgetConfiguration> {
 
     private WebMarkupContainer fieldIdNews;
 	
-    public NewsWidget(String id, WidgetDefinition widgetDefinition) {
-        super(id, new Model<WidgetDefinition>(widgetDefinition));
+    public NewsWidget(String id, WidgetDefinition<WidgetConfiguration> widgetDefinition) {
+        super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));
 
         add(fieldIdNews = new WebMarkupContainer("fieldIdNews"));
         fieldIdNews.setOutputMarkupId(true);
@@ -44,9 +46,9 @@ public class NewsWidget extends Widget {
 
 	@Override
 	protected Component createConfigPanel(String id) {
-		return new Label(id, "hello");
+		IModel<WidgetConfiguration> configModel = new Model<WidgetConfiguration>(getWidgetDefinition().getObject().getConfig());		
+		return new WidgetConfigPanel<WidgetConfiguration>(id, configModel);
 	}
-
 
 }
 

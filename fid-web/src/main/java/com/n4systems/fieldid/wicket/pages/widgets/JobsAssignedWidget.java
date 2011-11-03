@@ -20,13 +20,15 @@ import com.n4systems.fieldid.wicket.components.dashboard.subcomponents.LinkToJob
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.jobs.OpenJobsForUserDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
 import com.n4systems.model.Project;
 import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
-public class JobsAssignedWidget extends Widget {
+public class JobsAssignedWidget extends Widget<WidgetConfiguration> {
 
-    public JobsAssignedWidget(String id, WidgetDefinition widgetDefinition) {
-		super(id, new Model<WidgetDefinition>(widgetDefinition));			
+    public JobsAssignedWidget(String id, WidgetDefinition<WidgetConfiguration> widgetDefinition) {
+		super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));			
 		add(CSSPackageResource.getHeaderContribution("style/dashboard/widgets/jobsassigned.css"));
 
 		List<IColumn> columns = new ArrayList<IColumn>();
@@ -74,8 +76,8 @@ public class JobsAssignedWidget extends Widget {
 
 	@Override
 	protected Component createConfigPanel(String id) {
-		return new Label(id, "hello");
+		IModel<WidgetConfiguration> configModel = new Model<WidgetConfiguration>(getWidgetDefinition().getObject().getConfig());		
+		return new WidgetConfigPanel<WidgetConfiguration>(id, configModel);
 	}
-
 
 }

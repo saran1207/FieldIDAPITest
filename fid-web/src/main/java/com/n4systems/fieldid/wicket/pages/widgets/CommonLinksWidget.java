@@ -4,19 +4,22 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
+import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
 @SuppressWarnings("serial")
-public class CommonLinksWidget extends Widget {
+public class CommonLinksWidget extends Widget<WidgetConfiguration> {
 
-	public CommonLinksWidget(String id, WidgetDefinition widgetDefinition) {
-		super(id, new Model<WidgetDefinition>(widgetDefinition));			
+	public CommonLinksWidget(String id, WidgetDefinition<WidgetConfiguration> widgetDefinition) {
+		super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));			
 		add(new NonWicketLink("upcomingEventsLink", "schedule!createSearch.action?criteria.status=INCOMPLETE"));
 		add(new BookmarkablePageLink<Void>("eventHistoryLink", ReportingPage.class));
 		add(new NonWicketLink("findAssetLink", "search.action"));
@@ -31,7 +34,8 @@ public class CommonLinksWidget extends Widget {
 
 	@Override
 	protected Component createConfigPanel(String id) {
-		return new Label(id, "hello");
+		IModel<WidgetConfiguration> configModel = new Model<WidgetConfiguration>(getWidgetDefinition().getObject().getConfig());		
+		return new WidgetConfigPanel<WidgetConfiguration>(id, configModel);
 	}
 
 }

@@ -48,8 +48,7 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifie
 
 	@Override
 	protected Component createConfigPanel(String id) {
-		AssetsIdentifiedWidgetConfiguration configCopy = getWidgetDefinition().getObject().getConfig();
-		IModel<AssetsIdentifiedWidgetConfiguration> configModel = new Model<AssetsIdentifiedWidgetConfiguration>(configCopy);
+		IModel<AssetsIdentifiedWidgetConfiguration> configModel = new Model<AssetsIdentifiedWidgetConfiguration>(getWidgetDefinition().getObject().getConfig());
 		return new AssetsIdentifiedConfigPanel(id, configModel);        
 	}
 	

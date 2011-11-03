@@ -19,12 +19,12 @@ import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 @SuppressWarnings("serial")
 public abstract class Widget<W extends WidgetConfiguration> extends Panel {
 
-	protected static final String HIDECONFIGJS = "$('.config').each(function() { $(this).css('marginLeft',$(this).outerWidth()); })";
+	protected static final String HIDECONFIGJS = "$('.config').each(function() { $(this).hide(); $(this).css('marginLeft', $(this).outerWidth()); })";
 
 	
 	// TODO DD : refactor this into common .js utility file.
 	private static final String SLIDE_CONFIG_JS_TEMPLATE = 
-		"$('#%1$s').parent('.config').animate(" +
+		"$('#%1$s').parent('.config').show(); $('#%1$s').parent('.config').animate(" +
 		"{marginLeft: parseInt($('#%1$s').parent('.config').css('marginLeft'),10) == 0 ? $('#%1$s').parent('.config').outerWidth() : 0 " + 
         "},'fast');";
 
