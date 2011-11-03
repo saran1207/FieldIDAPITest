@@ -64,13 +64,13 @@ var dashboardWidgetFactory = (function() {
 		var day = d.getDate();
 		var month = d.getMonth();
 		var year = d.getFullYear();
-		return months[month] + ' ' + day + ' ' + year; 
+		return months[month] + ' ' + day + ',' + year; 
 	};
 	
 	var dateTooltipContent = function(datapoint, options) { 
 	    var y = datapoint[1].toFixed(options.yaxis.decimals);
 	    var date = formatDate(new Date(datapoint[0]), options.xaxis.monthNames);
-	    return date + ": " + y;
+	    return "<p>"+date + ": <b>" +y+ "</b></p>";
 	};
 	
 	var horizLabelTooltipContent = function(datapoint, options) {
@@ -78,7 +78,7 @@ var dashboardWidgetFactory = (function() {
 	    var value = datapoint[0].toFixed(0);
 	    var index = datapoint[1].toFixed(0);
 	    var label = options.yaxis.ticks[index][1];
-	    return label + " : " + value;		
+	    return "<p>"+label + ": <b>" +value+ "</b></p>";	
 	};
 	
 	// instead of passing id, why not pass reference to element???

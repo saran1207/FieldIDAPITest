@@ -3,18 +3,22 @@ package com.n4systems.model.dashboard;
 import com.google.common.base.CaseFormat;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.AssetsStatusWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
 public enum WidgetType implements Listable<String> {
 
+	// TODO DD : don't need this config stuff here.  the widgets will know themselves.
 	NEWS("FieldId News", WidgetConfiguration.class),
     JOBS_ASSIGNED("Assigned Jobs", WidgetConfiguration.class),
-    COMPLETED_EVENTS("Completed Events", WidgetConfiguration.class),
-    ASSETS_IDENTIFIED("Assets Identified", AssetsIdentifiedWidgetConfiguration.class),
-    ASSETS_STATUS("Assets By Status", WidgetConfiguration.class),
     COMMON_LINKS("Common Links", WidgetConfiguration.class),
-    UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", WidgetConfiguration.class),
+    COMPLETED_EVENTS("Completed Events", CompletedEventsWidgetConfiguration.class),
+    ASSETS_STATUS("Assets By Status", AssetsStatusWidgetConfiguration.class),
+    UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", UpcomingEventsWidgetConfiguration.class),
+    ASSETS_IDENTIFIED("Assets Identified", AssetsIdentifiedWidgetConfiguration.class),
     EVENT_KPI("Event KPIs", EventKPIWidgetConfiguration.class);
 
     private String description;

@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -48,8 +47,7 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifie
 
 	@Override
 	protected Component createConfigPanel(String id) {
-		IModel<AssetsIdentifiedWidgetConfiguration> configModel = new Model<AssetsIdentifiedWidgetConfiguration>(getWidgetDefinition().getObject().getConfig());
-		return new AssetsIdentifiedConfigPanel(id, configModel);        
+		return new AssetsIdentifiedConfigPanel(id, getConfigModel());        
 	}
 	
 }

@@ -32,7 +32,6 @@ import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.WhereParameterGroup;
-import com.n4systems.util.time.DateUtil;
 
 // TODO DD : CACHEABLE!!!  this is used for getting old, unchangeable data.  use EMcache?
 
@@ -114,7 +113,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ChartSeries<String>> getAssetsStatus(BaseOrg org) {
+	public List<ChartSeries<String>> getAssetsStatus(ChartDateRange chartDateRange, BaseOrg org) {
 		QueryBuilder<AssetsStatusReportRecord> builder = new QueryBuilder<AssetsStatusReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 		
 //		SELECT u.status, u.v, @rownum:=@rownum+1 AS rownum
@@ -126,7 +125,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 //		(SELECT @rownum:=0) r		
 		
 		builder.setSelectArgument(new NewObjectSelect(AssetsStatusReportRecord.class, "assetStatus.name", "COUNT(*)"));		
-		builder.addWhere(Comparator.GE, "identified", "identified", DateUtil.getEarliestFieldIdDate());
+		builder.addWhere(Comparator.GE, "identified", "identified", chartDateRange.getFromDate());
 		builder.addGroupBy("assetStatus.name");
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
@@ -137,7 +136,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         return Lists.newArrayList(new ChartSeries<String>(results).withChartManager(new StringChartManager(true)));
 	}	
 	
-	public List<ChartSeries<Calendar>> getCompletedEvents(ChartGranularity granularity, BaseOrg org) {
+	public List<ChartSeries<Calendar>> getCompletedEvents(ChartDateRange chartDateRange, ChartGranularity granularity, BaseOrg org) {
 		QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
 		NewObjectSelect select = new NewObjectSelect(CompletedEventsReportRecord.class);
@@ -146,7 +145,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		builder.addWhere(Comparator.GE, "date", "date", DateUtil.getEarliestFieldIdDate());
+		builder.addWhere(Comparator.GE, "date", "date", chartDateRange.getFromDate());
 		builder.addGroupByClauses(getGroupByClausesByGranularity(granularity,"date"));		
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());

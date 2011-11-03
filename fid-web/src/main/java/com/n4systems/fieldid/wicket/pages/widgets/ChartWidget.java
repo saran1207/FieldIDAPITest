@@ -29,14 +29,15 @@ import com.n4systems.util.chart.LineGraphOptions;
 public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widget<T> {
 
 	protected Component flotChart;
-	protected BaseOrg owner;
-	protected ChartGranularity granularity = ChartGranularity.YEAR;
+//	protected BaseOrg owner;
+	protected ChartGranularity granularity;
 	protected Integer period = 30;
 	
 	public ChartWidget(String id, IModel<WidgetDefinition<T>> model) {
 		super(id, model);
 		setOutputMarkupId(true);
 		add(flotChart = createFlotChart());
+		granularity = getDefaultGranularity();
 	}
 
 	protected Component createFlotChart() {
@@ -114,7 +115,16 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	protected FlotOptions<X> createOptions() {
 		return new LineGraphOptions<X>();
 	}
-		
+
+	protected ChartGranularity getDefaultGranularity() {
+		return ChartGranularity.QUARTER;
+	}
+	
+	protected IModel<T> getConfigModel() {
+		IModel<T> configModel = new Model<T>(getWidgetDefinition().getObject().getConfig());
+		return configModel;
+	}
+	
  
 	class OrgForm extends Form {
 

@@ -4,33 +4,33 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import com.n4systems.fieldid.wicket.pages.widgets.config.CompletedEventsConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
+import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.FlotOptions;
 import com.n4systems.util.chart.LineGraphOptions;
 
 @SuppressWarnings("serial")
-public class CompletedEventsWidget extends ChartWidget<Calendar, WidgetConfiguration> {
+public class CompletedEventsWidget extends ChartWidget<Calendar, CompletedEventsWidgetConfiguration> {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
 	
-    public CompletedEventsWidget(String id, WidgetDefinition<WidgetConfiguration> widgetDefinition) {
-		super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));			
+    public CompletedEventsWidget(String id, WidgetDefinition<CompletedEventsWidgetConfiguration> widgetDefinition) {
+		super(id, new Model<WidgetDefinition<CompletedEventsWidgetConfiguration>>(widgetDefinition));			
         addGranularityButton("year", ChartGranularity.YEAR);
         addGranularityButton("quarter", ChartGranularity.QUARTER);
         addGranularityButton("month", ChartGranularity.MONTH);
         addGranularityButton("week", ChartGranularity.WEEK);
-        add(new OrgForm("ownerForm"));
     }
-
  
     @Override
     protected FlotOptions<Calendar> createOptions() {
@@ -42,14 +42,23 @@ public class CompletedEventsWidget extends ChartWidget<Calendar, WidgetConfigura
     
 	@Override
     protected List<ChartSeries<Calendar>> getChartSeries() {
-    	return reportingService.getCompletedEvents(granularity, owner);
+    	return reportingService.getCompletedEvents(getChartDateRange(), granularity, getOrg());
     }
+
+	private BaseOrg getOrg() {
+		CompletedEventsWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
+		return config.getOrg();
+	}	
+
+	private ChartDateRange getChartDateRange() {
+		CompletedEventsWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
+		return config.getDateRange();
+	}
 	
 	@Override
 	protected Component createConfigPanel(String id) {
-		return new Label(id, "hello");
+		return new CompletedEventsConfigPanel(id,getConfigModel());
 	}
-
 	
 }
 

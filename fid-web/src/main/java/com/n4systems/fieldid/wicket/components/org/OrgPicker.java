@@ -132,7 +132,7 @@ public class OrgPicker extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 orgPickerContainer.setVisible(true);
                 target.addComponent(OrgPicker.this);
-                target.appendJavascript("translate($('"+orgPickerContainer.getMarkupId()+"'), $('"+chooseLink.getMarkupId()+"'), 0, 0);");
+//                target.appendJavascript("translate($('#"+orgPickerContainer.getMarkupId()+"'), $('#"+chooseLink.getMarkupId()+"'), 0, 0);");
             }
         });
         chooseLink.setOutputMarkupPlaceholderTag(true);

@@ -1,6 +1,7 @@
 .orgSelector {
 	border: 3px solid #999;
 	background-color: white;
+	z-index:1000;
 }
 
 .orgSelector .selections {
@@ -72,6 +73,7 @@ span.closeImage a {
 
 .orgSelector {
 	width: 450px;
+	z-index:1000;	
 }
 
 

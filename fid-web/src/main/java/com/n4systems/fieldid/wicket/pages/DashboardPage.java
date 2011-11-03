@@ -194,4 +194,5 @@ public class DashboardPage extends FieldIDFrontEndPage {
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("label.dashboard"));
     }
+
 }
