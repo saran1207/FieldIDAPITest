@@ -1,8 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import static com.google.common.base.Preconditions.*;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -15,10 +19,21 @@ import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 @SuppressWarnings("serial")
 public abstract class Widget<W extends WidgetConfiguration> extends Panel {
 
+	protected static final String HIDECONFIGJS = "$('.config').each(function() { $(this).css('marginLeft',$(this).outerWidth()); })";
+
+	
+	// TODO DD : refactor this into common .js utility file.
+	private static final String SLIDE_CONFIG_JS_TEMPLATE = 
+		"$('#%1$s').parent('.config').animate(" +
+		"{marginLeft: parseInt($('#%1$s').parent('.config').css('marginLeft'),10) == 0 ? $('#%1$s').parent('.config').outerWidth() : 0 " + 
+        "},'fast');";
+
+	
 	private IModel<WidgetDefinition<W>> widgetDefinition;
 
     protected ContextImage removeButton;
     protected ContextImage configureButton;
+	private Component configPanel;
     
 
     public Widget(String id, IModel<WidgetDefinition<W>> widgetDefinition) {
@@ -27,8 +42,13 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
         setOutputMarkupId(true).setMarkupId(getCssClassWithSuffix("Widget"));
         add(new Label("titleLabel", new PropertyModel<String>(widgetDefinition, "config.name")));
         add(new ContextImage("dragImage", "images/dashboard/drag.png"));        
+        add(configPanel = createDecoratedConfigPanel("config"));
+        add(new AbstractBehavior () {
+			@Override public void renderHead(IHeaderResponse response) {				
+				response.renderOnDomReadyJavascript(HIDECONFIGJS);
+			}
+        });
         addButtons();
-        add(createConfigPanel("config"));
     }
     
 	private String getCssClassWithSuffix(String suffix) {
@@ -36,12 +56,10 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
 	}
 
 	private void addButtons() {
+		checkNotNull(configPanel);// config panel must exist before you add configureButton.
         add(removeButton = new ContextImage("removeButton", "images/dashboard/x.png"));
         add(configureButton = new ContextImage("configureButton", "images/dashboard/config.png"));
-        configureButton.setOutputMarkupId(true).setMarkupId(configureButton.getId());
-
-        String js = "$('.widget-content').slideToggle();$('.widget-config').slideToggle();";
-        configureButton.add(new SimpleAttributeModifier("onclick", js));        
+        configureButton.add(new SimpleAttributeModifier("onclick", String.format(SLIDE_CONFIG_JS_TEMPLATE, configPanel.getMarkupId())));        
     }
 
 	public Widget<W> setRemoveBehaviour(AjaxEventBehavior behaviour) {
@@ -58,6 +76,12 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
     public IModel<WidgetDefinition<W>> getWidgetDefinition() {
     	return widgetDefinition;
     }
+
+	private Component createDecoratedConfigPanel(String id) {
+		Component panel = createConfigPanel(id);
+		panel.setOutputMarkupId(true).setMarkupId(getWidgetDefinition().getObject().getWidgetType().getCamelCase()+"Config");
+		return panel;
+	}
 
 	protected abstract Component createConfigPanel(String id);
 

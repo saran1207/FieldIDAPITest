@@ -1,7 +1,6 @@
 .widgetConfiguration {
     font-size: 12px;
-    height: 100%;
-    margin: 12px;
+    background-color : #ffffff;
 }
 
 .widgetConfiguration h2 {
@@ -64,3 +63,19 @@
     padding:2px;
     border: 1px solid #999;
 }
+
+
+.configContainer {
+	position : relative; 
+	overflow : hidden;
+}
+
+.configContainer .config {
+	height : 800px;
+	width : 100%;
+	position : absolute;
+	left: 0;
+	top : 0;
+	background-color:#ffffff;
+}
+

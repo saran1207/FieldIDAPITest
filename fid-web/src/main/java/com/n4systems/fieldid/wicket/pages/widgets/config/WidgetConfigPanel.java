@@ -26,8 +26,6 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
 
     public WidgetConfigPanel(String id, IModel<T> configModel) {
         super(id);
-        setOutputMarkupId(true);
-
         add(configForm = new ConfigForm("configForm", configModel));
     }
 
