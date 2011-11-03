@@ -6,7 +6,7 @@ import com.thoughtworks.selenium.Selenium;
 
 public class HomePage extends FieldIDPage {
 	
-	private static final String HOME_PAGE_HEADER_XPATH = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Home')]";
+	private static final String HOME_PAGE_HEADER_XPATH = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Dashboard')]";
 
 	public HomePage(Selenium selenium) {
 		this(selenium, true);
