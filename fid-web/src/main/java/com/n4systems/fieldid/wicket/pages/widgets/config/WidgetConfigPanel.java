@@ -67,6 +67,9 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
     }
 
     protected void addConfigElement(Component component) {
+    	if (component==null) { 
+    		return;
+    	}
         configForm.add(component);
     }
 

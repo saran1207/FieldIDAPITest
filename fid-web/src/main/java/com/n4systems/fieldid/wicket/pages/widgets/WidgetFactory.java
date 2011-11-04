@@ -33,7 +33,8 @@ public class WidgetFactory implements Serializable {
 			Constructor<? extends Widget> constructor = clazz.getDeclaredConstructor(String.class, WidgetDefinition.class);
 			return constructor.newInstance(id, widgetDefinition);			 		
 		} catch (Exception e) {
-			logger.error(e);
+			e.printStackTrace();
+			logger.error(e); 
 			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " can not be created/instantiated");			
 		}
 	}

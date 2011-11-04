@@ -19,23 +19,32 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
     protected OrgPicker orgPicker;
     protected DropDownChoice<ChartDateRange> dateRangeSelect;
 
+    
     public OrgDateWidgetConfigPanel(String id, final IModel<T> configModel) {
         super(id, configModel);
         this.configModel = configModel;       
+        addConfigElement(orgPicker = createOrgPicker(configModel));        
+		addConfigElement(dateRangeSelect = createDateRangeSelect()); 
+    }
 
-        addConfigElement(orgPicker = new OrgPicker("picker", new PropertyModel<BaseOrg>(configModel, "org")));
-        
+	private OrgPicker createOrgPicker(final IModel<T> configModel) {
+		return new OrgPicker("picker", new PropertyModel<BaseOrg>(configModel, "org"));
+	}
+
+
+	protected DropDownChoice<ChartDateRange> createDateRangeSelect() {
         IChoiceRenderer<ChartDateRange> renderer = new IChoiceRenderer<ChartDateRange>() {       
 			@Override public Object getDisplayValue(ChartDateRange object) {
 				return object.toString();
 			}
-			@Override public String getIdValue(ChartDateRange object, int index) {
+			@Override public String getIdValue(ChartDateRange object, int index) {	
 				return object.name();
 			}
-		};
-		dateRangeSelect = new DropDownChoice<ChartDateRange>("dateRangeSelect", new PropertyModel<ChartDateRange>(configModel,"dateRange"), Arrays.asList(ChartDateRange.values()), renderer);
+		};		
 		
-		addConfigElement(dateRangeSelect.setNullValid(false));        
-    }	
+		DropDownChoice<ChartDateRange> d = new DropDownChoice<ChartDateRange>("dateRangeSelect", new PropertyModel<ChartDateRange>(configModel,"dateRange"), Arrays.asList(ChartDateRange.values()), renderer);		
+		d.setNullValid(false);
+		return d;
+	}	
 
 }

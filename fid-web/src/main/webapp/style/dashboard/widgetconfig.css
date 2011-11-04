@@ -1,23 +1,41 @@
 .widgetConfiguration {
     font-size: 12px;
-    background-color : #ffffff;
+    background-color : #F7F7F7;
 }
 
 .widgetConfiguration h2 {
     font-size:15px;
-    padding-bottom:10px;
+    padding-bottom:5px;
+}  
+
+.widgetConfiguration form fieldset {
+	width : 100%;
+	padding : 10px 0px 10px 0px;
 }
 
-.widgetConfiguration .leftColumn {
-    padding-top: 2px;
-    padding-right:12px;
-    text-align: right;
-    display:block;
-    float:left;
-    width:30%;
+.widgetConfiguration form fieldset .row { 
+	clear : both; 
+	padding-top : 10px;
+}
+
+.widgetConfiguration form fieldset .row label {
+  float: left;
+  width: 100px;
+  text-align: right;
+  padding-right : 10px;
+}
+
+.widgetConfiguration form fieldset .row .value {
+  float: left;
+  text-align: left;
+} 
+
+.widgetConfiguration form fieldset legend {
+	display : none; /* just for readability, semantic html purposes */
 }
 
 .widgetConfiguration .formAction {
+	border-bottom : none;
     margin-top:15px;
     width:96%;
 }
@@ -28,10 +46,21 @@
     padding: 0 2px;
 }
 
+.widgetConfiguration input[type='text'] {
+    padding:4px;
+    border: 1px solid #999;
+}
+
 .widgetConfiguration .orgNameLabel {
     display:block;
     float:left;
     padding-top:10px;
+}
+
+.widgetConfiguration .title {
+	padding : 5px 0px 5px 20px;
+	font-size : 13px;
+	border-bottom : 1px dotted #dddddd;
 }
 
 .orgsListContainer {
@@ -59,13 +88,9 @@
     clear:both;
 }
 
-.widgetConfiguration input[type='text'] {
-    padding:2px;
-    border: 1px solid #999;
-}
-
 .configContainer {
 	position : relative; 
+	
 }
 
 .configContainer .config {
@@ -74,16 +99,16 @@
 	position : absolute;
 	left: 0;
 	top : 0;
-	background-color:#ffffff;
+	background-color:#f7f7f7;
 }
 
 .jobsAssignedConfig { 
-	max-height : 275px;
+	max-height : 155px;
 }
 
 
 .commonLinksConfig { 
-	max-height : 275px;
+	max-height : 135px;
 }
 
 .eventKpiConfig { 
@@ -91,5 +116,9 @@
 }
 
 .newsConfig { 
-	max-height : 300px;
+	max-height : 155px;
+}
+
+.assetsStatusConfig {
+	max-height : 250px;
 }

@@ -58,8 +58,7 @@ var widgetToolkit = (function() {
 				if (hideConfig) { 
 					configContainer.animate({height:containerHeight},
 							'fast', 'linear', 
-//							function() {$(this).css({height:''});
-							function() {}
+							function() {$(this).css({height:''}); }
 						);
 				} else {
 					configContainer.animate({height:configHeight});
