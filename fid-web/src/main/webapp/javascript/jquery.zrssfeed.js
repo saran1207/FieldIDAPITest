@@ -20,7 +20,7 @@
  * FieldId changes:
  * - added footer
  * - added date formatting (plug in now requires jquery-ui)
- * - added new image for new posts
+ * - added newimage option to indicate new posts
  **/
 
 (function($){
