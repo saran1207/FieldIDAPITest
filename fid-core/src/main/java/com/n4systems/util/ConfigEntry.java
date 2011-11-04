@@ -80,7 +80,7 @@ public enum ConfigEntry {
 	HELP_SYSTEM_URL                             (   "http://n4systems.helpserve.com/index.php?/Tickets/Submit/"),
 	CLICKTALE_START                             (   "<script type=\"text/javascript\">var WRInitTime=(new Date()).getTime();</script>"),
 	CLICKTALE_END                               (   "<div id=\"ClickTaleDiv\" style=\"display: none;\"></div>\n<script type='text/javascript'>\ndocument.write(unescape(\"%3Cscript%20src='\"+\n(document.location.protocol=='https:'?\n  'https://clicktale.pantherssl.com/':\n  'http://s.clicktale.net/')+\n \"WRb.js'%20type='text/javascript'%3E%3C/script%3E\"));\n</script>\n<script type=\"text/javascript\" src=\"http://s.clicktale.net/FetchFromWithCookies.js\"></script>\n<script type=\"text/javascript\">\nFetchFromWithCookies.setFromCookie(\"JSESSIONID\"); \nClickTaleFetchFrom = FetchFromWithCookies.constructFetchFromUrl();\nvar ClickTaleSSL=1;\nif(typeof ClickTale=='function') ClickTale(12764,0.15,\"www03\");\n</script>"),
-	RSS_FEED                                    (   "http://feeds.feedburner.com/ModernSafety" );
+	RSS_FEED                                    (   "http://feeds.feedburner.com/FieldIdCustomerBlog" );
 	
 	private String defaultValue;
 	

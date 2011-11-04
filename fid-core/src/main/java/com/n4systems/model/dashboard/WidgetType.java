@@ -11,8 +11,7 @@ import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
 public enum WidgetType implements Listable<String> {
 
-	// TODO DD : don't need this config stuff here.  the widgets will know themselves.
-	NEWS("FieldId News", WidgetConfiguration.class),
+	NEWS("Field ID News & Updates", WidgetConfiguration.class),
     JOBS_ASSIGNED("Assigned Jobs", WidgetConfiguration.class),
     COMMON_LINKS("Common Links", WidgetConfiguration.class),
     COMPLETED_EVENTS("Completed Events", CompletedEventsWidgetConfiguration.class),

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
@@ -23,7 +24,9 @@ public class NewsWidget extends Widget<WidgetConfiguration> {
 
         add(fieldIdNews = new WebMarkupContainer("fieldIdNews"));
         fieldIdNews.setOutputMarkupId(true);
-		add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.zrssfeed.min.js"));
+		add(CSSPackageResource.getHeaderContribution("style/dashboard/widgets/news.css"));
+		add(JavascriptPackageResource.getHeaderContribution("javascript/jquery-ui-1.8.13.custom.min.js"));
+		add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.zrssfeed.js"));
     }
 
 	@Override
@@ -38,7 +41,7 @@ public class NewsWidget extends Widget<WidgetConfiguration> {
         String feed = ConfigContext.getCurrentContext().getString(ConfigEntry.RSS_FEED);
 
         jsBuffer.append("$('#"+fieldIdNews.getMarkupId()+"').rssfeed('" + feed + "', {");
-        jsBuffer.append("limit: 3");
+        jsBuffer.append("limit: 3, content: false, dateformat: 'D, M d', snippet: false, header: false, titletag: 'div', newimage: '../images/new.png'");
    		jsBuffer.append("});");
         
         return jsBuffer.toString();

@@ -1,0 +1,28 @@
+.rssRow {
+	float: left;
+	border-bottom: 1px dotted #CCCCCC;
+	padding: 8px 0;
+}
+
+.rssTitle {
+	float: left;
+	width: 340px;
+}
+
+.rssDate {
+	float: left;
+	width: 100px;
+	text-align: right;
+	font-size: 11px;
+}
+
+.rssFooter {
+	padding-top: 5px;
+	clear: both;
+	float: right;
+}
+
+.newNewsItem {
+	padding-right: 3px;
+	vertical-align: middle;
+}
