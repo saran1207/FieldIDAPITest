@@ -39,8 +39,8 @@ ${action.setPageType('user', 'import_export')!}
 
 <div class="rightBox">
 	<div class="formatDate">
-		<h4><@s.text name="label.formatting_dates" /></h4>
-		<span><@s.text name="message.formatting_dates"><@s.param><@s.text name="label.asset_type_date_fields"/></@s.param></@s.text></span>
+		<h4><@s.text name="label.updating_data" /></h4>
+		<span><@s.text name="message.updating_data"><@s.param><@s.text name="label.asset_type_date_fields"/></@s.param></@s.text></span>
 	</div>
 	<div class="faq">
 		<div class="faqSection">
