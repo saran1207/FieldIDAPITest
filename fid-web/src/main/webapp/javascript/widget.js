@@ -12,7 +12,7 @@ var widgetToolkit = (function() {
 
 		/* private methods and properties */
 		var id = widgetId;
-		var me = $('#'+widgetId);		
+		var containerHeight = 0;		
 		
 		function setup() { 
 			configButton = $('#'+id).find('.widget-buttons').find('.configButton');					
@@ -20,32 +20,51 @@ var widgetToolkit = (function() {
 			configContainer = $('#'+id).find('.configContainer');
 			config = configContainer.find('.config');
 			config.css({
-				marginLeft : 600
-			});						
+				marginLeft : 600,
+				style : ''
+			});			
 		}
 		
 		function toggleConfig() { 
 			configContainer = $('#'+id).find('.configContainer');
 			config = configContainer.find('.config');
-			slideOut = parseInt(config.css('marginLeft'),10)==0;
-			finish = function() {};
+			hideConfig = parseInt(config.css('marginLeft'),10)==0;
+			finish = function() { };
 			config.show();
-			if (slideOut) { 
+			if (hideConfig) { 
 				configContainer.css({
 					overflow : 'hidden'
 				});
-			} else { 
+			} else {
+				containerHeight = Math.max(100,configContainer.height());				
 				finish = function() {
 					configContainer.css({
 						overflow : 'visible'
 					});					
 				}
 			}
+			maybeResizeContainer(hideConfig, config, configContainer);
 			config.animate({
-					marginLeft: slideOut ? config.outerWidth()+5 : 0
+					marginLeft: hideConfig ? config.outerWidth()+5 : 0
 				},
 				'fast', 'linear', finish
-			);
+			);		
+		}
+		
+		function maybeResizeContainer(hideConfig, config, configContainer) {
+			configHeight = config.css('maxHeight');
+			// if height requires special height instead of just filling area of widget....			
+			if (configHeight) { 
+				if (hideConfig) { 
+					configContainer.animate({height:containerHeight},
+							'fast', 'linear', 
+//							function() {$(this).css({height:''});
+							function() {}
+						);
+				} else {
+					configContainer.animate({height:configHeight});
+				}							
+			}
 		}
 		
 		/* public methods exposed */

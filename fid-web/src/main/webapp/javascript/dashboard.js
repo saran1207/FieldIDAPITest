@@ -4,12 +4,12 @@
  *   jquery.flot.navigate.js
  */
 
-var dashboardWidgetFactory = (function() { 
+var chartWidgetFactory = (function() { 
 	
 	/**   TODO DD : rename this to ChartWidgetFactory....createChart etc...
 	 * widget object returned by factory 
 	 */	
-	function dashboardWidget(widgetId, opts) {
+	function chartWidget(widgetId, opts) {
 
 		/* private methods and properties */
 		var id = widgetId;
@@ -83,12 +83,12 @@ var dashboardWidgetFactory = (function() {
 	
 	// instead of passing id, why not pass reference to element???
 	var create = function(id) { 
-		var widget = dashboardWidget(id);
+		var widget = chartWidget(id);
 		return widget;
 	};
 	
 	var createWithData = function(id,data,options) {
-		var widget = dashboardWidget(id,options);
+		var widget = chartWidget(id,options);
 		if(!options.yaxis.panRange) {
 			options.yaxis.panRange=false;
 		}

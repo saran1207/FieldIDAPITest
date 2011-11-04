@@ -64,7 +64,6 @@
     border: 1px solid #999;
 }
 
-
 .configContainer {
 	position : relative; 
 }
@@ -78,3 +77,19 @@
 	background-color:#ffffff;
 }
 
+.jobsAssignedConfig { 
+	max-height : 275px;
+}
+
+
+.commonLinksConfig { 
+	max-height : 275px;
+}
+
+.eventKpiConfig { 
+	max-height : 275px;
+}
+
+.newsConfig { 
+	max-height : 300px;
+}

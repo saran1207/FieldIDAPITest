@@ -51,12 +51,11 @@ public class FlotChart<X> extends Panel {
 	        setOutputMarkupId(true).setMarkupId(createNextMarkupId());        
 	        setOutputMarkupPlaceholderTag(true);
 			add(new AbstractBehavior () {
-				// TODO DD : not sure if this needs to be in renderHead or just hooked into render.????  which is better...
 				@Override
 				public void renderHead(IHeaderResponse response) {
 					updateOptions(getChartSeries());					
 					StringBuffer javascriptBuffer = new StringBuffer();
-					javascriptBuffer.append ("dashboardWidgetFactory.createWithData('"+getMarkupId() + "'," + 
+					javascriptBuffer.append ("chartWidgetFactory.createWithData('"+getMarkupId() + "'," + 
 							jsonRenderer.render(getChartSeries()) + "," + 
 							jsonRenderer.render(getOptions()) + 
 					");");
