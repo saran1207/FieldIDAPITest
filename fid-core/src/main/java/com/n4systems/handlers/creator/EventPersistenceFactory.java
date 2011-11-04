@@ -4,6 +4,7 @@ import com.n4systems.ejb.impl.CreateEventsMethodObject;
 import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.handlers.creator.events.EventCreator;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.services.NextEventScheduleSerivce;
 
@@ -14,6 +15,8 @@ public interface EventPersistenceFactory {
 	public AuditLogger createCreateEventAuditLogger();
 	
 	public EventCreator createEventCreator();
+
+    public EventCreator createEventCreator(TransactionManager transactionManager);
 
 	public CreateEventsMethodObject createCreateEventsMethodObject(Transaction transaction);
 

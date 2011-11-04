@@ -7,6 +7,7 @@ import com.n4systems.ejb.impl.CreateEventsMethodObject;
 import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.handlers.creator.events.EventCreator;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.services.NextEventScheduleSerivce;
 
@@ -40,4 +41,9 @@ public class NullObjectDefaultedEventPersistenceFactory implements EventPersiste
 	public NextEventScheduleSerivce createNextEventScheduleService(Transaction transaction) {
 		return nextEventScheduleSerivce;
 	}
+
+    @Override
+    public EventCreator createEventCreator(TransactionManager transactionManager) {
+        return eventCreator;
+    }
 }

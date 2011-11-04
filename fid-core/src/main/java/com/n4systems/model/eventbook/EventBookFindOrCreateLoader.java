@@ -19,11 +19,11 @@ public class EventBookFindOrCreateLoader extends EventBookByNameLoader {
 
 	@Override
 	public EventBook load(EntityManager em, SecurityFilter filter) {
-		EventBook book = createIfNull(super.load(em, filter));
+		EventBook book = createIfNull(em, super.load(em, filter));
 		return book;
 	}
 
-	private EventBook createIfNull(EventBook book) {
+	private EventBook createIfNull(EntityManager em, EventBook book) {
 		if (book == null) {
 			book = new EventBook();
 			book.setName(getName());
@@ -31,7 +31,7 @@ public class EventBookFindOrCreateLoader extends EventBookByNameLoader {
 			book.setOwner(getOwner());
 			book.setTenant(getOwner().getTenant());
 			
-			saver.save(book);
+			saver.save(em, book);
 		}
 		return book;
 	}

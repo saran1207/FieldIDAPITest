@@ -18,6 +18,7 @@ import com.n4systems.handlers.creator.WebServiceEventsCreator;
 import com.n4systems.handlers.creator.events.EventCreator;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.security.CreateEventAuditHandler;
 import com.n4systems.security.Log4JAuditLogger;
@@ -61,7 +62,9 @@ public class ProductionEventPersistenceFactory implements EventPersistenceFactor
 	public NextEventScheduleSerivce createNextEventScheduleService(Transaction transaction) {
 		return new ManagerBackedNextEventScheduleService(new EventScheduleManagerImpl(transaction.getEntityManager()));
 	}
-		
 
-	
+    @Override
+    public EventCreator createEventCreator(TransactionManager transactionManager) {
+        return  new EventCreator(transactionManager, this);
+    }
 }
