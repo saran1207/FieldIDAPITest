@@ -1,6 +1,7 @@
 package com.n4systems.services.dashboard;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
@@ -58,7 +59,10 @@ public class DashboardService extends FieldIdPersistenceService {
 
         DashboardColumn secondColumn = new DashboardColumn();
         secondColumn.getWidgets().add(newsWidget);
-        secondColumn.getWidgets().add(jobsWidget);
+
+        if (securityContext.getUserSecurityFilter().getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Projects)) {
+            secondColumn.getWidgets().add(jobsWidget);
+        }
 
         layout.getColumns().add(firstColumn);
         layout.getColumns().add(secondColumn);

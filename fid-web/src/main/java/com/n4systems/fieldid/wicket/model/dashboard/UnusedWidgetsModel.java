@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.model.dashboard;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FieldIDSpringModel;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
@@ -21,7 +23,7 @@ public class UnusedWidgetsModel extends FieldIDSpringModel<List<WidgetType>> {
 
     @Override
     protected List<WidgetType> load() {
-        List<WidgetType> types = new ArrayList<WidgetType>(Arrays.asList(WidgetType.values()));
+        List<WidgetType> types = getAvailableWidgetTypes();
 
         DashboardLayout layout = currentLayoutModel.getObject();
 
@@ -29,6 +31,16 @@ public class UnusedWidgetsModel extends FieldIDSpringModel<List<WidgetType>> {
             for (WidgetDefinition widget : column.getWidgets()) {
                 types.remove(widget.getWidgetType());
             }
+        }
+
+        return types;
+    }
+
+    public List<WidgetType> getAvailableWidgetTypes() {
+        List<WidgetType> types = new ArrayList<WidgetType>(Arrays.asList(WidgetType.values()));
+
+        if (!FieldIDSession.get().getSessionUser().getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Projects)) {
+            types.remove(WidgetType.JOBS_ASSIGNED);
         }
 
         return types;

@@ -33,10 +33,11 @@ public class AddWidgetPanel extends Panel {
         public AddWidgetForm(String id) {
             super(id);
 
-            add(new Label("displayingWidgets", new PropertyModel<Integer>(currentLayoutModel, "widgetCount")));
-            add(new Label("totalWidgets", WidgetType.values().length+""));
-
             final UnusedWidgetsModel unusedWidgetsModel = new UnusedWidgetsModel(currentLayoutModel);
+
+            add(new Label("displayingWidgets", new PropertyModel<Integer>(currentLayoutModel, "widgetCount")));
+            add(new Label("totalWidgets", unusedWidgetsModel.getAvailableWidgetTypes().size()+""));
+
             DropDownChoice<WidgetType> widgetTypeSelect;
             add(widgetTypeSelect = new DropDownChoice<WidgetType>("widgetTypeSelect", new PropertyModel<WidgetType>(this, "selectedType"), unusedWidgetsModel, new ListableChoiceRenderer<WidgetType>()));
 
