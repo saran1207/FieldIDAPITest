@@ -6,7 +6,7 @@
 
 var dashboardWidgetFactory = (function() { 
 	
-	/**
+	/**   TODO DD : rename this to ChartWidgetFactory....createChart etc...
 	 * widget object returned by factory 
 	 */	
 	function dashboardWidget(widgetId, opts) {
@@ -103,7 +103,7 @@ var dashboardWidgetFactory = (function() {
 	};	
 	
 			
-	return { 
+	return {		
 		horizTooltip : horizLabelTooltipContent,
 		dateTooltip : dateTooltipContent,
 		create : create,

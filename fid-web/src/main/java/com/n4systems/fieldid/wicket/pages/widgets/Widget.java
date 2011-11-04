@@ -5,7 +5,6 @@ import static com.google.common.base.Preconditions.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.behavior.AbstractBehavior;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -39,27 +38,27 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
     public Widget(String id, IModel<WidgetDefinition<W>> widgetDefinition) {
         super(id);
         this.widgetDefinition = widgetDefinition;
-        setOutputMarkupId(true).setMarkupId(getCssClassWithSuffix("Widget"));
+        setOutputMarkupId(true);
         add(new Label("titleLabel", new PropertyModel<String>(widgetDefinition, "config.name")));
         add(new ContextImage("dragImage", "images/dashboard/drag.png"));        
         add(configPanel = createDecoratedConfigPanel("config"));
         add(new AbstractBehavior () {
 			@Override public void renderHead(IHeaderResponse response) {				
-				response.renderOnDomReadyJavascript(HIDECONFIGJS);
+				response.renderOnDomReadyJavascript("widgetToolkit.registerWidget('"+getMarkupId()+"');");;
 			}
         });
         addButtons();
     }
     
-	private String getCssClassWithSuffix(String suffix) {
-		return getWidgetDefinition().getObject().getWidgetType().getCamelCase()+suffix;
-	}
+//	private String getCssClassWithSuffix(String suffix) {
+//		return getWidgetDefinition().getObject().getWidgetType().getCamelCase()+suffix;
+//	}
 
 	private void addButtons() {
 		checkNotNull(configPanel);// config panel must exist before you add configureButton.
         add(removeButton = new ContextImage("removeButton", "images/dashboard/x.png"));
         add(configureButton = new ContextImage("configureButton", "images/dashboard/config.png"));
-        configureButton.add(new SimpleAttributeModifier("onclick", String.format(SLIDE_CONFIG_JS_TEMPLATE, configPanel.getMarkupId())));        
+//        configureButton.add(new SimpleAttributeModifier("onclick", String.format(SLIDE_CONFIG_JS_TEMPLATE, configPanel.getMarkupId())));        
     }
 
 	public Widget<W> setRemoveBehaviour(AjaxEventBehavior behaviour) {

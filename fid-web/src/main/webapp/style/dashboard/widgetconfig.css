@@ -67,11 +67,10 @@
 
 .configContainer {
 	position : relative; 
-	overflow : hidden;
 }
 
 .configContainer .config {
-	height : 800px;
+	height : 100%;
 	width : 100%;
 	position : absolute;
 	left: 0;

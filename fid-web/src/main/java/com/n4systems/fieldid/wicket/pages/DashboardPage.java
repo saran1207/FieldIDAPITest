@@ -58,6 +58,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.navigate.min.js"));        
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.symbol.min.js"));        
         add(JavascriptPackageResource.getHeaderContribution("javascript/dashboard.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/widget.js"));
         
         add(configurationWindow = new FIDModalWindow("configurationWindow"));
         configurationWindow.setInitialHeight(500);

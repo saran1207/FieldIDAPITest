@@ -8,13 +8,13 @@
 
             <div class="widget-buttons">
                 <!--  TODO DD : add padding around buttons...they are too hard to click -->
-                <img wicket:id="configureButton">                
-                <img wicket:id="removeButton">
+                <img class="configButton" wicket:id="configureButton">                
+                <img class="removeButton" wicket:id="removeButton">
             </div>
             <span wicket:id="titleLabel"></span>
         </div>
 
-		<div class="widget-content configContainer">
+		<div class="widget-content configContainer" style="overflow:hidden">
            	<wicket:child/>
 			<div class="config">
 	           	<div wicket:id="config"/>
