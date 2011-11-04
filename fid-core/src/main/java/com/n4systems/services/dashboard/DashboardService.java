@@ -49,12 +49,19 @@ public class DashboardService extends FieldIdPersistenceService {
     private DashboardLayout createDefaultLayout() {
         DashboardLayout layout = new DashboardLayout();
 
+        WidgetDefinition commonLinksWidget = new WidgetDefinition(WidgetType.COMMON_LINKS);
+        WidgetDefinition newsWidget = new WidgetDefinition(WidgetType.NEWS);
         WidgetDefinition jobsWidget = new WidgetDefinition(WidgetType.JOBS_ASSIGNED);
 
-        DashboardColumn dashboardColumn = new DashboardColumn();
-        dashboardColumn.getWidgets().add(jobsWidget);
+        DashboardColumn firstColumn = new DashboardColumn();
+        firstColumn.getWidgets().add(commonLinksWidget);
 
-        layout.getColumns().add(dashboardColumn);
+        DashboardColumn secondColumn = new DashboardColumn();
+        secondColumn.getWidgets().add(newsWidget);
+        secondColumn.getWidgets().add(jobsWidget);
+
+        layout.getColumns().add(firstColumn);
+        layout.getColumns().add(secondColumn);
         layout.getColumns().add(new DashboardColumn());
 
         return layout;
