@@ -1,14 +1,20 @@
 package com.n4systems.util.chart;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 
 @SuppressWarnings("serial")
 public class CalendarChartManager extends SimpleChartManager<Calendar> {
 
 	private transient ChartGranularity granularity;
+	private transient ChartDateRange range;
 	
-	public CalendarChartManager(ChartGranularity granularity) {
+	public CalendarChartManager(ChartGranularity granularity, ChartDateRange range) {
 		this.granularity = granularity;
+		this.range = range;
 	}
 	
 	@Override
@@ -26,7 +32,29 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 	@Override
 	public Long getPanMax(ChartSeries<Calendar> series) {		
 		Chartable<Calendar> lastEntry = series.getLastEntry();
-		return lastEntry == null ? null : lastEntry.getLongX(); 
+		return lastEntry == null ? null : lastEntry.getLongX();
+	}
+
+	@Override
+	public void normalize(ChartSeries<Calendar> series) {
+		List<CalendarChartable> padding = new ArrayList<CalendarChartable>();
+		Calendar expected = range.getFromCalendar();
+		for (Iterator<Entry<Calendar, Chartable<Calendar>>> i = series.getEntrySet().iterator(); i.hasNext();) {
+			Entry<Calendar, Chartable<Calendar>> entry = i.next();
+			Calendar actual = entry.getValue().getX();
+			while (granularity.compare(expected,actual)<0) {
+				padding.add(pad(expected));
+				expected=granularity.next(expected);
+			}
+			expected=granularity.next(actual);			
+		}
+		series.add(padding);
+	}
+	
+	protected CalendarChartable pad(Calendar c) {		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(c.getTimeInMillis());
+		return new CalendarChartable(calendar,0);
 	}
 
 	@Override

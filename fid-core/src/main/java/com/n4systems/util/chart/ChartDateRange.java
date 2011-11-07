@@ -1,8 +1,8 @@
 package com.n4systems.util.chart;
 
+import java.util.Calendar;
 import java.util.Date;
 
-import com.ibm.icu.util.Calendar;
 import com.n4systems.util.time.DateUtil;
 
 public enum ChartDateRange {
@@ -28,26 +28,31 @@ public enum ChartDateRange {
 	}		
 	
 	public Date getFromDate() {
+		return getFromCalendar().getTime();
+	}
+		
+	public Calendar getFromCalendar() {
 		Calendar calendar = Calendar.getInstance();
 		switch (this) {
-		case FOREVER: 
-			return DateUtil.getEarliestFieldIdDate();
+		case FOREVER: 			
+			return DateUtil.getEarliestFieldIdCalendar();
 		case LAST_MONTH:
 		case LAST_QUARTER:
 		case LAST_YEAR:
 		case LAST_WEEK:
 			calendar.add(calendarParam, -value);
-			return calendar.getTime();
+			return calendar;
 		case THIS_WEEK:
 		case THIS_MONTH:
 		case THIS_YEAR:
 			calendar.set(calendarParam, value);
-			return calendar.getTime();
+			return calendar;
 		case THIS_QUARTER:
 			calendar.set(Calendar.MONTH,1 + (calendar.get(Calendar.MONTH)/12 * 3));
-			return calendar.getTime();
+			return calendar;
 		default : 
-			return new Date();			
+			// just return todays' calendar
+			return calendar;			
 		}
 	}	
 	

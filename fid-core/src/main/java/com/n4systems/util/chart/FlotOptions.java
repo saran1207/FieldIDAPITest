@@ -86,7 +86,7 @@ public class FlotOptions<X> implements Serializable {
 		public Boolean show;
 		public String labelFormatter;
 		public String position;
-		public Integer margin;
+		public Integer margin = 4;
 		public String backgroundColor;
 		public String backgroundOpacity;
 		public String container;

@@ -63,7 +63,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		List<AssetsIdentifiedReportRecord> results = persistenceService.findAll(builder);
 				
-        return Lists.newArrayList(new ChartSeries<Calendar>(results).withChartManager(new CalendarChartManager(granularity)));
+        return Lists.newArrayList(new ChartSeries<Calendar>(results).withChartManager(new CalendarChartManager(granularity, range)));
     }
 
 
@@ -115,15 +115,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	@SuppressWarnings("unchecked")
 	public List<ChartSeries<String>> getAssetsStatus(ChartDateRange chartDateRange, BaseOrg org) {
 		QueryBuilder<AssetsStatusReportRecord> builder = new QueryBuilder<AssetsStatusReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
-		
-//		SELECT u.status, u.v, @rownum:=@rownum+1 AS rownum
-//		FROM (
-//		   select ass.name as status, count(*) as v from assets a, assetstatus ass 
-//		where a.tenant_id = 15511493 and a.state = 'ACTIVE' and a.assetstatus_id=ass.id
-//		group by ass.name
-//		) u,
-//		(SELECT @rownum:=0) r		
-		
+	
 		builder.setSelectArgument(new NewObjectSelect(AssetsStatusReportRecord.class, "assetStatus.name", "COUNT(*)"));		
 		builder.addWhere(Comparator.GE, "identified", "identified", chartDateRange.getFromDate());
 		builder.addGroupBy("assetStatus.name");
@@ -154,13 +146,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		ArrayList<ChartSeries<Calendar>> results = new ArrayList<ChartSeries<Calendar>>();
 		// first add all events...
-		results.add(new ChartSeries<Calendar>("All", persistenceService.findAll(builder)).withChartManager(new CalendarChartManager(granularity)));	
+		results.add(new ChartSeries<Calendar>("All", persistenceService.findAll(builder)).withChartManager(new CalendarChartManager(granularity, chartDateRange)));	
 		
 		for (Status status:Status.values()) {
 			// ...then group them by status.
 			builder.addSimpleWhere("status", status);
 			List<CompletedEventsReportRecord> events = persistenceService.findAll(builder);
-			results.add(new ChartSeries<Calendar>(status.getDisplayName(), events).withChartManager(new CalendarChartManager(granularity)));	
+			results.add(new ChartSeries<Calendar>(status.getDisplayName(), events).withChartManager(new CalendarChartManager(granularity, chartDateRange)));	
 		}
 		return results;
 	}

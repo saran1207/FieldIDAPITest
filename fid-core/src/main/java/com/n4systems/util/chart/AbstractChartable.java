@@ -1,5 +1,7 @@
 package com.n4systems.util.chart;
 
+import com.google.common.base.Objects;
+
 
 @SuppressWarnings("serial")
 public abstract class AbstractChartable<X> implements Chartable<X> {
@@ -25,6 +27,11 @@ public abstract class AbstractChartable<X> implements Chartable<X> {
 	@Override 
 	public String toJavascriptString() { 	
 		return "[" + getLongX() + "," + y+"]";
-	}	
+	}
+	
+	@Override
+	public String toString() { 
+		return Objects.toStringHelper(this).toString();
+	}
 	
 }

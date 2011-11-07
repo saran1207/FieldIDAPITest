@@ -29,12 +29,15 @@ public class DateUtil {
 		}
 	}
 	
-	// TODO DD : put in util pkg.
 	public static Date getEarliestFieldIdDate() {
+		return getEarliestFieldIdCalendar().getTime();
+	}
+
+	public static Calendar getEarliestFieldIdCalendar() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear();
 		calendar.set(Calendar.YEAR,2005);
-		return calendar.getTime();
+		return calendar;
 	}
 
 	public static Calendar getCalendar(Date date) {
