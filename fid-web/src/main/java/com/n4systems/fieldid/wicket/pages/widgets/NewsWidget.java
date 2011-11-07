@@ -41,7 +41,9 @@ public class NewsWidget extends Widget<WidgetConfiguration> {
         String feed = ConfigContext.getCurrentContext().getString(ConfigEntry.RSS_FEED);
 
         jsBuffer.append("$('#"+fieldIdNews.getMarkupId()+"').rssfeed('" + feed + "', {");
-        jsBuffer.append("limit: 3, content: false, dateformat: 'D, M d', snippet: false, header: false, titletag: 'div', newimage: '../images/new.png'");
+        jsBuffer.append("limit: 3, content: false, dateformat: 'D, M d', snippet: false, ");
+        jsBuffer.append("header: false, titletag: 'div', newimage: '../images/new.png', ");
+        jsBuffer.append("linktarget: '_blank'");
    		jsBuffer.append("});");
         
         return jsBuffer.toString();
