@@ -94,6 +94,10 @@ img.widget-drag-image {
 	height : 200px;
 }
 
+.legendColorBox, .legendLabel {
+	padding-left : 4px;	
+}
+
 .widgetContent { 
 }
 
