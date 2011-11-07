@@ -51,7 +51,9 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 	protected Component createConfigPanel(String id) {
 		return new AssetsStatusConfigPanel(id,getConfigModel());
 	}
-
+	
+	
+	// FOREVER.   no granularity.
 }
 
 

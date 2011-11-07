@@ -60,6 +60,10 @@ public class CompletedEventsWidget extends ChartWidget<Calendar, CompletedEvents
 		return new CompletedEventsConfigPanel(id,getConfigModel());
 	}
 	
+	@Override
+	protected ChartGranularity getDefaultGranularity() {
+		return ChartGranularity.WEEK;   // range = QUARTER. 
+	}
 }
 
 

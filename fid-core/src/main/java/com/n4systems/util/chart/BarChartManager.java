@@ -4,21 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-// TODO DD : rename this --> BarChartManager.
 @SuppressWarnings("serial")
-public class StringChartManager implements ChartManager<String> {
+public class BarChartManager implements ChartManager<String> {
 	
 	private boolean transpose;
 	private double otherThreshold = 0.02;  // TODO DD : ask matt what proper threshold should be.
 
-	public StringChartManager() { 
+	public BarChartManager() { 
 	}
 	
-	public StringChartManager(boolean transpose) { 
+	public BarChartManager(boolean transpose) { 
 		this.transpose = transpose;
 	}
 	
-	public StringChartManager(boolean transpose, double otherThreshold) { 
+	public BarChartManager(boolean transpose, double otherThreshold) { 
 		this.transpose = transpose;
 		this.otherThreshold = otherThreshold;
 	}

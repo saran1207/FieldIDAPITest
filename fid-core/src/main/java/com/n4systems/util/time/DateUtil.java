@@ -17,6 +17,7 @@ public class DateUtil {
 		calendar.clear();
 		setValue(calendar, Calendar.YEAR, year);
 		setValue(calendar, Calendar.MONTH, (quarter-1)*3);		
+		setValue(calendar, Calendar.MONTH, month);		
 		setValue(calendar, Calendar.WEEK_OF_YEAR, week);
 		setValue(calendar, Calendar.DAY_OF_YEAR, day);
 		// currently doesn't handle hours/minutes/seconds etc...
@@ -52,6 +53,12 @@ public class DateUtil {
 		calendar.clear();
 		calendar.set(Calendar.YEAR, (int) (delta/YEARINMILLIS));
 		calendar.set(Calendar.DAY_OF_YEAR, (int) (delta/DAYINMILLIS)%365);
+		return calendar;
+	}
+
+	public static Calendar getLatestCalendar() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, calendar.getMaximum(Calendar.YEAR));
 		return calendar;
 	}
 	

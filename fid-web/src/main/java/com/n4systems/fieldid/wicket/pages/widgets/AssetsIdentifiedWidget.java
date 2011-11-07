@@ -49,6 +49,11 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifie
 	protected Component createConfigPanel(String id) {
 		return new AssetsIdentifiedConfigPanel(id, getConfigModel());        
 	}
+
+	@Override
+	protected ChartGranularity getDefaultGranularity() {
+		return ChartGranularity.WEEK;   // range = QUARTER. 
+	}	
 	
 }
 

@@ -13,7 +13,7 @@ import com.google.common.collect.Ordering;
 
 public enum ChartGranularity {
 	
-	HOUR(Calendar.HOUR_OF_DAY), DAY(Calendar.DAY_OF_YEAR), WEEK(Calendar.DAY_OF_WEEK), MONTH(Calendar.MONTH), QUARTER(Calendar.MONTH,3), YEAR(Calendar.YEAR);
+	HOUR(Calendar.HOUR_OF_DAY), DAY(Calendar.DAY_OF_YEAR), WEEK(Calendar.WEEK_OF_YEAR), MONTH(Calendar.MONTH), QUARTER(Calendar.MONTH,3), YEAR(Calendar.YEAR);
 
 	private int field;
 	private int multiplier;
@@ -48,7 +48,7 @@ public enum ChartGranularity {
 
 	public Long delta() {
 		Calendar today = Calendar.getInstance();		
-		// try to get around 30 data points per plot... 
+		// try to get around 50 data points per plot... 
 		Calendar from = Calendar.getInstance();
 		from.setTimeInMillis(today.getTimeInMillis());
 		
@@ -57,13 +57,13 @@ public enum ChartGranularity {
 			from.add(Calendar.MONTH, -1);
 			break;
 		case WEEK:
-			from.add(Calendar.MONTH, -6);
+			from.add(Calendar.MONTH, -12);
 			break;
 		case MONTH: 
-			from.add(Calendar.YEAR, -1);
+			from.add(Calendar.YEAR, -3);
 			break;
 		case QUARTER:
-			from.add(Calendar.YEAR, -2);
+			from.add(Calendar.YEAR, -7);
 			break;
 		case YEAR:
 			from.set(Calendar.YEAR, 2005);

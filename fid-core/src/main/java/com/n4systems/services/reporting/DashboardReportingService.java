@@ -20,11 +20,11 @@ import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.util.chart.BarChartManager;
 import com.n4systems.util.chart.CalendarChartManager;
 import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
-import com.n4systems.util.chart.StringChartManager;
 import com.n4systems.util.persistence.GroupByClause;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -55,6 +55,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		builder.setSelectArgument(select);
 		builder.addGroupByClauses(getGroupByClausesByGranularity(granularity,"identified"));
 		ChartDateRange range = dateRange==null ? ChartDateRange.FOREVER : dateRange;
+		
+		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");		
+		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "from", "identified", range.getFromDate(), null, ChainOp.AND));
+		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "identified", range.getToDate(), null, ChainOp.AND));
+		builder.addWhere(filterGroup);
+		
 		builder.addWhere(Comparator.GE, "identified", "identified", range.getFromDate());
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
@@ -113,11 +119,14 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ChartSeries<String>> getAssetsStatus(ChartDateRange chartDateRange, BaseOrg org) {
+	public List<ChartSeries<String>> getAssetsStatus(ChartDateRange range, BaseOrg org) {
 		QueryBuilder<AssetsStatusReportRecord> builder = new QueryBuilder<AssetsStatusReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 	
 		builder.setSelectArgument(new NewObjectSelect(AssetsStatusReportRecord.class, "assetStatus.name", "COUNT(*)"));		
-		builder.addWhere(Comparator.GE, "identified", "identified", chartDateRange.getFromDate());
+		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");		
+		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "from", "identified", range.getFromDate(), null, ChainOp.AND));
+		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "identified", range.getToDate(), null, ChainOp.AND));
+		builder.addWhere(filterGroup);
 		builder.addGroupBy("assetStatus.name");
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
@@ -125,10 +134,10 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		List<AssetsStatusReportRecord> results = persistenceService.findAll(builder);
 				
-        return Lists.newArrayList(new ChartSeries<String>(results).withChartManager(new StringChartManager(true)));
+        return Lists.newArrayList(new ChartSeries<String>(results).withChartManager(new BarChartManager(true)));
 	}	
 	
-	public List<ChartSeries<Calendar>> getCompletedEvents(ChartDateRange chartDateRange, ChartGranularity granularity, BaseOrg org) {
+	public List<ChartSeries<Calendar>> getCompletedEvents(ChartDateRange range, ChartGranularity granularity, BaseOrg org) {
 		QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
 		NewObjectSelect select = new NewObjectSelect(CompletedEventsReportRecord.class);
@@ -137,7 +146,10 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		builder.addWhere(Comparator.GE, "date", "date", chartDateRange.getFromDate());
+		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");		
+		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "from", "date", range.getFromDate(), null, ChainOp.AND));
+		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "date", range.getToDate(), null, ChainOp.AND));
+		builder.addWhere(filterGroup);
 		builder.addGroupByClauses(getGroupByClausesByGranularity(granularity,"date"));		
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
@@ -146,13 +158,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		ArrayList<ChartSeries<Calendar>> results = new ArrayList<ChartSeries<Calendar>>();
 		// first add all events...
-		results.add(new ChartSeries<Calendar>("All", persistenceService.findAll(builder)).withChartManager(new CalendarChartManager(granularity, chartDateRange)));	
+		results.add(new ChartSeries<Calendar>("All", persistenceService.findAll(builder)).withChartManager(new CalendarChartManager(granularity, range)));	
 		
 		for (Status status:Status.values()) {
 			// ...then group them by status.
 			builder.addSimpleWhere("status", status);
 			List<CompletedEventsReportRecord> events = persistenceService.findAll(builder);
-			results.add(new ChartSeries<Calendar>(status.getDisplayName(), events).withChartManager(new CalendarChartManager(granularity, chartDateRange)));	
+			results.add(new ChartSeries<Calendar>(status.getDisplayName(), events).withChartManager(new CalendarChartManager(granularity, range)));	
 		}
 		return results;
 	}
