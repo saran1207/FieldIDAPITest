@@ -1,7 +1,19 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
+import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.dashboard.CurrentLayoutModel;
+import com.n4systems.fieldid.wicket.pages.widgets.Widget;
+import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
+import com.n4systems.fieldid.wicket.util.AjaxCallback;
+import com.n4systems.fieldid.wicket.util.JavascriptPackageResourceIE;
+import com.n4systems.model.dashboard.DashboardColumn;
+import com.n4systems.model.dashboard.DashboardLayout;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.WidgetType;
+import com.n4systems.services.dashboard.DashboardService;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -17,20 +29,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
-import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
-import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.dashboard.CurrentLayoutModel;
-import com.n4systems.fieldid.wicket.pages.widgets.Widget;
-import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
-import com.n4systems.fieldid.wicket.util.AjaxCallback;
-import com.n4systems.fieldid.wicket.util.JavascriptPackageResourceIE;
-import com.n4systems.model.dashboard.DashboardColumn;
-import com.n4systems.model.dashboard.DashboardLayout;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.WidgetType;
-import com.n4systems.services.dashboard.DashboardService;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class DashboardPage extends FieldIDFrontEndPage {
@@ -44,8 +43,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
     private AddWidgetPanel addWidgetPanel;
 
-    private WebMarkupContainer sortableColumn;
-    private WebMarkupContainer sortableColumn2;
+    private DashboardColumnContainer sortableColumn;
+    private DashboardColumnContainer sortableColumn2;
 
     private ModalWindow configurationWindow;
     IModel<DashboardLayout> currentLayoutModel;
@@ -79,8 +78,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
         add(sortableColumn2 = createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[1].widgets"), 1));
     }
 
-	private WebMarkupContainer createColumnContainer(String containerId, IModel<List<WidgetDefinition>> widgetsModel,  final int columnIndex) {
-        WebMarkupContainer container = new WebMarkupContainer(containerId);
+	private DashboardColumnContainer createColumnContainer(String containerId, IModel<List<WidgetDefinition>> widgetsModel,  final int columnIndex) {
+        DashboardColumnContainer container = new DashboardColumnContainer(containerId);
 
         container.add(new ListView<WidgetDefinition>("widgets", widgetsModel) {
             @Override
@@ -95,23 +94,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
                         saveAndRepaintDashboard(target);
                     }
                 });
-                
-                
-                
-//                widget.setConfigureBehaviour(new AjaxEventBehavior("onclick") {
-//                    @Override
-//                    protected void onEvent(AjaxRequestTarget target) {
-//                        String panelId = configurationWindow.getContentId();
-//                        // Copy a temporary instance of the widget's configuration for editing - this enables a meaningful cancel button
-//                        WidgetConfiguration configCopy = item.getModelObject().getConfig().copy();
-//                        IModel<WidgetConfiguration> configModel = new Model<WidgetConfiguration>(configCopy);
-//                        configurationWindow.setContent(widget.createConfigurationPanel(panelId, configModel, createConfigSavedCallback()));
-//                        configurationWindow.show(target);
-//                    }
-//                });
-				item.add(widget);			
+				item.add(widget);
             }
-
         });
        
         container.add(makeSortableBehavior(container, columnIndex));
@@ -194,6 +178,12 @@ public class DashboardPage extends FieldIDFrontEndPage {
     @Override
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("label.dashboard"));
+    }
+
+    public static class DashboardColumnContainer extends WebMarkupContainer {
+        public DashboardColumnContainer(String id) {
+            super(id);
+        }
     }
 
 }

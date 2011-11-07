@@ -1,5 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
+import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.pages.DashboardPage;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -11,10 +15,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
-
-import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
 @SuppressWarnings("serial")
 public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
@@ -48,7 +48,7 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     persistenceService.update(getWidgetConfigurationToSave(model));
-                    target.addComponent(WidgetConfigPanel.this.getParent().getParent());
+                    target.addComponent(WidgetConfigPanel.this.findParent(DashboardPage.DashboardColumnContainer.class));
                 }
 
                 @Override
