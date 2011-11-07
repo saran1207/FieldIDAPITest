@@ -64,7 +64,7 @@ var chartWidgetFactory = (function() {
 		var day = d.getDate();
 		var month = d.getMonth();
 		var year = d.getFullYear();
-		return months[month] + ' ' + day + ',' + year; 
+		return months[month] + ' ' + day + ', ' + year;
 	};
 	
 	var dateTooltipContent = function(datapoint, options) { 

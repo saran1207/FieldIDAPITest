@@ -29,7 +29,6 @@ import com.n4systems.util.chart.LineGraphOptions;
 public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widget<T> {
 
 	protected Component flotChart;
-//	protected BaseOrg owner;
 	protected ChartGranularity granularity;
 	protected Integer period = 30;
 	
@@ -124,24 +123,5 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 		IModel<T> configModel = new Model<T>(getWidgetDefinition().getObject().getConfig());
 		return configModel;
 	}
-	
- 
-	class OrgForm extends Form {
 
-		@Deprecated // this will be moved to configuration panel.
-		public OrgForm(String id) {
-			super(id);
-			add(new OrgPicker("ownerPicker", new PropertyModel<BaseOrg>(ChartWidget.this, "owner")) { 
-				@Override protected void closePicker(AjaxRequestTarget target) {
-					super.closePicker(target);
-					target.addComponent(ChartWidget.this);
-				}
-				@Override protected void cancelPicker(AjaxRequestTarget target) {
-					super.cancelPicker(target);
-					target.addComponent(ChartWidget.this);
-				}
-			});
-		}
-	}
-    
 }
