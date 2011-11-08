@@ -102,13 +102,15 @@
 	background-color:#f7f7f7;
 }
 
+/* TODO DD : these should move into the widgets own .CSS file.   e.g. news.css, jobsassigned.css etc.. */ 
+
 .jobsAssignedConfig { 
-	max-height : 155px;
+	max-height : 140px;
 }
 
 
 .commonLinksConfig { 
-	max-height : 135px;
+	max-height : 155px;
 }
 
 .eventKpiConfig { 
