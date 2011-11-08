@@ -7,25 +7,34 @@ import com.n4systems.util.time.DateUtil;
 
 public enum ChartDateRange {
 
-	LAST_WEEK(Calendar.WEEK_OF_YEAR), LAST_MONTH(Calendar.MONTH), LAST_QUARTER(Calendar.MONTH, 3), LAST_YEAR(Calendar.YEAR),
-	THIS_WEEK(Calendar.DAY_OF_WEEK), THIS_MONTH(Calendar.DAY_OF_MONTH), THIS_QUARTER(Calendar.MONTH,3), THIS_YEAR(Calendar.DAY_OF_YEAR), 
-	FOREVER;
+	LAST_WEEK("Last Week", Calendar.WEEK_OF_YEAR), 
+	LAST_MONTH("Last Month", Calendar.MONTH), 
+	LAST_QUARTER("Last Quarter", Calendar.MONTH, 3), 
+	LAST_YEAR("Last Year", Calendar.YEAR),
+	THIS_WEEK("This Week", Calendar.DAY_OF_WEEK), 
+	THIS_MONTH("This Month", Calendar.DAY_OF_MONTH), 
+	THIS_QUARTER("This Quarter", Calendar.MONTH,3), 
+	THIS_YEAR("This Year", Calendar.DAY_OF_YEAR), 
+	FOREVER("All Time");
 	
 	private int calendarParam;
-	private int value;
+	private int value = 1;
+	private String displayName;
 
 
-	ChartDateRange() {
+	ChartDateRange(String displayName) {
+		this.displayName = displayName;		
 	}
 
-	ChartDateRange(int calendarParam, int delta) { 
+	ChartDateRange(String displayName, int calendarParam) { 
+		this(displayName, calendarParam, 1);
+	}		
+	
+	ChartDateRange(String displayName, int calendarParam, int delta) {
+		this(displayName);
 		this.calendarParam = calendarParam;
 		this.value = delta;
 	}
-	
-	ChartDateRange(int calendarParam) { 
-		this(calendarParam, 1);
-	}		
 	
 	public Date getFromDate() {
 		return getFromCalendar().getTime();
@@ -123,5 +132,8 @@ public enum ChartDateRange {
 		return getToCalendar().getTime();
 	}
 	
+	public String getDisplayName() { 
+		return displayName;
+	}
 	
 }

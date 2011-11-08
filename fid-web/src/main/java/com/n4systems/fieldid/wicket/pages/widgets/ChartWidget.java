@@ -8,18 +8,14 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.FlotOptions;

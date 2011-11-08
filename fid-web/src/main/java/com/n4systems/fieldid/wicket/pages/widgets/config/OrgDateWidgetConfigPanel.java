@@ -35,7 +35,7 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
 	protected DropDownChoice<ChartDateRange> createDateRangeSelect() {
         IChoiceRenderer<ChartDateRange> renderer = new IChoiceRenderer<ChartDateRange>() {       
 			@Override public Object getDisplayValue(ChartDateRange object) {
-				return object.toString();
+				return object.getDisplayName();
 			}
 			@Override public String getIdValue(ChartDateRange object, int index) {	
 				return object.name();
