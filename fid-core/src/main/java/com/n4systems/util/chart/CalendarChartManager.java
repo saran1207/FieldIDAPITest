@@ -57,7 +57,7 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 			}
 			expected=granularity.next(actual);			
 		}
-	//	series.add(padding);
+		series.add(padding);
 	}
 	
 	protected CalendarChartable pad(Calendar c) {		
