@@ -6,7 +6,8 @@
 
 var chartWidgetFactory = (function() { 
 	
-	/**   
+	/**   TODO DD : rename this file    dashboard.js --->  chartWidget.js   !!!
+	 *    
 	 * widget object returned by factory 
 	 */	
 	function chartWidget(widgetId, opts) {
@@ -72,7 +73,11 @@ var chartWidgetFactory = (function() {
 	    var value = datapoint[0].toFixed(0);
 	    var index = datapoint[1].toFixed(0);
 	    var label = options.yaxis.ticks[index][1];
-	    return "<p>"+label + ": <b>" +value+ "</b></p>";
+	    if (options.yaxis.ticks[index][2]) {
+	    	return options.yaxis.ticks[index][2]; 
+	    } else {
+	    	return "<p>"+label + ": <b>" +value+ "</b></p>";
+	    }
 	};
 
     function formatTooltip(map, tooltipFormat) {
