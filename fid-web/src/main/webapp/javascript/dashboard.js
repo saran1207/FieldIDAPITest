@@ -60,17 +60,11 @@ var chartWidgetFactory = (function() {
 		
 	}			
 
-	function formatDate(d,months) { 
-		var day = d.getDate();
-		var month = d.getMonth();
-		var year = d.getFullYear();
-		return months[month] + ' ' + day + ', ' + year;
-	};
-	
 	var dateTooltipContent = function(datapoint, options) { 
 	    var y = datapoint[1].toFixed(options.yaxis.decimals);
-	    var date = formatDate(new Date(datapoint[0]), options.xaxis.monthNames);
-	    return "<p>"+date + ": <b>" +y+ "</b></p>";
+        var map = createTooltipVariablesMap(datapoint, options);
+        var tooltip = formatTooltip(map, options.tooltipFormat);
+	    return tooltip;//"<p>"+date + ": <b>" +y+ "</b></p>";
 	};
 	
 	var horizLabelTooltipContent = function(datapoint, options) {
@@ -78,8 +72,30 @@ var chartWidgetFactory = (function() {
 	    var value = datapoint[0].toFixed(0);
 	    var index = datapoint[1].toFixed(0);
 	    var label = options.yaxis.ticks[index][1];
-	    return "<p>"+label + ": <b>" +value+ "</b></p>";	
+	    return "<p>"+label + ": <b>" +value+ "</b></p>";
 	};
+
+    function formatTooltip(map, tooltipFormat) {
+        var tooltip = tooltipFormat;
+        for (var key in map) {
+            var reg = new RegExp("\\{" + key + "\\}", "gm");
+            tooltip = tooltip.replace(reg, map[key]);
+        }
+        return tooltip;
+    }
+
+    function createTooltipVariablesMap(datapoint, options) {
+        var monthNames = options.xaxis.monthNames;
+        var dateObj = new Date(datapoint[0]);
+        var y = datapoint[1].toFixed(options.yaxis.decimals);
+        var index = datapoint[1].toFixed(0);
+        return {
+            year: dateObj.getFullYear(),
+            month: monthNames[dateObj.getMonth()],
+            day: dateObj.getDate(),
+            y: y
+        };
+    }
 	
 	// instead of passing id, why not pass reference to element???
 	var create = function(id) { 

@@ -97,8 +97,14 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 			@Override protected List<ChartSeries<X>> load() {
 				return getChartSeries();
 			}
-		};		
-		return new FlotChart<X>(id, model, createOptions(), getFlotChartCss());
+		};
+		LoadableDetachableModel<FlotOptions<X>> optionsModel = new LoadableDetachableModel<FlotOptions<X>>() {
+            @Override
+            protected FlotOptions<X> load() {
+                return createOptions();
+            }
+        };
+        return new FlotChart<X>(id, model, optionsModel, getFlotChartCss());
 	}
 	
 	private String getFlotChartCss() {
@@ -108,7 +114,9 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	protected abstract List<ChartSeries<X>> getChartSeries();
 	
 	protected FlotOptions<X> createOptions() {
-		return new LineGraphOptions<X>();
+        LineGraphOptions<X> options = new LineGraphOptions<X>();
+        options.setGranularity(granularity);
+        return options;
 	}
 
 	protected ChartGranularity getDefaultGranularity() {

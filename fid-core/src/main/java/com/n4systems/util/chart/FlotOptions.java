@@ -12,7 +12,9 @@ import java.io.Serializable;
 public class FlotOptions<X> implements Serializable {
 
 	public static transient final String[] QUARTER_NAMES = new String[]{"Q1", "Q1", "Q1", "Q2", "Q2", "Q2", "Q3", "Q3", "Q3", "Q4", "Q4", "Q4"};
-	public static transient final String[] MONTH_NAMES = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};		
+	public static transient final String[] MONTH_NAMES = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    private static final String TOOLTIP_WITH_DAY = "<p>{month} {day}, {year}: <b>{y}</b></p>";
+    private static final String TOOLTIP_WITHOUT_DAY = "<p>{month}, {year}: <b>{y}</b></p>";
 	
 	public Series series = new Series();
 	public Lines lines = new Lines();
@@ -24,6 +26,7 @@ public class FlotOptions<X> implements Serializable {
 	public Bars bars = new Bars();
 	public Legend legend = new Legend();
 	public String[] colors;
+    public String tooltipFormat;
 	
 	
 	public class Lines implements Serializable { 
@@ -106,6 +109,14 @@ public class FlotOptions<X> implements Serializable {
 		yaxis.timeformat = null;
 		yaxis.monthNames = null;
 		colors = new String[] {"#32578B"};
+        tooltipFormat = TOOLTIP_WITH_DAY;
 	}
-		 
+
+    public void setGranularity(ChartGranularity granularity) {
+        if (granularity == ChartGranularity.QUARTER) {
+            tooltipFormat = TOOLTIP_WITHOUT_DAY;
+        } else {
+            tooltipFormat = TOOLTIP_WITH_DAY;
+        }
+    }
 }

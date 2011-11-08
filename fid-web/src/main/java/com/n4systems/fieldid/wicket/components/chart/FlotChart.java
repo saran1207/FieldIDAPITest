@@ -21,29 +21,20 @@ public class FlotChart<X> extends Panel {
 	
 	static AtomicInteger markupId = new AtomicInteger(1);
 	
-	private FlotOptions<X> options;
 	private JsonRenderer jsonRenderer = new JsonRenderer();  // TODO DD: springify this bean.
+    private IModel<FlotOptions<X>> optionsModel;
 
-	public FlotChart(final String id, IModel<List<ChartSeries<X>>> model, FlotOptions<X> options, String css) {
+    public FlotChart(final String id, IModel<List<ChartSeries<X>>> model, IModel<FlotOptions<X>> optionsModel, String css) {
 		super(id, model);
-		this.options = options;
-		add(new ChartMarkup("flot").add(new AttributeAppender("class", true, new Model<String>(css), " ")));	                        				
+        this.optionsModel = optionsModel;
+        add(new ChartMarkup("flot").add(new AttributeAppender("class", true, new Model<String>(css), " ")));
 	}    	
 	    	
 	@SuppressWarnings("unchecked")
 	private List<ChartSeries<X>> getChartSeries() {
 		return ((List<ChartSeries<X>>)getDefaultModelObject());
 	}
-	
-	public void setOptions(FlotOptions<X> options) { 
-		this.options = options;
-	}
-	
-	public FlotOptions<X> getOptions() { 
-		return options;
-	}
 
-	
 	class ChartMarkup extends WebMarkupContainer {
 
 		public ChartMarkup(String id) {
@@ -53,11 +44,12 @@ public class FlotChart<X> extends Panel {
 			add(new AbstractBehavior () {
 				@Override
 				public void renderHead(IHeaderResponse response) {
+                    optionsModel.detach();
 					updateOptions(getChartSeries());					
 					StringBuffer javascriptBuffer = new StringBuffer();
 					javascriptBuffer.append ("chartWidgetFactory.createWithData('"+getMarkupId() + "'," + 
 							jsonRenderer.render(getChartSeries()) + "," + 
-							jsonRenderer.render(getOptions()) + 
+							jsonRenderer.render(optionsModel.getObject()) +
 					");");
 					response.renderOnDomReadyJavascript(javascriptBuffer.toString());
 				}
@@ -69,7 +61,7 @@ public class FlotChart<X> extends Panel {
 		private void updateOptions(List<ChartSeries<X>> list) {
 			int i = 0;
 			for (ChartSeries<X> chartSeries:list) { 
-				chartSeries.updateOptions(options, i++);				
+				chartSeries.updateOptions(optionsModel.getObject(), i++);
 			}
 		}
 		
@@ -78,7 +70,7 @@ public class FlotChart<X> extends Panel {
 		}		
 		
 	}
-	
+
 }
 		
 	
