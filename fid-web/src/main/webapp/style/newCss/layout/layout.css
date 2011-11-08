@@ -51,7 +51,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	width: 100%;
 	margin-bottom: 10px;
 	text-align: left;
-	overflow: hidden;
+    overflow: visible;
 }
 
 #pageHeader #pageNavigation {
