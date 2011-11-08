@@ -26,7 +26,7 @@ public class CompletedEventsWidgetConfiguration extends WidgetConfiguration {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="date_range", nullable=false)	
-	private ChartDateRange dateRange = ChartDateRange.FOREVER;
+	private ChartDateRange dateRange = ChartDateRange.THIS_QUARTER;
 	
 	@AllowSafetyNetworkAccess
 	public BaseOrg getOrg() {

@@ -25,11 +25,13 @@ public class FlotOptions<X> implements Serializable {
 	public Legend legend = new Legend();
 	public String[] colors;
 	
+	
 	public class Lines implements Serializable { 
 		public Boolean show;
 		public Boolean fill;
 		public String fillColor;
 		public Boolean steps;
+		public Integer lineWidth;
 	}
 	
 	public class Points  implements Serializable { 
@@ -72,6 +74,7 @@ public class FlotOptions<X> implements Serializable {
 		public Lines lines = new Lines();
 		public Bars bars = new Bars();
 		public Points points = new Points();
+		public Integer shadowSize;
 	}
 	
 	public class Bars implements Serializable { 

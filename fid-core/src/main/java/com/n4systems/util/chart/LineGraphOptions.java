@@ -27,6 +27,8 @@ public class LineGraphOptions<X> extends FlotOptions<X> {
 		pan.interactive = true;		
 		
 		legend.position = "nw";
+		
+		series.shadowSize = 0;
 	}
 
 }

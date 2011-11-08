@@ -32,14 +32,19 @@ public class SimpleChartManager<X> implements ChartManager<X> {
 		// do nothing.
 	}
 
+	
+	// TODO DD : refactor this so it gets entire list of chartSeries objects.   doing one at a time loses context.
+	// also, make a proper reset/initialize() method for FlotOptions.
 	@Override
 	public void updateOptions(ChartSeries<X> chartSeries, FlotOptions<X> options, int index) {
 		options.legend.noColumns = index+1;
-		//reset every request. (recall this is invoked for every ChartSeries [0...n] that a chart is plotting.
+		//reset first time thru. (recall this is invoked for every ChartSeries [0...n] that a chart is plotting.
 		if (index==0) {	
 			options.xaxis.min = null;
 			options.xaxis.panRange=new Long[2]; 				
 			options.points.radius = 3;
+			options.points.show = true;
+			options.lines.lineWidth = null;			
 		}
 		
 		options.xaxis.min = min(options.xaxis.min, getMinX(chartSeries));
@@ -48,7 +53,13 @@ public class SimpleChartManager<X> implements ChartManager<X> {
 			options.xaxis.panRange[1] = max(options.xaxis.panRange[1], getPanMax(chartSeries));
 		}
 		// TODO DD : should set radius according to pts in viewport, not total points.
-		options.points.radius = Math.min(options.points.radius, (chartSeries.size()+1)*index>POINTS_THRESHOLD?2:3);		
+		options.points.radius = Math.min(options.points.radius, (chartSeries.size()+1)*index>POINTS_THRESHOLD?2:3);
+
+// TODO DD : we might want to make lines thinner if more than one chartSeries or if tons of dots...ask matt.		
+//		if (index>0) {
+//			options.points.show = false;
+//			options.lines.lineWidth = 1;
+//		}
 	}
 	
 
