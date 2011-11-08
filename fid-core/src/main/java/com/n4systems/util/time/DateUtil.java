@@ -18,7 +18,7 @@ public class DateUtil {
 		setValue(calendar, Calendar.YEAR, year);
 		setValue(calendar, Calendar.MONTH, (quarter-1)*3);		
 		setValue(calendar, Calendar.MONTH, month);		
-		setValue(calendar, Calendar.WEEK_OF_YEAR, week);
+		setValue(calendar, Calendar.WEEK_OF_YEAR, week>=0 ? week+1 : -1);
 		setValue(calendar, Calendar.DAY_OF_YEAR, day);
 		// currently doesn't handle hours/minutes/seconds etc...
 		return calendar;
@@ -60,9 +60,17 @@ public class DateUtil {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, calendar.getMaximum(Calendar.YEAR));
 		return calendar;
+	}	
+
+	public static Calendar getMidnightIntance() {		
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.HOUR_OF_DAY, 0);  
+		c.set(Calendar.MINUTE, 0);  
+		c.set(Calendar.SECOND, 0);  
+		c.set(Calendar.MILLISECOND, 0);  		
+		return c;
 	}
 	
-
 	
 	
 }

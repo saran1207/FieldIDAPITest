@@ -35,18 +35,20 @@ public class SimpleChartManager<X> implements ChartManager<X> {
 	@Override
 	public void updateOptions(ChartSeries<X> chartSeries, FlotOptions<X> options, int index) {
 		options.legend.noColumns = index+1;
-		if (index==0) {	//reset every request.
+		//reset every request. (recall this is invoked for every ChartSeries [0...n] that a chart is plotting.
+		if (index==0) {	
 			options.xaxis.min = null;
 			options.xaxis.panRange=new Long[2]; 				
 			options.points.radius = 3;
 		}
+		
 		options.xaxis.min = min(options.xaxis.min, getMinX(chartSeries));
 		if (options.pan.interactive) { 
 			options.xaxis.panRange[0] = min(options.xaxis.panRange[0], getPanMin(chartSeries));
 			options.xaxis.panRange[1] = max(options.xaxis.panRange[1], getPanMax(chartSeries));
 		}
 		// TODO DD : should set radius according to pts in viewport, not total points.
-		options.points.radius = Math.min(options.points.radius, chartSeries.size()>POINTS_THRESHOLD?2:3);		
+		options.points.radius = Math.min(options.points.radius, (chartSeries.size()+1)*index>POINTS_THRESHOLD?2:3);		
 	}
 	
 

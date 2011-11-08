@@ -61,7 +61,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "identified", range.getToDate(), null, ChainOp.AND));
 		builder.addWhere(filterGroup);
 		
-		builder.addWhere(Comparator.GE, "identified", "identified", range.getFromDate());
 		if (org!=null) { 
 			builder.addSimpleWhere("owner.id", org.getId());
 		}
@@ -84,11 +83,9 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Date today = new PlainDate();
 		Date endDate = DateUtils.addDays(today, period);
 		
-		WhereParameterGroup filtergroup = new WhereParameterGroup("filtergroup");
-		
+		WhereParameterGroup filtergroup = new WhereParameterGroup("filtergroup");		
 		filtergroup.addClause(WhereClauseFactory.create(Comparator.GE, "fromDate", "nextDate", today, null, ChainOp.AND));
-		filtergroup.addClause(WhereClauseFactory.create(Comparator.LE, "toDate", "nextDate", endDate, null, ChainOp.AND));
-		
+		filtergroup.addClause(WhereClauseFactory.create(Comparator.LE, "toDate", "nextDate", endDate, null, ChainOp.AND));		
 		builder.addWhere(filtergroup);
 		builder.addSimpleWhere("status", ScheduleStatus.SCHEDULED);
 
