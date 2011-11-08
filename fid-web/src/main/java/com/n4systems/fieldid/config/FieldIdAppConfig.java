@@ -50,6 +50,7 @@ import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.json.JsonRenderer;
 
 @Configuration
 public class FieldIdAppConfig {
@@ -262,5 +263,10 @@ public class FieldIdAppConfig {
     @Bean
     public WidgetFactory dashboardWidgetFactory() { 
     	return new WidgetFactory();
+    }
+    
+    @Bean 
+    public JsonRenderer jsonRenderer() { 
+    	return new JsonRenderer();
     }
 }

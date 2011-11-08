@@ -53,7 +53,7 @@ public class SimpleChartManager<X> implements ChartManager<X> {
 			options.xaxis.panRange[1] = max(options.xaxis.panRange[1], getPanMax(chartSeries));
 		}
 		// TODO DD : should set radius according to pts in viewport, not total points.
-		options.points.radius = Math.min(options.points.radius, (chartSeries.size()+1)*index>POINTS_THRESHOLD?2:3);
+		options.points.radius = Math.min(options.points.radius, chartSeries.size()*(index+1)>POINTS_THRESHOLD?2:3);
 
 // TODO DD : we might want to make lines thinner if more than one chartSeries or if tons of dots...ask matt.		
 //		if (index>0) {

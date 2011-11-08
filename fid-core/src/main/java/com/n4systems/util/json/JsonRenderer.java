@@ -17,9 +17,9 @@ import com.n4systems.util.chart.ChartableMap;
 @SuppressWarnings("serial")
 public class JsonRenderer implements Serializable {
 
-	
-	public String render(Object bean) {
-		Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(ChartableMap.class, new ChartableMapSerializer()).create();
+	private Gson gson = new GsonBuilder().registerTypeAdapter(ChartableMap.class, new ChartableMapSerializer()).create();
+
+	public String render(Object bean) {		
 		String json = gson.toJson(bean);
 		return json;
 	}

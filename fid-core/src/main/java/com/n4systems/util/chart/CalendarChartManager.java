@@ -58,12 +58,14 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 			}
 			expected=granularity.next(actual);			
 		}
-		 
-		expected = actual;
-		while (granularity.compare(expected, range.getToCalendar())<=0) {
-			padding.add(pad(expected));
-			expected=granularity.next(expected);
-		}		
+
+		if (!ChartDateRange.FOREVER.equals(range)) { 
+			expected = actual;
+			while (granularity.compare(expected, range.getToCalendar())<=0) {
+				padding.add(pad(expected));
+				expected=granularity.next(expected);
+			}
+		}
 		series.add(padding);
 	}
 	

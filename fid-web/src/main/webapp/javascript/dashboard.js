@@ -6,7 +6,7 @@
 
 var chartWidgetFactory = (function() { 
 	
-	/**   TODO DD : rename this to ChartWidgetFactory....createChart etc...
+	/**   
 	 * widget object returned by factory 
 	 */	
 	function chartWidget(widgetId, opts) {

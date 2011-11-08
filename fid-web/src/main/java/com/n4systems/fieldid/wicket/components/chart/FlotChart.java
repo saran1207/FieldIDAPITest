@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.FlotOptions;
@@ -21,9 +22,11 @@ public class FlotChart<X> extends Panel {
 	
 	static AtomicInteger markupId = new AtomicInteger(1);
 	
-	private JsonRenderer jsonRenderer = new JsonRenderer();  // TODO DD: springify this bean.
-    private IModel<FlotOptions<X>> optionsModel;
+	@SpringBean
+	private JsonRenderer jsonRenderer;
 
+	private IModel<FlotOptions<X>> optionsModel;
+	
     public FlotChart(final String id, IModel<List<ChartSeries<X>>> model, IModel<FlotOptions<X>> optionsModel, String css) {
 		super(id, model);
         this.optionsModel = optionsModel;
