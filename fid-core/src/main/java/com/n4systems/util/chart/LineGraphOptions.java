@@ -19,8 +19,6 @@ public class LineGraphOptions<X> extends FlotOptions<X> {
 		xaxis.timeformat = "%y/%m";
 		xaxis.monthNames = MONTH_NAMES;				
 		
-		yaxis.decimals = "0";
-		
 		grid.hoverable = true;
 		grid.clickable = true;
 				

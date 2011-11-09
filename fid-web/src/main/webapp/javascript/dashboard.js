@@ -62,7 +62,7 @@ var chartWidgetFactory = (function() {
 	}			
 
 	var dateTooltipContent = function(datapoint, options) { 
-	    var y = datapoint[1].toFixed(options.yaxis.decimals);
+	    var y = datapoint[1].toFixed(options.yaxis.tickDecimals);
         var map = createTooltipVariablesMap(datapoint, options);
         var tooltip = formatTooltip(map, options.tooltipFormat);
 	    return tooltip;//"<p>"+date + ": <b>" +y+ "</b></p>";

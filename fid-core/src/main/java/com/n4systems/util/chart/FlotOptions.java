@@ -67,11 +67,11 @@ public class FlotOptions<X> implements Serializable {
 	}
 	
 	public class Axis implements Serializable  {
-		public Long[] panRange;	
-		public Long min;		
+		public Long[] panRange;
+		public Long min;
 		public String mode;
 		public String timeformat = "%m/%y";
-		public String decimals;
+        public Long tickDecimals;
 		public String[] monthNames;
 		public String[][] ticks;
 		public Integer tickLength;
@@ -125,12 +125,12 @@ public class FlotOptions<X> implements Serializable {
 	// ------------------------------------------------------------------------------------
 
 	public FlotOptions() { 
-		xaxis.decimals = null;		
 		yaxis.panRange = null;
-		yaxis.min = null;
 		yaxis.mode = null;
 		yaxis.timeformat = null;
 		yaxis.monthNames = null;
+        yaxis.min = 0L;
+        yaxis.tickDecimals = 0L;
 		colors = new String[] {"#32578B"};
 	}
 
