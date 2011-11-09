@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -24,6 +27,9 @@ import com.n4systems.util.chart.LineGraphOptions;
 @SuppressWarnings("serial")
 public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widget<T> {
 
+	private static final Logger logger = Logger.getLogger(ChartWidget.class);
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+	
 	protected Component flotChart;
 	protected ChartGranularity granularity;
 	protected Integer period = 30;
@@ -36,13 +42,17 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	}
 
 	protected Component createFlotChart() {
+		final String className = getClass().getSimpleName();
 		return new AjaxLazyLoadPanel("chart") {
 			@Override
 			public Component getLazyLoadComponent(String markupId) {
-				return createFlotChartImpl(markupId);
+				Component chart = createFlotChartImpl(markupId);
+            	logger.warn("WIDGET end " + className + " @ " + dateFormat.format(new Date()));				
+				return chart;
 			}
             @Override
 			public Component getLoadingComponent(final String markupId) {
+            	logger.warn("WIDGET start " + className + " @ " + dateFormat.format(new Date()));
                 return new Label(markupId, "<div class='loadingText'>" + new FIDLabelModel("label.loading_ellipsis").getObject() +
                     "</div>").setEscapeModelStrings(false);
             }
