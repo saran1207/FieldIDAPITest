@@ -42,6 +42,7 @@ public class FlotChart<X> extends Panel {
 
 		public ChartMarkup(String id) {
 			super(id);
+			// TODO DD : don't need to set markup Id explicitly.  remove createNextMarkupId() method.  
 	        setOutputMarkupId(true).setMarkupId(createNextMarkupId());        
 	        setOutputMarkupPlaceholderTag(true);
 			add(new AbstractBehavior () {

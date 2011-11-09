@@ -84,12 +84,19 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 		return harness;
 	}			
 
-	protected void assertClass(String expected, Component component) {
+	// use this if you expect the class to be *ONLY* the expected value, as opposed to having it 
+	//   be one of many classes.   typically you'll use assertClassContains() instead.
+	protected void assertClassExactly(String expected, Component component) {
 		assertAttributeEquals(CLASS, expected, component);
 	}
 	
 	protected void assertClassContains(String expected, Component component) {
 		assertAttributeContains(CLASS, expected, component);
+	}
+	
+	protected void assertInDocument(String expected) {
+		String document = (wicketTester.getServletResponse()).getDocument();
+		assertTrue(document.indexOf(expected)!=-1);
 	}
 	
 	/**

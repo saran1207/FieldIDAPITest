@@ -3,10 +3,33 @@ package com.n4systems.util.chart;
 import java.io.Serializable;
 
 
-// NOTE : don't use primitives for fields....use objects so they can be null. 
-//  if a field is null it will not be rendered.
-// e.g.   public boolean showImage;    // BOO-URNS!
-//        public Boolean showImage;    // Yay
+/**
+ *  NOTE : don't use primitives for fields....use objects so they can be null.
+ *  
+ *     if a field is null it will not be rendered.
+ * e.g.   public boolean showImage;    // BOO-URNS!
+ *        public Boolean showImage;    // Yay
+ *
+ * in general, think of this as a javascript object.  this is why it is laid out with a bunch of public fields in inner classes     
+ *   and why objects are used instead of primitives.   that way you can more easily use a javascript like syntax. 
+ * for example : 
+ *    options.xaxis.color = "blue";       // looks like javascript.  instead of getXaxis().setColor(Color.BLUE);   
+ *    options.series.points.show = true;  
+ *    options.lines.lineWidth = null;     // note that null variables won't be serialized. 
+ *    
+ * so if you see something in the FLOT API documentation that requires you set a property, 
+ * 1 : add the appropriate subclasses.   e.g. if you need options.help.faq, then create a "Help" inner class 
+ * 2 : add the required field.                if you need options.help.faq, then add public String[] faq.     (or whatever faq requires). 
+ * 3 : set this value in the constructor or in the hook when options are updated. 
+ * 
+ * if you need to add your own custom, non-FLOT option then i'd recommend a custom sub-object. 
+ *   e.g. options.fieldid.assetId          // put all custom options under a new "fieldId" class.       
+ *
+ * if you add values to this field that aren't part of the options, then MARK THEM AS TRANSIENT. 
+ * e.g.   public int tempCounter = 0;         		BOO!      
+ * 		  public transient int tempCounter = 0;     YAY!      
+ *     
+ */
 
 @SuppressWarnings("serial")
 public class FlotOptions<X> implements Serializable {
