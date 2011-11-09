@@ -33,10 +33,6 @@ div.itemLinkTitle {
     padding-left: 5px;
 }
 
-div.score div.itemLinkTitle {
-    width:66%;
-}
-
 div.itemLinkTitle a {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -52,12 +48,12 @@ div.editCopyLinks {
     padding-bottom: 10px;
     display: block;
     width: 15%;
-    float: left;
+    float: right;
     font-size: 10px;
 }
 
 div.score div.editCopyLinks {
-    width: 25%
+    float:left;
 }
 
 .scoreGroups {
@@ -75,7 +71,7 @@ div.score div.editCopyLinks {
     border-bottom:1px solid #ddd;
 }
 
-.scores {
+.verticalEditPanel {
     width:48%;
     border:1px solid #ddd;
     display:block;
@@ -117,8 +113,8 @@ div.score div.editCopyLinks {
 }
 
 div.reorderLinkSection {
-    padding-bottom: 10px;
-    padding-right: 5px;
+    padding-top: 15px;
+    padding-right: 8px;
     display: block;
     float: right;
 }
@@ -134,5 +130,10 @@ div.itemLinkTitle a div.subTitle {
 
 .textContainer {
     background-image: url("../images/bs-logo.png");
-    
+}
+
+.scores .viewLinkContainer {
+    width:400px;
+    overflow:hidden;
+    float:left;
 }

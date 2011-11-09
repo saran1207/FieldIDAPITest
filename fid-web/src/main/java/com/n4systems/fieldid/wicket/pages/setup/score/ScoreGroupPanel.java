@@ -50,7 +50,7 @@ public class ScoreGroupPanel extends SortableListPanel {
         add(new WebMarkupContainer("blankInstructions") {
             @Override
             public boolean isVisible() {
-                return isScoreGroupSelected() && getScores().size() == 0;
+                return !isScoreGroupSelected() && (getScores() == null || getScores().size() > 0);
             }
         });
 
@@ -75,9 +75,12 @@ public class ScoreGroupPanel extends SortableListPanel {
                 sortableBehavior.setDisabled(false);
                 reorderState = true;
             }
+
+            @Override
+            public boolean isVisible() {
+                return isScoreGroupSelected();
+            }
         });
-        
-        
         
         WebMarkupContainer sortableScoresContainer = new WebMarkupContainer("sortableScoresContainer");
         	 
@@ -101,7 +104,7 @@ public class ScoreGroupPanel extends SortableListPanel {
                     @Override
 					protected boolean isReorderState() {
                     	return reorderState;
-                    };
+                    }
                 });
             }
         });
@@ -110,15 +113,12 @@ public class ScoreGroupPanel extends SortableListPanel {
         
         add(sortableScoresContainer);
 
-
-        
         add(scoreGroupForm = new ScoreGroupForm("scoreGroupForm", model) {
             @Override
             public boolean isVisible() {
                 return isScoreGroupSelected();
             }
         });
-        
     }
 
 	private void setDefaultModel() {
