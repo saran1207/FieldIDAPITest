@@ -46,7 +46,10 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 
 	@Override
 	public void normalize(ChartSeries<Calendar> series) {
-		List<CalendarChartable> padding = new ArrayList<CalendarChartable>();
+		if (series.isEmpty()) {
+			return;
+		}
+		List<CalendarChartable> padding = new ArrayList<CalendarChartable>();		
 		Calendar expected = range.getFromCalendar();
 		Calendar actual = null;		
 		for (Iterator<Entry<Calendar, Chartable<Calendar>>> i = series.getEntrySet().iterator(); i.hasNext();) {
@@ -58,7 +61,6 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 			}
 			expected=granularity.next(actual);			
 		}
-
 		if (!ChartDateRange.FOREVER.equals(range)) { 
 			expected = actual;
 			while (granularity.compare(expected, range.getToCalendar())<=0) {
