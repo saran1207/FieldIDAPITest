@@ -64,7 +64,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         addClickTaleScripts();
         addCssContainers();
 
-        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.js"));
+        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.min.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.at_intervals.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout-jquery.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/json2.js"));
