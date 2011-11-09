@@ -144,7 +144,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		UserQueryHelper.applyFullyActiveFilter(builder);
-		builder.addSimpleWhere("hashSecurityCardNumber", User.hashPassword(rfidNumber));
+		builder.addSimpleWhere("hashSecurityCardNumber", User.hashSecurityCardNumber(rfidNumber));
 		builder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE);
 
 		List<User> userBeans = builder.getResultList(em, 0, 2);
@@ -191,7 +191,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		}
 
 		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(User.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
-		queryBuilder.addSimpleWhere("hashSecurityCardNumber", EncryptionUtility.getSHA1HexHash(userRfid.toUpperCase()));
+		queryBuilder.addSimpleWhere("hashSecurityCardNumber", User.hashSecurityCardNumber(userRfid));
 
 		if (currentUserId != null) {
 			queryBuilder.addWhere(Comparator.NE, "id", "id", currentUserId);
