@@ -124,9 +124,7 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	protected abstract List<ChartSeries<X>> getChartSeries();
 	
 	protected FlotOptions<X> createOptions() {
-        LineGraphOptions<X> options = new LineGraphOptions<X>();
-        options.setGranularity(granularity);
-        return options;
+        return new LineGraphOptions<X>();
 	}
 
 	protected ChartGranularity getDefaultGranularity() {
