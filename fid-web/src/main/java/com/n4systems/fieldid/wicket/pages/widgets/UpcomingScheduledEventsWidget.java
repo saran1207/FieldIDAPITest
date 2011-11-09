@@ -12,6 +12,7 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
+import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.FlotOptions;
 
@@ -51,5 +52,12 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar,Upcoming
 	protected Component createConfigPanel(String id) {
 		return new UpcomingEventsConfigPanel(id,getConfigModel());
 	}
+	
+	@Override
+	protected ChartGranularity getDefaultGranularity() {
+		return null; // this widget doesn't use granularity...should not be relevant.
+	}
+	
+
 	
 }
