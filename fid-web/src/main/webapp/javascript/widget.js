@@ -32,9 +32,16 @@ var widgetToolkit = (function() {
 			finish = function() { };
 			config.show();
 			if (hideConfig) {
-                finish = function() { config.hide() };
+				configContainer.css({
+					overflow : 'hidden'
+				});
 			} else {
-				containerHeight = Math.max(100,configContainer.height());				
+				containerHeight = Math.max(100,configContainer.height());
+				finish = function() {
+					configContainer.css({
+						overflow : 'visible'
+					});
+				}
 			}
 			maybeResizeContainer(hideConfig, config, configContainer);
 			config.animate({
@@ -46,16 +53,13 @@ var widgetToolkit = (function() {
 		
 		function maybeResizeContainer(hideConfig, config, configContainer) {
 			configHeight = config.css('maxHeight');
-			// if height requires special height instead of just filling area of widget....			
-			if (configHeight) { 
-				if (hideConfig) { 
-					configContainer.animate({height:containerHeight},
-							'fast', 'linear', 
-							function() {$(this).css({height:''}); }
-						);
+			// if height requires special height instead of just filling area of widget....
+			if (configHeight) {
+				if (hideConfig) {
+                    configContainer.css({height:containerHeight});
 				} else {
-					configContainer.animate({height:configHeight});
-				}							
+                    configContainer.css({height:configHeight});
+				}
 			}
 		}
 		
