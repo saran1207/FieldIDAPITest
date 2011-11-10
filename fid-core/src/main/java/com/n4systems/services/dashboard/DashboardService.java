@@ -66,7 +66,6 @@ public class DashboardService extends FieldIdPersistenceService {
 
         layout.getColumns().add(firstColumn);
         layout.getColumns().add(secondColumn);
-        layout.getColumns().add(new DashboardColumn());
 
         return layout;
     }
