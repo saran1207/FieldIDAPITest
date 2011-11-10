@@ -31,17 +31,10 @@ var widgetToolkit = (function() {
 			hideConfig = parseInt(config.css('marginLeft'),10)==0;
 			finish = function() { };
 			config.show();
-			if (hideConfig) { 
-				configContainer.css({
-					overflow : 'hidden'
-				});
+			if (hideConfig) {
+                finish = function() { config.hide() };
 			} else {
 				containerHeight = Math.max(100,configContainer.height());				
-				finish = function() {
-					configContainer.css({
-						overflow : 'visible'
-					});					
-				}
 			}
 			maybeResizeContainer(hideConfig, config, configContainer);
 			config.animate({
