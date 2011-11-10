@@ -26,6 +26,10 @@
     color: #666;
 }
 
+.widget-content {
+	clear: both;
+}
+
 .widget .widget-content .small-text {
     font-size:11px;
     color:#666;
@@ -37,10 +41,16 @@
     font-weight:normal;
 }
 
+.widget-draggable{
+    float: left;
+    width: 89%;
+}
+
 .widget-buttons {
     display: block;
     float: right;
     padding-right:20px;   
+    padding-top: 10px;
 }
 
 .pageContent .ui-sortable-placeholder {
