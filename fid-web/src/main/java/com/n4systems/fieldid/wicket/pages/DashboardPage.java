@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -55,6 +56,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.symbol.min.js"));        
         add(JavascriptPackageResource.getHeaderContribution("javascript/dashboard.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/widget.js"));
+        // override org picker with inline style...ugly but it works.
+        add(new StringHeaderContributor("<style type='text/css'>.orgSelector { width : 300px !important; }</style>")); 	
         
         currentLayoutModel = new CurrentLayoutModel();
 

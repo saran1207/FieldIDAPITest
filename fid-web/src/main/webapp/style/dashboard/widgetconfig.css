@@ -18,7 +18,7 @@
 	padding-top : 10px;
 }
 
-.widgetConfiguration form fieldset .row label {
+.widgetConfiguration form fieldset .row>label {
   float: left;
   width: 100px;
   text-align: right;
@@ -82,6 +82,11 @@
     display:block;
     float:left;
     overflow:hidden;
+}
+
+.orgSelector {
+	width: 300px;
+	z-index:1000;	
 }
 
 .orgListItem {
