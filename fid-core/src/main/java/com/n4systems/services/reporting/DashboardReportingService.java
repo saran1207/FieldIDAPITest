@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.n4systems.model.security.OwnerAndDownFilter;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -172,7 +173,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		
 		QueryBuilder<EventScheduleStatusCount> builder1 = new QueryBuilder<EventScheduleStatusCount>(EventSchedule.class, securityContext.getUserSecurityFilter());
 		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "status", "COUNT(*)"));
-		builder1.addSimpleWhere("owner.id", owner.getId());
+        builder1.applyFilter(new OwnerAndDownFilter(owner));
 		builder1.addGroupBy("status");
 		List<EventScheduleStatusCount> statusCounts = persistenceService.findAll(builder1);
 		
