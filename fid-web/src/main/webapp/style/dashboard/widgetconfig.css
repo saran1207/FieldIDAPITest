@@ -109,7 +109,6 @@
 	max-height : 140px;
 }
 
-
 .commonLinksConfig { 
 	max-height : 155px;
 }
@@ -123,5 +122,17 @@
 }
 
 .assetsStatusConfig {
+	max-height : 250px;
+}
+
+.completedEventsConfig {
+	max-height: 250px;
+}
+
+.assetsIdentifiedConfig {
+	max-height : 250px;
+}
+
+.upcomingScheduledEventsConfig {
 	max-height : 250px;
 }
