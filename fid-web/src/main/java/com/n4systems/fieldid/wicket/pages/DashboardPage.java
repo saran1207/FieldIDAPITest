@@ -80,8 +80,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
         container.add(new ListView<WidgetDefinition>("widgets", widgetsModel) {
             @Override
             protected void populateItem(final ListItem<WidgetDefinition> item) {
-                item.setOutputMarkupId(true);                
-                WidgetDefinition widgetDefinition = item.getModelObject();                
+                item.setOutputMarkupId(true);
+                WidgetDefinition widgetDefinition = item.getModelObject();
                 final Widget widget = widgetFactory.createWidget(widgetDefinition);
                 widget.setRemoveBehaviour(new AjaxEventBehavior("onclick") {
                     @Override
@@ -90,7 +90,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
                         saveAndRepaintDashboard(target);
                     }
                 });
-				item.add(widget);
+                item.add(widget);
             }
         });
        
@@ -122,11 +122,27 @@ public class DashboardPage extends FieldIDFrontEndPage {
                     movingWidget = (WidgetDefinition) sortedComponent.getDefaultModelObject();
                 }
             }
+
+            @Override
+            public void onUpdate(Component sortedComponent, int index, AjaxRequestTarget target) {
+                if (sortedComponent != null && index != -1) {
+                    WidgetDefinition movingWidget = (WidgetDefinition) sortedComponent.getDefaultModelObject();
+                    moveWidgetInsideColumn(movingWidget, columnIndex, index);
+                    saveAndRepaintDashboard(target);
+                }
+            }
         };
         simpleSortableAjaxBehavior.setCursor("pointer");
         simpleSortableAjaxBehavior.setHandle(".widget-draggable");
         simpleSortableAjaxBehavior.setConnectWith(".column");
         return simpleSortableAjaxBehavior;
+    }
+
+    private void moveWidgetInsideColumn(WidgetDefinition movingWidget, int columnIndex, int destinationIndex) {
+        DashboardColumn column = currentLayoutModel.getObject().getColumns().get(columnIndex);
+        int sourceIndex = column.getWidgets().indexOf(movingWidget);
+        column.getWidgets().remove(sourceIndex);
+        column.getWidgets().add(destinationIndex, movingWidget);
     }
 
     private void saveAndRepaintDashboard(AjaxRequestTarget target) {
