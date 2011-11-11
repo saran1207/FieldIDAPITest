@@ -14,4 +14,10 @@
         </div>
     </div>
 
+    <script>
+        $(document).ready(function() {
+            $('.ui-sortable').each(function() { $.data(this, 'sortable').options['stop'] = function(event,ui) { setTimeout(function() { $(event.target).addClass('force-redraw-for-graphs').removeClass('force-redraw-for-graphs'); }, 50); } } );
+        });
+    </script>
+
 </wicket:extend>
