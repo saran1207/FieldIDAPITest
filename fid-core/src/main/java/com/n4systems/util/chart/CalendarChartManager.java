@@ -47,6 +47,7 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 	@Override
 	public void normalize(ChartSeries<Calendar> series) {
 		if (series.isEmpty()) {
+			series.add(pad(range.getFromCalendar()));
 			return;
 		}
 		List<CalendarChartable> padding = new ArrayList<CalendarChartable>();		

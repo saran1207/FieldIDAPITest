@@ -7,33 +7,21 @@ import com.n4systems.util.time.DateUtil;
 
 public enum ChartDateRange {
 
-	LAST_WEEK("Last Week", Calendar.WEEK_OF_YEAR), 
-	LAST_MONTH("Last Month", Calendar.MONTH), 
-	LAST_QUARTER("Last Quarter", Calendar.MONTH, 3), 
-	LAST_YEAR("Last Year", Calendar.YEAR),
-	THIS_WEEK("This Week", Calendar.DAY_OF_WEEK), 
-	THIS_MONTH("This Month", Calendar.DAY_OF_MONTH), 
-	THIS_QUARTER("This Quarter", Calendar.MONTH,3), 
-	THIS_YEAR("This Year", Calendar.DAY_OF_YEAR), 
+	LAST_WEEK("Last Week" ), 
+	LAST_MONTH("Last Month"), 
+	LAST_QUARTER("Last Quarter"), 
+	LAST_YEAR("Last Year"),
+	THIS_WEEK("This Week"), 
+	THIS_MONTH("This Month"), 
+	THIS_QUARTER("This Quarter"), 
+	THIS_YEAR("This Year"), 
 	FOREVER("All Time");
 	
-	private int calendarParam;
-	private int value = 1;
 	private String displayName;
 
 
 	ChartDateRange(String displayName) {
 		this.displayName = displayName;		
-	}
-
-	ChartDateRange(String displayName, int calendarParam) { 
-		this(displayName, calendarParam, 1);
-	}		
-	
-	ChartDateRange(String displayName, int calendarParam, int delta) {
-		this(displayName);
-		this.calendarParam = calendarParam;
-		this.value = delta;
 	}
 	
 	public Date getFromDate() {
@@ -41,7 +29,7 @@ public enum ChartDateRange {
 	}
 		
 	public Calendar getToCalendar() { 
-		// queries should use <,  NOT <= when using these dates!!!
+		// exclusive date :  should use <,  NOT <= when comparing against returned value!!!   
 		Calendar calendar = getTimelessIntance();
 		switch (this) {
 		case FOREVER: 			
@@ -60,7 +48,8 @@ public enum ChartDateRange {
 			calendar.set(Calendar.DAY_OF_WEEK, 1);
 			break;
 		case THIS_WEEK:
-			calendar.set(Calendar.DAY_OF_WEEK, 8);			
+			calendar.set(Calendar.DAY_OF_WEEK, 1);
+			calendar.add(Calendar.WEEK_OF_YEAR, 1);			
 			break;
 		case THIS_MONTH:
 			calendar.add(Calendar.MONTH, 1);
@@ -84,21 +73,21 @@ public enum ChartDateRange {
 		case FOREVER: 			
 			return DateUtil.getEarliestFieldIdCalendar();
 		case LAST_YEAR:
-			calendar.add(calendarParam, -value);
+			calendar.add(Calendar.YEAR, -1);
 			calendar.set(Calendar.DAY_OF_YEAR, 1);
 			break;
 		case LAST_QUARTER:
 			//Q3/2011= Q2/2011
 			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH)/3 * 3);  // round to nearest quarter...
-			calendar.add(calendarParam, -value);										// then go back one.
+			calendar.add(Calendar.MONTH, -3);										// then go back one.
 			calendar.set(Calendar.DAY_OF_MONTH, 1);
 			break;
 		case LAST_MONTH:
-			calendar.add(calendarParam, -value);
+			calendar.add(Calendar.MONTH, -1);
 			calendar.set(Calendar.DAY_OF_MONTH, 1);
 			break;
 		case LAST_WEEK:
-			calendar.add(calendarParam, -value);
+			calendar.add(Calendar.WEEK_OF_YEAR, -1);
 			calendar.set(Calendar.DAY_OF_WEEK, 1);
 			break;
 		case THIS_WEEK:

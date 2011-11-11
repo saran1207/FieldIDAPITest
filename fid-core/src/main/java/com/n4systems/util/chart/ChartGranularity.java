@@ -29,6 +29,12 @@ public enum ChartGranularity {
 
 	public int compare(Calendar a, Calendar b) {		
 		int compare = 0;
+		if (a==null) { 
+			return b==null ? 0 : -1; 
+		}
+		if (b==null) {
+			return 1;
+		}
 		for (ChartGranularity granularity:reverseValues()) {  // CAVEAT : enum must be in order of least to most significant. i.e. months before years. 
 			if (granularity.compareTo(this)>=0) {
 				compare = (a.get(granularity.field)/granularity.multiplier) - (b.get(granularity.field)/granularity.multiplier);
@@ -76,6 +82,13 @@ public enum ChartGranularity {
 		Calendar c = Calendar.getInstance();
 		c.setTime(calendar.getTime());
 		c.add(field, 1*multiplier);		
+		return c;
+	}
+
+	public Calendar previous(Calendar calendar) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(calendar.getTime());
+		c.add(field, -1*multiplier);		
 		return c;
 	}
 	

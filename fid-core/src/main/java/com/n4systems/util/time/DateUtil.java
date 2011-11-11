@@ -9,7 +9,8 @@ public class DateUtil {
 	public static long MINUTEINMILLIS = SECONDINMILLIS * 60;
 	public static long HOURINMILLIS = MINUTEINMILLIS * 60;
 	public static long DAYINMILLIS = HOURINMILLIS * 24;
-	public static long YEARINMILLIS = DAYINMILLIS * 365;
+	public static long WEEKINMILLIS = DAYINMILLIS * 7;
+	public static long YEARINMILLIS = DAYINMILLIS * 365;  //not entirely accurate..no leap year stuff here.
 	
 
 	public static Calendar getCalendar(Integer year, Integer quarter, Integer month, Integer week, Integer day) {
@@ -70,7 +71,17 @@ public class DateUtil {
 		c.set(Calendar.MILLISECOND, 0);  		
 		return c;
 	}
+
+	public static long intervalInDays(long delta) {
+		return delta/DAYINMILLIS;
+	}
 	
+	public static long intervalInYears(long delta) {
+		return delta/YEARINMILLIS;
+	}
 	
+	public static long intervalInWeeks(long delta) {
+		return delta/WEEKINMILLIS;
+	}
 	
 }

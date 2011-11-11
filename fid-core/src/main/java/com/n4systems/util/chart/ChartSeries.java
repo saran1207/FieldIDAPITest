@@ -14,9 +14,6 @@ public class ChartSeries<X> implements Serializable {
 
 	// typical json representation might look like this..    { label: "Foo", data: [ [10, 1], [17, -14], [30, 5] ] }	
 	private ChartableMap<X> data = new ChartableMap<X>();
-//    lines: specific lines options       
-//    bars: specific bars options          these are other FLOT options i haven't included yet.
-//    points: specific points options
 	public String color;
 	private Integer xaxis;
 	private Integer yaxis;
@@ -63,11 +60,11 @@ public class ChartSeries<X> implements Serializable {
 	}
 
 	public X getFirstX() {
-		return data.firstEntry().getKey();
+		return data.isEmpty() ? null : data.firstEntry().getKey();
 	}
 
-	public X getLastX() {
-		return data.lastEntry().getKey();
+	public X getLastX() {		
+		return data.isEmpty() ? null : data.lastEntry().getKey();
 	}
 
 	public Chartable<X> get(X x) {
