@@ -6,7 +6,7 @@
 .eventKpiTable .ui-progressbar {
 	height: 15px;
     margin-top: 5px;
-	width: 145px;
+	width: 130px;
 	float: left;	
 }
 
@@ -40,7 +40,7 @@
 .eventKpiTable .completedSchedules {
 	padding-right: 3px;
 	text-align: right;
-	width: 17px;
+	width: 25px;
 }
 
 .eventKpiTable .ui-corner-left {
