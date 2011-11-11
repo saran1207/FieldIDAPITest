@@ -124,7 +124,9 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	protected abstract List<ChartSeries<X>> getChartSeries();
 	
 	protected FlotOptions<X> createOptions() {
-        return new LineGraphOptions<X>();
+		LineGraphOptions<X> options = new LineGraphOptions<X>();
+        options.tooltipFormat = granularity == ChartGranularity.QUARTER ? FlotOptions.TOOLTIP_WITHOUT_DAY : FlotOptions.TOOLTIP_WITH_DAY;
+        return options;
 	}
 
 	protected ChartGranularity getDefaultGranularity() {
