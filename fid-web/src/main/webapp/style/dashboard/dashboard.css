@@ -104,13 +104,6 @@ img.widget-drag-image {
 	padding-left : 4px;	
 }
 
-.widgetContent { 
-}
-
-.assetsStatusWidget { 
-	height : 200px;
-}
-
 div.chartTooltip {
     position: absolute;
     display: none;
