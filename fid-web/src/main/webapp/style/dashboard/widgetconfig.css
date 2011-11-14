@@ -95,8 +95,8 @@
 }
 
 .configContainer {
-	position : relative; 
-	
+	position : relative;
+    overflow:hidden;
 }
 
 .configContainer .config {
