@@ -106,6 +106,7 @@
 	left: 0;
 	top : 0;
 	background-color:#f7f7f7;
+    margin-left:600px;
 }
 
 /* TODO DD : these should move into the widgets own .CSS file.   e.g. news.css, jobsassigned.css etc.. */ 

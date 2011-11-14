@@ -15,14 +15,8 @@ var widgetToolkit = (function() {
 		var containerHeight = 0;		
 		
 		function setup() { 
-			configButton = $('#'+id).find('.widget-buttons').find('.configButton');					
+			configButton = $('#'+id).find('.widget-buttons').find('.configButton');
 			configButton.click(function() { toggleConfig(); });
-			configContainer = $('#'+id).find('.configContainer');
-			config = configContainer.find('.config');
-			config.css({
-				marginLeft : 600,
-				style : ''
-			});			
 		}
 		
 		function toggleConfig() { 
