@@ -1,3 +1,7 @@
+.newsWidget .widget-content {
+	float: left;
+}
+
 .rssRow {
 	float: left;
 	border-bottom: 1px dotted #CCCCCC;

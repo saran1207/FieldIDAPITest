@@ -29,6 +29,7 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
         super(id);
         this.widgetDefinition = widgetDefinition;
         setOutputMarkupId(true);
+        add(new AttributeAppender("class", new Model<String>(getCssClassWithSuffix("Widget")), " "));
         add(new Label("titleLabel", new PropertyModel<String>(widgetDefinition, "config.name")));
         add(new ContextImage("dragImage", "images/dashboard/drag.png"));        
         add(configPanel = createDecoratedConfigPanel("configPanel"));
