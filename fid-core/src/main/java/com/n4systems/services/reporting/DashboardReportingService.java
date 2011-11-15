@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.n4systems.model.security.OwnerAndDownFilter;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +19,7 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.chart.BarChartManager;
 import com.n4systems.util.chart.CalendarChartManager;
@@ -167,13 +167,21 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return results;
 	}
 	
-	public EventKpiRecord getEventKpi(BaseOrg owner) {
+	public EventKpiRecord getEventKpi(BaseOrg owner, ChartDateRange range) {
 		EventKpiRecord eventKpiRecord = new EventKpiRecord();	
 		eventKpiRecord.setCustomer(owner);
 		
 		QueryBuilder<EventScheduleStatusCount> builder1 = new QueryBuilder<EventScheduleStatusCount>(EventSchedule.class, securityContext.getUserSecurityFilter());
 		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "status", "COUNT(*)"));
         builder1.applyFilter(new OwnerAndDownFilter(owner));
+
+        // TODO DD :refactor this...
+        WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");		
+		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "from", "nextDate", range.getFromDate(), null, ChainOp.AND));
+		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "nextDate", range.getToDate(), null, ChainOp.AND));
+		builder1.addWhere(filterGroup);
+        
+        
 		builder1.addGroupBy("status");
 		List<EventScheduleStatusCount> statusCounts = persistenceService.findAll(builder1);
 		
@@ -190,6 +198,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		builder2.addSimpleWhere("owner.id", owner.getId());
 		builder2.addSimpleWhere("status", ScheduleStatus.COMPLETED);
 		builder2.addSimpleWhere("event.status", Status.FAIL);
+		builder2.addWhere(filterGroup);
 		
 		Long failedCount = persistenceService.count(builder2);
 		

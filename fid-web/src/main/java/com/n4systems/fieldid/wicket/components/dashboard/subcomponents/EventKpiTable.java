@@ -10,18 +10,22 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.progressbar.ProgressBar;
 
+import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.reporting.EventKpiRecord;
+import com.n4systems.util.chart.ChartDateRange;
 
 public class EventKpiTable extends Panel {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
+	private EventKPIWidgetConfiguration config;
 
 
-	public EventKpiTable(String id, List<BaseOrg> orgList) {
+	public EventKpiTable(String id, List<BaseOrg> orgList, EventKPIWidgetConfiguration eventKPIWidgetConfiguration) {
 		super(id);
+		this.config = eventKPIWidgetConfiguration;
 		add(new ListView<EventKpiRecord>("customerEventKpiList", getCustomerEventKPIs(orgList)) {
 			
 			@Override
@@ -49,11 +53,15 @@ public class EventKpiTable extends Panel {
 		
 		List<EventKpiRecord> eventKpis = new ArrayList<EventKpiRecord>();
 		for(BaseOrg org: orgs) {
-			eventKpis.add(reportingService.getEventKpi(org));
+			eventKpis.add(reportingService.getEventKpi(org, getDateRange()));
 		}
 		return eventKpis;
 	}
 	
+	protected ChartDateRange getDateRange() {
+		return config.getDateRange();
+	}
+
 	private Long getCompletedPercentage(EventKpiRecord record) {
 		if(record.getTotalScheduledEvents() > 0L)
 			return Math.round((record.getCompleted().doubleValue() * 100)/record.getTotalScheduledEvents().doubleValue());

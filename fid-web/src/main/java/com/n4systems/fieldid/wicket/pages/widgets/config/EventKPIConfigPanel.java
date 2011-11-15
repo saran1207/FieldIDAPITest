@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -7,7 +8,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -17,6 +20,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.util.chart.ChartDateRange;
 
 public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfiguration> {
 
@@ -26,6 +30,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
 
     private OrgPicker orgPicker;
     private AjaxButton addOrgButton;
+	private DropDownChoice<ChartDateRange> dateRange;
 
     public EventKPIConfigPanel(String id, final IModel<EventKPIWidgetConfiguration> configModel) {
         super(id, configModel);
@@ -70,8 +75,26 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
             }
         });
         addOrgButton.setOutputMarkupId(true);
+        
+        addConfigElement(dateRange = createDateRangeSelect());
+        
     }
 
+	protected DropDownChoice<ChartDateRange> createDateRangeSelect() {
+        IChoiceRenderer<ChartDateRange> renderer = new IChoiceRenderer<ChartDateRange>() {       
+			@Override public Object getDisplayValue(ChartDateRange object) {
+				return object.getDisplayName();
+			}
+			@Override public String getIdValue(ChartDateRange object, int index) {	
+				return object.name();
+			}
+		};		
+		
+		DropDownChoice<ChartDateRange> d = new DropDownChoice<ChartDateRange>("dateRangeSelect", new PropertyModel<ChartDateRange>(configModel,"dateRange"), Arrays.asList(ChartDateRange.values()), renderer);		
+		d.setNullValid(false);
+		return d;
+	}	        
+    
     private AjaxEventBehavior createDeleteBehavior(final ListItem<BaseOrg> item, final PropertyModel<List<BaseOrg>> orgsListModel) {
         return new AjaxEventBehavior("onclick") {
             @Override

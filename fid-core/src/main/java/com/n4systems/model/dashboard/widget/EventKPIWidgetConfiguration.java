@@ -3,7 +3,10 @@ package com.n4systems.model.dashboard.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
@@ -13,7 +16,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.util.chart.ChartDateRange;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "widget_configurations_event_kpi")
 @PrimaryKeyJoinColumn(name="id")
@@ -26,10 +31,14 @@ public class EventKPIWidgetConfiguration extends WidgetConfiguration {
     @IndexColumn(name="orderIdx")
     private List<BaseOrg> orgs = new ArrayList<BaseOrg>();
 
+	@Enumerated(EnumType.STRING)
+	@Column(name="date_range", nullable=false)	    
+	private ChartDateRange dateRange = ChartDateRange.THIS_WEEK;
+    
     public List<BaseOrg> getOrgs() {
         return orgs;
     }
-
+    
     public void setOrgs(List<BaseOrg> orgs) {
         this.orgs = orgs;
     }
@@ -38,7 +47,16 @@ public class EventKPIWidgetConfiguration extends WidgetConfiguration {
     public EventKPIWidgetConfiguration copy() {
         EventKPIWidgetConfiguration copy = (EventKPIWidgetConfiguration) super.copy();
         copy.setOrgs(new ArrayList<BaseOrg>(orgs));
+		copy.setDateRange(getDateRange());        
         return copy;
     }
+
+	public void setDateRange(ChartDateRange dateRange) {
+		this.dateRange = dateRange;
+	}
+
+	public ChartDateRange getDateRange() {
+		return dateRange;
+	}
 
 }

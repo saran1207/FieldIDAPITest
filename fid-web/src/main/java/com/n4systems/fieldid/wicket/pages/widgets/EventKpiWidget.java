@@ -36,7 +36,7 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 			add(message);
 			arrow.setVisible(true);
 		} else {
-			add(new EventKpiTable("eventKpiContent", orgList));
+			add(new EventKpiTable("eventKpiContent", orgList, getWidgetDefinition().getObject().getConfig() ));
 			arrow.setVisible(false);
 		}
 	}
