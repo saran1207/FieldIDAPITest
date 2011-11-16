@@ -61,7 +61,7 @@ public class LocationPicker extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 locationPickerContainer.setVisible(true);
                 target.addComponent(LocationPicker.this);
-                target.appendJavascript("translate($('" + locationPickerContainer.getMarkupId() + "'), $('" + chooseLink.getMarkupId() + "'), 0, 0);");
+                target.appendJavascript("translate($('#" + locationPickerContainer.getMarkupId() + "'), $('#" + chooseLink.getMarkupId() + "'), 0, 0);");
             }
         });
         chooseLink.setOutputMarkupPlaceholderTag(true);
