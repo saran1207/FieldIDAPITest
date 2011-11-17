@@ -37,6 +37,7 @@ import com.n4systems.util.views.TableView;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -556,6 +557,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		this.fileId = fileId;
 	}
 
+    @SkipValidation
 	public String doConfirmDownloadName() {
 
 		downloadLink = loadDownloadLink();
