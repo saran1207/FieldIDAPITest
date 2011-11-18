@@ -54,10 +54,11 @@ public abstract class DBTestCase {
                 TenantCleaner cleaner = new TenantCleaner(transaction.getEntityManager());
                 cleaner.cleanTenants(TEST_TENANT_NAMES);
                 cleaner.cleanTenants(TEST_CREATED_TENANT_NAMES);
-                
+
                 Query q = transaction.getEntityManager().createQuery("from " + Tenant.class.getName() + " where name in (:tenantNames)");
                 q.setParameter("tenantNames", Arrays.asList(TEST_CREATED_TENANT_NAMES));
                 for (Tenant t : (List<Tenant>)q.getResultList()) {
+                    transaction.getEntityManager().remove(t.getSettings());
                     transaction.getEntityManager().remove(t);
                 }
             }
