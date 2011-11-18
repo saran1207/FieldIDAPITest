@@ -2,7 +2,11 @@ package com.n4systems.fieldid.wicket.pages;
 
 import java.util.List;
 
+import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
+import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
+import com.n4systems.model.ui.seenit.SeenItItem;
 import org.apache.wicket.Component;
+import org.apache.wicket.RedirectToUrlException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.StringHeaderContributor;
@@ -29,6 +33,7 @@ import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.services.dashboard.DashboardService;
+import rfid.web.helper.SessionUser;
 
 @SuppressWarnings("serial")
 public class DashboardPage extends FieldIDFrontEndPage {
@@ -48,6 +53,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
     IModel<DashboardLayout> currentLayoutModel;
 
 	public DashboardPage() {
+        redirectToSetupWizardIfNecessary();
         add(CSSPackageResource.getHeaderContribution("style/dashboard/dashboard.css"));
         add(CSSPackageResource.getHeaderContribution("style/dashboard/widgetconfig.css"));
        	add(JavascriptPackageResourceIE.getHeaderContribution("javascript/flot/excanvas.min.js"));
@@ -185,6 +191,15 @@ public class DashboardPage extends FieldIDFrontEndPage {
     public static class DashboardColumnContainer extends WebMarkupContainer {
         public DashboardColumnContainer(String id) {
             super(id);
+        }
+    }
+
+    private void redirectToSetupWizardIfNecessary() {
+        SessionUser sessionUser = getSessionUser();
+        SeenItRegistryImpl seenItRegistry = new SeenItRegistryImpl(new SeenItRegistryDatabaseDataSource(getSessionUser().getId()));
+        boolean shouldRedirect = sessionUser.isAdmin() && !seenItRegistry.haveISeen(SeenItItem.SetupWizard);
+        if (shouldRedirect) {
+            throw new RedirectToUrlException("/quickSetupWizard/startWizard.action");
         }
     }
 
