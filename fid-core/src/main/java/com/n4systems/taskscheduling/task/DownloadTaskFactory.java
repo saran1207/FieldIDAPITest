@@ -12,7 +12,6 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
-import com.n4systems.reporting.EventReportType;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.search.SearchDefiner;
@@ -41,21 +40,6 @@ public class DownloadTaskFactory {
 		task.setSearchDefiner(searchDefiner);
 		task.setColumnTitles(columnTitles);
 		task.setCellHandlers(outputHandlers);
-		
-		return task;
-	}
-	
-	public PrintAllEventCertificatesTask createPrintAllEventCertificatesTask(DownloadLink link, String downloadUrl, EventReportType type, List<Long> eventIds) {
-		PrintAllEventCertificatesTask task = new PrintAllEventCertificatesTask(link, downloadUrl);
-		task.setReportType(type);
-		task.setEventIds(eventIds);
-		
-		return task;
-	}
-	
-	public PrintAllAssetCertificatesTask createPrintAllAssetCertificatesTask(DownloadLink link, String downloadUrl, List<Long> productIds) {
-		PrintAllAssetCertificatesTask task = new PrintAllAssetCertificatesTask(link, downloadUrl);
-		task.setProductIdList(productIds);
 		
 		return task;
 	}

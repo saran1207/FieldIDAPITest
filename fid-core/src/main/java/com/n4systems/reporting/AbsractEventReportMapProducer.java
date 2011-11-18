@@ -6,18 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.n4systems.fieldid.certificate.model.InspectionImage;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.ScoreCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteria;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
-import com.n4systems.services.signature.SignatureService;
-import com.n4systems.util.DoubleFormatter;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import com.n4systems.fieldid.certificate.model.InspectionImage;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
@@ -26,14 +17,22 @@ import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Deficiency;
-import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Event;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.NumberFieldCriteria;
 import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.Observation;
+import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.Recommendation;
+import com.n4systems.model.ScoreCriteriaResult;
+import com.n4systems.model.SelectCriteriaResult;
+import com.n4systems.model.SignatureCriteriaResult;
+import com.n4systems.model.TextFieldCriteriaResult;
+import com.n4systems.model.UnitOfMeasureCriteria;
+import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.DateTimeDefinition;
-import com.n4systems.util.ReportMap;
+import com.n4systems.util.DoubleFormatter;
 
 public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
@@ -84,8 +83,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		return imageList;
 	}
 
-	private ReportMap<String> eventInfoOptions() {
-		ReportMap<String> eventIOMap = new ReportMap<String>(getEvent().getType().getInfoFieldNames().size());
+	private Map<String, Object> eventInfoOptions() {
+		Map<String, Object> eventIOMap = new HashMap<String, Object>();
 		for (String fieldName : getEvent().getType().getInfoFieldNames()) {
 			eventIOMap.put(normalizeString(fieldName), getEvent().getInfoOptionMap().get(fieldName));
 		}
@@ -267,9 +266,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		}
 	}
 
-	protected ReportMap<Object> addProofTestInfoParams(Event event) {
-		ReportMap<Object> proofTestInfo = new ReportMap<Object>();
-		proofTestInfo.putEmpty("proofTest", "peakLoad", "testDuration", "peakLoadDuration");
+	protected Map<String, Object> addProofTestInfoParams(Event event) {
+		Map<String, Object> proofTestInfo = new HashMap<String, Object>();
 		if (event.getProofTestInfo() != null) {
 			proofTestInfo.put("peakLoad", event.getProofTestInfo().getPeakLoad());
 			proofTestInfo.put("testDuration", event.getProofTestInfo().getDuration());

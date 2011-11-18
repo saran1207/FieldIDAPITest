@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -35,7 +37,6 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.util.ReportMap;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
@@ -68,8 +69,8 @@ public class EventSummaryGenerator {
 
 		//List<Long> eventIds = getSearchIds(reportDefiner, user);
 
-		ReportMap<Object> reportMap = criteriaMap(reportDefiner, user.getOwner().getPrimaryOrg(), jasperFile);
-		List<ReportMap<Object>> collection = new ArrayList<ReportMap<Object>>();
+		Map<String, Object> reportMap = criteriaMap(reportDefiner, user.getOwner().getPrimaryOrg(), jasperFile);
+		List<Map<String, Object>> collection = new ArrayList<Map<String, Object>>();
 
 		addImageStreams(reportMap, user.getOwner().getInternalOrg());
 
@@ -84,7 +85,7 @@ public class EventSummaryGenerator {
 				
 				event = eventManager.findAllFields(inspectionId, user.getSecurityFilter());
 
-				ReportMap<Object> eventMap = new ReportMap<Object>();
+				Map<String, Object> eventMap = new HashMap<String, Object>();
 				eventMap.put("date", event.getDate());
 				eventMap.put("referenceNumber", event.getAsset().getCustomerRefNumber());
 				eventMap.put("productType", event.getAsset().getType().getName());
@@ -119,11 +120,11 @@ public class EventSummaryGenerator {
 						? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 				
-				ReportMap<Object> eventReportMap = new EventReportMapProducer(event, dateDefiner).produceMap();
+				Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner).produceMap();
 				eventMap.put("mainInspection", eventReportMap);
 				eventMap.put("product", eventReportMap.get("product"));
 				
-				List<ReportMap<Object>> inspectionResultMaps = new ArrayList<ReportMap<Object>>();
+				List<Map<String, Object>> inspectionResultMaps = new ArrayList<Map<String, Object>>();
 				inspectionResultMaps.add(eventReportMap);
 				
 				for (SubEvent subEvent : event.getSubEvents()) {
@@ -191,8 +192,8 @@ public class EventSummaryGenerator {
 	}
 
 	// XXX - document me
-	private ReportMap<Object> criteriaMap(ReportDefiner reportDefiner, PrimaryOrg primaryOrg, File jasperFile) {
-		ReportMap<Object> reportMap = new ReportMap<Object>();
+	private Map<String, Object> criteriaMap(ReportDefiner reportDefiner, PrimaryOrg primaryOrg, File jasperFile) {
+		Map<String, Object> reportMap = new HashMap<String, Object>();
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
 		reportMap.put("serialNumber", reportDefiner.getIdentifier());
@@ -232,7 +233,7 @@ public class EventSummaryGenerator {
 		return reportMap;
 	}
 
-	private void addImageStreams(ReportMap<Object> params, InternalOrg org) throws ReportException {
+	private void addImageStreams(Map<String, Object> params, InternalOrg org) throws ReportException {
 		InputStream logoImage = resolveCertificateMainLogo(org);
 		InputStream n4LogoImage = getImageFileStream(PathHandler.getCommonImageFile(n4LogoFileName));
 

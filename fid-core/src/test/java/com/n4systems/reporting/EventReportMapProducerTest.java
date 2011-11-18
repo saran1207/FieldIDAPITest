@@ -6,24 +6,25 @@ import static com.n4systems.model.builders.SubEventBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static com.n4systems.model.event.AssignedToUpdate.*;
 import static com.n4systems.reporting.ReportMapEntryMatcher.*;
-import static com.n4systems.reporting.mapbuilders.ReportField.*;
 import static com.n4systems.test.helpers.Asserts.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.Test;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.builders.AssetBuilder;
-import org.junit.Test;
-
 import com.n4systems.model.builders.PredefinedLocationBuilder;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.user.User;
 import com.n4systems.test.helpers.Asserts;
-import com.n4systems.util.ReportMap;
 
 public class EventReportMapProducerTest {
 
@@ -35,11 +36,11 @@ public class EventReportMapProducerTest {
 		Event masterEvent = anEvent().build();
 		SubEvent targetEvent = aSubEvent("bob").withType(eventType).build();
 
-		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
+		Map<String, Object> expectedReportMap = new HashMap<String, Object>();
 		expectedReportMap.put("productLabel", "bob");
 		expectedReportMap.put("type", "test");
 		ReportMapProducer sut = new SubEventReportMapProducer(targetEvent, masterEvent, new DefaultedDateTimeDefiner());
-		ReportMap<Object> actualReportMap = sut.produceMap();
+		Map<String, Object> actualReportMap = sut.produceMap();
 
 		Asserts.assertConatainsExpectedValues(expectedReportMap, actualReportMap);
 	}
@@ -50,11 +51,11 @@ public class EventReportMapProducerTest {
 		Asset targetAsset = AssetBuilder.anAsset().build();
 		Event targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
 
-		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
+		Map<String, Object> expectedReportMap = new HashMap<String, Object>();
 		expectedReportMap.put("productLabel", null);
 		expectedReportMap.put("type", "test");
 		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner());
-		ReportMap<Object> actualReportMap = sut.produceMap();
+		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertConatainsExpectedValues(expectedReportMap, actualReportMap);
 	}
@@ -70,13 +71,13 @@ public class EventReportMapProducerTest {
 
 		targetEvent.setAdvancedLocation(advancedLocation);
 
-		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
+		Map<String, Object> expectedReportMap = new HashMap<String, Object>();
 		expectedReportMap.put("productLabel", null);
 		expectedReportMap.put("type", "test");
 		expectedReportMap.put("predefinedLocationFullName", advancedLocation.getFullName());
 
 		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner());
-		ReportMap<Object> actualReportMap = sut.produceMap();
+		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertConatainsExpectedValues(expectedReportMap, actualReportMap);
 	}
@@ -91,13 +92,13 @@ public class EventReportMapProducerTest {
 
 		targetEvent.setAdvancedLocation(advancedLocation);
 
-		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
+		Map<String, Object> expectedReportMap = new HashMap<String, Object>();
 		expectedReportMap.put("productLabel", null);
 		expectedReportMap.put("type", "test");
 		expectedReportMap.put("predefinedLocationFullName", advancedLocation.getFullName());
 
 		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner());
-		ReportMap<Object> actualReportMap = sut.produceMap();
+		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertConatainsExpectedValues(expectedReportMap, actualReportMap);
 	}
@@ -116,13 +117,13 @@ public class EventReportMapProducerTest {
 
 		targetEvent.setAdvancedLocation(advancedLocation);
 
-		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
+		Map<String, Object> expectedReportMap = new HashMap<String, Object>();
 		expectedReportMap.put("productLabel", null);
 		expectedReportMap.put("type", "test");
 		expectedReportMap.put("predefinedLocationFullName", advancedLocation.getFullName());
 
 		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner());
-		ReportMap<Object> actualReportMap = sut.produceMap();
+		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertConatainsExpectedValues(expectedReportMap, actualReportMap);
 	}
@@ -132,9 +133,9 @@ public class EventReportMapProducerTest {
 		Event event = anEvent().withNoAssignedToUpdate().build();
 
 		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner());
-		ReportMap<Object> actualReportMap = sut.produceMap();
+		Map<String, Object> actualReportMap = sut.produceMap();
 
-		assertThat(actualReportMap, hasReportEntry(equalTo(ASSIGNED_USER.getParamKey()), nullValue()));
+		assertThat(actualReportMap, hasReportEntry(equalTo("assignedUserName"), nullValue()));
 	}
 
 	@Test
@@ -142,9 +143,9 @@ public class EventReportMapProducerTest {
 		Event event = anEvent().withAssignedToUpdate(unassignAsset()).build();
 
 		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner());
-		ReportMap<Object> actualReportMap = sut.produceMap();
+		Map<String, Object> actualReportMap = sut.produceMap();
 
-		assertThat(actualReportMap, hasReportEntry(equalTo(ASSIGNED_USER.getParamKey()), equalTo((Object) "Unassigned")));
+		assertThat(actualReportMap, hasReportEntry(equalTo("assignedUserName"), equalTo((Object) "Unassigned")));
 	}
 
 	@Test
@@ -153,9 +154,9 @@ public class EventReportMapProducerTest {
 		Event event = anEvent().withAssignedToUpdate(assignAssetToUser(namedEmployee)).build();
 
 		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner());
-		ReportMap<Object> actualReportMap = sut.produceMap();
+		Map<String, Object> actualReportMap = sut.produceMap();
 
-		assertThat(actualReportMap, hasReportEntry(equalTo(ASSIGNED_USER.getParamKey()), equalTo((Object) "first last")));
+		assertThat(actualReportMap, hasReportEntry(equalTo("assignedUserName"), equalTo((Object) "first last")));
 	}
 
 }

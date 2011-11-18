@@ -24,19 +24,23 @@ import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
+import com.n4systems.fieldid.service.certificate.CertificateService;
+import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.event.EventFormService;
+import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.event.ScoreService;
 import com.n4systems.fieldid.service.export.ExportService;
 import com.n4systems.fieldid.service.job.JobService;
+import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.search.SearchService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.task.AsyncService;
-import com.n4systems.fieldid.service.task.AsyncTaskFactory;
+import com.n4systems.fieldid.service.task.DownloadLinkService;
 import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
@@ -251,11 +255,6 @@ public class FieldIdAppConfig {
     }
     
     @Bean 
-    public AsyncTaskFactory asyncTaskFactory() {
-    	return new AsyncTaskFactory();
-    }
-    
-    @Bean 
     public DashboardReportingService reportingService() { 
     	return new DashboardReportingService();
     }
@@ -269,4 +268,30 @@ public class FieldIdAppConfig {
     public JsonRenderer jsonRenderer() { 
     	return new JsonRenderer();
     }
+    
+    @Bean
+    public EventScheduleService eventScheduleService() {
+    	return new EventScheduleService();
+    }
+    
+    @Bean
+    public CertificateService certificateService() {
+    	return new CertificateService();
+    }
+    
+    @Bean
+    public PrintAllCertificateService printAllCertificateService() {
+    	return new PrintAllCertificateService();
+    }
+    
+    @Bean
+    public MailService mailService() {
+    	return new MailService();
+    }
+    
+    @Bean
+    public DownloadLinkService downloadLinkService() {
+    	return new DownloadLinkService();
+    }
+    
 }

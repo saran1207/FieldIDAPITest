@@ -3,17 +3,15 @@ package com.n4systems.fieldid.actions.downloaders;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.model.Asset;
-import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
-import com.n4systems.reporting.AssetCertificateGenerator;
-import net.sf.jasperreports.engine.JasperPrint;
-
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.reporting.CertificatePrinter;
+import com.n4systems.fieldid.service.certificate.CertificateService;
+import com.n4systems.model.Asset;
+import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
 
 public class DownloadManufacturerCert extends DownloadAction {
 
@@ -23,14 +21,15 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	private AssetManager assetManager;
 	private Asset asset;
-	private AssetCertificateGenerator certGen;
+	
+	@Autowired
+	private CertificateService certificateGenerator;
 
 	private long linkedAssetId;
 
 	public DownloadManufacturerCert(AssetManager assetManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.assetManager = assetManager;
-		this.certGen = new AssetCertificateGenerator();
 	}
 
 	public String doDownloadLinked() {
@@ -80,9 +79,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	private String generateCertificate() {
 		try {
-			
-			JasperPrint p = certGen.generate(asset, fetchCurrentUser());
-			byte[] pdf = new CertificatePrinter().printToPDF(p);
+			byte[] pdf = certificateGenerator.generateAssetCertificatePdf(asset.getId());
 			
 			fileName = "certificate-" + asset.getIdentifier() + ".pdf";
 			sendFile(new ByteArrayInputStream(pdf));

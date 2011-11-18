@@ -25,8 +25,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.task.AsyncService;
-import com.n4systems.fieldid.service.task.AsyncTaskFactory;
-import com.n4systems.fieldid.service.task.AsyncTaskFactory.AsyncTask;
+import com.n4systems.fieldid.service.task.AsyncService.LegacyAsyncTask;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.model.Event;
 import com.n4systems.model.downloadlink.DownloadLink;
@@ -37,8 +36,7 @@ import com.n4systems.model.utils.StreamUtils;
 public class ExportService extends FieldIdPersistenceService {
 	
 	@Autowired private UserService userService;
-	@Autowired private AsyncService asyncService;
-	@Autowired private AsyncTaskFactory asyncTaskFactory;		
+	@Autowired private AsyncService asyncService;	
 	@Autowired private EventService eventService;
 	@Autowired private PersistenceService persistenceService;
 	
@@ -59,7 +57,7 @@ public class ExportService extends FieldIdPersistenceService {
 
 		final DownloadLink link = persistenceService.find(DownloadLink.class,linkId);
 
-		AsyncTask<?> task = asyncTaskFactory.createTask(new Callable<Void>() {
+		LegacyAsyncTask<?> task = asyncService.createLegacyTask(new Callable<Void>() {
 			@Override public Void call() { 
 				generateEventByTypeExport(link.getFile(), link.getId(), eventTypeId, dateFormat, from, to); 
 				return null;  // Void 

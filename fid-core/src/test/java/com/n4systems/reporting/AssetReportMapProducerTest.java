@@ -3,15 +3,15 @@ package com.n4systems.reporting;
 import static com.n4systems.model.builders.AssetBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static com.n4systems.reporting.ReportMapEntryMatcher.*;
-import static com.n4systems.reporting.mapbuilders.ReportField.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+
+import java.util.Map;
 
 import org.junit.Test;
 
 import com.n4systems.model.Asset;
 import com.n4systems.util.DateTimeDefinition;
-import com.n4systems.util.ReportMap;
 
 
 public class AssetReportMapProducerTest {
@@ -25,9 +25,9 @@ public class AssetReportMapProducerTest {
 		
 		AssetReportMapProducer sut = new AssetReportMapProducer(asset, DEFAULT_DATE_TIME_DEFINITION);
 		
-		ReportMap<Object> reportMap = sut.produceMap();
+		Map<String, Object> reportMap = sut.produceMap();
 		
-		assertThat(reportMap, hasReportEntry(equalTo(ASSIGNED_USER.getParamKey()), equalTo((Object)"first last")));
+		assertThat(reportMap, hasReportEntry(equalTo("assignedUserName"), equalTo((Object)"first last")));
 	}
 	
 	@Test
@@ -36,9 +36,9 @@ public class AssetReportMapProducerTest {
 		
 		AssetReportMapProducer sut = new AssetReportMapProducer(asset, DEFAULT_DATE_TIME_DEFINITION);
 		
-		ReportMap<Object> reportMap = sut.produceMap();
+		Map<String, Object> reportMap = sut.produceMap();
 		
-		assertThat(reportMap, hasReportEntry(equalTo(ASSIGNED_USER.getParamKey()), equalTo((Object)"Unassigned")));
+		assertThat(reportMap, hasReportEntry(equalTo("assignedUserName"), equalTo((Object)"Unassigned")));
 	}
 	
 	

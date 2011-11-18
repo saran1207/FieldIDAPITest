@@ -36,7 +36,7 @@
     -->    
     
     <!--  spring quartz task related beans -->    
-	<task:executor id="executor" pool-size="5"/>	    
+	<task:executor id="executor" pool-size="8" queue-capacity="512" />	    
 	<task:annotation-driven executor="executor"/>
  	<!-- if we use @Scheduled in future, will need to have this XML .... <task:scheduler id="scheduler" pool-size="20"/> -->
 

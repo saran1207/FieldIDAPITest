@@ -6,7 +6,6 @@ import java.util.Date;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.reporting.mapbuilders.ReportField;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
 
@@ -30,7 +29,7 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 		add("inspectionResult", event.getStatus().getDisplayName());
 		add("proofTestInfo", addProofTestInfoParams(event));
 
-		add(ReportField.ASSIGNED_USER.getParamKey(), assignedUserName());
+		add("assignedUserName", assignedUserName());
 
 		fillInDate(event);
 	}

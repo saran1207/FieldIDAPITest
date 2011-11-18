@@ -1,27 +1,29 @@
 package com.n4systems.fieldid.actions.search;
 
-import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.UNASSIGNED_USER;
+import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
-import com.n4systems.fieldid.service.search.columns.dynamic.AssetManagerBackedCommonAssetAttributeFinder;
-import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGroupGenerator;
-import com.n4systems.model.search.ReportConfiguration;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
+import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
+import com.n4systems.fieldid.service.search.columns.dynamic.AssetManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.asset.AssetCountLoader;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.DateHelper;
@@ -38,6 +40,9 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	private AssignedToUserGrouper userGrouper;
 	private LoaderFactory loaderFactory;
 
+	@Autowired
+	private PrintAllCertificateService printAllCertificateService;
+	
 	public AssetSearchAction(final PersistenceManager persistenceManager, final AssetManager assetManager) {
 		super(AssetSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "asset_search"));
 	}
@@ -87,9 +92,7 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 		reportName = String.format("Manufacturer Certificate Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
 
 		try {
-			List<Long> assetIds = getSearchIds();
-
-			downloadLink = getDownloadCoordinator().generateAllAssetCertificates(reportName, getDownloadLinkUrl(), assetIds);
+			downloadLink = printAllCertificateService.generateAssetCertificates(getSearchIds(), getDownloadLinkUrl(), reportName);
 		} catch (Exception e) {
 			logger.error("Failed to print all manufacturer certs", e);
 			addFlashErrorText("error.reportgeneration");

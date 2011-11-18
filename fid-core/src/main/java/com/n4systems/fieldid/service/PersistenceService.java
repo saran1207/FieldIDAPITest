@@ -77,6 +77,12 @@ public class PersistenceService extends FieldIdService {
         Query query = queryBuilder.createQuery(em).setFirstResult(page*pageSize).setMaxResults(pageSize);
         return query.getResultList();
     }
+    
+    @Transactional(readOnly = true)
+	public boolean exists(QueryBuilder<?> queryBuilder) throws InvalidQueryException {
+        boolean exists = queryBuilder.entityExists(em);
+        return exists;
+    }
 
     @Transactional
     public void save(Saveable saveable) {

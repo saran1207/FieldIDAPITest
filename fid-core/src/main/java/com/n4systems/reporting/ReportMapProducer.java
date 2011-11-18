@@ -1,24 +1,25 @@
 package com.n4systems.reporting;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.FieldidDateFormatter;
-import com.n4systems.util.ReportMap;
 
 public abstract class ReportMapProducer {
 
 	protected final DateTimeDefinition dateTimeDefinition;
-	private ReportMap<Object> reportMap = new ReportMap<Object>();
+	private Map<String, Object> reportMap = new HashMap<String, Object>();
 
 	public ReportMapProducer(DateTimeDefinition dateTimeDefinition) {
 		super();
 		this.dateTimeDefinition = dateTimeDefinition;
 	}
 	
-	public ReportMap<Object> produceMap() {
+	public Map<String, Object> produceMap() {
 		addParameters();
 		return reportMap;
 	}

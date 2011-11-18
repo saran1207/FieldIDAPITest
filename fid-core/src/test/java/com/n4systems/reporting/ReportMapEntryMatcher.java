@@ -11,11 +11,9 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import com.n4systems.util.ReportMap;
-
-public class ReportMapEntryMatcher extends TypeSafeMatcher<ReportMap<Object>> {
+public class ReportMapEntryMatcher extends TypeSafeMatcher<Map<String, Object>> {
 	
-	public static Matcher<ReportMap<Object>> hasReportEntry(Matcher<String> key, Matcher<Object> value) {
+	public static Matcher<Map<String, Object>> hasReportEntry(Matcher<String> key, Matcher<Object> value) {
 		return new ReportMapEntryMatcher(key, value);
 	}
 	
@@ -25,7 +23,7 @@ public class ReportMapEntryMatcher extends TypeSafeMatcher<ReportMap<Object>> {
 		matcher = hasEntry(key, value);
 	}
 
-	public boolean matchesSafely(ReportMap<Object> reportMap) {
+	public boolean matchesSafely(Map<String, Object> reportMap) {
         return matcher.matches(reportMap);
     }
 

@@ -3,19 +3,14 @@ package com.n4systems.fieldid.actions.downloaders;
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 
-import com.n4systems.model.Event;
-import com.n4systems.reporting.EventCertificateGenerator;
-import com.n4systems.reporting.EventReportType;
-import net.sf.jasperreports.engine.JasperPrint;
-
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.exceptions.NonPrintableEventType;
+import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
-import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.persistence.PersistenceManager;
-import com.n4systems.persistence.Transaction;
-import com.n4systems.reporting.CertificatePrinter;
+import com.n4systems.model.Event;
+import com.n4systems.reporting.EventReportType;
 
 
 public class DownloadEventCert extends DownloadAction {
@@ -24,6 +19,9 @@ public class DownloadEventCert extends DownloadAction {
 	private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	
 	private EventReportType reportType;
+	
+	@Autowired
+	private CertificateService certificateService;
 	
 	public DownloadEventCert(com.n4systems.ejb.PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -40,34 +38,22 @@ public class DownloadEventCert extends DownloadAction {
 		if(event == null) {
 			addActionError( getText( "error.noevent" ) );
 			return MISSING;
-		} 
-
-		boolean failure = true;
-		Transaction transaction = null;
+		}
+		
 		try {
-			transaction = PersistenceManager.startTransaction();
-			
-			EventCertificateGenerator certGen = new EventCertificateGenerator(new DateTimeDefiner(getUser()));
-			JasperPrint p = certGen.generate(reportType, event, transaction);
-			
-			byte[] pdf = new CertificatePrinter().printToPDF(p);
+			byte[] pdf = certificateService.generateEventCertificatePdf(reportType, event.getId());
 			
 			fileName = constructReportFileName(event);
-
 			sendFile(new ByteArrayInputStream(pdf));
-			failure = false;
 			
-			PersistenceManager.finishTransaction(transaction);
+			return null;
 		} catch(NonPrintableEventType npe) {
 			logger.debug("Cert was non-printable", npe);
-			PersistenceManager.rollbackTransaction(transaction);
 			return "cantprint";
 		} catch(Exception e) {
 			logger.error("Unable to download event cert", e);
-			PersistenceManager.rollbackTransaction(transaction);
+			return ERROR;
 		}
-		
-		return (failure) ? ERROR : null;
 	}
 
 	private String constructReportFileName(Event event) {

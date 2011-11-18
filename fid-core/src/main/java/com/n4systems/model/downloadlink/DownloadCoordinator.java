@@ -10,7 +10,6 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
-import com.n4systems.reporting.EventReportType;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.AssetExportTask;
@@ -18,8 +17,6 @@ import com.n4systems.taskscheduling.task.AutoAttributeExportTask;
 import com.n4systems.taskscheduling.task.CustomerExportTask;
 import com.n4systems.taskscheduling.task.DownloadTaskFactory;
 import com.n4systems.taskscheduling.task.ExcelReportExportTask;
-import com.n4systems.taskscheduling.task.PrintAllAssetCertificatesTask;
-import com.n4systems.taskscheduling.task.PrintAllEventCertificatesTask;
 import com.n4systems.taskscheduling.task.PrintEventSummaryReportTask;
 import com.n4systems.taskscheduling.task.UserExportTask;
 import com.n4systems.util.persistence.search.SearchDefiner;
@@ -54,22 +51,6 @@ public class DownloadCoordinator {
 	public DownloadLink generateExcel(String name, String downloadUrl, SearchDefiner<TableView> searchDefiner, List<String> columnTitles, ExcelOutputHandler[] outputHandlers) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
 		ExcelReportExportTask task = taskFactory.createExcelTask(link, downloadUrl, searchDefiner, columnTitles, outputHandlers);
-		
-		executor.execute(task);
-		return link;
-	}
-	
-	public DownloadLink generateAllEventCertificates(String name, String downloadUrl, EventReportType type, List<Long> eventIds) {
-		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
-		PrintAllEventCertificatesTask task = taskFactory.createPrintAllEventCertificatesTask(link, downloadUrl, type, eventIds);
-		
-		executor.execute(task);
-		return link;
-	}
-	
-	public DownloadLink generateAllAssetCertificates(String name, String downloadUrl, List<Long> assetIds) {
-		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
-		PrintAllAssetCertificatesTask task = taskFactory.createPrintAllAssetCertificatesTask(link, downloadUrl, assetIds);
 		
 		executor.execute(task);
 		return link;

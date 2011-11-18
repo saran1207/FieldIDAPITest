@@ -2,14 +2,13 @@ package com.n4systems.taskscheduling;
 
 import static org.junit.Assert.*;
 
-import com.n4systems.taskscheduling.task.PrintAllEventCertificatesTask;
-import com.n4systems.taskscheduling.task.PrintEventSummaryReportTask;
-import com.n4systems.util.properties.HierarchicalProperties;
-
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+
+import com.n4systems.taskscheduling.task.PrintEventSummaryReportTask;
+import com.n4systems.util.properties.HierarchicalProperties;
 
 public class TaskPoolListInitializerTest {
 	
@@ -34,7 +33,7 @@ public class TaskPoolListInitializerTest {
 		HierarchicalProperties conf = new HierarchicalProperties();
 		conf.setProperty("pool.0.name", poolNames.get(0));
 		conf.setProperty("pool.0.size", String.valueOf(poolSizes.get(0)));
-		conf.setProperty("pool.0.class.0", PrintAllEventCertificatesTask.class.getName());
+		conf.setProperty("pool.0.class.0", Runnable.class.getName());
 		
 		conf.setProperty("pool.1.name", poolNames.get(1));
 		conf.setProperty("pool.1.size", String.valueOf(poolSizes.get(1)));
@@ -84,23 +83,6 @@ public class TaskPoolListInitializerTest {
 		
 		assertNotNull(pool.getExecutor());
 		
-	}
-
-	@SuppressWarnings("unchecked")
-    @Test
-	public void test_init_classes() {
-		TaskPool pool = new TaskPool("name", 1);
-
-		Class<?>[] classes = {PrintAllEventCertificatesTask.class, PrintEventSummaryReportTask.class};
-		
-		HierarchicalProperties conf = new HierarchicalProperties();
-		conf.setProperty("0", classes[0].getName());
-		conf.setProperty("1", classes[1].getName());
-		
-		initializer.initClasses(conf, pool);
-		
-		assertTrue(pool.canExecute((Class<? extends Runnable>)classes[0]));
-		assertTrue(pool.canExecute((Class<? extends Runnable>)classes[1]));
 	}
 
     @Test

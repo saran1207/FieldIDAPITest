@@ -23,8 +23,6 @@ abstract public class SafetyNetworkEventLoader extends SecurityFilteredLoader<Ev
 		this(filter, new NonSecureIdLoader<Event>(Event.class));
 	}
 
-	
-
 	abstract protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Event event);
 	
 	@Override

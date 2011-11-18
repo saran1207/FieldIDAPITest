@@ -2,9 +2,6 @@ package com.n4systems.taskscheduling;
 
 import static org.junit.Assert.*;
 
-import com.n4systems.taskscheduling.task.PrintAllEventCertificatesTask;
-import com.n4systems.taskscheduling.task.PrintEventSummaryReportTask;
-
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.junit.Test;
@@ -17,19 +14,6 @@ public class TaskPoolTest {
 		
 		assertEquals(5, pool.getExecutor().getCorePoolSize());
 		assertEquals(LinkedBlockingQueue.class, pool.getExecutor().getQueue().getClass());
-	}
-	
-	@Test
-	public void test_can_execute() {
-		TaskPool pool = new TaskPool("name", 0);
-		
-		pool.getExecutableTasks().add(PrintAllEventCertificatesTask.class);
-		pool.getExecutableTasks().add(PrintEventSummaryReportTask.class);
-		
-		assertTrue(pool.canExecute(PrintAllEventCertificatesTask.class));
-		assertTrue(pool.canExecute(PrintEventSummaryReportTask.class));
-		
-		assertFalse(pool.canExecute(Thread.class));
 	}
 
 	@Test

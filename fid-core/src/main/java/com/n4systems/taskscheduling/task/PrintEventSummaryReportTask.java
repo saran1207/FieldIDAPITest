@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.List;
 
 
+import com.n4systems.fieldid.service.certificate.CertificatePrinter;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.reporting.CertificatePrinter;
 import com.n4systems.reporting.EventSummaryGenerator;
 import com.n4systems.reporting.ReportDefiner;
 

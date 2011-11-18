@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.actions.search;
 
-import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.UNASSIGNED_USER;
+import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,22 +10,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.fieldid.service.search.columns.EventColumnsService;
-import com.n4systems.fieldid.service.search.columns.dynamic.EventAttributeDynamicGroupGenerator;
-import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGroupGenerator;
-import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.search.ReportConfiguration;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.ejb.legacy.UserManager;
-import com.n4systems.fieldid.service.search.columns.dynamic.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
+import com.n4systems.fieldid.service.search.columns.EventColumnsService;
+import com.n4systems.fieldid.service.search.columns.dynamic.AssetManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.service.search.columns.dynamic.EventAttributeDynamicGroupGenerator;
+import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
@@ -41,6 +41,8 @@ import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.DateHelper;
@@ -70,6 +72,9 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	private List<AssetStatus> statuses;
 	private List<ListingPair> eventJobs;
 	private AssignedToUserGrouper userGrouper;
+	
+	@Autowired
+	private PrintAllCertificateService printAllCertificateService;
 	
 	public EventReportAction(
 			final PersistenceManager persistenceManager,
@@ -155,8 +160,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 
 		try {
 			List<Long> eventIds = sortEventIdsByRowIndex(getContainer().getMultiIdSelection().getSelectedIds());
-			
-			downloadLink = getDownloadCoordinator().generateAllEventCertificates(reportName, getDownloadLinkUrl(), reportType, eventIds);
+			downloadLink = printAllCertificateService.generateEventCertificates(eventIds, reportType, getDownloadLinkUrl(), reportName);
 		} catch(RuntimeException e) {
 			logger.error("Failed to print all event certs", e);
 			addFlashErrorText("error.reportgeneration");
