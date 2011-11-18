@@ -9,8 +9,8 @@ import java.util.zip.ZipOutputStream;
 
 import net.sf.jasperreports.engine.JasperPrint;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.apache.wicket.util.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +20,8 @@ import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.task.AsyncService;
-import com.n4systems.fieldid.service.task.DownloadLinkService;
 import com.n4systems.fieldid.service.task.AsyncService.AsyncTask;
+import com.n4systems.fieldid.service.task.DownloadLinkService;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
