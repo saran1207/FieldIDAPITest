@@ -24,6 +24,7 @@ import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.exceptions.ReportException;
+import com.n4systems.fieldid.service.certificate.ReportCompiler;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
@@ -61,7 +62,12 @@ public class EventSummaryGenerator {
 	
 	public JasperPrint generate(ReportDefiner reportDefiner, List<Long> eventIds, User user) throws ReportException {
 		File jasperFile = PathHandler.getSummaryReportFile(user.getTenant());
-
+		try {
+			new ReportCompiler().compileReports(jasperFile.getParentFile());
+		} catch (JRException e) {
+			throw new ReportException(e);
+		}
+		
 		// check to see if the report exists
 		if (!jasperFile.canRead()) {
 			throw new ReportException("Could not access Jasper File " + jasperFile);
