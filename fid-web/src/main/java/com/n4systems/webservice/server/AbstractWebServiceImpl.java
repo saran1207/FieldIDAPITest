@@ -10,8 +10,6 @@ public abstract class AbstractWebServiceImpl implements AbstractWebService {
 	private Logger logger = Logger.getLogger(AbstractWebServiceImpl.class);
 
 	protected User authenticateUser(AuthBundle authUser) throws WebserviceAuthenticationException {
-		// FIXME DD : need to figure out how to deal with account policy settings.   can web service allow infinite login attempts?		
-		
 		User user = WsServiceLocator.getUser(null /*note : i don't know the tenantId so just passing in null.  not needed*/).
 						findUserByPw(authUser.getTenantName(), authUser.getUserName(), authUser.getPassword());
 				

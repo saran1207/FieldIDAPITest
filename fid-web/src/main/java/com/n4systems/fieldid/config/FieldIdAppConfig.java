@@ -22,6 +22,8 @@ import com.n4systems.ejb.wrapper.EventScheduleManagerEJBContainer;
 import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.ReportServiceHelper;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
@@ -293,5 +295,16 @@ public class FieldIdAppConfig {
     public DownloadLinkService downloadLinkService() {
     	return new DownloadLinkService();
     }
+    
+    @Bean 
+    public AssetService assetService() { 
+    	return new AssetService();
+    }
+    
+    @Bean 
+    public ReportServiceHelper reportServiceHelper() { 
+    	return new ReportServiceHelper();
+    }
+    
     
 }

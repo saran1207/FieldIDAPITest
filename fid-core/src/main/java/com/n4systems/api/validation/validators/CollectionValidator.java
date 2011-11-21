@@ -21,7 +21,6 @@ public class CollectionValidator<T, C extends Collection<T>> implements FieldVal
 		for (T value:fieldValue) {
 			ValidationResult result = validateElement(value, view, fieldName, filter, field, validationContext);
 			if (result.isFailed()) {
-				// FIXME DD : need ability to append error messages here instead of just returning a single value.
 				return result;
 			}
 		}

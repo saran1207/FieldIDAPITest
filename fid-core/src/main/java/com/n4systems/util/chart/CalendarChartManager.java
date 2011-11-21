@@ -64,7 +64,7 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 		}
 		if (!ChartDateRange.FOREVER.equals(range)) { 
 			expected = actual;
-			while (granularity.compare(expected, range.getToCalendar())<=0) {
+			while (granularity.compare(expected, range.getToCalendar())<0) {
 				padding.add(pad(expected));
 				expected=granularity.next(expected);
 			}
@@ -92,7 +92,7 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 		options.xaxis.monthNames = FlotOptions.MONTH_NAMES;  // unless otherwise overridden.
 		switch (granularity) { 
 		case YEAR:
-//			options.xaxis.tickSize = new String[]{"1","year"};  // FIXME DD : BUG! need to generate my own ticks in this case.. flot does't work when you don't have enough years.
+//			options.xaxis.tickSize = new String[]{"1","year"};  // BUG! need to generate my own ticks in this case.. flot does't work when you don't have enough years.
 			options.xaxis.timeformat = "%y";
 			break;
 		case QUARTER:

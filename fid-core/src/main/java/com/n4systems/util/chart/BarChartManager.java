@@ -76,8 +76,7 @@ public class BarChartManager implements ChartManager<String> {
 				series.add(createChartable(chartable,index++));
 			}
 		}
-		series.remove(other);
-		// TODO DD : localize this title.
+		series.remove(other);		
 		Joiner joiner = Joiner.on(", ").skipNulls();
 		series.add(createChartable(OTHER_BAR_NAME, otherTotalValue, index++, joiner.join(otherTooltip)));				
 	}
@@ -89,7 +88,7 @@ public class BarChartManager implements ChartManager<String> {
 		int i = 0;
 		for (Entry<String, Chartable<String>> entry: chartSeries.getEntrySet()) {			
 			StringChartable value = (StringChartable)entry.getValue();
-			options.yaxis.ticks[i][0] = i+"";//(options.bars.barWidth)+"";
+			options.yaxis.ticks[i][0] = i+"";
 			options.yaxis.ticks[i][1] = entry.getValue().getX();
 			options.yaxis.ticks[i][2] = value.getTooltip();
 			i++;

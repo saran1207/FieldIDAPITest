@@ -59,6 +59,7 @@ public class DateUtil {
 
 	public static Calendar getLatestCalendar() {
 		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(0);  // in order to make this not fail in tests (i.e. so it doesnt' create dates just a MS or two apart, we force it to return exact same value every time.
 		calendar.set(Calendar.YEAR, calendar.getMaximum(Calendar.YEAR));
 		return calendar;
 	}	
@@ -82,6 +83,14 @@ public class DateUtil {
 	
 	public static long intervalInWeeks(long delta) {
 		return delta/WEEKINMILLIS;
+	}
+
+	public static Date getDay(int year, int day) {
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(0);
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.DAY_OF_YEAR, day);
+		return c.getTime();
 	}
 	
 }

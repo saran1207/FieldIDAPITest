@@ -50,7 +50,6 @@ public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings
         mountBookmarkablePage("setup/scoreResults", ScoreResultConfigurationPage.class);
 
         mountBookmarkablePage("dashboard", DashboardPage.class);
-        // FIXME DD : remove this by end of iteration...only for development purposes.
         mountBookmarkablePage("reporting", ReportingPage.class);
         mountBookmarkablePage("returnToReport", ReturnToReportPage.class);
         mountBookmarkablePage("savedReport", RunSavedReportPage.class);

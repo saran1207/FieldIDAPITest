@@ -44,8 +44,6 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		
 		assertChecked(false, getHarness().getAssetAssignmentCheckbox());
 		assertChecked(false, getHarness().getManufacturerCertificatesCheckbox());
-		// FIXME DD : this is now broken...test should be updated.  commenting out for now.
-//		assertChecked(false, getHarness().getOrderDetailsCheckbox());
 		assertChecked(true, getHarness().getGpsCaptureCheckbox());
 		
 		assertEquals(dateFormat, getHarness().getDateFormat().getValue());
