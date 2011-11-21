@@ -3,8 +3,10 @@
 			body {
 				text-align: left;
 			}
+
 			.uploadFileForm {
 				background-color: #F5FBFF;
+				height: 21px;				
 			}	
 		</style>
 </head>	
