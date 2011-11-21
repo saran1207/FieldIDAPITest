@@ -643,5 +643,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public TenantSettingsService getTenantSettingsService() {
 		return tenantSettingsService;
 	}
+
+    public boolean isGoogleAnalyticsEnabled() {
+        return ConfigContext.getCurrentContext().getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED);
+    }
     
 }

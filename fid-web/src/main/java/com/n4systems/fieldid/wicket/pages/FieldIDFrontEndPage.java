@@ -59,6 +59,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         super(params);
         setConfigurationProvider(configurationProvider);
 
+        add(new WebMarkupContainer("googleAnalyticsScripts").setRenderBodyOnly(true).setVisible(ConfigContext.getCurrentContext().getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED)));
+
         SessionUser sessionUser = getSessionUser();
 
         addClickTaleScripts();
