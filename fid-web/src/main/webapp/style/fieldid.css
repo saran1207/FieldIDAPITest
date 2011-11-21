@@ -2612,3 +2612,7 @@ inputsWithLegend .legend span {
 	font-size: 12px;
 }
 
+.identifierLabel {
+    display:inline;
+    word-wrap:break-word;
+}

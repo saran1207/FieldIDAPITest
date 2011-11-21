@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup;
 
 import java.util.List;
 
+import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
@@ -24,6 +25,7 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.AssetTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
+import org.apache.wicket.validation.validator.StringValidator;
 
 @SuppressWarnings("serial")
 public class IdentifierOverridesPage extends FieldIDFrontEndPage {
@@ -48,8 +50,17 @@ public class IdentifierOverridesPage extends FieldIDFrontEndPage {
 		        protected void populateItem(ListItem<AssetType> item) {
 		            item.add(new CheckBox("override", new PropertyModel<Boolean>(item.getModel(), "identifierOverridden")));
 		            item.add(new FlatLabel("assetTypeName", new PropertyModel<Boolean>(item.getModel(), "name")));
-		            item.add(new TextField<String>("identifierLabel", new PropertyModel<String>(item.getModel(), "identifierLabel")));
-		            item.add(new TextField<String>("identifierFormat", new PropertyModel<String>(item.getModel(), "identifierFormat")));
+                    TextField<String> labelField = new TextField<String>("identifierLabel", new PropertyModel<String>(item.getModel(), "identifierLabel"));
+                    TextField<String> formatField = new TextField<String>("identifierFormat", new PropertyModel<String>(item.getModel(), "identifierFormat"));
+
+                    labelField.add(new StringValidator.MaximumLengthValidator(250));
+                    formatField.add(new StringValidator.MaximumLengthValidator(250));
+
+                    ValidationBehavior.addValidationBehaviorToComponent(labelField);
+                    ValidationBehavior.addValidationBehaviorToComponent(formatField);
+
+                    item.add(formatField);
+                    item.add(labelField);
 		        }
 		    });
             add(new Button("submitButton"));
