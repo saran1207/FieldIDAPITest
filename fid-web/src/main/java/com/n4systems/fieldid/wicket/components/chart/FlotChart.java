@@ -42,8 +42,7 @@ public class FlotChart<X> extends Panel {
 
 		public ChartMarkup(String id) {
 			super(id);
-			// TODO DD : don't need to set markup Id explicitly.  remove createNextMarkupId() method.  
-	        setOutputMarkupId(true).setMarkupId(createNextMarkupId());        
+	        setOutputMarkupId(true);        
 	        setOutputMarkupPlaceholderTag(true);
 			add(new AbstractBehavior () {
 				@Override
@@ -68,11 +67,7 @@ public class FlotChart<X> extends Panel {
 				chartSeries.updateOptions(optionsModel.getObject(), i++);
 			}
 		}
-		
-		private String createNextMarkupId() {
-			return "flotChart_"+markupId.getAndIncrement();
-		}		
-		
+				
 	}
 
 }

@@ -18,7 +18,6 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
     private IModel<T> configModel;
     protected OrgPicker orgPicker;
     protected DropDownChoice<ChartDateRange> dateRangeSelect;
-
     
     public OrgDateWidgetConfigPanel(String id, final IModel<T> configModel) {
         super(id, configModel);

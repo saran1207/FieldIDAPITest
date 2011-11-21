@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import com.n4systems.util.chart.FlotOptions.Lines;
+
 
 @SuppressWarnings("serial")
 public class ChartSeries<X> implements Serializable {
@@ -14,8 +16,9 @@ public class ChartSeries<X> implements Serializable {
 
 	// typical json representation might look like this..    { label: "Foo", data: [ [10, 1], [17, -14], [30, 5] ] }	
 	private ChartableMap<X> data = new ChartableMap<X>();
-	public String color;
+	private String color;
 	private String label;
+	private Lines lines = new Lines();
 	
 	// fields NOT included in Json representation.
 	private transient ChartManager<X> chartManager = null;
@@ -128,6 +131,22 @@ public class ChartSeries<X> implements Serializable {
 
 	public String getLabel() {
 		return label;
+	}
+
+	public void setFillColor(String fillColor) {
+		this.lines.fillColor = fillColor;
+	}
+
+	public String getFillColor() {
+		return lines.fillColor;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getColor() {
+		return color;
 	}
 	
 }	 

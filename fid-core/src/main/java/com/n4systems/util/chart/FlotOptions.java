@@ -52,7 +52,7 @@ public class FlotOptions<X> implements Serializable {
     public String tooltipFormat = TOOLTIP_WITH_DAY;
 	
 	
-	public class Lines implements Serializable { 
+	public static class Lines implements Serializable { 
 		public Boolean show;
 		public Boolean fill;
 		public String fillColor;
@@ -60,13 +60,13 @@ public class FlotOptions<X> implements Serializable {
 		public Integer lineWidth;
 	}
 	
-	public class Points  implements Serializable { 
+	public static class Points  implements Serializable { 
 		public Boolean show;
 		public String symbol = "circle";
 		public Integer radius = 3;
 	}
 	
-	public class Axis implements Serializable  {
+	public static class Axis implements Serializable  {
 		public Long[] panRange;
 		public Long min;
 		public String mode;
@@ -81,7 +81,7 @@ public class FlotOptions<X> implements Serializable {
 		public String[] tickSize;		
 	}
 	
-	public class Grid implements Serializable  {
+	public static class Grid implements Serializable  {
 		public Boolean hoverable;
 		public Boolean clickable;	
 		public String colour;
@@ -91,11 +91,11 @@ public class FlotOptions<X> implements Serializable {
 		public Integer borderWidth = 1; 
 	}
 	
-	public class Pan implements Serializable  { 
+	public static class Pan implements Serializable  { 
 		public Boolean interactive;
 	}
 	
-	public class Series implements Serializable {
+	public static class Series implements Serializable {
 		public Long stack;
 		public Lines lines = new Lines();
 		public Bars bars = new Bars();
@@ -103,7 +103,7 @@ public class FlotOptions<X> implements Serializable {
 		public Integer shadowSize;
 	}
 	
-	public class Bars implements Serializable { 
+	public static class Bars implements Serializable { 
 		public Boolean show;
 		public Double barWidth;
 		public Boolean horizontal;
@@ -111,7 +111,7 @@ public class FlotOptions<X> implements Serializable {
 		public Integer lineWidth;
 	}
 	
-	public class Legend implements Serializable { 
+	public static class Legend implements Serializable { 
 		public Boolean show;
 		public String labelFormatter;
 		public String position;

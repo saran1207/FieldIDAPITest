@@ -23,6 +23,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.CompletedEventsReportRecord;
+import com.n4systems.services.reporting.EventCompletenessReportRecord;
 import com.n4systems.services.reporting.EventKpiRecord;
 import com.n4systems.services.reporting.EventScheduleStatusCount;
 import com.n4systems.services.reporting.UpcomingScheduledEventsRecord;
@@ -183,7 +184,36 @@ public class EventService extends FieldIdPersistenceService {
 		eventKpiRecord.setFailed(failedCount);
 		
 		return eventKpiRecord;
-	}			
-    
+	}
+
+	public List<EventCompletenessReportRecord> getEventCompleteness(ChartGranularity granularity, Date fromDate, Date toDate, BaseOrg org) {
+		return getEventCompleteness(null, granularity, fromDate, toDate, org); 
+	}
+
+	public List<EventCompletenessReportRecord> getEventCompleteness(ScheduleStatus status, ChartGranularity granularity, 
+			Date fromDate, Date toDate, BaseOrg org) {
+		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(EventSchedule.class, securityContext.getUserSecurityFilter());
+		
+		NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);
+		List<String> args = Lists.newArrayList("COUNT(*)");
+		args.addAll(reportServiceHelper.getSelectConstructorArgsByGranularity("nextDate", granularity));
+		select.setConstructorArgs(args);
+		builder.setSelectArgument(select);
+		
+		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");		
+		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "from", "nextDate", fromDate, null, ChainOp.AND));
+		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "nextDate", toDate, null, ChainOp.AND));
+		builder.addWhere(filterGroup);
+		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"nextDate"));		
+		if (org!=null) { 
+			builder.addSimpleWhere("owner.id", org.getId());
+		}
+		if (status!=null) { 
+			builder.addSimpleWhere("status", status);
+		}
+		builder.addOrder("nextDate");
+		
+		return persistenceService.findAll(builder);	
+	}			    
     
 }

@@ -5,6 +5,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.AssetsStatusWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
@@ -18,6 +19,7 @@ public enum WidgetType implements Listable<String> {
     ASSETS_STATUS("Assets By Status", AssetsStatusWidgetConfiguration.class),
     UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", UpcomingEventsWidgetConfiguration.class),
     ASSETS_IDENTIFIED("Assets Identified", AssetsIdentifiedWidgetConfiguration.class),
+    EVENT_COMPLETENESS("Event Completeness", EventCompletenessWidgetConfiguration.class),
     EVENT_KPI("Event KPIs", EventKPIWidgetConfiguration.class);
 
     private String description;

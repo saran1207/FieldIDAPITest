@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
@@ -96,6 +97,21 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
+	}
+
+	public List<ChartSeries<Calendar>> getEventCompletenessEvents(ChartGranularity granularity, ChartDateRange dateRange, BaseOrg org) {
+		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, dateRange.getFromDate(), dateRange.getToDate(), org);
+		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, dateRange.getFromDate(), dateRange.getToDate(), org);
+		
+		List<ChartSeries<Calendar>> results = Lists.newArrayList();
+		ChartSeries<Calendar> allChartSeries = new ChartSeries<Calendar>("All", allScheduledEvents).withChartManager(new CalendarChartManager(granularity, dateRange));
+		results.add(allChartSeries);
+		ChartSeries<Calendar> completedChartSeries = new ChartSeries<Calendar>("Completed", completedScheduledEvents).withChartManager(new CalendarChartManager(granularity, dateRange));
+		completedChartSeries.setFillColor("#339933");
+		completedChartSeries.setColor("#55aa55");
+		results.add(completedChartSeries);
+		
+		return results;		
 	}		
 	
 }
