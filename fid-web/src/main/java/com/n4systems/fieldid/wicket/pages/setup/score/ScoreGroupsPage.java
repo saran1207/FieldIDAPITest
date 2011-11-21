@@ -57,19 +57,9 @@ public class ScoreGroupsPage extends FieldIDFrontEndPage {
         groupsAndScoresContainer.add(new ScoreGroupsListPanel("scoreGroups", scoreGroupsForTenant) {
             @Override
             protected void onScoreGroupSelected(IModel<ScoreGroup> model, AjaxRequestTarget target) {
-                if (model == null) {
-                    // clearing the selected score group
-                    scoreGroupPanel.setVisible(false);
-                } else {
-                    groupsAndScoresContainer.remove("scoreGroup");
-                    groupsAndScoresContainer.add(new ScoreGroupPanel("scoreGroup", model));
-                }
+                groupsAndScoresContainer.remove("scoreGroup");
+                groupsAndScoresContainer.add(new ScoreGroupPanel("scoreGroup", model));
 
-                
-                // DD : change this to visibility and setting model instead of creating every time???
-//                groupsAndScoresContainer.setDefaultModelObject(model);
-//                groupsAndScoresContainer.setVisible(true);
-                
                 target.addComponent(groupsAndScoresContainer);
                 target.addComponent(feedbackPanel);
             }

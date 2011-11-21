@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -49,8 +50,10 @@ public class ScoreGroupsListPanel extends Panel {
                     protected void onDeleteButtonClicked(AjaxRequestTarget target) {
                         persistenceService.archive(item.getModelObject());
                         if (item.getIndex() == currentlySelectedIndex) {
-                            onScoreGroupSelected(null, target);
+                            onScoreGroupSelected(new Model<ScoreGroup>(null), target);
                             currentlySelectedIndex = -1;
+                        } else if (currentlySelectedIndex != -1 && item.getIndex() < currentlySelectedIndex) {
+                            currentlySelectedIndex = currentlySelectedIndex - 1;
                         }
                         scoreGroupsModel.detach();
                         target.addComponent(ScoreGroupsListPanel.this);
