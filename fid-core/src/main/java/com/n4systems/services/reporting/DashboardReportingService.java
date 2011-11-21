@@ -10,6 +10,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
@@ -32,6 +33,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
     public List<ChartSeries<Calendar>> getAssetsIdentified(ChartDateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
+		Preconditions.checkArgument(dateRange!=null);
 		List<AssetsIdentifiedReportRecord> results = assetService.getAssetsIdentified(granularity, dateRange.getFromDate(), dateRange.getToDate(), owner);
         return Lists.newArrayList(new ChartSeries<Calendar>(results).withChartManager(new CalendarChartManager(granularity, dateRange)));
     }
@@ -39,6 +41,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
     public List<ChartSeries<Calendar>> getUpcomingScheduledEvents(Integer period, BaseOrg owner) {
+		Preconditions.checkArgument(period!=null);		
 		List<UpcomingScheduledEventsRecord> results = eventService.getUpcomingScheduledEvents(period, owner);
 
 		Date today = new PlainDate();
@@ -61,26 +64,29 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ChartSeries<String>> getAssetsStatus(ChartDateRange range, BaseOrg org) {
-		List<AssetsStatusReportRecord> results = assetService.getAssetsStatus(range.getFromDate(), range.getToDate(), org);		
+	public List<ChartSeries<String>> getAssetsStatus(ChartDateRange dateRange, BaseOrg org) {
+		Preconditions.checkArgument(dateRange!=null);		
+		List<AssetsStatusReportRecord> results = assetService.getAssetsStatus(dateRange.getFromDate(), dateRange.getToDate(), org);		
         return Lists.newArrayList(new ChartSeries<String>(results).withChartManager(new BarChartManager(true)));
 	}		
 	
-	public List<ChartSeries<Calendar>> getCompletedEvents(ChartDateRange range, ChartGranularity granularity, BaseOrg org) {
+	public List<ChartSeries<Calendar>> getCompletedEvents(ChartDateRange dateRange, ChartGranularity granularity, BaseOrg org) {
+		Preconditions.checkArgument(dateRange!=null);				
 		List<ChartSeries<Calendar>> results = Lists.newArrayList();
 		
-		List<CompletedEventsReportRecord> completedEvents = eventService.getCompletedEvents(range.getFromDate(), range.getToDate(), org, null, granularity);		
-		results.add(new ChartSeries<Calendar>("All", completedEvents).withChartManager(new CalendarChartManager(granularity, range)));
+		List<CompletedEventsReportRecord> completedEvents = eventService.getCompletedEvents(dateRange.getFromDate(), dateRange.getToDate(), org, null, granularity);		
+		results.add(new ChartSeries<Calendar>("All", completedEvents).withChartManager(new CalendarChartManager(granularity, dateRange)));
 
 		for (Status status:Status.values()) { 
-			completedEvents = eventService.getCompletedEvents(range.getFromDate(), range.getToDate(), org, status, granularity);		
-			results.add(new ChartSeries<Calendar>(status.getDisplayName(), completedEvents).withChartManager(new CalendarChartManager(granularity, range)));
+			completedEvents = eventService.getCompletedEvents(dateRange.getFromDate(), dateRange.getToDate(), org, status, granularity);		
+			results.add(new ChartSeries<Calendar>(status.getDisplayName(), completedEvents).withChartManager(new CalendarChartManager(granularity, dateRange)));
 		}
 				
 		return results;
 	}
 	
 	public EventKpiRecord getEventKpi(BaseOrg owner, ChartDateRange dateRange) {
+		Preconditions.checkArgument(dateRange!=null);				
 		return eventService.getEventKpi(dateRange.getFromDate(), dateRange.getToDate(), owner);
 	}
 

@@ -15,11 +15,6 @@ public class ChartSeries<X> implements Serializable {
 	// typical json representation might look like this..    { label: "Foo", data: [ [10, 1], [17, -14], [30, 5] ] }	
 	private ChartableMap<X> data = new ChartableMap<X>();
 	public String color;
-	private Integer xaxis;
-	private Integer yaxis;
-	private Boolean clickable;
-	private Boolean hoverable;
-	private Integer shadowSize;		
 	private String label;
 	
 	// fields NOT included in Json representation.
@@ -31,7 +26,7 @@ public class ChartSeries<X> implements Serializable {
 	}
 	
 	public ChartSeries(String label, List<? extends Chartable<X>> data) {
-		this.label = label;
+		this.setLabel(label);
 		add(data);
 	}
 	
@@ -125,6 +120,14 @@ public class ChartSeries<X> implements Serializable {
 
 	public void updateOptions(FlotOptions<X> options, int index) { 
 		getChartManager().updateOptions(this, options, index);		
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public String getLabel() {
+		return label;
 	}
 	
 }	 
