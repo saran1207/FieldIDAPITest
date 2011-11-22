@@ -36,7 +36,7 @@
 							var ext =  filename.slice(filename.lastIndexOf('.'));
 							/*jQuery(".attachmentLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ ext });*/
 						</script>
-						<a href="javascript:void(0)"  onclick="$('attached_${attachedFile_index}').remove();return false;"><@s.text name="label.remove"/></a>
+						<a href="javascript:void(0)"  onclick="$('attached_${attachedFile_index}').remove();addUploadFile('${uploadFileType!}', true);return false;"><@s.text name="label.remove"/></a>
 					</div>
 					<div class="commentContainer">
 						<@s.textarea name="attachments[${attachedFile_index}].comments" id="attachments[${attachedFile_index}].comments"  cols="50" rows="3" theme="fieldidSimple"/>
@@ -60,7 +60,7 @@
 				<div id="frame_${uploadedFile_index}" class="fileUpload infoSet">
 					<@s.hidden name="uploadedFiles[${uploadedFile_index}].fileName" />
 					<label>${action.getFileName(uploadedFile.fileName)}</label>
-					<a href="javascript:void(0)" onclick="$('frame_${uploadedFile_index}').remove(); return false;"><@s.text name="label.remove"/></a>
+					<a href="javascript:void(0)" onclick="$('frame_${uploadedFile_index}').remove();addUploadFile('${uploadFileType!}', true);return false;"><@s.text name="label.remove"/></a>
 					<div>
 						<@s.textarea name="uploadedFiles[${uploadedFile_index}].comments" id="uploadedFiles[${uploadedFile_index}].comments"  cols="50" rows="3" theme="fieldidSimple"/>
 					</div>
@@ -73,6 +73,6 @@
 
 <div class="uploadAction">
 	<script type="text/javascript">
-		addUploadFile('${uploadFileType!}');
+		addUploadFile('${uploadFileType!}', false);
 	</script>
 </div>

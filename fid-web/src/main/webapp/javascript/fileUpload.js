@@ -51,8 +51,8 @@ function addUploadFile(type, isRemove) {
 	if (type == undefined) {
 		type = ""; 
 	}
-	
-	if (!isRemove && $$('.assetUploadPreview').size() >= uploadFileLimit) {
+		
+	if (!isRemove && ($$('.assetUploadPreview').size() + 1) >= uploadFileLimit) {
 		return;
 	}
 	
