@@ -71,8 +71,8 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
         if (config instanceof ConfigurationWithGranularity) {
             ConfigurationWithGranularity configurationWithGranularity = (ConfigurationWithGranularity) config;
             configurationWithGranularity.setGranularity(granularity);
+            persistenceService.update(config);
         }
-        persistenceService.update(config);
         this.granularity = granularity;
     }        	
     
@@ -81,8 +81,8 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
         if (config instanceof ConfigurationWithPeriod) {
             ConfigurationWithPeriod configurationWithPeriod = (ConfigurationWithPeriod) config;
             configurationWithPeriod.setPeriod(period);
+            persistenceService.update(config);
         }
-        persistenceService.update(config);
 		this.period = period;
 	}
 
