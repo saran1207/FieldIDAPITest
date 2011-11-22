@@ -104,7 +104,6 @@ public class ChangePasswordCrud extends AbstractCrud {
 	}
 
 	private PasswordPolicy getPasswordPolicy() {
-		// TODO DD : cache this? 
 		return tenantSettingsService.getTenantSettings().getPasswordPolicy();
 	}	
 	

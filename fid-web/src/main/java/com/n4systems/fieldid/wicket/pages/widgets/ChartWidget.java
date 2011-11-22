@@ -3,9 +3,6 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
-import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -16,16 +13,19 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 import com.n4systems.util.chart.LineGraphOptions;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 @SuppressWarnings("serial")
 public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widget<T> {
@@ -84,6 +84,23 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
             persistenceService.update(config);
         }
 		this.period = period;
+	}
+	
+	protected String getTooltipFormat(ChartGranularity granularity) {
+		switch (granularity) { 
+		case DAY:
+		case HOUR:
+			return FlotOptions.TOOLTIP_WITH_DAY;
+		case YEAR:
+			return FlotOptions.TOOLTIP_YEAR;
+		case MONTH:
+		case QUARTER:
+			return FlotOptions.TOOLTIP_WITHOUT_DAY;
+		case WEEK:
+			return FlotOptions.TOOLTIP_WEEK;
+		default: 
+			return FlotOptions.TOOLTIP_WITH_DAY;				
+		}		
 	}
 
 	@SuppressWarnings("rawtypes")

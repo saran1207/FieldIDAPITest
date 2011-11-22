@@ -37,7 +37,9 @@ public class FlotOptions<X> implements Serializable {
 	public static transient final String[] QUARTER_NAMES = new String[]{"Q1", "Q1", "Q1", "Q2", "Q2", "Q2", "Q3", "Q3", "Q3", "Q4", "Q4", "Q4"};
 	public static transient final String[] MONTH_NAMES = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     public static final String TOOLTIP_WITH_DAY = "<p>{month} {day}, {year}: <b>{y}</b></p>";
-    public static final String TOOLTIP_WITHOUT_DAY = "<p>{month}, {year}: <b>{y}</b></p>";
+    public static final String TOOLTIP_WITHOUT_DAY = "<p>{month} {year}: <b>{y}</b></p>";
+    public static final String TOOLTIP_WEEK = "<p>{month} {day}-{weekEndDay}, {year}: <b>{y}</b></p>";
+    public static final String TOOLTIP_YEAR = "<p>{year}: <b>{y}</b></p>";
 
 	public Series series = new Series();
 	public Lines lines = new Lines();

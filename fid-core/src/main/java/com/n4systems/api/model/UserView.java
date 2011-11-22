@@ -325,8 +325,6 @@ public class UserView extends ExternalModelView {
 	}
 	
 	
-	// TODO DD : refactor this permission related stuff into testable class.
-	
 	public int getPermissions() {
 		// CAVEAT : this defines the permissions as defined in the excel columns but they aren't validated.
 		// ie. it doesn't check to see if the account type actually allows for these permissions.

@@ -59,7 +59,6 @@ public abstract class SerializationHandler<T> {
 		try {
 			return (T) propertyUtils.getProperty(bean, getField().getName());
 		} catch (ClassCastException e) {
-			// TODO DD : print out expected class type.
 			String msg = String.format("Class cast exception getting field.  Property was of type " + property.getClass().getSimpleName(), 
 					getField().getName(), 
 					bean.getClass().getName());
@@ -124,8 +123,6 @@ public abstract class SerializationHandler<T> {
 		return cleanValue;
 	}
 	
-	// TODO DD: this is just short term hack. really, a long term solution would be to register converters for map serialization handler
-	//  so it would know how to handle many different types of objects.
 	protected String cleanStringForMap(Object value) {
 		if (value instanceof Date) { 
 			return Long.toString(((Date)value).getTime());

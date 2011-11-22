@@ -54,7 +54,6 @@ public class JsonRendererTest {
 
 	@Test 
 	public void testRender_CustomMapSerializer() {
-		// TODO DD : add code to jsonRenderer to register adapters. (currently all done at construction time...makes it difficult to test).
 		FooBar bean = new FooBar();
 		gb.registerTypeAdapter(ImmutableMap.class, new TestSerializer());
 		Gson gson = gb.create();

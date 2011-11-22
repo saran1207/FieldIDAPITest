@@ -14,8 +14,6 @@ public class ParentOrgResolutionValidator implements FieldValidator {
 	@Override
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, SerializableField field, Map<String, Object> validationContext) {
 		
-		// TODO DD : make a "HasParentOrg" interface to avoid this casting...also used by user import so this code needs to be shared among views.
-		
 		FullExternalOrgView orgView = (FullExternalOrgView)view;
 		if (!orgView.isCustomer()) {
 			// this validation only applies to the customer

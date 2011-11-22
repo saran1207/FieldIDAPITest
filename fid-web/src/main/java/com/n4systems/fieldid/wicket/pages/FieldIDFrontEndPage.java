@@ -199,7 +199,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
     }
 
     
-    // TODO DD : can we use a springleton to solve this? would make it much more testable an
 	protected ConfigurationProvider getConfigurationProvider() {
 		if (configurationProvider==null) { 
 			configurationProvider = ConfigContext.getCurrentContext(); 

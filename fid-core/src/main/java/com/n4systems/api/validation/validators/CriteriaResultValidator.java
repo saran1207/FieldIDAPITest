@@ -126,7 +126,6 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 	}
 
 	private ValidationResult validateDateField(DateFieldCriteria criteria, CriteriaSection section, CriteriaResultView value) {
-		// TODO DD : should i allow null dates to pass? 
 		return (value.getResult()==null || value.getResult() instanceof Date ) ? 
 				ValidationResult.pass() : 
 				ValidationResult.fail(FieldValidator.CriteriaValidatorDateFail, value.getResult(), criteria.getDisplayName());

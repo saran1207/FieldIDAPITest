@@ -24,8 +24,6 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class EntityManagerBackedUserManagerTest {
 
-	// TODO DD : add tests for all methods. currently only has tests for recently added method "findUserByPw()".
-	
 	
 	@SuppressWarnings("unchecked")
 	private QueryBuilder<User> queryBuilder = createMock(QueryBuilder.class);  

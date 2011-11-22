@@ -43,10 +43,7 @@ public class ExampleUserExportAction extends AbstractDownloadAction {
 		view.setIdentifyAssets(Y);
 		view.setEditEvents(Y);
 		view.setCreateEvents(Y);
-		// TODO DD : need to use consistent terms....one of AccountType or UserType. not sure which one is "gooder".
 		view.setAccountType(UserType.FULL.getLabel());
-		// note : only populate required fields...leave the other ones blank.
-		
 		return view;
 	}
 	

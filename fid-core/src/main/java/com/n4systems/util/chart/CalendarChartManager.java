@@ -89,10 +89,9 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 			return;
 		}
 		options.xaxis.minTickSize = null;
-		options.xaxis.monthNames = FlotOptions.MONTH_NAMES;  // unless otherwise overridden.
+		options.xaxis.monthNames = FlotOptions.MONTH_NAMES;
 		switch (granularity) { 
 		case YEAR:
-//			options.xaxis.tickSize = new String[]{"1","year"};  // BUG! need to generate my own ticks in this case.. flot does't work when you don't have enough years.
 			options.xaxis.timeformat = "%y";
 			break;
 		case QUARTER:

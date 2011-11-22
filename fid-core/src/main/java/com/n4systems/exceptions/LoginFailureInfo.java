@@ -38,7 +38,7 @@ public class LoginFailureInfo {
 	}
 	
 	public boolean requiresLocking() { 
-		return attempts>=maxAttempts && !isLocked();		// if already locked, skip update. (TODO DD : discuss with matt...should this always update??)
+		return attempts>=maxAttempts && !isLocked();		// if already locked, skip update. 
 	}
 	
 	public boolean isLocked() {

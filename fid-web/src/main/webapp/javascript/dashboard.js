@@ -60,15 +60,19 @@ var chartWidgetFactory = (function() {
 		
 	}			
 
+	/*
+	 * private methods/vars for chartWidgetFactory.
+	 */
+	var MS_PER_DAY = 1000*60*60*24;
+		
 	var dateTooltipContent = function(datapoint, options) { 
 	    var y = datapoint[1].toFixed(options.yaxis.tickDecimals);
         var map = createTooltipVariablesMap(datapoint, options);
         var tooltip = formatTooltip(map, options.tooltipFormat);
-	    return tooltip;//"<p>"+date + ": <b>" +y+ "</b></p>";
+	    return tooltip;
 	};
 	
 	var horizLabelTooltipContent = function(datapoint, options) {
-		// assumes a 0...N list.  otherwise i would have to search ticks list for index.
 	    var value = datapoint[0].toFixed(0);
 	    var index = datapoint[1].toFixed(0);
 	    var label = options.yaxis.ticks[index][1];
@@ -91,17 +95,22 @@ var chartWidgetFactory = (function() {
     function createTooltipVariablesMap(datapoint, options) {
         var monthNames = options.xaxis.monthNames;
         var dateObj = new Date(datapoint[0]);
+        var date2Obj = new Date(datapoint[0]+6*MS_PER_DAY);
         var y = datapoint[1].toFixed(options.yaxis.decimals);
-        var index = datapoint[1].toFixed(0);
+        var weekEndDay = '';
+        if (date2Obj.getUTCMonth()!=dateObj.getUTCMonth()) {
+        	weekEndDay = monthNames[date2Obj.getUTCMonth()] + ' ';
+        }
+        weekEndDay += date2Obj.getUTCDate();
         return {
-            year: dateObj.getFullYear(),
-            month: monthNames[dateObj.getMonth()],
-            day: dateObj.getDate(),
+            year: dateObj.getUTCFullYear(),
+            month: monthNames[dateObj.getUTCMonth()],
+            day: dateObj.getUTCDate(),
+            weekEndDay : weekEndDay,
             y: y
         };
     }
 	
-	// instead of passing id, why not pass reference to element???
 	var create = function(id) { 
 		var widget = chartWidget(id);
 		return widget;

@@ -1,24 +1,11 @@
 package com.n4systems.api.conversion.event;
 
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.*;
 
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaType;
-import com.n4systems.model.DateFieldCriteriaResult;
-import com.n4systems.model.NumberFieldCriteriaResult;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.ScoreCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.*;
 
 
-// TODO DD : what package should this live in? 
-//  also, need to refactor all code that creates criteria results to use this common code.
 public class CriteriaResultFactory {
 	
 	private CriteriaResultPopulator populator;

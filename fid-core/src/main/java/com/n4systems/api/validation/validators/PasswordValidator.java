@@ -30,7 +30,6 @@ public class PasswordValidator implements FieldValidator {
 			PasswordPolicy passwordPolicy = (PasswordPolicy) validationContext.get(PASSWORD_POLICY_KEY);
 			PasswordComplexityChecker passwordComplexityChecker = new PasswordComplexityChecker(passwordPolicy);		
 			
-			// TODO DD : need to generate suitable error message for weak password failures.
 			return passwordComplexityChecker.isValid(password) ? ValidationResult.pass() : ValidationResult.fail("password " + password + " is not strong enough.");				
 		}
 		return ValidationResult.pass();		

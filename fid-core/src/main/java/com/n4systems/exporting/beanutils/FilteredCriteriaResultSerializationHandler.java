@@ -21,7 +21,6 @@ public class FilteredCriteriaResultSerializationHandler extends CollectionSerial
 
 	@Override
 	public boolean handlesField(String title) {
-		// TODO DD : may need a more strict check to validate that section/criteria parsed from title exist. 
 		return (title!=null && title.indexOf(SEPARATOR)!=-1);
 	}
 	

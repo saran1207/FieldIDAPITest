@@ -56,7 +56,6 @@ public class AsyncService extends FieldIdService {
 		private final EntityManager createEntityManager() throws IllegalStateException {
 			EntityManagerFactory emf = getEntityManagerFactory();
 			Preconditions.checkArgument(emf != null, "No EntityManagerFactory specified");
-			// TODO DD : do i need properties when constructing this????
 			Map<String, Object> properties = new HashMap<String, Object>();
 			return (!CollectionUtils.isEmpty(properties) ? emf.createEntityManager(properties) : emf.createEntityManager());
 		}
@@ -65,10 +64,6 @@ public class AsyncService extends FieldIdService {
 			return entityManagerFactory.getObject();
 		}
 
-		// TODO DD : methinks i'd be better off doing this as an around advice aspect that
-		// 1: stores & resets context when thread is executed.
-		// 2: creates a new task to be run immediately when any method in the
-		// AsyncService is called.
 		@Override
 		public final T call() {
 			try {
@@ -93,7 +88,6 @@ public class AsyncService extends FieldIdService {
 
 		private AsyncTask(Callable<T> callable, SecurityContext securityContext) {
 			this.callable = callable;
-			// TODO DD : implement "clone" method for security context.
 			this.tenantSecurityFilter = securityContext.getTenantSecurityFilter();
 			this.userSecurityFilter = securityContext.getUserSecurityFilter();
 		}

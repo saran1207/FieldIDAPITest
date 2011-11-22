@@ -46,17 +46,7 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.LineItem;
-import com.n4systems.model.Order;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.asset.AssetAttachment;
@@ -166,7 +156,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	
-	// TODO DD : change this to use @Autowiring.
 	public AssetCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager, AssetCodeMappingService assetCodeMappingServiceManager,
 			AssetManager assetManager, OrderManager orderManager, ProjectManager projectManager, EventScheduleManager eventScheduleManager, EventManager eventManager) {
 		super(persistenceManager);
@@ -395,7 +384,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return SUCCESS;
 	}
 	
-    // TODO DD : same as above...this is event related code. but this will be refactored into wicket component soon enough...i hope.
 	public Set<Event> getEventsWithLocation() {
     	List<Event> events = getAllEventHelper().getEvents();
     	Set<Event> result = new HashSet<Event>();

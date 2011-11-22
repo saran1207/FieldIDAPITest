@@ -2,10 +2,10 @@ package com.n4systems.fieldid.wicket;
 
 import static org.easymock.EasyMock.*;
 
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.junit.Before;
 
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 
@@ -32,7 +32,6 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 		F fixture = factory.createFixture("id");
 		if (fixture instanceof FieldIDFrontEndPage) {
 			FieldIDFrontEndPage fieldIdPage = fixture;
-			// TODO DD : FIX THIS STATIC METHOD WORKAROUND!   
 			fieldIdPage.setConfigurationProvider(configurationProvider);
 		}
 		return fixture;
@@ -45,7 +44,6 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 		expect(configurationProvider.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT)).andReturn(new Integer(20));
 		replay(configurationProvider);		
 	}
-
 	
 	protected ConfigurationProvider getConfigurationProvider() { 
 		return configurationProvider;

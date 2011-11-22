@@ -12,7 +12,7 @@ public class BarChartManager implements ChartManager<String> {
 	public static final String OTHER_BAR_NAME = "Other";
 	
 	private boolean transpose;
-	private double otherThreshold = 0.02;  // TODO DD : ask matt what proper threshold should be.
+	private double otherThreshold = 0.02; 
 
 	public BarChartManager() { 
 	}

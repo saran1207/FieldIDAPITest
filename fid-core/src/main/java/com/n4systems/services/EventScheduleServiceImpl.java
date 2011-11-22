@@ -22,8 +22,6 @@ public class EventScheduleServiceImpl implements EventScheduleService {
 	@Override
 	public EventSchedule updateSchedule(EventSchedule schedule) {
 		EventSchedule updatedSchedule = persistenceManager.update(schedule);
-		// TODO DD WEB-2157 : when doing multi-add, the touch part is not required (and adds to already long running times). 
-		//    refactor into separate methods for different use cases.
 		updatedSchedule.getAsset().touch();
 		persistenceManager.update(updatedSchedule.getAsset());
 		return updatedSchedule;

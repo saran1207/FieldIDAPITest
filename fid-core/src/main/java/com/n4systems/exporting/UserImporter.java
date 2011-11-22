@@ -112,8 +112,7 @@ public class UserImporter extends AbstractImporter<UserView> {
 	@Override
 	protected void importView(Transaction transaction, UserView view) throws ConversionException {
 		User user = converter.toModel(view, transaction);
-		if (user.getTimeZoneID() == null) { // TODO DD: this responsibility
-											// should be in converter?
+		if (user.getTimeZoneID() == null) { 
 			user.setTimeZoneID(timeZoneId);
 		}
 		saver.saveOrUpdate(user);

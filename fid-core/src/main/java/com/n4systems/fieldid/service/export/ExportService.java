@@ -46,7 +46,6 @@ public class ExportService extends FieldIdPersistenceService {
 	 * suggestions : need to avoid creating runnables, need a DownloadService that handles all the link stuff automatically.  a couple of advices might make things cleaner.
 	 * may need to implement MailManager for this stuff...ask matt.  
 	 * 
-	 * TODO DD : TESTS are needed for this and all composing classes (particularly Excel??Managers).
 	 */
 	
 	@Transactional
@@ -77,7 +76,6 @@ public class ExportService extends FieldIdPersistenceService {
 		persistenceService.save(downloadLink);
 	}		
 
-	// TODO DD : this smells of aop implemention...e.g. @nnotate method as "@Downloadable" which will wrap downloadLink handling.
 	private void generateEventByTypeExport(File file, Long downloadLinkId, Long eventTypeId, String dateFormat, Date from, Date to) {
 		MapWriter mapWriter = null;
 		try {
