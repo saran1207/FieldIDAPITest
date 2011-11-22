@@ -30,7 +30,7 @@ public enum ChartDateRange {
 		
 	public Calendar getToCalendar() { 
 		// exclusive date :  should use <,  NOT <= when comparing against returned value!!!   
-		Calendar calendar = getTimelessIntance();
+		Calendar calendar = DateUtil.getTimelessIntance();
 		switch (this) {
 		case FOREVER: 			
 			return DateUtil.getLatestCalendar();
@@ -68,7 +68,7 @@ public enum ChartDateRange {
 	}
 
 	public Calendar getFromCalendar() {
-		Calendar calendar = getTimelessIntance();
+		Calendar calendar = DateUtil.getTimelessIntance();
 		switch (this) {
 		case FOREVER: 			
 			return DateUtil.getEarliestFieldIdCalendar();
@@ -105,16 +105,6 @@ public enum ChartDateRange {
 			break;
 		}
 		return calendar;
-	}
-
-	// TODO DD : put in dateUtils.
-	private Calendar getTimelessIntance() {		
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.HOUR_OF_DAY, 0);  
-		c.set(Calendar.MINUTE, 0);  
-		c.set(Calendar.SECOND, 0);  
-		c.set(Calendar.MILLISECOND, 0);  		
-		return c;
 	}
 	
 	public Date getToDate() { 

@@ -1,5 +1,7 @@
 package com.n4systems.util.chart;
 
+import com.n4systems.util.time.DateUtil;
+
 
 
 @SuppressWarnings("serial")
@@ -44,26 +46,12 @@ public class SimpleChartManager<X> implements ChartManager<X> {
 			options.lines.lineWidth = null;			
 		}
 		
-		options.xaxis.min = min(options.xaxis.min, getMinX(chartSeries));
+		options.xaxis.min = DateUtil.nullSafeMin(options.xaxis.min, getMinX(chartSeries));
 		if (options.pan.interactive) { 
-			options.xaxis.panRange[0] = min(options.xaxis.panRange[0], getPanMin(chartSeries));
-			options.xaxis.panRange[1] = max(options.xaxis.panRange[1], getPanMax(chartSeries));
+			options.xaxis.panRange[0] = DateUtil.nullSafeMin(options.xaxis.panRange[0], getPanMin(chartSeries));
+			options.xaxis.panRange[1] = DateUtil.nullSafeMax(options.xaxis.panRange[1], getPanMax(chartSeries));
 		}
 		options.points.radius = Math.min(options.points.radius, chartSeries.size()*(index+1)>POINTS_THRESHOLD?2:3);
 	}
-	
-	// ------------------------------------------------------------------------------------------------
-	protected Long max(Long a, Long b) {
-		// will return null if both are null. 
-		return a==null ? b : 
-			b==null ? a : 
-			a.compareTo(b) < 0 ? b : a;  
-	}
-	
-	protected Long min(Long a, Long b) { 
-		return a==null ? b : 
-			b==null ? a :  
-			a.compareTo(b) < 0 ? a : b;  
-	}	
 	
 }

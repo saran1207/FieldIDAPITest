@@ -6,8 +6,7 @@
 
 var chartWidgetFactory = (function() { 
 	
-	/**   TODO DD : rename this file    dashboard.js --->  chartWidget.js   !!!
-	 *    
+	/** 
 	 * widget object returned by factory 
 	 */	
 	function chartWidget(widgetId, opts) {
