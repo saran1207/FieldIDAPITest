@@ -51,7 +51,7 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifie
 
 	@Override
 	protected ChartGranularity getDefaultGranularity() {
-		return ChartGranularity.WEEK;   // range = QUARTER. 
+		return ChartGranularity.WEEK;   
 	}	
 	
 }

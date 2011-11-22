@@ -30,7 +30,7 @@ public class UpcomingEventsWidgetConfiguration extends WidgetConfiguration imple
 	private ChartDateRange dateRange = ChartDateRange.FOREVER;
 
     @Column(name="period", nullable=false)
-    private Integer period;
+    private Integer period = 30;
 	
 	@AllowSafetyNetworkAccess
 	public BaseOrg getOrg() {
@@ -57,11 +57,13 @@ public class UpcomingEventsWidgetConfiguration extends WidgetConfiguration imple
 		return copy;
 	}
 
-    public Integer getPeriod() {
+    @Override
+	public Integer getPeriod() {
         return period;
     }
 
-    public void setPeriod(Integer period) {
+    @Override
+	public void setPeriod(Integer period) {
         this.period = period;
     }
 }

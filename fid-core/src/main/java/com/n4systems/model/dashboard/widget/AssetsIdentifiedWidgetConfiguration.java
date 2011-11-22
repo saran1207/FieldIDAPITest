@@ -32,7 +32,7 @@ public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration imp
 
     @Enumerated(EnumType.STRING)
     @Column(name="granularity", nullable=false)
-    private ChartGranularity granularity;
+    private ChartGranularity granularity = ChartGranularity.WEEK;
 	
 	@AllowSafetyNetworkAccess
 	public BaseOrg getOrg() {
