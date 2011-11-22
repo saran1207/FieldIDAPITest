@@ -26,7 +26,7 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
     
 
     public Widget(String id, IModel<WidgetDefinition<W>> widgetDefinition) {
-        super(id);
+        super(id, widgetDefinition);
         this.widgetDefinition = widgetDefinition;
         setOutputMarkupId(true);
         add(new AttributeAppender("class", new Model<String>(getCssClassWithSuffix("Widget")), " "));

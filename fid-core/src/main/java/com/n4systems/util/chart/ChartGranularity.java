@@ -8,9 +8,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
-
-
-
 public enum ChartGranularity {
 	
 	HOUR(Calendar.HOUR_OF_DAY), DAY(Calendar.DAY_OF_YEAR), WEEK(Calendar.WEEK_OF_YEAR), MONTH(Calendar.MONTH), QUARTER(Calendar.MONTH,3), YEAR(Calendar.YEAR);

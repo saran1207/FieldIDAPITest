@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.util.chart.ChartDateRange;
@@ -18,7 +19,7 @@ import com.n4systems.util.chart.ChartDateRange;
 @Entity
 @Table(name = "widget_configurations_upcoming_events")
 @PrimaryKeyJoinColumn(name="id")
-public class UpcomingEventsWidgetConfiguration extends WidgetConfiguration {
+public class UpcomingEventsWidgetConfiguration extends WidgetConfiguration implements ConfigurationWithPeriod {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "org_id")
@@ -27,6 +28,9 @@ public class UpcomingEventsWidgetConfiguration extends WidgetConfiguration {
 	@Enumerated(EnumType.STRING)
 	@Column(name="date_range", nullable=false)	
 	private ChartDateRange dateRange = ChartDateRange.FOREVER;
+
+    @Column(name="period", nullable=false)
+    private Integer period;
 	
 	@AllowSafetyNetworkAccess
 	public BaseOrg getOrg() {
@@ -52,5 +56,12 @@ public class UpcomingEventsWidgetConfiguration extends WidgetConfiguration {
 		copy.setDateRange(getDateRange());
 		return copy;
 	}
-	
+
+    public Integer getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Integer period) {
+        this.period = period;
+    }
 }
