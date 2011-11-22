@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
@@ -19,8 +18,8 @@ import com.n4systems.fieldid.wicket.components.chart.FlotChart;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.FlotOptions;
 import com.n4systems.util.chart.LineGraphOptions;
 
@@ -103,9 +102,9 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	}
 
 	private Component createFlotChartImpl(String id) {
-		LoadableDetachableModel<List<ChartSeries<X>>> model = new LoadableDetachableModel<List<ChartSeries<X>>>() {
-			@Override protected List<ChartSeries<X>> load() {
-				return getChartSeries();
+		LoadableDetachableModel<ChartData<X>> model = new LoadableDetachableModel<ChartData<X>>() {
+			@Override protected ChartData<X> load() {
+				return getChartData();
 			}
 		};
 		LoadableDetachableModel<FlotOptions<X>> optionsModel = new LoadableDetachableModel<FlotOptions<X>>() {
@@ -121,7 +120,7 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 		return getWidgetDefinition().getObject().getWidgetType().getCamelCase()+"Chart";
 	}
 
-	protected abstract List<ChartSeries<X>> getChartSeries();
+	protected abstract ChartData<X> getChartData();
 	
 	protected FlotOptions<X> createOptions() {
 		LineGraphOptions<X> options = new LineGraphOptions<X>();

@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 import java.util.Calendar;
-import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
@@ -12,9 +11,9 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
+import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.ChartSeries;
 
 @SuppressWarnings("serial")
 public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifiedWidgetConfiguration> {
@@ -31,8 +30,8 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifie
     }
     
 	@Override
-    protected List<ChartSeries<Calendar>> getChartSeries() {
-    	return reportingService.getAssetsIdentified(getChartDateRange(), granularity, getOrg());
+    protected ChartData<Calendar> getChartData() {
+    	return new ChartData<Calendar>(reportingService.getAssetsIdentified(getChartDateRange(), granularity, getOrg()));
     }
 
 	private ChartDateRange getChartDateRange() {

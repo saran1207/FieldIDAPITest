@@ -31,10 +31,7 @@ public class SimpleChartManager<X> implements ChartManager<X> {
 	public void normalize(ChartSeries<X> series) {
 		// do nothing.
 	}
-
 	
-	// TODO DD : refactor this so it gets entire list of chartSeries objects.   doing one at a time loses context.
-	// also, make a proper reset/initialize() method for FlotOptions.
 	@Override
 	public void updateOptions(ChartSeries<X> chartSeries, FlotOptions<X> options, int index) {
 		options.legend.noColumns = index+1;
@@ -52,19 +49,10 @@ public class SimpleChartManager<X> implements ChartManager<X> {
 			options.xaxis.panRange[0] = min(options.xaxis.panRange[0], getPanMin(chartSeries));
 			options.xaxis.panRange[1] = max(options.xaxis.panRange[1], getPanMax(chartSeries));
 		}
-		// TODO DD : should set radius according to pts in viewport, not total points.
 		options.points.radius = Math.min(options.points.radius, chartSeries.size()*(index+1)>POINTS_THRESHOLD?2:3);
-
-// TODO DD : we might want to make lines thinner if more than one chartSeries or if tons of dots...ask matt.		
-//		if (index>0) {
-//			options.points.show = false;
-//			options.lines.lineWidth = 1;
-//		}
 	}
 	
-
 	// ------------------------------------------------------------------------------------------------
-	// TODO DD : put in utils class somewhere? 
 	protected Long max(Long a, Long b) {
 		// will return null if both are null. 
 		return a==null ? b : 

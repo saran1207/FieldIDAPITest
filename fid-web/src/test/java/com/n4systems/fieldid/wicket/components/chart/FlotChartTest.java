@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.components.chart;
 
 import static org.easymock.EasyMock.*;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -20,6 +19,7 @@ import com.n4systems.fieldid.wicket.components.chart.FlotChart.ChartMarkup;
 import com.n4systems.fieldid.wicket.components.chart.FlotChartTest.FlotChartHarness;
 import com.n4systems.fieldid.wicket.components.reporting.results.FieldIdPanelTest;
 import com.n4systems.util.chart.CalendarChartable;
+import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.Chartable;
 import com.n4systems.util.chart.FlotOptions;
@@ -34,8 +34,7 @@ public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<
 	
 	private JsonRenderer jsonRenderer;
 	private Model<FlotOptions<Calendar>> optionsModel;
-	private ArrayList<ChartSeries<Calendar>> newArrayList;
-	private ArrayList<ChartSeries<Calendar>> chartList;
+	private ChartData<Calendar> chartList;
 
 	
 	@Override
@@ -49,7 +48,7 @@ public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<
 	public void test_Render() {
 		optionsModel = new Model<FlotOptions<Calendar>>(new LineGraphOptions<Calendar>());
 		final ChartSeries<Calendar> chartSeries = new ChartSeries<Calendar>(TEST_LABEL, createData());
-		chartList = Lists.newArrayList(chartSeries);		
+		chartList = new ChartData<Calendar>(chartSeries);		
 		expect(jsonRenderer.render(optionsModel.getObject())).andReturn("{options}");
 		expect(jsonRenderer.render(chartList)).andReturn("{chartSeries}");
 		replay(jsonRenderer);
@@ -67,8 +66,8 @@ public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<
 	
 	@Override
 	public FlotChart<Calendar> createFixture(String id) {
-		IModel<List<ChartSeries<Calendar>>> model = new LoadableDetachableModel<List<ChartSeries<Calendar>>>() {
-			@Override protected List<ChartSeries<Calendar>> load() {
+		IModel<ChartData<Calendar>> model = new LoadableDetachableModel<ChartData<Calendar>>() {
+			@Override protected ChartData<Calendar> load() {
 				return chartList;
 			}
 		};

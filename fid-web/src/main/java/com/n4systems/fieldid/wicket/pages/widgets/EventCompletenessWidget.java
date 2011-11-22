@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 import java.util.Calendar;
-import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
@@ -12,9 +11,9 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
+import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.FlotOptions;
 
 @SuppressWarnings("serial")
@@ -32,8 +31,10 @@ public class EventCompletenessWidget extends ChartWidget<Calendar,EventCompleten
 	}
 
 	@Override
-	protected List<ChartSeries<Calendar>> getChartSeries() {
-		return reportingService.getEventCompletenessEvents(granularity, getChartDateRange(), getOrg());
+	protected ChartData<Calendar> getChartData() {
+		ChartData<Calendar> chartData = new ChartData<Calendar>(reportingService.getEventCompletenessEvents(granularity, getChartDateRange(), getOrg()));
+		chartData.get(1).setColor("#60986B");
+		return chartData;
 	}
 	
 	private BaseOrg getOrg() {

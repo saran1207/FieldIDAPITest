@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.chart;
 
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.wicket.behavior.AbstractBehavior;
@@ -13,7 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.FlotOptions;
 import com.n4systems.util.json.JsonRenderer;
 
@@ -27,17 +26,22 @@ public class FlotChart<X> extends Panel {
 
 	private IModel<FlotOptions<X>> optionsModel;
 	
-    public FlotChart(final String id, IModel<List<ChartSeries<X>>> model, IModel<FlotOptions<X>> optionsModel, String css) {
+    public FlotChart(final String id, IModel<ChartData<X>> model, IModel<FlotOptions<X>> optionsModel, String css) {
 		super(id, model);
         this.optionsModel = optionsModel;
         add(new ChartMarkup("flot").add(new AttributeAppender("class", true, new Model<String>(css), " ")));
 	}    	
 	    	
 	@SuppressWarnings("unchecked")
-	private List<ChartSeries<X>> getChartSeries() {
-		return ((List<ChartSeries<X>>)getDefaultModelObject());
+	private ChartData<X> getChartData() {
+		return ((ChartData<X>)getDefaultModelObject());
 	}
-
+	
+	protected void updateOptions(ChartData<X> chartData) {
+		chartData.updateOptions(optionsModel.getObject());
+	}
+	
+	
 	class ChartMarkup extends WebMarkupContainer {
 
 		public ChartMarkup(String id) {
@@ -48,26 +52,20 @@ public class FlotChart<X> extends Panel {
 				@Override
 				public void renderHead(IHeaderResponse response) {
                     optionsModel.detach();
-					updateOptions(getChartSeries());					
+					updateOptions(getChartData());					
 					StringBuffer javascriptBuffer = new StringBuffer();
 					javascriptBuffer.append ("chartWidgetFactory.createWithData('"+getMarkupId() + "'," + 
-							jsonRenderer.render(getChartSeries()) + "," + 
+							jsonRenderer.render(getChartData()) + "," + 
 							jsonRenderer.render(optionsModel.getObject()) +
 					");");
 					response.renderOnDomReadyJavascript(javascriptBuffer.toString());
 				}
 
+
 			});
 			
 		}
 		
-		private void updateOptions(List<ChartSeries<X>> list) {
-			int i = 0;
-			for (ChartSeries<X> chartSeries:list) { 
-				chartSeries.updateOptions(optionsModel.getObject(), i++);
-			}
-		}
-				
 	}
 
 }
