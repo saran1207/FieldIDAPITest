@@ -141,16 +141,15 @@
 			<result name="success" type="freemarker">/templates/html/commentTemplateCrud/commentTemplateList.ftl</result>
 		</action>
 
-		<!-- TODO: get rid of the chain response. -->
 		<action name="commentTemplateEdit" method="loadEdit" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
 			<result name="input" type="freemarker">/templates/html/commentTemplateCrud/commentTemplateForm.ftl</result>
-			<result name="success" type="chain">commentTemplateList</result>
-			<result name="error" type="chain">commentTemplateList</result>
+			<result name="success" type="redirectAction">commentTemplateList</result>
+			<result name="error" type="redirectAction">commentTemplateList</result>
 		</action>
 
 		<action name="commentTemplateRemove" method="remove" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
-			<result name="success" type="chain">commentTemplateList</result>
-			<result name="error" type="chain">commentTemplateList</result>
+			<result name="success" type="redirectAction">commentTemplateList</result>
+			<result name="error" type="redirectAction">commentTemplateList</result>
 		</action>
 
 		<action name="customerShow" method="show" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
