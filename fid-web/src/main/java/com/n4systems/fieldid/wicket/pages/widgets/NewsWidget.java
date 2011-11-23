@@ -7,18 +7,21 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
 
 @SuppressWarnings("serial")
 public class NewsWidget extends Widget<WidgetConfiguration> {
 
-    private WebMarkupContainer fieldIdNews;
+    @SpringBean private ConfigService configService;
 	
+    private WebMarkupContainer fieldIdNews;
+    
     public NewsWidget(String id, WidgetDefinition<WidgetConfiguration> widgetDefinition) {
         super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));
 
@@ -38,7 +41,7 @@ public class NewsWidget extends Widget<WidgetConfiguration> {
 	private String getRssSetUpScript() {
         StringBuffer jsBuffer = new StringBuffer();
         
-        String feed = ConfigContext.getCurrentContext().getString(ConfigEntry.RSS_FEED);
+        String feed = configService.getString(ConfigEntry.RSS_FEED);
 
         jsBuffer.append("$('#"+fieldIdNews.getMarkupId()+"').rssfeed('" + feed + "', {");
         jsBuffer.append("limit: 3, content: false, dateformat: 'D, M d', snippet: false, ");

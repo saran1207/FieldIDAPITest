@@ -1,5 +1,11 @@
 package com.n4systems.fieldid.wicket.model.dashboard;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.wicket.model.IModel;
+
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FieldIDSpringModel;
 import com.n4systems.model.ExtendedFeature;
@@ -7,12 +13,8 @@ import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
-import org.apache.wicket.model.IModel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+@SuppressWarnings("serial")
 public class UnusedWidgetsModel extends FieldIDSpringModel<List<WidgetType>> {
 
     private IModel<DashboardLayout> currentLayoutModel;
@@ -45,5 +47,10 @@ public class UnusedWidgetsModel extends FieldIDSpringModel<List<WidgetType>> {
 
         return types;
     }
+
+    @Deprecated // for testing only.
+	public int indexOf(WidgetType widgetType) {    
+    	return widgetType==null ? -1 : getAvailableWidgetTypes().indexOf(widgetType);
+	}
 
 }

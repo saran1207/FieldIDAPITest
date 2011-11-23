@@ -2,9 +2,6 @@ package com.n4systems.fieldid.wicket.pages;
 
 import java.util.List;
 
-import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
-import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
-import com.n4systems.model.ui.seenit.SeenItItem;
 import org.apache.wicket.Component;
 import org.apache.wicket.RedirectToUrlException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -21,6 +18,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
+import rfid.web.helper.SessionUser;
+
+import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
+import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -32,8 +33,9 @@ import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
+import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.services.dashboard.DashboardService;
-import rfid.web.helper.SessionUser;
+import com.n4systems.util.ConfigurationProvider;
 
 @SuppressWarnings("serial")
 public class DashboardPage extends FieldIDFrontEndPage {
@@ -51,8 +53,13 @@ public class DashboardPage extends FieldIDFrontEndPage {
     private DashboardColumnContainer sortableColumn2;
 
     IModel<DashboardLayout> currentLayoutModel;
+    public DashboardPage() {
+    	this(null);
+    }
 
-	public DashboardPage() {
+	@Deprecated // for testing only... need to find a generic way to override configProvider for all unit tests.
+	public DashboardPage(ConfigurationProvider configProvider) {
+    	super(configProvider);
         redirectToSetupWizardIfNecessary();
         add(CSSPackageResource.getHeaderContribution("style/dashboard/dashboard.css"));
         add(CSSPackageResource.getHeaderContribution("style/dashboard/widgetconfig.css"));
@@ -62,7 +69,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.symbol.min.js"));        
         add(JavascriptPackageResource.getHeaderContribution("javascript/dashboard.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/widget.js"));
-        // override org picker with inline style...ugly but it works.
+        // override org picker with inline style...ugly but it works.  i'd suggest actually changing the default size (which is 450px)
+        // but that would require regression testing.
         add(new StringHeaderContributor("<style type='text/css'>.orgSelector { width : 300px !important; }</style>")); 	
         
         currentLayoutModel = new CurrentLayoutModel();
@@ -194,7 +202,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
         }
     }
 
-    private void redirectToSetupWizardIfNecessary() {
+    protected void redirectToSetupWizardIfNecessary() {
         SessionUser sessionUser = getSessionUser();
         SeenItRegistryImpl seenItRegistry = new SeenItRegistryImpl(new SeenItRegistryDatabaseDataSource(getSessionUser().getId()));
         boolean shouldRedirect = sessionUser.isAdmin() && !seenItRegistry.haveISeen(SeenItItem.SetupWizard);

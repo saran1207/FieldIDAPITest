@@ -14,13 +14,15 @@ import com.n4systems.model.dashboard.WidgetType;
 @SuppressWarnings("serial")
 public class WidgetFactory implements Serializable {
 	
+	public static final String WIDGET_ID = "widget";
+
 	private static final Logger logger = Logger.getLogger(WidgetFactory.class);
 	
 	private Map<WidgetType, Class<? extends Widget>> config = new HashMap<WidgetType, Class<? extends Widget>>();
 
 
 	public Widget createWidget(final WidgetDefinition widgetDefinition) {
-		return createWidget(widgetDefinition, "widget", true);
+		return createWidget(widgetDefinition, WIDGET_ID, true);
 	}		
 	
 	public Widget createWidget(final WidgetDefinition widgetDefinition, String id, boolean checkForLazy) {

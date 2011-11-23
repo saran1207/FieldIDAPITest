@@ -29,6 +29,7 @@ import org.apache.wicket.util.tester.TagTester;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 
+import com.google.common.base.CaseFormat;
 import com.google.common.base.Preconditions;
 
 
@@ -40,26 +41,20 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 	protected static final String COMPONENT_CONTEXT = "panel:";
 		
 	protected WicketTester wicketTester;
+	protected ComponentTestInjector injector;
 	private T harness;
 	private String pathContext;	
-	private ComponentTestInjector injector;
 	
-	protected IApplicationFactory DEFAULT_APPLICATION_FACTORY = new IApplicationFactory() {			
-		@Override public WebApplication createTestApplication(ComponentTestInjector injector) {
-			return new WicketTester.DummyWebApplication();
-		}
-	};
-
 
 	@Before
-	public void setUp() throws Exception { 
+	protected void setUp() throws Exception { 
 		injector = ComponentTestInjector.make();
 	}	
 	
-	public void initializeApplication(IApplicationFactory applicationFactory) {		
-		wicketTester = new WicketTester(applicationFactory.createTestApplication(injector));
+	public void initializeApplication(WebApplication application) {		
+		wicketTester = new WicketTester(application);
 		Application.get().getResourceSettings().addStringResourceLoader(new IStringResourceLoader() {
-			@Override public String loadStringResource(Class<?> clazz, String key, Locale locale, String style) {return key; }			
+			@Override public String loadStringResource(Class<?> clazz, String key, Locale locale, String style) {return key;}			
 			@Override public String loadStringResource(Component component, String key) { return key; }
 		});				
 	}	
@@ -70,8 +65,9 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 	
 	protected abstract T createHarness(String pathContext, IWicketTester wicketTester); 
 	
-	public WicketTest<T,F> wire(Object fieldValue, String fieldName) {
-		injector.wire(fieldName, fieldValue);
+	public WicketTest<T,F> wire(Object bean, String fieldName) {
+		// wire up bean to all fields with given name.  
+		injector.wire(fieldName, bean);
 		return this;
 	}
 
@@ -129,7 +125,6 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 		this.pathContext = pathContext;
 	}
 	
-	// TODO DD : make this take a list of ID's instead of component.
 	protected void assertInvisible(Component component) {
 		assertNull("component should not be visible", component);
 	}
@@ -204,6 +199,17 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 
 	public <M> M wire(Class<M> typeToMock, String fieldName) {
 		M mock = createMock(typeToMock);
+		wire(mock,fieldName);
+		return mock;
+	}	
+
+	protected <M> M wire(Class<M> typeToMock) {
+		M mock = createMock(typeToMock);
+		String fieldName = mock.getClass().getSimpleName();
+		// note : classname will have all that mock gobbledygook appended. let's strip it off. 
+		//   e.g.    User$$EnhancerByCGLIB  -->  User
+		fieldName = fieldName.substring(0, fieldName.indexOf("$$EnhancerByCGLIB"));
+		fieldName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, fieldName);
 		wire(mock,fieldName);
 		return mock;
 	}	

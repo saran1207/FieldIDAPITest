@@ -11,7 +11,7 @@ public abstract class WicketPageTest<T extends WicketHarness, F extends WebPage>
 
 	@Override
 	@Before
-	public void setUp() throws Exception {
+	protected void setUp() throws Exception {
 		super.setUp();
 		setPathContext(PAGE_CONTEXT);
 	}

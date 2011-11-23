@@ -41,7 +41,7 @@ public class WicketHarness {
 		getWicketTester().executeAjaxEvent(getPathFor(ids), "onclick");	
 	}
 
-	public FormTester newFormTester(boolean resolvePath, String id) {	// TODO DD : change this to take a varargs of ids.
+	public FormTester newFormTester(boolean resolvePath, String id) {
 		String path = resolvePath ? getPathFor(id) : id;
 		return getWicketTester().newFormTester(path);
 	}

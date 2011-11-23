@@ -59,8 +59,7 @@ public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<
 		assertClassContains(TEST_CSS, getHarness().getChart());
 		
 		// make sure javascript is rendered.
-		assertInDocument(String.format("chartWidgetFactory.createWithData('%1$s',{chartSeries},{options});", getHarness().getChart().getMarkupId()));
-		
+		assertInDocument(String.format("chartWidgetFactory.createWithData('%1$s',{chartSeries},{options});", getHarness().getChart().getMarkupId()));	
 	}
 	
 	

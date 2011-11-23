@@ -2,10 +2,10 @@ package com.n4systems.fieldid.wicket;
 
 import static org.easymock.EasyMock.*;
 
-import org.apache.wicket.protocol.http.WebApplication;
 import org.junit.Before;
 
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 
@@ -13,18 +13,14 @@ import com.n4systems.util.ConfigurationProvider;
 
 public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldIDFrontEndPage> extends WicketPageTest<T,F> {
 
-	private ConfigurationProvider configurationProvider = createMock(ConfigurationProvider.class);
+	protected ConfigurationProvider configurationProvider = createMock(ConfigurationProvider.class);
 	
 	
 	@Override
 	@Before
 	public void setUp() throws Exception { 
 		super.setUp();
-		initializeApplication(new IApplicationFactory() {			
-			@Override public WebApplication createTestApplication(ComponentTestInjector injector) {
-				return new FieldIdTestableApp(injector);
-			}
-		});
+		initializeApplication(new FieldIdTestableApp(injector));
 	}	
 	  
 	@Override
@@ -36,6 +32,11 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 		}
 		return fixture;
 	}
+	
+	protected void setSessionUser(User user) {
+		FieldIDSession session = (FieldIDSession) getWicketTester().getWicketSession();
+		session.setUser(user);
+	}		
 	
 	protected void expectingConfigurationProvider() {
 		expect(configurationProvider.getString(ConfigEntry.CLICKTALE_START)).andReturn("");
