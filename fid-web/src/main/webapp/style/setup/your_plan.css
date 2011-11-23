@@ -4,7 +4,7 @@ h1 {
 }
 
 .yourPlan, .accountUsage {
-	border: 1px solid #CCCCCC;
+	border: 1px dotted #CCCCCC;
 	padding: 25px 10px 0px;
 }
 
@@ -51,13 +51,13 @@ h1 {
 }
 
 .accountUsage .ui-progressbar {  
-    background: url("../../images/barBackground.png") repeat-x scroll 0 0 transparent;
+    background: url("../../images/barBackground.png") repeat scroll 0 0 transparent;
     border: 1px solid #79C5E5;
     padding: 2px;
 }
 
 .accountUsage .ui-progressbar-value {
-	background: url("../../images/barForeground.png") repeat-x scroll 0 0 #79C5E5;
+	background: url("../../images/barForeground.png") repeat scroll 0 0 #79C5E5;
 }
 
 .accountUsage .ui-progressbar .ui-progressbar-value {
