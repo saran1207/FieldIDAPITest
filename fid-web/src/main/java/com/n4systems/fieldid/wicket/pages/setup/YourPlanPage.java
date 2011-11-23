@@ -81,5 +81,10 @@ public class YourPlanPage extends FieldIDFrontEndPage {
         pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
         return pageLink;
     }
+    
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new FlatLabel(labelId, new FIDLabelModel("title.manage_field_id_plan.plural"));
+    }
 	
 }
