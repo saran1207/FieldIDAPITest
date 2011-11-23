@@ -22,6 +22,7 @@ import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
+import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
@@ -273,10 +274,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		assignedTo = asset.getAssignedUser();
 		
 		if (eventSchedule != null) {
-			eventSchedule.inProgress();
 			try {
+				eventSchedule.inProgress();
 				persistenceManager.update(eventSchedule, getSessionUser().getId());
 				addActionMessageText("message.scheduleinprogress");
+			} catch (InvalidScheduleStateException e) {
+				logger.warn("Schedule has already been completed", e);
+				event = eventSchedule.getEvent();
+				return ERROR;
 			} catch (Exception e) {
 				logger.warn("could not move schedule to in progress", e);
 			}

@@ -1162,6 +1162,10 @@
 
 		<action name="eventAdd" method="add" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="success" type="freemarker">/templates/html/eventCrud/add.ftl</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">event</param>
+				<param name="uniqueID">${eventId}</param>
+			</result>
 		</action>
 
 		<action name="eventCreate" method="create" class="com.n4systems.fieldid.actions.event.EventCrud">
