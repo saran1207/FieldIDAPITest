@@ -1,0 +1,70 @@
+<wicket:extend>
+
+<h1><wicket:message key="label.your_plan"/></h1>
+<div class="yourPlan">
+
+	<div class="infoSet">
+		<label><wicket:message key="label.companyid"/></label>
+		<span class="fieldHolder">
+			<div wicket:id="companyId"></div>
+		</span>
+	</div>
+	
+	<div class="infoSet">
+		<label><wicket:message key="label.your_current_plan"/></label>
+		<span class="fieldHolder">
+			<div wicket:id="planName"></div>
+		</span>
+	</div>
+	
+	<div class="infoSet">
+		<label><wicket:message key="label.account_created"/></label>
+		<span class="fieldHolder">
+			<div wicket:id="createDate"></div>
+		</span>
+	</div>
+	
+</div>
+
+<h1><wicket:message key="label.account_usage"/></h1>
+<div class="accountUsage">
+
+	<div class="infoSet">
+		<label><wicket:message key="label.employee_accounts"/></label>
+		<span class="fieldHolder">
+			<div wicket:id="fullUsersUsage"></div>
+			<div class="usageSummary">
+				<span wicket:id="fullUsersCount"></span>
+				<wicket:message key="label.of"/>
+				<span wicket:id="fullUsersMax"></span>
+			</div>
+		</span>
+	</div>
+
+	<div wicket:id="liteUsersStatusContainer" class="infoSet">
+		<label><wicket:message key="label.lite_user_accounts"/></label>
+		<span class="fieldHolder">
+			<div wicket:id="liteUsersUsage"></div>
+			<div class="usageSummary">
+				<span wicket:id="liteUsersCount"></span>
+				<wicket:message key="label.of"/>
+				<span wicket:id="liteUsersMax"></span>
+			</div>
+		</span>
+	</div>
+
+	<div wicket:id="readonlyUsersStatusContainer" class="infoSet">
+		<label><wicket:message key="label.readonly_user_accounts"/></label>
+		<span class="fieldHolder">
+			<div wicket:id="readonlyUsersUsage"></div>
+			<div class="usageSummary">
+				<span wicket:id="readonlyUsersCount"></span>
+				<wicket:message key="label.of"/>
+				<span wicket:id="readonlyUsersMax"></span>
+			</div>
+		</span>
+	</div>
+
+</div>
+
+</wicket:extend>

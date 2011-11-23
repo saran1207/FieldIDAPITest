@@ -42,6 +42,7 @@ public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings
         mountBookmarkablePage("setup/templates", TemplatesPage.class);
         mountBookmarkablePage("setup/widgets", WidgetsPage.class);
         mountBookmarkablePage("setup/systemSettings", SystemSettingsPage.class);
+        mountBookmarkablePage("setup/yourPlan", YourPlanPage.class);        
         mountBookmarkablePage("setup/identifierOverrides", IdentifierOverridesPage.class);
         mountBookmarkablePage("setup/passwordPolicy", PasswordPolicyPage.class);
         mountBookmarkablePage("setup/accountPolicy", AccountPolicyPage.class);

@@ -6,6 +6,7 @@ public class SettingsPage extends SetupPage {
 
     public SettingsPage() {
         add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
+        add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
     }
 
 }
