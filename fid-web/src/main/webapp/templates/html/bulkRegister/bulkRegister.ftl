@@ -16,6 +16,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/multiAddAsset.js" />"></script>
 	<@n4.includeStyle type="page" href="asset"/>
 	<@n4.includeStyle type="page" href="multiadd"/>
+	<@n4.includeStyle type="page" href="../newCss/event/event_schedule"/>
     <@n4.includeStyle href="vendor" type="page"/>
     <style>
         #steps {
