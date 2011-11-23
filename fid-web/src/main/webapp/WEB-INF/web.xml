@@ -41,7 +41,11 @@
  	</filter>
     <filter-mapping>
         <filter-name>session-in-view</filter-name>
-        <url-pattern>*</url-pattern>
+        <url-pattern>/w/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>session-in-view</filter-name>
+        <url-pattern>/eventTypes.action</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>log-exceptions</filter-name>

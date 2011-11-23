@@ -194,32 +194,30 @@ public class InfoOptionInput {
 		List<InfoOptionInput> inputs = new ArrayList<InfoOptionInput>();
 		if( fieldsToLookFor == null ){ return inputs; }
 		for( InfoFieldBean field : fieldsToLookFor ) {
-			if(!field.isRetired()) {
-				InfoOptionInput input = null;
-				if( options != null ) {	
-					for( InfoOptionBean option : options ) {
-						if( option.getInfoField().getUniqueID().equals( field.getUniqueID() ) ) {
-							input = new InfoOptionInput( option, field );
-							
-							if(option.getInfoField().getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
-								Date utcDate = new Date(Long.parseLong(input.getName()));
-								SessionUserDateConverter dateConverter = user.createUserDateConverter();
-								
-								if (option.getInfoField().isIncludeTime()) {
-									input.setName( dateConverter.convertDateTime(utcDate) );
-								} else {
-									input.setName( dateConverter.convertDate(utcDate) );
-								}
-							}
-							break;
-						}
-					}
-				}
-				if( input == null ) {
-					input = new InfoOptionInput( null, field );
-				}
-				inputs.add( input );
-			}
+            InfoOptionInput input = null;
+            if( options != null && !field.isRetired()) {
+                for( InfoOptionBean option : options ) {
+                    if( option.getInfoField().getUniqueID().equals( field.getUniqueID() ) ) {
+                        input = new InfoOptionInput( option, field );
+
+                        if(option.getInfoField().getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
+                            Date utcDate = new Date(Long.parseLong(input.getName()));
+                            SessionUserDateConverter dateConverter = user.createUserDateConverter();
+
+                            if (option.getInfoField().isIncludeTime()) {
+                                input.setName( dateConverter.convertDateTime(utcDate) );
+                            } else {
+                                input.setName( dateConverter.convertDate(utcDate) );
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            if( input == null ) {
+                input = new InfoOptionInput( null, field );
+            }
+            inputs.add( input );
 		}
 		return inputs;
 	}

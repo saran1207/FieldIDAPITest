@@ -5,13 +5,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SubSelectInClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
 
 public class AssetsByIdOwnerTypeLoader extends ListLoader<Asset> {
 
@@ -27,9 +27,7 @@ public class AssetsByIdOwnerTypeLoader extends ListLoader<Asset> {
 	public List<Asset> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, filter);
 		
-		// search for identifier...
-		builder.addWhere(WhereClauseFactory.create("identifier", identifier));
-		// ...within the org/customer/division.
+		builder.addWhere(new SmartSearchWhereClause(identifier, true, true, true));
 		QueryBuilder<Long> subQueryBuilder = new QueryBuilder<Long>(BaseOrg.class, filter);
 		orgByNameLoader.createQueryForBuilder(subQueryBuilder, filter.getTenantId());
 		subQueryBuilder.setSimpleSelect("id", true);
