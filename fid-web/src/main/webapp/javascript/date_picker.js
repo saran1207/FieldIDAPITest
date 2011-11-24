@@ -1,3 +1,4 @@
+/*
 <!-- Original:  Kedar R. Bhave (softricks@hotmail.com) -->
 <!-- Web Site:  http://www.softricks.com -->
 <!-- This script and many more are available free online at -->
@@ -12,6 +13,7 @@
 <!--   you'll need to change the positioning in the overlib() call to make sure the "over" div gets positioned -->
 <!--   away from all other form fields -->
 <!-- you can get overLIB from: -->
+*/
 //\  overLIB 3.50  --  This notice must remain untouched at all times.
 //\  Copyright Erik Bosrup 1998-2001. All rights reserved.
 //\  By Erik Bosrup (erik@bosrup.com).  Last modified 2001-08-28.
