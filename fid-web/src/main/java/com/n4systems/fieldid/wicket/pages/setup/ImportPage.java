@@ -2,13 +2,13 @@ package com.n4systems.fieldid.wicket.pages.setup;
 
 import java.util.List;
 
+import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
 import com.n4systems.fieldid.wicket.model.AssetTypesForTenantModel;
-import com.n4systems.fieldid.wicket.model.EventTypesForTenantModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 

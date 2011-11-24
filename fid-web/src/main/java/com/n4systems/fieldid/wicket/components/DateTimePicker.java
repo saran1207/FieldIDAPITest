@@ -31,7 +31,7 @@ public class DateTimePicker extends Panel {
     public DateTimePicker(String id, IModel<Date> dateModel, boolean includeTime) {
         super(id);
 
-        setRenderBodyOnly(true);
+        setOutputMarkupId(true);
         addJsAndStylesheets();
 
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
@@ -39,6 +39,7 @@ public class DateTimePicker extends Panel {
         String javaDateFormat = includeTime ? sessionUser.getDateTimeFormat() : sessionUser.getDateFormat();
 
         add(dateTextField = new DateTextField("dateField", dateModel, javaDateFormat));
+        dateTextField.setOutputMarkupId(true);
 
         getDateTextField().setOutputMarkupId(true);
 

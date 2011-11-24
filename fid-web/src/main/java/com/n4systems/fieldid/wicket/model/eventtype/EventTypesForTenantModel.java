@@ -6,6 +6,7 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import com.n4systems.model.eventtype.EventTypeListLoader;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,10 @@ import java.util.List;
 public class EventTypesForTenantModel extends FieldIDSpringModel<List<EventType>> {
 
     private IModel<EventTypeGroup> eventTypeGroupModel;
+
+    public EventTypesForTenantModel() {
+        this(new Model<EventTypeGroup>(null));
+    }
 
     public EventTypesForTenantModel(IModel<EventTypeGroup> eventTypeGroupModel) {
         this.eventTypeGroupModel = eventTypeGroupModel;

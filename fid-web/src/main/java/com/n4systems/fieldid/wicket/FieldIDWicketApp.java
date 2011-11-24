@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -54,6 +55,8 @@ public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings
         mountBookmarkablePage("reporting", ReportingPage.class);
         mountBookmarkablePage("returnToReport", ReturnToReportPage.class);
         mountBookmarkablePage("savedReport", RunSavedReportPage.class);
+
+        mountBookmarkablePage("massSchedule", MassSchedulePage.class);
         
         mountBookmarkablePage("admin/addTenant", AddTenantPage.class);
              

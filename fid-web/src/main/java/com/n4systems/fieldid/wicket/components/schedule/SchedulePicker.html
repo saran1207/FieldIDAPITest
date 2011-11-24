@@ -1,0 +1,65 @@
+<wicket:panel>
+
+    <form wicket:id="scheduleForm">
+
+        <input type="submit" wicket:id="openDialogButton" wicket:message="value:label.addschedule">
+
+        <div wicket:id="scheduleEditorContainer" class="newScheduleForm schedulesAdd">
+
+            <h2>Add a Schedule</h2>
+
+            <div class="infoSet">
+
+                <label class="label">
+                    <wicket:message key="label.what_should_be_scheduled"/>
+                </label>
+
+                <span>
+                    <select wicket:id="eventTypeSelect"></select>
+                </span>
+
+            </div>
+
+            <div class="infoSet">
+
+                <label class="label">
+                    <wicket:message key="label.assign_to_a_job"/>
+                </label>
+
+                <span>
+                    <select wicket:id="jobSelect"></select>
+                </span>
+
+            </div>
+
+            <div class="infoSet">
+
+                <label class="label">
+                    <wicket:message key="label.when_is_it_due"/>
+                </label>
+
+                <span class="fieldHolder">
+                    <div wicket:id="datePicker"></div>
+                </span>
+
+                <span class="dateQuickLinks">
+                    <a wicket:id="quickLinkToday"><wicket:message key="label.today"/></a> |
+                    <a wicket:id="quickLinkTomorrow"><wicket:message key="label.tomorrow"/></a> |
+                    <a wicket:id="quickLinkNextMonth"><wicket:message key="label.next_month"/></a> |
+                    <a wicket:id="quickLinkSixMonths"><wicket:message key="label.in_6_months"/></a> |
+                    <a wicket:id="quickLinkNextYear"><wicket:message key="label.next_year"/></a>
+                </span>
+
+            </div>
+
+            <div class="blockSeparated">
+                <input type="submit" wicket:id="addScheduleButton" wicket:message="value:label.addschedule">
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            </div>
+
+        </div>
+
+    </form>
+
+</wicket:panel>
