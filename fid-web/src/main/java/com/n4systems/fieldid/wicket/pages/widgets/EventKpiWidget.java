@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.wicket.components.dashboard.subcomponents.EventKpiTable;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -20,6 +21,9 @@ import com.n4systems.model.orgs.BaseOrg;
 
 @SuppressWarnings("serial")
 public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
+
+	@SpringBean 
+	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
 	
 	public EventKpiWidget(String id, WidgetDefinition<EventKPIWidgetConfiguration> widgetDefinition) {
         super(id, new Model<WidgetDefinition<EventKPIWidgetConfiguration>>(widgetDefinition));
@@ -36,13 +40,13 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 			add(message);
 			arrow.setVisible(true);
 		} else {
-			add(new EventKpiTable("eventKpiContent", orgList, getWidgetDefinition().getObject().getConfig() ));
+			add(new EventKpiTable("eventKpiContent", orgList, getConfig() ));
 			arrow.setVisible(false);
 		}
 	}
 	
 	private List<BaseOrg> getOrgList() {
-		EventKPIWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
+		EventKPIWidgetConfiguration config = getConfig();
 
 		if(config == null) {
 			return new ArrayList<BaseOrg>();
@@ -51,17 +55,20 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 		}
 	}
 
+	private EventKPIWidgetConfiguration getConfig() {
+		return getWidgetDefinition().getObject().getConfig();
+	}
+
 	@Override
 	protected Component createConfigPanel(String id) {
-		EventKPIWidgetConfiguration configCopy = getWidgetDefinition().getObject().getConfig().copy();
+		EventKPIWidgetConfiguration configCopy = getConfig().copy();
 		IModel<EventKPIWidgetConfiguration> configModel = new Model<EventKPIWidgetConfiguration>(configCopy);
 		return new EventKPIConfigPanel(id, configModel);        
 	}
 	
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		return getRangeSubTitleModel();
+		return orgDateRangeSubtitleHelper.getSubTitleModel(this, null, getConfig().getDateRange());
 	}
-	
 	
 }

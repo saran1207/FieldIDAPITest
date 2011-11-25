@@ -1,5 +1,7 @@
 package com.n4systems.model.orgs;
 
+import javax.persistence.*;
+
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Exportable;
@@ -12,17 +14,6 @@ import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.GlobalID;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "org_base")
@@ -94,6 +85,7 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		}
 	}
 	
+	@Override
 	@AllowSafetyNetworkAccess
     @DenyReadOnlyUsersAccess
 	public String getDisplayName() {
@@ -102,10 +94,27 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	
 	@AllowSafetyNetworkAccess
     @DenyReadOnlyUsersAccess
+	public String getHierarchicalDisplayName() {
+		StringBuffer buff = new StringBuffer();
+		buff.append(getPrimaryOrg().getName());
+		if (getCustomerOrg()!=null) { 
+			buff.append(",").append(getCustomerOrg().getName());			
+		}
+		if (getDivisionOrg()!=null) { 
+			buff.append(" (").append(getDivisionOrg().getName()).append(")");
+		}
+		return buff.toString();		 
+	}
+	
+	
+	@Override
+	@AllowSafetyNetworkAccess
+    @DenyReadOnlyUsersAccess
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String displayName) {
 		this.name = (displayName != null) ? displayName.trim() : null;
 	}
@@ -135,6 +144,7 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		return String.format("%s (%d) [%s]", name, id, String.valueOf(getTenant()));
 	}
 	
+	@Override
 	public int compareTo(BaseOrg other) {
 		int cmp = name.compareToIgnoreCase(other.getName());
 		return (cmp != 0) ? cmp : getId().compareTo(other.getId());
@@ -241,6 +251,7 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		}
 	}
 	
+	@Override
 	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
 		return SecurityLevel.calculateSecurityLevel(fromOrg, this);

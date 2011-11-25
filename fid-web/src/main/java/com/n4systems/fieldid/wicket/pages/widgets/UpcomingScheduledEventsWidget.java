@@ -22,6 +22,9 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar,Upcoming
 	@SpringBean
 	private DashboardReportingService reportingService;
 
+	@SpringBean 
+	private OrgPeriodSubtitleHelper orgPeriodSubtitleHelper;
+	
 	public UpcomingScheduledEventsWidget(String id, WidgetDefinition<UpcomingEventsWidgetConfiguration> widgetDefinition) {
 		super(id, new Model<WidgetDefinition<UpcomingEventsWidgetConfiguration>>(widgetDefinition));			
 		addPeriodButton("7days", 7);
@@ -60,7 +63,7 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar,Upcoming
 
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		return getPeriodOrgSubTitleModel(getOrg());
+		return orgPeriodSubtitleHelper.getSubTitleModel(this, getOrg());
 	}
 	
 }

@@ -59,10 +59,19 @@ public enum ChartDateRange {
 		if (this.equals(FOREVER)) { 
 			return "";
 		} else { 
-			return dateFormatters.get(this).format(getToDate());
+			return dateFormatters.get(this).format(getInclusiveToDate());
 		}
 	}
 	
+	// note that toDate is exclusive.  e.g. for a year 2011
+	// Jan 1, 2011 is from.   and to is Jan 1, 2012.  (not dec 31,11:59:59.9999...)
+	// .: this is used for display reasons 
+	private Date getInclusiveToDate() {
+		Calendar to = getToCalendar();
+		to.add(Calendar.DAY_OF_YEAR, -1);
+		return to.getTime();
+	}
+
 	public Date getFromDate() {
 		return getFromCalendar().getTime();
 	}

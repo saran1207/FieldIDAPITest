@@ -22,6 +22,9 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 	@SpringBean
 	private DashboardReportingService reportingService;
 	
+	@SpringBean 
+	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
+	
     public AssetsStatusWidget(String id, WidgetDefinition<AssetsStatusWidgetConfiguration> widgetDefinition) {
 		super(id, new Model<WidgetDefinition<AssetsStatusWidgetConfiguration>>(widgetDefinition));			
     }
@@ -54,8 +57,8 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		return getRangeOrgSubTitleModel(getOrg());
-	}		
+		return orgDateRangeSubtitleHelper.getSubTitleModel(this, getOrg(), getChartDateRange());
+	}
 	
 }
 

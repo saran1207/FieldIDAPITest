@@ -21,6 +21,9 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifie
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
+
+	@SpringBean 
+	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
 	
     public AssetsIdentifiedWidget(String id, WidgetDefinition<AssetsIdentifiedWidgetConfiguration> widgetDefinition) {
 		super(id, new Model<WidgetDefinition<AssetsIdentifiedWidgetConfiguration>>(widgetDefinition));			
@@ -57,7 +60,7 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifie
 	
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		return getRangeOrgSubTitleModel(getOrg());
+		return orgDateRangeSubtitleHelper.getSubTitleModel(this, getOrg(), getChartDateRange());
 	}
 		
 }

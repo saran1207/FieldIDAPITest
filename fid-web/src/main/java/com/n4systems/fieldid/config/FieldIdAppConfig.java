@@ -49,6 +49,9 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.pages.widgets.OrgDateRangeSubtitleHelper;
+import com.n4systems.fieldid.wicket.pages.widgets.OrgPeriodSubtitleHelper;
+import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
@@ -304,6 +307,16 @@ public class FieldIdAppConfig {
     @Bean 
     public ReportServiceHelper reportServiceHelper() { 
     	return new ReportServiceHelper();
+    }
+    
+    @Bean
+    public OrgSubtitleHelper orgDateRangeSubtitleHelper() {
+    	return new OrgDateRangeSubtitleHelper();
+    }
+    
+    @Bean
+    public OrgPeriodSubtitleHelper orgPeriodSubtitleHelper() {
+    	return new OrgPeriodSubtitleHelper();
     }
     
     

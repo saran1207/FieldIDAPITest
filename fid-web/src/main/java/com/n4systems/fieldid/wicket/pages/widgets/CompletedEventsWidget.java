@@ -23,6 +23,9 @@ public class CompletedEventsWidget extends ChartWidget<Calendar, CompletedEvents
 	@SpringBean
 	private DashboardReportingService reportingService;
 	
+	@SpringBean 
+	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
+	
     public CompletedEventsWidget(String id, WidgetDefinition<CompletedEventsWidgetConfiguration> widgetDefinition) {
 		super(id, new Model<WidgetDefinition<CompletedEventsWidgetConfiguration>>(widgetDefinition));			
         addGranularityButton("year", ChartGranularity.YEAR);
@@ -64,10 +67,10 @@ public class CompletedEventsWidget extends ChartWidget<Calendar, CompletedEvents
 	protected ChartGranularity getDefaultGranularity() {
 		return ChartGranularity.WEEK; 
 	}
-
+	
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		return getRangeOrgSubTitleModel(getOrg());
+		return orgDateRangeSubtitleHelper.getSubTitleModel(this, getOrg(), getChartDateRange());
 	}
 	
 }

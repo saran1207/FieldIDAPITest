@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,14 +34,24 @@ public class WidgetFactory implements Serializable {
 	private Widget createWidget(Class<? extends Widget> clazz, WidgetDefinition widgetDefinition, String id) {		
 		try {
 			Constructor<? extends Widget> constructor = clazz.getDeclaredConstructor(String.class, WidgetDefinition.class);
-			return constructor.newInstance(id, widgetDefinition);			 		
+			return constructor.newInstance(id, widgetDefinition);
+		} catch (InvocationTargetException e) {
+			logger.error(e.getTargetException());
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " can not be created/instantiated");				
+		} catch (IllegalArgumentException e) {
+			logger.error(e);
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " failed because of illegal arguments");
+		} catch (InstantiationException e) {
+			logger.error(e);
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " failed due to instantiation exception");
+		} catch (IllegalAccessException e) {
+			logger.error(e);
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " can not be created/instantiated due to illegal access");
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e); 
-			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " can not be created/instantiated");			
-		}
+			logger.error(e);
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " failed when attempting to create instance.");
+		} 
 	}
-
 
 	@SuppressWarnings("unchecked")
 	private Class<? extends Widget> getWidgetClass(WidgetType type) {
