@@ -1,14 +1,16 @@
 <head>
 	<@n4.includeScript type="text/javascript">
-		$('newSchedule').observe('submit', 
-			function(event) {
-				event.stop();
-				$('newScheduleForm').hide();
-				$('newScheduleForm').relativize();
-				$('schedulesBlankSlate').hide();
-				$('newSchedule').request( getStandardCallbacks() );
-				
+	    document.observe("dom:loaded", function() {
+			$('newSchedule').observe('submit', 
+				function(event) {
+					event.stop();
+					$('newScheduleForm').hide();
+					$('newScheduleForm').relativize();
+					$('schedulesBlankSlate').hide();
+					$('newSchedule').request( getStandardCallbacks() );
 			});			
+		});
+	
 	</@n4.includeScript>
 	
 	<@n4.includeScript src="schedulePickerDates"/>
