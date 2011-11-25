@@ -94,6 +94,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	}
 
 	public List<ChartSeries<Calendar>> getEventCompletenessEvents(ChartGranularity granularity, ChartDateRange dateRange, BaseOrg org) {
+		Preconditions.checkArgument(dateRange!=null);				
 		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, dateRange.getFromDate(), dateRange.getToDate(), org);
 		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, dateRange.getFromDate(), dateRange.getToDate(), org);
 		

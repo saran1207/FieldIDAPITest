@@ -14,6 +14,7 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
@@ -135,11 +136,45 @@ public class DashboardReportingServiceTest {
 		assertEquals(Status.FAIL.getDisplayName(), results.get(2).getLabel());
 		assertEquals(Status.NA.getDisplayName(), results.get(3).getLabel());
 	}
+		
+	@Test 
+	public void test_EventCompleteness() { 
+		ChartGranularity granularity = ChartGranularity.WEEK;
+		ChartDateRange dateRange = ChartDateRange.LAST_MONTH;
+		BaseOrg org = OrgBuilder.aDivisionOrg().build();
+		
+		List<EventCompletenessReportRecord> completedEvents = createEventCompletenessResults(21L);
+		List<EventCompletenessReportRecord> allEvents = Lists.newArrayList();
+		allEvents.addAll(completedEvents);
+		allEvents.addAll(createEventCompletenessResults(888L, 574L, 924L));
+		expect(eventService.getEventCompleteness(granularity, dateRange.getFromDate(), dateRange.getToDate(), org)).andReturn(allEvents);
+		expect(eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, dateRange.getFromDate(), dateRange.getToDate(), org)).andReturn(completedEvents);
+		replay(eventService);
+		
+		List<ChartSeries<Calendar>> results = fixture.getEventCompletenessEvents(granularity, dateRange, org);
+		
+		assertEquals(2, results.size());
+		assertEquals("All", results.get(0).getLabel());
+		assertEquals("Completed", results.get(1).getLabel());
+	}
+	
+	private List<EventCompletenessReportRecord> createEventCompletenessResults(Long... values) {
+		List<EventCompletenessReportRecord> results = Lists.newArrayList();
+		for (Long value:values) { 
+			EventCompletenessReportRecord record = new EventCompletenessReportRecord(value, 2011, 1,1,1,1);
+			results.add(record);
+		}
+		return results;
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void test_getEventCompleteness_null_range() { 
+		List<ChartSeries<Calendar>> results = fixture.getEventCompletenessEvents(ChartGranularity.DAY, null, owner);		
+	}	
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void test_getCompletedEvents_null_range() { 
-		ChartDateRange dateRange = null;		
-		List<ChartSeries<Calendar>> results = fixture.getCompletedEvents(dateRange, ChartGranularity.DAY, owner);		
+		List<ChartSeries<Calendar>> results = fixture.getCompletedEvents(null, ChartGranularity.DAY, owner);		
 	}	
 
 	private List<CompletedEventsReportRecord> createCompletedEventsResults(Status fail, int count) {

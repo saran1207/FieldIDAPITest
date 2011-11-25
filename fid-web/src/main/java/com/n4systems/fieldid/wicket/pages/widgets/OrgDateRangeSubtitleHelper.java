@@ -1,8 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import org.apache.wicket.model.IModel;
-
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.ChartDateRange;
 
@@ -16,8 +13,8 @@ public class OrgDateRangeSubtitleHelper extends OrgSubtitleHelper {
 		super("config.dateRange.fromDateDisplayString", "config.dateRange.toDateDisplayString");
 	}
 	
-	public <W extends WidgetConfiguration> IModel<String> getSubTitleModel(Widget<W> widget, BaseOrg org, ChartDateRange dateRange) {
-		return super.getSubTitleModel(widget, org, getKeyForDateRange(dateRange));
+	public SubTitleModelInfo getSubTitleModel(Object model, BaseOrg org, ChartDateRange dateRange) {
+		return super.getSubTitleModel(model, org, getKeyForDateRange(dateRange));
 	}
 	
 	private String getKeyForDateRange(ChartDateRange dateRange) {
@@ -25,7 +22,6 @@ public class OrgDateRangeSubtitleHelper extends OrgSubtitleHelper {
 		String key = dateRange.toString().replace("LAST_", "").replace("THIS_", "").toLowerCase();		
 		return String.format(keyFormat,key);
 	}
-	
-	
+		
 	
 }

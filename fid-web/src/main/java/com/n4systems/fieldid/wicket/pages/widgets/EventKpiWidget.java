@@ -10,10 +10,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.wicket.components.dashboard.subcomponents.EventKpiTable;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
 import com.n4systems.fieldid.wicket.pages.widgets.config.EventKPIConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
@@ -68,7 +70,8 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 	
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		return orgDateRangeSubtitleHelper.getSubTitleModel(this, null, getConfig().getDateRange());
+		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), null, getConfig().getDateRange());
+		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );
 	}
 	
 }
