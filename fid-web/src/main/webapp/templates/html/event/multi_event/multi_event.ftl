@@ -23,6 +23,7 @@
 	<@n4.includeScript src="multi_inspect" />
 	<@n4.includeStyle href="newCss/event/event_base" />
     <@n4.includeStyle href="newCss/event/multi_event" />
+    <@n4.includeStyle href="newCss/event/event_schedule" />
 
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
