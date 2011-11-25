@@ -44,6 +44,7 @@
 	display: block;
 	padding: 5px 0;
 	margin-left: 200px;
+	clear: both;
 }
 
 .newScheduleButton{
