@@ -30,6 +30,7 @@
 	
 	<@n4.includeScript src="commentTemplates"/>
 	<@n4.includeScript src="combobox"/>
+	<@n4.includeScript src="schedulePickerDates"/>
 		
 	<@n4.includeScript>
 		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>';

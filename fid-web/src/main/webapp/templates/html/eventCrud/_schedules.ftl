@@ -1,3 +1,17 @@
+<head>
+	<@n4.includeScript src="schedulePickerDates"/>
+	<@n4.includeScript>
+		index = ${nextSchedules.size()};
+		addScheduleUrl = '<@s.url action="addSchedule" namespace="/ajax" />';
+		autoSuggestUrl = '<@s.url action="autoSuggestSchedule" namespace="/ajax" />';
+		dateErrorText = '<@s.text name="error.mustbeadate"/>';
+		eventTypeId = '${type!0}';
+		assetId = '${assetId!0}';
+	
+		onDocumentLoad(scheduleListUpdated);
+	</@n4.includeScript>
+</head>
+
 <div id="schedulesForm">
 	<h2><@s.text name="label.schedules"/></h2>
 	
@@ -39,10 +53,10 @@
 			<@s.textfield id="nextDate" name="newScheduleDate" cssClass="datepicker" theme="fieldid"/>
 			<span class="dateQuickLinks">
 				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(new Date());">Today</a> |
-				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1));"><@s.text name="label.tomorrow"/></a> |
-				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1));"><@s.text name="label.next_month"/></a> |
-				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6));"><@s.text name="label.in_6_months"/></a> |
-				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1));"><@s.text name="label.next_year"/></a>
+				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.tomorrow"/></a> |
+				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.next_month"/></a> |
+				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.in_6_months"/></a> |
+				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.next_year"/></a>
 			</span>
 		</div>
 		<div class="blockSeparated"> 
@@ -50,28 +64,3 @@
 		</div>
 	</div>
 </div>
-
-<@n4.includeScript>
-	index = ${nextSchedules.size()};
-	addScheduleUrl = '<@s.url action="addSchedule" namespace="/ajax" />';
-	autoSuggestUrl = '<@s.url action="autoSuggestSchedule" namespace="/ajax" />';
-	dateErrorText = '<@s.text name="error.mustbeadate"/>';
-	eventTypeId = '${type!0}';
-	assetId = '${assetId!0}';
-	
-	onDocumentLoad(scheduleListUpdated);
-	
-	function formatDate(date) {
-		return jQuery.datepicker.formatDate('${sessionUser.jqueryDateFormat}', date);
-	}
-	
-	function addDays(date, days) {
-		return new Date( date.setDate(date.getDate() + days) );
-	}
-	function addMonths(date, months) {
-		return new Date( date.setMonth(date.getMonth() + months) );
-	}
-	function addYears(date, years) {
-		return new Date( date.setFullYear(date.getFullYear() + years) );
-	}
-</@n4.includeScript>

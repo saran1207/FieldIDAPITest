@@ -1,3 +1,19 @@
+<head>
+	<@n4.includeScript type="text/javascript">
+		$('newSchedule').observe('submit', 
+			function(event) {
+				event.stop();
+				$('newScheduleForm').hide();
+				$('newScheduleForm').relativize();
+				$('schedulesBlankSlate').hide();
+				$('newSchedule').request( getStandardCallbacks() );
+				
+			});			
+	</@n4.includeScript>
+	
+	<@n4.includeScript src="schedulePickerDates"/>
+</head>
+
 <@s.form id="newSchedule" action="eventScheduleCreate" cssClass="crudForm pageSection" namespace="/ajax" theme="fieldid" >
 	<div id="schedulesForm">
 			
@@ -30,11 +46,11 @@
 				<label class="label"><@s.text name="label.when_is_it_due"/></label>
 				<@s.textfield id="nextDate" name="nextDate" cssClass="datepicker" />
 				<span class="dateQuickLinks">
-					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(new Date());">Today</a> |
-					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1));"><@s.text name="label.tomorrow"/></a> |
-					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1));"><@s.text name="label.next_month"/></a> |
-					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6));"><@s.text name="label.in_6_months"/></a> |
-					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1));"><@s.text name="label.next_year"/></a>
+					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(new Date(), '${sessionUser.jqueryDateFormat}');">Today</a> |
+					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.tomorrow"/></a> |
+					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.next_month"/></a> |
+					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.in_6_months"/></a> |
+					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.next_year"/></a>
 				</span>
 			</div>	
 			
@@ -46,30 +62,3 @@
 		</div>
 	</div>
 </@s.form>
-	
-<script type="text/javascript">
-	$('newSchedule').observe('submit', 
-		function(event) {
-			event.stop();
-			$('newScheduleForm').hide();
-			$('newScheduleForm').relativize();
-			$('schedulesBlankSlate').hide();
-			$('newSchedule').request( getStandardCallbacks() );
-			
-		});
-		
-	function formatDate(date) {
-		return jQuery.datepicker.formatDate('${sessionUser.jqueryDateFormat}', date);
-	}
-	
-	function addDays(date, days) {
-		return new Date( date.setDate(date.getDate() + days) );
-	}
-	function addMonths(date, months) {
-		return new Date( date.setMonth(date.getMonth() + months) );
-	}
-	function addYears(date, years) {
-		return new Date( date.setFullYear(date.getFullYear() + years) );
-	}
-	
-</script>
