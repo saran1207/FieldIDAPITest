@@ -26,6 +26,13 @@
     color: #666;
 }
 
+.widget-header .widget-subtitle {
+	font-size : 11px;
+	color : #585858;
+	font-style : italic;
+	font-weight : normal;
+}
+
 .widget-content {
 	clear: both;
 }

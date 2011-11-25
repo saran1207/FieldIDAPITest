@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import java.util.Calendar;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -56,7 +57,10 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar,Upcoming
 	protected ChartGranularity getDefaultGranularity() {
 		return null; // this widget doesn't use granularity...should not be relevant.
 	}
-	
 
+	@Override
+	protected IModel<String> getSubTitleModel() {
+		return getPeriodOrgSubTitleModel(getOrg());
+	}
 	
 }

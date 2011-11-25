@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+
 import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -49,6 +51,11 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 	protected Component createConfigPanel(String id) {
 		return new AssetsStatusConfigPanel(id,getConfigModel());
 	}
+
+	@Override
+	protected IModel<String> getSubTitleModel() {
+		return getRangeOrgSubTitleModel(getOrg());
+	}		
 	
 }
 

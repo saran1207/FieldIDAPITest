@@ -1,7 +1,11 @@
 package com.n4systems.util.chart;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.n4systems.util.time.DateUtil;
 
@@ -19,9 +23,44 @@ public enum ChartDateRange {
 	
 	private String displayName;
 
+	private static Map<ChartDateRange, DateFormat> dateFormatters = new HashMap<ChartDateRange, DateFormat>();
+
+	private static DateFormat quarterFromFormat;
+	
+	static { 
+		dateFormatters.put(LAST_WEEK, new SimpleDateFormat("MMM d"));
+		dateFormatters.put(LAST_MONTH, new SimpleDateFormat("MMM yyyy"));
+		dateFormatters.put(LAST_QUARTER, new SimpleDateFormat("MMM yyyy"));
+		dateFormatters.put(LAST_YEAR, new SimpleDateFormat("yyyy"));
+		dateFormatters.put(THIS_WEEK, new SimpleDateFormat("MMM d"));
+		dateFormatters.put(THIS_MONTH, new SimpleDateFormat("MMM yyyy"));
+		dateFormatters.put(THIS_QUARTER, new SimpleDateFormat("MMM yyyy"));
+		dateFormatters.put(THIS_YEAR, new SimpleDateFormat("yyyy"));
+		dateFormatters.put(FOREVER, null);	// FOREVER just returns a text string. 
+		quarterFromFormat = new SimpleDateFormat("MMM");  // NOTE : quarter display = Jan-Mar 2011.  i.e. "from" is different format than "to"
+	}
 
 	ChartDateRange(String displayName) {
 		this.displayName = displayName;		
+	}
+
+	public String getFromDateDisplayString() {
+		DateFormat formatter = dateFormatters.get(this);
+		if (this.equals(FOREVER)) { 
+			return "All Time";
+		}
+		if (this.equals(LAST_QUARTER) || this.equals(THIS_QUARTER)) {
+			formatter = quarterFromFormat;  
+		}
+		return formatter.format(getFromDate());
+	}
+	
+	public String getToDateDisplayString() {
+		if (this.equals(FOREVER)) { 
+			return "";
+		} else { 
+			return dateFormatters.get(this).format(getToDate());
+		}
 	}
 	
 	public Date getFromDate() {
@@ -29,7 +68,7 @@ public enum ChartDateRange {
 	}
 		
 	public Calendar getToCalendar() { 
-		// exclusive date :  should use <,  NOT <= when comparing against returned value!!!   
+		// exclusive date :  should use <  *not*  <= when comparing against returned value!!!   
 		Calendar calendar = DateUtil.getTimelessIntance();
 		switch (this) {
 		case FOREVER: 			

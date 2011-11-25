@@ -14,6 +14,7 @@ import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.util.chart.ChartDateRange;
+import com.n4systems.util.chart.ChartPeriod;
 
 @SuppressWarnings("serial")
 @Entity
@@ -66,4 +67,9 @@ public class UpcomingEventsWidgetConfiguration extends WidgetConfiguration imple
 	public void setPeriod(Integer period) {
         this.period = period;
     }
+    
+    public ChartPeriod getChartPeriod() { 
+    	return ChartPeriod.valueOf(period);
+    }
+    
 }

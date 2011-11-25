@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import java.util.Calendar;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -64,5 +65,10 @@ public class EventCompletenessWidget extends ChartWidget<Calendar,EventCompleten
 	protected ChartGranularity getDefaultGranularity() {
 		return ChartGranularity.WEEK;
 	}
+
+	@Override
+	protected IModel<String> getSubTitleModel() {
+		return getRangeOrgSubTitleModel(getOrg());
+	}	
 	
 }

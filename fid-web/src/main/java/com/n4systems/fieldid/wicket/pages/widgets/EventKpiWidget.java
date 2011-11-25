@@ -58,4 +58,10 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 		return new EventKPIConfigPanel(id, configModel);        
 	}
 	
+	@Override
+	protected IModel<String> getSubTitleModel() {
+		return getRangeSubTitleModel();
+	}
+	
+	
 }
