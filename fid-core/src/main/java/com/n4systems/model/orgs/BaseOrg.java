@@ -96,14 +96,14 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
     @DenyReadOnlyUsersAccess
 	public String getHierarchicalDisplayName() {
 		StringBuffer buff = new StringBuffer();
-		buff.append(getPrimaryOrg().getName());
-		if (getCustomerOrg()!=null) { 
-			buff.append(",").append(getCustomerOrg().getName());			
-		}
-		if (getDivisionOrg()!=null) { 
-			buff.append(" (").append(getDivisionOrg().getName()).append(")");
-		}
-		return buff.toString();		 
+        if (getDivisionOrg() != null) {
+            buff.append(getDivisionOrg().getName()).append(", ").append(getCustomerOrg().getName()).append(" (").append(getPrimaryOrg().getName()).append(")");
+        } else if (getCustomerOrg() != null) {
+            buff.append(getCustomerOrg().getName()).append(" (").append(getPrimaryOrg().getName()).append(")");
+        } else {
+            buff.append(getPrimaryOrg().getName());
+        }
+		return buff.toString();
 	}
 	
 	
