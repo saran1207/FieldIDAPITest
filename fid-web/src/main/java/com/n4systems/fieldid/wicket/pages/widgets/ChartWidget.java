@@ -86,23 +86,6 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 		this.period = period;
 	}
 	
-	protected String getTooltipFormat(ChartGranularity granularity) {
-		switch (granularity) { 
-		case DAY:
-		case HOUR:
-			return FlotOptions.TOOLTIP_WITH_DAY;
-		case YEAR:
-			return FlotOptions.TOOLTIP_YEAR;
-		case MONTH:
-		case QUARTER:
-			return FlotOptions.TOOLTIP_WITHOUT_DAY;
-		case WEEK:
-			return FlotOptions.TOOLTIP_WEEK;
-		default: 
-			return FlotOptions.TOOLTIP_WITH_DAY;				
-		}		
-	}
-
 	@SuppressWarnings("rawtypes")
 	protected void addGranularityButton(String id, final ChartGranularity granularity) {
         AjaxLink granularityButton = new AjaxLink(id) {

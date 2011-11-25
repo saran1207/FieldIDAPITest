@@ -63,7 +63,6 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 			expected=granularity.next(actual);			
 		}
 		if (!ChartDateRange.FOREVER.equals(range)) { 
-			expected = actual;
 			while (granularity.compare(expected, range.getToCalendar())<0) {
 				padding.add(pad(expected));
 				expected=granularity.next(expected);
@@ -81,7 +80,25 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 	@Override
 	public void updateOptions(ChartSeries<Calendar> chartSeries, FlotOptions<Calendar> options, int index) {	
 		super.updateOptions(chartSeries, options, index);
-		updateTimeFormat(chartSeries, options);		
+		updateTimeFormat(chartSeries, options);
+		options.tooltipFormat = getTooltipFormat(granularity);				
+	}
+
+	protected String getTooltipFormat(ChartGranularity granularity) {
+		switch (granularity) { 
+		case DAY:
+		case HOUR:
+			return FlotOptions.TOOLTIP_WITH_DAY;
+		case YEAR:
+			return FlotOptions.TOOLTIP_YEAR;
+		case MONTH:
+		case QUARTER:
+			return FlotOptions.TOOLTIP_WITHOUT_DAY;
+		case WEEK:
+			return FlotOptions.TOOLTIP_WEEK;
+		default: 
+			return FlotOptions.TOOLTIP_WITH_DAY;				
+		}		
 	}
 
 	protected void updateTimeFormat(ChartSeries<Calendar> chartSeries, FlotOptions<Calendar> options) {

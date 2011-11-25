@@ -41,7 +41,6 @@ public class CompletedEventsWidget extends ChartWidget<Calendar, CompletedEvents
     	FlotOptions<Calendar> options = super.createOptions();
     	options.lines.fill = false;
     	options.colors = new String[]{"#32578B", "#5B8C62", "#B35045", "#999999" };
-        options.tooltipFormat = getTooltipFormat(granularity);
     	return options;
     }
     

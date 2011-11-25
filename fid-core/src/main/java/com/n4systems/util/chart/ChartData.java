@@ -25,5 +25,6 @@ public class ChartData<X> extends ArrayList<ChartSeries<X>> {
 		}
 		return options; 		
 	}
+		
 	
 }
