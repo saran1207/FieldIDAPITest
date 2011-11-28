@@ -9,7 +9,6 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.web.helper.SessionUser;
 
-import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringListingPair;
 
 public class InfoOptionInput {
@@ -86,8 +85,13 @@ public class InfoOptionInput {
 				field.getFieldType().equals( InfoFieldBean.SELECTBOX_FIELD_TYPE ) ) {
 			infoOption.setName( uniqueIDString.substring( 1 ) );
 		}else if (field.getFieldType().equals( InfoFieldBean.DATEFIELD_FIELD_TYPE) ){ 
-				String dateFormatStr = field.isIncludeTime() ? user.getDateTimeFormat() : user.getDateFormat();
-				Date date = DateHelper.string2DateTime(dateFormatStr, name, user.getTimeZone());
+				SessionUserDateConverter dateConverter = user.createUserDateConverter();
+				Date date;				
+				if(field.isIncludeTime()) {
+					date = dateConverter.convertDateTime(name);
+				} else {
+					date = dateConverter.convertDate(name);
+				}
 				infoOption.setName( Long.toString(date.getTime()) );
 		} else {
 			infoOption.setName( name );
