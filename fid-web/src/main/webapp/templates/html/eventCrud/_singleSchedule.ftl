@@ -17,7 +17,7 @@
 			
 			<#if securityGuard.projectsEnabled && job?exists>
 				<div class="inline addScheduleJob"> 
-					<p class="inline"><@s.text name="label.on"/> ${nextSchedule.jobName?html}</p>
+					<@s.text name="label.on"/> ${nextSchedule.jobName?html}
 				</div>
 			</#if>
 	</div>

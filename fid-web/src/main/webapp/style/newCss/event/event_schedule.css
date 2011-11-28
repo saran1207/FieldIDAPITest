@@ -13,7 +13,7 @@
     float: left;
 }
 
-.addScheduleJob p{
+.addScheduleJob{
 	color: #999999;
 }
 
@@ -25,6 +25,7 @@
 .addScheduleLabel label {
 	font-weight: bold;
 }
+
 .fullForm .addNewScheduleButton, .addNewScheduleButton {
 	margin: 10px;
 	font-size: 11px; 
