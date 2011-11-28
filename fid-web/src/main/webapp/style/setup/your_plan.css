@@ -1,4 +1,4 @@
-h1 {
+.pageContent h1 {
 	margin-top: 20px;
 	margin-bottom: 10px;
 }
@@ -6,6 +6,10 @@ h1 {
 .yourPlan, .accountUsage {
 	border: 1px dotted #CCCCCC;
 	padding: 25px 10px 0px;
+}
+
+.accountUsage {
+	margin-bottom: 20px;
 }
 
 .infoSet label {
