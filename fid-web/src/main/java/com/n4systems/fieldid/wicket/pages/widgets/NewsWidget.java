@@ -21,6 +21,7 @@ public class NewsWidget extends Widget<WidgetConfiguration> {
     @SpringBean private ConfigService configService;
 	
     private WebMarkupContainer fieldIdNews;
+    private final String rssCallbackJs = "function() { $('.rssFooter a').attr('target','_blank');}";
     
     public NewsWidget(String id, WidgetDefinition<WidgetConfiguration> widgetDefinition) {
         super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));
@@ -44,12 +45,14 @@ public class NewsWidget extends Widget<WidgetConfiguration> {
         String feed = configService.getString(ConfigEntry.RSS_FEED);
 
         jsBuffer.append("$('#"+fieldIdNews.getMarkupId()+"').rssfeed('" + feed + "', {");
-        jsBuffer.append("limit: 3, content: false, dateformat: 'D, M d', snippet: false, ");
-        jsBuffer.append("header: false, titletag: 'div', newimage: '../images/new.png', ");
-        jsBuffer.append("linktarget: '_blank',");
-        jsBuffer.append("ssl: true");
-   		jsBuffer.append("});");
-        
+        jsBuffer.append("	limit: 3, content: false, dateformat: 'D, M d', snippet: false, ");
+        jsBuffer.append("	header: false, titletag: 'div', newimage: '../images/new.png', ");
+        jsBuffer.append("	linktarget: '_blank',");
+        jsBuffer.append("	ssl: true");
+   		jsBuffer.append("},");
+   		jsBuffer.append(rssCallbackJs);
+   		jsBuffer.append(");");
+   		        
         return jsBuffer.toString();
 	}
 
