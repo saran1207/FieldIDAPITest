@@ -67,8 +67,8 @@ public class DashboardServiceTest {
 		
 		DashboardLayout actual = fixture.findLayout();
 		
-		assertEquals(1, actual.getWidgetCount());
-		assertEquals(1, actual.getColumns().get(0).getWidgets().size());
+		assertEquals(2, actual.getWidgetCount());
+		assertEquals(2, actual.getColumns().get(0).getWidgets().size());
 		assertEquals(0, actual.getColumns().get(1).getWidgets().size());		
 	}
 
