@@ -10,7 +10,11 @@ public class FieldIdService {
 	@Autowired
     protected SecurityContext securityContext;
 	
-    protected <T> QueryBuilder<T> createUserSecurityBuilder(Class<T> clazz) {
+    public void setSecurityContext(SecurityContext securityContext) {
+		this.securityContext = securityContext;
+	}
+
+	protected <T> QueryBuilder<T> createUserSecurityBuilder(Class<T> clazz) {
     	return new QueryBuilder<T>(clazz, securityContext.getUserSecurityFilter());
     }
     

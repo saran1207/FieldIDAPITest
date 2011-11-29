@@ -1,14 +1,12 @@
 package com.n4systems.services.dashboard;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
-import org.springframework.transaction.annotation.Transactional;
 
 public class DashboardService extends FieldIdPersistenceService {
 
@@ -49,24 +47,10 @@ public class DashboardService extends FieldIdPersistenceService {
 
     private DashboardLayout createDefaultLayout() {
         DashboardLayout layout = new DashboardLayout();
-
-        WidgetDefinition commonLinksWidget = new WidgetDefinition(WidgetType.COMMON_LINKS);
-        WidgetDefinition newsWidget = new WidgetDefinition(WidgetType.NEWS);
-        WidgetDefinition jobsWidget = new WidgetDefinition(WidgetType.JOBS_ASSIGNED);
-
         DashboardColumn firstColumn = new DashboardColumn();
-        firstColumn.getWidgets().add(commonLinksWidget);
-
         DashboardColumn secondColumn = new DashboardColumn();
-        secondColumn.getWidgets().add(newsWidget);
-
-        if (securityContext.getUserSecurityFilter().getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Projects)) {
-            secondColumn.getWidgets().add(jobsWidget);
-        }
-
         layout.getColumns().add(firstColumn);
         layout.getColumns().add(secondColumn);
-
         return layout;
     }
 
