@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysql.jdbc.StringUtils;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
 import com.n4systems.fieldid.ws.v1.models.ApiUser;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.StringUtils;
 
 @Path("/authenticate.json")
 @Component
@@ -37,7 +37,7 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 			@FormParam("userId") String userId, 
 			@FormParam("password") String password) {
 		
-		if (StringUtils.isNullOrEmpty(tenantName) || StringUtils.isNullOrEmpty(userId) || StringUtils.isNullOrEmpty(password)) {
+		if (StringUtils.isEmpty(tenantName) || StringUtils.isEmpty(userId) || StringUtils.isEmpty(password)) {
 			throw new ForbiddenException();
 		}
 
