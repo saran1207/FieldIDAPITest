@@ -19,6 +19,7 @@ import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import rfid.web.helper.SessionUser;
 
@@ -30,12 +31,16 @@ import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.model.Tenant;
+import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 
+@SuppressWarnings("serial")
 public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
 
+	@SpringBean private ConfigService configService;
+	
     private static String versionString;
     private Label titleLabel;
 	private Label topTitleLabel;
@@ -53,14 +58,12 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
     	this(params,null);
     }
     
-    // UGH DD: nned to refactor configurationProvider more.  next phase need to refactor this out into spring bean or some 
-    //   non-static reference to ConfigContext that is currently throughout pages. 
     public FieldIDFrontEndPage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
         setConfigurationProvider(configurationProvider);
 
-        add(new WebMarkupContainer("googleAnalyticsScripts").setRenderBodyOnly(true).setVisible(ConfigContext.getCurrentContext().getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED)));
-
+        add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
+        
         SessionUser sessionUser = getSessionUser();
 
         addClickTaleScripts();
@@ -240,6 +243,23 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         add(new Label("clickTaleEnd", getConfigurationProvider().getString(ConfigEntry.CLICKTALE_END)).setEscapeModelStrings(false));
     }
 
+	class GoogleAnalyticsContainer extends WebMarkupContainer {
+
+		public GoogleAnalyticsContainer(String id) {
+			super(id);
+			setRenderBodyOnly(true);
+		}
+
+        @Override
+        protected void onBeforeRender() {
+        	if (!hasBeenRendered()) {
+        		setVisible(configService.getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED));    	    		
+        	}
+        	super.onBeforeRender();  // note : call super at END of override.  see wicket docs.
+        }
+    	
+    }
+    
     static class StaticImage extends WebComponent {
         public StaticImage(String id, IModel<String> urlModel) {
             super( id, urlModel );

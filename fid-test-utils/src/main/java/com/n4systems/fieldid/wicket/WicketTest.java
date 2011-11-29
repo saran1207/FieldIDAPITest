@@ -51,6 +51,12 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 		injector = ComponentTestInjector.make();
 	}	
 	
+    protected void verifyMocks(Object... mocks) {
+    	for (Object mock:mocks) { 
+    		verify(mock);
+    	}
+    }
+
 	public void initializeApplication(WebApplication application) {		
 		wicketTester = new WicketTester(application);
 		Application.get().getResourceSettings().addStringResourceLoader(new IStringResourceLoader() {

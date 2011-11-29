@@ -5,8 +5,10 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.Component.IVisitor;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -18,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
+import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.wicket.FieldIdPageTest;
 import com.n4systems.fieldid.wicket.IFixtureFactory;
 import com.n4systems.fieldid.wicket.IWicketTester;
@@ -27,6 +30,7 @@ import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage.DashboardColumnContainer;
 import com.n4systems.fieldid.wicket.pages.DashboardPageTest.DashboardHarness;
 import com.n4systems.fieldid.wicket.pages.widgets.CommonLinksWidget;
+import com.n4systems.fieldid.wicket.pages.widgets.JobsAssignedWidget;
 import com.n4systems.fieldid.wicket.pages.widgets.NewsWidget;
 import com.n4systems.fieldid.wicket.pages.widgets.Widget;
 import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
@@ -37,20 +41,19 @@ import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.model.user.User;
-import com.n4systems.services.ConfigService;
 import com.n4systems.services.dashboard.DashboardService;
-import com.n4systems.util.ConfigEntry;
 
 
 public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, DashboardPage> implements IFixtureFactory<DashboardPage> {
 
 	private DashboardService dashboardService;
 	private WidgetFactory widgetFactory;
+	private JobService jobService;
     
 	private DashboardLayout layout;
 	private WidgetDefinition linksWidgetDefinition;
 	private CommonLinksWidget commonLinksWidget;
-	private ConfigService configService;
+	private NewsWidget newsWidget;
 	
 
     @Override
@@ -59,19 +62,20 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
     	super.setUp();
     	init();
     }
-
+    
 	protected void init() {
 		dashboardService = wire(DashboardService.class);
     	widgetFactory = wire(WidgetFactory.class);
-    	configService = wire(ConfigService.class);
 		linksWidgetDefinition = new WidgetDefinition(WidgetType.COMMON_LINKS);
+		jobService = wire(JobService.class);
     	layout = createNewDashboardLayout(linksWidgetDefinition);
+    	commonLinksWidget = new CommonLinksWidget(WidgetFactory.WIDGET_ID, linksWidgetDefinition);    
+		newsWidget = new NewsWidget(WidgetFactory.WIDGET_ID, new WidgetDefinition(WidgetType.NEWS));
 	}
     
 	@Test 
 	public void testRender()  {
-		commonLinksWidget = new CommonLinksWidget(WidgetFactory.WIDGET_ID, linksWidgetDefinition);
-		expectingConfigurationProvider();
+		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2);	//extra invocation for assertion using getList().
 		replay(dashboardService);
@@ -82,28 +86,42 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		assertVisible(getHarness().getSortableColumn(0));
 		assertVisible(getHarness().getSortableColumn(1));
 		
-		IVisitor<ListItem<WidgetDefinition<?>>> visitor = new IVisitor<ListItem<WidgetDefinition<?>>>() {
-			@Override public Object component(ListItem<WidgetDefinition<?>> item) {
-				assertEquals(commonLinksWidget.getClass(), item.get("widget").getClass());
-				return IVisitor.CONTINUE_TRAVERSAL;
-			} 			
-		};		
-		
-		getHarness().getSortableColumn(0).visitChildren(ListItem.class, visitor);
+		getHarness().getSortableColumn(0).visitChildren(ListItem.class, new WidgetVisitor(CommonLinksWidget.class));
 		assertEquals(0, getHarness().getSortableColumn(1).getList().size());
+		assertVisible(getHarness().getGoogleAnalytics());
+		assertInDocument("<script src=\"https://ssl.google-analytics.com/ga.js\" type=\"text/javascript\"></script>");
+	
+		verifyMocks(dashboardService, widgetFactory);
 	}	
 	
+
+	@Test 
+	public void testRender_noGoogleAnalytics()  {
+		expectingConfig(false);
+		expect(dashboardService.findLayout()).andReturn(layout);
+		expectLastCall().times(2);	//extra invocation for assertion using getList().
+		replay(dashboardService);
+		expect(widgetFactory.createWidget(linksWidgetDefinition)).andReturn(commonLinksWidget);
+		replay(widgetFactory);
+
+		renderFixture(this);
+		
+		assertEquals(0, getHarness().getSortableColumn(1).getList().size());
+		assertInvisible(getHarness().getGoogleAnalytics());
+		
+		verifyMocks(dashboardService, widgetFactory);
+	}	
+	
+		
 	@Test 
 	public void testAddWidget()  {
-		commonLinksWidget = new CommonLinksWidget(WidgetFactory.WIDGET_ID, linksWidgetDefinition);		
-		expectingConfigurationProvider();
+		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(4);  // have to add some expectations because our asserts actually trigger calls...yecccch. 
 		dashboardService.saveLayout(layout);
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(linksWidgetDefinition)).andReturn(commonLinksWidget);		
 		expectLastCall().times(2);
-		final NewsWidget newsWidget = new NewsWidget("widget", new WidgetDefinition(WidgetType.NEWS));
 		expect(widgetFactory.createWidget(WidgetDefinitionMatcher.eq(WidgetType.NEWS))).andReturn(newsWidget);
 		replay(widgetFactory);		
 
@@ -115,73 +133,51 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 				
 		getHarness().addWidget(WidgetType.NEWS, layout);
 		
-		IVisitor<ListItem<WidgetDefinition<?>>> visitor = new IVisitor<ListItem<WidgetDefinition<?>>>() {
-			@Override public Object component(ListItem<WidgetDefinition<?>> item) {
-				if (item.getIndex()==0) {   // adds widgets to front of list...   .: NEWS will be first in line
-					assertEquals(newsWidget.getClass(), item.get("widget").getClass());
-				} else if (item.getIndex()==1) { 
-					assertEquals(commonLinksWidget.getClass(), item.get("widget").getClass());
-				} else { 
-					fail("there should only be two widgets");
-				}
-				return IVisitor.CONTINUE_TRAVERSAL;
-			} 			
-		};				
+		IVisitor<ListItem<WidgetDefinition<?>>> visitor = new WidgetVisitor(NewsWidget.class, CommonLinksWidget.class);
 		
 		getHarness().getSortableColumn(0).visitChildren(ListItem.class, visitor);
 		
 		// should be one less available after adding. 
-		assertEquals(available-1, getHarness().getAddWidgetsDropDown().getChoices().size());
+		assertEquals(available-1, getHarness().getAddWidgetsDropDown().getChoices().size());		
+
+		verifyMocks(dashboardService, widgetFactory);
 	}	
 	
 	@Test 
 	public void testAddWidgetWithJobsUser()  {
-		String feedUrl = "http://www.fieldid.com";
-
 		User user = UserBuilder.aFullUser().build();
 		user.getOwner().getPrimaryOrg().setExtendedFeatures(Sets.newHashSet(ExtendedFeature.Projects));
 		setSessionUser(user);
 				
-		expectingConfigurationProvider();
-		expect(configService.getString(ConfigEntry.RSS_FEED)).andReturn(feedUrl);
-		replay(configService);
+		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2);
 		dashboardService.saveLayout(layout);
 		replay(dashboardService);
+		
+		expect(jobService.countAssignedToMe(true)).andReturn(new Long(0));
+		expectLastCall().anyTimes();
+		replay(jobService);	
+		
 		commonLinksWidget = new CommonLinksWidget(WidgetFactory.WIDGET_ID, linksWidgetDefinition);
 		expect(widgetFactory.createWidget(linksWidgetDefinition)).andReturn(commonLinksWidget);		
 		expectLastCall().times(2);
-		final NewsWidget jobsWidget = new NewsWidget("widget", new WidgetDefinition(WidgetType.JOBS_ASSIGNED));
+		final JobsAssignedWidget jobsWidget = new JobsAssignedWidget(WidgetFactory.WIDGET_ID, new WidgetDefinition(WidgetType.JOBS_ASSIGNED));
 		expect(widgetFactory.createWidget(WidgetDefinitionMatcher.eq(WidgetType.JOBS_ASSIGNED))).andReturn(jobsWidget);
-		replay(widgetFactory);		
+		replay(widgetFactory);
 
 		renderFixture(this);
 
 		getHarness().addWidget(WidgetType.JOBS_ASSIGNED, layout);
 		
-		IVisitor<ListItem<WidgetDefinition<?>>> visitor = new IVisitor<ListItem<WidgetDefinition<?>>>() {
-			@Override public Object component(ListItem<WidgetDefinition<?>> item) {
-				if (item.getIndex()==0) {   // adds widgets to front of list...   .: NEWS will be first in line
-					assertEquals(jobsWidget.getClass(), item.get("widget").getClass());
-				} else if (item.getIndex()==1) { 
-					assertEquals(commonLinksWidget.getClass(), item.get("widget").getClass());
-				} else { 
-					fail("there should only be two widgets");
-				}
-				return IVisitor.CONTINUE_TRAVERSAL;
-			} 			
-		};				
-		
-		getHarness().getSortableColumn(0).visitChildren(ListItem.class, visitor);
-		
-		assertInDocument("rssfeed('"+feedUrl);   // should be some sort of jquery javascript emitted with our url.
+		getHarness().getSortableColumn(0).visitChildren(ListItem.class, new WidgetVisitor(JobsAssignedWidget.class, CommonLinksWidget.class));		
+
+		verifyMocks(dashboardService, widgetFactory, jobService);
 	}	
 	
 	@Test 
 	public void testRemoveWidget()  {
-		commonLinksWidget = new CommonLinksWidget(WidgetFactory.WIDGET_ID, linksWidgetDefinition);
-		expectingConfigurationProvider();
+		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2);
 		dashboardService.saveLayout(layout);		
@@ -198,8 +194,37 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 
 		assertEquals(0, columns.get(0).getWidgets().size());
 		assertEquals(0, columns.get(1).getWidgets().size());
+
+		verifyMocks(dashboardService, widgetFactory);
 	}	
 	
+	@Test 
+	public void test_BlankSlate()  {
+		layout = createNewDashboardLayout();
+		expectingConfig();
+		expect(dashboardService.findLayout()).andReturn(layout);
+		expectLastCall().times(2); 
+		dashboardService.saveLayout(layout);
+		replay(dashboardService);
+		expect(widgetFactory.createWidget(WidgetDefinitionMatcher.eq(WidgetType.NEWS))).andReturn(newsWidget);
+		replay(widgetFactory);		
+
+		renderFixture(this);
+		
+		assertEquals(0, layout.getWidgetCount());
+		assertVisible(getHarness().getBlankSlatePanel());
+		assertInvisible(getHarness().getSortableColumn(0));
+		assertInvisible(getHarness().getSortableColumn(1));
+				
+		getHarness().addWidget(WidgetType.NEWS, layout);
+		
+		assertEquals(1, layout.getWidgetCount());
+		assertInvisible(getHarness().getBlankSlatePanel());
+		assertVisible(getHarness().getSortableColumn(0));
+		assertVisible(getHarness().getSortableColumn(1));
+		
+		verifyMocks(dashboardService, widgetFactory);
+	}
 	
 	@Override
 	public DashboardPage createFixture(String id) {
@@ -231,6 +256,23 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		return layout;
 	}
 	
+	class WidgetVisitor implements IVisitor<ListItem<WidgetDefinition<?>>> { 
+
+		private Class<? extends Widget<?>>[] widgets;
+		public WidgetVisitor(Class<? extends Widget<?>>... widgets) { 
+			this.widgets = widgets;
+		}
+		
+		@Override public Object component(ListItem<WidgetDefinition<?>> item) {
+			if (item.getIndex()>=widgets.length) {
+				fail("there should only be " + widgets.length + " widgets");
+			}
+			Class<? extends Widget> clazz = widgets[item.getIndex()];
+			assertEquals(clazz, item.get("widget").getClass());
+			return IVisitor.CONTINUE_TRAVERSAL;
+		} 			
+		
+	}
 	
 	static protected class WidgetDefinitionMatcher implements IArgumentMatcher {
 
@@ -266,7 +308,16 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	class DashboardHarness extends WicketHarness {
 		
 		public DashboardHarness(String pathContext, IWicketTester tester) {
-			super(pathContext, tester);			
+			super(pathContext, tester);	
+			appendPathContext("content");
+		}
+		
+		public Component getGoogleAnalytics() {
+			return getWicketTester().getComponentFromLastRenderedPage("googleAnalyticsScripts");
+		}
+
+		public WebMarkupContainer getBlankSlatePanel() {
+			return (WebMarkupContainer) get("blankSlate");
 		}
 
 		public DropDownChoice<WidgetType> getAddWidgetsDropDown() {
@@ -286,16 +337,16 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 
 		public ListView<?> getSortableColumn(int i) {
 			MarkupContainer container = (MarkupContainer) get("sortableColumn" + ((i==0)?"":"2"));
-			return (ListView<?>) container.get("widgets");
+			return container==null? null : (ListView<?>) container.get("widgets");
 		}
 		
 		private FormTester getAddWidgetFormTester() {
-			return getFormTester("addWidgetPanel:addWidgetForm");
+			return getFormTester("addWidgetPanel","addWidgetForm");
 		}
 		
 		private Widget getWidget(int col, int index) {
 			String sortableColumnId = "sortableColumn" + (col==0?"":"2");
-			DashboardColumnContainer sortableColumn = (DashboardColumnContainer) getComponent(sortableColumnId);
+			DashboardColumnContainer sortableColumn = (DashboardColumnContainer) get(sortableColumnId);
 			ListView<WidgetDefinition> listView = (ListView<WidgetDefinition>) sortableColumn.get("widgets");
 			ListItem<WidgetDefinition> c = (ListItem<WidgetDefinition>) listView.get(index);
 			return (Widget) c.get("widget");

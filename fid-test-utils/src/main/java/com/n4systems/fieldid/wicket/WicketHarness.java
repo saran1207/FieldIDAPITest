@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket;
 
 import static com.google.common.base.Preconditions.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,16 @@ public class WicketHarness {
 
 	private void setPathContext(String context) {
 		this.pathContext = context;
+	}
+	
+	protected void appendPathContext(String context) {
+		if (context==null) { 
+			return;
+		}
+		pathContext+=context;
+		if (!context.endsWith(":")) {
+			pathContext+=":";
+		}
 	}
 	
 	public String getLastRenderedPageAsHtml() { 
@@ -73,6 +84,12 @@ public class WicketHarness {
 			buff.append(":");
 		}
 		return buff.substring(0,buff.length()-1);	
+	}
+
+	protected String getPrefixedPathFor(String prefix, String... ids) {
+		List<String> allIds = Arrays.asList(ids);
+		allIds.add(0, prefix);
+		return getPathFor((String[]) allIds.toArray());	
 	}
 
 	private String getPathContext() {

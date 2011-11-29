@@ -1,9 +1,5 @@
 package com.n4systems.model.dashboard;
 
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.user.User;
-import org.hibernate.annotations.IndexColumn;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.IndexColumn;
+
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.user.User;
 
 @Entity
 @Table(name = "dashboard_layouts")

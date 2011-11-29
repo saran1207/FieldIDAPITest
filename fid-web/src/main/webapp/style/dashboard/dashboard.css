@@ -166,3 +166,19 @@ div.buttonsLabel {
     float:left;
 }
 
+.blank-slate .step {
+	float: left;
+	word-wrap: break-word; 
+	padding: 0px 40px; 
+	width: 200px;
+	text-align:center; 
+	margin-bottom: 50px;
+}
+
+.blank-slate .header { 
+	padding:20px 0px;
+	font-size:22px;
+	font-weight:bold;
+}
+
+

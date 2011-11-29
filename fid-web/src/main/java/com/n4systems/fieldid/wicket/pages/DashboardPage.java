@@ -11,10 +11,12 @@ import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
@@ -51,8 +53,12 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
     private DashboardColumnContainer sortableColumn;
     private DashboardColumnContainer sortableColumn2;
+    private WebMarkupContainer blankSlatePanel;
+	private WebMarkupContainer content;
 
     IModel<DashboardLayout> currentLayoutModel;
+
+	
     public DashboardPage() {
     	this(null);
     }
@@ -60,6 +66,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
 	@Deprecated // for testing only... need to find a generic way to override configProvider for all unit tests.
 	public DashboardPage(ConfigurationProvider configProvider) {
     	super(configProvider);
+    	
         redirectToSetupWizardIfNecessary();
         add(CSSPackageResource.getHeaderContribution("style/dashboard/dashboard.css"));
         add(CSSPackageResource.getHeaderContribution("style/dashboard/widgetconfig.css"));
@@ -75,7 +82,13 @@ public class DashboardPage extends FieldIDFrontEndPage {
         
         currentLayoutModel = new CurrentLayoutModel();
 
-        add(addWidgetPanel = new AddWidgetPanel("addWidgetPanel", currentLayoutModel) {
+        add(content = addContent("content"));        
+    }
+
+	private WebMarkupContainer addContent(String id) {
+		WebMarkupContainer content = new WebMarkupContainer(id);
+		content.setOutputMarkupId(true);
+        content.add(addWidgetPanel = new AddWidgetPanel("addWidgetPanel", currentLayoutModel) {
             @Override
             protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) {
                 WidgetDefinition definition = new WidgetDefinition(type);
@@ -84,9 +97,30 @@ public class DashboardPage extends FieldIDFrontEndPage {
             }
         });
 
-        add(sortableColumn = createColumnContainer("sortableColumn", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[0].widgets"), 0));
-        add(sortableColumn2 = createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[1].widgets"), 1));
-    }
+        content.add(sortableColumn = createColumnContainer("sortableColumn", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[0].widgets"), 0));
+        content.add(sortableColumn2 = createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[1].widgets"), 1));                
+        content.add(blankSlatePanel = createBlankSlate("blankSlate"));   
+        
+        setContentVisibility();
+        
+        return content;
+	}
+
+	private void setContentVisibility() {
+		boolean noWidgets = currentLayoutModel.getObject().getWidgetCount()==0; 
+		blankSlatePanel.setVisible(noWidgets);
+		sortableColumn.setVisible(!noWidgets);
+		sortableColumn2.setVisible(!noWidgets);		
+	}
+
+	private WebMarkupContainer createBlankSlate(String id) {
+		WebMarkupContainer panel = new WebMarkupContainer(id);
+		panel.setOutputMarkupId(true);
+		panel.add(new Image("step1", new ContextRelativeResource("/images/dashboard/step1.png")));
+		panel.add(new Image("step2", new ContextRelativeResource("/images/dashboard/step2.png")));
+		panel.add(new Image("step3", new ContextRelativeResource("/images/dashboard/step3.png")));
+		return panel;
+	}
 
 	private DashboardColumnContainer createColumnContainer(String containerId, IModel<List<WidgetDefinition>> widgetsModel,  final int columnIndex) {
         DashboardColumnContainer container = new DashboardColumnContainer(containerId);
@@ -162,9 +196,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
     private void saveAndRepaintDashboard(AjaxRequestTarget target) {
         currentLayoutModel.getObject().setTenant(getTenant());
         dashboardService.saveLayout(currentLayoutModel.getObject());
-        target.addComponent(sortableColumn);
-        target.addComponent(sortableColumn2);
-        target.addComponent(addWidgetPanel);
+        setContentVisibility();            	
+        target.addComponent(content);        
     }
 
     private void removeWidgetFromColumn(WidgetDefinition widgetToRemove, int columnIndex) {
@@ -178,7 +211,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
         }
     }
 
-    private void removeWidgetFromColumn(int columnIndex, int widgetIndex) {
+    private void removeWidgetFromColumn(int columnIndex, int widgetIndex) {    	
         currentLayoutModel.getObject().getColumns().get(columnIndex).getWidgets().remove(widgetIndex);
     }
 

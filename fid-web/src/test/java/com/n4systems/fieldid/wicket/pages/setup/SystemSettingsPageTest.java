@@ -24,7 +24,7 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 	@Before
 	public void setUp() throws Exception { 
 		super.setUp();
-		expectingConfigurationProvider();
+		expectingConfig();
 		systemSettingsService = wire(SystemSettingsService.class, "systemSettingsService");
 	}
 

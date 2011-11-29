@@ -1,18 +1,40 @@
 <wicket:extend>
 
-    <div wicket:id="addWidgetPanel"></div>
+	<div wicket:id="content">
 
-    <div class="column" wicket:id="sortableColumn">
-        <div wicket:id="widgets">
-            <div wicket:id="widget"></div>
-        </div>
-    </div>
-
-    <div class="column" wicket:id="sortableColumn2">
-        <div wicket:id="widgets">
-            <div wicket:id="widget"></div>
-        </div>
-    </div>
+	    <div wicket:id="addWidgetPanel"></div>
+	    
+	    <div class="column" wicket:id="sortableColumn">
+	        <div wicket:id="widgets">
+	            <div wicket:id="widget"></div>
+	        </div>
+	    </div>
+	
+	    <div class="column" wicket:id="sortableColumn2">
+	        <div wicket:id="widgets">
+	            <div wicket:id="widget"></div>
+	        </div>
+	    </div>
+	 	
+	 	<div style="clear:both;"/>
+	 		
+		<div class="blank-slate" wicket:id="blankSlate">
+			<div class="header"><wicket:message key="blank.slate.header" /></div>
+			<div class="step">
+				<img wicket:id="step1"/>
+				<div><wicket:message key="blank.slate.step.one"/></div>
+			</div>	
+			<div class="step">
+				<img wicket:id="step2"/>
+				<div><wicket:message key="blank.slate.step.two"/></div>				
+			</div>			
+			<div class="step" >
+				<img wicket:id="step3"/>
+				<div><wicket:message key="blank.slate.step.three"/></div>
+			</div>		
+		</div>
+		
+	</div>
 
     <script>
         $(document).ready(function() {
