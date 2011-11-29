@@ -51,6 +51,7 @@ public enum ConfigEntry {
 	CURRENT_MOBILE_FILE_NAME                    (   "Field ID Mobile.CAB"   ),
 	MAX_SIZE_FOR_MULTI_INSPECT					(	"250"					),
 	MAX_MULTI_ADD_SIZE							(	"250"					),
+    MAX_SIZE_FOR_MASS_SCHEDULE                  (	"250"					),
 	UPLOAD_FILE_SIZE_LIMIT_DEFAULT_IN_KB			(	"5120"				),
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_ATTACHMENT_IN_KB	(	"2048"				), 
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_TYPE_IMAGE_IN_KB (	"500"				),

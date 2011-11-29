@@ -612,3 +612,14 @@ table.list tr.multiSelected {
     padding: 15px 10px;
     border-bottom: 1px solid #E2E2E2;
 }
+
+.formAction button, .formAction input[type='submit'] {
+    margin-left: 10px;
+    margin-right: 2.5px;
+    padding: 0 2px;
+    font-size: 1.2em;
+}
+
+.formAction a {
+    font-size: 12px;
+}

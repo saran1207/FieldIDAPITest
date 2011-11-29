@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.wicket.components.schedule;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
-import com.n4systems.util.time.DateUtil;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -24,55 +26,77 @@ import java.util.List;
 public class SchedulePicker extends Panel {
 
     private IModel<EventSchedule> scheduleModel;
+    private int dx;
+    private int dy;
 
     public SchedulePicker(String id, IModel<EventSchedule> scheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
+        this(id, scheduleModel, eventTypeOptions, jobsOptions, 0, 0);
+    }
+
+    public SchedulePicker(String id, IModel<EventSchedule> scheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions, int dx, int dy) {
         super(id);
         this.scheduleModel = scheduleModel;
+        this.dx = dx;
+        this.dy = dy;
         setOutputMarkupId(true);
 
         add(new ScheduleForm("scheduleForm", scheduleModel, eventTypeOptions, jobsOptions));
-        add(CSSPackageResource.getHeaderContribution("style/newCss/component/schedule_picker.css"));
+        add(CSSPackageResource.getHeaderContribution("style/newCss/component/wicket_schedule_picker.css"));
     }
 
     class ScheduleForm extends Form<EventSchedule> {
 
+        FIDFeedbackPanel feedbackPanel;
         AjaxButton openDialogButton;
         WebMarkupContainer editorContainer;
         DateTimePicker dateTimePicker;
 
-        public ScheduleForm(String id, IModel<EventSchedule> eventScheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
+        public ScheduleForm(String id, final IModel<EventSchedule> eventScheduleModel, final IModel<List<EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
             super(id, eventScheduleModel);
 
             add(openDialogButton = new AjaxButton("openDialogButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     setEditorVisible(target, true);
-                    target.appendJavascript("translate($('#"+editorContainer.getMarkupId()+"'), $('#"+openDialogButton.getMarkupId()+"'),0,0)");
+                    target.appendJavascript("translate($('#"+editorContainer.getMarkupId()+"'), $('#"+openDialogButton.getMarkupId()+"'),"+dy+","+dx+")");
                 }
             });
 
             setDefaultEventType(eventScheduleModel, eventTypeOptions);
 
             add(editorContainer = new WebMarkupContainer("scheduleEditorContainer"));
+            editorContainer.add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
             editorContainer.setOutputMarkupPlaceholderTag(true);
             editorContainer.setVisible(false);
 
-            editorContainer.add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "nextDate")));
+            editorContainer.add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "nextStandardDate")));
+            dateTimePicker.getDateTextField().setRequired(true);
 
             DropDownChoice<EventType> eventTypeSelect = new DropDownChoice<EventType>("eventTypeSelect", new PropertyModel<EventType>(eventScheduleModel, "eventType"), eventTypeOptions, new ListableChoiceRenderer<EventType>());
             DropDownChoice<Project> jobSelect = new DropDownChoice<Project>("jobSelect", new PropertyModel<Project>(eventScheduleModel, "project"), jobsOptions, new ListableChoiceRenderer<Project>());
 
             eventTypeSelect.setNullValid(false);
+            eventTypeSelect.setRequired(true);
             jobSelect.setNullValid(true);
 
             editorContainer.add(eventTypeSelect);
-            editorContainer.add(jobSelect);
+            WebMarkupContainer jobSelectRow = new WebMarkupContainer("jobSelectRow");
+            jobSelectRow.add(jobSelect);
+            jobSelectRow.setVisible(FieldIDSession.get().getSessionUser().getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Projects));
+            editorContainer.add(jobSelectRow);
 
             editorContainer.add(new AjaxButton("addScheduleButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    onPickComplete();
+                    onPickComplete(target);
+                    setDefaultEventType(eventScheduleModel, eventTypeOptions);
                     setEditorVisible(target, false);
+                    target.addComponent(feedbackPanel);
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    target.addComponent(feedbackPanel);
                 }
             });
 
@@ -112,12 +136,14 @@ public class SchedulePicker extends Panel {
                     dateToSchedule = DateUtils.addMonths(dateToSchedule, monthsFromNow);
                     dateToSchedule = DateUtils.addDays(dateToSchedule, daysFromNow);
                     scheduleModel.getObject().setNextDate(dateToSchedule);
+                    // We must clear the input in case we have some raw input in the date field that had a validation error.
+                    dateTimePicker.clearInput();
                     target.addComponent(dateTimePicker);
                 }
             };
         }
     }
 
-    protected void onPickComplete() { }
+    protected void onPickComplete(AjaxRequestTarget target) { }
 
 }

@@ -518,6 +518,10 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, getTenantId());
 	}
 
+    public Integer getMaxSizeForMassSchedule() {
+        return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_SCHEDULE, getTenantId());
+    }
+
     public String getSearchContainerKey() {
         return containerSessionKey;
     }

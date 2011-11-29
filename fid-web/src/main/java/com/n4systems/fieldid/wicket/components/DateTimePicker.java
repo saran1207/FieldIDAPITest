@@ -110,4 +110,9 @@ public class DateTimePicker extends Panel {
 	public DateTextField getDateTextField() {
 		return dateTextField;
 	}
+
+    public void clearInput() {
+        dateTextField.clearInput();
+    }
+
 }

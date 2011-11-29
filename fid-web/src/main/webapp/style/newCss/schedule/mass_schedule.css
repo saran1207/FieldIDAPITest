@@ -1,0 +1,75 @@
+.assetTypeRow {
+    border-top: 1px solid #e2e2e2;
+    clear:both;
+    padding: 10px 0 10px 0;
+    overflow:hidden;
+}
+
+.assetTypeRow .assetTypeName {
+    width:30%;
+    font-size:1.2em;
+    display:block;
+    float:left;
+}
+
+.assetTypeRow .assetTypeCount {
+    width:10%;
+    text-align:right;
+    font-size:1.2em;
+    display:block;
+    float:left;
+}
+
+.assetTypeRow .assetTypeSchedule {
+    display:block;
+    float:left;
+    padding-left:400px;
+}
+
+
+.assetTypeRow .assetTypeSchedule input[type='submit'] {
+    font-size:1.1em;
+    padding:2px;
+    margin-bottom:6px;
+}
+
+.schedulesList {
+    border-top: 1px dotted #e2e2e2;
+    overflow:hidden;
+    clear:both;
+}
+
+.schedulesList .schedule {
+    padding-top:5px;
+    clear:both;
+    overflow:hidden;
+}
+
+.schedulesList .schedule .scheduledDate {
+    display:block;
+    float:left;
+    background:#e2e2e2;
+    padding:5px 8px;
+}
+
+.schedulesList .schedule .eventTypeName {
+    display:block;
+    float:left;
+    padding-left:8px;
+    padding-top: 5px;
+}
+
+.schedulesList .schedule .jobDescription {
+    display:block;
+    float:left;
+    padding-top: 5px;
+    padding-left:3px;
+    color: #9c9c9c;
+}
+
+.schedulesList .schedule img {
+    display:block;
+    float:left;
+    padding-top:5px;
+    padding-right:8px;
+}

@@ -127,6 +127,13 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
                 return !useLegacyCss();
             }
         });
+        add(new WebMarkupContainer("siteWideCss") {
+            { setRenderBodyOnly(true); }
+            @Override
+            public boolean isVisible() {
+                return useSiteWideCss();
+            }
+        });
     }
 
     private Component createRelogLink() {
@@ -273,7 +280,13 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         }
     }
 
+    // Ideally these will both be unneeded by all pages, After we convert to layout.css from site_wide.css and fieldid.css
+    // (both site_wide and fieldid have accumulated a ton of irrelevant stuff that may be used only on one page and breaks new pages).
     protected boolean useLegacyCss() {
+        return true;
+    }
+
+    protected boolean useSiteWideCss() {
         return true;
     }
 

@@ -1,7 +1,28 @@
 <wicket:extend>
 
-    This is the mass schedule page.
+    <div wicket:id="assetTypeSummary" class="assetTypeRow">
+        <div wicket:id="assetTypeName" class="assetTypeName"></div>
+        <div class="assetTypeCount" wicket:id="count"></div>
+        <div class="assetTypeSchedule" wicket:id="schedulePicker"></div>
 
-    <div wicket:id="schedulePicker"></div>
+        <div class="schedulesList" wicket:id="schedulesContainer">
+            <div wicket:id="schedules" class="schedule">
+                <img wicket:id="deleteImage"/>
+                <div class="scheduledDate" wicket:id="scheduledDate"></div>
+
+                <div class="eventTypeName" wicket:id="eventTypeName"></div>
+                <div class="jobDescription" wicket:id="jobDescriptionContainer">
+                    <wicket:message key="label.on"/>
+                    <span wicket:id="jobName"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="formAction">
+        <form wicket:id="submitForm">
+            <input type="submit" wicket:id="submitButton" wicket:message="value:label.perform_mass_schedule"> <wicket:message key="label.or"/> <a wicket:id="returnToSearchLink"><wicket:message key="label.returntosearch"/></a>
+        </form>
+    </div>
 
 </wicket:extend>

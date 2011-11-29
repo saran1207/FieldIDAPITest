@@ -1,8 +1,13 @@
 package com.n4systems.fieldid.service.asset;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.n4systems.model.AssetType;
+import com.n4systems.model.asset.AssetSummaryEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,5 +70,31 @@ public class AssetService extends FieldIdPersistenceService {
 		
 		return persistenceService.findAll(builder);
 	}
-	
+
+    public List<AssetSummaryEntry> getAssetSummary(List<Long> assetIds) {
+        List<Asset> assets = getAssets(assetIds);
+        Map<AssetType, AssetSummaryEntry> summaryEntryMap = new HashMap<AssetType, AssetSummaryEntry>();
+        for (Asset asset : assets) {
+            AssetType assetType = asset.getType();
+
+            if (!summaryEntryMap.containsKey(assetType)) {
+                AssetSummaryEntry assetSummaryEntry = new AssetSummaryEntry();
+                assetSummaryEntry.setAssetType(assetType);
+                summaryEntryMap.put(assetType, assetSummaryEntry);
+            }
+
+            AssetSummaryEntry assetSummaryEntry = summaryEntryMap.get(assetType);
+            assetSummaryEntry.incrementCount();
+            assetSummaryEntry.getAssetIds().add(asset.getId());
+        }
+
+        return new ArrayList<AssetSummaryEntry>(summaryEntryMap.values());
+    }
+
+    public List<Asset> getAssets(List<Long> assetIds) {
+        QueryBuilder<Asset> query = new QueryBuilder<Asset>(Asset.class, securityContext.getUserSecurityFilter());
+        query.addWhere(WhereClauseFactory.create(Comparator.IN, "id", assetIds));
+        return persistenceService.findAll(query);
+    }
+
 }

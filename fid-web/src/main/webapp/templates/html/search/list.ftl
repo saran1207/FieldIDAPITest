@@ -26,6 +26,7 @@
 			<#if sessionUser.hasAccess('createevent') >
 				| <a href="#multiEvent" name="multiEvent" id="multiEvent" class="multiEvent"><@s.text name="label.preform_mass_event"/></a>
 			</#if>
+                | <a href="/fieldid/w/massSchedule?searchId=${searchId}" name="massSchedule" id="massSchedule" class="massSchedule"><@s.text name="label.mass_schedule"/></a>
 		</div>
 	<#else>
 		<div class="emptyList" >

@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
+import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import org.apache.wicket.Request;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebRequest;
@@ -75,12 +76,20 @@ public class FieldIDSession extends WebSession {
         session.setAttribute(FlashScopeMarshaller.FLASH_MESSAGES, Arrays.asList(message));
     }
 
+    public void storeErrorMessageForStruts(String message) {
+        session.setAttribute(FlashScopeMarshaller.FLASH_ERRORS, Arrays.asList(message));
+    }
+
 	public Collection<String> getFlashMessages() {
         return (Collection<String>) session.getAttribute(FlashScopeMarshaller.FLASH_MESSAGES);
     }
 
     public Collection<String> getFlashErrors() {
         return (Collection<String>) session.getAttribute(FlashScopeMarshaller.FLASH_ERRORS);
+    }
+
+    public SearchContainer getSearchContainer(String key) {
+        return (SearchContainer) session.getAttribute(key);
     }
 
     public Tenant getTenant() {

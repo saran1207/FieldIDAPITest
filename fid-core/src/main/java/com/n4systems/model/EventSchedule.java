@@ -308,6 +308,14 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	public void setAdvancedLocation(Location advancedLocation) {
 		this.advancedLocation = advancedLocation;
 	}
+
+    public Date getNextStandardDate() {
+        return nextDate;
+    }
+
+    public void setNextStandardDate(Date date) {
+        this.nextDate = new PlainDate(date);
+    }
 	
 
 }

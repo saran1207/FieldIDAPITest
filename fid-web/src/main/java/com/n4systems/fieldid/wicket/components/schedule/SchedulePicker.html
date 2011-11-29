@@ -2,45 +2,48 @@
 
     <form wicket:id="scheduleForm">
 
-        <input type="submit" wicket:id="openDialogButton" wicket:message="value:label.addschedule">
+        <input type="submit" wicket:id="openDialogButton" wicket:message="value:label.add_a_schedule">
 
         <div wicket:id="scheduleEditorContainer" class="newScheduleForm schedulesAdd">
 
             <h2>Add a Schedule</h2>
 
-            <div class="infoSet">
+            <div wicket:id="feedbackPanel"></div>
+
+            <div class="scheduleRow">
 
                 <label class="label">
                     <wicket:message key="label.what_should_be_scheduled"/>
                 </label>
 
-                <span>
+                <div class="rightSide">
                     <select wicket:id="eventTypeSelect"></select>
-                </span>
+                </div>
 
             </div>
 
-            <div class="infoSet">
+            <div class="scheduleRow" wicket:id="jobSelectRow">
 
                 <label class="label">
                     <wicket:message key="label.assign_to_a_job"/>
+                    <span class="optionalMessage">(<wicket:message key="label.optional"/>)</span>
                 </label>
 
-                <span>
+                <div class="rightSide">
                     <select wicket:id="jobSelect"></select>
-                </span>
+                </div>
 
             </div>
 
-            <div class="infoSet">
+            <div class="scheduleRow">
 
                 <label class="label">
                     <wicket:message key="label.when_is_it_due"/>
                 </label>
 
-                <span class="fieldHolder">
+                <div class="rightSide">
                     <div wicket:id="datePicker"></div>
-                </span>
+                </div>
 
                 <span class="dateQuickLinks">
                     <a wicket:id="quickLinkToday"><wicket:message key="label.today"/></a> |
