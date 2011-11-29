@@ -63,7 +63,8 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private Date lockedUntil;
 	private Date passwordChanged;
 	
-	
+	@Column(nullable = false, unique = true)
+	private String authKey;
 	
 	@Column(name="password", nullable=false)
 	@ElementCollection(fetch=FetchType.EAGER)
@@ -98,6 +99,12 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	protected void generateGlobalIdIfNull() {
 		if (globalId == null) {
 			globalId = GlobalID.getId();
+		}
+	}
+	
+	protected void generateAuthKey() {
+		if (authKey == null) {
+			authKey = UUID.randomUUID().toString();
 		}
 	}
 	
@@ -449,5 +456,14 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 			previousPasswords.add(hashPassword);
 		}
 	}
+
+	public String getAuthKey() {
+		return authKey;
+	}
+
+	public void setAuthKey(String authKey) {
+		this.authKey = authKey;
+	}
+	
 	
 }

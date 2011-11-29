@@ -64,6 +64,10 @@ public class WhereClauseFactory {
 		return create(null, null, param, value, null, null);
 	}
 	
+	public static <T> WhereClause<T> createCaseInsensitive(String param, T value) {
+		return create(Comparator.EQ, null, param, value, WhereParameter.IGNORE_CASE, null);
+	}
+	
 	public static <T> WhereClause<T> create(String name, String param, T value) {
 		return create(null, name, param, value, null, null);
 	}

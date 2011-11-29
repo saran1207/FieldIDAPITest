@@ -64,6 +64,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.fieldid</groupId>
+			<artifactId>fid-ws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fieldid</groupId>
 			<artifactId>fid-test-utils</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -271,6 +275,6 @@
       		<artifactId>gson</artifactId>
       		<version>1.7.1</version>
       		<scope>compile</scope>
-    	</dependency>        
+    	</dependency>
 	</dependencies>
 </project>

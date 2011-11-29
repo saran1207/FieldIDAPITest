@@ -11,6 +11,7 @@
 		<module>fid-cert-data</module>
 		<module>fid-web</module>
 		<module>fid-exporter</module>
+		<module>fid-ws</module>
 	</modules>
 	<repositories>
 		<repository>
@@ -84,6 +85,11 @@
 			<dependency>
 				<groupId>com.fieldid</groupId>
 				<artifactId>fid-core</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fieldid</groupId>
+				<artifactId>fid-ws</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
 			<dependency>

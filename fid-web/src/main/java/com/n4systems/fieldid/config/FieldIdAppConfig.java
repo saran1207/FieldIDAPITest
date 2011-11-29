@@ -53,6 +53,7 @@ import com.n4systems.fieldid.wicket.pages.widgets.OrgDateRangeSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgPeriodSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
+import com.n4systems.fieldid.ws.v1.resources.AuthenticationResource;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.dashboard.DashboardService;
@@ -319,5 +320,9 @@ public class FieldIdAppConfig {
     	return new OrgPeriodSubtitleHelper();
     }
     
+    @Bean
+    public AuthenticationResource authenticationResource() {
+    	return new AuthenticationResource();
+    }
     
 }

@@ -114,10 +114,20 @@
 			<param-value>com.n4systems.ws.resources</param-value>
 		</init-param>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>fieldid_api_v1</servlet-name>
+  		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Field ID WS</servlet-name>
 		<url-pattern>/ws/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>fieldid_api_v1</servlet-name>
+		<url-pattern>/api/v1/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
