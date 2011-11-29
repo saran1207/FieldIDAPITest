@@ -18,7 +18,6 @@ import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
 import com.n4systems.fieldid.ws.v1.models.ApiUser;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.StringUtils;
 
 @Path("/authenticate.json")
 @Component
@@ -28,16 +27,20 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 	@Autowired
 	private UserService userService;
 	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public ApiUser authenticate(
-			@FormParam("companyId") String tenantName,
-			@FormParam("userId") String userId, 
+			@FormParam("tenant") String tenantName,
+			@FormParam("user") String userId, 
 			@FormParam("password") String password) {
 		
-		if (StringUtils.isEmpty(tenantName) || StringUtils.isEmpty(userId) || StringUtils.isEmpty(password)) {
+		if (tenantName == null || userId == null || password == null) {
 			throw new ForbiddenException();
 		}
 
@@ -45,7 +48,7 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 		if (user == null) {
 			throw new ForbiddenException();
 		}
-		
+
 		ApiUser apiUser = convertUserToApiUser(user);
 		return apiUser;
 	}

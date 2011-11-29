@@ -11,6 +11,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.fieldid</groupId>
+			<artifactId>fid-test-utils</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fieldid</groupId>
 			<artifactId>fid-core</artifactId>
 			<exclusions>
 				<exclusion>

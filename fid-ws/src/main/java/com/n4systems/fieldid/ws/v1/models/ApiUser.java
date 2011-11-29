@@ -4,7 +4,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ApiUser extends ApiReadonlyModelWithOwner {
-	private Long id;
 	private String userId;
 	private String name;
 	private String hashPassword;
@@ -12,14 +11,6 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private String authKey;
 	private String userType;
 	private ApiUserPermissions permissions = new ApiUserPermissions();
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getUserId() {
 		return userId;
