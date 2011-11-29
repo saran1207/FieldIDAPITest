@@ -241,6 +241,7 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
         protected void onSubmit() {
             if (getModelObject().getSortedStaticAndDynamicColumns().isEmpty()) {
                 error(new FIDLabelModel("error.nocolumnsselected").getObject());
+                onNoDisplayColumnsSelected();
                 return;
             }
             HttpSession session = ((WebRequest) getRequest()).getHttpServletRequest().getSession();
@@ -293,5 +294,7 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
         eventTypeGroupDropDownChoice.setNullValid(true);
         return eventTypeGroupDropDownChoice;
     }
+    
+    protected void onNoDisplayColumnsSelected() {}
 
 }

@@ -19,6 +19,7 @@ import org.apache.wicket.model.PropertyModel;
 public class ReportingResultsPage extends FieldIDFrontEndPage {
 
     private EventReportCriteriaModel reportCriteriaModel;
+    private ReportResultsPanel reportResultsPanel;
 
     public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel) {
         this.reportCriteriaModel = reportCriteriaModel;
@@ -26,7 +27,7 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
 
         add(CSSPackageResource.getHeaderContribution("style/pageStyles/reporting.css"));
 
-        add(new ReportResultsPanel("resultsPanel", reportCriteriaPropertyModel));
+        add(reportResultsPanel = new ReportResultsPanel("resultsPanel", reportCriteriaPropertyModel));
 
         add(new BookmarkablePageLink<Void>("startNewReportLink", ReportingPage.class));
         add(createSaveReportLink("saveReportLink", true));
@@ -37,7 +38,12 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
         add(createSaveReportLink("saveReportLinkAs2", false));
 
         SlidingReportSectionCollapseContainer criteriaExpandContainer = new SlidingReportSectionCollapseContainer("criteriaExpandContainer", new FIDLabelModel("label.reportcriteria"));
-        criteriaExpandContainer.addContainedPanel(new EventReportCriteriaPanel("criteriaPanel", reportCriteriaPropertyModel));
+        criteriaExpandContainer.addContainedPanel(new EventReportCriteriaPanel("criteriaPanel", reportCriteriaPropertyModel) {
+        	@Override
+        	protected void onNoDisplayColumnsSelected() {
+        		reportResultsPanel.setVisible(false);
+        	}
+        });
 
         add(criteriaExpandContainer);
         add(new MassActionPanel("massActionPanel", reportCriteriaPropertyModel));
