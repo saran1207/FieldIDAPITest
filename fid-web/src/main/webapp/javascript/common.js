@@ -185,6 +185,8 @@ function findPos(obj) {
 function translate(target, relativeElement, offsetY, offsetX) {
 	var position = findPos(relativeElement);
 
+    target.setStyle({ position: 'absolute' });
+
 	target.setStyle({'top': position[1] + offsetY + "px",
 					'left': position[0] + offsetX + "px"});
 }
