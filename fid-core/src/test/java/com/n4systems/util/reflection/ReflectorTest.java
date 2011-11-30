@@ -29,11 +29,13 @@ public class ReflectorTest {
 	private class ExposedReflector extends Reflector {
 		
 		public String _createGetter(String field) {
-			return Reflector.createGetter(field);
+			String fieldNoIndex = Reflector.parseFieldFromIndexPath(field);
+			return "get" + fieldNoIndex.substring(0, 1).toUpperCase() + fieldNoIndex.substring(1);
 		}
 		
 		public String _createBooleanGetter(String field) {
-			return Reflector.createBooleanGetter(field);
+			String fieldNoIndex = Reflector.parseFieldFromIndexPath(field);
+			return "is" + fieldNoIndex.substring(0, 1).toUpperCase() + fieldNoIndex.substring(1);
 		}
 		
 		public boolean _isArray(Object o) {
@@ -69,7 +71,7 @@ public class ReflectorTest {
 		}
 		
 		public boolean _pathIsIndexCall(String path) {
-			return Reflector.pathIsIndexCall(path);
+			return Reflector.pathHasIndexCall(path);
 		}
 		
 		public boolean _pathIsMethodCall(String path) {
@@ -198,10 +200,12 @@ public class ReflectorTest {
 		bean.setName(fieldName);
 		
 		Object rootBean = Reflector.getPathValue(bean, "", new ReflectionFilter<String>() {
+			@Override
 			public String getPath() {
 				return "name";
 			}
 
+			@Override
 			public boolean isValid(String object) {
 				return (object == fieldName);
 			}
@@ -212,10 +216,12 @@ public class ReflectorTest {
 		
 		// no bean will pass filter, reflector must return null
 		assertNull(Reflector.getPathValue(bean, "", new ReflectionFilter<String>() {
+			@Override
 			public String getPath() {
 				return "name";
 			}
 
+			@Override
 			public boolean isValid(String object) {
 				return false;
 			}
@@ -228,10 +234,12 @@ public class ReflectorTest {
 		
 		 Object beanB = Reflector.getPathValue(bean, "beanB", new ReflectionFilter<String>() {
 
+			@Override
 			public String getPath() {
 				return "name";
 			}
 
+			@Override
 			public boolean isValid(String object) {
 				return (object == beanBName);
 			}
@@ -254,10 +262,12 @@ public class ReflectorTest {
 		
 		
 		List<ReflectionTestBeanB> beanBList = (List<ReflectionTestBeanB>)Reflector.getPathValue(bean, "beanBList", new ReflectionFilter<Long>() {
+			@Override
 			public String getPath() {
 				return "id";
 			}
 
+			@Override
 			public boolean isValid(Long object) {
 				for (Long id: ids) {
 					if (id.equals(object)) {
@@ -397,11 +407,38 @@ public class ReflectorTest {
 	
 	@Test
 	public void test_find_all_fields_allows_parent_class_to_have_no_fields() {
-
-		
 		Field[] fields = Reflector.findAllFields(NonEmptyChild.class);
 		
 		assertEquals(1, fields.length);
 		assertEquals("field", fields[0].getName());
 	}
+	
+	@Test
+	public void finds_method_or_index_in_correct_order() throws ReflectionException {
+		ReflectionTestBeanB beanB = new ReflectionTestBeanB();
+		ReflectionTestBeanA beanA = new ReflectionTestBeanA();
+		beanA.getBeanMap().put("methodName()", beanB);
+		
+		Object value = Reflector.getPathValue(beanA, "beanMap[methodName()]");
+		assertSame(beanB, value);
+	}
+
+	@Test
+	public void finds_index_with_embedded_braces() throws ReflectionException {
+		ReflectionTestBeanB beanB = new ReflectionTestBeanB();
+		ReflectionTestBeanA beanA = new ReflectionTestBeanA();
+		beanA.getBeanMap().put("methodName[asd[]]", beanB);
+		
+		Object value = Reflector.getPathValue(beanA, "beanMap[methodName[asd[]]]");
+		assertSame(beanB, value);
+	}
+	
+	@Test
+	public void allows_method_list_syntax() throws ReflectionException {
+		ReflectionTestBeanA beanA = new ReflectionTestBeanA();
+		
+		Object value = Reflector.getPathValue(beanA, "getList(hello)[0]");
+		assertEquals("hello", value);
+	}
+	
 }

@@ -1,6 +1,7 @@
 package com.n4systems.util.reflection.beans;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -91,5 +92,9 @@ public class ReflectionTestBeanA extends AbstractReflectionTestBean {
 
 	public void setBoolValue(boolean boolValue) {
 		this.boolValue = boolValue;
+	}
+	
+	public List<String> getList(String str) {
+		return Arrays.asList(str);
 	}
 }

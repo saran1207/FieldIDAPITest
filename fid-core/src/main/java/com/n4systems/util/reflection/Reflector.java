@@ -19,6 +19,9 @@ import com.n4systems.util.CollectionFactory;
  * This is where the magic happens ...
  */
 public class Reflector {
+	
+	private enum Operation { GETTER, METHOD, INDEX };
+
 	// all methods are static, hide the constructor
 	protected Reflector() {}
 	
@@ -156,45 +159,26 @@ public class Reflector {
 			//pop the next part off the stack
 			String pathVar = pathStack.pop();
 			
-			String methodName;
-			boolean isMethodCall = pathIsMethodCall(pathVar);
-			if (isMethodCall) {
-				// the path is a method call, we need to isolate the method name
-				methodName = parseMethodNameFromMethod(pathVar);
-			} else {
-				// we have a field name, convert it to a getter
-				methodName = createGetter(pathVar);
+			
+			Object methodValue = null;
+			switch(getPathOperation(pathVar)) {
+				case INDEX:
+				case GETTER:
+					Method getter = findClassGetter(object.getClass(), pathVar);
+					methodValue = getter.invoke(object);
+					break;
+				case METHOD:
+					String methodName = parseMethodNameFromMethod(pathVar);
+					Object[] methodArgs = parseMethodArgs(pathVar);
+					
+					Method method = findClassMethod(object.getClass(), methodName, methodArgs);
+					methodValue = method.invoke(object, methodArgs);
+					break;
+				
 			}
-			
-			// get a list of our method args if there are any
-			Object[] methodArgs = parseMethodArgs(pathVar);
-			
-			Method method;
-			try {
-				// find our path method
-				method = findClassMethod(object.getClass(), methodName, methodArgs);
-			} catch(NoSuchMethodException e1) {
-				if (isMethodCall) {
-					// nothing more we can do here
-					throw e1;
-				} else {
-					try {
-						// if the path was not a method call (ie a getter), it could be we're dealing with a 
-						// boolean which uses the isField syntax. let try and find that before rethrowing
-						method = findClassMethod(object.getClass(), createBooleanGetter(pathVar), methodArgs);
-					} catch(NoSuchMethodException e2) {
-						// the path was not a boolean getter either, we'll ignore the second NME and rethrow the first
-						throw e1;
-					}
-				}
-			}
-			
-			
-			// invoke the method with arguments (if any)
-			Object methodValue = method.invoke(object, parseMethodArgs(pathVar));
 			
 			// TODO: check/return element index here eg infoOptions[0]
-			if (pathIsIndexCall(pathVar)) {
+			if (pathHasIndexCall(pathVar)) {
 				String indexStr = parseIndexFromIndexPath(pathVar);
 				
 				if (isList(methodValue)) {
@@ -220,6 +204,17 @@ public class Reflector {
 		}
 		
 		return pathValue;
+	}
+	
+	private static Operation getPathOperation(String pathVar) {
+		for (char c: pathVar.toCharArray()) {
+			if (c == '[') {
+				return Operation.INDEX;
+			} else if (c == '(') {
+				return Operation.METHOD;
+			}
+		}
+		return Operation.GETTER;
 	}
 	
 	protected static <K> Object filterObject(Object object, ReflectionFilter<K> filter) throws ReflectionException {
@@ -275,26 +270,6 @@ public class Reflector {
 	}
 	
 	/**
-	 * Converts field names to getters using Java Beans convention.  Eg myField to getMyField
-	 * @param	field	String field name
-	 * @return			String getter representation of the field
-	 */
-	protected static String createGetter(String field) {
-		String fieldNoIndex = parseFieldFromIndexPath(field);
-		return "get" + fieldNoIndex.substring(0, 1).toUpperCase() + fieldNoIndex.substring(1);
-	}
-	
-	/**
-	 * Converts field names to a boolean getter using Java Beans convention.  Eg myField to isMyField
-	 * @param	field	String field name
-	 * @return			String boolean getter representation of the field
-	 */
-	protected static String createBooleanGetter(String field) {
-		String fieldNoIndex = parseFieldFromIndexPath(field);
-		return "is" + fieldNoIndex.substring(0, 1).toUpperCase() + fieldNoIndex.substring(1);
-	}
-	
-	/**
 	 * Parses method calls to method names.  Eg myMethod("asd", 123) to myMethod
 	 * @param 	method 	String representation of a method call eg myMethod("asd", 123)
 	 * @return			A String method name parsed from the 'method' or 'method' itself
@@ -334,7 +309,7 @@ public class Reflector {
 	 * @return			The index representation
 	 */
 	protected static String parseIndexFromIndexPath(String indexCall) {
-		return indexCall.substring(indexCall.indexOf('[') + 1, indexCall.indexOf(']'));
+		return indexCall.substring(indexCall.indexOf('[') + 1, indexCall.lastIndexOf(']'));
 	}
 	
 	/**
@@ -357,6 +332,27 @@ public class Reflector {
 		}
 		
 		return objClass.getMethod(methodName, argTypes);
+	}
+	
+	/**
+	 *
+	 * 
+	 * @param 	objClass	Class implementing the method
+	 * @param	fieldName   Name of the field
+	 */
+	public static Method findClassGetter(Class<?> objClass, String pathVar) throws NoSuchMethodException {
+		String fieldNoIndex = parseFieldFromIndexPath(pathVar);
+		String getterName = "get" + fieldNoIndex.substring(0, 1).toUpperCase() + fieldNoIndex.substring(1);
+		
+		Method method;
+		try {
+			method = objClass.getMethod(getterName);
+		} catch(NoSuchMethodException e1) {
+			getterName = "is" + fieldNoIndex.substring(0, 1).toUpperCase() + fieldNoIndex.substring(1);
+			method = objClass.getMethod(getterName);
+		}
+
+		return method;
 	}
 	
 	/**
@@ -471,7 +467,7 @@ public class Reflector {
 	 * @param	pathPart	String path
 	 * @return				true if path contains a ']'.  false otherwise.
 	 */
-	protected static boolean pathIsIndexCall(String pathPart) {
+	protected static boolean pathHasIndexCall(String pathPart) {
 		return pathPart.contains("]");
 	}
 	
