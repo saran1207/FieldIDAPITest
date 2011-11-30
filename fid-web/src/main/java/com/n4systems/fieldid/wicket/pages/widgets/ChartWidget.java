@@ -8,6 +8,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -61,7 +62,7 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 			public Component getLoadingComponent(final String markupId) {
             	logger.warn("WIDGET start " + className + " @ " + dateFormat.format(new Date()));
                 return new Label(markupId, "<div class='loadingText'>" + new FIDLabelModel("label.loading_ellipsis").getObject() +
-                    "</div>").setEscapeModelStrings(false);
+                    "</div>").setEscapeModelStrings(false).add(new SimpleAttributeModifier("class", "chart-loading"));
             }
 		};		
 	}
