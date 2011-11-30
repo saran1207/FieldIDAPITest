@@ -1,5 +1,7 @@
 <wicket:extend>
 
+    <div wicket:id="feedbackPanel"></div>
+
     <div wicket:id="assetTypeSummary" class="assetTypeRow">
         <div wicket:id="assetTypeName" class="assetTypeName"></div>
         <div class="assetTypeCount" wicket:id="count"></div>
@@ -19,10 +21,16 @@
         </div>
     </div>
 
-    <div class="formAction">
-        <form wicket:id="submitForm">
+    <form wicket:id="submitForm">
+
+        <div class="duplicateDetectionSection">
+            <input type="checkbox" wicket:id="duplicateDetection"> <wicket:message key="label.enable_duplicate_detection"/>
+        </div>
+
+        <div class="formAction">
             <input type="submit" wicket:id="submitButton" wicket:message="value:label.perform_mass_schedule"> <wicket:message key="label.or"/> <a wicket:id="returnToSearchLink"><wicket:message key="label.returntosearch"/></a>
-        </form>
-    </div>
+        </div>
+    </form>
+
 
 </wicket:extend>

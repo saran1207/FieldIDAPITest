@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.config;
 
+import com.n4systems.fieldid.service.schedule.MassScheduleService;
+import com.n4systems.fieldid.service.schedule.ScheduleService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -323,6 +325,16 @@ public class FieldIdAppConfig {
     @Bean
     public AuthenticationResource authenticationResource() {
     	return new AuthenticationResource();
+    }
+
+    @Bean
+    public ScheduleService scheduleService() {
+        return new ScheduleService();
+    }
+
+    @Bean
+    public MassScheduleService massScheduleService() {
+        return new MassScheduleService();
     }
     
 }

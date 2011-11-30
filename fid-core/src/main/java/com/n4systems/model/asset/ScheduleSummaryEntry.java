@@ -7,12 +7,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssetSummaryEntry implements Serializable {
+public class ScheduleSummaryEntry implements Serializable {
 
     private AssetType assetType;
     private List<Long> assetIds = new ArrayList<Long>();
     private List<EventSchedule> schedules = new ArrayList<EventSchedule>();
-    private int count = 0;
 
     public AssetType getAssetType() {
         return assetType;
@@ -27,14 +26,11 @@ public class AssetSummaryEntry implements Serializable {
     }
 
     public int getCount() {
-        return count;
-    }
-
-    public void incrementCount() {
-        count++;
+        return assetIds.size();
     }
 
     public List<EventSchedule> getSchedules() {
         return schedules;
     }
+
 }

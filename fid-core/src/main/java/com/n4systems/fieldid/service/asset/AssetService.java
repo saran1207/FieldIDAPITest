@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.model.AssetType;
-import com.n4systems.model.asset.AssetSummaryEntry;
+import com.n4systems.model.asset.ScheduleSummaryEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,24 +71,23 @@ public class AssetService extends FieldIdPersistenceService {
 		return persistenceService.findAll(builder);
 	}
 
-    public List<AssetSummaryEntry> getAssetSummary(List<Long> assetIds) {
+    public List<ScheduleSummaryEntry> getAssetScheduleSummary(List<Long> assetIds) {
         List<Asset> assets = getAssets(assetIds);
-        Map<AssetType, AssetSummaryEntry> summaryEntryMap = new HashMap<AssetType, AssetSummaryEntry>();
+        Map<AssetType, ScheduleSummaryEntry> summaryEntryMap = new HashMap<AssetType, ScheduleSummaryEntry>();
         for (Asset asset : assets) {
             AssetType assetType = asset.getType();
 
             if (!summaryEntryMap.containsKey(assetType)) {
-                AssetSummaryEntry assetSummaryEntry = new AssetSummaryEntry();
-                assetSummaryEntry.setAssetType(assetType);
-                summaryEntryMap.put(assetType, assetSummaryEntry);
+                ScheduleSummaryEntry scheduleSummaryEntry = new ScheduleSummaryEntry();
+                scheduleSummaryEntry.setAssetType(assetType);
+                summaryEntryMap.put(assetType, scheduleSummaryEntry);
             }
 
-            AssetSummaryEntry assetSummaryEntry = summaryEntryMap.get(assetType);
-            assetSummaryEntry.incrementCount();
-            assetSummaryEntry.getAssetIds().add(asset.getId());
+            ScheduleSummaryEntry scheduleSummaryEntry = summaryEntryMap.get(assetType);
+            scheduleSummaryEntry.getAssetIds().add(asset.getId());
         }
 
-        return new ArrayList<AssetSummaryEntry>(summaryEntryMap.values());
+        return new ArrayList<ScheduleSummaryEntry>(summaryEntryMap.values());
     }
 
     public List<Asset> getAssets(List<Long> assetIds) {
