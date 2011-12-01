@@ -69,7 +69,8 @@ public class AuthenticationResourceTest {
 		
 		ApiUser apiUser = fixture.authenticate(tenant, userId, pass);
 		
-		assertEquals(user.getId(), apiUser.getId());
+		assertEquals(user.getId(), apiUser.getSid());
+		assertEquals(user.getModified(), apiUser.getModified());
 		assertEquals(user.isActive(), apiUser.isActive());
 		assertEquals(user.getOwner().getId(), apiUser.getOwnerId());
 		assertEquals(user.getUserID(), apiUser.getUserId());
@@ -78,8 +79,8 @@ public class AuthenticationResourceTest {
 		assertEquals(user.getHashSecurityCardNumber(), apiUser.getHashSecurityCardNumber());
 		assertEquals(user.getAuthKey(), apiUser.getAuthKey());
 		assertEquals(user.getUserType().name(), apiUser.getUserType());
-		assertEquals(Permissions.hasOneOf(user, Permissions.CreateEvent), apiUser.getPermissions().isCreateEvent());
-		assertEquals(Permissions.hasOneOf(user, Permissions.EditEvent), apiUser.getPermissions().isEditEvent());
-		assertEquals(Permissions.hasOneOf(user, Permissions.Tag), apiUser.getPermissions().isIdentify());	
+		assertEquals(Permissions.hasOneOf(user, Permissions.CreateEvent), apiUser.isCreateEventEnabled());
+		assertEquals(Permissions.hasOneOf(user, Permissions.EditEvent), apiUser.isEditEventEnabled());
+		assertEquals(Permissions.hasOneOf(user, Permissions.Tag), apiUser.isIdentifyEnabled());	
 	}
 }

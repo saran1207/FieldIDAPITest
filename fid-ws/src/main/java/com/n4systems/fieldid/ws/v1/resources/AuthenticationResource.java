@@ -55,7 +55,8 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 	
 	private ApiUser convertUserToApiUser(User user) {
 		ApiUser apiUser = new ApiUser();
-		apiUser.setId(user.getId());
+		apiUser.setSid(user.getId());
+		apiUser.setModified(user.getModified());
 		apiUser.setActive(user.isActive());
 		apiUser.setOwnerId(user.getOwner().getId());
 		apiUser.setUserId(user.getUserID());
@@ -64,9 +65,9 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 		apiUser.setUserType(user.getUserType().name());
 		apiUser.setHashPassword(user.getHashPassword());
 		apiUser.setHashSecurityCardNumber(user.getHashSecurityCardNumber());
-		apiUser.getPermissions().setCreateEvent(Permissions.hasOneOf(user, Permissions.CreateEvent));
-		apiUser.getPermissions().setEditEvent(Permissions.hasOneOf(user, Permissions.EditEvent));
-		apiUser.getPermissions().setIdentify(Permissions.hasOneOf(user, Permissions.Tag));
+		apiUser.setCreateEventEnabled(Permissions.hasOneOf(user, Permissions.CreateEvent));
+		apiUser.setEditEventEnabled(Permissions.hasOneOf(user, Permissions.EditEvent));
+		apiUser.setIdentifyEnabled(Permissions.hasOneOf(user, Permissions.Tag));
 		return apiUser;
 	}
 	

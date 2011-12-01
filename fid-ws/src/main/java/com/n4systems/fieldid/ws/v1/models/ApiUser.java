@@ -10,7 +10,9 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private String hashSecurityCardNumber;
 	private String authKey;
 	private String userType;
-	private ApiUserPermissions permissions = new ApiUserPermissions();
+	private boolean identifyEnabled;
+	private boolean createEventEnabled;
+	private boolean editEventEnabled;
 
 	public String getUserId() {
 		return userId;
@@ -60,12 +62,29 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 		this.userType = userType;
 	}
 
-	public ApiUserPermissions getPermissions() {
-		return permissions;
+	public boolean isIdentifyEnabled() {
+		return identifyEnabled;
 	}
 
-	public void setPermissions(ApiUserPermissions permissions) {
-		this.permissions = permissions;
+	public void setIdentifyEnabled(boolean permissionIdentify) {
+		this.identifyEnabled = permissionIdentify;
 	}
+
+	public boolean isCreateEventEnabled() {
+		return createEventEnabled;
+	}
+
+	public void setCreateEventEnabled(boolean permissionCreateEvent) {
+		this.createEventEnabled = permissionCreateEvent;
+	}
+
+	public boolean isEditEventEnabled() {
+		return editEventEnabled;
+	}
+
+	public void setEditEventEnabled(boolean permissionEditEvent) {
+		this.editEventEnabled = permissionEditEvent;
+	}
+	
 
 }
