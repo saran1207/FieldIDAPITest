@@ -46,7 +46,6 @@ import com.n4systems.model.eventtype.EventTypeListableLoader;
 import com.n4systems.model.fileattachment.FileAttachmentLoader;
 import com.n4systems.model.jobs.EventJobListableLoader;
 import com.n4systems.model.lastmodified.LastModifiedListLoader;
-import com.n4systems.model.lastmodified.LegacyLastModifiedListLoader;
 import com.n4systems.model.location.AllPredefinedLocationsPaginatedLoader;
 import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.location.PredefinedLocationListLoader;
@@ -54,14 +53,56 @@ import com.n4systems.model.location.PredefinedLocationTreeLoader;
 import com.n4systems.model.messages.PaginatedMessageLoader;
 import com.n4systems.model.messages.UnreadMessageCountLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
-import com.n4systems.model.orgs.*;
+import com.n4systems.model.orgs.AllOrgsWithArchivedListLoader;
+import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
+import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
+import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
+import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
+import com.n4systems.model.orgs.EntityByIdIncludingArchivedLoader;
+import com.n4systems.model.orgs.InternalOrgListableLoader;
+import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
+import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
+import com.n4systems.model.orgs.SecondaryOrgListableLoader;
+import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.orgs.customer.CustomerOrgsWithNameLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.legacy.LegacyEntityCreateModifyDate;
-import com.n4systems.model.safetynetwork.*;
+import com.n4systems.model.safetynetwork.AllPreAssignedAssetsLoader;
+import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
+import com.n4systems.model.safetynetwork.AssetsByIdOwnerTypeLoader;
+import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
+import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
+import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
+import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
+import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
+import com.n4systems.model.safetynetwork.EventsByAssetIdLoader;
+import com.n4systems.model.safetynetwork.HasLinkedAssetsLoader;
+import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentListLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssetLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssetTypeLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssignedAssetEventLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAttachmentLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkEventLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkPreAssignedAssetLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetCountLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetEventLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredOrAssignedEventLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkUnregisteredAssetCountLoader;
+import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
+import com.n4systems.model.safetynetwork.TypedOrgConnection;
+import com.n4systems.model.safetynetwork.TypedOrgConnectionListLoader;
+import com.n4systems.model.safetynetwork.VendorLinkedOrgListLoader;
+import com.n4systems.model.safetynetwork.VendorLinkedOrgLoader;
+import com.n4systems.model.safetynetwork.VendorOrgConnectionLoader;
+import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.signup.SignupReferralListLoader;
@@ -370,15 +411,15 @@ public class LoaderFactory implements Serializable {
 	}
 
 	public LastModifiedListLoader createLastModifiedListLoader(Class<? extends AbstractEntity> clazz) { 
-		return new LastModifiedListLoader(filter, clazz);
+		return LastModifiedListLoader.create(filter, clazz);
+	}
+	
+	public LastModifiedListLoader createLastModifiedListLoaderLegacy(Class<? extends LegacyEntityCreateModifyDate> clazz) { 
+		return LastModifiedListLoader.createLegacy(filter, clazz);
 	}
 
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
 		return new LatestEulaAcceptanceLoader(filter);
-	}
-
-	public <T extends LegacyEntityCreateModifyDate> LegacyLastModifiedListLoader<T> createLegacyLastModifiedListLoader(Class<T> clazz) {
-		return new LegacyLastModifiedListLoader<T>(filter, clazz);
 	}
 
 	public NextEventDateByEventLoader createNextEventDateByEventLoader() {

@@ -1,10 +1,9 @@
 package com.n4systems.ws.resources;
 
-import java.util.List;
 
 import rfid.ejb.entity.CommentTempBean;
 
-import com.n4systems.model.lastmodified.LastModified;
+import com.n4systems.model.lastmodified.LastModifiedListLoader;
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -20,8 +19,8 @@ public class CommentTemplateResourceDefiner implements ResourceDefiner<CommentTe
 	}
 
 	@Override
-	public Loader<List<LastModified>> getLastModifiedLoader(LoaderFactory loaderFactory) {
-		return loaderFactory.createLegacyLastModifiedListLoader(CommentTempBean.class);
+	public LastModifiedListLoader getLastModifiedLoader(LoaderFactory loaderFactory) {
+		return loaderFactory.createLastModifiedListLoaderLegacy(CommentTempBean.class);
 	}
 
 	@Override

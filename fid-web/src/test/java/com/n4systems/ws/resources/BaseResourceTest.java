@@ -11,12 +11,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.lastmodified.LastModified;
+import com.n4systems.model.lastmodified.LastModifiedListLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
-import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.ws.model.WsModelConverter;
 import com.n4systems.ws.model.lastmod.WsLastModified;
 import com.n4systems.ws.utils.ConversionHelper;
+import com.n4systems.ws.utils.DateParam;
 import com.n4systems.ws.utils.ResourceContext;
 
 public class BaseResourceTest {
@@ -57,19 +58,21 @@ public class BaseResourceTest {
 	public void verify_mocks() {
 		verify(context, converter, definer, loaderFactory, modelConverter, lastModifiedConverter);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Test
 	public void test_get_list() {
+		DateParam after = new DateParam("1322760138224");
+		
 		List<WsLastModified> wsModels = Arrays.asList(new WsLastModified(), new WsLastModified());
 		
-		ListLoader<LastModified> loader = createMock(ListLoader.class);
+		LastModifiedListLoader loader = createMock(LastModifiedListLoader.class);
 		
 		expect(definer.getLastModifiedLoader(loaderFactory)).andReturn(loader);
+		expect(loader.modifiedAfter(after)).andReturn(loader);
 		expect(converter.convertList(loader, lastModifiedConverter)).andReturn(wsModels);
 		replay(loader, context, definer, converter, modelConverter);
 		
-		WsLastModified[] result = resource.list();
+		WsLastModified[] result = resource.list(after);
 		
 		assertArrayEquals(wsModels.toArray(new WsLastModified[wsModels.size()]), result);
 	}

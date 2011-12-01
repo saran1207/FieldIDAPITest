@@ -8,10 +8,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import com.n4systems.model.lastmodified.LastModified;
+import com.n4systems.model.lastmodified.LastModifiedListLoader;
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.ArrayUtils;
@@ -19,6 +21,7 @@ import com.n4systems.ws.model.WsModelConverter;
 import com.n4systems.ws.model.lastmod.WsLastModified;
 import com.n4systems.ws.model.lastmod.WsLastModifiedConverter;
 import com.n4systems.ws.utils.ConversionHelper;
+import com.n4systems.ws.utils.DateParam;
 import com.n4systems.ws.utils.ResourceContext;
 import com.n4systems.ws.utils.WsLoaderHelper;
 
@@ -42,8 +45,9 @@ public abstract class BaseResource<M, W> {
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
-	public WsLastModified[] list() {
-		List<WsLastModified> wsList = converter.convertList(definer.getLastModifiedLoader(context.getLoaderFactory()), lastModifiedConverter);
+	public WsLastModified[] list(@QueryParam("after") DateParam after) {
+		LastModifiedListLoader lastModifiedLoader = definer.getLastModifiedLoader(context.getLoaderFactory()).modifiedAfter(after);
+		List<WsLastModified> wsList = converter.convertList(lastModifiedLoader, lastModifiedConverter);
 		return wsList.toArray(new WsLastModified[wsList.size()]);
 	}
 	
