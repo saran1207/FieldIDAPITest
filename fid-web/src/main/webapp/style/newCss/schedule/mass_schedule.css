@@ -74,3 +74,16 @@
     clear:both;
     padding:8px 0 6px 0;
 }
+
+
+.scheduleAllContainer {
+    padding-bottom: 10px;
+    overflow:hidden;
+}
+
+.scheduleAllContainer .noCommonEventTypesMessage {
+    padding-top:5px;
+    display:block;
+    float:left;
+    color:#9c9c9c;
+}

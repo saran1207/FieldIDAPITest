@@ -2,23 +2,31 @@
 
     <div wicket:id="feedbackPanel"></div>
 
-    <div wicket:id="assetTypeSummary" class="assetTypeRow">
-        <div wicket:id="assetTypeName" class="assetTypeName"></div>
-        <div class="assetTypeCount" wicket:id="count"></div>
-        <div class="assetTypeSchedule" wicket:id="schedulePicker"></div>
+    <div class="scheduleAllContainer">
+        <div wicket:id="scheduleAllPicker"></div> <div class="noCommonEventTypesMessage" wicket:id="noCommonEventTypesMessage">(<wicket:message key="message.cant_schedule_all_no_common_event_types"/>)</div>
+    </div>
 
-        <div class="schedulesList" wicket:id="schedulesContainer">
-            <div wicket:id="schedules" class="schedule">
-                <img wicket:id="deleteImage"/>
-                <div class="scheduledDate" wicket:id="scheduledDate"></div>
+    <div wicket:id="assetTypesListContainer">
 
-                <div class="eventTypeName" wicket:id="eventTypeName"></div>
-                <div class="jobDescription" wicket:id="jobDescriptionContainer">
-                    <wicket:message key="label.on"/>
-                    <span wicket:id="jobName"></span>
+        <div wicket:id="assetTypeSummary" class="assetTypeRow">
+            <div wicket:id="assetTypeName" class="assetTypeName"></div>
+            <div class="assetTypeCount" wicket:id="count"></div>
+            <div class="assetTypeSchedule" wicket:id="schedulePicker"></div>
+
+            <div class="schedulesList" wicket:id="schedulesContainer">
+                <div wicket:id="schedules" class="schedule">
+                    <img wicket:id="deleteImage"/>
+                    <div class="scheduledDate" wicket:id="scheduledDate"></div>
+
+                    <div class="eventTypeName" wicket:id="eventTypeName"></div>
+                    <div class="jobDescription" wicket:id="jobDescriptionContainer">
+                        <wicket:message key="label.on"/>
+                        <span wicket:id="jobName"></span>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <form wicket:id="submitForm">

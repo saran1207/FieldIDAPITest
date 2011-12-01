@@ -24,6 +24,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import rfid.ejb.entity.InfoFieldBean;
@@ -508,4 +509,14 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
     public void setIdentifierOverridden(boolean identifierOverridden) {
         this.identifierOverridden = identifierOverridden;
     }
+
+    @Transient
+    public List<EventType> getAllEventTypes() {
+        List<EventType> allEventTypes = new ArrayList<EventType>();
+        for (AssociatedEventType eventType : eventTypes) {
+            allEventTypes.add(eventType.getEventType());
+        }
+        return allEventTypes;
+    }
+
 }

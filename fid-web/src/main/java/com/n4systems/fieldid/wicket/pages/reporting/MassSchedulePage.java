@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.eventtype.CommonEventTypesModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -35,6 +36,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
     List<Long> selectedIds;
     private boolean duplicateDetection = true;
+    private EventSchedule scheduleForAll = new EventSchedule();
 
     @SpringBean
     private AssetService assetService;
@@ -54,14 +57,32 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
         add(CSSPackageResource.getHeaderContribution("style/newCss/schedule/mass_schedule.css"));
 
-        add(new FIDFeedbackPanel("feedbackPanel"));
-
         SearchContainer searchContainer = verifySearchIdNotExpired(params);
         selectedIds = searchContainer.getMultiIdSelection().getSelectedIds();
 
         final List<ScheduleSummaryEntry> scheduleSummary = assetService.getAssetScheduleSummary(selectedIds);
+        List<AssetType> assetTypesList = getAssetTypeList(scheduleSummary);
+        IModel<List<EventType>> commonEventTypesModel = new CommonEventTypesModel(assetTypesList);
 
-        add(new ListView<ScheduleSummaryEntry>("assetTypeSummary", scheduleSummary) {
+        final WebMarkupContainer assetTypesListContainer = new WebMarkupContainer("assetTypesListContainer");
+        add(assetTypesListContainer.setOutputMarkupId(true));
+
+        final EventJobsForTenantModel jobsOptions = new EventJobsForTenantModel();
+
+        add(new SchedulePicker("scheduleAllPicker", new FIDLabelModel("label.schedule_all"), new PropertyModel<EventSchedule>(this, "scheduleForAll"), commonEventTypesModel, jobsOptions, 0, 0) {
+            @Override
+            protected void onPickComplete(AjaxRequestTarget target) {
+                for (ScheduleSummaryEntry scheduleSummaryEntry : scheduleSummary) {
+                    scheduleSummaryEntry.getSchedules().add(scheduleForAll);
+                }
+                scheduleForAll = new EventSchedule();
+                target.addComponent(assetTypesListContainer);
+            }
+        });
+        add(new WebMarkupContainer("noCommonEventTypesMessage").setVisible(commonEventTypesModel.getObject().isEmpty()));
+
+        add(new FIDFeedbackPanel("feedbackPanel"));
+        assetTypesListContainer.add(new ListView<ScheduleSummaryEntry>("assetTypeSummary", scheduleSummary) {
             @Override
             protected void populateItem(final ListItem<ScheduleSummaryEntry> item) {
                 final Model<EventSchedule> eventScheduleModel = new Model<EventSchedule>(new EventSchedule());
@@ -73,7 +94,8 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
                 IModel<List<EventType>> eventTypesForAssetType = new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(item.getModel(), "assetType"));
 
-                item.add(new SchedulePicker("schedulePicker", eventScheduleModel, eventTypesForAssetType, new EventJobsForTenantModel(), -250, 0) {
+                IModel<String> openAssetTypeSchedulePickerLabel = new FIDLabelModel("label.add_a_schedule");
+                item.add(new SchedulePicker("schedulePicker", openAssetTypeSchedulePickerLabel, eventScheduleModel, eventTypesForAssetType, jobsOptions, -250, 0) {
                     @Override
                     protected void onPickComplete(AjaxRequestTarget target) {
                         item.getModelObject().getSchedules().add(eventScheduleModel.getObject());
@@ -153,6 +175,14 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
             }
         }
         return false;
+    }
+
+    private List<AssetType> getAssetTypeList(List<ScheduleSummaryEntry> scheduleSummaryEntries) {
+        List<AssetType> assetTypes = new ArrayList<AssetType>(scheduleSummaryEntries.size());
+        for (ScheduleSummaryEntry entry : scheduleSummaryEntries) {
+            assetTypes.add(entry.getAssetType());
+        }
+        return assetTypes;
     }
 
     @Override

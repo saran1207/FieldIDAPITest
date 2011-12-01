@@ -12,6 +12,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -29,18 +30,14 @@ public class SchedulePicker extends Panel {
     private int dx;
     private int dy;
 
-    public SchedulePicker(String id, IModel<EventSchedule> scheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
-        this(id, scheduleModel, eventTypeOptions, jobsOptions, 0, 0);
-    }
-
-    public SchedulePicker(String id, IModel<EventSchedule> scheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions, int dx, int dy) {
+    public SchedulePicker(String id, IModel<String> openPickerLabel, IModel<EventSchedule> scheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions, int dx, int dy) {
         super(id);
         this.scheduleModel = scheduleModel;
         this.dx = dx;
         this.dy = dy;
         setOutputMarkupId(true);
 
-        add(new ScheduleForm("scheduleForm", scheduleModel, eventTypeOptions, jobsOptions));
+        add(new ScheduleForm("scheduleForm", openPickerLabel, scheduleModel, eventTypeOptions, jobsOptions));
         add(CSSPackageResource.getHeaderContribution("style/newCss/component/wicket_schedule_picker.css"));
     }
 
@@ -51,7 +48,7 @@ public class SchedulePicker extends Panel {
         WebMarkupContainer editorContainer;
         DateTimePicker dateTimePicker;
 
-        public ScheduleForm(String id, final IModel<EventSchedule> eventScheduleModel, final IModel<List<EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
+        public ScheduleForm(String id, IModel<String> openPickerLabel, final IModel<EventSchedule> eventScheduleModel, final IModel<List<EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
             super(id, eventScheduleModel);
 
             add(openDialogButton = new AjaxButton("openDialogButton") {
@@ -61,6 +58,8 @@ public class SchedulePicker extends Panel {
                     target.appendJavascript("translate($('#"+editorContainer.getMarkupId()+"'), $('#"+openDialogButton.getMarkupId()+"'),"+dy+","+dx+")");
                 }
             });
+            openDialogButton.add(new SimpleAttributeModifier("value", openPickerLabel.getObject()));
+            openDialogButton.setEnabled(eventTypeOptions.getObject().size() > 0);
 
             setDefaultEventType(eventScheduleModel, eventTypeOptions);
 

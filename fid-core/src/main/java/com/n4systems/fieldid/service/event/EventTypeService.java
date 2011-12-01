@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.service.event;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import com.n4systems.model.AssetType;
 import org.apache.commons.lang.StringUtils;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
@@ -29,6 +32,23 @@ public class EventTypeService extends FieldIdPersistenceService {
         builder.addOrder("name");
 
         return persistenceService.findAll(builder);
+    }
+
+    public List<EventType> getCommonEventTypes(List<AssetType> assetTypes) {
+        List<EventType> commonTypes = new ArrayList<EventType>();
+        Iterator<AssetType> iterator = assetTypes.iterator();
+        if (iterator.hasNext()) {
+            commonTypes.addAll(iterator.next().getAllEventTypes());
+        }
+        while (iterator.hasNext()) {
+            List<EventType> currentEventTypes = iterator.next().getAllEventTypes();
+            for (Iterator<EventType> commonTypesIterator = commonTypes.iterator(); commonTypesIterator.hasNext(); ) {
+                EventType commonType = commonTypesIterator.next();
+                if (!currentEventTypes.contains(commonType))
+                    commonTypesIterator.remove();
+            }
+        }
+        return commonTypes;
     }
 
 }
