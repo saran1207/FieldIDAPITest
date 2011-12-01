@@ -27,12 +27,6 @@
 }
 
 
-.assetTypeRow .assetTypeSchedule input[type='submit'] {
-    font-size:1.1em;
-    padding:2px;
-    margin-bottom:6px;
-}
-
 .schedulesList {
     border-top: 1px dotted #e2e2e2;
     overflow:hidden;

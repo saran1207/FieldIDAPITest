@@ -93,12 +93,17 @@
     overflow:hidden;
 }
 
-.newScheduleForm input[type='submit'] {
-    padding:4px;
-    font-size:1.2em;
-}
-
 .newScheduleForm .scheduleRow .rightSide {
     display:block;
     float:left;
+}
+
+.openSchedulePickerButton {
+    padding:2px;
+    font-size:1.2em;
+}
+
+.pickScheduleButton {
+    padding:4px;
+    font-size:1.2em;
 }

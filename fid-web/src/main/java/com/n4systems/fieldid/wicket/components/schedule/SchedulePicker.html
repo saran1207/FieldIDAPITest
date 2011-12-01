@@ -2,7 +2,7 @@
 
     <form wicket:id="scheduleForm">
 
-        <input type="submit" wicket:id="openDialogButton" wicket:message="value:label.add_a_schedule">
+        <input type="submit" wicket:id="openDialogButton" class="openSchedulePickerButton" wicket:message="value:label.add_a_schedule">
 
         <div wicket:id="scheduleEditorContainer" class="newScheduleForm schedulesAdd">
 
@@ -56,7 +56,7 @@
             </div>
 
             <div class="blockSeparated">
-                <input type="submit" wicket:id="addScheduleButton" wicket:message="value:label.addschedule">
+                <input type="submit" wicket:id="addScheduleButton" wicket:message="value:label.addschedule" class="pickScheduleButton">
                 <wicket:message key="label.or"/>
                 <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
             </div>
