@@ -2,7 +2,7 @@
 	
 	<@s.hidden name="nextSchedules[${index}].typeName" id="nextEventTypeName_${index}" value="${nextSchedule.typeName}"/>
 	<@s.hidden name="nextSchedules[${index}].date" id="nextEventDate_${index}" value="${nextSchedule.date}"/>
-	<@s.hidden name="nextSchedules[${index}].type" id="nextEventType_${index}" value="${nextSchedule.type}"/>
+	<@s.hidden name="nextSchedules[${index}].type" id="nextEventType_${index}" value="${nextSchedule.type!}"/>
 	<@s.hidden name="nextSchedules[${index}].autoScheduled" id="autoScheduled_${index}" value="${nextSchedule.autoScheduled?string}"/>
 	
 	<#if securityGuard.projectsEnabled && job?exists>

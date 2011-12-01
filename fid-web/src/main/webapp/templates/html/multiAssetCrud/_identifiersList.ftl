@@ -28,7 +28,7 @@
                 <@s.textfield id="identifier_${ident_stat.index}" cssClass="identifierInput identifier" name="identifiers[${ident_stat.index}].identifier" onkeyup="identifierIsValid(${ident_stat.index});" />
             </div>
             <div>
-                <@s.textfield cssClass="identifierInput" name="identifiers[${ident_stat.index}].rfidNumber" size="50" />
+                <@s.textfield id="rfid_${ident_stat.index}" cssClass="identifierInput rfidNumber" name="identifiers[${ident_stat.index}].rfidNumber" size="50" />
             </div>
             <div>
                 <@s.textfield cssClass="identifierInput" name="identifiers[${ident_stat.index}].referenceNumber" size="50" />

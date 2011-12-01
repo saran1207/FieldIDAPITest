@@ -47,7 +47,7 @@
 			element.observe('click', function(event) {
 				var element = Event.element(event);
 				event.stop();
-				checkDuplicateRfids('rfidNumber', element);
+				checkDuplicateRfids([$('rfidNumber').getValue()], element);
 			});
 		});
 </script>

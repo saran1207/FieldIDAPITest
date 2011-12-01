@@ -4,13 +4,13 @@ function mergeAndSubmit(form1id, form2id, masterFormId) {
 	var formMaster = $(masterFormId);
 	
 	if (!validateForm4()) {
-		return false;
+		return;
 	}
 	
 	convertAndAppendInputsToForm(formMaster, $(form1id).getElements());
 	convertAndAppendInputsToForm(formMaster, $(form2id).getElements());
 	
-	return true;
+	validateRfids();
 }
 
 function convertInputToHidden(input) {
@@ -178,8 +178,21 @@ function validateForm4() {
 			valid = false;
 		}
 	}
-	
 	return valid;
+
+}
+
+function validateRfids() {
+	var rfidFields = $$('.rfidNumber');
+	var rfids = new Array();
+	for (var i = 0; i < rfidFields.length; i++) {
+		var rfid = rfidFields[i].getValue();
+		if ( rfid != null && rfid.length > 0) {
+			rfids.push(rfid);
+		}
+	}
+	
+	checkDuplicateRfids(rfids, $('saveButton') );	
 }
 
 function backToStep2() {

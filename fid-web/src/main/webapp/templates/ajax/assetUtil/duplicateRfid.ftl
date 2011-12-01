@@ -1,4 +1,3 @@
-
 <#assign html>
 	<#escape y as y?html>
 		<div>
@@ -9,12 +8,14 @@
 			<table class="list">
 				<tr>
 					<th>${identifierLabel}</th>
+					<th><@s.text name="label.rfidnumber"/></th>
 					<th><@s.text name="label.customername"/></th>
 					<th><@s.text name="label.description"/></th>
 				</tr>
 				<#list assets as asset >
 					<tr>
 						<td>${asset.identifier}</td>
+						<td>${asset.rfidNumber!}</td>
 						<td>${(asset.owner.name)!}</td>
 						<td>${asset.description}</td>
 					</tr>

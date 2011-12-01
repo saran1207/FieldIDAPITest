@@ -1,18 +1,21 @@
 package com.n4systems.fieldid.actions.asset;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.legacy.IdentifierCounter;
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 
-
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.IdentifierCounter;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
 
@@ -29,31 +32,38 @@ public class AssetUtilAction extends AbstractAction {
 	
 	private String identifier;
 	
-	private String rfidString;
 	private Long uniqueId;
 	
-	private Collection<Asset> assets;
-
     private AssetType assetType;
     private Long assetTypeId;
-	
+    
+    private String [] rfids;
+    private List<String> duplicateRfids;
+    
 	public AssetUtilAction(IdentifierCounter identifierCounter, LegacyAsset legacyAssetManager, AssetManager assetManager, PersistenceManager persistenceManager ) {
 		super(persistenceManager);
 		this.identifierCounter = identifierCounter;
 		this.legacyAssetManager = legacyAssetManager;
 		this.assetManager = assetManager;
+		duplicateRfids = new ArrayList<String>();
 	}
 
 
 	public String doCheckDuplicateRfid( ) {
 		try {
-			if( legacyAssetManager.rfidExists( rfidString, getTenantId(), uniqueId ) ) {
-				return "duplicate";
+			boolean duplicateFound = false;
+			if(rfids != null) {
+				for (int i = 0; i < rfids.length; i++) {
+					if( legacyAssetManager.rfidExists( rfids[i], getTenantId()) ) {
+						duplicateFound = true;
+						duplicateRfids.add(rfids[i]);
+					}				
+				}
 			}
-			return SUCCESS;
+			return duplicateFound ? "duplicate" : SUCCESS;
 		} catch( Exception e) {
 			addActionError( getText( "error.lookinguprfid" ) );
-			logger.error( "looking up rfid number " + rfidString, e );
+			logger.error( "looking up rfid numbers " + rfids, e );
 			return ERROR;
 		}
 	}
@@ -83,17 +93,6 @@ public class AssetUtilAction extends AbstractAction {
 		return identifier;
 	}
 
-
-	public String getRfidString() {
-		return rfidString;
-	}
-
-
-	public void setRfidString( String rfidString ) {
-		this.rfidString = rfidString;
-	}
-
-
 	public Long getUniqueId() {
 		return uniqueId;
 	}
@@ -105,9 +104,13 @@ public class AssetUtilAction extends AbstractAction {
 
 
 	public Collection<Asset> getAssets() {
-		if( assets == null ) {
-			assets =  assetManager.findAssetsByRfidNumber( rfidString, new TenantOnlySecurityFilter( getTenantId() ), "infoOptions", "type.name" );
+		Set<Asset> assets = new HashSet<Asset>();
+
+		for (String duplicateRfid: duplicateRfids) {
+			List<Asset> dupAssets = assetManager.findAssetsByRfidNumber( duplicateRfid, new TenantOnlySecurityFilter( getTenantId() ), "infoOptions", "type.name" );
+			assets.addAll(dupAssets);
 		}
+
 		return assets;
 	}
 
@@ -126,5 +129,15 @@ public class AssetUtilAction extends AbstractAction {
             this.assetType = persistenceManager.find(AssetType.class, assetTypeId, getTenantId());
         }
     }
+
+
+	public String[] getRfids() {
+		return rfids;
+	}
+
+
+	public void setRfids(String[] rfids) {
+		this.rfids = rfids;
+	}
 
 }

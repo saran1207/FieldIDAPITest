@@ -48,6 +48,6 @@ function checkAssetTypeChange() {
 
 function saveAsset( button ) {
 	if( checkAssetTypeChange() ) {
-		checkDuplicateRfids('rfidNumber', button, $( 'uniqueID' ).getValue() );
+		checkDuplicateRfids([$('rfidNumber').getValue()], button );
 	} 
 }

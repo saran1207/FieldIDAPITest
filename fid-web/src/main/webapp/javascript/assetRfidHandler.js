@@ -3,17 +3,14 @@ var buttonPressed = null;
 var checkRfidUrl= "";
 
 
-function checkDuplicateRfids(rfidId, submitButton, uniqueId) {
+function checkDuplicateRfids(rfids, submitButton) {
 	lockSubmitButtons();
-	
-	var rfidString = $(rfidId).value;
-	
+		
 	mainForm = submitButton.form;
 	buttonPressed = submitButton 
 	new Ajax.Request(checkRfidUrl, {
 		parameters: {
-			rfidString: rfidString,
-			uniqueId: uniqueId
+			rfids: rfids
 		},
 		method: 'post',
 		asynchronous:false,

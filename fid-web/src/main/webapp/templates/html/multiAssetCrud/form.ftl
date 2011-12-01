@@ -6,13 +6,15 @@
 	<@n4.includeStyle href="chosen/chosen.css"/>
 	<@n4.includeScript src="jquery-1.4.2.min.js"/>
 	<@n4.includeScript>jQuery.noConflict();</@n4.includeScript>	
-	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/asset.js" />" ></script>
-    <script type="text/javascript" src="<@s.url value="/javascript/autoschedule.js" />" ></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/event.js" />" ></script>
-	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/multiAddAsset.js" />"></script>
+	<@n4.includeScript src="steps.js"/>
+	<@n4.includeScript src="commentTemplates.js" />
+	<@n4.includeScript src="asset.js" />
+    <@n4.includeScript src="autoschedule.js" />
+	<@n4.includeScript src="event.js" />
+	<@n4.includeScript src="updateAttributes.js"/>
+	<@n4.includeScript src="multiAddAsset.js" />
+	<@n4.includeScript src="assetRfidHandler.js"/>
+	<@n4.includeScript src="lockSubmitButtons.js"/>
 	<@n4.includeStyle type="page" href="asset"/>
 	<@n4.includeStyle type="page" href="multiadd"/>
 	<@n4.includeStyle href="newCss/event/event_schedule"/>	
@@ -25,10 +27,8 @@
 	    originalAssetType = ${assetTypeId!0};
 	    updateAssetTypeUrl = '<@s.url action="assetTypeChange" namespace="/ajax" />';
 	    updateAutoScheduleUrl = '<@s.url action="updateAutoSchedule" namespace="/ajax"/>';
-	    
-	    function moveToStep4() {
-	    	
-	    }
+	    checkRfidUrl = '<@s.url action="checkRFID" namespace="/ajax"/>';
+	    	    
 	</script>
 </head>
 <#if lineItem?exists>

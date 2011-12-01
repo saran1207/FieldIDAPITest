@@ -38,7 +38,7 @@
 		<#include "/templates/html/assetCrud/_attributes.ftl"/>
 		
 		<div class="actions">
-			<@s.submit key="label.save" onclick="checkDuplicateRfids('subAssetRfidNumber_${assetTypeId}', this); return false;" />
+			<@s.submit key="label.save" onclick="checkDuplicateRfids([$('subAssetRfidNumber_${assetTypeId}').getValue()], this); return false;" />
 			<@s.text name="label.or"/>
 			<a href="#" onclick="Effect.BlindUp( 'subAssetCreateForm_${assetTypeId}', { afterFinish: function() { $('subAssetCreateForm_${assetTypeId}').remove(); } } ); return false;" ><@s.text name="label.cancel"/></a>
 		</div>
