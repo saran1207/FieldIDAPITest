@@ -5,6 +5,7 @@ import java.net.URI;
 import javax.ws.rs.core.MultivaluedMap;
 
 import com.n4systems.fieldid.service.SecurityContextInitializer;
+import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
 import com.n4systems.fieldid.ws.v1.exceptions.UnauthorizedException;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
@@ -24,10 +25,16 @@ public class ApiSecurityRequestFilter implements ContainerRequestFilter, Contain
 		
 		MultivaluedMap<String, String> params = request.getQueryParameters();
 		if (!params.containsKey("k")) {
-			throw new UnauthorizedException("Requests must contain an authKey (" + request.getAbsolutePath() + "?k=<authKey>)");
+			throw new UnauthorizedException("Requests must contain an auth key (" + request.getAbsolutePath() + "?k=<authKey>)");
 		}
 
-		SecurityContextInitializer.initSecurityContext(params.getFirst("k"));
+		String authKey = params.getFirst("k");
+		try {
+			SecurityContextInitializer.initSecurityContext(authKey);
+		} catch (SecurityException e) {
+			throw new ForbiddenException("Invalid auth key '" + authKey + "'");
+		}
+		
 		return request;
 	}
 

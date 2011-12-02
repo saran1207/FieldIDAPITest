@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import com.n4systems.fieldid.ws.v1.resources.authentication.AuthenticationResource;
+import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 
@@ -30,6 +31,11 @@ public class FieldIdWsConfig {
     @Bean
     public ApiUserResource apiUserResource() {
     	return new ApiUserResource();
+    }
+    
+    @Bean
+    public ApiPredefinedLocationResource apiPredefinedLocationResource() {
+    	return new ApiPredefinedLocationResource();
     }
 
 }

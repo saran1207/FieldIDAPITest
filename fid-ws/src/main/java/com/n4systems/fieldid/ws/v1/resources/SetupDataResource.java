@@ -12,15 +12,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
+@Component
 public abstract class SetupDataResource<A, E extends EntityWithTenant> extends FieldIdPersistenceService {
 	
 	private final Class<E> entityClass;
@@ -42,12 +47,13 @@ public abstract class SetupDataResource<A, E extends EntityWithTenant> extends F
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
 	public ListResponse<A> findAll(
 			@QueryParam("after") DateParam after,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("100") @QueryParam("pageSize") int pageSize) {
 		
-		QueryBuilder<E> builder = createTenantSecurityBuilder(entityClass);
+		QueryBuilder<E> builder = new QueryBuilder<E>(entityClass, getSecurityFilterWithArchived());
 		if (after != null) {
 			builder.addWhere(WhereClauseFactory.create(Comparator.GT, "modified", after));
 		}
@@ -65,8 +71,9 @@ public abstract class SetupDataResource<A, E extends EntityWithTenant> extends F
 	@Path("{id}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
 	public A find(@PathParam("id") Long id) {
-		QueryBuilder<E> builder = createTenantSecurityBuilder(entityClass);
+		QueryBuilder<E> builder = new QueryBuilder<E>(entityClass, getSecurityFilterWithArchived());
 		builder.addWhere(WhereClauseFactory.create("id", id));
 		
 		E entityModel = persistenceService.find(builder);
@@ -76,5 +83,9 @@ public abstract class SetupDataResource<A, E extends EntityWithTenant> extends F
 		
 		A apiModel = convertEntityToApiModel(entityModel);
 		return apiModel;
+	}
+	
+	private TenantOnlySecurityFilter getSecurityFilterWithArchived() {
+		return new TenantOnlySecurityFilter(securityContext.getTenantSecurityFilter()).setShowArchived(true);
 	}
 }

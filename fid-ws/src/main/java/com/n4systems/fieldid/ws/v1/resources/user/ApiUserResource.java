@@ -2,10 +2,13 @@ package com.n4systems.fieldid.ws.v1.resources.user;
 
 import javax.ws.rs.Path;
 
+import org.springframework.stereotype.Component;
+
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 
+@Component
 @Path("users")
 public class ApiUserResource extends SetupDataResource<ApiUser, User> {
 

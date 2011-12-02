@@ -2,9 +2,12 @@ package com.n4systems.fieldid.ws.v1.resources.org;
 
 import javax.ws.rs.Path;
 
+import org.springframework.stereotype.Component;
+
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.orgs.BaseOrg;
 
+@Component
 @Path("orgs")
 public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 
