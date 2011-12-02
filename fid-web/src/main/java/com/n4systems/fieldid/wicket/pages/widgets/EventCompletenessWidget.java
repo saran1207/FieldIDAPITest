@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import java.util.Calendar;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
 import com.n4systems.fieldid.wicket.pages.widgets.config.EventCompletenessConfigPanel;
@@ -20,7 +19,7 @@ import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 
 @SuppressWarnings("serial")
-public class EventCompletenessWidget extends ChartWidget<Calendar,EventCompletenessWidgetConfiguration> {
+public class EventCompletenessWidget extends ChartWidget<LocalDate,EventCompletenessWidgetConfiguration> {
 
 	@SpringBean
 	private DashboardReportingService reportingService;
@@ -37,8 +36,8 @@ public class EventCompletenessWidget extends ChartWidget<Calendar,EventCompleten
 	}
 
 	@Override
-	protected ChartData<Calendar> getChartData() {
-		ChartData<Calendar> chartData = new ChartData<Calendar>(reportingService.getEventCompletenessEvents(granularity, getChartDateRange(), getOrg()));
+	protected ChartData<LocalDate> getChartData() {
+		ChartData<LocalDate> chartData = new ChartData<LocalDate>(reportingService.getEventCompletenessEvents(granularity, getChartDateRange(), getOrg()));
 		chartData.get(1).setColor("#60986B");
 		return chartData;
 	}
@@ -54,8 +53,8 @@ public class EventCompletenessWidget extends ChartWidget<Calendar,EventCompleten
 	}
 	
 	@Override
-	protected FlotOptions<Calendar> createOptions() {
-		FlotOptions<Calendar> options = super.createOptions();
+	protected FlotOptions<LocalDate> createOptions() {
+		FlotOptions<LocalDate> options = super.createOptions();
 		options.pan.interactive = false;
 		options.xaxis.timeformat = "%b %d";
 		return options;		

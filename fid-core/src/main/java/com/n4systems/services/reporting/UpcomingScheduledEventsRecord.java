@@ -1,7 +1,8 @@
 package com.n4systems.services.reporting;
 
-import java.util.Calendar;
 import java.util.Date;
+
+import org.joda.time.LocalDate;
 
 import com.n4systems.util.chart.CalendarChartable;
 
@@ -12,8 +13,9 @@ public class UpcomingScheduledEventsRecord extends CalendarChartable {
 		super(date, value);
 	}
 
-	public UpcomingScheduledEventsRecord(Calendar time, Long value) {
-		super(time, value);
+	public UpcomingScheduledEventsRecord(LocalDate date, Long value) {
+		super(date, value);
 	}
+
 	
 }

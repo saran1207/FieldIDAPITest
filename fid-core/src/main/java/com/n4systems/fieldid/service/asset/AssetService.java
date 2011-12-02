@@ -36,7 +36,7 @@ public class AssetService extends FieldIdPersistenceService {
 		
 		NewObjectSelect select = new NewObjectSelect(AssetsIdentifiedReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsByGranularity("identified", granularity));
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("identified", granularity));
 		select.setConstructorArgs(args);
 		
 		builder.setSelectArgument(select);

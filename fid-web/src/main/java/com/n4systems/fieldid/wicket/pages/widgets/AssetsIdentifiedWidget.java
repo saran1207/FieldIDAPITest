@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import java.util.Calendar;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
 import com.n4systems.fieldid.wicket.pages.widgets.config.AssetsIdentifiedConfigPanel;
@@ -19,7 +18,7 @@ import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 
 @SuppressWarnings("serial")
-public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifiedWidgetConfiguration> {
+public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifiedWidgetConfiguration> {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
@@ -36,8 +35,8 @@ public class AssetsIdentifiedWidget extends ChartWidget<Calendar,AssetsIdentifie
     }
     
 	@Override
-    protected ChartData<Calendar> getChartData() {
-    	return new ChartData<Calendar>(reportingService.getAssetsIdentified(getChartDateRange(), granularity, getOrg()));
+    protected ChartData<LocalDate> getChartData() {
+    	return new ChartData<LocalDate>(reportingService.getAssetsIdentified(getChartDateRange(), granularity, getOrg()));
     }
 
 	private ChartDateRange getChartDateRange() {

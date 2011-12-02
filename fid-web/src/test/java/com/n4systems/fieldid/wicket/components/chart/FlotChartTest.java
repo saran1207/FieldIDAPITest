@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,14 +28,14 @@ import com.n4systems.util.chart.LineGraphOptions;
 import com.n4systems.util.json.JsonRenderer;
 
 
-public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<Calendar>> implements IFixtureFactory<FlotChart<Calendar>> {
+public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<LocalDate>> implements IFixtureFactory<FlotChart<LocalDate>> {
 
 	private static final String TEST_CSS = "myCss";
 	private static final String TEST_LABEL = "chartLabel";
 	
 	private JsonRenderer jsonRenderer;
-	private Model<FlotOptions<Calendar>> optionsModel;
-	private ChartData<Calendar> chartList;
+	private Model<FlotOptions<LocalDate>> optionsModel;
+	private ChartData<LocalDate> chartList;
 
 	
 	@Override
@@ -46,9 +47,9 @@ public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<
 	
 	@Test
 	public void test_Render() {
-		optionsModel = new Model<FlotOptions<Calendar>>(new LineGraphOptions<Calendar>());
-		final ChartSeries<Calendar> chartSeries = new ChartSeries<Calendar>(TEST_LABEL, createData());
-		chartList = new ChartData<Calendar>(chartSeries);		
+		optionsModel = new Model<FlotOptions<LocalDate>>(new LineGraphOptions<LocalDate>());
+		final ChartSeries<LocalDate> chartSeries = new ChartSeries<LocalDate>(TEST_LABEL, createData());
+		chartList = new ChartData<LocalDate>(chartSeries);		
 		expect(jsonRenderer.render(optionsModel.getObject())).andReturn("{options}");
 		expect(jsonRenderer.render(chartList)).andReturn("{chartSeries}");
 		replay(jsonRenderer);
@@ -64,23 +65,21 @@ public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<
 	
 	
 	@Override
-	public FlotChart<Calendar> createFixture(String id) {
-		IModel<ChartData<Calendar>> model = new LoadableDetachableModel<ChartData<Calendar>>() {
-			@Override protected ChartData<Calendar> load() {
+	public FlotChart<LocalDate> createFixture(String id) {
+		IModel<ChartData<LocalDate>> model = new LoadableDetachableModel<ChartData<LocalDate>>() {
+			@Override protected ChartData<LocalDate> load() {
 				return chartList;
 			}
 		};
-		return new FlotChart<Calendar>(id, model, optionsModel, TEST_CSS); 
+		return new FlotChart<LocalDate>(id, model, optionsModel, TEST_CSS); 
 	}
 
-	private List<Chartable<Calendar>> createData() {
-		List<Chartable<Calendar>> data = Lists.newArrayList();
+	private List<Chartable<LocalDate>> createData() {
+		List<Chartable<LocalDate>> data = Lists.newArrayList();
 		Calendar c = Calendar.getInstance();
-		c.set(Calendar.YEAR, 1980);
-		for (int i = 0; i < 100; i++) {
-			Calendar x = Calendar.getInstance();
-			x.setTimeInMillis(c.getTimeInMillis());
-			data.add(new CalendarChartable(x,i));
+		for (int year = 1980; year < 2012; year++) {
+			int value = year;
+			data.add(new CalendarChartable(new LocalDate(year, 1, 1), value));
 		}
 		return data;
 	}

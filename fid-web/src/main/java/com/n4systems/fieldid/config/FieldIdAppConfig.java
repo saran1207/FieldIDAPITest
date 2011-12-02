@@ -2,6 +2,7 @@ package com.n4systems.fieldid.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import com.n4systems.fieldid.wicket.pages.widgets.OrgDateRangeSubtitleHelper;
@@ -10,6 +11,7 @@ import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
 
 @Configuration
+@Import({FieldIdWsConfig.class, FieldIdCoreConfig.class})
 public class FieldIdAppConfig {
 
 	

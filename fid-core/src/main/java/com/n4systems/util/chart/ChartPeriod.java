@@ -2,9 +2,8 @@ package com.n4systems.util.chart;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
-import com.n4systems.util.time.DateUtil;
+import org.joda.time.LocalDate;
 
 public enum ChartPeriod {
 	
@@ -28,13 +27,11 @@ public enum ChartPeriod {
 	}
 	
 	public String getFromDisplayString() { 
-		return dateFormat.format(DateUtil.getMidnightIntance().getTime());
+		return dateFormat.format(new LocalDate().toDate());
 	}
 
 	public String getToDisplayString() {
-		Calendar to = DateUtil.getMidnightIntance();
-		to.add(Calendar.DAY_OF_YEAR, days);
-		return dateFormat.format(to.getTime());
+		return dateFormat.format( new LocalDate().plusDays(days).toDate() );
 	}
 
 }

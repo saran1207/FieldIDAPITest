@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import java.util.Calendar;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
 import com.n4systems.fieldid.wicket.pages.widgets.config.CompletedEventsConfigPanel;
@@ -20,7 +19,7 @@ import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 
 @SuppressWarnings("serial")
-public class CompletedEventsWidget extends ChartWidget<Calendar, CompletedEventsWidgetConfiguration> {
+public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEventsWidgetConfiguration> {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
@@ -37,16 +36,16 @@ public class CompletedEventsWidget extends ChartWidget<Calendar, CompletedEvents
     }
  
     @Override
-    protected FlotOptions<Calendar> createOptions() {
-    	FlotOptions<Calendar> options = super.createOptions();
+    protected FlotOptions<LocalDate> createOptions() {
+    	FlotOptions<LocalDate> options = super.createOptions();
     	options.lines.fill = false;
     	options.colors = new String[]{"#32578B", "#5B8C62", "#B35045", "#999999" };
     	return options;
     }
     
 	@Override
-    protected ChartData<Calendar> getChartData() {
-    	return new ChartData<Calendar>(reportingService.getCompletedEvents(getChartDateRange(), granularity, getOrg()));
+    protected ChartData<LocalDate> getChartData() {
+    	return new ChartData<LocalDate>(reportingService.getCompletedEvents(getChartDateRange(), granularity, getOrg()));
     }
 
 	private BaseOrg getOrg() {

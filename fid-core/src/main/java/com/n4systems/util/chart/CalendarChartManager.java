@@ -1,13 +1,14 @@
 package com.n4systems.util.chart;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.joda.time.LocalDate;
+
 @SuppressWarnings("serial")
-public class CalendarChartManager extends SimpleChartManager<Calendar> {
+public class CalendarChartManager extends SimpleChartManager<LocalDate> {
 
 	private transient ChartGranularity granularity;
 	private transient ChartDateRange range;
@@ -18,43 +19,43 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 	}
 	
 	@Override
-	public Long getMinX(ChartSeries<Calendar> series) {
+	public Long getMinX(ChartSeries<LocalDate> series) {
 		if (series.isEmpty()) { 
-			return range.getFromDate().getTime();
+			return range.getFrom().toDate().getTime();
 		}
-		Chartable<Calendar> lastEntry = series.getLastEntry();
-		long minX = lastEntry.getLongX() - granularity.delta();
-		long firstX = series.getFirstEntry().getX().getTimeInMillis();
+		Chartable<LocalDate> lastEntry = series.getLastEntry();
+		long minX = lastEntry.getX().minus(granularity.preferredRange()).toDate().getTime();
+		long firstX = series.getFirstEntry().getX().toDate().getTime();
 		return (minX < firstX) ? firstX : minX;
 	}
 
 	@Override
-	public Long getPanMin(ChartSeries<Calendar> series) {
+	public Long getPanMin(ChartSeries<LocalDate> series) {
 		if (series.isEmpty()) { 
-			return range.getFromDate().getTime();
+			return range.getFrom().toDate().getTime();
 		}
 		return series.getFirstEntry().getLongX();
 	}
 
 	@Override
-	public Long getPanMax(ChartSeries<Calendar> series) {
+	public Long getPanMax(ChartSeries<LocalDate> series) {
 		if (series.isEmpty()) { 
-			return range.getToDate().getTime();
+			return range.getTo().toDate().getTime();
 		}		
 		return series.getLastEntry().getLongX();
 	}
 
 	@Override
-	public void normalize(ChartSeries<Calendar> series) {
+	public void normalize(ChartSeries<LocalDate> series) {
 		if (series.isEmpty()) {
-			series.add(pad(range.getFromCalendar()));
+			series.add(pad(range.getFrom()));
 			return;
 		}
 		List<CalendarChartable> padding = new ArrayList<CalendarChartable>();		
-		Calendar expected = range.getFromCalendar();
-		Calendar actual = null;		
-		for (Iterator<Entry<Calendar, Chartable<Calendar>>> i = series.getEntrySet().iterator(); i.hasNext();) {
-			Entry<Calendar, Chartable<Calendar>> entry = i.next();
+		LocalDate expected = range.getFrom();
+		LocalDate actual = null;		
+		for (Iterator<Entry<LocalDate, Chartable<LocalDate>>> i = series.getEntrySet().iterator(); i.hasNext();) {
+			Entry<LocalDate, Chartable<LocalDate>> entry = i.next();
 			actual = entry.getValue().getX();
 			while (granularity.compare(expected,actual)<0) {
 				padding.add(pad(expected));
@@ -63,7 +64,7 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 			expected=granularity.next(actual);			
 		}
 		if (!ChartDateRange.FOREVER.equals(range)) { 
-			while (granularity.compare(expected, range.getToCalendar())<0) {
+			while (granularity.compare(expected, range.getTo())<0) {
 				padding.add(pad(expected));
 				expected=granularity.next(expected);
 			}
@@ -71,14 +72,13 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 		series.add(padding);
 	}
 	
-	protected CalendarChartable pad(Calendar c) {		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(c.getTimeInMillis());
-		return new CalendarChartable(calendar,0);
+	protected CalendarChartable pad(LocalDate c) {		
+		LocalDate date = new LocalDate(c);
+		return new CalendarChartable(date,0);
 	}
 
 	@Override
-	public void updateOptions(ChartSeries<Calendar> chartSeries, FlotOptions<Calendar> options, int index) {	
+	public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index) {	
 		super.updateOptions(chartSeries, options, index);
 		updateTimeFormat(chartSeries, options);
 		options.tooltipFormat = getTooltipFormat(granularity);				
@@ -87,7 +87,6 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 	protected String getTooltipFormat(ChartGranularity granularity) {
 		switch (granularity) { 
 		case DAY:
-		case HOUR:
 			return FlotOptions.TOOLTIP_WITH_DAY;
 		case YEAR:
 			return FlotOptions.TOOLTIP_YEAR;
@@ -101,7 +100,7 @@ public class CalendarChartManager extends SimpleChartManager<Calendar> {
 		}		
 	}
 
-	protected void updateTimeFormat(ChartSeries<Calendar> chartSeries, FlotOptions<Calendar> options) {
+	protected void updateTimeFormat(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options) {
 		if (!"time".equals(options.xaxis.mode)) {
 			return;
 		}

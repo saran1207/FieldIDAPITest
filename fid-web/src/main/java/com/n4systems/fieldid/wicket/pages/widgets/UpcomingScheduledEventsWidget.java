@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import java.util.Calendar;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
 import com.n4systems.fieldid.wicket.pages.widgets.config.UpcomingEventsConfigPanel;
@@ -19,7 +18,7 @@ import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 
 @SuppressWarnings("serial")
-public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar,UpcomingEventsWidgetConfiguration> {
+public class UpcomingScheduledEventsWidget extends ChartWidget<LocalDate,UpcomingEventsWidgetConfiguration> {
 
 	@SpringBean
 	private DashboardReportingService reportingService;
@@ -36,8 +35,8 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar,Upcoming
 	}
 
 	@Override
-	protected ChartData<Calendar> getChartData() {
-		return new ChartData<Calendar>(reportingService.getUpcomingScheduledEvents(period, getOrg()));
+	protected ChartData<LocalDate> getChartData() {
+		return new ChartData<LocalDate>(reportingService.getUpcomingScheduledEvents(period, getOrg()));
 	}
 		
 	private BaseOrg getOrg() {
@@ -46,8 +45,8 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<Calendar,Upcoming
 	}
 		
 	@Override
-	protected FlotOptions<Calendar> createOptions() {
-		FlotOptions<Calendar> options = super.createOptions();
+	protected FlotOptions<LocalDate> createOptions() {
+		FlotOptions<LocalDate> options = super.createOptions();
 		options.pan.interactive = false;
 		options.xaxis.timeformat = "%b %d";
 		return options;		

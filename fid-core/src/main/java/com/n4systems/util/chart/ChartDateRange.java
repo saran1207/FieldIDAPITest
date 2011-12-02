@@ -2,11 +2,13 @@ package com.n4systems.util.chart;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.joda.time.LocalDate;
+
+import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.util.time.DateUtil;
 
 public enum ChartDateRange {
@@ -52,115 +54,90 @@ public enum ChartDateRange {
 		if (this.equals(LAST_QUARTER) || this.equals(THIS_QUARTER)) {
 			formatter = quarterFromFormat;  
 		}
-		return formatter.format(getFromDate());
+		return formatter.format(getFrom().toDate());
 	}
 	
 	public String getToDateDisplayString() {
 		if (this.equals(FOREVER)) { 
 			return "";
 		} else { 
-			return dateFormatters.get(this).format(getInclusiveToDate());
+			return dateFormatters.get(this).format(getInclusiveTo().toDate());
 		}
 	}
 	
 	// note that toDate is exclusive.  e.g. for a year 2011
-	// Jan 1, 2011 is from.   and to is Jan 1, 2012.  (not dec 31,11:59:59.9999...)
-	// .: this is used for display reasons 
-	private Date getInclusiveToDate() {
-		Calendar to = getToCalendar();
-		to.add(Calendar.DAY_OF_YEAR, -1);
-		return to.getTime();
+	// Jan 1, 2011 is from.   
+	//  and to is Jan 1, 2012.  *not*  dec 31,2011    [11:59:59.9999...]
+	// this is used for display reasons. 
+	private LocalDate getInclusiveTo() {
+		return getTo().minusDays(1);
 	}
 
-	public Date getFromDate() {
-		return getFromCalendar().getTime();
+	public LocalDate getTo() { 
+		// exclusive date :  should use <  *not*  <= when comparing against returned value!!!
+		LocalDate today = LocalDate.now();
+		
+		switch (this) {
+			case FOREVER: 			
+				return DateUtil.getLatestFieldIdDate();
+			case LAST_YEAR:
+				return today.withDayOfYear(1); 
+			case THIS_YEAR:
+				return today.plusYears(1).withDayOfYear(1);
+			case LAST_QUARTER:
+				return today.minusMonths((today.getMonthOfYear()-1)%3).withDayOfMonth(1);
+			case THIS_QUARTER:
+				return today.plusMonths(3-(today.getMonthOfYear()-1)%3).withDayOfMonth(1);
+			case LAST_MONTH:
+				return today.withDayOfMonth(1);
+			case THIS_MONTH:
+				return today.plusMonths(1).withDayOfMonth(1);
+			case LAST_WEEK:
+				return today.withDayOfWeek(1);
+			case THIS_WEEK:
+				return today.plusWeeks(1).withDayOfWeek(1);
+			default: 
+				throw new InvalidArgumentException("ChartDateRange " + this + " not supported."); 
+		}
+	}
+
+	public LocalDate getFrom() {
+		LocalDate today = new LocalDate();
+		switch (this) {
+			case FOREVER: 			
+				return DateUtil.getEarliestFieldIdDate();
+			case LAST_YEAR:
+				return today.minusYears(1).withDayOfYear(1);				
+			case THIS_YEAR:
+				return today.withDayOfYear(1);				
+			case LAST_QUARTER:
+				return today.minusMonths(3+(today.getMonthOfYear()-1)%3).withDayOfMonth(1);
+			case THIS_QUARTER:
+				return today.minusMonths((today.getMonthOfYear()-1)%3).withDayOfMonth(1);
+			case LAST_MONTH:
+				return today.minusMonths(1).withDayOfMonth(1);
+			case THIS_MONTH:
+				return today.withDayOfMonth(1);
+			case LAST_WEEK:
+				return today.minusWeeks(1).withDayOfWeek(1);
+			case THIS_WEEK:
+				return today.withDayOfWeek(1);
+			default: 
+				throw new InvalidArgumentException("ChartDateRange " + this + " not supported."); 
+		}
 	}
 		
-	public Calendar getToCalendar() { 
-		// exclusive date :  should use <  *not*  <= when comparing against returned value!!!   
-		Calendar calendar = DateUtil.getTimelessIntance();
-		switch (this) {
-		case FOREVER: 			
-			return DateUtil.getLatestCalendar();
-		case LAST_YEAR:
-			calendar.set(Calendar.DAY_OF_YEAR, 1);
-			break;			
-		case LAST_QUARTER:
-			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH)/3 * 3);  // round to nearest quarter...
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			break;
-		case LAST_MONTH:
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			break;			
-		case LAST_WEEK:
-			calendar.set(Calendar.DAY_OF_WEEK, 1);
-			break;
-		case THIS_WEEK:
-			calendar.set(Calendar.DAY_OF_WEEK, 1);
-			calendar.add(Calendar.WEEK_OF_YEAR, 1);			
-			break;
-		case THIS_MONTH:
-			calendar.add(Calendar.MONTH, 1);
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			break;
-		case THIS_QUARTER:
-			calendar.set(Calendar.MONTH, 3 + (calendar.get(Calendar.MONTH)/3)*3);  // round to nearest quarter...
-			calendar.set(Calendar.DAY_OF_MONTH,1);
-			break;
-		case THIS_YEAR:
-			calendar.add(Calendar.YEAR, 1);
-			calendar.set(Calendar.DAY_OF_YEAR, 1);
-			break;
-		}
-		return calendar;
-	}
-
-	public Calendar getFromCalendar() {
-		Calendar calendar = DateUtil.getTimelessIntance();
-		switch (this) {
-		case FOREVER: 			
-			return DateUtil.getEarliestFieldIdCalendar();
-		case LAST_YEAR:
-			calendar.add(Calendar.YEAR, -1);
-			calendar.set(Calendar.DAY_OF_YEAR, 1);
-			break;
-		case LAST_QUARTER:
-			//Q3/2011= Q2/2011
-			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH)/3 * 3);  // round to nearest quarter...
-			calendar.add(Calendar.MONTH, -3);										// then go back one.
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			break;
-		case LAST_MONTH:
-			calendar.add(Calendar.MONTH, -1);
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			break;
-		case LAST_WEEK:
-			calendar.add(Calendar.WEEK_OF_YEAR, -1);
-			calendar.set(Calendar.DAY_OF_WEEK, 1);
-			break;
-		case THIS_WEEK:
-			calendar.set(Calendar.DAY_OF_WEEK,1);
-			break;
-		case THIS_MONTH:
-			calendar.set(Calendar.DAY_OF_MONTH,1);
-			break;
-		case THIS_QUARTER:
-			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH)/3 * 3);  
-			calendar.set(Calendar.DAY_OF_MONTH,1);
-			break;
-		case THIS_YEAR:
-			calendar.set(Calendar.DAY_OF_YEAR, 1);
-			break;
-		}
-		return calendar;
-	}
-	
-	public Date getToDate() { 
-		return getToCalendar().getTime();
-	}
-	
 	public String getDisplayName() { 
 		return displayName;
 	}
+
+	public Date getFromDate() {
+		return getFrom().toDate();
+	}
+
+	public Date getToDate() {
+		return getTo().toDate();
+	}
+
 	
 }

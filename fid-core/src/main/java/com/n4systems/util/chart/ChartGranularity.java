@@ -1,93 +1,128 @@
 package com.n4systems.util.chart;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
+import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.util.time.DateUtil;
 
 public enum ChartGranularity {
 	
-	HOUR(Calendar.HOUR_OF_DAY), DAY(Calendar.DAY_OF_YEAR), WEEK(Calendar.WEEK_OF_YEAR), MONTH(Calendar.MONTH), QUARTER(Calendar.MONTH,3), YEAR(Calendar.YEAR);
+	YEAR(new Period().withYears(1)), 
+	QUARTER(new Period().withMonths(3)), 
+	MONTH(new Period().withMonths(1)), 
+	WEEK(new Period().withWeeks(1)),   // note : weeks start on monday.  (i.e. withDayOfWeek(1) will set dates to monday)
+	DAY(new Period().withDays(1));
 
-	private int field;
-	private int multiplier;
+	private Period period;
 
-	private ChartGranularity(int cal) { 
-		this(cal,1);
+	private ChartGranularity(Period period) {
+		this.period = period;
 	}
 	
-	private ChartGranularity(int cal, int multiplier) { 
-		this.field = cal;
-		this.multiplier = multiplier;
+	public Period getPeriod() { 
+		return period;
 	}
-
-	public int compare(Calendar a, Calendar b) {		
-		int compare = 0;
+	
+	public int compare(LocalDate a, LocalDate b) {		
+		int comparison = 0;
 		if (a==null) { 
 			return b==null ? 0 : -1; 
 		}
 		if (b==null) {
 			return 1;
 		}
-		for (ChartGranularity granularity:reverseValues()) {  // CAVEAT : enum must be in order of least to most significant. i.e. months before years. 
-			if (granularity.compareTo(this)>=0) {
-				compare = (a.get(granularity.field)/granularity.multiplier) - (b.get(granularity.field)/granularity.multiplier);
-				if (compare!=0) {
-					break;
+		for (ChartGranularity granularity:values()) {  // CAVEAT : enum must be in order of most to least significant. 
+			if (granularity.compareTo(this)<=0) {
+				comparison = compare(a,b,granularity);
+				if (comparison!=0) {
+					return comparison;
 				}
 			}
 		}
-		return compare;		
+		return 0;		
 	}
 	
-	private List<ChartGranularity> reverseValues() {
-		ArrayList<ChartGranularity> result = Lists.newArrayList(values());
-		Collections.sort(result, Ordering.natural().reverse());
-		return result;
+	private int compare(LocalDate a, LocalDate b, ChartGranularity granularity) {
+		switch (granularity) { 
+		case YEAR:
+			return a.getYear() - b.getYear();
+		case QUARTER: 
+			return DateUtil.getQuarter(a) - DateUtil.getQuarter(b);
+		case MONTH:
+			return a.getMonthOfYear() - b.getMonthOfYear();
+		case WEEK:
+			// edge case : it is possible that jan 1st could return week 52. (i.e. it is at the end of the week that began at the end
+			// of the previous year.  .: we can't just compare weeks, we must bring in year as well).			
+			return (a.getWeekyear()*100 + a.getWeekOfWeekyear()) - (b.getWeekyear()*100 + b.getWeekOfWeekyear());
+		case DAY: 
+			return a.getDayOfYear() - b.getDayOfYear();
+		default: 
+			throw new InvalidArgumentException("invalid chart granularity used when comparing");
+		}
 	}
 
-	public Long delta() {
-		Calendar today = Calendar.getInstance();		
-		// try to get around 50 data points per plot... 
-		Calendar from = Calendar.getInstance();
-		from.setTimeInMillis(today.getTimeInMillis());
-		
+	public Period preferredRange() {
 		switch (this) { 
 		case DAY:
-			from.add(Calendar.MONTH, -1);
-			break;
+			return new Period().withDays(30);			
 		case WEEK:
-			from.add(Calendar.MONTH, -12);
-			break;
+			return new Period().withMonths(12);
 		case MONTH: 
-			from.add(Calendar.YEAR, -3);
-			break;
+			return new Period().withYears(3);
 		case QUARTER:
-			from.add(Calendar.YEAR, -7);
-			break;
+			return new Period().withYears(7);
 		case YEAR:
-			from.set(Calendar.YEAR, 2005);
-			break;
+			return new Period().withYears(10);
+		default: 
+			throw new InvalidArgumentException("invalid chart granularity used when calculating delta");			
 		}
-		return today.getTimeInMillis()- from.getTimeInMillis();
 	}
 
-	public Calendar next(Calendar calendar) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(calendar.getTime());
-		c.add(field, 1*multiplier);		
-		return c;
+	/**
+	 * note that this just doesn't add a period to given date. 
+	 * for example, with granularity MONTH  
+	 * 	next(Oct 7,2011) will return Jan1,2012   if i just added 1 year i would get Oct 7, 2012.  wrong!
+	 * 	next(Jan 1,2011) will return Jan1,2012
+	 * 	next(Jan 1,2011) will return Jan1,2012
+	 */
+	public LocalDate next(LocalDate date) {
+		return normalize(date).plus(period);
 	}
 
-	public Calendar previous(Calendar calendar) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(calendar.getTime());
-		c.add(field, -1*multiplier);		
-		return c;
+	public LocalDate previous(LocalDate date) {
+		return normalize(date).minus(period);
 	}
-	
+
+	public LocalDate normalize(LocalDate date) {
+		switch (this) { 
+		case DAY:
+			return date;
+		case WEEK:
+			// important : the database & java code must be in synch with what they call the "first day of the week". 
+			// at this time it is decided that it is monday, not sunday.
+			// if you change this code you may need to change any queries use of the WEEK(dateValue, [dateMode]) method.
+			return date.withDayOfWeek(DateTimeConstants.MONDAY);
+		case MONTH: 
+			return date.withDayOfMonth(1);
+		case QUARTER:
+			int quarterMonth = DateUtil.getQuarterMonth(date); 
+			return date.withMonthOfYear(quarterMonth).withDayOfMonth(1);
+		case YEAR:
+			return date.withDayOfYear(1);
+		default: 
+			throw new InvalidArgumentException("invalid chart granularity used when comparing");
+		}
+	}
+
+	public LocalDate roundDown(LocalDate date) {
+		return normalize(date);
+	}
+
+	public LocalDate roundUp(LocalDate date) {
+		LocalDate normalized = normalize(date);		
+		return (date.isEqual(normalized)) ? date : next(date); 
+	}
 
 }

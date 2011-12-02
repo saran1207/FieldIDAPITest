@@ -6,7 +6,7 @@ import com.n4systems.util.chart.CalendarChartable;
 @SuppressWarnings("serial")
 public class AssetsIdentifiedReportRecord extends CalendarChartable {	
 
-	public AssetsIdentifiedReportRecord(Long value, Integer year, Integer quarter, Integer month, Integer week, Integer day) {
-		super(value, year, quarter, month, week, day);
+	public AssetsIdentifiedReportRecord(Long value, String granularity, Integer year, Integer month, Integer day) {
+		super(value, granularity, year, month, day);
 	}
 }

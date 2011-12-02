@@ -125,8 +125,8 @@ public class EventService extends FieldIdPersistenceService {
 		QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
 		NewObjectSelect select = new NewObjectSelect(CompletedEventsReportRecord.class);
-		List<String> args = Lists.newArrayList("COUNT(*)", "status");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsByGranularity("date", granularity));
+		List<String> args = Lists.newArrayList("COUNT(*)");
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("date", granularity));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
@@ -196,7 +196,7 @@ public class EventService extends FieldIdPersistenceService {
 		
 		NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsByGranularity("nextDate", granularity));
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("nextDate", granularity));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
