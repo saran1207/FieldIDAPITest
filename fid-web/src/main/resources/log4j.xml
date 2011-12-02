@@ -4,7 +4,7 @@
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<param name="Threshold" value="DEBUG" />
-		<layout class="org.apache.log4j.PatternLayout">
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<!-- The default pattern: Date Priority [Category] Message\n -->
 			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n" />
 		</layout>
@@ -14,7 +14,7 @@
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="500MB" />
 		<param name="MaxBackupIndex" value="10" />
-		<layout class="org.apache.log4j.PatternLayout">
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<param name="ConversionPattern" value="%d: %c: %m%n" />
 		</layout>
 	</appender>
@@ -23,7 +23,7 @@
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="500MB" />
 		<param name="MaxBackupIndex" value="1" />
-		<layout class="org.apache.log4j.PatternLayout">
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<param name="ConversionPattern" value="%d: %c: %m%n" />
 		</layout>
 	</appender>
@@ -32,8 +32,8 @@
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="500MB" />
 		<param name="MaxBackupIndex" value="10" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%d [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
 	<appender name="FIELDID_TASK" class="org.apache.log4j.RollingFileAppender">
@@ -41,16 +41,16 @@
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="500MB" />
 		<param name="MaxBackupIndex" value="10" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%d [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
 	<appender name="FIELDID_ORDER" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/order.log" />
 		<param name="Append" value="true" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%d [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
 	<appender name="LIMIT_SERVICE" class="org.apache.log4j.RollingFileAppender">
@@ -58,8 +58,8 @@
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="200MB" />
 		<param name="MaxBackupIndex" value="1" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%d [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
 	<appender name="INSPECTION_SERVICE" class="org.apache.log4j.RollingFileAppender">
@@ -67,8 +67,8 @@
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="200MB" />
 		<param name="MaxBackupIndex" value="1" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%d [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
 	<appender name="MOBILE_ERROR" class="org.apache.log4j.RollingFileAppender">
@@ -76,7 +76,7 @@
 		<param name="Append" value="true" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<param name="MaxBackupIndex" value="30" />
-		<layout class="org.apache.log4j.PatternLayout">
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<param name="ConversionPattern" value="%d: %m%n" />
 		</layout>
 	</appender>
