@@ -18,32 +18,33 @@ import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.services.dashboard.FieldIdUnitTest;
+import com.n4systems.test.TestMock;
+import com.n4systems.test.TestTarget;
 import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.time.DateUtil;
 
 
-public class DashboardReportingServiceTest {
+public class DashboardReportingServiceTest extends FieldIdUnitTest {
 
 	private static final String STATUS_FOO = "Foo";
 	private static final String STATUS_BAR = "bar";
 	private static final String STATUS_HELLO = "hello";
 	private static final String STATUS_WORLD = "world";
 	
-	private DashboardReportingService fixture; 
-	private AssetService assetService;
-	private EventService eventService;
+	@TestTarget private DashboardReportingService dashboardService; 
+	@TestMock private AssetService assetService;
+	@TestMock private EventService eventService;
+	
 	private BaseOrg owner;
 
 	
+	@Override
 	@Before 
-	public void setUp() { 
-		fixture = new DashboardReportingService();
-		assetService = createMock(AssetService.class);
-		eventService = createMock(EventService.class);
-		fixture.setAssetService(assetService);
-		fixture.setEventService(eventService);
+	public void setUp() {
+		super.setUp();
 		owner = OrgBuilder.aCustomerOrg().build();
 	}
 	
@@ -55,7 +56,7 @@ public class DashboardReportingServiceTest {
 		expect(eventService.getUpcomingScheduledEvents(period, owner)).andReturn(events);
 		replay(eventService);
 		
-		List<ChartSeries<Calendar>> results = fixture.getUpcomingScheduledEvents(period, owner);
+		List<ChartSeries<Calendar>> results = dashboardService.getUpcomingScheduledEvents(period, owner);
 		
 		assertEquals("only one ChartSeries in result set", 1, results.size());		
 		assertEquals("expecting 30 days of points", period+1, results.get(0).size());  // currently code is inclusive hence the "period+1" 
@@ -69,7 +70,7 @@ public class DashboardReportingServiceTest {
 		expect(assetService.getAssetsStatus(dateRange.getFromDate(), dateRange.getToDate(), owner)).andReturn(assetStatuses);
 		replay(assetService);
 		
-		List<ChartSeries<String>> results = fixture.getAssetsStatus(dateRange, owner);
+		List<ChartSeries<String>> results = dashboardService.getAssetsStatus(dateRange, owner);
 		
 		assertEquals(1, results.size());
 		assertEquals(assetStatuses.size()+1, results.get(0).size());  // note that it currently adds "Other" section to results so expect one more.		
@@ -77,7 +78,7 @@ public class DashboardReportingServiceTest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void test_getAssetsStatus_null_range() { 
-		List<ChartSeries<String>> results = fixture.getAssetsStatus(null, owner);		
+		List<ChartSeries<String>> results = dashboardService.getAssetsStatus(null, owner);		
 	}	
 
 	@Test
@@ -89,7 +90,7 @@ public class DashboardReportingServiceTest {
 		expect(assetService.getAssetsIdentified(granularity, dateRange.getFromDate(), dateRange.getToDate(), owner)).andReturn(assets);
 		replay(assetService);
 		
-		List<ChartSeries<Calendar>> results = fixture.getAssetsIdentified(dateRange, granularity, owner);
+		List<ChartSeries<Calendar>> results = dashboardService.getAssetsIdentified(dateRange, granularity, owner);
 		
 		assertEquals("only one ChartSeries in result set", 1, results.size());		
 		assertEquals("expecting a year (365) of points in the ChartSeries", 365, results.get(0).size());		
@@ -100,7 +101,7 @@ public class DashboardReportingServiceTest {
 		BaseOrg owner = OrgBuilder.aCustomerOrg().build();
 		ChartGranularity granularity = ChartGranularity.DAY;
 		
-		List<ChartSeries<Calendar>> results = fixture.getAssetsIdentified(null, granularity, owner);		
+		List<ChartSeries<Calendar>> results = dashboardService.getAssetsIdentified(null, granularity, owner);		
 	}	
 	
 	
@@ -128,7 +129,7 @@ public class DashboardReportingServiceTest {
 		expect(eventService.getCompletedEvents(dateRange.getFromDate(), dateRange.getToDate(), owner, Status.PASS, granularity)).andReturn(passedEvents);
 		replay(eventService);
 		
-		List<ChartSeries<Calendar>> results = fixture.getCompletedEvents(dateRange, granularity, owner);
+		List<ChartSeries<Calendar>> results = dashboardService.getCompletedEvents(dateRange, granularity, owner);
 		
 		assertEquals("expect ChartSeries for All, Pass, NA, Fail", 4, results.size());
 		assertEquals("All", results.get(0).getLabel());
@@ -151,7 +152,7 @@ public class DashboardReportingServiceTest {
 		expect(eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, dateRange.getFromDate(), dateRange.getToDate(), org)).andReturn(completedEvents);
 		replay(eventService);
 		
-		List<ChartSeries<Calendar>> results = fixture.getEventCompletenessEvents(granularity, dateRange, org);
+		List<ChartSeries<Calendar>> results = dashboardService.getEventCompletenessEvents(granularity, dateRange, org);
 		
 		assertEquals(2, results.size());
 		assertEquals("All", results.get(0).getLabel());
@@ -169,12 +170,12 @@ public class DashboardReportingServiceTest {
 
 	@Test(expected=IllegalArgumentException.class)
 	public void test_getEventCompleteness_null_range() { 
-		List<ChartSeries<Calendar>> results = fixture.getEventCompletenessEvents(ChartGranularity.DAY, null, owner);		
+		List<ChartSeries<Calendar>> results = dashboardService.getEventCompletenessEvents(ChartGranularity.DAY, null, owner);		
 	}	
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void test_getCompletedEvents_null_range() { 
-		List<ChartSeries<Calendar>> results = fixture.getCompletedEvents(null, ChartGranularity.DAY, owner);		
+		List<ChartSeries<Calendar>> results = dashboardService.getCompletedEvents(null, ChartGranularity.DAY, owner);		
 	}	
 
 	private List<CompletedEventsReportRecord> createCompletedEventsResults(Status fail, int count) {

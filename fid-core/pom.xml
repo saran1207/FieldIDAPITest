@@ -197,6 +197,6 @@
         	<groupId>net.sf.jasperreports</groupId>
         	<artifactId>jasperreports-fonts</artifactId>
         	<version>4.0.0</version>
-        </dependency>
+        </dependency>      
 	</dependencies>
 </project>

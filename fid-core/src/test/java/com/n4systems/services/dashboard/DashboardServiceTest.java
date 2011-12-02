@@ -16,27 +16,26 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
+import com.n4systems.test.TestMock;
+import com.n4systems.test.TestTarget;
 import com.n4systems.util.persistence.QueryBuilder;
 
 
-public class DashboardServiceTest {
+public class DashboardServiceTest extends FieldIdUnitTest {
 	
-	private DashboardService fixture;
-	private PersistenceService persistenceService;
-	private SecurityContext securityContext;
+	@TestTarget private DashboardService dashboardService;
+	
+	@TestMock private PersistenceService persistenceService;
+	@TestMock private SecurityContext securityContext;
+	
 	private SecurityFilter securityFilter;
 	
+	@Override
 	@Before
 	public void setUp() {
+		super.setUp();
 		User user = UserBuilder.aDivisionUser().build();
 		securityFilter = new UserSecurityFilter(user);
-		securityContext = createMock(SecurityContext.class);
-		persistenceService = createMock(PersistenceService.class);
-		
-		fixture = new DashboardService();
-		
-		fixture.setSecurityContext(securityContext);
-		fixture.setPersistenceService(persistenceService);		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -48,7 +47,7 @@ public class DashboardServiceTest {
 		expectLastCall().times(2);
 		replay(securityContext);
 		
-		DashboardLayout actual = fixture.findLayout();
+		DashboardLayout actual = dashboardService.findLayout();
 		
 		assertEquals(0, actual.getWidgetCount());
 		assertEquals(0, actual.getColumns().get(0).getWidgets().size());
@@ -65,7 +64,7 @@ public class DashboardServiceTest {
 		expectLastCall().times(2);
 		replay(securityContext);
 		
-		DashboardLayout actual = fixture.findLayout();
+		DashboardLayout actual = dashboardService.findLayout();
 		
 		assertEquals(2, actual.getWidgetCount());
 		assertEquals(2, actual.getColumns().get(0).getWidgets().size());

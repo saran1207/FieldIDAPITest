@@ -107,10 +107,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return results;		
 	}		
 	
+	@Deprecated // for testing only
 	public void setAssetService(AssetService assetService) {
 		this.assetService = assetService;
 	}
 	
+	@Deprecated // for testing only
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
 	}
