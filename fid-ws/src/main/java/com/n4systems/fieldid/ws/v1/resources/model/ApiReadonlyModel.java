@@ -1,10 +1,7 @@
-package com.n4systems.fieldid.ws.v1.models;
+package com.n4systems.fieldid.ws.v1.resources.model;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
 public abstract class ApiReadonlyModel {
 	private Long sid;
 	private Date modified;

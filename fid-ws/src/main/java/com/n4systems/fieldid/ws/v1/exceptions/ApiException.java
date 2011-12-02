@@ -7,15 +7,15 @@ import javax.ws.rs.core.Response.Status;
 
 public abstract class ApiException extends WebApplicationException {
 	
-	protected ApiException(Status status) {
+	public ApiException(Status status) {
 		this(status, "");
 	}
 	
-	protected ApiException(Status status, String message) {
+	public ApiException(Status status, String message) {
 		this(Response.status(status).entity(message).type(MediaType.TEXT_PLAIN_TYPE).build());
 	}
 	
-	protected ApiException(Response response) {
+	public ApiException(Response response) {
 		super(response);
 	}
 }

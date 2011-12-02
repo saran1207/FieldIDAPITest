@@ -1,14 +1,12 @@
-package com.n4systems.fieldid.ws.v1.models;
+package com.n4systems.fieldid.ws.v1.resources.user;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModelWithOwner;
 
-@XmlRootElement
 public class ApiUser extends ApiReadonlyModelWithOwner {
 	private String userId;
 	private String name;
 	private String hashPassword;
 	private String hashSecurityCardNumber;
-	private String authKey;
 	private String userType;
 	private boolean identifyEnabled;
 	private boolean createEventEnabled;
@@ -46,14 +44,6 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 		this.hashSecurityCardNumber = hashSecurityCardNumber;
 	}
 
-	public String getAuthKey() {
-		return authKey;
-	}
-
-	public void setAuthKey(String authKey) {
-		this.authKey = authKey;
-	}
-
 	public String getUserType() {
 		return userType;
 	}
@@ -85,6 +75,5 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	public void setEditEventEnabled(boolean permissionEditEvent) {
 		this.editEventEnabled = permissionEditEvent;
 	}
-	
 
 }

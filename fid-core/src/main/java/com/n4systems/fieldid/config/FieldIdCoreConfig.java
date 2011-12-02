@@ -22,6 +22,7 @@ import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
+import com.n4systems.fieldid.service.SecurityContextInitializer;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
@@ -306,5 +307,12 @@ public class FieldIdCoreConfig {
     public MassScheduleService massScheduleService() {
         return new MassScheduleService();
     }
+    
+    @Bean
+    @Scope("singleton")
+    public SecurityContextInitializer securityContextInitializer() {
+    	return new SecurityContextInitializer();
+    }
+    
 }
 

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.ws.v1.resources;
+package com.n4systems.fieldid.ws.v1.resources.authentication;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -8,10 +8,8 @@ import org.junit.Test;
 
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
-import com.n4systems.fieldid.ws.v1.models.ApiUser;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
-import com.n4systems.security.Permissions;
 
 public class AuthenticationResourceTest {
 	
@@ -61,26 +59,13 @@ public class AuthenticationResourceTest {
 		String tenant = "tenant";
 		String userId = "user";
 		String pass = "pass";
+		String authKey = "abcdefg";
 		
-		User user = UserBuilder.anEmployee().build();
+		User user = UserBuilder.anEmployee().withAuthKey(authKey).build();
 		
 		expect(userService.authenticateUserByPassword(tenant, userId, pass)).andReturn(user);
 		replay(userService);
 		
-		ApiUser apiUser = fixture.authenticate(tenant, userId, pass);
-		
-		assertEquals(user.getId(), apiUser.getSid());
-		assertEquals(user.getModified(), apiUser.getModified());
-		assertEquals(user.isActive(), apiUser.isActive());
-		assertEquals(user.getOwner().getId(), apiUser.getOwnerId());
-		assertEquals(user.getUserID(), apiUser.getUserId());
-		assertEquals(user.getDisplayName(), apiUser.getName());
-		assertEquals(user.getHashPassword(), apiUser.getHashPassword());
-		assertEquals(user.getHashSecurityCardNumber(), apiUser.getHashSecurityCardNumber());
-		assertEquals(user.getAuthKey(), apiUser.getAuthKey());
-		assertEquals(user.getUserType().name(), apiUser.getUserType());
-		assertEquals(Permissions.hasOneOf(user, Permissions.CreateEvent), apiUser.isCreateEventEnabled());
-		assertEquals(Permissions.hasOneOf(user, Permissions.EditEvent), apiUser.isEditEventEnabled());
-		assertEquals(Permissions.hasOneOf(user, Permissions.Tag), apiUser.isIdentifyEnabled());	
+		assertEquals(authKey, fixture.authenticate(tenant, userId, pass));
 	}
 }

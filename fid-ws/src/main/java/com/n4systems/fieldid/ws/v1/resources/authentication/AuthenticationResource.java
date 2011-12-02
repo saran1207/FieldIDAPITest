@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.ws.v1.resources;
+package com.n4systems.fieldid.ws.v1.resources.authentication;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -15,17 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
-import com.n4systems.fieldid.ws.v1.models.ApiUser;
 import com.n4systems.model.user.User;
-import com.n4systems.security.Permissions;
 
-@Path("/authenticate.json")
+@Path("/authenticate")
 @Component
 @Scope("request")
 public class AuthenticationResource extends FieldIdPersistenceService {
 
-	@Autowired
-	private UserService userService;
+	@Autowired private UserService userService;
 	
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -33,9 +30,9 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	@Transactional(readOnly = true)
-	public ApiUser authenticate(
+	public String authenticate(
 			@FormParam("tenant") String tenantName,
 			@FormParam("user") String userId, 
 			@FormParam("password") String password) {
@@ -48,27 +45,8 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 		if (user == null) {
 			throw new ForbiddenException();
 		}
-
-		ApiUser apiUser = convertUserToApiUser(user);
-		return apiUser;
-	}
-	
-	private ApiUser convertUserToApiUser(User user) {
-		ApiUser apiUser = new ApiUser();
-		apiUser.setSid(user.getId());
-		apiUser.setModified(user.getModified());
-		apiUser.setActive(user.isActive());
-		apiUser.setOwnerId(user.getOwner().getId());
-		apiUser.setUserId(user.getUserID());
-		apiUser.setAuthKey(user.getAuthKey());
-		apiUser.setName(user.getDisplayName());
-		apiUser.setUserType(user.getUserType().name());
-		apiUser.setHashPassword(user.getHashPassword());
-		apiUser.setHashSecurityCardNumber(user.getHashSecurityCardNumber());
-		apiUser.setCreateEventEnabled(Permissions.hasOneOf(user, Permissions.CreateEvent));
-		apiUser.setEditEventEnabled(Permissions.hasOneOf(user, Permissions.EditEvent));
-		apiUser.setIdentifyEnabled(Permissions.hasOneOf(user, Permissions.Tag));
-		return apiUser;
+		
+		return user.getAuthKey();
 	}
 	
 }

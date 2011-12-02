@@ -18,6 +18,7 @@ public class UserBuilder extends BaseBuilder<User> {
 	private final int permissions;
 	private final boolean locked;
 	private final UserType userType;
+	private final String authKey;
 	
 	public static UserBuilder aUser() {
 		return aFullUser();
@@ -28,15 +29,15 @@ public class UserBuilder extends BaseBuilder<User> {
 	}
 
 	public static UserBuilder aFullUser() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.FULL);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.FULL, null);
 	}
 
 	public static UserBuilder anLiteUser() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.LITE);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.LITE, null);
 	}
 	
 	public static UserBuilder aSystemUser() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.SYSTEM);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.SYSTEM, null);
 	}
 	
 	public static UserBuilder anAdminUser() {
@@ -44,26 +45,26 @@ public class UserBuilder extends BaseBuilder<User> {
 	}
 	
 	public static UserBuilder aSecondaryUser() {
-		return new UserBuilder(OrgBuilder.aSecondaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.FULL);
+		return new UserBuilder(OrgBuilder.aSecondaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.FULL, null);
 	}
 	
 	public static UserBuilder aReadOnlyUser() {
-		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.READONLY);
+		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.READONLY, null);
 	}
 	
 	public static UserBuilder aDivisionUser() {
-		return new UserBuilder(OrgBuilder.aDivisionOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.FULL);
+		return new UserBuilder(OrgBuilder.aDivisionOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.FULL, null);
 	}
 
 	private UserBuilder(BaseOrg owner, String firstName, String lastName, String userId, 
 			String emailAddress, String password, boolean resetPasswordKey, Long id, 
-			int permissions, UserType userType) {
-		this(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, id, permissions, userType, false);		
+			int permissions, UserType userType, String authKey) {
+		this(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, id, permissions, userType, false, authKey);		
 	}
 
 	private UserBuilder(BaseOrg owner, String firstName, String lastName, String userId, 
 			String emailAddress, String password, boolean resetPasswordKey, Long id, 
-			int permissions, UserType userType, boolean locked) {
+			int permissions, UserType userType, boolean locked, String authKey) {
 		super(id);
 		this.owner = owner;
 		this.firstName = firstName;
@@ -75,58 +76,63 @@ public class UserBuilder extends BaseBuilder<User> {
 		this.permissions = permissions;
 		this.userType = userType;
 		this.locked = locked;
+		this.authKey = authKey;
 	}
 	
 	public UserBuilder withOwner(BaseOrg owner) {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType, authKey));
 	}
 	
 	public UserBuilder withFirstName(String firstName) {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType, authKey));
 	}
 	
 	public UserBuilder withLastName(String lastName) {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType, authKey));
 	}
 	
 	public UserBuilder withUserId(String userId) {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType, authKey));
 	}
 	
 	public UserBuilder withEmailAddress(String emailAddress) {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType, authKey));
 	}
 	
 	public UserBuilder withNoPassword() {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, null, resetPasswordKey, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, null, resetPasswordKey, getId(), permissions, userType, authKey));
 	}
 	
 	public UserBuilder withPassword(String password) {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, getId(), permissions, userType, authKey));
 	}
 
 	public UserBuilder withResetPasswordKey() {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, true, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, true, getId(), permissions, userType, authKey));
 	}
 
 	public UserBuilder withOutResetPasswordKey() {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType, authKey));
 	}
 	
 	public UserBuilder withId(long id) {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, id, permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, id, permissions, userType, authKey));
 	}
 	
 	public UserBuilder withPermissions(int permissions) {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType, authKey));
 	}
 
 	public UserBuilder withUserType(UserType userType) {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType, authKey));
 	}
 	
 	public BaseBuilder<User> withLocked(boolean locked) {
-		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType, locked));
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType, locked, authKey));
+	}
+	
+	public BaseBuilder<User> withAuthKey(String authKey) {
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType, locked, authKey));
 	}
 	
 	@Override
@@ -142,6 +148,7 @@ public class UserBuilder extends BaseBuilder<User> {
 		user.setRegistered(true);
 		user.setUserType(userType);
 		user.setLocked(locked);
+		user.setAuthKey(authKey);
 		
 		if (userType.equals(UserType.ADMIN)) {
 			user.setPermissions(Permissions.ADMIN);

@@ -118,6 +118,18 @@
 	<servlet>
 		<servlet-name>fieldid_api_v1</servlet-name>
   		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+			<param-value>com.n4systems.fieldid.config.ApiSecurityRequestFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+			<param-value>com.n4systems.fieldid.config.ApiSecurityRequestFilter</param-value>
+		</init-param>
 	</servlet>
 
 	<servlet-mapping>
@@ -166,6 +178,11 @@
 	<error-page>
 		<error-code>404</error-code>
 		<location>/static/html/404.html</location>
+	</error-page>
+
+	<error-page>
+		<error-code>405</error-code>
+		<location>/static/html/405.html</location>
 	</error-page>
 
 	<error-page>

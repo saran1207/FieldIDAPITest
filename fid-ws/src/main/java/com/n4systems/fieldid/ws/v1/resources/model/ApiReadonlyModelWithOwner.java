@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.ws.v1.models;
+package com.n4systems.fieldid.ws.v1.resources.model;
 
 public abstract class ApiReadonlyModelWithOwner extends ApiReadonlyModel {
 	private Long ownerId;

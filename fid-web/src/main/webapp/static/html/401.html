@@ -1,17 +1,21 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-		<title>Access Restricted</title>
+		<title>Unauthorized</title>
 	</head>
 	<body>		
 		<script src="https://ssl.google-analytics.com/ga.js" type="text/javascript"></script>
 		<script type="text/javascript">
-		if (location.href.indexOf("fieldid.com") != -1) {
-			var pageTracker = _gat._getTracker("UA-4760869-1");
-			    pageTracker._initData();
-			    pageTracker._trackPageview('/static/html/401.html');
-		}	
-		location.href = location.href.substr(0, location.href.lastIndexOf('fieldid/')) + 'fieldid/restricted.action';		
+		// Don't redirect the web services
+		if (location.href.indexOf("/fieldid/api/") == -1) {
+			if (location.href.indexOf("fieldid.com") != -1) {
+				var pageTracker = _gat._getTracker("UA-4760869-1");
+				    pageTracker._initData();
+				    pageTracker._trackPageview('/static/html/401.html');
+			}	
+			location.href = location.href.substr(0, location.href.lastIndexOf('fieldid/')) + 'fieldid/restricted.action';		
+		}
 		</script>
+		<h1>401 - Unauthorized</h1>
 	</body>
 </html>
