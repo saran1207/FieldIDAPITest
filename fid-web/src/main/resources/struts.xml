@@ -178,6 +178,7 @@
 		
 		<action name="downloadAssetTypeImageSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetTypeImage" />
 		<action name="downloadCertLogo" method="downloadCertLogo" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" />
+		<action name="downloadOrgLogo" method="downloadOrgLogo" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" />
 		<action name="downloadPrintOutPreview" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
 		<action name="downloadPrintOutThumb" method="downloadThumb" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
 		<action name="downloadAssetAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetAttachmentFile" />

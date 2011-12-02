@@ -31,6 +31,8 @@ public class UploadFileAction extends AbstractAction {
 	
 	private String uploadedFilePath;
 	
+	private Boolean backgroundColor = false;
+	
 	public UploadFileAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
@@ -128,5 +130,13 @@ public class UploadFileAction extends AbstractAction {
 
 	public void setTypeOfUpload(String typeOfUpload) {
 		this.typeOfUpload = typeOfUpload;
+	}
+
+	public Boolean getBackgroundColor() {
+		return backgroundColor;
+	}
+
+	public void setBackgroundColor(Boolean backgroundColor) {
+		this.backgroundColor = backgroundColor;
 	}
 }

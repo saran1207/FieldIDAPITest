@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.actions.customers;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -20,14 +23,17 @@ import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.customer.CustomerOrgArchiver;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.user.UserSaver;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
+import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 @Validation
@@ -49,6 +55,11 @@ public class CustomerCrud extends AbstractCrud {
 	private List<ListingPair> internalOrgList;
 	private DownloadLink downloadLink;
 	private String reportName;
+	
+	private File logo;
+	private String logoImageDirectory;
+	private boolean removeImage = false;
+	private boolean newImage = false;
 	
 	public CustomerCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -88,6 +99,11 @@ public class CustomerCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
+	private String logoImageExists() {
+		File logo = PathHandler.getOrgLogo(customer);
+		return logo.exists() ? logo.getName() : null;
+	}
+	
 	@SkipValidation
 	public String doLoadEdit() {
 		if (customer == null) {
@@ -95,6 +111,8 @@ public class CustomerCrud extends AbstractCrud {
 			return ERROR;
 		}
 
+		logoImageDirectory = logoImageExists();
+		
 		return INPUT;
 	}
 	
@@ -123,6 +141,8 @@ public class CustomerCrud extends AbstractCrud {
 			addActionError("Customer not found");
 			return ERROR;
 		}
+
+		logoImageDirectory = logoImageExists();
 
 		return SUCCESS;
 	}
@@ -174,6 +194,7 @@ public class CustomerCrud extends AbstractCrud {
 				customer.setTenant(getTenant());
 			}
             customer.touch();
+            processImage();
 			saver.saveOrUpdate(customer);
 			addFlashMessage(getText("message.saved"));
 			uniqueID = customer.getId();
@@ -184,6 +205,33 @@ public class CustomerCrud extends AbstractCrud {
 		
 		return SUCCESS;
 	}
+	
+	private void processImage() {
+		
+		File orgLogo = PathHandler.getOrgLogo(customer);
+		if (removeImage) {
+			if (orgLogo.exists()) {
+				orgLogo.delete();
+			}
+		}
+		if (newImage == true && logoImageDirectory != null && logoImageDirectory.length() != 0) {
+			try {
+				if (orgLogo.exists()) {
+					orgLogo.delete();
+				}
+				
+				File tmpDirectory = PathHandler.getTempRoot();
+				File uploadedImage = new File(tmpDirectory.getAbsolutePath() + '/' + logoImageDirectory);
+				
+				FileUtils.copyFile( uploadedImage, orgLogo );
+				uploadedImage.delete();
+				
+			} catch (IOException e) {
+				logger.error("Could not save logo file",e);
+			}
+		}
+	}
+	
 	
 	@SkipValidation
 	public String doShowImportExport() {
@@ -342,5 +390,38 @@ public class CustomerCrud extends AbstractCrud {
 	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.notes_length", maxLength = "1000")
 	public void setCustomerNotes(String notes) {
 		customer.setNotes(notes);
+	}
+
+	public File getLogo() {
+		return logo;
+	}
+	
+	@CustomValidator(type = "fileSizeValidator", message = "", key = "errors.file_too_large", parameters = { @ValidationParameter(name = "fileSize", value = "524288") })
+	public void setLogo(File logo) {
+		this.logo = logo;
+	}
+
+	public String getLogoImageDirectory() {
+		return logoImageDirectory;
+	}
+
+	public void setLogoImageDirectory(String logoImageDirectory) {
+		this.logoImageDirectory = logoImageDirectory;
+	}
+
+	public boolean isRemoveImage() {
+		return removeImage;
+	}
+
+	public void setRemoveImage(boolean removeImage) {
+		this.removeImage = removeImage;
+	}
+
+	public boolean isNewImage() {
+		return newImage;
+	}
+
+	public void setNewImage(boolean newImage) {
+		this.newImage = newImage;
 	}
 }

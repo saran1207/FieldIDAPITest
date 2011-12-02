@@ -5,9 +5,16 @@
 			vertical-align:top;
 			display:block;
 		}
+		
+		.radio {
+			width: 60px;
+		}
+		
 	</style>
 	
 	<script type="text/javascript">
+		countryChangeUrl = "<@s.url action="getRegions" namespace="/public/ajax" />";
+
 		function imageFileUploaded( fileName, directory ){
 			$("imageUpload").remove();
 			$("imageUploaded").show();
@@ -27,6 +34,8 @@
 		}
 		
 	</script>
+
+	<script type="text/javascript" src="<@s.url value="javascript/timezone.js" />"></script>
 </head>
 
 <#include "/templates/html/common/_formErrors.ftl" />
@@ -128,17 +137,6 @@
 	</div>
 </div>
 
-<head>
-	<style>
-		.radio {
-			width: 60px;
-		}
-	</style>
-	<script type="text/javascript" src="<@s.url value="javascript/timezone.js" />"></script>
-	<script type="text/javascript" >
-		countryChangeUrl = "<@s.url action="getRegions" namespace="/public/ajax" />";
-	</script>
-</head>
 
 
 

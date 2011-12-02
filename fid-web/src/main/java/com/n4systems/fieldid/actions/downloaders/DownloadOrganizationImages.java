@@ -102,6 +102,38 @@ public class DownloadOrganizationImages extends DownloadAction {
 		}
 		return null;
 	}
+	
+	public String doDownloadOrgLogo() {
+		if( uniqueID != null ) {
+			BaseOrg organization = getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(uniqueID).load();
+			
+			if(organization != null) {
+				File orgLogoFile = PathHandler.getOrgLogo(organization);
+				
+				if (!orgLogoFile.exists()) {
+					logger.debug("No organization logo file found at [" + orgLogoFile.getAbsolutePath() + "]");
+					return ERROR;
+				}
+	
+				InputStream input = null;
+				try {
+					fileName = "orgLogo.gif";
+					
+					input = new FileInputStream(orgLogoFile);
+					sendFile( input );
+				} catch (IOException ioe) {
+					logger.error("Failed sending organization logo image", ioe);
+					return ERROR;
+				} finally {
+					IOUtils.closeQuietly(input);
+				}
+			} else {
+				logger.error("Could not find organization");
+				return ERROR;
+			}
+		}
+		return null;
+	}
 
 	public String getTenantName() {
 		return tenantName;

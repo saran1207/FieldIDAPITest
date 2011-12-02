@@ -5,12 +5,15 @@
 			}
 
 			.uploadFileForm {
-				background-color: #F5FBFF;
 				height: 21px;				
+			}
+			
+			.backgroundColor {
+				background-color: #F5FBFF;
 			}	
 		</style>
 </head>	
-<div class="uploadFileForm">
+<div class="uploadFileForm <#if backgroundColor>backgroundColor</#if>">
 	<@s.form method="POST" action="uploadImage" theme="simple"  enctype="multipart/form-data" style="height:20px;">
 		<@s.file name="upload" onchange="$('progress').show(); this.form.submit();" />
 		<@s.hidden name="frameId"/>

@@ -14,6 +14,7 @@ import com.n4systems.model.Project;
 import com.n4systems.model.State;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.user.User;
@@ -64,6 +65,7 @@ public class PathHandler {
 	
 	// paths are in the format <tenant id>/<created year>/<created month>/<event id>
 	private static final String CREATED_DATE_PATH_FORMAT = "yy/MM";
+	private static final String ORGANIZATION_LOGO_IMAGE_FILE_NAME = "orgLogo.gif";
 	
 	/**
 	 * Merges path parts into a file system path.
@@ -550,6 +552,10 @@ public class PathHandler {
 		}
 		
 		return logo;
+	}
+	
+	public static File getOrgLogo(BaseOrg org) {
+		return absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(org.getTenant()), ORGANIZATION_PATH_PART , org.getId().toString(), ORGANIZATION_LOGO_IMAGE_FILE_NAME));
 	}
 	
 	private static String getUserPrivatePath(User user) {

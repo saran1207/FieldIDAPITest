@@ -19,7 +19,7 @@
 		function removeUploadImage() { 
 			$( "imageUploaded" ).hide();
 			$("removeImage").value = "true";
-			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" typeOfUpload="assetTypeImage"/>" scrolling="no" scrollbar="no" scrolling="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>';
+			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" backgroundColor="true" typeOfUpload="assetTypeImage"/>" scrolling="no" scrollbar="no" scrolling="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>';
 			$( "imageUploadField" ).insert( { top: iframe } );
 			$("imageUploaded").removeClassName( "inputError" );
 			$("imageUploaded").title = "";
@@ -44,7 +44,7 @@
 		<p id="assetImageMsg"  <#if !newImage > style="display:none"</#if>><@s.text name="message.asset_image"/></p>
 		<span id="imageUploadField"  >
 			<#if !imageDirectory?exists || imageDirectory.length() == 0  || removeImage >
-				<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>
+				<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" backgroundColor="true"/>" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>
 			</#if>
 			<div class="imageUploadPreview" id="imageUploaded" <#if (action.fieldErrors['uploadedImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !imageDirectory?exists || imageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
 				

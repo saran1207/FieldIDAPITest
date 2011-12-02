@@ -32,6 +32,14 @@ ${action.setPageType('customer','show')!}
 <div class="viewRow" >
 	<div class="userDetails viewSection smallViewSection">
 		<h2><@s.text name="label.details"/></h2>
+		
+		<p>
+			<#if logoImageDirectory?exists>
+				<img src="<@s.url action="downloadOrgLogo" namespace="/file" uniqueID="${customer.id}"  />" alt="<@s.text name="label.organizationalunit"/>" width="120px"/>
+			<#else>
+				Customer Logo
+			</#if>
+		</p>
 		<p>
 			<label for="id"><@s.text name="label.id"/></label>
 			<span class="fieldValue">${customerId!}</span>

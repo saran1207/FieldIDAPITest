@@ -8,7 +8,47 @@
 	</title>
 	<@n4.includeStyle href="user" type="page"/>
     <script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
+
+	<#if customer.linkedOrg?exists>
+		<@n4.includeScript>
+			document.observe("dom:loaded", function() {
+					$$(".linkedCustomerControlled").invoke("disable");
+				});
+		</@n4.includeScript>
+	</#if>
+
+	<script type="text/javascript" >
+		var buttons = new Array( 'saveButton');
+		var buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait" />');
+		
+		document.observe("dom:loaded", function() {
+		    $('saveButton').observe('click', function(event) {
+		        event.stop();
+		        lockSubmitButtons();
+		        $('customerForm').submit();
+		    });
+	    });
+	    
+	    function imageFileUploaded( fileName, directory ){
+			$("imageUpload").remove();
+			$("imageUploaded").show();
+			$("removeImage").value = "false";
+			$("previewImage").hide();
+			$("newImage").value = "true";
+			$("imageDirectory").value = directory;
+		}
+		
+		function removeUploadImage() { 
+			$( "imageUploaded" ).hide();
+			$("removeImage").value = "true";
+			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>';
+			$( "imageUploadField" ).insert( { top: iframe } );
+			$("imageUploaded").removeClassName( "inputError" );
+			$("imageUploaded").title = "";
+		}
+	</script>
 </head>
+
 <@s.form action="customerEdit!save" cssClass="fullForm fluidSets" theme="fieldid" id="customerForm">
 	<#include "../common/_formErrors.ftl"/>
 	<@s.hidden name="uniqueID" />
@@ -36,6 +76,26 @@
 			<div class="infoSet">
 				<label class="label" for="customerNotes"><@s.text name="label.notes"/></label>
 				<@s.textarea  name="customerNotes" />
+			</div>
+			<div class="infoSet">
+				<label class="label" for="customerNotes"><@s.text name="label.logo_image"/></label>
+				
+				<span id="imageUploadField" class="fieldHolder">
+				
+					<#if !logoImageDirectory?exists || logoImageDirectory.length() == 0  || removeImage >
+						<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />"  scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
+					</#if>
+					<span id="imageUploaded" <#if (action.fieldErrors['logoImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !logoImageDirectory?exists || logoImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
+						<@s.url id="previewImage" uniqueID="${uniqueID!}" action="downloadOrgLogo" namespace="/file" />
+						<img src="${previewImage}" width="260px" <#if newImage > style="display:none"</#if> id="previewImage"/>
+						
+						<@s.hidden name="removeImage" id="removeImage"/>  <a href="removeImage" id="removeImageLink" onclick="removeUploadImage(); return false;"><@s.text name="label.remove"/></a>
+						<@s.hidden name="newImage" id="newImage"/>
+						<@s.hidden name="logoImageDirectory" id="imageDirectory"/>
+						
+						
+					</span>
+				</span>
 			</div>
 		</div>
 		<div class="fieldGroup">
@@ -96,25 +156,3 @@
 		
 	</div>
 </@s.form>
-
-
-<head>
-	<#if customer.linkedOrg?exists>
-		<@n4.includeScript>
-			document.observe("dom:loaded", function() {
-					$$(".linkedCustomerControlled").invoke("disable");
-				});
-		</@n4.includeScript>
-	</#if>
-</head>
-
-<script type="text/javascript" >
-	var buttons = new Array( 'saveButton');
-	var buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait" />');
-
-    $('saveButton').observe('click', function(event) {
-        event.stop();
-        lockSubmitButtons();
-        $('customerForm').submit();
-    });
-</script>
