@@ -20,13 +20,13 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
-import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Component
-public abstract class SetupDataResource<A, E extends EntityWithTenant> extends FieldIdPersistenceService {
+public abstract class SetupDataResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
 	private final Class<E> entityClass;
 	
 	protected SetupDataResource(Class<E> entityClass) {

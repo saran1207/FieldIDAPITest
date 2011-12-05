@@ -11,54 +11,60 @@ import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateR
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
+import com.n4systems.fieldid.ws.v1.resources.unit.ApiUnitResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 
 @Configuration
 public class FieldIdWsConfig {
-    
+
 	@Bean
 	@Scope("singleton")
 	public CatchAllExceptionMapper catchAllExceptionMapper() {
 		return new CatchAllExceptionMapper();
 	}
-	
-    @Bean
-    public AuthenticationResource authenticationResource() {
-    	return new AuthenticationResource();
-    }
-    
-    @Bean
-    public ApiOrgResource apiOrgResource() {
-    	return new ApiOrgResource();
-    }
-    
-    @Bean
-    public ApiUserResource apiUserResource() {
-    	return new ApiUserResource();
-    }
-    
-    @Bean
-    public ApiPredefinedLocationResource apiPredefinedLocationResource() {
-    	return new ApiPredefinedLocationResource();
-    }
 
-    @Bean
-    public ApiAssetTypeGroupResource apiAssetTypeGroupResource() {
-    	return new ApiAssetTypeGroupResource();
-    }
-    
-    @Bean
-    public ApiAssetStatusResource apiAssetStatusResource() {
+	@Bean
+	public AuthenticationResource authenticationResource() {
+		return new AuthenticationResource();
+	}
+
+	@Bean
+	public ApiOrgResource apiOrgResource() {
+		return new ApiOrgResource();
+	}
+
+	@Bean
+	public ApiUserResource apiUserResource() {
+		return new ApiUserResource();
+	}
+
+	@Bean
+	public ApiPredefinedLocationResource apiPredefinedLocationResource() {
+		return new ApiPredefinedLocationResource();
+	}
+
+	@Bean
+	public ApiAssetTypeGroupResource apiAssetTypeGroupResource() {
+		return new ApiAssetTypeGroupResource();
+	}
+
+	@Bean
+	public ApiAssetStatusResource apiAssetStatusResource() {
 		return new ApiAssetStatusResource();
 	}
-    
-    @Bean
-    public ApiCommentTemplateResource apiCommentTemplateResource() {
-    	return new ApiCommentTemplateResource();
-    }
-    
-    @Bean
-    public ApiEventBookResource apiEventBookResource() {
-    	return new ApiEventBookResource();
-    }
+
+	@Bean
+	public ApiCommentTemplateResource apiCommentTemplateResource() {
+		return new ApiCommentTemplateResource();
+	}
+
+	@Bean
+	public ApiEventBookResource apiEventBookResource() {
+		return new ApiEventBookResource();
+	}
+
+	@Bean
+	public ApiUnitResource apiUnitResource() {
+		return new ApiUnitResource();
+	}
 }
