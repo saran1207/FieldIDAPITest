@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import com.n4systems.fieldid.ws.v1.resources.assetstatus.ApiAssetStatusResource;
+import com.n4systems.fieldid.ws.v1.resources.assettypegroup.ApiAssetTypeGroupResource;
 import com.n4systems.fieldid.ws.v1.resources.authentication.AuthenticationResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
@@ -38,4 +40,13 @@ public class FieldIdWsConfig {
     	return new ApiPredefinedLocationResource();
     }
 
+    @Bean
+    public ApiAssetTypeGroupResource apiAssetTypeGroupResource() {
+    	return new ApiAssetTypeGroupResource();
+    }
+    
+    @Bean
+    public ApiAssetStatusResource apiAssetStatusResource() {
+		return new ApiAssetStatusResource();
+	}
 }

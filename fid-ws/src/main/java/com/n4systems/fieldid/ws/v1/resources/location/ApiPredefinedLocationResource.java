@@ -9,7 +9,7 @@ import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationLevels;
 
 @Component
-@Path("locations")
+@Path("location")
 public class ApiPredefinedLocationResource extends SetupDataResource<ApiPredefinedLocation, PredefinedLocation> {
 
 	public ApiPredefinedLocationResource() {
