@@ -9,7 +9,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 
 @Component
-@Path("users")
+@Path("user")
 public class ApiUserResource extends SetupDataResource<ApiUser, User> {
 
 	public ApiUserResource() {
