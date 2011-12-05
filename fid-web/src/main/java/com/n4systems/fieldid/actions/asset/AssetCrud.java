@@ -46,10 +46,21 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AutoAttributeCriteria;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
+import com.n4systems.model.LineItem;
+import com.n4systems.model.Order;
+import com.n4systems.model.Project;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -76,7 +87,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private static Logger logger = Logger.getLogger(AssetCrud.class);
 
 	// drop down lists
-	private List<Listable<Long>> commentTemplates;
+	private List<CommentTemplate> commentTemplates;
 	private AssetType assetType;
 	private Collection<AssetExtension> extentions;
 	private AutoAttributeCriteria autoAttributeCriteria;
@@ -843,7 +854,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		this.saveAndStartEvent = saveAndStartEvent;
 	}
 
-	public List<Listable<Long>> getCommentTemplates() {
+	public List<CommentTemplate> getCommentTemplates() {
 		if (commentTemplates == null) {
 			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
 		}

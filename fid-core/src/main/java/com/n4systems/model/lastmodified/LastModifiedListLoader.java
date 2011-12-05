@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.model.parents.legacy.LegacyEntityCreateModifyDate;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.NewObjectSelect;
@@ -15,21 +14,15 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class LastModifiedListLoader extends ListLoader<LastModified> {
-	
-	// I would prefer to do this with constructors but then there's an erasure conflict - mf
-	public static LastModifiedListLoader create(SecurityFilter filter, Class<? extends AbstractEntity> clazz) {
-		return new LastModifiedListLoader(filter, clazz, "id", "modified");
-	}
-	
-	public static LastModifiedListLoader createLegacy(SecurityFilter filter, Class<? extends LegacyEntityCreateModifyDate> clazz) {
-		return new LastModifiedListLoader(filter, clazz, "uniqueID", "dateModified");
-	}
-	
 	private final Class<?> clazz;
 	private final String idField;
 	private final String modifiedField;
 	
 	private Date modifiedAfter;
+	
+	public LastModifiedListLoader(SecurityFilter filter, Class<? extends AbstractEntity> clazz) {
+		this(filter, clazz, "id", "modified");
+	}
 	
 	private LastModifiedListLoader(SecurityFilter filter, Class<?> clazz, String idField, String modifiedField) {
 		super(filter);

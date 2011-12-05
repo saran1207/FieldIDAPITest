@@ -1,6 +1,5 @@
 package com.n4systems.services;
 
-import rfid.ejb.entity.CommentTempBean;
 
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
@@ -15,6 +14,7 @@ import com.n4systems.model.Project;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -35,7 +35,7 @@ public enum SetupDataGroup {
 	 * exception!
 	 */
 	PRODUCT_TYPE	(AssetType.class, AssetStatus.class, AssetTypeGroup.class, AssociatedEventType.class, AssetTypeSchedule.class),
-	INSPECTION_TYPE	(EventType.class, State.class, StateSet.class, EventBook.class, CommentTempBean.class, UnitOfMeasure.class),
+	INSPECTION_TYPE	(EventType.class, State.class, StateSet.class, EventBook.class, CommentTemplate.class, UnitOfMeasure.class),
 	AUTO_ATTRIBUTES	(AutoAttributeCriteria.class, AutoAttributeDefinition.class),
 	OWNERS			(PrimaryOrg.class, SecondaryOrg.class, CustomerOrg.class, DivisionOrg.class, OrgConnection.class),
 	JOBS			(Project.class),

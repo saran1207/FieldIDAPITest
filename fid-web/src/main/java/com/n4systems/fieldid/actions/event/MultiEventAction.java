@@ -4,15 +4,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import com.n4systems.ejb.EventScheduleManager;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.exceptions.MissingEntityException;
+import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.event.viewmodel.EventWebModel;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
+import com.n4systems.fieldid.actions.helpers.MultiEventActionHelper;
+import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.collection.helpers.CommonAssetValues;
+import com.n4systems.fieldid.collection.helpers.CommonAssetValuesFinder;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.CommonEventTypeHandler;
 import com.n4systems.handlers.LoaderBackedCommonEventTypeHandler;
+import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
@@ -20,24 +32,11 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Status;
-import com.n4systems.model.eventtype.CommonAssetTypeDatabaseLoader;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.UserManager;
-import com.n4systems.exceptions.MissingEntityException;
-import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.helpers.MultiEventActionHelper;
-import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.collection.helpers.CommonAssetValues;
-import com.n4systems.fieldid.collection.helpers.CommonAssetValuesFinder;
-import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.Asset;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.commenttemplate.CommentTemplate;
+import com.n4systems.model.eventtype.CommonAssetTypeDatabaseLoader;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ListingPair;
@@ -62,7 +61,7 @@ public class MultiEventAction extends AbstractCrud {
 
 	private UserManager userManager;
 	private List<ListingPair> examiners;
-	private List<Listable<Long>> commentTemplates;
+	private List<CommentTemplate> commentTemplates;
 	private List<AssetStatus> assetStatuses;
 	private CommonEventTypeHandler commonEventTypeHandler;
 	private CommonAssetValues commonAssetValues;
@@ -234,7 +233,7 @@ public class MultiEventAction extends AbstractCrud {
 		return eventFormHelper;
 	}
 	
-	public List<Listable<Long>> getCommentTemplates() {
+	public List<CommentTemplate> getCommentTemplates() {
 		if (commentTemplates == null) {
 			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
 		}

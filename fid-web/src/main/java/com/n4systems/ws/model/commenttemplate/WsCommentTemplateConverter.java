@@ -1,17 +1,17 @@
 package com.n4systems.ws.model.commenttemplate;
 
-import rfid.ejb.entity.CommentTempBean;
 
+import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.ws.model.WsModelConverter;
 
-public class WsCommentTemplateConverter extends WsModelConverter<CommentTempBean, WsCommentTemplate> {
+public class WsCommentTemplateConverter extends WsModelConverter<CommentTemplate, WsCommentTemplate> {
 
 	@Override
-	public WsCommentTemplate fromModel(CommentTempBean model) {
+	public WsCommentTemplate fromModel(CommentTemplate model) {
 		WsCommentTemplate wsModel = new WsCommentTemplate();
-		wsModel.setId(model.getUniqueID());
-		wsModel.setName(model.getTemplateID());
-		wsModel.setComment(model.getContents());
+		wsModel.setId(model.getId());
+		wsModel.setName(model.getName());
+		wsModel.setComment(model.getComment());
 		return wsModel;
 	}
 

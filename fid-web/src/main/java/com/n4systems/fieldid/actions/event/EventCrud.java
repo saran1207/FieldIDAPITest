@@ -64,6 +64,7 @@ import com.n4systems.model.Status;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.assettype.AssetTypeLoader;
+import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
@@ -116,7 +117,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private boolean allowNetworkResults = false;
 	private List<SubEvent> subEvents;
 	private List<ListingPair> examiners;
-	private List<Listable<Long>> commentTemplates;
+	private List<CommentTemplate> commentTemplates;
 	private List<Listable<Long>> employees;
 	private List<ListingPair> eventBooks;
 	private List<EventSchedule> availableSchedules;
@@ -682,7 +683,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return assetStatuses;
 	}
 
-	public List<Listable<Long>> getCommentTemplates() {
+	public List<CommentTemplate> getCommentTemplates() {
 		if (commentTemplates == null) {
 			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
 		}

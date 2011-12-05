@@ -3,32 +3,31 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.OrderManager;
+import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.asset.AssetIdentifierView;
 import com.n4systems.fieldid.actions.asset.AssetView;
 import com.n4systems.fieldid.actions.asset.AssetViewModeConverter;
 import com.n4systems.fieldid.actions.asset.AssetWebModel;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-
-import com.n4systems.ejb.OrderManager;
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
-import com.n4systems.fieldid.actions.asset.AssetIdentifierView;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
+import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -54,7 +53,7 @@ public class RegisterAsset extends AbstractCrud{
 	private AssetTypeLister assetTypeLister;
 	private List<Listable<Long>> employees;
 	private List<AssetStatus> assetStatuses;
-	private List<Listable<Long>> commentTemplates;
+	private List<CommentTemplate> commentTemplates;
 	private OwnerPicker ownerPicker;
 	private AutoAttributeCriteria autoAttributeCriteria;
 	private AssignedToUserGrouper userGrouper;
@@ -180,7 +179,7 @@ public class RegisterAsset extends AbstractCrud{
 		return autoAttributeCriteria;
 	}
 		
-	public List<Listable<Long>> getCommentTemplates() {
+	public List<CommentTemplate> getCommentTemplates() {
 		if (commentTemplates == null) {
 			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
 		}

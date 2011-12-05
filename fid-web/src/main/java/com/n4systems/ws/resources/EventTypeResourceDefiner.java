@@ -21,7 +21,7 @@ public class EventTypeResourceDefiner implements ResourceDefiner<EventType, WsEv
 	@Override
 	public LastModifiedListLoader getLastModifiedLoader(LoaderFactory loaderFactory) {
 		Long tenantId = loaderFactory.getSecurityFilter().getTenantId();
-		return LastModifiedListLoader.create(new TenantOnlySecurityFilter(tenantId), EventType.class);
+		return new LastModifiedListLoader(new TenantOnlySecurityFilter(tenantId), EventType.class);
 	}
 
 	@Override

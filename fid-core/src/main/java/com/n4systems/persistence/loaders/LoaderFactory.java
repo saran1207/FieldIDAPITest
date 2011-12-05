@@ -25,8 +25,6 @@ import com.n4systems.model.assettype.EventFrequencyListLoader;
 import com.n4systems.model.autoattribute.AutoAttributeCriteriaListLoader;
 import com.n4systems.model.autoattribute.AutoAttributeDefinitionListLoader;
 import com.n4systems.model.catalog.CatalogLoader;
-import com.n4systems.model.commenttemplate.CommentTemplateIdLoader;
-import com.n4systems.model.commenttemplate.CommentTemplateListLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
 import com.n4systems.model.downloadlink.DownloadLinkListLoader;
 import com.n4systems.model.downloadlink.DownloadsByDownloadIdLoader;
@@ -70,7 +68,6 @@ import com.n4systems.model.orgs.customer.CustomerOrgsWithNameLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.model.parents.legacy.LegacyEntityCreateModifyDate;
 import com.n4systems.model.safetynetwork.AllPreAssignedAssetsLoader;
 import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
 import com.n4systems.model.safetynetwork.AssetsByIdOwnerTypeLoader;
@@ -246,16 +243,8 @@ public class LoaderFactory implements Serializable {
 		return createUserListableLoader().setNoDeleted(true);
 	}
 
-	public CommentTemplateIdLoader createCommentTemplateIdLoader() {
-		return new CommentTemplateIdLoader(filter);
-	}
-
 	public CommentTemplateListableLoader createCommentTemplateListableLoader() {
 		return new CommentTemplateListableLoader(filter);
-	}
-
-	public CommentTemplateListLoader createCommentTemplateListLoader() {
-		return new CommentTemplateListLoader(filter);
 	}
 
 	public UserListableLoader createCurrentCombinedUserListableLoader() {
@@ -411,11 +400,7 @@ public class LoaderFactory implements Serializable {
 	}
 
 	public LastModifiedListLoader createLastModifiedListLoader(Class<? extends AbstractEntity> clazz) { 
-		return LastModifiedListLoader.create(filter, clazz);
-	}
-	
-	public LastModifiedListLoader createLastModifiedListLoaderLegacy(Class<? extends LegacyEntityCreateModifyDate> clazz) { 
-		return LastModifiedListLoader.createLegacy(filter, clazz);
+		return new LastModifiedListLoader(filter, clazz);
 	}
 
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {

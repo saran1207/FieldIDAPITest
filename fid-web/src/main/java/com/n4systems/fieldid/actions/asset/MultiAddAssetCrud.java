@@ -43,6 +43,7 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetCleaner;
 import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
+import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
@@ -64,7 +65,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	// drop down lists
 	private List<Listable<Long>> employees;
 	private List<AssetStatus> assetStatuses;
-	private List<Listable<Long>> commentTemplates;
+	private List<CommentTemplate> commentTemplates;
 	private List<AssetExtension> extentions;
 	private AssetTypeLister assetTypeLister;
 	private AutoAttributeCriteria autoAttributeCriteria;
@@ -274,7 +275,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		return assetStatuses;
 	}
 
-	public List<Listable<Long>> getCommentTemplates() {
+	public List<CommentTemplate> getCommentTemplates() {
 		if (commentTemplates == null) {
 			commentTemplates = getLoaderFactory().createCommentTemplateListableLoader().load();
 		}
