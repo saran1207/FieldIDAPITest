@@ -17,7 +17,7 @@ public class ApiUserResource extends SetupDataResource<ApiUser, User> {
 	}
 
 	@Override
-	public ApiUser convertEntityToApiModel(User user) {
+	protected ApiUser convertEntityToApiModel(User user) {
 		ApiUser apiUser = new ApiUser();
 		apiUser.setSid(user.getId());
 		apiUser.setModified(user.getModified());

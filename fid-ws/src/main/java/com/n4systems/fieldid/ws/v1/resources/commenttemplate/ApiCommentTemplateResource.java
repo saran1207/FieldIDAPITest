@@ -16,7 +16,7 @@ public class ApiCommentTemplateResource extends SetupDataResource<ApiCommentTemp
 	}
 
 	@Override
-	public ApiCommentTemplate convertEntityToApiModel(CommentTemplate template) {
+	protected ApiCommentTemplate convertEntityToApiModel(CommentTemplate template) {
 		ApiCommentTemplate apiTemplate = new ApiCommentTemplate();
 		apiTemplate.setSid(template.getId());
 		apiTemplate.setActive(true);

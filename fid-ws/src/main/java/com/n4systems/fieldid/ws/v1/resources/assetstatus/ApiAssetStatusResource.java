@@ -16,7 +16,7 @@ public class ApiAssetStatusResource extends SetupDataResource<ApiAssetStatus, As
 	}
 
 	@Override
-	public ApiAssetStatus convertEntityToApiModel(AssetStatus status) {
+	protected ApiAssetStatus convertEntityToApiModel(AssetStatus status) {
 		ApiAssetStatus apiStatus = new ApiAssetStatus();
 		apiStatus.setSid(status.getId());
 		apiStatus.setModified(status.getModified());

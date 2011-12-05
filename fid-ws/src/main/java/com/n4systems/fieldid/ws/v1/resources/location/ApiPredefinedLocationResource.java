@@ -17,7 +17,7 @@ public class ApiPredefinedLocationResource extends SetupDataResource<ApiPredefin
 	}
 
 	@Override
-	public ApiPredefinedLocation convertEntityToApiModel(PredefinedLocation location) {
+	protected ApiPredefinedLocation convertEntityToApiModel(PredefinedLocation location) {
 		ApiPredefinedLocation apiLocation = new ApiPredefinedLocation();
 		apiLocation.setSid(location.getId());
 		apiLocation.setActive(location.isActive());

@@ -16,7 +16,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 	}
 
 	@Override
-	public ApiOrg convertEntityToApiModel(BaseOrg baseOrg) {
+	protected ApiOrg convertEntityToApiModel(BaseOrg baseOrg) {
 		ApiOrg apiOrg = new ApiOrg();
 		apiOrg.setSid(baseOrg.getId());
 		apiOrg.setModified(baseOrg.getModified());

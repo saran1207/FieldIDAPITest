@@ -16,7 +16,7 @@ public class ApiAssetTypeGroupResource extends SetupDataResource<ApiAssetTypeGro
 	}
 
 	@Override
-	public ApiAssetTypeGroup convertEntityToApiModel(AssetTypeGroup assetTypeGroup) {
+	protected ApiAssetTypeGroup convertEntityToApiModel(AssetTypeGroup assetTypeGroup) {
 		ApiAssetTypeGroup apiAssetTypeGroup = new ApiAssetTypeGroup();
 		apiAssetTypeGroup.setSid(assetTypeGroup.getId());
 		apiAssetTypeGroup.setActive(true);
