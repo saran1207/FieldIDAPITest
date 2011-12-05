@@ -3,7 +3,14 @@
 	<div class="row">  
 		<label>Date Range</label><select wicket:id="dateRangeSelect"></select>
 	</div>	
-	
+
+    <div class="row">
+		<label>&nbsp;</label>
+    	<div wicket:id="picker" class="orgPickerContainer"></div>
+	    <input type="submit" wicket:id="addOrgButton" wicket:message="value:label.add">
+	</div>
+
+    <div style="clear:both;"></div>
 
     <div wicket:id="orgsListContainer" class="orgsListContainer">
 
@@ -16,13 +23,5 @@
         </div>
 
     </div>
-
-    <div style="clear:both;"></div>
-
-	<div class="row">
-		<label>&nbsp;</label>
-    	<div wicket:id="picker" class="orgPickerContainer"></div>
-	    <input type="submit" wicket:id="addOrgButton" wicket:message="value:label.add">
-	</div>
 
 </wicket:extend>

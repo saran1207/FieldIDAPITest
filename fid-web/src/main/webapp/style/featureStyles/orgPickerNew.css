@@ -1,7 +1,8 @@
 .orgSelector {
 	border: 3px solid #999;
 	background-color: white;
-	z-index:1000;
+	z-index:30000;
+	width: 450px;
 }
 
 .orgSelector .selections {
@@ -70,12 +71,6 @@ span.closeImage a {
 .orgSelector .resultCount {
 	padding:5px 0;
 }
-
-.orgSelector {
-	width: 450px;
-	z-index:1000;	
-}
-
 
 .orgBrowser {
 	overflow:hidden;

@@ -61,7 +61,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 	}
 
 	@Override
-	protected Component createConfigPanel(String id) {
+    public Component createConfigPanel(String id) {
 		return new EventCompletenessConfigPanel(id,getConfigModel());
 	}
 	

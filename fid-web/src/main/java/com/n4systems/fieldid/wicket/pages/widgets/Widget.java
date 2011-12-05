@@ -23,7 +23,7 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
 
     protected ContextImage removeButton;
     protected ContextImage configureButton;
-	private Component configPanel;
+//	private Component configPanel;
     
 
     public Widget(String id, IModel<WidgetDefinition<W>> widgetDefinition) {
@@ -31,11 +31,11 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
         this.widgetDefinition = widgetDefinition;
         setOutputMarkupId(true);
         Label subTitleLabel = new Label("subTitleLabel", getSubTitleModel()); 
-        add(new AttributeAppender("class", new Model<String>(getCssClassWithSuffix("Widget")), " "));
+//        add(new AttributeAppender("class", new Model<String>(getCssClassWithSuffix("Widget")), " "));
         add(new Label("titleLabel", new PropertyModel<String>(widgetDefinition, "config.name")));
         add(subTitleLabel);
         add(new ContextImage("dragImage", "images/dashboard/drag.png"));        
-        add(configPanel = createDecoratedConfigPanel("configPanel"));
+//        add(configPanel = createDecoratedConfigPanel("configPanel"));
         add(new AbstractBehavior () {
 			@Override public void renderHead(IHeaderResponse response) {				
 				response.renderOnDomReadyJavascript("widgetToolkit.registerWidget('"+getMarkupId()+"');");
@@ -61,20 +61,25 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
 		return this;
 	}
 
+	public Widget<W> setConfigureBehavior(AjaxEventBehavior behaviour) {
+		configureButton.add(behaviour);
+		return this;
+	}
+
     public IModel<WidgetDefinition<W>> getWidgetDefinition() {
     	return widgetDefinition;
     }    
 
-	private String getCssClassWithSuffix(String suffix) {
-		return getWidgetDefinition().getObject().getWidgetType().getCamelCase()+suffix;
-	}   
+//	private String getCssClassWithSuffix(String suffix) {
+//		return getWidgetDefinition().getObject().getWidgetType().getCamelCase()+suffix;
+//	}
+//
+//	private Component createDecoratedConfigPanel(String id) {
+//		Component panel = createConfigPanel(id);
+//		panel.add(new AttributeAppender("class", new Model<String>(getCssClassWithSuffix("Config")), " " ));
+//		return panel;
+//	}
 
-	private Component createDecoratedConfigPanel(String id) {
-		Component panel = createConfigPanel(id);
-		panel.add(new AttributeAppender("class", new Model<String>(getCssClassWithSuffix("Config")), " " ));
-		return panel;
-	}
-
-	protected abstract Component createConfigPanel(String id);	
+	public abstract Component createConfigPanel(String id);
 
 }

@@ -3,18 +3,24 @@
 	<div wicket:id="content">
 
 	    <div wicket:id="addWidgetPanel"></div>
-	    
-	    <div class="column" wicket:id="sortableColumn">
-	        <div wicket:id="widgets">
-	            <div wicket:id="widget"></div>
-	        </div>
-	    </div>
-	
-	    <div class="column" wicket:id="sortableColumn2">
-	        <div wicket:id="widgets">
-	            <div wicket:id="widget"></div>
-	        </div>
-	    </div>
+
+        <div wicket:id="columnsContainer">
+
+            <div class="column" wicket:id="sortableColumn">
+                <div wicket:id="widgets">
+                    <div wicket:id="widget"></div>
+                </div>
+            </div>
+
+            <div class="column" wicket:id="sortableColumn2">
+                <div wicket:id="widgets">
+                    <div wicket:id="widget"></div>
+                </div>
+            </div>
+
+            <div wicket:id="configWindow"></div>
+
+        </div>
 	 	
 	 	<div style="clear:both;"/>
 	 		

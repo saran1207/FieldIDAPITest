@@ -27,7 +27,6 @@ import com.n4systems.fieldid.wicket.IWicketTester;
 import com.n4systems.fieldid.wicket.WicketHarness;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
 import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
-import com.n4systems.fieldid.wicket.pages.DashboardPage.DashboardColumnContainer;
 import com.n4systems.fieldid.wicket.pages.DashboardPageTest.DashboardHarness;
 import com.n4systems.fieldid.wicket.pages.widgets.CommonLinksWidget;
 import com.n4systems.fieldid.wicket.pages.widgets.JobsAssignedWidget;
@@ -336,7 +335,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		}
 
 		public ListView<?> getSortableColumn(int i) {
-			MarkupContainer container = (MarkupContainer) get("sortableColumn" + ((i==0)?"":"2"));
+			MarkupContainer container = (MarkupContainer) get("columnsContainer", "sortableColumn" + ((i==0)?"":"2"));
 			return container==null? null : (ListView<?>) container.get("widgets");
 		}
 		
@@ -346,8 +345,8 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		
 		private Widget getWidget(int col, int index) {
 			String sortableColumnId = "sortableColumn" + (col==0?"":"2");
-			DashboardColumnContainer sortableColumn = (DashboardColumnContainer) get(sortableColumnId);
-			ListView<WidgetDefinition> listView = (ListView<WidgetDefinition>) sortableColumn.get("widgets");
+			WebMarkupContainer sortableColumns = (WebMarkupContainer) get("columnsContainer", sortableColumnId);
+			ListView<WidgetDefinition> listView = (ListView<WidgetDefinition>) sortableColumns.get("widgets");
 			ListItem<WidgetDefinition> c = (ListItem<WidgetDefinition>) listView.get(index);
 			return (Widget) c.get("widget");
 		}

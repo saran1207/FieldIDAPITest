@@ -187,3 +187,6 @@ div.buttonsLabel {
 	height : 200px;
 }
 
+.w_content_container {
+    overflow:visible;
+}

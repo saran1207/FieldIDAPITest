@@ -1,31 +1,10 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.RedirectToUrlException;
-import org.apache.wicket.ajax.AjaxEventBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.StringHeaderContributor;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.resource.ContextRelativeResource;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.dashboard.CurrentLayoutModel;
 import com.n4systems.fieldid.wicket.pages.widgets.Widget;
@@ -38,6 +17,27 @@ import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.util.ConfigurationProvider;
+import org.apache.wicket.Component;
+import org.apache.wicket.RedirectToUrlException;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.StringHeaderContributor;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.resource.ContextRelativeResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
+import rfid.web.helper.SessionUser;
+
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class DashboardPage extends FieldIDFrontEndPage {
@@ -48,17 +48,16 @@ public class DashboardPage extends FieldIDFrontEndPage {
     @SpringBean
     private WidgetFactory widgetFactory;
 
-
     private AddWidgetPanel addWidgetPanel;
 
-    private DashboardColumnContainer sortableColumn;
-    private DashboardColumnContainer sortableColumn2;
+    private WebMarkupContainer columnsContainer;
     private WebMarkupContainer blankSlatePanel;
 	private WebMarkupContainer content;
 
     IModel<DashboardLayout> currentLayoutModel;
 
-	
+    private ModalWindow configurationWindow;
+
     public DashboardPage() {
     	this(null);
     }
@@ -82,7 +81,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
         
         currentLayoutModel = new CurrentLayoutModel();
 
-        add(content = addContent("content"));        
+        add(content = addContent("content"));
     }
 
 	private WebMarkupContainer addContent(String id) {
@@ -97,8 +96,12 @@ public class DashboardPage extends FieldIDFrontEndPage {
             }
         });
 
-        content.add(sortableColumn = createColumnContainer("sortableColumn", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[0].widgets"), 0));
-        content.add(sortableColumn2 = createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[1].widgets"), 1));                
+        columnsContainer = new WebMarkupContainer("columnsContainer");
+        columnsContainer.add(createColumnContainer("sortableColumn", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[0].widgets"), 0));
+        columnsContainer.add(createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[1].widgets"), 1));
+        columnsContainer.add(configurationWindow = new FIDModalWindow("configWindow"));
+        columnsContainer.setOutputMarkupId(true);
+        content.add(columnsContainer);
         content.add(blankSlatePanel = createBlankSlate("blankSlate"));   
         
         setContentVisibility();
@@ -109,8 +112,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
 	private void setContentVisibility() {
 		boolean noWidgets = currentLayoutModel.getObject().getWidgetCount()==0; 
 		blankSlatePanel.setVisible(noWidgets);
-		sortableColumn.setVisible(!noWidgets);
-		sortableColumn2.setVisible(!noWidgets);		
+		columnsContainer.setVisible(!noWidgets);
 	}
 
 	private WebMarkupContainer createBlankSlate(String id) {
@@ -122,8 +124,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
 		return panel;
 	}
 
-	private DashboardColumnContainer createColumnContainer(String containerId, IModel<List<WidgetDefinition>> widgetsModel,  final int columnIndex) {
-        DashboardColumnContainer container = new DashboardColumnContainer(containerId);
+	private WebMarkupContainer createColumnContainer(String containerId, IModel<List<WidgetDefinition>> widgetsModel,  final int columnIndex) {
+        WebMarkupContainer container = new WebMarkupContainer(containerId);
 
         container.add(new ListView<WidgetDefinition>("widgets", widgetsModel) {
             @Override
@@ -136,6 +138,13 @@ public class DashboardPage extends FieldIDFrontEndPage {
                     protected void onEvent(AjaxRequestTarget target) {
                         removeWidgetFromColumn(columnIndex, item.getIndex());
                         saveAndRepaintDashboard(target);
+                    }
+                });
+                widget.setConfigureBehavior(new AjaxEventBehavior("onclick") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        configurationWindow.setContent(widget.createConfigPanel(configurationWindow.getContentId()));
+                        configurationWindow.show(target);
                     }
                 });
                 item.add(widget);
@@ -229,12 +238,6 @@ public class DashboardPage extends FieldIDFrontEndPage {
         return new Label(labelId, new FIDLabelModel("label.dashboard"));
     }
 
-    public static class DashboardColumnContainer extends WebMarkupContainer {
-        public DashboardColumnContainer(String id) {
-            super(id);
-        }
-    }
-
     protected void redirectToSetupWizardIfNecessary() {
         SessionUser sessionUser = getSessionUser();
         SeenItRegistryImpl seenItRegistry = new SeenItRegistryImpl(new SeenItRegistryDatabaseDataSource(getSessionUser().getId()));
@@ -242,6 +245,11 @@ public class DashboardPage extends FieldIDFrontEndPage {
         if (shouldRedirect) {
             throw new RedirectToUrlException("/quickSetupWizard/startWizard.action");
         }
+    }
+
+    public void closeConfigWindow(AjaxRequestTarget target) {
+        configurationWindow.close(target);
+        target.addComponent(columnsContainer);
     }
 
 }

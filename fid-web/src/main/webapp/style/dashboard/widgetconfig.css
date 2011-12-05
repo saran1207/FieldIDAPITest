@@ -1,6 +1,7 @@
 .widgetConfiguration {
     font-size: 12px;
     background-color : #F7F7F7;
+    height:100%;
 }
 
 .widgetConfiguration h2 {
@@ -16,6 +17,7 @@
 .widgetConfiguration form fieldset .row { 
 	clear : both; 
 	padding-top : 10px;
+    overflow: hidden;
 }
 
 .widgetConfiguration form fieldset .row>label {

@@ -59,7 +59,7 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
 	}
 	
 	@Override
-	protected Component createConfigPanel(String id) {
+    public Component createConfigPanel(String id) {
 		return new CompletedEventsConfigPanel(id,getConfigModel());
 	}
 	

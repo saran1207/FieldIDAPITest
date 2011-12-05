@@ -8,10 +8,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -26,6 +28,7 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
 
     public WidgetConfigPanel(String id, IModel<T> configModel) {
         super(id);
+        add(new AttributeAppender("class", new Model<String>("widgetConfiguration"), " "));
         add(configForm = new ConfigForm("configForm", configModel));
     }
 
@@ -48,7 +51,7 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     persistenceService.update(getWidgetConfigurationToSave(model));
-                    target.addComponent(WidgetConfigPanel.this.findParent(DashboardPage.DashboardColumnContainer.class));
+                    ((DashboardPage)getPage()).closeConfigWindow(target);
                 }
 
                 @Override
@@ -59,7 +62,7 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
             add(new AjaxLink("cancelLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                   target.addComponent(WidgetConfigPanel.this.getParent());
+                    ((DashboardPage)getPage()).closeConfigWindow(target);
                 }
             });
         }
