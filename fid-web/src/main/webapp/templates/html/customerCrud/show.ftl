@@ -2,6 +2,7 @@ ${action.setPageType('customer','show')!}
 
 <head>
 	<@n4.includeStyle href="user" type="page"/>
+	<@n4.includeStyle href="customers" type="page"/>
 </head>
 
 <div class="viewactions">
@@ -33,37 +34,31 @@ ${action.setPageType('customer','show')!}
 	<div class="userDetails viewSection smallViewSection">
 		<h2><@s.text name="label.details"/></h2>
 		
-		<p>
-			<#if logoImageDirectory?exists>
-				<img src="<@s.url action="downloadOrgLogo" namespace="/file" uniqueID="${customer.id}"  />" alt="<@s.text name="label.organizationalunit"/>" width="120px"/>
-			<#else>
-				Customer Logo
-			</#if>
-		</p>
-		<p>
-			<label for="id"><@s.text name="label.id"/></label>
-			<span class="fieldValue">${customerId!}</span>
-		</p>
-		<p>
-			<label for="organization"><@s.text name="label.organizationalunit"/></label>
-			<span class="fieldValue">${customer.parent.name!}</span>
-		</p>
-		<p>
-			<label for="customerName"><@s.text name="label.name"/></label>
-			<span class="fieldValue">${customerName!}</span>
-		</p>
-		<p>
-			<label for="created"><@s.text name="label.created" /></label>
-			<span class="fieldValue"><#if customer.createdBy?exists>${customer.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(customer.created)}</span>
-		</p>
-		<p>
-			<label for="lastModified"><@s.text name="label.last_modified" /></label>
-			<span class="fieldValue"><#if customer.modifiedBy?exists>${customer.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(customer.modified)}</span>
-		</p>
-		<p>
-			<label for="lastModified"><@s.text name="label.notes" /></label>
-			<span class="fieldValue">${action.replaceCR((customer.notes?html)!"")}</span>
-		</p>
+		<#if logoImageDirectory?exists>
+			<div class="logo">
+				<img src="<@s.url action="downloadOrgLogo" namespace="/file" uniqueID="${customer.id}"  />" alt="<@s.text name="label.organizationalunit"/>"/>
+			</div>
+		</#if>
+		
+		<h3 class="customerName">${customerName!}</h3>
+		
+		
+		<div>
+			<label class="label" for="id"><@s.text name="label.id"/></label>:
+			<span>${customerId!}</span>
+		</div>
+		<div>
+			<label class="label" for="organization"><@s.text name="label.organizationalunit"/></label>:
+			<span>${customer.parent.name!}</span>
+		</div>
+		<div class="customerLinks"> 
+			<a href='<@s.url action="divisions" customerId="${customer.id}"/>'>${divisionCount} <@s.text name="label.divisions"/></a>
+			<a href='<@s.url action="customersUsers" customerId="${customer.id}"/>'>${userCount} <@s.text name="label.user_accounts"/></a>
+		</div>
+		<div class="notes">
+			<label><@s.text name="label.notes" /></label>
+			<div class="noteText">${action.replaceCR((customer.notes?html)!"")}</div>
+		</div>
 	</div>
 	
 	<div class="userDetails viewSection smallViewSection">

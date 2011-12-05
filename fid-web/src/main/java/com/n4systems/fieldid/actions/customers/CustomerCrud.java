@@ -8,6 +8,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
+import rfid.web.helper.Constants;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -18,10 +20,13 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
+import com.n4systems.model.orgs.DivisionOrgsForCustomerOrgLoader;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.customer.CustomerOrgArchiver;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
+import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserPaginatedLoader;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
@@ -60,6 +65,7 @@ public class CustomerCrud extends AbstractCrud {
 	private String logoImageDirectory;
 	private boolean removeImage = false;
 	private boolean newImage = false;
+	
 	
 	public CustomerCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -100,6 +106,9 @@ public class CustomerCrud extends AbstractCrud {
 	}
 
 	private String logoImageExists() {
+		if (customer.getId() == null) {
+			return null;
+		}
 		File logo = PathHandler.getOrgLogo(customer);
 		return logo.exists() ? logo.getName() : null;
 	}
@@ -276,6 +285,21 @@ public class CustomerCrud extends AbstractCrud {
 		return customerPage;
 	}
 
+	public int getDivisionCount() {
+		DivisionOrgsForCustomerOrgLoader loader = new DivisionOrgsForCustomerOrgLoader(getSecurityFilter());
+		return loader.parent(customer).load().size();
+	}
+	
+	public long getUserCount() {
+		Pager<User> page = new UserPaginatedLoader(getSecurityFilter())
+		.withCustomer(customer)
+		.setPage(1)
+		.setPageSize(Constants.PAGE_SIZE)
+		.load();
+		
+		return page.getTotalResults();
+	}
+	
 	public String getCustomerName() {
 		return customer.getName();
 	}
