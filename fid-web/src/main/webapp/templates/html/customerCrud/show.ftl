@@ -43,11 +43,11 @@ ${action.setPageType('customer','show')!}
 		<h3 class="customerName">${customerName!}</h3>
 		
 		
-		<div>
+		<div class="customerDetails">
 			<label class="label" for="id"><@s.text name="label.id"/></label>:
 			<span>${customerId!}</span>
 		</div>
-		<div>
+		<div class="customerDetails">
 			<label class="label" for="organization"><@s.text name="label.organizationalunit"/></label>:
 			<span>${customer.parent.name!}</span>
 		</div>

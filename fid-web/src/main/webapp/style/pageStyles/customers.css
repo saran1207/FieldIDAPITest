@@ -1,9 +1,12 @@
 .customerName{
-	font-size: 2em;
+	font-size: 18px;
 	font-weight: normal;
 	line-height: 1.5em;
 }
 
+.customerDetails {
+	font-size: 12px;
+}
 .label {
 	color: #999999;
 	font-weight: normal;
