@@ -34,6 +34,7 @@
 			$("imageUploaded").show();
 			$("removeImage").value = "false";
 			$("previewImage").hide();
+			$("uploadInfo").hide();
 			$("newImage").value = "true";
 			$("imageDirectory").value = directory;
 		}
@@ -41,10 +42,11 @@
 		function removeUploadImage() { 
 			$( "imageUploaded" ).hide();
 			$("removeImage").value = "true";
-			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>';
+			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="25" ></iframe> <span id="uploadInfo"><@s.text name="label.org_image_looks_best"/></span>';
 			$( "imageUploadField" ).insert( { top: iframe } );
 			$("imageUploaded").removeClassName( "inputError" );
 			$("imageUploaded").title = "";
+			$("uploadInfo").show();
 		}
 	</script>
 </head>
@@ -83,11 +85,12 @@
 				<span id="imageUploadField" class="fieldHolder">
 				
 					<#if !logoImageDirectory?exists || logoImageDirectory.length() == 0  || removeImage >
-						<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />"  scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
+						<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />"  scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="25" ></iframe>
+						<span id="uploadInfo"><@s.text name="label.org_image_looks_best"/></span>
 					</#if>
 					<span id="imageUploaded" <#if (action.fieldErrors['logoImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !logoImageDirectory?exists || logoImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
 						<@s.url id="previewImage" uniqueID="${uniqueID!}" action="downloadOrgLogo" namespace="/file" />
-						<img src="${previewImage}" width="260px" <#if newImage > style="display:none"</#if> id="previewImage"/>
+						<img src="${previewImage}" width="150px" <#if newImage > style="display:none"</#if> id="previewImage"/>
 						
 						<@s.hidden name="removeImage" id="removeImage"/>  <a href="removeImage" id="removeImageLink" onclick="removeUploadImage(); return false;"><@s.text name="label.remove"/></a>
 						<@s.hidden name="newImage" id="newImage"/>

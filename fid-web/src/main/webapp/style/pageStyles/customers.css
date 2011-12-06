@@ -28,6 +28,9 @@
 .notes{
 	background: no-repeat url(../../images/notes-box.png);
 	clear: both;
+	margin-top: 10px;
+	float: left;
+	width: 100%;
 }
 
 .notes label {
@@ -58,4 +61,8 @@
 	border: 1px solid #CCCCCC;
 	position:relative;	
 	overflow: hidden;
+}
+
+.noImage {
+	padding-left: 15px;
 }

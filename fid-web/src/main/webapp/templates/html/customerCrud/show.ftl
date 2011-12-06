@@ -40,7 +40,7 @@ ${action.setPageType('customer','show')!}
 			</div>
 		</#if>
 		
-		<div class="details">
+		<div class="details <#if !logoImageDirectory?exists>noImage</#if>">
 			<h3 class="customerName">${customerName!}</h3>
 					
 			<div class="customerDetails">
