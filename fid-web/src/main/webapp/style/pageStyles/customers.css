@@ -27,6 +27,7 @@
 
 .notes{
 	background: no-repeat url(../../images/notes-box.png);
+	clear: both;
 }
 
 .notes label {
@@ -40,5 +41,21 @@
 }
 
 .logo img{
-	width: 200px
+	width: 120px;
+	padding-left: 4px;
+	display:block;
+    position:absolute;top:0;bottom:0;margin:auto;
+}
+
+.logo, .details {
+	float: left;
+}
+
+.logo {
+	margin-right: 10px;
+	width: 128px;
+	height: 128px;
+	border: 1px solid #CCCCCC;
+	position:relative;	
+	overflow: hidden;
 }

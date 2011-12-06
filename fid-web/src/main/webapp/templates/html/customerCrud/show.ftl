@@ -40,25 +40,28 @@ ${action.setPageType('customer','show')!}
 			</div>
 		</#if>
 		
-		<h3 class="customerName">${customerName!}</h3>
+		<div class="details">
+			<h3 class="customerName">${customerName!}</h3>
+					
+			<div class="customerDetails">
+				<label class="label" for="id"><@s.text name="label.id"/></label>:
+				<span>${customerId!}</span>
+			</div>
+			<div class="customerDetails">
+				<label class="label" for="organization"><@s.text name="label.organizationalunit"/></label>:
+				<span>${customer.parent.name!}</span>
+			</div>
+			<div class="customerLinks"> 
+				<a href='<@s.url action="divisions" customerId="${customer.id}"/>'>${divisionCount} <@s.text name="label.divisions"/></a>
+				<a href='<@s.url action="customersUsers" customerId="${customer.id}"/>'>${userCount} <@s.text name="label.user_accounts"/></a>
+			</div>
+		</div>
 		
-		
-		<div class="customerDetails">
-			<label class="label" for="id"><@s.text name="label.id"/></label>:
-			<span>${customerId!}</span>
-		</div>
-		<div class="customerDetails">
-			<label class="label" for="organization"><@s.text name="label.organizationalunit"/></label>:
-			<span>${customer.parent.name!}</span>
-		</div>
-		<div class="customerLinks"> 
-			<a href='<@s.url action="divisions" customerId="${customer.id}"/>'>${divisionCount} <@s.text name="label.divisions"/></a>
-			<a href='<@s.url action="customersUsers" customerId="${customer.id}"/>'>${userCount} <@s.text name="label.user_accounts"/></a>
-		</div>
 		<div class="notes">
 			<label><@s.text name="label.notes" /></label>
 			<div class="noteText">${action.replaceCR((customer.notes?html)!"")}</div>
 		</div>
+
 	</div>
 	
 	<div class="userDetails viewSection smallViewSection">
