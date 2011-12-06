@@ -108,7 +108,7 @@ function removeNote( event ) {
 
 var uploadUrl = '';
 function addUploadFile() {
-	$('attachment').replace('<iframe id="attachment" class="fileUpload" src="'+ uploadUrl + '?frameId=attachment&frameCount=1" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="60" ></iframe>');
+	$('attachment').replace('<iframe id="attachment" class="fileUpload" src="'+ uploadUrl + '?frameId=attachment&frameCount=1" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="70" ></iframe>');
 }
 
 var removeText = '';
