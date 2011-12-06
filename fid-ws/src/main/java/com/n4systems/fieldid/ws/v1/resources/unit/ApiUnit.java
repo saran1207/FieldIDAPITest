@@ -3,19 +3,10 @@ package com.n4systems.fieldid.ws.v1.resources.unit;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 
 public class ApiUnit extends ApiReadonlyModel {
-	private String type;
 	private String name;
 	private String shortName;
 	private boolean selectable;
 	private ApiUnit child;
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 
 	public String getName() {
 		return name;

@@ -23,7 +23,6 @@ public class ApiUnitResource extends SetupDataResource<ApiUnit, UnitOfMeasure> {
 		apiUnit.setModified(unit.getModified());
 		apiUnit.setName(unit.getName());
 		apiUnit.setShortName(unit.getShortName());
-		apiUnit.setType(unit.getType());
 		apiUnit.setSelectable(unit.isSelectable());
 		if (unit.getChild() != null) {
 			apiUnit.setChild(convertEntityToApiModel(unit.getChild()));

@@ -57,7 +57,7 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Fie
 	public ListResponse<A> findAll(
 			@QueryParam("after") DateParam after,
 			@DefaultValue("0") @QueryParam("page") int page,
-			@DefaultValue("100") @QueryParam("pageSize") int pageSize) {
+			@DefaultValue("500") @QueryParam("pageSize") int pageSize) {
 		
 		QueryBuilder<E> builder = createFindAllBuilder(after);
 		List<E> entityModels = persistenceService.findAll(builder, page, pageSize);

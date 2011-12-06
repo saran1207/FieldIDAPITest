@@ -329,4 +329,18 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 		return fieldType.equals(DATEFIELD_FIELD_TYPE);
 	}
 	
+	public InfoFieldType getType() {
+		if (isDateField()) {
+			return InfoFieldType.DateField;
+		} else if (isUnitOfMeasure()) {
+			return InfoFieldType.UnitOfMeasure;
+		} else if (isComboBox()) {
+			return InfoFieldType.ComboBox;
+		} else if (isSelectBox()) {
+			return InfoFieldType.SelectBox;
+		} else {
+			return InfoFieldType.TextField;
+		}
+	}
+	
 }

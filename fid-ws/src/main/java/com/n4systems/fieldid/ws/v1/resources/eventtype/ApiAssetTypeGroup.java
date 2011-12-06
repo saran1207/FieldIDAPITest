@@ -1,8 +1,6 @@
-package com.n4systems.fieldid.ws.v1.resources.assettypegroup;
+package com.n4systems.fieldid.ws.v1.resources.eventtype;
 
-import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
-
-public class ApiAssetTypeGroup extends ApiReadonlyModel {
+public class ApiAssetTypeGroup {
 	private String name;
 	private Long weight;
 

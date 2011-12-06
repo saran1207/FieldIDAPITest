@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import com.n4systems.fieldid.ws.v1.resources.assetstatus.ApiAssetStatusResource;
-import com.n4systems.fieldid.ws.v1.resources.assettypegroup.ApiAssetTypeGroupResource;
 import com.n4systems.fieldid.ws.v1.resources.authentication.AuthenticationResource;
 import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateResource;
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
+import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiAssetTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
 import com.n4systems.fieldid.ws.v1.resources.unit.ApiUnitResource;
@@ -44,11 +44,6 @@ public class FieldIdWsConfig {
 	}
 
 	@Bean
-	public ApiAssetTypeGroupResource apiAssetTypeGroupResource() {
-		return new ApiAssetTypeGroupResource();
-	}
-
-	@Bean
 	public ApiAssetStatusResource apiAssetStatusResource() {
 		return new ApiAssetStatusResource();
 	}
@@ -66,5 +61,10 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiUnitResource apiUnitResource() {
 		return new ApiUnitResource();
+	}
+	
+	@Bean
+	public ApiAssetTypeResource apiAssetTypeResource() {
+		return new ApiAssetTypeResource();
 	}
 }
