@@ -56,6 +56,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
                 target.addComponent(addOrgButton);
             }
         });
+        orgPicker.setTranslateContainerSelector(".w_content");
 
         addConfigElement(orgsListContainer);
 

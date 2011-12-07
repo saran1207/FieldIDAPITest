@@ -4,7 +4,6 @@
         <form wicket:id="configForm">
 
             <div wicket:id="feedbackPanel"></div>
-	        <div class="title"><wicket:message key="label.widget_configuration"/></div>
             
 			<fieldset>	            
 				<legend>Widget Configuration</legend>
@@ -13,15 +12,18 @@
 		            <label class="colOne"><wicket:message key="label.widget_title"/></label>
 		            <input class="colTwo" type="text" wicket:id="name">
 				</div>
+
+                <div class="smallInstruction">
+                    <wicket:message key="message.each_widget_must_have_title"/>
+                </div>
 				
 	            <wicket:child/>
-	            	
 			
-	            <div class="formAction">
-	                <input type="submit" wicket:id="saveButton" wicket:message="value:label.save">
-	                <wicket:message key="label.or"/>
-	                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
-	            </div>			
+                <div class="actionsRow">
+                    <input type="submit" wicket:id="saveButton" wicket:message="value:label.save">
+                    <wicket:message key="label.or"/>
+                    <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+                </div>
 			</fieldset>
 			
         </form>

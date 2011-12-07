@@ -174,6 +174,17 @@ function findPos(obj) {
     return [ offset.left, offset.top ];
 }
 
+function translateWithin(target, relativeElement, withinElement) {
+    var withinElementPos = findPos(withinElement);
+    var position = findPos(relativeElement);
+
+    var newX = position[0] - withinElementPos[0];
+    var newY = position[1] - withinElementPos[1];
+	target.css({position: 'absolute',
+        'top': newY + "px",
+					'left': newX + "px"});
+}
+
 function translate(target, relativeElement, offsetY, offsetX) {
 	var position = findPos(relativeElement);
 

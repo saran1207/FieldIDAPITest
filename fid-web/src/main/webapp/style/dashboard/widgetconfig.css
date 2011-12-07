@@ -1,6 +1,5 @@
 .widgetConfiguration {
     font-size: 12px;
-    background-color : #F7F7F7;
     height:100%;
 }
 
@@ -20,11 +19,31 @@
     overflow: hidden;
 }
 
+.widgetConfiguration .smallInstruction {
+    color:#999999;
+    padding-top: 6px;
+    padding-left:140px;
+    font-size:10px;
+}
+
+.widgetConfiguration .largeInstruction {
+    color:#999999;
+    padding-top: 6px;
+    padding-left: 30px;
+    font-size:10px;
+}
+
 .widgetConfiguration form fieldset .row>label {
   float: left;
-  width: 100px;
+  width: 130px;
   text-align: right;
   padding-right : 10px;
+  font-weight:bold;
+}
+
+.widgetConfiguration .actionsRow {
+    padding-top:15px;
+    padding-left:138px;
 }
 
 .widgetConfiguration form fieldset .row .value {
@@ -36,12 +55,6 @@
 	display : none; /* just for readability, semantic html purposes */
 }
 
-.widgetConfiguration .formAction {
-	border-bottom : none;
-    margin-top:15px;
-    width:96%;
-}
-
 .widgetConfiguration input[type='submit'] {
     margin-right:2.5px;
     font-size:1.2em;
@@ -51,6 +64,12 @@
 .widgetConfiguration input[type='text'] {
     padding:4px;
     border: 1px solid #999;
+    width:180px;
+}
+
+.widgetConfiguration select {
+    width:180px;
+    padding:2px;
 }
 
 .widgetConfiguration .orgNameLabel {
@@ -70,7 +89,7 @@
     overflow:hidden;
     padding-top: 10px;
     padding-bottom:10px;
-    padding-left: 110px;
+    padding-left: 140px;
 }
 
 .removeOrgImage {

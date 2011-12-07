@@ -68,7 +68,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
     	
         redirectToSetupWizardIfNecessary();
         add(CSSPackageResource.getHeaderContribution("style/dashboard/dashboard.css"));
-        add(CSSPackageResource.getHeaderContribution("style/dashboard/widgetconfig.css"));
+
        	add(JavascriptPackageResourceIE.getHeaderContribution("javascript/flot/excanvas.min.js"));
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.min.js"));                
         add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.navigate.min.js"));        
@@ -82,6 +82,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
         currentLayoutModel = new CurrentLayoutModel();
 
         add(content = addContent("content"));
+        add(CSSPackageResource.getHeaderContribution("style/dashboard/widgetconfig.css"));
     }
 
 	private WebMarkupContainer addContent(String id) {
@@ -100,6 +101,11 @@ public class DashboardPage extends FieldIDFrontEndPage {
         columnsContainer.add(createColumnContainer("sortableColumn", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[0].widgets"), 0));
         columnsContainer.add(createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[1].widgets"), 1));
         columnsContainer.add(configurationWindow = new FIDModalWindow("configWindow"));
+        configurationWindow.setInitialWidth(500);
+        configurationWindow.setInitialHeight(350);
+
+        configurationWindow.setTitle(new FIDLabelModel("label.widget_configuration"));
+
         columnsContainer.setOutputMarkupId(true);
         content.add(columnsContainer);
         content.add(blankSlatePanel = createBlankSlate("blankSlate"));   

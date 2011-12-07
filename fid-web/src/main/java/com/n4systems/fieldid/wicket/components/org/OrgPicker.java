@@ -30,6 +30,11 @@ public class OrgPicker extends Panel {
     private BrowsePanel browsePanel;
     private SearchPanel searchPanel;
 
+    // A selector for the relative container that the picker is contained in.
+    // This is necessary for the modal windows where the translate function doesn't position
+    // the orgpicker properly and translateWithin is required.
+    private String translateContainerSelector;
+
     public OrgPicker(String id, final IModel<BaseOrg> orgModel) {
         super(id, orgModel);
 
@@ -132,7 +137,9 @@ public class OrgPicker extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 orgPickerContainer.setVisible(true);
                 target.addComponent(OrgPicker.this);
-//                target.appendJavascript("translate($('#"+orgPickerContainer.getMarkupId()+"'), $('#"+chooseLink.getMarkupId()+"'), 0, 0);");
+                if (translateContainerSelector != null) {
+                    target.appendJavascript("translateWithin($('#"+orgPickerContainer.getMarkupId()+"'), $('#"+chooseLink.getMarkupId()+"'), $('"+translateContainerSelector+"'));");
+                }
             }
         });
         chooseLink.setOutputMarkupPlaceholderTag(true);
@@ -153,5 +160,9 @@ public class OrgPicker extends Panel {
 	}
 
     protected void onPickerClosed(AjaxRequestTarget target) {}
+
+    public void setTranslateContainerSelector(String selector) {
+        this.translateContainerSelector = selector;
+    }
 
 }

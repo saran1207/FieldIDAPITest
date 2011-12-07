@@ -27,9 +27,10 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
     }
 
 	private OrgPicker createOrgPicker(final IModel<T> configModel) {
-		return new OrgPicker("picker", new PropertyModel<BaseOrg>(configModel, "org"));
+        OrgPicker picker = new OrgPicker("picker", new PropertyModel<BaseOrg>(configModel, "org"));
+        picker.setTranslateContainerSelector(".w_content");
+        return picker;
 	}
-
 
 	protected DropDownChoice<ChartDateRange> createDateRangeSelect() {
         IChoiceRenderer<ChartDateRange> renderer = new IChoiceRenderer<ChartDateRange>() {       
