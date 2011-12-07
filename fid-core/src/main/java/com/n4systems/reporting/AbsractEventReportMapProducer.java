@@ -30,6 +30,7 @@ import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.DoubleFormatter;
@@ -71,6 +72,12 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		add("observations", new JRBeanCollectionDataSource(createObservationViews));
 		
 		add("images", createEventImages());
+		add("ownerLogo", getOwnerLogo(getEvent().getAsset().getOwner()));
+		
+	}
+	
+	private File getOwnerLogo(BaseOrg owner) {
+		return PathHandler.getOrgLogo(owner);
 	}
 
 	private List<InspectionImage> createEventImages() {

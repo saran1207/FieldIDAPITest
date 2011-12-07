@@ -11,6 +11,7 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.DateTimeDefinition;
 
 public class AssetReportMapProducer extends ReportMapProducer {
@@ -52,6 +53,7 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("productInstructions", assetType.getInstructions());
 		
 		add("productImage", imagePath(assetType));
+		add("ownerLogo", getOwnerLogo(asset.getOwner()));
 	}
 
 	private String getOrderNumber() {
@@ -69,6 +71,10 @@ public class AssetReportMapProducer extends ReportMapProducer {
 
 	private File imagePath(AssetType assetType) {
 		return (assetType.hasImage()) ? new File(PathHandler.getAssetTypeImageFile(assetType), assetType.getImageName()) : null;
+	}
+	
+	private File getOwnerLogo(BaseOrg owner) {
+		return PathHandler.getOrgLogo(owner);
 	}
 
 	private Map<String, Object> produceInfoOptionMap() {
