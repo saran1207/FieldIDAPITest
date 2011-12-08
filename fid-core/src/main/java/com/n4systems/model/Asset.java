@@ -8,19 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -281,7 +269,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 
 	@AllowSafetyNetworkAccess
 	public String getDescription() {
-		return type.prepareDescription(infoOptions);
+		return type.prepareDescription(this, infoOptions);
 	}
 
 	@AllowSafetyNetworkAccess
@@ -532,4 +520,14 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	public void setGpsLocation(GpsLocation gpsLocation) {
 		this.gpsLocation = gpsLocation;
 	}
+	
+	public String getOrderNumber() {
+		if (getShopOrder() != null) {
+			return getShopOrder().getOrder().getOrderNumber();
+		} else if (getNonIntergrationOrderNumber() != null) {
+			return getNonIntergrationOrderNumber();
+		} else
+			return "";
+	}
+	
 }

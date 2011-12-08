@@ -3,7 +3,6 @@ package com.n4systems.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,24 +11,14 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
-import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
@@ -37,6 +26,7 @@ import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
@@ -44,12 +34,21 @@ import com.n4systems.model.security.SecurityLevel;
 @Entity
 @Table(name = "assettypes")
 public class AssetType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<AssetType> {
+
 	private static final long serialVersionUID = 1L;
 	private static final String descVariableDefault = "";
 	private static final String descVariableStart = "{";
 	private static final String descVariableEnd = "}";
 	private static final String descVariableRegex = ".*\\" + descVariableStart + "(.+?)" + "\\" + descVariableEnd + ".*";
 	public static final String DEFAULT_ITEM_NUMBER = "*";
+	
+	private static final String PO_NUMBER = "PONumber";
+	private static final String RFID = "RFID";
+	private static final String REF_NUMBER = "RefNumber";
+	private static final String ORDER_NUMBER = "OrderNumber";
+	private static final String IDENTIFIER = "Identifier";
+	
+	private static Collection<? extends String> reservedFieldNames = Lists.newArrayList(PO_NUMBER, RFID, REF_NUMBER, ORDER_NUMBER, IDENTIFIER );
 	
 	@Column(nullable=false)
 	private String name;
@@ -113,11 +112,13 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		this.name = (name != null) ? name.trim() : null;
 	}
 	
+	@Override
 	protected void onCreate() {
 		super.onCreate();
 		trimName();
 	}
 	
+	@Override
 	protected void onUpdate() {
 		super.onUpdate();
 		trimName();
@@ -138,10 +139,12 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		this.descriptionTemplate = descriptionTemplate;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Override
 	@AllowSafetyNetworkAccess
 	public String getName() {
 		return name;
@@ -272,7 +275,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	 * This method is complex because it has been highly optimized.  Please ensure any
 	 * refactors conform to the same standard of performance as it is used heavily by reporting
 	 */
-	public String prepareDescription(Collection<InfoOptionBean> infoOptions) {
+	public String prepareDescription(Asset asset, Collection<InfoOptionBean> infoOptions) {
 		if( descriptionTemplate == null ) { 
 			return "";
 		}
@@ -282,11 +285,8 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		}
 		
 		// now we can create a HashMap of info field names to info option names.
-		// this will be used in variable substitution below.  The map is initialized to its final size for performance. 
-		Map<String, String> optionMap = new HashMap<String, String>(infoOptions.size());
-		for(InfoOptionBean option: infoOptions) {
-			optionMap.put(option.getInfoField().getName(), option.getName());
-		}
+		// this will be used in variable substitution below.
+		Map<String, String> valueMap = createValueMap(asset, infoOptions);
 		
 		// index of the last closing bracket in the template 
 		int lastBracket = descriptionTemplate.lastIndexOf(descVariableEnd);
@@ -305,8 +305,8 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 			currentIdx += field.length() + 1;
 			
 			// if the field name exists in our map, then substitute it in, otherwise use the default
-			if(optionMap.containsKey(field)) {
-				desc.append(optionMap.get(field));
+			if(valueMap.containsKey(field)) {
+				desc.append(valueMap.get(field));
 			} else {
 				desc.append(descVariableDefault);
 			}
@@ -316,13 +316,27 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		
 		return desc.toString();
 	}
+
+	private Map<String, String> createValueMap(Asset asset, Collection<InfoOptionBean> infoOptions) {
+		Map<String, String> valueMap = Maps.newHashMapWithExpectedSize(infoOptions.size());
+		// NOTE : if the asset has an attribute that is the same as a reserved keyword (like "Identifier") then 
+		// that one wins.   i.e. put the infoOption values in second so they will overwrite values from asset.  see WEB-2539		
+		valueMap.put(RFID, asset.getRfidNumber());
+		valueMap.put(REF_NUMBER, asset.getCustomerRefNumber());
+		valueMap.put(ORDER_NUMBER, asset.getOrderNumber());
+		valueMap.put(PO_NUMBER, asset.getPurchaseOrder());
+		valueMap.put(IDENTIFIER, asset.getIdentifier());
+		for(InfoOptionBean option: infoOptions) {
+			valueMap.put(option.getInfoField().getName(), option.getName());
+		}
+		return valueMap;
+	}
 	
 	public boolean isDescriptionTemplateValid() {
 		List<String> fieldNames = new ArrayList<String>();
 		for(InfoFieldBean field: infoFields) {
 			fieldNames.add(field.getName());
-		}
-		
+		}		
 		return isDescriptionTemplateValid(descriptionTemplate, fieldNames);
 	}
 	
@@ -334,11 +348,12 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	// XXX - we should pull this to a util/handler class at some point
 	public static List<String> getInvalidDescriptionTemplateVariables(String descriptionTemplate, Collection<String> infoFieldNames) {
 		String description = "" + descriptionTemplate;
-		
-		for(String fieldName: infoFieldNames) {
+
+		ImmutableList<String> validFieldNames = new ImmutableList.Builder<String>().addAll(infoFieldNames).addAll(reservedFieldNames).build();
+		for(String fieldName: validFieldNames) {
 			// we'll just replace them with nothing since all we care about is if there are invalid variables
 			description = description.replace(descVariableStart + fieldName + descVariableEnd, "");
-		}
+		}		
 		
 		Matcher varMatcher = Pattern.compile(descVariableRegex).matcher(description);
 		
@@ -414,11 +429,13 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		return returnDate;
 	}
 
+	@Override
 	@AllowSafetyNetworkAccess
 	public List<FileAttachment> getAttachments() {
 		return attachments;
 	}
 
+	@Override
 	public void setAttachments( List<FileAttachment> attachments ) {
 		this.attachments = attachments;
 	}
@@ -446,6 +463,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		this.subTypes = subTypes;
 	}
 	
+	@Override
 	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
 		return name;
@@ -478,6 +496,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		this.group = group;
 	}
 
+	@Override
 	public AssetType enhance(SecurityLevel level) {
 		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}

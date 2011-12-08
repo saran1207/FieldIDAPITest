@@ -32,7 +32,7 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("reelId", asset.getIdentifier());
 		add("poNumber", asset.getPurchaseOrder());
 		add("customerRefNumber", asset.getCustomerRefNumber());
-		add("orderNumber", getOrderNumber());
+		add("orderNumber", asset.getOrderNumber());
 		add("dateOfIssue", formatDate(asset.getCreated(), false));
 		add("productComment", asset.getComments());
 		add("productLocation", asset.getAdvancedLocation().getFreeformLocation());
@@ -54,15 +54,6 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		
 		add("productImage", imagePath(assetType));
 		add("ownerLogo", getOwnerLogo(asset.getOwner()));
-	}
-
-	private String getOrderNumber() {
-		if (asset.getShopOrder() != null) {
-			return asset.getShopOrder().getOrder().getOrderNumber();
-		} else if (asset.getNonIntergrationOrderNumber() != null) {
-			return asset.getNonIntergrationOrderNumber();
-		} else
-			return "";
 	}
 
 	private String assignedUserName() {
