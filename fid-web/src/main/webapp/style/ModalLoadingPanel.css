@@ -1,6 +1,6 @@
 .modalLoadingPanel {
 	position: absolute;
-	background-color: #F9F9F9;
+	background-color: #FFFFFF;
 	filter: alpha(opacity=60);	/* IE */
     opacity: 0.6;				/* Safari, Opera */
     -moz-opacity:0.60;			/* FireFox */
@@ -12,8 +12,8 @@
 	position: fixed;
 	top: 50%;
 	left: 50%;
-	width: 100px;
-	height: 100px;
+	width: 55px;
+	height: 55px;
 	margin-left: -50px;
 	margin-top: -50px;
 }
