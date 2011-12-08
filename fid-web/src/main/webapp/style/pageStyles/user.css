@@ -85,13 +85,12 @@ td.permissionName{
 
 #passwords .increasedMargin{
  	margin-left: 170px;
- 	margin-right: 117px;
+ 	margin-right: 80px;
  }
 
 #passwords .labelContainers{
  	color: #999;
  	display: inline;
-	margin-right: 90px;
  }
  
  div.personalMessageHeading{
