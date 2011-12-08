@@ -32,5 +32,10 @@ public class OneClickCriteriaResult extends CriteriaResult {
 	public String getResultString() {
 		return state != null ? state.getDisplayText() : "";
 	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "[state=" + state + "]";
+	}
 	
 }

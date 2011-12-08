@@ -67,7 +67,8 @@ public class FilteredCriteriaResultSerializationHandler extends CollectionSerial
 
 	private CriteriaResultView findCriteriaResultView(ParsedCriteria parsedCriteria) {
 		for (CriteriaResultView criteriaResultView:getCollection()) { 
-			if (parsedCriteria.criteria.equals(criteriaResultView.getDisplayText())) {
+			if (parsedCriteria.criteria.equals(criteriaResultView.getDisplayText()) &&
+					parsedCriteria.section.equals(criteriaResultView.getSection())) {
 				return criteriaResultView;
 			}
 		}

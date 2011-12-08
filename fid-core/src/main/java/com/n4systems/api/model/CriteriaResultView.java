@@ -2,8 +2,6 @@ package com.n4systems.api.model;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.google.common.base.Objects;
-
 
 public class CriteriaResultView {
 	
@@ -55,15 +53,17 @@ public class CriteriaResultView {
 	public String getDisplayText() {
 		return displayText;
 	}
-	@Override
-	public String toString() {		
-		return Objects.toStringHelper(getClass()).toString();
-	}
 	public void setSection(String section) {
 		this.section = section;
 	}
 	public String getSection() {
 		return section;
+	}
+
+	@Override
+	public String toString() {
+		return "CriteriaResultView [displayText=" + displayText + ", result="
+				+ result + ", section=" + section + "]";
 	}
 
 	

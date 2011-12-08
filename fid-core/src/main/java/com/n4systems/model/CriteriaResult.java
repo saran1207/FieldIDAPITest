@@ -3,12 +3,20 @@ package com.n4systems.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.util.StringUtils;
 
 @Entity
 @Table(name = "criteriaresults")
@@ -72,25 +80,17 @@ public abstract class CriteriaResult extends EntityWithTenant {
 		this.deficiencies = deficiencies;
 	}
 
-	@Override
-    public String toString() {
-		String recString = new String();
-		for (Observation observation: getRecommendations()) {
-			recString += "\n" + observation;
-		}
-		
-		String defString = new String();
-		for (Observation observation: getDeficiencies()) {
-			defString += "\n" + observation;
-		}
-		
-	    return "Result [" + getId() + "] :, " + getCriteria() + " = " + StringUtils.indent(recString, 1) + StringUtils.indent(defString, 1);
-    }
-
     public Status getResult() {
         return null;
     }
     
     public abstract String getResultString();
+
+	@Override
+	public String toString() {
+		return "CriteriaResult [criteria=" + criteria + ", deficiencies="
+				+ deficiencies + ", recommendations="
+				+ recommendations + "]";
+	}
 
 }
