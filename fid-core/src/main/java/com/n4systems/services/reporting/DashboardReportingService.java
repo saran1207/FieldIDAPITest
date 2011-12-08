@@ -19,11 +19,11 @@ import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.BarChartManager;
-import com.n4systems.util.chart.CalendarChartManager;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.DateChartManager;
 
 
 public class DashboardReportingService extends FieldIdPersistenceService {
@@ -38,7 +38,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		LocalDate from  = granularity.roundDown(dateRange.getFrom());
 		LocalDate to = granularity.roundUp(dateRange.getTo());
 		List<AssetsIdentifiedReportRecord> results = assetService.getAssetsIdentified(granularity, from.toDate(), to.toDate(), owner);
-		ChartSeries<LocalDate> chartSeries = new ChartSeries<LocalDate>(results).withChartManager(new CalendarChartManager(granularity, dateRange));		
+		ChartSeries<LocalDate> chartSeries = new ChartSeries<LocalDate>(results).withChartManager(new DateChartManager(granularity, dateRange));		
         return Lists.newArrayList(chartSeries);
     }
 
@@ -48,25 +48,16 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Preconditions.checkArgument(period!=null);		
 		List<UpcomingScheduledEventsRecord> results = eventService.getUpcomingScheduledEvents(period, owner);
 
+		ChartDateRange dateRange = ChartDateRange.forDays(period);
+		
 		List<UpcomingScheduledEventsRecord> fullResults = new ArrayList<UpcomingScheduledEventsRecord>();		
 		Iterator<UpcomingScheduledEventsRecord> iterator = results.iterator();
 		UpcomingScheduledEventsRecord record = iterator.hasNext() ? iterator.next() : null;
 		
 		LocalDate date = LocalDate.now();
 		LocalDate endDate = date.plus(new Period().withDays(period));
-		// FIXME DD : refactor this into chartManager when JODA part is done.
-//		while (date.isBefore(endDate)) {		
-//			if(record != null && record.getX().getDayOfYear() == date.getDayOfYear()) {
-//				fullResults.add(record);
-//				if(iterator.hasNext())
-//					record = iterator.next();
-//			} else {
-//				fullResults.add(new UpcomingScheduledEventsRecord(date, 0L));
-//			}
-//			date = date.plusDays(1);
-//		}
-//		return Lists.newArrayList(new ChartSeries<LocalDate>(fullResults));
-		return Lists.newArrayList(new ChartSeries<LocalDate>(results));
+		
+		return Lists.newArrayList(new ChartSeries<LocalDate>(results).withChartManager(new DateChartManager(ChartGranularity.DAY, dateRange)));
 	}
 	
 	public List<ChartSeries<String>> getAssetsStatus(ChartDateRange dateRange, BaseOrg org) {
@@ -85,11 +76,11 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Date to = granularity.roundUp(dateRange.getTo()).toDate();
 
 		List<CompletedEventsReportRecord> completedEvents = eventService.getCompletedEvents(from, to, org, null, granularity);		
-		results.add(new ChartSeries<LocalDate>("All", completedEvents).withChartManager(new CalendarChartManager(granularity, dateRange)));
+		results.add(new ChartSeries<LocalDate>("All", completedEvents).withChartManager(new DateChartManager(granularity, dateRange)));
 
 		for (Status status:Status.values()) { 
 			completedEvents = eventService.getCompletedEvents(from, to, org, status, granularity);		
-			results.add(new ChartSeries<LocalDate>(status.getDisplayName(), completedEvents).withChartManager(new CalendarChartManager(granularity, dateRange)));
+			results.add(new ChartSeries<LocalDate>(status.getDisplayName(), completedEvents).withChartManager(new DateChartManager(granularity, dateRange)));
 		}
 				
 		return results;
@@ -110,9 +101,9 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, dateRange.getFromDate(), dateRange.getToDate(), org);
 		
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
-		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>("All", allScheduledEvents).withChartManager(new CalendarChartManager(granularity, dateRange));
+		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>("All", allScheduledEvents).withChartManager(new DateChartManager(granularity, dateRange));
 		results.add(allChartSeries);
-		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>("Completed", completedScheduledEvents).withChartManager(new CalendarChartManager(granularity, dateRange));
+		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>("Completed", completedScheduledEvents).withChartManager(new DateChartManager(granularity, dateRange));
 		results.add(completedChartSeries);
 		
 		return results;		

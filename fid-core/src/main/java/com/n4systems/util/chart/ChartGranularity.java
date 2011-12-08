@@ -82,13 +82,13 @@ public enum ChartGranularity {
 
 	/**
 	 * note that this just doesn't add a period to given date. 
-	 * for example, with granularity MONTH  
+	 * for example, with granularity YEAR  
 	 * 	next(Oct 7,2011) will return Jan1,2012   if i just added 1 year i would get Oct 7, 2012.  wrong!
 	 * 	next(Jan 1,2011) will return Jan1,2012
-	 * 	next(Jan 1,2011) will return Jan1,2012
+	 * 	next(Dec 31,2011) will return Jan1,2012
 	 */
 	public LocalDate next(LocalDate date) {
-		return normalize(date).plus(period);
+		return roundDown(date).plus(period);
 	}
 
 	public LocalDate previous(LocalDate date) {
@@ -116,6 +116,16 @@ public enum ChartGranularity {
 		}
 	}
 
+	/**
+	 *  rounding is needed for peculiar cases.  for example if the user asks for assets identified in january viewed weekly there are some
+	 *  subtleties to be aware of. say january is...
+	 *     -  -  -  -  -  1  2  
+	 *     3  4  5  6  7  8  9
+	 *     10 11 12 13        etc...
+	 *   since the week that includes jan 1, 2, 3 begins in dec those points. (4 is monday...part of the next week) it is 
+	 *   considered to be in the last week of the previous year.
+	 *   so when generating this query, the "from" date is dec  28th-jan3rd.   (i.e. round down jan 1-->dec 28) 
+	 */
 	public LocalDate roundDown(LocalDate date) {
 		return normalize(date);
 	}

@@ -4,10 +4,10 @@ import java.util.Date;
 
 import org.joda.time.LocalDate;
 
-import com.n4systems.util.chart.CalendarChartable;
+import com.n4systems.util.chart.DateChartable;
 
 @SuppressWarnings("serial")
-public class UpcomingScheduledEventsRecord extends CalendarChartable {
+public class UpcomingScheduledEventsRecord extends DateChartable {
 	
 	public UpcomingScheduledEventsRecord(Date date, Long value) {
 		super(date, value);

@@ -148,7 +148,11 @@ public class ChartSeries<X> implements Serializable {
 	public String getColor() {
 		return color;
 	}
-	
+
+	@Override
+	public String toString() { 
+		return data.toString();
+	}
 }	 
 
 

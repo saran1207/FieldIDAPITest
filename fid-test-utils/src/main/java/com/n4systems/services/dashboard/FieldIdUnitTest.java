@@ -36,8 +36,7 @@ public class FieldIdUnitTest {
 	public void setUp() {
 		try {
 			Field sutField = findSutField();
-			Object sut;
-				sut = createSut(sutField);
+			Object sut = createSut(sutField);
 			ReflectionTestUtils.setField(this, sutField.getName(), sut);						
 			autoWireSut(sut);
 		} catch (Exception e) {
@@ -94,4 +93,18 @@ public class FieldIdUnitTest {
 		return mocks;		
 	}
 
+	
+	protected void verifyTestMocks() { 
+		try {
+			for (Field field:getClass().getDeclaredFields()) {
+				if (field.getAnnotation(TestMock.class)!=null) {
+					field.setAccessible(true);
+					verify(field.get(this));
+				}
+			}		
+		} catch (Exception e) {
+			System.out.println("Can't verify mocks " + e.getLocalizedMessage());
+		}
+	}
+	
 }

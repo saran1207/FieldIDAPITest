@@ -7,7 +7,7 @@ import com.n4systems.util.time.DateUtil;
 @SuppressWarnings("serial")
 public class SimpleChartManager<X> implements ChartManager<X> {
 
-	private static final int POINTS_THRESHOLD = 40;  //anything larger than this is considered a lot of points. may affect rendering hints.
+	private static final int POINTS_THRESHOLD = 40;  //anything larger than this is considered an abundance of points. may affect rendering hints.
 
 	@Override
 	public Long getMinX(ChartSeries<X> data) {

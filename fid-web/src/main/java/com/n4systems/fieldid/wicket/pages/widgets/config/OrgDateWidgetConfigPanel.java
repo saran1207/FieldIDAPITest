@@ -42,7 +42,7 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
 			}
 		};		
 		
-		DropDownChoice<ChartDateRange> d = new DropDownChoice<ChartDateRange>("dateRangeSelect", new PropertyModel<ChartDateRange>(configModel,"dateRange"), Arrays.asList(ChartDateRange.values()), renderer);		
+		DropDownChoice<ChartDateRange> d = new DropDownChoice<ChartDateRange>("dateRangeSelect", new PropertyModel<ChartDateRange>(configModel,"dateRange"), Arrays.asList(ChartDateRange.chartDateRanges()), renderer);		
 		d.setNullValid(false);
 		return d;
 	}	

@@ -1,19 +1,14 @@
 package com.n4systems.util.chart;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-
 import org.joda.time.LocalDate;
 
 @SuppressWarnings("serial")
-public class CalendarChartManager extends SimpleChartManager<LocalDate> {
+public class DateChartManager extends SimpleChartManager<LocalDate> {
 
 	private transient ChartGranularity granularity;
 	private transient ChartDateRange range;
 	
-	public CalendarChartManager(ChartGranularity granularity, ChartDateRange range) {
+	public DateChartManager(ChartGranularity granularity, ChartDateRange range) {
 		this.granularity = granularity;
 		this.range = range;
 	}
@@ -47,34 +42,22 @@ public class CalendarChartManager extends SimpleChartManager<LocalDate> {
 
 	@Override
 	public void normalize(ChartSeries<LocalDate> series) {
-		if (series.isEmpty()) {
-			series.add(pad(range.getFrom()));
-			return;
-		}
-		List<CalendarChartable> padding = new ArrayList<CalendarChartable>();		
-		LocalDate expected = range.getFrom();
-		LocalDate actual = null;		
-		for (Iterator<Entry<LocalDate, Chartable<LocalDate>>> i = series.getEntrySet().iterator(); i.hasNext();) {
-			Entry<LocalDate, Chartable<LocalDate>> entry = i.next();
-			actual = entry.getValue().getX();
-			while (granularity.compare(expected,actual)<0) {
-				padding.add(pad(expected));
-				expected=granularity.next(expected);
+		LocalDate endDate = null;
+		endDate = ChartDateRange.FOREVER.equals(range) ? series.getLastX() : granularity.roundUp(range.getTo());
+
+		LocalDate date = granularity.roundDown(range.getFrom());
+		while (date.isBefore(endDate)) { 
+			Chartable<LocalDate> value = series.get(date);
+			if (value==null) {  // add some padding where no values exist. 
+				series.add(new DateChartable(date,0L));
 			}
-			expected=granularity.next(actual);			
-		}
-		if (!ChartDateRange.FOREVER.equals(range)) { 
-			while (granularity.compare(expected, range.getTo())<0) {
-				padding.add(pad(expected));
-				expected=granularity.next(expected);
-			}
-		}
-		series.add(padding);
+			date = granularity.next(date);
+		}		
 	}
 	
-	protected CalendarChartable pad(LocalDate c) {		
+	protected DateChartable pad(LocalDate c) {		
 		LocalDate date = new LocalDate(c);
-		return new CalendarChartable(date,0);
+		return new DateChartable(date,0);
 	}
 
 	@Override

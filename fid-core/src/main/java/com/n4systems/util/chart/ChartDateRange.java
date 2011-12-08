@@ -3,6 +3,7 @@ package com.n4systems.util.chart;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,10 @@ import com.n4systems.util.time.DateUtil;
 
 public enum ChartDateRange {
 
+	SEVEN_DAYS("7 days"), 
+	THIRTY_DAYS("30 days"), 
+	SIXTY_DAYS("60 days"), 
+	NINETY_DAYS("90 days"), 
 	LAST_WEEK("Last Week" ), 
 	LAST_MONTH("Last Month"), 
 	LAST_QUARTER("Last Quarter"), 
@@ -22,12 +27,15 @@ public enum ChartDateRange {
 	THIS_QUARTER("This Quarter"), 
 	THIS_YEAR("This Year"), 
 	FOREVER("All Time");
+
+	private static EnumSet<ChartDateRange> chartRanges = EnumSet.of(LAST_WEEK, LAST_MONTH, LAST_QUARTER, LAST_YEAR, THIS_WEEK, THIS_MONTH, THIS_QUARTER, THIS_YEAR, FOREVER);
 	
 	private String displayName;
 
 	private static Map<ChartDateRange, DateFormat> dateFormatters = new HashMap<ChartDateRange, DateFormat>();
 
 	private static DateFormat quarterFromFormat;
+	private static DateFormat defaultFormat;
 	
 	static { 
 		dateFormatters.put(LAST_WEEK, new SimpleDateFormat("MMM d"));
@@ -40,6 +48,7 @@ public enum ChartDateRange {
 		dateFormatters.put(THIS_YEAR, new SimpleDateFormat("yyyy"));
 		dateFormatters.put(FOREVER, null);	// FOREVER just returns a text string. 
 		quarterFromFormat = new SimpleDateFormat("MMM");  // NOTE : quarter display = Jan-Mar 2011.  i.e. "from" is different format than "to"
+		defaultFormat = new SimpleDateFormat("MMM d yyyy"); 
 	}
 
 	ChartDateRange(String displayName) {
@@ -47,7 +56,7 @@ public enum ChartDateRange {
 	}
 
 	public String getFromDateDisplayString() {
-		DateFormat formatter = dateFormatters.get(this);
+		DateFormat formatter = getFormatter();
 		if (this.equals(FOREVER)) { 
 			return "All Time";
 		}
@@ -56,12 +65,17 @@ public enum ChartDateRange {
 		}
 		return formatter.format(getFrom().toDate());
 	}
+
+	private DateFormat getFormatter() {
+		DateFormat format = dateFormatters.get(this);
+		return format != null ? format : defaultFormat;
+	}
 	
 	public String getToDateDisplayString() {
 		if (this.equals(FOREVER)) { 
 			return "";
 		} else { 
-			return dateFormatters.get(this).format(getInclusiveTo().toDate());
+			return getFormatter().format(getInclusiveTo().toDate());
 		}
 	}
 	
@@ -96,6 +110,14 @@ public enum ChartDateRange {
 				return today.withDayOfWeek(1);
 			case THIS_WEEK:
 				return today.plusWeeks(1).withDayOfWeek(1);
+			case SEVEN_DAYS:
+				return today.plusDays(7);
+			case THIRTY_DAYS:
+				return today.plusDays(30);
+			case SIXTY_DAYS:
+				return today.plusDays(60);
+			case NINETY_DAYS:
+				return today.plusDays(90);
 			default: 
 				throw new InvalidArgumentException("ChartDateRange " + this + " not supported."); 
 		}
@@ -122,9 +144,18 @@ public enum ChartDateRange {
 				return today.minusWeeks(1).withDayOfWeek(1);
 			case THIS_WEEK:
 				return today.withDayOfWeek(1);
+			case SEVEN_DAYS:
+			case THIRTY_DAYS:
+			case SIXTY_DAYS:
+			case NINETY_DAYS:
+				return today;
 			default: 
 				throw new InvalidArgumentException("ChartDateRange " + this + " not supported."); 
 		}
+	}
+	
+	public static ChartDateRange[] chartDateRanges() { 
+		return chartRanges.toArray(new ChartDateRange[]{});
 	}
 		
 	public String getDisplayName() { 
@@ -139,5 +170,19 @@ public enum ChartDateRange {
 		return getTo().toDate();
 	}
 
+	public static ChartDateRange forDays(Integer period) {
+		switch (period) { 
+			case 7:
+				return SEVEN_DAYS;
+			case 30: 
+				return THIRTY_DAYS;
+			case 60: 
+				return SIXTY_DAYS;
+			case 90:
+				return NINETY_DAYS;
+			default:
+				throw new IllegalStateException("can't find chartDateRange for " + period + " days.");
+		}
+	}
 	
 }

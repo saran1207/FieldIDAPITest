@@ -19,7 +19,7 @@ import com.n4systems.fieldid.wicket.WicketHarness;
 import com.n4systems.fieldid.wicket.components.chart.FlotChart.ChartMarkup;
 import com.n4systems.fieldid.wicket.components.chart.FlotChartTest.FlotChartHarness;
 import com.n4systems.fieldid.wicket.components.reporting.results.FieldIdPanelTest;
-import com.n4systems.util.chart.CalendarChartable;
+import com.n4systems.util.chart.DateChartable;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.Chartable;
@@ -79,7 +79,7 @@ public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<
 		Calendar c = Calendar.getInstance();
 		for (int year = 1980; year < 2012; year++) {
 			int value = year;
-			data.add(new CalendarChartable(new LocalDate(year, 1, 1), value));
+			data.add(new DateChartable(new LocalDate(year, 1, 1), value));
 		}
 		return data;
 	}
