@@ -102,7 +102,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
         columnsContainer.add(createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[1].widgets"), 1));
         columnsContainer.add(configurationWindow = new FIDModalWindow("configWindow"));
         configurationWindow.setInitialWidth(500);
-        configurationWindow.setInitialHeight(350);
+        configurationWindow.setInitialHeight(390);
 
         configurationWindow.setTitle(new FIDLabelModel("label.widget_configuration"));
 

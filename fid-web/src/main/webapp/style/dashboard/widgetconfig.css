@@ -19,17 +19,10 @@
     overflow: hidden;
 }
 
-.widgetConfiguration .smallInstruction {
-    color:#999999;
-    padding-top: 6px;
-    padding-left:140px;
-    font-size:10px;
-}
-
 .widgetConfiguration .largeInstruction {
     color:#999999;
     padding-top: 6px;
-    padding-left: 30px;
+    padding-left: 50px;
     font-size:10px;
 }
 

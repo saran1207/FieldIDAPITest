@@ -20,6 +20,7 @@ public class FIDModalWindow extends ModalWindow {
         setCssClassName(CSS_CLASS_GRAY);
         setMaskType(MaskType.SEMI_TRANSPARENT);
         add(CSSPackageResource.getHeaderContribution("style/modal/fid_modal.css"));
+        setResizable(false);
     }
 
 }
