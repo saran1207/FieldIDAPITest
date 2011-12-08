@@ -77,7 +77,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	}
 	
 	private File getOwnerLogo(BaseOrg owner) {
-		return PathHandler.getOrgLogo(owner);
+		return owner != null ? PathHandler.getOrgLogo(owner) : null;
 	}
 
 	private List<InspectionImage> createEventImages() {

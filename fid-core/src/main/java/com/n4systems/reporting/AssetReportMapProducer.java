@@ -74,7 +74,7 @@ public class AssetReportMapProducer extends ReportMapProducer {
 	}
 	
 	private File getOwnerLogo(BaseOrg owner) {
-		return PathHandler.getOrgLogo(owner);
+		return owner != null ? PathHandler.getOrgLogo(owner) : null;
 	}
 
 	private Map<String, Object> produceInfoOptionMap() {
