@@ -7,6 +7,7 @@ import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateLabel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -42,9 +43,14 @@ import java.util.List;
 
 public class MassSchedulePage extends FieldIDFrontEndPage {
 
-    List<Long> selectedIds;
+    private List<Long> selectedIds;
+    private List<ScheduleSummaryEntry> scheduleSummary;
     private boolean duplicateDetection = true;
+    private boolean aSchedulePickerIsOpen = false;
     private EventSchedule scheduleForAll = new EventSchedule();
+
+    private WebMarkupContainer assetTypesListContainer;
+    private SchedulePicker scheduleAllPicker;
 
     @SpringBean
     private AssetService assetService;
@@ -60,32 +66,22 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         SearchContainer searchContainer = verifySearchIdNotExpired(params);
         selectedIds = searchContainer.getMultiIdSelection().getSelectedIds();
 
-        final List<ScheduleSummaryEntry> scheduleSummary = assetService.getAssetScheduleSummary(selectedIds);
+        scheduleSummary = assetService.getAssetScheduleSummary(selectedIds);
         List<AssetType> assetTypesList = getAssetTypeList(scheduleSummary);
         IModel<List<EventType>> commonEventTypesModel = new CommonEventTypesModel(assetTypesList);
 
-        final WebMarkupContainer assetTypesListContainer = new WebMarkupContainer("assetTypesListContainer");
+        assetTypesListContainer = new WebMarkupContainer("assetTypesListContainer");
         add(assetTypesListContainer.setOutputMarkupId(true));
 
         final EventJobsForTenantModel jobsOptions = new EventJobsForTenantModel();
 
-        add(new SchedulePicker("scheduleAllPicker", new FIDLabelModel("label.schedule_all"), new PropertyModel<EventSchedule>(this, "scheduleForAll"), commonEventTypesModel, jobsOptions, 0, 0) {
-            @Override
-            protected void onPickComplete(AjaxRequestTarget target) {
-                for (ScheduleSummaryEntry scheduleSummaryEntry : scheduleSummary) {
-                    scheduleSummaryEntry.getSchedules().add(scheduleForAll);
-                }
-                scheduleForAll = new EventSchedule();
-                target.addComponent(assetTypesListContainer);
-            }
-        });
+        add(scheduleAllPicker = createScheduleAllPicker(commonEventTypesModel, jobsOptions));
         add(new WebMarkupContainer("noCommonEventTypesMessage").setVisible(commonEventTypesModel.getObject().isEmpty()));
 
         add(new FIDFeedbackPanel("feedbackPanel"));
         assetTypesListContainer.add(new ListView<ScheduleSummaryEntry>("assetTypeSummary", scheduleSummary) {
             @Override
             protected void populateItem(final ListItem<ScheduleSummaryEntry> item) {
-                final Model<EventSchedule> eventScheduleModel = new Model<EventSchedule>(new EventSchedule());
                 item.add(new Label("assetTypeName", new PropertyModel<String>(item.getModel(), "assetType.name")));
                 item.add(new Label("count", new PropertyModel<Integer>(item.getModel(), "count")));
 
@@ -94,15 +90,8 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
                 IModel<List<EventType>> eventTypesForAssetType = new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(item.getModel(), "assetType"));
 
-                IModel<String> openAssetTypeSchedulePickerLabel = new FIDLabelModel("label.add_a_schedule");
-                item.add(new SchedulePicker("schedulePicker", openAssetTypeSchedulePickerLabel, eventScheduleModel, eventTypesForAssetType, jobsOptions, -250, 0) {
-                    @Override
-                    protected void onPickComplete(AjaxRequestTarget target) {
-                        item.getModelObject().getSchedules().add(eventScheduleModel.getObject());
-                        eventScheduleModel.setObject(new EventSchedule());
-                        target.addComponent(schedulesContainer);
-                    }
-                });
+                item.add(createSchedulePicker(item, eventTypesForAssetType, jobsOptions));
+                item.add(new WebMarkupContainer("noEventTypesMessage").setVisible(eventTypesForAssetType.getObject().isEmpty()));
             }
         });
 
@@ -121,8 +110,71 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         };
         add(submitForm);
         submitForm.add(new CheckBox("duplicateDetection", new PropertyModel<Boolean>(this, "duplicateDetection")));
+        submitForm.add(new TooltipImage("duplicateDescriptionTooltipImage", new FIDLabelModel("message.duplicate_detection_description")));
         submitForm.add(new Button("submitButton"));
         submitForm.add(new NonWicketLink("returnToSearchLink", "searchResults.action?searchId="+params.getString("searchId")));
+    }
+
+    private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<EventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {
+        final Model<EventSchedule> eventScheduleModel = new Model<EventSchedule>(new EventSchedule());
+        return new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), eventScheduleModel, eventTypesForAssetType, jobsOptions, -400, 0) {
+            @Override
+            protected void onPickComplete(AjaxRequestTarget target) {
+                item.getModelObject().getSchedules().add(eventScheduleModel.getObject());
+                eventScheduleModel.setObject(new EventSchedule());
+                target.addComponent(assetTypesListContainer);
+                updateSchedulePickerButtonsForPickerOpened(target, false);
+            }
+            @Override
+            protected void onPickerOpened(AjaxRequestTarget target) {
+                updateSchedulePickerButtonsForPickerOpened(target, true);
+            }
+
+            @Override
+            protected void onPickerClosed(AjaxRequestTarget target) {
+                updateSchedulePickerButtonsForPickerOpened(target, false);
+            }
+
+            @Override
+            public boolean isOpenPickerButtonEnabled() {
+                return !aSchedulePickerIsOpen;
+            }
+        };
+    }
+
+    private SchedulePicker createScheduleAllPicker(final IModel<List<EventType>> commonEventTypesModel, final EventJobsForTenantModel jobsOptions) {
+        return new SchedulePicker("scheduleAllPicker", new FIDLabelModel("label.schedule_all"), new PropertyModel<EventSchedule>(this, "scheduleForAll"), commonEventTypesModel, jobsOptions, 0, 0) {
+            @Override
+            protected void onPickComplete(AjaxRequestTarget target) {
+                for (ScheduleSummaryEntry scheduleSummaryEntry : scheduleSummary) {
+                    scheduleSummaryEntry.getSchedules().add(scheduleForAll);
+                }
+                scheduleForAll = new EventSchedule();
+                target.addComponent(assetTypesListContainer);
+                updateSchedulePickerButtonsForPickerOpened(target, false);
+            }
+
+            @Override
+            protected void onPickerOpened(AjaxRequestTarget target) {
+                updateSchedulePickerButtonsForPickerOpened(target, true);
+            }
+
+            @Override
+            protected void onPickerClosed(AjaxRequestTarget target) {
+                updateSchedulePickerButtonsForPickerOpened(target, false);
+            }
+
+            @Override
+            protected boolean isOpenPickerButtonEnabled() {
+                return !aSchedulePickerIsOpen;
+            }
+        };
+    }
+
+    private void updateSchedulePickerButtonsForPickerOpened(AjaxRequestTarget target, boolean schedulePickerOpened) {
+        this.aSchedulePickerIsOpen = schedulePickerOpened;
+        target.addComponent(scheduleAllPicker);
+        target.addChildren(assetTypesListContainer, SchedulePicker.class);
     }
 
     private WebMarkupContainer createScheduleListView(String containerId, final IModel<ScheduleSummaryEntry> model) {

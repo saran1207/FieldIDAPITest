@@ -27,6 +27,7 @@ import java.util.List;
 public class SchedulePicker extends Panel {
 
     private IModel<EventSchedule> scheduleModel;
+    private ScheduleForm scheduleForm;
     private int dx;
     private int dy;
 
@@ -37,7 +38,7 @@ public class SchedulePicker extends Panel {
         this.dy = dy;
         setOutputMarkupId(true);
 
-        add(new ScheduleForm("scheduleForm", openPickerLabel, scheduleModel, eventTypeOptions, jobsOptions));
+        add(scheduleForm = new ScheduleForm("scheduleForm", openPickerLabel, scheduleModel, eventTypeOptions, jobsOptions));
         add(CSSPackageResource.getHeaderContribution("style/newCss/component/wicket_schedule_picker.css"));
     }
 
@@ -55,9 +56,16 @@ public class SchedulePicker extends Panel {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     setEditorVisible(target, true);
+                    onPickerOpened(target);
                     target.appendJavascript("translate($('#"+editorContainer.getMarkupId()+"'), $('#"+openDialogButton.getMarkupId()+"'),"+dy+","+dx+")");
                 }
+
+                @Override
+                public boolean isEnabled() {
+                    return super.isEnabled() && isOpenPickerButtonEnabled();
+                }
             });
+            openDialogButton.setOutputMarkupId(true);
             openDialogButton.add(new SimpleAttributeModifier("value", openPickerLabel.getObject()));
             openDialogButton.setEnabled(eventTypeOptions.getObject().size() > 0);
 
@@ -65,8 +73,8 @@ public class SchedulePicker extends Panel {
 
             add(editorContainer = new WebMarkupContainer("scheduleEditorContainer"));
             editorContainer.add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
-            editorContainer.setOutputMarkupPlaceholderTag(true);
             editorContainer.setVisible(false);
+            editorContainer.setOutputMarkupPlaceholderTag(true);
 
             editorContainer.add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "nextStandardDate")));
             dateTimePicker.getDateTextField().setRequired(true);
@@ -109,6 +117,7 @@ public class SchedulePicker extends Panel {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     setEditorVisible(target, false);
+                    onPickerClosed(target);
                 }
             });
 
@@ -143,6 +152,16 @@ public class SchedulePicker extends Panel {
         }
     }
 
+    protected void onPickerOpened(AjaxRequestTarget target) { }
+    protected void onPickerClosed(AjaxRequestTarget target) { }
     protected void onPickComplete(AjaxRequestTarget target) { }
+
+    public void redrawOpenDialogButton(AjaxRequestTarget target) {
+        target.addComponent(scheduleForm.openDialogButton);
+    }
+
+    protected boolean isOpenPickerButtonEnabled() {
+        return true;
+    }
 
 }

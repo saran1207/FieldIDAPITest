@@ -87,3 +87,10 @@
     float:left;
     color:#9c9c9c;
 }
+
+.noEventTypesMessage {
+    clear:left;
+    display:block;
+    padding-left:700px;
+    color:#9c9c9c;
+}

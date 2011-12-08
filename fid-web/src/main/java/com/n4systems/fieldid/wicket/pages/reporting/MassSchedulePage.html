@@ -12,6 +12,7 @@
             <div wicket:id="assetTypeName" class="assetTypeName"></div>
             <div class="assetTypeCount" wicket:id="count"></div>
             <div class="assetTypeSchedule" wicket:id="schedulePicker"></div>
+            <div class="noEventTypesMessage" wicket:id="noEventTypesMessage">(<wicket:message key="message.no_event_types_for_asset_type"/>)</div>
 
             <div class="schedulesList" wicket:id="schedulesContainer">
                 <div wicket:id="schedules" class="schedule">
@@ -32,7 +33,7 @@
     <form wicket:id="submitForm">
 
         <div class="duplicateDetectionSection">
-            <input type="checkbox" wicket:id="duplicateDetection"> <wicket:message key="label.enable_duplicate_detection"/>
+            <input type="checkbox" wicket:id="duplicateDetection"> <wicket:message key="label.enable_duplicate_detection"/> <img wicket:id="duplicateDescriptionTooltipImage">
         </div>
 
         <div class="formAction">
