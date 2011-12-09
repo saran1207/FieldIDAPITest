@@ -39,4 +39,8 @@
 
 </div>
 
+<script>
+    document.observe("dom:loaded", function() { $('userName').focus(); });
+</script>
+
 <#include "../common/_secondary_content.ftl"/>
