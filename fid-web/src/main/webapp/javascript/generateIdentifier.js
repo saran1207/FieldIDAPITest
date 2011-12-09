@@ -1,14 +1,16 @@
 var identifierUrl = "";
 function generateIdentifier(elementId, uniqueID, assetTypeId) {
-	new Ajax.Request( identifierUrl, {
-		method: 'post',
-        parameters: { assetTypeId: assetTypeId },
-		onSuccess: function(transport) {
-			var element = $(elementId);
-			element.value = transport.responseText.strip();
-			checkIdentifier(elementId, uniqueID);
-		}
-	});	
+	getResponse( identifierUrl, 'post', {
+        assetTypeId: assetTypeId,
+        uniqueId:uniqueID,
+        elementId: elementId
+	});
+}
+
+function identifierGenerated(elementId, uniqueID, generatedIdentifier) {
+    $(elementId).value = generatedIdentifier;
+
+    checkIdentifier(elementId, uniqueID);
 }
 
 var checkIdentifierUrl = "";

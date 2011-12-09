@@ -502,5 +502,10 @@
 		<action name="mergeFindCustomer" method="list" class="com.n4systems.fieldid.actions.customers.CustomerMergeAction">
 			<result name="success" type="freemarker">/templates/ajax/customerMerge/list.ftl</result>
 		</action>
+
+		<action name="generateIdentifier" method="generateIdentifier" class="com.n4systems.fieldid.actions.asset.AssetUtilAction">
+			<result name="success" type="freemarker">/templates/aHtml/assetUtil/generateIdentifier.ftl</result>
+		</action>
+
 	</package>
 </struts>

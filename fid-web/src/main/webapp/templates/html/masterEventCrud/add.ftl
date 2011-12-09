@@ -25,7 +25,7 @@
 		addAssetUrl = '<@s.url action="assetAdd" namespace="/ajax"/>';
 		createAssetUrl = "<@s.url action="assetCreate" namespace="/ajax" />";	
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"  />';
-		identifierUrl = '<@s.url action="generateIdentifier" namespace="/aHtml"  />';
+		identifierUrl = '<@s.url action="generateIdentifier" namespace="/ajax"  />';
 		checkRfidUrl = '<@s.url action="checkRFID" namespace="/ajax"  />';
 		removeSubAssetUrl = "<@s.url action="removeSubAsset" namespace="/ajax"/>";
 		unitOfMeasureUrl = '<@s.url action="unitOfMeasure" namespace="/ajax" />';

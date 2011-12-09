@@ -31,6 +31,7 @@ public class AssetUtilAction extends AbstractAction {
 	private AssetManager assetManager;
 	
 	private String identifier;
+    private String elementId;
 	
 	private Long uniqueId;
 	
@@ -83,6 +84,7 @@ public class AssetUtilAction extends AbstractAction {
 			identifier = identifierCounter.generateIdentifier(getPrimaryOrg(), assetType);
 		} catch (Exception e) {
 			logger.error("Generating identifier", e);
+            addActionErrorText("message.error_generating_identifier");
 			return ERROR;
 		}
 		return SUCCESS;
@@ -140,4 +142,11 @@ public class AssetUtilAction extends AbstractAction {
 		this.rfids = rfids;
 	}
 
+    public String getElementId() {
+        return elementId;
+    }
+
+    public void setElementId(String elementId) {
+        this.elementId = elementId;
+    }
 }

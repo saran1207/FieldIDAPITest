@@ -16,7 +16,7 @@
 	<@n4.includeStyle href="newCss/event/event_schedule"/>
 	<script type="text/javascript">
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
-		identifierUrl = '<@s.url action="generateIdentifier" namespace="/aHtml"/>';
+		identifierUrl = '<@s.url action="generateIdentifier" namespace="/ajax"/>';
 		checkRfidUrl = '<@s.url action="checkRFID" namespace="/ajax"/>';
 		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>'; 
 	    assetTypeChangeWarning = '<@s.text name="warning.assettypechange"/>';

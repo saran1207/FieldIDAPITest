@@ -67,10 +67,6 @@
 			<result name="input" type="freemarker">/templates/aHtml/report/expired.ftl</result>
 		</action>
 		
-		<action name="generateIdentifier" method="generateIdentifier" class="com.n4systems.fieldid.actions.asset.AssetUtilAction">
-			<result name="success" type="freemarker">/templates/aHtml/assetUtil/generateIdentifier.ftl</result>
-		</action>
-		
 		<action name="event" method="show" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="success" type="freemarker">/templates/aHtml/eventCrud/show.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
