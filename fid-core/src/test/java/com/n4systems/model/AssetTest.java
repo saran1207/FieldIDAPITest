@@ -169,7 +169,8 @@ public class AssetTest {
 
 		String description = asset.getDescription();
 		
-		// note how it will use the "newId" value instead of the assets IDENTIFIER value.
+		// note how it will use the attribute value instead of the assets IDENTIFIER value.
+		// in other words, Identifier and other predefined macros will be overridden. WEB-2539
 		assertEquals( String.format(format, anotherId, anotherRfid, anotherRef, anotherOrderNum, anotherPONum, blah ), description );		
 	}	
 	
