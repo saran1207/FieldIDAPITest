@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.model.CriteriaType;
 import org.apache.log4j.Logger;
 
 import com.n4systems.api.model.EventView;
@@ -34,6 +33,7 @@ import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.CriteriaType;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
@@ -76,12 +76,12 @@ public class EventImportAction extends AbstractImportAction {
 	
 	@Override
 	protected ImportSuccessNotification createSuccessNotification() {
-		return new EventImportSuccessNotification(getCurrentUser());
+		return new EventImportSuccessNotification(getCurrentUser(), type);
 	}
 	
 	@Override
 	protected ImportFailureNotification createFailureNotification() {
-		return new EventImportFailureNotification(getCurrentUser());
+		return new EventImportFailureNotification(getCurrentUser(), type);
 	}
 	
 	public String doDownloadExample() {		
