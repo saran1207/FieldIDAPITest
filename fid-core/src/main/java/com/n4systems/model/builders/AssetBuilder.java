@@ -1,5 +1,13 @@
 package com.n4systems.model.builders;
 
+import static com.n4systems.model.builders.AssetTypeBuilder.*;
+import static com.n4systems.model.builders.SubAssetBuilder.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
@@ -9,14 +17,6 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import static com.n4systems.model.builders.AssetTypeBuilder.anAssetType;
-import static com.n4systems.model.builders.SubAssetBuilder.aSubAsset;
-
 public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 	private static final User NOT_ASSIGNED = null;
 
@@ -24,6 +24,7 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 
 	private String identifier;
     private String rfidNumber;
+    private String referenceNumber;
 	private Date modified;
 	
 	private List<SubAsset> subAssets;
@@ -33,14 +34,15 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
     private User identifiedBy;
     private boolean published;
     private String purchaseOrder;
+	private String nonIntegrationOrderNumber;
 
     public static AssetBuilder anAsset() {
-		return new AssetBuilder(null, null, anAssetType().build(), null, null, new Location(), null, NOT_ASSIGNED, true, null, null, new ArrayList<SubAsset>(), null);
+		return new AssetBuilder(null, null, anAssetType().build(), null, null, new Location(), null, NOT_ASSIGNED, true, null, null, new ArrayList<SubAsset>(), null, null, null);
 	}
 
     public AssetBuilder(){}
 
-	private AssetBuilder(Tenant tenant, BaseOrg owner, AssetType type, String identifier, Date modified, Location location, AssetStatus assetStatus, User assignedTo, boolean published, String purchaseOrder, User identifiedBy, List<SubAsset> subAssets, String rfidNumber) {
+	private AssetBuilder(Tenant tenant, BaseOrg owner, AssetType type, String identifier, Date modified, Location location, AssetStatus assetStatus, User assignedTo, boolean published, String purchaseOrder, User identifiedBy, List<SubAsset> subAssets, String rfidNumber, String referenceNumber, String nonIntegrationOrderNumber) {
         super(tenant, owner);
 		this.type = type;
 		this.identifier = identifier;
@@ -53,38 +55,40 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
         this.purchaseOrder = purchaseOrder;
         this.identifiedBy = identifiedBy;
         this.rfidNumber = rfidNumber;
+        this.referenceNumber = referenceNumber;
+        this.nonIntegrationOrderNumber = nonIntegrationOrderNumber;
 	}
 
     public AssetBuilder identifiedBy(User identifiedBy) {
-        return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+        return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
     }
 
 	public AssetBuilder ofType(AssetType type) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 	
 	public AssetBuilder forTenant(Tenant tenant) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 	
 	public AssetBuilder withOwner(BaseOrg owner) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 	
 	public AssetBuilder withIdentifier(String identifier) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 	
 	public AssetBuilder withModifiedDate(Date modified) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 	
 	public AssetBuilder withOneSubAsset() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, Arrays.asList(aSubAsset().build()), rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, Arrays.asList(aSubAsset().build()), rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 	
 	public AssetBuilder withTwoSubAssets() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, Arrays.asList(aSubAsset().build(), aSubAsset().build()), rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, Arrays.asList(aSubAsset().build(), aSubAsset().build()), rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 	
 	public AssetBuilder inFreeformLocation(String location) {
@@ -92,33 +96,42 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 	}
 	
 	public AssetBuilder withAdvancedLocation(Location location) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 	
 	public AssetBuilder havingStatus(AssetStatus assetStatus) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 	
 	public AssetBuilder assignedTo(User employee) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, employee, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, employee, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 	
 	public AssetBuilder unassigned() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 
     public AssetBuilder published(boolean published) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 
     public AssetBuilder purchaseOrder(String purchaseOrder) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 
     public AssetBuilder rfidNumber(String rfidNumber) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
 	}
 
+	public AssetBuilder referenceNumber(String referenceNumber) {
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
+	}
+    
+	public AssetBuilder nonIntegrationOrderNumber(String nonIntegrationOrderNumber) {
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber, referenceNumber, nonIntegrationOrderNumber));
+	}
+    
+  
 	@Override
 	public Asset createObject() {
 		Asset asset = generate();
@@ -141,6 +154,8 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
         asset.setPurchaseOrder(purchaseOrder);
         asset.setIdentifiedBy(identifiedBy);
         asset.setRfidNumber(rfidNumber);
+        asset.setCustomerRefNumber(referenceNumber);
+        asset.setNonIntergrationOrderNumber(nonIntegrationOrderNumber);
 
 		return asset;
 	}
@@ -152,5 +167,6 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 			}
 		}
 	}
+
 	
 }

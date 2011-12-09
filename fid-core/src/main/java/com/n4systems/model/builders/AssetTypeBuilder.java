@@ -7,14 +7,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Tenant;
 import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.exceptions.Defect;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.AssociatedEventType;
+import com.n4systems.model.EventType;
+import com.n4systems.model.Tenant;
 
 public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
 
