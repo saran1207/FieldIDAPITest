@@ -54,12 +54,12 @@ public class AssetImportAction extends AbstractImportAction {
 	
 	@Override
 	protected ImportSuccessNotification createSuccessNotification() {
-		return new AssetImportSuccessNotification(getCurrentUser());
+		return new AssetImportSuccessNotification(getCurrentUser(), type);
 	}
 	
 	@Override
 	protected ImportFailureNotification createFailureNotification() {
-		return new AssetImportFailureNotification(getCurrentUser());
+		return new AssetImportFailureNotification(getCurrentUser(), type);
 	}
 	
 	public String doDownloadExample() {

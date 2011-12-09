@@ -26,6 +26,6 @@
 
 	<h1>Done. Your Event Import has finished.</h1>
 
-	<p>Field ID has sucessfully imported ${notification.totalImported} ${notification.eventType.name} events into your account.</p>
+	<p>Field ID has successfully imported ${notification.totalImported} ${notification.eventType.name} events into your account.</p>
 	
 </div>

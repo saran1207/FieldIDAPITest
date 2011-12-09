@@ -1,9 +1,7 @@
 package com.n4systems.notifiers.notifications;
 
 import com.n4systems.model.EventType;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
-import com.n4systems.services.TenantFinder;
 
 public class EventImportFailureNotification extends ImportFailureNotification {
 	
@@ -26,9 +24,5 @@ public class EventImportFailureNotification extends ImportFailureNotification {
 	@Override
 	public String subject() {
 		return "Import Failed: Event Import for " + getPrimaryOrg(eventType.getTenant().getId()).getName();
-	}
-
-	private PrimaryOrg getPrimaryOrg(long tenantId) {
-		return TenantFinder.getInstance().findPrimaryOrg(tenantId);
 	}
 }

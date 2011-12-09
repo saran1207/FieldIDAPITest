@@ -1,6 +1,8 @@
 package com.n4systems.notifiers.notifications;
 
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
+import com.n4systems.services.TenantFinder;
 
 public abstract class Notification {
 
@@ -53,8 +55,8 @@ public abstract class Notification {
 		return true;
 	}
 
-	
-	
-	
+	protected PrimaryOrg getPrimaryOrg(long tenantId) {
+		return TenantFinder.getInstance().findPrimaryOrg(tenantId);
+	}
 	
 }
