@@ -42,7 +42,7 @@
 		function removeUploadImage() { 
 			$( "imageUploaded" ).hide();
 			$("removeImage").value = "true";
-			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="25" ></iframe> <span id="uploadInfo"><@s.text name="label.org_image_looks_best"/></span>';
+			var iframe = '<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="300" height="25" ></iframe> <span id="uploadInfo"><@s.text name="label.org_image_looks_best"/></span>';
 			$( "imageUploadField" ).insert( { top: iframe } );
 			$("imageUploaded").removeClassName( "inputError" );
 			$("imageUploaded").title = "";
@@ -85,7 +85,7 @@
 				<span id="imageUploadField" class="fieldHolder">
 				
 					<#if !logoImageDirectory?exists || logoImageDirectory.length() == 0  || removeImage >
-						<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />"  scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="25" ></iframe>
+						<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />"  scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="300" height="25" ></iframe>
 						<span id="uploadInfo"><@s.text name="label.org_image_looks_best"/></span>
 					</#if>
 					<span id="imageUploaded" <#if (action.fieldErrors['logoImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !logoImageDirectory?exists || logoImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >

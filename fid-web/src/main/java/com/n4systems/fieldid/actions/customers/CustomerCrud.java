@@ -203,11 +203,12 @@ public class CustomerCrud extends AbstractCrud {
 				customer.setTenant(getTenant());
 			}
             customer.touch();
-            processImage();
 			saver.saveOrUpdate(customer);
+            processImage();
 			addFlashMessage(getText("message.saved"));
 			uniqueID = customer.getId();
 		} catch (Exception e) {
+			logger.error(getText("error.savingcustomer"), e);
 			addActionError(getText("error.savingcustomer"));
 			return ERROR;
 		}
