@@ -38,30 +38,24 @@ public class AssetUtilAction extends AbstractAction {
     private AssetType assetType;
     private Long assetTypeId;
     
-    private String [] rfids;
-    private List<String> duplicateRfids;
+    private String [] rfids = {};
+    private List<String> duplicateRfids = new ArrayList<String>();
     
 	public AssetUtilAction(IdentifierCounter identifierCounter, LegacyAsset legacyAssetManager, AssetManager assetManager, PersistenceManager persistenceManager ) {
 		super(persistenceManager);
 		this.identifierCounter = identifierCounter;
 		this.legacyAssetManager = legacyAssetManager;
 		this.assetManager = assetManager;
-		duplicateRfids = new ArrayList<String>();
 	}
-
 
 	public String doCheckDuplicateRfid( ) {
 		try {
-			boolean duplicateFound = false;
-			if(rfids != null) {
-				for (int i = 0; i < rfids.length; i++) {
-					if( legacyAssetManager.rfidExists( rfids[i], getTenantId()) ) {
-						duplicateFound = true;
-						duplicateRfids.add(rfids[i]);
-					}				
-				}
-			}
-			return duplicateFound ? "duplicate" : SUCCESS;
+            for (String rfid : rfids) {
+                if( legacyAssetManager.rfidExists( rfid, getTenantId(), uniqueId) ) {
+                    duplicateRfids.add(rfid);
+                }
+            }
+			return duplicateRfids.size() > 0 ? "duplicate" : SUCCESS;
 		} catch( Exception e) {
 			addActionError( getText( "error.lookinguprfid" ) );
 			logger.error( "looking up rfid numbers " + rfids, e );
