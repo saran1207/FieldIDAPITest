@@ -2,6 +2,7 @@ package com.n4systems.fieldid.validators;
 
 import java.util.List;
 
+import com.n4systems.fieldid.actions.event.ActionWithCriteriaResults;
 import com.n4systems.fieldid.actions.event.EventCrud;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.model.CriteriaType;
@@ -12,7 +13,7 @@ public class NumberCriteriaValidator extends FieldValidatorSupport {
 
 	@Override
 	public void validate(Object action) throws ValidationException {
-        List<CriteriaResultWebModel> criteriaResults = ((EventCrud) action).getCriteriaResults();
+        List<CriteriaResultWebModel> criteriaResults = ((ActionWithCriteriaResults) action).getCriteriaResults();
         for (CriteriaResultWebModel criteriaResult : criteriaResults) {
             if (CriteriaType.NUMBER_FIELD.name().equals(criteriaResult.getType())) {  
             	if(criteriaResult.getTextValue() != null && !criteriaResult.getTextValue().isEmpty()) {

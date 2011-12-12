@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.validators;
 
+import com.n4systems.fieldid.actions.event.ActionWithCriteriaResults;
 import com.n4systems.fieldid.actions.event.EventCrud;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.model.CriteriaType;
@@ -12,7 +13,7 @@ public class AllScoresMustBeEnteredValidator extends FieldValidatorSupport {
 
     @Override
     public void validate(Object action) throws ValidationException {
-        List<CriteriaResultWebModel> criteriaResults = ((EventCrud) action).getCriteriaResults();
+        List<CriteriaResultWebModel> criteriaResults = ((ActionWithCriteriaResults) action).getCriteriaResults();
         for (CriteriaResultWebModel criteriaResult : criteriaResults) {
             if (CriteriaType.SCORE.name().equals(criteriaResult.getType()) && criteriaResult.getStateId() == null) {
                 addFieldError(getFieldName(), action);

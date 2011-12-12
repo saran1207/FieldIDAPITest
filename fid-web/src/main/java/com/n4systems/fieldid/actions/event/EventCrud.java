@@ -85,7 +85,7 @@ import com.opensymphony.xwork2.validator.annotations.Validations;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 
-public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
+public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, ActionWithCriteriaResults {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(EventCrud.class);
 

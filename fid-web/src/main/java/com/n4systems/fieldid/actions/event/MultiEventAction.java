@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import com.opensymphony.xwork2.validator.annotations.Validations;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.EventScheduleManager;
@@ -46,7 +49,7 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
-public class MultiEventAction extends AbstractCrud {
+public class MultiEventAction extends AbstractCrud implements ActionWithCriteriaResults {
 
 	private static final long UNASSIGNED_OPTION_VALUE = 0L;
 	private static final long KEEP_THE_SAME_OPTION = -1L;
@@ -68,6 +71,7 @@ public class MultiEventAction extends AbstractCrud {
 	private EventWebModel modifiableEvent;
 	private MultiEventGroupSorter multiEventGroupSorter;
 	private List<Listable<Long>> employees;
+    protected List<CriteriaResultWebModel> criteriaResults;
 	
     private String searchContainerKey;
     private String searchId;
@@ -348,6 +352,17 @@ public class MultiEventAction extends AbstractCrud {
     @Override
     public boolean isUseLegacyCss() {
         return false;
+    }
+
+    public List<CriteriaResultWebModel> getCriteriaResults() {
+        return criteriaResults;
+    }
+
+    @Validations(customValidators = {
+            @CustomValidator(type = "allScoresMustBeEntered", message = "", key = "error.scores.required"),
+            @CustomValidator(type = "numberCriteriaValidator", message = "", key = "error.invalid_number_criteria")})
+    public void setCriteriaResults(List<CriteriaResultWebModel> criteriaResults) {
+        this.criteriaResults = criteriaResults;
     }
 
 }
