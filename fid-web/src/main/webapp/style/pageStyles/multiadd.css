@@ -59,6 +59,11 @@
 .identifierRow div {
 	float: left;
 	width: 175px;
+    padding-right: 8px;
+}
+
+.titleRow div {
+    word-wrap: break-word;
 }
 
 .identifierRow div .identifierInput {
