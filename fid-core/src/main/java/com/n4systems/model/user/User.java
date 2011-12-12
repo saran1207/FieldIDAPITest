@@ -111,7 +111,8 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private void onChange() {
 		trimNames();
 		generateReferralKeyIfNull();
-		generateGlobalIdIfNull();		
+		generateGlobalIdIfNull();
+		generateAuthKey();
 	}		
 	
 	private void trimNames() {
