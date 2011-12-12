@@ -36,7 +36,7 @@ ${action.setPageType('customer','show')!}
 		
 		<#if logoImageDirectory?exists>
 			<div class="logo">
-				<img src="<@s.url action="downloadOrgLogo" namespace="/file" uniqueID="${customer.id}"  />" alt="<@s.text name="label.organizationalunit"/>"/>
+				<span></span><img src="<@s.url action="downloadOrgLogo" namespace="/file" uniqueID="${customer.id}"  />" alt="<@s.text name="label.organizationalunit"/>"/>
 			</div>
 		</#if>
 		

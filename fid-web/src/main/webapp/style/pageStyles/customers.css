@@ -43,13 +43,6 @@
 	padding: 5px 10px 15px;
 }
 
-.logo img{
-	width: 120px;
-	padding-left: 4px;
-	display:block;
-    position:absolute;top:0;bottom:0;margin:auto;
-}
-
 .logo, .details {
 	float: left;
 }
@@ -59,8 +52,27 @@
 	width: 128px;
 	height: 128px;
 	border: 1px solid #CCCCCC;
-	position:relative;	
 	overflow: hidden;
+	display: table-cell; 
+	vertical-align: middle;
+	text-align: center
+}
+
+.logo {
+    display: block;
+}
+
+.logo img{
+	width: 120px;
+}
+
+.logo * {
+    vertical-align: middle;
+}
+.logo span {
+    display: inline-block;
+    height: 100%;
+    width: 1px;
 }
 
 .noImage {
