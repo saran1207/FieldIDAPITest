@@ -26,12 +26,12 @@ public class CustomerImportAction extends AbstractImportAction {
 	
 	@Override
 	protected ImportSuccessNotification createSuccessNotification() {
-		return new CustomerImportSuccessNotification(getCurrentUser(), getTenant(), getText("label.customer"));
+		return new CustomerImportSuccessNotification(getCurrentUser(), getText("label.customer"));
 	}
 	
 	@Override
 	protected ImportFailureNotification createFailureNotification() {
-		return new CustomerImportFailureNotification(getCurrentUser(), getTenant(), getText("label.customer"));
+		return new CustomerImportFailureNotification(getCurrentUser(), getText("label.customer"));
 	}
 	
 }

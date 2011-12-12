@@ -12,5 +12,10 @@ public class UserImportSuccessNotification extends ImportSuccessNotification {
 	public String notificationName() {
 		return "userImportSuccess";
 	}
+	
+	@Override
+	public String subject() {
+		return "Import Completed: User Import for " + getPrimaryOrg(getTo().getTenant().getId()).getName();
+	}
 
 }

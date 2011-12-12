@@ -1,17 +1,13 @@
 package com.n4systems.notifiers.notifications;
 
-import com.n4systems.model.BaseEntity;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.user.User;
 
 public class CustomerImportFailureNotification extends ImportFailureNotification {
 
-	private BaseEntity tenant;
 	private String label;
 	
-	public CustomerImportFailureNotification(User notifiyUser, Tenant tenant, String label) {
+	public CustomerImportFailureNotification(User notifiyUser, String label) {
 		super(notifiyUser);
-		this.tenant = tenant;
 		this.label = label;
 	}
 
@@ -22,7 +18,7 @@ public class CustomerImportFailureNotification extends ImportFailureNotification
 	
 	@Override
 	public String subject() {
-		return "Import Failed: " + label + " Import for " + getPrimaryOrg(tenant.getId()).getName();
+		return "Import Failed: " + label + " Import for " + getPrimaryOrg(getTo().getTenant().getId()).getName();
 	}
 
 	public String getLabel() {
