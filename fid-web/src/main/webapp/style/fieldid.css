@@ -2617,12 +2617,3 @@ inputsWithLegend .legend span {
     word-wrap:break-word;
 }
 
-.help-logo {
-	background-image: url(../images/small-help-logo.png);
-	display:block;
-	float:right;
-	width:20px;
-	height:20px;
-	background-repeat:no-repeat;
-}
-
