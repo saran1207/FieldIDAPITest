@@ -394,6 +394,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 		assetType.setManufactureCertificateText(manufacturerCertificateText);
 	}
 
+	@Override
 	public String getDescriptionTemplate() {
 		return assetType.getDescriptionTemplate();
 	}
@@ -403,6 +404,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 		assetType.setDescriptionTemplate(descriptionTemplate);
 	}
 
+	@Override
 	public List<InfoFieldInput> getInfoFields() {
 		if (infoFields == null) {
 			infoFields = new ArrayList<InfoFieldInput>();
@@ -490,6 +492,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 		this.retiredInfoFields = retiredInfoFields;
 	}
 
+	@Override
 	public boolean duplicateValueExists(String formValue) {
 		return !persistenceManager.uniqueNameAvailable(AssetType.class, formValue, uniqueID, getTenantId());
 	}
@@ -583,7 +586,4 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	public void setGroupFilter(Long groupFilter) {
 		this.groupFilter = groupFilter;
 	}
-	
-	
-
 }
