@@ -9,7 +9,6 @@
 	background-color: #E3E3E3;
 	padding: 5px 10px;
     text-align: center;
-    width: 50px;
     float: left;
 }
 
@@ -19,9 +18,10 @@
 
 .addScheduleLabel {
 	padding: 5px;
-	width: 215px;
 	float: left;
+	width: 200px;
 }
+
 .addScheduleLabel label {
 	font-weight: bold;
 }
