@@ -12,5 +12,11 @@ public class AutoAttributeImportFailureNotification extends ImportFailureNotific
 	public String notificationName() {
 		return "autoAttributeImportFailed";
 	}
+	
+	@Override
+	public String subject() {
+		return "Import Failed: Auto Attribute for " + getPrimaryOrg(getTo().getTenant().getId()).getName();
+	}
+
 
 }

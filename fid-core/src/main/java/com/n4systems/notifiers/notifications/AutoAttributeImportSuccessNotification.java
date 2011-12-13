@@ -13,4 +13,9 @@ public class AutoAttributeImportSuccessNotification extends ImportSuccessNotific
 		return "autoAttributeImportSuccess";
 	}
 
+	@Override
+	public String subject() {
+		return "Import Completed: Auto Attribute for " + getPrimaryOrg(getTo().getTenant().getId()).getName();
+	}
+
 }
