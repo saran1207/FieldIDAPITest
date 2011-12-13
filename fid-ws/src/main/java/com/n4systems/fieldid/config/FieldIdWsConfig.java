@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetResource;
 import com.n4systems.fieldid.ws.v1.resources.assetstatus.ApiAssetStatusResource;
 import com.n4systems.fieldid.ws.v1.resources.authentication.AuthenticationResource;
 import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateResource;
@@ -66,5 +67,10 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiAssetTypeResource apiAssetTypeResource() {
 		return new ApiAssetTypeResource();
+	}
+	
+	@Bean
+	public ApiAssetResource apiAssetResource() {
+		return new ApiAssetResource();
 	}
 }

@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
@@ -26,14 +24,12 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Component
-public abstract class SetupDataResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
+public abstract class SetupDataResource<A, E extends AbstractEntity> extends ApiResource<A, E> {
 	private final Class<E> entityClass;
 	
 	protected SetupDataResource(Class<E> entityClass) {
 		this.entityClass = entityClass;
 	}
-	
-	protected abstract A convertEntityToApiModel(E entityModel);
 	
 	protected QueryBuilder<E> createFindAllBuilder(Date after) {
 		QueryBuilder<E> builder = createTenantSecurityBuilder(entityClass, true);
@@ -84,11 +80,4 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Fie
 		return apiModel;
 	}
 	
-	private List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
-		List<A> apiModel = new ArrayList<A>();
-		for (E entityModel: entityModels) {
-			apiModel.add(convertEntityToApiModel(entityModel));
-		}
-		return apiModel;
-	}
 }

@@ -12,4 +12,7 @@ public class NotFoundException extends ApiException {
 		super(Status.NOT_FOUND, message);
 	}
 	
+	public NotFoundException(String resource, Object id) {
+		this(resource + " not found at [" + String.valueOf(id) + "]");
+	}
 }
