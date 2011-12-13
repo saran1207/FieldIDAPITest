@@ -1,1 +1,1 @@
-<@s.text name="label.version" /> <@s.text name="app.versionnumber"/><#if devMode?exists && devMode >.<@s.text name="app.buildnumber"/></#if>
+<@s.text name="label.version" /> <@s.text name="app.versionnumber"/>

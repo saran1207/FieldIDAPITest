@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import java.io.InputStream;
-import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.ComponentTag;
@@ -23,6 +17,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import rfid.web.helper.SessionUser;
 
+import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
@@ -41,7 +36,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
 
 	@SpringBean private ConfigService configService;
 	
-    private static String versionString;
     private Label titleLabel;
 	private Label topTitleLabel;
     private ConfigurationProvider configurationProvider;
@@ -80,7 +74,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         add(new BookmarkablePageLink<Void>("reportingLink", ReportingPage.class));
 
         add(new TopFeedbackPanel("topFeedbackPanel"));
-        add(new Label("versionLabel", getVersionString(getServletRequest())));
+        add(new Label("versionLabel", FieldIdVersion.getVersion()));
 
         boolean displayInvite = sessionUser.isEmployeeUser() && getUserSecurityGuard().isAllowedManageSafetyNetwork();
         boolean displayUpgrade = !displayInvite && sessionUser.isAnEndUser();
@@ -181,33 +175,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId));
     }
-
-    private String loadVersionNumber(boolean devMode) {
-        try {
-            InputStream propsStream = FieldIDFrontEndPage.class.getResourceAsStream("/com/package.properties");
-            Properties props = new Properties();
-            props.load(propsStream);
-            String versionNumber = props.getProperty("app.versionnumber");
-            if (devMode) {
-                versionNumber += "-" + props.getProperty("app.buildnumber");
-            }
-            return versionNumber;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "UNKNOWN";
-    }
-
-    private String getVersionString(HttpServletRequest servletRequest) {
-        if (versionString == null) {
-            String serverName = getServletRequest().getServerName();
-            String systemDomain = getConfigurationProvider().getString(ConfigEntry.SYSTEM_DOMAIN);
-            boolean devMode =  StringUtils.isNotBlank(systemDomain) && !(serverName.toLowerCase().endsWith(systemDomain));
-            versionString = loadVersionNumber(devMode);
-        }
-        return versionString;
-    }
-
     
 	protected ConfigurationProvider getConfigurationProvider() {
 		if (configurationProvider==null) { 
