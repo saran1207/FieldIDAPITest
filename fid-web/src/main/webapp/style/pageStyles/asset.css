@@ -236,6 +236,7 @@
 	color: #222;
 	width: 155px;
 	font-weight:bold;
+	word-wrap: break-word;
 }
 
 .viewSection p {
