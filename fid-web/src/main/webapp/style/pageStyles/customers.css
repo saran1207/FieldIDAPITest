@@ -39,6 +39,7 @@
 }
 
 .noteText {
+	word-wrap:break-word;
 	background-color: #F8F8F8;
 	padding: 5px 10px 15px;
 }
