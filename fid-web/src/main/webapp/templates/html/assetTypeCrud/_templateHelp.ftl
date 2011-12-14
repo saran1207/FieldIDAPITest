@@ -2,7 +2,7 @@
 	
 	<h2 style="padding:5px 0px;">Asset Description Template Formatting</h2>
 	<p>
-	Asset Description template is used throughout Field ID Web &amp; Mobile to provide a description of each asset.&nbsp; You can customize how this looks for each Asset Type.&nbsp; Sentences are created with a combination of preconfigured and custom notations.&nbsp; <br>
+	The Asset Description template is used throughout Field ID Web &amp; Mobile to provide a description of each asset.&nbsp; You can customize how this looks for each Asset Type.&nbsp; Sentences are created with a combination of preconfigured and custom notations.&nbsp; <br>
 
 	<br>
 	There is no limit to the number of notations you can use and each notation can be separated by any character or word. <br>
