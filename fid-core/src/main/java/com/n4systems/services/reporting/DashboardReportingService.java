@@ -2,11 +2,9 @@ package com.n4systems.services.reporting;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.joda.time.LocalDate;
-import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,13 +47,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		List<UpcomingScheduledEventsRecord> results = eventService.getUpcomingScheduledEvents(period, owner);
 
 		ChartDateRange dateRange = ChartDateRange.forDays(period);
-		
-		List<UpcomingScheduledEventsRecord> fullResults = new ArrayList<UpcomingScheduledEventsRecord>();		
-		Iterator<UpcomingScheduledEventsRecord> iterator = results.iterator();
-		UpcomingScheduledEventsRecord record = iterator.hasNext() ? iterator.next() : null;
-		
-		LocalDate date = LocalDate.now();
-		LocalDate endDate = date.plus(new Period().withDays(period));
 		
 		return Lists.newArrayList(new ChartSeries<LocalDate>(results).withChartManager(new DateChartManager(ChartGranularity.DAY, dateRange)));
 	}

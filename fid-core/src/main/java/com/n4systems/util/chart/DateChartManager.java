@@ -6,28 +6,28 @@ import org.joda.time.LocalDate;
 public class DateChartManager extends SimpleChartManager<LocalDate> {
 
 	private transient ChartGranularity granularity;
-	private transient ChartDateRange range;
+	private transient ChartDateRange dateRange;
 	
 	public DateChartManager(ChartGranularity granularity, ChartDateRange range) {
 		this.granularity = granularity;
-		this.range = range;
+		this.dateRange = range;
 	}
 	
 	@Override
 	public Long getMinX(ChartSeries<LocalDate> series) {
-		if (series.isEmpty()) { 
-			return range.getFrom().toDate().getTime();
+		if (series.isEmpty() || dateRange.isDaysFromNowRange()) { 
+			return null;
 		}
 		Chartable<LocalDate> lastEntry = series.getLastEntry();
 		long minX = lastEntry.getX().minus(granularity.preferredRange()).toDate().getTime();
 		long firstX = series.getFirstEntry().getX().toDate().getTime();
-		return (minX < firstX) ? firstX : minX;
+		return Math.max(minX,firstX);
 	}
 
 	@Override
 	public Long getPanMin(ChartSeries<LocalDate> series) {
 		if (series.isEmpty()) { 
-			return range.getFrom().toDate().getTime();
+			return dateRange.getFrom().toDate().getTime();
 		}
 		return series.getFirstEntry().getLongX();
 	}
@@ -35,18 +35,17 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 	@Override
 	public Long getPanMax(ChartSeries<LocalDate> series) {
 		if (series.isEmpty()) { 
-			return range.getTo().toDate().getTime();
+			return null;
 		}		
 		return series.getLastEntry().getLongX();
 	}
 
 	@Override
 	public void normalize(ChartSeries<LocalDate> series) {
-		LocalDate endDate = null;
-		endDate = ChartDateRange.FOREVER.equals(range) ? series.getLastX() : granularity.roundUp(range.getTo());
-
-		LocalDate date = granularity.roundDown(range.getFrom());
-		while (date.isBefore(endDate)) { 
+		LocalDate endDate = ChartDateRange.FOREVER.equals(dateRange) ? series.getLastX() : granularity.roundUp(dateRange.getTo());
+		LocalDate date = granularity.roundDown(dateRange.getFrom());
+		
+		while (endDate!=null && date.isBefore(endDate)) { 
 			Chartable<LocalDate> value = series.get(date);
 			if (value==null) {  // add some padding where no values exist. 
 				series.add(new DateChartable(date,0L));

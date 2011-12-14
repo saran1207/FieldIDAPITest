@@ -29,6 +29,7 @@ public enum ChartDateRange {
 	FOREVER("All Time");
 
 	private static EnumSet<ChartDateRange> chartRanges = EnumSet.of(LAST_WEEK, LAST_MONTH, LAST_QUARTER, LAST_YEAR, THIS_WEEK, THIS_MONTH, THIS_QUARTER, THIS_YEAR, FOREVER);
+	private static EnumSet<ChartDateRange> daysFromNowRanges = EnumSet.of(SEVEN_DAYS, THIRTY_DAYS, SIXTY_DAYS, NINETY_DAYS);
 	
 	private String displayName;
 
@@ -156,6 +157,10 @@ public enum ChartDateRange {
 	
 	public static ChartDateRange[] chartDateRanges() { 
 		return chartRanges.toArray(new ChartDateRange[]{});
+	}
+		
+	public boolean isDaysFromNowRange()  {
+		return daysFromNowRanges.contains(this);
 	}
 		
 	public String getDisplayName() { 
