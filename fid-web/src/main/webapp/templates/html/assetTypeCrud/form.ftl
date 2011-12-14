@@ -12,6 +12,7 @@
 	<@n4.includeScript>jQuery.noConflict();</@n4.includeScript>
 	<@n4.includeStyle href="jquery-redmond/jquery-ui-1.8.13.custom"/>
 	
+	
 	<style>	
 		.crudForm .infoSet textarea, .crudForm .infoSet input[type="text"] {
     		width: 380px;
@@ -45,6 +46,15 @@
  		   font-weight: normal;
 		}
 		
+		.ui-dialog .ui-dialog-content {
+			border: 0; 
+			padding: .5em 1em;	
+			background: none; 
+			overflow: auto;
+			zoom: 1; 
+			height: 515px !important;
+		}		
+		
 	</style>
 	
 	<script type="text/javascript">
@@ -67,14 +77,25 @@
             $("imageDirectory").value = "";
             $("newImage").value = "false";
 		}
-
-		function toggleTemplateHelp(id) {
-			var dialog = jQuery('#'+id);			
-			(dialog.dialog("isOpen")==false) ? dialog.dialog("open") : dialog.dialog("close");
-		}
 		
 		function initTemplateHelp(id) {
-		    jQuery('#'+id).dialog({autoOpen:false,width:420});
+			var dialog = jQuery('#'+id);		
+			jQuery('#helpButton').click(function() {					
+    				var x = jQuery(this).position().left + jQuery(this).outerWidth();
+    				var y = jQuery(this).position().top - jQuery(document).scrollTop() - jQuery('.ui-dialog').outerHeight();
+    				dialog.dialog('option', 'position', [x,y]);
+    				(dialog.dialog("isOpen")==false) ? dialog.dialog("open") : dialog.dialog("close");
+    				return false;
+    			});
+    		var options = {autoOpen:false,width:420};
+    		// arghh.  the combination of prototype/IE/older version of jquery causes a bug. 
+    		// when one of these variables changes, we can take out this hack and make it draggable/resizable again.
+    		// as well the height of the dialog's contents has to be hard coded, style-wise because of IE.  		
+			if (jQuery.browser.msie) {
+				options.draggable=false;
+				options.resizable=false; 
+			}    			
+		    dialog.dialog(options).height('auto');
   		}
 		
 	</script>
@@ -131,7 +152,7 @@
 		<label class="label"><@s.text name="label.assetdescription" /></label>
 		<span class="fieldHolder">
 			<@s.textfield name="descriptionTemplate"/>											
-  	 		<a href="#" onclick="toggleTemplateHelp('templateDialog');return false;"><image src="<@s.url value="/images/tooltip-icon.png"/>"/></a>
+  	 		<a id="helpButton" href="#"><image src="<@s.url value="/images/tooltip-icon.png"/>"/></a>
 		</span>
 		<div id="templateDialog" class="help-dialog">						
 			<#include "_templateHelp.ftl"/> 							

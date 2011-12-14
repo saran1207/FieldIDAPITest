@@ -141,7 +141,6 @@ var googleMapFactory = (function() {
 		return prefix ? prefix+url : url;
 	}
 			
-	/** TODO DD : refactor this.  events status stuff doesn't really belong with google maps stuff */
 	var makeMarkerForStatus = function(loc) {
 		var content = loc.args[0];   // assumes that these *might* be passed to addLocation in this order.  [content,status,prefix]
 		var status = loc.args[1];
