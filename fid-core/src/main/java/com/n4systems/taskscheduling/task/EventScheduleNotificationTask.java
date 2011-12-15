@@ -1,5 +1,19 @@
 package com.n4systems.taskscheduling.task;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.log4j.Logger;
+
 import com.n4systems.model.event.FailedEventListLoader;
 import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
 import com.n4systems.model.eventschedulecount.UpcomingEventScheduleCountListLoader;
@@ -22,19 +36,6 @@ import com.n4systems.util.time.StoppedClock;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
-import org.apache.log4j.Logger;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 public class EventScheduleNotificationTask extends ScheduledTask {
 	private static Logger logger = Logger.getLogger(EventScheduleNotificationTask.class);
@@ -115,6 +116,13 @@ public class EventScheduleNotificationTask extends ScheduledTask {
             if (cal.get(Calendar.HOUR_OF_DAY) == configuredHour) {
                 currentTimezones.put(regionId, getTheDateInTimeZone(timeZoneId));
             }
+            
+            
+         //---------- FOR TESTING ONLY!
+            if (regionId.equals("Canada:Ontario - Toronto")) {
+                currentTimezones.put(regionId, getTheDateInTimeZone(timeZoneId));
+            }            
+         // ---------------------FOR TESTING ONLY!
 
         }
 

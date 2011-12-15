@@ -14,7 +14,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.PlainDate;
 
-// TODO change class to use the calendar to properly handle dates.  using millisecond addition does not handle time zones
 @SuppressWarnings("serial")
 public class DateHelper {
 	public static final long millisPerDay = 86400000;
