@@ -33,7 +33,6 @@ public class FailedEventListLoaderTest {
 
 	
 	private EntityManager mockEntityManager;
-	private FailedEventListLoader sut;
 	private QueryBuilder<Event> mockQueryBuilder;
 	private StoppedClock clock = new StoppedClock(new PlainDate());
 	private EventType typeA = new EventType("A");

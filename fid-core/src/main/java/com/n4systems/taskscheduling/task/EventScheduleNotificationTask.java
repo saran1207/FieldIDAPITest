@@ -116,14 +116,7 @@ public class EventScheduleNotificationTask extends ScheduledTask {
             if (cal.get(Calendar.HOUR_OF_DAY) == configuredHour) {
                 currentTimezones.put(regionId, getTheDateInTimeZone(timeZoneId));
             }
-            
-            
-         //---------- FOR TESTING ONLY!
-            if (regionId.equals("Canada:Ontario - Toronto")) {
-                currentTimezones.put(regionId, getTheDateInTimeZone(timeZoneId));
-            }            
-         // ---------------------FOR TESTING ONLY!
-
+                        
         }
 
         return currentTimezones;
