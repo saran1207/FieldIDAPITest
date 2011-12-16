@@ -30,8 +30,9 @@ public class SimpleChartManager<X> implements ChartManager<X> {
 	}
 
 	@Override
-	public void normalize(ChartSeries<X> series) {
+	public ChartSeries<X> normalize(ChartSeries<X> series) {
 		// do nothing.
+		return series;
 	}
 	
 	@Override

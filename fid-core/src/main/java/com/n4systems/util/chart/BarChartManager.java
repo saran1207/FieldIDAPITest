@@ -57,7 +57,7 @@ public class BarChartManager implements ChartManager<String> {
 	}
 	
 	@Override
-	public void normalize(ChartSeries<String> series) {
+	public ChartSeries<String> normalize(ChartSeries<String> series) {
 		long index = 0;
 		List<Chartable<String>> other = new ArrayList<Chartable<String>>();
 		Double otherTotalValue = 0.0;		
@@ -78,7 +78,8 @@ public class BarChartManager implements ChartManager<String> {
 		}
 		series.remove(other);		
 		Joiner joiner = Joiner.on(", ").skipNulls();
-		series.add(createChartable(OTHER_BAR_NAME, otherTotalValue, index++, joiner.join(otherTooltip)));				
+		series.add(createChartable(OTHER_BAR_NAME, otherTotalValue, index++, joiner.join(otherTooltip)));
+		return series;
 	}
 
 	@Override

@@ -80,10 +80,9 @@ public enum ChartDateRange {
 		}
 	}
 	
-	// note that toDate is exclusive.  e.g. for a year 2011
-	// Jan 1, 2011 is from.   
-	//  and to is Jan 1, 2012.  *not*  dec 31,2011    [11:59:59.9999...]
-	// this is used for display reasons. 
+	// note that getTo() is exclusive.  e.g. for a year 2011
+	// Jan 1, 2011 is getFrom() and getTo() is Jan 1, 2012  *not*  dec 31,2011    [11:59:59.9999...]
+	// this method is used for display reasons.  (e.g.  "hello oct 1,2011-oct 31,2011") 
 	private LocalDate getInclusiveTo() {
 		return getTo().minusDays(1);
 	}

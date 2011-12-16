@@ -41,7 +41,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 	}
 
 	@Override
-	public void normalize(ChartSeries<LocalDate> series) {
+	public ChartSeries<LocalDate> normalize(ChartSeries<LocalDate> series) {
 		LocalDate endDate = ChartDateRange.FOREVER.equals(dateRange) ? series.getLastX() : granularity.roundUp(dateRange.getTo());
 		LocalDate date = granularity.roundDown(dateRange.getFrom());
 		
@@ -51,7 +51,8 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 				series.add(new DateChartable(date,0L));
 			}
 			date = granularity.next(date);
-		}		
+		}
+		return series;
 	}
 	
 	protected DateChartable pad(LocalDate c) {		
@@ -106,6 +107,14 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 			options.xaxis.timeformat = "%b %y";
 			break;
 		}		
+	}
+	
+	public ChartGranularity getGranularity() { 
+		return granularity;
+	}
+	
+	public ChartDateRange getDateRange() { 
+		return dateRange;
 	}
 	
 }
