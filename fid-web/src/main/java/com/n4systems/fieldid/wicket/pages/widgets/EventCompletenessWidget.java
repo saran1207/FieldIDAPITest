@@ -55,7 +55,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 	@Override
 	protected FlotOptions<LocalDate> createOptions() {
 		FlotOptions<LocalDate> options = super.createOptions();
-		options.pan.interactive = false;
+		options.pan.interactive = true;
 		options.xaxis.timeformat = "%b %d";
 		return options;		
 	}
