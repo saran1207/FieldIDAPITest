@@ -1,7 +1,8 @@
 package com.n4systems.fieldid.ws.v1.resources.eventtype.attributevalues;
 
-public abstract class ApiAttributeValue {
+public class ApiAttributeValue {
 	private Long attributeId;
+	private Object value;
 	
 	public Long getAttributeId() {
 		return attributeId;
@@ -11,4 +12,12 @@ public abstract class ApiAttributeValue {
 		this.attributeId = attributeId;
 	}
 
+	public Object getValue() {
+		return value;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+	
 }

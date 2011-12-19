@@ -22,14 +22,10 @@ import rfid.ejb.entity.InfoOptionBean;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.attributevalues.ApiAttributeValue;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributevalues.ApiComboBoxAttributeValue;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributevalues.ApiDateTimeAttributeValue;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributevalues.ApiSelectBoxAttributeValue;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributevalues.ApiTextBoxAttributeValue;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributevalues.ApiUnitAttributeValue;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
+import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.reporting.PathHandler;
@@ -46,11 +42,13 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Transactional(readOnly = true)
 	public ListResponse<ApiAsset> findAll(
 			@QueryParam("after") DateParam after,
+			@QueryParam("searchText") String searchText,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("100") @QueryParam("pageSize") int pageSize,
 			@QueryParam("owner") Long ownerId) {
 		
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
+		builder.addOrder("created");
 		
 		if (ownerId != null) {
 			BaseOrg owner = persistenceService.find(BaseOrg.class, ownerId);
@@ -58,6 +56,10 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 				throw new NotFoundException("Organization", ownerId);
 			}
 			builder.applyFilter(new OwnerAndDownFilter(owner));
+		}
+		
+		if (searchText != null) {
+			builder.addWhere(new SmartSearchWhereClause(searchText, true, true, true));
 		}
 
 		List<Asset> assets = persistenceService.findAll(builder, page, pageSize);
@@ -124,38 +126,16 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 	
 	private ApiAttributeValue convertInfoOption(InfoOptionBean infoOption) {
-		ApiAttributeValue attribValue;
-		switch (infoOption.getInfoField().getType()) {
-			case SelectBox:
-				attribValue = new ApiSelectBoxAttributeValue();
-				((ApiSelectBoxAttributeValue) attribValue).setOptionId(infoOption.getUniqueID());
-				break;
-			case ComboBox:
-				attribValue = new ApiComboBoxAttributeValue();
-				if (infoOption.isStaticData()) {
-					((ApiComboBoxAttributeValue) attribValue).setOptionId(infoOption.getUniqueID());
-				} else {
-					((ApiComboBoxAttributeValue) attribValue).setText(infoOption.getName());
-				}
-				break;
-			case DateField:
-				attribValue = new ApiDateTimeAttributeValue();
-				if (infoOption.getName() != null) {
-					((ApiDateTimeAttributeValue) attribValue).setDate(new Date(Long.parseLong(infoOption.getName())));
-				}
-				break;
-			case UnitOfMeasure:
-				attribValue = new ApiUnitAttributeValue();
-				((ApiUnitAttributeValue) attribValue).setText(infoOption.getName());
-				break;
-			case TextField:
-				attribValue = new ApiTextBoxAttributeValue();
-				((ApiTextBoxAttributeValue) attribValue).setText(infoOption.getName());
-				break;
-			default:
-				throw new IllegalArgumentException("Unhandled InfoFieldType: " + infoOption.getInfoField().getType().name());
-		}
+		ApiAttributeValue attribValue = new ApiAttributeValue();
 		attribValue.setAttributeId(infoOption.getInfoField().getUniqueID());
+		
+		if (infoOption.getInfoField().isDateField()) {
+			if (infoOption.getName() != null) {
+				attribValue.setValue(new Date(Long.parseLong(infoOption.getName())));
+			}
+		} else {
+			attribValue.setValue(infoOption.getName());
+		}
 		return attribValue;
 	}
 	
