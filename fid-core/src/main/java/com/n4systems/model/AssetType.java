@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 
 import javax.persistence.*;
 
+import org.apache.log4j.Logger;
+
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -35,6 +37,8 @@ import com.n4systems.model.security.SecurityLevel;
 @Table(name = "assettypes")
 public class AssetType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<AssetType> {
 
+	private static final Logger logger = Logger.getLogger(AssetType.class);
+	
 	private static final long serialVersionUID = 1L;
 	private static final String descVariableDefault = "";
 	private static final String descVariableStart = "{";
@@ -305,9 +309,12 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 			currentIdx += field.length() + 1;
 			
 			// if the field name exists in our map, then substitute it in, otherwise use the default
-			if(valueMap.containsKey(field)) {
+			if(valueMap.get(field)!=null) {
 				desc.append(valueMap.get(field));
 			} else {
+				if (valueMap.containsKey(field)) {  // contains key but it's value is null? 
+					logger.warn("The asset template references the attribute " + field + " which has a null value. Substituting an empty string for asset " + asset.toString()) ;										 
+				}
 				desc.append(descVariableDefault);
 			}
 		}

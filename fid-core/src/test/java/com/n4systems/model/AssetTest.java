@@ -123,6 +123,22 @@ public class AssetTest {
 	}
 	
 	@Test
+	public void test_description_null_values() {
+		String format = "id:[%1$s] rfid:[%2$s] ref:[%3$s] order:[%4$s] po:[%5$s]";
+		String template = String.format(format, "{Identifier}", "{RFID}", "{RefNumber}", "{OrderNumber}", "{PONumber}" );
+		Asset asset = AssetBuilder.anAsset().withIdentifier(null).rfidNumber(null).referenceNumber(null).purchaseOrder(null).nonIntegrationOrderNumber(null).build();
+		AssetType assetType = AssetTypeBuilder.anAssetType().descriptionTemplate(template).build();
+		asset.setType(assetType);
+
+		String description = asset.getDescription();		
+		
+		// NOTE : nulls should be treated as empty strings, NOT the word "null".
+		// e.g. for a template "the id is {Identifier} for X" 
+		//  will yield  "the id is for X"   as opposed to "the id is null for X".  
+		assertEquals( String.format(format, "", "", "", "", ""), description );		
+	}
+	
+	@Test
 	public void test_description() {
 		String format = "id:[%1$s] rfid:[%2$s] ref:[%3$s] order:[%4$s] po:[%5$s]";
 		String template = String.format(format, "{Identifier}", "{RFID}", "{RefNumber}", "{OrderNumber}", "{PONumber}" );
