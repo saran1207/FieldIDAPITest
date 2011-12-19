@@ -9,6 +9,7 @@ import java.util.List;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.LocalDate;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -188,6 +189,7 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 	}
 		
 	@Test 
+	@Ignore
 	public void test_EventCompleteness() { 
 		ChartGranularity granularity = ChartGranularity.WEEK;
 		ChartDateRange dateRange = ChartDateRange.LAST_MONTH;
