@@ -86,10 +86,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Preconditions.checkArgument(dateRange!=null);		
 
 		Date from  = granularity.roundDown(dateRange.getFrom()).toDate();
-		Date to = granularity.roundUp(dateRange.getTo()).toDate();
+		// NOTE : i max this out to "today" because we don't want to display schedules in the future.  that would be confusing
+		//   for "EventCompleteness" widget.
+		Date to = LocalDate.now().toDate();
 		
 		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, from, to,  org);
-		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, dateRange.getFromDate(), dateRange.getToDate(), org);
+		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, from, to, org);
 		
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
 		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>("All", allScheduledEvents).withChartManager(new DateChartManager(granularity, dateRange));
