@@ -4,7 +4,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
@@ -14,9 +13,9 @@ import com.n4systems.model.Project;
 import com.n4systems.model.State;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 
@@ -25,10 +24,12 @@ public class PathHandler {
 	private static final String PRIVATE_PATH_BASE = "private";
 	private static final String COMMON_PATH_BASE = "common";
 	private static final String TEMP_PATH_BASE = "tmp";
-	private static final String REPORT_FILE_EXT = ".jasper";
+	private static final String COMPILED_REPORT_FILE_EXT = ".jasper";
+	private static final String REPORT_FILE_EXT = ".jrxml";
 	private static final String PROPERTIES_FILE_EXT = ".properties";
 	private static final String PACKAGE_PROPERTIES_FILE = "package.properties";
 	private static final String SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + REPORT_FILE_EXT;
+	private static final String COMPILED_SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + COMPILED_REPORT_FILE_EXT;
 	private static final String ASSET_REPORT_FILE_NAME = "product" + REPORT_FILE_EXT;
 	private static final String CHART_FILE_NAME = "proof_test_chart.png";
 	private static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
@@ -273,6 +274,10 @@ public class PathHandler {
 		return printOut.getPdfTemplate() + REPORT_FILE_EXT;
 	}
 	
+	private static String getCompiledReportFileName(PrintOut printOut) {
+		return printOut.getPdfTemplate() + COMPILED_REPORT_FILE_EXT;
+	}
+	
 	/**
 	 * Finds the relative Tenant specific path to an EventTypeGroup's report.  Uses the Tenant from the EventTypeGroup to resolve the Tenant path part. Appends the master suffix if isMaster is true.
 	 * @see 	#getTenantPathPart(Tenant)
@@ -283,6 +288,10 @@ public class PathHandler {
 	 */
 	private static String getReportPath(PrintOut printOut) {
 		return mergePaths(getReportPathBase(printOut), getReportFileName(printOut));
+	}
+	
+	private static String getCompiledReportPath(PrintOut printOut) {
+		return mergePaths(getReportPathBase(printOut), getCompiledReportFileName(printOut));
 	}
 	
 	private static String getPrintOutPreveiwPath(PrintOut printOut) {
@@ -309,6 +318,10 @@ public class PathHandler {
 	public static File getPrintOutFile(PrintOut printOut) {
 		return absolutize(getReportPath(printOut));
 	}
+
+	public static File getCompiledPrintOutFile(PrintOut printOut) {
+		return absolutize(getCompiledReportPath(printOut));
+	}
 	
 	public static File getPreviewImage(PrintOut printOut) {
 		return absolutize(getPrintOutPreveiwPath(printOut));
@@ -328,6 +341,11 @@ public class PathHandler {
 	public static File getSummaryReportFile(Tenant tenant) {
 		File tenantReport = absolutize(mergePaths(REPORT_PATH_BASE, getTenantPathPart(tenant), SUMMARY_REPORT_FILE_NAME));
 		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(SUMMARY_REPORT_FILE_NAME);
+	}
+	
+	public static File getCompiledSummaryReportFile(Tenant tenant) {
+		File tenantReport = absolutize(mergePaths(REPORT_PATH_BASE, getTenantPathPart(tenant), COMPILED_SUMMARY_REPORT_FILE_NAME));
+		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(COMPILED_SUMMARY_REPORT_FILE_NAME);
 	}
 	
 	private static String getEventPath(Event event) {

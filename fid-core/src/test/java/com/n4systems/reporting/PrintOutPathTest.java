@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.PrintOut;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.PrintOut.PrintOutType;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
 
@@ -56,7 +56,7 @@ public class PrintOutPathTest {
 
 	@Test
 	public void test_get_report_file_for_inspection_type_that_is_printable() {
-		File file = PathHandler.getPrintOutFile(printOut);
+		File file = PathHandler.getCompiledPrintOutFile(printOut);
 		assertEquals(getAbsolutePathFor(DEFAULT_DIR+ "/default_inspection_cert.jasper"), file.getAbsolutePath());
 	}
 	
@@ -64,7 +64,7 @@ public class PrintOutPathTest {
 	public void test_get_report_file_for_inspection_type_that_is_custom() {
 		createCustomPrintOut();
 		
-		File file = PathHandler.getPrintOutFile(printOut);
+		File file = PathHandler.getCompiledPrintOutFile(printOut);
 		assertEquals(getAbsolutePathFor(REPORT_DIR + "/" + tenant.getName() + "/custom_inspection_cert.jasper"), file.getAbsolutePath());
 	}
 

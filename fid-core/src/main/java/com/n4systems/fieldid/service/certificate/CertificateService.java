@@ -25,19 +25,7 @@ import com.n4systems.fieldid.certificate.model.Job;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.model.AddressInfo;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Contact;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.LineItem;
-import com.n4systems.model.PrintOut;
-import com.n4systems.model.Project;
-import com.n4systems.model.ProofTestInfo;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -152,7 +140,7 @@ public class CertificateService extends FieldIdPersistenceService {
 		}
 		reportMap.put("allInspections", eventResultMaps);
 
-		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
+		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledPrintOutFile(printOut));
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JRMapCollectionDataSource(eventResultMaps));
 		return jasperPrint;
 	}
@@ -179,7 +167,7 @@ public class CertificateService extends FieldIdPersistenceService {
 		Map<String, Object> eventMap = new EventReportMapProducer(event, dateDefiner).produceMap();
 		reportMap.putAll(eventMap);
 
-		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
+		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledPrintOutFile(printOut));
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, (JRDataSource) eventMap.get("results"));
 		return jasperPrint;
 	}

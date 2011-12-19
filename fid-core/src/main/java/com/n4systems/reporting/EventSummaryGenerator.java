@@ -61,7 +61,7 @@ public class EventSummaryGenerator {
 	}
 	
 	public JasperPrint generate(ReportDefiner reportDefiner, List<Long> eventIds, User user) throws ReportException {
-		File jasperFile = PathHandler.getSummaryReportFile(user.getTenant());
+		File jasperFile = PathHandler.getCompiledSummaryReportFile(user.getTenant());
 		try {
 			new ReportCompiler().compileReports(jasperFile.getParentFile());
 		} catch (JRException e) {
@@ -168,8 +168,8 @@ public class EventSummaryGenerator {
 
 		JasperPrint jasperPrint = null;
 		try {
-			JRBeanCollectionDataSource jrDataSource = new JRBeanCollectionDataSource(collection);
-			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
+			JRBeanCollectionDataSource jrDataSource = new JRBeanCollectionDataSource(collection);				
+			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledSummaryReportFile(user.getTenant()));
 			jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, jrDataSource);
 
 		} catch (JRException e) {

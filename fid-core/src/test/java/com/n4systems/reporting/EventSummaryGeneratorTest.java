@@ -1,14 +1,9 @@
 package com.n4systems.reporting;
 
-import static com.n4systems.model.builders.EventBuilder.anEvent;
-import static com.n4systems.model.builders.OrgBuilder.aPrimaryOrg;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertNotNull;
+import static com.n4systems.model.builders.EventBuilder.*;
+import static com.n4systems.model.builders.OrgBuilder.*;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Date;
