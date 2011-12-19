@@ -2,23 +2,11 @@
 
     <div class="sectionContent selectColumnForm" style="overflow-x: hidden; overflow-y: hidden;">
 
-        <div wicket:id="columnGroups" class="columnGroup">
+        <form wicket:id="columnsForm">
 
-            <h4><span wicket:id="groupLabel"></span></h4>
-
-            <div wicket:id="columns">
-                <input type="checkbox" wicket:id="checkbox"/> <label wicket:id="checkboxLabel"></label>
-            </div>
-
-        </div>
-
-        <div wicket:id="dynamicColumnsContainer" class="columnGroupWrapper">
-
-            <div wicket:id="dynamicColumnGroups" class="columnGroup">
+            <div wicket:id="columnGroups" class="columnGroup">
 
                 <h4><span wicket:id="groupLabel"></span></h4>
-    
-                <div wicket:id="noCommonAttributesMessage"><wicket:message key="label.no_common_attributes"/></div>
 
                 <div wicket:id="columns">
                     <input type="checkbox" wicket:id="checkbox"/> <label wicket:id="checkboxLabel"></label>
@@ -26,7 +14,23 @@
 
             </div>
 
-        </div>
+            <div wicket:id="dynamicColumnsContainer" class="columnGroupWrapper">
+
+                <div wicket:id="dynamicColumnGroups" class="columnGroup">
+
+                    <h4><span wicket:id="groupLabel"></span></h4>
+
+                    <div wicket:id="noCommonAttributesMessage"><wicket:message key="label.no_common_attributes"/></div>
+
+                    <div wicket:id="columns">
+                        <input type="checkbox" wicket:id="checkbox"/> <label wicket:id="checkboxLabel"></label>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
 
     </div>
 

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -184,8 +185,8 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	private boolean findCriteria() {
-		if (getSession().containsKey(AssetSearchAction.SEARCH_CRITERIA) && getSession().get(AssetSearchAction.SEARCH_CRITERIA) != null) {
-			criteria = (AssetSearchContainer) getSession().get(AssetSearchAction.SEARCH_CRITERIA);
+		if (getSession().containsKey(WebSessionMap.SEARCH_CRITERIA) && getSession().get(WebSessionMap.SEARCH_CRITERIA) != null) {
+			criteria = (AssetSearchContainer) getSession().get(WebSessionMap.SEARCH_CRITERIA);
 		}
 
 		if (criteria == null || searchId == null || !searchId.equals(criteria.getSearchId())) {

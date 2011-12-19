@@ -1,27 +1,25 @@
 package com.n4systems.fieldid.service.search;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Event;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.search.JoinTerm;
+import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
@@ -29,18 +27,60 @@ import com.n4systems.util.persistence.search.terms.NullTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
-public class SearchService extends FieldIdPersistenceService {
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public abstract class SearchService<T extends SearchCriteriaModel, M extends BaseEntity & NetworkEntity> extends FieldIdPersistenceService {
 
     @Autowired
 	public OrgService orgService;
+
+    private Class<M> searchClass;
+
+    public SearchService(Class<M> searchClass) {
+        this.searchClass = searchClass;
+    }
+
+    @Transactional(readOnly = true)
+	public List<Long> idSearch(T criteria) {
+		// construct a search QueryBuilder with Long as the select class since we will force simple select to be "id" later
+		QueryBuilder<?> idBuilder = createBaseSearchQueryBuilder(criteria);
+
+		addSortTermsToBuilder(idBuilder, criteria);
+
+		// note that this will fail for entities not implementing BaseEntity (unless you get lucky)
+		return (List<Long>) persistenceService.findAll(idBuilder.setSimpleSelect("id"));
+	}
+
+    @Transactional(readOnly = true)
+	public Integer countPages(T criteriaModel, Long pageSize) {
+		QueryBuilder<?> countBuilder = createBaseSearchQueryBuilder(criteriaModel);
+
+		Long count = (Long) persistenceService.find(countBuilder.setCountSelect());
+
+		return (int)Math.ceil(count.doubleValue() / pageSize.doubleValue());
+	}
 	
     @Transactional(readOnly = true)
-    public SearchResult<Event> performEventSearch(EventReportCriteriaModel criteriaModel, Integer pageNumber, Integer pageSize) {
+    public <K> PageHolder<K> performSearch(T criteriaModel, ResultTransformer<K> transformer, Integer pageNumber, Integer pageSize) {
+        SearchResult<M> eventSearchResult = performSearch(criteriaModel, pageNumber, pageSize);
+
+        List<M> entities = eventSearchResult.getResults();
+
+        entities = EntitySecurityEnhancer.enhanceList(entities, securityContext.getUserSecurityFilter());
+
+        K pageResults = transformer.transform(entities);
+
+        return new PageHolder<K>(pageResults, eventSearchResult.getTotalResultCount());
+    }
+
+    private SearchResult<M> performSearch(T criteriaModel, Integer pageNumber, Integer pageSize) {
 		// create our base query builder (no sort terms yet)
-		QueryBuilder<?> searchBuilder = createBaseSearchQueryBuilder(criteriaModel);
-		
-		System.out.println(searchBuilder.getQueryString());
+		QueryBuilder<M> searchBuilder = createBaseSearchQueryBuilder(criteriaModel);
 
 		// get/set the total result count now before the sort terms get added
 		int totalResultCount = findCount(searchBuilder).intValue();
@@ -48,9 +88,9 @@ public class SearchService extends FieldIdPersistenceService {
 		// now we can add in our sort terms
 		addSortTermsToBuilder(searchBuilder, criteriaModel);
 
-        SearchResult<Event> searchResult = new SearchResult<Event>();
+        SearchResult<M> searchResult = new SearchResult<M>();
         searchResult.setTotalResultCount(totalResultCount);
-        searchResult.setResults((List<Event>) persistenceService.findAll(searchBuilder.setSimpleSelect(), pageNumber, pageSize));
+        searchResult.setResults(persistenceService.findAll(searchBuilder.setSimpleSelect(), pageNumber, pageSize));
         return searchResult;
     }
 
@@ -58,9 +98,9 @@ public class SearchService extends FieldIdPersistenceService {
         return persistenceService.count(searchBuilder);
     }
 
-    private QueryBuilder<?> createBaseSearchQueryBuilder(EventReportCriteriaModel criteriaModel) {
+    private QueryBuilder<M> createBaseSearchQueryBuilder(T criteriaModel) {
 		// create our QueryBuilder, note the type will be the same as our selectClass
-		QueryBuilder<Event> searchBuilder = createUserSecurityBuilder(Event.class);
+		QueryBuilder<M> searchBuilder = createUserSecurityBuilder(searchClass);
 
         ColumnMappingView sortColumn = criteriaModel.getSortColumn();
         if (sortColumn.getJoinExpression() != null) {
@@ -90,51 +130,14 @@ public class SearchService extends FieldIdPersistenceService {
 		return searchBuilder;
     }
 
-    private void addSearchTerms(EventReportCriteriaModel criteriaModel, List<SearchTermDefiner> searchTerms) {
-        addWildcardOrStringTerm(searchTerms, "asset.rfidNumber", criteriaModel.getRfidNumber());
-        addWildcardOrStringTerm(searchTerms, "asset.identifier", criteriaModel.getIdentifier());
-		if(isIntegrationEnabled()) {
-			addWildcardOrStringTerm(searchTerms, "asset.shopOrder.order.orderNumber", criteriaModel.getOrderNumber());
-		} else {
-			addWildcardOrStringTerm(searchTerms, "asset.nonIntergrationOrderNumber", criteriaModel.getOrderNumber());
-		}        
-        addWildcardOrStringTerm(searchTerms, "asset.purchaseOrder", criteriaModel.getPurchaseOrder());
-        addWildcardOrStringTerm(searchTerms, "asset.customerRefNumber", criteriaModel.getReferenceNumber());
-        addWildcardOrStringTerm(searchTerms, "advancedLocation.freeformLocation", criteriaModel.getLocation().getFreeformLocation());
-        addSimpleTerm(searchTerms, "asset.type.id", getId(criteriaModel.getAssetType()));
-        addSimpleTerm(searchTerms, "asset.type.group.id", getId(criteriaModel.getAssetTypeGroup()));
-        addSimpleTerm(searchTerms, "assetStatus.id", getId(criteriaModel.getAssetStatus()));
-        addSimpleTerm(searchTerms, "type.id", getId(criteriaModel.getEventType()));
-        addSimpleTerm(searchTerms, "type.group.id", getId(criteriaModel.getEventTypeGroup()));
-        addSimpleTerm(searchTerms, "performedBy.id", getId(criteriaModel.getPerformedBy()));
-        addSimpleTerm(searchTerms, "schedule.project.id", getId(criteriaModel.getJob()));
-        addSimpleTerm(searchTerms, "status", criteriaModel.getResult());
-        addDateRangeTerm(searchTerms, "date", criteriaModel.getFromDate(), criteriaModel.getToDate());
+    protected abstract void addSearchTerms(T criteriaModel, List<SearchTermDefiner> search);
 
-        if(criteriaModel.getEventBook() != null && criteriaModel.getEventBook().getId() == 0) {
-            addNullTerm(searchTerms, "book.id");
-        } else {
-            addSimpleTerm(searchTerms, "book.id", getId(criteriaModel.getEventBook()));
-        }
-
-        Long assignedUserId = getId(criteriaModel.getAssignedTo());
-        if (assignedUserId != null) {
-            addSimpleTerm(searchTerms, "assignedTo.assignmentApplyed", true);
-
-            if(assignedUserId == 0) {
-                addNullTerm(searchTerms, "assignedTo.assignedUser.id");
-            } else {
-                addSimpleTerm(searchTerms, "assignedTo.assignedUser.id", assignedUserId);
-            }
-        }
-    }
-
-    private boolean isIntegrationEnabled() {
+    protected boolean isIntegrationEnabled() {
     	PrimaryOrg primaryOrg = getPrimaryOrg();
     	return primaryOrg.hasExtendedFeature(ExtendedFeature.Integration);
 	}
 
-	private void addSortTermsToBuilder(QueryBuilder<?> searchBuilder, EventReportCriteriaModel criteriaModel) {
+	private void addSortTermsToBuilder(QueryBuilder<?> searchBuilder, T criteriaModel) {
         ColumnMappingView sortColumn = criteriaModel.getSortColumn();
         SortDirection sortDirection = criteriaModel.getSortDirection();
         if (sortColumn != null) {
@@ -163,11 +166,11 @@ public class SearchService extends FieldIdPersistenceService {
 		}
 	}
 
-    private void addNullTerm(List<SearchTermDefiner> searchTerms, String field) {
+    protected void addNullTerm(List<SearchTermDefiner> searchTerms, String field) {
         searchTerms.add(new NullTerm(field));
     }
 
-    private void addDateRangeTerm(List<SearchTermDefiner> terms, String field, Date fromDate, Date toDate) {
+    protected void addDateRangeTerm(List<SearchTermDefiner> terms, String field, Date fromDate, Date toDate) {
         if (fromDate != null || toDate != null) {
             terms.add(new DateRangeTerm(field, fromDate, toDate));
         }
@@ -206,28 +209,6 @@ public class SearchService extends FieldIdPersistenceService {
     protected boolean isWildcard(String value) {
         return value.startsWith("*") || value.endsWith("*");
     }
-
-    
-    
-    @Transactional(readOnly = true)
-	public List<Long> idSearch(EventReportCriteriaModel criteria) {
-		// construct a search QueryBuilder with Long as the select class since we will force simple select to be "id" later
-		QueryBuilder<?> idBuilder = createBaseSearchQueryBuilder(criteria);
-
-		addSortTermsToBuilder(idBuilder, criteria);
-
-		// note that this will fail for entities not implementing BaseEntity (unless you get lucky)
-		return (List<Long>) persistenceService.findAll(idBuilder.setSimpleSelect("id"));
-	}
-
-    @Transactional(readOnly = true)
-	public Integer countPages(EventReportCriteriaModel criteriaModel, Long pageSize) {
-		QueryBuilder<?> countBuilder = createBaseSearchQueryBuilder(criteriaModel);
-		
-		Long count = (Long) persistenceService.find(countBuilder.setCountSelect());
-
-		return (int)Math.ceil(count.doubleValue() / pageSize.doubleValue());
-	}
 
     protected PrimaryOrg getPrimaryOrg() {
 		return orgService.getPrimaryOrgForTenant(securityContext.getTenantSecurityFilter().getTenantId(), false);

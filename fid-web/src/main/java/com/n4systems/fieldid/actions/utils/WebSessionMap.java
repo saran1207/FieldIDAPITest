@@ -48,6 +48,8 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	public static final String REPORT_CRITERIA = "reportCriteria";
     public static final String NEW_REPORT_CRITERIA = "newReportCriteria";
 	public static final String SCHEDULE_CRITERIA = "scheduleCriteria";
+
+    public static final String SEARCH_CRITERIA = "searchCriteria";
 	
 	
 	public WebSessionMap() {

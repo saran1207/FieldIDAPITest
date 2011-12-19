@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.reporting.results;
+package com.n4systems.fieldid.wicket.components.search.results;
 
 import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.DisplayNoneIfCondition;

@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
-import com.n4systems.fieldid.actions.search.AssetSearchAction;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
-import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateLabel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -15,10 +13,12 @@ import com.n4systems.fieldid.wicket.model.eventtype.CommonEventTypesModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
+import com.n4systems.model.search.AssetSearchCriteriaModel;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RedirectToUrlException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -58,13 +59,10 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
     @SpringBean
     private MassScheduleService massScheduleService;
 
-    public MassSchedulePage(final PageParameters params) {
-        super(params);
-
+    public MassSchedulePage(final IModel<AssetSearchCriteriaModel> criteriaModel) {
         add(CSSPackageResource.getHeaderContribution("style/newCss/schedule/mass_schedule.css"));
 
-        SearchContainer searchContainer = verifySearchIdNotExpired(params);
-        selectedIds = searchContainer.getMultiIdSelection().getSelectedIds();
+        selectedIds = criteriaModel.getObject().getSelection().getSelectedIds();
 
         scheduleSummary = assetService.getAssetScheduleSummary(selectedIds);
         List<AssetType> assetTypesList = getAssetTypeList(scheduleSummary);
@@ -102,17 +100,21 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
                     error(new FIDLabelModel("message.mass_schedule_no_events").getObject());
                     return;
                 }
-                verifySearchIdNotExpired(params);
                 massScheduleService.performSchedules(scheduleSummary, duplicateDetection);
-                FieldIDSession.get().storeInfoMessageForStruts(new FIDLabelModel("message.mass_schedule_success").getObject());
-                throw new RedirectToUrlException("/searchResults.action?searchId="+params.getString("searchId"));
+                FieldIDSession.get().info(new FIDLabelModel("message.mass_schedule_success").getObject());
+                setResponsePage(new AssetSearchResultsPage(criteriaModel.getObject()));
             }
         };
         add(submitForm);
         submitForm.add(new CheckBox("duplicateDetection", new PropertyModel<Boolean>(this, "duplicateDetection")));
         submitForm.add(new TooltipImage("duplicateDescriptionTooltipImage", new FIDLabelModel("message.duplicate_detection_description")));
         submitForm.add(new Button("submitButton"));
-        submitForm.add(new NonWicketLink("returnToSearchLink", "searchResults.action?searchId="+params.getString("searchId")));
+        submitForm.add(new Link("returnToSearchLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new AssetSearchResultsPage(criteriaModel.getObject()));
+            }
+        });
     }
 
     private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<EventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {
@@ -208,16 +210,6 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
             }
         });
         return container;
-    }
-
-    private SearchContainer verifySearchIdNotExpired(PageParameters params) {
-        String searchId = params.getString("searchId");
-        SearchContainer searchContainer = FieldIDSession.get().getSearchContainer(AssetSearchAction.SEARCH_CRITERIA);
-        if (searchContainer == null || searchId == null || !searchId.equals(searchContainer.getSearchId())) {
-            FieldIDSession.get().storeErrorMessageForStruts(new FIDLabelModel("error.searchexpired").getObject());
-            throw new RedirectToUrlException("/search.action");
-        }
-        return searchContainer;
     }
 
     private boolean hasAtLeastOneEvent(List<ScheduleSummaryEntry> scheduleSummary) {

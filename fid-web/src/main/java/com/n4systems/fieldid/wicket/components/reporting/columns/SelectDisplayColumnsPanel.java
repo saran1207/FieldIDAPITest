@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.wicket.components.reporting.columns;
 
-import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -24,7 +24,10 @@ public class SelectDisplayColumnsPanel extends Panel {
         super(id);
         setOutputMarkupId(true);
 
-        add(new ListView<ColumnMappingGroupView>("columnGroups", columnsModel) {
+        Form columnsForm = new Form("columnsForm");
+        add(columnsForm);
+
+        columnsForm.add(new ListView<ColumnMappingGroupView>("columnGroups", columnsModel) {
             @Override
             protected void populateItem(ListItem<ColumnMappingGroupView> item) {
                 item.add(new FlatLabel("groupLabel", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "label"))));
@@ -32,7 +35,7 @@ public class SelectDisplayColumnsPanel extends Panel {
             }
         });
 
-        add(dynamicColumnsContainer = new WebMarkupContainer("dynamicColumnsContainer"));
+        columnsForm.add(dynamicColumnsContainer = new WebMarkupContainer("dynamicColumnsContainer"));
         dynamicColumnsContainer.setOutputMarkupId(true);
 
         dynamicColumnsContainer.add(new ListView<ColumnMappingGroupView>("dynamicColumnGroups", dynamicColumnsModel) {
@@ -50,15 +53,9 @@ public class SelectDisplayColumnsPanel extends Panel {
             @Override
             protected void populateItem(ListItem<ColumnMappingView> columnItem) {
                 columnItem.add(new Label("checkboxLabel", new FIDLabelModel(new PropertyModel<String>(columnItem.getModel(), "label"))));
-                columnItem.add(new AjaxCheckBox("checkbox", new PropertyModel<Boolean>(columnItem.getModel(), "enabled")) {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
-                    }
-                });
+                columnItem.add(new CheckBox("checkbox", new PropertyModel<Boolean>(columnItem.getModel(), "enabled")));
             }
         });
     }
-
-    public void dynamicColumnsUpdated(AjaxRequestTarget target) { }
 
 }

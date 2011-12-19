@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
+import com.n4systems.model.security.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,12 @@ import com.n4systems.util.persistence.WhereParameterGroup;
 public class AssetService extends FieldIdPersistenceService {
 	
 	@Autowired private ReportServiceHelper reportServiceHelper;
+
+    @Transactional(readOnly=true)
+    public Long countAssets() {
+        QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, securityContext.getTenantSecurityFilter());
+        return persistenceService.count(builder);
+    }
 
 	@Transactional(readOnly=true)
 	public List<AssetsIdentifiedReportRecord> getAssetsIdentified(ChartGranularity granularity, Date fromDate, Date toDate, BaseOrg org) {

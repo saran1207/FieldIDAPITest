@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.ComponentTag;
@@ -72,6 +73,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         add(CSSPackageResource.getHeaderContribution("style/colorbox.css"));
 
         add(new BookmarkablePageLink<Void>("reportingLink", ReportingPage.class));
+        add(new BookmarkablePageLink<Void>("assetSearchLink", AssetSearchPage.class));
 
         add(new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));

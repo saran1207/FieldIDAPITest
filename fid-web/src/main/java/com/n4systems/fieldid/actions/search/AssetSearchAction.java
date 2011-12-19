@@ -5,6 +5,7 @@ import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -44,7 +45,7 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	private PrintAllCertificateService printAllCertificateService;
 	
 	public AssetSearchAction(final PersistenceManager persistenceManager, final AssetManager assetManager) {
-		super(AssetSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "asset_search"));
+		super(AssetSearchAction.class, WebSessionMap.SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "asset_search"));
 	}
 
     @Override

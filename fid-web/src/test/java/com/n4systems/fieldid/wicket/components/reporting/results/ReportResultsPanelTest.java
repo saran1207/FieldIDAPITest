@@ -52,7 +52,7 @@ public class ReportResultsPanelTest extends FieldIdPanelTest<ReportResultsPanelH
 		results = makeResults();
 		
 		expect(reportService.countPages(model, 1L)).andReturn(1);
-		expect(reportService.eventReport(eq(model), isA(ResultTransformer.class), eq(0), eq(20))).andReturn(results);
+		expect(reportService.performSearch(eq(model), isA(ResultTransformer.class), eq(0), eq(20))).andReturn(results);
 		replay(reportService);
 		renderFixture(this);	
 		assertVisible(getHarness().get("resultsTable"));
@@ -62,7 +62,7 @@ public class ReportResultsPanelTest extends FieldIdPanelTest<ReportResultsPanelH
 	@Override
 	public ReportResultsPanel createFixture(String id) {
 		return new ReportResultsPanel(id, new Model<EventReportCriteriaModel>(model)) {
-			@Override SerializableSecurityGuard getSecurityGuard() {
+			@Override protected SerializableSecurityGuard getSecurityGuard() {
 				return new SerializableSecurityGuard(TenantBuilder.n4(), PrimaryOrgBuilder.aPrimaryOrg().build());
 			}
 		};

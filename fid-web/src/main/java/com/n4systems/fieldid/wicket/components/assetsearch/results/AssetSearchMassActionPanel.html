@@ -1,0 +1,24 @@
+<wicket:extend>
+    <div class="adminLink alternateActions">
+
+    <wicket:enclosure>
+        <img src="/fieldid/images/pdf_small.gif" /> <a wicket:id="printAllCertsLink" class="lightboxPrintLink printAllPDFs"><wicket:message key="label.printselectedmanufacturercertificate"/></a> |
+    </wicket:enclosure>
+
+    <a wicket:id="exportToExcelLink" class='lightboxPrintLink exportToExcel'><wicket:message key="label.exporttoexcel"/></a>
+
+    <wicket:enclosure>
+        | <a wicket:id="massUpdateLink" class="massUpdate"><wicket:message key="label.massupdate"/></a>
+    </wicket:enclosure>
+
+    <wicket:enclosure>
+        | <a wicket:id="massEventLink" class="multiEvent"><wicket:message key="label.preform_mass_event" /></a>
+    </wicket:enclosure>
+
+    <wicket:enclosure>
+        | <a wicket:id="massScheduleLink" class="massSchedule"><wicket:message key="label.mass_schedule" /></a>
+    </wicket:enclosure>
+
+
+</div>
+</wicket:extend>

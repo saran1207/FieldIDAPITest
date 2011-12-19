@@ -1,23 +1,25 @@
 package com.n4systems.fieldid.wicket.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
+import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.reporting.columns.display.FieldIdPropertyColumn;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.BaseEntity;
+import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.SearchCriteriaModel;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.views.RowView;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportFormatConverter {
 
@@ -27,7 +29,7 @@ public class ReportFormatConverter {
     	this.securityGuard = securityGuard;
     }
 
-	public List<IColumn<RowView>> convertColumns(EventReportCriteriaModel criteriaModel) {
+	public List<IColumn<RowView>> convertColumns(SearchCriteriaModel criteriaModel) {
         List<IColumn<RowView>> convertedColumns = new ArrayList<IColumn<RowView>>();
         List<ColumnMappingView> enabledColumns = criteriaModel.getSortedStaticAndDynamicColumns();
 
@@ -70,24 +72,46 @@ public class ReportFormatConverter {
         container.setReferenceNumber(criteriaModel.getReferenceNumber());
         container.setRfidNumber(criteriaModel.getRfidNumber());
         container.setStatus(criteriaModel.getResult() == null ? null : criteriaModel.getResult().name());
-        container.setSelectedColumns(convertSelectedColumns(criteriaModel));
-        container.setMultiIdSelection(criteriaModel.getSelection());
         container.getLocation().setFreeformLocation(criteriaModel.getLocation().getFreeformLocation());
         container.getLocation().setPredefinedLocation(criteriaModel.getLocation().getPredefinedLocation());
 
-        container.setSortColumn(criteriaModel.getSortColumn() == null ? null : criteriaModel.getSortColumn().getSortExpression());
-        container.setSortDirection(criteriaModel.getSortDirection() == null ? null : criteriaModel.getSortDirection().getDisplayName());
-        container.setSortJoinExpression(criteriaModel.getSortColumn() == null ? null : criteriaModel.getSortColumn().getJoinExpression());
+        setSortAndColumnParameters(container, criteriaModel);
 
         return container;
     }
 
-    // package protected method so it can be extract/overriden for testing.    
-	SerializableSecurityGuard getSecurityGuard() {
-		return new SerializableSecurityGuard(FieldIDSession.get().getTenant());
-	}
+    public AssetSearchContainer convertCriteria(AssetSearchCriteriaModel criteriaModel) {
+        SecurityFilter securityFilter = FieldIDSession.get().getSessionUser().getSecurityFilter();
+        AssetSearchContainer container = new AssetSearchContainer(securityFilter, new LoaderFactory(securityFilter), securityGuard);
 
-    private List<String> convertSelectedColumns(EventReportCriteriaModel criteriaModel) {
+        container.setIdentifier(criteriaModel.getIdentifier());
+        container.setOwner(criteriaModel.getOwner());
+        container.setAssetStatus(getId(criteriaModel.getAssetStatus()));
+        container.setAssetType(getId(criteriaModel.getAssetType()));
+        container.setAssignedUser(getId(criteriaModel.getAssignedTo()));
+        container.setAssetTypeGroup(getId(criteriaModel.getAssetTypeGroup()));
+        container.setFromDate(criteriaModel.getIdentifiedFromDate());
+        container.setToDate(criteriaModel.getIdentifiedToDate());
+        container.setOrderNumber(criteriaModel.getOrderNumber());
+        container.setRfidNumber(criteriaModel.getRfidNumber());
+        container.setReferenceNumber(criteriaModel.getReferenceNumber());
+        container.setRfidNumber(criteriaModel.getRfidNumber());
+        container.setPurchaseOrder(criteriaModel.getPurchaseOrder());
+
+        setSortAndColumnParameters(container, criteriaModel);
+
+        return container;
+    }
+
+    protected void setSortAndColumnParameters(SearchContainer container, SearchCriteriaModel criteriaModel) {
+        container.setSelectedColumns(convertSelectedColumns(criteriaModel));
+        container.setMultiIdSelection(criteriaModel.getSelection());
+        container.setSortColumn(criteriaModel.getSortColumn() == null ? null : criteriaModel.getSortColumn().getSortExpression());
+        container.setSortDirection(criteriaModel.getSortDirection() == null ? null : criteriaModel.getSortDirection().getDisplayName());
+        container.setSortJoinExpression(criteriaModel.getSortColumn() == null ? null : criteriaModel.getSortColumn().getJoinExpression());
+    }
+
+    private List<String> convertSelectedColumns(SearchCriteriaModel criteriaModel) {
         List<ColumnMappingView> sortedEnabledColumns = criteriaModel.getSortedStaticAndDynamicColumns();
         List<String> convertedColumns = new ArrayList<String>(sortedEnabledColumns.size());
         for (ColumnMappingView sortedEnabledColumn : sortedEnabledColumns) {

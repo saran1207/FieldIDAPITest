@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
+import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionPanel;
 import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCollapseContainer;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -46,7 +47,7 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
         });
 
         add(criteriaExpandContainer);
-        add(new MassActionPanel("massActionPanel", reportCriteriaPropertyModel));
+        add(new ReportingMassActionPanel("massActionPanel", reportCriteriaPropertyModel));
     }
 
     private Link createSaveReportLink(String linkId, final boolean overwrite) {

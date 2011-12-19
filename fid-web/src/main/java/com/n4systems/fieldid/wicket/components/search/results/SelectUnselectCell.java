@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.reporting.results;
+package com.n4systems.fieldid.wicket.components.search.results;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;

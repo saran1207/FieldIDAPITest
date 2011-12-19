@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.components.reporting.BlankSlatePanel;
+import com.n4systems.fieldid.wicket.components.reporting.ReportingBlankSlatePanel;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -17,9 +17,9 @@ public class ReportingPage extends FieldIDFrontEndPage {
     public ReportingPage(PageParameters params) {
         super(params);
         if(tenantHasEvents()) {
-        	add(new EventReportCriteriaPanel("reportCriteriaPanel"));
+        	add(new EventReportCriteriaPanel("contentPanel"));
         }else {
-        	add(new BlankSlatePanel("reportCriteriaPanel"));
+        	add(new ReportingBlankSlatePanel("contentPanel"));
         }
     }
 

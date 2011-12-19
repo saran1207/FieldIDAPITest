@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.config;
 
+import com.n4systems.fieldid.service.search.AssetSearchService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -41,7 +42,6 @@ import com.n4systems.fieldid.service.schedule.MassScheduleService;
 import com.n4systems.fieldid.service.schedule.ScheduleService;
 import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.fieldid.service.search.SavedReportService;
-import com.n4systems.fieldid.service.search.SearchService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.service.task.DownloadLinkService;
@@ -144,13 +144,13 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
-    public SearchService searchService() {
-        return new SearchService();
+    public ReportService reportService() {
+        return new ReportService();
     }
 
     @Bean
-    public ReportService reportService() {
-        return new ReportService(searchService());
+    public AssetSearchService assetSearchService() {
+        return new AssetSearchService();
     }
 
     @Bean

@@ -1,6 +1,33 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.pages.DashboardPage;
+import com.n4systems.fieldid.wicket.pages.OopsPage;
+import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
+import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
+import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
+import com.n4systems.fieldid.wicket.pages.setup.AccountPolicyPage;
+import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
+import com.n4systems.fieldid.wicket.pages.setup.IdentifierOverridesPage;
+import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
+import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
+import com.n4systems.fieldid.wicket.pages.setup.PasswordPolicyPage;
+import com.n4systems.fieldid.wicket.pages.setup.SecurityPage;
+import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
+import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPage;
+import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
+import com.n4systems.fieldid.wicket.pages.setup.WidgetsPage;
+import com.n4systems.fieldid.wicket.pages.setup.YourPlanPage;
+import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
+import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
+import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
+import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
+import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
+import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -13,21 +40,6 @@ import org.apache.wicket.spring.injection.annot.AnnotSpringInjector;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.odlabs.wiquery.core.commons.IWiQuerySettings;
 import org.odlabs.wiquery.core.commons.WiQuerySettings;
-
-import com.n4systems.fieldid.wicket.pages.DashboardPage;
-import com.n4systems.fieldid.wicket.pages.OopsPage;
-import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
-import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
-import com.n4systems.fieldid.wicket.pages.setup.*;
-import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
-import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
-import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
-import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
-import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
-import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 
 public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings {
 
@@ -57,7 +69,10 @@ public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings
         mountBookmarkablePage("savedReport", RunSavedReportPage.class);
 
         mountBookmarkablePage("massSchedule", MassSchedulePage.class);
-        
+
+        mountBookmarkablePage("search", AssetSearchPage.class);
+        mountBookmarkablePage("searchResults", AssetSearchResultsPage.class);
+
         mountBookmarkablePage("admin/addTenant", AddTenantPage.class);
              
         getMarkupSettings().setStripWicketTags(true);
@@ -69,8 +84,6 @@ public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings
 
         getApplicationSettings().setPageExpiredErrorPage(DashboardPage.class);
         getApplicationSettings().setInternalErrorPage(OopsPage.class);
-        
-               
     }
 
     @Override

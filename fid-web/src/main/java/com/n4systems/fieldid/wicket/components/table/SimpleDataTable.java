@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.components.table;
 
-import com.n4systems.fieldid.wicket.components.reporting.results.SelectionStatusPanel;
+import com.n4systems.fieldid.wicket.components.search.results.SelectionStatusPanel;
 import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.util.persistence.search.SortDirection;
@@ -164,7 +164,7 @@ public class SimpleDataTable<T> extends Panel {
     private void scrollToTopPaginationBar(AjaxRequestTarget target) {
         String topPageBarId = topPaginationBar.getMarkupId();
 
-        target.appendJavascript("var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('"+topPageBarId+"'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}");
+        target.appendJavascript("var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('#"+topPageBarId+"'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}");
     }
 
     protected void onPageChanged(AjaxRequestTarget target) { }
