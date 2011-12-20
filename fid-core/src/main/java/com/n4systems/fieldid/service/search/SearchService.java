@@ -218,7 +218,7 @@ public abstract class SearchService<T extends SearchCriteriaModel, M extends Bas
     }
 
     protected PrimaryOrg getPrimaryOrg() {
-		return orgService.getPrimaryOrgForTenant(securityContext.getTenantSecurityFilter().getTenantId(), false);
+		return orgService.getPrimaryOrgForTenant(securityContext.getTenantSecurityFilter().getTenantId());
 	}
 
 }

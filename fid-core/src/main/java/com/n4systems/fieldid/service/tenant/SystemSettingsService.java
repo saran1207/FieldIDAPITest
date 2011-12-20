@@ -64,7 +64,7 @@ public class SystemSettingsService extends FieldIdPersistenceService {
     }
 
     private PrimaryOrg getPrimaryOrg() {
-        return orgService.getPrimaryOrgForTenant(securityContext.getUserSecurityFilter().getTenantId(), false);
+        return orgService.getPrimaryOrgForTenant(securityContext.getUserSecurityFilter().getTenantId());
     }
 
 }
