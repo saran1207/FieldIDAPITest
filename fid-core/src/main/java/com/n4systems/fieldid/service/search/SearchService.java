@@ -109,14 +109,20 @@ public abstract class SearchService<T extends SearchCriteriaModel, M extends Bas
         }
 
         List<SearchTermDefiner> searchTerms = new ArrayList<SearchTermDefiner>();
+        List<JoinTerm> joinTerms = new ArrayList<JoinTerm>();
 
         addSearchTerms(criteriaModel, searchTerms);
+        addJoinTerms(criteriaModel, joinTerms);
 
 		// convert all our search terms to where parameters
         for (SearchTermDefiner term : searchTerms) {
             for (WhereClause<?> param: term.getWhereParameters()) {
                 searchBuilder.addWhere(param);
             }
+        }
+
+        for (JoinTerm joinTerm : joinTerms) {
+            searchBuilder.addJoin(joinTerm.toJoinClause());
         }
 
         List<QueryFilter> searchFilters = new ArrayList<QueryFilter>();
@@ -130,6 +136,7 @@ public abstract class SearchService<T extends SearchCriteriaModel, M extends Bas
 		return searchBuilder;
     }
 
+    protected void addJoinTerms(T criteriaModel, List<JoinTerm> joinTerms) { }
     protected abstract void addSearchTerms(T criteriaModel, List<SearchTermDefiner> search);
 
     protected boolean isIntegrationEnabled() {

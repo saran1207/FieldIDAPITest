@@ -4,7 +4,6 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
@@ -65,13 +64,11 @@ public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings
 
         mountBookmarkablePage("dashboard", DashboardPage.class);
         mountBookmarkablePage("reporting", ReportingPage.class);
+        mountBookmarkablePage("search", AssetSearchPage.class);
+
         mountBookmarkablePage("returnToReport", ReturnToReportPage.class);
         mountBookmarkablePage("savedReport", RunSavedReportPage.class);
-
         mountBookmarkablePage("massSchedule", MassSchedulePage.class);
-
-        mountBookmarkablePage("search", AssetSearchPage.class);
-        mountBookmarkablePage("searchResults", AssetSearchResultsPage.class);
 
         mountBookmarkablePage("admin/addTenant", AddTenantPage.class);
              
