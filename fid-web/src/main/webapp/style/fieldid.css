@@ -1798,6 +1798,7 @@ input.description {
 
 .dropDownLink{
 	text-decoration: none;
+	width : 55px;
 }
 
 .dropDownLink span{
