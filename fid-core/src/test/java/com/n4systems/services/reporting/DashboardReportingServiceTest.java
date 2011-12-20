@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -46,6 +47,7 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 	private LocalDate jan5 = new LocalDate(2011, 1, 5);
 	
 	private BaseOrg owner;
+	private LocalDate jan1_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
 
 	
 	@Override
@@ -191,6 +193,7 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 	@Test 
 	@Ignore
 	public void test_EventCompleteness() { 
+		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		ChartGranularity granularity = ChartGranularity.WEEK;
 		ChartDateRange dateRange = ChartDateRange.LAST_MONTH;
 		BaseOrg org = OrgBuilder.aDivisionOrg().build();
@@ -199,8 +202,8 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 		List<EventCompletenessReportRecord> allEvents = Lists.newArrayList();
 		allEvents.addAll(completedEvents);
 		allEvents.addAll(createEventCompletenessResults(granularity, 888L, 574L, 924L));
-		expect(eventService.getEventCompleteness(granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(dateRange.getTo()).toDate(), org)).andReturn(allEvents);
-		expect(eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, dateRange.getFromDate(), dateRange.getToDate(), org)).andReturn(completedEvents);
+		expect(eventService.getEventCompleteness(granularity, granularity.roundDown(dateRange.getFrom()).toDate(), jan1_2011.toDate(), org)).andReturn(allEvents);
+		expect(eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, granularity.roundDown(dateRange.getFrom()).toDate(), jan1_2011.toDate(), org)).andReturn(completedEvents);
 		replay(eventService);
 		replay(assetService);
 		
