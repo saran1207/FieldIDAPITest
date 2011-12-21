@@ -31,6 +31,7 @@ public class PathHandler {
 	private static final String SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + REPORT_FILE_EXT;
 	private static final String COMPILED_SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + COMPILED_REPORT_FILE_EXT;
 	private static final String ASSET_REPORT_FILE_NAME = "product" + REPORT_FILE_EXT;
+    private static final String COMPILED_ASSET_REPORT_FILE_NAME = "product" + COMPILED_REPORT_FILE_EXT;
 	private static final String CHART_FILE_NAME = "proof_test_chart.png";
 	private static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
 	private static final String LOGO_IMAGE_FILE_NAME = "logo.gif";
@@ -250,6 +251,10 @@ public class PathHandler {
 	private static String getReportPath(Asset asset) {
 		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), ASSET_REPORT_FILE_NAME);
 	}
+
+	private static String getCompiledReportPath(Asset asset) {
+		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), COMPILED_ASSET_REPORT_FILE_NAME);
+	}
 	
 	/**
 	 * Finds a report file for an Asset.  Defaults to the all Tenant report directory if the Tenant specific report does not exist.
@@ -260,6 +265,12 @@ public class PathHandler {
 	 */
 	public static File getReportFile(Asset asset) {
 		File tenantReport = absolutize(getReportPath(asset));
+		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(ASSET_REPORT_FILE_NAME);
+	}
+
+
+	public static File getCompiledReportFile(Asset asset) {
+		File tenantReport = absolutize(getCompiledReportPath(asset));
 		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(ASSET_REPORT_FILE_NAME);
 	}
 	

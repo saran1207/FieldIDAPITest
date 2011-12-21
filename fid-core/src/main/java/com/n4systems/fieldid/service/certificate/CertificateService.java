@@ -62,11 +62,11 @@ public class CertificateService extends FieldIdPersistenceService {
 		}
 		
 		try {	
-			File jasperFile = PathHandler.getReportFile(asset);
-			reportCompiler.compileReports(jasperFile.getParentFile());
+			File jrxmlFile = PathHandler.getReportFile(asset);
+			reportCompiler.compileReports(jrxmlFile.getParentFile());
 			
 			Map<String, Object> reportMap = new HashMap<String, Object>();
-			reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
+			reportMap.put("SUBREPORT_DIR", jrxmlFile.getParent() + "/");
 	
 			addIdentifiedByParams(reportMap, asset.getIdentifiedBy());
 			reportMap.putAll(new AssetReportMapProducer(asset, new DateTimeDefiner(getCurrentUser())).produceMap());
@@ -78,8 +78,8 @@ public class CertificateService extends FieldIdPersistenceService {
 			List<Asset> reportCollection = new ArrayList<Asset>();
 			reportCollection.add(asset);
 
-			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JRBeanCollectionDataSource(reportCollection));
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledReportFile(asset));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JRBeanCollectionDataSource(reportCollection));
 			return jasperPrint;
 		} catch (JRException e) {
 			throw new ReportException("Failed to generate asset certificate", e);
