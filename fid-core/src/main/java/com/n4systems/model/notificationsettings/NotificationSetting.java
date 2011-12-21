@@ -3,16 +3,7 @@ package com.n4systems.model.notificationsettings;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.IndexColumn;
 
@@ -106,10 +97,12 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
     }
 
 	
+	@Override
 	public User getUser() {
     	return user;
     }
 
+	@Override
 	public void setUser(User user) {
     	this.user = user;
     }
@@ -142,6 +135,14 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 		return overdueReport.includeOverdue;
 	}
 
+	public boolean isSmartFailure() {
+		return failedReport.smartFailure;
+	}
+	
+	public void setSmartFailure(Boolean smartFailure) {
+		failedReport.smartFailure = smartFailure;
+	}	
+	
 	public void setIncludeOverdue(boolean includeOverdue) {
 		this.overdueReport.includeOverdue = includeOverdue;
 	}
@@ -193,4 +194,5 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	public void setEventTypeGroup(Long eventTypeGroup) {
 		this.eventTypeGroup = eventTypeGroup;
 	}
+
 }

@@ -32,6 +32,7 @@ public class NotificationSettingView implements Serializable {
 	private List<String> addresses = new ArrayList<String>();
 	private Boolean includeFailed = false;
 	private Boolean sendBlankReport = false;
+	private Boolean smartFailure = false;
 
 	
 	public NotificationSettingView() {}
@@ -186,5 +187,13 @@ public class NotificationSettingView implements Serializable {
 	public void setEventTypeGroupId(Long eventTypeGroupId) {
 		this.eventTypeGroupId = eventTypeGroupId;
 	}
-	
+
+	public void setSmartFailure(Boolean smartFailure) {
+		this.smartFailure = smartFailure;
+	}
+
+	public Boolean getSmartFailure() {
+		return smartFailure;
+	}
+
 }

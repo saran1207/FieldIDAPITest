@@ -29,7 +29,7 @@ import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.time.StoppedClock;
 
 
-public class FailedEventListLoaderTest {
+public class SmartFailedEventListLoaderTest {
 
 	
 	private EntityManager mockEntityManager;
@@ -66,9 +66,9 @@ public class FailedEventListLoaderTest {
 		);
 		withExpectations(results);
 				
-		FailedEventListLoader sut = createSut(filter);
+		SmartFailedEventListLoader smartFailedEventListLoader = createSmartFailedEventListLoader(filter);
 		
-		List<Event> actual = sut.load(mockEntityManager, filter);
+		List<Event> actual = smartFailedEventListLoader.load(mockEntityManager, filter);
 		
 		assertEquals(0, actual.size());
 
@@ -86,9 +86,9 @@ public class FailedEventListLoaderTest {
 										);
 		withExpectations(results);
 				
-		FailedEventListLoader sut = createSut(filter);
+		SmartFailedEventListLoader smartFailedEventListLoader = createSmartFailedEventListLoader(filter);
 		
-		List<Event> actual = sut.load(mockEntityManager, filter);
+		List<Event> actual = smartFailedEventListLoader.load(mockEntityManager, filter);
 		
 		assertEquals(1, actual.size());
 
@@ -107,9 +107,9 @@ public class FailedEventListLoaderTest {
 										);
 		withExpectations(results);
 				
-		FailedEventListLoader sut = createSut(filter);
+		SmartFailedEventListLoader smartFailedEventListLoader = createSmartFailedEventListLoader(filter);
 		
-		List<Event> actual = sut.load(mockEntityManager, filter);
+		List<Event> actual = smartFailedEventListLoader.load(mockEntityManager, filter);
 		
 		assertEquals(3, actual.size());
 
@@ -129,9 +129,9 @@ public class FailedEventListLoaderTest {
 										);
 		withExpectations(results);
 				
-		FailedEventListLoader sut = createSut(filter);
+		SmartFailedEventListLoader smartFailedEventListLoader = createSmartFailedEventListLoader(filter);
 		
-		List<Event> actual = sut.load(mockEntityManager, filter);
+		List<Event> actual = smartFailedEventListLoader.load(mockEntityManager, filter);
 		
 		assertEquals(2, actual.size());
 
@@ -150,9 +150,9 @@ public class FailedEventListLoaderTest {
 										);
 		withExpectations(results);
 				
-		FailedEventListLoader sut = createSut(filter);
+		SmartFailedEventListLoader smartFailedEventListLoader = createSmartFailedEventListLoader(filter);
 		
-		List<Event> actual = sut.load(mockEntityManager, filter);
+		List<Event> actual = smartFailedEventListLoader.load(mockEntityManager, filter);
 		
 		assertEquals(3, actual.size());
 
@@ -172,9 +172,9 @@ public class FailedEventListLoaderTest {
 										);
 		withExpectations(results);
 				
-		FailedEventListLoader sut = createSut(filter);
+		SmartFailedEventListLoader smartFailedEventListLoader = createSmartFailedEventListLoader(filter);
 		
-		List<Event> actual = sut.load(mockEntityManager, filter);
+		List<Event> actual = smartFailedEventListLoader.load(mockEntityManager, filter);
 
 		assertEquals(0, actual.size());
 
@@ -192,9 +192,9 @@ public class FailedEventListLoaderTest {
 										);
 		withExpectations(results);
 				
-		FailedEventListLoader sut = createSut(filter);
+		SmartFailedEventListLoader smartFailedEventListLoader = createSmartFailedEventListLoader(filter);
 		
-		List<Event> actual = sut.load(mockEntityManager, filter);
+		List<Event> actual = smartFailedEventListLoader.load(mockEntityManager, filter);
 
 		assertEquals(1, actual.size());
 
@@ -212,9 +212,9 @@ public class FailedEventListLoaderTest {
 										);
 		withExpectations(results);
 				
-		FailedEventListLoader sut = createSut(filter);
+		SmartFailedEventListLoader smartFailedEventListLoader = createSmartFailedEventListLoader(filter);
 		
-		List<Event> actual = sut.load(mockEntityManager, filter);
+		List<Event> actual = smartFailedEventListLoader.load(mockEntityManager, filter);
 
 		assertEquals(0, actual.size());
 
@@ -226,15 +226,15 @@ public class FailedEventListLoaderTest {
 	
 	
 	
-	private FailedEventListLoader createSut(OpenSecurityFilter filter) {
-		FailedEventListLoader sut = new FailedEventListLoader(filter) { 
+	private SmartFailedEventListLoader createSmartFailedEventListLoader(OpenSecurityFilter filter) {
+		SmartFailedEventListLoader smartFailedEventListLoader = new SmartFailedEventListLoader(filter) { 
 			@Override QueryBuilder<Event> createQueryBuilder(SecurityFilter filter) {
 				return mockQueryBuilder;
 			};
 		};
-		sut.setClock(clock);
-		sut.setFrequency(SimpleFrequency.DAILY);
-		return sut;
+		smartFailedEventListLoader.setClock(clock);
+		smartFailedEventListLoader.setFrequency(SimpleFrequency.DAILY);
+		return smartFailedEventListLoader;
 	}
 
 	private void withExpectations(List<Event> results) {

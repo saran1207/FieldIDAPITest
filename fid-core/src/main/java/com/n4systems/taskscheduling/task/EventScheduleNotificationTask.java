@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.event.FailedEventListLoader;
+import com.n4systems.model.event.SmartFailedEventListLoader;
 import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
 import com.n4systems.model.eventschedulecount.UpcomingEventScheduleCountListLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
@@ -79,7 +80,7 @@ public class EventScheduleNotificationTask extends ScheduledTask {
 				logger.info(LogUtils.prepare("Generating event schedule report for Tenant [$0], Name [$1], User [$2]",	setting.getTenant(), setting.getName(), setting.getUser().getUserID()));
 
 				new EventScheduleCountGenerator(new SimpleDateFormat(primaryOrg.getDateFormat()), new UpcomingEventScheduleCountListLoader(settingUserFilter), 
-						new OverdueEventScheduleCountListLoader(settingUserFilter), new FailedEventListLoader(settingUserFilter),
+						new OverdueEventScheduleCountListLoader(settingUserFilter), createFailedEventListLoader(setting, settingUserFilter),
 						ServiceLocator.getMailManager()).sendReport(setting, clock);
 
 			} catch(Exception e) {
@@ -88,7 +89,11 @@ public class EventScheduleNotificationTask extends ScheduledTask {
 		}
     }
 
-    private static Date getTheDateInTimeZone(String timeZoneId) {
+    private FailedEventListLoader createFailedEventListLoader(NotificationSetting setting, SecurityFilter filter) {
+    	return setting.isSmartFailure() ? new SmartFailedEventListLoader(filter) : new FailedEventListLoader(filter);
+	}
+
+	private static Date getTheDateInTimeZone(String timeZoneId) {
         Date localizedDate = DateHelper.localizeDate(new Date(), TimeZone.getTimeZone(timeZoneId));
         return new PlainDate(localizedDate);
     }
@@ -116,9 +121,8 @@ public class EventScheduleNotificationTask extends ScheduledTask {
             if (cal.get(Calendar.HOUR_OF_DAY) == configuredHour) {
                 currentTimezones.put(regionId, getTheDateInTimeZone(timeZoneId));
             }
-                        
         }
-
+        
         return currentTimezones;
     }
 

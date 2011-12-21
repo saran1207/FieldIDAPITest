@@ -2,7 +2,6 @@ package com.n4systems.fieldid.actions.notifications;
 
 import java.util.Date;
 
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
@@ -37,6 +36,7 @@ public class NotificationSettingViewModelConverter {
 		view.setIncludeUpcoming(model.getUpcomingReport().isIncludeUpcoming());
 		view.setIncludeFailed(model.isIncludeFailed());
 		view.setSendBlankReport(model.getSendBlankReport());
+		view.setSmartFailure(model.isSmartFailure());
 		
 		// we'll need the created date to carry through on edit
 		if (model.getCreated() != null) {
@@ -79,6 +79,7 @@ public class NotificationSettingViewModelConverter {
 		else
 			model.setUpcomingReport(new UpcomingEventReport(RelativeTime.TODAY, RelativeTime.TOMORROW, false));
 		model.setIncludeOverdue(view.getIncludeOverdue());
+		model.setSmartFailure(view.getSmartFailure());
 		model.setIncludeFailed(view.getIncludeFailed());
 		model.setSendBlankReport(view.getSendBlankReport());
 		

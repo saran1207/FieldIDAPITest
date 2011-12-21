@@ -171,3 +171,7 @@ form.largeForm {
 .content .infoSet .upcomingDates {
 	width : auto;
 }
+
+.sectionContent .indented {
+	padding-left:50px;
+}

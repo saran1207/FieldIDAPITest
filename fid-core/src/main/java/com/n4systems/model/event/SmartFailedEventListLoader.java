@@ -3,7 +3,6 @@ package com.n4systems.model.event;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,27 +11,16 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.Status;
-import com.n4systems.model.common.SimpleFrequency;
-import com.n4systems.model.notificationsettings.NotificationSetting;
-import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.utils.PlainDate;
-import com.n4systems.persistence.loaders.ListLoader;
-import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.WhereParameterGroup;
-import com.n4systems.util.time.Clock;
 
-public class FailedEventListLoader extends ListLoader<Event> {
-	
-	protected  Clock clock;
-	protected SimpleFrequency frequency;
-	protected NotificationSetting setting;
-	
-	public FailedEventListLoader(SecurityFilter filter) {
+public class SmartFailedEventListLoader extends FailedEventListLoader {
+		
+	public SmartFailedEventListLoader(SecurityFilter filter) {
 		super(filter);
 	}
 
@@ -89,55 +77,4 @@ public class FailedEventListLoader extends ListLoader<Event> {
 		return event.getType().getId()+":"+event.getAsset().getId();
 	}
 
-	protected void applyNotificationFilters(QueryBuilder<Event> builder) {
-		if(setting.getOwner() != null) {
-			builder.applyFilter(new OwnerAndDownFilter(setting.getOwner()));
-		}
-		if(!setting.getAssetTypes().isEmpty()) {
-			builder.addSimpleWhere("asset.type.id", setting.getAssetTypes().get(0));
-		}
-
-		if (setting.getAssetTypes().isEmpty() && setting.getAssetTypeGroup() != null) {
-			builder.addSimpleWhere("asset.type.group.id", setting.getAssetTypeGroup());
-		}
-		
-		if(setting.getEventTypes().isEmpty() && setting.getEventTypeGroup() !=null){
-			builder.addSimpleWhere("type.group.id", setting.getEventTypeGroup());
-		}
-
-		if (setting.getAssetStatus() != null) {
-			builder.addSimpleWhere("asset.assetStatus.id", setting.getAssetStatus());
-		}		
-		
-		if(!setting.getEventTypes().isEmpty()) {
-			builder.addSimpleWhere("type.id", setting.getEventTypes().get(0));
-		}
-	}
-
-	protected Date getFromDate() {
-		Date date = new PlainDate(clock.currentTime());
-		if (frequency.equals(SimpleFrequency.DAILY)) {
-			date = DateHelper.increment(date, DateHelper.DAY, -1);
-		}else if (frequency.getGroupLabel().equals(SimpleFrequency.WEEKLY_SUNDAY.getGroupLabel())) {
-			date = DateHelper.increment(date, DateHelper.WEEK, -1);
-		}else if (frequency.getGroupLabel().equals(SimpleFrequency.MONTHLY_FIRST.getGroupLabel())) {
-			date = DateHelper.increment(date, DateHelper.MONTH, -1);
-		}
-		return date;
-	}
-
-	public FailedEventListLoader setClock(Clock clock) {
-		this.clock = clock;
-		return this;
-	}
-
-	public FailedEventListLoader setFrequency(SimpleFrequency frequency) {
-		this.frequency = frequency;
-		return this;
-	}
-
-	public FailedEventListLoader setNotificationSetting(NotificationSetting setting) {
-		this.setting = setting;
-		return this;
-	}
 }

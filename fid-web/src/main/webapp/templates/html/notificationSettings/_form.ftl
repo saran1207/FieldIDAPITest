@@ -64,12 +64,11 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		<label for="view.includeOverdue"><@s.text name="label.include_overdue"/></label>
 	</div>
 	<div class="infoSet fullInfoSet">
-		<span class="infoField checkbox"><@s.checkbox name="view.includeFailed"  theme="fieldidSimple" /></span>
-		<span class="wide">
-			<label for="view.includeFailed"><@s.text name="label.include_failed"/></label>
-			<p class="instructions"><@s.text name="instruction.content_example"/></p>
-		</span>
-	</div>
+		<span class="infoField checkbox"><@s.checkbox id="failedEvents" name="view.includeFailed" theme="fieldidSimple" /></span>
+		<label for="view.includeFailed"><@s.text name="label.include_failed"/></label>			
+		<span class="infoField checkbox"><@s.checkbox id="smartFail" name="view.smartFailure"  theme="fieldidSimple" /></span>
+		<label for="view.smartFailure"><@s.text name="label.smartFailure"/></label>			
+	</div>	
 </div>
 
 <h2><@s.text name="label.filters"/></h2>
@@ -153,11 +152,20 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		}
 	}
 	
+	function updateSmartFailure() {
+		$('smartFail').disabled = !$('failedEvents').checked;
+	}	
+	
+	$('failedEvents').observe('change', function(event) {
+		updateSmartFailure(); 
+	});
+	
 	$('includeUpcoming').observe('change', function(event) {
-			updateUpcomingOptions();
+		updateUpcomingOptions();			
 	});
 
 	document.observe("dom:loaded", function() {
 		updateUpcomingOptions();
+		updateSmartFailure();
 	});
 </script>

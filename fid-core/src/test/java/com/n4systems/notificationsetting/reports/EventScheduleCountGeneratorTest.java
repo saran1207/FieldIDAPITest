@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.event.FailedEventListLoader;
+import com.n4systems.model.event.SmartFailedEventListLoader;
 import com.n4systems.model.eventschedulecount.EventScheduleCount;
 import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
 import com.n4systems.model.eventschedulecount.UpcomingEventScheduleCountListLoader;
@@ -224,8 +224,8 @@ public class EventScheduleCountGeneratorTest {
 		assertNull(message);
 	}
 	
-	private FailedEventListLoader createSuccessfulFailedEventsLoader(NotificationSetting notificationSetting, List<Event> failedEvents) {
-		FailedEventListLoader loader = createMock(FailedEventListLoader.class);
+	private SmartFailedEventListLoader createSuccessfulFailedEventsLoader(NotificationSetting notificationSetting, List<Event> failedEvents) {
+		SmartFailedEventListLoader loader = createMock(SmartFailedEventListLoader.class);
 		expect(loader.setFrequency(notificationSetting.getFrequency())).andReturn(loader);
 		expect(loader.setClock((Clock)anyObject())).andReturn(loader);
 		expect(loader.setNotificationSetting(notificationSetting)).andReturn(loader);
