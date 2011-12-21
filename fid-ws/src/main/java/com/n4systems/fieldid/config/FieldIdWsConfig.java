@@ -12,6 +12,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiAssetTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
+import com.n4systems.fieldid.ws.v1.resources.smartsearch.ApiSmartSearchResource;
 import com.n4systems.fieldid.ws.v1.resources.unit.ApiUnitResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 
@@ -72,5 +73,10 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiAssetResource apiAssetResource() {
 		return new ApiAssetResource();
+	}
+	
+	@Bean
+	public ApiSmartSearchResource apiSmartSearchResource() {
+		return new ApiSmartSearchResource();
 	}
 }
