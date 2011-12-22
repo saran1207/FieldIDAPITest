@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -30,6 +31,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 
 @Component
 @Path("asset")
@@ -68,6 +70,24 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		List<ApiAsset> apiAssets = convertAllEntitiesToApiModels(assets);
 		ListResponse<ApiAsset> response = new ListResponse<ApiAsset>(apiAssets, page, pageSize, total);
 		return response;
+	}
+	
+	@GET
+	@Path("{id}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public ApiAsset find(@PathParam("id") String id) {
+		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
+		builder.addWhere(WhereClauseFactory.create("mobileGUID", id));
+		
+		Asset asset = persistenceService.find(builder);
+		if (asset == null) {
+			throw new NotFoundException("Asset", id);
+		}
+		
+		ApiAsset apiModel = convertEntityToApiModel(asset);
+		return apiModel;
 	}
 
 	@Override
