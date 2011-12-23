@@ -15,7 +15,7 @@ public class Permissions {
 	public static final int Tag 				= 1<<0;  // aka IdentifyAssets
 	public static final int ManageSystemConfig	= 1<<1;
 	public static final int ManageSystemUsers	= 1<<2;
-	public static final int ManageEndUsers		= 1<<3;
+	public static final int ManageEndUsers		= 1<<3;  // aka ManageJobSites or Customers.
 	public static final int CreateEvent         = 1<<4;
 	public static final int EditEvent           = 1<<5;
 	public static final int ManageJobs			= 1<<6;
