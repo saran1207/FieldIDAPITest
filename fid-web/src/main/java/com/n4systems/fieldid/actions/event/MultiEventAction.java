@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
+import com.n4systems.util.ListHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -64,6 +65,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 
 	private UserManager userManager;
 	private List<ListingPair> examiners;
+    private List<ListingPair> jobs;
 	private List<CommentTemplate> commentTemplates;
 	private List<AssetStatus> assetStatuses;
 	private CommonEventTypeHandler commonEventTypeHandler;
@@ -364,5 +366,13 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
     public void setCriteriaResults(List<CriteriaResultWebModel> criteriaResults) {
         this.criteriaResults = criteriaResults;
     }
+
+	public List<ListingPair> getJobs() {
+		if (jobs == null) {
+			List<Listable<Long>> eventJobListables = getLoaderFactory().createEventJobListableLoader().load();
+			jobs = ListHelper.longListableToListingPair(eventJobListables);
+		}
+		return jobs;
+	}
 
 }
