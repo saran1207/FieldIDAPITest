@@ -111,15 +111,12 @@ public class EventService extends FieldIdPersistenceService {
 		builder.addWhere(filtergroup);
 		builder.addSimpleWhere("status", ScheduleStatus.SCHEDULED);
 
-		if(owner != null) {
-			builder.addSimpleWhere("owner", owner);
-		}
-
+		builder.applyFilter(new OwnerAndDownFilter(owner));
 		builder.addGroupBy("nextDate");
 		return persistenceService.findAll(builder);		
 	}
 
-
+    @Transactional(readOnly = true)
 	public List<CompletedEventsReportRecord> getCompletedEvents(Date fromDate, Date toDate, BaseOrg org, Status status, ChartGranularity granularity) {
 		
 		QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
@@ -135,9 +132,7 @@ public class EventService extends FieldIdPersistenceService {
 		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "date", toDate, null, ChainOp.AND));
 		builder.addWhere(filterGroup);
 		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"date"));		
-		if (org!=null) { 
-			builder.addSimpleWhere("owner.id", org.getId());
-		}
+		builder.applyFilter(new OwnerAndDownFilter(org));
 		if (status!=null) { 
 			builder.addSimpleWhere("status", status);
 		}
@@ -146,8 +141,7 @@ public class EventService extends FieldIdPersistenceService {
 		return persistenceService.findAll(builder);	
 	}
 
-
-
+    @Transactional(readOnly = true)
 	public EventKpiRecord getEventKpi(Date fromDate, Date toDate, BaseOrg owner) {
 		EventKpiRecord eventKpiRecord = new EventKpiRecord();	
 		eventKpiRecord.setCustomer(owner);
@@ -174,7 +168,7 @@ public class EventService extends FieldIdPersistenceService {
 		}
 
 		QueryBuilder<EventSchedule> builder2 = new QueryBuilder<EventSchedule>(EventSchedule.class, securityContext.getUserSecurityFilter());
-		builder2.addSimpleWhere("owner.id", owner.getId());
+		builder2.applyFilter(new OwnerAndDownFilter(owner));
 		builder2.addSimpleWhere("status", ScheduleStatus.COMPLETED);
 		builder2.addSimpleWhere("event.status", Status.FAIL);
 		builder2.addWhere(filterGroup);
@@ -186,10 +180,12 @@ public class EventService extends FieldIdPersistenceService {
 		return eventKpiRecord;
 	}
 
+    @Transactional(readOnly = true)
 	public List<EventCompletenessReportRecord> getEventCompleteness(ChartGranularity granularity, Date fromDate, Date toDate, BaseOrg org) {
 		return getEventCompleteness(null, granularity, fromDate, toDate, org); 
 	}
 
+    @Transactional(readOnly = true)
 	public List<EventCompletenessReportRecord> getEventCompleteness(ScheduleStatus status, ChartGranularity granularity, 
 			Date fromDate, Date toDate, BaseOrg org) {
 		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(EventSchedule.class, securityContext.getUserSecurityFilter());
@@ -205,9 +201,7 @@ public class EventService extends FieldIdPersistenceService {
 		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "nextDate", toDate, null, ChainOp.AND));
 		builder.addWhere(filterGroup);
 		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"nextDate"));		
-		if (org!=null) { 
-			builder.addSimpleWhere("owner.id", org.getId());
-		}
+		builder.applyFilter(new OwnerAndDownFilter(org));
 		if (status!=null) { 
 			builder.addSimpleWhere("status", status);
 		}

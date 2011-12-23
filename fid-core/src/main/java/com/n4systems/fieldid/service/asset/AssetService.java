@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.n4systems.model.AssetType;
-import com.n4systems.model.asset.ScheduleSummaryEntry;
-import com.n4systems.model.security.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +13,10 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.asset.ScheduleSummaryEntry;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
 import com.n4systems.util.chart.ChartGranularity;
@@ -52,11 +52,8 @@ public class AssetService extends FieldIdPersistenceService {
 		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");		
 		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "from", "identified", fromDate, null, ChainOp.AND));
 		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "identified", toDate, null, ChainOp.AND));
-		builder.addWhere(filterGroup);
-		
-		if (org!=null) { 
-			builder.addSimpleWhere("owner.id", org.getId());
-		}
+		builder.addWhere(filterGroup);		
+		builder.applyFilter(new OwnerAndDownFilter(org));
 		builder.addOrder("identified");
 		
 		return persistenceService.findAll(builder);				
@@ -71,9 +68,7 @@ public class AssetService extends FieldIdPersistenceService {
 		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "identified", toDate, null, ChainOp.AND));
 		builder.addWhere(filterGroup);
 		builder.addGroupBy("assetStatus.name");
-		if (org!=null) { 
-			builder.addSimpleWhere("owner.id", org.getId());
-		}		
+		builder.applyFilter(new OwnerAndDownFilter(org));
 		
 		return persistenceService.findAll(builder);
 	}
