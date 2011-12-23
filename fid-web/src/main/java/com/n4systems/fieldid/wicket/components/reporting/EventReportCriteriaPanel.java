@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.components.search.OrderDetailsCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.OwnershipCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.SRSCriteriaPanel;
 import com.n4systems.fieldid.wicket.model.EndOfDayDateModel;
+import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.search.EventReportCriteriaModel;
@@ -41,8 +42,8 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriter
 
     @Override
     protected void populateForm(SearchCriteriaForm form) {
-        form.add(new DateTimePicker("fromDate", new PropertyModel<Date>(form.getModel(), "fromDate")));
-        form.add(new DateTimePicker("toDate", new EndOfDayDateModel(new PropertyModel<Date>(form.getModel(), "toDate"))));
+        form.add(new DateTimePicker("fromDate", new UserToUTCDateModel(new PropertyModel<Date>(form.getModel(), "fromDate"))));
+        form.add(new DateTimePicker("toDate", new UserToUTCDateModel(new EndOfDayDateModel(new PropertyModel<Date>(form.getModel(), "toDate")))));
 
         form.addAssetDetailsPanel("assetDetailsCriteriaPanel");
         form.addEventDetailsPanel("eventDetailsCriteriaPanel");
