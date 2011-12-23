@@ -14,8 +14,14 @@ public class NumberCriteriaValidator extends FieldValidatorSupport {
 	@Override
 	public void validate(Object action) throws ValidationException {
         List<CriteriaResultWebModel> criteriaResults = ((ActionWithCriteriaResults) action).getCriteriaResults();
+        if (criteriaResults != null) {
+            verifyAllNumberfieldCriteria(action, criteriaResults);
+        }
+    }
+
+    private void verifyAllNumberfieldCriteria(Object action, List<CriteriaResultWebModel> criteriaResults) {
         for (CriteriaResultWebModel criteriaResult : criteriaResults) {
-            if (CriteriaType.NUMBER_FIELD.name().equals(criteriaResult.getType())) {  
+            if (CriteriaType.NUMBER_FIELD.name().equals(criteriaResult.getType())) {
             	if(criteriaResult.getTextValue() != null && !criteriaResult.getTextValue().isEmpty()) {
 		        	try {
 						Float.parseFloat(criteriaResult.getTextValue());
@@ -26,7 +32,6 @@ public class NumberCriteriaValidator extends FieldValidatorSupport {
 				}
             }
         }
-
-	}
+    }
 
 }
