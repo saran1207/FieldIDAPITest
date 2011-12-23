@@ -18,7 +18,8 @@ public class EndOfDayDateModel implements IModel<Date> {
 
     @Override
     public Date getObject() {
-        return dateModel.getObject();
+        Date date = dateModel.getObject();
+        return date == null ? null : DateHelper.convertToUserTimeZone(date, FieldIDSession.get().getSessionUser().getTimeZone());
     }
 
     @Override
