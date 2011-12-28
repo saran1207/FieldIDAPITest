@@ -89,7 +89,7 @@
 					</li>
 				<#else>
 					<li>
-						<a href="<@s.url action="ownersUsersLocations" namespace="/"/>" class="speedLink" id="menuSetup"><@s.text name="label.setup" /> </a>
+						<a href="<@s.url value="/w/setup/ownersUsersLocations"/>" class="speedLink" id="menuSetup"><@s.text name="label.setup" /> </a>
 					</li>
 				</#if>
 			</#if>
