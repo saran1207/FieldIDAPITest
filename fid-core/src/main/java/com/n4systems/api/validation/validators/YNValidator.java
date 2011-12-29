@@ -2,6 +2,8 @@ package com.n4systems.api.validation.validators;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
@@ -29,7 +31,11 @@ public class YNValidator implements FieldValidator {
 		Y,N;
 
 		public static boolean isYes(String value) {
-			return Y.toString().equalsIgnoreCase(value);
+			return Y.toString().equalsIgnoreCase(StringUtils.upperCase(value));
+		}
+
+		public static boolean isNo(String value) {
+			return N.toString().equalsIgnoreCase(StringUtils.upperCase(value));
 		}
 	}
 }

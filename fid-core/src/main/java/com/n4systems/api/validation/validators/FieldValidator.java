@@ -34,6 +34,8 @@ public interface FieldValidator {
 	public static final String NonUniqueOwnerValidatorFail = "Found multiple owners for organization '%s', customer '%s' and division '%s'.";
 	public static final String EventStatusValidatorFail = "'%s' is not a valid result.  Results may be 'Pass', 'Fail', or 'N/A'";
 	public static final String YNValidatorFail = "'%s' is not allowed for the field '%s'.  Valid values are 'Y' or 'N'.";
+	public static final String PermissionTypeFail = "User %s is not allowed to set the permission %s to %s.";
+	public static final String AccountTypeFail = "The account type [%s] can not be found when trying to set its permission for user %s.";
 	public static final String NoUserFoundValidationFail = "Could not find a user with the name '%s' for the field '%s'.";
 	public static final String MultipleUserFoundValidationFail = "Multiple users have been found matching the name '%s'.  The matching users are: '%s'.";
 	public static final String NoAssetFoundValidationFail = "Could not find an asset matching the identifier '%s' for the field '%s'.Either it doesn't exist or the event type is not associated with it.";

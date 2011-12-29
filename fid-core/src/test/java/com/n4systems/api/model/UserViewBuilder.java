@@ -21,6 +21,10 @@ public class UserViewBuilder extends BaseBuilder<UserView> {
 	public UserViewBuilder() { 		
 	}
 	
+	public static UserViewBuilder aUserView() { 
+		return new UserViewBuilder().withDefaultValues();
+	}
+	
 	public UserViewBuilder withDefaultValues() {
 		organization = "N4";
 		firstName = "john";
