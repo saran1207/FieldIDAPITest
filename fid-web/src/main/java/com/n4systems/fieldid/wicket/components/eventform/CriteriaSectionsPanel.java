@@ -37,14 +37,14 @@ public class CriteriaSectionsPanel extends SortableListPanel {
         add(new TwoStateAjaxLink("reorderSectionsButton", "Reorder Sections", "Done Reordering") {
             @Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
-                target.addComponent(CriteriaSectionsPanel.this);
+                target.add(CriteriaSectionsPanel.this);
                 sortableBehavior.setDisabled(true);
                 reorderState = false;
             }
 
             @Override
             protected void onEnterSecondaryState(AjaxRequestTarget target) {
-                target.addComponent(CriteriaSectionsPanel.this);
+                target.add(CriteriaSectionsPanel.this);
                 sortableBehavior.setDisabled(false);
                 reorderState = true;
             }
@@ -87,7 +87,7 @@ public class CriteriaSectionsPanel extends SortableListPanel {
                     
                     @Override
                     protected void onFormValidationError(AjaxRequestTarget target) {
-                        target.addComponent(feedbackPanel);
+                        target.add(feedbackPanel);
                     }
 
                     @Override
@@ -123,7 +123,7 @@ public class CriteriaSectionsPanel extends SortableListPanel {
     protected void onItemMoving(int oldIndex, int newIndex, AjaxRequestTarget target) {
         CriteriaSection movingSection = getListModel().getObject().remove(oldIndex);
         getListModel().getObject().add(newIndex, movingSection);
-        target.addComponent(CriteriaSectionsPanel.this);
+        target.add(CriteriaSectionsPanel.this);
     }
 
     private void processCopy(int index) {
@@ -159,7 +159,7 @@ public class CriteriaSectionsPanel extends SortableListPanel {
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    target.addComponent(feedbackPanel);
+                    target.add(feedbackPanel);
                 }
             });
             sectionNameField.add(new ClickOnComponentWhenEnterKeyPressedBehavior(submitButton));

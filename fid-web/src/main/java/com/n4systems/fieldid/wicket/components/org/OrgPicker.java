@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.wicket.components.org;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.components.CloseImagePanel;
+import com.n4systems.fieldid.wicket.components.SimplePanel;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -10,16 +10,17 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
-import com.n4systems.fieldid.wicket.components.CloseImagePanel;
-import com.n4systems.model.orgs.BaseOrg;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrgPicker extends Panel {
 
@@ -45,8 +46,6 @@ public class OrgPicker extends Panel {
         WebMarkupContainer orgNameDisplay = new WebMarkupContainer("orgNameInput");
         orgNameDisplay.add(new AttributeModifier("value", true, new PropertyModel<String>(orgModel, "displayName")));
         add(orgNameDisplay);
-
-        add(CSSPackageResource.getHeaderContribution("style/featureStyles/orgPickerNew.css"));
 
         add(orgPickerContainer = new WebMarkupContainer("orgPickerContainer"));
         orgPickerContainer.setVisible(false);
@@ -87,7 +86,7 @@ public class OrgPicker extends Panel {
         tabs.add(new AbstractTab(new Model<String>("CLOSE")) {
             @Override
             public Panel getPanel(String panelId) {
-                return new Panel(panelId);
+                return new SimplePanel(panelId);
             }
         });
 
@@ -123,6 +122,11 @@ public class OrgPicker extends Panel {
         orgPickerContainer.add(tabbedPanel);
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/featureStyles/orgPickerNew.css");
+    }
+
     private void addClearAndCloseLinks() {
         add(new AjaxLink("clearLink") {
             @Override
@@ -136,9 +140,9 @@ public class OrgPicker extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 orgPickerContainer.setVisible(true);
-                target.addComponent(OrgPicker.this);
+                target.add(OrgPicker.this);
                 if (translateContainerSelector != null) {
-                    target.appendJavascript("translateWithin($('#"+orgPickerContainer.getMarkupId()+"'), $('#"+chooseLink.getMarkupId()+"'), $('"+translateContainerSelector+"'));");
+                    target.appendJavaScript("translateWithin($('#"+orgPickerContainer.getMarkupId()+"'), $('#"+chooseLink.getMarkupId()+"'), $('"+translateContainerSelector+"'));");
                 }
             }
         });
@@ -147,7 +151,7 @@ public class OrgPicker extends Panel {
 
     protected void closePicker(AjaxRequestTarget target) {
         orgPickerContainer.setVisible(false);
-        target.addComponent(OrgPicker.this);
+        target.add(OrgPicker.this);
         onPickerClosed(target);
     }
     
@@ -156,7 +160,7 @@ public class OrgPicker extends Panel {
         if (browsePanel != null) {
             browsePanel.clearSelections();
         }
-        target.addComponent(OrgPicker.this);
+        target.add(OrgPicker.this);
 	}
 
     protected void onPickerClosed(AjaxRequestTarget target) {}

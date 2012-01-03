@@ -48,25 +48,20 @@ public class FlotChart<X> extends Panel {
 			super(id);
 	        setOutputMarkupId(true);        
 	        setOutputMarkupPlaceholderTag(true);
-			add(new AbstractBehavior () {
-				@Override
-				public void renderHead(IHeaderResponse response) {
-                    optionsModel.detach();
-					updateOptions(getChartData());					
-					StringBuffer javascriptBuffer = new StringBuffer();
-					javascriptBuffer.append ("chartWidgetFactory.createWithData('"+getMarkupId() + "'," + 
-							jsonRenderer.render(getChartData()) + "," + 
-							jsonRenderer.render(optionsModel.getObject()) +
-					");");
-					response.renderOnDomReadyJavascript(javascriptBuffer.toString());
-				}
-
-
-			});
-			
 		}
-		
-	}
+
+        @Override
+        public void renderHead(IHeaderResponse response) {
+            optionsModel.detach();
+            updateOptions(getChartData());
+            StringBuffer javascriptBuffer = new StringBuffer();
+            javascriptBuffer.append ("chartWidgetFactory.createWithData('"+getMarkupId() + "'," +
+                    jsonRenderer.render(getChartData()) + "," +
+                    jsonRenderer.render(optionsModel.getObject()) +
+            ");");
+            response.renderOnDomReadyJavaScript(javascriptBuffer.toString());
+        }
+    }
 
 }
 		

@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.wicket.resources;
 
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import org.apache.wicket.Component;
+import org.apache.wicket.resource.loader.IStringResourceLoader;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Properties;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.resource.loader.IStringResourceLoader;
-
-import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 
 public class CustomerLanguageResourceLoader implements IStringResourceLoader {
 
@@ -22,12 +21,12 @@ public class CustomerLanguageResourceLoader implements IStringResourceLoader {
     }
 
     @Override
-    public String loadStringResource(Class<?> clazz, String key, Locale locale, String style) {
+    public String loadStringResource(Class<?> clazz, String key, Locale locale, String style, String variation) {
         return loadResource(key);
     }
 
     @Override
-    public String loadStringResource(Component component, String key) {
+    public String loadStringResource(Component component, String key, Locale locale, String style, String variation) {
         return loadResource(key);
     }
 

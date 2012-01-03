@@ -1,32 +1,30 @@
 package com.n4systems.fieldid.wicket;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.http.HttpSession;
-
-import com.n4systems.fieldid.viewhelpers.SearchContainer;
-import org.apache.wicket.Request;
-import org.apache.wicket.Session;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.protocol.http.WebSession;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
+import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldidadmin.utils.Constants;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
+import org.apache.wicket.Session;
+import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.Request;
+import rfid.web.helper.SessionUser;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.servlet.http.HttpSession;
 
 @SuppressWarnings({ "unchecked", "serial" })
 public class FieldIDSession extends WebSession {
@@ -36,7 +34,7 @@ public class FieldIDSession extends WebSession {
 
     public FieldIDSession(Request request) {
         super(request);
-        this.session = ((WebRequest)request).getHttpServletRequest().getSession();
+        this.session = ((ServletWebRequest)request).getContainerRequest().getSession();
     }
   
     @Deprecated // for testing only. 

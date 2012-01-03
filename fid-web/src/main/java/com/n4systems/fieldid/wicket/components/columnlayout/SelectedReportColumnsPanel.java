@@ -47,8 +47,8 @@ public class SelectedReportColumnsPanel extends Panel {
             public void onUpdate(Component component, int newIndexOfMovingItem, AjaxRequestTarget target) {
                 if (component == null) return;
 
-                target.addComponent(columnsListContainer);
-                target.addComponent(component);
+                target.add(columnsListContainer);
+                target.add(component);
 
                 List<ColumnMapping> selectedColumns = getSelectedColumns();
 
@@ -56,7 +56,7 @@ public class SelectedReportColumnsPanel extends Panel {
                 ColumnMapping reportColumn = theReportColumnPanel.getColumnModel().getObject();
                 selectedColumns.remove(reportColumn);
                 selectedColumns.add(newIndexOfMovingItem, reportColumn);
-                target.addComponent(columnsListContainer);
+                target.add(columnsListContainer);
             }
         };
         sortable.setRevert(new SortableRevert(true));
@@ -69,7 +69,7 @@ public class SelectedReportColumnsPanel extends Panel {
 
     private void doRemoveColumn(AjaxRequestTarget target, ColumnMapping reportColumn) {
         getSelectedColumns().remove(reportColumn);
-        target.addComponent(columnsListContainer);
+        target.add(columnsListContainer);
         onColumnRemoved(target, reportColumn);
     }
 

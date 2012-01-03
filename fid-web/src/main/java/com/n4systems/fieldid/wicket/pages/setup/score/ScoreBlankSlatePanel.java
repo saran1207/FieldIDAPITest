@@ -22,6 +22,10 @@ public class ScoreBlankSlatePanel extends Panel {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     onCreateFirstGroupClicked(target);
                 }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                }
             });
 
         }

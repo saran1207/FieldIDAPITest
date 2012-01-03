@@ -13,7 +13,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -39,7 +39,6 @@ public class SchedulePicker extends Panel {
         setOutputMarkupId(true);
 
         add(scheduleForm = new ScheduleForm("scheduleForm", openPickerLabel, scheduleModel, eventTypeOptions, jobsOptions));
-        add(CSSPackageResource.getHeaderContribution("style/newCss/component/wicket_schedule_picker.css"));
     }
 
     class ScheduleForm extends Form<EventSchedule> {
@@ -57,7 +56,11 @@ public class SchedulePicker extends Panel {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     setEditorVisible(target, true);
                     onPickerOpened(target);
-                    target.appendJavascript("translate($('#"+editorContainer.getMarkupId()+"'), $('#"+openDialogButton.getMarkupId()+"'),"+dy+","+dx+")");
+                    target.appendJavaScript("translate($('#" + editorContainer.getMarkupId() + "'), $('#" + openDialogButton.getMarkupId() + "')," + dy + "," + dx + ")");
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
                 }
 
                 @Override
@@ -98,12 +101,12 @@ public class SchedulePicker extends Panel {
                     onPickComplete(target);
                     setDefaultEventType(eventScheduleModel, eventTypeOptions);
                     setEditorVisible(target, false);
-                    target.addComponent(feedbackPanel);
+                    target.add(feedbackPanel);
                 }
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    target.addComponent(feedbackPanel);
+                    target.add(feedbackPanel);
                 }
             });
 
@@ -133,7 +136,7 @@ public class SchedulePicker extends Panel {
 
         private void setEditorVisible(AjaxRequestTarget target, boolean visible) {
             editorContainer.setVisible(visible);
-            target.addComponent(editorContainer);
+            target.add(editorContainer);
         }
 
         private AjaxLink createQuickDateLink(String id, final int daysFromNow, final int monthsFromNow, final int yearsFromNow) {
@@ -146,7 +149,7 @@ public class SchedulePicker extends Panel {
                     scheduleModel.getObject().setNextDate(dateToSchedule);
                     // We must clear the input in case we have some raw input in the date field that had a validation error.
                     dateTimePicker.clearInput();
-                    target.addComponent(dateTimePicker);
+                    target.add(dateTimePicker);
                 }
             };
         }
@@ -157,11 +160,15 @@ public class SchedulePicker extends Panel {
     protected void onPickComplete(AjaxRequestTarget target) { }
 
     public void redrawOpenDialogButton(AjaxRequestTarget target) {
-        target.addComponent(scheduleForm.openDialogButton);
+        target.add(scheduleForm.openDialogButton);
     }
 
     protected boolean isOpenPickerButtonEnabled() {
         return true;
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/newCss/component/wicket_schedule_picker.css");
+    }
 }

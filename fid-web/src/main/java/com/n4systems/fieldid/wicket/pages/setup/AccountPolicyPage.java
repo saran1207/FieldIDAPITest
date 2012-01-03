@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.MinimumValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
@@ -26,14 +26,14 @@ public class AccountPolicyPage extends SetupPage {
         add(new AccountPolicyForm("accountPolicyForm"));
     }
 
-    class AccountPolicyForm extends Form<AccountPolicyForm> {
+    class AccountPolicyForm extends Form<AccountPolicy> {
 		private static final long serialVersionUID = 3819792960628089473L;
 		
         public AccountPolicyForm(String id) {
             super(id);
             setOutputMarkupId(true);
             AccountPolicy accountPolicy = tenantSettingsService.getTenantSettings().getAccountPolicy();
-            setDefaultModel(new CompoundPropertyModel<AccountPolicyForm>(accountPolicy));
+            setDefaultModel(new CompoundPropertyModel<AccountPolicy>(accountPolicy));
 
             add(feedback = new FIDFeedbackPanel("feedbackPanel"));
 
@@ -44,11 +44,11 @@ public class AccountPolicyPage extends SetupPage {
 				private static final long serialVersionUID = 1L;
 				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 					udpateAccountPolicy((AccountPolicy) form.getModelObject());
-                    target.addComponent(AccountPolicyForm.this);
+                    target.add(AccountPolicyForm.this);
                 	setResponsePage(SecurityPage.class);
                 }
 				@Override protected void onError(AjaxRequestTarget target, Form<?> form) {
-					target.addComponent(feedback);
+					target.add(feedback);
 				}
             });
             

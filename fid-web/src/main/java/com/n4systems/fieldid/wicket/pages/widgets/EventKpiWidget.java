@@ -1,18 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import com.n4systems.fieldid.wicket.components.dashboard.subcomponents.EventKpiTable;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
@@ -20,6 +7,18 @@ import com.n4systems.fieldid.wicket.pages.widgets.config.EventKPIConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
+import org.apache.wicket.Component;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
@@ -30,7 +29,6 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 	public EventKpiWidget(String id, WidgetDefinition<EventKPIWidgetConfiguration> widgetDefinition) {
         super(id, new Model<WidgetDefinition<EventKPIWidgetConfiguration>>(widgetDefinition));
 		setOutputMarkupId(true);
-		add(CSSPackageResource.getHeaderContribution("style/dashboard/widgets/eventkpi.css"));
 
 		List<BaseOrg> orgList = getOrgList();
 		ContextImage arrow;
@@ -46,8 +44,13 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 			arrow.setVisible(false);
 		}
 	}
-	
-	private List<BaseOrg> getOrgList() {
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/dashboard/widgets/eventkpi.css");
+    }
+
+    private List<BaseOrg> getOrgList() {
 		EventKPIWidgetConfiguration config = getConfig();
 
 		if(config == null) {

@@ -56,7 +56,7 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    target.addComponent(feedbackPanel);
+                    target.add(feedbackPanel);
                 }
             });
             add(new AjaxLink("cancelLink") {

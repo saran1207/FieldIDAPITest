@@ -77,7 +77,7 @@ public class PredefinedLocationsPanel extends Panel {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         selectedPredefinedLocationId = item.getModelObject().getId();
-                        target.addComponent(PredefinedLocationsPanel.this);
+                        target.add(PredefinedLocationsPanel.this);
 
                         for (int i = expandedLevels.size() - 1; i >= Math.max(1, levelIndex + 1); i--) {
                             expandedLevels.remove(i);
@@ -94,7 +94,7 @@ public class PredefinedLocationsPanel extends Panel {
 
                         selectedLevels.add(item.getModelObject());
 
-                        target.appendJavascript("$('"+ PredefinedLocationsPanel.this.getMarkupId()+"').scrollLeft = 10000;");
+                        target.appendJavaScript("$('"+ PredefinedLocationsPanel.this.getMarkupId()+"').scrollLeft = 10000;");
                     }
                 };
                 clickLink.add(createHighlightSelectedModifier(item, levelIndex));

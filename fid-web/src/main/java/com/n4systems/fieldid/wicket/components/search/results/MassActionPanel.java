@@ -40,6 +40,6 @@ public abstract class MassActionPanel extends Panel implements IHeaderContributo
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderOnDomReadyJavascript(variableAssignmentScriptBuffer.toString());
+        response.renderOnDomReadyJavaScript(variableAssignmentScriptBuffer.toString());
     }
 }

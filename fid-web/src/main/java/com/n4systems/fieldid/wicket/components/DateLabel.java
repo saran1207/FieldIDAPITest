@@ -20,7 +20,7 @@ public class DateLabel extends Label {
     }
 
     @Override
-    protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
+    public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
         DateFormat df = new SimpleDateFormat(FieldIDSession.get().getSessionUser().getDateFormat());
         String dateString = df.format(model.getObject());
         replaceComponentTagBody(markupStream, openTag, dateString);

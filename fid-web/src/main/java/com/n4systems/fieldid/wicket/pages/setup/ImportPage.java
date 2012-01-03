@@ -1,23 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
-import java.util.List;
-
-import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.model.IModel;
-
-import com.n4systems.fieldid.wicket.model.AssetTypesForTenantModel;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 
 public class ImportPage extends SetupPage {
 
     public ImportPage() {
-        IModel<List<AssetType>> assetTypeListModel = new AssetTypesForTenantModel();
-        IModel<List<EventType>> eventTypeListModel = new EventTypesForTenantModel();
-
         add(new ImportOwnersForm("importOwnersForm"));
         add(new ImportAssetsForm("importAssetsForm"));
         add(new ImportEventsForm("importEventsForm"));
@@ -28,70 +18,49 @@ public class ImportPage extends SetupPage {
     class ImportOwnersForm extends Form {
         public ImportOwnersForm(String id) {
             super(id);
-            add(new AjaxButton("importOwnersButton") {
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    getResponse().redirect("/fieldid/customerImportExport.action");
-                }
-            });
+            add(createRedirectingAjaxButton("importOwnersButton", "/customerImportExport.action"));
         }
     }
 
     class ImportAssetsForm extends Form {
-
         public ImportAssetsForm(String id) {
             super(id);
-            add(new AjaxButton("importAssetsButton") {
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    getResponse().redirect("/fieldid/assetImportExport.action");
-                }
-            });
+            add(createRedirectingAjaxButton("importAssetsButton", "/assetImportExport.action"));
         }
     }
 
     class ImportEventsForm extends Form {
-    	
         public ImportEventsForm(String id) {
             super(id);
-            add(new AjaxButton("importEventsButton") {
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    getResponse().redirect("/fieldid/eventImportExport.action");
-                }
-            });
+            add(createRedirectingAjaxButton("importEventsButton", "/eventImportExport.action"));
         }
-
     }
 
     class ImportAutoAttributesForm extends Form {
-
         public ImportAutoAttributesForm(String id) {
             super(id);
-
-            add(new AjaxButton("startImportButton") {
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    getResponse().redirect("/fieldid/autoAttributeImportExport.action");
-                }
-            });
-
+            add(createRedirectingAjaxButton("startImportButton", "/autoAttributeImportExport.action"));
         }
-
     }
     
     class ImportUsersForm extends Form {
         public ImportUsersForm(String id) {
             super(id);
-            add(new AjaxButton("importUsersButton") {
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    getResponse().redirect("/fieldid/userImportExport.action");
-                }
-            });
+            add(createRedirectingAjaxButton("importUsersButton", "/userImportExport.action"));
         }
     }
-    
-    
+
+    protected AjaxButton createRedirectingAjaxButton(final String id, final String url) {
+        return new AjaxButton(id) {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                throw new RedirectToUrlException(url);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            }
+        };
+    }
 
 }

@@ -48,7 +48,7 @@ public class AssetDetailsCriteriaPanel extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 onAssetTypeOrGroupUpdated(target, assetTypeModel.getObject(), availableAssetTypesModel.getObject());
-                target.addComponent(groupedAssetTypePicker);
+                target.add(groupedAssetTypePicker);
             }
         });
         assetTypeGroupDropDownChoice.setNullValid(true);

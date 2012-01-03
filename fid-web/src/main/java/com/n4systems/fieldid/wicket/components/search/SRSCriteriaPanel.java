@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.wicket.components.search;
 
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
-import com.n4systems.fieldid.service.search.columns.EventColumnsService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCollapseContainer;
@@ -16,8 +14,7 @@ import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.search.SearchCriteriaModel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Button;
@@ -48,11 +45,6 @@ public abstract class SRSCriteriaPanel<T extends SearchCriteriaModel> extends Pa
         this.criteriaModel = criteriaModel;
         add(new FIDFeedbackPanel("feedbackPanel"));
         setOutputMarkupId(true);
-
-        add(JavascriptPackageResource.getHeaderContribution("javascript/reportingForm.js"));
-
-        add(CSSPackageResource.getHeaderContribution("style/pageStyles/search.css"));
-        add(CSSPackageResource.getHeaderContribution("style/pageStyles/downloads.css"));
 
         add(new ContextImage("tipIcon", "images/tip-icon.png"));
         add(searchCriteriaForm = new SearchCriteriaForm("reportCriteriaForm", criteriaModel));
@@ -96,7 +88,7 @@ public abstract class SRSCriteriaPanel<T extends SearchCriteriaModel> extends Pa
                 public void onClick(AjaxRequestTarget target) {
                     SearchCriteriaForm.this.getModel().setObject(createNewCriteriaModel());
                     initializeConfiguredColumns(dynamicAssetColumnsModel, dynamicEventColumnsModel);
-                    target.addComponent(SRSCriteriaPanel.this);
+                    target.add(SRSCriteriaPanel.this);
                 }
             });
 
@@ -141,7 +133,7 @@ public abstract class SRSCriteriaPanel<T extends SearchCriteriaModel> extends Pa
                 @Override
                 protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
                     updateDynamicAssetColumns(dynamicAssetColumnsModel, selectedAssetType, availableAssetTypes);
-                    target.addComponent(selectDisplayColumnsPanel);
+                    target.add(selectDisplayColumnsPanel);
                 }
             };
             add(assetDetailsCriteriaPanel);
@@ -152,7 +144,7 @@ public abstract class SRSCriteriaPanel<T extends SearchCriteriaModel> extends Pa
                 @Override
                 protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {
                     updateDynamicEventColumns(dynamicEventColumnsModel, selectedEventType, availableEventTypes);
-                    target.addComponent(selectDisplayColumnsPanel);
+                    target.add(selectDisplayColumnsPanel);
                 }
             };
             add(eventDetailsCriteriaPanel);
@@ -172,4 +164,10 @@ public abstract class SRSCriteriaPanel<T extends SearchCriteriaModel> extends Pa
 
     protected void onNoDisplayColumnsSelected() {}
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderJavaScriptReference("javascript/reportingForm.js");
+        response.renderCSSReference("style/pageStyles/search.css");
+        response.renderCSSReference("style/pageStyles/downloads.css");
+    }
 }

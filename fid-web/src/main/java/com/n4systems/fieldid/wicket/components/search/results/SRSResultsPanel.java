@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 
 import java.util.List;
 
@@ -51,7 +51,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteriaModel> extends Pan
                 if (selected) {
                     dataTable.justSelectedPageWithElements(countItemsOnCurrentPage());
                 }
-                target.appendJavascript("setTableSelected('"+dataTable.getTable().getMarkupId()+"', "+selected+");");
+                target.appendJavaScript("setTableSelected('" + dataTable.getTable().getMarkupId() + "', " + selected + ");");
                 updateSelectionStatus(target);
             }
 
@@ -64,18 +64,18 @@ public abstract class SRSResultsPanel<T extends SearchCriteriaModel> extends Pan
         convertedColumns.add(createActionsColumn());
 
         provider = createDataProvider(criteriaModel);
-        add(dataTable = new SimpleDataTable<RowView>("resultsTable", convertedColumns.toArray(new IColumn[convertedColumns.size()]), provider, 20, selectedRows) {
+        add(dataTable = new SimpleDataTable<RowView>("resultsTable", convertedColumns, provider, 20, selectedRows) {
             @Override
             protected void onPageChanged(AjaxRequestTarget target) {
-                WebRequest request = (WebRequest) getRequest();
-                new LegacyReportCriteriaStorage().storePageNumber(request.getHttpServletRequest().getSession(), dataTable.getTable().getCurrentPage());
-                target.addComponent(totalResultsLabel);
+                ServletWebRequest request = (ServletWebRequest) getRequest();
+                new LegacyReportCriteriaStorage().storePageNumber(request.getContainerRequest().getSession(), dataTable.getTable().getCurrentPage());
+                target.add(totalResultsLabel);
             }
 
             @Override
             protected void onSelectionChanged(AjaxRequestTarget target) {
                 storeCriteriaIfNecessary();
-                target.addComponent(numSelectedLabel);
+                target.add(numSelectedLabel);
             }
 
             @Override
@@ -104,7 +104,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteriaModel> extends Pan
 	}
 
     protected void updateSelectionStatus(AjaxRequestTarget target) {
-        target.addComponent(numSelectedLabel);
+        target.add(numSelectedLabel);
         dataTable.updateSelectionStatus(target);
         storeCriteriaIfNecessary();
     }

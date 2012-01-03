@@ -56,8 +56,8 @@ public class SelectionStatusPanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 selection.clear();
-                target.addComponent(SelectionStatusPanel.this);
-                target.appendJavascript("setTableSelected('"+dataTable.getMarkupId()+"', false);");
+                target.add(SelectionStatusPanel.this);
+                target.appendJavaScript("setTableSelected('"+dataTable.getMarkupId()+"', false);");
                 onSelectionChanged(target);
             }
         };
@@ -68,12 +68,12 @@ public class SelectionStatusPanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 selection.clear();
-                target.appendJavascript("setTableSelected('"+dataTable.getMarkupId()+"', true);");
+                target.appendJavaScript("setTableSelected('"+dataTable.getMarkupId()+"', true);");
                 List<Long> idList = dataProvider.getIdList();
                 for (Long id : idList) {
                     selection.addId(id);
                 }
-                target.addComponent(SelectionStatusPanel.this);
+                target.add(SelectionStatusPanel.this);
                 onSelectionChanged(target);
             }
         });

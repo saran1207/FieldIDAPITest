@@ -36,8 +36,4 @@ public class NullDataProvider<T extends Serializable> implements ISortableDataPr
         return null;
     }
 
-    @Override
-    public void setSortState(ISortState state) {
-    }
-
 }

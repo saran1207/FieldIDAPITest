@@ -1,13 +1,16 @@
 package com.n4systems.fieldid.wicket.components.table;
 
+import com.n4systems.fieldid.utils.Predicate;
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.ModalLoadingPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -17,11 +20,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
-import com.n4systems.fieldid.utils.Predicate;
-import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.ModalLoadingPanel;
 
 public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware {
 
@@ -35,7 +33,6 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
         this.simpleDataTable = simpleDataTable;
         this.table = simpleDataTable.getTable();
         setOutputMarkupId(true);
-        add(CSSPackageResource.getHeaderContribution("style/featureStyles/pagination.css"));
 
         paginationContainer = new WebMarkupContainer("paginationContainer") {
             @Override
@@ -44,8 +41,8 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
             }
         };
 
-		paginationContainer.add(new AttributeModifier("colspan", true, new Model<String>(
-			String.valueOf(table.getColumns().length))));
+		paginationContainer.add(new AttributeModifier("colspan", new Model<String>(
+			String.valueOf(table.getColumns().size()))));
 
         addPreviousLinks(paginationContainer);
         addNextLinks(paginationContainer);
@@ -75,7 +72,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
                 Integer pageLinkNumber = item.getModelObject() - 1;
                 final boolean isCurrentPage = pageLinkNumber.equals(getTable().getCurrentPage());
                 if (isCurrentPage) {
-                    item.add(new SimpleAttributeModifier("class", "currentPage"));
+                    item.add(new AttributeModifier("class", "currentPage"));
                 }
                 AjaxLink pageLink;
                 item.add(pageLink = createGotoPageLink("pageLink", item.getModelObject(), new Predicate() {
@@ -102,8 +99,12 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
             add(hiddenSubmitButton = new AjaxButton("hiddenJumpButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    target.addComponent(simpleDataTable);
+                    target.add(simpleDataTable);
                     onPageChanged(target);
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
                 }
             });
 
@@ -124,7 +125,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(pageNumber - 1);
-                target.addComponent(simpleDataTable);
+                target.add(simpleDataTable);
                 onPageChanged(target);
             }
 
@@ -140,7 +141,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(getTable().getCurrentPage() + offset);
-                target.addComponent(simpleDataTable);
+                target.add(simpleDataTable);
                 onPageChanged(target);
             }
 
@@ -156,7 +157,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(getTable().getPageCount() - 1);
-                target.addComponent(simpleDataTable);
+                target.add(simpleDataTable);
                 onPageChanged(target);
             }
 
@@ -193,7 +194,12 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
 	public String getAjaxIndicatorMarkupId() {
 		return loadingPanel.getMarkupId();
 	}
-    
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/featureStyles/pagination.css");
+    }
+
     protected void onPageChanged(AjaxRequestTarget target) { }
 
 }

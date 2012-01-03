@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.components.navigation;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
 import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -15,7 +14,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.target.basic.RedirectRequestTarget;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,7 +89,7 @@ public class NavigationBar extends Panel {
 
     private String getQueryString(PageParameters parameters) {
         StringBuffer queryString = new StringBuffer();
-        for (String key : parameters.keySet()) {
+        for (String key : parameters.getNamedKeys()) {
             if (queryString.length() == 0) {
                 queryString.append("?");
             } else {

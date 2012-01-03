@@ -53,7 +53,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
         addConfigElement(orgPicker = new OrgPicker("picker", new PropertyModel<BaseOrg>(this, "orgToAdd")) {
             @Override
             protected void onPickerClosed(AjaxRequestTarget target) {
-                target.addComponent(addOrgButton);
+                target.add(addOrgButton);
             }
         });
         orgPicker.setTranslateContainerSelector(".w_content");
@@ -65,9 +65,13 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 configModel.getObject().getOrgs().add(orgToAdd);
                 orgToAdd = null;
-                target.addComponent(orgsListContainer);
-                target.addComponent(orgPicker);
-                target.addComponent(this);
+                target.add(orgsListContainer);
+                target.add(orgPicker);
+                target.add(this);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
             }
 
             @Override
@@ -101,7 +105,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
             @Override
             protected void onEvent(AjaxRequestTarget target) {
                 orgsListModel.getObject().remove(item.getIndex());
-                target.addComponent(orgsListContainer);
+                target.add(orgsListContainer);
             }
         };
     }

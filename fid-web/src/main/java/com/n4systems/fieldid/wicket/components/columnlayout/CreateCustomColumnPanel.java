@@ -44,7 +44,6 @@ public class CreateCustomColumnPanel extends Panel {
                 @Override
                 protected void onComponentTag(ComponentTag tag) {
                     super.onComponentTag(tag);
-//                    tag.put("onkeypress", "if (event.keyCode == 13) { eval(document.getElementById('"+submitLink.getMarkupId()+"').getAttribute('onclick'));return false; }");
                     tag.put("onkeypress", "if (event.keyCode == 13) { fireEvent('"+submitLink.getMarkupId()+"', 'click');return false; }");
                     tag.put("autocomplete", "off");
                 }
@@ -60,14 +59,13 @@ public class CreateCustomColumnPanel extends Panel {
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    super.onError(target, form);
                 }
             });
             add(new AjaxLink("cancelLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     setAddMode(target, false);
-                    target.addComponent(CreateCustomColumnPanel.this);
+                    target.add(CreateCustomColumnPanel.this);
                 }
             });
         }
@@ -79,7 +77,7 @@ public class CreateCustomColumnPanel extends Panel {
     private void setAddMode(AjaxRequestTarget target, boolean addMode) {
         newColumnForm.setVisible(addMode);
         addNewLink.setVisible(!addMode);
-        target.addComponent(CreateCustomColumnPanel.this);
+        target.add(CreateCustomColumnPanel.this);
     }
 
 }

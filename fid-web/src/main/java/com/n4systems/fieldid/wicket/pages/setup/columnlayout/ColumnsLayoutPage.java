@@ -20,11 +20,9 @@ import com.n4systems.model.columns.saver.ColumnLayoutService;
 import com.n4systems.model.columns.saver.CustomColumnMappingSaver;
 import com.n4systems.model.columns.saver.PathCreator;
 import com.n4systems.util.persistence.search.SortDirection;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -34,6 +32,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,11 +64,10 @@ public class ColumnsLayoutPage extends FieldIDFrontEndPage {
 
     public ColumnsLayoutPage(PageParameters pageParams) {
         super(pageParams);
-        reportType = pageParams.getAsEnum("type", ReportType.class);
+        reportType = ReportType.valueOf(pageParams.get("type").toString());
         if (reportType == null)
             reportType = ReportType.EVENT;
 
-        add(CSSPackageResource.getHeaderContribution("style/columnlayout/column_layout.css"));
         add(feedbackPanel = new FeedbackPanel("feedbackPanel"));
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
 
@@ -87,15 +85,15 @@ public class ColumnsLayoutPage extends FieldIDFrontEndPage {
             @Override
             protected void onReportColumnAddedToReport(AjaxRequestTarget target, ColumnMapping column) {
                 inUseColumns.add(0, column);
-                target.addComponent(selectedReportColumnsPanel);
-                target.addComponent(feedbackPanel);
+                target.add(selectedReportColumnsPanel);
+                target.add(feedbackPanel);
             }
 
             @Override
             protected void onCustomColumnCreated(AjaxRequestTarget target, String value, CustomColumnCategory category) {
                 saveNewCustomColumn(target,value,category);
-                target.addComponent(availableReportColumnsPanel);
-                target.addComponent(feedbackPanel);
+                target.add(availableReportColumnsPanel);
+                target.add(feedbackPanel);
             }
 
             @Override
@@ -106,7 +104,7 @@ public class ColumnsLayoutPage extends FieldIDFrontEndPage {
                 } else {
                     new CustomColumnMappingSaver().remove(customColumnMapping);
                 }
-                target.addComponent(feedbackPanel);
+                target.add(feedbackPanel);
             }
         });
 
@@ -121,11 +119,17 @@ public class ColumnsLayoutPage extends FieldIDFrontEndPage {
                         group.getColumnMappings().add(reportColumn);
                     }
                 }
-                target.addComponent(selectedReportColumnsPanel);
-                target.addComponent(availableReportColumnsPanel);
-                target.addComponent(feedbackPanel);
+                target.add(selectedReportColumnsPanel);
+                target.add(availableReportColumnsPanel);
+                target.add(feedbackPanel);
             }
         });
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/columnlayout/column_layout.css");
     }
 
     private void storeAndSortSortableColumns() {
@@ -170,6 +174,10 @@ public class ColumnsLayoutPage extends FieldIDFrontEndPage {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     saveColumnLayout();
                     setResponsePage(TemplatesPage.class);
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
                 }
             });
             add(new BookmarkablePageLink<Void>("cancelLink", TemplatesPage.class));

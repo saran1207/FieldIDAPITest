@@ -29,7 +29,7 @@ public class StringListEditor extends Panel {
                     @Override
                     protected void onDeleteButtonClicked(AjaxRequestTarget target) {
                         getStringList().remove(item.getIndex());
-                        target.addComponent(StringListEditor.this);
+                        target.add(StringListEditor.this);
                     }
 
                     @Override
@@ -63,8 +63,12 @@ public class StringListEditor extends Panel {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     getStringList().add(string);
                     string = null;
-                    target.addComponent(StringListEditor.this);
+                    target.add(StringListEditor.this);
                     focusOnAddItemTextField(target);
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
                 }
             });
             addItemTextField.add(new ClickOnComponentWhenEnterKeyPressedBehavior(addButton));

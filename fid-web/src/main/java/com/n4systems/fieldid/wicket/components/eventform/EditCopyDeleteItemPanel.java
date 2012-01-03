@@ -170,13 +170,13 @@ public class EditCopyDeleteItemPanel extends Panel {
     private void setViewState(AjaxRequestTarget target) {
         editFormContainer.setVisible(false);
         viewContainer.setVisible(true);
-        target.addComponent(this);
+        target.add(this);
     }
 
     private void setEditState(AjaxRequestTarget target) {
         editFormContainer.setVisible(true);
         viewContainer.setVisible(false);
-        target.addComponent(this);
+        target.add(this);
     }
 
     protected boolean isReorderState() {

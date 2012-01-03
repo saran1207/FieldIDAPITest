@@ -46,20 +46,20 @@ public class SlidingReportSectionCollapseContainer extends Border {
         ContextImage collapseImage = new ContextImage("collapseImage", "images/collapseLarge.gif");
         collapseLink.add(collapseImage);
 
-        add(expandLink);
-        add(collapseLink);
+        addToBorder(expandLink);
+        addToBorder(collapseLink);
 
-        add(new FlatLabel("titleLabel", titleModel));
+        addToBorder(new FlatLabel("titleLabel", titleModel));
 
-        add(getBodyContainer());
+//        add(getBodyContainer());
     }
 
     private void setExpanded(AjaxRequestTarget target, boolean expanded) {
         this.expanded = expanded;
         if (expanded) {
-            target.appendJavascript("openSection('"+component.getMarkupId()+"', '"+expandLink.getMarkupId()+"', '"+collapseLink.getMarkupId()+"');");
+            target.appendJavaScript("openSection('"+component.getMarkupId()+"', '"+expandLink.getMarkupId()+"', '"+collapseLink.getMarkupId()+"');");
         } else {
-            target.appendJavascript("closeSection('" + component.getMarkupId() + "', '" + collapseLink.getMarkupId() + "', '" + expandLink.getMarkupId() + "');");
+            target.appendJavaScript("closeSection('" + component.getMarkupId() + "', '" + collapseLink.getMarkupId() + "', '" + expandLink.getMarkupId() + "');");
         }
     }
 

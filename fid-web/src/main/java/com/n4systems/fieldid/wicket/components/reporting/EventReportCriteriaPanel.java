@@ -19,7 +19,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 
 import java.util.Date;
 
@@ -37,7 +37,8 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriter
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderOnDomReadyJavascript("observeFormChange('"+searchCriteriaForm.getMarkupId()+"');");
+        super.renderHead(response);
+        response.renderOnDomReadyJavaScript("observeFormChange('" + searchCriteriaForm.getMarkupId() + "');");
     }
 
     @Override
@@ -62,7 +63,7 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriter
 
     @Override
     protected WebPage createResultsPage(EventReportCriteriaModel criteria) {
-        HttpSession session = ((WebRequest) getRequest()).getHttpServletRequest().getSession();
+        HttpSession session = ((ServletWebRequest) getRequest()).getContainerRequest().getSession();
         new LegacyReportCriteriaStorage().storeCriteria(criteria, session);
         return new ReportingResultsPage(criteria);
     }

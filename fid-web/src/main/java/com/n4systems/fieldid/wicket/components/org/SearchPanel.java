@@ -102,7 +102,11 @@ public class SearchPanel extends Panel {
                     displayingResults = orgs.size();
                     totalResults = pager.getTotalResults();
 
-                    target.addComponent(SearchPanel.this);
+                    target.add(SearchPanel.this);
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
                 }
             });
 

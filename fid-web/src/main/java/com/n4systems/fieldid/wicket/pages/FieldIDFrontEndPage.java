@@ -1,28 +1,11 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
-import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
-import org.apache.wicket.markup.html.WebComponent;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
@@ -31,6 +14,20 @@ import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
+import rfid.web.helper.SessionUser;
 
 @SuppressWarnings("serial")
 public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
@@ -63,14 +60,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
 
         addClickTaleScripts();
         addCssContainers();
-
-        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.min.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.at_intervals.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout-jquery.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/json2.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/common-jquery.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/jquery.colorbox.js"));
-        add(CSSPackageResource.getHeaderContribution("style/colorbox.css"));
 
         add(new BookmarkablePageLink<Void>("reportingLink", ReportingPage.class));
         add(new BookmarkablePageLink<Void>("assetSearchLink", AssetSearchPage.class));
@@ -191,9 +180,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
 	}
 
     @Override
-    public void renderHead(HtmlHeaderContainer container) {
-        super.renderHead(container);
-
+    public void renderHead(IHeaderResponse response) {
         StringBuffer javascriptBuffer = new StringBuffer();
         Integer timeoutTime = getConfigurationProvider().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
         String loginLightboxTitle = getApplication().getResourceSettings().getLocalizer().getString("title.sessionexpired", null);
@@ -203,7 +190,18 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         javascriptBuffer.append("sessionTestUrl = '/fieldid/ajax/testSession.action';").append(";\n");
         javascriptBuffer.append("loginWindowTitle = '").append(loginLightboxTitle).append("';\n");
 
-        container.getHeaderResponse().renderJavascript(javascriptBuffer.toString(), null);
+        response.renderJavaScript(javascriptBuffer.toString(), null);
+
+        response.renderJavaScriptReference(CoreJavaScriptResourceReference.get());
+
+        response.renderJavaScriptReference("javascript/common-jquery.js");
+        response.renderJavaScriptReference("javascript/jquery.at_intervals.js");
+        response.renderJavaScriptReference("javascript/sessionTimeout-jquery.js");
+        response.renderJavaScriptReference("javascript/json2.js");
+        response.renderJavaScriptReference("javascript/jquery.at_intervals.js");
+        response.renderJavaScriptReference("javascript/jquery.colorbox.js");
+
+        response.renderCSSReference("style/colorbox.css");
     }
 
     protected Long getTenantId() {

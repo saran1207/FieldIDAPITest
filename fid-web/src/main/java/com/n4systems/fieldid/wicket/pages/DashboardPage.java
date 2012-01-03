@@ -18,13 +18,10 @@ import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.util.ConfigurationProvider;
 import org.apache.wicket.Component;
-import org.apache.wicket.RedirectToUrlException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -32,7 +29,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.resource.ContextRelativeResource;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 import rfid.web.helper.SessionUser;
@@ -67,25 +65,32 @@ public class DashboardPage extends FieldIDFrontEndPage {
     	super(configProvider);
     	
         redirectToSetupWizardIfNecessary();
-        add(CSSPackageResource.getHeaderContribution("style/dashboard/dashboard.css"));
 
-       	add(JavascriptPackageResourceIE.getHeaderContribution("javascript/flot/excanvas.min.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.min.js"));                
-        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.navigate.min.js"));        
-        add(JavascriptPackageResource.getHeaderContribution("javascript/flot/jquery.flot.symbol.min.js"));        
-        add(JavascriptPackageResource.getHeaderContribution("javascript/dashboard.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/widget.js"));
-        // override org picker with inline style...ugly but it works.  i'd suggest actually changing the default size (which is 450px)
-        // but that would require regression testing.
-        add(new StringHeaderContributor("<style type='text/css'>.orgSelector { width : 300px !important; }</style>")); 	
-        
         currentLayoutModel = new CurrentLayoutModel();
 
         add(content = addContent("content"));
-        add(CSSPackageResource.getHeaderContribution("style/dashboard/widgetconfig.css"));
     }
 
-	private WebMarkupContainer addContent(String id) {
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        // override org picker with inline style...ugly but it works.  i'd suggest actually changing the default size (which is 450px)
+        // but that would require regression testing.
+        response.renderString("<style type='text/css'>.orgSelector { width : 300px !important; }</style>");
+
+        JavascriptPackageResourceIE.renderJavaScriptReference(response, "javascript/flot/excanvas.min.js");
+
+        response.renderJavaScriptReference("javascript/flot/jquery.flot.min.js");
+        response.renderJavaScriptReference("javascript/flot/jquery.flot.navigate.min.js");
+        response.renderJavaScriptReference("javascript/flot/jquery.flot.symbol.min.js");
+        response.renderJavaScriptReference("javascript/dashboard.js");
+        response.renderJavaScriptReference("javascript/widget.js");
+
+        response.renderCSSReference("style/dashboard/dashboard.css");
+        response.renderCSSReference("style/dashboard/widgetconfig.css");
+    }
+
+    private WebMarkupContainer addContent(String id) {
 		WebMarkupContainer content = new WebMarkupContainer(id);
 		content.setOutputMarkupId(true);
         content.add(addWidgetPanel = new AddWidgetPanel("addWidgetPanel", currentLayoutModel) {
@@ -124,9 +129,9 @@ public class DashboardPage extends FieldIDFrontEndPage {
 	private WebMarkupContainer createBlankSlate(String id) {
 		WebMarkupContainer panel = new WebMarkupContainer(id);
 		panel.setOutputMarkupId(true);
-		panel.add(new Image("step1", new ContextRelativeResource("/images/dashboard/step1.png")));
-		panel.add(new Image("step2", new ContextRelativeResource("/images/dashboard/step2.png")));
-		panel.add(new Image("step3", new ContextRelativeResource("/images/dashboard/step3.png")));
+		panel.add(new Image("step1", new PackageResourceReference("/images/dashboard/step1.png")));
+		panel.add(new Image("step2", new PackageResourceReference("/images/dashboard/step2.png")));
+		panel.add(new Image("step3", new PackageResourceReference("/images/dashboard/step3.png")));
 		return panel;
 	}
 
@@ -212,7 +217,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
         currentLayoutModel.getObject().setTenant(getTenant());
         dashboardService.saveLayout(currentLayoutModel.getObject());
         setContentVisibility();            	
-        target.addComponent(content);        
+        target.add(content);
     }
 
     private void removeWidgetFromColumn(WidgetDefinition widgetToRemove, int columnIndex) {
@@ -255,7 +260,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
     public void closeConfigWindow(AjaxRequestTarget target) {
         configurationWindow.close(target);
-        target.addComponent(columnsContainer);
+        target.add(columnsContainer);
     }
 
 }

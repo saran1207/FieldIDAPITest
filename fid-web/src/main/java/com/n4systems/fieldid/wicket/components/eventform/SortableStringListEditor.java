@@ -53,7 +53,7 @@ public class SortableStringListEditor extends SortableListPanel {
                             // Shift the selection by one if an item higher in the list was deleted
                             currentlySelectedIndex -= 1;
                         }
-                        target.addComponent(SortableStringListEditor.this);
+                        target.add(SortableStringListEditor.this);
                     }
 
                     @Override
@@ -79,14 +79,14 @@ public class SortableStringListEditor extends SortableListPanel {
         add(new TwoStateAjaxLink("reorderCriteriaButton", "Reorder Options", "Done Reordering") {
             @Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
-                target.addComponent(SortableStringListEditor.this);
+                target.add(SortableStringListEditor.this);
                 sortableAjaxBehavior.setDisabled(true);
                 reorderState = false;
             }
 
             @Override
             protected void onEnterSecondaryState(AjaxRequestTarget target) {
-                target.addComponent(SortableStringListEditor.this);
+                target.add(SortableStringListEditor.this);
                 sortableAjaxBehavior.setDisabled(false);
                 reorderState = true;
             }
@@ -118,8 +118,12 @@ public class SortableStringListEditor extends SortableListPanel {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     getStringList().add(string);
                     string = null;
-                    target.addComponent(SortableStringListEditor.this);
+                    target.add(SortableStringListEditor.this);
                     focusOnAddItemTextField(target);
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
                 }
             });
             addItemTextField.add(new ClickOnComponentWhenEnterKeyPressedBehavior(addButton));
@@ -146,7 +150,7 @@ public class SortableStringListEditor extends SortableListPanel {
 	protected void onItemMoving(int oldIndex, int newIndex,	AjaxRequestTarget target) {
 		String movingListItem = getStringList().remove(oldIndex);
 		getStringList().add(newIndex, movingListItem);
-		target.addComponent(this);
+		target.add(this);
 	}
 
 }

@@ -7,7 +7,7 @@ import org.apache.wicket.model.IModel;
 
 public class SelectUnselectCell extends Panel {
 
-    AjaxCheckBox selectCheckbox;
+    protected AjaxCheckBox selectCheckbox;
 
     public SelectUnselectCell(String id, final IModel<Boolean> selectedModel) {
         super(id);
@@ -22,9 +22,5 @@ public class SelectUnselectCell extends Panel {
     }
 
     protected void onSelectUnselect(AjaxRequestTarget target) { }
-
-    public AjaxCheckBox getSelectCheckbox() {
-        return selectCheckbox;
-    }
 
 }

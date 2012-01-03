@@ -31,7 +31,7 @@ public class ScoreResultRangePanel extends Panel {
         comparatorChoice.add(new UpdateComponentOnChange() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                target.addComponent(ScoreResultRangePanel.this);
+                target.add(ScoreResultRangePanel.this);
             }
         });
         TextField<Double> value1Field;

@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.model.navigation;
 
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class PageParametersBuilder {
 

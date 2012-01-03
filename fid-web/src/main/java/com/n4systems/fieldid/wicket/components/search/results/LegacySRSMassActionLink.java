@@ -5,8 +5,8 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.request.target.basic.RedirectRequestTarget;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,7 +24,7 @@ public abstract class LegacySRSMassActionLink<MODEL, LEGACY extends SearchContai
 
     @Override
     public void onClick() {
-        HttpServletRequest httpServletRequest = ((WebRequest) getRequest()).getHttpServletRequest();
+        HttpServletRequest httpServletRequest = ((ServletWebRequest) getRequest()).getContainerRequest();
         HttpSession session = httpServletRequest.getSession();
 
         LEGACY searchContainer = convertAndStoreCriteria(reportCriteriaModel.getObject(), session);
@@ -32,7 +32,7 @@ public abstract class LegacySRSMassActionLink<MODEL, LEGACY extends SearchContai
         String formattedUrl = String.format(url, searchContainer.getSearchId());
         String destination = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://" + httpServletRequest.getServerName() + httpServletRequest.getContextPath() + formattedUrl;
 
-        getRequestCycle().setRequestTarget(new RedirectRequestTarget(destination));
+        getRequestCycle().replaceAllRequestHandlers(new RedirectRequestHandler(destination));
     }
 
     protected abstract LEGACY convertAndStoreCriteria(MODEL model, HttpSession session);

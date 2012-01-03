@@ -1,23 +1,19 @@
 package com.n4systems.fieldid.wicket.components;
 
-import java.util.Date;
-
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
 import rfid.web.helper.SessionUser;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
+import java.util.Date;
 
 @SuppressWarnings("serial")
 public class DateTimePicker extends Panel {
@@ -32,7 +28,6 @@ public class DateTimePicker extends Panel {
         super(id);
 
         setOutputMarkupId(true);
-        addJsAndStylesheets();
 
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
 
@@ -46,8 +41,8 @@ public class DateTimePicker extends Panel {
         ValidationBehavior.addValidationBehaviorToComponent(getDateTextField());
 
         Model<String> classModel = new Model<String>(includeTime ? "datetimepicker dateTime" : "datepicker date");
-        dateTextField.add(new AttributeAppender("class", true, classModel, " "));
-        dateTextField.add(new SimpleAttributeModifier("title", includeTime ? sessionUser.getDisplayDateTimeFormat() : sessionUser.getDisplayDateFormat()) {
+        dateTextField.add(new AttributeAppender("class", classModel, " "));
+        dateTextField.add(new AttributeModifier("title", includeTime ? sessionUser.getDisplayDateTimeFormat() : sessionUser.getDisplayDateFormat()) {
             @Override
             public boolean isEnabled(Component component) {
                 // The format should only be put as the title if there are no validation errors for this component.
@@ -57,19 +52,14 @@ public class DateTimePicker extends Panel {
         });
     }
 
-    private void addJsAndStylesheets() {
-        add(CSSPackageResource.getHeaderContribution("style/datetimepicker.css"));
-        add(CSSPackageResource.getHeaderContribution("style/jquery-redmond/jquery-ui-1.8.13.custom.css"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/jquery-1.4.2.min.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/jquery-ui-1.8.13.custom.min.js"));
-        add(JavascriptPackageResource.getHeaderContribution("javascript/jquery-ui-timepicker-addon.js"));
-    }
-
     @Override
-    public void renderHead(HtmlHeaderContainer container) {
-        super.renderHead(container);
-        container.getHeaderResponse().renderJavascript("jQuery.noConflict();", null);
-        container.getHeaderResponse().renderOnDomReadyJavascript(createSetupCalendarJavascript());
+    public void renderHead(IHeaderResponse response) {
+        response.renderOnLoadJavaScript(createSetupCalendarJavascript());
+
+        response.renderCSSReference("style/datetimepicker.css");
+        response.renderCSSReference("style/jquery-redmond/jquery-ui-1.8.13.custom.css");
+        response.renderJavaScriptReference("javascript/jquery-ui-1.8.13.custom.min.js");
+        response.renderJavaScriptReference("javascript/jquery-ui-timepicker-addon.js");
     }
 
     private String createSetupCalendarJavascript() {

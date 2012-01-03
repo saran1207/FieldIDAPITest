@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import com.n4systems.fieldid.utils.UrlArchive;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.RedirectToUrlException;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import rfid.web.helper.SessionUser;
 
 public class FieldIDAuthenticatedPage extends FieldIDWicketPage {

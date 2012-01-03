@@ -4,7 +4,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -18,7 +17,6 @@ public class SavePanel extends Panel implements IHeaderContributor {
         super(id);
         setOutputMarkupId(true);
 
-        add(JavascriptPackageResource.getHeaderContribution("javascript/updateLastSaveWarning.js"));
         add(new AjaxLink("saveNowAndFinishLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -40,8 +38,8 @@ public class SavePanel extends Panel implements IHeaderContributor {
     }
 
     private void resetLastSaveCounter(AjaxRequestTarget target) {
-        target.appendJavascript("minutesSinceLastSave = 0;");
-        target.appendJavascript("startWarningTimer();");
+        target.appendJavaScript("minutesSinceLastSave = 0;");
+        target.appendJavaScript("startWarningTimer();");
     }
 
     protected void onSaveAndContinueClicked(AjaxRequestTarget target) { }
@@ -49,8 +47,10 @@ public class SavePanel extends Panel implements IHeaderContributor {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderOnDomReadyJavascript("minuteCountIds.push('"+minutesAgoLabel.getMarkupId()+"');");
-        response.renderOnDomReadyJavascript("warningPanelIds.push('"+warningContainer.getMarkupId()+"');");
+        response.renderJavaScriptReference("javascript/updateLastSaveWarning.js");
+        
+        response.renderOnDomReadyJavaScript("minuteCountIds.push('" + minutesAgoLabel.getMarkupId() + "');");
+        response.renderOnDomReadyJavaScript("warningPanelIds.push('" + warningContainer.getMarkupId() + "');");
     }
 
 }

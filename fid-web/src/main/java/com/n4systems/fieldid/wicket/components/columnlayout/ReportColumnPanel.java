@@ -14,7 +14,7 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.resource.ContextRelativeResource;
+import org.apache.wicket.request.resource.PackageResourceReference;
 
 public class ReportColumnPanel extends Panel {
 
@@ -58,11 +58,11 @@ public class ReportColumnPanel extends Panel {
     }
 
     private void addPlusAndDragImages(WebMarkupContainer leftBox) {
-        Image dragImage = new Image("dragImage", new ContextRelativeResource("/images/columnlayout/drag.png"));
+        Image dragImage = new Image("dragImage", new PackageResourceReference("/images/columnlayout/drag.png"));
         dragImage.setVisible(!addMode);
         leftBox.add(dragImage);
 
-        Image plusImage = new Image("plusImage", new ContextRelativeResource("/images/columnlayout/plus.png"));
+        Image plusImage = new Image("plusImage", new PackageResourceReference("/images/columnlayout/plus.png"));
         plusImage.setVisible(addMode);
         leftBox.add(plusImage);
 
@@ -76,7 +76,7 @@ public class ReportColumnPanel extends Panel {
 
     private void addRemoveImage() {
         Image removeImage;
-        add(removeImage = new Image("removeImage", new ContextRelativeResource("/images/columnlayout/remove.png")) {
+        add(removeImage = new Image("removeImage", new PackageResourceReference("/images/columnlayout/remove.png")) {
             @Override
             public boolean isVisible() {
                 return deleteAlwaysVisible || !addMode;

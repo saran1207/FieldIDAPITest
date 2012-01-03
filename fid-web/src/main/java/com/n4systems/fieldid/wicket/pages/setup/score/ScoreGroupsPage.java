@@ -1,8 +1,17 @@
 package com.n4systems.fieldid.wicket.pages.setup.score;
 
+import com.n4systems.fieldid.service.event.ScoreService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.TextFieldWithDescription;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.eventform.ScoreGroupsForTenantModel;
+import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.ScoreGroup;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -13,16 +22,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
-
-import com.n4systems.fieldid.service.event.ScoreService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.TextFieldWithDescription;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.eventform.ScoreGroupsForTenantModel;
-import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
-import com.n4systems.model.ScoreGroup;
 
 public class ScoreGroupsPage extends FieldIDFrontEndPage {
 
@@ -35,7 +34,6 @@ public class ScoreGroupsPage extends FieldIDFrontEndPage {
     private FIDFeedbackPanel feedbackPanel;
 
     public ScoreGroupsPage() {
-        add(CSSPackageResource.getHeaderContribution("style/scoreGroups.css"));
         ScoreGroupsForTenantModel scoreGroupsForTenant = new ScoreGroupsForTenantModel();
         boolean hasScoreGroups = !scoreGroupsForTenant.getObject().isEmpty();
 
@@ -46,8 +44,8 @@ public class ScoreGroupsPage extends FieldIDFrontEndPage {
             protected void onCreateFirstGroupClicked(AjaxRequestTarget target) {
                 groupsAndScoresContainer.setVisible(true);
                 scoreBlankSlatePanel.setVisible(false);
-                target.addComponent(scoreBlankSlatePanel);
-                target.addComponent(groupsAndScoresContainer);
+                target.add(scoreBlankSlatePanel);
+                target.add(groupsAndScoresContainer);
             }
         });
         scoreBlankSlatePanel.setVisible(!hasScoreGroups);
@@ -60,18 +58,24 @@ public class ScoreGroupsPage extends FieldIDFrontEndPage {
                 groupsAndScoresContainer.remove("scoreGroup");
                 groupsAndScoresContainer.add(new ScoreGroupPanel("scoreGroup", model));
 
-                target.addComponent(groupsAndScoresContainer);
-                target.addComponent(feedbackPanel);
+                target.add(groupsAndScoresContainer);
+                target.add(feedbackPanel);
             }
 
             @Override
             protected void onValidationError(AjaxRequestTarget target) {
-                target.addComponent(feedbackPanel);
+                target.add(feedbackPanel);
             }
         });
         
         groupsAndScoresContainer.add(scoreGroupPanel = new ScoreGroupPanel("scoreGroup", new Model<ScoreGroup>()));
         groupsAndScoresContainer.add(new NewScoreGroupForm("newScoreGroupForm"));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/scoreGroups.css");
     }
 
     @Override

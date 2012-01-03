@@ -1,24 +1,5 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.Component.IVisitor;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.util.tester.FormTester;
-import org.easymock.EasyMock;
-import org.easymock.IArgumentMatcher;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.wicket.FieldIdPageTest;
@@ -41,6 +22,26 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.model.user.User;
 import com.n4systems.services.dashboard.DashboardService;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.util.tester.FormTester;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
+import org.easymock.EasyMock;
+import org.easymock.IArgumentMatcher;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, DashboardPage> implements IFixtureFactory<DashboardPage> {
@@ -132,7 +133,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 				
 		getHarness().addWidget(WidgetType.NEWS, layout);
 		
-		IVisitor<ListItem<WidgetDefinition<?>>> visitor = new WidgetVisitor(NewsWidget.class, CommonLinksWidget.class);
+		IVisitor<ListItem<WidgetDefinition<?>>, Void> visitor = new WidgetVisitor(NewsWidget.class, CommonLinksWidget.class);
 		
 		getHarness().getSortableColumn(0).visitChildren(ListItem.class, visitor);
 		
@@ -255,21 +256,20 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		return layout;
 	}
 	
-	class WidgetVisitor implements IVisitor<ListItem<WidgetDefinition<?>>> { 
+	class WidgetVisitor implements IVisitor<ListItem<WidgetDefinition<?>>, Void> {
 
 		private Class<? extends Widget<?>>[] widgets;
 		public WidgetVisitor(Class<? extends Widget<?>>... widgets) { 
 			this.widgets = widgets;
 		}
 		
-		@Override public Object component(ListItem<WidgetDefinition<?>> item) {
+		@Override public void component(ListItem<WidgetDefinition<?>> item, final IVisit<Void> visit) {
 			if (item.getIndex()>=widgets.length) {
 				fail("there should only be " + widgets.length + " widgets");
 			}
 			Class<? extends Widget> clazz = widgets[item.getIndex()];
 			assertEquals(clazz, item.get("widget").getClass());
-			return IVisitor.CONTINUE_TRAVERSAL;
-		} 			
+		}
 		
 	}
 	

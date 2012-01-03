@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateLabel;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
@@ -19,11 +18,9 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.RedirectToUrlException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -60,8 +57,6 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
     private MassScheduleService massScheduleService;
 
     public MassSchedulePage(final IModel<AssetSearchCriteriaModel> criteriaModel) {
-        add(CSSPackageResource.getHeaderContribution("style/newCss/schedule/mass_schedule.css"));
-
         selectedIds = criteriaModel.getObject().getSelection().getSelectedIds();
 
         scheduleSummary = assetService.getAssetScheduleSummary(selectedIds);
@@ -117,6 +112,12 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         });
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/newCss/schedule/mass_schedule.css");
+    }
+
     private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<EventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {
         final Model<EventSchedule> eventScheduleModel = new Model<EventSchedule>(new EventSchedule());
         return new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), eventScheduleModel, eventTypesForAssetType, jobsOptions, -400, 0) {
@@ -124,7 +125,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
             protected void onPickComplete(AjaxRequestTarget target) {
                 item.getModelObject().getSchedules().add(eventScheduleModel.getObject());
                 eventScheduleModel.setObject(new EventSchedule());
-                target.addComponent(assetTypesListContainer);
+                target.add(assetTypesListContainer);
                 updateSchedulePickerButtonsForPickerOpened(target, false);
             }
             @Override
@@ -152,7 +153,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
                     scheduleSummaryEntry.getSchedules().add(scheduleForAll);
                 }
                 scheduleForAll = new EventSchedule();
-                target.addComponent(assetTypesListContainer);
+                target.add(assetTypesListContainer);
                 updateSchedulePickerButtonsForPickerOpened(target, false);
             }
 
@@ -175,7 +176,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
     private void updateSchedulePickerButtonsForPickerOpened(AjaxRequestTarget target, boolean schedulePickerOpened) {
         this.aSchedulePickerIsOpen = schedulePickerOpened;
-        target.addComponent(scheduleAllPicker);
+        target.add(scheduleAllPicker);
         target.addChildren(assetTypesListContainer, SchedulePicker.class);
     }
 
@@ -195,7 +196,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
                         model.getObject().getSchedules().remove(item.getIndex());
-                        target.addComponent(container);
+                        target.add(container);
                     }
                 });
 

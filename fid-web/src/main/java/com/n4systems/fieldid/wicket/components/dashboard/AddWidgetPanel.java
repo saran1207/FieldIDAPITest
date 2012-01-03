@@ -47,7 +47,7 @@ public class AddWidgetPanel extends Panel {
                     if (selectedType != null) {
                         onWidgetTypeSelected(target, selectedType);
                         unusedWidgetsModel.detach();
-                        target.addComponent(AddWidgetPanel.this);
+                        target.add(AddWidgetPanel.this);
                         selectedType = null;
                     }
                 }

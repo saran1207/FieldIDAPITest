@@ -10,9 +10,7 @@ import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.ScoreCalculationType;
 import com.n4systems.model.ScoreResultRange;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.RedirectToUrlException;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -20,6 +18,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Arrays;
@@ -35,7 +35,12 @@ public class ScoreResultConfigurationPage extends EventTypePage {
         super(params);
 
         add(new ScoreConfigurationForm("scoreConfigurationForm"));
-        add(CSSPackageResource.getHeaderContribution("style/scoreResult.css"));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/scoreResult.css");
     }
 
     @Override

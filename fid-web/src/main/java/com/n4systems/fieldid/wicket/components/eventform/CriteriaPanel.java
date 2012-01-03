@@ -86,7 +86,7 @@ public class CriteriaPanel extends SortableListPanel {
 
                     @Override
                     protected void onFormValidationError(AjaxRequestTarget target) {
-                        target.addComponent(feedbackPanel);
+                        target.add(feedbackPanel);
                     }
 
                     @Override
@@ -107,14 +107,14 @@ public class CriteriaPanel extends SortableListPanel {
         add(new TwoStateAjaxLink("reorderCriteriaButton", "Reorder Criteria", "Done Reordering") {
             @Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
-                target.addComponent(CriteriaPanel.this);
+                target.add(CriteriaPanel.this);
                 sortableAjaxBehavior.setDisabled(true);
                 reorderState = false;
             }
 
             @Override
             protected void onEnterSecondaryState(AjaxRequestTarget target) {
-                target.addComponent(CriteriaPanel.this);
+                target.add(CriteriaPanel.this);
                 sortableAjaxBehavior.setDisabled(false);
                 reorderState = true;
             }
@@ -180,7 +180,7 @@ public class CriteriaPanel extends SortableListPanel {
                     StateSet stateSet = getDefaultStateSet();
                     if (stateSet == null) {
                         error("You must configure at least one Button Group to use One-Click criteria");
-                        target.addComponent(feedbackPanel);
+                        target.add(feedbackPanel);
                         return false;
                     }
                     if (previouslySelectedStateSet != null) {
@@ -196,7 +196,7 @@ public class CriteriaPanel extends SortableListPanel {
                     ScoreGroup scoreGroup = getDefaultScoreGroup();
                     if (scoreGroup == null) {
                         error("You must configure at least one Score Group to use Score criteria");
-                        target.addComponent(feedbackPanel);
+                        target.add(feedbackPanel);
                         return false;
                     }
                     if(previouslySelectedScoreGroup != null) {
@@ -209,7 +209,7 @@ public class CriteriaPanel extends SortableListPanel {
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    target.addComponent(feedbackPanel);
+                    target.add(feedbackPanel);
                 }
             });
 
@@ -232,7 +232,7 @@ public class CriteriaPanel extends SortableListPanel {
     protected void onItemMoving(int oldIndex, int newIndex, AjaxRequestTarget target) {
         Criteria movingCriteria = getCriteriaSection().getCriteria().remove(oldIndex);
         getCriteriaSection().getCriteria().add(newIndex, movingCriteria);
-        target.addComponent(this);
+        target.add(this);
     }
 
     protected void onCriteriaAdded(AjaxRequestTarget target, Criteria criteria, int newIndex) { }

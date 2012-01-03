@@ -13,7 +13,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -81,6 +81,10 @@ public class BrowsePanel extends Panel {
                     }
                     onOrgSelected(target);
                 }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                }
             });
             PropertyModel<BaseOrg> selectedInternalOrgModel = new PropertyModel<BaseOrg>(BrowsePanel.this, "selectedInternalOrg");
             PropertyModel<BaseOrg> selectedCustomerOrgModel = new PropertyModel<BaseOrg>(BrowsePanel.this, "selectedCustomerOrg");
@@ -99,7 +103,7 @@ public class BrowsePanel extends Panel {
             });
         }
 
-        protected AbstractBehavior createUpdateSelectsOnChangeBehavior(final boolean clearCustomerOnChange, final boolean clearDivisionOnChange) {
+        protected Behavior createUpdateSelectsOnChangeBehavior(final boolean clearCustomerOnChange, final boolean clearDivisionOnChange) {
             return new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
@@ -109,7 +113,7 @@ public class BrowsePanel extends Panel {
                     if (clearDivisionOnChange) {
                         selectedDivisionOrg = null;
                     }
-                    target.addComponent(BrowsePanel.this);
+                    target.add(BrowsePanel.this);
                 }
             };
         }

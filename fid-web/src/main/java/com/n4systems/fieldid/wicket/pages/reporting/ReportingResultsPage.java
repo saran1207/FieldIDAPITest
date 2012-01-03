@@ -2,14 +2,14 @@ package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
-import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionPanel;
 import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCollapseContainer;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
+import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.search.EventReportCriteriaModel;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -25,8 +25,6 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
     public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel) {
         this.reportCriteriaModel = reportCriteriaModel;
         PropertyModel<EventReportCriteriaModel> reportCriteriaPropertyModel = new PropertyModel<EventReportCriteriaModel>(this, "reportCriteriaModel");
-
-        add(CSSPackageResource.getHeaderContribution("style/pageStyles/reporting.css"));
 
         add(reportResultsPanel = new ReportResultsPanel("resultsPanel", reportCriteriaPropertyModel));
 
@@ -48,6 +46,12 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
 
         add(criteriaExpandContainer);
         add(new ReportingMassActionPanel("massActionPanel", reportCriteriaPropertyModel));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/pageStyles/reporting.css");
     }
 
     private Link createSaveReportLink(String linkId, final boolean overwrite) {

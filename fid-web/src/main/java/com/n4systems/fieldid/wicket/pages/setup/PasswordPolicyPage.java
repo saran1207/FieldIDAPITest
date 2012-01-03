@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.MinimumValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
@@ -28,13 +28,13 @@ public class PasswordPolicyPage extends SetupPage {
         add(new PasswordPolicyForm("passwordForm"));
     }
 
-    class PasswordPolicyForm extends Form<PasswordPolicyForm> {
+    class PasswordPolicyForm extends Form<PasswordPolicy> {
 		private static final long serialVersionUID = 3819792960628089473L;
 		    	
         public PasswordPolicyForm(String id) {
             super(id);
             PasswordPolicy passwordPolicy = tenantSettingsService.getTenantSettings().getPasswordPolicy();           
-            setDefaultModel(new CompoundPropertyModel<PasswordPolicyForm>(passwordPolicy));
+            setDefaultModel(new CompoundPropertyModel<PasswordPolicy>(passwordPolicy));
 
             add(feedbackPanel=new FIDFeedbackPanel("feedbackPanel"));
 
@@ -48,12 +48,12 @@ public class PasswordPolicyPage extends SetupPage {
             add(new AjaxButton("saveButton") {
 				private static final long serialVersionUID = 1L;
 				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    target.addComponent(feedbackPanel);
+                    target.add(feedbackPanel);
                     tenantSettingsService.updateTenantPasswordPolicySettings((PasswordPolicy) form.getModelObject());
                 	setResponsePage(SecurityPage.class);                    
                 }
 				@Override protected void onError(AjaxRequestTarget target, Form<?> form) {
-					target.addComponent(feedbackPanel);
+					target.add(feedbackPanel);
 				}
             });
             

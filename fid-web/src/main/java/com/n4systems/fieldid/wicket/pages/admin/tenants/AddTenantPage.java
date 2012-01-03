@@ -1,28 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.admin.tenants;
 
-import java.util.Set;
-
-import org.apache.log4j.Logger;
-import org.apache.wicket.RedirectToUrlException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.extensions.model.AbstractCheckBoxModel;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressInfoInputPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -38,6 +15,27 @@ import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import org.apache.log4j.Logger;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.extensions.model.AbstractCheckBoxModel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.Set;
 
 public class AddTenantPage extends FieldIDAdminPage {
 	private static final Logger logger = Logger.getLogger(AddTenantPage.class);
@@ -76,7 +74,7 @@ public class AddTenantPage extends FieldIDAdminPage {
 					Set<ExtendedFeature> extendedFeatures = addTenantModel.getObject().getPrimaryOrg().getExtendedFeatures();
 					extendedFeatures.clear();
 					extendedFeatures.addAll(signUpPackageSelect.getModelObject().getFeatureList());
-                    target.addComponent(extendedFeaturesContainer);
+                    target.add(extendedFeaturesContainer);
                 }
             });
             getMarkupId();

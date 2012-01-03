@@ -1,17 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
-import java.text.SimpleDateFormat;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.odlabs.wiquery.ui.progressbar.ProgressBar;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -19,6 +7,17 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.orgs.PrimaryOrg;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.odlabs.wiquery.ui.progressbar.ProgressBar;
+import rfid.web.helper.SessionUser;
+
+import java.text.SimpleDateFormat;
 
 public class YourPlanPage extends FieldIDFrontEndPage {
 	
@@ -26,12 +25,8 @@ public class YourPlanPage extends FieldIDFrontEndPage {
 	private UserLimitService userLimitService;
 	
 	public YourPlanPage() {
-		
-        add(CSSPackageResource.getHeaderContribution("style/setup/your_plan.css"));
-
 		SessionUser sessionUser = getSessionUser();
 		PrimaryOrg primaryOrg = getSecurityGuard().getPrimaryOrg();
-		
 		
 		add(new Label("companyId", sessionUser.getTenant().getDisplayName()));
 		add(new Label("planName", primaryOrg.getSignUpPackage().getDisplayName()));
@@ -86,5 +81,10 @@ public class YourPlanPage extends FieldIDFrontEndPage {
     protected Label createTitleLabel(String labelId) {
         return new FlatLabel(labelId, new FIDLabelModel("title.manage_field_id_plan.plural"));
     }
-	
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/setup/your_plan.css");
+    }
 }

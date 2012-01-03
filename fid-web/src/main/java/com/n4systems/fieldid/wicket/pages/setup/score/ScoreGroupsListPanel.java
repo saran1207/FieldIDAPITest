@@ -42,7 +42,7 @@ public class ScoreGroupsListPanel extends Panel {
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
                         currentlySelectedIndex = item.getIndex();
-                        target.addComponent(ScoreGroupsListPanel.this);
+                        target.add(ScoreGroupsListPanel.this);
                         onScoreGroupSelected(item.getModel(), target);
                     }
 
@@ -56,7 +56,7 @@ public class ScoreGroupsListPanel extends Panel {
                             currentlySelectedIndex = currentlySelectedIndex - 1;
                         }
                         scoreGroupsModel.detach();
-                        target.addComponent(ScoreGroupsListPanel.this);
+                        target.add(ScoreGroupsListPanel.this);
                     }
 
                     @Override
@@ -64,7 +64,7 @@ public class ScoreGroupsListPanel extends Panel {
                         ScoreGroup copiedGroup = new ScoreGroupCopyUtil().copy(item.getModelObject());
                         persistenceService.save(copiedGroup);
                         scoreGroupsModel.detach();
-                        target.addComponent(ScoreGroupsListPanel.this);
+                        target.add(ScoreGroupsListPanel.this);
                     }
 
                     @Override

@@ -36,7 +36,7 @@ public class ScoreDetailsPanel extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
             	onScoreGroupSelected(ScoreDetailsPanel.this.scoreCriteriaModel.getObject().getScoreGroup());
-                target.addComponent(scoreGroupsDisplayContainer);
+                target.add(scoreGroupsDisplayContainer);
             }
         });
 

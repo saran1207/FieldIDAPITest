@@ -1,10 +1,9 @@
 package com.n4systems.fieldid.wicket.model.navigation;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class NavigationItemBuilder {
 

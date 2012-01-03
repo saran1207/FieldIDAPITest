@@ -5,19 +5,18 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 
 public class ReturnToReportPage extends FieldIDFrontEndPage {
 
     public ReturnToReportPage() {
-        WebRequest request = (WebRequest) getRequest();
-        EventReportCriteriaModel storedCriteria = new LegacyReportCriteriaStorage().getStoredCriteria(request.getHttpServletRequest().getSession());
+        ServletWebRequest request = (ServletWebRequest) getRequest();
+        EventReportCriteriaModel storedCriteria = new LegacyReportCriteriaStorage().getStoredCriteria(request.getContainerRequest().getSession());
 
         if (storedCriteria == null) {
             throw new RestartResponseException(DashboardPage.class);
         }
 
-        setRedirect(true);
         setResponsePage(new ReportingResultsPage(storedCriteria));
     }
 

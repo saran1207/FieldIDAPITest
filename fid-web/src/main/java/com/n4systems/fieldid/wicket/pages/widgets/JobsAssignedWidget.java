@@ -6,7 +6,8 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.request.resource.CssPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.EnclosureContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,19 +29,17 @@ import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 public class JobsAssignedWidget extends Widget<WidgetConfiguration> {
 
     public JobsAssignedWidget(String id, WidgetDefinition<WidgetConfiguration> widgetDefinition) {
-		super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));			
-		add(CSSPackageResource.getHeaderContribution("style/dashboard/widgets/jobsassigned.css"));
+		super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));
 
-		List<IColumn> columns = new ArrayList<IColumn>();
-        columns.add(new PropertyColumn<String>(new FIDLabelModel("label.job_id"), "projectID"));
-        columns.add(new PropertyColumn<String>(new FIDLabelModel("label.title"), "name"));
-        columns.add(new PropertyColumn<String>(new FIDLabelModel("label.status"), "status"));
+		List<IColumn<Project>> columns = new ArrayList<IColumn<Project>>();
+        columns.add(new PropertyColumn<Project>(new FIDLabelModel("label.job_id"), "projectID"));
+        columns.add(new PropertyColumn<Project>(new FIDLabelModel("label.title"), "name"));
+        columns.add(new PropertyColumn<Project>(new FIDLabelModel("label.status"), "status"));
         columns.add(createLinkColumn());
-        IColumn[] columnsArray = columns.toArray(new IColumn[columns.size()]);
 
         final OpenJobsForUserDataProvider openJobsForUserDataProvider = new OpenJobsForUserDataProvider();
 
-        SimpleDataTable<Project> jobsTable = new SimpleDataTable<Project>("jobsTable", columnsArray, openJobsForUserDataProvider, 5) {
+        SimpleDataTable<Project> jobsTable = new SimpleDataTable<Project>("jobsTable", columns, openJobsForUserDataProvider, 5) {
             @Override
             public boolean isVisible() {
                 return openJobsForUserDataProvider.size() > 0;
@@ -65,8 +64,13 @@ public class JobsAssignedWidget extends Widget<WidgetConfiguration> {
         });
 	}
 
-    private IColumn createLinkColumn() {
-        return new PropertyColumn(new Model<String>(""), "id") {
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/dashboard/widgets/jobsassigned.css");
+    }
+
+    private IColumn<Project> createLinkColumn() {
+        return new PropertyColumn<Project>(new Model<String>(""), "id") {
             @Override
             public void populateItem(Item item, String componentId, IModel rowModel) {
                 item.add(new LinkToJob(componentId, new PropertyModel<Long>(rowModel, "id")));

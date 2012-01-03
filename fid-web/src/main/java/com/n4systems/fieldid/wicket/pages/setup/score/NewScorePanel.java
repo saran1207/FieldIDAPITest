@@ -53,8 +53,8 @@ public class NewScorePanel extends Panel {
             typeChoice.add(new UpdateComponentOnChange() {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
-                    target.addComponent(valueTextField);
-                    target.addComponent(typeChoice);
+                    target.add(valueTextField);
+                    target.add(typeChoice);
                 }
             });           
 

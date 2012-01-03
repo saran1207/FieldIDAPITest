@@ -6,12 +6,13 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
 import com.n4systems.model.EventType;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
-import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
+import static com.n4systems.fieldid.wicket.model.navigation.
+        PageParametersBuilder.uniqueId;
 
 public class EventTypePage extends FieldIDFrontEndPage {
 
@@ -24,7 +25,7 @@ public class EventTypePage extends FieldIDFrontEndPage {
 
     @Override
     protected void storePageParameters(PageParameters params) {
-        eventTypeId = params.getAsLong("uniqueID");
+        eventTypeId = params.get("uniqueID").toLong();
         eventTypeModel = new EntityModel<EventType>(EventType.class, eventTypeId);
     }
 

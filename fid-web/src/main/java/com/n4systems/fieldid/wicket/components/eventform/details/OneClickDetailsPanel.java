@@ -45,7 +45,7 @@ public class OneClickDetailsPanel extends Panel {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
                     onStateSetSelected(getCriteriaModel().getObject().getStates());
-                    target.addComponent(buttonGroupDisplayPanel);
+                    target.add(buttonGroupDisplayPanel);
                 }
             });
             add(new AjaxCheckBox("setsResultCheckbox", new PropertyModel<Boolean>(getCriteriaModel(), "principal")) {

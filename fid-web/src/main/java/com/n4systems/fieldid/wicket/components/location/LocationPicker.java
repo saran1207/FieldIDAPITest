@@ -8,7 +8,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -29,8 +29,6 @@ public class LocationPicker extends Panel {
         super(id);
         this.locationModel = locationModel;
         setOutputMarkupPlaceholderTag(true);
-
-        add(CSSPackageResource.getHeaderContribution("style/featureStyles/locationPicker.css"));
 
         add(locationPickerContainer = new WebMarkupContainer("locationPickerContainer"));
         locationPickerContainer.setOutputMarkupPlaceholderTag(true);
@@ -60,11 +58,16 @@ public class LocationPicker extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 locationPickerContainer.setVisible(true);
-                target.addComponent(LocationPicker.this);
-                target.appendJavascript("translate($('#" + locationPickerContainer.getMarkupId() + "'), $('#" + chooseLink.getMarkupId() + "'), 0, 0);");
+                target.add(LocationPicker.this);
+                target.appendJavaScript("translate($('#" + locationPickerContainer.getMarkupId() + "'), $('#" + chooseLink.getMarkupId() + "'), 0, 0);");
             }
         });
         chooseLink.setOutputMarkupPlaceholderTag(true);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/featureStyles/locationPicker.css");
     }
 
     class LocationForm extends Form {
@@ -81,6 +84,10 @@ public class LocationPicker extends Panel {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     setModelValueFromPicker();
                     closePicker(target);
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
                 }
             });
 
@@ -106,7 +113,7 @@ public class LocationPicker extends Panel {
 
     private void closePicker(AjaxRequestTarget target) {
         locationPickerContainer.setVisible(false);
-        target.addComponent(LocationPicker.this);
+        target.add(LocationPicker.this);
     }
 
 }

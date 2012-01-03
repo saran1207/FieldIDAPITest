@@ -1,9 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
-import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -11,9 +12,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
 @SuppressWarnings("serial")
 public abstract class Widget<W extends WidgetConfiguration> extends Panel {
@@ -32,18 +30,18 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
         add(new Label("titleLabel", new PropertyModel<String>(widgetDefinition, "config.name")));
         add(subTitleLabel);
         add(new ContextImage("dragImage", "images/dashboard/drag.png"));        
-        add(new AbstractBehavior () {
-			@Override public void renderHead(IHeaderResponse response) {				
-				response.renderOnDomReadyJavascript("widgetToolkit.registerWidget('"+getMarkupId()+"');");
-			}
-        });
         if (StringUtils.isBlank(subTitleLabel.getDefaultModelObjectAsString())) {
         	subTitleLabel.setVisible(false);
         }
         addButtons();
     }
-    
-	protected IModel<String> getSubTitleModel() {
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderOnDomReadyJavaScript("widgetToolkit.registerWidget('" + getMarkupId() + "');");
+    }
+
+    protected IModel<String> getSubTitleModel() {
 		return new Model<String>();
 	}
 	

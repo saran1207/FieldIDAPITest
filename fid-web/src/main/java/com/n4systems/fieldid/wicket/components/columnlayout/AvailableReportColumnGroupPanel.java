@@ -25,14 +25,14 @@ public class AvailableReportColumnGroupPanel extends Panel {
                     @Override
                     protected void onAddLinkClicked(AjaxRequestTarget target, IModel<ColumnMapping> reportColumnModel) {
                         ColumnMapping reportColumn = reportColumnModel.getObject();
-                        target.addComponent(AvailableReportColumnGroupPanel.this);
+                        target.add(AvailableReportColumnGroupPanel.this);
                         getAvailableColumns().remove(reportColumn);
                         onReportColumnAdded(target, reportColumn);
                     }
 
                     @Override
                     protected void onRemoveLinkClicked(AjaxRequestTarget target) {
-                        target.addComponent(AvailableReportColumnGroupPanel.this);
+                        target.add(AvailableReportColumnGroupPanel.this);
                         onReportColumnRemoved(target, item.getModel().getObject());
                         // The above just caused the list of columns to load by calling getObject(). We must
                         // detach the model since the list has changed in db (one item removed) so the model's cache must be cleared

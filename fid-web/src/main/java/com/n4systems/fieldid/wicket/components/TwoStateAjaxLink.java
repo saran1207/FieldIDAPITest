@@ -31,7 +31,7 @@ public class TwoStateAjaxLink extends Panel {
                 inInitialState = !inInitialState;
                 callCorrectCallback(target);
                 setCorrectStateLabel();
-                target.addComponent(TwoStateAjaxLink.this);
+                target.add(TwoStateAjaxLink.this);
             }
         });
         link.add(linkLabel = new FlatLabel("linkLabel", new PropertyModel<String>(this, "currentStateLabel")));

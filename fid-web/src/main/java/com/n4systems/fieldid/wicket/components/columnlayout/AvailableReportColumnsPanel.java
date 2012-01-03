@@ -83,7 +83,7 @@ public class AvailableReportColumnsPanel extends Panel {
             @Override
             protected void onReportColumnRemoved(AjaxRequestTarget target, ColumnMapping columnMapping) {
                 onCustomColumnRemoved(target, (CustomColumnMapping) columnMapping);
-                target.addComponent(AvailableReportColumnsPanel.this);
+                target.add(AvailableReportColumnsPanel.this);
             }
         };
         assetAttributesContainer.addContainedPanel(addableColumnsListPanel);

@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.admin;
 
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.RedirectToUrlException;
-
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDWicketPage;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class FieldIDAdminPage extends FieldIDWicketPage {
 	

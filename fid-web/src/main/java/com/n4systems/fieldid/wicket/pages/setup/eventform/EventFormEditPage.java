@@ -1,17 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.setup.eventform;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaDetailsPanel;
@@ -24,6 +12,17 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.ScoreGroup;
 import com.n4systems.model.StateSet;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventFormEditPage extends EventTypePage {
 
@@ -46,9 +45,6 @@ public class EventFormEditPage extends EventTypePage {
 
     public EventFormEditPage(PageParameters params) {
         super(params);
-
-        add(CSSPackageResource.getHeaderContribution("style/fieldid.css"));
-        add(CSSPackageResource.getHeaderContribution("style/eventFormEdit.css"));
 
         add(topSavePanel = createSavePanel("topSavePanel"));
         add(bottomSavePanel = createSavePanel("bottomSavePanel"));
@@ -137,20 +133,27 @@ public class EventFormEditPage extends EventTypePage {
         criteriaDetailsPanel.setVisible(false);
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/fieldid.css");
+        response.renderCSSReference("style/eventFormEdit.css");
+    }
+
     private SavePanel createSavePanel(String panelID) {
         return new SavePanel(panelID) {
             @Override
             protected void onSaveAndContinueClicked(AjaxRequestTarget target) {
                 saveEventForm();
-                target.addComponent(topSavePanel);
-                target.addComponent(bottomSavePanel);
+                target.add(topSavePanel);
+                target.add(bottomSavePanel);
             }
 
             @Override
             protected void onSaveAndFinishClicked(AjaxRequestTarget target) {
                 saveEventForm();
                 FieldIDSession.get().storeInfoMessageForStruts("Event Form saved.");
-                target.appendJavascript("promptBeforeLeaving = false; window.location='/fieldid/eventType.action?uniqueID=" + eventTypeId+"'");
+                target.appendJavaScript("promptBeforeLeaving = false; window.location='/fieldid/eventType.action?uniqueID=" + eventTypeId + "'");
             }
         };
     }
@@ -161,9 +164,9 @@ public class EventFormEditPage extends EventTypePage {
     }
 
     private void refreshAllComponents(AjaxRequestTarget target) {
-        target.addComponent(criteriaSectionsPanel);
-        target.addComponent(criteriaPanel);
-        target.addComponent(criteriaDetailsPanel);
+        target.add(criteriaSectionsPanel);
+        target.add(criteriaPanel);
+        target.add(criteriaDetailsPanel);
     }
 
     private void focusOnCriteriaNameField(AjaxRequestTarget target) {

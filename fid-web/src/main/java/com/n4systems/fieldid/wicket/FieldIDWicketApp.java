@@ -28,59 +28,54 @@ import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.Response;
 import org.apache.wicket.Session;
-import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.spring.injection.annot.AnnotSpringInjector;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.odlabs.wiquery.core.commons.IWiQuerySettings;
-import org.odlabs.wiquery.core.commons.WiQuerySettings;
 
-public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings {
+public class FieldIDWicketApp extends WebApplication {
 
     @Override
     protected void init() {
-        mountBookmarkablePage("setup/eventFormEdit", EventFormEditPage.class);
-        mountBookmarkablePage("setup/columnsLayout", ColumnsLayoutPage.class);
+        mountPage("setup/eventFormEdit", EventFormEditPage.class);
+        mountPage("setup/columnsLayout", ColumnsLayoutPage.class);
 
-        mountBookmarkablePage("setup/settings", SettingsPage.class);
-        mountBookmarkablePage("setup/ownersUsersLocations", OwnersUsersLocationsPage.class);
-        mountBookmarkablePage("setup/assetsEvents", AssetsAndEventsPage.class);
-        mountBookmarkablePage("setup/import", ImportPage.class);
-        mountBookmarkablePage("setup/templates", TemplatesPage.class);
-        mountBookmarkablePage("setup/widgets", WidgetsPage.class);
-        mountBookmarkablePage("setup/systemSettings", SystemSettingsPage.class);
-        mountBookmarkablePage("setup/yourPlan", YourPlanPage.class);        
-        mountBookmarkablePage("setup/identifierOverrides", IdentifierOverridesPage.class);
-        mountBookmarkablePage("setup/passwordPolicy", PasswordPolicyPage.class);
-        mountBookmarkablePage("setup/accountPolicy", AccountPolicyPage.class);
-        mountBookmarkablePage("setup/security", SecurityPage.class);
-        mountBookmarkablePage("setup/scoreGroups", ScoreGroupsPage.class);
-        mountBookmarkablePage("setup/scoreResults", ScoreResultConfigurationPage.class);
+        mountPage("setup/settings", SettingsPage.class);
+        mountPage("setup/ownersUsersLocations", OwnersUsersLocationsPage.class);
+        mountPage("setup/assetsEvents", AssetsAndEventsPage.class);
+        mountPage("setup/import", ImportPage.class);
+        mountPage("setup/templates", TemplatesPage.class);
+        mountPage("setup/widgets", WidgetsPage.class);
+        mountPage("setup/systemSettings", SystemSettingsPage.class);
+        mountPage("setup/yourPlan", YourPlanPage.class);
+        mountPage("setup/identifierOverrides", IdentifierOverridesPage.class);
+        mountPage("setup/passwordPolicy", PasswordPolicyPage.class);
+        mountPage("setup/accountPolicy", AccountPolicyPage.class);
+        mountPage("setup/security", SecurityPage.class);
+        mountPage("setup/scoreGroups", ScoreGroupsPage.class);
+        mountPage("setup/scoreResults", ScoreResultConfigurationPage.class);
 
-        mountBookmarkablePage("dashboard", DashboardPage.class);
-        mountBookmarkablePage("reporting", ReportingPage.class);
-        mountBookmarkablePage("search", AssetSearchPage.class);
+        mountPage("dashboard", DashboardPage.class);
+        mountPage("reporting", ReportingPage.class);
+        mountPage("search", AssetSearchPage.class);
 
-        mountBookmarkablePage("returnToReport", ReturnToReportPage.class);
-        mountBookmarkablePage("savedReport", RunSavedReportPage.class);
-        mountBookmarkablePage("massSchedule", MassSchedulePage.class);
+        mountPage("returnToReport", ReturnToReportPage.class);
+        mountPage("savedReport", RunSavedReportPage.class);
+        mountPage("massSchedule", MassSchedulePage.class);
 
-        mountBookmarkablePage("admin/addTenant", AddTenantPage.class);
+        mountPage("admin/addTenant", AddTenantPage.class);
              
         getMarkupSettings().setStripWicketTags(true);
-        getResourceSettings().addStringResourceLoader(0, new CustomerLanguageResourceLoader());
-        getResourceSettings().addStringResourceLoader(0, new TenantOverridesResourceLoader());
+        getResourceSettings().getStringResourceLoaders().add(0, new CustomerLanguageResourceLoader());
+        getResourceSettings().getStringResourceLoaders().add(0, new TenantOverridesResourceLoader());
         getResourceSettings().setLocalizer(new CacheInSessionLocalizer());
-        InjectorHolder.setInjector(new AnnotSpringInjector(new SpringContextLocator()));
-        addComponentInstantiationListener(new SpringComponentInjector(this));
+        getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 
         getApplicationSettings().setPageExpiredErrorPage(DashboardPage.class);
         getApplicationSettings().setInternalErrorPage(OopsPage.class);
+
+        getRequestCycleListeners().add(new FieldIDRequestCycleListener());
     }
 
     @Override
@@ -92,18 +87,5 @@ public class FieldIDWicketApp extends WebApplication implements IWiQuerySettings
     public Session newSession(Request request, Response response) {
         return new FieldIDSession(request);
     }
-
-    @Override
-    public RequestCycle newRequestCycle(Request request, Response response) {
-        return new FieldIDRequestCycle(this, (WebRequest) request, response);
-    }
-
-	@Override
-	public WiQuerySettings getWiQuerySettings() {
-		WiQuerySettings wiQuerySettings = new WiQuerySettings();
-		// we do *NOT* want jquery imported again.  that is already done by base page.
-		wiQuerySettings.setAutoImportJQueryResource(false);
-		return wiQuerySettings;
-	}
 
 }

@@ -76,7 +76,7 @@ public class EventDetailsCriteriaPanel extends Panel {
         eventTypeGroupDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                target.addComponent(eventTypeSelect);
+                target.add(eventTypeSelect);
                 onEventTypeOrGroupUpdated(target, eventTypeModel.getObject(), availableEventTypesModel.getObject());
             }
         });

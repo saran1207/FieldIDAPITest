@@ -8,7 +8,7 @@ import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 
 import javax.servlet.http.HttpSession;
 
@@ -31,7 +31,7 @@ public class ReportResultsPanel extends SRSResultsPanel<EventReportCriteriaModel
 
     @Override
     protected void storeCriteriaIfNecessary() {
-        HttpSession session = ((WebRequest) getRequest()).getHttpServletRequest().getSession();
+        HttpSession session = ((ServletWebRequest) getRequest()).getContainerRequest().getSession();
         new LegacyReportCriteriaStorage().storeCriteria(criteriaModel.getObject(), session);
     }
 

@@ -14,7 +14,6 @@ import junit.framework.Assert;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
-import org.apache.wicket.Component.IVisitor;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
@@ -27,11 +26,12 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.resource.loader.IStringResourceLoader;
 import org.apache.wicket.util.tester.TagTester;
 import org.apache.wicket.util.tester.WicketTester;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.junit.Before;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Preconditions;
-
 
 public abstract class WicketTest<T extends WicketHarness,F extends Component> implements IWicketTester, IFixtureFactory<F> {
 	
@@ -59,10 +59,17 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 
 	public void initializeApplication(WebApplication application) {		
 		wicketTester = new WicketTester(application);
-		Application.get().getResourceSettings().addStringResourceLoader(new IStringResourceLoader() {
-			@Override public String loadStringResource(Class<?> clazz, String key, Locale locale, String style) {return key;}			
-			@Override public String loadStringResource(Component component, String key) { return key; }
-		});				
+		Application.get().getResourceSettings().getStringResourceLoaders().add(new IStringResourceLoader() {
+            @Override
+            public String loadStringResource(Class<?> clazz, String key, Locale locale, String style, String variation) {
+                return key;
+            }
+
+            @Override
+            public String loadStringResource(Component component, String key, Locale locale, String style, String variation) {
+                return key;
+            }
+        });
 	}	
 		
 	protected F createFixture(IFixtureFactory<F> factory) {
@@ -97,7 +104,7 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 	}
 	
 	protected void assertInDocument(String expected) {
-		String document = (wicketTester.getServletResponse()).getDocument();
+		String document = wicketTester.getResponse().getDocument();
 		assertTrue(document.indexOf(expected)!=-1);
 	}
 	
@@ -175,13 +182,13 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 	protected void assertContainsPropertyValue(MarkupContainer container, String value) {
 		final List<String> values = new ArrayList<String>();
 		
-		container.visitChildren(new IVisitor<Component>() {
-			@Override
-			public Object component(Component component) {
+		container.visitChildren(new IVisitor<Component, Void>() {
+            @Override
+            public void component(Component component, IVisit<Void> visit) {
 				IModel<?> defaultModel = component.getDefaultModel();
 				if (defaultModel instanceof PropertyModel) {
 					PropertyModel<?> propertyModel = (PropertyModel<?>)defaultModel;
-					Class<? extends Object> klass = propertyModel.getTarget().getClass();
+					Class<?> klass = propertyModel.getTarget().getClass();
 					try {
 						Method declaredMethod = klass.getDeclaredMethod(propertyModel.getPropertyGetter().getName(), new Class[0]);
 						Object result = declaredMethod.invoke(propertyModel.getTarget(), new Object[0]);
@@ -190,9 +197,8 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 						e.printStackTrace();
 					}
 				}
-				return null;
-			}
-		});
+            }
+        });
 		
 		assertTrue("\"" + value + "\" not found", values.contains(value));
 	}

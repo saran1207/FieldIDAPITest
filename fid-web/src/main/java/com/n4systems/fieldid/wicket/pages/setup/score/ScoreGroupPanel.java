@@ -58,7 +58,7 @@ public class ScoreGroupPanel extends SortableListPanel {
         	List<Score> scores;  // transient model backing while we are juggling the list around. 
 			@Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
-                target.addComponent(ScoreGroupPanel.this);
+                target.add(ScoreGroupPanel.this);
                 sortableBehavior.setDisabled(true);
                 reorderState = false;
                 getScoreGroup().setScores(scores);
@@ -68,7 +68,7 @@ public class ScoreGroupPanel extends SortableListPanel {
 
             @Override
             protected void onEnterSecondaryState(AjaxRequestTarget target) {
-                target.addComponent(ScoreGroupPanel.this);
+                target.add(ScoreGroupPanel.this);
                 scores = new ArrayList<Score>();
                 scores.addAll(getScores());
                 ScoreGroupPanel.this.setDefaultModel(new PropertyModel<List<Score>>(this, "scores"));
@@ -93,13 +93,13 @@ public class ScoreGroupPanel extends SortableListPanel {
                     @Override
                     protected void onDeleteButtonClicked(AjaxRequestTarget target) {
                     	scoreService.archiveScore(getScoreGroup(), item.getModelObject());                    	
-                       	target.addComponent(ScoreGroupPanel.this);
+                       	target.add(ScoreGroupPanel.this);
                     }
 
                     @Override
                     protected void onStoreLinkClicked(AjaxRequestTarget target) {
                         persistenceService.update(item.getModelObject());
-                        target.addComponent(ScoreGroupPanel.this);
+                        target.add(ScoreGroupPanel.this);
                     }
                     @Override
 					protected boolean isReorderState() {
@@ -202,12 +202,12 @@ public class ScoreGroupPanel extends SortableListPanel {
     				scoreService.addScore(ScoreGroupForm.this.getModelObject(), score);
     				score = new Score();
     				scoreGroupModel.detach();
-    				target.addComponent(ScoreGroupPanel.this);
+    				target.add(ScoreGroupPanel.this);
     			}
     			
 				@Override
     			protected void onError(AjaxRequestTarget target, Form<?> form) {
-    				target.addComponent(feedbackPanel);
+    				target.add(feedbackPanel);
     			}
     		});
     	}

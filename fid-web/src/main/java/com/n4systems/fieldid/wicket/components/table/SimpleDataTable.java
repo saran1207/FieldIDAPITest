@@ -11,17 +11,20 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+
+import java.util.List;
 
 public class SimpleDataTable<T> extends Panel {
 	
@@ -32,23 +35,23 @@ public class SimpleDataTable<T> extends Panel {
     private Component topPaginationBar;
     private String cssClass = "list";
 
-    public SimpleDataTable(String id, final IColumn<T>[] columns,
+    public SimpleDataTable(String id, final List<IColumn<T>> columns,
         ISortableDataProvider<T> dataProvider, int rowsPerPage) {
         this(id, columns, dataProvider, rowsPerPage, new MultiIdSelection());
     }
 
-    public SimpleDataTable(String id, final IColumn<T>[] columns,
+    public SimpleDataTable(String id, final List<IColumn<T>> columns,
         ISortableDataProvider<T> dataProvider, int rowsPerPage, MultiIdSelection selection) {
         this(id, columns, dataProvider, rowsPerPage, "label.noresults", "message.emptysearch", selection);
     }
 
-    public SimpleDataTable(String id, final IColumn<T>[] columns,
+    public SimpleDataTable(String id, final List<IColumn<T>> columns,
 		ISortableDataProvider<T> dataProvider, int rowsPerPage,
         String emptyResultsTitleKey, String emptyResultsMessageKey) {
         this(id, columns, dataProvider, rowsPerPage, emptyResultsTitleKey, emptyResultsMessageKey, new MultiIdSelection());
     }
 
-    public SimpleDataTable(String id, final IColumn<T>[] columns,
+    public SimpleDataTable(String id, final List<IColumn<T>> columns,
 		final ISortableDataProvider<T> dataProvider, int rowsPerPage,
         String emptyResultsTitleKey, String emptyResultsMessageKey, MultiIdSelection selection) {
 		super(id);
@@ -56,8 +59,6 @@ public class SimpleDataTable<T> extends Panel {
         multiIdSelection = selection;
 
         setOutputMarkupId(true);
-
-        add(JavascriptPackageResource.getHeaderContribution("javascript/selectionNew.js"));
 
         table = new DataTable<T>("table", columns, dataProvider, rowsPerPage) {
             @Override
@@ -69,11 +70,12 @@ public class SimpleDataTable<T> extends Panel {
             }
 
             @Override
-            protected Item<T> newCellItem(String id, int index, IModel<T> tiModel) {
-                Item<T> cellItem = super.newCellItem(id, index, tiModel);
+            protected Item<IColumn<T>> newCellItem(String id, int index, IModel<IColumn<T>> tiModel) {
+                Item<IColumn<T>> cellItem = super.newCellItem(id, index, tiModel);
                 cellItem.setOutputMarkupId(true);
                 return cellItem;
             }
+
         };
         table.setOutputMarkupPlaceholderTag(true);
         table.add(new AttributeAppender("class", true, new PropertyModel<String>(this, "cssClass"), " "));
@@ -92,8 +94,8 @@ public class SimpleDataTable<T> extends Panel {
                         getTable().setCurrentPage(0);
 
                         ISortState sortState = dataProvider.getSortState();
-                        int propertySortOrder = sortState.getPropertySortOrder(property);
-                        SortDirection sortDirection = propertySortOrder == ISortState.ASCENDING ? SortDirection.ASC : SortDirection.DESC;
+                        SortOrder propertySortOrder = sortState.getPropertySortOrder(property);
+                        SortDirection sortDirection = propertySortOrder == SortOrder.ASCENDING ? SortDirection.ASC : SortDirection.DESC;
 
                         SimpleDataTable.this.onSortChanged(property, sortDirection);
                     }
@@ -164,7 +166,7 @@ public class SimpleDataTable<T> extends Panel {
     private void scrollToTopPaginationBar(AjaxRequestTarget target) {
         String topPageBarId = topPaginationBar.getMarkupId();
 
-        target.appendJavascript("var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('#"+topPageBarId+"'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}");
+        target.appendJavaScript("var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('#"+topPageBarId+"'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}");
     }
 
     protected void onPageChanged(AjaxRequestTarget target) { }
@@ -174,7 +176,7 @@ public class SimpleDataTable<T> extends Panel {
     protected void onSortChanged(String sortProperty, SortDirection sortDirection) {}
 
     public void updateSelectionStatus(AjaxRequestTarget target) {
-        target.addComponent(selectionStatusPanel);
+        target.add(selectionStatusPanel);
     }
 
     public void setDisplayPagination(boolean displayPagination) {
@@ -184,4 +186,10 @@ public class SimpleDataTable<T> extends Panel {
     public void setCssClass(String cssClass) {
         this.cssClass = cssClass;
     }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderJavaScriptReference("javascript/selectionNew.js");
+    }
+
 }

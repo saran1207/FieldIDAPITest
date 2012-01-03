@@ -26,8 +26,8 @@ public class CollapsiblePanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 setExpanded(!expanded);
-                target.addComponent(CollapsiblePanel.this);
-                target.addComponent(collapseImage);
+                target.add(CollapsiblePanel.this);
+                target.add(collapseImage);
                 onExpandedOrCollapsed(titleModel.getObject(), expanded);
             }
         });

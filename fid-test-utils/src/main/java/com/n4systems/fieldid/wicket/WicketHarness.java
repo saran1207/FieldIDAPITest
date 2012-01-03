@@ -43,9 +43,9 @@ public class WicketHarness {
 			pathContext+=":";
 		}
 	}
-	
-	public String getLastRenderedPageAsHtml() { 
-		return getWicketTester().getServletResponse().getDocument();
+
+	public String getLastRenderedPageAsHtml() {
+		return getWicketTester().getResponse().getDocument();
 	}
 
 	protected void click(String... ids) {

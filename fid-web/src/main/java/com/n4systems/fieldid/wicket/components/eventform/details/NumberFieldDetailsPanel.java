@@ -27,7 +27,7 @@ public class NumberFieldDetailsPanel extends Panel {
 			@Override
 			protected void onError(AjaxRequestTarget target, RuntimeException e) {
 				feedbackPanel.setVisible(true);
-                target.addComponent(feedbackPanel);
+                target.add(feedbackPanel);
 			}
 			
 			@Override
@@ -35,7 +35,7 @@ public class NumberFieldDetailsPanel extends Panel {
 				super.onUpdate(target);
 				if(feedbackPanel.isVisible()) {
 					feedbackPanel.setVisible(false);
-					target.addComponent(feedbackPanel);
+					target.add(feedbackPanel);
 				}
 			}
 		});

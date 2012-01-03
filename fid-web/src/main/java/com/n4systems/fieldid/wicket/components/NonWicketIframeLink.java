@@ -19,7 +19,7 @@ public class NonWicketIframeLink extends NonWicketLink implements IHeaderContrib
     @Override
     public void renderHead(IHeaderResponse response) {
         String options = "{ width: " + width + ", height: " + height + ", scrolling:" + scrolling + ", iframe: true }";
-        response.renderOnDomReadyJavascript("$('#"+getLinkMarkupId()+"').colorbox("+options+");");
+        response.renderOnDomReadyJavaScript("$('#"+getLinkMarkupId()+"').colorbox("+options+");");
     }
 
 }

@@ -93,7 +93,7 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
             @Override
             public void onClick(AjaxRequestTarget target) {
                 setGranularity(granularity);
-                target.addComponent(ChartWidget.this);
+                target.add(ChartWidget.this);
             }
         };
         granularityButton.add(new AttributeAppender("class", true, new Model<String>("selected"), " ") {
@@ -110,7 +110,7 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
             @Override
             public void onClick(AjaxRequestTarget target) {
                 setPeriod(period);
-                target.addComponent(ChartWidget.this);
+                target.add(ChartWidget.this);
             }
         };
         periodButton.add(new AttributeAppender("class", true, new Model<String>("selected"), " ") {
