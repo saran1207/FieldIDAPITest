@@ -10,6 +10,8 @@ public class SearchDisplayColumns {
 	
 	private boolean jobSiteName;
 	
+	private boolean customer;
+	
 	private boolean division;
 	
 	private boolean location;
@@ -323,6 +325,7 @@ public class SearchDisplayColumns {
 		referenceNumber = true;	
 		rfidNumber = true;	
 		jobSiteName = true;	
+		customer = true;
 		division = true;	
 		location = true;	
 		organization = true;	
@@ -374,5 +377,13 @@ public class SearchDisplayColumns {
 
 	public void setDaysPastDue(boolean daysPastDue) {
 		this.daysPastDue = daysPastDue;
+	}
+
+	public boolean isCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(boolean customer) {
+		this.customer = customer;
 	}
 }

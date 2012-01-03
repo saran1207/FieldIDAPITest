@@ -6,7 +6,7 @@ import com.thoughtworks.selenium.Selenium;
 
 import java.util.List;
 
-public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> {
+public class AssetsSearchPage extends WicketEntitySearchPage<AssetsSearchResultsPage> {
 	
 	public AssetsSearchPage(Selenium selenium) {
 		super(selenium, AssetsSearchResultsPage.class);
@@ -14,47 +14,50 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 
 	@Override
 	public void setDisplayColumns(SearchDisplayColumns displayColumns) {
-		setDisplayColumns(displayColumns, false);
+		setDisplayColumns(displayColumns, false, false);
 	}
 
 	
-	public void setDisplayColumns(SearchDisplayColumns displayColumns, boolean isIntergationEnabled) {
-		setCheckBoxValue("//input[@id='chk_asset_search_identifier']", displayColumns.isIdentifier());
-		setCheckBoxValue("//input[@id='chk_asset_search_referencenumber']", displayColumns.isReferenceNumber());
-		setCheckBoxValue("//input[@id='chk_asset_search_rfidnumber']", displayColumns.isRfidNumber());
-		setCheckBoxValue("//input[@id='chk_asset_search_customer']", displayColumns.isJobSiteName());
-		setCheckBoxValue("//input[@id='chk_asset_search_division']", displayColumns.isDivision());
-		setCheckBoxValue("//input[@id='chk_asset_search_location']", displayColumns.isLocation());
-		setCheckBoxValue("//input[@id='chk_asset_search_organization']", displayColumns.isOrganization());
-		setCheckBoxValue("//input[@id='chk_asset_search_assettypegroup']", displayColumns.isAssetTypeGroup());
-		setCheckBoxValue("//input[@id='chk_asset_search_assettype']", displayColumns.isAssetType());
-		setCheckBoxValue("//input[@id='chk_asset_search_assetstatus']", displayColumns.isAssetStatus());
-		setCheckBoxValue("//input[@id='chk_asset_search_identified']", displayColumns.isDateIdentified());
-		setCheckBoxValue("//input[@id='chk_asset_search_lasteventdate']", displayColumns.isLastEventDate());
-		setCheckBoxValue("//input[@id='chk_asset_search_network_lasteventdate']", displayColumns.isNetworkLastEventDate());
-		setCheckBoxValue("//input[@id='chk_asset_search_assignedto']", displayColumns.isAssignedTo());
-		setCheckBoxValue("//input[@id='chk_asset_search_identifiedby']", displayColumns.isIdentifiedBy());
-		setCheckBoxValue("//input[@id='chk_asset_search_modifiedby']", displayColumns.isModifiedBy());
-		setCheckBoxValue("//input[@id='chk_asset_search_comments']", displayColumns.isComments());
-		setCheckBoxValue("//input[@id='chk_asset_search_description']", displayColumns.isDescription());
-		setCheckBoxValue("//input[@id='chk_asset_search_published']", displayColumns.isSafetyNetwork());
-		setCheckBoxValue("//input[@id='chk_asset_next_scheduled_date']", displayColumns.isScheduledDate());
+	public void setDisplayColumns(SearchDisplayColumns displayColumns, boolean isIntergationEnabled, boolean isJobSitesEnabled) {
+		setCheckBoxValue("//div//label[.='ID Number']/../input", displayColumns.isIdentifier());
+		setCheckBoxValue("//div//label[.='Reference Number']/../input", displayColumns.isReferenceNumber());
+		setCheckBoxValue("//div//label[.='RFID Number']/../input", displayColumns.isRfidNumber());
+		if(isJobSitesEnabled) {
+			setCheckBoxValue("//div//label[.='Job Site Name']/../input", displayColumns.isJobSiteName());
+		}
+		setCheckBoxValue("//div//label[.='Customer Name']/../input", displayColumns.isCustomer());
+		setCheckBoxValue("//div//label[.='Division']/../input", displayColumns.isDivision());
+		setCheckBoxValue("//div//label[.='Location']/../input", displayColumns.isLocation());
+		setCheckBoxValue("//div//label[.='Organization']/../input", displayColumns.isOrganization());
+		setCheckBoxValue("//div//label[.='Asset Type Group']/../input", displayColumns.isAssetTypeGroup());
+		setCheckBoxValue("//div//label[.='Asset Type']/../input", displayColumns.isAssetType());
+		setCheckBoxValue("//div//label[.='Asset Status']/../input", displayColumns.isAssetStatus());
+		setCheckBoxValue("//div//label[.='Date Identified']/../input", displayColumns.isDateIdentified());
+		setCheckBoxValue("//div//label[.='Last Event Date']/../input", displayColumns.isLastEventDate());
+		setCheckBoxValue("//div//label[.='Network Last Event Date']/../input", displayColumns.isNetworkLastEventDate());
+		setCheckBoxValue("//div//label[.='Assigned To']/../input", displayColumns.isAssignedTo());
+		setCheckBoxValue("//div//label[.='Identified By']/../input", displayColumns.isIdentifiedBy());
+		setCheckBoxValue("//div//label[.='Modified By']/../input", displayColumns.isModifiedBy());
+		setCheckBoxValue("//div//label[.='Comments']/../input", displayColumns.isComments());
+		setCheckBoxValue("//div//label[.='Description']/../input", displayColumns.isDescription());
+		setCheckBoxValue("//div//label[.='Safety Network']/../input", displayColumns.isSafetyNetwork());
+		setCheckBoxValue("//div//label[.='Next Scheduled Date']/../input", displayColumns.isScheduledDate());
 		if(isIntergationEnabled) {
-			setCheckBoxValue("//input[@id='chk_asset_search_order_description']", displayColumns.isOrderDescription());
-			setCheckBoxValue("//input[@id='chk_asset_search_order_number']", displayColumns.isOrderNumber());
+			setCheckBoxValue("//div//label[.='Organization']/../input", displayColumns.isOrderDescription());
+			setCheckBoxValue("//div//label[.='Organization']/../input", displayColumns.isOrderNumber());
 		}else {
-			setCheckBoxValue("//input[@id='chk_asset_search_purchaseorder']", displayColumns.isPurchaseOrder());
-			setCheckBoxValue("//input[@id='chk_asset_search_non_intergration_order_number']", displayColumns.isOrderNumber());
+			setCheckBoxValue("//div//label[.='Purchase Order']/../input", displayColumns.isPurchaseOrder());
+			setCheckBoxValue("//div//label[.='Order Number']/../input", displayColumns.isOrderNumber());
 		}
 	}
 
 	public AssetPage clickResultInfo(String identifier) {
-		selenium.click("//table[@class='list']//a[text()='" +identifier+"']/../..//a[contains(text(), 'View Asset')]");
+		selenium.click("//table[@class='list']//a[text()='" +identifier+"']/../../..//li/a[contains(text(), 'View')]");
 		return new AssetPage(selenium);
 	}
 
 	public QuickEventPage clickResultStartEvent(String identifier) {
-		selenium.click("//table[@class='list']//a[text()='" +identifier+"']/../..//a[contains(text(), 'Start Event')]");
+		selenium.click("//table[@class='list']//a[text()='" +identifier+"']/../../..//li/a[contains(text(), 'Start Event')]");
 		return new QuickEventPage(selenium);
 	}
 

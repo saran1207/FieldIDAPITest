@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.selenium.pages;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.thoughtworks.selenium.Selenium;
 
 public class WicketFieldIDPage extends FieldIDPage {
@@ -28,4 +31,16 @@ public class WicketFieldIDPage extends FieldIDPage {
         selenium.waitForCondition(waitTarget, timeout);
     }
 
+    @Override
+    public List<String> getFormErrorMessages() {
+        List<String> result = new ArrayList<String>();
+
+        int maxIndex = selenium.getXpathCount("//li[@class='errorMessage']").intValue();
+        for(int i = 1; i <= maxIndex; i++) {
+            String iterableErrorMessageLocator = "//ul/li["+i+"]/*[@class='errorMessage']";
+            String s = selenium.getText(iterableErrorMessageLocator);
+            result.add(s);
+        }
+        return result;
+    }
 }
