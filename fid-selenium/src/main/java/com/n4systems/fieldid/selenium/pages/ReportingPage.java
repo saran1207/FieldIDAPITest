@@ -177,7 +177,7 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
     }
     
     public void selectResult(String result) {
-    	selenium.select("//select[@name='result']", result);
+    	selenium.select("//select[@name='eventDetailsCriteriaPanel:result']", result);
     }
     
     public boolean isBlankSlate() {
