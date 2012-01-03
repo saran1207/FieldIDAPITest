@@ -50,6 +50,8 @@ import com.n4systems.security.Permissions;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.ListHelper;
+import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
@@ -66,6 +68,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private List<Listable<Long>> employees;
 	private List<AssetStatus> assetStatuses;
 	private List<CommentTemplate> commentTemplates;
+	private List<ListingPair> jobs;
 	private List<AssetExtension> extentions;
 	private AssetTypeLister assetTypeLister;
 	private AutoAttributeCriteria autoAttributeCriteria;
@@ -508,5 +511,14 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 
 	public void setTagOptionId(Long tagOptionId) {
 		this.tagOptionId = tagOptionId;
+	}
+	
+	public List<ListingPair> getJobs() {
+		if (jobs == null) {
+			List<Listable<Long>> eventJobListables = getLoaderFactory()
+					.createEventJobListableLoader().load();
+			jobs = ListHelper.longListableToListingPair(eventJobListables);
+		}
+		return jobs;
 	}
 }
