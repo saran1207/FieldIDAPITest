@@ -10,6 +10,7 @@ import javax.persistence.Query;
 
 import com.n4systems.model.columns.ActiveColumnMapping;
 import com.n4systems.model.columns.ColumnLayout;
+import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import org.apache.log4j.Logger;
 
@@ -148,6 +149,7 @@ public class TenantCleaner {
         removeAllForTenants(EventGroup.class, tenantIds);
         removeAllForTenants(EventTypeGroup.class, tenantIds);
         removeAllSeenItStorageItems(tenantIds);
+        removeAllForTenants(CommentTemplate.class, tenantIds);
         cleanUpForeignFieldsOnUsers(tenantIds);
 
         removeAllForTenants(DivisionOrg.class, tenantIds);
