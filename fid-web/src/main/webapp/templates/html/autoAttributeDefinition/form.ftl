@@ -5,6 +5,7 @@ ${action.setPageType('auto_attribute', 'definitions')!}
 	<script type="text/javascript">
 		unitOfMeasureUrl = '<@s.url action="unitOfMeasure" namespace="/ajax" />';
 	</script>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>		
 </head>
 <#include "_secondaryNav.ftl"/>
 <@s.form action="autoAttributeDefinitionSave" cssClass="fullForm " theme="fieldid" >

@@ -19,17 +19,20 @@ ${action.setPageType('auto_attribute', 'edit')!}
 					<div class="dynamicOption dragOption <#if infoField.hasStaticInfoOption() > staticOption </#if>" id="field_${infoField.uniqueID}">
 						<@s.hidden name="available[]" value="%{${infoField.uniqueID}}" />
 						<span class="">${infoField.name?html}</span>
-						<span>[
+						<span>[							
 							<#switch infoField.fieldType >
 								<#case 'textfield'>
-								T
+								T 
 								<#break >
 								<#case 'combobox'>
-								C
+								C 
 								<#break >
 								<#case 'selectbox'>
-								S
+								S 
 								<#break >
+								<#case 'datefield'>
+								D
+								<#break>
 							</#switch>
 							]
 						</span>
@@ -99,6 +102,9 @@ ${action.setPageType('auto_attribute', 'edit')!}
 								<#case 'selectbox'>
 								S
 								<#break >
+								<#case 'datefield'>
+								D
+								<#break>								
 							</#switch>
 							]
 						</span>
@@ -130,6 +136,7 @@ ${action.setPageType('auto_attribute', 'edit')!}
 			<tr><td>[ T ]</td><td>text field</td> </tr>
 			<tr><td>[ S ]</td><td>select box</td> </tr>
 			<tr><td>[ C ]</td><td>combo box</td> </tr>
+			<tr><td>[ D ]</td><td>date field</td> </tr>
 		</table>
 	</div>
 	<div class="formAction">
