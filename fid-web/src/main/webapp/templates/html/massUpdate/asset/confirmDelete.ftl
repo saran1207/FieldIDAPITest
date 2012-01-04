@@ -56,7 +56,7 @@
 		
 	</div>
 	<div class="formAction">
-		<@s.url id="cancelUrl" action="massUpdateAssets" searchId="${searchId}" currentPage="${currentPage}"/>
+		<@s.url id="cancelUrl" action="massUpdateAssets" searchId="${searchId}"/>
 		<@s.url id="deleteUrl" action="massAssetDelete" searchId="${searchId}"/>
 		
 		<@s.submit key="label.delete" onclick="return redirect('${deleteUrl}');" theme="fieldid" >
