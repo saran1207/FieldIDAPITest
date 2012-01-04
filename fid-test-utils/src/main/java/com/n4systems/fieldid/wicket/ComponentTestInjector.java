@@ -7,6 +7,7 @@ import org.apache.wicket.injection.Injector;
 import java.lang.reflect.Field;
 
 public class ComponentTestInjector {
+
 	private InjectionTestConfig injectConfig;
 	
 	private ComponentTestInjector(){
@@ -19,7 +20,7 @@ public class ComponentTestInjector {
 	}
 	
 	public void inject(Component component) {
-		Injector.get().inject(component);
+        injectConfig.inject(component);
 	}
 
 	public static ComponentTestInjector make() {
@@ -42,5 +43,9 @@ public class ComponentTestInjector {
 			}
 		}
 	}
+
+    public Injector getInjector() {
+        return injectConfig;
+    }
 
 }

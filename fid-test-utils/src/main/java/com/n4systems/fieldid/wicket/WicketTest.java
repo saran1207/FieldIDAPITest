@@ -104,7 +104,7 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 	}
 	
 	protected void assertInDocument(String expected) {
-		String document = wicketTester.getResponse().getDocument();
+		String document = wicketTester.getLastResponse().getDocument();
 		assertTrue(document.indexOf(expected)!=-1);
 	}
 	

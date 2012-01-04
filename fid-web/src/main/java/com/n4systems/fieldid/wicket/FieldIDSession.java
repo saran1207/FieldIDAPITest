@@ -34,7 +34,7 @@ public class FieldIDSession extends WebSession {
 
     public FieldIDSession(Request request) {
         super(request);
-        this.session = ((ServletWebRequest)request).getContainerRequest().getSession();
+        this.session = ((ServletWebRequest)request).getContainerRequest().getSession(true);
     }
   
     @Deprecated // for testing only. 

@@ -20,6 +20,7 @@ public class FieldIdTestableApp extends WebApplication {
 	
 	public FieldIdTestableApp(ComponentTestInjector injector) {
 		this.injector = injector;
+        injector.getInjector().bind(this);
 	}
 
 	@Override

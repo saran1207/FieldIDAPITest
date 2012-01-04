@@ -33,9 +33,8 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 	}
 	
 	protected void setSessionUser(User user) {
-        //TODO: FIXME
-//		FieldIDSession session = (FieldIDSession) getWicketTester().getWicketSession();
-//		session.setUser(user);
+		FieldIDSession session = (FieldIDSession) getWicketTester().getSession();
+		session.setUser(user);
 	}		
 	
 	protected String getFeedUrl() {
