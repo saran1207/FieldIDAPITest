@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.smartsearch;
 
-
-
 public class ApiSmartSearchSuggestion {
 	private String sid;
 	private String type;
@@ -56,6 +54,5 @@ public class ApiSmartSearchSuggestion {
 	public void setFieldLength(Integer fieldLength) {
 		this.fieldLength = fieldLength;
 	}
-	
 
 }
