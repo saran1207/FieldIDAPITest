@@ -11,7 +11,7 @@ public class AssetsSearchResultsPage extends SearchResultsPage {
     }
 
     public int getTotalResultsCount() {
-        return selenium.getXpathCount("//table[@id='resultsTable']//tr").intValue() - 1;
+        return selenium.getXpathCount("//table[@class='list']//tr").intValue() - 1;
     }
 
     public AssetsMassUpdatePage clickMassUpdate() {

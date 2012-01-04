@@ -14,13 +14,13 @@ public class SearchResultsPage extends WicketFieldIDPage {
     }
 
     public void selectAllItemsOnPage() {
-        checkAndFireClick("//table[@class='list']//tr[1]//th[1]/input");
-        waitForAjax();
+        checkAndFireClick("//table[@class='list']//tr[1]//th[1]//input");
+        waitForWicketAjax();
     }
 
     public void selectItemOnRow(int rowNumber) {
-        checkAndFireClick("//table[@class='list']//tr["+rowNumber+"]//td[1]/input");
-        waitForAjax();
+        checkAndFireClick("//table[@class='list']//tr["+rowNumber+"]//td[1]//input");
+        waitForWicketAjax();
     }
 
     public List<String> getColumnNames() {
