@@ -32,16 +32,16 @@ public class SearchResultsPage extends WicketFieldIDPage {
     }
 
     public String getSortColumn() {
-        return selenium.getText("//table[@class='list']//th[contains(@class, 'sorted')]");
+        return selenium.getText("//table[@class='list']//th[contains(@class, 'wicket_order') and not(contains(@class, 'wicket_orderNone'))]");
     }
 
     public SortDirection getSortDirection() {
-        String sortedClass = selenium.getAttribute("//table[@class='list']//th[contains(@class, 'sorted')]/@class");
+        String sortedClass = selenium.getAttribute("//table[@class='list']//th[contains(@class, 'wicket_order') and not(contains(@class, 'wicket_orderNone'))]/@class");
         // Up arrow class means highest is at the top, so we're descending. down arrow means lowest at top, so ascending
-        if (sortedClass.contains("up")) {
-            return SortDirection.DESC;
-        } else if (sortedClass.contains("down")) {
+        if (sortedClass.toLowerCase().contains("up")) {
             return SortDirection.ASC;
+        } else if (sortedClass.toLowerCase().contains("down")) {
+            return SortDirection.DESC;
         } else {
             throw new RuntimeException("Could not determine sort direction from class: " + sortedClass);
         }
