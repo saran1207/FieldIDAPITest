@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
+import com.n4systems.model.AddressInfo;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.PathHandler;
 
@@ -28,7 +29,8 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setModified(baseOrg.getModified());
 		apiOrg.setActive(baseOrg.isActive());
 		apiOrg.setName(baseOrg.getName());
-		apiOrg.setImage(loadOrgImage(baseOrg));
+		apiOrg.setImage(loadOrgImage(baseOrg));		
+		apiOrg.setAddress(convertAddress(baseOrg.getAddressInfo()));
 		
 		if (baseOrg.getParent() != null) {
 			apiOrg.setParentId(baseOrg.getParent().getId());
@@ -62,4 +64,17 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		return image;
 	}
 
+	private String convertAddress(AddressInfo addressInfo) {
+		String address = null;
+		
+		if(addressInfo != null) {
+			address = String.format("%s, %s, %s, %s", 
+					addressInfo.getStreetAddress(),
+					addressInfo.getCity(),
+					addressInfo.getState(),
+					addressInfo.getZip());
+		}
+		
+		return address;
+	}
 }
