@@ -174,9 +174,15 @@
 		selectField('owner');
 	});
 	
-	$('location').observe("location:change", function() {
-		selectField('location');
-	});
+	if( $('location') != null) {
+		$('location').observe("location:change", function() {
+			selectField('location');
+		});
+	} else {
+		$('location_freeformLocation').observe("change", function() {
+			selectField('location');
+		});
+	}
 	
 	function selectField( fieldType ) {
 		var field = $('check_' + fieldType );

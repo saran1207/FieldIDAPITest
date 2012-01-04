@@ -56,7 +56,6 @@
 		
 	</div>
 	<div class="formAction">
-		<@s.url id="cancelUrl" action="massUpdateAssets" searchId="${searchId}"/>
 		<@s.url id="deleteUrl" action="massAssetDelete" searchId="${searchId}"/>
 		
 		<@s.submit key="label.delete" onclick="return redirect('${deleteUrl}');" theme="fieldid" >
@@ -67,7 +66,7 @@
 		
 		<@s.text name="label.or"/>
 		
-		<a href="#" onclick="return redirect('${cancelUrl}');"><@s.text name="label.cancel"/></a>
+		<a href="javascript:void(0);" onClick="window.history.go(-2);"><@s.text name="label.cancel"/></a>
 	</div>
 </div>
 
