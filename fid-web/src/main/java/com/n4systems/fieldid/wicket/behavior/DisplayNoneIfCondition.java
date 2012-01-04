@@ -13,7 +13,7 @@ public class DisplayNoneIfCondition extends AttributeAppender {
     private Predicate predicate;
 
     public DisplayNoneIfCondition(Predicate predicate) {
-        super("style", true, new Model<String>("display:none;"), " ");
+        super("style", new Model<String>("display:none;"), " ");
         this.predicate = predicate;
     }
 

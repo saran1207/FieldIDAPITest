@@ -78,7 +78,7 @@ public class SimpleDataTable<T> extends Panel {
 
         };
         table.setOutputMarkupPlaceholderTag(true);
-        table.add(new AttributeAppender("class", true, new PropertyModel<String>(this, "cssClass"), " "));
+        table.add(new AttributeAppender("class", new PropertyModel<String>(this, "cssClass"), " "));
 
 		table.addTopToolbar(new HeadersToolbar(table, dataProvider) {
             @Override

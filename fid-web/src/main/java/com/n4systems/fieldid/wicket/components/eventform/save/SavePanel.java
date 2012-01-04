@@ -2,13 +2,12 @@ package com.n4systems.fieldid.wicket.components.eventform.save;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
-public class SavePanel extends Panel implements IHeaderContributor {
+public class SavePanel extends Panel {
 
     private Label minutesAgoLabel;
     private WebMarkupContainer warningContainer;

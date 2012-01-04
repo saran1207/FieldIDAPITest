@@ -6,7 +6,7 @@ import org.apache.wicket.model.Model;
 public class PointerOnHoverAppender extends AttributeAppender {
 
     public PointerOnHoverAppender() {
-        super("style", true, new Model<String>("cursor:pointer"), " ");
+        super("style", new Model<String>("cursor:pointer"), " ");
     }
 
 }

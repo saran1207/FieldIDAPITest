@@ -3,12 +3,11 @@ package com.n4systems.fieldid.wicket.components.search.results;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
-public abstract class MassActionPanel extends Panel implements IHeaderContributor {
+public abstract class MassActionPanel extends Panel {
 
     private StringBuffer variableAssignmentScriptBuffer;
 

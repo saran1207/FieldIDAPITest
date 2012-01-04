@@ -13,7 +13,6 @@ import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
@@ -25,7 +24,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
-public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriteriaModel> implements IHeaderContributor {
+public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriteriaModel> {
 
     public EventReportCriteriaPanel(String id, IModel<EventReportCriteriaModel> criteriaModel) {
         super(id, criteriaModel);

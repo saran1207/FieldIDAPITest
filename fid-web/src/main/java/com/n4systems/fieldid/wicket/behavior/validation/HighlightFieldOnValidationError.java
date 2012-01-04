@@ -9,7 +9,7 @@ import org.apache.wicket.model.Model;
 public class HighlightFieldOnValidationError extends AttributeAppender {
 
     public HighlightFieldOnValidationError() {
-        super("class", true, new Model<String>("inputError"), " ");
+        super("class", new Model<String>("inputError"), " ");
     }
 
     @Override

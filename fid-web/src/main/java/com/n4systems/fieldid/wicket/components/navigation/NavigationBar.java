@@ -28,7 +28,7 @@ public class NavigationBar extends Panel {
         List<NavigationItem> navItemsList = filterVisibleItems(Arrays.asList(items));
         WebMarkupContainer optionsList = new WebMarkupContainer("optionsList");
         if (items.length == 0) {
-            optionsList.add(new AttributeAppender("class", true, new Model<String>("emptyOptions"), " "));
+            optionsList.add(new AttributeAppender("class", new Model<String>("emptyOptions"), " "));
         }
 
         optionsList.add(new ListView<NavigationItem>("navItems", navItemsList) {

@@ -2,12 +2,11 @@ package com.n4systems.fieldid.wicket.components;
 
 import com.n4systems.fieldid.wicket.behavior.validation.ConsiderAbsentIfEqualToValidator;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 
-public class TextFieldWithDescription extends TextField<String> implements IHeaderContributor {
+public class TextFieldWithDescription extends TextField<String> {
 
     private IModel<String> descriptionText;
 

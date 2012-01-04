@@ -119,7 +119,7 @@ public class PredefinedLocationsPanel extends Panel {
     }
 
     private AttributeAppender createArrowIfHasChildrenModifier(final ListItem<HierarchicalNode> item) {
-        return new AttributeAppender("class", true, new Model<String>("hasChildMenu"), " ") {
+        return new AttributeAppender("class", new Model<String>("hasChildMenu"), " ") {
             @Override
             public boolean isEnabled(Component component) {
                 return !item.getModelObject().isLeaf();
@@ -128,7 +128,7 @@ public class PredefinedLocationsPanel extends Panel {
     }
 
     private AttributeAppender createHighlightSelectedModifier(final ListItem<HierarchicalNode> item, final int levelIndex) {
-        return new AttributeAppender("class", true, new Model<String>("active"), " ") {
+        return new AttributeAppender("class", new Model<String>("active"), " ") {
             @Override
             public boolean isEnabled(Component component) {
                 // Must add one to index to account for artificial root level.
@@ -141,7 +141,7 @@ public class PredefinedLocationsPanel extends Panel {
     }
 
     private AttributeAppender createAbsolutePositionModifier(final int levelIndex) {
-        return new AttributeAppender("style", true, new IModel<String>() {
+        return new AttributeAppender("style", new IModel<String>() {
             @Override
             public String getObject() {
                 return "top: 0px; left: " +(levelIndex*200) + "px";

@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.wicket.behavior;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 
-public class ClickOnComponentWhenEnterKeyPressedBehavior extends AbstractBehavior {
+public class ClickOnComponentWhenEnterKeyPressedBehavior extends Behavior {
 
     private Component componentToClickOn;
 

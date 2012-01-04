@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.wicket.components;
 
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 
-public class NonWicketIframeLink extends NonWicketLink implements IHeaderContributor {
+public class NonWicketIframeLink extends NonWicketLink {
 
     private boolean scrolling;
     private int width;

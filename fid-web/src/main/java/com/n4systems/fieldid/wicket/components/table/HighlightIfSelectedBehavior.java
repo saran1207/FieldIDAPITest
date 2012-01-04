@@ -13,7 +13,7 @@ public class HighlightIfSelectedBehavior extends AttributeAppender {
     private MultiIdSelection selection;
 
     public HighlightIfSelectedBehavior(IModel<?> rowModel, MultiIdSelection selection) {
-        super("class", true, new Model<String>("multiSelected"), " ");
+        super("class", new Model<String>("multiSelected"), " ");
         this.rowModel = rowModel;
         this.selection = selection;
     }

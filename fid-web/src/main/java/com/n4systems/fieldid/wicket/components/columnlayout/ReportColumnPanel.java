@@ -40,10 +40,10 @@ public class ReportColumnPanel extends Panel {
             labelModel = new PropertyModel<String>(model, "label");
         }
         areaClickableForAdd.add(new Label("columnTitle", labelModel));
-        add(new AttributeAppender("class", true, new CssForTypeModel("column_body_", model), " "));
+        add(new AttributeAppender("class", new CssForTypeModel("column_body_", model), " "));
 
         WebMarkupContainer leftBox = new WebMarkupContainer("leftBox");
-        leftBox.add(new AttributeAppender("class", true, new CssForTypeModel("column_box_", model), " "));
+        leftBox.add(new AttributeAppender("class", new CssForTypeModel("column_box_", model), " "));
         addPlusAndDragImages(leftBox);
         areaClickableForAdd.add(leftBox);
 

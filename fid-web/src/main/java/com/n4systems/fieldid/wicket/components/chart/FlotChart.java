@@ -29,7 +29,7 @@ public class FlotChart<X> extends Panel {
     public FlotChart(final String id, IModel<ChartData<X>> model, IModel<FlotOptions<X>> optionsModel, String css) {
 		super(id, model);
         this.optionsModel = optionsModel;
-        add(new ChartMarkup("flot").add(new AttributeAppender("class", true, new Model<String>(css), " ")));
+        add(new ChartMarkup("flot").add(new AttributeAppender("class", new Model<String>(css), " ")));
 	}    	
 	    	
 	@SuppressWarnings("unchecked")
