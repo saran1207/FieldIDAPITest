@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -79,7 +80,7 @@ public class SystemSettingsPage extends FieldIDFrontEndPage {
 			WebMarkupContainer orderDetails = new WebMarkupContainer("orderDetailsOption");
 			orderDetails.add(new CheckBox("orderDetails"));
 			add(orderDetails.setVisible(showOrderDetails));
-            add(new Image("gpsLogo", new PackageResourceReference("/images/gps-logo.png")));
+            add(new ContextImage("gpsLogo", "images/gps-logo.png"));
             add(new CheckBox("gpsCapture"));
             add(new DropDownChoice<String>("dateFormat", getDateFormats(), new DateFormatSampleChoiceRenderer()).setNullValid(false));
             add(new TextField<String>("identifierLabel").setRequired(true));

@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -58,11 +59,11 @@ public class ReportColumnPanel extends Panel {
     }
 
     private void addPlusAndDragImages(WebMarkupContainer leftBox) {
-        Image dragImage = new Image("dragImage", new PackageResourceReference("/images/columnlayout/drag.png"));
+        ContextImage dragImage = new ContextImage("dragImage", "images/columnlayout/drag.png");
         dragImage.setVisible(!addMode);
         leftBox.add(dragImage);
 
-        Image plusImage = new Image("plusImage", new PackageResourceReference("/images/columnlayout/plus.png"));
+        ContextImage plusImage = new ContextImage("plusImage", "images/columnlayout/plus.png");
         plusImage.setVisible(addMode);
         leftBox.add(plusImage);
 
@@ -75,8 +76,8 @@ public class ReportColumnPanel extends Panel {
     }
 
     private void addRemoveImage() {
-        Image removeImage;
-        add(removeImage = new Image("removeImage", new PackageResourceReference("/images/columnlayout/remove.png")) {
+        ContextImage removeImage;
+        add(removeImage = new ContextImage("removeImage", "images/columnlayout/remove.png") {
             @Override
             public boolean isVisible() {
                 return deleteAlwaysVisible || !addMode;

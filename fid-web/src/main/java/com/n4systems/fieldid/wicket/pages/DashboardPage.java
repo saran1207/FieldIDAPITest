@@ -24,13 +24,12 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 import rfid.web.helper.SessionUser;
@@ -129,9 +128,9 @@ public class DashboardPage extends FieldIDFrontEndPage {
 	private WebMarkupContainer createBlankSlate(String id) {
 		WebMarkupContainer panel = new WebMarkupContainer(id);
 		panel.setOutputMarkupId(true);
-		panel.add(new Image("step1", new PackageResourceReference("/images/dashboard/step1.png")));
-		panel.add(new Image("step2", new PackageResourceReference("/images/dashboard/step2.png")));
-		panel.add(new Image("step3", new PackageResourceReference("/images/dashboard/step3.png")));
+		panel.add(new ContextImage("step1", "images/dashboard/step1.png"));
+		panel.add(new ContextImage("step2", "images/dashboard/step2.png"));
+		panel.add(new ContextImage("step3", "images/dashboard/step3.png"));
 		return panel;
 	}
 
