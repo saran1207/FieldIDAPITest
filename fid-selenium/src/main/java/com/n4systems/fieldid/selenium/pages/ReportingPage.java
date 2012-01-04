@@ -173,7 +173,7 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
     
     @Override
     public void enterIdentifier(String identifier) {
-        selenium.type("//input[@name='identifier']", identifier);
+        selenium.type("//input[@name='identifiersCriteriaPanel:identifier']", identifier);
     }
     
     public void selectResult(String result) {
