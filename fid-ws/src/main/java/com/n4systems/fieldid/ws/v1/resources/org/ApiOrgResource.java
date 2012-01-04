@@ -64,17 +64,28 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		return image;
 	}
 
-	private String convertAddress(AddressInfo addressInfo) {
-		String address = null;
-		
-		if(addressInfo != null) {
-			address = String.format("%s, %s, %s, %s", 
-					addressInfo.getStreetAddress(),
-					addressInfo.getCity(),
-					addressInfo.getState(),
-					addressInfo.getZip());
+	private String convertAddress(AddressInfo addressInfo) {		
+		if(addressInfo != null) {			
+			StringBuilder builder = new StringBuilder();
+			
+			appendStringSafely(builder, addressInfo.getStreetAddress());
+			appendStringSafely(builder, addressInfo.getCity());
+			appendStringSafely(builder, addressInfo.getState());
+			appendStringSafely(builder, addressInfo.getZip());
+			
+			return builder.toString();
+		} else {
+			return null;
 		}
-		
-		return address;
+	}
+	
+	private void appendStringSafely(StringBuilder builder, String data) {
+		if(data != null && data.length() != 0)
+		{
+			if(builder.length() > 0)
+				builder.append(", ");
+			
+			builder.append(data);
+		}
 	}
 }
