@@ -44,24 +44,7 @@ import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.viewhelpers.EventHelper;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.Deficiency;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.ProofTestInfo;
-import com.n4systems.model.Recommendation;
-import com.n4systems.model.Status;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.commenttemplate.CommentTemplate;
@@ -288,8 +271,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			}
 		}
 		
-		suggestSchedule();
-
 		autoSchedule();
 		
 		
@@ -315,14 +296,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
             nextSchedules.add(0, nextSchedule);
         }
     }
-
-	private void suggestSchedule() {
-		if (eventScheduleOnEvent == false && eventSchedule == null) {
-			setScheduleId(new EventScheduleSuggestion(getAvailableSchedules()).getSuggestedScheduleId());
-			scheduleSuggested = (eventSchedule != null);
-			
-		}
-	}
 
 	@SkipValidation
 	@NetworkAwareAction
@@ -742,6 +715,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		this.newEventBookTitle = newEventBookTitle;
 	}
 
+	@Override
 	public List<CriteriaResultWebModel> getCriteriaResults() {
 		if (criteriaResults == null) {
 			// criteria results need to be placed back in the order that they appear on the form

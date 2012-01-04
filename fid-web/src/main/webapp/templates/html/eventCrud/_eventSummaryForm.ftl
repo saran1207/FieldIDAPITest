@@ -102,18 +102,10 @@
 			
 		</div>
 	<#else>
-		<div class="infoSet <#if scheduleSuggested>suggested</#if>">
-		
+		<div class="infoSet">		
 			<label class="label"><@s.text name="label.schedulefor"/></label>
 			<span class="fieldHolder">
 				<@s.select id="schedule" name="scheduleId" list="schedules" listKey="id" listValue="name" theme="fieldidSimple"/>
-				<#if scheduleSuggested>
-					<a href="javascript:void(0);" id="suggestedSchedule_button">?</a>
-					<div id="suggestedSchedule" class="hidden quickView" ><@s.text name="label.wesuggestedascheduleforyou"/></div>
-					<script type="text/javascript">
-						$("suggestedSchedule_button").observe( 'click', function(event) { showQuickView('suggestedSchedule', event); } );
-					</script>
-				</#if>
 			</span>
 		</div>
 	</#if>
