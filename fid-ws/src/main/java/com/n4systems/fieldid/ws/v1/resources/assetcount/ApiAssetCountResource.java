@@ -29,8 +29,8 @@ public class ApiAssetCountResource extends FieldIdPersistenceService {
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public ListResponse<ApiAssetCount> getAssetCounts(@QueryParam("orgId") Long[] orgIds) {
-		List<ApiAssetCount> apiAssetCount = new ArrayList<ApiAssetCount>();
+	public ListResponse<ApiAssetCount> getAssetCounts(@QueryParam("orgId") List<Long> orgIds) {
+		List<ApiAssetCount> assetCounts = new ArrayList<ApiAssetCount>();
 		for (Long orgId: orgIds) {
 			QueryBuilder<Long> builder = new QueryBuilder<Long>(Asset.class, securityContext.getUserSecurityFilter());
 			builder.setCountSelect();
@@ -43,10 +43,10 @@ public class ApiAssetCountResource extends FieldIdPersistenceService {
 			builder.applyFilter(new OwnerAndDownFilter(org));
 			Long assets = persistenceService.find(builder);
 			
-			apiAssetCount.add(new ApiAssetCount(orgId, assets));
+			assetCounts.add(new ApiAssetCount(orgId, assets));
 		}
 		
-		ListResponse<ApiAssetCount> response = new ListResponse<ApiAssetCount>();
+		ListResponse<ApiAssetCount> response = new ListResponse<ApiAssetCount>(assetCounts, 0, 0, assetCounts.size());
 		return response;
 	}
 	

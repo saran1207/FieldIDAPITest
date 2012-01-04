@@ -186,6 +186,12 @@
 		    <groupId>org.odlabs.wiquery</groupId>
 			<artifactId>wiquery-jquery-ui</artifactId>
 			<version>1.5.3</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jackson-mapper-asl</artifactId>
+					<groupId>org.codehaus.jackson</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.xfire</groupId>
