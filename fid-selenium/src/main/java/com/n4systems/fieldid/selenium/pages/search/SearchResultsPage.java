@@ -20,7 +20,6 @@ public class SearchResultsPage extends WicketFieldIDPage {
 
     public void selectItemOnRow(int rowNumber) {
         checkAndFireClick("//table[@class='list']//tr["+rowNumber+"]//td[1]//input");
-        waitForWicketAjax();
     }
 
     public List<String> getColumnNames() {
