@@ -62,9 +62,9 @@
 
 	<#if !linkedAsset.orderedInfoOptionList.isEmpty()>
 		<#if autoAttributeCriteria?exists>
-		<div id="suggestedAttributes">
+		<div id="suggestedAttributes" name="sa" class="suggested-register-attributes">
 		<#else>
-		<div id="suggestedAttributes" style="display:none">
+		<div id="suggestedAttributes" name="nonesa" class="suggested-register-attributes" style="display:none">
 		</#if>
 		   <h3> ${linkedAsset.tenant.name} <@s.text name="label.attributes"/></h3>
 		   <p class="gray"><@s.text name="label.registerasset.linkedattributes"/></p>

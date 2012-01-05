@@ -149,3 +149,9 @@ width:70%;
 	text-align: left;
 }
 
+.suggested-register-attributes { 
+	z-index:-1;
+	position:absolute;
+	left:430px; /*position is related to width of field this is beside. if you change that, change this accordingly */ 
+}
+
