@@ -4,10 +4,9 @@ function startFileUpload() {
 }
 
 function completedFileUpload() {
-	activeFileUploads--;
 	addUploadFile('${uploadFileType!}', false);
+	activeFileUploads--;
 }
-
 var uploadWarning = "";
 function checkForUploads() {
 	if( activeFileUploads > 0 ) {
@@ -52,7 +51,7 @@ function addUploadFile(type, isRemove) {
 		type = ""; 
 	}
 		
-	if (!isRemove && ($$('.assetUploadPreview').size() + 1) >= uploadFileLimit) {
+	if (!isRemove && ($$('.assetUploadPreview').size())+activeFileUploads >= uploadFileLimit) {
 		return;
 	}
 	
