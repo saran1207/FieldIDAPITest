@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.user;
 
+import java.util.Date;
+
 import javax.ws.rs.Path;
 
 import org.springframework.stereotype.Component;
@@ -7,6 +9,9 @@ import org.springframework.stereotype.Component;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Component
 @Path("user")
@@ -16,6 +21,17 @@ public class ApiUserResource extends SetupDataResource<ApiUser, User> {
 		super(User.class);
 	}
 
+	@Override
+	protected QueryBuilder<User> createFindAllBuilder(Date after) {
+		QueryBuilder<User> builder = createTenantSecurityBuilder(User.class, true);
+		builder.addWhere(WhereClauseFactory.create("registered", true));
+		if (after != null) {
+			builder.addWhere(WhereClauseFactory.create(Comparator.GT, "modified", after));
+		}
+		builder.addOrder("id");
+		return builder;
+	}
+	
 	@Override
 	protected ApiUser convertEntityToApiModel(User user) {
 		ApiUser apiUser = new ApiUser();
