@@ -29,7 +29,7 @@ public enum ConfigEntry {
 	MOBLIE_PAGESIZE_SETUPDATA					(	"500"					),
 	WEB_TOTAL_INSPECTION_BUTTONS				(	"14"					),
 	WEB_FILE_UPLOAD_MAX							(	"50"					),
-	PRODUCT_FILE_UPLOAD_MAX						(	"2"						),
+	PRODUCT_FILE_UPLOAD_MAX						(	"5"						),
 	WEB_PAGINATION_PAGE_SIZE					(	"20"					),
 	INTEGRATION_PRODUCTTYPE_RESOLVES_BY_CODE	(	"true"					),
 	INDEX_JOB_PAGE_SIZE							(	"128"					),
