@@ -38,10 +38,7 @@
         <div id="listContainer">
             <ul class="listOfLinks">
                 <li class="first">
-                    Welcome, <span wicket:id="loggedInUsernameLabel"></span>
-                </li>
-                <li>
-                      <a href="/fieldid/myAccount.action"><wicket:message key="label.myaccount"/></a>
+                    Welcome, <a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
                 </li>
                 <li wicket:id="topInviteLinkContainer">
                     <a href="/fieldid/invite.action" onclick:target="_blank"><wicket:message key="label.invite"/></a>
@@ -55,9 +52,6 @@
                 <li wicket:id="topFieldIDStoreLink">
                       <a href="/fieldid/redirectToWebStore.action" target="_blank" ><wicket:message key="label.fieldid_webstore"/></a>
                 </li>
-                <li>
-                      <a href="http://blog.fieldid.com/" target="_blank" ><wicket:message key="label.blog"/></a>
-                  </li>
                   <li>
                     <a href="/fieldid/logout.action" ><wicket:message key="label.logout"/></a>
                 </li>

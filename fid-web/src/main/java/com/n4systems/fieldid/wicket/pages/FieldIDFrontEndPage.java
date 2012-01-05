@@ -86,7 +86,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
 
         add(createBackToLink("backToLink", "backToLinkLabel"));
         addNavBar("navBar");
-        add(new Label("loggedInUsernameLabel", sessionUser.getUserName()));
+        add(new Label("loggedInUsernameLabel", sessionUser.getName()));
         add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent") || sessionUser.hasAccess("editevent")));
         add(createSetupLinkContainer(sessionUser));
         add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));

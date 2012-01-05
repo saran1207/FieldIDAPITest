@@ -5,10 +5,7 @@
 		<div id="listContainer">
 			<ul class="listOfLinks">				
 				<li class="first">
-					<@s.text name="label.welcome"/>, ${sessionUser.userID} 
-				</li>
-		  		<li>
-		  			<a href="<@s.url action="myAccount" namespace="/"/>"><@s.text name="label.myaccount"/></a>
+					<@s.text name="label.welcome"/>, <a href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a> 
 				</li>
 					<#if sessionUser.employeeUser && userSecurityGuard.allowedManageSafetyNetwork>
 						<li>
@@ -27,9 +24,6 @@
 			  			<a href="<@s.url action="redirectToWebStore" namespace="/"/>" target="_blank" ><@s.text name="label.fieldid_webstore"/></a>
 			  		</li>
 				</#if>
-				<li>
-		  			<a href="http://blog.fieldid.com/" target="_blank" ><@s.text name="label.blog"/></a>
-		  		</li>	  		
 		  		<li>
 					<a href="<@s.url action="logout"  namespace="/"/>" ><@s.text name="label.logout"/></a>
 				</li>
