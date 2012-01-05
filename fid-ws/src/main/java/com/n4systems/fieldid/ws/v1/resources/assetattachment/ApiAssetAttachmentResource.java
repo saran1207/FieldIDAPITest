@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetAttachment;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;

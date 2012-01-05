@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.ws.v1.resources.asset;
+package com.n4systems.fieldid.ws.v1.resources.assetattachment;
 
 public class ApiAssetAttachment {
 	private String assetId;
