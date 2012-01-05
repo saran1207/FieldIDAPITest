@@ -20,7 +20,7 @@ public class NumberFieldCriteriaResult extends CriteriaResult {
 	}
 	
 	public String getFormattedValue() {
-		return String.format("%." + ((NumberFieldCriteria) getCriteria()).getDecimalPlaces() + "f", value);
+		return value==null ? "" : String.format("%." + ((NumberFieldCriteria) getCriteria()).getDecimalPlaces() + "f", value);
 	}
 
 	@Override
