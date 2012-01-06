@@ -12,6 +12,7 @@ import com.n4systems.fieldid.ws.v1.resources.authentication.AuthenticationResour
 import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateResource;
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
+import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiAssetTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
@@ -97,4 +98,10 @@ public class FieldIdWsConfig {
 	public ApiEventHistoryResource apiEventHistoryResource() {
 		return new ApiEventHistoryResource();
 	}
+	
+	@Bean
+	public ApiEventScheduleResource apiEventScheduleResource() {
+		return new ApiEventScheduleResource();
+	}
+	
 }
