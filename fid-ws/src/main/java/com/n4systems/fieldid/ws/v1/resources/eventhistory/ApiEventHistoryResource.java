@@ -52,7 +52,7 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, Event>
 		ApiEventHistory apiEventHistory = new ApiEventHistory();
 		apiEventHistory.setAssetId(event.getAsset().getMobileGUID());
 		apiEventHistory.setAssetTypeId(event.getType().getId());
-		apiEventHistory.setAssetTypeName(event.getType().getName());
+		apiEventHistory.setEventTypeName(event.getType().getName());
 		apiEventHistory.setEventDate(event.getDate());
 		apiEventHistory.setEventId(event.getMobileGUID());
 		apiEventHistory.setPerformedBy(event.getPerformedBy().getDisplayName());
