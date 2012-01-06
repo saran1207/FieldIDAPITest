@@ -1,4 +1,4 @@
-package com.n4systems.services.dashboard;
+package com.n4systems.fieldid;
 
 import static org.easymock.EasyMock.*;
 
@@ -23,7 +23,7 @@ import com.n4systems.test.TestTarget;
  *    fixture.setServiceB(createMock(ServiceB.class)); 
  *    fixture.setServiceC(createMock(ServiceC.class)); 
  *    fixture.setServiceD(createMock(ServiceD.class));
- *  the autoWireFixture method does all this stuff for you. 
+ *  the autoWire method does all this stuff for you. 
  */
 public class FieldIdUnitTest {
 
