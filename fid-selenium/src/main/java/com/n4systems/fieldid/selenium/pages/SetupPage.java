@@ -84,7 +84,7 @@ public class SetupPage extends FieldIDPage {
 	
     public ColumnLayoutPage clickEditAssetColumnLayout() {
         clickTemplatesTab();
-        selenium.click("//a[.='Asset Search Column Layout']");
+        selenium.click("//a[.='Search Column Layout']");
         return new ColumnLayoutPage(selenium);
     }
 
