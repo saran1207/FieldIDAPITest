@@ -13,16 +13,18 @@ public class DownloadLinksTest extends PageNavigatingTestCase<MyAccountPage>{
 
 	private static final String PASSWORD = "password";
 	private static final String USERID = "userid";
+	private User defaultUser;
 
 	@Override
 	protected MyAccountPage navigateToPage() {
-		return startAsCompany("test1").login(USERID, PASSWORD).clickMyAccount();
+		return startAsCompany("test1").login(USERID, PASSWORD).clickMyAccount(defaultUser.getDisplayName());
 	}
 
 	@Override
 	public void setupScenario(Scenario scenario) {
 		User user = scenario.aUser()
 							.withUserId(USERID)
+							.withEmailAddress(USERID)
 							.withPassword(PASSWORD)
 							.build();
 		
@@ -30,11 +32,12 @@ public class DownloadLinksTest extends PageNavigatingTestCase<MyAccountPage>{
 		        .withTenant(scenario.defaultTenant())
 		        .withUser(user)
 		        .build();
+		defaultUser = scenario.defaultUser();
 	}
 	
 	@Test
 	public void view_downloads_no_downloads() throws Exception {
-		page.clickSignOut().login().clickMyAccount().clickDownloads();
+		page.clickSignOut().login().clickMyAccount("N4 Admin").clickDownloads();
 		assertEquals(0, page.getNumberOfItemsInDownloadList());	
 	}
 	

@@ -64,7 +64,7 @@ public class FieldIDPage extends WebPage {
 	}
 
     public AssetsSearchPage clickAssetsLink() {
-        selenium.click("//div[@id='pageNavigation']//a[contains(.,'Assets')]");
+        selenium.click("//div[@id='pageNavigation']//a[contains(.,'Search')]");
         return new AssetsSearchPage(selenium);
     }
     
@@ -73,8 +73,8 @@ public class FieldIDPage extends WebPage {
         return new ReportingPage(selenium);
     }
 
-    public MyAccountPage clickMyAccount() {
-        selenium.click("//div[@id='pageActions']//a[.='My Account']");
+    public MyAccountPage clickMyAccount(String userId) {
+        selenium.click("//div[@id='pageActions']//a[.='" + userId + "']");
         return new MyAccountPage(selenium);
     }
 	
