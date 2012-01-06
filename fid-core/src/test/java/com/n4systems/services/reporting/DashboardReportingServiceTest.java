@@ -14,13 +14,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.FieldIdUnitTest;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.services.dashboard.FieldIdUnitTest;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import com.n4systems.util.chart.ChartDateRange;
@@ -38,6 +38,7 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 	private static final String STATUS_BAR = "bar";
 	private static final String STATUS_HELLO = "hello";
 	private static final String STATUS_WORLD = "world";
+	
 	@TestTarget private DashboardReportingService dashboardService; 
 	@TestMock private AssetService assetService;
 	@TestMock private EventService eventService;

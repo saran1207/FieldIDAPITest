@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.fieldid.FieldIdUnitTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.dashboard.DashboardColumn;
