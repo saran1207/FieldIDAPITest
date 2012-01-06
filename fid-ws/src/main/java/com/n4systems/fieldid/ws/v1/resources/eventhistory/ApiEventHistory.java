@@ -5,7 +5,7 @@ import java.util.Date;
 public class ApiEventHistory {
 	private String assetId;
 	private String eventId;
-	private String assetTypeName;
+	private String eventTypeName;
 	private Long assetTypeId;
 	private Date eventDate;
 	private String performedBy;
@@ -27,12 +27,12 @@ public class ApiEventHistory {
 		this.eventId = eventId;
 	}
 
-	public String getAssetTypeName() {
-		return assetTypeName;
+	public String getEventTypeName() {
+		return eventTypeName;
 	}
 
-	public void setAssetTypeName(String assetTypeName) {
-		this.assetTypeName = assetTypeName;
+	public void setEventTypeName(String eventTypeName) {
+		this.eventTypeName = eventTypeName;
 	}
 
 	public Long getAssetTypeId() {
