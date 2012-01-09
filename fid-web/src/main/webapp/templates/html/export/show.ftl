@@ -3,9 +3,7 @@
 	<@n4.includeStyle href="viewTree"/>
 	<@n4.includeStyle href="pageStyles/downloads"/>
 	<@n4.includeStyle href="chosen/chosen.css"/>
-	<@n4.includeScript src="jquery-1.4.2.min.js"/>
-	<@n4.includeScript>jQuery.noConflict();</@n4.includeScript>	
-	<#include "/templates/html/common/_datetimepicker.ftl"/>	
+	<#include "/templates/html/common/_datetimepicker.ftl"/>
 			
 	<style type="text/css">chzn-select {max-height:110px !important;}</style>
 </head>

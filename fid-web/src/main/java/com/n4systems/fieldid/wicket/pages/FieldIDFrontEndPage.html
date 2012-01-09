@@ -52,8 +52,12 @@
                 <li wicket:id="topFieldIDStoreLink">
                       <a href="/fieldid/redirectToWebStore.action" target="_blank" ><wicket:message key="label.fieldid_webstore"/></a>
                 </li>
-                  <li>
+                <li>
                     <a href="/fieldid/logout.action" ><wicket:message key="label.logout"/></a>
+                    <img class="divider" wicket:id="savedItemsDivider"/>
+                </li>
+                <li>
+                    <span wicket:id="savedItemsDropdown"></span>
                 </li>
               </ul>
           </div>

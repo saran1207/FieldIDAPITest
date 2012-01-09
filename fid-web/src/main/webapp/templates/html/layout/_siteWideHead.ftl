@@ -18,3 +18,9 @@
 <!--[if IE 6]>
 <@n4.includeScript src="common-ie6" />
 <![endif]-->
+
+<@n4.includeScript src="jquery-1.4.2.min.js"/>
+<@n4.includeScript>jQuery.noConflict();</@n4.includeScript>
+
+<@n4.includeStyle href="newCss/component/my_saved_items.css" />
+<@n4.includeScript src="my_saved_items.js" />

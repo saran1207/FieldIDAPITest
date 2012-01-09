@@ -26,6 +26,7 @@ import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.SortDirection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,15 @@ public class SavedReportService extends FieldIdPersistenceService {
     @Transactional(readOnly = true)
     public SavedReport getSavedReport(Long savedReportId) {
         return persistenceService.find(SavedReport.class, savedReportId);
+    }
+
+    @Transactional
+    public List<SavedReport> listSavedReports() {
+        QueryBuilder<SavedReport> query = createUserSecurityBuilder(SavedReport.class);
+        
+        query.addOrder("name");
+
+        return persistenceService.findAll(query);
     }
 
     @Transactional(readOnly = true)

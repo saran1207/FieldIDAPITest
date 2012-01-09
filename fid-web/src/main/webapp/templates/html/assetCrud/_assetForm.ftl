@@ -1,7 +1,5 @@
 <head>
 	<@n4.includeStyle href="chosen/chosen.css"/>
-	<@n4.includeScript src="jquery-1.4.2.min.js"/>
-	<@n4.includeScript>jQuery.noConflict();</@n4.includeScript>	
 	<@n4.includeScript src="commentTemplates.js" />
 	<@n4.includeScript src="asset.js" />
 	<@n4.includeScript src="event.js" />

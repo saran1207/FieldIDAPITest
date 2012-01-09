@@ -26,7 +26,15 @@
 				</#if>
 		  		<li>
 					<a href="<@s.url action="logout"  namespace="/"/>" ><@s.text name="label.logout"/></a>
+                    <img src="<@s.url value='/images/saved-item-divider.png'/>" class="divider">
 				</li>
+                <li>
+                    <span>
+                        <a href="javascript:void(0);" id="mySavedItemsLink"><@s.text name="label.my_saved_items"/></a>
+                        <img src="<@s.url value='/images/down-arrow.png'/>" class="downArrow">
+                        <div id="mySavedItemsBox" class="mySavedItemsBox" style="display:none;"></div>
+                    </span>
+                </li>
 	  		</ul>
 	  	</div>
   	</div> 

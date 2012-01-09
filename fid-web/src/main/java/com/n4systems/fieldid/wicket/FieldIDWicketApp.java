@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsPage;
 import com.n4systems.fieldid.wicket.pages.setup.AccountPolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.IdentifierOverridesPage;
@@ -63,6 +64,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("returnToReport", ReturnToReportPage.class);
         mountPage("savedReport", RunSavedReportPage.class);
         mountPage("massSchedule", MassSchedulePage.class);
+
+        mountPage("savedItems", SavedItemsPage.class);
 
         mountPage("admin/addTenant", AddTenantPage.class);
              

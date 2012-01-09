@@ -1,0 +1,49 @@
+.mySavedItemsBox {
+    display:none;
+    width: 220px;
+    position:absolute;
+    background-color:#fff;
+    border:1px solid #ccc;
+    padding: 20px 0;
+    text-align:left;
+}
+
+.mySavedItemsBox .savedItem {
+    padding: 5px 0 5px 10px;
+    overflow:hidden;
+    clear:left;
+    display:block;
+}
+
+.mySavedItemsBox .savedItem img {
+    padding-right:5px;
+    display:block;
+    float:left;
+}
+
+.mySavedItemsBox div.savedItem:hover {
+    background-color:#f0f0f0;
+}
+
+#pageHeader #mySavedItemsBox a, #pageHeader #mySavedItemsBox a:hover, #pageHeader #mySavedItemsBox a:visited {
+    text-decoration: none;
+    color: #444;
+}
+
+.mySavedItemsBox .blankSlateContainer {
+    font-style: italic;
+    padding-left:20px;
+}
+
+.listOfLinks .openedSavedItemsLink {
+    background-color:#ddd;
+}
+
+.listOfLinks img.divider {
+    height: 8px;
+    padding-left:8px;
+}
+
+.listOfLinks img.downArrow {
+    padding-bottom:2px;
+}
