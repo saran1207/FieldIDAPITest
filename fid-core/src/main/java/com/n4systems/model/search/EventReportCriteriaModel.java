@@ -22,7 +22,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     private AssetType assetType;
     private AssetTypeGroup assetTypeGroup;
     private User assignedTo;
-    private ChartDateRange dateRange;
+    private ChartDateRange dateRange = ChartDateRange.FOREVER;
 
     private EventType eventType;
     private EventTypeGroup eventTypeGroup;
@@ -218,6 +218,10 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     }
 
 	public void setDateRange(ChartDateRange dateRange) {
+		if (!ChartDateRange.CUSTOM.equals(dateRange)) { 
+			this.fromDate = null;	// mutually exclusive - can't have dates for non-custom ranges.
+			this.toDate = null;
+		}
 		this.dateRange = dateRange;
 	}
 

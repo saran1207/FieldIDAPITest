@@ -31,7 +31,8 @@ public class DateTimePicker extends Panel {
         super(id);
 
         setOutputMarkupId(true);
-
+		setOutputMarkupPlaceholderTag(true);
+        
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
 
         String javaDateFormat = includeTime ? sessionUser.getDateTimeFormat() : sessionUser.getDateFormat();
