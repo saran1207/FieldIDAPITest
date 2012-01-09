@@ -1,5 +1,10 @@
 package com.n4systems.fieldid.service.search;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.event.EventTypeService;
@@ -26,12 +31,10 @@ import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.EnumUtils;
+import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.SortDirection;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 public class SavedReportService extends FieldIdPersistenceService {
 
@@ -93,6 +96,7 @@ public class SavedReportService extends FieldIdPersistenceService {
 
 		criteriaModel.setFromDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.FROM_DATE)));
 		criteriaModel.setToDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.TO_DATE)));
+		criteriaModel.setDateRange(EnumUtils.valueOf(ChartDateRange.class, savedReport.getCriteria().get(SavedReport.DATE_RANGE)));
 
 		criteriaModel.setSavedReportId(savedReport.getId());
 		if (savedReport.getLongCriteria(SavedReport.OWNER_ID) != null) {

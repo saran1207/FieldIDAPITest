@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
+import java.util.Date;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -11,9 +11,12 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import rfid.web.helper.SessionUser;
 
-import java.util.Date;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
+
 
 @SuppressWarnings("serial")
 public class DateTimePicker extends Panel {

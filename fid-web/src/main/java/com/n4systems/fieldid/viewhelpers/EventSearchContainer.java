@@ -12,6 +12,7 @@ import com.n4systems.model.security.NetworkIdSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.reporting.ReportDefiner;
+import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.persistence.search.SortDirection;
 
 
@@ -39,6 +40,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	private Long jobId;
 	private Date fromDate;
 	private Date toDate;
+	private ChartDateRange dateRange;
 	
 	private Long performedBy;
 	
@@ -135,6 +137,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		return SortDirection.DESC;
 	}
 	
+	@Override
 	public String getRfidNumber() {
 		return rfidNumber;
 	}
@@ -143,6 +146,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.rfidNumber = rfidNumber;
 	}
 
+	@Override
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -151,6 +155,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.identifier = identifier;
 	}
 	
+	@Override
 	public String getOrderNumber() {
 		return orderNumber;
 	}
@@ -159,6 +164,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.orderNumber = orderNumber;
 	}
 
+	@Override
 	public Long getAssetType() {
 		return assetTypeId;
 	}
@@ -167,6 +173,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.assetTypeId = assetTypeId;
 	}
 	
+	@Override
 	public Long getAssetTypeGroup() {
 		return assetTypeGroupId;
 	}
@@ -183,6 +190,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.assetStatusId = assetStatusId;
 	}
 
+	@Override
 	public Long getEventTypeGroup() {
 		return eventTypeGroupId;
 	}
@@ -191,6 +199,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.eventTypeGroupId = eventTypeGroupId;
 	}
 
+	@Override
 	public Long getPerformedBy() {
 		return performedBy;
 	}
@@ -199,6 +208,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.performedBy = performedBy;
 	}
 
+	@Override
 	public Long getEventBook() {
 		return eventBookId;
 	}
@@ -207,6 +217,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.eventBookId = eventBookId;
 	}
 
+	@Override
 	public String getPurchaseOrder() {
 		return purchaseOrder;
 	}
@@ -215,6 +226,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.purchaseOrder = purchaseOrder;
 	}
 
+	@Override
 	public Date getFromDate() {
 		return fromDate;
 	}
@@ -223,6 +235,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.fromDate = fromDate;
 	}
 
+	@Override
 	public Date getToDate() {
 		return toDate;
 	}
@@ -280,6 +293,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		return location;
 	}
 
+	@Override
 	public BaseOrg getOwner() {
 		return owner;
 	}
@@ -319,4 +333,12 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
     public void setEventType(Long eventTypeId) {
         this.eventTypeId = eventTypeId;
     }
+
+	public void setDateRange(ChartDateRange dateRange) {
+		this.dateRange = dateRange;
+	}
+
+	public ChartDateRange getDateRange() {
+		return dateRange;
+	}
 }

@@ -16,6 +16,9 @@ public class ChartDateRangeTest {
 	
 	@Test
 	public void testFromToDelta() {
+		// for testing purposes i will set the current time.
+		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		
 		assertFromToDelta(ChartDateRange.THIS_WEEK, 7);
 		assertFromToDelta(ChartDateRange.THIS_MONTH, 28, 29, 30, 31);
 		assertFromToDelta(ChartDateRange.THIS_QUARTER, 88, 89, 90, 91, 92, 93);
@@ -68,6 +71,10 @@ public class ChartDateRangeTest {
 		assertEquals(DateTimeConstants.JANUARY, ChartDateRange.FOREVER.getFrom().getMonthOfYear());		
 		assertTrue(ChartDateRange.FOREVER.getFrom().getYear()>=2005);
 		assertEquals(1, ChartDateRange.FOREVER.getFrom().getDayOfYear());
+
+		assertEquals(DateTimeConstants.JANUARY, ChartDateRange.CUSTOM.getFrom().getMonthOfYear());		
+		assertTrue(ChartDateRange.CUSTOM.getFrom().getYear()>=2005);
+		assertEquals(1, ChartDateRange.CUSTOM.getFrom().getDayOfYear());
 	}
 
 	@Test
@@ -120,6 +127,11 @@ public class ChartDateRangeTest {
 		assertEquals(DateTimeConstants.JANUARY, ChartDateRange.FOREVER.getTo().getMonthOfYear());		
 		assertTrue(ChartDateRange.FOREVER.getTo().getYear()>=2005);
 		assertEquals(1, ChartDateRange.FOREVER.getTo().getDayOfYear());
+		
+		assertEquals(DateTimeConstants.JANUARY, ChartDateRange.CUSTOM.getTo().getMonthOfYear());		
+		assertTrue(ChartDateRange.CUSTOM.getTo().getYear()>=2005);
+		assertEquals(1, ChartDateRange.CUSTOM.getTo().getDayOfYear());
+		
 	}	
 	
 	private void assertFromToDelta(ChartDateRange range, Integer... expected) {

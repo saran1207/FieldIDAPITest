@@ -28,6 +28,7 @@ import com.n4systems.model.user.User;
 @Table(name="savedreports")
 public class SavedReport extends EntityWithTenant implements NamedEntity, Listable<Long>, HasUser {
 	private static final long serialVersionUID = 1L;
+	public static final String DATE_RANGE = "dateRange";
 	public static final String TO_DATE = "toDate";
 	public static final String FROM_DATE = "fromDate";
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
@@ -126,14 +127,17 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 		return value;
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Override
 	public String getDisplayName() {
 		return getName();
 	}
@@ -155,10 +159,12 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 		this.sortColumn = sortColumn;
 	}
 
+	@Override
 	public User getUser() {
 		return user;
 	}
 
+	@Override
 	public void setUser(User owner) {
 		this.user = owner;
 	}

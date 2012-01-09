@@ -1,28 +1,24 @@
 package com.n4systems.fieldid.wicket.components.reporting;
 
-import com.n4systems.fieldid.service.search.columns.EventColumnsService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.DateTimePicker;
-import com.n4systems.fieldid.wicket.components.search.IdentifiersCriteriaPanel;
-import com.n4systems.fieldid.wicket.components.search.OrderDetailsCriteriaPanel;
-import com.n4systems.fieldid.wicket.components.search.OwnershipCriteriaPanel;
-import com.n4systems.fieldid.wicket.components.search.SRSCriteriaPanel;
-import com.n4systems.fieldid.wicket.model.EndOfDayDateModel;
-import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
-import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
-import com.n4systems.model.search.EventReportCriteriaModel;
-import com.n4systems.model.search.ReportConfiguration;
+import javax.servlet.http.HttpSession;
+
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 
-import java.util.Date;
-
-import javax.servlet.http.HttpSession;
+import com.n4systems.fieldid.service.search.columns.EventColumnsService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.DateRangePicker;
+import com.n4systems.fieldid.wicket.components.search.IdentifiersCriteriaPanel;
+import com.n4systems.fieldid.wicket.components.search.OrderDetailsCriteriaPanel;
+import com.n4systems.fieldid.wicket.components.search.OwnershipCriteriaPanel;
+import com.n4systems.fieldid.wicket.components.search.SRSCriteriaPanel;
+import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
+import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
+import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.ReportConfiguration;
 
 public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriteriaModel> {
 
@@ -42,8 +38,7 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriter
 
     @Override
     protected void populateForm(SearchCriteriaForm form) {
-        form.add(new DateTimePicker("fromDate", new UserToUTCDateModel(new PropertyModel<Date>(form.getModel(), "fromDate"))));
-        form.add(new DateTimePicker("toDate", new UserToUTCDateModel(new EndOfDayDateModel(new PropertyModel<Date>(form.getModel(), "toDate")))));
+    	form.add(new DateRangePicker<EventReportCriteriaModel>("dateRangePicker", form.getModel()));
 
         form.addAssetDetailsPanel("assetDetailsCriteriaPanel");
         form.addEventDetailsPanel("eventDetailsCriteriaPanel");
@@ -72,4 +67,5 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriter
         return new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
     }
 
+    
 }

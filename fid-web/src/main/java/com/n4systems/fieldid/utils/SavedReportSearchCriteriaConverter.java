@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
@@ -15,9 +18,6 @@ import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.DateHelper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SavedReportSearchCriteriaConverter {
 
@@ -103,6 +103,7 @@ public class SavedReportSearchCriteriaConverter {
 		report.setInCriteria(SavedReport.JOB_ID, container.getJob());
 		report.setInCriteria(SavedReport.LOCATION, container.getLocation().getFreeformLocation());
 		report.setInCriteria(SavedReport.PREDEFINED_LOCATION_ID, container.getLocation().getPredefinedLocationId());
+		report.setInCriteria(SavedReport.DATE_RANGE, container.getDateRange());
 		
 		if (container.getFromDate() != null) {
 			report.setInCriteria(SavedReport.FROM_DATE, DateHelper.date2String(SavedReport.DATE_FORMAT, container.getFromDate()));

@@ -10,9 +10,10 @@ import java.util.Map;
 import org.joda.time.LocalDate;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.model.api.Listable;
 import com.n4systems.util.time.DateUtil;
 
-public enum ChartDateRange {
+public enum ChartDateRange implements Listable<String> {
 
 	SEVEN_DAYS("7 days"), 
 	THIRTY_DAYS("30 days"), 
@@ -26,7 +27,9 @@ public enum ChartDateRange {
 	THIS_MONTH("This Month"), 
 	THIS_QUARTER("This Quarter"), 
 	THIS_YEAR("This Year"), 
-	FOREVER("All Time");
+	FOREVER("All Time"), 
+	CUSTOM("Custom Date Range");
+	
 
 	private static EnumSet<ChartDateRange> chartRanges = EnumSet.of(LAST_WEEK, LAST_MONTH, LAST_QUARTER, LAST_YEAR, THIS_WEEK, THIS_MONTH, THIS_QUARTER, THIS_YEAR, FOREVER);
 	private static EnumSet<ChartDateRange> daysFromNowRanges = EnumSet.of(SEVEN_DAYS, THIRTY_DAYS, SIXTY_DAYS, NINETY_DAYS);
@@ -92,7 +95,8 @@ public enum ChartDateRange {
 		LocalDate today = LocalDate.now();
 		
 		switch (this) {
-			case FOREVER: 			
+			case FOREVER: 	
+			case CUSTOM:
 				return DateUtil.getLatestFieldIdDate();
 			case LAST_YEAR:
 				return today.withDayOfYear(1); 
@@ -126,6 +130,7 @@ public enum ChartDateRange {
 	public LocalDate getFrom() {
 		LocalDate today = new LocalDate();
 		switch (this) {
+			case CUSTOM:
 			case FOREVER: 			
 				return DateUtil.getEarliestFieldIdDate();
 			case LAST_YEAR:
@@ -158,10 +163,17 @@ public enum ChartDateRange {
 		return chartRanges.toArray(new ChartDateRange[]{});
 	}
 		
+	public static ChartDateRange[] chartDateRangesWithCustom() {
+		EnumSet<ChartDateRange> set = EnumSet.copyOf(chartRanges);
+		set.add(ChartDateRange.CUSTOM);
+		return set.toArray(new ChartDateRange[]{});		
+	}
+		
 	public boolean isDaysFromNowRange()  {
 		return daysFromNowRanges.contains(this);
 	}
 		
+	@Override
 	public String getDisplayName() { 
 		return displayName;
 	}
@@ -187,6 +199,11 @@ public enum ChartDateRange {
 			default:
 				throw new IllegalStateException("can't find chartDateRange for " + period + " days.");
 		}
+	}
+
+	@Override
+	public String getId() {
+		return name();
 	}
 	
 }

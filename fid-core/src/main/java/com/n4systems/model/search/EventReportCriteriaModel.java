@@ -1,5 +1,7 @@
 package com.n4systems.model.search;
 
+import java.util.Date;
+
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -10,8 +12,7 @@ import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.user.User;
-
-import java.util.Date;
+import com.n4systems.util.chart.ChartDateRange;
 
 public class EventReportCriteriaModel extends SearchCriteriaModel {
 
@@ -21,6 +22,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     private AssetType assetType;
     private AssetTypeGroup assetTypeGroup;
     private User assignedTo;
+    private ChartDateRange dateRange;
 
     private EventType eventType;
     private EventTypeGroup eventTypeGroup;
@@ -56,7 +58,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     }
 
     public Date getFromDate() {
-        return fromDate;
+    	return dateRange != null ? dateRange.getFromDate() : fromDate; 
     }
 
     public void setFromDate(Date fromDate) {
@@ -64,7 +66,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     }
 
     public Date getToDate() {
-        return toDate;
+    	return dateRange != null ? dateRange.getToDate() : toDate;
     }
 
     public void setToDate(Date toDate) {
@@ -214,5 +216,13 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     public void setSavedReportName(String savedReportName) {
         this.savedReportName = savedReportName;
     }
+
+	public void setDateRange(ChartDateRange dateRange) {
+		this.dateRange = dateRange;
+	}
+
+	public ChartDateRange getDateRange() {
+		return dateRange;
+	}
 
 }
