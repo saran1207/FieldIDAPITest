@@ -7,7 +7,7 @@ function checkDuplicateRfids(rfids, submitButton, uniqueId) {
 	lockSubmitButtons();
 		
 	mainForm = submitButton.form;
-	buttonPressed = submitButton 
+	buttonPressed = submitButton;
 	new Ajax.Request(checkRfidUrl, {
 		parameters: {
             uniqueId: uniqueId,

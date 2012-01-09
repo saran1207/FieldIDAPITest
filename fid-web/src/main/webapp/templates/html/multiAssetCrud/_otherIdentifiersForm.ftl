@@ -23,7 +23,7 @@
 			element.observe('click', function(event) {
 				var element = Event.element(event);
 				event.stop();
-				mergeAndSubmit('step1form', 'step4form', 'masterForm');
+				mergeAndSubmit('step1form', 'step4form', 'masterForm', element);
 			});
 		});
 </script>

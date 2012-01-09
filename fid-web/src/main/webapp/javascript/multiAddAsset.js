@@ -1,6 +1,6 @@
 
 
-function mergeAndSubmit(form1id, form2id, masterFormId) {
+function mergeAndSubmit(form1id, form2id, masterFormId, submitButton) {
 	var formMaster = $(masterFormId);
 	
 	if (!validateForm4()) {
@@ -10,7 +10,7 @@ function mergeAndSubmit(form1id, form2id, masterFormId) {
 	convertAndAppendInputsToForm(formMaster, $(form1id).getElements());
 	convertAndAppendInputsToForm(formMaster, $(form2id).getElements());
 	
-	validateRfids();
+	validateRfids(submitButton);
 }
 
 function convertInputToHidden(input) {
@@ -182,7 +182,7 @@ function validateForm4() {
 
 }
 
-function validateRfids() {
+function validateRfids(submitButton) {
 	var rfidFields = $$('.rfidNumber');
 	var rfids = new Array();
 	for (var i = 0; i < rfidFields.length; i++) {
@@ -192,7 +192,7 @@ function validateRfids() {
 		}
 	}
 	
-	checkDuplicateRfids(rfids, $('saveButton') );	
+	checkDuplicateRfids(rfids, submitButton);
 }
 
 function backToStep2() {
