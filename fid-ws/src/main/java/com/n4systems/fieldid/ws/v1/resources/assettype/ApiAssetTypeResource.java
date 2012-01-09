@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.ws.v1.resources.eventtype;
+package com.n4systems.fieldid.ws.v1.resources.assettype;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,13 +14,13 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributes.ApiAttribute;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributes.ApiAttributeOption;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributes.ApiComboBoxAttribute;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributes.ApiDateTimeAttribute;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributes.ApiSelectBoxAttribute;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributes.ApiTextBoxAttribute;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributes.ApiUnitAttribute;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiAttribute;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiAttributeOption;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiComboBoxAttribute;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiDateTimeAttribute;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiSelectBoxAttribute;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiTextBoxAttribute;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiUnitAttribute;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;

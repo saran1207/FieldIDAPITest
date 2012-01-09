@@ -1,9 +1,9 @@
-package com.n4systems.fieldid.ws.v1.resources.eventtype;
+package com.n4systems.fieldid.ws.v1.resources.assettype;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributes.ApiAttribute;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiAttribute;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 
 public class ApiAssetType extends ApiReadonlyModel {

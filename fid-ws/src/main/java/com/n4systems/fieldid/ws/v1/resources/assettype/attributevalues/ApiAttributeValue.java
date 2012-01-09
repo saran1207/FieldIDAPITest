@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.ws.v1.resources.eventtype.attributevalues;
+package com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues;
 
 public class ApiAttributeValue {
 	private Long attributeId;

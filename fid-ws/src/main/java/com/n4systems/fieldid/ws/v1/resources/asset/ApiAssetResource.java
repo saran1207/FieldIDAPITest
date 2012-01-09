@@ -22,7 +22,7 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributevalues.ApiAttributeValue;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;

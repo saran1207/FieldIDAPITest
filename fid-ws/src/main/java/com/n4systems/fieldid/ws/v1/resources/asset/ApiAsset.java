@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.fieldid.ws.v1.resources.eventtype.attributevalues.ApiAttributeValue;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
 
 public class ApiAsset extends ApiReadWriteModelWithOwner {

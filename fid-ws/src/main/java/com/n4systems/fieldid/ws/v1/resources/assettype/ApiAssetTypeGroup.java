@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.ws.v1.resources.eventtype;
+package com.n4systems.fieldid.ws.v1.resources.assettype;
 
 public class ApiAssetTypeGroup {
 	private String name;
