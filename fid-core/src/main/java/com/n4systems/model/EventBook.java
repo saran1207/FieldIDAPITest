@@ -13,14 +13,14 @@ import javax.persistence.Table;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.SecurityEnhanced;
-import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "eventbooks")
-public class EventBook extends EntityWithOwner implements NamedEntity, Listable<Long>, Comparable<EventBook>, SecurityEnhanced<EventBook> {
+public class EventBook extends ArchivableEntityWithOwner implements NamedEntity, Listable<Long>, Comparable<EventBook>, SecurityEnhanced<EventBook> {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false)

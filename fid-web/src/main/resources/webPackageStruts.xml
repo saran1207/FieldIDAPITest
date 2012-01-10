@@ -1298,6 +1298,10 @@
 		<action name="eventBooks" method="list" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/html/eventBook/list.ftl</result>
 		</action>
+		
+		<action name="archivedEventBooks" method="archivedList" class="com.n4systems.fieldid.actions.event.EventBookCrud">
+			<result name="success" type="freemarker">/templates/html/eventBook/listArchived.ftl</result>
+		</action>
 
 		<action name="eventBookAdd" method="add" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/html/eventBook/add.ftl</result>
@@ -1320,6 +1324,20 @@
 		<action name="eventBookUpdate" method="save" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="error" type="freemarker">/templates/html/eventBook/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventBook/edit.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">eventBooks</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+		</action>
+		
+		<action name="eventBookArchive" method="archive" class="com.n4systems.fieldid.actions.event.EventBookCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">eventBooks</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+		</action>
+		
+		<action name="eventBookUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventBooks</param>
 				<param name="currentPage">${currentPage}</param>

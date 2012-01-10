@@ -2,23 +2,24 @@ package com.n4systems.fieldid.actions.event;
 
 import java.util.List;
 
-import com.n4systems.model.EventBook;
-import com.n4systems.model.eventbook.EventBookListLoader;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
+import com.n4systems.model.eventbook.EventBookListLoader;
+import com.n4systems.model.eventbook.EventBookPaginatedLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
@@ -40,6 +41,7 @@ public class EventBookCrud extends AbstractCrud implements HasDuplicateValueVali
 	private List<ListingPair> books;
 
 	private Pager<EventBook> page;
+	private Pager<EventBook> archivedPage;
 
 	private OwnerPicker ownerPicker;
 	
@@ -67,18 +69,55 @@ public class EventBookCrud extends AbstractCrud implements HasDuplicateValueVali
 
 	@SkipValidation
 	public String doList() {
-		QueryBuilder<EventBook> queryBuilder = new QueryBuilder<EventBook>(EventBook.class, new OpenSecurityFilter());
-
-		queryBuilder.applyFilter(getSecurityFilter());
-		queryBuilder.addOrder("name");
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doArchivedList() {
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doArchive() {
 		try {
-			page = persistenceManager.findAllPaged(queryBuilder, getCurrentPage(), Constants.PAGE_SIZE);
-			return SUCCESS;
-		} catch (InvalidQueryException iqe) {
-			addActionErrorText("error.failedtoloadeventbooks");
-			logger.error("couldn't load the list of event docs", iqe);
+			testDependencies();
+		} catch (MissingEntityException e) {
+			return MISSING;
+		}
+
+		book.archiveEntity();
+
+		try {
+			book = persistenceManager.update(book, getSessionUser().getUniqueID());
+			addFlashMessage(getText("message.eventbookarchived"));
+		} catch (Exception e) {
+			logger.error("failed to archive event book", e);
+			addActionError(getText("error.eventbookarchivefailed"));
 			return ERROR;
 		}
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doUnarchive() {
+		try {
+			testDependencies();
+		} catch (MissingEntityException e) {
+			return MISSING;
+		}
+
+		book.activateEntity();
+
+		try {
+			book = persistenceManager.update(book, getSessionUser().getUniqueID());
+			addFlashMessage(getText("message.eventbookunarchived"));
+		} catch (Exception e) {
+			logger.error("failed to unarchive event book", e);
+			addActionError(getText("error.eventbookunarchivefailed"));
+			return ERROR;
+		}
+		return SUCCESS;
+		
 	}
 
 	@SkipValidation
@@ -223,7 +262,24 @@ public class EventBookCrud extends AbstractCrud implements HasDuplicateValueVali
 	}
 
 	public Pager<EventBook> getPage() {
+		if(page == null) {
+			EventBookPaginatedLoader loader = new EventBookPaginatedLoader(getSecurityFilter());
+			page = loader.setPage(getCurrentPage().intValue())
+			             .setPageSize(Constants.PAGE_SIZE)
+			             .load();
+		}
 		return page;
+	}
+	
+	public Pager<EventBook> getArchivedPage() {
+		if(archivedPage == null) {
+			EventBookPaginatedLoader loader = new EventBookPaginatedLoader(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true))
+												.archivedOnly();
+			archivedPage = loader.setPage(getCurrentPage().intValue())
+			             .setPageSize(Constants.PAGE_SIZE)
+			             .load();
+		}
+		return archivedPage;
 	}
 	
 	public String getName() {

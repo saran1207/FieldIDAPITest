@@ -1,4 +1,5 @@
-${action.setPageType('event_book', 'list')!}
+${action.setPageType('event_book', 'list_archived')!}
+<#assign page=archivedPage />
 
 <#if  page.hasResults() && page.validPage() >
 	<#assign currentAction="eventBooks.action" />
@@ -17,13 +18,8 @@ ${action.setPageType('event_book', 'list')!}
 				<td>${(book.owner.name?html)!}</td>
 				<td>${action.formatDateTime(book.created)}</td>
 				<td><span id="bookStatus_${book.id}">${book.open?string( action.getText( "label.open" ), action.getText( "label.closed" ) ) }</td>
-				<td><span id="bookStatusLink_${book.id}">
-						<#if book.open >
-							<#include "_closeLink.ftl" />
-						<#else>
-							<#include "_openLink.ftl" />
-						</#if>
-					</span> | <a href='<@s.url action="eventBookArchive" uniqueID="${book.id}"/>'><@s.text name="label.archive"/></a>
+				<td>
+					<a href='<@s.url action="eventBookUnarchive" uniqueID="${book.id}"/>'><@s.text name="label.unarchive"/></a>
 				</td>
 			</tr>	
 		</#list>
