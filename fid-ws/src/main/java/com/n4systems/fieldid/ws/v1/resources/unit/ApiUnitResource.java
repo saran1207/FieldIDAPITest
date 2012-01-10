@@ -12,7 +12,7 @@ import com.n4systems.model.UnitOfMeasure;
 public class ApiUnitResource extends SetupDataResource<ApiUnit, UnitOfMeasure> {
 
 	public ApiUnitResource() {
-		super(UnitOfMeasure.class);
+		super(UnitOfMeasure.class, false);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 	private static Logger logger = Logger.getLogger(ApiOrgResource.class);
 	
 	public ApiOrgResource() {
-		super(BaseOrg.class);
+		super(BaseOrg.class, true);
 	}
 
 	@Override

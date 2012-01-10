@@ -13,7 +13,7 @@ import com.n4systems.model.location.PredefinedLocationLevels;
 public class ApiPredefinedLocationResource extends SetupDataResource<ApiPredefinedLocation, PredefinedLocation> {
 
 	public ApiPredefinedLocationResource() {
-		super(PredefinedLocation.class);
+		super(PredefinedLocation.class, true);
 	}
 
 	@Override

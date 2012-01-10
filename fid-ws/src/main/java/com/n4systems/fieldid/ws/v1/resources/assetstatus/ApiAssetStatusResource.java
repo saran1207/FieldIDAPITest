@@ -12,7 +12,7 @@ import com.n4systems.model.AssetStatus;
 public class ApiAssetStatusResource extends SetupDataResource<ApiAssetStatus, AssetStatus> {
 
 	public ApiAssetStatusResource() {
-		super(AssetStatus.class);
+		super(AssetStatus.class, true);
 	}
 
 	@Override

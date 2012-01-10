@@ -49,6 +49,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		apiSchedule.setOwnerId(schedule.getOwner().getId());
 		apiSchedule.setAssetId(schedule.getAsset().getMobileGUID());
 		apiSchedule.setEventTypeId(schedule.getEventType().getId());
+		apiSchedule.setEventTypeName(schedule.getEventType().getName());
 		apiSchedule.setNextDate(schedule.getNextDate());
 		return apiSchedule;
 	}

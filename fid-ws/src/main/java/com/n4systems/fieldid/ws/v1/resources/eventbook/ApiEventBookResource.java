@@ -14,7 +14,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 public class ApiEventBookResource extends SetupDataResource<ApiEventBook, EventBook> {
 
 	public ApiEventBookResource() {
-		super(EventBook.class);
+		super(EventBook.class, false);
 	}
 
 	@Override

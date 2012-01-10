@@ -12,7 +12,7 @@ import com.n4systems.model.commenttemplate.CommentTemplate;
 public class ApiCommentTemplateResource extends SetupDataResource<ApiCommentTemplate, CommentTemplate> {
 
 	public ApiCommentTemplateResource() {
-		super(CommentTemplate.class);
+		super(CommentTemplate.class, false);
 	}
 
 	@Override

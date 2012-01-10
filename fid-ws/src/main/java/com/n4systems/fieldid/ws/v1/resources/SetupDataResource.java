@@ -26,13 +26,15 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 @Component
 public abstract class SetupDataResource<A, E extends AbstractEntity> extends ApiResource<A, E> {
 	private final Class<E> entityClass;
+	private final boolean allowArchived;
 	
-	protected SetupDataResource(Class<E> entityClass) {
+	protected SetupDataResource(Class<E> entityClass, boolean allowArchived) {
 		this.entityClass = entityClass;
+		this.allowArchived = allowArchived;
 	}
 	
 	protected QueryBuilder<E> createFindAllBuilder(Date after) {
-		QueryBuilder<E> builder = createTenantSecurityBuilder(entityClass, true);
+		QueryBuilder<E> builder = createTenantSecurityBuilder(entityClass, allowArchived);
 		if (after != null) {
 			builder.addWhere(WhereClauseFactory.create(Comparator.GT, "modified", after));
 		}

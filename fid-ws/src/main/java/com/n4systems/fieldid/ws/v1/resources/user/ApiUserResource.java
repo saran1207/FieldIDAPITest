@@ -18,7 +18,7 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class ApiUserResource extends SetupDataResource<ApiUser, User> {
 
 	public ApiUserResource() {
-		super(User.class);
+		super(User.class, true);
 	}
 
 	@Override

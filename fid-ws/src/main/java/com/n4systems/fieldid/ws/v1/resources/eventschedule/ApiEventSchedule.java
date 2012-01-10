@@ -7,6 +7,7 @@ import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
 public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 	private String assetId;
 	private Long eventTypeId;
+	private String eventTypeName;
 	private Date nextDate;
 
 	public String getAssetId() {
@@ -23,6 +24,14 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 
 	public void setEventTypeId(Long eventTypeId) {
 		this.eventTypeId = eventTypeId;
+	}
+	
+	public String getEventTypeName() {
+		return eventTypeName;
+	}
+
+	public void setEventTypeName(String eventTypeName) {
+		this.eventTypeName = eventTypeName;
 	}
 
 	public Date getNextDate() {
