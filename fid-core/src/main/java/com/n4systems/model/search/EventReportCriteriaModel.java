@@ -66,7 +66,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     }
 
     public Date getToDate() {
-    	return dateRange != null ? dateRange.getToDate() : toDate;
+    	return dateRange != null ? dateRange.getInclusiveToDate() : toDate;
     }
 
     public void setToDate(Date toDate) {

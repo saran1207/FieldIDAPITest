@@ -1,13 +1,14 @@
 package com.n4systems.model.search;
 
+import java.util.Date;
+
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
-
-import java.util.Date;
+import com.n4systems.util.chart.ChartDateRange;
 
 public class AssetSearchCriteriaModel extends SearchCriteriaModel {
 
@@ -27,9 +28,10 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
 
     private Date identifiedFromDate;
     private Date identifiedToDate;
+    private ChartDateRange dateRange = ChartDateRange.FOREVER;
 
     private User assignedTo;
-
+    
     public String getRfidNumber() {
         return rfidNumber;
     }
@@ -62,11 +64,13 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
         this.location = location;
     }
 
-    public BaseOrg getOwner() {
+    @Override
+	public BaseOrg getOwner() {
         return owner;
     }
 
-    public void setOwner(BaseOrg owner) {
+    @Override
+	public void setOwner(BaseOrg owner) {
         this.owner = owner;
     }
 
@@ -111,7 +115,7 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     }
 
     public Date getIdentifiedFromDate() {
-        return identifiedFromDate;
+    	return dateRange!=null ? dateRange.getFromDate() : identifiedFromDate;
     }
 
     public void setIdentifiedFromDate(Date identifiedFromDate) {
@@ -119,7 +123,7 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     }
 
     public Date getIdentifiedToDate() {
-        return identifiedToDate;
+    	return dateRange!=null ? dateRange.getInclusiveToDate() : identifiedToDate;
     }
 
     public void setIdentifiedToDate(Date identifiedToDate) {
@@ -133,4 +137,15 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     public void setAssignedTo(User assignedTo) {
         this.assignedTo = assignedTo;
     }
+
+	public void setDateRange(ChartDateRange dateRange) {
+		if (!ChartDateRange.CUSTOM.equals(dateRange)) { 
+			this.identifiedToDate = this.identifiedFromDate = null;  // mutually exclusive.  can't have specific dates if using non-customized ranges. 
+		}
+		this.dateRange = dateRange;
+	}
+
+	public ChartDateRange getDateRange() {
+		return dateRange;
+	}
 }

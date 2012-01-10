@@ -1,22 +1,19 @@
 package com.n4systems.fieldid.wicket.components.assetsearch;
 
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.DateRangePicker;
 import com.n4systems.fieldid.wicket.components.search.IdentifiersCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.OrderDetailsCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.OwnershipCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.SRSCriteriaPanel;
-import com.n4systems.fieldid.wicket.model.EndOfDayDateModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-
-import java.util.Date;
 
 public class AssetSearchCriteriaPanel extends SRSCriteriaPanel<AssetSearchCriteriaModel> {
 
@@ -33,14 +30,8 @@ public class AssetSearchCriteriaPanel extends SRSCriteriaPanel<AssetSearchCriter
         form.add(new IdentifiersCriteriaPanel("identifiersCriteriaPanel", form.getModel()));
         form.addAssetDetailsPanel("assetDetailsCriteriaPanel");
         form.add(new OwnershipCriteriaPanel("ownershipCriteriaPanel", form.getModel()));
-        form.add(new OrderDetailsCriteriaPanel("orderDetailsCriteriaPanel"));
-        form.add(new DateTimePicker("fromDate", new PropertyModel<Date>(form.getModel(), "identifiedFromDate")));
-        form.add(new DateTimePicker("toDate", new EndOfDayDateModel(new PropertyModel<Date>(form.getModel(), "identifiedToDate"))));
-    }
-
-    @Override
-    protected AssetSearchCriteriaModel createNewCriteriaModel() {
-        return new AssetSearchCriteriaModel();
+        form.add(new OrderDetailsCriteriaPanel("orderDetailsCriteriaPanel"));        
+        form.add(new DateRangePicker<AssetSearchCriteriaModel>("dateRangePicker", form.getModel(), "identifiedFromDate", "identifiedToDate"));
     }
 
     @Override
@@ -52,4 +43,9 @@ public class AssetSearchCriteriaPanel extends SRSCriteriaPanel<AssetSearchCriter
     protected ReportConfiguration loadReportConfiguration() {
         return new AssetColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
     }
+
+	@Override
+	protected AssetSearchCriteriaModel createNewCriteriaModel() {
+		return new AssetSearchCriteriaModel();
+	}
 }

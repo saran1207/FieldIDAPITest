@@ -89,6 +89,10 @@ public enum ChartDateRange implements Listable<String> {
 	private LocalDate getInclusiveTo() {
 		return getTo().minusDays(1);
 	}
+	
+	public Date getInclusiveToDate() { 
+		return getInclusiveTo().toDate();
+	}
 
 	public LocalDate getTo() { 
 		// exclusive date :  should use <  *not*  <= when comparing against returned value!!!

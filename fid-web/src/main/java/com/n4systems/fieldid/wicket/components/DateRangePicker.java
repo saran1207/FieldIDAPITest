@@ -23,28 +23,30 @@ public class DateRangePicker<T> extends Panel {
 
 	private DropDownChoice<ChartDateRange> dropDownChoice;
 	private String dateRangeProperty = "dateRange";
-	private String fromDateProperty = "fromDate";
-	private String toDateProperty = "toDate";
 	private DateTimePicker fromDatePicker;
 	private DateTimePicker toDatePicker;
-	
-	public DateRangePicker(String id, IModel<T> model) {
+
+	public DateRangePicker(String id, IModel<T> model, String fromDateProperty, String toDateProperty) {
 		super(id, model);
 		dropDownChoice = new DropDownChoice<ChartDateRange>("dateRange", new PropertyModel<ChartDateRange>(model,dateRangeProperty), getDateRanges(), new EnumDropDownChoiceRenderer<ChartDateRange>());
 		fromDatePicker = new DateTimePicker("fromDate", new UserToUTCDateModel(new PropertyModel<Date>(model, fromDateProperty)));
 		toDatePicker = new DateTimePicker("toDate", new UserToUTCDateModel(new EndOfDayDateModel(new PropertyModel<Date>(model, toDateProperty))));
-
-		dropDownChoice.setOutputMarkupId(true);
 		
-        add(dropDownChoice);    	
-        add(fromDatePicker);
-		add(toDatePicker);		
+		dropDownChoice.setOutputMarkupId(true);
+		dropDownChoice.setNullValid(false);
+		
+		add(dropDownChoice);    	
+		add(fromDatePicker);
+		add(toDatePicker);
+	}		
+		
+	public DateRangePicker(String id, IModel<T> model) {
+		this(id, model, "fromDate", "toDate");
 	}
 	
 	protected List<ChartDateRange> getDateRanges() {
 		return Arrays.asList(ChartDateRange.chartDateRangesWithCustom());
 	}
-
 	
 	
 	public void setRenderer(IChoiceRenderer<ChartDateRange> renderer) {
