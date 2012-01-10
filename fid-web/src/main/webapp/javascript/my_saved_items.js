@@ -6,7 +6,7 @@ function showDropBox() {
         boxSelector = 'mySavedItemsBox';
         linkSelector = 'mySavedItemsLink';
     }
-    translate($(boxSelector), $(linkSelector), 15, -110);
+    translate($(boxSelector), $(linkSelector), 14, -212);
     jQuery("#mySavedItemsLink").parents("li").addClass("openedSavedItemsLink");
 }
 

@@ -1727,7 +1727,7 @@ input.description {
 
 #listContainer .listOfLinks {
 	background: url(../images/header-bg.png);
-	padding: 0.5em;
+	padding: 0.5em 0 0.5em 0.5em;
 	margin: 0 0 0.5em 0;
 	float:right;
 }
