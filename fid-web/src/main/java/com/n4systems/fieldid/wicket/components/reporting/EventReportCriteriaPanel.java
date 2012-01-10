@@ -2,6 +2,10 @@ package com.n4systems.fieldid.wicket.components.reporting;
 
 import javax.servlet.http.HttpSession;
 
+import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
+import com.n4systems.model.search.ColumnMappingGroupView;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
@@ -19,8 +23,13 @@ import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.List;
 
 public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriteriaModel> {
+
+    private @SpringBean DynamicColumnsService dynamicColumnsService;
 
     public EventReportCriteriaPanel(String id, IModel<EventReportCriteriaModel> criteriaModel) {
         super(id, criteriaModel);
@@ -67,5 +76,14 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriter
         return new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
     }
 
-    
+    @Override
+    protected List<ColumnMappingGroupView> getDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
+        return dynamicColumnsService.getDynamicAssetColumnsForReporting(assetType, availableAssetTypes);
+    }
+
+    @Override
+    protected List<ColumnMappingGroupView> getDynamicEventColumns(EventType eventType, List<EventType> availableEventTypes) {
+        return dynamicColumnsService.getDynamicEventColumnsForReporting(eventType, availableEventTypes);
+    }
+
 }

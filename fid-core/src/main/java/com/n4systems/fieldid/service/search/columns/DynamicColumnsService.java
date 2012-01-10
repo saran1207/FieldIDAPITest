@@ -23,14 +23,20 @@ public class DynamicColumnsService extends FieldIdService {
     private @Autowired PersistenceManager persistenceManager;
     private @Autowired AssetManager assetManager;
 
-    public List<ColumnMappingGroupView> getDynamicEventColumns(EventType selectedEventType, List<EventType> currentlyAvailableEventTypes) {
+    public List<ColumnMappingGroupView> getDynamicEventColumnsForReporting(EventType selectedEventType, List<EventType> currentlyAvailableEventTypes) {
         EventAttributeDynamicGroupGenerator dynamicGenerator = new EventAttributeDynamicGroupGenerator(persistenceManager);
         Long selectedEventTypeId = selectedEventType == null ? null : selectedEventType.getId();
         return dynamicGenerator.getDynamicGroups(selectedEventTypeId, idSet(currentlyAvailableEventTypes), securityContext.getUserSecurityFilter().getTenantId(), "event_search", securityContext.getUserSecurityFilter());
     }
 
-    public List<ColumnMappingGroupView> getDynamicAssetColumns(AssetType selectedAssetType, List<AssetType> currentlyAvailableAssetTypes) {
+    public List<ColumnMappingGroupView> getDynamicAssetColumnsForReporting(AssetType selectedAssetType, List<AssetType> currentlyAvailableAssetTypes) {
         InfoFieldDynamicGroupGenerator dynamicGenerator = new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "event_search", "asset");
+        Long selectedAssetTypeId = selectedAssetType == null ? null : selectedAssetType.getId();
+        return dynamicGenerator.getDynamicGroups(selectedAssetTypeId, idList(currentlyAvailableAssetTypes));
+    }
+
+    public List<ColumnMappingGroupView> getDynamicAssetColumnsForSearch(AssetType selectedAssetType, List<AssetType> currentlyAvailableAssetTypes) {
+        InfoFieldDynamicGroupGenerator dynamicGenerator = new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "event_search", null);
         Long selectedAssetTypeId = selectedAssetType == null ? null : selectedAssetType.getId();
         return dynamicGenerator.getDynamicGroups(selectedAssetTypeId, idList(currentlyAvailableAssetTypes));
     }

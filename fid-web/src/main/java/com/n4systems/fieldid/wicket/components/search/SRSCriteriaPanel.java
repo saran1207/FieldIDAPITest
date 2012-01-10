@@ -25,13 +25,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class SRSCriteriaPanel<T extends SearchCriteriaModel> extends Panel {
-
-    private @SpringBean DynamicColumnsService dynamicColumnsService;
 
     private SelectDisplayColumnsPanel selectDisplayColumnsPanel;
 
@@ -153,13 +151,19 @@ public abstract class SRSCriteriaPanel<T extends SearchCriteriaModel> extends Pa
     }
 
     private void updateDynamicEventColumns(IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel, EventType eventType, List<EventType> availableEventTypes) {
-        List<ColumnMappingGroupView> dynamicColumns = dynamicColumnsService.getDynamicEventColumns(eventType, availableEventTypes);
-        dynamicEventColumnsModel.setObject(dynamicColumns);
+        dynamicEventColumnsModel.setObject(getDynamicEventColumns(eventType,  availableEventTypes));
     }
 
     private void updateDynamicAssetColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, AssetType assetType, List<AssetType> availableAssetTypes) {
-        List<ColumnMappingGroupView> dynamicColumns = dynamicColumnsService.getDynamicAssetColumns(assetType, availableAssetTypes);
-        dynamicAssetColumnsModel.setObject(dynamicColumns);
+        dynamicAssetColumnsModel.setObject(getDynamicAssetColumns(assetType, availableAssetTypes));
+    }
+
+    protected List<ColumnMappingGroupView> getDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
+        return Collections.<ColumnMappingGroupView>emptyList();
+    }
+
+    protected List<ColumnMappingGroupView> getDynamicEventColumns(EventType eventType, List<EventType> availableEventTypes) {
+        return Collections.<ColumnMappingGroupView>emptyList();
     }
 
     protected void onNoDisplayColumnsSelected() {}

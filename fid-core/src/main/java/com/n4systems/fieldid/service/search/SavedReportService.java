@@ -104,8 +104,8 @@ public class SavedReportService extends FieldIdPersistenceService {
 		}
 
         AssetTypeGroup assetTypeGroup = criteriaModel.getAssetTypeGroup();
-        List<ColumnMappingGroupView> dynamicAssetColumns = dynamicColumnsService.getDynamicAssetColumns(criteriaModel.getAssetType(), assetTypeService.getAssetTypes(assetTypeGroup == null ? null : assetTypeGroup.getId()));
-        List<ColumnMappingGroupView> dynamicEventColumns = dynamicColumnsService.getDynamicEventColumns(criteriaModel.getEventType(), eventTypeService.getEventTypes(assetTypeGroup == null ? null : assetTypeGroup.getId()));
+        List<ColumnMappingGroupView> dynamicAssetColumns = dynamicColumnsService.getDynamicAssetColumnsForReporting(criteriaModel.getAssetType(), assetTypeService.getAssetTypes(assetTypeGroup == null ? null : assetTypeGroup.getId()));
+        List<ColumnMappingGroupView> dynamicEventColumns = dynamicColumnsService.getDynamicEventColumnsForReporting(criteriaModel.getEventType(), eventTypeService.getEventTypes(assetTypeGroup == null ? null : assetTypeGroup.getId()));
 
         criteriaModel.setDynamicAssetColumnGroups(dynamicAssetColumns);
         criteriaModel.setDynamicEventColumnGroups(dynamicEventColumns);
