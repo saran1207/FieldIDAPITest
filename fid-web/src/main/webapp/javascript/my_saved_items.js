@@ -1,5 +1,8 @@
+var savedItemsDropBoxDown = false;
+
 function showDropBox() {
-    jQuery('#mySavedItemsBox').load("/fieldid/w/savedItems", function() { jQuery(this).slideDown() } );
+    savedItemsDropBoxDown = true;
+    jQuery('#mySavedItemsBox').load("/fieldid/w/savedItems", function() { jQuery(this).slideDown(80) } );
     var boxSelector = "#mySavedItemsBox";
     var linkSelector = "#mySavedItemsLink";
     if (typeof(Prototype) == 'object') {
@@ -11,13 +14,22 @@ function showDropBox() {
 }
 
 function hideDropBox() {
+    savedItemsDropBoxDown = false;
     jQuery('#mySavedItemsBox').fadeOut();
     jQuery("#mySavedItemsLink").parents("li").removeClass("openedSavedItemsLink");
 }
 
-function listenForSavedItemsHover() {
-    jQuery('#mySavedItemsLink').mouseenter(showDropBox);
+function toggleDropBox() {
+    if (savedItemsDropBoxDown) {
+        hideDropBox();
+    } else {
+        showDropBox();
+    }
+}
+
+function listenForSavedItemsClick() {
+    jQuery('#mySavedItemsLink').click(toggleDropBox);
     jQuery('#mySavedItemsLink').parents('#pageActions').mouseleave(hideDropBox);
 }
 
-jQuery(document).ready(function() { listenForSavedItemsHover(); });
+jQuery(document).ready(function() { listenForSavedItemsClick(); });
