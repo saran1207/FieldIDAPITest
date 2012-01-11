@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.EnumSet;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.joda.time.LocalDate;
+import org.joda.time.Period;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.utils.DateRange;
@@ -132,6 +135,18 @@ public enum ChartDateRange implements Listable<String>, Serializable {
 			}
 		}
 		return null;
+	}
+
+	public Period getPeriod() {
+		return dateRange.getPeriod();
+	}
+
+	public Duration getDuration() {
+		//sigh. i wish i could just call toStandardDuration() but i can't 'cause it's too long.
+		DateTime x = new DateTime();
+		DateTime y = x.plus(getPeriod());
+		return new Duration(x,y);
+		
 	}
 
 }

@@ -60,6 +60,11 @@ public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifi
 	}	
 	
 	@Override
+	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity) {
+		return isGranularityAppicable(buttonGranularity, getChartDateRange());
+	}
+	
+	@Override
 	protected IModel<String> getSubTitleModel() {
 		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getChartDateRange());
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );		

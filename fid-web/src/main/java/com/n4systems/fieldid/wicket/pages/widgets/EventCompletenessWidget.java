@@ -76,4 +76,8 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );		
 	}
 	
+	@Override
+	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity) {
+		return isGranularityAppicable(buttonGranularity, getChartDateRange());
+	}
 }

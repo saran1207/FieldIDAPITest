@@ -3,10 +3,11 @@ package com.n4systems.model.utils;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+import org.joda.time.Duration;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
-import org.joda.time.ReadablePeriod;
 
 import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.DaysRangeFormatter;
@@ -38,7 +39,9 @@ public class DateRange implements Serializable {
 	public static final DateRange THIS_YEAR = new DateRange(new YearHandler(0), new FloatingDateRangeFormatter("This Year", "yyyy"));
 	public static final DateRange FOREVER = new DateRange(new StaticDateRanageFormatter("All Time"));
 	public static final DateRange CUSTOM = new DateRange(new StaticDateRanageFormatter("Custom Date Range"));
-		
+
+	public static final Period OPEN_PERIOD = new Period().withYears(3000);
+	
 		
 	private DateRangeFormatter formatter = new DefaultDateRangeFormatter("MMM d yyyy");
 	private DateRangeHandler handler;
@@ -113,6 +116,19 @@ public class DateRange implements Serializable {
 		return formatter.getDisplayName(this);
 	}
 	
+	public Period getPeriod() {
+		return handler.getPeriod();		
+	}
+	
+	public Duration getDuration() { 
+		if (OPEN_PERIOD==getPeriod()) {
+			return Duration.standardDays(9999);
+		} else { 
+			DateTime x = new DateTime();
+			DateTime y = x.plus(getPeriod());
+			return new Duration(x,y);			
+		}
+	}
 	
 	
 	// ---------------------------------- internal classes -----------------------------------------------
@@ -125,19 +141,21 @@ public class DateRange implements Serializable {
 
 
 	static abstract class AbstractDateRangeHandler implements DateRangeHandler {
-		private ReadablePeriod period;
+		private Period period;
 
 		public AbstractDateRangeHandler(Period period) { 
 			this.period = period;
 		}
-		@Override
-		public LocalDate getNowFrom() {
+		@Override public LocalDate getNowFrom() {
 			return LocalDate.now();
 		}
-		@Override
-		public LocalDate getNowTo() {
+		@Override public LocalDate getNowTo() {
 			return getNowFrom().plus(period);			
-		}		
+		}
+		@Override public Period getPeriod() {
+			return period;
+		}
+		
 	}
 	
 	public static class IntervalHandler implements DateRangeHandler {
@@ -145,14 +163,14 @@ public class DateRange implements Serializable {
 		private LocalDate to;
 
 		public IntervalHandler() {
+			this((Date)null,(Date)null);
+		}
+		public IntervalHandler(Date from, Date to) { 
+			this(from==null ? null : new LocalDate(from), to==null ? null : new LocalDate(to));
 		}
 		public IntervalHandler(LocalDate from, LocalDate to) { 
 			this.from = from;
 			this.to = to;
-		}
-		public IntervalHandler(Date from, Date to) { 
-			this.from = from==null ? null : new LocalDate(from);
-			this.to = to==null ? null : new LocalDate(to);
 		}
 		@Override public LocalDate getNowFrom() {
 			return from;
@@ -160,12 +178,9 @@ public class DateRange implements Serializable {
 		@Override public LocalDate getNowTo() {
 			return to;
 		}
-	}
-	
-	public static class NowHandler extends AbstractDateRangeHandler {
-		public NowHandler(Period period) {
-			super(period);			
-		} 		
+		@Override public Period getPeriod() {
+			return from==null||to==null ? OPEN_PERIOD : new Period(from,to);
+		}
 	}
 	
 	public static  class WeekHandler extends AbstractDateRangeHandler {

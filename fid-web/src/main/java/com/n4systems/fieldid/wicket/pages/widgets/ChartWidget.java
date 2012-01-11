@@ -15,6 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.Duration;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
@@ -23,7 +24,9 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
+import com.n4systems.util.EnumUtils;
 import com.n4systems.util.chart.ChartData;
+import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 import com.n4systems.util.chart.LineGraphOptions;
@@ -88,23 +91,40 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	}
 	
 	@SuppressWarnings("rawtypes")
-	protected void addGranularityButton(String id, final ChartGranularity granularity) {
+	protected void addGranularityButton(final String id, final ChartGranularity granularity) {
         AjaxLink granularityButton = new AjaxLink(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 setGranularity(granularity);
                 target.add(ChartWidget.this);
             }
+            @Override
+            protected void onBeforeRender() {
+           		setVisible(isGranularityAppicable(EnumUtils.valueOf(ChartGranularity.class, getMarkupId())));
+            	super.onBeforeRender();
+            }
+            
         };
-        granularityButton.add(new AttributeAppender("class", true, new Model<String>("selected"), " ") {
+        granularityButton.setMarkupId(granularity.name());
+    	granularityButton.setOutputMarkupId(true);
+        granularityButton.add(new AttributeAppender("class", new Model<String>("selected"), " ") {
             @Override
             public boolean isEnabled(Component component) {
                 return granularity == ChartWidget.this.granularity;
             }
         });
+        
         add(granularityButton);
 	}
 
+	
+	
+	protected boolean isGranularityAppicable(ChartGranularity chartGranularity) {
+		// compare relative to 
+		return true;
+	}
+	
+	
 	protected void addPeriodButton(String id, final int period) {
         AjaxLink periodButton = new AjaxLink(id) {
             @Override
@@ -168,4 +188,22 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
         }
     }
 
+	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity, ChartDateRange chartDateRange) {		
+		Duration duration = chartDateRange.getDuration();
+		switch (buttonGranularity) { 
+			case WEEK:
+				return true;												
+			case MONTH:
+				return duration.getStandardDays()>=60;
+			case QUARTER:
+				return duration.getStandardDays()>=120;				
+			case YEAR: 
+				return duration.getStandardDays()>=365*2;
+		}
+		return false;
+	}
+    
+	
+    
+    
 }
