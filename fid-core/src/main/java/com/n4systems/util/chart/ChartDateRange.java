@@ -1,168 +1,57 @@
 package com.n4systems.util.chart;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.joda.time.LocalDate;
 
-import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.model.utils.DateRange.MonthHandler;
+import com.n4systems.model.utils.DateRange.QuarterHandler;
+import com.n4systems.model.utils.DateRange.WeekHandler;
+import com.n4systems.model.utils.DateRange.YearHandler;
+import com.n4systems.model.utils.DateRangeFormatter;
+import com.n4systems.model.utils.DateRangeHandler;
 import com.n4systems.util.time.DateUtil;
 
-public enum ChartDateRange implements Listable<String> {
+public enum ChartDateRange implements Listable<String>, Serializable {
 
-	SEVEN_DAYS("7 days"), 
-	THIRTY_DAYS("30 days"), 
-	SIXTY_DAYS("60 days"), 
-	NINETY_DAYS("90 days"), 
-	LAST_WEEK("Last Week" ), 
-	LAST_MONTH("Last Month"), 
-	LAST_QUARTER("Last Quarter"), 
-	LAST_YEAR("Last Year"),
-	THIS_WEEK("This Week"), 
-	THIS_MONTH("This Month"), 
-	THIS_QUARTER("This Quarter"), 
-	THIS_YEAR("This Year"), 
-	FOREVER("All Time"), 
-	CUSTOM("Custom Date Range");
+	SEVEN_DAYS(7, new DaysRangeFormatter("7 days", 7)), 
+	THIRTY_DAYS(30, new DaysRangeFormatter("30 days", 30)), 
+	SIXTY_DAYS(60, new DaysRangeFormatter("60 days", 60)), 
+	NINETY_DAYS(90, new DaysRangeFormatter("90 days", 90)), 
+	LAST_WEEK(new WeekHandler(-1),  new FloatingDateRangeFormatter("Last Week", "MMM d")), 
+	LAST_MONTH(new MonthHandler(-1), new FloatingDateRangeFormatter("Last Month", "MMM yyyy")), 
+	LAST_QUARTER(new QuarterHandler(-1), new QuarterDateRangeFormatter("Last Quarter")), 
+	LAST_YEAR(new YearHandler(-1), new FloatingDateRangeFormatter("Last Year", "yyyy")),
+	THIS_WEEK(new WeekHandler(0), new FloatingDateRangeFormatter("This Week", "MMM d")), 
+	THIS_MONTH(new MonthHandler(0), new FloatingDateRangeFormatter("This Month", "MMM yyyy")), 
+	THIS_QUARTER(new QuarterHandler(0), new QuarterDateRangeFormatter("This Quarter")), 
+	THIS_YEAR(new YearHandler(0), new FloatingDateRangeFormatter("This Year", "yyyy")), 
+	FOREVER(new StaticDateRanageFormatter("All Time")),
+    CUSTOM(new StaticDateRanageFormatter("Custom Date Range"));
 	
-
+	
 	private static EnumSet<ChartDateRange> chartRanges = EnumSet.of(LAST_WEEK, LAST_MONTH, LAST_QUARTER, LAST_YEAR, THIS_WEEK, THIS_MONTH, THIS_QUARTER, THIS_YEAR, FOREVER);
 	private static EnumSet<ChartDateRange> daysFromNowRanges = EnumSet.of(SEVEN_DAYS, THIRTY_DAYS, SIXTY_DAYS, NINETY_DAYS);
 	
-	private String displayName;
+	private DateRange dateRange;
+	private String id;
 
-	private static Map<ChartDateRange, DateFormat> dateFormatters = new HashMap<ChartDateRange, DateFormat>();
-
-	private static DateFormat quarterFromFormat;
-	private static DateFormat defaultFormat;
-	
-	static { 
-		dateFormatters.put(LAST_WEEK, new SimpleDateFormat("MMM d"));
-		dateFormatters.put(LAST_MONTH, new SimpleDateFormat("MMM yyyy"));
-		dateFormatters.put(LAST_QUARTER, new SimpleDateFormat("MMM yyyy"));
-		dateFormatters.put(LAST_YEAR, new SimpleDateFormat("yyyy"));
-		dateFormatters.put(THIS_WEEK, new SimpleDateFormat("MMM d"));
-		dateFormatters.put(THIS_MONTH, new SimpleDateFormat("MMM yyyy"));
-		dateFormatters.put(THIS_QUARTER, new SimpleDateFormat("MMM yyyy"));
-		dateFormatters.put(THIS_YEAR, new SimpleDateFormat("yyyy"));
-		dateFormatters.put(FOREVER, null);	// FOREVER just returns a text string. 
-		quarterFromFormat = new SimpleDateFormat("MMM");  // NOTE : quarter display = Jan-Mar 2011.  i.e. "from" is different format than "to"
-		defaultFormat = new SimpleDateFormat("MMM d yyyy"); 
+	ChartDateRange(int days, DateRangeFormatter formatter) {
+		this.dateRange = new DateRange(days, formatter);
 	}
 
-	ChartDateRange(String displayName) {
-		this.displayName = displayName;		
+	ChartDateRange(DateRangeHandler handler, DateRangeFormatter formatter) {
+		this.dateRange = new DateRange(handler, formatter);
 	}
 
-	public String getFromDateDisplayString() {
-		DateFormat formatter = getFormatter();
-		if (this.equals(FOREVER)) { 
-			return "All Time";
-		}
-		if (this.equals(LAST_QUARTER) || this.equals(THIS_QUARTER)) {
-			formatter = quarterFromFormat;  
-		}
-		return formatter.format(getFrom().toDate());
+	ChartDateRange(DateRangeFormatter formatter) {
+		this.dateRange = new DateRange(formatter);
 	}
 
-	private DateFormat getFormatter() {
-		DateFormat format = dateFormatters.get(this);
-		return format != null ? format : defaultFormat;
-	}
-	
-	public String getToDateDisplayString() {
-		if (this.equals(FOREVER)) { 
-			return "";
-		} else { 
-			return getFormatter().format(getInclusiveTo().toDate());
-		}
-	}
-	
-	// note that getTo() is exclusive.  e.g. for a year 2011
-	// Jan 1, 2011 is getFrom() and getTo() is Jan 1, 2012  *not*  dec 31,2011    [11:59:59.9999...]
-	// this method is used for display reasons.  (e.g.  "hello oct 1,2011-oct 31,2011") 
-	private LocalDate getInclusiveTo() {
-		return getTo().minusDays(1);
-	}
-	
-	public Date getInclusiveToDate() { 
-		return getInclusiveTo().toDate();
-	}
-
-	public LocalDate getTo() { 
-		// exclusive date :  should use <  *not*  <= when comparing against returned value!!!
-		LocalDate today = LocalDate.now();
-		
-		switch (this) {
-			case FOREVER: 	
-			case CUSTOM:
-				return DateUtil.getLatestFieldIdDate();
-			case LAST_YEAR:
-				return today.withDayOfYear(1); 
-			case THIS_YEAR:
-				return today.plusYears(1).withDayOfYear(1);
-			case LAST_QUARTER:
-				return today.minusMonths((today.getMonthOfYear()-1)%3).withDayOfMonth(1);
-			case THIS_QUARTER:
-				return today.plusMonths(3-(today.getMonthOfYear()-1)%3).withDayOfMonth(1);
-			case LAST_MONTH:
-				return today.withDayOfMonth(1);
-			case THIS_MONTH:
-				return today.plusMonths(1).withDayOfMonth(1);
-			case LAST_WEEK:
-				return today.withDayOfWeek(1);
-			case THIS_WEEK:
-				return today.plusWeeks(1).withDayOfWeek(1);
-			case SEVEN_DAYS:
-				return today.plusDays(7);
-			case THIRTY_DAYS:
-				return today.plusDays(30);
-			case SIXTY_DAYS:
-				return today.plusDays(60);
-			case NINETY_DAYS:
-				return today.plusDays(90);
-			default: 
-				throw new InvalidArgumentException("ChartDateRange " + this + " not supported."); 
-		}
-	}
-
-	public LocalDate getFrom() {
-		LocalDate today = new LocalDate();
-		switch (this) {
-			case CUSTOM:
-			case FOREVER: 			
-				return DateUtil.getEarliestFieldIdDate();
-			case LAST_YEAR:
-				return today.minusYears(1).withDayOfYear(1);				
-			case THIS_YEAR:
-				return today.withDayOfYear(1);				
-			case LAST_QUARTER:
-				return today.minusMonths(3+(today.getMonthOfYear()-1)%3).withDayOfMonth(1);
-			case THIS_QUARTER:
-				return today.minusMonths((today.getMonthOfYear()-1)%3).withDayOfMonth(1);
-			case LAST_MONTH:
-				return today.minusMonths(1).withDayOfMonth(1);
-			case THIS_MONTH:
-				return today.withDayOfMonth(1);
-			case LAST_WEEK:
-				return today.minusWeeks(1).withDayOfWeek(1);
-			case THIS_WEEK:
-				return today.withDayOfWeek(1);
-			case SEVEN_DAYS:
-			case THIRTY_DAYS:
-			case SIXTY_DAYS:
-			case NINETY_DAYS:
-				return today;
-			default: 
-				throw new InvalidArgumentException("ChartDateRange " + this + " not supported."); 
-		}
-	}
-	
 	public static ChartDateRange[] chartDateRanges() { 
 		return chartRanges.toArray(new ChartDateRange[]{});
 	}
@@ -173,23 +62,14 @@ public enum ChartDateRange implements Listable<String> {
 		return set.toArray(new ChartDateRange[]{});		
 	}
 		
+	public static LocalDate earliestDate() {
+		return DateUtil.getEarliestFieldIdDate();
+	}
+	
 	public boolean isDaysFromNowRange()  {
 		return daysFromNowRanges.contains(this);
 	}
 		
-	@Override
-	public String getDisplayName() { 
-		return displayName;
-	}
-
-	public Date getFromDate() {
-		return getFrom().toDate();
-	}
-
-	public Date getToDate() {
-		return getTo().toDate();
-	}
-
 	public static ChartDateRange forDays(Integer period) {
 		switch (period) { 
 			case 7:
@@ -209,5 +89,51 @@ public enum ChartDateRange implements Listable<String> {
 	public String getId() {
 		return name();
 	}
+
+	@Override
+	public String getDisplayName() {
+		return dateRange.getDisplayName();
+	}
+
+	public LocalDate getTo() {
+		return dateRange.getTo();
+	}
+
+	public LocalDate getFrom() {
+		return dateRange.getFrom();
+	}
 	
+	public LocalDate getEarliest() { 
+		return dateRange.getFrom()==null ? DateUtil.getEarliestFieldIdDate() : dateRange.getFrom();
+	}
+
+	public LocalDate getLatest() {
+		return dateRange.getTo()==null ? DateUtil.getLatestFieldIdDate() : dateRange.getTo();
+	}
+
+	
+	public Date getFromDate() {
+		return dateRange.getFromDate();
+	}
+
+	public Date getInclusiveToDate() {
+		return dateRange.getInclusiveToDate();
+	}
+
+	public String getFromDateDisplayString() {
+		return dateRange.getFromDateDisplayString();
+	}
+
+	public String getToDateDisplayString() {
+		return dateRange.getToDateDisplayString();
+	}
+
+	public Date getToDate() {
+		return dateRange.getToDate();
+	}
+	
+	public DateRange asDateRange() { 
+		return dateRange;// make sure this is immutable.
+	}
+
 }

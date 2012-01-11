@@ -30,8 +30,10 @@ import com.n4systems.services.reporting.UpcomingScheduledEventsRecord;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.WhereParameterGroup;
 
@@ -61,7 +63,6 @@ public class EventService extends FieldIdPersistenceService {
     	builder.addOrder("date");
     	return builder;
     }
-
     
     @Transactional(readOnly = true)	
     public List<EventType> getEventTypes() {
@@ -105,10 +106,8 @@ public class EventService extends FieldIdPersistenceService {
 		Date today = new PlainDate();
 		Date endDate = DateUtils.addDays(today, period);
 		
-		WhereParameterGroup filtergroup = new WhereParameterGroup("filtergroup");		
-		filtergroup.addClause(WhereClauseFactory.create(Comparator.GE, "fromDate", "nextDate", today, null, ChainOp.AND));
-		filtergroup.addClause(WhereClauseFactory.create(Comparator.LE, "toDate", "nextDate", endDate, null, ChainOp.AND));		
-		builder.addWhere(filtergroup);
+		
+		builder.addWhere(whereFromTo(today, endDate, "nextDate"));
 		builder.addSimpleWhere("status", ScheduleStatus.SCHEDULED);
 
 		builder.applyFilter(new OwnerAndDownFilter(owner));
@@ -116,7 +115,23 @@ public class EventService extends FieldIdPersistenceService {
 		return persistenceService.findAll(builder);		
 	}
 
-    @Transactional(readOnly = true)
+    private WhereClause<?> whereFromTo(Date fromDate, Date toDate, String property) {
+    	if (fromDate!=null && toDate!=null) { 
+    		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
+    		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "fromDate", property, fromDate, null, ChainOp.AND));
+    		filterGroup.addClause(WhereClauseFactory.create(Comparator.LE, "toDate", property, toDate, null, ChainOp.AND));
+    		return filterGroup;
+    	}
+    	if (fromDate!=null) { 
+    		return new WhereParameter<Date>(Comparator.GE, property, fromDate);
+    	}
+    	if (toDate!=null) { 
+    		return new WhereParameter<Date>(Comparator.LT, property, toDate);
+    	}
+    	return null;
+	}
+        
+	@Transactional(readOnly = true)
 	public List<CompletedEventsReportRecord> getCompletedEvents(Date fromDate, Date toDate, BaseOrg org, Status status, ChartGranularity granularity) {
 		
 		QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
@@ -127,10 +142,7 @@ public class EventService extends FieldIdPersistenceService {
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");		
-		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "from", "date", fromDate, null, ChainOp.AND));
-		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "date", toDate, null, ChainOp.AND));
-		builder.addWhere(filterGroup);
+		builder.addWhere(whereFromTo(fromDate, toDate, "date"));
 		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"date"));		
 		builder.applyFilter(new OwnerAndDownFilter(org));
 		if (status!=null) { 
@@ -150,10 +162,7 @@ public class EventService extends FieldIdPersistenceService {
 		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "status", "COUNT(*)"));
         builder1.applyFilter(new OwnerAndDownFilter(owner));
 
-        WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");		
-		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "from", "nextDate", fromDate, null, ChainOp.AND));
-		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "nextDate", toDate, null, ChainOp.AND));
-		builder1.addWhere(filterGroup);
+		builder1.addWhere(whereFromTo(fromDate, toDate, "nextDate"));
         
 		builder1.addGroupBy("status");
 		List<EventScheduleStatusCount> statusCounts = persistenceService.findAll(builder1);
@@ -171,7 +180,7 @@ public class EventService extends FieldIdPersistenceService {
 		builder2.applyFilter(new OwnerAndDownFilter(owner));
 		builder2.addSimpleWhere("status", ScheduleStatus.COMPLETED);
 		builder2.addSimpleWhere("event.status", Status.FAIL);
-		builder2.addWhere(filterGroup);
+		builder2.addWhere(whereFromTo(fromDate, toDate, "nextDate"));
 		
 		Long failedCount = persistenceService.count(builder2);
 		
@@ -196,10 +205,7 @@ public class EventService extends FieldIdPersistenceService {
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");		
-		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "from", "nextDate", fromDate, null, ChainOp.AND));
-		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "nextDate", toDate, null, ChainOp.AND));
-		builder.addWhere(filterGroup);
+		builder.addWhere(whereFromTo(fromDate,toDate,"nextDate"));
 		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"nextDate"));		
 		builder.applyFilter(new OwnerAndDownFilter(org));
 		if (status!=null) { 

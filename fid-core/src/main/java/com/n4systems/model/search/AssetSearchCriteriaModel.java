@@ -2,13 +2,14 @@ package com.n4systems.model.search;
 
 import java.util.Date;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
-import com.n4systems.util.chart.ChartDateRange;
+import com.n4systems.model.utils.DateRange;
 
 public class AssetSearchCriteriaModel extends SearchCriteriaModel {
 
@@ -28,7 +29,7 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
 
     private Date identifiedFromDate;
     private Date identifiedToDate;
-    private ChartDateRange dateRange = ChartDateRange.FOREVER;
+    private DateRange dateRange;
 
     private User assignedTo;
     
@@ -115,7 +116,7 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     }
 
     public Date getIdentifiedFromDate() {
-    	return dateRange!=null ? dateRange.getFromDate() : identifiedFromDate;
+    	return dateRange.getFromDate();
     }
 
     public void setIdentifiedFromDate(Date identifiedFromDate) {
@@ -123,7 +124,7 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     }
 
     public Date getIdentifiedToDate() {
-    	return dateRange!=null ? dateRange.getInclusiveToDate() : identifiedToDate;
+    	return dateRange.getInclusiveToDate();
     }
 
     public void setIdentifiedToDate(Date identifiedToDate) {
@@ -138,14 +139,12 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
         this.assignedTo = assignedTo;
     }
 
-	public void setDateRange(ChartDateRange dateRange) {
-		if (!ChartDateRange.CUSTOM.equals(dateRange)) { 
-			this.identifiedToDate = this.identifiedFromDate = null;  // mutually exclusive.  can't have specific dates if using non-customized ranges. 
-		}
+	public void setDateRange(DateRange dateRange) {
+		Preconditions.checkArgument(dateRange!=null);
 		this.dateRange = dateRange;
 	}
 
-	public ChartDateRange getDateRange() {
+	public DateRange getDateRange() {
 		return dateRange;
 	}
 }

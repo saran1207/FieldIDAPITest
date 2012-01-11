@@ -96,6 +96,9 @@ public enum ChartGranularity {
 	}
 
 	public LocalDate normalize(LocalDate date) {
+		if(date==null) { 
+			return null;
+		}
 		switch (this) { 
 		case DAY:
 			return date;
@@ -126,7 +129,7 @@ public enum ChartGranularity {
 	 *   considered to be in the last week of the previous year.
 	 *   so when generating this query, the "from" date is dec  28th-jan3rd.   (i.e. round down jan 1-->dec 28) 
 	 */
-	public LocalDate roundDown(LocalDate date) {
+	public LocalDate roundDown(LocalDate date) {		
 		return normalize(date);
 	}
 

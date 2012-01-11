@@ -68,13 +68,8 @@ public class ChartDateRangeTest {
 		assertEquals(1, ChartDateRange.THIS_WEEK.getFrom().getDayOfWeek());
 		
 		// all time...forever
-		assertEquals(DateTimeConstants.JANUARY, ChartDateRange.FOREVER.getFrom().getMonthOfYear());		
-		assertTrue(ChartDateRange.FOREVER.getFrom().getYear()>=2005);
-		assertEquals(1, ChartDateRange.FOREVER.getFrom().getDayOfYear());
-
-		assertEquals(DateTimeConstants.JANUARY, ChartDateRange.CUSTOM.getFrom().getMonthOfYear());		
-		assertTrue(ChartDateRange.CUSTOM.getFrom().getYear()>=2005);
-		assertEquals(1, ChartDateRange.CUSTOM.getFrom().getDayOfYear());
+		assertNull(ChartDateRange.FOREVER.getFrom());		
+		assertNull(ChartDateRange.CUSTOM.getFrom());		
 	}
 
 	@Test
@@ -124,14 +119,8 @@ public class ChartDateRangeTest {
 		assertEquals(1, ChartDateRange.THIS_WEEK.getTo().getDayOfWeek());
 		
 		// all time...forever
-		assertEquals(DateTimeConstants.JANUARY, ChartDateRange.FOREVER.getTo().getMonthOfYear());		
-		assertTrue(ChartDateRange.FOREVER.getTo().getYear()>=2005);
-		assertEquals(1, ChartDateRange.FOREVER.getTo().getDayOfYear());
-		
-		assertEquals(DateTimeConstants.JANUARY, ChartDateRange.CUSTOM.getTo().getMonthOfYear());		
-		assertTrue(ChartDateRange.CUSTOM.getTo().getYear()>=2005);
-		assertEquals(1, ChartDateRange.CUSTOM.getTo().getDayOfYear());
-		
+		assertNull(ChartDateRange.FOREVER.getTo());		
+		assertNull(ChartDateRange.CUSTOM.getTo());		
 	}	
 	
 	private void assertFromToDelta(ChartDateRange range, Integer... expected) {

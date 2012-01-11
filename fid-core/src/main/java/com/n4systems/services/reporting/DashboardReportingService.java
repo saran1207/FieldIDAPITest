@@ -33,9 +33,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	@Transactional(readOnly = true)
     public List<ChartSeries<LocalDate>> getAssetsIdentified(ChartDateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
 		Preconditions.checkArgument(dateRange!=null);
-		LocalDate from  = granularity.roundDown(dateRange.getFrom());
-		LocalDate to = granularity.roundUp(dateRange.getTo());
-		List<AssetsIdentifiedReportRecord> results = assetService.getAssetsIdentified(granularity, from.toDate(), to.toDate(), owner);
+		List<AssetsIdentifiedReportRecord> results = assetService.getAssetsIdentified(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), owner);
 		ChartSeries<LocalDate> chartSeries = new ChartSeries<LocalDate>(results).withChartManager(new DateChartManager(granularity, dateRange));		
         return Lists.newArrayList(chartSeries);
     }
@@ -63,9 +61,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Preconditions.checkArgument(dateRange!=null);				
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
 
-		Date from  = granularity.roundDown(dateRange.getFrom()).toDate();
-		Date to = granularity.roundUp(dateRange.getTo()).toDate();
-
+		Date from = getFrom(granularity, dateRange);
+		Date to = getTo(granularity, dateRange);
 		List<CompletedEventsReportRecord> completedEvents = eventService.getCompletedEvents(from, to, org, null, granularity);		
 		results.add(new ChartSeries<LocalDate>("All", completedEvents).withChartManager(new DateChartManager(granularity, dateRange)));
 
@@ -85,11 +82,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	public List<ChartSeries<LocalDate>> getEventCompletenessEvents(ChartGranularity granularity, ChartDateRange dateRange, BaseOrg org) {
 		Preconditions.checkArgument(dateRange!=null);		
 
-		Date from  = granularity.roundDown(dateRange.getFrom()).toDate();
-		Date to = granularity.roundUp(dateRange.getTo()).toDate();
-		
-		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, from, to,  org);
-		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, from, to, org);
+		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, getFrom(granularity,dateRange), getTo(granularity,dateRange),  org);
+		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, getFrom(granularity,dateRange), getTo(granularity,dateRange), org);
 		
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
 		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>("All", allScheduledEvents).withChartManager(new DateChartManager(granularity, dateRange));
@@ -98,6 +92,16 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		results.add(completedChartSeries);
 		
 		return results;		
+	}
+
+	private Date getTo(ChartGranularity granularity, ChartDateRange dateRange) {		
+		LocalDate to = dateRange.getTo();		
+		return (to==null) ? null : granularity.roundUp(to).toDate();
+	}
+
+	private Date getFrom(ChartGranularity granularity, ChartDateRange dateRange) {
+		LocalDate from = dateRange.getFrom();		
+		return (from==null) ? null : granularity.roundDown(from).toDate();
 	}		
 	
 }

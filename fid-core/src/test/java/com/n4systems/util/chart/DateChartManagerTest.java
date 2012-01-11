@@ -16,7 +16,7 @@ public class DateChartManagerTest {
 	private DateChartManager dateChartManager;
 	private LocalDate jan1_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
 	private LocalDate feb28_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(28);
-	private LocalDate nov16_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.NOVEMBER).withDayOfMonth(16);
+	private LocalDate nov16_2022 = new LocalDate().withYear(2022).withMonthOfYear(DateTimeConstants.NOVEMBER).withDayOfMonth(16);
 	
 	
 	@Test 
@@ -35,8 +35,7 @@ public class DateChartManagerTest {
 			// |..2.....7....12| are given (3 in total). 
 			//padded to include all the others. 
 			assertSeries(13, 3, 2, 5);
-		}
-	
+		}	
 	}
 	
 	@Test 
@@ -135,12 +134,16 @@ public class DateChartManagerTest {
 		assertSeries(size, numberOfPoints, 0, 1);
 	}
 	
-	
 	private void assertSeries(int size, int numberOfPoints, int offset, int periodMultiplier) {
+		ChartDateRange dateRange = dateChartManager.getDateRange();
+		assertSeries(dateRange.getEarliest(), dateRange.getLatest(), size, numberOfPoints, offset, periodMultiplier);
+	}
+	
+	private void assertSeries(LocalDate from, LocalDate to, int size, int numberOfPoints, int offset, int periodMultiplier) {
 		ChartDateRange dateRange = dateChartManager.getDateRange();
 		ChartGranularity granularity = dateChartManager.getGranularity();
 		
-		ChartSeries<LocalDate> series = createTestSeries(granularity, dateRange, offset, periodMultiplier, numberOfPoints);
+		ChartSeries<LocalDate> series = createTestSeries(granularity, from, to, offset, periodMultiplier, numberOfPoints);
 		// create series with original numberOfPoints, the normalize() which will add padding (i.e. more 0 value points). 
 		// .: end size of series will be >= original.
 		series = dateChartManager.normalize(series);
@@ -150,8 +153,8 @@ public class DateChartManagerTest {
 		Period offsetPeriod = multiplyPeriod(offset, granularity.getPeriod());
 		Period periodBetweenPoints = multiplyPeriod(periodMultiplier, granularity.getPeriod());  // the points we defined. (skips the padded ones).
 		
-		LocalDate nextCreatedPoint = granularity.normalize(dateRange.getFrom()).plus(offsetPeriod); 
-		LocalDate start = granularity.normalize(dateRange.getFrom());
+		LocalDate nextCreatedPoint = granularity.normalize(dateRange.getEarliest()).plus(offsetPeriod); 
+		LocalDate start = granularity.normalize(dateRange.getEarliest());
 		LocalDate expect = start;
 		long createdPoints = 0;
 		while (expect.compareTo(series.getLastX())<=0) {
@@ -172,14 +175,14 @@ public class DateChartManagerTest {
 		return period.withDays(period.getDays()*multiplier).withWeeks(period.getWeeks()*multiplier).withMonths(period.getMonths()*multiplier).withYears(period.getYears()*multiplier);
 	}
 
-	private ChartSeries<LocalDate> createTestSeries(ChartGranularity granularity, ChartDateRange dateRange, int offset, int period, int count) {
+	private ChartSeries<LocalDate> createTestSeries(ChartGranularity granularity, LocalDate from, LocalDate to, int offset, int period, int count) {
 		ChartSeries<LocalDate> series = new ChartSeries<LocalDate>(new ArrayList<DateChartable>());
-		LocalDate firstDate = granularity.normalize(advance(dateRange.getFrom(),granularity, offset));
-		LocalDate lastDate = dateRange.getTo();
+		LocalDate firstDate = granularity.normalize(advance(from,granularity, offset));
+		LocalDate lastDate = to;
 		LocalDate d = firstDate;
 		for (int i=0; i<count; i++) {
 			if (d.isAfter(lastDate)) {
-				System.out.println("can't create test series out of bounds of date range " + d + " is after end date of " + lastDate + " for date range " + dateRange + " with granularity " + granularity);
+				System.out.println("can't create test series out of bounds of date range " + d + " is after end date of " + lastDate + " for date range " + dateChartManager.getDateRange() + " with granularity " + granularity);
 				System.out.println("skipping rest of data creation and returning data of size " + series.size());
 				return series;
 			}

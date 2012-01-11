@@ -78,6 +78,7 @@ public class BarChartManager implements ChartManager<String> {
 		}
 		series.remove(other);		
 		Joiner joiner = Joiner.on(", ").skipNulls();
+		// note : adds "Other" bar even if it's empty. 
 		series.add(createChartable(OTHER_BAR_NAME, otherTotalValue, index++, joiner.join(otherTooltip)));
 		return series;
 	}

@@ -10,9 +10,9 @@ import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.NetworkIdSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.reporting.ReportDefiner;
-import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.persistence.search.SortDirection;
 
 
@@ -40,7 +40,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	private Long jobId;
 	private Date fromDate;
 	private Date toDate;
-	private ChartDateRange dateRange;
+	private DateRange dateRange;
 	
 	private Long performedBy;
 	
@@ -334,11 +334,11 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
         this.eventTypeId = eventTypeId;
     }
 
-	public void setDateRange(ChartDateRange dateRange) {
+	public void setDateRange(DateRange dateRange) {
 		this.dateRange = dateRange;
 	}
 
-	public ChartDateRange getDateRange() {
+	public DateRange getDateRange() {
 		return dateRange;
 	}
 }

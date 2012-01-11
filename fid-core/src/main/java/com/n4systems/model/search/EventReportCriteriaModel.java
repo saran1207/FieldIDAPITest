@@ -12,8 +12,10 @@ import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.user.User;
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.ChartDateRange;
 
+@SuppressWarnings("serial")
 public class EventReportCriteriaModel extends SearchCriteriaModel {
 
     private Location location = new Location();
@@ -22,7 +24,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     private AssetType assetType;
     private AssetTypeGroup assetTypeGroup;
     private User assignedTo;
-    private ChartDateRange dateRange = ChartDateRange.FOREVER;
+    private DateRange dateRange;
 
     private EventType eventType;
     private EventTypeGroup eventTypeGroup;
@@ -217,7 +219,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
         this.savedReportName = savedReportName;
     }
 
-	public void setDateRange(ChartDateRange dateRange) {
+	public void setDateRange(DateRange dateRange) {
 		if (!ChartDateRange.CUSTOM.equals(dateRange)) { 
 			this.fromDate = null;	// mutually exclusive - can't have dates for non-custom ranges.
 			this.toDate = null;
@@ -225,7 +227,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
 		this.dateRange = dateRange;
 	}
 
-	public ChartDateRange getDateRange() {
+	public DateRange getDateRange() {
 		return dateRange;
 	}
 

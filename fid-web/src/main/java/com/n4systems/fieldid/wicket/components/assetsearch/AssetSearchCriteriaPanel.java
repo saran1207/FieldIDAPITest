@@ -39,7 +39,7 @@ public class AssetSearchCriteriaPanel extends SRSCriteriaPanel<AssetSearchCriter
         form.addAssetDetailsPanel("assetDetailsCriteriaPanel");
         form.add(new OwnershipCriteriaPanel("ownershipCriteriaPanel", form.getModel()));
         form.add(new OrderDetailsCriteriaPanel("orderDetailsCriteriaPanel"));        
-        form.add(new DateRangePicker<AssetSearchCriteriaModel>("dateRangePicker", form.getModel(), "identifiedFromDate", "identifiedToDate"));
+        form.add(new DateRangePicker<AssetSearchCriteriaModel>("dateRangePicker", form.getModel()));
     }
 
     @Override

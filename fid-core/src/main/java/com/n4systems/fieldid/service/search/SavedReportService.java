@@ -31,8 +31,6 @@ import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.EnumUtils;
-import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.SortDirection;
 
@@ -96,7 +94,7 @@ public class SavedReportService extends FieldIdPersistenceService {
 
 		criteriaModel.setFromDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.FROM_DATE)));
 		criteriaModel.setToDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.TO_DATE)));
-		criteriaModel.setDateRange(EnumUtils.valueOf(ChartDateRange.class, savedReport.getCriteria().get(SavedReport.DATE_RANGE)));
+//	FIXME WEB-2612	criteriaModel.setDateRange(EnumUtils.valueOf(ChartDateRange.class, savedReport.getCriteria().get(SavedReport.DATE_RANGE)));
 
 		criteriaModel.setSavedReportId(savedReport.getId());
 		if (savedReport.getLongCriteria(SavedReport.OWNER_ID) != null) {

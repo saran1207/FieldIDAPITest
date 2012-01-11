@@ -2,6 +2,8 @@ package com.n4systems.util.chart;
 
 import org.joda.time.LocalDate;
 
+import com.n4systems.util.time.DateUtil;
+
 @SuppressWarnings("serial")
 public class DateChartManager extends SimpleChartManager<LocalDate> {
 
@@ -27,7 +29,9 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 	@Override
 	public Long getPanMin(ChartSeries<LocalDate> series) {
 		if (series.isEmpty()) { 
-			return dateRange.getFrom().toDate().getTime();
+			LocalDate from = dateRange.getFrom();			
+			return from != null ? from.toDate().getTime() :
+				DateUtil.getEarliestFieldIdDate().toDate().getTime();
 		}
 		return series.getFirstEntry().getLongX();
 	}
@@ -43,7 +47,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 	@Override
 	public ChartSeries<LocalDate> normalize(ChartSeries<LocalDate> series) {
 		LocalDate endDate = ChartDateRange.FOREVER.equals(dateRange) ? series.getLastX() : granularity.roundUp(dateRange.getTo());
-		LocalDate date = granularity.roundDown(dateRange.getFrom());
+		LocalDate date = granularity.roundDown(dateRange.getEarliest());
 		
 		while (endDate!=null && date.isBefore(endDate)) { 
 			Chartable<LocalDate> value = series.get(date);
