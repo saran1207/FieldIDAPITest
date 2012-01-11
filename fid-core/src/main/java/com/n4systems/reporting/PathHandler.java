@@ -271,7 +271,7 @@ public class PathHandler {
 
 	public static File getCompiledReportFile(Asset asset) {
 		File tenantReport = absolutize(getCompiledReportPath(asset));
-		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(ASSET_REPORT_FILE_NAME);
+		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(COMPILED_ASSET_REPORT_FILE_NAME);
 	}
 	
 	/**
