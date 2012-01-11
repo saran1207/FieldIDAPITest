@@ -2,7 +2,6 @@ package com.n4systems.model.search;
 
 import java.util.Date;
 
-import com.google.common.base.Preconditions;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -27,8 +26,6 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     private AssetTypeGroup assetTypeGroup;
     private AssetType assetType;
 
-    private Date identifiedFromDate;
-    private Date identifiedToDate;
     private DateRange dateRange;
 
     private User assignedTo;
@@ -115,21 +112,13 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
         this.assetType = assetType;
     }
 
-    public Date getIdentifiedFromDate() {
+    public Date getIdentifiedFromDate() { 
     	return dateRange.getFromDate();
     }
 
-    public void setIdentifiedFromDate(Date identifiedFromDate) {
-        this.identifiedFromDate = identifiedFromDate;
-    }
-
-    public Date getIdentifiedToDate() {
-    	return dateRange.getInclusiveToDate();
-    }
-
-    public void setIdentifiedToDate(Date identifiedToDate) {
-        this.identifiedToDate = identifiedToDate;
-    }
+    public Date getIdentifiedToDate() { 
+		return dateRange.getToDate();
+	}
 
     public User getAssignedTo() {
         return assignedTo;
@@ -140,11 +129,11 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     }
 
 	public void setDateRange(DateRange dateRange) {
-		Preconditions.checkArgument(dateRange!=null);
 		this.dateRange = dateRange;
 	}
 
 	public DateRange getDateRange() {
 		return dateRange;
 	}
+	
 }

@@ -1,5 +1,25 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
+
+import java.util.List;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.util.tester.FormTester;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
+import org.easymock.EasyMock;
+import org.easymock.IArgumentMatcher;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.wicket.FieldIdPageTest;
@@ -22,26 +42,6 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.model.user.User;
 import com.n4systems.services.dashboard.DashboardService;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.util.tester.FormTester;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
-import org.easymock.EasyMock;
-import org.easymock.IArgumentMatcher;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.List;
-
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 
 public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, DashboardPage> implements IFixtureFactory<DashboardPage> {
@@ -81,7 +81,9 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(linksWidgetDefinition)).andReturn(commonLinksWidget);
 		replay(widgetFactory);
+		
 		renderFixture(this);
+		
 		assertVisible(getHarness().getWidgetPanel());
 		assertVisible(getHarness().getSortableColumn(0));
 		assertVisible(getHarness().getSortableColumn(1));

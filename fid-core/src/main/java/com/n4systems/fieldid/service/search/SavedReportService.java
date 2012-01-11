@@ -30,7 +30,6 @@ import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.user.User;
-import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.SortDirection;
 
@@ -92,9 +91,10 @@ public class SavedReportService extends FieldIdPersistenceService {
 		criteriaModel.setAssetTypeGroup(findEntity(AssetTypeGroup.class, savedReport.getLongCriteria(SavedReport.ASSET_TYPE_GROUP)));
 		criteriaModel.setJob(findEntity(Project.class, savedReport.getLongCriteria(SavedReport.JOB_ID)));
 
-		criteriaModel.setFromDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.FROM_DATE)));
-		criteriaModel.setToDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.TO_DATE)));
+//		criteriaModel.setFromDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.FROM_DATE)));
+//		criteriaModel.setToDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.TO_DATE)));
 //	FIXME WEB-2612	criteriaModel.setDateRange(EnumUtils.valueOf(ChartDateRange.class, savedReport.getCriteria().get(SavedReport.DATE_RANGE)));
+// DD this is blocked until remodeling of saved reports is done...will pick up later. 		
 
 		criteriaModel.setSavedReportId(savedReport.getId());
 		if (savedReport.getLongCriteria(SavedReport.OWNER_ID) != null) {

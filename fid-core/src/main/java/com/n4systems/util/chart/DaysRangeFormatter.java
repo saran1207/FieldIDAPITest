@@ -5,14 +5,13 @@ import org.joda.time.LocalDate;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.DateRangeFormatter;
 
+@SuppressWarnings("serial")
 public class DaysRangeFormatter implements DateRangeFormatter {
 	
 	private String displayName;
-	private int days;
 
-	public DaysRangeFormatter(String displayName, int days) {
+	public DaysRangeFormatter(String displayName) {
 		this.displayName = displayName;
-		this.days = days;
 	}
 
 	@Override

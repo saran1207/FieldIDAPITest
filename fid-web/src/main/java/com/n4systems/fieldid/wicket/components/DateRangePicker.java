@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.form.IFormModelUpdateListener;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.joda.time.LocalDate;
 
 import com.n4systems.fieldid.wicket.model.EndOfDayDateModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
@@ -19,6 +18,7 @@ import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.ChartDateRange;
 
 
+@SuppressWarnings("serial")
 public class DateRangePicker<T> extends Panel implements IFormModelUpdateListener {
 
 	private static final String DATE_RANGE_PROPERTY = "dateRange";
@@ -48,7 +48,7 @@ public class DateRangePicker<T> extends Panel implements IFormModelUpdateListene
 		add(fromDatePicker);
 		add(toDatePicker);
 		
-		//setDefaultValuesFromModel();
+		setDefaultValuesFromModel();
 	}		
 	
 	protected List<ChartDateRange> getDateRanges() {
@@ -56,23 +56,25 @@ public class DateRangePicker<T> extends Panel implements IFormModelUpdateListene
 	}
 	
 	private void setDefaultValuesFromModel() {
-		IModel<DateRange> model = new PropertyModel(getDefaultModel(), dateRangeProperty);
-		DateRange chartDateRange = model.getObject();
-		// TBD.  WEB-2612
+		IModel<DateRange> model = new PropertyModel<DateRange>(getDefaultModel(), dateRangeProperty);
+		DateRange modelDateRange = model.getObject();
+		dateRange = (modelDateRange==null) ? ChartDateRange.FOREVER : ChartDateRange.fromDateRange(modelDateRange);  
+		if (dateRange==null) {
+			dateRange = ChartDateRange.CUSTOM;
+		}
 	}
 
 	@Override
 	public void updateModel() {
-		IModel<DateRange> model = new PropertyModel(getDefaultModel(), dateRangeProperty);
+		IModel<DateRange> model = new PropertyModel<DateRange>(getDefaultModel(), dateRangeProperty);
 		model.setObject(createDateRange(from, to, dateRange));
 	}
 	
 	private DateRange createDateRange(Date from, Date to, ChartDateRange dateRange) {
 		if (dateRange==null) { 
-			return new DateRange();
-		}
-		if (ChartDateRange.CUSTOM.equals(dateRange)) { 
-			return new DateRange(new LocalDate(from),new LocalDate(to)); 
+			return DateRange.FOREVER;
+		} else if (ChartDateRange.CUSTOM.equals(dateRange)) { 
+			return new DateRange(from,to); 
 		} else { 
 			return dateRange.asDateRange();
 		}

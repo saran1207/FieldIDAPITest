@@ -13,14 +13,11 @@ import com.n4systems.model.Status;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
-import com.n4systems.util.chart.ChartDateRange;
 
 @SuppressWarnings("serial")
 public class EventReportCriteriaModel extends SearchCriteriaModel {
 
     private Location location = new Location();
-    private Date fromDate;
-    private Date toDate;
     private AssetType assetType;
     private AssetTypeGroup assetTypeGroup;
     private User assignedTo;
@@ -60,19 +57,11 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     }
 
     public Date getFromDate() {
-    	return dateRange != null ? dateRange.getFromDate() : fromDate; 
-    }
-
-    public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
+    	return dateRange.getFromDate(); 
     }
 
     public Date getToDate() {
-    	return dateRange != null ? dateRange.getInclusiveToDate() : toDate;
-    }
-
-    public void setToDate(Date toDate) {
-        this.toDate = toDate;
+    	return dateRange.getToDate();
     }
 
     public AssetType getAssetType() {
@@ -220,10 +209,6 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     }
 
 	public void setDateRange(DateRange dateRange) {
-		if (!ChartDateRange.CUSTOM.equals(dateRange)) { 
-			this.fromDate = null;	// mutually exclusive - can't have dates for non-custom ranges.
-			this.toDate = null;
-		}
 		this.dateRange = dateRange;
 	}
 

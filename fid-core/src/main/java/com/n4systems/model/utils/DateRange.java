@@ -8,18 +8,40 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.ReadablePeriod;
 
+import com.n4systems.util.chart.ChartDateRange;
+import com.n4systems.util.chart.DaysRangeFormatter;
+import com.n4systems.util.chart.FloatingDateRangeFormatter;
+import com.n4systems.util.chart.QuarterDateRangeFormatter;
+import com.n4systems.util.chart.StaticDateRanageFormatter;
 
-/* handles floating dates & static dates
+
+/**
+ *  handles floating dates & static dates
  * e.g. LAST WEEK   or     jan 1-jan7    or  ALL TIME    or   jan1,1970-jan1,2099
  * @see ChartDateRange
  */
 @SuppressWarnings("serial")
 public class DateRange implements Serializable {
-
+	
+	// list of static floating date ranges. 
+	public static final DateRange SEVEN_DAYS = new DateRange(7, new DaysRangeFormatter("7 days")); 
+	public static final DateRange THIRTY_DAYS = new DateRange(30, new DaysRangeFormatter("30 days")); 
+	public static final DateRange SIXTY_DAYS = new DateRange(60, new DaysRangeFormatter("60 days")); 
+	public static final DateRange NINETY_DAYS = new DateRange(90, new DaysRangeFormatter("90 days")); 
+	public static final DateRange LAST_WEEK = new DateRange(new WeekHandler(-1),  new FloatingDateRangeFormatter("Last Week", "MMM d")); 
+	public static final DateRange LAST_MONTH = new DateRange(new MonthHandler(-1), new FloatingDateRangeFormatter("Last Month", "MMM yyyy")); 
+	public static final DateRange LAST_QUARTER = new DateRange(new QuarterHandler(-1), new QuarterDateRangeFormatter("Last Quarter")); 
+	public static final DateRange LAST_YEAR = new DateRange(new YearHandler(-1), new FloatingDateRangeFormatter("Last Year", "yyyy"));
+	public static final DateRange THIS_WEEK = new DateRange(new WeekHandler(0), new FloatingDateRangeFormatter("This Week", "MMM d"));
+	public static final DateRange THIS_MONTH = new DateRange(new MonthHandler(0), new FloatingDateRangeFormatter("This Month", "MMM yyyy")); 
+	public static final DateRange THIS_QUARTER = new DateRange(new QuarterHandler(0), new QuarterDateRangeFormatter("This Quarter")); 
+	public static final DateRange THIS_YEAR = new DateRange(new YearHandler(0), new FloatingDateRangeFormatter("This Year", "yyyy"));
+	public static final DateRange FOREVER = new DateRange(new StaticDateRanageFormatter("All Time"));
+	public static final DateRange CUSTOM = new DateRange(new StaticDateRanageFormatter("Custom Date Range"));
+		
+		
 	private DateRangeFormatter formatter = new DefaultDateRangeFormatter("MMM d yyyy");
 	private DateRangeHandler handler;
-	protected LocalDate from;
-	protected LocalDate to;
 	
 	public DateRange(DateRangeHandler handler, DateRangeFormatter formatter) {
 		this.handler = handler;
@@ -34,12 +56,16 @@ public class DateRange implements Serializable {
 		this(new IntervalHandler(from,to),null);
 	}	
 	
+	public DateRange(Date from, Date to) { 
+		this(new IntervalHandler(from,to),null);
+	}	
+	
 	public DateRange(DateRangeFormatter formatter) {
-		this(new IntervalHandler(null,null),formatter);
+		this(new IntervalHandler(),formatter);
 	}
 
 	public DateRange() { 
-		this(new IntervalHandler(null,null),null);
+		this(new IntervalHandler(),null);
 	}	
 	
 
@@ -65,11 +91,11 @@ public class DateRange implements Serializable {
 	}
 
 	public LocalDate getTo() {
-		return to!=null ? to : 	handler.getNowTo();		
+		return handler.getNowTo();		
 	}
 
 	public LocalDate getFrom() {
-		return (from!=null) ? from : handler.getNowFrom();
+		return handler.getNowFrom();
 	}
 	
 	public Date getFromDate() {
@@ -87,10 +113,6 @@ public class DateRange implements Serializable {
 		return formatter.getDisplayName(this);
 	}
 	
-//	public String getId() { 
-//		return formatter.getId(this);
-//	}
-		
 	
 	
 	// ---------------------------------- internal classes -----------------------------------------------
@@ -122,9 +144,15 @@ public class DateRange implements Serializable {
 		private LocalDate from;
 		private LocalDate to;
 
+		public IntervalHandler() {
+		}
 		public IntervalHandler(LocalDate from, LocalDate to) { 
 			this.from = from;
 			this.to = to;
+		}
+		public IntervalHandler(Date from, Date to) { 
+			this.from = from==null ? null : new LocalDate(from);
+			this.to = to==null ? null : new LocalDate(to);
 		}
 		@Override public LocalDate getNowFrom() {
 			return from;

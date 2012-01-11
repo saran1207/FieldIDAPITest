@@ -1,5 +1,7 @@
 package com.n4systems.util.time;
 
+import java.util.Date;
+
 import org.joda.time.LocalDate;
 
 public class DateUtil {
@@ -52,9 +54,9 @@ public class DateUtil {
 		// e.g. for Feb will return Jan because Jan is the month that the quarter starts.
 		return (date.getMonthOfYear()-1)/3 * 3 + 1;
 	}
-	
-	
-	
-	
+
+	public static Date createLocalDate(LocalDate date) {
+		return date==null ? null : date.toDate();
+	}
 	
 }
