@@ -154,6 +154,11 @@ h2 a {
 #pageHeader #pageActions {
 	float: none;
 	overflow: hidden;
+	background-color: #f3f3f3;
+	border:1px dotted #ddd;
+	border-top:0px;
+	margin-bottom: 15px;
+	padding-top: 3px;
 }
 
 #pageActions .listOfLinks {
@@ -164,6 +169,22 @@ h2 a {
 #pageActions .listOfLinks a,#pageActions .listOfLinks a:hover,#pageActions .listOfLinks a:visited,#pageActions .listOfLinks a:active
 	{
 	color: #333;
+}
+
+.listOfLinks .first .welcome {
+	color: #777;
+}
+
+.listOfLinks a {
+	margin-right: 10px;
+}
+
+.listOfLinks .separator {
+	color:  #CCC;
+}
+
+.listOfLinks .darkseparator {
+	color:  #333;
 }
 
 #contentHeader #notifications {
@@ -1726,7 +1747,7 @@ input.description {
 }
 
 #listContainer .listOfLinks {
-	background: url(../images/header-bg.png);
+	background-color: #f3f3f3;
 	padding: 0.5em 0 0.5em 0.5em;
 	margin: 0 0 0.5em 0;
 	float:right;

@@ -5,30 +5,35 @@
 		<div id="listContainer">
 			<ul class="listOfLinks">				
 				<li class="first">
-					<@s.text name="label.welcome"/>, <a href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a> 
+					<span class="welcome"><@s.text name="label.welcome"/>, </span><a href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a> 
+					<span class="separator">|</span>
 				</li>
 					<#if sessionUser.employeeUser && userSecurityGuard.allowedManageSafetyNetwork>
 						<li>
 		  					<a href="<@s.url action="invite" namespace="/"/>" onclick:target="_blank"><@s.text name="label.invite"/></a>
+		  					<span class="separator">|</span>
 						</li>
 					<#elseif sessionUser.anEndUser>
 						<li>
 		  					<a href="http://www.fieldid.com/upgrade" target="_blank"><@s.text name="label.upgrade"/></a>
+		  					<span class="separator">|</span>
 						</li>
 					</#if>
 				<li>
 		  			<a href="http://help.fieldid.com/" target="_blank"><@s.text name="label.support"/></a>
+		  			<span class="separator">|</span>
 				</li>
 				<#if userSecurityGuard.allowedAccessWebStore>
 					<li>
 			  			<a href="<@s.url action="redirectToWebStore" namespace="/"/>" target="_blank" ><@s.text name="label.fieldid_webstore"/></a>
+			  			<span class="separator">|</span>
 			  		</li>
 				</#if>
 		  		<li>
 					<a href="<@s.url action="logout"  namespace="/"/>" ><@s.text name="label.logout"/></a>
-                    <img src="<@s.url value='/images/saved-item-divider.png'/>" class="divider">
+					<span class="darkseparator">|</span>
 				</li>
-                <li>
+                <li class="last">
                     <span>
                         <a href="javascript:void(0);" id="mySavedItemsLink"><@s.text name="label.my_saved_items"/></a>
                         <img src="<@s.url value='/images/down-arrow.png'/>" class="downArrow">

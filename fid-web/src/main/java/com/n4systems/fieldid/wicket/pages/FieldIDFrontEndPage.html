@@ -38,25 +38,30 @@
         <div id="listContainer">
             <ul class="listOfLinks">
                 <li class="first">
-                    Welcome, <a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
+                    <span class="welcome">Welcome, </span><a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
+                    <span class="separator">|</span>
                 </li>
                 <li wicket:id="topInviteLinkContainer">
                     <a href="/fieldid/invite.action" onclick:target="_blank"><wicket:message key="label.invite"/></a>
+                    <span class="separator">|</span>
                 </li>
                 <li wicket:id="topUpgradeLinkContainer">
                     <a href="http://www.fieldid.com/upgrade" target="_blank"><wicket:message key="label.upgrade"/></a>
+                    <span class="separator">|</span>
                 </li>
                 <li>
-                      <a href="http://help.fieldid.com/" target="_blank"><wicket:message key="label.support"/></a>
+                    <a href="http://help.fieldid.com/" target="_blank"><wicket:message key="label.support"/></a>
+                    <span class="separator">|</span>
                 </li>
                 <li wicket:id="topFieldIDStoreLink">
                       <a href="/fieldid/redirectToWebStore.action" target="_blank" ><wicket:message key="label.fieldid_webstore"/></a>
+                      <span class="separator">|</span>
                 </li>
                 <li>
                     <a href="/fieldid/logout.action" ><wicket:message key="label.logout"/></a>
-                    <img class="divider" wicket:id="savedItemsDivider"/>
+                    <span class="darkseparator">|</span>
                 </li>
-                <li>
+                <li class="last">
                     <span wicket:id="savedItemsDropdown"></span>
                 </li>
               </ul>

@@ -160,6 +160,11 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 #pageHeader #pageActions {
 	float: none;
 	overflow: hidden;
+	background-color: #f3f3f3;
+	border:1px dotted #ddd;
+	border-top:0px;
+	margin-bottom: 15px;
+	padding-top: 3px;
 }
 
 #pageActions .listOfLinks {
@@ -179,7 +184,6 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 }
 
 #listContainer .listOfLinks {
-	background: url(../../../images/header-bg.png);
 	padding: 0.5em 0 0.5em 0.5em;
 	margin: 0 0 0.5em 0;
 	float:right;
@@ -224,6 +228,22 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 .listOfLinks li.massUpdateIndicator {
     border-left: none;
+}
+
+.listOfLinks .first .welcome {
+	color: #777;
+}
+
+.listOfLinks a {
+	margin-right: 10px;
+}
+
+.listOfLinks .separator {
+	color:  #CCC;
+}
+
+.listOfLinks .darkseparator {
+	color:  #333;
 }
 
 #contentTitle {
