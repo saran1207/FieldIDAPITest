@@ -3,7 +3,7 @@
 function mergeAndSubmit(form1id, form2id, masterFormId, submitButton) {
 	var formMaster = $(masterFormId);
 	
-	formMaster.select('input[type=hidden]').each(function (hiddenInput) {
+	$$('#masterForm input[type=hidden]').each(function (hiddenInput) {
 		hiddenInput.remove();
 	});
 	
