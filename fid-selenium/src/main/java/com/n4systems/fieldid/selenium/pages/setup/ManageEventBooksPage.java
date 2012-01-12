@@ -61,6 +61,11 @@ public class ManageEventBooksPage extends FieldIDPage {
         selenium.click("//table[@class='list']//td[1]//a[.='"+bookName+"']/../../td[5]//a[contains(text(),'Delete')]");
         waitForAjax();
     }
+    
+    public void clickArchiveForBookNamed(String bookName) {
+        selenium.click("//table[@class='list']//td[1]//a[.='"+bookName+"']/../../td[5]//a[contains(text(),'Archive')]");
+        waitForPageToLoad();
+    }
 
 	public void clickFirstListItemClose() {
 		selenium.click("//table[@class='list']//tr[2]//td[5]//a[contains(text(),'Close')]");

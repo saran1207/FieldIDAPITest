@@ -73,7 +73,7 @@ public class ManageEventBooksTest extends FieldIDTestCase {
     }
 
     @Test
-    public void test_add_and_delete_book() throws Exception {
+    public void test_add_and_archive_book() throws Exception {
         assertFalse(manageEventBooksPage.eventBookExists("Test Selenium"));
 
         manageEventBooksPage.clickAddTab();
@@ -86,14 +86,8 @@ public class ManageEventBooksTest extends FieldIDTestCase {
         assertEquals("View All", manageEventBooksPage.getCurrentTab());
 
         assertTrue(manageEventBooksPage.eventBookExists("Test Selenium"));
-        manageEventBooksPage.clickDeleteForBookNamed("Test Selenium");
+        manageEventBooksPage.clickArchiveForBookNamed("Test Selenium");
         assertFalse(manageEventBooksPage.eventBookExists("Test Selenium"));
-    }
-
-    @Test
-    public void test_delete_book_in_use() throws Exception {
-        manageEventBooksPage.clickDeleteForBookNamed("The In Use Book");
-        assertEquals("Event Book can not be deleted. It is still in use.", manageEventBooksPage.getAlert().trim());
     }
 
 }
