@@ -15,9 +15,9 @@
 </div>
 
 <script type="text/javascript" >
-	var buttons = new Array( 'saveButton', 'saveAndStartEventButton');
-	var buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />');
-	var buttonMessages = new Array( '<@s.text name="hbutton.save" />', '<@s.text name="hbutton.saveandstartevent" />', '<@s.text name="hbutton.saveandprint" />');
+	buttons = new Array( 'saveButton', 'saveAndStartEventButton');
+	buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />');
+	buttonMessages = new Array( '<@s.text name="hbutton.save" />', '<@s.text name="hbutton.saveandstartevent" />', '<@s.text name="hbutton.saveandprint" />');
 	
 	$$('#masterForm .save').each(function(element) {
 			element.observe('click', function(event) {

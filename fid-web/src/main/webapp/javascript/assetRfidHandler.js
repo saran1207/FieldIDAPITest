@@ -14,7 +14,7 @@ function checkDuplicateRfids(rfids, submitButton, uniqueId) {
 			rfids: rfids
 		},
 		method: 'post',
-		asynchronous:false,
+		//asynchronous:false,
 		onSuccess: contentCallback
 	});
 }
