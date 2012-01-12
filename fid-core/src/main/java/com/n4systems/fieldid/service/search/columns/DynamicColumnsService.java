@@ -36,7 +36,7 @@ public class DynamicColumnsService extends FieldIdService {
     }
 
     public List<ColumnMappingGroupView> getDynamicAssetColumnsForSearch(AssetType selectedAssetType, List<AssetType> currentlyAvailableAssetTypes) {
-        InfoFieldDynamicGroupGenerator dynamicGenerator = new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "event_search", null);
+        InfoFieldDynamicGroupGenerator dynamicGenerator = new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "asset_search", null);
         Long selectedAssetTypeId = selectedAssetType == null ? null : selectedAssetType.getId();
         return dynamicGenerator.getDynamicGroups(selectedAssetTypeId, idList(currentlyAvailableAssetTypes));
     }
