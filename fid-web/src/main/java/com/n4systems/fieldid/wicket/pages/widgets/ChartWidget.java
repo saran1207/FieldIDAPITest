@@ -71,6 +71,9 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	}
 	
     private void setGranularity(ChartGranularity granularity) {
+    	if (granularity!=null && this.granularity.equals(granularity)) {
+    		return;
+    	}
         T config = getWidgetDefinition().getObject().getConfig();
         if (config instanceof ConfigurationWithGranularity) {
             ConfigurationWithGranularity configurationWithGranularity = (ConfigurationWithGranularity) config;
@@ -81,6 +84,9 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
     }        	
     
 	public void setPeriod(Integer period) {
+		if (period!=null && period.intValue()==this.period.intValue()) { 
+			return;
+		}
         T config = getWidgetDefinition().getObject().getConfig();
         if (config instanceof ConfigurationWithPeriod) {
             ConfigurationWithPeriod configurationWithPeriod = (ConfigurationWithPeriod) config;
@@ -91,8 +97,8 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected void addGranularityButton(final String id, final ChartGranularity granularity) {
-        AjaxLink granularityButton = new AjaxLink(id) {
+	protected void addGranularityButton(final ChartGranularity granularity) {
+        AjaxLink granularityButton = new AjaxLink(granularity.name().toLowerCase()) {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 setGranularity(granularity);
@@ -107,7 +113,7 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
         };
         granularityButton.setMarkupId(granularity.name());
     	granularityButton.setOutputMarkupId(true);
-        granularityButton.add(new AttributeAppender("class", new Model<String>("selected"), " ") {
+        granularityButton.add(new AttributeAppender("class", true, new Model<String>("selected"), " ") {
             @Override
             public boolean isEnabled(Component component) {
                 return granularity == ChartWidget.this.granularity;
@@ -177,10 +183,10 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
     private void loadPeriodAndGranularityConfig() {
         T config = getWidgetDefinition().getObject().getConfig();
         if (config instanceof ConfigurationWithGranularity) {
-            this.granularity = validateGranularity( ((ConfigurationWithGranularity)config).getGranularity() );
+            setGranularity(validateGranularity( ((ConfigurationWithGranularity)config).getGranularity() ));
         }
         if (config instanceof ConfigurationWithPeriod) {
-            this.period = ((ConfigurationWithPeriod)config).getPeriod();
+            setPeriod(((ConfigurationWithPeriod)config).getPeriod());
         }        
     }
 
@@ -190,15 +196,12 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 			while (!isGranularityAppicable(g)) {
 				g = g.finer();
 				if (g==null) { 
-					g = ChartGranularity.WEEK;
+					g = (ChartGranularity.DAY.equals(granularity)) ? ChartGranularity.WEEK : ChartGranularity.DAY;
 					break;
 				}
 			}
-			if (!g.equals(granularity)) {
-				// need to persist the change
-				setGranularity(g);
-			}
 		}
+		setGranularity(g);
 		return g;		
 	}
 
@@ -206,9 +209,9 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 		Duration duration = chartDateRange.getDuration();
 		switch (buttonGranularity) {
 			case DAY:
-				return true;
+				return duration.getStandardDays()<100; 
 			case WEEK:
-				return true;//duration.getStandardDays()>=14;												
+				return duration.getStandardDays()>=14;												
 			case MONTH:
 				return duration.getStandardDays()>=60;
 			case QUARTER:

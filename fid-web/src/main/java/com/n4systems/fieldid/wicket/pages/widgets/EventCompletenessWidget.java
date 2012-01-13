@@ -29,10 +29,11 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 
 	public EventCompletenessWidget(String id, WidgetDefinition<EventCompletenessWidgetConfiguration> widgetDefinition) {
 		super(id, new Model<WidgetDefinition<EventCompletenessWidgetConfiguration>>(widgetDefinition));			
-        addGranularityButton("year", ChartGranularity.YEAR);
-        addGranularityButton("quarter", ChartGranularity.QUARTER);
-        addGranularityButton("month", ChartGranularity.MONTH);
-        addGranularityButton("week", ChartGranularity.WEEK);        		
+        addGranularityButton(ChartGranularity.YEAR);
+        addGranularityButton(ChartGranularity.QUARTER);
+        addGranularityButton(ChartGranularity.MONTH);
+        addGranularityButton(ChartGranularity.WEEK);        	
+        addGranularityButton(ChartGranularity.DAY);        
 	}
 
 	@Override
@@ -47,6 +48,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 		return config.getOrg();
 	}	
 
+	@Override
 	public ChartDateRange getChartDateRange() {
 		EventCompletenessWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return config.getDateRange();

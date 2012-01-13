@@ -19,7 +19,7 @@ import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 
 @SuppressWarnings("serial")
-public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEventsWidgetConfiguration> {
+public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEventsWidgetConfiguration> implements HasDateRange {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
@@ -29,10 +29,11 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
 	
     public CompletedEventsWidget(String id, WidgetDefinition<CompletedEventsWidgetConfiguration> widgetDefinition) {
 		super(id, new Model<WidgetDefinition<CompletedEventsWidgetConfiguration>>(widgetDefinition));			
-        addGranularityButton("year", ChartGranularity.YEAR);
-        addGranularityButton("quarter", ChartGranularity.QUARTER);
-        addGranularityButton("month", ChartGranularity.MONTH);
-        addGranularityButton("week", ChartGranularity.WEEK);
+        addGranularityButton(ChartGranularity.YEAR);
+        addGranularityButton(ChartGranularity.QUARTER);
+        addGranularityButton(ChartGranularity.MONTH);
+        addGranularityButton(ChartGranularity.WEEK);
+        addGranularityButton(ChartGranularity.DAY);
     }
  
     @Override
@@ -53,7 +54,8 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
 		return config.getOrg();
 	}	
 
-	private ChartDateRange getChartDateRange() {
+	@Override
+	public ChartDateRange getChartDateRange() {
 		CompletedEventsWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return config.getDateRange();
 	}
