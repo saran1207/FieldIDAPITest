@@ -5,6 +5,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.util.EnumUtils;
 import com.n4systems.util.time.DateUtil;
 
 public enum ChartGranularity {
@@ -136,6 +137,14 @@ public enum ChartGranularity {
 	public LocalDate roundUp(LocalDate date) {
 		LocalDate normalized = normalize(date);		
 		return (date.isEqual(normalized)) ? date : next(date); 
+	}
+
+	public ChartGranularity finer() {
+		return EnumUtils.next(this);
+	}
+
+	public ChartGranularity coarser() {
+		return EnumUtils.previous(this);
 	}
 
 }

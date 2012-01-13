@@ -18,7 +18,7 @@ import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 
 @SuppressWarnings("serial")
-public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifiedWidgetConfiguration> {
+public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifiedWidgetConfiguration> implements HasDateRange {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
@@ -39,7 +39,7 @@ public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifi
     	return new ChartData<LocalDate>(reportingService.getAssetsIdentified(getChartDateRange(), granularity, getOrg()));
     }
 
-	private ChartDateRange getChartDateRange() {
+	public ChartDateRange getChartDateRange() {
 		AssetsIdentifiedWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return config.getDateRange();
 	}

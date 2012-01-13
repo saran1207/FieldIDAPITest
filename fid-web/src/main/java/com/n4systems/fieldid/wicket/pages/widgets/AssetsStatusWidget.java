@@ -19,7 +19,7 @@ import com.n4systems.util.chart.FlotOptions;
 import com.n4systems.util.chart.HorizBarChartOptions;
 
 @SuppressWarnings("serial")
-public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetConfiguration> {
+public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetConfiguration>  implements HasDateRange {
 	
 	@SpringBean
 	private DashboardReportingService reportingService;
@@ -47,7 +47,8 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 		return config.getOrg();
 	}
 		
-	private ChartDateRange getChartDateRange() {
+	@Override
+	public ChartDateRange getChartDateRange() {
 		AssetsStatusWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return config.getDateRange();
 	}
@@ -62,6 +63,7 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getChartDateRange());
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );		
 	}
+
 	
 }
 

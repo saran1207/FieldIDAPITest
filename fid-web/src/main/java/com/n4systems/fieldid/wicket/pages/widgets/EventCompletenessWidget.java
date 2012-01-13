@@ -19,7 +19,7 @@ import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 
 @SuppressWarnings("serial")
-public class EventCompletenessWidget extends ChartWidget<LocalDate,EventCompletenessWidgetConfiguration> {
+public class EventCompletenessWidget extends ChartWidget<LocalDate,EventCompletenessWidgetConfiguration> implements HasDateRange {
 
 	@SpringBean
 	private DashboardReportingService reportingService;
@@ -47,7 +47,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 		return config.getOrg();
 	}	
 
-	private ChartDateRange getChartDateRange() {
+	public ChartDateRange getChartDateRange() {
 		EventCompletenessWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return config.getDateRange();
 	}

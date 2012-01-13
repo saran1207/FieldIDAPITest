@@ -49,7 +49,7 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 		setOutputMarkupId(true);
 		add(flotChart = createFlotChart());
 		granularity = getDefaultGranularity();
-        loadPeriodAndGranularityConfig();
+        loadPeriodAndGranularityConfig();        
 	}
 
     protected Component createFlotChart() {
@@ -89,7 +89,7 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
         }
 		this.period = period;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	protected void addGranularityButton(final String id, final ChartGranularity granularity) {
         AjaxLink granularityButton = new AjaxLink(id) {
@@ -116,24 +116,20 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
         
         add(granularityButton);
 	}
-
-	
 	
 	protected boolean isGranularityAppicable(ChartGranularity chartGranularity) {
-		// compare relative to 
 		return true;
 	}
 	
-	
 	protected void addPeriodButton(String id, final int period) {
-        AjaxLink periodButton = new AjaxLink(id) {
+        AjaxLink<String> periodButton = new AjaxLink<String>(id) {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 setPeriod(period);
                 target.add(ChartWidget.this);
             }
         };
-        periodButton.add(new AttributeAppender("class", true, new Model<String>("selected"), " ") {
+        periodButton.add(new AttributeAppender("class", new Model<String>("selected"), " ") {
             @Override
             public boolean isEnabled(Component component) {
                 return period == ChartWidget.this.period;
@@ -181,18 +177,38 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
     private void loadPeriodAndGranularityConfig() {
         T config = getWidgetDefinition().getObject().getConfig();
         if (config instanceof ConfigurationWithGranularity) {
-            this.granularity = ((ConfigurationWithGranularity)config).getGranularity();
+            this.granularity = validateGranularity( ((ConfigurationWithGranularity)config).getGranularity() );
         }
         if (config instanceof ConfigurationWithPeriod) {
             this.period = ((ConfigurationWithPeriod)config).getPeriod();
-        }
+        }        
     }
+
+	private ChartGranularity validateGranularity(ChartGranularity granularity) {
+		ChartGranularity g = granularity;
+		if (this instanceof HasDateRange) { 
+			while (!isGranularityAppicable(g)) {
+				g = g.finer();
+				if (g==null) { 
+					g = ChartGranularity.WEEK;
+					break;
+				}
+			}
+			if (!g.equals(granularity)) {
+				// need to persist the change
+				setGranularity(g);
+			}
+		}
+		return g;		
+	}
 
 	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity, ChartDateRange chartDateRange) {		
 		Duration duration = chartDateRange.getDuration();
-		switch (buttonGranularity) { 
+		switch (buttonGranularity) {
+			case DAY:
+				return true;
 			case WEEK:
-				return true;												
+				return true;//duration.getStandardDays()>=14;												
 			case MONTH:
 				return duration.getStandardDays()>=60;
 			case QUARTER:
@@ -202,8 +218,5 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 		}
 		return false;
 	}
-    
-	
-    
     
 }

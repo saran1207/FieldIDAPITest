@@ -251,5 +251,20 @@ public class ChartGranularityTest {
 		assertEquals(3, oct1Up.getDayOfMonth() );
 		assertEquals(DateTimeConstants.OCTOBER, oct1Up.getMonthOfYear() );		
 	}
-		
+
+	@Test
+	public void test_finerCoarser() { 
+		assertEquals(ChartGranularity.QUARTER, ChartGranularity.YEAR.finer());
+		assertEquals(ChartGranularity.MONTH, ChartGranularity.QUARTER.finer());
+		assertEquals(ChartGranularity.WEEK, ChartGranularity.MONTH.finer());
+		assertEquals(ChartGranularity.DAY, ChartGranularity.WEEK.finer());
+		assertEquals(null, ChartGranularity.DAY.finer());
+
+		assertEquals(null, ChartGranularity.YEAR.coarser());
+		assertEquals(ChartGranularity.YEAR, ChartGranularity.QUARTER.coarser());
+		assertEquals(ChartGranularity.QUARTER, ChartGranularity.MONTH.coarser());
+		assertEquals(ChartGranularity.MONTH, ChartGranularity.WEEK.coarser());
+		assertEquals(ChartGranularity.WEEK, ChartGranularity.DAY.coarser());
+	}
+	
 }
