@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApiScoreCriteria extends ApiCriteria {
-	private List<ApiScore> scores = new ArrayList<ApiScore>();
+	private List<ApiScore> scores;
 
 	public ApiScoreCriteria(List<ApiScore> scores) {
-		this();
+		super("SCORE");
 		this.scores = scores;
 	}
 
 	public ApiScoreCriteria() {
-		setCriteriaType("SCORE");
+		this(new ArrayList<ApiScore>());
 	}
 
 	public void setScores(List<ApiScore> scores) {

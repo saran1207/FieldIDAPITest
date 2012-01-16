@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApiComboBoxCriteria extends ApiCriteria {
-	private List<String> options = new ArrayList<String>();
+	private List<String> options;
 
 	public ApiComboBoxCriteria(List<String> options) {
-		this();
+		super("COMBOBOX");
 		this.options = options;
 	}
 	
 	public ApiComboBoxCriteria() {
-		setCriteriaType("COMBOBOX");
+		this(new ArrayList<String>());
 	}
 
 	public List<String> getOptions() {

@@ -6,13 +6,13 @@ public class ApiUnitOfMeasureCriteria extends ApiCriteria {
     private Long secondaryUnitId;
 	    
 	public ApiUnitOfMeasureCriteria(long primaryUnitId, Long secondaryUnitId) {
-		super();
+		super("UNITOFMEASURE");
 		this.primaryUnitId = primaryUnitId;
 		this.secondaryUnitId = secondaryUnitId;
 	}
 
 	public ApiUnitOfMeasureCriteria() {
-		setCriteriaType("UNITOFMEASURE");
+		this(0, null);
 	}
 
 	public long getPrimaryUnitId() {

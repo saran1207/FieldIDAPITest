@@ -4,12 +4,12 @@ public class ApiNumberFieldCriteria extends ApiCriteria {
 	private Integer decimalPlaces = 0;
 
 	public ApiNumberFieldCriteria(Integer decimalPlaces) {
-		this();
+		super("NUMBERFIELD");
 		this.decimalPlaces = decimalPlaces;
 	}
 
 	public ApiNumberFieldCriteria() {
-		setCriteriaType("NUMBERFIELD");
+		this(0);
 	}
 
 	public void setDecimalPlaces(Integer decimalPlaces) {

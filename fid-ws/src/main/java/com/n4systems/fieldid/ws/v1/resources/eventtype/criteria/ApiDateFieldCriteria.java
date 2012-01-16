@@ -4,12 +4,12 @@ public class ApiDateFieldCriteria extends ApiCriteria {
 	private boolean includeTime = false;
 
 	public ApiDateFieldCriteria(boolean includeTime) {
-		this();
+		super("DATEFIELD");
 		this.includeTime = includeTime;
 	}
 	
 	public ApiDateFieldCriteria() {
-		setCriteriaType("DATEFIELD");
+		this(false);
 	}
 
 	public void setIncludeTime(boolean includeTime) {

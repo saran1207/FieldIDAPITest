@@ -11,6 +11,10 @@ public class ApiCriteria extends ApiReadonlyModel {
 	private List<String> recommendations = new ArrayList<String>();
 	private List<String> deficiencies = new ArrayList<String>();
 
+	protected ApiCriteria(String criteriaType) {
+		this.criteriaType = criteriaType;
+	}
+	
 	public String getCriteriaType() {
 		return criteriaType;
 	}

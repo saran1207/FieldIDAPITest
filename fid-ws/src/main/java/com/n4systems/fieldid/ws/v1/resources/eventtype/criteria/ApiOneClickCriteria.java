@@ -5,16 +5,16 @@ import java.util.List;
 
 public class ApiOneClickCriteria extends ApiCriteria {
 	private boolean principal;
-	private List<ApiOneClickState> states = new ArrayList<ApiOneClickState>();
+	private List<ApiOneClickState> states;
 
 	public ApiOneClickCriteria(boolean principal, List<ApiOneClickState> states) {
-		this();
+		super("ONECLICK");
 		this.principal = principal;
 		this.states = states;
 	}
 	
 	public ApiOneClickCriteria() {
-		setCriteriaType("ONECLICK");
+		this(false, new ArrayList<ApiOneClickState>());
 	}
 
 	public boolean isPrincipal() {

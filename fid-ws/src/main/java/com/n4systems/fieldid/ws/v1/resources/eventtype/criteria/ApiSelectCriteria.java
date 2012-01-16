@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApiSelectCriteria extends ApiCriteria {
-	private List<String> options = new ArrayList<String>();
+	private List<String> options;
 
 	public ApiSelectCriteria(List<String> options) {
-		this();
+		super("SELECTBOX");
 		this.options = options;
 	}
 
 	public ApiSelectCriteria() {
-		setCriteriaType("SELECTBOX");
+		this(new ArrayList<String>());
 	}
 
 	public List<String> getOptions() {
