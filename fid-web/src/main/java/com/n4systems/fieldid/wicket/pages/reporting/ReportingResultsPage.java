@@ -10,7 +10,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCollapseContainer;
@@ -20,6 +19,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.services.reporting.DashboardReportingService;
 
 public class ReportingResultsPage extends FieldIDFrontEndPage {
 
@@ -30,7 +30,7 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
     private ReportResultsPanel reportResultsPanel;
     
     @SpringBean
-    private SavedReportService savedReportService;
+    private DashboardReportingService dashboardReportingService;
     
     public ReportingResultsPage(PageParameters params) { 
     	super(params);
@@ -73,7 +73,7 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
     		// load config and set values...
     		Long widgetDefinitionId = params.get(WIDGET_DEFINITION_PARAMETER).toLong();
     		Long time = params.get(TIME_PARAMETER).toLong();
-    		EventReportCriteriaModel model = savedReportService.convertWidgetDefinitionToCriteria(widgetDefinitionId,time); 
+    		EventReportCriteriaModel model = dashboardReportingService.convertWidgetDefinitionToCriteria(widgetDefinitionId,time); 
     		return model;
     	}
     	throw new IllegalStateException("must specify configId in parameters in order to create report criteria model.");

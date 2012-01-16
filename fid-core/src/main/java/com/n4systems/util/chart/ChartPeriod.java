@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import org.joda.time.LocalDate;
+import org.joda.time.Period;
 
 public enum ChartPeriod {
 	
@@ -11,10 +12,12 @@ public enum ChartPeriod {
 	
 	private int days;
 	private DateFormat dateFormat = new SimpleDateFormat("MMM d");
+	private Period period;
 	
 
 	ChartPeriod(int days) { 
 		this.days = days;
+		this.period = new Period().withDays(days);
 	}
 
 	public static ChartPeriod valueOf(Integer days) {
@@ -24,6 +27,10 @@ public enum ChartPeriod {
 			}
 		}
 		return null;
+	}
+
+	public Period getPeriod() { 
+		return period;
 	}
 	
 	public String getFromDisplayString() { 

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.joda.time.LocalDate;
+import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +14,17 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.ReportConfiguration;
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.BarChartManager;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDateRange;
@@ -103,5 +112,59 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		LocalDate from = dateRange.getFrom();		
 		return (from==null) ? null : granularity.roundDown(from).toDate();
 	}		
+
+
+	// ------------------------------------------------------------------------------------------------
+	// 
+	// NOTE : stuff below is temporary and will have to be refactored when saving reports changes. 
+	// in particular, setCommonModelDefaults().
+	//
+	
+	public EventReportCriteriaModel convertWidgetDefinitionToCriteria(Long widgetDefinitionId, Long time) {
+		WidgetDefinition<?> widgetDefinition = persistenceService.findNonSecure(WidgetDefinition.class, widgetDefinitionId);
+		EventReportCriteriaModel model = new EventReportCriteriaModel();
+		switch (widgetDefinition.getWidgetType()) { 
+			case EVENT_COMPLETENESS:
+				setModelDefaults(model, ((EventCompletenessWidgetConfiguration)widgetDefinition.getConfig()), time);
+				break;
+			case COMPLETED_EVENTS:
+				setModelDefaults(model, ((CompletedEventsWidgetConfiguration)widgetDefinition.getConfig()), time);
+				break;
+			case UPCOMING_SCHEDULED_EVENTS: 
+				setModelDefaults(model, ((UpcomingEventsWidgetConfiguration)widgetDefinition.getConfig()), time);
+				break;
+			default: 
+				throw new IllegalArgumentException("Can't convert widget of type " + widgetDefinition.getWidgetType() + " into report criteria");
+		}
+		// from, to. type of data.   i.e. assets identified, events failed, etc...
+		return model;
+	}
+
+	private void setModelDefaults(EventReportCriteriaModel model, UpcomingEventsWidgetConfiguration config, Long time) {		
+		setCommonModelDefaults(model, config.getDateRange(), new Period().withDays(config.getPeriod()), time);
+	}
+
+	private void setModelDefaults(EventReportCriteriaModel model, CompletedEventsWidgetConfiguration config, Long time) {		
+		setCommonModelDefaults(model, config.getDateRange(), config.getGranularity().getPeriod(), time);
+	}
+
+	private void setModelDefaults(EventReportCriteriaModel model, EventCompletenessWidgetConfiguration config, Long time) {
+		setCommonModelDefaults(model, config.getDateRange(), config.getGranularity().getPeriod(), time);
+	}
+
+	private void setCommonModelDefaults(EventReportCriteriaModel model, ChartDateRange chartDateRange, Period period, Long time) {
+        if (!model.isReportAlreadyRun()) {
+            ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
+            model.setColumnGroups(reportConfiguration.getColumnGroups());
+            model.setSortColumn(reportConfiguration.getSortColumn());
+            model.setSortDirection(reportConfiguration.getSortDirection());
+            model.setReportAlreadyRun(true);
+        }
+        if (period!=null) { 
+        	LocalDate from = new LocalDate(time);
+        	LocalDate to = from.plus(period.minusDays(1));  // subtract one since this will yield non-inclusive date.   i.e. we want Jan1-Jan7 NOT Jan1-Jan8 when searching for a week.
+        	model.setDateRange(new DateRange(from,to));
+        }		
+	}    	
 	
 }
