@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithDateRange;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
@@ -20,7 +21,7 @@ import com.n4systems.util.chart.ChartGranularity;
 @Entity
 @Table(name = "widget_configurations_assets_identified")
 @PrimaryKeyJoinColumn(name="id")
-public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration implements ConfigurationWithGranularity {
+public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration implements ConfigurationWithGranularity, ConfigurationWithDateRange {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "org_id")
@@ -47,6 +48,7 @@ public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration imp
 		this.dateRange = range;
 	}
 
+	@Override
 	public ChartDateRange getDateRange() {
 		return dateRange;
 	}

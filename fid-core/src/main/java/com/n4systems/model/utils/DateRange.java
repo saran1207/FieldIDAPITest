@@ -9,6 +9,7 @@ import org.joda.time.Duration;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.DaysRangeFormatter;
 import com.n4systems.util.chart.FloatingDateRangeFormatter;
@@ -20,6 +21,13 @@ import com.n4systems.util.chart.StaticDateRanageFormatter;
  *  handles floating dates & static dates
  * e.g. LAST WEEK   or     jan 1-jan7    or  ALL TIME    or   jan1,1970-jan1,2099
  * @see ChartDateRange
+ * 
+ * note that it is up to the user to decide if this represents an inclusive or exclusive range. 
+ * does Jan1-Jan8 mean Jan1,2,3,4,5,6,7?   (one week before the 8th).     OR 
+ *      Jan1-Jan8 mean Jan1,2,3,4,5,6,7,8?
+ *      
+ * this object is not aware of the context but you should know if you use LE or LT in queries.   
+ * LT = use getToDate();  LE = use getInclusiveToDate()
  */
 @SuppressWarnings("serial")
 public class DateRange implements Serializable {
@@ -40,13 +48,18 @@ public class DateRange implements Serializable {
 	public static final DateRange FOREVER = new DateRange(new StaticDateRanageFormatter("All Time"));
 	public static final DateRange CUSTOM = new DateRange(new StaticDateRanageFormatter("Custom Date Range"));
 
-	public static final Period OPEN_PERIOD = new Period().withYears(3000);
+	public static final Period OPEN_PERIOD = new Period().withYears(3000);  // can't use MAX_INT 'cause that causes overflow in certain scenarios.
 	
 		
 	private DateRangeFormatter formatter = new DefaultDateRangeFormatter("MMM d yyyy");
 	private DateRangeHandler handler;
 	
+	public DateRange(DateRangeHandler handler) {
+		this.handler = handler;
+	}
+	
 	public DateRange(DateRangeHandler handler, DateRangeFormatter formatter) {
+		Preconditions.checkArgument(formatter!=null,"must specify a valid date range formatter.");
 		this.handler = handler;
 		this.formatter = formatter;
 	}
@@ -56,11 +69,11 @@ public class DateRange implements Serializable {
 	}
 	
 	public DateRange(LocalDate from, LocalDate to) { 
-		this(new IntervalHandler(from,to),null);
+		this(new IntervalHandler(from,to));
 	}	
 	
 	public DateRange(Date from, Date to) { 
-		this(new IntervalHandler(from,to),null);
+		this(new IntervalHandler(from,to));
 	}	
 	
 	public DateRange(DateRangeFormatter formatter) {
@@ -68,7 +81,7 @@ public class DateRange implements Serializable {
 	}
 
 	public DateRange() { 
-		this(new IntervalHandler(),null);
+		this(new IntervalHandler());
 	}	
 	
 

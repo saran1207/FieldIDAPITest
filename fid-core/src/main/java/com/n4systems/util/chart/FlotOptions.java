@@ -52,6 +52,7 @@ public class FlotOptions<X> implements Serializable {
 	public Legend legend = new Legend();
 	public String[] colors;
     public String tooltipFormat = TOOLTIP_WITH_DAY;
+    public FieldIdOptions fieldIdOptions = new FieldIdOptions();
 	
 	
 	public static class Lines implements Serializable { 
@@ -124,6 +125,13 @@ public class FlotOptions<X> implements Serializable {
 		public Integer noColumns;
 	}
 	
+	// any non-FLOT stuff should be put here so it's easier to understand and port/migrate. 
+	public static class FieldIdOptions implements Serializable { 
+		public Boolean clickable = true;
+		public String url = "reporting";  // FIXME DD : get this via bookmarkableLink.
+		public Long widgetConfigId;		
+	}
+	
 	// ------------------------------------------------------------------------------------
 
 	public FlotOptions() { 
@@ -135,5 +143,7 @@ public class FlotOptions<X> implements Serializable {
         yaxis.tickDecimals = 0L;
 		colors = new String[] {"#32578B"};
 	}
+	
+	
 
 }

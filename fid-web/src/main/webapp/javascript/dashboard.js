@@ -2,6 +2,7 @@
  * requires.... 
  *   jquery.flot.js 
  *   jquery.flot.navigate.js
+ * @see FlotChart for java class that uses this.   
  */
 
 var chartWidgetFactory = (function() { 
@@ -110,6 +111,18 @@ var chartWidgetFactory = (function() {
             y: y
         };
     }
+    
+    function bindClick(id,url) {    	  
+    	$('#'+id).bind("plotclick", function(event,pos,item) {
+    		if (item) {   // generate URL & parameters via options and arguments. 
+    			window.location=clickUrl(url, event, pos, item);
+    		}
+    	});
+    }
+
+	var clickUrl = function(url, event, pos, item) {
+		return url + "&time="+item.datapoint[0];
+	}
 	
 	var create = function(id) { 
 		var widget = chartWidget(id);
@@ -127,6 +140,9 @@ var chartWidgetFactory = (function() {
 		} else if (options.bars.horizontal) {
 			widget.setTooltip(horizLabelTooltipContent);
 		}
+		if (options.fieldIdOptions.clickable) {
+			bindClick(id,options.fieldIdOptions.url);
+		}
 		widget.update(data);
 		return widget;
 	};	
@@ -135,6 +151,7 @@ var chartWidgetFactory = (function() {
 	return {		
 		horizTooltip : horizLabelTooltipContent,
 		dateTooltip : dateTooltipContent,
+		clickUrl : clickUrl,
 		create : create,
 		createWithData : createWithData
 	};

@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.form.IFormModelUpdateListener;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.joda.time.LocalDate;
 
 import com.n4systems.fieldid.wicket.model.EndOfDayDateModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
@@ -61,6 +62,8 @@ public class DateRangePicker<T> extends Panel implements IFormModelUpdateListene
 		dateRange = (modelDateRange==null) ? ChartDateRange.FOREVER : ChartDateRange.fromDateRange(modelDateRange);  
 		if (dateRange==null) {
 			dateRange = ChartDateRange.CUSTOM;
+			from = modelDateRange.getFromDate();
+			to = modelDateRange.getToDate();
 		}
 	}
 
@@ -78,11 +81,7 @@ public class DateRangePicker<T> extends Panel implements IFormModelUpdateListene
 		} else { 
 			return dateRange.asDateRange();
 		}
-	}
-	
-//	public void setRenderer(IChoiceRenderer<ChartDateRange> renderer) {
-//		dropDownChoice.setChoiceRenderer(renderer);
-//	}
+	}	
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {

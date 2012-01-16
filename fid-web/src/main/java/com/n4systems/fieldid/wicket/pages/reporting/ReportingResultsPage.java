@@ -1,5 +1,16 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCollapseContainer;
@@ -9,22 +20,31 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.search.EventReportCriteriaModel;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
 public class ReportingResultsPage extends FieldIDFrontEndPage {
 
-    private EventReportCriteriaModel reportCriteriaModel;
+    public static final String WIDGET_DEFINITION_PARAMETER = "wdf";
+	public static final String TIME_PARAMETER = "time";
+    
+	private EventReportCriteriaModel reportCriteriaModel;
     private ReportResultsPanel reportResultsPanel;
+    
+    @SpringBean
+    private SavedReportService savedReportService;
+    
+    public ReportingResultsPage(PageParameters params) { 
+    	super(params);
+    	init(createReportCriteriaModel(params));
+    }
 
-    public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel) {
-        this.reportCriteriaModel = reportCriteriaModel;
-        PropertyModel<EventReportCriteriaModel> reportCriteriaPropertyModel = new PropertyModel<EventReportCriteriaModel>(this, "reportCriteriaModel");
+	public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel) {
+		super(new PageParameters());
+		init(reportCriteriaModel);
+	}
+
+	private void init(EventReportCriteriaModel reportCriteriaModel) {
+		this.reportCriteriaModel = reportCriteriaModel;
+		PropertyModel<EventReportCriteriaModel> reportCriteriaPropertyModel = new PropertyModel<EventReportCriteriaModel>(this, "reportCriteriaModel");
 
         add(reportResultsPanel = new ReportResultsPanel("resultsPanel", reportCriteriaPropertyModel));
 
@@ -46,9 +66,20 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
 
         add(criteriaExpandContainer);
         add(new ReportingMassActionPanel("massActionPanel", reportCriteriaPropertyModel));
-    }
+	}
 
-    @Override
+    private EventReportCriteriaModel createReportCriteriaModel(PageParameters params) {    	
+    	if(params!=null) {
+    		// load config and set values...
+    		Long widgetDefinitionId = params.get(WIDGET_DEFINITION_PARAMETER).toLong();
+    		Long time = params.get(TIME_PARAMETER).toLong();
+    		EventReportCriteriaModel model = savedReportService.convertWidgetDefinitionToCriteria(widgetDefinitionId,time); 
+    		return model;
+    	}
+    	throw new IllegalStateException("must specify configId in parameters in order to create report criteria model.");
+	}
+
+	@Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/pageStyles/reporting.css");

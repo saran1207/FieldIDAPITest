@@ -1,16 +1,21 @@
 package com.n4systems.fieldid.service.search;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.BaseEntity;
-import com.n4systems.model.Event;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.SearchCriteriaModel;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
@@ -27,12 +32,6 @@ import com.n4systems.util.persistence.search.terms.NullTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public abstract class SearchService<T extends SearchCriteriaModel, M extends BaseEntity & NetworkEntity> extends FieldIdPersistenceService {
 
