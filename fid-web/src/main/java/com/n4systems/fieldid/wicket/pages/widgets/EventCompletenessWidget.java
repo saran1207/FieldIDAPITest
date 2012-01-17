@@ -33,7 +33,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
         addGranularityButton(ChartGranularity.QUARTER);
         addGranularityButton(ChartGranularity.MONTH);
         addGranularityButton(ChartGranularity.WEEK);        	
-        addGranularityButton(ChartGranularity.DAY);        
+        addGranularityButton(ChartGranularity.DAY);
 	}
 
 	@Override

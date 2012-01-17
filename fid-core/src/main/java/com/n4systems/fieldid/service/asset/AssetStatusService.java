@@ -20,5 +20,14 @@ public class AssetStatusService extends FieldIdPersistenceService {
 
         return persistenceService.findAll(builder);
     }
+    
+    public AssetStatus getStatusByName(String name) { 
+		QueryBuilder<AssetStatus> builder = createUserSecurityBuilder(AssetStatus.class);
+
+        builder.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+        builder.addSimpleWhere("name", name);
+
+        return persistenceService.find(builder);
+    }    
 
 }

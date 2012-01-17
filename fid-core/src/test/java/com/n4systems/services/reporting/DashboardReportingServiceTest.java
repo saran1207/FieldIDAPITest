@@ -118,7 +118,28 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 		List<ChartSeries<String>> results = dashboardService.getAssetsStatus(dateRange, owner);
 		
 		assertEquals(1, results.size());
-		assertEquals(assetStatuses.size()+1, results.get(0).size());  // note that it currently adds "Other" section to results so expect one more.		
+		assertEquals(assetStatuses.size(), results.get(0).size());		
+
+		verifyTestMocks();		
+	}	
+	
+	@Test 
+	public void test_getAssetsStatusWithOther() { 		
+		ChartDateRange dateRange = ChartDateRange.FOREVER;
+		BaseOrg owner = OrgBuilder.aCustomerOrg().build();		
+		List<AssetsStatusReportRecord> assetStatuses = createAssetStatusResults();
+		int sizeOfBigData = assetStatuses.size();
+		assetStatuses.add(new AssetsStatusReportRecord("otherStuff", 1L));  // these two will be lumped into one "other" group.		
+		assetStatuses.add(new AssetsStatusReportRecord("otherStuff2", 1L));		
+		assetStatuses.add(new AssetsStatusReportRecord("otherStuff3", 1L));		
+		expect(assetService.getAssetsStatus(dateRange.getFromDate(), dateRange.getToDate(), owner)).andReturn(assetStatuses);
+		replay(assetService);
+		replay(eventService);
+		
+		List<ChartSeries<String>> results = dashboardService.getAssetsStatus(dateRange, owner);
+		
+		assertEquals(1, results.size());
+		assertEquals(sizeOfBigData+1, results.get(0).size());  // add one for the Other section (which aggregrates the 3 smaller valued records).		
 
 		verifyTestMocks();		
 	}	

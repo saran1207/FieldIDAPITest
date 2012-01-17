@@ -18,19 +18,25 @@ public class ChartSeries<X> implements Serializable {
 	private ChartableMap<X> data = new ChartableMap<X>();
 	private String color;
 	private String label;
+	private String id;
 	private Lines lines = new Lines();
 	
 	// fields NOT included in Json representation.
 	private transient ChartManager<X> chartManager = null;
 	private transient boolean normalized = false;
 	
+	public ChartSeries(String label, String id, List<? extends Chartable<X>> data) {
+		this.setLabel(label);
+		this.id = id;
+		add(data);
+	}
+	
 	public ChartSeries(List<? extends Chartable<X>> data) {
-		this(null,data);
+		this(null,null,data);
 	}
 	
 	public ChartSeries(String label, List<? extends Chartable<X>> data) {
-		this.setLabel(label);
-		add(data);
+		this(label,null,data);
 	}
 	
 	/*pkg protected */ChartSeries<X> add(List<? extends Chartable<X>> data) {
@@ -153,6 +159,14 @@ public class ChartSeries<X> implements Serializable {
 	public String toString() { 
 		return data.toString();
 	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return id;
+	}	
 }	 
 
 

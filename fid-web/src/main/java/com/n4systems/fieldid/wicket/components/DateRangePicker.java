@@ -10,10 +10,7 @@ import org.apache.wicket.markup.html.form.IFormModelUpdateListener;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.joda.time.LocalDate;
 
-import com.n4systems.fieldid.wicket.model.EndOfDayDateModel;
-import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.utils.EnumDropDownChoiceRenderer;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.ChartDateRange;
@@ -39,17 +36,22 @@ public class DateRangePicker<T> extends Panel implements IFormModelUpdateListene
 				new PropertyModel<ChartDateRange>(this,dateRangeProperty), 
 				getDateRanges(), 
 				new EnumDropDownChoiceRenderer<ChartDateRange>());
-		fromDatePicker = new DateTimePicker("fromDate", new UserToUTCDateModel(new PropertyModel<Date>(this, "from")));
-		toDatePicker = new DateTimePicker("toDate", new UserToUTCDateModel(new EndOfDayDateModel(new PropertyModel<Date>(this, "to"))));
+		
+		setDefaultValuesFromModel();
+		
+//		fromDatePicker = new DateTimePicker("fromDate", new UserToUTCDateModel(new PropertyModel<Date>(this, "from")));
+//		toDatePicker = new DateTimePicker("toDate", new UserToUTCDateModel(new PropertyModel<Date>(this, "to")));
+		
+		// TODO DD : may need to set time zone here...depends on how things are persisted?
+		fromDatePicker = new DateTimePicker("fromDate", new PropertyModel<Date>(this, "from"));
+		toDatePicker = new DateTimePicker("toDate", new PropertyModel<Date>(this, "to"));
 		
 		dropDownChoice.setOutputMarkupId(true);
 		dropDownChoice.setNullValid(false);
 		
 		add(dropDownChoice);    	
 		add(fromDatePicker);
-		add(toDatePicker);
-		
-		setDefaultValuesFromModel();
+		add(toDatePicker);		
 	}		
 	
 	protected List<ChartDateRange> getDateRanges() {
@@ -70,6 +72,7 @@ public class DateRangePicker<T> extends Panel implements IFormModelUpdateListene
 	@Override
 	public void updateModel() {
 		IModel<DateRange> model = new PropertyModel<DateRange>(getDefaultModel(), dateRangeProperty);
+		// TODO DD : may need to set time zone here...depends on how things are persisted?
 		model.setObject(createDateRange(from, to, dateRange));
 	}
 	

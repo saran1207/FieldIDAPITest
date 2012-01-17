@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.actions.search;
 
-import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.UNASSIGNED_USER;
+import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,22 +8,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.fieldid.service.search.columns.ScheduleColumnsService;
-import com.n4systems.fieldid.service.search.columns.dynamic.EventAttributeDynamicGroupGenerator;
-import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGroupGenerator;
-import com.n4systems.model.search.ColumnMappingGroupView;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.service.search.columns.dynamic.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.search.columns.ScheduleColumnsService;
+import com.n4systems.fieldid.service.search.columns.dynamic.AssetManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.service.search.columns.dynamic.EventAttributeDynamicGroupGenerator;
+import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
-import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.EventSchedule;
@@ -31,9 +32,14 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import com.n4systems.model.eventschedule.EventScheduleCountLoader;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.util.ListingPair;
@@ -54,6 +60,14 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	private List<ListingPair> eventJobs;
 	private AssignedToUserGrouper userGrouper;
 
+	// parameters passed thru when user clicks on dashboard widget that is Schedule related.  (e.g. Upcoming Scheduled Events)
+	private Long wdf; // widget definition Id.
+	private Long longX;  // time in MS of dashboard pt clicked on.
+	private String y;    // currently not needed but passed.
+	private String series; // name of series.
+
+	@Autowired private PersistenceService persistenceService;
+
 	public EventScheduleAction(final PersistenceManager persistenceManager, final EventManager eventManager, final AssetManager assetManager, final EventScheduleManager eventScheduleManager) {
 
 		this(SCHEDULE_CRITERIA, EventScheduleAction.class, persistenceManager, eventManager, assetManager, eventScheduleManager);
@@ -68,7 +82,6 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 		attribGroupGen = new EventAttributeDynamicGroupGenerator(persistenceManager);
 		this.eventManager = eventManager;
 		this.eventScheduleManager = eventScheduleManager;
-
 	}
 
     @Override
@@ -76,7 +89,8 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
         return new ScheduleColumnsService().getReportConfiguration(getSecurityFilter());
     }
 
-    public void prepare() throws Exception {
+    @Override
+	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
 		ownerPicker.setOwnerId(getContainer().getOwnerId());
 
@@ -84,8 +98,50 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	}
 
 	@Override
-	protected EventScheduleSearchContainer createSearchContainer() {
-		return new EventScheduleSearchContainer(getSecurityFilter(), getLoaderFactory(), getSecurityGuard());
+	protected EventScheduleSearchContainer createSearchContainer() {		
+		EventScheduleSearchContainer searchContainer = new EventScheduleSearchContainer(getSecurityFilter(), getLoaderFactory(), getSecurityGuard());
+		return populateWithClickThruDefaults(searchContainer);
+	}
+
+	private EventScheduleSearchContainer populateWithClickThruDefaults(EventScheduleSearchContainer searchContainer) {
+		WidgetDefinition<?> widgetDefinition = getWidgetDefinition(wdf);		
+		if (widgetDefinition!=null) { 
+			switch (widgetDefinition.getWidgetType()) { 
+				case UPCOMING_SCHEDULED_EVENTS:
+					return populateWithClickThruDefaults(((UpcomingEventsWidgetConfiguration)widgetDefinition.getConfig()), searchContainer);
+				case EVENT_COMPLETENESS:
+					return populateWithClickThruDefaults(((EventCompletenessWidgetConfiguration)widgetDefinition.getConfig()), searchContainer );
+				default: 
+					throw new IllegalArgumentException("Can't convert widget of type " + widgetDefinition.getWidgetType() + " into report criteria");
+			}			
+		} 
+		return searchContainer;
+	}
+	
+	private WidgetDefinition getWidgetDefinition(Long id) {
+		if (id==null ) { 
+			return null;
+		}
+		return persistenceService.findNonSecure(WidgetDefinition.class, id);
+	}
+	
+	private EventScheduleSearchContainer populateWithClickThruDefaults(
+			EventCompletenessWidgetConfiguration config,
+			EventScheduleSearchContainer searchContainer ) {
+		LocalDate localDate = new LocalDate(longX);
+		LocalDate to = localDate.plus(config.getGranularity().getPeriod());
+		searchContainer.setFromDate(localDate.toDate());
+		searchContainer.setToDate(to.toDate());
+		return searchContainer;
+	}
+
+	private EventScheduleSearchContainer populateWithClickThruDefaults(
+			UpcomingEventsWidgetConfiguration config,
+			EventScheduleSearchContainer searchContainer) {
+		LocalDate localDate = new LocalDate(longX);		
+		searchContainer.setFromDate(localDate.toDate());
+		searchContainer.setToDate(localDate.toDate());
+		return searchContainer;
 	}
 
 	@Override
@@ -235,4 +291,32 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 		}
 		return userGrouper;
 	}
+	
+	
+	public void setWdf(Long wdf) {
+		this.wdf = wdf;
+	}
+
+	public Long getWdf() {
+		return wdf;
+	}
+
+	public void setLongX(Long longX) {
+		this.longX = longX;
+	}
+
+	public Long getLongX() {
+		return longX;
+	}
+
+	public void setY(String y) {
+		this.y = y;
+	}
+
+	public String getY() {
+		return y;
+	}
+
+	
+	
 }

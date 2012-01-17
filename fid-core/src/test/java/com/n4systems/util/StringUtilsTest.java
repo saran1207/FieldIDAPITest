@@ -68,4 +68,20 @@ public class StringUtilsTest {
 	public void test_strip_whitespace() {
 		assertEquals("helloworld", StringUtils.stripWhitespace(" hello wor\tld"));
 	}
+	
+	@Test
+	public void test_isWholeNumber() {
+		assertTrue(StringUtils.isWholeNumber("1231231239999933333321120045854954954"));  // note that there is no limit to length. even if bigger than MaxInt.
+		assertTrue(StringUtils.isWholeNumber("123123123"));
+		assertTrue(StringUtils.isWholeNumber("12312312  "));
+		assertFalse(StringUtils.isWholeNumber("  12 312312  "));
+		assertTrue(StringUtils.isWholeNumber("   12312312  "));
+		assertFalse(StringUtils.isWholeNumber("12312312X"));
+		assertFalse(StringUtils.isWholeNumber("0x12312312"));
+		assertFalse(StringUtils.isWholeNumber("-1"));
+		assertTrue(StringUtils.isWholeNumber("0"));
+		assertFalse(StringUtils.isWholeNumber(""));
+		assertFalse(StringUtils.isWholeNumber(null));
+	}
+	
 }

@@ -112,6 +112,7 @@ public class FlotOptions<X> implements Serializable {
 		public Boolean horizontal;
 		public String align;
 		public Integer lineWidth;
+		public Boolean clickable;
 	}
 	
 	public static class Legend implements Serializable { 
@@ -128,8 +129,9 @@ public class FlotOptions<X> implements Serializable {
 	// any non-FLOT stuff should be put here so it's easier to understand and port/migrate. 
 	public static class FieldIdOptions implements Serializable { 
 		public Boolean clickable = true;
-		public String url = "reporting";  // FIXME DD : get this via bookmarkableLink.
-		public Long widgetConfigId;		
+		public String url;
+		public Long widgetConfigId;
+		public String clicked;		
 	}
 	
 	// ------------------------------------------------------------------------------------

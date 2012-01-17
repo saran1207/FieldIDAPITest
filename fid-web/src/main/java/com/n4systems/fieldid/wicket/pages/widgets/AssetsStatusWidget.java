@@ -7,6 +7,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
 import com.n4systems.fieldid.wicket.pages.widgets.config.AssetsStatusConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
@@ -28,7 +30,8 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
 	
     public AssetsStatusWidget(String id, WidgetDefinition<AssetsStatusWidgetConfiguration> widgetDefinition) {
-		super(id, new Model<WidgetDefinition<AssetsStatusWidgetConfiguration>>(widgetDefinition));			
+		super(id, new Model<WidgetDefinition<AssetsStatusWidgetConfiguration>>(widgetDefinition));
+		setClickThruHandler(new AssetClickThruHandler(this, widgetDefinition.getId()));		
     }
 
     @Override
@@ -37,6 +40,13 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
     	return options;
     }
 
+    @Override
+	protected Class<? extends FieldIDFrontEndPage> getClickThroughPage() {
+		return AssetSearchResultsPage.class;
+	}
+
+    
+    
 	@Override
     protected ChartData<String> getChartData() {
     	return new ChartData<String>(reportingService.getAssetsStatus(getChartDateRange(), getOrg()));

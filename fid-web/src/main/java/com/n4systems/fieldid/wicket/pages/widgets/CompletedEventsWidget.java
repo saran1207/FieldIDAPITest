@@ -34,6 +34,7 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
         addGranularityButton(ChartGranularity.MONTH);
         addGranularityButton(ChartGranularity.WEEK);
         addGranularityButton(ChartGranularity.DAY);
+        setClickThruHandler(new ReportClickThruHandler(this, widgetDefinition.getId()));		                
     }
  
     @Override

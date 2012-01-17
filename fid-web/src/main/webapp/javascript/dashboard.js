@@ -112,17 +112,37 @@ var chartWidgetFactory = (function() {
         };
     }
     
-    function bindClick(id,url) {    	  
+    function bindClick(id,options) {    	  
     	$('#'+id).bind("plotclick", function(event,pos,item) {
     		if (item) {   // generate URL & parameters via options and arguments. 
-    			window.location=clickUrl(url, event, pos, item);
+    			window.location=clickUrl(options, event, pos, item);
     		}
     	});
     }
 
-	var clickUrl = function(url, event, pos, item) {
-		return url + "&time="+item.datapoint[0];
-	}
+	function clickUrl (options, event, pos, item) {
+		var transposed = options.bars.horizontal;
+		var xIndex = transposed?1:0;   // account for possibility that X&Y axis flip flopped?
+		var yIndex = transposed?0:1;
+		
+		var url = options.fieldIdOptions.url;
+		//  longX
+		url += "&longX="+item.datapoint[xIndex];
+		//  y
+		if(options.bars.show) {  // for horizontal bar charts we pass the label, not the numeric value.
+			var index = item.datapoint[1];
+			url+="&y="+(transposed?item.series.yaxis.ticks[index].label:item.series.xaxis.ticks[index].label); 
+		} else {
+			url+="&y="+item.datapoint[yIndex];
+		}
+		// series
+		if (item.series.id) { 
+			url += "&series="+item.series.id;			
+		} else { 
+			url+="&series="+item.seriesIndex;			
+		}			
+		return url;
+	}	
 	
 	var create = function(id) { 
 		var widget = chartWidget(id);
@@ -141,7 +161,7 @@ var chartWidgetFactory = (function() {
 			widget.setTooltip(horizLabelTooltipContent);
 		}
 		if (options.fieldIdOptions.clickable) {
-			bindClick(id,options.fieldIdOptions.url);
+			bindClick(id,options);
 		}
 		widget.update(data);
 		return widget;

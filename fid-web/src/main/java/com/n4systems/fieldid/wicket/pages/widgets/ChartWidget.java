@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
@@ -14,12 +15,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.Duration;
 
+import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -46,9 +45,12 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	protected ChartGranularity granularity;
 	protected Integer period = 30;
 
-    @SpringBean
-    private PersistenceService persistenceService;
+	private ClickThruHandler clickThruHandler = ClickThruHandler.NOP_CLICKTHRU_HANDLER;
+	private Set<OptionsUpdater> optionsUpdaters = Sets.newHashSet();
 
+	@SpringBean
+	private PersistenceService persistenceService;
+	
 	public ChartWidget(String id, IModel<WidgetDefinition<T>> model) {
 		super(id, model);
 		setOutputMarkupId(true);
@@ -157,8 +159,12 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 		};
 		LoadableDetachableModel<FlotOptions<X>> optionsModel = new LoadableDetachableModel<FlotOptions<X>>() {
             @Override
-            protected FlotOptions<X> load() {
-                return createOptions();
+            protected FlotOptions<X> load() {            	
+                FlotOptions<X> options = createOptions();
+                for (OptionsUpdater ou:optionsUpdaters) {
+                	ou.updateOptions(options);
+                }
+                return options;
             }
         };
         return new FlotChart<X>(id, model, optionsModel, getFlotChartCss());
@@ -172,12 +178,6 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	
 	protected FlotOptions<X> createOptions() {
 		LineGraphOptions<X> options = new LineGraphOptions<X>();
-        options.tooltipFormat = granularity == ChartGranularity.QUARTER ? FlotOptions.TOOLTIP_WITHOUT_DAY : FlotOptions.TOOLTIP_WITH_DAY;
-        options.fieldIdOptions.clickable = true;
-        PageParameters parameters = new PageParameters();        
-        parameters.set(ReportingResultsPage.WIDGET_DEFINITION_PARAMETER, getWidgetDefinition().getObject().getId());
-        options.fieldIdOptions.url = RequestCycle.get().getUrlRenderer().renderRelativeUrl(
-        		Url.parse(getPage().urlFor(getClickThroughPage(),parameters).toString()));          
         return options;
 	}
 
@@ -234,6 +234,20 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 				return duration.getStandardDays()>=365*2;
 		}
 		return false;
+	}
+	
+	protected Set<OptionsUpdater> add(OptionsUpdater ou) { 
+		optionsUpdaters.add(ou);
+		return optionsUpdaters;
+	}		
+	
+	protected void setClickThruHandler(ClickThruHandler ctu) {
+		// note that this object may want a chance to set/override some options so hook it up.
+		if (clickThruHandler!=null) { 
+			optionsUpdaters.remove(clickThruHandler);			
+		}
+		clickThruHandler = ctu;
+		optionsUpdaters.add(clickThruHandler);
 	}
     
 }

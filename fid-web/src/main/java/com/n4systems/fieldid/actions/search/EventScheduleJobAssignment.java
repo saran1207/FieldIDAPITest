@@ -1,17 +1,17 @@
 package com.n4systems.fieldid.actions.search;
 
-import com.n4systems.ejb.EventManager;
-import com.n4systems.fieldid.service.search.columns.EventToJobColumnsService;
-import com.n4systems.model.search.ReportConfiguration;
 import org.apache.log4j.Logger;
 
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.AssetManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.search.columns.EventToJobColumnsService;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
+import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -26,7 +26,7 @@ public class EventScheduleJobAssignment extends EventScheduleAction {
 	public EventScheduleJobAssignment(PersistenceManager persistenceManager, EventManager eventManager, AssetManager assetManager, EventScheduleManager eventScheduleManager) {
 		super(SCHEDULE_CRITERIA, EventScheduleJobAssignment.class, persistenceManager, eventManager, assetManager, eventScheduleManager);
 	}
-
+	
     @Override
     protected ReportConfiguration loadReportConfiguration() {
         return new EventToJobColumnsService().getReportConfiguration(getSecurityFilter());
@@ -47,6 +47,7 @@ public class EventScheduleJobAssignment extends EventScheduleAction {
 		return doCreateSearch();
 	}
 
+	@Override
 	public String doCreateSearch() {
 		testRequiredEntities();
 		setJobId(getContainer().getJobAndNullId());
@@ -54,6 +55,7 @@ public class EventScheduleJobAssignment extends EventScheduleAction {
 	}
 	
 
+	@Override
 	public String doSearch() {
 		testRequiredEntities();
 		setJobId(getContainer().getJobAndNullId());
@@ -91,7 +93,5 @@ public class EventScheduleJobAssignment extends EventScheduleAction {
 		jobId.setSimpleSelect("project.id").addLeftJoin("project", "project").addSimpleWhere("id", Long.valueOf(scheduleId));
 		return persistenceManager.find(jobId);
 	}
-	
-
 
 }

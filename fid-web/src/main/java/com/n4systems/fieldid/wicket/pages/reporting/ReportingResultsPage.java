@@ -15,6 +15,7 @@ import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPane
 import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCollapseContainer;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionPanel;
+import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -23,9 +24,6 @@ import com.n4systems.services.reporting.DashboardReportingService;
 
 public class ReportingResultsPage extends FieldIDFrontEndPage {
 
-    public static final String WIDGET_DEFINITION_PARAMETER = "wdf";
-	public static final String TIME_PARAMETER = "time";
-    
 	private EventReportCriteriaModel reportCriteriaModel;
     private ReportResultsPanel reportResultsPanel;
     
@@ -71,9 +69,10 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
     private EventReportCriteriaModel createReportCriteriaModel(PageParameters params) {    	
     	if(params!=null) {
     		// load config and set values...
-    		Long widgetDefinitionId = params.get(WIDGET_DEFINITION_PARAMETER).toLong();
-    		Long time = params.get(TIME_PARAMETER).toLong();
-    		EventReportCriteriaModel model = dashboardReportingService.convertWidgetDefinitionToCriteria(widgetDefinitionId,time); 
+    		Long widgetDefinitionId = params.get(SRSResultsPanel.WIDGET_DEFINITION_PARAMETER).toLong();
+    		Long x = params.get(SRSResultsPanel.X_PARAMETER).toLong();
+    		String series = params.get(SRSResultsPanel.SERIES_PARAMETER).toString();
+    		EventReportCriteriaModel model = dashboardReportingService.convertWidgetDefinitionToReportCriteria(widgetDefinitionId,x,series); 
     		return model;
     	}
     	throw new IllegalStateException("must specify configId in parameters in order to create report criteria model.");

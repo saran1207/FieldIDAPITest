@@ -13,18 +13,24 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.AssetsStatusWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.EnumUtils;
 import com.n4systems.util.chart.BarChartManager;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartDateRange;
@@ -37,6 +43,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 	@Autowired private AssetService assetService;
 	@Autowired private EventService eventService;
+	@Autowired private AssetStatusService assetStatusService;
 	
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
@@ -77,7 +84,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 		for (Status status:Status.values()) { 
 			completedEvents = eventService.getCompletedEvents(from, to, org, status, granularity);		
-			results.add(new ChartSeries<LocalDate>(status.getDisplayName(), completedEvents).withChartManager(new DateChartManager(granularity, dateRange)));
+			results.add(new ChartSeries<LocalDate>(status.getDisplayName(), status.name(), completedEvents).withChartManager(new DateChartManager(granularity, dateRange)));
 		}
 				
 		return results;
@@ -120,51 +127,98 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	// in particular, setCommonModelDefaults().
 	//
 	
-	public EventReportCriteriaModel convertWidgetDefinitionToCriteria(Long widgetDefinitionId, Long time) {
-		WidgetDefinition<?> widgetDefinition = persistenceService.findNonSecure(WidgetDefinition.class, widgetDefinitionId);
-		EventReportCriteriaModel model = new EventReportCriteriaModel();
+	public EventReportCriteriaModel convertWidgetDefinitionToReportCriteria(Long widgetDefinitionId, Long x, String series) {
+		WidgetDefinition<?> widgetDefinition = getWidgetDefinition(widgetDefinitionId);
+		LocalDate localDate = new LocalDate(x);
 		switch (widgetDefinition.getWidgetType()) { 
 			case EVENT_COMPLETENESS:
-				setModelDefaults(model, ((EventCompletenessWidgetConfiguration)widgetDefinition.getConfig()), time);
-				break;
+				return getModelDefaults(((EventCompletenessWidgetConfiguration)widgetDefinition.getConfig()), series, localDate);
 			case COMPLETED_EVENTS:
-				setModelDefaults(model, ((CompletedEventsWidgetConfiguration)widgetDefinition.getConfig()), time);
-				break;
+				return getModelDefaults(((CompletedEventsWidgetConfiguration)widgetDefinition.getConfig()), series, localDate);
 			case UPCOMING_SCHEDULED_EVENTS: 
-				setModelDefaults(model, ((UpcomingEventsWidgetConfiguration)widgetDefinition.getConfig()), time);
-				break;
+				return getModelDefaults(((UpcomingEventsWidgetConfiguration)widgetDefinition.getConfig()), series, localDate);
 			default: 
 				throw new IllegalArgumentException("Can't convert widget of type " + widgetDefinition.getWidgetType() + " into report criteria");
 		}
-		// from, to. type of data.   i.e. assets identified, events failed, etc...
+	}
+
+	private WidgetDefinition<?> getWidgetDefinition(Long widgetDefinitionId) {
+		return persistenceService.findNonSecure(WidgetDefinition.class, widgetDefinitionId);
+	}
+
+	private EventReportCriteriaModel getModelDefaults(UpcomingEventsWidgetConfiguration config, String series, LocalDate localDate) {
+		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getDateRange(), new Period().withDays(config.getPeriod()), localDate);
 		return model;
 	}
 
-	private void setModelDefaults(EventReportCriteriaModel model, UpcomingEventsWidgetConfiguration config, Long time) {		
-		setCommonModelDefaults(model, config.getDateRange(), new Period().withDays(config.getPeriod()), time);
+	private EventReportCriteriaModel getModelDefaults(CompletedEventsWidgetConfiguration config, String series, LocalDate localDate) {
+		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getDateRange(), config.getGranularity().getPeriod(), localDate);
+		model.setResult(EnumUtils.valueOf(Status.class, series));		
+		return model;
 	}
 
-	private void setModelDefaults(EventReportCriteriaModel model, CompletedEventsWidgetConfiguration config, Long time) {		
-		setCommonModelDefaults(model, config.getDateRange(), config.getGranularity().getPeriod(), time);
+	private EventReportCriteriaModel getModelDefaults(EventCompletenessWidgetConfiguration config, String series, LocalDate localDate) {
+		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getDateRange(), config.getGranularity().getPeriod(), localDate);
+		model.setOwner(config.getOrg());
+		return model;
 	}
 
-	private void setModelDefaults(EventReportCriteriaModel model, EventCompletenessWidgetConfiguration config, Long time) {
-		setCommonModelDefaults(model, config.getDateRange(), config.getGranularity().getPeriod(), time);
-	}
-
-	private void setCommonModelDefaults(EventReportCriteriaModel model, ChartDateRange chartDateRange, Period period, Long time) {
-        if (!model.isReportAlreadyRun()) {
-            ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
-            model.setColumnGroups(reportConfiguration.getColumnGroups());
-            model.setSortColumn(reportConfiguration.getSortColumn());
-            model.setSortDirection(reportConfiguration.getSortDirection());
-            model.setReportAlreadyRun(true);
-        }
+	private EventReportCriteriaModel getDefaultReportCriteriaModel(BaseOrg org, ChartDateRange chartDateRange, Period period, LocalDate localDate) {
+		EventReportCriteriaModel model = new EventReportCriteriaModel();
+        ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
+        model.setColumnGroups(reportConfiguration.getColumnGroups());
+        model.setSortColumn(reportConfiguration.getSortColumn());
+        model.setSortDirection(reportConfiguration.getSortDirection());
+        model.setReportAlreadyRun(true);
+        
         if (period!=null) { 
-        	LocalDate from = new LocalDate(time);
-        	LocalDate to = from.plus(period.minusDays(1));  // subtract one since this will yield non-inclusive date.   i.e. we want Jan1-Jan7 NOT Jan1-Jan8 when searching for a week.
+        	LocalDate from = localDate;
+        	LocalDate to = from.plus(period).minusDays(1);  // recall...it's inclusive so need to subtract one.
         	model.setDateRange(new DateRange(from,to));
-        }		
-	}    	
+        }
+        return model;
+	}
+
+	public AssetSearchCriteriaModel convertWidgetDefinitionToAssetCriteria(Long widgetDefinitionId, Long x, String y, String series) {
+		WidgetDefinition<?> widgetDefinition = getWidgetDefinition(widgetDefinitionId);		
+		switch (widgetDefinition.getWidgetType()) { 
+			case ASSETS_IDENTIFIED:
+				return getModelDefaults(((AssetsIdentifiedWidgetConfiguration)widgetDefinition.getConfig()), new LocalDate(x));
+			case ASSETS_STATUS:
+				return getModelDefaults(((AssetsStatusWidgetConfiguration)widgetDefinition.getConfig()), y);
+			default: 
+				throw new IllegalArgumentException("Can't convert widget of type " + widgetDefinition.getWidgetType() + " into report criteria");
+		}
+	}
+
+	private AssetSearchCriteriaModel getModelDefaults(
+			AssetsIdentifiedWidgetConfiguration config,
+			LocalDate localDate) {		
+		AssetSearchCriteriaModel model = getDefaultAssetSearchModel();		
+		if (config.getGranularity()!=null) { 
+			LocalDate from = localDate;
+			LocalDate to = from.plus(config.getGranularity().getPeriod().minusDays(1));
+			model.setDateRange(new DateRange(from,to));
+		}
+		return model;
+	}
+
+	private AssetSearchCriteriaModel getModelDefaults(
+			AssetsStatusWidgetConfiguration config, String assetStatus) {
+		AssetSearchCriteriaModel model = getDefaultAssetSearchModel();
+		model.setAssetStatus(assetStatusService.getStatusByName(assetStatus));
+		model.setDateRange(config.getDateRange().asDateRange());
+		return model;
+	}
+
+	private AssetSearchCriteriaModel getDefaultAssetSearchModel() {
+		AssetSearchCriteriaModel model = new AssetSearchCriteriaModel();
+		ReportConfiguration reportConfiguration = new AssetColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());		
+		model.setColumnGroups(reportConfiguration.getColumnGroups());
+        model.setSortColumn(reportConfiguration.getSortColumn());
+        model.setSortDirection(reportConfiguration.getSortDirection());
+        model.setReportAlreadyRun(true);		
+		return model;
+	}
 	
 }

@@ -1,9 +1,13 @@
 package com.n4systems.util;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtils {
 
+	private static final Pattern numericPattern = Pattern.compile("[0-9]+");
+	
 	public static <T> String concat(T[] array, String delim) {
 		StringBuilder sb = new StringBuilder();
 		
@@ -94,5 +98,13 @@ public class StringUtils {
             .append(Character.toLowerCase(str.charAt(0)))
             .append(str.substring(1))
             .toString();
+	}
+
+	public static boolean isWholeNumber(String value) {
+		if (value==null) { 
+			return false;
+		}
+		Matcher matcher = numericPattern.matcher(value.trim());
+		return matcher.matches();
 	}
 }
