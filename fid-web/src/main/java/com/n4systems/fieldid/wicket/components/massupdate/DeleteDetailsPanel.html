@@ -1,0 +1,39 @@
+<wicket:panel>
+
+	<h1><wicket:message key="label.mass_update_step3"/></h1>
+	<label><span wicket:id="deleteDetailsMessage"></span></label>
+	
+	<div class="infoSet">
+		<label><span wicket:id="eventsToDelete"></span></label>
+		<span><wicket:message key="label.eventsbeingdeleted"/></span>
+	</div>
+	
+	<div class="infoSet">
+		<label><span wicket:id="schedulesToDelete"></span></label>
+		<span><wicket:message key="label.schedulesbeingdeleted"/></span>
+	</div>
+	
+	<wicket:fragment wicket:id="detachFromMaster">
+		<div class="infoSet">
+			<label></label>
+			<span><wicket:message key="label.detachfrommaster"/></span>
+		</div>
+	</wicket:fragment>
+
+	<div class="infoSet">
+		<label><span wicket:id="subAssetsToDetach"></span></label>
+		<span><wicket:message key="label.detachsubassets"/></span>
+	</div>
+
+	<div class="infoSet">
+		<label><span wicket:id="projectToDetachFrom"></span></label>
+		<span><wicket:message key="label.assetsbeingdetachedfromproject"/></span>
+	</div>
+	
+	<form wicket:id="form">
+		<input type="submit" value="Next" />
+		<wicket:message key="label.or"/>
+		<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+	</form>
+
+</wicket:panel>

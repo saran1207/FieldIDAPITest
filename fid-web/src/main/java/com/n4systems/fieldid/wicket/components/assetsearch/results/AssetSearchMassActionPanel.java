@@ -1,9 +1,11 @@
 package com.n4systems.fieldid.wicket.components.assetsearch.results;
 
+import com.n4systems.fieldid.actions.MassUpdate;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionPanel;
+import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import org.apache.wicket.markup.html.link.Link;
@@ -30,6 +32,13 @@ public class AssetSearchMassActionPanel extends MassActionPanel {
         add(new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", criteriaModel));
         add(massEventLink = new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", criteriaModel));
         add(massUpdateLink = new AssetSearchMassActionLink("massUpdateLink", "/massUpdateAssets.action?searchId=%s", criteriaModel));
+        add(massSchedueLink = new Link("newMassUpdateLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new MassUpdatePage(criteriaModel));
+            }
+        });
+
         add(massSchedueLink = new Link("massScheduleLink") {
             @Override
             public void onClick() {

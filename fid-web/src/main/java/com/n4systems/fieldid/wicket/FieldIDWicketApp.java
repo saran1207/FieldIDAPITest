@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
+import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
@@ -60,6 +61,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("dashboard", DashboardPage.class);
         mountPage("reporting", ReportingPage.class);
         mountPage("search", AssetSearchPage.class);
+        mountPage("massupdate", MassUpdatePage.class);
 
         mountPage("returnToReport", ReturnToReportPage.class);
         mountPage("savedReport", RunSavedReportPage.class);

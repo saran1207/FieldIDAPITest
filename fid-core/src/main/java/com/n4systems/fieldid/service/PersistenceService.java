@@ -156,4 +156,12 @@ public class PersistenceService extends FieldIdService {
     	return query.getResultList();    	
     }
     
+    @Transactional
+    public Query createQuery (String queryString, Map<String,Object> params) {     	
+    	Query query = em.createQuery(queryString);
+    	for (Entry<String,Object> entry:params.entrySet()) {
+    		query.setParameter(entry.getKey(), entry.getValue());
+    	}    	    	
+    	return query;
+    }
 }

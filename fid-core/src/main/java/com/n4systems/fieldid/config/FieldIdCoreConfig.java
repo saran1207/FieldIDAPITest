@@ -37,6 +37,7 @@ import com.n4systems.fieldid.service.event.ScoreService;
 import com.n4systems.fieldid.service.export.ExportService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.mail.MailService;
+import com.n4systems.fieldid.service.massupdate.MassUpdateService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
 import com.n4systems.fieldid.service.schedule.ScheduleService;
@@ -314,5 +315,9 @@ public class FieldIdCoreConfig {
     	return new SecurityContextInitializer();
     }
     
+    @Bean
+    public MassUpdateService massUpdateService() {
+    	return new MassUpdateService();
+    }
 }
 
