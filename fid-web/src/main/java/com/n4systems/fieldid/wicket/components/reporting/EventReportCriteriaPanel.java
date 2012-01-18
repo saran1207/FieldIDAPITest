@@ -4,10 +4,12 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -47,7 +49,7 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriter
 
     @Override
     protected void populateForm(SearchCriteriaForm form) {
-    	form.add(new DateRangePicker<EventReportCriteriaModel>("dateRangePicker", form.getModel()));
+        form.add(new DateRangePicker("dateRangePicker", new PropertyModel<DateRange>(form.getModel(), "dateRange")));
 
         form.addAssetDetailsPanel("assetDetailsCriteriaPanel");
         form.addEventDetailsPanel("eventDetailsCriteriaPanel");

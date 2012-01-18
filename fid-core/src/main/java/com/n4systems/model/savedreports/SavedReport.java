@@ -20,6 +20,7 @@ import org.hibernate.annotations.IndexColumn;
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
+
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.User;

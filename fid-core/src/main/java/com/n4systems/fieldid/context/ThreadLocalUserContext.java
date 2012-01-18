@@ -2,7 +2,9 @@ package com.n4systems.fieldid.context;
 
 import com.n4systems.model.user.User;
 
-public class ThreadLocalUserContext implements UserContext {
+import java.io.Serializable;
+
+public class ThreadLocalUserContext implements UserContext, Serializable {
 
     private ThreadLocal<User> userThreadLocal = new ThreadLocal<User>();
 

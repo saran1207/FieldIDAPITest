@@ -1,7 +1,5 @@
 package com.n4systems.model.search;
 
-import java.util.Date;
-
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -11,42 +9,111 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
+import org.hibernate.annotations.IndexColumn;
 
-@SuppressWarnings("serial")
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name="saved_reports")
 public class EventReportCriteriaModel extends SearchCriteriaModel {
 
-    private Location location = new Location();
-    private AssetType assetType;
-    private AssetTypeGroup assetTypeGroup;
-    private User assignedTo;
-    private DateRange dateRange;
+    @OneToOne(mappedBy = "report")
+    private SavedReportItem savedReportItem;
 
+    private Location location = new Location();
+
+    @ManyToOne
+    @JoinColumn(name="assetType")
+    private AssetType assetType;
+
+    @ManyToOne
+    @JoinColumn(name="assetTypeGroup")
+    private AssetTypeGroup assetTypeGroup;
+
+    @ManyToOne
+    @JoinColumn(name="assignedUser")
+    private User assignedTo;
+
+    @ManyToOne
+    @JoinColumn(name="eventTypeId")
     private EventType eventType;
+
+    @Embedded
+    private DateRange dateRange = new DateRange();
+
+    @ManyToOne
+    @JoinColumn(name="eventTypeGroup")
     private EventTypeGroup eventTypeGroup;
 
+    @ManyToOne
+    @JoinColumn(name="assetStatus")
     private AssetStatus assetStatus;
 
+    @ManyToOne
+    @JoinColumn(name="eventBook")
     private EventBook eventBook;
+
+    @ManyToOne
+    @JoinColumn(name="jobId")
     private Project job;
 
+    @Column
     private String rfidNumber;
+
+    @Column
     private String identifier;
+
+    @Column
     private String referenceNumber;
 
+    @Column
     private String orderNumber;
+
+    @Column(name="purchaseOrderNumber")
     private String purchaseOrder;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="status")
     private Status result;
 
+    @ManyToOne
+    @JoinColumn(name="performedBy")
     private User performedBy;
 
+    @Column(name="includeSafetyNetwork")
     private boolean includeSafetyNetwork;
 
+    @Deprecated
+    @Transient
     private Long savedReportId;
+
+    @Deprecated
+    @Transient
     private String savedReportName;
 
+	@ElementCollection(fetch= FetchType.EAGER)
+	@IndexColumn(name="idx")
+    @JoinTable(name="saved_reports_columns", joinColumns = {@JoinColumn(name="saved_report_id")})
+    @Column(name="column_id")
+	private List<String> columns = new ArrayList<String>();
 
     public Location getLocation() {
         return location;
@@ -54,14 +121,6 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
 
     public void setLocation(Location location) {
         this.location = location;
-    }
-
-    public Date getFromDate() {
-    	return dateRange.getFromDate(); 
-    }
-
-    public Date getToDate() {
-    	return dateRange.getToDate();
     }
 
     public AssetType getAssetType() {
@@ -192,18 +251,22 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
         this.performedBy = performedBy;
     }
 
+    @Deprecated
     public Long getSavedReportId() {
         return savedReportId;
     }
 
+    @Deprecated
     public void setSavedReportId(Long savedReportId) {
         this.savedReportId = savedReportId;
     }
 
+    @Deprecated
     public String getSavedReportName() {
         return savedReportName;
     }
 
+    @Deprecated
     public void setSavedReportName(String savedReportName) {
         this.savedReportName = savedReportName;
     }
@@ -216,4 +279,19 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
 		return dateRange;
 	}
 
+    public List<String> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<String> columns) {
+        this.columns = columns;
+    }
+
+    public SavedReportItem getSavedReportItem() {
+        return savedReportItem;
+    }
+
+    public void setSavedReportItem(SavedReportItem savedReportItem) {
+        this.savedReportItem = savedReportItem;
+    }
 }

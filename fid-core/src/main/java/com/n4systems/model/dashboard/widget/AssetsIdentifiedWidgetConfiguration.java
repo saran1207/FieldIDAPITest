@@ -14,7 +14,7 @@ import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithDateRang
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.util.chart.ChartDateRange;
+import com.n4systems.util.chart.FloatingDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 
 @SuppressWarnings("serial")
@@ -29,7 +29,7 @@ public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration imp
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="date_range", nullable=false)	
-	private ChartDateRange dateRange = ChartDateRange.THIS_QUARTER;
+	private FloatingDateRange dateRange = FloatingDateRange.THIS_QUARTER;
 
     @Enumerated(EnumType.STRING)
     @Column(name="granularity", nullable=false)
@@ -44,12 +44,12 @@ public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration imp
 		this.org = org;
 	}
 
-	public void setDateRange(ChartDateRange range) {
+	public void setDateRange(FloatingDateRange range) {
 		this.dateRange = range;
 	}
 
 	@Override
-	public ChartDateRange getDateRange() {
+	public FloatingDateRange getDateRange() {
 		return dateRange;
 	}
 

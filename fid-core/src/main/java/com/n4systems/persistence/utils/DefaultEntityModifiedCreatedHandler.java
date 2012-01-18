@@ -20,7 +20,7 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
     private Clock clock;
 
     public DefaultEntityModifiedCreatedHandler() {
-        this(ThreadLocalUserContext.getInstance(), new SystemClock());
+        this(null, new SystemClock());
     }
 
     public DefaultEntityModifiedCreatedHandler(UserContext userContext, Clock clock) {
@@ -57,7 +57,7 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
     }
 
     private User lookupCurrentUser(AbstractEntity entity) {
-        User user = userContext.getCurrentUser();
+        User user = getUserContext().getCurrentUser();
         if (user == null && shouldWarnOnNullUser(entity)) {
             logger.warn("Entity persisted without current user set in context", new Exception());
         }
@@ -75,6 +75,13 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
 
     private boolean shouldStoreUserOnEntity(AbstractEntity entity) {
         return !(entity instanceof User);
+    }
+
+    private UserContext getUserContext() {
+        if (userContext == null) {
+            return ThreadLocalUserContext.getInstance();
+        }
+        return userContext;
     }
 
 }

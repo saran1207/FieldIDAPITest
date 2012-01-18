@@ -16,9 +16,10 @@ public class RunSavedReportPage extends FieldIDFrontEndPage {
         Long id = params.get("id").toLong();
 
         SavedReport savedReport = savedReportService.getSavedReport(id);
-        EventReportCriteriaModel criteriaModel = savedReportService.convertToCriteria(id);
+        EventReportCriteriaModel criteriaModel = savedReportService.getConvertedReport(id);
+
         criteriaModel.setSavedReportId(id);
-        criteriaModel.setSavedReportName(savedReport.getName());
+//        criteriaModel.setSavedReportName(criteriaModel.getName());
 
         setResponsePage(new ReportingResultsPage(criteriaModel));
     }

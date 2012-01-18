@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.util.chart.ChartDateRange;
+import com.n4systems.util.chart.FloatingDateRange;
 
 @SuppressWarnings("serial")
 @Entity
@@ -26,7 +26,7 @@ public class AssetsStatusWidgetConfiguration extends WidgetConfiguration {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="date_range", nullable=false)	
-	private ChartDateRange dateRange = ChartDateRange.FOREVER;
+	private FloatingDateRange dateRange = FloatingDateRange.FOREVER;
 	
 	@AllowSafetyNetworkAccess
 	public BaseOrg getOrg() {
@@ -37,11 +37,11 @@ public class AssetsStatusWidgetConfiguration extends WidgetConfiguration {
 		this.org = org;
 	}
 
-	public void setDateRange(ChartDateRange range) {
+	public void setDateRange(FloatingDateRange range) {
 		this.dateRange = range;
 	}
 
-	public ChartDateRange getDateRange() {
+	public FloatingDateRange getDateRange() {
 		return dateRange;
 	}
 

@@ -26,7 +26,7 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     private AssetTypeGroup assetTypeGroup;
     private AssetType assetType;
 
-    private DateRange dateRange;
+    private DateRange dateRange = new DateRange();
 
     private User assignedTo;
     
@@ -113,11 +113,11 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     }
 
     public Date getIdentifiedFromDate() { 
-    	return dateRange.getFromDate();
+    	return dateRange.calculateFromDate();
     }
 
     public Date getIdentifiedToDate() { 
-		return dateRange.getToDate();
+		return dateRange.calculateToDate();
 	}
 
     public User getAssignedTo() {

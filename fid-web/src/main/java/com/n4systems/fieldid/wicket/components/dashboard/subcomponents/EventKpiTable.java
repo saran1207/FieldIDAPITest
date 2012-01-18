@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.dashboard.subcomponents;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.util.chart.FloatingDateRange;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -14,7 +15,6 @@ import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.reporting.EventKpiRecord;
-import com.n4systems.util.chart.ChartDateRange;
 
 public class EventKpiTable extends Panel {
 	
@@ -58,7 +58,7 @@ public class EventKpiTable extends Panel {
 		return eventKpis;
 	}
 	
-	protected ChartDateRange getDateRange() {
+	protected FloatingDateRange getDateRange() {
 		return config.getDateRange();
 	}
 

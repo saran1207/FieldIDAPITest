@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
+import com.n4systems.util.chart.FloatingDateRange;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -30,7 +31,6 @@ import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranular
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
 import com.n4systems.util.EnumUtils;
 import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 import com.n4systems.util.chart.LineGraphOptions;
@@ -219,8 +219,8 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 		return g;		
 	}
 
-	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity, ChartDateRange chartDateRange) {		
-		Duration duration = chartDateRange.getDuration();
+	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity, FloatingDateRange floatingDateRange) {
+		Duration duration = floatingDateRange.getDuration();
 		switch (buttonGranularity) {
 			case DAY:
 				return duration.getStandardDays()<100; 

@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.chart.ChartDateRange;
+import com.n4systems.util.chart.FloatingDateRange;
 
 @SuppressWarnings("serial")
 @Entity
@@ -33,7 +33,7 @@ public class EventKPIWidgetConfiguration extends WidgetConfiguration {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="date_range", nullable=false)	    
-	private ChartDateRange dateRange = ChartDateRange.THIS_WEEK;
+	private FloatingDateRange dateRange = FloatingDateRange.THIS_WEEK;
     
     public List<BaseOrg> getOrgs() {
         return orgs;
@@ -51,11 +51,11 @@ public class EventKPIWidgetConfiguration extends WidgetConfiguration {
         return copy;
     }
 
-	public void setDateRange(ChartDateRange dateRange) {
+	public void setDateRange(FloatingDateRange dateRange) {
 		this.dateRange = dateRange;
 	}
 
-	public ChartDateRange getDateRange() {
+	public FloatingDateRange getDateRange() {
 		return dateRange;
 	}
 

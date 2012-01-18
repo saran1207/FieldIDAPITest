@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
+import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -10,26 +11,15 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
-import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
-import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
-import com.n4systems.model.savedreports.SavedReport;
-import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteriaModel;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.user.User;
-import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.util.persistence.QueryBuilder;
 
 public class SaveReportPage extends FieldIDFrontEndPage {
 
     @SpringBean
-    private PersistenceManager persistenceManager;
+    private SavedReportService savedReportService;
 
     private EventReportCriteriaModel criteriaModel;
     private WebPage backToPage;
@@ -41,8 +31,8 @@ public class SaveReportPage extends FieldIDFrontEndPage {
         this.criteriaModel = criteriaModel;
         this.backToPage = backToPage;
         this.overwrite = overwrite;
-        if (overwrite) {
-            name = criteriaModel.getSavedReportName();
+        if (overwrite && criteriaModel.getSavedReportItem() != null) {
+            name = criteriaModel.getSavedReportItem().getName();
         }
         add(new SaveReportForm("saveReportForm"));
     }
@@ -78,53 +68,7 @@ public class SaveReportPage extends FieldIDFrontEndPage {
     }
 
     protected void saveReport(String name) {
-        SavedReport savedReport;
-
-        boolean updating = overwrite && criteriaModel.getSavedReportId() != null;
-
-        if (updating) {
-            QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, getSecurityFilter());
-            query.addSimpleWhere("id", criteriaModel.getSavedReportId());
-
-            savedReport = persistenceManager.find(query);
-        } else {
-            savedReport = new SavedReport();
-        }
-
-        ReportFormatConverter reportFormatConverter = new ReportFormatConverter(new SerializableSecurityGuard(FieldIDSession.get().getTenant()));
-        EventSearchContainer searchContainer = reportFormatConverter.convertCriteria(criteriaModel);
-        SecurityFilter securityFilter = getSecurityFilter();
-        SavedReportSearchCriteriaConverter savedReportSearchCriteriaConverter = new SavedReportSearchCriteriaConverter(new LoaderFactory(securityFilter), securityFilter, getSecurityGuard());
-
-        savedReportSearchCriteriaConverter.convertInto(searchContainer, savedReport);
-
-        User user = fetchUser(FieldIDSession.get().getSessionUser().getId());
-
-        savedReport.setName(name);
-        savedReport.setTenant(FieldIDSession.get().getTenant());
-        savedReport.setUser(user);
-
-        ColumnMappingView sortColumn = criteriaModel.getSortColumn();
-
-        savedReport.setSortColumnId(sortColumn.getDbColumnId());
-        savedReport.setSortColumn(sortColumn.getSortExpression());
-        savedReport.setSortDirection(criteriaModel.getSortDirection().getDisplayName());
-
-        if (updating) {
-            persistenceManager.update(savedReport, user);
-        } else {
-            persistenceManager.save(savedReport, user);
-        }
-
-        criteriaModel.setSavedReportId(savedReport.getId());
-        criteriaModel.setSavedReportName(savedReport.getName());
-    }
-
-    protected User fetchUser(Long userId) {
-        if (userId == null) {
-            return null;
-        }
-        return persistenceManager.find(User.class, userId);
+        savedReportService.saveReport(criteriaModel, overwrite, name);
     }
 
 }

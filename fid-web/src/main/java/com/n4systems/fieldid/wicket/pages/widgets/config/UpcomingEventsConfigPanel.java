@@ -4,7 +4,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 
 import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
-import com.n4systems.util.chart.ChartDateRange;
+import com.n4systems.util.chart.FloatingDateRange;
 
 @SuppressWarnings("serial")
 public class UpcomingEventsConfigPanel extends OrgDateWidgetConfigPanel<UpcomingEventsWidgetConfiguration> {
@@ -14,7 +14,7 @@ public class UpcomingEventsConfigPanel extends OrgDateWidgetConfigPanel<Upcoming
     }
 
     @Override
-    protected DropDownChoice<ChartDateRange> createDateRangeSelect() {
+    protected DropDownChoice<FloatingDateRange> createDateRangeSelect() {
     	return null;
     }    
 }

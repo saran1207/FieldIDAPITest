@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.util.chart.FloatingDateRange;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,6 @@ import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.EnumUtils;
 import com.n4systems.util.chart.BarChartManager;
 import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.DateChartManager;
@@ -47,7 +47,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-    public List<ChartSeries<LocalDate>> getAssetsIdentified(ChartDateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
+    public List<ChartSeries<LocalDate>> getAssetsIdentified(FloatingDateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
 		Preconditions.checkArgument(dateRange!=null);
 		List<AssetsIdentifiedReportRecord> results = assetService.getAssetsIdentified(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), owner);
 		ChartSeries<LocalDate> chartSeries = new ChartSeries<LocalDate>(results).withChartManager(new DateChartManager(granularity, dateRange));		
@@ -60,12 +60,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Preconditions.checkArgument(period!=null);		
 		List<UpcomingScheduledEventsRecord> results = eventService.getUpcomingScheduledEvents(period, owner);
 
-		ChartDateRange dateRange = ChartDateRange.forDays(period);
+		FloatingDateRange dateRange = FloatingDateRange.forDays(period);
 		
 		return Lists.newArrayList(new ChartSeries<LocalDate>(results).withChartManager(new DateChartManager(ChartGranularity.DAY, dateRange)));
 	}
 	
-	public List<ChartSeries<String>> getAssetsStatus(ChartDateRange dateRange, BaseOrg org) {
+	public List<ChartSeries<String>> getAssetsStatus(FloatingDateRange dateRange, BaseOrg org) {
 		Preconditions.checkArgument(dateRange!=null);	
 		
 		List<AssetsStatusReportRecord> results = assetService.getAssetsStatus(dateRange.getFromDate(), dateRange.getToDate(), org);		
@@ -73,7 +73,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         return new ChartData<String>(chartSeries);
 	}		
 	
-	public List<ChartSeries<LocalDate>> getCompletedEvents(ChartDateRange dateRange, ChartGranularity granularity, BaseOrg org) {
+	public List<ChartSeries<LocalDate>> getCompletedEvents(FloatingDateRange dateRange, ChartGranularity granularity, BaseOrg org) {
 		Preconditions.checkArgument(dateRange!=null);				
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
 
@@ -90,12 +90,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return results;
 	}
 	
-	public EventKpiRecord getEventKpi(BaseOrg owner, ChartDateRange dateRange) {
+	public EventKpiRecord getEventKpi(BaseOrg owner, FloatingDateRange dateRange) {
 		Preconditions.checkArgument(dateRange!=null);				
 		return eventService.getEventKpi(dateRange.getFromDate(), dateRange.getToDate(), owner);
 	}
 
-	public List<ChartSeries<LocalDate>> getEventCompletenessEvents(ChartGranularity granularity, ChartDateRange dateRange, BaseOrg org) {
+	public List<ChartSeries<LocalDate>> getEventCompletenessEvents(ChartGranularity granularity, FloatingDateRange dateRange, BaseOrg org) {
 		Preconditions.checkArgument(dateRange!=null);		
 
 		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, getFrom(granularity,dateRange), getTo(granularity,dateRange),  org);
@@ -110,12 +110,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return results;		
 	}
 
-	private Date getTo(ChartGranularity granularity, ChartDateRange dateRange) {		
+	private Date getTo(ChartGranularity granularity, FloatingDateRange dateRange) {
 		LocalDate to = dateRange.getTo();		
 		return (to==null) ? null : granularity.roundUp(to).toDate();
 	}
 
-	private Date getFrom(ChartGranularity granularity, ChartDateRange dateRange) {
+	private Date getFrom(ChartGranularity granularity, FloatingDateRange dateRange) {
 		LocalDate from = dateRange.getFrom();		
 		return (from==null) ? null : granularity.roundDown(from).toDate();
 	}		
@@ -163,7 +163,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return model;
 	}
 
-	private EventReportCriteriaModel getDefaultReportCriteriaModel(BaseOrg org, ChartDateRange chartDateRange, Period period, LocalDate localDate) {
+	private EventReportCriteriaModel getDefaultReportCriteriaModel(BaseOrg org, FloatingDateRange chartDateRange, Period period, LocalDate localDate) {
 		EventReportCriteriaModel model = new EventReportCriteriaModel();
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
         model.setColumnGroups(reportConfiguration.getColumnGroups());

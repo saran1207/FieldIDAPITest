@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
@@ -23,6 +25,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
+import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
@@ -35,6 +38,7 @@ import com.n4systems.security.UserType;
 import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.RandomString;
 import com.n4systems.util.timezone.CountryList;
+import org.hibernate.annotations.IndexColumn;
 
 @Entity
 @Table(name = "users")
@@ -62,7 +66,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private boolean locked;
 	private Date lockedUntil;
 	private Date passwordChanged;
-	
+
 	@Column(nullable = false, unique = true)
 	private String authKey;
 	
@@ -75,6 +79,11 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
 	private UserType userType=UserType.ALL;
+
+    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinTable(name="users_saved_items", joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name="item_id"))
+    @IndexColumn(name="orderIdx")
+    private List<SavedItem> savedItems;
 	
 	private boolean registered = false;
 	
@@ -465,6 +474,12 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	public void setAuthKey(String authKey) {
 		this.authKey = authKey;
 	}
-	
-	
+
+    public List<SavedItem> getSavedItems() {
+        return savedItems;
+    }
+
+    public void setSavedItems(List<SavedItem> savedItems) {
+        this.savedItems = savedItems;
+    }
 }

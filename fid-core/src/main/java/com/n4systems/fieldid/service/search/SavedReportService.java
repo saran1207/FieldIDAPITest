@@ -1,28 +1,16 @@
 package com.n4systems.fieldid.service.search;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.Project;
-import com.n4systems.model.Status;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.SystemColumnMapping;
-import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.saveditem.SavedItem;
+import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.search.ColumnMappingConverter;
 import com.n4systems.model.search.ColumnMappingGroupView;
@@ -31,7 +19,11 @@ import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.search.SortDirection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SavedReportService extends FieldIdPersistenceService {
 
@@ -45,8 +37,8 @@ public class SavedReportService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public List<SavedReport> listSavedReports() {
-        QueryBuilder<SavedReport> query = createUserSecurityBuilder(SavedReport.class);
+    public List<SavedItem> listSavedItems() {
+        QueryBuilder<SavedItem> query = createUserSecurityBuilder(SavedItem.class);
         
         query.addOrder("name");
 
@@ -54,77 +46,86 @@ public class SavedReportService extends FieldIdPersistenceService {
     }
 
     @Transactional(readOnly = true)
-    public EventReportCriteriaModel convertToCriteria(Long savedReportId) {
-        SavedReport savedReport = getSavedReport(savedReportId);
-
-        EventReportCriteriaModel criteriaModel = new EventReportCriteriaModel();
-        criteriaModel.setReportAlreadyRun(true);
+    public EventReportCriteriaModel getConvertedReport(Long itemId) {
+        final SavedReportItem savedItem = (SavedReportItem) persistenceService.find(SavedItem.class, itemId);
+        final EventReportCriteriaModel report = savedItem.getReport();
+        report.setReportAlreadyRun(true);
 
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
 
-		criteriaModel.setSortDirection(SortDirection.ASC.getDisplayName().equals(savedReport.getSortDirection()) ? SortDirection.ASC : SortDirection.DESC);
+        AssetTypeGroup assetTypeGroup = report.getAssetTypeGroup();
+        EventTypeGroup eventTypeGroup = report.getEventTypeGroup();
+        List<ColumnMappingGroupView> dynamicAssetColumns = dynamicColumnsService.getDynamicAssetColumnsForReporting(report.getAssetType(), assetTypeService.getAssetTypes(assetTypeGroup == null ? null : assetTypeGroup.getId()));
+        List<ColumnMappingGroupView> dynamicEventColumns = dynamicColumnsService.getDynamicEventColumnsForReporting(report.getEventType(), eventTypeService.getEventTypes(assetTypeGroup == null ? null : eventTypeGroup.getId()));
 
-        if (savedReport.getSortColumnId() != null) {
-            ColumnMapping mapping = persistenceService.findUnsecured(SystemColumnMapping.class, savedReport.getSortColumnId());
+        report.setDynamicAssetColumnGroups(dynamicAssetColumns);
+        report.setDynamicEventColumnGroups(dynamicEventColumns);
+        report.setColumnGroups(reportConfiguration.getColumnGroups());
+
+        enableSelectedColumns(report, report.getColumns());
+
+        if (report.getSortColumnId() != null) {
+            ColumnMapping mapping = persistenceService.findUnsecured(SystemColumnMapping.class, report.getSortColumnId());
             ColumnMappingView mappingView = new ColumnMappingConverter().convert(mapping);
-            criteriaModel.setSortColumn(mappingView);
+            report.setSortColumn(mappingView);
         }
 
-		criteriaModel.setPurchaseOrder(savedReport.getStringCriteria(SavedReport.PURCHASE_ORDER_NUMBER));
-		criteriaModel.setOrderNumber(savedReport.getStringCriteria(SavedReport.ORDER_NUMBER));
-		criteriaModel.setRfidNumber(savedReport.getStringCriteria(SavedReport.RFID_NUMBER));
-		criteriaModel.setIdentifier(savedReport.getStringCriteria(SavedReport.SERIAL_NUMBER));
-		criteriaModel.setReferenceNumber(savedReport.getStringCriteria(SavedReport.REFERENCE_NUMBER));
-
-		criteriaModel.getLocation().setFreeformLocation(savedReport.getStringCriteria(SavedReport.LOCATION));
-		criteriaModel.getLocation().setPredefinedLocation(findEntity(PredefinedLocation.class, savedReport.getLongCriteria(SavedReport.PREDEFINED_LOCATION_ID)));
-
-		criteriaModel.setEventBook(findEntity(EventBook.class, savedReport.getLongCriteria(SavedReport.EVENT_BOOK)));
-		criteriaModel.setEventTypeGroup(findEntity(EventTypeGroup.class, savedReport.getLongCriteria(SavedReport.EVENT_TYPE_GROUP)));
-		criteriaModel.setPerformedBy(findEntity(User.class, savedReport.getLongCriteria(SavedReport.PERFORMED_BY)));
-		criteriaModel.setAssignedTo(findEntity(User.class, savedReport.getLongCriteria(SavedReport.ASSIGNED_USER)));
-		criteriaModel.setAssetStatus(findEntity(AssetStatus.class, savedReport.getLongCriteria(SavedReport.ASSET_STATUS)));
-        String statusString = savedReport.getStringCriteria(SavedReport.EVENT_STATUS);
-        criteriaModel.setResult(statusString == null ? null : Status.valueOf(statusString));
-        criteriaModel.setEventType(findEntity(EventType.class, savedReport.getLongCriteria(SavedReport.EVENT_TYPE)));
-		criteriaModel.setAssetType(findEntity(AssetType.class, savedReport.getLongCriteria(SavedReport.ASSET_TYPE)));
-		criteriaModel.setAssetTypeGroup(findEntity(AssetTypeGroup.class, savedReport.getLongCriteria(SavedReport.ASSET_TYPE_GROUP)));
-		criteriaModel.setJob(findEntity(Project.class, savedReport.getLongCriteria(SavedReport.JOB_ID)));
-
-//		criteriaModel.setFromDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.FROM_DATE)));
-//		criteriaModel.setToDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.TO_DATE)));
-//	FIXME WEB-2612	criteriaModel.setDateRange(EnumUtils.valueOf(ChartDateRange.class, savedReport.getCriteria().get(SavedReport.DATE_RANGE)));
-// DD this is blocked until remodeling of saved reports is done...will pick up later. 		
-
-		criteriaModel.setSavedReportId(savedReport.getId());
-		if (savedReport.getLongCriteria(SavedReport.OWNER_ID) != null) {
-			criteriaModel.setOwner(persistenceService.find(BaseOrg.class, savedReport.getLongCriteria(SavedReport.OWNER_ID)));
-		}
-
-        AssetTypeGroup assetTypeGroup = criteriaModel.getAssetTypeGroup();
-        List<ColumnMappingGroupView> dynamicAssetColumns = dynamicColumnsService.getDynamicAssetColumnsForReporting(criteriaModel.getAssetType(), assetTypeService.getAssetTypes(assetTypeGroup == null ? null : assetTypeGroup.getId()));
-        List<ColumnMappingGroupView> dynamicEventColumns = dynamicColumnsService.getDynamicEventColumnsForReporting(criteriaModel.getEventType(), eventTypeService.getEventTypes(assetTypeGroup == null ? null : assetTypeGroup.getId()));
-
-        criteriaModel.setDynamicAssetColumnGroups(dynamicAssetColumns);
-        criteriaModel.setDynamicEventColumnGroups(dynamicEventColumns);
-        criteriaModel.setColumnGroups(reportConfiguration.getColumnGroups());
-
-        enableSelectedColumns(criteriaModel, savedReport);
-
-		return criteriaModel;
+        return report;
     }
 
-    private void enableSelectedColumns(EventReportCriteriaModel criteriaModel, SavedReport savedReport) {
-        List<String> columns = savedReport.getColumns();
+    @Transactional
+    public void saveReport(EventReportCriteriaModel criteriaModel, boolean overwrite, String name) {
+        boolean updating = overwrite && criteriaModel.getId() != null;
+        final User user = getCurrentUser();
+
+        SavedReportItem savedReportItem;
+
+        if (updating) {
+            savedReportItem = criteriaModel.getSavedReportItem();
+        } else {
+            savedReportItem = new SavedReportItem();
+        }
+
+        savedReportItem.setTenant(getCurrentTenant());
+        savedReportItem.setName(name);
+        savedReportItem.setReport(criteriaModel);
+
+        storeSelectedColumns(criteriaModel);
+
+        if (updating) {
+            persistenceService.update(savedReportItem);
+        } else {
+            criteriaModel.reset();
+            try {
+                criteriaModel = (EventReportCriteriaModel) criteriaModel.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+
+            persistenceService.save(criteriaModel);
+            savedReportItem.setReport(criteriaModel);
+            user.getSavedItems().add(savedReportItem);
+
+            persistenceService.save(user);
+        }
+
+        
+    }
+
+    // TODO: Refactor these into model objects themselves after asset search saving implemented!
+    private void enableSelectedColumns(EventReportCriteriaModel criteriaModel, List<String> columns) {
         for (ColumnMappingView columnMappingView : criteriaModel.getSortedStaticAndDynamicColumns(false)) {
             columnMappingView.setEnabled(columns.contains(columnMappingView.getId()));
         }
     }
 
-    private <T extends EntityWithTenant> T findEntity(Class<T> klass, Long id) {
-        if (id == null) {
-            return null;
+    private void storeSelectedColumns(EventReportCriteriaModel criteriaModel) {
+        List<String> selectedColumns = new ArrayList<String>();
+        for (ColumnMappingView columnMappingView : criteriaModel.getSortedStaticAndDynamicColumns(true)) {
+            selectedColumns.add(columnMappingView.getId());
         }
-        return persistenceService.find(klass, id);
-    }    
+        criteriaModel.setColumns(selectedColumns);
+    }
+
 }
+

@@ -32,7 +32,9 @@ public class ReportService extends SearchService<EventReportCriteriaModel, Event
         addSimpleTerm(searchTerms, "performedBy.id", getId(criteriaModel.getPerformedBy()));
         addSimpleTerm(searchTerms, "schedule.project.id", getId(criteriaModel.getJob()));
         addSimpleTerm(searchTerms, "status", criteriaModel.getResult());
-        addDateRangeTerm(searchTerms, "date", criteriaModel.getFromDate(), criteriaModel.getToDate());
+        if (criteriaModel.getDateRange() != null) {
+            addDateRangeTerm(searchTerms, "date", criteriaModel.getDateRange().calculateFromDate(), criteriaModel.getDateRange().calculateToDate());
+        }
 
         if(criteriaModel.getEventBook() != null && criteriaModel.getEventBook().getId() == 0) {
             addNullTerm(searchTerms, "book.id");

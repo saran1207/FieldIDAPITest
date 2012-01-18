@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.widgets.config;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.util.chart.FloatingDateRange;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -20,7 +21,6 @@ import org.apache.wicket.model.PropertyModel;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.chart.ChartDateRange;
 
 public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfiguration> {
 
@@ -30,7 +30,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
 
     private OrgPicker orgPicker;
     private AjaxButton addOrgButton;
-	private DropDownChoice<ChartDateRange> dateRange;
+	private DropDownChoice<FloatingDateRange> dateRange;
 
     public EventKPIConfigPanel(String id, final IModel<EventKPIWidgetConfiguration> configModel) {
         super(id, configModel);
@@ -85,17 +85,17 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
         
     }
 
-	protected DropDownChoice<ChartDateRange> createDateRangeSelect() {
-        IChoiceRenderer<ChartDateRange> renderer = new IChoiceRenderer<ChartDateRange>() {       
-			@Override public Object getDisplayValue(ChartDateRange object) {
+	protected DropDownChoice<FloatingDateRange> createDateRangeSelect() {
+        IChoiceRenderer<FloatingDateRange> renderer = new IChoiceRenderer<FloatingDateRange>() {
+			@Override public Object getDisplayValue(FloatingDateRange object) {
 				return object.getDisplayName();
 			}
-			@Override public String getIdValue(ChartDateRange object, int index) {	
+			@Override public String getIdValue(FloatingDateRange object, int index) {
 				return object.name();
 			}
 		};		
 		
-		DropDownChoice<ChartDateRange> d = new DropDownChoice<ChartDateRange>("dateRangeSelect", new PropertyModel<ChartDateRange>(configModel,"dateRange"), Arrays.asList(ChartDateRange.chartDateRanges()), renderer);		
+		DropDownChoice<FloatingDateRange> d = new DropDownChoice<FloatingDateRange>("dateRangeSelect", new PropertyModel<FloatingDateRange>(configModel,"dateRange"), Arrays.asList(FloatingDateRange.chartDateRanges()), renderer);
 		d.setNullValid(false);
 		return d;
 	}	        

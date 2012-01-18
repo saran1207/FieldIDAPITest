@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.widgets.config;
 
 import java.util.Arrays;
 
+import com.n4systems.util.chart.FloatingDateRange;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -10,14 +11,13 @@ import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.utils.EnumDropDownChoiceRenderer;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.chart.ChartDateRange;
 
 @SuppressWarnings("serial")
 public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> extends WidgetConfigPanel<T> {
 
     private IModel<T> configModel;
     protected OrgPicker orgPicker;
-    protected DropDownChoice<ChartDateRange> dateRangeSelect;
+    protected DropDownChoice<FloatingDateRange> dateRangeSelect;
     
     public OrgDateWidgetConfigPanel(String id, final IModel<T> configModel) {
         super(id, configModel);
@@ -32,8 +32,8 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
         return picker;
 	}
 
-	protected DropDownChoice<ChartDateRange> createDateRangeSelect() {	
-		DropDownChoice<ChartDateRange> d = new DropDownChoice<ChartDateRange>("dateRangeSelect", new PropertyModel<ChartDateRange>(configModel,"dateRange"), Arrays.asList(ChartDateRange.chartDateRanges()), new EnumDropDownChoiceRenderer());		
+	protected DropDownChoice<FloatingDateRange> createDateRangeSelect() {
+		DropDownChoice<FloatingDateRange> d = new DropDownChoice<FloatingDateRange>("dateRangeSelect", new PropertyModel<FloatingDateRange>(configModel,"dateRange"), Arrays.asList(FloatingDateRange.chartDateRanges()), new EnumDropDownChoiceRenderer());
 		d.setNullValid(false);
 		return d;
 	}	

@@ -14,7 +14,7 @@ import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartDateRange;
+import com.n4systems.util.chart.FloatingDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 
@@ -56,7 +56,7 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
 	}	
 
 	@Override
-	public ChartDateRange getChartDateRange() {
+	public FloatingDateRange getChartDateRange() {
 		CompletedEventsWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return config.getDateRange();
 	}

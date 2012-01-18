@@ -8,9 +8,9 @@ import com.n4systems.util.time.DateUtil;
 public class DateChartManager extends SimpleChartManager<LocalDate> {
 
 	private transient ChartGranularity granularity;
-	private transient ChartDateRange dateRange;
+	private transient FloatingDateRange dateRange;
 	
-	public DateChartManager(ChartGranularity granularity, ChartDateRange range) {
+	public DateChartManager(ChartGranularity granularity, FloatingDateRange range) {
 		this.granularity = granularity;
 		this.dateRange = range;
 	}
@@ -46,7 +46,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 
 	@Override
 	public ChartSeries<LocalDate> normalize(ChartSeries<LocalDate> series) {
-		LocalDate endDate = ChartDateRange.FOREVER.equals(dateRange) ? series.getLastX() : granularity.roundUp(dateRange.getTo());
+		LocalDate endDate = FloatingDateRange.FOREVER.equals(dateRange) ? series.getLastX() : granularity.roundUp(dateRange.getTo());
 		LocalDate date = granularity.roundDown(dateRange.getEarliest());
 		
 		while (endDate!=null && date.isBefore(endDate)) { 
@@ -117,7 +117,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 		return granularity;
 	}
 	
-	public ChartDateRange getDateRange() { 
+	public FloatingDateRange getDateRange() {
 		return dateRange;
 	}
 	

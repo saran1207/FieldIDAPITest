@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.assetsearch;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -17,6 +18,7 @@ import com.n4systems.fieldid.wicket.components.search.SRSCriteriaPanel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public class AssetSearchCriteriaPanel extends SRSCriteriaPanel<AssetSearchCriter
         form.addAssetDetailsPanel("assetDetailsCriteriaPanel");
         form.add(new OwnershipCriteriaPanel("ownershipCriteriaPanel", form.getModel()));
         form.add(new OrderDetailsCriteriaPanel("orderDetailsCriteriaPanel"));        
-        form.add(new DateRangePicker<AssetSearchCriteriaModel>("dateRangePicker", form.getModel()));
+        form.add(new DateRangePicker("dateRangePicker", new PropertyModel<DateRange>(form.getModel(), "dateRange")));
     }
 
     @Override

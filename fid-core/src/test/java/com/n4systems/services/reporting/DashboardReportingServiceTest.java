@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.util.chart.FloatingDateRange;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.LocalDate;
@@ -23,7 +24,6 @@ import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
-import com.n4systems.util.chart.ChartDateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 
@@ -108,7 +108,7 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 	
 	@Test 
 	public void test_getAssetsStatus() { 		
-		ChartDateRange dateRange = ChartDateRange.FOREVER;
+		FloatingDateRange dateRange = FloatingDateRange.FOREVER;
 		BaseOrg owner = OrgBuilder.aCustomerOrg().build();		
 		List<AssetsStatusReportRecord> assetStatuses = createAssetStatusResults();
 		expect(assetService.getAssetsStatus(dateRange.getFromDate(), dateRange.getToDate(), owner)).andReturn(assetStatuses);
@@ -125,7 +125,7 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 	
 	@Test 
 	public void test_getAssetsStatusWithOther() { 		
-		ChartDateRange dateRange = ChartDateRange.FOREVER;
+		FloatingDateRange dateRange = FloatingDateRange.FOREVER;
 		BaseOrg owner = OrgBuilder.aCustomerOrg().build();		
 		List<AssetsStatusReportRecord> assetStatuses = createAssetStatusResults();
 		int sizeOfBigData = assetStatuses.size();
@@ -154,7 +154,7 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 		BaseOrg owner = OrgBuilder.aCustomerOrg().build();
 		ChartGranularity granularity = ChartGranularity.WEEK;
 		List<AssetsIdentifiedReportRecord> assets = createAssetsIdentifiedResults(granularity);
-		ChartDateRange dateRange = ChartDateRange.THIS_YEAR;
+		FloatingDateRange dateRange = FloatingDateRange.THIS_YEAR;
 		expect(assetService.getAssetsIdentified(granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(dateRange.getTo()).toDate(), owner)).andReturn(assets);
 		replay(assetService);
 		replay(eventService);
@@ -180,7 +180,7 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 	public void test_getCompletedEvents() { 
 		BaseOrg owner = OrgBuilder.aCustomerOrg().build();
 		ChartGranularity granularity = ChartGranularity.DAY;
-		ChartDateRange dateRange = ChartDateRange.THIS_YEAR;
+		FloatingDateRange dateRange = FloatingDateRange.THIS_YEAR;
 		
 		int failedCount = 3;
 		int passCount = 7;
@@ -217,7 +217,7 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 	public void test_EventCompleteness() { 
 		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		ChartGranularity granularity = ChartGranularity.WEEK;
-		ChartDateRange dateRange = ChartDateRange.LAST_MONTH;
+		FloatingDateRange dateRange = FloatingDateRange.LAST_MONTH;
 		BaseOrg org = OrgBuilder.aDivisionOrg().build();
 		
 		List<EventCompletenessReportRecord> completedEvents = createEventCompletenessResults(granularity, 21L);

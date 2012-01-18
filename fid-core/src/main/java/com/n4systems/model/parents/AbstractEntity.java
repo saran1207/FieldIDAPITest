@@ -37,7 +37,7 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 	private User modifiedBy;
 
     @Transient
-    private transient EntityModifiedCreatedHandler modifiedCreatedHandler;
+    private EntityModifiedCreatedHandler modifiedCreatedHandler;
 
     public AbstractEntity() {
         this(new DefaultEntityModifiedCreatedHandler());

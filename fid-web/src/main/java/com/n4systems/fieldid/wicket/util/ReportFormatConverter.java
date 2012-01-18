@@ -62,8 +62,10 @@ public class ReportFormatConverter {
         container.setEventBook(getId(criteriaModel.getEventBook()));
         container.setEventType(getId(criteriaModel.getEventType()));
         container.setEventTypeGroup(getId(criteriaModel.getEventTypeGroup()));
-        container.setFromDate(criteriaModel.getFromDate());
-        container.setToDate(criteriaModel.getToDate());
+        if (criteriaModel.getDateRange() != null) {
+            container.setFromDate(criteriaModel.getDateRange().calculateFromDate());
+            container.setToDate(criteriaModel.getDateRange().calculateToDate());
+        }
         container.setDateRange(criteriaModel.getDateRange());
         container.setIncludeNetworkResults(criteriaModel.isIncludeSafetyNetwork());        
         container.setJob(getId(criteriaModel.getJob()));

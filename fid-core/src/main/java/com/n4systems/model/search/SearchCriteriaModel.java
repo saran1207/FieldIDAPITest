@@ -1,32 +1,58 @@
 package com.n4systems.model.search;
 
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class SearchCriteriaModel implements Serializable {
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
-    private BaseOrg owner;
+@MappedSuperclass
+public abstract class SearchCriteriaModel extends AbstractEntity {
 
+    @Transient
     private List<ColumnMappingGroupView> columnGroups = new ArrayList<ColumnMappingGroupView>();
 
+    @Transient
     private List<ColumnMappingGroupView> dynamicEventColumnGroups = new ArrayList<ColumnMappingGroupView>();
+
+    @Transient
     private List<ColumnMappingGroupView> dynamicAssetColumnGroups = new ArrayList<ColumnMappingGroupView>();
 
+    @Transient
     private Integer pageNumber = 0;
 
+    @Transient
     private ColumnMappingView sortColumn;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "ownerId")
+    private BaseOrg owner;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="sortDirection")
     private SortDirection sortDirection;
 
+    @Transient
     private boolean reportAlreadyRun;
 
+    @Transient
     private MultiIdSelection selection = new MultiIdSelection();
+
+    @Column(name="sortColumnId")
+    private Long sortColumnId;
 
     public List<ColumnMappingGroupView> getDynamicEventColumnGroups() {
         return dynamicEventColumnGroups;
@@ -104,6 +130,7 @@ public class SearchCriteriaModel implements Serializable {
 
     public void setSortColumn(ColumnMappingView sortColumn) {
         this.sortColumn = sortColumn;
+        setSortColumnId(sortColumn.getDbColumnId());
     }
 
     public SortDirection getSortDirection() {
@@ -130,5 +157,12 @@ public class SearchCriteriaModel implements Serializable {
         this.owner = owner;
     }
 
+    public Long getSortColumnId() {
+        return sortColumnId;
+    }
+
+    public void setSortColumnId(Long sortColumnId) {
+        this.sortColumnId = sortColumnId;
+    }
 
 }

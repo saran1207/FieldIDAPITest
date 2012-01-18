@@ -76,7 +76,6 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     @JoinColumn(name="assetstatus_id")
 	private AssetStatus assetStatus;
 
-
 	@ManyToOne(optional = true)
 	private User identifiedBy;
     

@@ -13,7 +13,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.time.DateUtil;
 
-public enum ChartDateRange implements Listable<String>, Serializable {
+public enum FloatingDateRange implements Listable<String>, Serializable {
 
 	SEVEN_DAYS(DateRange.SEVEN_DAYS),  
 	THIRTY_DAYS(DateRange.THIRTY_DAYS), 
@@ -32,23 +32,23 @@ public enum ChartDateRange implements Listable<String>, Serializable {
 	
 		
 	
-	private static EnumSet<ChartDateRange> chartRanges = EnumSet.of(LAST_WEEK, LAST_MONTH, LAST_QUARTER, LAST_YEAR, THIS_WEEK, THIS_MONTH, THIS_QUARTER, THIS_YEAR, FOREVER);
-	private static EnumSet<ChartDateRange> daysFromNowRanges = EnumSet.of(SEVEN_DAYS, THIRTY_DAYS, SIXTY_DAYS, NINETY_DAYS);
+	private static EnumSet<FloatingDateRange> floatingRanges = EnumSet.of(LAST_WEEK, LAST_MONTH, LAST_QUARTER, LAST_YEAR, THIS_WEEK, THIS_MONTH, THIS_QUARTER, THIS_YEAR, FOREVER);
+	private static EnumSet<FloatingDateRange> daysFromNowRanges = EnumSet.of(SEVEN_DAYS, THIRTY_DAYS, SIXTY_DAYS, NINETY_DAYS);
 	
 	private DateRange dateRange;
 
-	ChartDateRange(DateRange dateRange) {
+	FloatingDateRange(DateRange dateRange) {
 		this.dateRange = dateRange;
 	}
 
-	public static ChartDateRange[] chartDateRanges() { 
-		return chartRanges.toArray(new ChartDateRange[]{});
+	public static FloatingDateRange[] chartDateRanges() {
+		return floatingRanges.toArray(new FloatingDateRange[]{});
 	}
 		
-	public static ChartDateRange[] chartDateRangesWithCustom() {
-		EnumSet<ChartDateRange> set = EnumSet.copyOf(chartRanges);
-		set.add(ChartDateRange.CUSTOM);
-		return set.toArray(new ChartDateRange[]{});		
+	public static FloatingDateRange[] chartDateRangesWithCustom() {
+		EnumSet<FloatingDateRange> set = EnumSet.copyOf(floatingRanges);
+		set.add(FloatingDateRange.CUSTOM);
+		return set.toArray(new FloatingDateRange[]{});
 	}
 		
 	public static LocalDate earliestDate() {
@@ -59,7 +59,7 @@ public enum ChartDateRange implements Listable<String>, Serializable {
 		return daysFromNowRanges.contains(this);
 	}
 		
-	public static ChartDateRange forDays(Integer period) {
+	public static FloatingDateRange forDays(Integer period) {
 		switch (period) { 
 			case 7:
 				return SEVEN_DAYS;
@@ -102,7 +102,7 @@ public enum ChartDateRange implements Listable<String>, Serializable {
 
 	
 	public Date getFromDate() {
-		return dateRange.getFromDate();
+		return dateRange.calculateFromDate();
 	}
 
 	public Date getInclusiveToDate() {
@@ -118,20 +118,20 @@ public enum ChartDateRange implements Listable<String>, Serializable {
 	}
 
 	public Date getToDate() {
-		return dateRange.getToDate();
+		return dateRange.calculateToDate();
 	}
 	
 	public DateRange asDateRange() { 
 		return dateRange;// make sure this is immutable.
 	}
 
-	public static ChartDateRange fromDateRange(DateRange dateRange) {
+	public static FloatingDateRange fromDateRange(DateRange dateRange) {
 		if (dateRange==null) { 
 			return null;
 		}
-		for (ChartDateRange chartDateRange:values()) { 
-			if (chartDateRange.asDateRange().equals(dateRange)) { 
-				return chartDateRange;
+		for (FloatingDateRange floatingDateRange :values()) {
+			if (floatingDateRange.asDateRange().equals(dateRange)) {
+				return floatingDateRange;
 			}
 		}
 		return null;
