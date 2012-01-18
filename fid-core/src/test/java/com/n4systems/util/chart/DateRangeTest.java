@@ -54,9 +54,9 @@ public class DateRangeTest {
 		assertEquals(2010, new DateRange(RangeType.LAST_MONTH).getFrom().getYear());
 		assertEquals(1, new DateRange(RangeType.LAST_MONTH).getFrom().getDayOfMonth());
 		
-		assertEquals(DateTimeConstants.JANUARY, new DateRange(RangeType.LAST_MONTH).getFrom().getMonthOfYear());
+		assertEquals(DateTimeConstants.JANUARY, new DateRange(RangeType.THIS_MONTH).getFrom().getMonthOfYear());
 		assertEquals(2011, new DateRange(RangeType.THIS_MONTH).getFrom().getYear());
-		assertEquals(1, new DateRange(RangeType.LAST_MONTH).getFrom().getDayOfMonth());
+		assertEquals(1, new DateRange(RangeType.THIS_MONTH).getFrom().getDayOfMonth());
 		
 		//week
 		assertEquals(DateTimeConstants.DECEMBER, new DateRange(RangeType.LAST_WEEK).getFrom().getMonthOfYear());

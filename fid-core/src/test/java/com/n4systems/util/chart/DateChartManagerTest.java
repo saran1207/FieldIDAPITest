@@ -42,8 +42,7 @@ public class DateChartManagerTest {
 	@Test 
 	public void test_normalize_thisyear() {
 		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
-        RangeType bleh = RangeType.CUSTOM;
-		
+
         DateRange dateRange = new DateRange(RangeType.THIS_YEAR);
 
 		dateChartManager = new DateChartManager(ChartGranularity.YEAR, dateRange);

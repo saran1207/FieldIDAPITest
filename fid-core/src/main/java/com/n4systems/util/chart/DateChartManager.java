@@ -47,7 +47,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 
 	@Override
 	public ChartSeries<LocalDate> normalize(ChartSeries<LocalDate> series) {
-		LocalDate endDate = RangeType.FOREVER.equals(dateRange) ? series.getLastX() : granularity.roundUp(dateRange.getTo());
+		LocalDate endDate = RangeType.FOREVER.equals(dateRange.getRangeType()) ? series.getLastX() : granularity.roundUp(dateRange.getTo());
 		LocalDate date = granularity.roundDown(dateRange.getEarliest());
 		
 		while (endDate!=null && date.isBefore(endDate)) { 

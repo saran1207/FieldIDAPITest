@@ -195,10 +195,10 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 		allEvents.addAll(naEvents);
 		allEvents.addAll(passedEvents);
 		
-		expect(eventService.getCompletedEvents(dateRange.getFromDate(), dateRange.getToDate(), owner, (Status)null, granularity)).andReturn(allEvents);
-		expect(eventService.getCompletedEvents(dateRange.getFromDate(), dateRange.getToDate(), owner, Status.FAIL, granularity)).andReturn(failedEvents);
-		expect(eventService.getCompletedEvents(dateRange.getFromDate(), dateRange.getToDate(), owner, Status.NA, granularity)).andReturn(naEvents);
-		expect(eventService.getCompletedEvents(dateRange.getFromDate(), dateRange.getToDate(), owner, Status.PASS, granularity)).andReturn(passedEvents);
+		expect(eventService.getCompletedEvents(dateRange.calculateFromDate(), dateRange.calculateToDate(), owner, (Status)null, granularity)).andReturn(allEvents);
+		expect(eventService.getCompletedEvents(dateRange.calculateFromDate(), dateRange.calculateToDate(), owner, Status.FAIL, granularity)).andReturn(failedEvents);
+		expect(eventService.getCompletedEvents(dateRange.calculateFromDate(), dateRange.calculateToDate(), owner, Status.NA, granularity)).andReturn(naEvents);
+		expect(eventService.getCompletedEvents(dateRange.calculateFromDate(), dateRange.calculateToDate(), owner, Status.PASS, granularity)).andReturn(passedEvents);
 		replay(eventService);
 		replay(assetService);
 		
