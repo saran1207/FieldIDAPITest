@@ -32,8 +32,8 @@ public class DateRangePicker extends Panel { //implements IFormModelUpdateListen
 				new PropertyModel<RangeType>(model, "rangeType"),
 				getDateRanges(), 
 				new EnumDropDownChoiceRenderer<RangeType>());
-		fromDatePicker = new DateTimePicker("fromDate", new PropertyModel<Date>(this, "from"));
-		toDatePicker = new DateTimePicker("toDate", new PropertyModel<Date>(this, "from"));
+		fromDatePicker = new DateTimePicker("fromDate", new PropertyModel<Date>(model, "fromDate"));
+		toDatePicker = new DateTimePicker("toDate", new PropertyModel<Date>(model, "toDate"));
 		
 		dropDownChoice.setOutputMarkupId(true);
 		dropDownChoice.setNullValid(false);
