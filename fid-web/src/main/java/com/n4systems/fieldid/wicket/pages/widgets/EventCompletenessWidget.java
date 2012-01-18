@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import com.n4systems.util.chart.FloatingDateRange;
+import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -49,9 +49,9 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 	}	
 
 	@Override
-	public FloatingDateRange getChartDateRange() {
+	public DateRange getChartDateRange() {
 		EventCompletenessWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
-		return config.getDateRange();
+		return new DateRange(config.getRangeType());
 	}
 	
 	@Override
@@ -74,7 +74,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getChartDateRange());
+		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getChartDateRange().getRangeType());
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );		
 	}
 	

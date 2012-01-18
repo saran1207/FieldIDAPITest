@@ -14,7 +14,8 @@ import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithDateRang
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.util.chart.FloatingDateRange;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.chart.ChartGranularity;
 
 @SuppressWarnings("serial")
@@ -29,7 +30,7 @@ public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration imp
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="date_range", nullable=false)	
-	private FloatingDateRange dateRange = FloatingDateRange.THIS_QUARTER;
+	private RangeType rangeType = RangeType.THIS_QUARTER;
 
     @Enumerated(EnumType.STRING)
     @Column(name="granularity", nullable=false)
@@ -44,20 +45,20 @@ public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration imp
 		this.org = org;
 	}
 
-	public void setDateRange(FloatingDateRange range) {
-		this.dateRange = range;
+	public void setRangeType(RangeType rangeType) {
+		this.rangeType = rangeType;
 	}
 
 	@Override
-	public FloatingDateRange getDateRange() {
-		return dateRange;
+	public RangeType getRangeType() {
+		return rangeType;
 	}
 
 	@Override
 	public AssetsIdentifiedWidgetConfiguration copy() {
 		AssetsIdentifiedWidgetConfiguration copy = (AssetsIdentifiedWidgetConfiguration) super.copy();
 		copy.setOrg(getOrg());
-		copy.setDateRange(getDateRange());
+		copy.setRangeType(getRangeType());
 		return copy;
 	}
 
@@ -69,5 +70,9 @@ public class AssetsIdentifiedWidgetConfiguration extends WidgetConfiguration imp
     @Override
     public void setGranularity(ChartGranularity granularity) {
         this.granularity = granularity;
+    }
+
+    public DateRange getDateRange() {
+        return new DateRange(getRangeType());
     }
 }

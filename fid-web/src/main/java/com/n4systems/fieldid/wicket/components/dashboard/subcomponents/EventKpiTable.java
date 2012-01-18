@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.components.dashboard.subcomponents;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.util.chart.FloatingDateRange;
+import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -58,8 +58,8 @@ public class EventKpiTable extends Panel {
 		return eventKpis;
 	}
 	
-	protected FloatingDateRange getDateRange() {
-		return config.getDateRange();
+	protected DateRange getDateRange() {
+		return new DateRange(config.getRangeType());
 	}
 
 	private Long getCompletedPercentage(EventKpiRecord record) {

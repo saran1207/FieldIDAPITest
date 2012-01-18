@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
+import com.n4systems.model.utils.DateRange;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.LocalDate;
@@ -23,7 +24,7 @@ public class DateChartManagerTest {
 	public void test_normalize_forever() {
 		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		
-		FloatingDateRange dateRange = FloatingDateRange.FOREVER;
+        DateRange dateRange = new DateRange(RangeType.FOREVER);
 
 		for (ChartGranularity granularity:ChartGranularity.values()) {
 			dateChartManager = new DateChartManager(granularity, dateRange);
@@ -41,26 +42,26 @@ public class DateChartManagerTest {
 	@Test 
 	public void test_normalize_thisyear() {
 		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
-        FloatingDateRange bleh = FloatingDateRange.CUSTOM;
+        RangeType bleh = RangeType.CUSTOM;
 		
-		FloatingDateRange dateRange = FloatingDateRange.THIS_YEAR;
+        DateRange dateRange = new DateRange(RangeType.THIS_YEAR);
 
-		dateChartManager = new DateChartManager(ChartGranularity.YEAR, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.YEAR, dateRange);
 		assertSeries(1, 1, 0, 1);  // one point max for viewing yearly data with year date range.
 	
-		dateChartManager = new DateChartManager(ChartGranularity.QUARTER, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.QUARTER, dateRange);
 		assertSeries(4, 4, 0, 1);
 		assertSeries(4, 1, 2, 1);
 	
-		dateChartManager = new DateChartManager(ChartGranularity.MONTH, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.MONTH, dateRange);
 		assertSeries(12, 5, 0, 2);
 		assertSeries(12, 3, 2, 1);
 	
-		dateChartManager = new DateChartManager(ChartGranularity.WEEK, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.WEEK, dateRange);
 		assertSeries(53, 5, 0, 2);
 		assertSeries(53, 3, 2, 1);
 	
-		dateChartManager = new DateChartManager(ChartGranularity.DAY, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.DAY, dateRange);
 		assertSeries(365, 5, 0, 2);
 		assertSeries(365, 3, 2, 1);
 	
@@ -70,21 +71,21 @@ public class DateChartManagerTest {
 	public void test_normalize_thisquarter() {
 		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		
-		FloatingDateRange dateRange = FloatingDateRange.THIS_QUARTER;
+        DateRange dateRange = new DateRange(RangeType.THIS_QUARTER);
 
-		dateChartManager = new DateChartManager(ChartGranularity.QUARTER, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.QUARTER, dateRange);
 		assertSeries(1, 0, 0, 1);
 		assertSeries(1, 1, 0, 1);
 	
-		dateChartManager = new DateChartManager(ChartGranularity.MONTH, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.MONTH, dateRange);
 		assertSeries(3, 4, 0, 2);
 		assertSeries(3, 1, 2, 1);
 	
-		dateChartManager = new DateChartManager(ChartGranularity.WEEK, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.WEEK, dateRange);
 		assertSeries(14, 4, 0, 2);  // 14 weeks in the particular jan/feb/mar quarter we are looking at.
 		assertSeries(14, 3, 2, 1);
 	
-		dateChartManager = new DateChartManager(ChartGranularity.DAY, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.DAY, dateRange);
 		assertSeries(90, 5, 0, 2);   // 90 days in jan/feb/mar quarter.
 		assertSeries(90, 3, 2, 1);
 	
@@ -94,9 +95,9 @@ public class DateChartManagerTest {
 	public void test_normalize_thismonth() {
 		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		
-		FloatingDateRange dateRange = FloatingDateRange.THIS_MONTH;
+        DateRange dateRange = new DateRange(RangeType.THIS_MONTH);
 	
-		dateChartManager = new DateChartManager(ChartGranularity.MONTH, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.MONTH, dateRange);
 		assertSeries(1, 1);
 		assertSeries(1, 0);
 	
@@ -108,7 +109,7 @@ public class DateChartManagerTest {
 		// will negatively impact the app.
 		assertSeries(6, 4, 0, 2);  
 	
-		dateChartManager = new DateChartManager(ChartGranularity.DAY, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.DAY, dateRange);
 		assertSeries(31, 5, 0, 2);   
 		assertSeries(31, 3, 2, 1);	
 	}
@@ -118,13 +119,13 @@ public class DateChartManagerTest {
 	public void test_normalize_thisweek() {
 		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		
-		FloatingDateRange dateRange = FloatingDateRange.THIS_WEEK;
+        DateRange dateRange = new DateRange(RangeType.THIS_WEEK);
 	
 		dateChartManager = new DateChartManager(ChartGranularity.WEEK, dateRange);
 		assertSeries(1, 0);  
 		assertSeries(1, 1);  
 	
-		dateChartManager = new DateChartManager(ChartGranularity.DAY, dateRange);		
+		dateChartManager = new DateChartManager(ChartGranularity.DAY, dateRange);
 		assertSeries(7, 3, 0, 2);   
 		assertSeries(7, 3, 2, 1);	
 	}
@@ -136,12 +137,12 @@ public class DateChartManagerTest {
 	}
 	
 	private void assertSeries(int size, int numberOfPoints, int offset, int periodMultiplier) {
-		FloatingDateRange dateRange = dateChartManager.getDateRange();
+		DateRange dateRange = dateChartManager.getDateRange();
 		assertSeries(dateRange.getEarliest(), dateRange.getLatest(), size, numberOfPoints, offset, periodMultiplier);
 	}
 	
 	private void assertSeries(LocalDate from, LocalDate to, int size, int numberOfPoints, int offset, int periodMultiplier) {
-		FloatingDateRange dateRange = dateChartManager.getDateRange();
+		DateRange dateRange = dateChartManager.getDateRange();
 		ChartGranularity granularity = dateChartManager.getGranularity();
 		
 		ChartSeries<LocalDate> series = createTestSeries(granularity, from, to, offset, periodMultiplier, numberOfPoints);
@@ -154,7 +155,7 @@ public class DateChartManagerTest {
 		Period offsetPeriod = multiplyPeriod(offset, granularity.getPeriod());
 		Period periodBetweenPoints = multiplyPeriod(periodMultiplier, granularity.getPeriod());  // the points we defined. (skips the padded ones).
 		
-		LocalDate nextCreatedPoint = granularity.normalize(dateRange.getEarliest()).plus(offsetPeriod); 
+		LocalDate nextCreatedPoint = granularity.normalize(dateRange.getEarliest()).plus(offsetPeriod);
 		LocalDate start = granularity.normalize(dateRange.getEarliest());
 		LocalDate expect = start;
 		long createdPoints = 0;

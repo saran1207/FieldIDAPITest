@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.chart.FloatingDateRange;
-
-
+import com.n4systems.util.chart.RangeType;
 
 public class OrgDateRangeSubtitleHelper extends OrgSubtitleHelper {
 
@@ -13,15 +11,14 @@ public class OrgDateRangeSubtitleHelper extends OrgSubtitleHelper {
 		super("config.dateRange.fromDateDisplayString", "config.dateRange.toDateDisplayString");
 	}
 	
-	public SubTitleModelInfo getSubTitleModel(Object model, BaseOrg org, FloatingDateRange dateRange) {
-		return super.getSubTitleModel(model, org, getKeyForDateRange(dateRange));
+	public SubTitleModelInfo getSubTitleModel(Object model, BaseOrg org, RangeType dateRangeType) {
+		return super.getSubTitleModel(model, org, getKeyForDateRange(dateRangeType));
 	}
 	
-	private String getKeyForDateRange(FloatingDateRange dateRange) {
+	private String getKeyForDateRange(RangeType dateRangeType) {
 		// e.g. transform LAST_WEEK, THIS_WEEK   --->   week
-		String key = dateRange.toString().replace("LAST_", "").replace("THIS_", "").toLowerCase();		
+		String key = dateRangeType.toString().replace("LAST_", "").replace("THIS_", "").toLowerCase();
 		return String.format(keyFormat,key);
 	}
-		
-	
+
 }

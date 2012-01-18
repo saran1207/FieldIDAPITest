@@ -13,10 +13,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.chart.FloatingDateRange;
 
 @SuppressWarnings("serial")
 @Entity
@@ -33,7 +34,7 @@ public class EventKPIWidgetConfiguration extends WidgetConfiguration {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="date_range", nullable=false)	    
-	private FloatingDateRange dateRange = FloatingDateRange.THIS_WEEK;
+	private RangeType rangeType = RangeType.THIS_WEEK;
     
     public List<BaseOrg> getOrgs() {
         return orgs;
@@ -47,16 +48,20 @@ public class EventKPIWidgetConfiguration extends WidgetConfiguration {
     public EventKPIWidgetConfiguration copy() {
         EventKPIWidgetConfiguration copy = (EventKPIWidgetConfiguration) super.copy();
         copy.setOrgs(new ArrayList<BaseOrg>(orgs));
-		copy.setDateRange(getDateRange());        
+		copy.setRangeType(getRangeType());
         return copy;
     }
 
-	public void setDateRange(FloatingDateRange dateRange) {
-		this.dateRange = dateRange;
+	public void setRangeType(RangeType rangeType) {
+		this.rangeType = rangeType;
 	}
 
-	public FloatingDateRange getDateRange() {
-		return dateRange;
+	public RangeType getRangeType() {
+		return rangeType;
 	}
+
+    public DateRange getDateRange() {
+        return new DateRange(getRangeType());
+    }
 
 }

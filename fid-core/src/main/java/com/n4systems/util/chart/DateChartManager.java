@@ -1,5 +1,6 @@
 package com.n4systems.util.chart;
 
+import com.n4systems.model.utils.DateRange;
 import org.joda.time.LocalDate;
 
 import com.n4systems.util.time.DateUtil;
@@ -8,16 +9,16 @@ import com.n4systems.util.time.DateUtil;
 public class DateChartManager extends SimpleChartManager<LocalDate> {
 
 	private transient ChartGranularity granularity;
-	private transient FloatingDateRange dateRange;
+	private transient DateRange dateRange;
 	
-	public DateChartManager(ChartGranularity granularity, FloatingDateRange range) {
+	public DateChartManager(ChartGranularity granularity, DateRange dateRange) {
 		this.granularity = granularity;
-		this.dateRange = range;
+		this.dateRange = dateRange;
 	}
 	
 	@Override
 	public Long getMinX(ChartSeries<LocalDate> series) {
-		if (series.isEmpty() || dateRange.isDaysFromNowRange()) { 
+		if (series.isEmpty() || dateRange.getRangeType().isDaysFromNowRangeType()) {
 			return null;
 		}
 		Chartable<LocalDate> lastEntry = series.getLastEntry();
@@ -29,7 +30,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 	@Override
 	public Long getPanMin(ChartSeries<LocalDate> series) {
 		if (series.isEmpty()) { 
-			LocalDate from = dateRange.getFrom();			
+			LocalDate from = dateRange.getFrom();
 			return from != null ? from.toDate().getTime() :
 				DateUtil.getEarliestFieldIdDate().toDate().getTime();
 		}
@@ -46,7 +47,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 
 	@Override
 	public ChartSeries<LocalDate> normalize(ChartSeries<LocalDate> series) {
-		LocalDate endDate = FloatingDateRange.FOREVER.equals(dateRange) ? series.getLastX() : granularity.roundUp(dateRange.getTo());
+		LocalDate endDate = RangeType.FOREVER.equals(dateRange) ? series.getLastX() : granularity.roundUp(dateRange.getTo());
 		LocalDate date = granularity.roundDown(dateRange.getEarliest());
 		
 		while (endDate!=null && date.isBefore(endDate)) { 
@@ -117,7 +118,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 		return granularity;
 	}
 	
-	public FloatingDateRange getDateRange() {
+	public DateRange getDateRange() {
 		return dateRange;
 	}
 	

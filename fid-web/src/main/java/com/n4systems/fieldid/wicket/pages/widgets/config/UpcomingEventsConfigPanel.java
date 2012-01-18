@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
+import com.n4systems.util.chart.RangeType;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 
 import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
-import com.n4systems.util.chart.FloatingDateRange;
 
 @SuppressWarnings("serial")
 public class UpcomingEventsConfigPanel extends OrgDateWidgetConfigPanel<UpcomingEventsWidgetConfiguration> {
@@ -14,7 +14,7 @@ public class UpcomingEventsConfigPanel extends OrgDateWidgetConfigPanel<Upcoming
     }
 
     @Override
-    protected DropDownChoice<FloatingDateRange> createDateRangeSelect() {
+    protected DropDownChoice<RangeType> createDateRangeSelect() {
     	return null;
     }    
 }

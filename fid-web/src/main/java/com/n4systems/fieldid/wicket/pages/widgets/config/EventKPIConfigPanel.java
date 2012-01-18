@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.widgets.config;
 import java.util.Arrays;
 import java.util.List;
 
-import com.n4systems.util.chart.FloatingDateRange;
+import com.n4systems.util.chart.RangeType;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -30,7 +30,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
 
     private OrgPicker orgPicker;
     private AjaxButton addOrgButton;
-	private DropDownChoice<FloatingDateRange> dateRange;
+	private DropDownChoice<RangeType> dateRange;
 
     public EventKPIConfigPanel(String id, final IModel<EventKPIWidgetConfiguration> configModel) {
         super(id, configModel);
@@ -85,17 +85,17 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
         
     }
 
-	protected DropDownChoice<FloatingDateRange> createDateRangeSelect() {
-        IChoiceRenderer<FloatingDateRange> renderer = new IChoiceRenderer<FloatingDateRange>() {
-			@Override public Object getDisplayValue(FloatingDateRange object) {
+	protected DropDownChoice<RangeType> createDateRangeSelect() {
+        IChoiceRenderer<RangeType> renderer = new IChoiceRenderer<RangeType>() {
+			@Override public Object getDisplayValue(RangeType object) {
 				return object.getDisplayName();
 			}
-			@Override public String getIdValue(FloatingDateRange object, int index) {
+			@Override public String getIdValue(RangeType object, int index) {
 				return object.name();
 			}
 		};		
 		
-		DropDownChoice<FloatingDateRange> d = new DropDownChoice<FloatingDateRange>("dateRangeSelect", new PropertyModel<FloatingDateRange>(configModel,"dateRange"), Arrays.asList(FloatingDateRange.chartDateRanges()), renderer);
+		DropDownChoice<RangeType> d = new DropDownChoice<RangeType>("dateRangeSelect", new PropertyModel<RangeType>(configModel,"rangeType"), Arrays.asList(RangeType.rangeTypes()), renderer);
 		d.setNullValid(false);
 		return d;
 	}	        

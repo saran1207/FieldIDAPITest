@@ -73,7 +73,7 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 	
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), null, getConfig().getDateRange());
+		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), null, getConfig().getRangeType());
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );
 	}
 	

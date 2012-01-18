@@ -12,7 +12,8 @@ import javax.persistence.Table;
 
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.util.chart.FloatingDateRange;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 
 @SuppressWarnings("serial")
 @Entity
@@ -26,7 +27,7 @@ public class AssetsStatusWidgetConfiguration extends WidgetConfiguration {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="date_range", nullable=false)	
-	private FloatingDateRange dateRange = FloatingDateRange.FOREVER;
+	private RangeType rangeType = RangeType.FOREVER;
 	
 	@AllowSafetyNetworkAccess
 	public BaseOrg getOrg() {
@@ -37,20 +38,24 @@ public class AssetsStatusWidgetConfiguration extends WidgetConfiguration {
 		this.org = org;
 	}
 
-	public void setDateRange(FloatingDateRange range) {
-		this.dateRange = range;
+	public void setRangeType(RangeType rangeType) {
+		this.rangeType = rangeType;
 	}
 
-	public FloatingDateRange getDateRange() {
-		return dateRange;
+	public RangeType getRangeType() {
+		return rangeType;
 	}
 
 	@Override
 	public AssetsStatusWidgetConfiguration copy() {
 		AssetsStatusWidgetConfiguration copy = (AssetsStatusWidgetConfiguration) super.copy();
 		copy.setOrg(getOrg());
-		copy.setDateRange(getDateRange());
+		copy.setRangeType(getRangeType());
 		return copy;
 	}
+
+    public DateRange getDateRange() {
+        return new DateRange(getRangeType());
+    }
 	
 }

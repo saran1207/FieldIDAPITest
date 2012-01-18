@@ -1,32 +1,31 @@
 package com.n4systems.model.utils;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import com.n4systems.util.chart.FloatingDateRange;
+import com.google.common.base.Preconditions;
+import com.n4systems.util.chart.DaysRangeFormatter;
+import com.n4systems.util.chart.FloatingDateRangeFormatter;
+import com.n4systems.util.chart.QuarterDateRangeFormatter;
+import com.n4systems.util.chart.RangeType;
+import com.n4systems.util.chart.StaticDateRanageFormatter;
+import com.n4systems.util.time.DateUtil;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Duration;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
-import com.google.common.base.Preconditions;
-import com.n4systems.util.chart.DaysRangeFormatter;
-import com.n4systems.util.chart.FloatingDateRangeFormatter;
-import com.n4systems.util.chart.QuarterDateRangeFormatter;
-import com.n4systems.util.chart.StaticDateRanageFormatter;
+import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Transient;
 
 
 /**
  *  handles floating dates & static dates
  * e.g. LAST WEEK   or     jan 1-jan7    or  ALL TIME    or   jan1,1970-jan1,2099
- * @see com.n4systems.util.chart.FloatingDateRange
+ * @see com.n4systems.util.chart.RangeType
  * 
  * note that it is up to the user to decide if this represents an inclusive or exclusive range. 
  * does Jan1-Jan8 mean Jan1,2,3,4,5,6,7?   (one week before the 8th).     OR 
@@ -39,33 +38,11 @@ import javax.persistence.Transient;
 @Embeddable
 public class DateRange implements Serializable {
 	
-	// list of static floating date ranges. 
-	public static final DateRange SEVEN_DAYS = new DateRange(7, new DaysRangeFormatter("7 days")); 
-	public static final DateRange THIRTY_DAYS = new DateRange(30, new DaysRangeFormatter("30 days")); 
-	public static final DateRange SIXTY_DAYS = new DateRange(60, new DaysRangeFormatter("60 days")); 
-	public static final DateRange NINETY_DAYS = new DateRange(90, new DaysRangeFormatter("90 days")); 
-	public static final DateRange LAST_WEEK = new DateRange(new WeekHandler(-1),  new FloatingDateRangeFormatter("Last Week", "MMM d")); 
-	public static final DateRange LAST_MONTH = new DateRange(new MonthHandler(-1), new FloatingDateRangeFormatter("Last Month", "MMM yyyy")); 
-	public static final DateRange LAST_QUARTER = new DateRange(new QuarterHandler(-1), new QuarterDateRangeFormatter("Last Quarter")); 
-	public static final DateRange LAST_YEAR = new DateRange(new YearHandler(-1), new FloatingDateRangeFormatter("Last Year", "yyyy"));
-	public static final DateRange THIS_WEEK = new DateRange(new WeekHandler(0), new FloatingDateRangeFormatter("This Week", "MMM d"));
-	public static final DateRange THIS_MONTH = new DateRange(new MonthHandler(0), new FloatingDateRangeFormatter("This Month", "MMM yyyy")); 
-	public static final DateRange THIS_QUARTER = new DateRange(new QuarterHandler(0), new QuarterDateRangeFormatter("This Quarter")); 
-	public static final DateRange THIS_YEAR = new DateRange(new YearHandler(0), new FloatingDateRangeFormatter("This Year", "yyyy"));
-	public static final DateRange FOREVER = new DateRange(new StaticDateRanageFormatter("All Time"));
-	public static final DateRange CUSTOM = new DateRange(new StaticDateRanageFormatter("Custom Date Range"));
-
 	public static final Period OPEN_PERIOD = new Period().withYears(3000);  // can't use MAX_INT 'cause that causes overflow in certain scenarios.
 	
-    @Transient
-	private DateRangeFormatter formatter = new DefaultDateRangeFormatter("MMM d yyyy");
-
-    @Transient
-	private DateRangeHandler handler;
-
-    @Column(nullable = false)
+    @Column(name="dateRange", nullable = false)
     @Enumerated(EnumType.STRING)
-    private FloatingDateRange dateRange = FloatingDateRange.FOREVER;
+    private RangeType rangeType = RangeType.FOREVER;
 
     @Column
     private Date fromDate;
@@ -75,38 +52,27 @@ public class DateRange implements Serializable {
 
     public DateRange() {
     }
-	
-	public DateRange(DateRangeHandler handler) {
-		this.handler = handler;
-	}
-	public DateRange(DateRangeHandler handler, DateRangeFormatter formatter) {
-		Preconditions.checkArgument(formatter!=null,"must specify a valid date range formatter.");
-		this.handler = handler;
-		this.formatter = formatter;
-	}
-	
-	public DateRange(int days, DateRangeFormatter formatter) { 
-		this(new DayRangeHandler(days),formatter);		
-	}
-	
-	public DateRange(LocalDate from, LocalDate to) { 
-		this(new IntervalHandler(from,to));
-	}	
-	
-	public DateRange(Date from, Date to) { 
-		this(new IntervalHandler(from,to));
-	}	
-	
-	public DateRange(DateRangeFormatter formatter) {
-		this(new IntervalHandler(),formatter);
-	}
 
+    public DateRange(LocalDate fromDate, LocalDate toDate) {
+        this.fromDate = fromDate.toDate();
+        this.toDate = toDate.toDate();
+        this.rangeType = RangeType.CUSTOM;
+    }
+
+    public DateRange(RangeType rangeType) {
+        this.rangeType = rangeType;
+    }
+
+    public static LocalDate earliestDate() {
+        return DateUtil.getEarliestFieldIdDate();
+    }
+	
 	public String getFromDateDisplayString() {
-		return formatter.getFromDateDisplayString(getFrom());
+		return rangeType.getFormatter().getFromDateDisplayString(getFrom());
 	}
 
 	public String getToDateDisplayString() {
-		return formatter.getToDateDisplayString(getTo());
+		return rangeType.getFormatter().getToDateDisplayString(getTo());
 	}
 	
 	// note that getTo() is exclusive.  e.g. for a year 2011
@@ -123,11 +89,11 @@ public class DateRange implements Serializable {
 	}
 
 	public LocalDate getTo() {
-		return getHandler().getNowTo();
+		return rangeType.getHandler().getNowTo();
 	}
 
 	public LocalDate getFrom() {
-		return getHandler().getNowFrom();
+		return rangeType.getHandler().getNowFrom();
 	}
 	
 	public Date calculateFromDate() {
@@ -142,11 +108,11 @@ public class DateRange implements Serializable {
 
 
 	public String getDisplayName() {
-		return formatter.getDisplayName(this);
+		return rangeType.getFormatter().getDisplayName(this);
 	}
 	
 	public Period getPeriod() {
-		return handler.getPeriod();		
+		return rangeType.getHandler().getPeriod();
 	}
 	
 	public Duration getDuration() { 
@@ -157,6 +123,14 @@ public class DateRange implements Serializable {
 			DateTime y = x.plus(getPeriod());
 			return new Duration(x,y);			
 		}
+	}
+
+	public LocalDate getEarliest() {
+		return getFrom()==null ? DateUtil.getEarliestFieldIdDate() : getFrom();
+	}
+
+	public LocalDate getLatest() {
+		return getTo()==null ? DateUtil.getLatestFieldIdDate() : getTo();
 	}
 	
 	
@@ -268,93 +242,12 @@ public class DateRange implements Serializable {
 		}
 	}
 
-    public FloatingDateRange getDateRange() {
-        return dateRange;
+    public RangeType getRangeType() {
+        return rangeType;
     }
 
-    public void setDateRange(FloatingDateRange dateRange) {
-        this.dateRange = dateRange;
-    }
-
-    private DateRangeHandler getHandler() {
-        if (handler == null) {
-            handler = createHandler();
-        }
-        return handler;
-    }
-
-    private DateRangeHandler createHandler() {
-        switch (dateRange) {
-            case SEVEN_DAYS:
-                return new DayRangeHandler(7);
-            case THIRTY_DAYS:
-                return new DayRangeHandler(30);
-            case SIXTY_DAYS:
-                return new DayRangeHandler(60);
-            case NINETY_DAYS:
-                return new DayRangeHandler(90);
-            case LAST_WEEK:
-                return new WeekHandler(-1);
-            case LAST_MONTH:
-                return new MonthHandler(-1);
-            case LAST_QUARTER:
-                return new QuarterHandler(-1);
-            case LAST_YEAR:
-                return new YearHandler(-1);
-            case THIS_WEEK:
-                return new WeekHandler(0);
-            case THIS_MONTH:
-                return new MonthHandler(0);
-            case THIS_QUARTER:
-                return new QuarterHandler(0);
-            case THIS_YEAR:
-                return new YearHandler(0);
-            default:
-                return new IntervalHandler();
-        }
-    }
-
-    private DateRangeFormatter getFormatter() {
-        switch (dateRange) {
-            case SEVEN_DAYS:
-                return new DaysRangeFormatter("7 days");
-            case THIRTY_DAYS:
-                return new DaysRangeFormatter("30 days");
-            case SIXTY_DAYS:
-                return new DaysRangeFormatter("60 days");
-            case NINETY_DAYS:
-                return new DaysRangeFormatter("90 days");
-            case LAST_WEEK:
-                return new FloatingDateRangeFormatter("Last Week", "MMM d");
-            case LAST_MONTH:
-                return new FloatingDateRangeFormatter("Last Month", "MMM yyyy");
-            case LAST_QUARTER:
-                return new QuarterDateRangeFormatter("Last Quarter");
-            case LAST_YEAR:
-                return new FloatingDateRangeFormatter("Last Year", "yyyy");
-            case THIS_WEEK:
-                return new FloatingDateRangeFormatter("This Week", "MMM d");
-            case THIS_MONTH:
-                return new FloatingDateRangeFormatter("This Month", "MMM yyyy");
-            case THIS_QUARTER:
-                return new QuarterDateRangeFormatter("This Quarter");
-            case THIS_YEAR:
-                return new FloatingDateRangeFormatter("This Year", "yyyy");
-            case FOREVER:
-                return new StaticDateRanageFormatter("All Time");
-            case CUSTOM:
-                return new StaticDateRanageFormatter("Custom Date Range");
-            default:
-                return new DefaultDateRangeFormatter("MMM d yyyy");
-        }
-    }
-
-    public FloatingDateRange getFloatingDateRange() {
-        return dateRange;
-    }
-
-    public void setFloatingDateRange(FloatingDateRange dateRange) {
-        this.dateRange = dateRange;
+    public void setRangeType(RangeType rangeType) {
+        this.rangeType = rangeType;
     }
 
     public Date getFromDate() {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.util.chart.FloatingDateRange;
+import com.n4systems.util.chart.RangeType;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +47,10 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-    public List<ChartSeries<LocalDate>> getAssetsIdentified(FloatingDateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
-		Preconditions.checkArgument(dateRange!=null);
+    public List<ChartSeries<LocalDate>> getAssetsIdentified(DateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
+		Preconditions.checkArgument(dateRange !=null);
 		List<AssetsIdentifiedReportRecord> results = assetService.getAssetsIdentified(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), owner);
-		ChartSeries<LocalDate> chartSeries = new ChartSeries<LocalDate>(results).withChartManager(new DateChartManager(granularity, dateRange));		
+		ChartSeries<LocalDate> chartSeries = new ChartSeries<LocalDate>(results).withChartManager(new DateChartManager(granularity, dateRange));
         return Lists.newArrayList(chartSeries);
     }
 
@@ -60,21 +60,21 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Preconditions.checkArgument(period!=null);		
 		List<UpcomingScheduledEventsRecord> results = eventService.getUpcomingScheduledEvents(period, owner);
 
-		FloatingDateRange dateRange = FloatingDateRange.forDays(period);
+		DateRange dateRange = new DateRange(RangeType.forDays(period));
 		
 		return Lists.newArrayList(new ChartSeries<LocalDate>(results).withChartManager(new DateChartManager(ChartGranularity.DAY, dateRange)));
 	}
 	
-	public List<ChartSeries<String>> getAssetsStatus(FloatingDateRange dateRange, BaseOrg org) {
-		Preconditions.checkArgument(dateRange!=null);	
+	public List<ChartSeries<String>> getAssetsStatus(DateRange dateRange, BaseOrg org) {
+		Preconditions.checkArgument(dateRange !=null);
 		
-		List<AssetsStatusReportRecord> results = assetService.getAssetsStatus(dateRange.getFromDate(), dateRange.getToDate(), org);		
+		List<AssetsStatusReportRecord> results = assetService.getAssetsStatus(dateRange.getFromDate(), dateRange.getToDate(), org);
         ChartSeries<String> chartSeries = new ChartSeries<String>(results).withChartManager(new BarChartManager(true));
         return new ChartData<String>(chartSeries);
 	}		
 	
-	public List<ChartSeries<LocalDate>> getCompletedEvents(FloatingDateRange dateRange, ChartGranularity granularity, BaseOrg org) {
-		Preconditions.checkArgument(dateRange!=null);				
+	public List<ChartSeries<LocalDate>> getCompletedEvents(DateRange dateRange, ChartGranularity granularity, BaseOrg org) {
+		Preconditions.checkArgument(dateRange !=null);
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
 
 		Date from = getFrom(granularity, dateRange);
@@ -90,16 +90,16 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return results;
 	}
 	
-	public EventKpiRecord getEventKpi(BaseOrg owner, FloatingDateRange dateRange) {
-		Preconditions.checkArgument(dateRange!=null);				
+	public EventKpiRecord getEventKpi(BaseOrg owner, DateRange dateRange) {
+		Preconditions.checkArgument(dateRange !=null);
 		return eventService.getEventKpi(dateRange.getFromDate(), dateRange.getToDate(), owner);
 	}
 
-	public List<ChartSeries<LocalDate>> getEventCompletenessEvents(ChartGranularity granularity, FloatingDateRange dateRange, BaseOrg org) {
-		Preconditions.checkArgument(dateRange!=null);		
+	public List<ChartSeries<LocalDate>> getEventCompletenessEvents(ChartGranularity granularity, DateRange dateRange, BaseOrg org) {
+		Preconditions.checkArgument(dateRange !=null);
 
-		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, getFrom(granularity,dateRange), getTo(granularity,dateRange),  org);
-		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, getFrom(granularity,dateRange), getTo(granularity,dateRange), org);
+		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange),  org);
+		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
 		
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
 		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>("All", allScheduledEvents).withChartManager(new DateChartManager(granularity, dateRange));
@@ -110,13 +110,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return results;		
 	}
 
-	private Date getTo(ChartGranularity granularity, FloatingDateRange dateRange) {
-		LocalDate to = dateRange.getTo();		
+	private Date getTo(ChartGranularity granularity, DateRange dateRange) {
+		LocalDate to = dateRange.getTo();
 		return (to==null) ? null : granularity.roundUp(to).toDate();
 	}
 
-	private Date getFrom(ChartGranularity granularity, FloatingDateRange dateRange) {
-		LocalDate from = dateRange.getFrom();		
+	private Date getFrom(ChartGranularity granularity, DateRange dateRange) {
+		LocalDate from = dateRange.getFrom();
 		return (from==null) ? null : granularity.roundDown(from).toDate();
 	}		
 
@@ -147,23 +147,23 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	}
 
 	private EventReportCriteriaModel getModelDefaults(UpcomingEventsWidgetConfiguration config, String series, LocalDate localDate) {
-		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getDateRange(), new Period().withDays(config.getPeriod()), localDate);
+		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getRangeType(), new Period().withDays(config.getPeriod()), localDate);
 		return model;
 	}
 
 	private EventReportCriteriaModel getModelDefaults(CompletedEventsWidgetConfiguration config, String series, LocalDate localDate) {
-		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getDateRange(), config.getGranularity().getPeriod(), localDate);
+		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getDateRangeType(), config.getGranularity().getPeriod(), localDate);
 		model.setResult(EnumUtils.valueOf(Status.class, series));		
 		return model;
 	}
 
 	private EventReportCriteriaModel getModelDefaults(EventCompletenessWidgetConfiguration config, String series, LocalDate localDate) {
-		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getDateRange(), config.getGranularity().getPeriod(), localDate);
+		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getRangeType(), config.getGranularity().getPeriod(), localDate);
 		model.setOwner(config.getOrg());
 		return model;
 	}
 
-	private EventReportCriteriaModel getDefaultReportCriteriaModel(BaseOrg org, FloatingDateRange chartDateRange, Period period, LocalDate localDate) {
+	private EventReportCriteriaModel getDefaultReportCriteriaModel(BaseOrg org, RangeType rangeType, Period period, LocalDate localDate) {
 		EventReportCriteriaModel model = new EventReportCriteriaModel();
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
         model.setColumnGroups(reportConfiguration.getColumnGroups());
@@ -207,7 +207,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 			AssetsStatusWidgetConfiguration config, String assetStatus) {
 		AssetSearchCriteriaModel model = getDefaultAssetSearchModel();
 		model.setAssetStatus(assetStatusService.getStatusByName(assetStatus));
-		model.setDateRange(config.getDateRange().asDateRange());
+		model.setDateRange(new DateRange(config.getRangeType()));
 		return model;
 	}
 

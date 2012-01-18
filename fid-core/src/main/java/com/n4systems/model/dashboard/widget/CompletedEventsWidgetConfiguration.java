@@ -13,7 +13,8 @@ import javax.persistence.Table;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.util.chart.FloatingDateRange;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.chart.ChartGranularity;
 
 @SuppressWarnings("serial")
@@ -28,7 +29,7 @@ public class CompletedEventsWidgetConfiguration extends WidgetConfiguration impl
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="date_range", nullable=false)	
-	private FloatingDateRange dateRange = FloatingDateRange.THIS_QUARTER;
+	private RangeType rangeType = RangeType.THIS_QUARTER;
 
     @Enumerated(EnumType.STRING)
     @Column(name="granularity", nullable=false)
@@ -43,19 +44,19 @@ public class CompletedEventsWidgetConfiguration extends WidgetConfiguration impl
 		this.org = org;
 	}
 
-	public void setDateRange(FloatingDateRange range) {
-		this.dateRange = range;
+	public void setDateRangeType(RangeType rangeType) {
+		this.rangeType = rangeType;
 	}
 
-	public FloatingDateRange getDateRange() {
-		return dateRange;
+	public RangeType getDateRangeType() {
+		return rangeType;
 	}
 
 	@Override
 	public CompletedEventsWidgetConfiguration copy() {
 		CompletedEventsWidgetConfiguration copy = (CompletedEventsWidgetConfiguration) super.copy();
 		copy.setOrg(getOrg());
-		copy.setDateRange(getDateRange());
+		copy.setDateRangeType(getDateRangeType());
 		return copy;
 	}
 
@@ -67,5 +68,9 @@ public class CompletedEventsWidgetConfiguration extends WidgetConfiguration impl
     @Override
     public void setGranularity(ChartGranularity granularity) {
         this.granularity = granularity;
+    }
+
+    public DateRange getDateRange() {
+        return new DateRange(rangeType);
     }
 }

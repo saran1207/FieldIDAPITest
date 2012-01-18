@@ -4,7 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-import com.n4systems.util.chart.FloatingDateRange;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -219,8 +220,8 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 		return g;		
 	}
 
-	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity, FloatingDateRange floatingDateRange) {
-		Duration duration = floatingDateRange.getDuration();
+	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity, DateRange dateRange) {
+		Duration duration = dateRange.getDuration();
 		switch (buttonGranularity) {
 			case DAY:
 				return duration.getStandardDays()<100; 

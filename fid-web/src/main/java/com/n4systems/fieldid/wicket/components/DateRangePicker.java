@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.util.chart.RangeType;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -12,26 +13,25 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.n4systems.fieldid.wicket.utils.EnumDropDownChoiceRenderer;
 import com.n4systems.model.utils.DateRange;
-import com.n4systems.util.chart.FloatingDateRange;
 
 
 @SuppressWarnings("serial")
 public class DateRangePicker extends Panel { //implements IFormModelUpdateListener {
 
-	private DropDownChoice<FloatingDateRange> dropDownChoice;
+	private DropDownChoice<RangeType> dropDownChoice;
 	private DateTimePicker fromDatePicker;
 	private DateTimePicker toDatePicker;
 	// local fields used as temporary model.
 	private Date from;
 	private Date to;
-	private FloatingDateRange dateRange;
+	private RangeType dateRangeType;
 
 	public DateRangePicker(String id, IModel<DateRange> model) {
 		super(id, model);		
-		dropDownChoice = new DropDownChoice<FloatingDateRange>("dateRange",
-				new PropertyModel<FloatingDateRange>(model, "floatingDateRange"),
+		dropDownChoice = new DropDownChoice<RangeType>("dateRange",
+				new PropertyModel<RangeType>(model, "rangeType"),
 				getDateRanges(), 
-				new EnumDropDownChoiceRenderer<FloatingDateRange>());
+				new EnumDropDownChoiceRenderer<RangeType>());
 		fromDatePicker = new DateTimePicker("fromDate", new PropertyModel<Date>(this, "from"));
 		toDatePicker = new DateTimePicker("toDate", new PropertyModel<Date>(this, "from"));
 		
@@ -43,8 +43,8 @@ public class DateRangePicker extends Panel { //implements IFormModelUpdateListen
 		add(toDatePicker);
 	}		
 	
-	protected List<FloatingDateRange> getDateRanges() {
-		return Arrays.asList(FloatingDateRange.chartDateRangesWithCustom());	
+	protected List<RangeType> getDateRanges() {
+		return Arrays.asList(RangeType.rangeTypesWithCustom());
 	}
 	
 	@Override
