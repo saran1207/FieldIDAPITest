@@ -19,12 +19,16 @@ import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.wicket.FieldIdPageTest;
+import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner;
+import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner.WithUsers;
 import com.n4systems.fieldid.wicket.IFixtureFactory;
 import com.n4systems.fieldid.wicket.IWicketTester;
+import com.n4systems.fieldid.wicket.TestUser;
 import com.n4systems.fieldid.wicket.WicketHarness;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
 import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
@@ -44,6 +48,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.services.dashboard.DashboardService;
 
 
+@RunWith(FieldIdWicketTestRunner.class)
 public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, DashboardPage> implements IFixtureFactory<DashboardPage> {
 
 	private DashboardService dashboardService;
@@ -74,6 +79,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	}
     
 	@Test 
+	@WithUsers({TestUser.ALL_PERMISSIONS_USER, TestUser.NO_PERMISSIONS_USER, TestUser.JOBS_USER})
 	public void testRender()  {
 		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);

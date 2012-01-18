@@ -1,15 +1,17 @@
 package com.n4systems.fieldid.wicket;
 
+import static org.easymock.EasyMock.*;
+
+import org.apache.wicket.protocol.http.WebApplication;
+import org.junit.Before;
+
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.user.User;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
-import org.junit.Before;
 
-import static org.easymock.EasyMock.*;
-
-public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldIDFrontEndPage> extends WicketPageTest<T,F> {
+public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldIDFrontEndPage> extends WicketPageTest<T,F,FieldIdWicketTestContext> {
 
 	protected ConfigurationProvider configurationProvider = createMock(ConfigurationProvider.class);
 	private ConfigService configService;
@@ -18,9 +20,13 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 	@Before
 	public void setUp() throws Exception { 
 		super.setUp();
-		initializeApplication(new FieldIdTestableApp(injector));
 		configService = wire(ConfigService.class);
-	}	
+	}
+	
+	@Override
+	public WebApplication createApp(ComponentTestInjector injector) {
+		return new FieldIdTestableApp(injector);
+	}
 	  
 	@Override
 	public F createFixture(IFixtureFactory<F> factory) {
@@ -64,5 +70,9 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 		return configurationProvider;
 	}
 
+	@Override
+	protected TestContextHandler<FieldIdWicketTestContext> getContextHandler() {
+		return new FieldIdTestContextHandler();
+	}
 }
 

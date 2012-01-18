@@ -4,7 +4,7 @@ import org.apache.wicket.Component;
 import org.junit.Before;
 
 
-public abstract class WicketComponentTest<T extends WicketHarness, F extends Component> extends WicketTest<T,F> {
+public abstract class WicketComponentTest<T extends WicketHarness, F extends Component, C> extends WicketTest<T,F,C> {
 	
 	@Override
 	@Before 

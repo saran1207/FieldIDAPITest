@@ -7,15 +7,18 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.wicket.FieldIdPageTest;
+import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner;
 import com.n4systems.fieldid.wicket.IFixtureFactory;
 import com.n4systems.fieldid.wicket.IWicketTester;
 import com.n4systems.fieldid.wicket.WicketHarness;
 import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPageTest.SystemsSettingsPageHarness;
 import com.n4systems.model.tenant.SystemSettings;
 
+@RunWith(FieldIdWicketTestRunner.class)
 public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageHarness, SystemSettingsPage> implements IFixtureFactory<SystemSettingsPage> {	
 	private SystemSettingsService systemSettingsService;
 

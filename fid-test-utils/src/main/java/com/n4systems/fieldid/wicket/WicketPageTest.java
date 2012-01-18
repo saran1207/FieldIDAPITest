@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.junit.Before;
 
 
-public abstract class WicketPageTest<T extends WicketHarness, F extends WebPage> extends WicketTest<T,F> {
+public abstract class WicketPageTest<T extends WicketHarness, F extends WebPage, C> extends WicketTest<T,F,C> {
 
 	@Override
 	@Before

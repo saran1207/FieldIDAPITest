@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.util.chart.FloatingDateRange;
+
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.LocalDate;
@@ -26,6 +26,7 @@ import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.FloatingDateRange;
 
 
 public class DashboardReportingServiceTest extends FieldIdUnitTest {

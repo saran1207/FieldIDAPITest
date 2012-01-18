@@ -33,43 +33,75 @@ import org.junit.Before;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Preconditions;
 
-public abstract class WicketTest<T extends WicketHarness,F extends Component> implements IWicketTester, IFixtureFactory<F> {
+public abstract class WicketTest<T extends WicketHarness,F extends Component, C> implements IWicketTester, IFixtureFactory<F> {
 	
 	private static final String CLASS = "class";
 	protected static final String PAGE_CONTEXT = "";
 	protected static final String PANEL_CONTEXT = "panel:";
 	protected static final String COMPONENT_CONTEXT = "panel:";
 		
-	protected WicketTester wicketTester;
-	protected ComponentTestInjector injector;
+	protected FieldIdWicketTester wicketTester;
 	private T harness;
 	private String pathContext;	
+	private C testContext;
 	
-
+	
 	@Before
-	protected void setUp() throws Exception { 
-		injector = ComponentTestInjector.make();
+	protected void setUp() throws Exception {
+		initialize();
+	}
+	
+	public FieldIdWicketTester createWicketTesterForRunner() {
+		return initialize();
 	}	
+
+	public WebApplication createApp() {		
+		return createApp(createTestInjector());
+	}
+	
+	protected ComponentTestInjector createTestInjector() {
+		return ComponentTestInjector.make();
+	}
+
+	public abstract WebApplication createApp(ComponentTestInjector injector);
 	
     protected void verifyMocks(Object... mocks) {
     	for (Object mock:mocks) { 
     		verify(mock);
     	}
     }
+    
+	public void initializeForRunner(FieldIdWicketTester wicketTester, C context) {
+		this.wicketTester = wicketTester;
+    	testContext = context;
+    }
+    
+    protected C getTestContext() {
+    	return testContext;
+    }
 
-	public void initializeApplication(WebApplication application) {		
-		wicketTester = new WicketTester(application);
-		Application.get().getResourceSettings().getStringResourceLoaders().add(new IStringResourceLoader() {
-            @Override
-            public String loadStringResource(Class<?> clazz, String key, Locale locale, String style, String variation) {
-                return key;
-            }
-
-            @Override
-            public String loadStringResource(Component component, String key, Locale locale, String style, String variation) {
-                return key;
-            }
-        });
+    protected abstract TestContextHandler<C> getContextHandler();       
+    
+	public FieldIdWicketTester initialize() {
+		if (wicketTester==null) {
+			ComponentTestInjector injector = createTestInjector();
+			wicketTester = new FieldIdWicketTester(createApp(injector), injector);
+			Application.get().getResourceSettings().getStringResourceLoaders().add(new IStringResourceLoader() {
+	            @Override
+	            public String loadStringResource(Class<?> clazz, String key, Locale locale, String style, String variation) {
+	                return key;
+	            }
+	
+	            @Override
+	            public String loadStringResource(Component component, String key, Locale locale, String style, String variation) {
+	                return key;
+	            }
+	        });
+		}
+		if (testContext!=null) { 
+			getContextHandler().initializeContext(getWicketTester().getSession(), testContext);
+		}		
+		return wicketTester;
 	}	
 		
 	protected F createFixture(IFixtureFactory<F> factory) {
@@ -78,9 +110,9 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 	
 	protected abstract T createHarness(String pathContext, IWicketTester wicketTester); 
 	
-	public WicketTest<T,F> wire(Object bean, String fieldName) {
+	public WicketTest<T,F,C> wire(Object bean, String fieldName) {
 		// wire up bean to all fields with given name.  
-		injector.wire(fieldName, bean);
+		wicketTester.injector.wire(fieldName, bean);
 		return this;
 	}
 
@@ -224,7 +256,7 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 		fieldName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, fieldName);
 		wire(mock,fieldName);
 		return mock;
-	}	
+	}
 
 
 	/*	@Override
@@ -267,5 +299,20 @@ public abstract class WicketTest<T extends WicketHarness,F extends Component> im
 			}
 			return file;
 		}*/	
+
+	
+	
+	public static class FieldIdWicketTester extends WicketTester { 
+		ComponentTestInjector injector;
+
+		public FieldIdWicketTester(WebApplication app, ComponentTestInjector injector) {
+			super(app);
+			this.injector = injector;			
+		}
+				
+	}
+	
+	
+	
 	
 }

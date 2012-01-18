@@ -2,10 +2,9 @@ package com.n4systems.fieldid.wicket;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.tester.DummyPanelPage;
-import org.apache.wicket.util.tester.ITestPanelSource;
 import org.junit.Before;
 
-public abstract class WicketPanelTest<T extends WicketHarness, F extends Panel> extends WicketTest<T,F> {
+public abstract class WicketPanelTest<T extends WicketHarness, F extends Panel, C> extends WicketTest<T,F,C> {
 
 	
 	@Override
