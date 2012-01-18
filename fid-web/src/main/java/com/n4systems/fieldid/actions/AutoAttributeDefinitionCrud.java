@@ -2,22 +2,25 @@ package com.n4systems.fieldid.actions;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.web.helper.Constants;
+import rfid.web.helper.SessionUser;
 
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
+import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.AssetType;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.StringListingPair;
@@ -61,6 +64,7 @@ private static final long serialVersionUID = 1L;
 		autoAttributeDefinition = persistenceManager.find( AutoAttributeDefinition.class, uniqueId, getTenant(), fetches );
 	}
 
+	@Override
 	public void prepare() throws Exception {
 		super.prepare();
 		String[] fetches = { "inputs", "outputs", "assetType.name" };
@@ -99,7 +103,14 @@ private static final long serialVersionUID = 1L;
 		
 		autoAttributeDefinition.setCriteria( autoAttributeCriteria );
 		autoAttributeDefinition.setTenant( getTenant() );
-		convertOutputsToInfoOptions();
+		
+		String error = validateOutputs();
+		if (error!=null) {
+			addActionErrorText(error);
+			return INPUT;
+		}
+		
+		convertOutputsToInfoOptionsWithValidation();
 		convertInputsToInfoOptions();
 		
 		AutoAttributeDefinition existingDefinition = autoAttributeManager.findTemplateToApply( autoAttributeCriteria, autoAttributeDefinition.getInputs() ); 
@@ -150,9 +161,35 @@ private static final long serialVersionUID = 1L;
 		return SUCCESS;
 	}
 	
+
+	// WEB-2583 NOTE : previously, no validation was done because the field types didn't require it. 
+	//  this was added to handle date fields.  if more and more field types are added this should be refactored
+	//  into a separate class.   
+	private String validateOutputs() {				
+		SessionUser user = getSessionUser();
+		for( InfoOptionInput input : outputInfoOptions ) {
+			for (InfoFieldBean field: autoAttributeCriteria.getOutputs()) {		
+				if(field.getUniqueID().equals(input.getInfoFieldId()) && input!=null) {				
+					String error = validateField(field, user, input.getName());
+					if (error!=null) { 
+						return error;
+					}
+				}
+			}
+		}
+		return null;
+	}
 	
-	
-	private void convertOutputsToInfoOptions() {
+	private String validateField(InfoFieldBean field, SessionUser user, String name) {
+		if (field.getFieldType().equals( InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
+			SessionUserDateConverter dateConverter = user.createUserDateConverter();
+			Date date = dateConverter.convertDate(name, field.isIncludeTime());
+			return date==null ? getText("error.invalidate_date_value") : null;
+		}
+		return null;
+	}
+
+	private void convertOutputsToInfoOptionsWithValidation() {
 		autoAttributeDefinition.setOutputs( InfoOptionInput.convertInputInfoOptionsToInfoOptions( outputInfoOptions, autoAttributeCriteria.getOutputs(), getSessionUser() ) );
 	}
 	
