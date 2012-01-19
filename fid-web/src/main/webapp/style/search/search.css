@@ -1,13 +1,16 @@
 .search { 
-	position:relative;
 	border : 1px solid;
+}
+
+.search .container { 
+	position:relative;
 }
 
 .search .filter { 
 	width:30%;
-	height: 85%;
+	height: 100%;
 	position: absolute;
-	top:35px;
+	top:0px;
 	left:0;
 	background-color:#ddd;
 }

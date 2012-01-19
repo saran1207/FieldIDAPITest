@@ -5,8 +5,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 @SuppressWarnings("serial")
 public class ResultsContentPanel extends Panel {
 
-	public ResultsContentPanel(String id) {
-		super(id);		
+	private Mediator mediator;
+
+	public ResultsContentPanel(String id, Mediator mediator) {
+		super(id);
+		this.mediator = mediator;
 	}
 
 }

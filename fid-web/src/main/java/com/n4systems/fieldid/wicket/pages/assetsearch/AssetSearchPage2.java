@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 
@@ -10,19 +11,25 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
 
     private AssetFilterPanel filter;
+	private WebMarkupContainer container;
 
 	public AssetSearchPage2() {
-		setOutputMarkupId(true);
     	add(new SearchBar("topBar"));
-    	add(new SearchMenu("topMenu",this));    	
-    	add(filter = new AssetFilterPanel("filter",this));
-    	add(new ResultsContentPanel("content"));
-    	add(new SearchMenu("bottomMenu",this));    	
+    	add(container = createContentWithMenus());
     	add(new SearchBar("bottomBar"));
-    	filter.setVisible(false);
     }
     
-    @Override	
+    private WebMarkupContainer createContentWithMenus() {
+    	WebMarkupContainer container = new WebMarkupContainer("container");
+    	container.setOutputMarkupId(true);
+    	container.add(filter = new AssetFilterPanel("filter",this));
+    	container.add(new SearchMenu("topMenu",this));    	
+    	container.add(new ResultsContentPanel("content",this));
+    	container.add(new SearchMenu("bottomMenu",this));    	
+    	return container;
+	}
+
+	@Override	
     public void renderHead(IHeaderResponse response) {
     	response.renderCSSReference("style/search/search.css");    	
     	super.renderHead(response);
@@ -31,11 +38,9 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
 	@Override
 	public void handleEvent(AjaxRequestTarget target, Component component) {
 		String id = component.getId();
-		if (id.equals("showFilters")) { 
-			filter.setVisible(true);
-		} else if (id.equals("search")) { 
-			filter.setVisible(false);
-			target.add(AssetSearchPage2.this);
+		if (id.equals("search")) {
+			target.add(filter);
+			target.add(container);
 		}
 	}
 

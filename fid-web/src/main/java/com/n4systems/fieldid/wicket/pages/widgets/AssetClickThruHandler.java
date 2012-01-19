@@ -15,7 +15,6 @@ public class AssetClickThruHandler extends SimpleClickThruHandler {
 	@Override
 	protected Class<? extends FieldIDFrontEndPage> getClickThruPage() {
 		return AssetSearchResultsPage.class;
-	}
-	
+	}	
 	
 }

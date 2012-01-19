@@ -12,7 +12,6 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage2Test.Asset
 
 @RunWith(FieldIdWicketTestRunner.class)
 public class AssetSearchPage2Test extends FieldIdPageTest<AssetSearchHarness, AssetSearchPage2> {
-
 	
 	@Test
 	public void testRender() {
