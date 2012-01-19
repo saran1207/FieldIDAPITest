@@ -1,0 +1,54 @@
+.search { 
+	position:relative;
+	border : 1px solid;
+}
+
+.search .filter { 
+	width:30%;
+	height: 85%;
+	position: absolute;
+	top:35px;
+	left:0;
+	background-color:#ddd;
+}
+
+.search .buttonsLeft {
+	float:left;
+	margin-top: 12px;
+}
+
+.search .buttonsRight {
+	float:right;
+	margin-top: 12px;
+}
+
+.button { 
+	text-decoration: none;
+	margin: 0px 5px;	
+}
+	
+.search .bar .buttons .button { 
+	color: #ddd;
+}
+
+
+.search .menu .buttons .button { 
+	color: #777;
+}
+
+.search .content { 
+	width:100%;
+	height : 300px;
+}
+
+.search .bar { 
+	height:35px;
+	background-color:#4D4D4D;
+	color:#fff; 
+}
+
+.search .menu {
+	height:45px;
+	background-color: #F3F3F3;
+}
+	
