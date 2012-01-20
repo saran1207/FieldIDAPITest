@@ -1,5 +1,7 @@
 <wicket:extend>
 
+    <div wicket:id="reorderButton"></div>
+
     <table class="list">
 
         <thead>
@@ -20,8 +22,9 @@
 
         <tbody wicket:id="itemsListContainer">
             <tr wicket:id="itemsList">
-                <td>
+                <td wicket:id="firstColumn">
                     <form wicket:id="editNameForm">
+                        <img wicket:id="reorderImage"/>
                         <a wicket:id="viewItemLink">
                             <span wicket:id="itemName"/>
                         </a>
@@ -33,16 +36,18 @@
                         </div>
                     </form>
                 </td>
-                <td>
-                    <span wicket:id="modifiedDate"/>
-                </td>
-                <td>
-                    <span wicket:id="type"/>
-                </td>
-                <td>
-                    <a wicket:id="editNameLink"><wicket:message key="label.edit_name"/></a> |
-                    <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
-                </td>
+                <wicket:enclosure child="modifiedDate">
+                    <td>
+                        <span wicket:id="modifiedDate"/>
+                    </td>
+                    <td>
+                        <span wicket:id="type"/>
+                    </td>
+                    <td>
+                        <a wicket:id="editNameLink"><wicket:message key="label.edit_name"/></a> |
+                        <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+                    </td>
+                </wicket:enclosure>
             </tr>
         </tbody>
 
