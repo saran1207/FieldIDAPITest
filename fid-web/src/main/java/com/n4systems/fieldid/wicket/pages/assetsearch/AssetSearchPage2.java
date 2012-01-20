@@ -10,21 +10,21 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 @SuppressWarnings("serial")
 public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
 
-    private AssetFilterPanel filter;
+    private SearchFilterPanel filter;
 	private WebMarkupContainer container;
+	private SearchColumnsPanel columns;
 
 	public AssetSearchPage2() {
-    	add(new SearchBar("topBar"));
     	add(container = createContentWithMenus());
-    	add(new SearchBar("bottomBar"));
     }
     
     private WebMarkupContainer createContentWithMenus() {
     	WebMarkupContainer container = new WebMarkupContainer("container");
     	container.setOutputMarkupId(true);
-    	container.add(filter = new AssetFilterPanel("filter",this));
+    	container.add(filter = new SearchFilterPanel("filter",this));
+    	container.add(columns = new SearchColumnsPanel("columns",this));
     	container.add(new SearchMenu("topMenu",this));    	
-    	container.add(new ResultsContentPanel("content",this));
+    	container.add(new ResultsContentPanel("content", this));
     	container.add(new SearchMenu("bottomMenu",this));    	
     	return container;
 	}

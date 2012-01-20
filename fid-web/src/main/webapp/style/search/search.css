@@ -1,42 +1,84 @@
 .search { 
-	border : 1px solid;
-}
-
-.search .container { 
 	position:relative;
 }
 
-.search .filter { 
+.search .config { 
 	width:30%;
 	height: 100%;
 	position: absolute;
 	top:0px;
 	left:0;
-	background-color:#ddd;
+	background-color:#ddf0f0;
 }
 
+.search .filter {
+	width:180px;
+}
+
+.search .columns {
+	width:300px;
+}
+
+.search .buttons {
+	margin-top:12px;	
+}
+	
 .search .buttonsLeft {
 	float:left;
-	margin-top: 12px;
 }
 
 .search .buttonsRight {
 	float:right;
-	margin-top: 12px;
 }
 
-.button { 
+.buttons .search { 
+	background: rgb(83,128,241);
+	color:#eee;
+}
+
+.buttons a { 
+	margin : 0px 3px;
+	display: inline-block;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
 	text-decoration: none;
-	margin: 0px 5px;	
+	font-size: .9em;
+	padding: 4px;
+	-webkit-border-radius: 4px; 
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	box-shadow: 0 1px 2px rgba(0,0,0,.4);
 }
 	
-.search .bar .buttons .button { 
-	color: #ddd;
+.configMenu { 
+	position : absolute;
+	width:100%;
+}
+
+.search .config .top { 
+	top:0;
+}
+
+.search .config .bottom { 
+	bottom:0px;
+}
+	
+
+/**change to  .search .config .configContent*/
+.configContent { 
+	height: 100%;
 }
 
 
-.search .menu .buttons .button { 
-	color: #777;
+.menu .buttons { 
+	color:#777;
+}
+
+.menu .buttons .button .disabled { 
+	color: #aaa;
 }
 
 .search .content { 
@@ -44,14 +86,11 @@
 	height : 300px;
 }
 
-.search .bar { 
-	height:35px;
-	background-color:#4D4D4D;
-	color:#fff; 
-}
-
 .search .menu {
 	height:45px;
 	background-color: #F3F3F3;
 }
 	
+.search .configPanel {
+	height:100%;
+}	

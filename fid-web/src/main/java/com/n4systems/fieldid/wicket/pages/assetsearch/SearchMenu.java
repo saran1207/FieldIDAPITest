@@ -4,6 +4,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -16,16 +17,17 @@ import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 @SuppressWarnings("serial")
 public class SearchMenu extends Panel {
 
+	private Component showFilters;
+	private Component showColumns;
+	
 	public SearchMenu(String id, final Mediator mediator) {
 		super(id);
-		Component show;
-		add(show = new WebMarkupContainer("showFilters").add(new AttributeAppender("class", new Model<String>("showFilters"), " ")));
+		add(showFilters = new WebMarkupContainer("showFilters").add(new AttributeAppender("class", new Model<String>("showFilters"), " ")));
+		add(showColumns = new WebMarkupContainer("showColumns").add(new AttributeAppender("class", new Model<String>("showFilters"), " ")));
 
-		show.add(new WiQueryEventBehavior(new Event(MouseEvent.CLICK) {
-			@Override public JsScope callback() {
-				return JsScopeUiEvent.quickScope("$('.filter').toggle();");
-			}
-		}));
+		showFilters.add(createToggleBehavior("filter",""));
+		
+		showColumns.add(createToggleBehavior("columns",""));
 		
 		add(new AjaxLink("printCertificates"){
 			@Override public void onClick(AjaxRequestTarget target) {
@@ -43,6 +45,14 @@ public class SearchMenu extends Panel {
 			}			
 		});		
 	
+	}
+
+	private Behavior createToggleBehavior(final String cssClass, final String showHide) {
+		return new WiQueryEventBehavior(new Event(MouseEvent.CLICK) {
+			@Override public JsScope callback() {
+				return JsScopeUiEvent.quickScope("$('."+cssClass+"').toggle("+showHide+");");
+			}
+		});
 	}	
 
 }
