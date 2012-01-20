@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.wicket.model;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+
+@SuppressWarnings("serial")
 public class CombinedListModel<T> extends LoadableDetachableModel<List<T>> {
 
     private IModel<List<T>>[] models;

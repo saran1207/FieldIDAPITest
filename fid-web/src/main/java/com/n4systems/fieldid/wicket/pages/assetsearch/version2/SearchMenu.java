@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.assetsearch;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -13,6 +13,7 @@ import org.odlabs.wiquery.core.events.MouseEvent;
 import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
 import org.odlabs.wiquery.core.javascript.JsScope;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
+
 
 @SuppressWarnings("serial")
 public class SearchMenu extends Panel {

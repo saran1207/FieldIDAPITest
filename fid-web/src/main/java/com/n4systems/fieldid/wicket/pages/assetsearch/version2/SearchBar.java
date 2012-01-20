@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.assetsearch;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;

@@ -1,31 +1,41 @@
-package com.n4systems.fieldid.wicket.pages.assetsearch;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.odlabs.wiquery.core.events.Event;
 import org.odlabs.wiquery.core.events.MouseEvent;
 import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
 import org.odlabs.wiquery.core.javascript.JsScope;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
+import com.n4systems.model.search.AssetSearchCriteriaModel;
+
+
 
 @SuppressWarnings("serial")
 public abstract class SearchConfigPanel extends Panel {
 	
 	private Mediator mediator;
+	protected Form<AssetSearchCriteriaModel> form;
 
-	public SearchConfigPanel(String id, Mediator mediator) {
+	public SearchConfigPanel(String id, Model<AssetSearchCriteriaModel>model, Mediator mediator) {
 		super(id);
 		this.mediator = mediator;
-		setOutputMarkupId(true);		
-		add(createMenu("topMenu"));
-		add(createMenu("bottomMenu"));		
+		setOutputMarkupId(true);
+		
+		add(form=createForm("form",model));
+		form.add(createMenu("topMenu"));
+		form.add(createMenu("bottomMenu"));
 	}
 
+	protected abstract Form<AssetSearchCriteriaModel> createForm(String id, Model<AssetSearchCriteriaModel> model);
+	
 	protected abstract void updateMenu(Component... component);
 
 	protected Component createMenu(String id) {

@@ -1,6 +1,7 @@
-package com.n4systems.fieldid.wicket.pages.assetsearch;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import org.apache.wicket.markup.html.panel.Panel;
+
 
 @SuppressWarnings("serial")
 public class ResultsContentPanel extends Panel {

@@ -1,32 +1,35 @@
-package com.n4systems.fieldid.wicket.pages.assetsearch;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.Model;
 
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.search.AssetSearchCriteriaModel;
 
 @SuppressWarnings("serial")
 public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
 
-    private SearchFilterPanel filter;
 	private WebMarkupContainer container;
+	private SearchFilterPanel filter;
 	private SearchColumnsPanel columns;
 
 	public AssetSearchPage2() {
-    	add(container = createContentWithMenus());
-    }
-    
-    private WebMarkupContainer createContentWithMenus() {
-    	WebMarkupContainer container = new WebMarkupContainer("container");
+    	container = new WebMarkupContainer("container");
     	container.setOutputMarkupId(true);
-    	container.add(filter = new SearchFilterPanel("filter",this));
-    	container.add(columns = new SearchColumnsPanel("columns",this));
+    	Model<AssetSearchCriteriaModel> model = createModel();
+    	container.add(filter = new SearchFilterPanel("filter",model, this));
+    	container.add(columns = new SearchColumnsPanel("columns",model, this));
     	container.add(new SearchMenu("topMenu",this));    	
     	container.add(new ResultsContentPanel("content", this));
-    	container.add(new SearchMenu("bottomMenu",this));    	
-    	return container;
+    	container.add(new SearchMenu("bottomMenu",this));    			
+    	add(container);
+    }	
+	
+	protected Model<AssetSearchCriteriaModel> createModel() {
+		return new Model<AssetSearchCriteriaModel>(new AssetSearchCriteriaModel()); 
 	}
 
 	@Override	
@@ -39,7 +42,6 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
 	public void handleEvent(AjaxRequestTarget target, Component component) {
 		String id = component.getId();
 		if (id.equals("search")) {
-			target.add(filter);
 			target.add(container);
 		}
 	}

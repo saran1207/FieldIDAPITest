@@ -13,7 +13,7 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage2;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AssetSearchPage2;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
