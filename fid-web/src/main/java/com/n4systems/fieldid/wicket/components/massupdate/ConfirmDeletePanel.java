@@ -13,13 +13,12 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.PatternValidator;
 
+import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.exceptions.UpdateFailureException;
-import com.n4systems.fieldid.service.massupdate.MassUpdateService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.model.user.User;
@@ -27,10 +26,10 @@ import com.n4systems.model.user.User;
 public class ConfirmDeletePanel extends Panel {
 	
 	@SpringBean
-	private MassUpdateService massUpdateService;
+	private UserService userService;
 	
 	@SpringBean
-	private UserService userService;
+	private MassUpdateManager massUpdateManager;
 	
 	private Panel previousPanel;
 	
@@ -45,7 +44,7 @@ public class ConfirmDeletePanel extends Panel {
 			protected void onSubmit() {			
 				List<Long> assetIds = assetSearchCriteria.getObject().getSelection().getSelectedIds();
 				try {
-					Long results = massUpdateService.deleteAssets(assetIds, getCurrentUser());
+					Long results = massUpdateManager.deleteAssets(assetIds, getCurrentUser());
 					assetSearchCriteria.getObject().getSelection().clear();
 					setResponsePage(new AssetSearchResultsPage(assetSearchCriteria.getObject()));
 					info(new FIDLabelModel("message.asset_massdelete_successful", results.toString()).getObject());

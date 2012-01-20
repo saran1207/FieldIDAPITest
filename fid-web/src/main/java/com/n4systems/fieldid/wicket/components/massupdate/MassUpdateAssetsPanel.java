@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.massupdate;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
+import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 
 public class MassUpdateAssetsPanel extends Panel {
@@ -42,15 +43,21 @@ public class MassUpdateAssetsPanel extends Panel {
 		};
 	}
 	
-	private EditDetailsPanel getEditDetailsPanel(IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel) {
+	private EditDetailsPanel getEditDetailsPanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel) {
 		return new EditDetailsPanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
 			protected void onCancel() {
 				this.replaceWith(currentPanel = getPreviousPanel());
 			}
+			
+			@Override
+			protected void onNext(MassUpdateAssetModel massUpdateAssetModel) {
+				this.replaceWith(currentPanel = getConfirmEditPanel(assetSearchCriteria, currentPanel, massUpdateAssetModel));
+			}
+
 		};
 	}
-	
+
 	private ConfirmDeletePanel getConfirmDeletePanel(IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel) {
 		return new ConfirmDeletePanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
@@ -58,7 +65,16 @@ public class MassUpdateAssetsPanel extends Panel {
 				this.replaceWith(currentPanel = getPreviousPanel());
 			}
 		};
-		
 	}
+	
+	private ConfirmEditPanel getConfirmEditPanel(IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel, MassUpdateAssetModel massUpdateAssetModel) {
+		return new ConfirmEditPanel("massUpdatePanel", assetSearchCriteria, previousPanel, massUpdateAssetModel){
+			@Override
+			protected void onCancel() {
+				this.replaceWith(currentPanel = getPreviousPanel());
+			}			
+		};
+	}
+
 
 }

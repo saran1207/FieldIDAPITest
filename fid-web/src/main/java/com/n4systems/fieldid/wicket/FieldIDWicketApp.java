@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket;
 
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -26,6 +28,8 @@ import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigur
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
+import com.n4systems.fieldid.wicket.util.PlainDateConverter;
+import com.n4systems.model.utils.PlainDate;
 
 public class FieldIDWicketApp extends WebApplication {
 
@@ -83,6 +87,13 @@ public class FieldIDWicketApp extends WebApplication {
     @Override
     public Session newSession(Request request, Response response) {
         return new FieldIDSession(request);
+    }
+    
+    @Override
+    protected IConverterLocator newConverterLocator() {
+    	ConverterLocator converterLocator = new ConverterLocator();
+    	converterLocator.set(PlainDate.class, new PlainDateConverter());
+    	return converterLocator;
     }
 
 }

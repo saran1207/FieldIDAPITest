@@ -2,16 +2,13 @@ package com.n4systems.fieldid.service.massupdate;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.n4systems.ejb.AssetManager;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.Asset;
@@ -19,13 +16,11 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.user.User;
 import com.n4systems.util.AssetRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class MassUpdateService extends FieldIdPersistenceService {
 	
-	@Autowired private AssetManager assetManager;
 	@Autowired private AssetService assetService;
 	
 	private Logger logger = Logger.getLogger(MassUpdateService.class);
@@ -62,23 +57,5 @@ public class MassUpdateService extends FieldIdPersistenceService {
 		}
 		return summary;
 	}
-		
-	public Long deleteAssets(List<Long> ids, User modifiedBy) throws UpdateFailureException {
-		Long result = 0L;
-
-		try {
-			for (Long id : ids) {
-				Asset asset = assetManager.findAssetAllFields(id, new OpenSecurityFilter());
-				result++;
-				assetManager.archive(asset, modifiedBy);
-			}
-		} catch (Exception e) {
-			throw new UpdateFailureException(e);
-		}
-
-		return result;
-	}
-	
-	
 
 }

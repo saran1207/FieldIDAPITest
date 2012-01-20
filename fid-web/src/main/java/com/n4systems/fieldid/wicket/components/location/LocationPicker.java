@@ -21,6 +21,7 @@ public class LocationPicker extends Panel {
     private IModel<Location> locationModel;
     private WebMarkupContainer locationPickerContainer;
     private AjaxLink chooseLink;
+    TextField<String> freeformLocationField;
 
     private PredefinedLocationsPanel predefinedLocationsPanel;
     private String freeformLocation;
@@ -42,7 +43,7 @@ public class LocationPicker extends Panel {
         add(predefinedEnabledContainer);
 
         WebMarkupContainer predefinedDisabledContainer = new WebMarkupContainer("predefinedDisabledContainer");
-        predefinedDisabledContainer.add(new TextField<String>("freeformLocation", new PropertyModel<String>(locationModel, "freeformLocation")));
+        predefinedDisabledContainer.add(freeformLocationField = new TextField<String>("freeformLocation", new PropertyModel<String>(locationModel, "freeformLocation")));
         predefinedDisabledContainer.setVisible(!FieldIDSession.get().getSecurityGuard().isAdvancedLocationEnabled());
         add(predefinedDisabledContainer);
 
@@ -84,6 +85,7 @@ public class LocationPicker extends Panel {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     setModelValueFromPicker();
                     closePicker(target);
+                    onLocationPicked(target);
                 }
 
                 @Override
@@ -115,5 +117,10 @@ public class LocationPicker extends Panel {
         locationPickerContainer.setVisible(false);
         target.add(LocationPicker.this);
     }
-
+    
+    protected void onLocationPicked(AjaxRequestTarget target) {}
+    
+    public TextField<String> getFreeformLocationField() {
+    	return freeformLocationField;
+    }
 }
