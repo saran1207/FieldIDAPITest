@@ -1,0 +1,51 @@
+<wicket:extend>
+
+    <table class="list">
+
+        <thead>
+            <tr>
+                <th>
+                    <wicket:message key="label.name"/>
+                </th>
+                <th>
+                    <wicket:message key="label.datemodified"/>
+                </th>
+                <th>
+                    <wicket:message key="label.type"/>
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody wicket:id="itemsListContainer">
+            <tr wicket:id="itemsList">
+                <td>
+                    <form wicket:id="editNameForm">
+                        <a wicket:id="viewItemLink">
+                            <span wicket:id="itemName"/>
+                        </a>
+                        <div wicket:id="editContainer">
+                            <input type="text" wicket:id="itemName">
+                            <input type="submit" wicket:id="saveNameButton" wicket:message="value:label.save">
+                            <wicket:message key="label.or"/>
+                            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    <span wicket:id="modifiedDate"/>
+                </td>
+                <td>
+                    <span wicket:id="type"/>
+                </td>
+                <td>
+                    <a wicket:id="editNameLink"><wicket:message key="label.edit_name"/></a> |
+                    <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+</wicket:extend>

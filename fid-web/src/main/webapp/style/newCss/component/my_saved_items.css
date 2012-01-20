@@ -15,6 +15,10 @@
     display:block;
 }
 
+.mySavedItemsBox .savedItemContainer {
+    height:36px;
+}
+
 .mySavedItemsBox .savedItem img {
     padding-right:16px;
     display:block;
@@ -25,18 +29,24 @@
     background-color:#f0f0f0;
 }
 
-#pageHeader #mySavedItemsBox a, #pageHeader #mySavedItemsBox a:hover, #pageHeader #mySavedItemsBox a:visited {
+#pageHeader #mySavedItemsBox .savedItemContainer a, #pageHeader #mySavedItemsBox .savedItemContainer a:hover, #pageHeader #mySavedItemsBox .savedItemContainer a:visited {
     text-decoration: none;
     color: #444;
+}
+
+#pageHeader #mySavedItemsBox .manageLinkSection a {
+    color:#356CA2;
+}
+
+.mySavedItemsBox .manageLinkSection {
+    border-top:1px solid #ebebeb;
+    padding-left:16px;
+    padding-top:8px;
 }
 
 .mySavedItemsBox .blankSlateContainer {
     font-style: italic;
     padding-left:16px;
-}
-
-.listOfLinks .openedSavedItemsLink {
-    background-color:#ebebeb;
 }
 
 .listOfLinks img.divider {

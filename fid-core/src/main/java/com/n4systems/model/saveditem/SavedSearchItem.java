@@ -10,4 +10,9 @@ import javax.persistence.InheritanceType;
 @DiscriminatorValue("S")
 public class SavedSearchItem extends SavedItem {
 
+    @Override
+    public String getTitleLabelKey() {
+        return "label.search";
+    }
+
 }

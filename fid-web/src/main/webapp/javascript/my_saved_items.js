@@ -1,7 +1,7 @@
-var savedItemsDropBoxDown = false;
+var savedItemsDropBoxShown = false;
 
-function showDropBox() {
-    savedItemsDropBoxDown = true;
+function showDropDown() {
+    savedItemsDropBoxShown = true;
     jQuery('#mySavedItemsBox').load("/fieldid/w/savedItems", function() { jQuery(this).slideDown(80) } );
     var boxSelector = "#mySavedItemsBox";
     var linkSelector = "#mySavedItemsLink";
@@ -9,27 +9,25 @@ function showDropBox() {
         boxSelector = 'mySavedItemsBox';
         linkSelector = 'mySavedItemsLink';
     }
-    translate($(boxSelector), $(linkSelector), 14, -212);
-    jQuery("#mySavedItemsLink").parents("li").addClass("openedSavedItemsLink");
+    translate($(boxSelector), $(linkSelector), 24, -221);
 }
 
-function hideDropBox() {
-    savedItemsDropBoxDown = false;
+function hideDropDown() {
+    savedItemsDropBoxShown = false;
     jQuery('#mySavedItemsBox').fadeOut();
-    jQuery("#mySavedItemsLink").parents("li").removeClass("openedSavedItemsLink");
 }
 
 function toggleDropBox() {
-    if (savedItemsDropBoxDown) {
-        hideDropBox();
+    if (savedItemsDropBoxShown) {
+        hideDropDown();
     } else {
-        showDropBox();
+        showDropDown();
     }
 }
 
 function listenForSavedItemsClick() {
     jQuery('#mySavedItemsLink').click(toggleDropBox);
-    jQuery('#mySavedItemsLink').parents('#pageActions').mouseleave(hideDropBox);
+    jQuery('#mySavedItemsLink').parents('#pageActions').mouseleave(hideDropDown);
 }
 
 jQuery(document).ready(function() { listenForSavedItemsClick(); });

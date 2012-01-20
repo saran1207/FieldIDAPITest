@@ -28,4 +28,8 @@ public class SavedReportItem extends SavedItem {
         this.report = report;
     }
 
+    @Override
+    public String getTitleLabelKey() {
+        return "label.report";
+    }
 }

@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="saved_items")
@@ -36,4 +37,8 @@ public abstract class SavedItem extends EntityWithTenant {
     public void setSharedByName(String sharedByName) {
         this.sharedByName = sharedByName;
     }
+
+    @Transient
+    public abstract String getTitleLabelKey();
+
 }
