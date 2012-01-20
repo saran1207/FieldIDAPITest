@@ -1,9 +1,10 @@
 package com.n4systems.fieldid.ws.v1.resources.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListResponse<T> {
-	private List<T> list;
+	private List<T> list = new ArrayList<T>();
 	private int page;
 	private int pageSize;
 	private long total;

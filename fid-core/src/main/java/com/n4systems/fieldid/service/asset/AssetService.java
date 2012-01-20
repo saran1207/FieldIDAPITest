@@ -28,11 +28,11 @@ import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause;
+import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereParameterGroup;
-import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.util.persistence.WhereParameterGroup;
 
 public class AssetService extends FieldIdPersistenceService {
 	
@@ -116,6 +116,13 @@ public class AssetService extends FieldIdPersistenceService {
         query.addWhere(WhereClauseFactory.create(Comparator.IN, "id", assetIds));
         return persistenceService.findAll(query);
     }
+
+    public Asset findByMobileId(String mobileId) {
+    	QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
+    	builder.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));
+    	Asset asset = persistenceService.find(builder);
+    	return asset;
+    }
     
     public Asset getAsset(Long assetId) {
         return persistenceService.find(Asset.class, assetId);
@@ -149,4 +156,5 @@ public class AssetService extends FieldIdPersistenceService {
 			return null;
 		}
 	}
+
 }

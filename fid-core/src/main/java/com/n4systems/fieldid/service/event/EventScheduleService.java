@@ -28,4 +28,14 @@ public class EventScheduleService extends FieldIdPersistenceService {
 		return (schedules.isEmpty()) ? null : schedules.get(0);
 	}
 
+	@Transactional(readOnly = true)
+	public List<EventSchedule> getIncompleteSchedules(Long assetId) {
+		QueryBuilder<EventSchedule> query = createUserSecurityBuilder(EventSchedule.class)
+				.addOrder("nextDate")
+				.addWhere(WhereClauseFactory.create(Comparator.NE, "status", ScheduleStatus.COMPLETED))
+				.addWhere(WhereClauseFactory.create("asset.id", assetId));
+
+		List<EventSchedule> schedules = persistenceService.findAll(query);
+		return schedules;
+	}
 }

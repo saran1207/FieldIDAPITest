@@ -15,28 +15,37 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import rfid.ejb.entity.InfoOptionBean;
 
+import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
+import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Component
 @Path("asset")
 public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	private static Logger logger = Logger.getLogger(ApiAssetResource.class);
+	
+	@Autowired private AssetService assetService;
+	@Autowired private EventScheduleService eventScheduleService;
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -73,15 +82,28 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 	
 	@GET
+	@Path("list")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public ListResponse<ApiAsset> findAll(@QueryParam("id") List<String> assetIds) {
+		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
+		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", assetIds));
+		
+		List<Asset> assets = persistenceService.findAll(builder);
+		
+		List<ApiAsset> apiAssets = convertAllEntitiesToApiModels(assets);
+		ListResponse<ApiAsset> response = new ListResponse<ApiAsset>(apiAssets, 0, assets.size(), assets.size());
+		return response;
+	}
+	
+	@GET
 	@Path("{id}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public ApiAsset find(@PathParam("id") String id) {
-		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
-		builder.addWhere(WhereClauseFactory.create("mobileGUID", id));
-		
-		Asset asset = persistenceService.find(builder);
+		Asset asset = assetService.findByMobileId(id);
 		if (asset == null) {
 			throw new NotFoundException("Asset", id);
 		}
@@ -142,7 +164,25 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			apiAsset.getAttributeValues().add(convertInfoOption(option));
 		}
 		
+		List<EventSchedule> schedules = eventScheduleService.getIncompleteSchedules(asset.getId());
+		for (EventSchedule schedule: schedules) {
+			apiAsset.getSchedules().add(convertEventSchedule(schedule));
+		}
+		
 		return apiAsset;
+	}
+	
+	private ApiEventSchedule convertEventSchedule(EventSchedule schedule) {
+		ApiEventSchedule apiSchedule = new ApiEventSchedule();
+		apiSchedule.setSid(schedule.getMobileGUID());
+		apiSchedule.setActive(true);
+		apiSchedule.setModified(schedule.getModified());
+		apiSchedule.setOwnerId(schedule.getOwner().getId());
+		apiSchedule.setAssetId(schedule.getAsset().getMobileGUID());
+		apiSchedule.setEventTypeId(schedule.getEventType().getId());
+		apiSchedule.setEventTypeName(schedule.getEventType().getName());
+		apiSchedule.setNextDate(schedule.getNextDate());
+		return apiSchedule;
 	}
 	
 	private ApiAttributeValue convertInfoOption(InfoOptionBean infoOption) {

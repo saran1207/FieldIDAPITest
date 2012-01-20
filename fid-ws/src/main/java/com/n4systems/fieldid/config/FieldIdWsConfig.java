@@ -13,11 +13,12 @@ import com.n4systems.fieldid.ws.v1.resources.authentication.AuthenticationResour
 import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateResource;
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
-import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
+import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
 import com.n4systems.fieldid.ws.v1.resources.smartsearch.ApiSmartSearchResource;
+import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
 import com.n4systems.fieldid.ws.v1.resources.unit.ApiUnitResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 
@@ -101,13 +102,17 @@ public class FieldIdWsConfig {
 	}
 	
 	@Bean
-	public ApiEventScheduleResource apiEventScheduleResource() {
-		return new ApiEventScheduleResource();
-	}
-	
-	@Bean
 	public ApiEventTypeResource apiEventTypeResource() {
 		return new ApiEventTypeResource();
 	}
 	
+	@Bean
+	public ApiOfflineProfileResource apiOfflineProfileResource() {
+		return new ApiOfflineProfileResource();
+	}
+	
+	@Bean
+	public ApiSynchronizationResource apiSynchronizationResource() {
+		return new ApiSynchronizationResource();
+	}
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
+import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
 
 public class ApiAsset extends ApiReadWriteModelWithOwner {
@@ -26,6 +27,7 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	private String nonIntergrationOrderNumber;
 	private byte[] image;
 	private List<ApiAttributeValue> attributeValues = new ArrayList<ApiAttributeValue>();
+	private List<ApiEventSchedule> schedules = new ArrayList<ApiEventSchedule>();
 
 	public String getIdentifier() {
 		return identifier;
@@ -170,5 +172,14 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	public void setAttributeValues(List<ApiAttributeValue> attributeValues) {
 		this.attributeValues = attributeValues;
 	}
+
+	public List<ApiEventSchedule> getSchedules() {
+		return schedules;
+	}
+
+	public void setSchedules(List<ApiEventSchedule> schedules) {
+		this.schedules = schedules;
+	}
+	
 
 }

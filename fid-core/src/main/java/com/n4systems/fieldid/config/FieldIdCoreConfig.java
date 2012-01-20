@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.config;
 
-import com.n4systems.fieldid.service.search.AssetSearchService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -38,9 +37,11 @@ import com.n4systems.fieldid.service.export.ExportService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
+import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
 import com.n4systems.fieldid.service.schedule.ScheduleService;
+import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
@@ -314,10 +315,16 @@ public class FieldIdCoreConfig {
     public SecurityContextInitializer securityContextInitializer() {
     	return new SecurityContextInitializer();
     }
-    
+
+    @Bean
+    public OfflineProfileService offlineProfileService() {
+    	return new OfflineProfileService();
+    }
+
     @Bean
     public MassUpdateService massUpdateService() {
     	return new MassUpdateService();
     }
+
 }
 
