@@ -12,21 +12,25 @@ import com.n4systems.fieldid.ws.v1.resources.user.ApiUser;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
+import com.n4systems.services.SecurityContext;
 
 public class AuthenticationResourceTest {
 	
 	private AuthenticationResource fixture;
 	private UserService userService;
 	private ApiUserResource apiUserResource;
+	private SecurityContext securityContext;
 	
 	@Before
 	public void before() {
 		fixture = new AuthenticationResource();
 		userService = createMock(UserService.class);
 		apiUserResource = createMock(ApiUserResource.class);
+		securityContext = createMock(SecurityContext.class);
 		
 		fixture.userService = userService;
 		fixture.apiUserResource = apiUserResource;
+		fixture.securityContext = securityContext;
 	}
 	
 	@Test(expected = ForbiddenException.class)
