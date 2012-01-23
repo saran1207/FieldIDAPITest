@@ -21,7 +21,8 @@ import com.n4systems.model.search.AssetSearchCriteriaModel;
 @SuppressWarnings("serial")
 public abstract class AbstractConfigPanel extends Panel {
 
-	private static final String HIDE_JS = "$('.search .config').hide();";
+	// hide configuration left hand panels and their (possible) children.
+	private static final String HIDE_JS = "$('.search .config').hide(); $('.locationSelection').remove(); $('.orgSelector').remove();";
 	
 	private Mediator mediator;
 	protected Form<AssetSearchCriteriaModel> form;

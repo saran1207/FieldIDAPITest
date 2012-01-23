@@ -17,7 +17,7 @@
 }
 	
 .search .filter {
-	width:450px;
+	width:500px;
 }
 
 .search .buttons {
@@ -137,3 +137,34 @@
 	font-size:13px;
 	padding:8px 0px 2px 0px;
 }
+
+
+/**
+----------------------------------------------------------------------------------------------------------------------------
+overrides to make dialogs work
+
+these are all hacks really and should be refactored into main code site wide when finished integrating new search/reporting screens. 
+----------------------------------------------------------------------------------------------------------------------------
+*/
+
+.locationSelection {
+	position:relative !important;
+	left:00px !important;
+	top:-65px !important;
+	background-color:#fff !important;
+	width:400px !important;
+	padding:4px !important;
+	border: 1px solid #333 !important;
+}
+
+.orgSelector {
+	position:relative !important;
+	top:-60px;
+	left:-100px;
+    width: 255px !important;
+} 
+
+.orgBrowserForm .infoSet label {
+	font-size: 1em !important;
+	width: 80px !important;
+}	
