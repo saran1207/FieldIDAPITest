@@ -29,7 +29,7 @@ import com.n4systems.model.search.ReportConfiguration;
 
 
 @SuppressWarnings("serial")
-public class SearchColumnsPanel extends SearchConfigPanel {
+public class SearchColumnsPanel extends AbstractConfigPanel {
 
 	
 	@SpringBean 
@@ -124,14 +124,14 @@ public class SearchColumnsPanel extends SearchConfigPanel {
         return assetColumnsService.getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
     }    
 
-    private void updateDynamicEventColumns(IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel, EventType eventType, List<EventType> availableEventTypes) {
-        dynamicEventColumnsModel.setObject(getDynamicEventColumns(eventType,  availableEventTypes));
-    }
-
-    private void updateDynamicAssetColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, AssetType assetType, List<AssetType> availableAssetTypes) {
-        dynamicAssetColumnsModel.setObject(getDynamicAssetColumns(assetType, availableAssetTypes));
-    }
-
+//    private void updateDynamicEventColumns(IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel, EventType eventType, List<EventType> availableEventTypes) {
+//        dynamicEventColumnsModel.setObject(getDynamicEventColumns(eventType,  availableEventTypes));
+//    }
+//
+//    private void updateDynamicAssetColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, AssetType assetType, List<AssetType> availableAssetTypes) {
+//        dynamicAssetColumnsModel.setObject(getDynamicAssetColumns(assetType, availableAssetTypes));
+//    }
+//
     protected List<ColumnMappingGroupView> getDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
         return Collections.<ColumnMappingGroupView>emptyList();
     }

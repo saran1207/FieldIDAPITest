@@ -8,32 +8,37 @@
 	position: absolute;
 	top:0px;
 	left:0;
-	background-color:#f0ffff;
-}
-
-.search .filter {
-	width:180px;
+	border-left: 1px #ddd dotted;
+	border-right: 1px #ddd dotted;
 }
 
 .search .columns {
 	width:200px;
+}
+	
+.search .filter {
+	width:450px;
 }
 
 .search .buttons {
 	margin-top:12px;	
 }
 	
-.search .buttonsLeft {
+.search .buttons-left {
 	float:left;
 }
 
-.search .buttonsRight {
+.search .buttons-right {
 	float:right;
 }
 
 .buttons .search { 
 	background: rgb(83,128,241);
 	color:#eee;
+}
+
+.buttons .close {
+	float:right;		 
 }
 
 .buttons a { 
@@ -53,7 +58,7 @@
 	box-shadow: 0 1px 2px rgba(0,0,0,.4);
 }
 	
-.configMenu { 
+.config-menu { 
 	position : absolute;
 	width:100%;
 }
@@ -65,17 +70,22 @@
 .search .config .bottom { 
 	bottom:0px;
 }
-	
 
-/**change to  .search .config .configContent*/
-.configContent { 
-	height: 300px;
-	width:100%;
+
+.search .config form .config-content { 
+	height: 600px;
 	position:absolute;
+	width:100%;
 	top:45px;
 	overflow-y:auto;
 	overflow-x:hidden; 
 }
+
+.search .filter form .config-content {
+	margin-top:4px; 
+	margin-bottom:4px; 
+}
+
 
 
 .menu .buttons { 
@@ -88,15 +98,42 @@
 
 .search .content { 
 	width:100%;
-	height : 300px;
+	height : 600px;
 }
 
 .search .menu {
 	height:45px;
 	background-color: #F3F3F3;
 }
-	
-.search .configPanel {
-	height:100%;
+
+.field {
+	margin:5px 0px 5px 10px;
 }
 
+.field label { 
+	width : 100px;
+	vertical-align:top;
+	margin-right:5px;
+}
+
+.field label {
+	  text-align:right;
+}
+
+.field label, .field input, .field select, .field .popup {
+  display:inline-block;
+}
+
+.field input, .field select, .field .component {
+  width:150px;
+}
+
+.field .date { 
+	display:inline;
+}
+
+.header {
+	margin-left:5px;
+	font-size:13px;
+	padding:8px 0px 2px 0px;
+}

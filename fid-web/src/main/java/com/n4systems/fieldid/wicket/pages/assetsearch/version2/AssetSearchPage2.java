@@ -20,9 +20,8 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
     	container = new WebMarkupContainer("container");
     	container.setOutputMarkupId(true);
     	Model<AssetSearchCriteriaModel> model = createModel();
-    	container.add(filter = new SearchFilterPanel("filter",model, this));
-    	container.add(columns = new SearchColumnsPanel("columns",model, this));
     	container.add(new SearchMenu("topMenu",this));    	
+    	container.add(new SearchConfigPanel("config", model,this));
     	container.add(new ResultsContentPanel("content", this));
     	container.add(new SearchMenu("bottomMenu",this));    			
     	add(container);
@@ -41,7 +40,7 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
 	@Override
 	public void handleEvent(AjaxRequestTarget target, Component component) {
 		String id = component.getId();
-		if (id.equals("search")) {
+		if (id.equals("config")) {
 			target.add(container);
 		}
 	}
