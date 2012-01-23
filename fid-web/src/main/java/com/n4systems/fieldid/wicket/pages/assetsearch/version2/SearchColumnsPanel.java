@@ -76,7 +76,7 @@ public class SearchColumnsPanel extends SearchConfigPanel {
             add(new ListView<ColumnMappingGroupView>("columnGroups", columnsModel)  {
                 @Override
                 protected void populateItem(ListItem<ColumnMappingGroupView> item) {
-                	item.add(createCollapsibleColumnsPanel(item));
+               		item.add(createCollapsibleColumnsPanel(item));
                 }
             });
 
