@@ -50,7 +50,7 @@ public class CollapsiblePanel extends Panel {
     private Behavior createCollapseBehavior(final String id) {
 		return new WiQueryEventBehavior(new Event(MouseEvent.CLICK) {
 			@Override public JsScope callback() {
-				return JsScopeUiEvent.quickScope("$('#"+id+"').slideToggle(180);" +
+				return JsScopeUiEvent.quickScope("$('#"+id+"').slideToggle(140);" +
 						"$('#"+expandImage.getMarkupId()+"').toggle();" + 
 						"$('#"+collapseImage.getMarkupId()+"').toggle();");
 			}

@@ -3,6 +3,7 @@
 	background:#eee;
 	color:#333;
 	padding:4px 0px;
+	width:100%;
 }
 
 .collapsibleSectionTitle + .collapsiblePanel {
