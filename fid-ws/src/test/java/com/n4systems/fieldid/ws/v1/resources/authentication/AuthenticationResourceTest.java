@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
+import com.n4systems.fieldid.ws.v1.resources.user.ApiUser;
+import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
 
@@ -15,13 +17,16 @@ public class AuthenticationResourceTest {
 	
 	private AuthenticationResource fixture;
 	private UserService userService;
+	private ApiUserResource apiUserResource;
 	
 	@Before
 	public void before() {
 		fixture = new AuthenticationResource();
 		userService = createMock(UserService.class);
-
-		fixture.setUserService(userService);
+		apiUserResource = createMock(ApiUserResource.class);
+		
+		fixture.userService = userService;
+		fixture.apiUserResource = apiUserResource;
 	}
 	
 	@Test(expected = ForbiddenException.class)
@@ -62,10 +67,14 @@ public class AuthenticationResourceTest {
 		String authKey = "abcdefg";
 		
 		User user = UserBuilder.anEmployee().withAuthKey(authKey).build();
+		ApiUser apiUser = new ApiUser();
 		
 		expect(userService.authenticateUserByPassword(tenant, userId, pass)).andReturn(user);
 		replay(userService);
 		
-		assertEquals(authKey, fixture.authenticate(tenant, userId, pass));
+		expect(apiUserResource.convertEntityToApiModel(user)).andReturn(apiUser);
+		replay(apiUserResource);
+		
+		assertSame(apiUser, fixture.authenticate(tenant, userId, pass));
 	}
 }

@@ -2,11 +2,9 @@ package com.n4systems.fieldid.ws.v1.resources.offlineprofile;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +25,6 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 	
 	@Autowired private OfflineProfileService offlineProfileService;
 	@Autowired private AssetService assetService;
-	
-	@GET
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional
-	public ApiOfflineProfile getOfflineProfile() {
-		OfflineProfile profile = offlineProfileService.findOrCreate(getCurrentUser());
-		ApiOfflineProfile apiProfile = convertEntityToApiModel(profile);
-		return apiProfile;
-	}
 	
 	@PUT
 	@Path("asset/{assetId}")
@@ -103,11 +91,11 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 	}
 
 	@Override
-	protected ApiOfflineProfile convertEntityToApiModel(OfflineProfile profile) {
+	public ApiOfflineProfile convertEntityToApiModel(OfflineProfile profile) {
 		ApiOfflineProfile apiProfile = new ApiOfflineProfile();
 		apiProfile.setUserId(profile.getUser().getId());
-		apiProfile.getAsset().addAll(profile.getAssets());
-		apiProfile.getOrganization().addAll(profile.getOrganizations());
+		apiProfile.getAssets().addAll(profile.getAssets());
+		apiProfile.getOrganizations().addAll(profile.getOrganizations());
 		return apiProfile;
 	}
 	

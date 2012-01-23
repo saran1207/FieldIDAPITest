@@ -1,17 +1,20 @@
 package com.n4systems.fieldid.ws.v1.resources.user;
 
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModelWithOwner;
+import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfile;
 
 public class ApiUser extends ApiReadonlyModelWithOwner {
 	private String userId;
 	private String name;
+	private String authKey;
 	private String hashPassword;
 	private String hashSecurityCardNumber;
 	private String userType;
 	private boolean identifyEnabled;
 	private boolean createEventEnabled;
 	private boolean editEventEnabled;
-
+	private ApiOfflineProfile offlineProfile;
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -26,6 +29,14 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAuthKey() {
+		return authKey;
+	}
+
+	public void setAuthKey(String apiKey) {
+		this.authKey = apiKey;
 	}
 
 	public String getHashPassword() {
@@ -74,6 +85,14 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 
 	public void setEditEventEnabled(boolean permissionEditEvent) {
 		this.editEventEnabled = permissionEditEvent;
+	}
+
+	public ApiOfflineProfile getOfflineProfile() {
+		return offlineProfile;
+	}
+
+	public void setOfflineProfile(ApiOfflineProfile offlineProfile) {
+		this.offlineProfile = offlineProfile;
 	}
 
 }

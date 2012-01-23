@@ -8,31 +8,32 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
+import com.n4systems.fieldid.ws.v1.resources.user.ApiUser;
+import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.services.SecurityContext;
 
 @Path("/authenticate")
 @Component
-@Scope("request")
 public class AuthenticationResource extends FieldIdPersistenceService {
 
-	@Autowired private UserService userService;
-	
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
+	@Autowired protected UserService userService;
+	@Autowired protected ApiUserResource apiUserResource;
+	@Autowired protected SecurityContext securityContext;
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public String authenticate(
+	public ApiUser authenticate(
 			@FormParam("tenant") String tenantName,
 			@FormParam("user") String userId, 
 			@FormParam("password") String password) {
@@ -46,7 +47,11 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 			throw new ForbiddenException();
 		}
 		
-		return user.getAuthKey();
+		securityContext.setUserSecurityFilter(new UserSecurityFilter(user));
+		securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(user.getTenant().getId()));
+		
+		ApiUser apiUser = apiUserResource.convertEntityToApiModel(user);
+		return apiUser;
 	}
 	
 }

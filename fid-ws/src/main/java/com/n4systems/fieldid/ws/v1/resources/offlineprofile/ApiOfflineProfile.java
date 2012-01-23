@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ApiOfflineProfile {
 	private Long userId;
-	private List<String> asset = new ArrayList<String>();
-	private List<Long> organization = new ArrayList<Long>();
+	private List<String> assets = new ArrayList<String>();
+	private List<Long> organizations = new ArrayList<Long>();
 
 	public Long getUserId() {
 		return userId;
@@ -16,20 +16,20 @@ public class ApiOfflineProfile {
 		this.userId = userId;
 	}
 
-	public List<String> getAsset() {
-		return asset;
+	public List<String> getAssets() {
+		return assets;
 	}
 
-	public void setAsset(List<String> asset) {
-		this.asset = asset;
+	public void setAssets(List<String> asset) {
+		this.assets = asset;
 	}
 
-	public List<Long> getOrganization() {
-		return organization;
+	public List<Long> getOrganizations() {
+		return organizations;
 	}
 
-	public void setOrganization(List<Long> organization) {
-		this.organization = organization;
+	public void setOrganizations(List<Long> organization) {
+		this.organizations = organization;
 	}
 
 }
