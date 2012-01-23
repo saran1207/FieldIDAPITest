@@ -41,11 +41,9 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.model.user.User;
 
-public class EditDetailsPanel extends Panel {
+public class EditDetailsPanel extends AbstractMassUpdatePanel {
 	
-	private Panel previousPanel;
-	
-	public EditDetailsPanel(String id, IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel) {
+	public EditDetailsPanel(String id, IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		super(id, assetSearchCriteria);
 		this.previousPanel = previousPanel;
 						
@@ -83,11 +81,6 @@ public class EditDetailsPanel extends Panel {
 	}
 	
 	protected void onNext(MassUpdateAssetModel massUpdateAssetModel) {};
-	protected void onCancel() {};
-
-	public Panel getPreviousPanel() {
-		return previousPanel;
-	}
 
 	class MassUpdateAssetForm extends Form<MassUpdateAssetModel> {
 

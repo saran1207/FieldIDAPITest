@@ -23,7 +23,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.model.user.User;
 
-public class ConfirmDeletePanel extends Panel {
+public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 	
 	@SpringBean
 	private UserService userService;
@@ -31,11 +31,9 @@ public class ConfirmDeletePanel extends Panel {
 	@SpringBean
 	private MassUpdateManager massUpdateManager;
 	
-	private Panel previousPanel;
-	
 	private String confirmation;
 
-	public ConfirmDeletePanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel) {
+	public ConfirmDeletePanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		super(id);
 		this.previousPanel = previousPanel;
 		
@@ -70,12 +68,6 @@ public class ConfirmDeletePanel extends Panel {
 		add(confirmDeleteForm);
 		
 		add(new FIDFeedbackPanel("feedbackPanel"));
-	}
-	
-	protected void onCancel() {};
-
-	public Panel getPreviousPanel() {
-		return previousPanel;
 	}
 	
 	private User getCurrentUser() {

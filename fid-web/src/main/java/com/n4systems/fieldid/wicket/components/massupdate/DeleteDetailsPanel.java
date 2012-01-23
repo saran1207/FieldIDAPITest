@@ -17,7 +17,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.util.AssetRemovalSummary;
 
-public class DeleteDetailsPanel extends Panel{
+public class DeleteDetailsPanel extends AbstractMassUpdatePanel{
 	
 	@SpringBean 
 	private MassUpdateService massUpdateService;
@@ -25,9 +25,7 @@ public class DeleteDetailsPanel extends Panel{
 	@SpringBean
 	private AssetService assetService;
 	
-	private Panel previousPanel;
-	
-	public DeleteDetailsPanel(String id, IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel) {
+	public DeleteDetailsPanel(String id, IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		super(id);
 
 		this.previousPanel = previousPanel;
@@ -65,13 +63,7 @@ public class DeleteDetailsPanel extends Panel{
 		});
 	}
 
-	protected void onCancel() {};
-	
 	protected void onNext() {};
-	
-	public Panel getPreviousPanel() {
-		return previousPanel;
-	}
 	
 	private AssetRemovalSummary getRemovalSummary(List<Long> selectedIds) {
 		

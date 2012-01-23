@@ -8,7 +8,8 @@ import com.n4systems.model.search.AssetSearchCriteriaModel;
 
 public class MassUpdateAssetsPanel extends Panel {
 	
-	private Panel currentPanel;
+	private AbstractMassUpdatePanel currentPanel;
+	private MassUpdateNavigationPanel navPanel;
 	
 	protected enum MassUpdateOperation { Edit, Delete; };
 	
@@ -19,61 +20,82 @@ public class MassUpdateAssetsPanel extends Panel {
 			@Override
 			protected void onOperationSelected(MassUpdateOperation operation) {
 				if(operation == MassUpdateOperation.Delete) {
-					currentPanel.replaceWith(currentPanel = getDeleteDetailsPanel(assetSearchCriteria, currentPanel));
+					this.replaceWith(currentPanel = getDeleteDetailsPanel(assetSearchCriteria, currentPanel));
 				} else {
-					currentPanel.replaceWith(currentPanel = getEditDetailsPanel(assetSearchCriteria, currentPanel));
+					this.replaceWith(currentPanel = getEditDetailsPanel(assetSearchCriteria, currentPanel));
 				}
+				updateNavigationPanel(assetSearchCriteria, currentPanel);
 			}
 		};
 		add(currentPanel);
 		
+		add(navPanel = getNavigationPanel(assetSearchCriteria, currentPanel));
 	}
 	
-	private DeleteDetailsPanel getDeleteDetailsPanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel) {
+	private MassUpdateNavigationPanel getNavigationPanel(IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel panel) {
+		return new MassUpdateNavigationPanel("navPanel", assetSearchCriteria, panel);
+	}
+	
+	private void updateNavigationPanel(IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel panel) {
+		navPanel.setParent(this);
+		navPanel.replaceWith(getNavigationPanel(assetSearchCriteria, panel));		
+	}
+
+	private DeleteDetailsPanel getDeleteDetailsPanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		return new DeleteDetailsPanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
 			protected void onCancel() {
 				this.replaceWith(currentPanel = getPreviousPanel());
+				updateNavigationPanel(assetSearchCriteria, getPreviousPanel());
 			}
 			
 			@Override
 			protected void onNext() {
 				this.replaceWith(currentPanel = getConfirmDeletePanel(assetSearchCriteria, currentPanel));
+				updateNavigationPanel(assetSearchCriteria, currentPanel);
 			}
 		};
 	}
 	
-	private EditDetailsPanel getEditDetailsPanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel) {
+	private AbstractMassUpdatePanel getEditDetailsPanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		return new EditDetailsPanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
 			protected void onCancel() {
 				this.replaceWith(currentPanel = getPreviousPanel());
+				updateNavigationPanel(assetSearchCriteria, getPreviousPanel());
 			}
 			
 			@Override
 			protected void onNext(MassUpdateAssetModel massUpdateAssetModel) {
 				this.replaceWith(currentPanel = getConfirmEditPanel(assetSearchCriteria, currentPanel, massUpdateAssetModel));
+				updateNavigationPanel(assetSearchCriteria, currentPanel);
 			}
 
 		};
 	}
 
-	private ConfirmDeletePanel getConfirmDeletePanel(IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel) {
+	private ConfirmDeletePanel getConfirmDeletePanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		return new ConfirmDeletePanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
 			protected void onCancel() {
 				this.replaceWith(currentPanel = getPreviousPanel());
+				updateNavigationPanel(assetSearchCriteria, getPreviousPanel());
 			}
 		};
 	}
 	
-	private ConfirmEditPanel getConfirmEditPanel(IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel, MassUpdateAssetModel massUpdateAssetModel) {
+	private ConfirmEditPanel getConfirmEditPanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel, MassUpdateAssetModel massUpdateAssetModel) {
 		return new ConfirmEditPanel("massUpdatePanel", assetSearchCriteria, previousPanel, massUpdateAssetModel){
 			@Override
 			protected void onCancel() {
 				this.replaceWith(currentPanel = getPreviousPanel());
+				updateNavigationPanel(assetSearchCriteria, getPreviousPanel());
 			}			
 		};
+	}
+
+	public void setCurrentPanel(AbstractMassUpdatePanel panel) {
+		this.currentPanel = panel;
 	}
 
 

@@ -20,7 +20,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.MassUpdateAssetsTask;
 
-public class ConfirmEditPanel extends Panel {
+public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 	
 	@SpringBean
 	private UserService userService;
@@ -28,11 +28,9 @@ public class ConfirmEditPanel extends Panel {
 	@SpringBean
 	private MassUpdateManager massUpdateManager;
 	
-	private Panel previousPanel;
-	
 	private MassUpdateAssetModel massUpdateAssetModel;
 
-	public ConfirmEditPanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria, Panel previousPanel, final MassUpdateAssetModel massUpdateAssetModel) {
+	public ConfirmEditPanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel, final MassUpdateAssetModel massUpdateAssetModel) {
 		super(id, assetSearchCriteria);
 		this.previousPanel = previousPanel;
 		this.massUpdateAssetModel = massUpdateAssetModel;
@@ -60,12 +58,6 @@ public class ConfirmEditPanel extends Panel {
 		add(confirmEditForm);
 	}
 	
-	protected void onCancel() {};
-
-	public Panel getPreviousPanel() {
-		return previousPanel;
-	}
-
 	private User getCurrentUser() {
 		return userService.getUser( FieldIDSession.get().getSessionUser().getId());
 	}
