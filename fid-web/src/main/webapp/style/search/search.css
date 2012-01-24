@@ -140,7 +140,7 @@
 
 /**
 ----------------------------------------------------------------------------------------------------------------------------
-overrides to make dialogs work
+overrides to make things work without touching the shared codebase.
 
 these are all hacks really and should be refactored into main code site wide when finished integrating new search/reporting screens. 
 ----------------------------------------------------------------------------------------------------------------------------
@@ -157,4 +157,8 @@ these are all hacks really and should be refactored into main code site wide whe
 .orgBrowserForm .infoSet label {
 	font-size: 1em !important;
 	width: 80px !important;
-}	
+}
+
+#pageContent {
+    overflow: visible;
+}

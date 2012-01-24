@@ -21,7 +21,7 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements FormListene
     	container = new WebMarkupContainer("container");
     	container.setOutputMarkupId(true);
     	Model<AssetSearchCriteriaModel> model = createModel();
-    	container.add(new SearchMenu("topMenu",this));    	
+    	container.add(new SearchMenu("topMenu",model,this));    	
     	container.add(new SearchConfigPanel("config", model,this));
     	container.add(content=new ResultsContentPanel("content", model, this));
     	add(container);

@@ -53,6 +53,7 @@ public abstract class AbstractSearchConfigPanel extends Panel {
 		menu.add(search = new IndicatingAjaxLink("search") {
 			@Override public void onClick(AjaxRequestTarget target) {
 				AbstractSearchConfigPanel.this.formListener.handleEvent(target,this);
+				target.appendJavaScript(HIDE_JS);
 			}
 		});		
 		menu.add(filters = new WebMarkupContainer("filters"));
