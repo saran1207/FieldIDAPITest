@@ -25,7 +25,7 @@ import com.n4systems.model.utils.DateRange;
 
 
 @SuppressWarnings("serial")
-public class SearchFilterPanel extends AbstractConfigPanel {
+public class SearchFilterPanel extends AbstractSearchConfigPanel {
 
 	public SearchFilterPanel(String id, Model<AssetSearchCriteriaModel> model, final Mediator mediator) {
 		super(id,model, mediator);

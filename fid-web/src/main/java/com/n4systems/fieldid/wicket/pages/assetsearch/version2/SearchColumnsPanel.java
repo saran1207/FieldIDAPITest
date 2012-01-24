@@ -28,7 +28,7 @@ import com.n4systems.model.search.ReportConfiguration;
 
 
 @SuppressWarnings("serial")
-public class SearchColumnsPanel extends AbstractConfigPanel {
+public class SearchColumnsPanel extends AbstractSearchConfigPanel {
 
 	@SpringBean private AssetColumnsService assetColumnsService;
 	@SpringBean private DynamicColumnsService dynamicColumnsService;	

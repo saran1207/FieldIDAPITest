@@ -15,15 +15,15 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
 	private WebMarkupContainer container;
 	private SearchFilterPanel filter;
 	private SearchColumnsPanel columns;
+	private ResultsContentPanel content;
 
 	public AssetSearchPage2() {
-		setOutputMarkupId(true);
     	container = new WebMarkupContainer("container");
     	container.setOutputMarkupId(true);
     	Model<AssetSearchCriteriaModel> model = createModel();
     	container.add(new SearchMenu("topMenu",this));    	
     	container.add(new SearchConfigPanel("config", model,this));
-    	container.add(new ResultsContentPanel("content", this));
+    	container.add(content=new ResultsContentPanel("content", model, this));
     	container.add(new SearchMenu("bottomMenu",this));    			
     	add(container);
     }	
@@ -42,7 +42,7 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
 	public void handleEvent(AjaxRequestTarget target, Component component) {
 		String id = component.getId();
 		if (id.equals("search")) {
-			target.add(container);
+			target.add(content);
 		}
 	}
 

@@ -9,6 +9,7 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 
 public class AssetSearchCriteriaModel extends SearchCriteriaModel {
 
@@ -26,7 +27,7 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     private AssetTypeGroup assetTypeGroup;
     private AssetType assetType;
 
-    private DateRange dateRange = new DateRange();
+    private DateRange dateRange = new DateRange(RangeType.CUSTOM);
 
     private User assignedTo;
     

@@ -19,7 +19,7 @@ import com.n4systems.model.search.AssetSearchCriteriaModel;
 
 
 @SuppressWarnings("serial")
-public abstract class AbstractConfigPanel extends Panel {
+public abstract class AbstractSearchConfigPanel extends Panel {
 
 	protected final String EXPAND_IMG = "images/columnlayout/arrow-over.png";
 	protected final String COLLAPSE_IMG = "images/columnlayout/arrow-down.png";	
@@ -31,7 +31,7 @@ public abstract class AbstractConfigPanel extends Panel {
 	protected Form<AssetSearchCriteriaModel> form;
 
 	
-	public AbstractConfigPanel(String id, Model<AssetSearchCriteriaModel>model, Mediator mediator) {
+	public AbstractSearchConfigPanel(String id, Model<AssetSearchCriteriaModel>model, Mediator mediator) {
 		super(id);
 		this.mediator = mediator;
 		setOutputMarkupId(true);
@@ -53,7 +53,7 @@ public abstract class AbstractConfigPanel extends Panel {
 		
 		menu.add(search = new IndicatingAjaxLink("search") {
 			@Override public void onClick(AjaxRequestTarget target) {
-				AbstractConfigPanel.this.mediator.handleEvent(target,this);
+				AbstractSearchConfigPanel.this.mediator.handleEvent(target,this);
 			}
 		});		
 		menu.add(filters = new WebMarkupContainer("filters"));
