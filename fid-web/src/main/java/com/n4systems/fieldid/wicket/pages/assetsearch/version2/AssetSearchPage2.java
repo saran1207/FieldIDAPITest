@@ -17,6 +17,7 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
 	private SearchColumnsPanel columns;
 
 	public AssetSearchPage2() {
+		setOutputMarkupId(true);
     	container = new WebMarkupContainer("container");
     	container.setOutputMarkupId(true);
     	Model<AssetSearchCriteriaModel> model = createModel();
@@ -40,7 +41,7 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
 	@Override
 	public void handleEvent(AjaxRequestTarget target, Component component) {
 		String id = component.getId();
-		if (id.equals("config")) {
+		if (id.equals("search")) {
 			target.add(container);
 		}
 	}

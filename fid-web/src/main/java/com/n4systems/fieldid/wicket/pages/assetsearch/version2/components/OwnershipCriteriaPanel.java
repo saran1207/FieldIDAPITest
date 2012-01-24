@@ -14,13 +14,13 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 
-public class OwnershipCriteriaPanel2 extends Panel {
+public class OwnershipCriteriaPanel extends Panel {
 
-    public OwnershipCriteriaPanel2(String id, IModel<?> model) {
+    public OwnershipCriteriaPanel(String id, IModel<?> model) {
         super(id, model);
 
         add(new OrgPicker("owner", new PropertyModel<BaseOrg>(getDefaultModel(), "owner")));
-        add(new LocationPicker("location", new PropertyModel<Location>(getDefaultModel(), "location")));
+        add(new LocationPicker("location", new PropertyModel<Location>(getDefaultModel(), "location")).withOffset(-290, -275));
 
         WebMarkupContainer assignedUserContainer = new WebMarkupContainer("assignedToContainer");
         GroupedUserPicker groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(getDefaultModel(), "assignedTo"), new GroupedUsersForTenantModel());

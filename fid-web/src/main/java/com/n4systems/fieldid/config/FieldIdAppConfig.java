@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
+import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.fieldid.service.search.columns.ScheduleColumnsService;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgDateRangeSubtitleHelper;
@@ -51,6 +52,11 @@ public class FieldIdAppConfig {
     @Bean 
     public ScheduleColumnsService scheduleColumnsService() { 
     	return new ScheduleColumnsService();
+    }
+    
+    @Bean 
+    public DynamicColumnsService dynamicColumnsService() { 
+    	return new DynamicColumnsService();
     }
     
 }

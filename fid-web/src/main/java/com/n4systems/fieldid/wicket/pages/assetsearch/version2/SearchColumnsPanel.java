@@ -1,11 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -17,12 +15,12 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
+import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.reporting.columns.SelectDisplayColumnsPanel;
-import com.n4systems.fieldid.wicket.model.CombinedListModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ReportConfiguration;
@@ -31,12 +29,10 @@ import com.n4systems.model.search.ReportConfiguration;
 @SuppressWarnings("serial")
 public class SearchColumnsPanel extends AbstractConfigPanel {
 
+	@SpringBean private AssetColumnsService assetColumnsService;
+	@SpringBean private DynamicColumnsService dynamicColumnsService;	
 	
-	@SpringBean 
-	private AssetColumnsService assetColumnsService;
-	
-	private SelectDisplayColumnsPanel selectDisplayColumnsPanel = null;	
-	
+    private IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel;
 	
 	public SearchColumnsPanel(String id, Model<AssetSearchCriteriaModel> model, final Mediator mediator) {
 		super(id, model, mediator);
@@ -57,20 +53,17 @@ public class SearchColumnsPanel extends AbstractConfigPanel {
         WebMarkupContainer assignedUserContainer;
         List<ColumnMappingGroupView> configuredColumnGroups;
 
-        IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel;
-        IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel;
 
-        public ColumnsForm(String id, IModel<AssetSearchCriteriaModel> criteriaModel) {
-            super(id, new CompoundPropertyModel<AssetSearchCriteriaModel>(criteriaModel));
+        public ColumnsForm(String id, IModel<AssetSearchCriteriaModel> model) {
+            super(id, new CompoundPropertyModel<AssetSearchCriteriaModel>(model));
             setOutputMarkupId(true);
 
             dynamicAssetColumnsModel = new PropertyModel<List<ColumnMappingGroupView>>(getModel(), "dynamicAssetColumnGroups");
-            dynamicEventColumnsModel = new PropertyModel<List<ColumnMappingGroupView>>(getModel(), "dynamicEventColumnGroups");
 
             // This has two functions - first to load the default report template configuration: columns, sort
             // Second to initialize the dynamic columns: Some tenants have each and every asset/event type with the same attributes.
             // They expect to see them without first selecting any event type group or event type.
-            initializeConfiguredColumns(dynamicAssetColumnsModel, dynamicEventColumnsModel);            
+            initializeConfiguredColumns(dynamicAssetColumnsModel);            
 
             PropertyModel<List<ColumnMappingGroupView>> columnsModel = new PropertyModel<List<ColumnMappingGroupView>>(getModel(), "columnGroups");
             add(new ListView<ColumnMappingGroupView>("columnGroups", columnsModel)  {
@@ -80,8 +73,7 @@ public class SearchColumnsPanel extends AbstractConfigPanel {
                 }
             });
 
-            CombinedListModel<ColumnMappingGroupView> dynamicColumsModel = new CombinedListModel<ColumnMappingGroupView>(dynamicEventColumnsModel, dynamicAssetColumnsModel);
-			add(new ListView<ColumnMappingGroupView>("dynamicColumnGroups",  dynamicColumsModel) {
+			add(new ListView<ColumnMappingGroupView>("dynamicColumnGroups",  dynamicAssetColumnsModel) {
                 @Override
                 protected void populateItem(final ListItem<ColumnMappingGroupView> item) {                	
                 	item.add(createCollapsibleColumnsPanel(item));
@@ -97,13 +89,19 @@ public class SearchColumnsPanel extends AbstractConfigPanel {
         	return collapsiblePanel;        	
         }
         
-        private void initializeConfiguredColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel) {
+        private void initializeConfiguredColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel) {
             if (!getModelObject().isReportAlreadyRun()) {
                 ReportConfiguration reportConfiguration = loadReportConfiguration();
                 getModelObject().setColumnGroups(reportConfiguration.getColumnGroups());
                 getModelObject().setSortColumn(reportConfiguration.getSortColumn());
                 getModelObject().setSortDirection(reportConfiguration.getSortDirection());
             }
+            
+            final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getDefaultModel(), "assetTypeGroup");
+            final IModel<AssetType> assetTypeModel = new PropertyModel<AssetType>(getDefaultModel(), "assetType");
+            GroupedAssetTypesForTenantModel availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
+            
+            updateDynamicAssetColumns(null, availableAssetTypesModel.getObject());
         }
 
         @Override
@@ -124,29 +122,16 @@ public class SearchColumnsPanel extends AbstractConfigPanel {
         return assetColumnsService.getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
     }    
 
-//    private void updateDynamicEventColumns(IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel, EventType eventType, List<EventType> availableEventTypes) {
-//        dynamicEventColumnsModel.setObject(getDynamicEventColumns(eventType,  availableEventTypes));
-//    }
-//
-//    private void updateDynamicAssetColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, AssetType assetType, List<AssetType> availableAssetTypes) {
-//        dynamicAssetColumnsModel.setObject(getDynamicAssetColumns(assetType, availableAssetTypes));
-//    }
-//
-    protected List<ColumnMappingGroupView> getDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
-        return Collections.<ColumnMappingGroupView>emptyList();
+    public void updateDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
+    	dynamicAssetColumnsModel.setObject(getDynamicAssetColumns(assetType, availableAssetTypes));
     }
 
-    protected List<ColumnMappingGroupView> getDynamicEventColumns(EventType eventType, List<EventType> availableEventTypes) {
-        return Collections.<ColumnMappingGroupView>emptyList();
+    protected List<ColumnMappingGroupView> getDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
+        return dynamicColumnsService.getDynamicAssetColumnsForSearch(assetType, availableAssetTypes);
     }
 
     protected void onNoDisplayColumnsSelected() {}
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-//        response.renderJavaScriptReference("javascript/reportingForm.js");
-    }
-	
 	@Override
 	protected void updateMenu(Component... components ) {
 		for (Component c:components) { 
@@ -157,7 +142,5 @@ public class SearchColumnsPanel extends AbstractConfigPanel {
 			}			
 		}
 	}
-
-
     
 }

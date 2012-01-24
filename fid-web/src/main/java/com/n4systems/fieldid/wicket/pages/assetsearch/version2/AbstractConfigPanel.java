@@ -24,7 +24,7 @@ public abstract class AbstractConfigPanel extends Panel {
 	// hide configuration left hand panels and their (possible) children.
 	private static final String HIDE_JS = "$('.search .config').hide(); $('.locationSelection').remove(); $('.orgSelector').remove();";
 	
-	private Mediator mediator;
+	protected Mediator mediator;
 	protected Form<AssetSearchCriteriaModel> form;
 
 	

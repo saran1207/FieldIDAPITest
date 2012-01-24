@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.wicket.components.location;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -16,6 +12,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.PredefinedLocationByIdLoader;
+
 public class LocationPicker extends Panel {
 
     private IModel<Location> locationModel;
@@ -25,6 +26,8 @@ public class LocationPicker extends Panel {
 
     private PredefinedLocationsPanel predefinedLocationsPanel;
     private String freeformLocation;
+    private int xOffset = 0;
+    private int yOffset = 0;
 
     public LocationPicker(String id, IModel<Location> locationModel) {
         super(id);
@@ -60,7 +63,7 @@ public class LocationPicker extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 locationPickerContainer.setVisible(true);
                 target.add(LocationPicker.this);
-                target.appendJavaScript("translate($('#" + locationPickerContainer.getMarkupId() + "'), $('#" + chooseLink.getMarkupId() + "'), 0, 0);");
+                target.appendJavaScript("translate($('#" + locationPickerContainer.getMarkupId() + "'), $('#" + chooseLink.getMarkupId() + "'), " + yOffset + "," + xOffset +");");
             }
         });
         chooseLink.setOutputMarkupPlaceholderTag(true);
@@ -113,6 +116,12 @@ public class LocationPicker extends Panel {
 
     }
 
+    public LocationPicker withOffset(int xOffset,int yOffset) { 
+    	this.yOffset = yOffset;
+    	this.xOffset = xOffset;
+    	return this;
+    }
+    
     private void closePicker(AjaxRequestTarget target) {
         locationPickerContainer.setVisible(false);
         target.add(LocationPicker.this);
