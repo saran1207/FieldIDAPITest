@@ -553,8 +553,8 @@
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 			<result name="savestartevent" type="redirectAction">
-				<param name="actionName">eventGroups</param>
-				<param name="uniqueID">${uniqueID}</param>
+				<param name="actionName">quickEvent</param>
+				<param name="assetId">${uniqueID}</param>
 			</result>
 		</action>
 
