@@ -1,28 +1,19 @@
 <wicket:panel>
 
 	<form wicket:id="form">	
-		<div wicket:id="topMenu" class="menu top config-menu">
+		<div wicket:id="menu" class="menu top config-menu">
 			<div class="buttons">
+				<a wicket:id="filters"><wicket:message key="label.filters"/></a>	
+				<a wicket:id="columns"><wicket:message key="label.columns"/></a>
+				<a class="close" wicket:id="x"><wicket:message key="label.closebutton"/></a>
 				<a class="search" wicket:id="search">Search</a>	
-				<a wicket:id="filters">Filters</a>	
-				<a wicket:id="columns">Columns</a>
-				<a class="close" wicket:id="x">X</a>
 			</div>	
 		</div>
 	
 		<div class="config-content">
 			<wicket:child/>
 		</div>
-	
-		<div wicket:id="bottomMenu" class="menu bottom config-menu">
-			<div class="buttons">
-				<a class="search" wicket:id="search">Search</a>	
-				<a wicket:id="filters">Filters</a>	
-				<a wicket:id="columns">Columns</a>
-				<a class="close" wicket:id="x">X</a>
-			</div>			
-		</div>
-		
+			
 	</form>
 	
 </wicket:panel>	

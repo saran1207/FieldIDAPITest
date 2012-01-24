@@ -10,11 +10,11 @@ import com.n4systems.model.search.AssetSearchCriteriaModel;
 @SuppressWarnings("serial")
 public class ResultsContentPanel extends Panel {
 
-	private Mediator mediator;
+	private FormListener formListener;
 
-	public ResultsContentPanel(String id, Model<AssetSearchCriteriaModel> model, Mediator mediator) {
+	public ResultsContentPanel(String id, Model<AssetSearchCriteriaModel> model, FormListener formListener) {
 		super(id);
-		this.mediator = mediator;
+		this.formListener = formListener;
 		setOutputMarkupId(true);
 		add(new AssetSearchResultsPanel("results", model));
 	}

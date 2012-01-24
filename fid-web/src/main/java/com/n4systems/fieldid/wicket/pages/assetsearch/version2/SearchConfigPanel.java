@@ -11,17 +11,17 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 
 @SuppressWarnings("serial")
-public class SearchConfigPanel extends Panel implements Mediator {
+public class SearchConfigPanel extends Panel implements FormListener {
 
 	private SearchFilterPanel filter;
 	private SearchColumnsPanel columns;
-	private Mediator mediator;
+	private FormListener formListener;
 	
 
-	public SearchConfigPanel(String id, Model<AssetSearchCriteriaModel> model, Mediator mediator) {
+	public SearchConfigPanel(String id, Model<AssetSearchCriteriaModel> model, FormListener formListener) {
 		super(id, model);
 		setRenderBodyOnly(true);
-		this.mediator = mediator;
+		this.formListener = formListener;
 		add(filter = new SearchFilterPanel("filter", model, this) {
 			@Override
 			protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
@@ -34,7 +34,7 @@ public class SearchConfigPanel extends Panel implements Mediator {
 
 	@Override
 	public void handleEvent(AjaxRequestTarget target, Component component) {
-		mediator.handleEvent(target, component);
+		formListener.handleEvent(target, component);
 	}
 
 }

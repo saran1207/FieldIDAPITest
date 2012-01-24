@@ -27,18 +27,17 @@ public abstract class AbstractSearchConfigPanel extends Panel {
 	// hide configuration left hand panels and their (possible) children.
 	private static final String HIDE_JS = "$('.search .config').hide(); $('.locationSelection').remove(); $('.orgSelector').remove();";
 	
-	protected Mediator mediator;
+	protected FormListener formListener;
 	protected Form<AssetSearchCriteriaModel> form;
 
 	
-	public AbstractSearchConfigPanel(String id, Model<AssetSearchCriteriaModel>model, Mediator mediator) {
+	public AbstractSearchConfigPanel(String id, Model<AssetSearchCriteriaModel>model, FormListener formListener) {
 		super(id);
-		this.mediator = mediator;
+		this.formListener = formListener;
 		setOutputMarkupId(true);
 		
 		add(form=createForm("form",model));
-		form.add(createMenu("topMenu"));
-		form.add(createMenu("bottomMenu"));
+		form.add(createMenu("menu"));
 	}
 
 	protected abstract Form<AssetSearchCriteriaModel> createForm(String id, Model<AssetSearchCriteriaModel> model);
@@ -53,7 +52,7 @@ public abstract class AbstractSearchConfigPanel extends Panel {
 		
 		menu.add(search = new IndicatingAjaxLink("search") {
 			@Override public void onClick(AjaxRequestTarget target) {
-				AbstractSearchConfigPanel.this.mediator.handleEvent(target,this);
+				AbstractSearchConfigPanel.this.formListener.handleEvent(target,this);
 			}
 		});		
 		menu.add(filters = new WebMarkupContainer("filters"));

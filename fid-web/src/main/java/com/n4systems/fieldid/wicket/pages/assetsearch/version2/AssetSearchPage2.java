@@ -10,7 +10,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 
 @SuppressWarnings("serial")
-public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
+public class AssetSearchPage2 extends FieldIDFrontEndPage implements FormListener {
 
 	private WebMarkupContainer container;
 	private SearchFilterPanel filter;
@@ -24,7 +24,6 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements Mediator {
     	container.add(new SearchMenu("topMenu",this));    	
     	container.add(new SearchConfigPanel("config", model,this));
     	container.add(content=new ResultsContentPanel("content", model, this));
-    	container.add(new SearchMenu("bottomMenu",this));    			
     	add(container);
     }	
 	

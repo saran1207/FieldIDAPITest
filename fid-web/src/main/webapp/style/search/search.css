@@ -14,11 +14,11 @@
 }
 
 .search .columns {
-	width:200px;
+	width:230px;
 }
 	
 .search .filter {
-	width:500px;
+	width:350px;
 }
 
 .search .buttons {
@@ -31,6 +31,7 @@
 
 .search .buttons-right {
 	float:right;
+	margin-left:20px;
 }
 
 .buttons .search { 
@@ -39,24 +40,25 @@
 }
 
 .buttons .close {
-	float:right;		 
+	float:right;
+	background:#eee;
+	color:#444;
 }
 
 .buttons a { 
-	margin : 0px 3px;
+	background:#bbb;
+	color:#fff;
+	margin : 0px 1px 0px 1px;
 	display: inline-block;
 	outline: none;
 	cursor: pointer;
 	text-align: center;
 	text-decoration: none;
 	font-size: 1em;
-	padding: 4px;
-	-webkit-border-radius: 4px; 
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	box-shadow: 0 1px 2px rgba(0,0,0,.4);
+	padding: 5px;
+	-webkit-border-radius: 3px; 
+	-moz-border-radius: 3px;
+	border-radius: 3px;
 }
 	
 .config-menu { 
@@ -77,8 +79,6 @@
 	position:absolute;
 	width:100%;
 	top:45px;
-	overflow-y:auto;
-	overflow-x:hidden; 
 }
 
 .search .filter form .config-content {
@@ -92,8 +92,8 @@
 	color:#777;
 }
 
-.menu .buttons .button .disabled { 
-	color: #aaa;
+.menu .buttons .disabled { 
+	background:#ddd;
 }
 
 .search .content { 
@@ -151,7 +151,7 @@ these are all hacks really and should be refactored into main code site wide whe
 }
 
 .orgSelector {
-    width: 255px !important;
+    width: 275px !important;
 } 
 
 .orgBrowserForm .infoSet label {

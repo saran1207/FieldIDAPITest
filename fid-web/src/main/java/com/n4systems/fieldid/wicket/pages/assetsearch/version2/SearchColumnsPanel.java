@@ -35,8 +35,8 @@ public class SearchColumnsPanel extends AbstractSearchConfigPanel {
 	
     private IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel;
 	
-	public SearchColumnsPanel(String id, Model<AssetSearchCriteriaModel> model, final Mediator mediator) {
-		super(id, model, mediator);
+	public SearchColumnsPanel(String id, Model<AssetSearchCriteriaModel> model, final FormListener formListener) {
+		super(id, model, formListener);
         setOutputMarkupId(true);	
 	}
 
