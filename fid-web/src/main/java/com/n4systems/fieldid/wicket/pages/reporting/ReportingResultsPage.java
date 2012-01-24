@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
+import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -12,7 +13,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
-import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCollapseContainer;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionPanel;
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
@@ -54,7 +54,7 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
         add(createSaveReportLink("saveReportLink2", true));
         add(createSaveReportLink("saveReportLinkAs2", false));
 
-        SlidingReportSectionCollapseContainer criteriaExpandContainer = new SlidingReportSectionCollapseContainer("criteriaExpandContainer", new FIDLabelModel("label.reportcriteria"));
+        SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.reportcriteria"));
         criteriaExpandContainer.addContainedPanel(new EventReportCriteriaPanel("criteriaPanel", reportCriteriaPropertyModel) {
         	@Override
         	protected void onNoDisplayColumnsSelected() {

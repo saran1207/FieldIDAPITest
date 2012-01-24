@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.wicket.components.search;
 
-import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCollapseContainer;
+import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
 import com.n4systems.fieldid.wicket.components.reporting.columns.SelectDisplayColumnsPanel;
 import com.n4systems.fieldid.wicket.model.CombinedListModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -90,7 +89,7 @@ public abstract class SRSCriteriaPanel<T extends SearchCriteriaModel> extends Pa
                 }
             });
 
-            SlidingReportSectionCollapseContainer container = new SlidingReportSectionCollapseContainer("displayColumnsContainer", new FIDLabelModel("label.selectcolumns"));
+            SlidingCollapsibleContainer container = new SlidingCollapsibleContainer("displayColumnsContainer", new FIDLabelModel("label.selectcolumns"));
 
             container.addContainedPanel(selectDisplayColumnsPanel = new SelectDisplayColumnsPanel("selectDisplayColumnsPanel",
                     new PropertyModel<List<ColumnMappingGroupView>>(getModel(), "columnGroups"),

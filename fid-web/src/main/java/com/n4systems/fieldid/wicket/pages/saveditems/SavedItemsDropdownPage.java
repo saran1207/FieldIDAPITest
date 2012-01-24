@@ -19,12 +19,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 
-public class SavedItemsDropdown extends FieldIDAuthenticatedPage {
+public class SavedItemsDropdownPage extends FieldIDAuthenticatedPage {
 
     private @SpringBean SavedReportService savedReportService;
     private @SpringBean UserService userService;
 
-    public SavedItemsDropdown() {
+    public SavedItemsDropdownPage() {
         final LoadableDetachableModel<List<SavedItem>> savedReportModel = createSavedReportModel();
         add(new ListView<SavedItem>("savedItemsList", savedReportModel) {
             @Override

@@ -47,6 +47,7 @@
 .mySavedItemsBox .blankSlateContainer {
     font-style: italic;
     padding-left:16px;
+    padding-bottom:8px;
 }
 
 .listOfLinks img.divider {

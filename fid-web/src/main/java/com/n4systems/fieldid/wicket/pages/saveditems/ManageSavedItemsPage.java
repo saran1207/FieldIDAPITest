@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
+import com.n4systems.fieldid.wicket.behavior.TooltipBehavior;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -19,6 +20,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -30,7 +32,9 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
@@ -64,7 +68,6 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         sortableBehavior.setDisabled(!sorting);
     }
 
-
     public ManageSavedItemsPage() {
         itemsListContainer = new WebMarkupContainer("itemsListContainer");
         itemsListContainer.setOutputMarkupId(true);
@@ -89,7 +92,6 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
                 final EditItemNameForm editItemNameForm = new EditItemNameForm("editNameForm", item.getModel());
                 item.setOutputMarkupId(true);
 
-
                 WebMarkupContainer firstColumn = new WebMarkupContainer("firstColumn");
                 firstColumn.add(createColspanModifier());
                 firstColumn.add(editItemNameForm);
@@ -101,6 +103,8 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
                     }
                 });
                 item.add(new Label("type", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "titleLabelKey"))));
+
+                item.add(new BookmarkablePageLink<Void>("shareLink", ShareSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
 
                 item.add(new AjaxLink<Void>("editNameLink") {
                     @Override
@@ -118,6 +122,12 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
                         persistenceService.save(user);
                     }
                 });
+
+                IModel<String> sharedTooltip = new StringResourceModel("shared_by", this, new Model<SavedItem>(item.getModelObject()));
+                final ContextImage sharedImage = new ContextImage("sharedByImage", "images/shared-icon.png");
+                sharedImage.setVisible(item.getModelObject().getSharedByName() != null);
+                sharedImage.add(new TooltipBehavior(sharedTooltip));
+                item.add(sharedImage);
             }
         });
 
@@ -138,6 +148,7 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
             }
         };
 
+        sortableBehavior.setDisabled(true);
         itemsListContainer.add(sortableBehavior);
     }
 
@@ -157,6 +168,12 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         link.setOutputMarkupPlaceholderTag(true);
 
         return link;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/newCss/component/manage_saved_items.css");
     }
 
     class EditItemNameForm extends Form {

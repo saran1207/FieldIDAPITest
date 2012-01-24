@@ -1,0 +1,27 @@
+<wicket:extend>
+
+
+    <form wicket:id="shareItemForm">
+
+        <div wicket:id="feedbackPanel"></div>
+
+        <div wicket:id="orgList">
+
+            <div wicket:id="orgContainer">
+                <div wicket:id="usersPanel"></div>
+            </div>
+
+        </div>
+
+        <div class="formAction">
+
+            <input type="submit" wicket:id="submitButton" wicket:message="value:label.share">
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+
+        </div>
+
+    </form>
+
+    
+</wicket:extend>
