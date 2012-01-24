@@ -1,10 +1,17 @@
 <wicket:panel>
 	<form wicket:id="form">
+		
 		<h1><wicket:message key="label.mass_update_step2"/></h1>
-		<label><span wicket:id="selectOperationMessage"></span></label>
-		<div wicket:id="operations"></div>
-		<input type="submit" wicket:message="value:label.pagenavigation.next" />
-		<wicket:message key="label.or"/>
-		<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+		<div class="stepDetails">
+			<label><span wicket:id="selectOperationMessage"></span></label>
+		</div>
+		<div class="operations" wicket:id="operations"></div>
+		
+		<div class="formActions">
+			<input type="submit" wicket:message="value:label.pagenavigation.next" />
+			<wicket:message key="label.or"/>
+			<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+		</div>
+	
 	</form>
 </wicket:panel>

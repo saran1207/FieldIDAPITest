@@ -2,11 +2,10 @@ package com.n4systems.fieldid.wicket.components.massupdate;
 
 import java.util.List;
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -39,7 +38,7 @@ public class DeleteDetailsPanel extends AbstractMassUpdatePanel{
 		add(new Label("subAssetsToDetach", assetRemovalSummary.getSubAssetsToDetach().toString()));
 		add(new Label("projectToDetachFrom", assetRemovalSummary.getProjectToDetachFrom().toString()));
 		
-		Fragment detachFromMaster = new Fragment("detachSummary", "detachFromMaster", this);
+		WebMarkupContainer detachFromMaster = new WebMarkupContainer("detachFromMaster");
 		
 		detachFromMaster.setVisible(assetRemovalSummary.isDetachFromMaster());
 		

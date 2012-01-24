@@ -1,0 +1,118 @@
+.navMenu {
+	width: 230px;
+	float:left;
+	background-color: #F3F3F3;
+	margin-right: 20px;
+}
+
+.navMenuShort {
+	height: 350px;
+}
+
+.navMenuLong {
+	height: 540px;
+}
+.navMenu ol {
+	padding-top: 10px;
+}
+
+.navMenu li {
+	list-style: decimal inside none;
+	padding: 5px 10px;
+	font-size: 1.1em;
+}
+
+.mainPanel {
+	width: 750px;
+	float: left;
+	font-size: 1.1em;
+}
+
+.mainPanel h1{
+	font-weight: normal;
+}
+
+.stepDetails {
+	padding: 10px 0;
+}
+
+.stepDetails p {
+	padding-bottom: 10px;
+}
+
+.operations {
+	padding-top: 10px;
+	height: 250px;
+}
+
+.operations input, .operations label {
+	margin-bottom: 15px;
+}
+
+.mainPanel .infoSet input[type="checkbox"] {
+    float: left;
+    display: block;
+    width: 30px;
+    margin: 5px 0px;
+}
+
+.mainPanel .infoSet label {
+    float: left;
+    display: block;
+    width: 150px;
+    padding: 5px 10px 5px 20px;
+    line-height: 18px;
+    text-align: left;
+    color: #555;
+    overflow:hidden;
+}
+
+.mainPanel .infoSet {
+    display: block;
+    min-height: 40px;
+    clear:left;
+    padding: 5px 0;
+    overflow:hidden;
+}
+
+.mainPanel .fieldHolder {
+    display: block;
+    float: left;
+    padding: 5px 0;
+    width: 305px;
+    line-height: 18px;
+    overflow:hidden;
+}
+
+.mainPanel .fieldHolder select {
+    border: 1px solid #9c9c9c;
+    color: #555;
+    width: 260px;
+    padding: 4px;
+}
+
+.editForm .formActions{
+	padding-top: 20px;
+}
+
+.confirmEditForm {
+	padding-top: 210px;
+}
+
+.deleteDetails {
+	padding: 5px 0;
+	height: 250px;
+}
+
+.confirmDeleteForm .infoSet label{
+	padding: 5px 5px 5px 0px;
+	width: 100px;
+}
+
+.confirmDeleteForm .formActions {
+	padding-top: 195px;
+}
+
+.formActions input[type="submit"] {
+	padding: 2px 10px;
+}

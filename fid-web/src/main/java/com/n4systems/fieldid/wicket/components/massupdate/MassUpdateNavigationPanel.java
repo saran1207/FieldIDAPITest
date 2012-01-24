@@ -37,18 +37,25 @@ public class MassUpdateNavigationPanel extends Panel {
 			add(operationDetailsLink = createBlankLink("backToOperationDetails"));
 			operationDetailsLink.setVisible(false);
 			backToOperationDetailsLabel.add(new AttributeModifier("class", "strong"));
+			if(panel instanceof EditDetailsPanel) {
+				add(new AttributeModifier("class", "navMenu navMenuLong"));
+			}else {
+				add(new AttributeModifier("class", "navMenu navMenuShort"));
+			}
 		} else if(panel instanceof ConfirmEditPanel || panel instanceof ConfirmDeletePanel) {
 			add(selectOperationLink = createLink("backToSelectOperation", assetSearchCriteria, panel.getPreviousPanel()));
 			backToSelectOperationLabel.setVisible(false);			
 			add(operationDetailsLink = createLink("backToOperationDetails", assetSearchCriteria, panel));
 			backToOperationDetailsLabel.setVisible(false);
 			confirmLabel.add(new AttributeModifier("class", "strong"));
+			add(new AttributeModifier("class", "navMenu navMenuShort"));
 		} else {
 			add(selectOperationLink = createBlankLink("backToSelectOperation"));
 			selectOperationLink.setVisible(false);
 			add(operationDetailsLink = createBlankLink("backToOperationDetails"));
 			operationDetailsLink.setVisible(false);
 			backToSelectOperationLabel.add(new AttributeModifier("class", "strong"));
+			add(new AttributeModifier("class", "navMenu navMenuShort"));
 		}		
 	}
 	

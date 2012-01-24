@@ -3,15 +3,22 @@
 	<div class="feedback" wicket:id="feedbackPanel"></div>
 
 	<h1><wicket:message key="label.mass_update_step4"/></h1>
-	<label><wicket:message key="message.mass_delete_confirm"/></label>
 	
-	<form wicket:id="form">
-		<div>
+	<div class="stepDetails">
+		<label><wicket:message key="message.mass_delete_confirm"/></label>
+	</div>
+	
+	<form class="confirmDeleteForm" wicket:id="form">
+		<div class="infoSet">
 			<label><wicket:message key="label.confirm_delete"/></label>
-			<input wicket:id="confirmationField" type="text"></input>
+			<span class="fieldHolder">
+				<input wicket:id="confirmationField" type="text"></input>
+			</span>
 		</div>
-		<input type="submit" wicket:message="value:label.delete" />
-		<wicket:message key="label.or"/>
-		<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+		<div class="formActions">
+			<input type="submit" wicket:message="value:label.delete" />
+			<wicket:message key="label.or"/>
+			<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+		</div>
 	</form>
 </wicket:panel>
