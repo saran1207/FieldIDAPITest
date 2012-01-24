@@ -14,7 +14,7 @@ import org.odlabs.wiquery.core.javascript.JsScope;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
 @SuppressWarnings("serial")
-public class CollapsiblePanel extends Panel {
+public abstract class CollapsiblePanel extends Panel {
 
     private static final String CONTAINED_PANEL_MARKUP_ID = "containedPanel";
 
@@ -25,27 +25,26 @@ public class CollapsiblePanel extends Panel {
     private ContextImage expandImage;
 
     public CollapsiblePanel(String id, final IModel<String> titleModel, String expandImageUrl, String collapseImageUrl) {
-        super(id);
-        setOutputMarkupId(true);
+        super(id);       
         add(collapseExpandLink = new WebMarkupContainer("collapseExpandLink"));
         collapseExpandLink.add(new Label("collapseExpandLinkLabel", titleModel));
         collapseExpandLink.add(expandImage = new ContextImage("expandImage", expandImageUrl));
         collapseExpandLink.add(collapseImage = new ContextImage("collapseImage", collapseImageUrl));
         expandImage.setOutputMarkupPlaceholderTag(true);
         collapseImage.setOutputMarkupPlaceholderTag(true);
+        add(getContainedPanel());
     }
 
-    public void addContainedPanel(WebMarkupContainer containedPanel) {
-		addContainedPanel(containedPanel,true);
-    }
+    
+    private Panel getContainedPanel() {
+		Panel containedPanel = createContainedPanel(getContainedPanelMarkupId());
+	    containedPanel.setOutputMarkupId(true);
+	    collapseExpandLink.add(createCollapseBehavior(containedPanel.getMarkupId()));
+	    return containedPanel;
+	}
+        
+    protected abstract Panel createContainedPanel(String id);
 
-	public void addContainedPanel(WebMarkupContainer containedPanel, boolean visible) {
-        this.containedPanel = containedPanel;
-        containedPanel.setOutputMarkupId(true);
-        collapseExpandLink.add(createCollapseBehavior(containedPanel.getMarkupId()));
-        //------
-        add(containedPanel);
-    }
 
     private Behavior createCollapseBehavior(final String id) {
 		return new WiQueryEventBehavior(new Event(MouseEvent.CLICK) {

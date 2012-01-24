@@ -4,11 +4,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
@@ -37,7 +35,6 @@ public class DateRangePicker2 extends Panel {
 		dropDownChoice.setOutputMarkupId(true);
 		dropDownChoice.setNullValid(false);
 		
-		add(new Label("header", new Model<String>("Date Identified")));
 		add(dropDownChoice);    	
 		add(fromDatePicker);
 		add(toDatePicker);

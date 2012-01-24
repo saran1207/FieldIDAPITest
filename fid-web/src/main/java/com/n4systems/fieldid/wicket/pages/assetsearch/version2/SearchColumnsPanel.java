@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -83,9 +84,13 @@ public class SearchColumnsPanel extends AbstractConfigPanel {
         }
 
         private Component createCollapsibleColumnsPanel(
-        		ListItem<ColumnMappingGroupView> item) {
-        	CollapsiblePanel collapsiblePanel = new CollapsiblePanel("columnGroup",  new FIDLabelModel(new PropertyModel<String>(item.getModel(),"label")), "images/columnlayout/arrow-over.png", "images/columnlayout/arrow-down.png");
-        	collapsiblePanel.addContainedPanel(new ColumnGroupPanel(collapsiblePanel.getContainedPanelMarkupId(), item.getModel()));        	
+        		final ListItem<ColumnMappingGroupView> item) {
+        	CollapsiblePanel collapsiblePanel = new CollapsiblePanel("columnGroup",  new FIDLabelModel(new PropertyModel<String>(item.getModel(),"label")), EXPAND_IMG, COLLAPSE_IMG) {
+				@Override protected Panel createContainedPanel(String id) {
+					return new ColumnGroupPanel(id, item.getModel());
+				}
+        		
+        	};
         	return collapsiblePanel;        	
         }
         

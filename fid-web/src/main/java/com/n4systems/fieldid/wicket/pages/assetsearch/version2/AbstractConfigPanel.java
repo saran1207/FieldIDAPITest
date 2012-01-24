@@ -21,6 +21,9 @@ import com.n4systems.model.search.AssetSearchCriteriaModel;
 @SuppressWarnings("serial")
 public abstract class AbstractConfigPanel extends Panel {
 
+	protected final String EXPAND_IMG = "images/columnlayout/arrow-over.png";
+	protected final String COLLAPSE_IMG = "images/columnlayout/arrow-down.png";	
+	
 	// hide configuration left hand panels and their (possible) children.
 	private static final String HIDE_JS = "$('.search .config').hide(); $('.locationSelection').remove(); $('.orgSelector').remove();";
 	

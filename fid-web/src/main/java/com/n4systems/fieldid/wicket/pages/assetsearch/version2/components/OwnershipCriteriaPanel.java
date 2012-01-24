@@ -20,6 +20,9 @@ public class OwnershipCriteriaPanel extends Panel {
         super(id, model);
 
         add(new OrgPicker("owner", new PropertyModel<BaseOrg>(getDefaultModel(), "owner")));
+        // because location picker is in a container that affects "relative" css positioning we must adjust offsets.
+        //  temporary - need to customize LocationPicker and/or javascript so it can handle this situation. 
+        //  (trying to minimize impact on shared components...do after consolidation of pages).
         add(new LocationPicker("location", new PropertyModel<Location>(getDefaultModel(), "location")).withOffset(-290, -275));
 
         WebMarkupContainer assignedUserContainer = new WebMarkupContainer("assignedToContainer");
