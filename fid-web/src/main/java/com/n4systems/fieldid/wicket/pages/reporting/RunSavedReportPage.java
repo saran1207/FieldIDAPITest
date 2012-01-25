@@ -2,8 +2,7 @@ package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.model.savedreports.SavedReport;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.saveditem.SavedReportItem;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -15,13 +14,12 @@ public class RunSavedReportPage extends FieldIDFrontEndPage {
     public RunSavedReportPage(PageParameters params) {
         Long id = params.get("id").toLong();
 
-        SavedReport savedReport = savedReportService.getSavedReport(id);
-        EventReportCriteriaModel criteriaModel = savedReportService.getConvertedReport(id);
+        SavedReportItem savedReportItem = savedReportService.getConvertedReport(SavedReportItem.class, id);
 
-        criteriaModel.setSavedReportId(id);
-//        criteriaModel.setSavedReportName(criteriaModel.getName());
+        savedReportItem.getSearchCriteria().setSavedReportId(id);
+        savedReportItem.getSearchCriteria().setSavedReportName(savedReportItem.getName());
 
-        setResponsePage(new ReportingResultsPage(criteriaModel));
+        setResponsePage(new ReportingResultsPage(savedReportItem));
     }
 
 }

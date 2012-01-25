@@ -10,9 +10,11 @@ import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.RunSavedSearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.saveditem.SavedReportItem;
+import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.user.User;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -158,6 +160,8 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
 
         if (model.getObject() instanceof SavedReportItem) {
             link = new BookmarkablePageLink<Void>("viewItemLink", RunSavedReportPage.class, params);
+        } else if (model.getObject() instanceof SavedSearchItem) {
+            link = new BookmarkablePageLink<Void>("viewItemLink", RunSavedSearchPage.class, params);
         }
 
         if (link == null) {

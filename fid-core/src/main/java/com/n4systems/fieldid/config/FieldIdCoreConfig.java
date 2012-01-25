@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.config;
 
+import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -133,6 +134,11 @@ public class FieldIdCoreConfig {
     @Bean 
     public ProofTestHandlerEJBContainer proofTestHandler() {
     	return new ProofTestHandlerEJBContainer(); 
+    }
+
+    @Bean
+    public SavedAssetSearchService savedAssetSearchService() {
+        return new SavedAssetSearchService();
     }
 	
     @Bean

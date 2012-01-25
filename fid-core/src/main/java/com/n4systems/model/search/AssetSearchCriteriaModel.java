@@ -1,35 +1,71 @@
 package com.n4systems.model.search;
 
-import java.util.Date;
-
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.location.Location;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
+import org.hibernate.annotations.IndexColumn;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="saved_searches")
 public class AssetSearchCriteriaModel extends SearchCriteriaModel {
 
+    @Column
     private String rfidNumber;
+
+    @Column
     private String identifier;
+
+    @Column
     private String referenceNumber;
 
     private Location location = new Location();
-    private BaseOrg owner;
 
+    @Column
     private String orderNumber;
+
+    @Column(name="purchaseOrderNumber")
     private String purchaseOrder;
 
+    @ManyToOne
+    @JoinColumn(name="assetStatus")
     private AssetStatus assetStatus;
+
+    @ManyToOne
+    @JoinColumn(name="assetTypeGroup")
     private AssetTypeGroup assetTypeGroup;
+
+    @ManyToOne
+    @JoinColumn(name="assetType")
     private AssetType assetType;
 
     private DateRange dateRange = new DateRange(RangeType.CUSTOM);
 
+    @ManyToOne
+    @JoinColumn(name="assignedUser")
     private User assignedTo;
+
+	@ElementCollection(fetch= FetchType.EAGER)
+	@IndexColumn(name="idx")
+    @JoinTable(name="saved_searches_columns", joinColumns = {@JoinColumn(name="saved_search_id")})
+    @Column(name="column_id")
+	private List<String> columns = new ArrayList<String>();
     
     public String getRfidNumber() {
         return rfidNumber;
@@ -61,16 +97,6 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
 
     public void setLocation(Location location) {
         this.location = location;
-    }
-
-    @Override
-	public BaseOrg getOwner() {
-        return owner;
-    }
-
-    @Override
-	public void setOwner(BaseOrg owner) {
-        this.owner = owner;
     }
 
     public String getOrderNumber() {
@@ -136,5 +162,12 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
 	public DateRange getDateRange() {
 		return dateRange;
 	}
-	
+
+    public List<String> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<String> columns) {
+        this.columns = columns;
+    }
 }

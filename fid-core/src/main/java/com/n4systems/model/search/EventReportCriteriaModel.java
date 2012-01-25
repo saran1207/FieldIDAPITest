@@ -35,9 +35,6 @@ import javax.persistence.Transient;
 @Table(name="saved_reports")
 public class EventReportCriteriaModel extends SearchCriteriaModel {
 
-    @OneToOne(mappedBy = "report")
-    private SavedReportItem savedReportItem;
-
     private Location location = new Location();
 
     @ManyToOne
@@ -100,14 +97,6 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
 
     @Column(name="includeSafetyNetwork")
     private boolean includeSafetyNetwork;
-
-    @Deprecated
-    @Transient
-    private Long savedReportId;
-
-    @Deprecated
-    @Transient
-    private String savedReportName;
 
 	@ElementCollection(fetch= FetchType.EAGER)
 	@IndexColumn(name="idx")
@@ -251,26 +240,6 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
         this.performedBy = performedBy;
     }
 
-    @Deprecated
-    public Long getSavedReportId() {
-        return savedReportId;
-    }
-
-    @Deprecated
-    public void setSavedReportId(Long savedReportId) {
-        this.savedReportId = savedReportId;
-    }
-
-    @Deprecated
-    public String getSavedReportName() {
-        return savedReportName;
-    }
-
-    @Deprecated
-    public void setSavedReportName(String savedReportName) {
-        this.savedReportName = savedReportName;
-    }
-
 	public void setDateRange(DateRange dateRange) {
 		this.dateRange = dateRange;
 	}
@@ -287,11 +256,4 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
         this.columns = columns;
     }
 
-    public SavedReportItem getSavedReportItem() {
-        return savedReportItem;
-    }
-
-    public void setSavedReportItem(SavedReportItem savedReportItem) {
-        this.savedReportItem = savedReportItem;
-    }
 }

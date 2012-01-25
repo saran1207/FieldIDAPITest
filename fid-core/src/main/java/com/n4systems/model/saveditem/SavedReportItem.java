@@ -14,18 +14,23 @@ import javax.persistence.OneToOne;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("R")
-public class SavedReportItem extends SavedItem {
+public class SavedReportItem extends SavedItem<EventReportCriteriaModel> {
+
+    public SavedReportItem() {}
+    public SavedReportItem(EventReportCriteriaModel criteria) {
+        this.searchCriteria = criteria;
+    }
 
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="report_id")
-    private EventReportCriteriaModel report;
+    private EventReportCriteriaModel searchCriteria;
 
-    public EventReportCriteriaModel getReport() {
-        return report;
+    public EventReportCriteriaModel getSearchCriteria() {
+        return searchCriteria;
     }
 
-    public void setReport(EventReportCriteriaModel report) {
-        this.report = report;
+    public void setSearchCriteria(EventReportCriteriaModel searchCriteria) {
+        this.searchCriteria = searchCriteria;
     }
 
     @Override

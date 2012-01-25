@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.saveditem.SavedReportItem;
+import com.n4systems.model.saveditem.SavedSearchItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -35,6 +36,9 @@ public class SavedItemsDropdownPage extends FieldIDAuthenticatedPage {
                 if (item.getModelObject() instanceof SavedReportItem) {
                     linkUrl = "w/savedReport?id="+item.getModelObject().getId();
                     imageUrl = "images/saved_items/reporting-small.png";
+                } else if (item.getModelObject() instanceof SavedSearchItem) {
+                    linkUrl = "w/savedSearch?id="+item.getModelObject().getId();
+                    imageUrl = "images/saved_items/search-small.png";
                 }
 
                 // This actually links to a wicket page, but because wicket outputs relative links

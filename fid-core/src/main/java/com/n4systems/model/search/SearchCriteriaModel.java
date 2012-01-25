@@ -2,6 +2,7 @@ package com.n4systems.model.search;
 
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
 
@@ -51,8 +52,17 @@ public abstract class SearchCriteriaModel extends AbstractEntity {
     @Transient
     private MultiIdSelection selection = new MultiIdSelection();
 
+    @Transient
+    private Long savedReportId;
+
+    @Transient
+    private String savedReportName;
+
     @Column(name="sortColumnId")
     private Long sortColumnId;
+
+    public abstract List<String> getColumns();
+    public abstract void setColumns(List<String> columns);
 
     public List<ColumnMappingGroupView> getDynamicEventColumnGroups() {
         return dynamicEventColumnGroups;
@@ -163,6 +173,22 @@ public abstract class SearchCriteriaModel extends AbstractEntity {
 
     public void setSortColumnId(Long sortColumnId) {
         this.sortColumnId = sortColumnId;
+    }
+
+    public Long getSavedReportId() {
+        return savedReportId;
+    }
+
+    public void setSavedReportId(Long savedReportId) {
+        this.savedReportId = savedReportId;
+    }
+
+    public String getSavedReportName() {
+        return savedReportName;
+    }
+
+    public void setSavedReportName(String savedReportName) {
+        this.savedReportName = savedReportName;
     }
 
 }

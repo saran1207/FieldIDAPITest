@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
+import com.n4systems.model.saveditem.SavedReportItem;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -24,6 +25,7 @@ import com.n4systems.services.reporting.DashboardReportingService;
 
 public class ReportingResultsPage extends FieldIDFrontEndPage {
 
+    private SavedReportItem savedReportItem;
 	private EventReportCriteriaModel reportCriteriaModel;
     private ReportResultsPanel reportResultsPanel;
     
@@ -35,8 +37,15 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
     	init(createReportCriteriaModel(params));
     }
 
+	public ReportingResultsPage(SavedReportItem savedReportItem) {
+        super(new PageParameters());
+        this.savedReportItem = savedReportItem;
+        init(savedReportItem.getSearchCriteria());
+	}
+
 	public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel) {
 		super(new PageParameters());
+        savedReportItem = new SavedReportItem(reportCriteriaModel);
 		init(reportCriteriaModel);
 	}
 
@@ -88,12 +97,12 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
         Link link = new Link(linkId) {
             @Override
             public void onClick() {
-                setResponsePage(new SaveReportPage(reportCriteriaModel, ReportingResultsPage.this, overwrite));
+                setResponsePage(new SaveReportPage(savedReportItem, ReportingResultsPage.this, overwrite));
             }
         };
         if (!overwrite) {
             // If this is not overwrite (ie the Save As link), it should be invisible if this isn't an existing saved report
-            link.setVisible(reportCriteriaModel.getSavedReportId() != null);
+            link.setVisible(savedReportItem.getId() != null);
         }
         return link;
     }

@@ -1,19 +1,21 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch;
 
-import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchMassActionPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchResultsPanel;
+import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.services.reporting.DashboardReportingService;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
@@ -21,19 +23,25 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
     @SpringBean
     private DashboardReportingService dashboardReportingService;
-    
-    
+    private SavedSearchItem savedSearchItem;
+
     public AssetSearchResultsPage(PageParameters params) { 
     	super(params);
     	init(createSearchCriteriaModel(params));
     }
+
+	public AssetSearchResultsPage(SavedSearchItem savedSearchItem) {
+        super(new PageParameters());
+        this.savedSearchItem = savedSearchItem;
+        init(savedSearchItem.getSearchCriteria());
+	}
     
     public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel) {
     	super(new PageParameters());
+        this.savedSearchItem = new SavedSearchItem(searchCriteriaModel);
     	init(searchCriteriaModel);
     }
-    
-    
+
     private AssetSearchCriteriaModel createSearchCriteriaModel(PageParameters params) {
     	if(params!=null) {
     		// load config and set values...
@@ -58,9 +66,32 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
         		reportResultsPanel.setVisible(false);
         	}
         });
+
+        add(new BookmarkablePageLink<Void>("startNewReportLink", AssetSearchPage.class));
+        add(createSaveSearchLink("saveReportLink", true));
+        add(createSaveSearchLink("saveReportLinkAs", false));
+
+        add(new BookmarkablePageLink<Void>("startNewReportLink2", AssetSearchPage.class));
+        add(createSaveSearchLink("saveReportLink2", true));
+        add(createSaveSearchLink("saveReportLinkAs2", false));
+
         add(criteriaExpandContainer);
         add(new AssetSearchMassActionPanel("massActionPanel", criteriaModel));    	
 	}
+
+    private Link createSaveSearchLink(String linkId, final boolean overwrite) {
+        Link link = new Link(linkId) {
+            @Override
+            public void onClick() {
+                setResponsePage(new SaveAssetSearchPage(savedSearchItem, AssetSearchResultsPage.this, overwrite));
+            }
+        };
+        if (!overwrite) {
+            // If this is not overwrite (ie the Save As link), it should be invisible if this isn't an existing saved report
+            link.setVisible(savedSearchItem.getId() != null);
+        }
+        return link;
+    }
 
 	@Override
     protected Label createTitleLabel(String labelId) {

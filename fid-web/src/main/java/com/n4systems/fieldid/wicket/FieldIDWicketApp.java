@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.pages.assetsearch.RunSavedSearchPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
 import org.apache.wicket.ConverterLocator;
@@ -63,6 +64,7 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("returnToReport", ReturnToReportPage.class);
         mountPage("savedReport", RunSavedReportPage.class);
+        mountPage("savedSearch", RunSavedSearchPage.class);
         mountPage("massSchedule", MassSchedulePage.class);
 
         mountPage("savedItems", SavedItemsDropdownPage.class);
