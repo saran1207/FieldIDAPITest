@@ -64,15 +64,31 @@ public class IdentifierOverridesPage extends FieldIDFrontEndPage {
 		        }
 		    });
             add(new Button("submitButton"));
-            add(new BookmarkablePageLink<Void>("cancelLink", SystemSettingsPage.class));		    
+            add(new BookmarkablePageLink<Void>("cancelLink", SystemSettingsPage.class));
     	}
     	
     	@Override
     	protected void onSubmit() {
-        	systemSettingsService.saveSystemSettings(getModelObject());
-        	FieldIDSession.get().info(new FIDLabelModel("message.system_settings_updated").getObject());
-        	setResponsePage(SystemSettingsPage.class);
- 		}
+    		String assetTypeName  = validateLabels(getModelObject());
+    		if(assetTypeName.isEmpty()) {
+	        	systemSettingsService.saveSystemSettings(getModelObject());
+	        	FieldIDSession.get().info(new FIDLabelModel("message.system_settings_updated").getObject());
+	        	setResponsePage(SystemSettingsPage.class);
+        	} else {
+        		error(new FIDLabelModel("error.identifier_override", (Object)assetTypeName).getObject());
+        	}
+ 		}    	
+    	
+    	private String validateLabels(List<AssetType> assetTypes) {
+    		for (AssetType assetType: assetTypes){
+    			String identifierLabel = assetType.getIdentifierLabel();
+    			if(assetType.isIdentifierOverridden() && 
+    					(identifierLabel == null || identifierLabel.isEmpty())){
+    				return assetType.getName();
+    			}
+    		}
+    		return "";
+    	}
     }
 
     @Override
