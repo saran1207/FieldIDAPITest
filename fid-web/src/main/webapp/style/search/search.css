@@ -1,14 +1,10 @@
-.search { 
-	position:relative;
-}
-
 .search .config { 
 	width:30%;
 	height: 100%;
+	background:#fff;
+	margin-top:-45px; /** = height of menu */
 	background-color:#fff;
 	position: absolute;
-	top:0px;
-	left:0;
 	border-left: 1px #ddd dotted;
 	border-right: 1px #ddd dotted;
 }
@@ -43,6 +39,25 @@
 	float:right;
 	background:#eee;
 	color:#444;
+}
+
+.buttons .dropdown div {
+	display: block;
+    width: 180px;
+    position:absolute;
+    background-color:#fff;
+    border:1px solid #ebebeb;
+    padding: 16px 0 8px 0;
+    text-align:left;
+}
+
+
+.buttons .dropdown div a {
+	color:#333;
+}
+
+.buttons .dropdown div a { 
+	background:#fff;
 }
 
 .buttons a { 
@@ -86,23 +101,13 @@
 	margin-bottom:4px; 
 }
 
-
-
-.menu .buttons { 
-	color:#777;
-}
-
-.menu .buttons .disabled { 
-	background:#ddd;
-}
-
 .search .content { 
 	width:100%;
 }
 
 .search .menu {
 	height:45px;
-	background-color: #F3F3F3;
+	background-color: #FFF;
 }
 
 .field {

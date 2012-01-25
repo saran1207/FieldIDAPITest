@@ -34,6 +34,7 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements FormListene
 	@Override	
     public void renderHead(IHeaderResponse response) {
     	response.renderCSSReference("style/search/search.css");    	
+    	response.renderCSSReference("style/search/menu.css");    	
     	super.renderHead(response);
     }
 
@@ -43,6 +44,16 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements FormListene
 		if (id.equals("search")) {
 			target.add(content);
 		}
+	}
+	
+	@Override
+	protected boolean useLegacyCss() {
+		return true;
+	}
+	
+	@Override
+	protected boolean useSiteWideCss() {
+		return true;
 	}
 
 }

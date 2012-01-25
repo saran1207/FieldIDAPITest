@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -17,9 +18,13 @@ public class ResultsContentPanel extends Panel {
 		super(id);
 		this.formListener = formListener;
 		setOutputMarkupId(true);
-		add(new AssetSearchResultsPanel("results", model));
+		add(new AssetSearchResultsPanel("results", model) {
+			@Override
+			protected void updateSelectionStatus(AjaxRequestTarget target) {
+				super.updateSelectionStatus(target);
+			}
+		});
 	}
-
 	
 	// in order to avoid changing shared code i am just styling away the bottom navigation bar. 
 	// when full search/reporting page switchover is complete the java code should be adjusted and this workaround taken out.
