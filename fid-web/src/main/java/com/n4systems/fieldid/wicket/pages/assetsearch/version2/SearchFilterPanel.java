@@ -7,7 +7,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -27,7 +26,7 @@ import com.n4systems.model.utils.DateRange;
 @SuppressWarnings("serial")
 public class SearchFilterPanel extends AbstractSearchConfigPanel {
 
-	public SearchFilterPanel(String id, Model<AssetSearchCriteriaModel> model, final FormListener formListener) {
+	public SearchFilterPanel(String id, IModel<AssetSearchCriteriaModel> model, final FormListener formListener) {
 		super(id,model, formListener);
 	}
 	
@@ -44,7 +43,7 @@ public class SearchFilterPanel extends AbstractSearchConfigPanel {
 
 	@Override
 	protected Form<AssetSearchCriteriaModel> createForm(String id,
-			Model<AssetSearchCriteriaModel> model) {
+			IModel<AssetSearchCriteriaModel> model) {
 		return new FilterForm(id,model);				
 	}
 	
@@ -55,7 +54,7 @@ public class SearchFilterPanel extends AbstractSearchConfigPanel {
     public class FilterForm extends Form<AssetSearchCriteriaModel> {
 
       	public FilterForm(String id, final IModel<AssetSearchCriteriaModel> model) {
-        	super(id, new CompoundPropertyModel<AssetSearchCriteriaModel>(model));
+        	super(id, model);
           	setOutputMarkupId(true);
 
 			CollapsiblePanel p1 = new CollapsiblePanel("identifiers", new StringResourceModel("label.identifiers",this,null), EXPAND_IMG, COLLAPSE_IMG) {
@@ -98,12 +97,6 @@ public class SearchFilterPanel extends AbstractSearchConfigPanel {
 		  	add(p5);		  	  			
       	}
 
-		@Override
-      	protected void onSubmit() {
-          	getModelObject().setReportAlreadyRun(true);
-          	getModelObject().getSelection().clear();
-	          //---make this refresh results object;
-      	}
       	
   }
 

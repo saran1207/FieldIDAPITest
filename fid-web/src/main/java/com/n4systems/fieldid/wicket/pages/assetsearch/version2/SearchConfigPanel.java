@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.IModel;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
@@ -18,7 +19,7 @@ public class SearchConfigPanel extends Panel implements FormListener {
 	private FormListener formListener;
 	
 
-	public SearchConfigPanel(String id, Model<AssetSearchCriteriaModel> model, FormListener formListener) {
+	public SearchConfigPanel(String id, IModel<AssetSearchCriteriaModel> model, FormListener formListener) {
 		super(id, model);
 		setRenderBodyOnly(true);
 		this.formListener = formListener;
@@ -33,8 +34,8 @@ public class SearchConfigPanel extends Panel implements FormListener {
 	}
 
 	@Override
-	public void handleEvent(AjaxRequestTarget target, Component component) {
-		formListener.handleEvent(target, component);
+	public void handleEvent(AjaxRequestTarget target, Component component, Form<?> form) {
+		formListener.handleEvent(target, component, form);
 	}
 
 }

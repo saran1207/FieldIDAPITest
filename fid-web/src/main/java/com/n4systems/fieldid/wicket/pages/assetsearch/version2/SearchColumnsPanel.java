@@ -35,13 +35,13 @@ public class SearchColumnsPanel extends AbstractSearchConfigPanel {
 	
     private IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel;
 	
-	public SearchColumnsPanel(String id, Model<AssetSearchCriteriaModel> model, final FormListener formListener) {
+	public SearchColumnsPanel(String id, IModel<AssetSearchCriteriaModel> model, final FormListener formListener) {
 		super(id, model, formListener);
         setOutputMarkupId(true);	
 	}
 
 	@Override
-	protected Form<AssetSearchCriteriaModel> createForm(String id, Model<AssetSearchCriteriaModel> model) {
+	protected Form<AssetSearchCriteriaModel> createForm(String id, IModel<AssetSearchCriteriaModel> model) {
 		return new ColumnsForm(id,model);
 	}
 
@@ -88,8 +88,7 @@ public class SearchColumnsPanel extends AbstractSearchConfigPanel {
         	CollapsiblePanel collapsiblePanel = new CollapsiblePanel("columnGroup",  new FIDLabelModel(new PropertyModel<String>(item.getModel(),"label")), EXPAND_IMG, COLLAPSE_IMG) {
 				@Override protected Panel createContainedPanel(String id) {
 					return new ColumnGroupPanel(id, item.getModel());
-				}
-        		
+				}        		
         	};
         	return collapsiblePanel;        	
         }
@@ -118,7 +117,7 @@ public class SearchColumnsPanel extends AbstractSearchConfigPanel {
             }
             getModelObject().setReportAlreadyRun(true);
             getModelObject().getSelection().clear();
-            //---make this refresh results object;
+            
         }
 
     }

@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.odlabs.wiquery.core.events.Event;
@@ -44,7 +45,7 @@ public class SearchMenu extends Panel {
 
     
     
-	public SearchMenu(String id, final Model<AssetSearchCriteriaModel> model, final FormListener formListener) {
+	public SearchMenu(String id, final IModel<AssetSearchCriteriaModel> model, final FormListener formListener) {
 		super(id);
 		add(showFilters = new WebMarkupContainer("showFilters").add(new AttributeAppender("class", new StringResourceModel("label.filters",this,null), " ")));
 		add(showColumns = new WebMarkupContainer("showColumns").add(new AttributeAppender("class", new StringResourceModel("label.columns",this,null), " ")));
@@ -60,8 +61,7 @@ public class SearchMenu extends Panel {
 		
 		add(new AjaxLink("save") {
 			@Override public void onClick(AjaxRequestTarget target) {
-				 // to be done later.
-				 formListener.handleEvent(target, this);				
+				//tbd;
 			}			
 		});		
 		add(printManuCertsLink = new AssetSearchMassActionLink("printCertificates", "/aHtml/searchPrintAllCerts.action?searchId=%s", model));

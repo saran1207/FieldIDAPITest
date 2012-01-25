@@ -6,6 +6,7 @@ import org.apache.wicket.model.IModel;
 
 import com.n4systems.fieldid.wicket.components.IdentifierLabel;
 
+@SuppressWarnings("serial")
 public class IdentifiersCriteriaPanel extends Panel {
 
 	public IdentifiersCriteriaPanel(String id, IModel<?> model) {

@@ -4,7 +4,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
@@ -16,19 +18,20 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements FormListene
 	private SearchFilterPanel filter;
 	private SearchColumnsPanel columns;
 	private ResultsContentPanel content;
+	private IModel<AssetSearchCriteriaModel> model;
 
 	public AssetSearchPage2() {
     	container = new WebMarkupContainer("container");
     	container.setOutputMarkupId(true);
-    	Model<AssetSearchCriteriaModel> model = createModel();
+    	model = createModel();
     	container.add(new SearchMenu("topMenu",model,this));    	
     	container.add(new SearchConfigPanel("config", model,this));
     	container.add(content=new ResultsContentPanel("content", model, this));
     	add(container);
     }	
 	
-	protected Model<AssetSearchCriteriaModel> createModel() {
-		return new Model<AssetSearchCriteriaModel>(new AssetSearchCriteriaModel()); 
+	protected IModel<AssetSearchCriteriaModel> createModel() {
+		return new CompoundPropertyModel<AssetSearchCriteriaModel>(new AssetSearchCriteriaModel()); 
 	}
 
 	@Override	
@@ -39,9 +42,11 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements FormListene
     }
 
 	@Override
-	public void handleEvent(AjaxRequestTarget target, Component component) {
+	public void handleEvent(AjaxRequestTarget target, Component component, Form<?> form) {
 		String id = component.getId();
 		if (id.equals("search")) {
+			model.getObject().setReportAlreadyRun(true);
+            model.getObject().getSelection().clear();			
 			target.add(content);
 		}
 	}

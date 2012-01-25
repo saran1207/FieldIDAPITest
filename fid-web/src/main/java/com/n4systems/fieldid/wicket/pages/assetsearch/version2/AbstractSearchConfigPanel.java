@@ -2,12 +2,12 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.IModel;
 import org.odlabs.wiquery.core.events.Event;
 import org.odlabs.wiquery.core.events.MouseEvent;
 import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
@@ -31,8 +31,8 @@ public abstract class AbstractSearchConfigPanel extends Panel {
 	protected Form<AssetSearchCriteriaModel> form;
 
 	
-	public AbstractSearchConfigPanel(String id, Model<AssetSearchCriteriaModel>model, FormListener formListener) {
-		super(id);
+	public AbstractSearchConfigPanel(String id, IModel<AssetSearchCriteriaModel>model, FormListener formListener) {
+		super(id,model);
 		this.formListener = formListener;
 		setOutputMarkupId(true);
 		
@@ -40,7 +40,7 @@ public abstract class AbstractSearchConfigPanel extends Panel {
 		form.add(createMenu("menu"));
 	}
 
-	protected abstract Form<AssetSearchCriteriaModel> createForm(String id, Model<AssetSearchCriteriaModel> model);
+	protected abstract Form<AssetSearchCriteriaModel> createForm(String id, IModel<AssetSearchCriteriaModel> model);
 	
 	protected abstract void updateMenu(Component... component);
 
@@ -50,10 +50,14 @@ public abstract class AbstractSearchConfigPanel extends Panel {
 		WebMarkupContainer filters;
 		WebMarkupContainer columns;
 		
-		menu.add(search = new IndicatingAjaxLink("search") {
-			@Override public void onClick(AjaxRequestTarget target) {
-				AbstractSearchConfigPanel.this.formListener.handleEvent(target,this);
+		menu.add(search = new AjaxSubmitLink("search") {
+			@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				AbstractSearchConfigPanel.this.formListener.handleEvent(target,this, form);
 				target.appendJavaScript(HIDE_JS);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
 			}
 		});		
 		menu.add(filters = new WebMarkupContainer("filters"));

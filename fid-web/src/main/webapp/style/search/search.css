@@ -41,25 +41,6 @@
 	color:#444;
 }
 
-.buttons .dropdown div {
-	display: block;
-    width: 180px;
-    position:absolute;
-    background-color:#fff;
-    border:1px solid #ebebeb;
-    padding: 16px 0 8px 0;
-    text-align:left;
-}
-
-
-.buttons .dropdown div a {
-	color:#333;
-}
-
-.buttons .dropdown div a { 
-	background:#fff;
-}
-
 .buttons a { 
 	background:#bbb;
 	color:#fff;
