@@ -97,12 +97,12 @@ public abstract class SearchService<T extends SearchCriteriaModel, M extends Bas
         return persistenceService.count(searchBuilder);
     }
 
-    private QueryBuilder<M> createBaseSearchQueryBuilder(T criteriaModel) {
+    public QueryBuilder<M> createBaseSearchQueryBuilder(T criteriaModel) {
 		// create our QueryBuilder, note the type will be the same as our selectClass
 		QueryBuilder<M> searchBuilder = createUserSecurityBuilder(searchClass);
 
         ColumnMappingView sortColumn = criteriaModel.getSortColumn();
-        if (sortColumn.getJoinExpression() != null) {
+        if (sortColumn != null && sortColumn.getJoinExpression() != null) {
             JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT, sortColumn.getJoinExpression(), JoinTerm.DEFAULT_SORT_JOIN_ALIAS, true);
             searchBuilder.addJoin(joinTerm.toJoinClause());
         }

@@ -14,8 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.n4systems.exceptions.NotImplementedException;
-import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.util.persistence.NewObjectSelect;
@@ -27,8 +26,8 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Component
-@Path("search")
-public class ApiSmartSearchResource extends ApiResource<ApiSmartSearchSuggestion, Asset> {
+@Path("smartSearch")
+public class ApiSmartSearchResource extends FieldIdPersistenceService {
 	private static final int SearchOptions = WhereParameter.IGNORE_CASE|WhereParameter.TRIM|WhereParameter.WILDCARD_RIGHT;
 	private static final int MaxResults = 8;
 	
@@ -36,14 +35,13 @@ public class ApiSmartSearchResource extends ApiResource<ApiSmartSearchSuggestion
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	@Path("suggest")
 	public ListResponse<ApiSmartSearchSuggestion> getSmartSearchSuggestions(@QueryParam("searchText") String searchText) {
 		/*
-		 * To get full-text search 'like' functionality, we run individual searches on the identifier, and customerReferenceNumber
+		 * To get full-text search like functionality, we run individual searches on the identifier, and customerReferenceNumber
 		 * sorting by the field length.  Then we merge the two lists.
 		 */
-		List<ApiSmartSearchSuggestion> identifierSuggestions = getLoadSuggestions("identifier", searchText);
-		List<ApiSmartSearchSuggestion> refNumberSuggestions = getLoadSuggestions("customerRefNumber", searchText);
+		List<ApiSmartSearchSuggestion> identifierSuggestions = loadSuggestions("identifier", searchText);
+		List<ApiSmartSearchSuggestion> refNumberSuggestions = loadSuggestions("customerRefNumber", searchText);
 
 		List<ApiSmartSearchSuggestion> suggestions = mergeSuggestions(identifierSuggestions, refNumberSuggestions);
 		
@@ -51,7 +49,7 @@ public class ApiSmartSearchResource extends ApiResource<ApiSmartSearchSuggestion
 		return response;
 	}
 	
-	private List<ApiSmartSearchSuggestion> getLoadSuggestions(String field, String searchText) {
+	private List<ApiSmartSearchSuggestion> loadSuggestions(String field, String searchText) {
 		QueryBuilder<ApiSmartSearchSuggestion> builder = new QueryBuilder<ApiSmartSearchSuggestion>(Asset.class, securityContext.getUserSecurityFilter());
 		builder.setSelectArgument(new NewObjectSelect(ApiSmartSearchSuggestion.class, "mobileGUID", "type.name", "identifier", "customerRefNumber", "length(" + field + ")"));
 		
@@ -81,9 +79,5 @@ public class ApiSmartSearchResource extends ApiResource<ApiSmartSearchSuggestion
 
 		return (suggestions.size() <= MaxResults) ? suggestions : suggestions.subList(0, MaxResults);
 	}
-	
-	@Override
-	protected ApiSmartSearchSuggestion convertEntityToApiModel(Asset entityModel) {
-		throw new NotImplementedException();
-	}
+
 }
