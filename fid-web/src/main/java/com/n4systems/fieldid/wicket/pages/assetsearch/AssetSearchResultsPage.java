@@ -29,6 +29,7 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     public AssetSearchResultsPage(PageParameters params) { 
     	super(params);
     	AssetSearchCriteriaModel searchCriteriaModel = createSearchCriteriaModel(params);
+    	this.savedSearchItem = new SavedSearchItem(searchCriteriaModel);
 		init(searchCriteriaModel);
     }
 
@@ -58,10 +59,6 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 	}
 
     private void init(AssetSearchCriteriaModel searchCriteriaModel) {
-    	if (savedSearchItem==null) {
-        	savedSearchItem = new SavedSearchItem(searchCriteriaModel);
-    	}
-
         Model<AssetSearchCriteriaModel> criteriaModel = new Model<AssetSearchCriteriaModel>(searchCriteriaModel);
         add(reportResultsPanel = new AssetSearchResultsPanel("resultsPanel", criteriaModel));
 
