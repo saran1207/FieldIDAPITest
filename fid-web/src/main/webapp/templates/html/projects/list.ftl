@@ -51,7 +51,7 @@ ${action.setPageType('job', 'list')!}
 				<#if justAssignedOn?exists && justAssignedOn >
 					<a href="<@s.url action="jobs"/>"><@s.text name="label.all_jobs"/></a>
 				<#else>
-					<@s.text name="label.all_jobs"/>
+					<span class="linkTitle"><@s.text name="label.all_jobs"/></span>
 				</#if>
 			</li>
 			<li <#if justAssignedOn?exists && justAssignedOn >class="selected"</#if>>

@@ -35,10 +35,10 @@ public class SavedItemsDropdownPage extends FieldIDAuthenticatedPage {
 
                 if (item.getModelObject() instanceof SavedReportItem) {
                     linkUrl = "w/savedReport?id="+item.getModelObject().getId();
-                    imageUrl = "images/saved_items/reporting-small.png";
+                    imageUrl = "images/saved_items/saved-report.png";
                 } else if (item.getModelObject() instanceof SavedSearchItem) {
                     linkUrl = "w/savedSearch?id="+item.getModelObject().getId();
-                    imageUrl = "images/saved_items/search-small.png";
+                    imageUrl = "images/saved_items/saved-search.png";
                 }
 
                 // This actually links to a wicket page, but because wicket outputs relative links

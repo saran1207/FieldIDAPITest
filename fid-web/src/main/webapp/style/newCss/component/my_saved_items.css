@@ -15,6 +15,11 @@
     display:block;
 }
 
+.mySavedItemsBox .savedItem .itemName {
+    display:block;
+    padding-top:6px;
+}
+
 .mySavedItemsBox .savedItemContainer {
     height:36px;
 }

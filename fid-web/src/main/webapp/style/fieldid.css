@@ -166,6 +166,12 @@ h2 a {
 	text-align: right;
 }
 
+#pageActions .listOfLinks li {
+	margin-bottom: 15px;
+	padding-right: .6em;
+    padding-left: .5em;
+}
+
 #pageActions .listOfLinks a,#pageActions .listOfLinks a:hover,#pageActions .listOfLinks a:visited,#pageActions .listOfLinks a:active
 	{
 	color: #333;
@@ -175,7 +181,7 @@ h2 a {
 	color: #777;
 }
 
-.listOfLinks a {
+.listOfLinks a, .listOfLinks span.linkTitle {
 	margin-right: 10px;
 }
 
@@ -569,13 +575,12 @@ td.formAction {
 .listOfLinks li {
 	display: inline;
 	border-left: 1px solid black;
-	padding-right: .6em;
-	padding-left: .5em;
+	padding-left: .8em;
 }
 
 .listOfLinks li.first {
 	border-left: none;
-	padding-left: 0px;
+	padding-left: 0;
 }
 
 .listOfLinks li.massUpdateIndicator {
