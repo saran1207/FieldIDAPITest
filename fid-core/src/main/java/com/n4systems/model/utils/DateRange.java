@@ -107,11 +107,15 @@ public class DateRange implements Serializable {
 		return from==null ? null : from.toDate();
 	}
 
+	// NOTE : static date ranges like LastWeek are inclusive.   i.e. From = Jan1, To=Jan8
+	// but when the user enters custom dates like Jan1-Jan8 they want to include the last day. 
 	public Date calculateToDate() {
 		LocalDate to = getTo();
+		if (rangeType.isWellDefinedRangeType()) { 
+			to = to.minusDays(1);
+		}
 		return to==null ? null : to.toDate();
 	}
-
 
 	public String getDisplayName() {
 		return rangeType.getFormatter().getDisplayName(this);
@@ -271,4 +275,5 @@ public class DateRange implements Serializable {
     public void setToDate(Date toDate) {
         this.toDate = toDate;
     }
+
 }

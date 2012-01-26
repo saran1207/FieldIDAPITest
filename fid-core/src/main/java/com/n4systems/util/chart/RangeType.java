@@ -25,6 +25,8 @@ public enum RangeType implements Listable<String>, Serializable {
 	FOREVER("All Time", new DateRange.IntervalHandler(), new StaticDateRanageFormatter("All Time")),
     CUSTOM("Custom Date Range", new DateRange.IntervalHandler(), new StaticDateRanageFormatter("Custom Date Range"));
 
+	
+	private static EnumSet<RangeType> wellDefinedRangeTypes = EnumSet.complementOf(EnumSet.of(CUSTOM,FOREVER)); // everything except the ambiguous ones like CUSTOM...
 	private static EnumSet<RangeType> floatingRangeTypes = EnumSet.of(LAST_WEEK, LAST_MONTH, LAST_QUARTER, LAST_YEAR, THIS_WEEK, THIS_MONTH, THIS_QUARTER, THIS_YEAR, FOREVER);
 	private static EnumSet<RangeType> daysFromNowRangeTypes = EnumSet.of(SEVEN_DAYS, THIRTY_DAYS, SIXTY_DAYS, NINETY_DAYS);
 
@@ -50,6 +52,10 @@ public enum RangeType implements Listable<String>, Serializable {
 
 	public boolean isDaysFromNowRangeType()  {
 		return daysFromNowRangeTypes.contains(this);
+	}
+
+	public boolean isWellDefinedRangeType()  {
+		return wellDefinedRangeTypes.contains(this);
 	}
 
 	public static RangeType forDays(Integer period) {
