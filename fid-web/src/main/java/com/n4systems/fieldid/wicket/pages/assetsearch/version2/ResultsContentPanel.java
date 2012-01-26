@@ -14,7 +14,7 @@ public class ResultsContentPanel extends Panel {
 	private FormListener formListener;
 
 	public ResultsContentPanel(String id, IModel<AssetSearchCriteriaModel> model, FormListener formListener) {
-		super(id);
+		super(id, model);
 		this.formListener = formListener;
 		setOutputMarkupId(true);
 		add(new AssetSearchResultsPanel("results", model) {

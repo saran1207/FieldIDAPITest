@@ -2,11 +2,15 @@
 	width:30%;
 	height: 100%;
 	background:#fff;
-	margin-top:-45px; /** = height of menu */
 	background-color:#fff;
 	position: absolute;
-	border-left: 1px #ddd dotted;
-	border-right: 1px #ddd dotted;
+	min-height:750px;
+	display:block;
+	border-left: 1px #aaa dotted;
+	border-right: 1px #aaa dotted;
+	-moz-box-shadow: 10px 10px 5px #888;
+	-webkit-box-shadow: 10px 10px 5px #888;
+	box-shadow: 10px 10px 5px #888;	
 }
 
 .search .columns {
@@ -17,15 +21,17 @@
 	width:350px;
 }
 
-.search .buttons {
-	margin-top:12px;	
+.buttons {
+	margin-top:12px;
+	
 }
 	
-.search .buttons-left {
+.buttons-left {
 	float:left;
+	width:100px;
 }
 
-.search .buttons-right {
+.buttons-right {
 	float:right;
 	margin-left:20px;
 }
@@ -74,7 +80,8 @@
 .search .config form .config-content { 
 	position:absolute;
 	width:100%;
-	top:45px;
+	height:100%;
+	top:45px; 	
 }
 
 .search .filter form .config-content {
@@ -84,6 +91,7 @@
 
 .search .content { 
 	width:100%;
+	min-height :750px;
 }
 
 .search .menu {
@@ -147,4 +155,21 @@ these are all hacks really and should be refactored into main code site wide whe
 
 #pageContent {
     overflow: visible;
+}
+
+.emptyList {
+	border:0px;
+	background-color:#fff;
+	text-align: center;
+	margin: 20px 0px;
+	clear: both;
+}
+
+
+.emptyList h2 {
+	display:none;
+}
+
+.emptyList p {
+	padding: 10px;
 }

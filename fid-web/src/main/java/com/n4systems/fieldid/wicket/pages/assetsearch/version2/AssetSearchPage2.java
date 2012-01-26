@@ -21,17 +21,21 @@ public class AssetSearchPage2 extends FieldIDFrontEndPage implements FormListene
 	private IModel<AssetSearchCriteriaModel> model;
 
 	public AssetSearchPage2() {
-    	container = new WebMarkupContainer("container");
-    	container.setOutputMarkupId(true);
-    	model = createModel();
-    	container.add(new SearchMenu("topMenu",model,this));    	
-    	container.add(new SearchConfigPanel("config", model,this));
-    	container.add(content=new ResultsContentPanel("content", model, this));
-    	add(container);
+		this(new AssetSearchCriteriaModel(), true);
     }	
 	
-	protected IModel<AssetSearchCriteriaModel> createModel() {
-		return new CompoundPropertyModel<AssetSearchCriteriaModel>(new AssetSearchCriteriaModel()); 
+	public AssetSearchPage2(AssetSearchCriteriaModel m) {
+		this(m,false);
+	}
+
+	public AssetSearchPage2(AssetSearchCriteriaModel m, boolean showConfig) {
+		model = new CompoundPropertyModel<AssetSearchCriteriaModel>(m);
+		add(new SearchMenu("topMenu",model,this));    	
+		container = new WebMarkupContainer("container");
+		container.setOutputMarkupId(true);
+		container.add(new SearchConfigPanel("config", model,this, showConfig));
+		container.add(content=new ResultsContentPanel("content", model, this));
+		add(container);
 	}
 
 	@Override	
