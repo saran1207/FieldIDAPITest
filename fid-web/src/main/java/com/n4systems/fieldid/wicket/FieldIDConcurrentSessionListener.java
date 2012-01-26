@@ -32,7 +32,7 @@ public class FieldIDConcurrentSessionListener implements IRequestCycleListener {
 		
 		SessionUserInUse sessionUserInUse = new SessionUserInUse(new ActiveSessionLoader(), ConfigContext.getCurrentContext(), new SystemClock(), new ActiveSessionSaver());
 		
-		if (! sessionUserInUse.doesActiveSessionBelongTo(sessionUser.getUniqueID(), sessionId)) {
+		if (sessionUser != null && !sessionUserInUse.doesActiveSessionBelongTo(sessionUser.getUniqueID(), sessionId)) {
 			cycle.setResponsePage(SessionBootedPage.class);
 		}
 	}
