@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -43,6 +44,8 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
         public SaveReportForm(String id) {
             super(id);
 
+            add(new Label("savedItemLabel", createSavedItemDescriptionModel()));
+
             add(new FIDFeedbackPanel("feedbackPanel"));
             add(new RequiredTextField<String>("name", new PropertyModel<String>(SaveSearchPage.this, "name")));
             add(new Link("cancelLink") {
@@ -57,16 +60,14 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
         @Override
         protected void onSubmit() {
             saveSearch(savedItem, overwrite, name);
-            FieldIDSession.get().info(new FIDLabelModel("message.savedreportsaved").getObject());
+            FieldIDSession.get().info(createSavedConfirmationModel().getObject());
             setResponsePage(backToPage);
         }
 
     }
 
-    @Override
-    protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.reporting"));
-    }
+    protected abstract IModel<String> createSavedConfirmationModel();
+    protected abstract IModel<String> createSavedItemDescriptionModel();
 
     protected abstract void saveSearch(T item, boolean overwrite, String name);
 
