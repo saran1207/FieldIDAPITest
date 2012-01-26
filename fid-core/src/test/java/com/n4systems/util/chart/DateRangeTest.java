@@ -2,13 +2,14 @@ package com.n4systems.util.chart;
 
 import static org.junit.Assert.*;
 
-import com.n4systems.model.utils.DateRange;
 import org.hamcrest.collection.IsIn;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+
+import com.n4systems.model.utils.DateRange;
 
 
 public class DateRangeTest {
@@ -148,20 +149,20 @@ public class DateRangeTest {
 		assertEquals("Dec 27", new DateRange(RangeType.THIS_WEEK).getFromDateDisplayString() );
 
 		
-		System.out.println( new DateRange(RangeType.FOREVER).getToDateDisplayString() );
+		assertEquals("", new DateRange(RangeType.FOREVER).getToDateDisplayString() );
 		
-		System.out.println( new DateRange(RangeType.LAST_YEAR).getToDateDisplayString() );
-		System.out.println( new DateRange(RangeType.THIS_YEAR).getToDateDisplayString() );
+		assertEquals("2010", new DateRange(RangeType.LAST_YEAR).getToDateDisplayString() );
+		assertEquals("2011", new DateRange(RangeType.THIS_YEAR).getToDateDisplayString() );
 		
-		System.out.println( new DateRange(RangeType.THIS_QUARTER).getToDateDisplayString() );
-		System.out.println( new DateRange(RangeType.LAST_QUARTER).getToDateDisplayString() );
+		assertEquals("Mar 2011", new DateRange(RangeType.THIS_QUARTER).getToDateDisplayString() );
+		assertEquals("Dec 2010", new DateRange(RangeType.LAST_QUARTER).getToDateDisplayString() );
 
-		System.out.println( new DateRange(RangeType.LAST_MONTH).getToDateDisplayString() );
-		System.out.println( new DateRange(RangeType.THIS_MONTH).getToDateDisplayString() );
+		assertEquals("Dec 2010", new DateRange(RangeType.LAST_MONTH).getToDateDisplayString() );
+		assertEquals("Jan 2011", new DateRange(RangeType.THIS_MONTH).getToDateDisplayString() );
 		
-		System.out.println( new DateRange(RangeType.LAST_WEEK).getToDateDisplayString() );
-		System.out.println( new DateRange(RangeType.THIS_WEEK).getToDateDisplayString() );
-		
+		assertEquals("Dec 26", new DateRange(RangeType.LAST_WEEK).getToDateDisplayString() );
+		assertEquals("Jan 2", new DateRange(RangeType.THIS_WEEK).getToDateDisplayString() );
+				
 	}
 	
 }

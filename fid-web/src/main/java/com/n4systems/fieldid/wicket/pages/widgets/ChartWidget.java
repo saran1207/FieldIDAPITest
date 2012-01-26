@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-import com.n4systems.model.utils.DateRange;
-import com.n4systems.util.chart.RangeType;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -30,6 +28,7 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.EnumUtils;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartGranularity;
@@ -237,18 +236,18 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 		return false;
 	}
 	
-	protected Set<OptionsUpdater> add(OptionsUpdater ou) { 
-		optionsUpdaters.add(ou);
+	protected Set<OptionsUpdater> add(OptionsUpdater optionsUpdater) { 
+		optionsUpdaters.add(optionsUpdater);
 		return optionsUpdaters;
 	}		
 	
-	protected void setClickThruHandler(ClickThruHandler ctu) {
+	protected void setClickThruHandler(ClickThruHandler handler) {
 		// note that this object may want a chance to set/override some options so hook it up.
-		if (clickThruHandler!=null) { 
-			optionsUpdaters.remove(clickThruHandler);			
+		if (handler!=null) { 
+			optionsUpdaters.remove(handler);			
 		}
-		clickThruHandler = ctu;
-		optionsUpdaters.add(clickThruHandler);
+		this.clickThruHandler = handler;
+		optionsUpdaters.add(handler);
 	}
     
 }

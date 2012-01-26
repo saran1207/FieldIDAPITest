@@ -1,18 +1,5 @@
 package com.n4systems.model.utils;
 
-import com.google.common.base.Preconditions;
-import com.n4systems.util.chart.DaysRangeFormatter;
-import com.n4systems.util.chart.FloatingDateRangeFormatter;
-import com.n4systems.util.chart.QuarterDateRangeFormatter;
-import com.n4systems.util.chart.RangeType;
-import com.n4systems.util.chart.StaticDateRanageFormatter;
-import com.n4systems.util.time.DateUtil;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.Duration;
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,6 +7,15 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.Duration;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+
+import com.n4systems.util.chart.RangeType;
+import com.n4systems.util.time.DateUtil;
 
 
 /**
@@ -72,12 +68,13 @@ public class DateRange implements Serializable {
 	}
 
 	public String getToDateDisplayString() {
-		return rangeType.getFormatter().getToDateDisplayString(getTo());
+		return rangeType.getFormatter().getToDateDisplayString(getInclusiveTo());
 	}
 	
 	// note that getTo() is exclusive.  e.g. for a year 2011
 	// Jan 1, 2011 is getFrom() and getTo() is Jan 1, 2012  *not*  dec 31,2011    [11:59:59.9999...]
-	// this method is used for display reasons.  (e.g.  "hello oct 1,2011-oct 31,2011") 
+	// this method is used for display reasons.  (e.g.  "Searching oct 1,2011 - oct 31,2011")
+	// @see getToDateDisplayString();
 	private LocalDate getInclusiveTo() {
 		LocalDate to = getTo();
 		return (to==null) ? null : to.minusDays(1);
