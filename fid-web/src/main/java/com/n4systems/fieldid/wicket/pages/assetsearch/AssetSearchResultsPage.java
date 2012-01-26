@@ -59,7 +59,7 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
         Model<AssetSearchCriteriaModel> criteriaModel = new Model<AssetSearchCriteriaModel>(searchCriteriaModel);
         add(reportResultsPanel = new AssetSearchResultsPanel("resultsPanel", criteriaModel));
 
-        SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.reportcriteria"));
+        SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));
         criteriaExpandContainer.addContainedPanel(new AssetSearchCriteriaPanel("criteriaPanel", criteriaModel) {
         	@Override
         	protected void onNoDisplayColumnsSelected() {
