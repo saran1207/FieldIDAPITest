@@ -1,22 +1,24 @@
 package com.n4systems.fieldid.wicket.components.massupdate;
 
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.validator.PatternValidator;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
@@ -32,6 +34,7 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 	private MassUpdateManager massUpdateManager;
 	
 	private String confirmation;
+	private Button submitButton;
 
 	public ConfirmDeletePanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		super(id);
@@ -56,8 +59,23 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 		
 		confirmDeleteForm.add(input = new RequiredTextField<String>("confirmationField", new PropertyModel<String>(this, "confirmation")));
 		
-		input.add(new PatternValidator(Pattern.compile("delete", Pattern.CASE_INSENSITIVE)));
-			
+		input.add(new UpdateComponentOnChange() {
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				Matcher matcher = Pattern.compile("delete", Pattern.CASE_INSENSITIVE).matcher(ConfirmDeletePanel.this.confirmation);				
+				if(matcher.matches()) {
+					submitButton.setEnabled(true);
+					target.add(submitButton);
+				}else {
+					submitButton.setEnabled(false);
+					target.add(submitButton);
+				}
+			}
+		});
+		
+		confirmDeleteForm.add(submitButton = new Button("submitButton"));
+		submitButton.setEnabled(false);
+		submitButton.setOutputMarkupId(true);
 		confirmDeleteForm.add(new Link("cancelLink") {
 			@Override
 			public void onClick() {

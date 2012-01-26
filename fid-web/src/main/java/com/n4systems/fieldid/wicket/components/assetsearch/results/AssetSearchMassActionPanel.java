@@ -25,14 +25,13 @@ public class AssetSearchMassActionPanel extends MassActionPanel {
 
         AssetSearchMassActionLink printManuCertsLink;
         Link massSchedueLink;
-        AssetSearchMassActionLink massUpdateLink;
+        Link massUpdateLink;
         AssetSearchMassActionLink massEventLink;
 
         add(printManuCertsLink = new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", criteriaModel));
         add(new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", criteriaModel));
         add(massEventLink = new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", criteriaModel));
-        add(massUpdateLink = new AssetSearchMassActionLink("massUpdateLink", "/massUpdateAssets.action?searchId=%s", criteriaModel));
-        add(massSchedueLink = new Link("newMassUpdateLink") {
+        add(massUpdateLink = new Link("massUpdateLink") {
             @Override
             public void onClick() {
                 setResponsePage(new MassUpdatePage(criteriaModel));

@@ -5,31 +5,30 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateAssetsPanel.MassUpdateOperation;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 
 public class SelectOperationPanel extends AbstractMassUpdatePanel {
 
-	private List<String> operations = Arrays.asList(new String[] {"Edit", "Delete"});
-
-	private String selected;
+	private MassUpdateOperation selected;
 	
 	public SelectOperationPanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria) {
 		super(id);
 		
-		RadioChoice<String> optType = new RadioChoice<String>("operations", new PropertyModel<String>(this, "selected"), operations);
+		RadioChoice<MassUpdateOperation> optType = new RadioChoice<MassUpdateOperation>("operations", new PropertyModel<MassUpdateOperation>(this, "selected"), 
+				Arrays.asList(MassUpdateOperation.values()), new MassUpdateOperationChoiceRenderer());
 		
 		Form<Void> massUpdateForm = new Form<Void>("form"){
 			@Override
 			protected void onSubmit() {
-				onOperationSelected(MassUpdateOperation.valueOf(selected));
+				onOperationSelected(selected);
 			}
 		};
 		
@@ -46,5 +45,19 @@ public class SelectOperationPanel extends AbstractMassUpdatePanel {
 	}
 	
 	protected void onOperationSelected(MassUpdateOperation operation) {}
+	
+	class MassUpdateOperationChoiceRenderer implements IChoiceRenderer<MassUpdateOperation> {
+
+		@Override
+		public Object getDisplayValue(MassUpdateOperation object) {
+			return new FIDLabelModel(object.getLabel()).getObject() + " - " + new FIDLabelModel(object.getMessage()).getObject();
+		}
+
+		@Override
+		public String getIdValue(MassUpdateOperation object, int index) {
+			return new FIDLabelModel(object.getLabel()).getObject();
+		}
+		
+	}
 	
 }

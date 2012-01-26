@@ -1,8 +1,13 @@
+.massUpdateContent {
+	margin-top: 10px;
+}
+
 .navMenu {
-	width: 230px;
+	width: 228px;
 	float:left;
 	background-color: #F3F3F3;
 	margin-right: 20px;
+	border:1px dotted #DDDDDD;
 }
 
 .navMenuShort {
@@ -49,18 +54,23 @@
 	margin-bottom: 15px;
 }
 
+.operations label {
+	padding-left: 5px;
+	vertical-align: 2px;
+}
+
 .mainPanel .infoSet input[type="checkbox"] {
     float: left;
     display: block;
     width: 30px;
-    margin: 5px 0px;
+    margin-top: 10px;
 }
 
 .mainPanel .infoSet label {
     float: left;
     display: block;
     width: 150px;
-    padding: 5px 10px 5px 20px;
+    padding: 8px 10px 5px 20px;
     line-height: 18px;
     text-align: left;
     color: #555;
@@ -91,6 +101,14 @@
     padding: 4px;
 }
 
+.fieldHolder .orgPicker {
+	padding: 0;
+}
+
+.editForm .infoSet{
+	border-bottom:1px dotted #CCC;
+}
+
 .editForm .formActions{
 	padding-top: 20px;
 }
@@ -104,6 +122,10 @@
 	height: 250px;
 }
 
+.deleteDetails .infoSet {
+	min-height: 25px;
+}
+
 .confirmDeleteForm .infoSet label{
 	padding: 5px 5px 5px 0px;
 	width: 100px;
@@ -115,4 +137,5 @@
 
 .formActions input[type="submit"] {
 	padding: 2px 10px;
+	font-size: 13px;
 }
