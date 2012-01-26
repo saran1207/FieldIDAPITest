@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -13,9 +12,9 @@ import com.n4systems.fieldid.wicket.pages.widgets.config.CompletedEventsConfigPa
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 
@@ -35,7 +34,6 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
         addGranularityButton(ChartGranularity.MONTH);
         addGranularityButton(ChartGranularity.WEEK);
         addGranularityButton(ChartGranularity.DAY);
-        setClickThruHandler(new ReportClickThruHandler(this, widgetDefinition.getId()));		                
     }
  
     @Override

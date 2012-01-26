@@ -1,5 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch;
 
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchMassActionPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchResultsPanel;
@@ -10,12 +17,6 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.services.reporting.DashboardReportingService;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
@@ -27,7 +28,8 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
     public AssetSearchResultsPage(PageParameters params) { 
     	super(params);
-    	init(createSearchCriteriaModel(params));
+    	AssetSearchCriteriaModel searchCriteriaModel = createSearchCriteriaModel(params);
+		init(searchCriteriaModel);
     }
 
 	public AssetSearchResultsPage(SavedSearchItem savedSearchItem) {
@@ -56,6 +58,10 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 	}
 
     private void init(AssetSearchCriteriaModel searchCriteriaModel) {
+    	if (savedSearchItem==null) {
+        	savedSearchItem = new SavedSearchItem(searchCriteriaModel);
+    	}
+
         Model<AssetSearchCriteriaModel> criteriaModel = new Model<AssetSearchCriteriaModel>(searchCriteriaModel);
         add(reportResultsPanel = new AssetSearchResultsPanel("resultsPanel", criteriaModel));
 
