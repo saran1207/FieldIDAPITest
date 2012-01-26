@@ -1,12 +1,12 @@
 package com.n4systems.util.chart;
 
+import java.io.Serializable;
+import java.util.EnumSet;
+
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.DateRangeFormatter;
 import com.n4systems.model.utils.DateRangeHandler;
-
-import java.io.Serializable;
-import java.util.EnumSet;
 
 public enum RangeType implements Listable<String>, Serializable {
 

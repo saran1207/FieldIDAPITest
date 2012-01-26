@@ -86,12 +86,21 @@ public class DateRange implements Serializable {
 	}
 
 	public LocalDate getTo() {
-		return rangeType.getHandler().getNowTo();
+		return getHandler().getNowTo();
 	}
 
 	public LocalDate getFrom() {
-		return rangeType.getHandler().getNowFrom();
+		return getHandler().getNowFrom();
 	}
+	
+	private DateRangeHandler getHandler() {
+		if (RangeType.CUSTOM.equals(rangeType)) {
+			return new IntervalHandler(fromDate,toDate);
+		} else { 
+			return rangeType.getHandler();
+		}
+	}
+
 	
 	public Date calculateFromDate() {
 		LocalDate from = getFrom();
@@ -109,7 +118,7 @@ public class DateRange implements Serializable {
 	}
 	
 	public Period getPeriod() {
-		return rangeType.getHandler().getPeriod();
+		return getHandler().getPeriod();
 	}
 	
 	public Duration getDuration() { 

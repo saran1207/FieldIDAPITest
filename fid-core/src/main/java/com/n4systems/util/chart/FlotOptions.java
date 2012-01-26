@@ -128,7 +128,7 @@ public class FlotOptions<X> implements Serializable {
 	
 	// any non-FLOT stuff should be put here so it's easier to understand and port/migrate. 
 	public static class FieldIdOptions implements Serializable { 
-		public Boolean clickable = true;
+		public Boolean clickable = false;
 		public String url;
 		public Long widgetConfigId;
 		public String clicked;		
