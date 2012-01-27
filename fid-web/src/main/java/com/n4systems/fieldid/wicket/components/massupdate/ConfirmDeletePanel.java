@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -18,7 +19,6 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
@@ -59,7 +59,7 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 		
 		confirmDeleteForm.add(input = new RequiredTextField<String>("confirmationField", new PropertyModel<String>(this, "confirmation")));
 		
-		input.add(new UpdateComponentOnChange() {
+		input.add(new AjaxFormComponentUpdatingBehavior("onkeyup") {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				Matcher matcher = Pattern.compile("delete", Pattern.CASE_INSENSITIVE).matcher(ConfirmDeletePanel.this.confirmation);				
