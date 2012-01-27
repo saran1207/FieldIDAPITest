@@ -8,6 +8,8 @@ import com.n4systems.util.time.DateUtil;
 public class SimpleChartManager<X> implements ChartManager<X> {
 
 	private static final int POINTS_THRESHOLD = 40;  //anything larger than this is considered an abundance of points. may affect rendering hints.
+	protected static final int PAN_THRESHOLD = 95;
+	
 
 	@Override
 	public Long getMinX(ChartSeries<X> data) {
@@ -48,7 +50,7 @@ public class SimpleChartManager<X> implements ChartManager<X> {
 		}
 		
 		options.xaxis.min = DateUtil.nullSafeMin(options.xaxis.min, getMinX(chartSeries));
-		if (options.pan.interactive) { 
+		if (options.pan.interactive) {
 			options.xaxis.panRange[0] = DateUtil.nullSafeMin(options.xaxis.panRange[0], getPanMin(chartSeries));
 			options.xaxis.panRange[1] = DateUtil.nullSafeMax(options.xaxis.panRange[1], getPanMax(chartSeries));
 		}

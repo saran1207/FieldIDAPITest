@@ -1,13 +1,13 @@
 package com.n4systems.util.chart;
 
-import com.n4systems.model.utils.DateRange;
 import org.joda.time.LocalDate;
 
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.time.DateUtil;
 
 @SuppressWarnings("serial")
 public class DateChartManager extends SimpleChartManager<LocalDate> {
-
+	
 	private transient ChartGranularity granularity;
 	private transient DateRange dateRange;
 	
@@ -24,7 +24,8 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 		Chartable<LocalDate> lastEntry = series.getLastEntry();
 		long minX = lastEntry.getX().minus(granularity.preferredRange()).toDate().getTime();
 		long firstX = series.getFirstEntry().getX().toDate().getTime();
-		return Math.max(minX,firstX);
+		// don't scroll if you have < X points. 
+		return (series.size()<PAN_THRESHOLD) ? firstX : Math.max(minX,firstX);
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 	public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index) {	
 		super.updateOptions(chartSeries, options, index);
 		updateTimeFormat(chartSeries, options);
-		options.tooltipFormat = getTooltipFormat(granularity);				
+		options.tooltipFormat = getTooltipFormat(granularity);		
 	}
 
 	protected String getTooltipFormat(ChartGranularity granularity) {
