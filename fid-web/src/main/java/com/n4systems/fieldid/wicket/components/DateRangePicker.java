@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.util.chart.RangeType;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -13,6 +12,7 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.n4systems.fieldid.wicket.utils.EnumDropDownChoiceRenderer;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 
 
 @SuppressWarnings("serial")
@@ -50,6 +50,7 @@ public class DateRangePicker extends Panel { //implements IFormModelUpdateListen
 	@Override
 	public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/dateRange.js");		
+        response.renderCSSReference("style/newCss/component/dateRange.css");		
         String javascript = "dateRangePicker.init('%s');";
         response.renderOnDomReadyJavaScript(String.format(javascript, dropDownChoice.getMarkupId()));
         super.renderHead(response);

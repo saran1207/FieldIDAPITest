@@ -1,5 +1,12 @@
 package com.n4systems.model.search;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
+
+import org.hibernate.annotations.IndexColumn;
+
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -9,27 +16,9 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.location.Location;
-import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
-import org.hibernate.annotations.IndexColumn;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import com.n4systems.util.chart.RangeType;
 
 @Entity
 @Table(name="saved_reports")
@@ -54,7 +43,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     private EventType eventType;
 
     @Embedded
-    private DateRange dateRange = new DateRange();
+    private DateRange dateRange = new DateRange(RangeType.CUSTOM);
 
     @ManyToOne
     @JoinColumn(name="eventTypeGroup")
@@ -248,11 +237,13 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
 		return dateRange;
 	}
 
-    public List<String> getColumns() {
+    @Override
+	public List<String> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<String> columns) {
+    @Override
+	public void setColumns(List<String> columns) {
         this.columns = columns;
     }
 
