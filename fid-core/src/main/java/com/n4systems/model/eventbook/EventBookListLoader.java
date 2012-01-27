@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.n4systems.model.EventBook;
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -76,6 +77,10 @@ public class EventBookListLoader extends ListLoader<EventBook> {
 		query.setParameter("security_tenant_id", filter.getTenantId());								
 	}
 	
+	public void applyActiveFilter(Query query) {
+		query.setParameter("activeState", EntityState.ACTIVE);
+	}
+	
 	@SuppressWarnings("unchecked")
 	private List<EventBook> getDownwardTreeList(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<EventBook> queryBuilder = new QueryBuilder<EventBook>(EventBook.class, filter);
@@ -110,11 +115,15 @@ public class EventBookListLoader extends ListLoader<EventBook> {
 		
 		eventBookQuery.append("(owner.secondaryOrg IS NULL AND owner.customerOrg IS NULL AND owner.divisionOrg IS NULL)");
 		eventBookQuery.append(")");
-
+		
+		eventBookQuery.append(" AND ");
+		eventBookQuery.append("state = :activeState");
+		
 		Query query = em.createQuery(eventBookQuery.toString());
 		
 		applyOrgParams(query, owner, "owner");
 		applyTenantSecurity(filter, query);
+		applyActiveFilter(query);
 		
 		return query.getResultList();
 	}
