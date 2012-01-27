@@ -10,6 +10,7 @@ import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
+import com.n4systems.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -19,6 +20,19 @@ public class SavedReportService extends SavedSearchService<SavedReportItem, Even
     private @Autowired DynamicColumnsService dynamicColumnsService;
     private @Autowired AssetTypeService assetTypeService;
     private @Autowired EventTypeService eventTypeService;
+
+    @Override
+    public EventReportCriteriaModel retrieveLastSearch() {
+        final EventReportCriteriaModel lastRunReport = getCurrentUser().getLastRunReport();
+        storeTransientColumns(lastRunReport);
+        enableSelectedColumns(lastRunReport, lastRunReport.getColumns());
+        return lastRunReport;
+    }
+
+    @Override
+    protected void storeLastSearchInUser(User user, EventReportCriteriaModel searchCriteria) {
+        user.setLastRunReport(searchCriteria);
+    }
 
     @Override
     protected void storeTransientColumns(EventReportCriteriaModel searchCriteria) {

@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
+import com.n4systems.fieldid.service.search.SavedReportService;
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
 import com.n4systems.model.saveditem.SavedReportItem;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -31,6 +33,9 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
     
     @SpringBean
     private DashboardReportingService dashboardReportingService;
+
+    @SpringBean
+    private SavedReportService savedReportService;
     
     public ReportingResultsPage(PageParameters params) { 
     	super(params);
@@ -50,6 +55,7 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
 	}
 
 	private void init(EventReportCriteriaModel reportCriteriaModel) {
+        savedReportService.saveLastSearch(reportCriteriaModel);
 		this.reportCriteriaModel = reportCriteriaModel;
 		PropertyModel<EventReportCriteriaModel> reportCriteriaPropertyModel = new PropertyModel<EventReportCriteriaModel>(this, "reportCriteriaModel");
 

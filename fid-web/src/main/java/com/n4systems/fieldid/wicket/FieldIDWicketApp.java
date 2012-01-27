@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSavedSearchPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
 import org.apache.wicket.ConverterLocator;
@@ -70,6 +72,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("savedItems", SavedItemsDropdownPage.class);
         mountPage("manageSavedItems", ManageSavedItemsPage.class);
         mountPage("shareSavedItem", ShareSavedItemPage.class);
+
+        mountPage("runLastSearch", RunLastSearchPage.class);
+        mountPage("runLastReport", RunLastReportPage.class);
 
         mountPage("admin/addTenant", AddTenantPage.class);
              

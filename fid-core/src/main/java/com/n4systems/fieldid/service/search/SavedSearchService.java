@@ -15,6 +15,20 @@ import java.util.List;
 
 public abstract class SavedSearchService<I extends SavedItem<T>, T extends SearchCriteriaModel>  extends FieldIdPersistenceService {
 
+    @Transactional
+    public void saveLastSearch(T searchCriteria) {
+        try {
+            searchCriteria = (T) searchCriteria.clone();
+            searchCriteria.reset();
+            storeSelectedColumns(searchCriteria);
+            final User user = getCurrentUser();
+            storeLastSearchInUser(user, searchCriteria);
+            persistenceService.update(user);
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Transactional(readOnly = true)
     public I getConvertedReport(Class<I> clazz, Long itemId) {
         final I savedItem = (I) persistenceService.find(clazz, itemId);
@@ -34,6 +48,8 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
         return savedItem;
     }
 
+    public abstract T retrieveLastSearch();
+    protected abstract void storeLastSearchInUser(User user, T searchCriteria);
     protected abstract void storeTransientColumns(T searchCriteria);
 
     @Transactional
@@ -63,16 +79,15 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
 
             persistenceService.save(user);
         }
-
     }
 
-    private void enableSelectedColumns(T criteriaModel, List<String> columns) {
+    protected void enableSelectedColumns(T criteriaModel, List<String> columns) {
         for (ColumnMappingView columnMappingView : criteriaModel.getSortedStaticAndDynamicColumns(false)) {
             columnMappingView.setEnabled(columns.contains(columnMappingView.getId()));
         }
     }
 
-    private void storeSelectedColumns(T criteriaModel) {
+    protected void storeSelectedColumns(T criteriaModel) {
         List<String> selectedColumns = new ArrayList<String>();
         for (ColumnMappingView columnMappingView : criteriaModel.getSortedStaticAndDynamicColumns(true)) {
             selectedColumns.add(columnMappingView.getId());

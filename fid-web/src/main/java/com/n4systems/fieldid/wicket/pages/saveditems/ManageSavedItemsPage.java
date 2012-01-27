@@ -21,6 +21,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -56,6 +57,7 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
     private SortableAjaxBehavior sortableBehavior;
 
     private boolean reorderState = false;
+    private boolean displayLastSearches;
 
     private List<SavedItem> savedItems;
 
@@ -71,6 +73,17 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
     }
 
     public ManageSavedItemsPage() {
+        displayLastSearches = getUser().isDisplayLastRunSearches();
+
+        add(new AjaxCheckBox("displayLastRunSearches", new PropertyModel<Boolean>(this, "displayLastSearches")) {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                final User user = userService.getUser(getUser().getId());
+                user.setDisplayLastRunSearches(displayLastSearches);
+                persistenceService.save(user);
+            }
+        });
+
         itemsListContainer = new WebMarkupContainer("itemsListContainer");
         itemsListContainer.setOutputMarkupId(true);
         add(itemsListContainer);

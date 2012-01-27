@@ -17,6 +17,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
@@ -26,6 +27,8 @@ import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.saveditem.SavedItem;
+import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
@@ -66,6 +69,15 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private boolean locked;
 	private Date lockedUntil;
 	private Date passwordChanged;
+    private boolean displayLastRunSearches;
+
+    @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "lastRunReportId")
+    private EventReportCriteriaModel lastRunReport;
+
+    @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "lastRunSearchId")
+    private AssetSearchCriteriaModel lastRunSearch;
 
 	@Column(nullable = false, unique = true)
 	private String authKey;
@@ -481,5 +493,29 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
     public void setSavedItems(List<SavedItem> savedItems) {
         this.savedItems = savedItems;
+    }
+
+    public boolean isDisplayLastRunSearches() {
+        return displayLastRunSearches;
+    }
+
+    public void setDisplayLastRunSearches(boolean displayLastRunSearches) {
+        this.displayLastRunSearches = displayLastRunSearches;
+    }
+
+    public EventReportCriteriaModel getLastRunReport() {
+        return lastRunReport;
+    }
+
+    public void setLastRunReport(EventReportCriteriaModel lastRunReport) {
+        this.lastRunReport = lastRunReport;
+    }
+
+    public AssetSearchCriteriaModel getLastRunSearch() {
+        return lastRunSearch;
+    }
+
+    public void setLastRunSearch(AssetSearchCriteriaModel lastRunSearch) {
+        this.lastRunSearch = lastRunSearch;
     }
 }

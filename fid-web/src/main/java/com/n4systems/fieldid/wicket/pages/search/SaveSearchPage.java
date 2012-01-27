@@ -3,10 +3,8 @@ package com.n4systems.fieldid.wicket.pages.search;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.saveditem.SavedItem;
-import com.n4systems.model.search.EventReportCriteriaModel;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -22,7 +20,6 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
     @SpringBean
     private SavedReportService savedReportService;
 
-    private EventReportCriteriaModel criteriaModel;
     private T savedItem;
     private WebPage backToPage;
     private boolean overwrite;

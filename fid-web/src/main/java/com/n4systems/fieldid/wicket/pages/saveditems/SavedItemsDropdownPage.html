@@ -13,6 +13,24 @@
 
 <div wicket:id="blankSlateContainer" class="blankSlateContainer"><wicket:message key="message.no_saved_items"/></div>
 
+<div wicket:id="lastSearchContainer" class="savedItemContainer">
+    <a wicket:id="savedItemLink">
+        <div class="savedItem">
+            <img wicket:id="savedItemIcon">
+            <span wicket:id="savedItemName" class="itemName"></span>
+        </div>
+    </a>
+</div>
+
+<div wicket:id="lastReportContainer" class="savedItemContainer">
+    <a wicket:id="savedItemLink">
+        <div class="savedItem">
+            <img wicket:id="savedItemIcon">
+            <span wicket:id="savedItemName" class="itemName"></span>
+        </div>
+    </a>
+</div>
+
 <div class="manageLinkSection">
     <a wicket:id="manageSavedItemsLink"><wicket:message key="label.manage_my_saved_items"/></a>
 </div>

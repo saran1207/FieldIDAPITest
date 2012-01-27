@@ -8,6 +8,8 @@ import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ReportConfiguration;
+import com.n4systems.model.user.User;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -16,6 +18,19 @@ public class SavedAssetSearchService extends SavedSearchService<SavedSearchItem,
 
     private @Autowired DynamicColumnsService dynamicColumnsService;
     private @Autowired AssetTypeService assetTypeService;
+
+    @Override
+    public AssetSearchCriteriaModel retrieveLastSearch() {
+        final AssetSearchCriteriaModel lastRunSearch = getCurrentUser().getLastRunSearch();
+        storeTransientColumns(lastRunSearch);
+        enableSelectedColumns(lastRunSearch, lastRunSearch.getColumns());
+        return lastRunSearch;
+    }
+
+    @Override
+    protected void storeLastSearchInUser(User user, AssetSearchCriteriaModel searchCriteria) {
+        user.setLastRunSearch(searchCriteria);
+    }
 
     @Override
     protected void storeTransientColumns(AssetSearchCriteriaModel searchCriteria) {
