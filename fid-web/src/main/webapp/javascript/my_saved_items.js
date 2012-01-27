@@ -4,12 +4,12 @@ function showDropDown() {
     savedItemsDropBoxShown = true;
     jQuery('#mySavedItemsBox').load("/fieldid/w/savedItems", function() { jQuery(this).slideDown(80) } );
     var boxSelector = "#mySavedItemsBox";
-    var linkSelector = "#mySavedItemsLink";
+    var linkSelector = "#pageActions";
     if (typeof(Prototype) == 'object') {
         boxSelector = 'mySavedItemsBox';
-        linkSelector = 'mySavedItemsLink';
+        linkSelector = 'pageActions';
     }
-    translate($(boxSelector), $(linkSelector), 24, -221);
+    translate($(boxSelector), $(linkSelector), 32, 673);
 }
 
 function hideDropDown() {
