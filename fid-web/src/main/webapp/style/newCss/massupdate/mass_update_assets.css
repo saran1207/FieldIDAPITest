@@ -25,6 +25,8 @@
 	list-style: decimal inside none;
 	padding: 5px 10px;
 	font-size: 1.1em;
+	/** anti-hack to get around IE issues with rendering list.   overrides the stuff brought in from fieldid-ie7.css */ 
+	zoom:0;	
 }
 
 .mainPanel {
