@@ -72,8 +72,7 @@
     float: left;
     display: block;
     width: 150px;
-    padding: 8px 10px 5px 20px;
-    line-height: 18px;
+    padding: 0px 10px 0px 20px;
     text-align: left;
     color: #555;
     overflow:hidden;
@@ -81,6 +80,7 @@
 
 .mainPanel .infoSet {
     display: block;
+    line-height: 18px;
     min-height: 40px;
     clear:left;
     padding: 5px 0;
