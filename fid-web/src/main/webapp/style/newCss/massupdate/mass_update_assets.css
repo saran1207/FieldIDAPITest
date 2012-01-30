@@ -79,6 +79,10 @@
     overflow:hidden;
 }
 
+.orgBrowserForm .infoSet label {
+    padding: 8px 10px 5px 0px;
+}
+
 .deleteDetails .infoSet label {
 	padding: 0px 10px 0px 20px;
 }

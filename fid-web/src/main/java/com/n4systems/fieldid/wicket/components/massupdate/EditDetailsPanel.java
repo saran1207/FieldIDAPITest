@@ -57,7 +57,13 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 				MassUpdateAssetModel model = (MassUpdateAssetModel) this.getDefaultModelObject();
 				
 				if(model.getSelect().containsValue(true)) {
-					onNext((MassUpdateAssetModel) this.getDefaultModelObject());
+					String errorMessage = checkRequiredFields(model);
+					if(errorMessage.isEmpty()) {
+						onNext((MassUpdateAssetModel) this.getDefaultModelObject());						
+					}
+					else {
+						error(new FIDLabelModel(errorMessage).getObject());
+					}
 				} else {
 					error(new FIDLabelModel("error.mass_edit_details").getObject());
 				}
@@ -77,6 +83,24 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 		});
 		
 		add(new FIDFeedbackPanel("feedbackPanel"));
+	}
+
+	private String checkRequiredFields(MassUpdateAssetModel model) {
+		String errorMessage = "";
+		
+		if(model.getSelect().get("identified") && model.getAsset().getIdentified() == null) {
+			return "error.identifiedrequired";
+		}
+		
+		if(model.getSelect().get("owner") && model.getAsset().getOwner() == null) {
+			return "error.ownerrequiredmassupdate";
+		}
+		
+		if(model.getSelect().get("nonIntegrationOrderNumber") && model.getAsset().getNonIntergrationOrderNumber() == null) {
+			model.getAsset().setNonIntergrationOrderNumber("");
+		}
+		
+		return errorMessage;
 	}
 	
 	protected void onNext(MassUpdateAssetModel massUpdateAssetModel) {};
