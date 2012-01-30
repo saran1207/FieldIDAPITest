@@ -6,6 +6,7 @@
     border:1px solid #ebebeb;
     padding-bottom: 8px;
     text-align:left;
+    z-index:1;  /** make sure this is above any FlotCharts that may appear below.   > 0 */
 }
 
 .mySavedItemsBox .savedItem {
