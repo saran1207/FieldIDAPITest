@@ -35,6 +35,7 @@ public class ActiveSessionSaverTest {
 		
 		EntityManager entityManager = createMock(EntityManager.class);
 		entityManager.persist(newActiveSession);
+        expect(entityManager.merge(user.getTenant())).andReturn(user.getTenant());
 		replay(entityManager);
 		
 		createQueryBuildOverridenActiveSessionSaver(null).save(entityManager, newActiveSession);
@@ -53,6 +54,7 @@ public class ActiveSessionSaverTest {
 		
 		EntityManager entityManager = createMock(EntityManager.class);
 		entityManager.persist(newActiveSession);
+        expect(entityManager.merge(user.getTenant())).andReturn(user.getTenant());
 		replay(entityManager);
 		
 		ActiveSessionSaverTestExtension sut = createQueryBuildOverridenActiveSessionSaver(null);
@@ -71,6 +73,7 @@ public class ActiveSessionSaverTest {
 		entityManager.remove(existingActiveSession);
 		entityManager.flush();
 		entityManager.persist(newActiveSession);
+        expect(entityManager.merge(user.getTenant())).andReturn(user.getTenant());
 		
 		replay(entityManager);
 		
