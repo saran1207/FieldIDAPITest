@@ -95,8 +95,8 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 		if(model.getSelect().get("owner") && model.getAsset().getOwner() == null) {
 			return "error.ownerrequiredmassupdate";
 		}
-		
-		if(model.getSelect().get("nonIntegrationOrderNumber") && model.getAsset().getNonIntergrationOrderNumber() == null) {
+				
+		if(Boolean.TRUE.equals(model.getSelect().get("nonIntegrationOrderNumber")) && model.getAsset().getNonIntergrationOrderNumber() == null) {
 			model.getAsset().setNonIntergrationOrderNumber("");
 		}
 		
