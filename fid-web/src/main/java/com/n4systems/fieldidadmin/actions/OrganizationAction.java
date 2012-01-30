@@ -1,18 +1,5 @@
 package com.n4systems.fieldidadmin.actions;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.n4systems.model.signuppackage.SignUpPackageDetails;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
@@ -28,6 +15,7 @@ import com.n4systems.model.orgs.AllPrimaryOrgsPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.model.tenant.TenantSaver;
@@ -38,12 +26,26 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.chart.RangeType;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Validations
 public class OrganizationAction extends AbstractCrud implements Preparable, HasDuplicateValueValidator {
@@ -61,6 +63,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private PrimaryOrg primaryOrg;
 	private AccountHelper accountHelper;
 	private TenantNameAvailabilityChecker tenantNameAvailablityChecker = new TenantNameAvailabilityChecker();
+    private String inactiveSince;
+    private boolean activeOnly;
 
 	private String title;
 	private String note;
@@ -83,6 +87,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private String featureName;
 	private boolean featureOn;
 	private boolean showReminder = false;
+
+    private Pager<PrimaryOrg> pager;
 	
 	@Autowired
 	private TenantSettingsService tenantSettingsService;
@@ -107,9 +113,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 					getNonSecureLoaderFactory().createSignUpPackageListLoader());
 		} else {
 			for (PrimaryOrg org : getPage().getList()) {
-				totalAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), false));
 				total30DayAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), true));
-				totalEvents.put(org.getId(), loadTotalEvents(org.getTenant().getId(), false));
 				total30DayEvents.put(org.getId(), loadTotalEvents(org.getTenant().getId(), true));
 				lastActiveSessions.put(org.getId(), loadLastActiveSession(org.getTenant().getId()));
 			}
@@ -316,8 +320,13 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	}
 
 	public Pager<PrimaryOrg> getPage() {
-		return new AllPrimaryOrgsPaginatedLoader().setPage(getCurrentPage()).setPageSize(RESULTS_PER_PAGE).setNameFilter(nameFilter)
-				.setOrder(sortColumn, sortDirection != null ? sortDirection.equalsIgnoreCase("asc") : true).load();
+        if (pager == null) {
+            pager = new AllPrimaryOrgsPaginatedLoader().setPage(getCurrentPage()).setPageSize(RESULTS_PER_PAGE).setNameFilter(nameFilter)
+                    .setInactiveSince(StringUtils.isBlank(inactiveSince) ? null : RangeType.valueOf(inactiveSince))
+                    .setActiveOnly(this.activeOnly)
+                    .setOrder(sortColumn, sortDirection != null ? sortDirection.equalsIgnoreCase("asc") : true).load();
+        }
+        return pager;
 	}
 
 	public String getOtherDateFormat() {
@@ -513,4 +522,23 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
         primaryOrg.setSignUpPackage(SignUpPackageDetails.valueOf(signUpPlan));
     }
 
+    public Collection<RangeType> getDateRanges() {
+        return new ArrayList<RangeType>(Arrays.asList(RangeType.THIRTY_DAYS, RangeType.SIXTY_DAYS, RangeType.NINETY_DAYS));
+    }
+
+    public String getInactiveSince() {
+        return inactiveSince;
+    }
+
+    public void setInactiveSince(String inactiveSince) {
+        this.inactiveSince = inactiveSince;
+    }
+
+    public boolean isActiveOnly() {
+        return activeOnly;
+    }
+
+    public void setActiveOnly(boolean activeOnly) {
+        this.activeOnly = activeOnly;
+    }
 }

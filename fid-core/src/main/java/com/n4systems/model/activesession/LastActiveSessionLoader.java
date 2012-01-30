@@ -23,8 +23,8 @@ public class LastActiveSessionLoader extends Loader<ActiveSession> {
 		
 		if (results == null || results.isEmpty()) {
 			return null;
-		}else {
-			if(excludeN4User) {
+		} else {
+			if (excludeN4User) {
 				for (ActiveSession session: results) {
 					if (!session.getUser().isSystem()) {
 						return session;

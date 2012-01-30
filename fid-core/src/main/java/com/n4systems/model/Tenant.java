@@ -4,6 +4,7 @@ package com.n4systems.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -12,8 +13,10 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.tenant.TenantSettings;
+import com.n4systems.model.user.User;
 import com.n4systems.util.HashCode;
 
+import java.util.Date;
 
 @Entity
 @Table(name="tenants")
@@ -33,6 +36,13 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 	
 	@OneToOne(optional=false, mappedBy = "tenant", fetch = FetchType.LAZY)
 	private TenantSettings settings = new TenantSettings();
+
+    @OneToOne(optional = true)
+    @JoinColumn(name="last_login_user")
+    private User lastLoginUser;
+
+    @Column(name="last_login_time")
+    private Date lastLoginTime;
 	
 	public Tenant() {}
 	
@@ -91,5 +101,20 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 	public void setSettings(TenantSettings settings) {
 		this.settings = settings;
 	}
-	
+
+    public User getLastLoginUser() {
+        return lastLoginUser;
+    }
+
+    public void setLastLoginUser(User lastLoginUser) {
+        this.lastLoginUser = lastLoginUser;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
 }
