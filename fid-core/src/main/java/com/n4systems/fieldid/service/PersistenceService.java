@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.n4systems.model.parents.AbstractEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.exceptions.InvalidQueryException;
@@ -36,6 +37,11 @@ public class PersistenceService extends FieldIdService {
     public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId) {
         QueryBuilder<T> queryBuilder = createUserSecurityBuilder(entityClass).addSimpleWhere("id", entityId);
         return find(queryBuilder);
+    }
+
+    @Transactional
+    public <T extends AbstractEntity> void delete(T entity) {
+        em.remove(entity);
     }
 
     @Transactional(readOnly = true)

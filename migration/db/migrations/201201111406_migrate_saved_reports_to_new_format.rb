@@ -1,12 +1,13 @@
 require 'saved_report'
 require 'new_saved_report'
 require 'date'
+require 'asset_type_group'
 
 class MigrateSavedReportsToNewFormat < ActiveRecord::Migration
 
   def self.up
 
-    fields_to_not_copy = [:fromDate,:toDate,:dateRange,:serialNumber, :predefinedLocationId]
+    fields_to_not_copy = [:fromDate,:toDate,:dateRange,:serialNumber, :predefinedLocationId, :assetTypeGroup]
 
     create_table :saved_reports do |t|
       create_abstract_entity_fields_on(t)
@@ -74,6 +75,10 @@ class MigrateSavedReportsToNewFormat < ActiveRecord::Migration
 
         if field_name == :predefinedLocationId
           new_saved_report.predefinedLocation_id = field_value
+        end
+
+        if field_name == :assetTypeGroup and !field_value.nil? and !AssetTypeGroup.find(field_value.to_i).nil?
+          new_saved_report.assetTypeGroup = field_value
         end
       end
 

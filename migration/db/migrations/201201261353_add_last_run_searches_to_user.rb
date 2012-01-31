@@ -9,9 +9,9 @@ class AddLastRunSearchesToUser < ActiveRecord::Migration
   end
 
   def self.down
-    drop_column(:users, :displayLastRunSearches)
-    drop_column(:users, :lastRunSearchId)
-    drop_column(:users, :lastRunReportId)
+    remove_column(:users, :displayLastRunSearches)
+    remove_column(:users, :lastRunSearchId)
+    remove_column(:users, :lastRunReportId)
   end
 
 end

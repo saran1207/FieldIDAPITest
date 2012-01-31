@@ -35,10 +35,10 @@ class CreateSavedSearchesTable < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :saved_reports_columns
-
     drop_foreign_key(:saved_items , :saved_searches, :source_column => :search_id, :foreign_column => :id, :name => "fk_saved_items_saved_searches")
     remove_column(:saved_items, :search_id)
+
+    drop_table :saved_searches_columns
     drop_table :saved_searches
   end
 

@@ -48,10 +48,6 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
     private AssetStatus assetStatus;
 
     @ManyToOne
-    @JoinColumn(name="assetTypeGroup")
-    private AssetTypeGroup assetTypeGroup;
-
-    @ManyToOne
     @JoinColumn(name="assetType")
     private AssetType assetType;
 
@@ -121,14 +117,6 @@ public class AssetSearchCriteriaModel extends SearchCriteriaModel {
 
     public void setAssetStatus(AssetStatus assetStatus) {
         this.assetStatus = assetStatus;
-    }
-
-    public AssetTypeGroup getAssetTypeGroup() {
-        return assetTypeGroup;
-    }
-
-    public void setAssetTypeGroup(AssetTypeGroup assetTypeGroup) {
-        this.assetTypeGroup = assetTypeGroup;
     }
 
     public AssetType getAssetType() {

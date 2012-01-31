@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.config;
 
+import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -73,6 +74,11 @@ public class FieldIdCoreConfig {
     @Bean
     public ScoreService scoreService() {
         return new ScoreService();
+    }
+
+    @Bean
+    public AssetTypeGroupService assetTypeGroupService() {
+        return new AssetTypeGroupService();
     }
 	
 	@Bean

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.util.AssetTypeGroupRemovalSummary;
@@ -27,8 +28,9 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 	private static final Logger logger = Logger.getLogger(AssetTypeGroupCrud.class);
 
 	private AssetManager assetManager;
-	
-	private List<AssetTypeGroup> groups;
+    private AssetTypeGroupService assetTypeGroupService;
+
+    private List<AssetTypeGroup> groups;
 	private AssetTypeGroup group;
 	private AssetTypeGroupRemovalSummary removalSummary;
 	private List<AssetType> assetTypes;
@@ -36,10 +38,11 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 	private List<Long> indexes = new ArrayList<Long>();
 	
 
-	public AssetTypeGroupCrud(PersistenceManager persistenceManager, AssetManager assetManager) {
+	public AssetTypeGroupCrud(PersistenceManager persistenceManager, AssetManager assetManager, AssetTypeGroupService assetTypeGroupService) {
 		super(persistenceManager);
 		this.assetManager = assetManager;
-	}
+        this.assetTypeGroupService = assetTypeGroupService;
+    }
 	
 	@Override
 	protected void initMemberFields() {
@@ -149,7 +152,7 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 	public String doDeleteConfirm() {
 		testRequiredEntities(true);
 		
-		removalSummary = assetManager.testDelete(group);
+		removalSummary = assetTypeGroupService.testDelete(group);
 		logger.info(getLogLinePrefix() + " confirming delete asset type group " + group.getName());
 		return SUCCESS;
 	}
@@ -159,7 +162,7 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 		testRequiredEntities(true);
 		
 		try {
-			assetManager.deleteAssetTypeGroup(group);
+			assetTypeGroupService.deleteAssetTypeGroup(group);
 			addFlashMessageText("message.assettypegroupdeleted");
 		} catch (Exception e) {
 			logger.error(getLogLinePrefix() + " could not delete asset type group",e);

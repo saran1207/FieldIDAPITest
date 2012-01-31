@@ -11,6 +11,10 @@ ${action.setPageType('asset_type_group', 'edit')!}
 			<label for="">${removalSummary.assetTypesConnected}</label>
 			<span><@s.text name="label.assettypesbeingdetached"/></span>
 		</div>
+        <div class="infoSet">
+            <label for="">${removalSummary.savedReportsConnected}</label>
+            <span><@s.text name="label.saved_reports_being_deleted"/></span>
+        </div>
 	</div>
 	<div class="formAction">
 		<@s.url id="cancelUrl" action="assetTypeGroup" uniqueID="${uniqueID}"/>

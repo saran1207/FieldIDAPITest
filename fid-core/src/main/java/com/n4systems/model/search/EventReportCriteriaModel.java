@@ -31,10 +31,6 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     private AssetType assetType;
 
     @ManyToOne
-    @JoinColumn(name="assetTypeGroup")
-    private AssetTypeGroup assetTypeGroup;
-
-    @ManyToOne
     @JoinColumn(name="assignedUser")
     private User assignedTo;
 
@@ -115,14 +111,6 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
 
     public void setAssignedTo(User assignedTo) {
         this.assignedTo = assignedTo;
-    }
-
-    public AssetTypeGroup getAssetTypeGroup() {
-        return assetTypeGroup;
-    }
-
-    public void setAssetTypeGroup(AssetTypeGroup assetTypeGroup) {
-        this.assetTypeGroup = assetTypeGroup;
     }
 
     public EventType getEventType() {

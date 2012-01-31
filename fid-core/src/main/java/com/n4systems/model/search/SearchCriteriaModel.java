@@ -1,8 +1,8 @@
 package com.n4systems.model.search;
 
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
 
@@ -60,6 +60,10 @@ public abstract class SearchCriteriaModel extends AbstractEntity {
 
     @Column(name="sortColumnId")
     private Long sortColumnId;
+
+    @ManyToOne
+    @JoinColumn(name="assetTypeGroup")
+    private AssetTypeGroup assetTypeGroup;
 
     public abstract List<String> getColumns();
     public abstract void setColumns(List<String> columns);
@@ -189,6 +193,14 @@ public abstract class SearchCriteriaModel extends AbstractEntity {
 
     public void setSavedReportName(String savedReportName) {
         this.savedReportName = savedReportName;
+    }
+
+    public AssetTypeGroup getAssetTypeGroup() {
+        return assetTypeGroup;
+    }
+
+    public void setAssetTypeGroup(AssetTypeGroup assetTypeGroup) {
+        this.assetTypeGroup = assetTypeGroup;
     }
 
 }

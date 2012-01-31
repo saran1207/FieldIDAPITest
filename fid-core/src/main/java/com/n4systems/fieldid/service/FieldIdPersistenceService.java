@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service;
 
+import com.n4systems.model.parents.AbstractEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.model.Tenant;
@@ -21,5 +22,12 @@ public class FieldIdPersistenceService extends FieldIdService {
 	protected User getCurrentUser() {
 		return persistenceService.find(User.class, securityContext.getUserSecurityFilter().getUserId());
 	}
+    
+    protected <T extends AbstractEntity> Long getId(T entity) {
+        if (entity == null) {
+            return null;
+        }
+        return entity.getId();
+    }
 	
 }

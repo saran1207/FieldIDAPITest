@@ -6,6 +6,7 @@ public class AssetTypeGroupRemovalSummary {
 	private AssetTypeGroup group;
 
 	private Long assetTypesConnected = 0L;
+    private Long savedReportsConnected = 0L;
 
 	public AssetTypeGroupRemovalSummary(AssetTypeGroup group) {
 		this.group = group;
@@ -23,4 +24,11 @@ public class AssetTypeGroupRemovalSummary {
 		this.assetTypesConnected = assetTypesConnected;
 	}
 
+    public Long getSavedReportsConnected() {
+        return savedReportsConnected;
+    }
+
+    public void setSavedReportsConnected(Long savedReportsConnected) {
+        this.savedReportsConnected = savedReportsConnected;
+    }
 }

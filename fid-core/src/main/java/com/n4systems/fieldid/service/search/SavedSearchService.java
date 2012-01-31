@@ -18,11 +18,16 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
     @Transactional
     public void saveLastSearch(T searchCriteria) {
         try {
+            final User user = getCurrentUser();
+
+            removeLastSavedSearch(user);
+
             searchCriteria = (T) searchCriteria.clone();
             searchCriteria.reset();
             storeSelectedColumns(searchCriteria);
-            final User user = getCurrentUser();
+
             storeLastSearchInUser(user, searchCriteria);
+
             persistenceService.update(user);
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
@@ -48,6 +53,7 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
         return savedItem;
     }
 
+    public abstract void removeLastSavedSearch(User user);
     public abstract T retrieveLastSearch();
     protected abstract void storeLastSearchInUser(User user, T searchCriteria);
     protected abstract void storeTransientColumns(T searchCriteria);
