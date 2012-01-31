@@ -9,6 +9,7 @@ public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
 	@Override
 	public ApiTenant convertEntityToApiModel(PrimaryOrg primaryOrg) {
 		ApiTenant apiTenant = new ApiTenant();
+		apiTenant.setSid(primaryOrg.getTenant().getId());
 		apiTenant.setUsingAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
 		return apiTenant;
 	}

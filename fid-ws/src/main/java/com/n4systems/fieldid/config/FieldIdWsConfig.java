@@ -21,6 +21,7 @@ import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
 import com.n4systems.fieldid.ws.v1.resources.search.ApiSearchResource;
 import com.n4systems.fieldid.ws.v1.resources.smartsearch.ApiSmartSearchResource;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
+import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenantResource;
 import com.n4systems.fieldid.ws.v1.resources.unit.ApiUnitResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 
@@ -126,6 +127,11 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiEventResource apiEventResource() {
 		return new ApiEventResource();
+	}
+	
+	@Bean
+	public ApiTenantResource apiTenantResource() {
+		return new ApiTenantResource();
 	}
 	
 }
