@@ -8,6 +8,7 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private Long typeId;
 	private String assetId;
 	private Date date;
+	private String status;
 	private Long assignedUserId;
 	private Long performedById;
 	private Long eventBookId;
@@ -42,6 +43,14 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Long getAssignedUserId() {

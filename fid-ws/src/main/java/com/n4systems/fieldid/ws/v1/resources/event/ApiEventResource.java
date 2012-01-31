@@ -38,6 +38,7 @@ import com.n4systems.model.ScoreCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.State;
+import com.n4systems.model.Status;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
@@ -76,7 +77,13 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		event.setPerformedBy(persistenceService.find(User.class, apiEvent.getPerformedById()));
 		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));
 		event.setAsset(assetService.findByMobileId(apiEvent.getAssetId()));
-
+		
+		if (apiEvent.getStatus() != null) {
+			event.setStatus(Status.valueOf(apiEvent.getStatus()));
+		} else {
+			event.setStatus(null);
+		}
+		
 		if (apiEvent.getAssignedUserId() != null) {
 			if (apiEvent.getAssignedUserId() < 0) {
 				event.setAssignedTo(AssignedToUpdate.unassignAsset());
