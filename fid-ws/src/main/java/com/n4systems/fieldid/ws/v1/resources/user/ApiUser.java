@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.user;
 
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModelWithOwner;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfile;
+import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenant;
 
 public class ApiUser extends ApiReadonlyModelWithOwner {
 	private String userId;
@@ -14,6 +15,7 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private boolean createEventEnabled;
 	private boolean editEventEnabled;
 	private ApiOfflineProfile offlineProfile;
+	private ApiTenant tenant;
 	
 	public String getUserId() {
 		return userId;
@@ -94,5 +96,12 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	public void setOfflineProfile(ApiOfflineProfile offlineProfile) {
 		this.offlineProfile = offlineProfile;
 	}
+	
+	public ApiTenant getTenant() {
+		return tenant;
+	}
 
+	public void setTenant(ApiTenant tenant) {
+		this.tenant = tenant;
+	}
 }

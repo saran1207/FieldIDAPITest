@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
+import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenantResource;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -22,6 +23,7 @@ public class ApiUserResource extends SetupDataResource<ApiUser, User> {
 
 	@Autowired private OfflineProfileService offlineProfileService;
 	@Autowired private ApiOfflineProfileResource apiOfflineProfileResource;
+	@Autowired private ApiTenantResource apiTenantResource; 
 	
 	public ApiUserResource() {
 		super(User.class, true);
@@ -55,6 +57,7 @@ public class ApiUserResource extends SetupDataResource<ApiUser, User> {
 		apiUser.setEditEventEnabled(Permissions.hasOneOf(user, Permissions.EditEvent));
 		apiUser.setIdentifyEnabled(Permissions.hasOneOf(user, Permissions.Tag));
 		apiUser.setOfflineProfile(apiOfflineProfileResource.convertEntityToApiModel(offlineProfileService.findOrCreate(user)));
+		apiUser.setTenant(apiTenantResource.convertEntityToApiModel(user.getOwner().getPrimaryOrg()));
 		return apiUser;
 	}
 
