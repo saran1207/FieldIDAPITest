@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
 import java.util.List;
@@ -52,6 +54,23 @@ public class ReportService extends SearchService<EventReportCriteriaModel, Event
                 addSimpleTerm(searchTerms, "assignedTo.assignedUser.id", assignedUserId);
             }
         }
+
+        addPredefinedLocationTerm(searchTerms, criteriaModel);
+    }
+
+	private void addPredefinedLocationTerm(List<SearchTermDefiner> search, EventReportCriteriaModel criteriaModel) {
+        Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
+        if (predefLocationId != null) {
+			search.add(new PredefinedLocationSearchTerm("preLocSearchId", predefLocationId));
+		}
+	}
+
+    @Override
+    protected void addJoinTerms(EventReportCriteriaModel criteriaModel, List<JoinTerm> joinTerms) {
+        Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
+        if (predefLocationId != null) {
+			addRequiredLeftJoin(joinTerms, "advancedLocation.predefinedLocation.searchIds", "preLocSearchId");
+		}
     }
 
 }
