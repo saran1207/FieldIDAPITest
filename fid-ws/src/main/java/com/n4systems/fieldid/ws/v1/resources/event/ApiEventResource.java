@@ -46,6 +46,8 @@ import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 
 @Component
 @Path("event")
@@ -93,7 +95,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		}
 		
 		if (apiEvent.getEventBookId() != null) {
-			event.setBook(persistenceService.find(EventBook.class, apiEvent.getEventBookId()));
+			event.setBook(findEventBook(apiEvent.getEventBookId()));
 		}
 		
 		if (apiEvent.getAssetStatusId() != null) {
@@ -122,6 +124,14 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		}
 		
 		return event;
+	}
+	
+	private EventBook findEventBook(String eventBookId) {
+		QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class);
+		query.addWhere(WhereClauseFactory.create("mobileId", eventBookId));
+		
+		EventBook book = persistenceService.find(query);
+		return book;
 	}
 	
 	private List<CriteriaResult> convertEventFormResults(ApiEventFormResult eventFormResult, EventForm form, Event event) {

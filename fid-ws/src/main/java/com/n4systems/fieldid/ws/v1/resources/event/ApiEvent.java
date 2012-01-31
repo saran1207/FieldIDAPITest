@@ -11,7 +11,7 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private String status;
 	private Long assignedUserId;
 	private Long performedById;
-	private Long eventBookId;
+	private String eventBookId;
 	private Long assetStatusId;
 	private Long predefinedLocationId;
 	private String freeformLocation;
@@ -69,11 +69,11 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 		this.performedById = performedById;
 	}
 
-	public Long getEventBookId() {
+	public String getEventBookId() {
 		return eventBookId;
 	}
 
-	public void setEventBookId(Long eventBookId) {
+	public void setEventBookId(String eventBookId) {
 		this.eventBookId = eventBookId;
 	}
 
