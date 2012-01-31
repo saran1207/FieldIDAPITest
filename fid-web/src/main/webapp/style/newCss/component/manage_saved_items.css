@@ -1,3 +1,9 @@
 .sharedByImage {
     padding-left:25px;
 }
+
+
+.list .no-highlight tr:hover {
+	background-color:#fff;
+}
+	
