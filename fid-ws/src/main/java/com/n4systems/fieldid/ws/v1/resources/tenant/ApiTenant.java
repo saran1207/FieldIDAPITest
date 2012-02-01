@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.tenant;
 
-import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
-
-public class ApiTenant extends ApiReadonlyModel {
+public class ApiTenant {
 	private boolean usingAssignedTo;
 
 	public void setUsingAssignedTo(boolean usingAssignedTo) {
