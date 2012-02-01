@@ -60,7 +60,7 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
 
     @Transactional
     public void saveReport(I savedItem, boolean overwrite, String name) {
-        boolean updating = overwrite && savedItem.getSearchCriteria().getId() != null;
+        boolean updating = overwrite && savedItem.getId() != null && savedItem.getSearchCriteria().getId() != null;
         final User user = getCurrentUser();
 
         savedItem.setTenant(getCurrentTenant());
@@ -72,17 +72,19 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
             persistenceService.update(savedItem);
         } else {
             savedItem.reset();
-            savedItem.getSearchCriteria().reset();
-            T copiedSearchCriteria;
-            try {
-                copiedSearchCriteria = (T) savedItem.getSearchCriteria().clone();
-            } catch (CloneNotSupportedException e) {
-                throw new RuntimeException(e);
+
+            if (savedItem.getSearchCriteria().getId() != null) {
+                T copiedSearchCriteria;
+                try {
+                    copiedSearchCriteria = (T) savedItem.getSearchCriteria().clone();
+                    copiedSearchCriteria.reset();
+                    savedItem.setSearchCriteria(copiedSearchCriteria);
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
-            persistenceService.save(copiedSearchCriteria);
             user.getSavedItems().add(savedItem);
-
             persistenceService.save(user);
         }
     }

@@ -14,7 +14,9 @@ import com.n4systems.services.reporting.DashboardReportingService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -29,6 +31,7 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     private SavedAssetSearchService savedAssetSearchService;
 
     private SavedSearchItem savedSearchItem;
+    private AssetSearchCriteriaModel searchCriteriaModel;
 
     public AssetSearchResultsPage(PageParameters params) { 
     	super(params);
@@ -63,6 +66,7 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 	}
 
     private void init(AssetSearchCriteriaModel searchCriteriaModel) {
+        this.searchCriteriaModel = searchCriteriaModel;
         savedAssetSearchService.saveLastSearch(searchCriteriaModel);
         Model<AssetSearchCriteriaModel> criteriaModel = new Model<AssetSearchCriteriaModel>(searchCriteriaModel);
         add(reportResultsPanel = new AssetSearchResultsPanel("resultsPanel", criteriaModel));
@@ -103,7 +107,15 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
 	@Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.asset_search_results"));
+        return new Label(labelId, new PropertyModel<String>(this, "pageLabel"));
+    }
+
+    public String getPageLabel() {
+        IModel<String> pageLabelModel = new FIDLabelModel("title.asset_search_results");
+        if (searchCriteriaModel.getSavedReportName() != null) {
+            pageLabelModel = new Model<String>(pageLabelModel.getObject() + " for - " + searchCriteriaModel.getSavedReportName());
+        }
+        return pageLabelModel.getObject();
     }
 
 }

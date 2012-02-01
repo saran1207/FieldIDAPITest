@@ -57,6 +57,7 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
         @Override
         protected void onSubmit() {
             saveSearch(savedItem, overwrite, name);
+            savedItem.getSearchCriteria().setSavedReportName(name);
             FieldIDSession.get().info(createSavedConfirmationModel().getObject());
             setResponsePage(backToPage);
         }

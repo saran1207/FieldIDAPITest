@@ -20,6 +20,7 @@ public abstract class SavedItem<T extends SearchCriteriaModel> extends EntityWit
 	}
 
     public abstract T getSearchCriteria();
+    public abstract void setSearchCriteria(T searchCriteria);
 
 	@Column(nullable=false, length=255)
 	private String name;
