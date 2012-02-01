@@ -36,11 +36,13 @@ public class EventAttributeDynamicGroupGenerator {
 				// when an event type has been selected, we will use all the infofields from the event type
 				EventType eventType = persistenceManager.find(EventType.class, eventTypeId, filter, "infoFieldNames");
 
-				// construct and add our field mappings
-				for (String fieldName : eventType.getInfoFieldNames()) {
-					attributeGroup.getMappings().add(createAttributeMapping(fieldName, idPrefix, pathPrefix, order));
-					order++;
-				}
+                if (eventType != null) {
+                    // construct and add our field mappings
+                    for (String fieldName : eventType.getInfoFieldNames()) {
+                        attributeGroup.getMappings().add(createAttributeMapping(fieldName, idPrefix, pathPrefix, order));
+                        order++;
+                    }
+                }
 
 			// Retrieve shared attributes over all Event Types.
 			} else if (!eventTypeIds.isEmpty()) {
