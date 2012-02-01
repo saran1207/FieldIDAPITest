@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.util.chart.RangeType;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,7 @@ import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.DateChartManager;
+import com.n4systems.util.chart.RangeType;
 
 
 public class DashboardReportingService extends FieldIdPersistenceService {
@@ -199,6 +199,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 			LocalDate from = localDate;
 			LocalDate to = from.plus(config.getGranularity().getPeriod().minusDays(1));
 			model.setDateRange(new DateRange(from,to));
+			model.setOwner(config.getOrg());
 		}
 		return model;
 	}
@@ -208,6 +209,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		AssetSearchCriteriaModel model = getDefaultAssetSearchModel();
 		model.setAssetStatus(assetStatusService.getStatusByName(assetStatus));
 		model.setDateRange(new DateRange(config.getRangeType()));
+		model.setOwner(config.getOrg());		
 		return model;
 	}
 

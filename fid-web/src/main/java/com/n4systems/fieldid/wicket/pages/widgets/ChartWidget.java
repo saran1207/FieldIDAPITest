@@ -35,6 +35,33 @@ import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.FlotOptions;
 import com.n4systems.util.chart.LineGraphOptions;
 
+/**
+ * used to render a Flot Chart based widget.     
+ *
+ * the players are...
+ * 
+ * @ChartWidget is a widget that renders a FlotChart (which is wrapped in a lazy ajax panel).
+ * @ChartSeries is a single graph.  				(e.g. if you had a chart of Apple & Google stocks, that would be two ChartSeries)
+ * @ChartData is a collection of ChartSeries  	(in above example, that is one ChartData).
+ * @ChartManager is responsible for manipulating ChartSeries data as it sees fit.  for example, it might round all scores down or remove all n/a event.  It also controls the scrolling/panning (or not) of chart.  
+ * @FlotChart is a really simple charting component containing ChartData & options. (see see http://code.google.com/p/flot/) which is responsible for giving the javascript charting engine what it needs. 
+ * @FlotOptions are the real meat of the FlotChart.  Think of this as a java object that matches all the options needed by the client side.
+ * @JsonRenderer is responsible for doing Java->Json conversion (which is really Gson under the hood. http://code.google.com/p/google-gson/).
+ * @WidgetConfiguration is base class to hold configuration for each different widget type.
+ * 
+ * steps to making a new flot chart based widget.  (prolly the easiest is to look at changeset 5486 and base it all on that.)
+ * 
+ *  - add your new widget to the enumeration.    see @WidgetType
+ *  - create your extension of ChartWidget  (e.g. MyOrgsWidget extends ChartWidget & associated HTML)
+ *  - in your widget's createOptions() method, fill in the required values. (e.g. set FlotOptions colors, chart type, etc... parameters)
+ *  - create your WidgetConfiguration extension  (e.g. MyOrgsWidgetConfiguration).  ***make sure you implement the @WidgetConfiguration.copy() method!!!
+ *  - create WidgetConfigurationPanel & HTML to make above object. 
+ *  - implement your service call in DashboardReportingService.  it should return List<ChartSeries<?>>.   this result is returned in ChartWidget.getChartSeries() 
+ *
+ * see {@link http://fieldid.jira.com/wiki/display/WEB/Dashboard+Chart+Widgets} 
+ * 
+ */
+
 @SuppressWarnings("serial")
 public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widget<T> {
 
