@@ -27,7 +27,7 @@ public class ReportingPage extends FieldIDFrontEndPage {
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.new_report").page(ReportingPage.class).build(),
-                aNavItem().label("nav.saved_reports").page("savedReports.action").build()));
+                aNavItem().label("nav.saved_reports").page(SavedReportsDeprecatedPage.class).build()));
     }
 
     @Override

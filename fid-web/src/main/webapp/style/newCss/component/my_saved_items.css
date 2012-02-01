@@ -66,3 +66,15 @@
     padding-top:2px;
     vertical-align: middle;
 }
+
+.savedReports {
+	background-image: url("../../../images/reporting-bs-icon.png");
+	background-position: left 5.5px;
+    background-repeat: no-repeat;
+    margin: 30px;
+    padding: 0 50px 0 100px;
+}
+
+.savedReports .message {
+	padding: 5px 0;
+}

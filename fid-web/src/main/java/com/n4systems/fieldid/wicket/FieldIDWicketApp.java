@@ -24,6 +24,7 @@ import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
+import com.n4systems.fieldid.wicket.pages.reporting.SavedReportsDeprecatedPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
@@ -68,7 +69,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("savedReport", RunSavedReportPage.class);
         mountPage("savedSearch", RunSavedSearchPage.class);
         mountPage("massSchedule", MassSchedulePage.class);
-
+        mountPage("savedReportsDeprecated", SavedReportsDeprecatedPage.class);
+        
         mountPage("savedItems", SavedItemsDropdownPage.class);
         mountPage("manageSavedItems", ManageSavedItemsPage.class);
         mountPage("shareSavedItem", ShareSavedItemPage.class);

@@ -130,7 +130,7 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
                 NavigationItemBuilder.aNavItem().label("nav.new_report").page(ReportingResultsPage.class).build(),
-                NavigationItemBuilder.aNavItem().label("nav.saved_reports").page("/savedReports.action").build()));
+                NavigationItemBuilder.aNavItem().label("nav.saved_reports").page(SavedReportsDeprecatedPage.class).build()));
     }
 
 }
