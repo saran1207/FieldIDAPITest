@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteriaModel;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.AssetTypeGroupRemovalSummary;
@@ -15,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.Query;
 
 public class AssetTypeGroupService extends FieldIdPersistenceService {
 
@@ -45,9 +46,10 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
 
         Map<String,Object> params = new HashMap<String,Object>();
 		params.put("group", groupToDelete);
-        persistenceService.createQuery("UPDATE " + AssetType.class.getName() + " assetType SET assetType.group = null WHERE assetType.group = :group", params);
+        Query clearAssetTypesQuery = persistenceService.createQuery("UPDATE " + AssetType.class.getName() + " assetType SET assetType.group = null WHERE assetType.group = :group", params);
+        clearAssetTypesQuery.executeUpdate();
 
-		persistenceService.delete(groupToDelete);
+        persistenceService.delete(groupToDelete);
 	}
 
 }
