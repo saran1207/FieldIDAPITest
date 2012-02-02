@@ -18,8 +18,8 @@ public class ApiSecurityRequestFilter implements ContainerRequestFilter, Contain
 	public ContainerRequest filter(ContainerRequest request) {
 		URI requestPath = request.getAbsolutePath();
 		
-		// filtering is enabled for the entire api path so we need to skip it for the auth resource
-		if (requestPath.getPath().matches(".*/api/.*/authenticate$")) {
+		// filtering is enabled for the entire api path so we need to skip it for the auth and hello resources
+		if (requestPath.getPath().matches(".*/api/.*/(authenticate|hello)$")) {
 			return request;
 		}
 		

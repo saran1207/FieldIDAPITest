@@ -15,6 +15,7 @@ import com.n4systems.fieldid.ws.v1.resources.event.ApiEventResource;
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
+import com.n4systems.fieldid.ws.v1.resources.hello.ApiHelloResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
@@ -132,6 +133,11 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiTenantResource apiTenantResource() {
 		return new ApiTenantResource();
+	}
+	
+	@Bean
+	public ApiHelloResource apiHelloResource() {
+		return new ApiHelloResource();
 	}
 	
 }
