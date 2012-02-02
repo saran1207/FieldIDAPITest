@@ -94,7 +94,7 @@ public class BrowsePanel extends Panel {
 
             add(new DropDownChoice<BaseOrg>("orgSelect", selectedInternalOrgModel, new InternalOrgsModel(), new ListableChoiceRenderer<BaseOrg>()).add(createUpdateSelectsOnChangeBehavior(true, true)));
             add(new DropDownChoice<BaseOrg>("customerSelect", selectedCustomerOrgModel, customersUnderInternalOrgModel, new ListableChoiceRenderer<BaseOrg>()).setNullValid(true).add(createUpdateSelectsOnChangeBehavior(false, true)));
-            add(new DropDownChoice<BaseOrg>("divisionSelect", new PropertyModel<BaseOrg>(BrowsePanel.this, "selectedDivisionOrg"), divisionsUnderCustomerOrgModel).setNullValid(true).add(createUpdateSelectsOnChangeBehavior(false, false)));
+            add(new DropDownChoice<BaseOrg>("divisionSelect", new PropertyModel<BaseOrg>(BrowsePanel.this, "selectedDivisionOrg"), divisionsUnderCustomerOrgModel, new ListableChoiceRenderer<BaseOrg>()).setNullValid(true).add(createUpdateSelectsOnChangeBehavior(false, false)));
             add(new AjaxLink("cancelLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
