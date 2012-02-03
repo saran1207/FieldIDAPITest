@@ -10,7 +10,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 public class SavedReportsDeprecatedPage extends FieldIDFrontEndPage {
 	
 	public SavedReportsDeprecatedPage() {
-		String url = "http://customers.fieldid.com/2012/01/new-feature-my-saved-items/";
+		String url = "http://customers.fieldid.com/2012/02/new-feature-saved-items/";
 		add(new ExternalLink("blogPostLink", url, url));
 	}
 	
