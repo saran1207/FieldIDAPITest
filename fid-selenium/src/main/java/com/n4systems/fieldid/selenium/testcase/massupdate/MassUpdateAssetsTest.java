@@ -78,10 +78,13 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		resultsPage.selectAllItemsOnPage();
 
 		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
+		massUpdatePage.selectEdit();
 		massUpdatePage.setAssetStatus("Out of Service");
 		massUpdatePage.setPurchaseOrder("PO 5");
+		
+		massUpdatePage.saveEditDetails();
 
-		resultsPage = massUpdatePage.clickSaveButtonAndConfirm();
+		resultsPage = massUpdatePage.clickConfirmEdit();
 
 		AssetPage assetPage = resultsPage.clickAssetLinkForResult(1);
 
@@ -154,9 +157,12 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		resultsPage.selectAllItemsOnPage();
 
 		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
-		massUpdatePage.checkMassDelete();
-
-		massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+		
+		massUpdatePage.selectDelete();
+		
+		massUpdatePage.saveDeleteDetails();
+		
+		massUpdatePage.clickConfirmDelete();
 	
 	}
 	

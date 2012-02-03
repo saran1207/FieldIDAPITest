@@ -1,27 +1,59 @@
 package com.n4systems.fieldid.selenium.pages.assets;
 
-import com.n4systems.fieldid.selenium.pages.MassUpdatePage;
+import com.n4systems.fieldid.selenium.pages.PageFactory;
+import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class AssetsMassUpdatePage extends MassUpdatePage<AssetsSearchResultsPage> {
-
+public class AssetsMassUpdatePage extends WicketFieldIDPage {
+	
     public AssetsMassUpdatePage(Selenium selenium) {
-        super(selenium, AssetsSearchResultsPage.class);
+        super(selenium);
+    }
+    
+    public void selectEdit() {
+    	selenium.check("//input[@value='Edit']");
+    	selenium.click("//input[@value='Next']"); 
+    	waitForElementToBePresent("//form[@class='editForm']");
+    }
+    
+    public void selectDelete() {
+    	selenium.check("//input[@value='Delete']");
+    	selenium.click("//input[@value='Next']");    	
+    	waitForElementToBePresent("//div[@class='deleteDetails']");
+    }
+    
+    public void saveEditDetails() {
+    	selenium.click("//input[@value='Next']");    	
+    	waitForElementToBePresent("//form[@class='confirmEditForm']");
+    }
+    
+    public void saveDeleteDetails() {
+    	selenium.click("//input[@value='Next']");    	
+    	waitForElementToBePresent("//form[@class='confirmDeleteForm']");
     }
 
     public void setAssetStatus(String newStatus) {
-        selenium.select("//select[@id='massUpdateAssetsSave_assetStatus']", newStatus);
-        selenium.fireEvent("//select[@id='massUpdateAssetsSave_assetStatus']", "change");
+        selenium.select("//select[@name='assetStatus']", newStatus);
+        selenium.fireEvent("//select[@name='assetStatus']", "change");
+        selenium.waitForCondition("var value = selenium.isChecked('//input[@name=\\'assetStatusCheck\\']'); value == true", DEFAULT_TIMEOUT);
     }
 
     public void setPurchaseOrder(String newPurchaseOrder) {
-        selenium.type("//input[@id='massUpdateAssetsSave_purchaseOrder']", newPurchaseOrder);
-        selenium.fireEvent("//input[@id='massUpdateAssetsSave_purchaseOrder']", "change");
+        selenium.type("//input[@name='purchaseOrder']", newPurchaseOrder);
+        selenium.fireEvent("//input[@name='purchaseOrder']", "change");
+        selenium.waitForCondition("var value = selenium.isChecked('//input[@name=\\'purchaseOrderCheck\\']'); value == true", DEFAULT_TIMEOUT);
+    }
+    
+    public AssetsSearchResultsPage clickConfirmDelete() {
+    	selenium.type("//input[@name='confirmationField']", "delete");
+        selenium.fireEvent("//input[@name='confirmationField']", "keyup");
+        waitForWicketAjax();
+    	selenium.click("//input[@value='Delete']");
+    	return PageFactory.createPage(AssetsSearchResultsPage.class, selenium);
     }
 
-    public void checkMassDelete(){
-    	selenium.check("//input[@id='check_delete']");
-        selenium.fireEvent("//input[@id='check_delete']", "change");
-    	waitForAjax();
+    public AssetsSearchResultsPage clickConfirmEdit() {
+    	selenium.click("//input[@value='Perform Mass Update']");
+    	return PageFactory.createPage(AssetsSearchResultsPage.class, selenium);
     }
 }
