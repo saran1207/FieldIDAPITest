@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.persistence;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.persistence.Query;
 import com.n4systems.model.columns.ActiveColumnMapping;
 import com.n4systems.model.columns.ColumnLayout;
 import com.n4systems.model.commenttemplate.CommentTemplate;
+import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import org.apache.log4j.Logger;
 
@@ -90,6 +92,8 @@ public class TenantCleaner {
         if (tenantIds.isEmpty())
             return;
 
+        clearUsersSavedItems(tenantIds);
+
         removeAllConfigsForTenants(tenantIds);
         removeAddAssetHistory(tenantIds);
         removeAllForTenants(DownloadLink.class, tenantIds);
@@ -157,9 +161,32 @@ public class TenantCleaner {
         removeAllForTenants(SecondaryOrg.class, tenantIds);
         removeAllForTenants(PrimaryOrg.class, tenantIds);
 
+        clearLastLoggedUsersFor(tenantIds);
+
         removeAllForTenants(User.class, tenantIds);
         
         timeLogger.stop();
+    }
+
+    private void clearUsersSavedItems(List<Long> tenantIds) {
+        Query usersQuery = em.createQuery("from " + User.class.getName() + " where tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
+        List<User> users = usersQuery.getResultList();
+        for (User user : users) {
+            user.setLastRunSearch(null);
+            user.setLastRunReport(null);
+            user.setSavedItems(new ArrayList<SavedItem>());
+            em.merge(user);
+        }
+    }
+
+    private void clearLastLoggedUsersFor(List<Long> tenantIds) {
+        Query tenantsQuery = em.createQuery("from " + Tenant.class.getName() + " where id in (:tenantIds)").setParameter("tenantIds", tenantIds);
+        final List<Tenant> resultList = tenantsQuery.getResultList();
+        for (Tenant tenant : resultList) {
+            tenant.setLastLoginTime(null);
+            tenant.setLastLoginUser(null);
+            em.merge(tenant);
+        }
     }
 
     private void clearAllSubAssetTypes(List<Long> tenantIds) {
