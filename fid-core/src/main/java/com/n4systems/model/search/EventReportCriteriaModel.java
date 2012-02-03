@@ -6,10 +6,11 @@ import java.util.List;
 import javax.persistence.*;
 
 import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
@@ -51,6 +52,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
 
     @ManyToOne
     @JoinColumn(name="eventBook")
+    @NotFound(action=NotFoundAction.IGNORE)
     private EventBook eventBook;
 
     @ManyToOne
