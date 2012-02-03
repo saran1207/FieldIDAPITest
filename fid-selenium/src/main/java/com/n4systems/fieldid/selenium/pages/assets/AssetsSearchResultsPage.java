@@ -10,6 +10,11 @@ public class AssetsSearchResultsPage extends SearchResultsPage {
         super(selenium);
     }
 
+    @Override
+    protected void waitForFrameworkAjax() {
+        waitForWicketAjax();
+    }
+
     public int getTotalResultsCount() {
         return selenium.getXpathCount("//table[@class='list']//tr").intValue() - 1;
     }

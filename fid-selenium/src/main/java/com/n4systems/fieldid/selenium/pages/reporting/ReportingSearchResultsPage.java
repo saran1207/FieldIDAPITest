@@ -12,6 +12,11 @@ public class ReportingSearchResultsPage extends SearchResultsPage {
     }
 
     @Override
+    protected void waitForFrameworkAjax() {
+        waitForWicketAjax();
+    }
+
+    @Override
     public void selectAllItemsOnPage() {
         checkAndFireClick("//table[@class='list']//tr[1]//th[1]//input");
         waitForWicketAjax();

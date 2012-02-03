@@ -7,19 +7,22 @@ import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.thoughtworks.selenium.Selenium;
 
-public class SearchResultsPage extends WicketFieldIDPage {
+public abstract class SearchResultsPage extends WicketFieldIDPage {
 
     public SearchResultsPage(Selenium selenium) {
         super(selenium);
     }
 
+    protected abstract void waitForFrameworkAjax();
+
     public void selectAllItemsOnPage() {
         checkAndFireClick("//table[@class='list']//tr[1]//th[1]//input");
-        waitForWicketAjax();
+        waitForFrameworkAjax();
     }
 
     public void selectItemOnRow(int rowNumber) {
         checkAndFireClick("//table[@class='list']//tr["+rowNumber+"]//td[1]//input");
+        waitForFrameworkAjax();
     }
 
     public List<String> getColumnNames() {

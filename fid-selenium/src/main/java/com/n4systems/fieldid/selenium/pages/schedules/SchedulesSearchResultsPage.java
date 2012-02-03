@@ -11,6 +11,11 @@ public class SchedulesSearchResultsPage extends SearchResultsPage {
         super(selenium);
     }
 
+    @Override
+    protected void waitForFrameworkAjax() {
+        waitForAjax();
+    }
+
     public SchedulesMassUpdatePage clickMassUpdate() {
         selenium.click("//a[.='Mass Update']");
         return new SchedulesMassUpdatePage(selenium);
