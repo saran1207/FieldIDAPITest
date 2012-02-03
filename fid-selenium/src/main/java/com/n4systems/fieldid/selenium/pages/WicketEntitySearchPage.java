@@ -41,7 +41,7 @@ public abstract class WicketEntitySearchPage<T extends WebPage> extends WicketFi
     	//waitForAjax();
     }
 	public void expandSearchCriteria() {
-    	selenium.click("//div[@class='pageSection']//h2[contains(.,'Report Settings')]//a[1]");
+    	selenium.click("//div[@class='pageSection']//h2[contains(.,'Search Settings')]//a[1]");
     	//waitForAjax();
 	}
 
