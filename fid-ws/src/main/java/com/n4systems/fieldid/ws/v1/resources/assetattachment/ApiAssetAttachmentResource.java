@@ -34,12 +34,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public ListResponse<ApiAssetAttachment> findAttachments(@QueryParam("assetId") String assetId) {
-		QueryBuilder<AssetAttachment> builder = createUserSecurityBuilder(AssetAttachment.class);
-		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
-		
-		List<AssetAttachment> attachments = persistenceService.findAll(builder);
-		List<ApiAssetAttachment> apiAttachments = convertAllEntitiesToApiModels(attachments);
-		
+		List<ApiAssetAttachment> apiAttachments = findAllAttachments(assetId);		
 		ListResponse<ApiAssetAttachment> response = new ListResponse<ApiAssetAttachment>(apiAttachments, 0, 0, apiAttachments.size());
 		return response;
 	}
@@ -82,6 +77,16 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 			apiAttachment.setData(loadAttachmentData(attachment));
 		}
 		return apiAttachment;
+	}
+	
+	public List<ApiAssetAttachment> findAllAttachments(String assetId) {
+		QueryBuilder<AssetAttachment> builder = createUserSecurityBuilder(AssetAttachment.class);
+		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
+		
+		List<AssetAttachment> attachments = persistenceService.findAll(builder);
+		List<ApiAssetAttachment> apiAttachments = convertAllEntitiesToApiModels(attachments);
+		
+		return apiAttachments;
 	}
 	
 	private byte[] loadAttachmentData(AssetAttachment attachment) {

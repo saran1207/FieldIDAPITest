@@ -24,6 +24,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 @Path("eventHistory")
 public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, Event> {
 
+	//This method is obsolete, we can remove it after findAllEventHistory is wired both in web service and client.
 	@GET
 	@Path("{assetId}")
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -47,6 +48,16 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, Event>
 		
 	}
 	
+	public List<ApiEventHistory> findAllEventHistory(String assetId) {
+		QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
+		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
+		builder.addOrder("date", false);
+
+		List<Event> events = persistenceService.findAll(builder);
+		List<ApiEventHistory> apiEventHistory = convertAllEntitiesToApiModels(events);
+		return apiEventHistory;
+	}
+	
 	@Override
 	protected ApiEventHistory convertEntityToApiModel(Event event) {
 		ApiEventHistory apiEventHistory = new ApiEventHistory();
@@ -59,5 +70,4 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, Event>
 		apiEventHistory.setStatus(event.getStatus().getDisplayName());
 		return apiEventHistory;
 	}
-	
 }

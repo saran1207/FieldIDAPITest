@@ -25,7 +25,11 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachment;
+import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistory;
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
@@ -46,6 +50,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	
 	@Autowired private AssetService assetService;
 	@Autowired private EventScheduleService eventScheduleService;
+	@Autowired private ApiAssetAttachmentResource apiAttachmentResource;
+	@Autowired private ApiEventHistoryResource apiEventHistoryResource;
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -168,6 +174,18 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		for (EventSchedule schedule: schedules) {
 			apiAsset.getSchedules().add(convertEventSchedule(schedule));
 		}
+		
+		List<ApiAssetAttachment> apiAttachments = apiAttachmentResource.findAllAttachments(asset.getMobileGUID());		
+		for (ApiAssetAttachment apiAttachment : apiAttachments) {
+			// If attachment is not an image, remove the data. User has to get that data on fly.
+			if(!apiAttachment.isImage()) {
+				apiAttachment.setData(null);
+			}
+		}		
+		apiAsset.setAttachments(apiAttachments);
+		
+		List<ApiEventHistory> eventHistory = apiEventHistoryResource.findAllEventHistory(asset.getMobileGUID());
+		apiAsset.setEventHistory(eventHistory);
 		
 		return apiAsset;
 	}
