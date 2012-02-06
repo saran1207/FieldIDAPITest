@@ -24,6 +24,7 @@ public class WsEventBookConverter extends WsModelConverter<EventBook, WsEventBoo
 		wsModel.setName(model.getName());
 		wsModel.setOpen(model.isOpen());
 		wsModel.setOwner(orgConverter.fromModel(model.getOwner()));
+		wsModel.setActive(model.isActive());
 		return wsModel;
 	}
 

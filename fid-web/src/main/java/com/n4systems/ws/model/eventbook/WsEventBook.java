@@ -11,6 +11,7 @@ public class WsEventBook extends WsUploadModel {
 	private String name;
 	private boolean open;
 	private WsOrg owner;
+	private boolean active;
 
 	@XmlElement(name="Name")
 	public String getName() {
@@ -37,6 +38,13 @@ public class WsEventBook extends WsUploadModel {
 
 	public void setOwner(WsOrg owner) {
 		this.owner = owner;
-	}
+	}	
 
+	public boolean isActive() {
+		return active;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 }
