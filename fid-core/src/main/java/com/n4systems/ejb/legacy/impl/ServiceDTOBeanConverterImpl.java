@@ -187,6 +187,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		bookDTO.setName(eventBook.getName());
 		bookDTO.setBookOpen(eventBook.isOpen());
 		bookDTO.setId(eventBook.getId());
+		bookDTO.setActive(eventBook.isActive());
 
 		populateOwners(eventBook.getOwner(), bookDTO);
 
