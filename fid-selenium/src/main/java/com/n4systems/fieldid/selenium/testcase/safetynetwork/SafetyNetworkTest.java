@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
+import com.n4systems.fieldid.selenium.util.ConditionWaiter;
+import com.n4systems.fieldid.selenium.util.Predicate;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
@@ -92,11 +95,11 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void test_view_catalog_and_import() {
+	public void test_view_catalog_and_import() throws InterruptedException {
 		SafetyNetworkPage safetyNetworkPage = startAsCompany(COMPANY2).login().clickSafetyNetworkLink();
 		CustomerConnectionProfilePage safetyNetworkCustomerPage = safetyNetworkPage.selectCustomerConnection(COMPANY1);
 
-		SafetyNetworkCatalogImportPage safetyNetworkCatalogImportPage = safetyNetworkCustomerPage.clickViewCatalog();
+		final SafetyNetworkCatalogImportPage safetyNetworkCatalogImportPage = safetyNetworkCustomerPage.clickViewCatalog();
 		
 		safetyNetworkCatalogImportPage.clickSelectItemsToImportButton();
 		
@@ -107,7 +110,18 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 		safetyNetworkCatalogImportPage.clickStartImport();
 		
 		assertTrue("Could not complete catalog import", selenium.isElementPresent("//input[@id='importDone']"));
-		
+
+        final String expectedImportedAssetTypeName = "TestType1 (test1)";
+
+        // We need to wait for the import to finish or the next tenant cleaning process will have a race condition!
+        // TODO: Refactor this into start import if clickStartImport is reused? Might be tricky to figure out which assets we expect to import
+        new ConditionWaiter(new Predicate(){
+            @Override
+            public boolean evaluate() {
+                final ManageAssetTypesPage manageAssetTypesPage = safetyNetworkCatalogImportPage.clickSetupLink().clickAssetTypes();
+                return manageAssetTypesPage.getAssetTypes().contains(expectedImportedAssetTypeName);
+            }
+        }).run("The imported asset type should show up in our list of asset types");
 	}
 
 	@Test
