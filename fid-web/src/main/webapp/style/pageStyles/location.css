@@ -63,7 +63,9 @@
 }
 
 #addLocation, #addFirstLocation{
-	margin:-5px 0 0 5px;
+	margin: 0 0 0 5px;
+	*margin: -15px 0 0 5px; /*For IE7*/
+	vertical-align: middle;
 }
 
 #nodeForm, #addFirstForm{
