@@ -15,8 +15,9 @@ div.wicket-modal div.w_silver a.w_close {
     margin-top:3px;
 }
 
-div.wicket-modal span.w_captionText {
-    font-size: 15px;
+div.wicket-modal h3.w_captionText {
+	line-height:1.5em;
+    font-size: 14px;
     display:block;
     margin-left:16px;
 }
