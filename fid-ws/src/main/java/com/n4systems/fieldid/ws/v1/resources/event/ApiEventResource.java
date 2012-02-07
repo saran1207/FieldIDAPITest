@@ -181,7 +181,8 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		switch (criteria.getCriteriaType()) {
 			case ONE_CLICK:
 				result = new OneClickCriteriaResult();
-				((OneClickCriteriaResult) result).setState(persistenceService.find(State.class, apiResult.getOneClickValue()));
+				State state = persistenceService.find(State.class, apiResult.getOneClickValue());
+				((OneClickCriteriaResult) result).setState(state);
 				break;
 			case TEXT_FIELD:
 				result = new TextFieldCriteriaResult();
