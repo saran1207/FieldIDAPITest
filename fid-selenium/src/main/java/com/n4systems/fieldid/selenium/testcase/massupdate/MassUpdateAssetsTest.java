@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -97,6 +98,28 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
 		assertEquals("PO 5", assetPage.getPurchaseOrder());
 		assertEquals("Out of Service", assetPage.getAssetStatus());
+	}
+	
+	@Test
+	public void test_mass_update_asset_required_fields() throws Exception {
+		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
+
+		assetsSearchPage.enterIdentifier("123456");
+		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
+
+		assertEquals(3, resultsPage.getTotalResultsCount());
+
+		resultsPage.selectAllItemsOnPage();
+
+		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
+		massUpdatePage.selectEdit();
+		
+		massUpdatePage.checkOwner();
+		massUpdatePage.checkIdentified();
+		
+		massUpdatePage.saveEditDetailsWithError();
+		
+		assertFalse(massUpdatePage.getFormErrorMessages().isEmpty());
 	}
 
 	@Test

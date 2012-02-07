@@ -23,8 +23,13 @@ public class AssetsMassUpdatePage extends WicketFieldIDPage {
     }
     
     public void saveEditDetails() {
-    	selenium.click("//input[@value='Next']");    	
+    	selenium.click("//input[@value='Next']");
     	waitForElementToBePresent("//form[@class='confirmEditForm']");
+    }
+    
+    public void saveEditDetailsWithError() {
+    	selenium.click("//input[@value='Next']");    	
+    	waitForElementToBePresent("//div[@class='formErrors']");
     }
     
     public void saveDeleteDetails() {
@@ -56,4 +61,12 @@ public class AssetsMassUpdatePage extends WicketFieldIDPage {
     	selenium.click("//input[@value='Perform Mass Update']");
     	return PageFactory.createPage(AssetsSearchResultsPage.class, selenium);
     }
+
+	public void checkOwner() {
+		selenium.check("//input[@name='ownerCheck']");
+	}
+
+	public void checkIdentified() {
+		selenium.check("//input[@name='identifiedCheck']");
+	}
 }
