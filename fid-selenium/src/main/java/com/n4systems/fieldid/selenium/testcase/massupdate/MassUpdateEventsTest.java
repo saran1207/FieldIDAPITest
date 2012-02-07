@@ -1,12 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.pages.event.EventMassUpdatePage;
-import com.n4systems.fieldid.selenium.pages.reporting.ReportingSearchResultsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -14,6 +10,9 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventType;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 	
@@ -77,24 +76,24 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 	
 	@Test
 	public void test_remove_all_events_for_multiple_assets(){
-		   page.enterIdentifier(IDENTIFIER);
-		   ReportingSearchResultsPage resultsPage = page.clickRunSearchButton();
-		   resultsPage.selectAllItemsOnPage();
-		   EventMassUpdatePage massUpdatePage = resultsPage.clickEventMassUpdate();
-		   massUpdatePage.checkMassDelete();
-		   massUpdatePage.clickSaveButtonAndConfirmMassDelete();
-		   assertTrue("Not all Events were properly removed", verifyAllEventsAreRemoved());
+        page.enterIdentifier(IDENTIFIER);
+        page.clickRunSearchButton();
+        page.selectAllItemsOnPage();
+        EventMassUpdatePage massUpdatePage = page.clickEventMassUpdate();
+        massUpdatePage.checkMassDelete();
+        massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+        assertTrue("Not all Events were properly removed", verifyAllEventsAreRemoved());
 	}
 	
 	@Test
 	public void test_remove_all_schedules_for_multiple_assets(){
-		   page.enterIdentifier(IDENTIFIER);
-		   ReportingSearchResultsPage resultsPage = page.clickRunSearchButton();
-		   resultsPage.selectAllItemsOnPage();
-		   EventMassUpdatePage massUpdatePage = resultsPage.clickEventMassUpdate();
-		   massUpdatePage.checkMassDelete();
-		   massUpdatePage.clickSaveButtonAndConfirmMassDelete();
-		   assertTrue("Not all Schedules were properly removed", verifyAllSchedulesAreRemoved());
+        page.enterIdentifier(IDENTIFIER);
+        page.clickRunSearchButton();
+        page.selectAllItemsOnPage();
+        EventMassUpdatePage massUpdatePage = page.clickEventMassUpdate();
+        massUpdatePage.checkMassDelete();
+        massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+        assertTrue("Not all Schedules were properly removed", verifyAllSchedulesAreRemoved());
 	}
 	
 	private boolean verifyAllSchedulesAreRemoved() {
@@ -106,8 +105,8 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 		return selenium.isElementPresent("//div[@class='message']");
 	}
 	
-	  @Override
-	    protected ReportingPage navigateToPage() {
+    @Override
+    protected ReportingPage navigateToPage() {
 		return startAsCompany(COMPANY).login().clickReportingLink();
 	}
 }

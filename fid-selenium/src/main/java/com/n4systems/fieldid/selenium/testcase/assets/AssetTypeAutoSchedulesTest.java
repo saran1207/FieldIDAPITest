@@ -1,18 +1,18 @@
 package com.n4systems.fieldid.selenium.testcase.assets;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.misc.DateUtil;
 import com.n4systems.fieldid.selenium.pages.IdentifyPage;
-import com.n4systems.fieldid.selenium.pages.schedules.SchedulesSearchResultsPage;
+import com.n4systems.fieldid.selenium.pages.SchedulesSearchPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage.EventFrequencyOverride;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
+
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class AssetTypeAutoSchedulesTest extends FieldIDTestCase {
 
@@ -58,11 +58,12 @@ public class AssetTypeAutoSchedulesTest extends FieldIDTestCase {
 		
 		identifyPage.enterIdentifier(SERIAL_NUMBER);
 		identifyPage.saveNewAsset();
+
+        final SchedulesSearchPage schedulesSearchPage = identifyPage.clickSchedulesLink();
+        schedulesSearchPage.clickRunSearchButton();
 		
-		SchedulesSearchResultsPage searchResultPage = identifyPage.clickSchedulesLink().clickRunSearchButton();
-		
-		assertEquals(1, searchResultPage.getTotalResultsCount());
-		assertEquals(getExpectedScheduleDate(14), searchResultPage.getScheduledDateForResult(1));
+		assertEquals(1, schedulesSearchPage.getTotalResultsCount());
+		assertEquals(getExpectedScheduleDate(14), schedulesSearchPage.getScheduledDateForResult(1));
 	}
 	
 	//@Test
@@ -86,10 +87,11 @@ public class AssetTypeAutoSchedulesTest extends FieldIDTestCase {
 		identifyPage.setOwner(new Owner(COMPANY,TEST_CUSTOMER_ORG));
 		identifyPage.saveNewAsset();
 
-		SchedulesSearchResultsPage searchResultPage = identifyPage.clickSchedulesLink().clickRunSearchButton();
+        final SchedulesSearchPage schedulesSearchPage = identifyPage.clickSchedulesLink();
+        schedulesSearchPage.clickRunSearchButton();
 		
-		assertEquals(1, searchResultPage.getTotalResultsCount());
-		assertEquals(getExpectedScheduleDate(7), searchResultPage.getScheduledDateForResult(1));
+		assertEquals(1, schedulesSearchPage.getTotalResultsCount());
+		assertEquals(getExpectedScheduleDate(7), schedulesSearchPage.getScheduledDateForResult(1));
 	}
 
 	private String getExpectedScheduleDate(int interval) {

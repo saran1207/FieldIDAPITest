@@ -1,12 +1,13 @@
 package com.n4systems.fieldid.selenium.pages.schedules;
 
 import com.n4systems.fieldid.selenium.pages.MassUpdatePage;
+import com.n4systems.fieldid.selenium.pages.SchedulesSearchPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class SchedulesMassUpdatePage extends MassUpdatePage<SchedulesSearchResultsPage> {
+public class SchedulesMassUpdatePage extends MassUpdatePage<SchedulesSearchPage> {
 
     public SchedulesMassUpdatePage(Selenium selenium) {
-        super(selenium, SchedulesSearchResultsPage.class);
+        super(selenium, SchedulesSearchPage.class);
     }
 
     public void enterNextEventDate(String date) {

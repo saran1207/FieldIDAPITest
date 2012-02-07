@@ -1,25 +1,23 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Date;
-
-import com.n4systems.fieldid.selenium.util.ConditionWaiter;
-import com.n4systems.fieldid.selenium.util.Predicate;
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.misc.DateUtil;
 import com.n4systems.fieldid.selenium.pages.SchedulesSearchPage;
 import com.n4systems.fieldid.selenium.pages.schedules.SchedulesMassUpdatePage;
-import com.n4systems.fieldid.selenium.pages.schedules.SchedulesSearchResultsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.fieldid.selenium.util.ConditionWaiter;
+import com.n4systems.fieldid.selenium.util.Predicate;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import org.junit.Test;
+
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
 
 public class MassUpdateSchedulesTest extends PageNavigatingTestCase<SchedulesSearchPage> {
 
@@ -70,19 +68,19 @@ public class MassUpdateSchedulesTest extends PageNavigatingTestCase<SchedulesSea
     @Test
     public void test_mass_update_schedules_next_date() throws Exception {
         page.enterIdentifier(IDENTIFIER);
-        SchedulesSearchResultsPage resultsPage = page.clickRunSearchButton();
+        page.clickRunSearchButton();
 
-        assertEquals(2, resultsPage.getTotalResultsCount());
+        assertEquals(2, page.getTotalResultsCount());
 
-        resultsPage.selectItemOnRow(1);
-        resultsPage.selectItemOnRow(2);
+        page.selectItemOnRow(1);
+        page.selectItemOnRow(2);
 
-        Date beginningDate = DateUtil.parseDate(resultsPage.getScheduledDateForResult(1));
-        SchedulesMassUpdatePage scheduleMassUpdatePage = resultsPage.clickMassUpdate();
+        Date beginningDate = DateUtil.parseDate(page.getScheduledDateForResult(1));
+        SchedulesMassUpdatePage scheduleMassUpdatePage = page.clickMassUpdate();
         final String nextDate = DateUtil.formatDate(DateUtil.theDayAfter(beginningDate));
 
         scheduleMassUpdatePage.enterNextEventDate(nextDate);
-        final SchedulesSearchResultsPage finalResultsPage = scheduleMassUpdatePage.clickSaveButtonAndConfirm();
+        final SchedulesSearchPage finalResultsPage = scheduleMassUpdatePage.clickSaveButtonAndConfirm();
 
         new ConditionWaiter(new Predicate() {
             @Override

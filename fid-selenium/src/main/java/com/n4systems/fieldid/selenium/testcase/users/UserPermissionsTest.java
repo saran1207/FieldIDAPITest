@@ -1,8 +1,9 @@
 package com.n4systems.fieldid.selenium.testcase.users;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 import com.n4systems.fieldid.selenium.pages.ManageEventsPage;
-import com.n4systems.fieldid.selenium.pages.reporting.ReportingSearchResultsPage;
+import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
 import com.n4systems.model.ExtendedFeature;
@@ -92,11 +93,12 @@ public class UserPermissionsTest extends FieldIDTestCase {
 
 	@Test
 	public void verify_edit_events_is_disabled() {
-		ReportingSearchResultsPage resultsPage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickReportingLink().clickRunSearchButton();
+        final ReportingPage reportingPage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickReportingLink();
+        reportingPage.clickRunSearchButton();
 
 		assertFalse("Shouldn't be able to see edit link next to view", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 
-		ManageEventsPage manageEventsPage = resultsPage.clickReportLinkForResult(1).clickEventHistoryTab().clickViewEventsByDateGroup();
+		ManageEventsPage manageEventsPage = reportingPage.clickReportLinkForResult(1).clickEventHistoryTab().clickViewEventsByDateGroup();
 
 		assertFalse("Shouldn't be able to see edit link", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 
@@ -108,7 +110,9 @@ public class UserPermissionsTest extends FieldIDTestCase {
 	
 	@Test
 	public void verify_customers_can_only_edit_four_unrestricted_fields_on_asset(){
-		startAsCompany(COMPANY).login(READ_ONLY_USER, READ_ONLY_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1).clickEditTab();
+        final AssetsSearchPage assetsSearchPage = startAsCompany(COMPANY).login(READ_ONLY_USER, READ_ONLY_USER).clickAssetsLink();
+        assetsSearchPage.clickRunSearchButton();
+        assetsSearchPage.clickAssetLinkForResult(1).clickEditTab();
 		
 		assertTrue("Coudldn't find owner field", selenium.isElementPresent("//label[contains(.,'Owner')]"));
 		assertTrue("Coudldn't find Location field", selenium.isElementPresent("//label[contains(.,'Location')]"));
@@ -118,7 +122,9 @@ public class UserPermissionsTest extends FieldIDTestCase {
 	
 	@Test
 	public void verify_employee_users_with_no_edit_permissions_cannot_view_asset_edit_tab(){
-		startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1);
+        final AssetsSearchPage assetsSearchPage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickAssetsLink();
+        assetsSearchPage.clickRunSearchButton();
+        assetsSearchPage.clickAssetLinkForResult(1);
 	
 		assertFalse("Shouldn't be able to see edit tab on asset page", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 	}

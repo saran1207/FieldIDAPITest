@@ -2,7 +2,6 @@ package com.n4systems.fieldid.selenium.testcase.columns;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
-import com.n4systems.fieldid.selenium.pages.reporting.ReportingSearchResultsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -72,15 +71,15 @@ public class SearchEventsWithCustomLayoutTest extends FieldIDTestCase {
     @Test
     public void test_search_events_with_custom_layout() throws Exception {
         ReportingPage reportingPage = startAsCompany("test1").login().clickReportingLink();
-        ReportingSearchResultsPage searchResultsPage = reportingPage.clickRunSearchButton();
-        searchResultsPage.getColumnNames();
+        reportingPage.clickRunSearchButton();
+        reportingPage.getColumnNames();
 
-        assertEquals(Arrays.asList("ID Number", "RFID Number"), searchResultsPage.getColumnNames());
-        assertEquals("456789", searchResultsPage.getValueInCell(1, 1));
-        assertEquals("456999", searchResultsPage.getValueInCell(2, 1));
+        assertEquals(Arrays.asList("ID Number", "RFID Number"), reportingPage.getColumnNames());
+        assertEquals("456789", reportingPage.getValueInCell(1, 1));
+        assertEquals("456999", reportingPage.getValueInCell(2, 1));
 
-        assertEquals("9876", searchResultsPage.getValueInCell(1, 2));
-        assertEquals("5678", searchResultsPage.getValueInCell(2, 2));
+        assertEquals("9876", reportingPage.getValueInCell(1, 2));
+        assertEquals("5678", reportingPage.getValueInCell(2, 2));
     }
 
 }

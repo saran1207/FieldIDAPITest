@@ -77,7 +77,12 @@ public class FieldIDPage extends WebPage {
         selenium.click("//div[@id='pageActions']//a[.='" + userId + "']");
         return new MyAccountPage(selenium);
     }
-	
+
+    public SavedItemsDropDown clickSavedItems() {
+        selenium.click("//div[@id='pageActions']//a[.='Saved Items']");
+        return new SavedItemsDropDown(selenium);
+    }
+
 	public void gotoNextPage() {
 		selenium.click("//div[@class='paginationWrapper'][1]//a[contains(.,'Next')]");
 		waitForPageToLoad();

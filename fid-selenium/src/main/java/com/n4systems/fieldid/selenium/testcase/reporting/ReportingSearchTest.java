@@ -6,7 +6,7 @@ import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.MyAccountPage;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
-import com.n4systems.fieldid.selenium.pages.search.SaveReportForm;
+import com.n4systems.fieldid.selenium.pages.reporting.SaveReportPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import org.junit.Test;
 
@@ -109,11 +109,11 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
-		SaveReportForm saveReportForm = page.clickSaveReport();
-		page = saveReportForm.clickCancel();
-		
-		assertTrue(page.hasSearchResults());
-		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
+		SaveReportPage saveReportForm = page.clickSaveReport();
+        final ReportingPage reportingPage = saveReportForm.clickCancel();
+
+        assertTrue(reportingPage.hasSearchResults());
+		assertEquals(getDefaultColumnHeaders(), reportingPage.getResultColumnHeaders());
 	}
 	
 	//Failing...
@@ -122,13 +122,13 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
-		SaveReportForm saveReportForm = page.clickSaveReport();
+		SaveReportPage saveReportPage = page.clickSaveReport();
 		String reportName = "Test Save Report";
-		saveReportForm.setReportName(reportName);
-		page = saveReportForm.clickSave();
-		assertEquals("Your Report has been saved.", page.getActionMessages().get(0));
+		saveReportPage.setReportName(reportName);
+        final ReportingPage reportingPage = saveReportPage.clickSave();
+        assertEquals("Your Report has been saved.", reportingPage.getActionMessages().get(0));
 		
-		page.clickStartNewReport();
+		reportingPage.clickStartNewReport();
 		
 		assertTrue(page.getSaveReportList().contains(reportName));
 		

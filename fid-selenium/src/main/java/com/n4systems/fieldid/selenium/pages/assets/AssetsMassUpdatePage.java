@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.selenium.pages.assets;
 
+import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 import com.n4systems.fieldid.selenium.pages.PageFactory;
 import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
 import com.thoughtworks.selenium.Selenium;
@@ -49,17 +50,17 @@ public class AssetsMassUpdatePage extends WicketFieldIDPage {
         selenium.waitForCondition("var value = selenium.isChecked('//input[@name=\\'purchaseOrderCheck\\']'); value == true", DEFAULT_TIMEOUT);
     }
     
-    public AssetsSearchResultsPage clickConfirmDelete() {
+    public AssetsSearchPage clickConfirmDelete() {
     	selenium.type("//input[@name='confirmationField']", "delete");
         selenium.fireEvent("//input[@name='confirmationField']", "keyup");
         waitForWicketAjax();
     	selenium.click("//input[@value='Delete']");
-    	return PageFactory.createPage(AssetsSearchResultsPage.class, selenium);
+        return new AssetsSearchPage(selenium);
     }
 
-    public AssetsSearchResultsPage clickConfirmEdit() {
+    public AssetsSearchPage clickConfirmEdit() {
     	selenium.click("//input[@value='Perform Mass Update']");
-    	return PageFactory.createPage(AssetsSearchResultsPage.class, selenium);
+    	return new AssetsSearchPage(selenium);
     }
 
 	public void checkOwner() {

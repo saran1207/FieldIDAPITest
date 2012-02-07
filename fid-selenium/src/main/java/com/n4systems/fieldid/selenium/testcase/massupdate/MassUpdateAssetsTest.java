@@ -1,18 +1,10 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
-import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
 import com.n4systems.model.Asset;
@@ -23,6 +15,10 @@ import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.EventScheduleBuilder;
 import com.n4systems.model.builders.SubAssetBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class MassUpdateAssetsTest extends FieldIDTestCase {
 
@@ -72,29 +68,29 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
 		assetsSearchPage.enterIdentifier("123456");
-		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
+		assetsSearchPage.clickRunSearchButton();
 
-		assertEquals(3, resultsPage.getTotalResultsCount());
+		assertEquals(3, assetsSearchPage.getTotalResultsCount());
 
-		resultsPage.selectAllItemsOnPage();
+		assetsSearchPage.selectAllItemsOnPage();
 
-		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
+		AssetsMassUpdatePage massUpdatePage = assetsSearchPage.clickMassUpdate();
 		massUpdatePage.selectEdit();
 		massUpdatePage.setAssetStatus("Out of Service");
 		massUpdatePage.setPurchaseOrder("PO 5");
 		
 		massUpdatePage.saveEditDetails();
 
-		resultsPage = massUpdatePage.clickConfirmEdit();
+		assetsSearchPage = massUpdatePage.clickConfirmEdit();
 
-		AssetPage assetPage = resultsPage.clickAssetLinkForResult(1);
+		AssetPage assetPage = assetsSearchPage.clickAssetLinkForResult(1);
 
 		assertEquals("PO 5", assetPage.getPurchaseOrder());
 		assertEquals("Out of Service", assetPage.getAssetStatus());
 
 		assetPage.goBack();
 
-		resultsPage.clickAssetLinkForResult(2);
+		assetsSearchPage.clickAssetLinkForResult(2);
 
 		assertEquals("PO 5", assetPage.getPurchaseOrder());
 		assertEquals("Out of Service", assetPage.getAssetStatus());
@@ -105,13 +101,13 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
 		assetsSearchPage.enterIdentifier("123456");
-		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
+		assetsSearchPage.clickRunSearchButton();
 
-		assertEquals(3, resultsPage.getTotalResultsCount());
+		assertEquals(3, assetsSearchPage.getTotalResultsCount());
 
-		resultsPage.selectAllItemsOnPage();
+		assetsSearchPage.selectAllItemsOnPage();
 
-		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
+		AssetsMassUpdatePage massUpdatePage = assetsSearchPage.clickMassUpdate();
 		massUpdatePage.selectEdit();
 		
 		massUpdatePage.checkOwner();
@@ -175,11 +171,11 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
 		assetsSearchPage.enterIdentifier(identifier);
-		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
+		assetsSearchPage.clickRunSearchButton();
 
-		resultsPage.selectAllItemsOnPage();
+		assetsSearchPage.selectAllItemsOnPage();
 
-		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
+		AssetsMassUpdatePage massUpdatePage = assetsSearchPage.clickMassUpdate();
 		
 		massUpdatePage.selectDelete();
 		

@@ -1,14 +1,14 @@
-package com.n4systems.fieldid.selenium.pages.search;
-
-import static org.junit.Assert.fail;
+package com.n4systems.fieldid.selenium.pages.reporting;
 
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class SaveReportForm extends FieldIDPage {
+import static org.junit.Assert.fail;
 
-	public SaveReportForm(Selenium selenium) {
+public class SaveReportPage extends FieldIDPage {
+
+	public SaveReportPage(Selenium selenium) {
 		super(selenium);
 		if(!checkOnSaveReportForm()){
 			fail("Expected to be on save report form page!");
@@ -20,11 +20,11 @@ public class SaveReportForm extends FieldIDPage {
 	}
 	
 	public void setReportName(String name) {
-		selenium.type("//input[@id='savedReportCreate_name']", name);
+		selenium.type("//input[@name='name']", name);
 	}
 
 	public ReportingPage clickSave() {
-		selenium.click("//input[@id='savedReportCreate_label_save']");
+		selenium.click("//input[@value='Save']");
 		return new ReportingPage(selenium);
 	}
 

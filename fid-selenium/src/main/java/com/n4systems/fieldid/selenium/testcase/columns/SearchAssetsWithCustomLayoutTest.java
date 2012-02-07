@@ -2,7 +2,6 @@ package com.n4systems.fieldid.selenium.testcase.columns;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
-import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ColumnLayoutPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.AssetType;
@@ -44,12 +43,11 @@ public class SearchAssetsWithCustomLayoutTest extends FieldIDTestCase {
     @Test
     public void test_search_with_custom_layout() {
         AssetsSearchPage searchPage = startAsCompany("test1").login().clickAssetsLink();
+        searchPage.clickRunSearchButton();
 
-        AssetsSearchResultsPage searchResultsPage = searchPage.clickRunSearchButton();
-
-        assertEquals(Arrays.asList("ID Number", "RFID Number"), searchResultsPage.getColumnNames());
-        assertEquals("ID Number", searchResultsPage.getSortColumn());
-        assertEquals(SortDirection.ASC, searchResultsPage.getSortDirection());
+        assertEquals(Arrays.asList("ID Number", "RFID Number"), searchPage.getColumnNames());
+        assertEquals("ID Number", searchPage.getSortColumn());
+        assertEquals(SortDirection.ASC, searchPage.getSortDirection());
     }
 
     @Test
@@ -66,28 +64,29 @@ public class SearchAssetsWithCustomLayoutTest extends FieldIDTestCase {
         assertEquals("RFID Number", columnLayoutPage.getSortColumnName());
         assertEquals(SortDirection.DESC, columnLayoutPage.getSortDirection());
 
-        AssetsSearchResultsPage resultsPage = columnLayoutPage.clickAssetsLink().clickRunSearchButton();
+        final AssetsSearchPage assetsSearchPage = columnLayoutPage.clickAssetsLink();
+        assetsSearchPage.clickRunSearchButton();
 
-        assertEquals("RFID Number", resultsPage.getSortColumn());
-        assertEquals(SortDirection.DESC, resultsPage.getSortDirection());
+        assertEquals("RFID Number", assetsSearchPage.getSortColumn());
+        assertEquals(SortDirection.DESC, assetsSearchPage.getSortDirection());
     }
 
     @Test
     public void test_sorting_in_results_pages() {
         AssetsSearchPage searchPage = startAsCompany("test1").login().clickAssetsLink();
-        AssetsSearchResultsPage resultsPage = searchPage.clickRunSearchButton();
+        searchPage.clickRunSearchButton();
 
-        assertEquals("ID Number", resultsPage.getSortColumn());
-        assertEquals(SortDirection.ASC, resultsPage.getSortDirection());
-        assertEquals("456789", resultsPage.getValueInCell(1, 1));
-        assertEquals("456999", resultsPage.getValueInCell(2, 1));
+        assertEquals("ID Number", searchPage.getSortColumn());
+        assertEquals(SortDirection.ASC, searchPage.getSortDirection());
+        assertEquals("456789", searchPage.getValueInCell(1, 1));
+        assertEquals("456999", searchPage.getValueInCell(2, 1));
 
-        resultsPage.clickSortColumn("ID Number");
+        searchPage.clickSortColumn("ID Number");
         
-        assertEquals("ID Number", resultsPage.getSortColumn());
-        assertEquals(SortDirection.DESC, resultsPage.getSortDirection());
-        assertEquals("456999", resultsPage.getValueInCell(1, 1));
-        assertEquals("456789", resultsPage.getValueInCell(2, 1));
+        assertEquals("ID Number", searchPage.getSortColumn());
+        assertEquals(SortDirection.DESC, searchPage.getSortDirection());
+        assertEquals("456999", searchPage.getValueInCell(1, 1));
+        assertEquals("456789", searchPage.getValueInCell(2, 1));
     }
 
 }

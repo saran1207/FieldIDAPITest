@@ -1,20 +1,17 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import java.util.List;
-
 import com.n4systems.fieldid.selenium.components.LocationPicker;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.AssetSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.thoughtworks.selenium.Selenium;
 
-public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
+import java.util.List;
 
-    private Class<T> clazz;
+public abstract class EntitySearchPage extends FieldIDPage {
 
-    public EntitySearchPage(Selenium selenium, Class<T> clazz) {
+    public EntitySearchPage(Selenium selenium) {
         super(selenium);
-        this.clazz = clazz;
     }
 
     public abstract void setDisplayColumns(SearchDisplayColumns displayColumns);
@@ -23,15 +20,11 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
         selenium.type("//input[@id='reportForm_criteria_identifier']", identifier);
     }
 
-    public T clickRunSearchButton() {
+    public void clickRunSearchButton() {
         selenium.click("//input[@type='submit' and @value='Run']");
-        return createResultsPage();
+        waitForPageToLoad();
     }
 
-    private T createResultsPage() {
-        return PageFactory.createPage(clazz, selenium);
-    }
-    
     public boolean hasSearchResults() {
     	return selenium.isElementPresent("//table[@class='list']");
     }
@@ -44,6 +37,16 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
     	selenium.click("//a[@id='expandSection_reportForm']");
     	waitForAjax();
 	}
+
+    public void selectAllItemsOnPage() {
+        checkAndFireClick("//table[@class='list']//tr[1]//th[1]//input");
+        waitForAjax();
+    }
+
+    public void selectItemOnRow(int rowNumber) {
+        checkAndFireClick("//table[@class='list']//tr[" + rowNumber + "]//td[1]//input");
+        waitForAjax();
+    }
 
 	public void setSearchCriteria(AssetSearchCriteria criteria) {
 		if (criteria.getRFIDNumber() != null) {

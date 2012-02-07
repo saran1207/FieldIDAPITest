@@ -6,14 +6,14 @@ import com.n4systems.fieldid.selenium.components.LocationPicker;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.ReportSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
-import com.n4systems.fieldid.selenium.pages.reporting.ReportingSearchResultsPage;
-import com.n4systems.fieldid.selenium.pages.search.SaveReportForm;
+import com.n4systems.fieldid.selenium.pages.event.EventMassUpdatePage;
+import com.n4systems.fieldid.selenium.pages.reporting.SaveReportPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> {
+public class ReportingPage extends WicketEntitySearchPage {
 
 	public ReportingPage(Selenium selenium) {
-		super(selenium, ReportingSearchResultsPage.class);
+		super(selenium);
 	}
 	
 	public void setDisplayColumns(SearchDisplayColumns displayColumns) {
@@ -126,9 +126,9 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 		return new EventPage(selenium);
 	}
 	
-	public SaveReportForm clickSaveReport() {
+	public SaveReportPage clickSaveReport() {
 		selenium.click("//a[.='Save Report']");
-		return new SaveReportForm(selenium);
+		return new SaveReportPage(selenium);
 	}
 	
 	public void clickStartNewReport() {
@@ -198,4 +198,20 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
     	selenium.click("//a[contains(., 'Import from Excel')]");
     	return new ImportPage(selenium);
     }
+
+    public void selectAllItemsOnPage() {
+        checkAndFireClick("//table[@class='list']//tr[1]//th[1]//input");
+        waitForWicketAjax();
+    }
+
+	public AssetPage clickReportLinkForResult(int resultNumber) {
+		selenium.click("//table[@class='list']//tbody//tr[" + resultNumber + "]/td//a[@class='identifierLink']");
+		return new AssetPage(selenium);
+	}
+
+	public EventMassUpdatePage clickEventMassUpdate() {
+		selenium.click("//a[contains(.,'Mass Update')]");
+		return new EventMassUpdatePage(selenium);
+	}
+
 }

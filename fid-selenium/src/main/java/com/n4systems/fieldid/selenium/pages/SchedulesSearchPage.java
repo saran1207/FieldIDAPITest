@@ -2,15 +2,15 @@ package com.n4systems.fieldid.selenium.pages;
 
 import com.n4systems.fieldid.selenium.datatypes.SchedulesSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
-import com.n4systems.fieldid.selenium.pages.schedules.SchedulesSearchResultsPage;
+import com.n4systems.fieldid.selenium.pages.schedules.SchedulesMassUpdatePage;
 import com.thoughtworks.selenium.Selenium;
 
 import java.util.List;
 
-public class SchedulesSearchPage extends EntitySearchPage<SchedulesSearchResultsPage> {
+public class SchedulesSearchPage extends EntitySearchPage {
 
     public SchedulesSearchPage(Selenium selenium) {
-        super(selenium, SchedulesSearchResultsPage.class);
+        super(selenium);
     }
 
 	@Override
@@ -68,6 +68,44 @@ public class SchedulesSearchPage extends EntitySearchPage<SchedulesSearchResults
     public IdentifyPage clickIdentifyAnAssetNow() {
     	selenium.click("//input[contains(@value, 'Identify an asset now')]");
     	return new IdentifyPage(selenium);
+    }
+
+    public int getTotalResultsCount() {
+        return selenium.getXpathCount("//table[@id='resultsTable']//tbody//tr").intValue();
+    }
+
+    public String getScheduledDateForResult(int resultNumber) {
+        return selenium.getText("//table[@id='resultsTable']/tbody/tr["+resultNumber+"]/td[contains(@id, 'nextdate')]");
+    }
+
+    public EventPage clickStartEventLink() {
+    	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'Start Event')][1]");
+    	return new EventPage(selenium);
+    }
+
+    public AssetPage clickViewSchedulesLink() {
+    	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'View Schedules')][1]");
+    	return new AssetPage(selenium);
+    }
+
+    public AssetPage clickEditSchedulesLink() {
+    	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'Edit Schedule')][1]");
+    	return new AssetPage(selenium);
+    }
+
+    public AssetPage clickViewAssetLink() {
+    	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'View Asset')][1]");
+    	return new AssetPage(selenium);
+    }
+
+    public AssetPage clickEditAssetLink() {
+    	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'Edit Asset')][1]");
+    	return new AssetPage(selenium);
+    }
+
+    public SchedulesMassUpdatePage clickMassUpdate() {
+        selenium.click("//a[.='Mass Update']");
+        return new SchedulesMassUpdatePage(selenium);
     }
 
 }

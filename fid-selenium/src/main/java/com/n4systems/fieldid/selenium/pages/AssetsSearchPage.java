@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.selenium.pages;
 
 import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
-import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
+import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
 import com.thoughtworks.selenium.Selenium;
 
 import java.util.List;
 
-public class AssetsSearchPage extends WicketEntitySearchPage<AssetsSearchResultsPage> {
+public class AssetsSearchPage extends WicketEntitySearchPage {
 	
 	public AssetsSearchPage(Selenium selenium) {
-		super(selenium, AssetsSearchResultsPage.class);
+		super(selenium);
 	}
 
 	@Override
@@ -17,12 +17,11 @@ public class AssetsSearchPage extends WicketEntitySearchPage<AssetsSearchResults
 		setDisplayColumns(displayColumns, false, false);
 	}
 
-	
 	public void setDisplayColumns(SearchDisplayColumns displayColumns, boolean isIntergationEnabled, boolean isJobSitesEnabled) {
 		setCheckBoxValue("//div//label[.='ID Number']/../input", displayColumns.isIdentifier());
 		setCheckBoxValue("//div//label[.='Reference Number']/../input", displayColumns.isReferenceNumber());
 		setCheckBoxValue("//div//label[.='RFID Number']/../input", displayColumns.isRfidNumber());
-		if(isJobSitesEnabled) {
+		if (isJobSitesEnabled) {
 			setCheckBoxValue("//div//label[.='Job Site Name']/../input", displayColumns.isJobSiteName());
 		}
 		setCheckBoxValue("//div//label[.='Customer Name']/../input", displayColumns.isCustomer());
@@ -42,10 +41,10 @@ public class AssetsSearchPage extends WicketEntitySearchPage<AssetsSearchResults
 		setCheckBoxValue("//div//label[.='Description']/../input", displayColumns.isDescription());
 		setCheckBoxValue("//div//label[.='Safety Network']/../input", displayColumns.isSafetyNetwork());
 		setCheckBoxValue("//div//label[.='Next Scheduled Date']/../input", displayColumns.isScheduledDate());
-		if(isIntergationEnabled) {
+		if (isIntergationEnabled) {
 			setCheckBoxValue("//div//label[.='Organization']/../input", displayColumns.isOrderDescription());
 			setCheckBoxValue("//div//label[.='Organization']/../input", displayColumns.isOrderNumber());
-		}else {
+		} else {
 			setCheckBoxValue("//div//label[.='Purchase Order']/../input", displayColumns.isPurchaseOrder());
 			setCheckBoxValue("//div//label[.='Order Number']/../input", displayColumns.isOrderNumber());
 		}
@@ -83,6 +82,16 @@ public class AssetsSearchPage extends WicketEntitySearchPage<AssetsSearchResults
     public ImportPage clickImportFromExcel() {
     	selenium.click("//a[contains(., 'Import from Excel')]");
     	return new ImportPage(selenium);
+    }
+
+    public AssetsMassUpdatePage clickMassUpdate() {
+        selenium.click("//a[.='Mass Update']");
+        return new AssetsMassUpdatePage(selenium);
+    }
+
+    public AssetPage clickAssetLinkForResult(int resultNumber) {
+        selenium.click("//table[@class='list']//tbody//tr["+resultNumber+"]/td//a[@class='identifierLink']");
+        return new AssetPage(selenium);
     }
 
 }

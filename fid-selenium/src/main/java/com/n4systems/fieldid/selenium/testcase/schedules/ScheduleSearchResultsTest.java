@@ -1,14 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.schedules;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Date;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.pages.schedules.SchedulesSearchResultsPage;
+import com.n4systems.fieldid.selenium.pages.SchedulesSearchPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -16,11 +9,17 @@ import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
 
 public class ScheduleSearchResultsTest extends FieldIDTestCase {
 
-	private SchedulesSearchResultsPage resultsPage;
-	
+	private SchedulesSearchPage resultsPage;
+
 	private static String COMPANY = "test1";
 	private static final String TEST_EVENT_TYPE1 = "Event Type 1";
 	private static final String SERIAL_NUMBER = "11111111";
@@ -53,7 +52,8 @@ public class ScheduleSearchResultsTest extends FieldIDTestCase {
 
 	@Before
 	public void setUp() {
-		resultsPage = startAsCompany(COMPANY).login().clickSchedulesLink().clickRunSearchButton();
+        resultsPage = startAsCompany(COMPANY).login().clickSchedulesLink();
+        resultsPage.clickRunSearchButton();
 	}
 
 	@Test
