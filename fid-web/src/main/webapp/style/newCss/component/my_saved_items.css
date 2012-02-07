@@ -41,14 +41,19 @@
 }
 
 #pageHeader #mySavedItemsBox .manageLinkSection a {
-    color:#356CA2;
+color:#356CA2;
+    display:block;
+    padding-left:16px;
+    line-height:32px;    
 }
+
+#pageHeader #mySavedItemsBox .manageLinkSection:hover {
+    background-color:#f0f0f0;
+}
+
 
 .mySavedItemsBox .manageLinkSection {
     border-top:1px solid #ebebeb;
-    padding-left:16px;
-    padding-top:16px;
-    padding-bottom:8px;
 }
 
 .mySavedItemsBox .blankSlateContainer {

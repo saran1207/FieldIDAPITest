@@ -4,6 +4,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 
+@SuppressWarnings("serial")
 public class SavedItemsDropdown extends Panel {
 
     public SavedItemsDropdown(String id) {
