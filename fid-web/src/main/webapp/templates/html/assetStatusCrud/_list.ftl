@@ -14,7 +14,9 @@
 				<td><#if assetStatus.createdBy?exists>${assetStatus.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(assetStatus.created)}</td>
 				<td><#if assetStatus.modifiedBy?exists>${assetStatus.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(assetStatus.modified)}</td>
 				<td>
+					<#if !assetStatus.archived>				
 					<a href="<@s.url value="assetStatusEdit.action" uniqueID="${assetStatus.id}" />" ><@s.text name="label.edit" /></a> |
+					</#if>
 					<#if isArchivedList>
 						<a href="<@s.url value="assetStatusUnarchive.action" uniqueID="${assetStatus.id}" />"><@s.text name="label.unarchive" /></a>
 					<#else>
