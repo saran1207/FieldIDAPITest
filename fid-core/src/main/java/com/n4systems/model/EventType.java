@@ -77,6 +77,9 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	
 	@Column(nullable=false)
 	private long formVersion = DEFAULT_FORM_VERSION;
+
+    @Column(nullable=false, name="display_section_totals")
+    private boolean displaySectionTotals;
 	
 	private Long legacyEventId;
 
@@ -246,5 +249,13 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 
     public void setEventForm(EventForm eventForm) {
         this.eventForm = eventForm;
+    }
+
+    public boolean isDisplaySectionTotals() {
+        return displaySectionTotals;
+    }
+
+    public void setDisplaySectionTotals(boolean displaySectionTotals) {
+        this.displaySectionTotals = displaySectionTotals;
     }
 }

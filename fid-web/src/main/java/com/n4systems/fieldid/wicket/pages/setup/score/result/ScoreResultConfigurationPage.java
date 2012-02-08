@@ -58,6 +58,7 @@ public class ScoreResultConfigurationPage extends EventTypePage {
             super(id, new CompoundPropertyModel<EventForm>(eventForm));
             add(new FIDFeedbackPanel("feedbackPanel"));
 
+            add(new CheckBox("displaySectionTotals", new PropertyModel<Boolean>(eventTypeModel, "displaySectionTotals")));
             add(new CheckBox("useScoreForResult"));
             add(new DropDownChoice<ScoreCalculationType>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
             add(new ScoreResultRangePanel("failRangePanel", new PropertyModel<ScoreResultRange>(eventForm, "failRange")));
@@ -73,8 +74,8 @@ public class ScoreResultConfigurationPage extends EventTypePage {
             if (eventType.getEventForm() == null) {
                 eventForm.setTenant(getTenant());
                 eventType.setEventForm(eventForm);
-                persistenceService.update(eventType);
             }
+            persistenceService.update(eventType);
             persistenceService.update(eventForm);
             FieldIDSession.get().storeInfoMessageForStruts(new FIDLabelModel("label.score_config_saved").getObject());
             throw new RedirectToUrlException("/eventType.action?uniqueID=" + eventTypeId);

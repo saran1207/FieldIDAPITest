@@ -29,4 +29,15 @@
 
         </div>
     </#list>
+    <#if formEvent.type.displaySectionTotals && eventFormHelper.getScoresForSections( formEvent ).get( section )?exists>
+        <div class="infoSet">
+            <label class="label eventFormLabel">
+                <@s.text name="label.section_score"/>
+            </label>
+            <div class="criteriaText">
+                ${eventFormHelper.getScoresForSections( formEvent ).get( section )}
+            </div>
+        </div>
+    </#if>
+
 </#if>
