@@ -30,154 +30,150 @@
 
         <div id="systemNotices">
         </div>
+        
+        <div id="pageHeader">
+
+			<div id="pageActions">
+				<div id="companyLogo">
+					<img width="215" height="61" wicket:id="tenantLogo" />
+				</div>
+		        <div id="listContainer">
+		            <ul class="listOfLinks">
+		                <li class="first">
+		                    <span class="welcome">Welcome, </span><a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
+		                    <span class="separator">|</span>
+		                </li>
+		                <li wicket:id="topInviteLinkContainer">
+		                    <a href="/fieldid/invite.action" onclick:target="_blank"><wicket:message key="label.invite"/></a>
+		                    <span class="separator">|</span>
+		                </li>
+		                <li wicket:id="topUpgradeLinkContainer">
+		                    <a href="http://www.fieldid.com/upgrade" target="_blank"><wicket:message key="label.upgrade"/></a>
+		                    <span class="separator">|</span>
+		                </li>
+		                <li>
+		                    <a href="http://help.fieldid.com/" target="_blank"><wicket:message key="label.support"/></a>
+		                    <span class="separator">|</span>
+		                </li>
+		                <li wicket:id="topFieldIDStoreLink">
+		                      <a href="/fieldid/redirectToWebStore.action" target="_blank" ><wicket:message key="label.fieldid_webstore"/></a>
+		                      <span class="separator">|</span>
+		                </li>
+		                <li>
+		                    <a href="/fieldid/logout.action" ><wicket:message key="label.logout"/></a>
+		                    <span class="darkseparator">|</span>
+		                </li>
+		                <li class="last">
+		                    <span wicket:id="savedItemsDropdown"></span>
+		                </li>
+					</ul>
+				</div>
+			</div>
+		
+		
+		    <div id="pageNavigation">
+		    	<div id="navigationList">
+			        <ul>
+			            <li>
+			                <a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><img src="/fieldid/images/home.png"/></a>
+			            </li>
+			            <div wicket:id="identifyLinksContainer">
+			                <li wicket:id="identifyLinkContainer">
+			                    <a href="/fieldid/identify.action" class="speedLink textLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
+			                </li>
+			                <li wicket:id="addAssetLinkContainer">
+			                    <a href="/fieldid/assetAdd.action" class="speedLink textLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
+			                </li>
+			            </div>
+			            <li wicket:id="startEventLinkContainer">
+			                <a href="/fieldid/startEvent.action" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
+			            </li>
+			            <li>
+			                <a wicket:id="assetSearchLink" class="speedLink textLink" id="menuAssets"><wicket:message key="speed.search"/></a>
+			            </li>
+			            <li>
+			                <a wicket:id="reportingLink" class="speedLink textLink" id="menuReport"><wicket:message key="speed.reporting"/></a>
+			            </li>
+			            <li>
+			                <a href="/fieldid/schedule.action" class="speedLink textLink" id="menuSchedule"><wicket:message key="speed.schedules"/></a>
+			            </li>
+			            <li wicket:id="safetyNetworkLinkContainer">
+			                <a href="/fieldid/safetyNetwork.action" class="speedLink textLink" id="menuSafetyNetwork"><wicket:message key="speed.safety_network"/></a>
+			            </li>
+			            <li wicket:id="jobsLinkContainer">
+			                <a href="/fieldid/jobs.action" class="speedLink textLink" id="menuProject"><wicket:message key="speed.projects"/></a>
+			            </li>
+			            <li wicket:id="setupLinkContainer">
+			                <a wicket:id="setupLink" class="speedLink textLink" id="menuSetup"><wicket:message key="label.setup"/></a>
+			            </li>
+			        </ul>
+				</div>
+		    </div>
+		
+		</div>
+        
         <div id="page">
 
-<div id="pageHeader">
+			<div id="contentHeader">
+			
+			    <div wicket:id="topFeedbackPanel"></div>
+			
+			        <div id="contentTitle">
+			        <h1><span wicket:id="titleLabel"></span></h1>
+			
+			
+			        <div class="backToLink">
+			            <a wicket:id="backToLink">&#171; <span wicket:id="backToLinkLabel"></span></a>
+			        </div>
+			
+			        <div id="smartSearchContainer">
+			
+						<form id="smartSearch" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
+							<label for="search">Find:</label>
+							<input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/><input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>
+			
+							<input type="text" name="search" wicket:message="value:label.smart_search_search_types" id="searchText" class="description"/></span><input type="submit" id="smartSearchButton" name="load" value="Load"/>
+						</form>
+			        </div>
+    		</div>
 
-        <div id="pageActions" style="float:none;">
-        <div id="listContainer">
-            <ul class="listOfLinks">
-                <li class="first">
-                    <span class="welcome">Welcome, </span><a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
-                    <span class="separator">|</span>
-                </li>
-                <li wicket:id="topInviteLinkContainer">
-                    <a href="/fieldid/invite.action" onclick:target="_blank"><wicket:message key="label.invite"/></a>
-                    <span class="separator">|</span>
-                </li>
-                <li wicket:id="topUpgradeLinkContainer">
-                    <a href="http://www.fieldid.com/upgrade" target="_blank"><wicket:message key="label.upgrade"/></a>
-                    <span class="separator">|</span>
-                </li>
-                <li>
-                    <a href="http://help.fieldid.com/" target="_blank"><wicket:message key="label.support"/></a>
-                    <span class="separator">|</span>
-                </li>
-                <li wicket:id="topFieldIDStoreLink">
-                      <a href="/fieldid/redirectToWebStore.action" target="_blank" ><wicket:message key="label.fieldid_webstore"/></a>
-                      <span class="separator">|</span>
-                </li>
-                <li>
-                    <a href="/fieldid/logout.action" ><wicket:message key="label.logout"/></a>
-                    <span class="darkseparator">|</span>
-                </li>
-                <li class="last">
-                    <span wicket:id="savedItemsDropdown"></span>
-                </li>
-              </ul>
-          </div>
-      </div>
+    		<div wicket:id="navBar"></div>
 
-<div id="companyLogo">
-		<img width="215" height="61" wicket:id="tenantLogo" />
-</div>
-    <div id="pageNavigation">
-        <ul>
-            <li>
-                <a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><wicket:message key="speed.home"/></a>
-            </li>
-            <div wicket:id="identifyLinksContainer">
-                <li wicket:id="identifyLinkContainer">
-                    <a href="/fieldid/identify.action" class="speedLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
-                </li>
-                <li wicket:id="addAssetLinkContainer">
-                    <a href="/fieldid/assetAdd.action" class="speedLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
-                </li>
-            </div>
-            <li wicket:id="startEventLinkContainer">
-                <a href="/fieldid/startEvent.action" class="speedLink" id="menuEvent"><wicket:message key="speed.event"/></a>
-            </li>
-            <li>
-                <a wicket:id="assetSearchLink" class="speedLink" id="menuAssets"><wicket:message key="speed.search"/></a>
-            </li>
-            <li>
-                <a wicket:id="reportingLink" class="speedLink" id="menuReport"><wicket:message key="speed.reporting"/></a>
-            </li>
-            <li>
-                <a href="/fieldid/schedule.action" class="speedLink" id="menuSchedule"><wicket:message key="speed.schedules"/></a>
-            </li>
-            <li wicket:id="safetyNetworkLinkContainer">
-                <a href="/fieldid/safetyNetwork.action" class="speedLink" id="menuSafetyNetwork"><wicket:message key="speed.safety_network"/></a>
-            </li>
-            <li wicket:id="jobsLinkContainer">
-                <a href="/fieldid/jobs.action" class="speedLink" id="menuProject"><wicket:message key="speed.projects"/></a>
-            </li>
-            <li wicket:id="setupLinkContainer">
-                <a wicket:id="setupLink" class="speedLink" id="menuSetup"><wicket:message key="label.setup"/></a>
-            </li>
-        </ul>
-    </div>
+		</div>
 
-</div>
-
-<div id="contentHeader">
-
-    <div wicket:id="topFeedbackPanel"></div>
-
-        <div id="contentTitle">
-        <h1><span wicket:id="titleLabel"></span></h1>
-
-
-        <div class="backToLink">
-            <a wicket:id="backToLink">&#171; <span wicket:id="backToLinkLabel"></span></a>
+		<script type="text/javascript">
+		    $(document).ready(function() {
+		        $('#searchText').bind('focus', clearDescription);
+		        $('#searchText').bind('blur', replaceDescription);
+		        $('#smartSearch').bind('submit', submitSmartSearch);
+		    });
+		</script>
+        <div id="pageContent" class="pageContent">
+	        <wicket:child></wicket:child>
         </div>
 
-        <div id="smartSearchContainer">
-
-<form id="smartSearch" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
-<label for="search">Find:</label>
-<input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/><input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>
-
-<input type="text" name="search" wicket:message="value:label.smart_search_search_types" id="searchText" class="description"/></span><input type="submit" id="smartSearchButton" name="load" value="Load"/>
-</form>
-
-
-
-        </div>
-    </div>
-
-    <div wicket:id="navBar"></div>
-
-</div>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#searchText').bind('focus', clearDescription);
-        $('#searchText').bind('blur', replaceDescription);
-        $('#smartSearch').bind('submit', submitSmartSearch);
-    });
-</script>
-            <div id="pageContent" class="pageContent">
-
-                <wicket:child></wicket:child>
-
-            </div>
-
-    <div id="pageFooter">
-        <div>
-            <p><span wicket:id="versionLabel"></span></p>
-        </div>
-<div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/images/poweredByFieldID.jpg" border="0"/></a></div>	</div>
+	    <div id="pageFooter">
+    	    <div>
+        	    <p><span wicket:id="versionLabel"></span></p>
+        	</div>
+			<div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/images/poweredByFieldID.jpg" border="0"/></a></div>	</div>
         </div>
 
-    <div wicket:id="clickTaleEnd"></div>
+    	<div wicket:id="clickTaleEnd"></div>
 
 
-<div class="loginLinkSection" style="display:none;">
-<a wicket:id="relogLink" class="relogLink">Relog</a>
-</div>
+		<div class="loginLinkSection" style="display:none;">
+			<a wicket:id="relogLink" class="relogLink">Relog</a>
+		</div>
 
         <div wicket:id="googleAnalyticsScripts">
-<script src="https://ssl.google-analytics.com/ga.js" type="text/javascript"></script>
-<script type="text/javascript">
-    var pageTracker = _gat._getTracker("UA-4760869-1");
-        pageTracker._initData();
-        pageTracker._trackPageview();
+			<script src="https://ssl.google-analytics.com/ga.js" type="text/javascript"></script>
+			<script type="text/javascript">
+			    var pageTracker = _gat._getTracker("UA-4760869-1");
+			        pageTracker._initData();
+			        pageTracker._trackPageview();
 
-</script>
+			</script>
         </div>
-
     </body>
-
-
 </html>

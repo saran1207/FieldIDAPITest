@@ -13,8 +13,10 @@
 		${clickTaleStart}
 		<div id="systemNotices">
 		</div>
+		
+		<#include "header.ftl"/>
+		
 		<div id="page">
-			<#include "header.ftl"/>
 			<#include "contentHeader.ftl"/>
 			<div id="pageContent" class="pageContent">
 				${body}

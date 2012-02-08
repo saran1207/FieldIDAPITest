@@ -117,8 +117,7 @@ h2 a {
 
 #page, .systemNotice {
 	width: 1000px;
-	margin-left: auto;
-	margin-right: auto;
+	margin: auto;
 	margin-top: 0px;
 }
 
@@ -154,11 +153,11 @@ h2 a {
 #pageHeader #pageActions {
 	float: none;
 	overflow: hidden;
-	background-color: #f3f3f3;
-	border:1px dotted #ddd;
-	border-top:0px;
 	margin-bottom: 15px;
 	padding-top: 3px;
+	height: 68px;
+	width: 1000px;
+	margin: auto;
 }
 
 #pageActions .listOfLinks {
@@ -226,14 +225,15 @@ h2 a {
 	float: left;
 	padding-left: 20px;
 	width: 215px;
+	margin-top: 5px;
 }
 
 #pageHeader #pageNavigation {
-	float: right;
-	text-align: left;
-	width: 685px;
-	overflow: hidden;
+	background-color: #323232;
+	height: 35px;
+	padding-top: 15px;
 }
+
 
 #pageNavigation ul {
 	list-style: none;
@@ -247,65 +247,28 @@ h2 a {
 }
 
 #pageNavigation a,#pageNavigation a:hover,#pageNavigation a:active,#pageNavigation a:visited
-	{
-	color: #356CA2;
+{
+	color: #FFFFFF;
+	text-decoration: none;
+	font-size: 1.1em;
 }
 
 #pageNavigation ul li a {
 	display: block;
-	padding-top: 45px;
 	min-width: 40px;
-	background-position:top center; 
-	background-repeat: no-repeat;
-	
 }
+
+#pageNavigation ul li .textLink{
+	padding-top: 3px;
+}
+
 #pageNavigation ul li a:hover {
 	background-position: center -70px;
 }
 
-#menuHome {
-	background-image: url(../images/menu/home.png);
-}
-
-
-
-#menuIdentify {
-	background-image: url(../images/menu/identify.png);
-}
-
-
-#menuEvent {
-	background-image: url(../images/menu/inspect.png);
-}
-
-
-#menuAssets {
-	background-image: url(../images/menu/assets.png);
-}
-
-#menuReport {
-	background-image: url(../images/menu/reporting.png);
-}
-
-
-#menuSchedule {
-	background-image: url(../images/menu/schedule.png);
-}
-
-
-#menuSetup {
-	background-image: url(../images/menu/setup.png);
-}
-
-
-
-#menuProject {
-	background-image: url(../images/menu/project.png);
-}
-
-
-#menuSafetyNetwork {
-	background-image: url(../images/menu/safety_network.png);
+#navigationList {
+	width: 1000px;
+	margin: auto;
 }
 
 .error {
@@ -1752,9 +1715,8 @@ input.description {
 }
 
 #listContainer .listOfLinks {
-	background-color: #f3f3f3;
 	padding: 0.5em 0 0.5em 0.5em;
-	margin: 0 0 0.5em 0;
+	margin: 30px 0 0.5em 0;
 	float:right;
 }
 

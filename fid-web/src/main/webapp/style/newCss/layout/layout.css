@@ -40,6 +40,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	float: left;
 	padding-left: 20px;
 	width: 215px;
+	margin-top: 5px;
 }
 
 #pageHeader {
@@ -55,10 +56,11 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 }
 
 #pageHeader #pageNavigation {
-	float: right;
 	text-align: left;
-	width: 685px;
 	overflow: hidden;
+	background: #323232;
+	padding-top: 15px;
+	height: 35px;
 }
 
 #pageNavigation ul {
@@ -74,55 +76,27 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #pageNavigation a,#pageNavigation a:hover,#pageNavigation a:active,#pageNavigation a:visited
 	{
-	color: #356CA2;
+	color: #FFFFFF;
+	text-decoration: none;
+	font-size: 1.1em;
 }
 
 #pageNavigation ul li a {
 	display: block;
-	padding-top: 45px;
 	min-width: 40px;
-	background-position:top center;
-	background-repeat: no-repeat;
-
 }
+
+#pageNavigation ul li .textLink{
+	padding-top: 3px;
+}
+
 #pageNavigation ul li a:hover {
 	background-position: center -70px;
 }
 
-#menuHome {
-	background-image: url(../../../images/menu/home.png);
-}
-
-#menuIdentify {
-	background-image: url(../../../images/menu/identify.png);
-}
-
-#menuEvent {
-	background-image: url(../../../images/menu/inspect.png);
-}
-
-#menuAssets {
-	background-image: url(../../../images/menu/assets.png);
-}
-
-#menuReport {
-	background-image: url(../../../images/menu/reporting.png);
-}
-
-#menuSchedule {
-	background-image: url(../../../images/menu/schedule.png);
-}
-
-#menuSetup {
-	background-image: url(../../../images/menu/setup.png);
-}
-
-#menuProject {
-	background-image: url(../../../images/menu/project.png);
-}
-
-#menuSafetyNetwork {
-	background-image: url(../../../images/menu/safety_network.png);
+#navigationList {
+	width: 1000px;
+	margin: auto;
 }
 
 #smartSearchContainer {
@@ -157,14 +131,18 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	padding: 3px;
 }
 
+#pageHeader {
+	width: 100%;
+}
+
 #pageHeader #pageActions {
 	float: none;
 	overflow: hidden;
-	background-color: #f3f3f3;
-	border:1px dotted #ddd;
-	border-top:0px;
 	margin-bottom: 15px;
 	padding-top: 3px;
+	height: 68px;
+	width: 1000px;
+	margin: auto;
 }
 
 #pageActions .listOfLinks {
@@ -185,7 +163,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #listContainer .listOfLinks {
 	padding: 0.5em 0 0.5em 0.5em;
-	margin: 0 0 0.5em 0;
+	margin: 30px 0 0.5em 0;
 	float:right;
 }
 

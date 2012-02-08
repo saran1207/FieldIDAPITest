@@ -1,7 +1,8 @@
 
 <div id="pageHeader">
-	
-		<div id="pageActions" style="float:none;">
+
+	<div id="pageActions" style="float:none;">
+		<#include "_companyLogo.ftl"/>
 		<div id="listContainer">
 			<ul class="listOfLinks">				
 				<li class="first">
@@ -44,64 +45,64 @@
 	  	</div>
   	</div> 
 
-	<#include "_companyLogo.ftl"/>
-	
 	<div id="pageNavigation">
-		<ul>
-			<li>
-				<a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><@s.text name="speed.home"/></a>
-			</li>
-		
-			<#if sessionUser.hasAccess("tag") == true >
-				<#if securityGuard.integrationEnabled>
-					<@s.url id="identifyUrl" action="identify"  namespace="/"/>
-					
-				<#else>
-					<@s.url id="identifyUrl" action="assetAdd" namespace="/" />
-				</#if>
+		<div id="navigationList">
+			<ul>
 				<li>
-					<a href="${identifyUrl}" class="speedLink" id="menuIdentify"><@s.text name="speed.identify"/></a>
+					<a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><img src="/fieldid/images/home.png"/></a>
 				</li>
-			</#if>
 			
-			<#if sessionUser.hasAccess("createevent") >
-				<li>
-					<a href="<@s.url action="startEvent" namespace="/"/>" class="speedLink" id="menuEvent"><@s.text name="speed.event"/></a>
-				</li>
-			</#if>
-			<li>
-				<a href="/fieldid/w/search" class="speedLink" id="menuAssets"><@s.text name="speed.search" /></a>
-			</li>
-			<li>
-				<a href="/fieldid/w/reporting" class="speedLink" id="menuReport"><@s.text name="speed.reporting" /></a>
-			</li>
-			<li>
-				<a href="<@s.url action="schedule" namespace="/"/>" class="speedLink" id="menuSchedule"><@s.text name="speed.schedules" /></a>
-			</li>
-			
-			<#if userSecurityGuard.allowedManageSafetyNetwork>
-				<li>
-					<a href="<@s.url action="safetyNetwork" namespace="/"/>" class="speedLink" id="menuSafetyNetwork"><@s.text name="speed.safety_network" /></a>
-				</li>
-			</#if>
-			<#if securityGuard.projectsEnabled>
-				<li>
-					<a href="<@s.url action="jobs" namespace="/"/>" class="speedLink" id="menuProject"><@s.text name="speed.projects"/></a>
-				</li>
-			</#if>
-			<#if sessionUser.hasSetupAccess()>
-				<#if sessionUser.hasAccess("managesystemconfig")>
+				<#if sessionUser.hasAccess("tag") == true >
+					<#if securityGuard.integrationEnabled>
+						<@s.url id="identifyUrl" action="identify"  namespace="/"/>
+						
+					<#else>
+						<@s.url id="identifyUrl" action="assetAdd" namespace="/" />
+					</#if>
 					<li>
-						<a href="<@s.url value="/w/setup/settings"/>" class="speedLink" id="menuSetup"><@s.text name="label.setup" /> </a>
-					</li>
-				<#else>
-					<li>
-						<a href="<@s.url value="/w/setup/ownersUsersLocations"/>" class="speedLink" id="menuSetup"><@s.text name="label.setup" /> </a>
+						<a href="${identifyUrl}" class="speedLink textLink" id="menuIdentify"><@s.text name="speed.identify"/></a>
 					</li>
 				</#if>
-			</#if>
-			
-		</ul>
+				
+				<#if sessionUser.hasAccess("createevent") >
+					<li>
+						<a href="<@s.url action="startEvent" namespace="/"/>" class="speedLink textLink" id="menuEvent"><@s.text name="speed.event"/></a>
+					</li>
+				</#if>
+				<li>
+					<a href="/fieldid/w/search" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" /></a>
+				</li>
+				<li>
+					<a href="/fieldid/w/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
+				</li>
+				<li>
+					<a href="<@s.url action="schedule" namespace="/"/>" class="speedLink textLink" id="menuSchedule"><@s.text name="speed.schedules" /></a>
+				</li>
+				
+				<#if userSecurityGuard.allowedManageSafetyNetwork>
+					<li>
+						<a href="<@s.url action="safetyNetwork" namespace="/"/>" class="speedLink textLink" id="menuSafetyNetwork"><@s.text name="speed.safety_network" /></a>
+					</li>
+				</#if>
+				<#if securityGuard.projectsEnabled>
+					<li>
+						<a href="<@s.url action="jobs" namespace="/"/>" class="speedLink textLink" id="menuProject"><@s.text name="speed.projects"/></a>
+					</li>
+				</#if>
+				<#if sessionUser.hasSetupAccess()>
+					<#if sessionUser.hasAccess("managesystemconfig")>
+						<li>
+							<a href="<@s.url value="/w/setup/settings"/>" class="speedLink textLink" id="menuSetup"><@s.text name="label.setup" /> </a>
+						</li>
+					<#else>
+						<li>
+							<a href="<@s.url value="/w/setup/ownersUsersLocations"/>" class="speedLink textLink" id="menuSetup"><@s.text name="label.setup" /> </a>
+						</li>
+					</#if>
+				</#if>
+				
+			</ul>
+		</div>
 	</div>
 	
 </div>
