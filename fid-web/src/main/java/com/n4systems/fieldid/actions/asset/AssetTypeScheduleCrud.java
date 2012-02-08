@@ -5,13 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.eventtype.EventFrequencySaver;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAssetType;
@@ -20,6 +15,10 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.AssociatedEventType;
+import com.n4systems.model.EventType;
+import com.n4systems.model.eventtype.EventFrequencySaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.Transaction;
@@ -27,6 +26,8 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
+import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateValueValidator {
@@ -243,6 +244,8 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 	}
 
 	@RequiredFieldValidator(message = "", key = "error.frequencyisrequired")
+	@Validations(customValidators = {
+			@CustomValidator(fieldName = "frequency", type = "longRange", message = "", key = "error.invalid_number_criteria", parameters = { @ValidationParameter(name = "min", value = "1") })})	
 	public void setFrequency(Long frequency) {
 		schedule.setFrequency(frequency);
 	}
@@ -266,6 +269,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 
 	}
 
+	@Override
 	public boolean duplicateValueExists(String formValue) {
 		if (getOwner() == null) {
 			return false;
