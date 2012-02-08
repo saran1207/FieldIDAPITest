@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,19 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachment;
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
-import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistory;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
-import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
+import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
@@ -48,10 +45,11 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	private static Logger logger = Logger.getLogger(ApiAssetResource.class);
 	
-	@Autowired private AssetService assetService;
-	@Autowired private EventScheduleService eventScheduleService;
-	@Autowired private ApiAssetAttachmentResource apiAttachmentResource;
+	@Autowired private AssetService assetService;	
 	@Autowired private ApiEventHistoryResource apiEventHistoryResource;
+	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
+	@Autowired private ApiAssetAttachmentResource apiAttachmentResource;
+	
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -164,43 +162,24 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			if (asset.getAdvancedLocation().getPredefinedLocation() != null) {
 				apiAsset.setPredefinedLocationId(asset.getAdvancedLocation().getPredefinedLocation().getId());
 			}
-		}
-		
-		for (InfoOptionBean option: asset.getInfoOptions()) {
-			apiAsset.getAttributeValues().add(convertInfoOption(option));
-		}
-		
-		List<EventSchedule> schedules = eventScheduleService.getIncompleteSchedules(asset.getId());
-		for (EventSchedule schedule: schedules) {
-			apiAsset.getSchedules().add(convertEventSchedule(schedule));
-		}
-		
-		List<ApiAssetAttachment> apiAttachments = apiAttachmentResource.findAllAttachments(asset.getMobileGUID());		
-		for (ApiAssetAttachment apiAttachment : apiAttachments) {
-			// If attachment is not an image, remove the data. User has to get that data on fly.
-			if(!apiAttachment.isImage()) {
-				apiAttachment.setData(null);
-			}
 		}		
-		apiAsset.setAttachments(apiAttachments);
 		
-		List<ApiEventHistory> eventHistory = apiEventHistoryResource.findAllEventHistory(asset.getMobileGUID());
-		apiAsset.setEventHistory(eventHistory);
+		apiAsset.setAttributeValues(findAllAttributeValues(asset));
+		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId()));
+		apiAsset.setEventHistory(apiEventHistoryResource.findAllEventHistory(asset.getMobileGUID()));
+		apiAsset.setAttachments(apiAttachmentResource.findAllAttachments(asset.getMobileGUID()));
 		
 		return apiAsset;
 	}
 	
-	private ApiEventSchedule convertEventSchedule(EventSchedule schedule) {
-		ApiEventSchedule apiSchedule = new ApiEventSchedule();
-		apiSchedule.setSid(schedule.getMobileGUID());
-		apiSchedule.setActive(true);
-		apiSchedule.setModified(schedule.getModified());
-		apiSchedule.setOwnerId(schedule.getOwner().getId());
-		apiSchedule.setAssetId(schedule.getAsset().getMobileGUID());
-		apiSchedule.setEventTypeId(schedule.getEventType().getId());
-		apiSchedule.setEventTypeName(schedule.getEventType().getName());
-		apiSchedule.setNextDate(schedule.getNextDate());
-		return apiSchedule;
+	private List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
+		List<ApiAttributeValue> apiAttributeValues = new ArrayList<ApiAttributeValue>();
+		
+		for (InfoOptionBean option: asset.getInfoOptions()) {
+			apiAttributeValues.add(convertInfoOption(option));
+		}
+		
+		return apiAttributeValues;
 	}
 	
 	private ApiAttributeValue convertInfoOption(InfoOptionBean infoOption) {

@@ -8,8 +8,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -27,17 +24,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 
 @Path("assetAttachment")
 public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, AssetAttachment> {
-	private static Logger logger = Logger.getLogger(ApiAssetAttachmentResource.class);
-	
-	@GET
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public ListResponse<ApiAssetAttachment> findAttachments(@QueryParam("assetId") String assetId) {
-		List<ApiAssetAttachment> apiAttachments = findAllAttachments(assetId);		
-		ListResponse<ApiAssetAttachment> response = new ListResponse<ApiAssetAttachment>(apiAttachments, 0, 0, apiAttachments.size());
-		return response;
-	}
+	private static Logger logger = Logger.getLogger(ApiAssetAttachmentResource.class);	
 	
 	@GET
 	@Path("{attachmentId}")
@@ -61,6 +48,23 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 				.header("Content-Disposition", "attachment; filename=\"" + attachment.getFileName() + "\"")
 				.build();
 		return response;
+	}	
+	
+	public List<ApiAssetAttachment> findAllAttachments(String assetId) {
+		QueryBuilder<AssetAttachment> builder = createUserSecurityBuilder(AssetAttachment.class);
+		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
+		
+		List<AssetAttachment> attachments = persistenceService.findAll(builder);
+		List<ApiAssetAttachment> apiAttachments = convertAllEntitiesToApiModels(attachments);
+		
+		for (ApiAssetAttachment apiAttachment : apiAttachments) {
+			// If attachment is not an image, remove the data. User has to get that data on fly.
+			if(!apiAttachment.isImage()) {
+				apiAttachment.setData(null);
+			}
+		}
+		
+		return apiAttachments;
 	}
 	
 	@Override
@@ -79,16 +83,6 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		return apiAttachment;
 	}
 	
-	public List<ApiAssetAttachment> findAllAttachments(String assetId) {
-		QueryBuilder<AssetAttachment> builder = createUserSecurityBuilder(AssetAttachment.class);
-		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
-		
-		List<AssetAttachment> attachments = persistenceService.findAll(builder);
-		List<ApiAssetAttachment> apiAttachments = convertAllEntitiesToApiModels(attachments);
-		
-		return apiAttachments;
-	}
-	
 	private byte[] loadAttachmentData(AssetAttachment attachment) {
 		byte[] data = null;
 		File attachmentFile = PathHandler.getAssetAttachmentFile(attachment);
@@ -101,5 +95,4 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		}
 		return data;
 	}
-
 }

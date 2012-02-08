@@ -14,6 +14,7 @@ import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateR
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventResource;
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
+import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.hello.ApiHelloResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
@@ -96,13 +97,18 @@ public class FieldIdWsConfig {
 	}
 	
 	@Bean
-	public ApiAssetAttachmentResource apiAssetAttachmentResource() {
-		return new ApiAssetAttachmentResource();
+	public ApiEventHistoryResource apiEventHistoryResource() {
+		return new ApiEventHistoryResource();
 	}
 	
 	@Bean
-	public ApiEventHistoryResource apiEventHistoryResource() {
-		return new ApiEventHistoryResource();
+	public ApiEventScheduleResource apiEventScheduleResource() {
+		return new ApiEventScheduleResource();
+	}
+	
+	@Bean
+	public ApiAssetAttachmentResource apiAssetAttachmentResource() {
+		return new ApiAssetAttachmentResource();
 	}
 	
 	@Bean
@@ -138,6 +144,5 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiHelloResource apiHelloResource() {
 		return new ApiHelloResource();
-	}
-	
+	}	
 }

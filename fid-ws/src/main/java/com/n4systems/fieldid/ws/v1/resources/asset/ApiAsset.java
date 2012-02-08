@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,8 +27,8 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	private String freeformLocation;
 	private String nonIntergrationOrderNumber;
 	private byte[] image;
-	private List<ApiAttributeValue> attributeValues = new ArrayList<ApiAttributeValue>();
-	private List<ApiEventSchedule> schedules = new ArrayList<ApiEventSchedule>();
+	private List<ApiAttributeValue> attributeValues;
+	private List<ApiEventSchedule> schedules;
 	private List<ApiAssetAttachment> attachments;
 	private List<ApiEventHistory> eventHistory;
 
