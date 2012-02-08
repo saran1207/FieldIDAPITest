@@ -9,7 +9,9 @@
 			<tr id="organization_${organization.id}" >
 				<td>${organization.name?html}</td>
 				<td>
-					<a href="<@s.url action="organizationEdit" uniqueID="${organization.id}"/>"><@s.text name="label.edit"/></a>
+					<#if !organization.archived>
+						<a href="<@s.url action="organizationEdit" uniqueID="${organization.id}"/>"><@s.text name="label.edit"/></a>
+					</#if>
 					<#if organization.active>
 						<a href="<@s.url action="organizationConfirmArchive" uniqueID="${organization.id}"/>"><@s.text name="label.archive"/></a>
 					<#else>
