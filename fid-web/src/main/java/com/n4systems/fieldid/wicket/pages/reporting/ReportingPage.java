@@ -1,16 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
-import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.*;
-
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.reporting.ReportingBlankSlatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.event.EventCountLoader;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class ReportingPage extends FieldIDFrontEndPage {
 
@@ -21,13 +17,6 @@ public class ReportingPage extends FieldIDFrontEndPage {
         } else {
         	add(new ReportingBlankSlatePanel("contentPanel"));
         }
-    }
-
-	@Override
-    protected void addNavBar(String navBarId) {
-        add(new NavigationBar(navBarId,
-                aNavItem().label("nav.new_report").page(ReportingPage.class).build(),
-                aNavItem().label("nav.saved_reports").page(SavedReportsDeprecatedPage.class).build()));
     }
 
     @Override

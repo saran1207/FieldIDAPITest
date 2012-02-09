@@ -126,11 +126,4 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
         return pageLabelModel.getObject();
     }
 
-    @Override
-    protected void addNavBar(String navBarId) {
-        add(new NavigationBar(navBarId,
-                NavigationItemBuilder.aNavItem().label("nav.new_report").page(ReportingResultsPage.class).build(),
-                NavigationItemBuilder.aNavItem().label("nav.saved_reports").page(SavedReportsDeprecatedPage.class).build()));
-    }
-
 }
