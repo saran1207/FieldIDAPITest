@@ -3,14 +3,29 @@ package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
+import com.n4systems.model.orgs.BaseOrg;
 
+@Component
+@Path("eventSchedule")
 public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, EventSchedule> {
 	@Autowired private EventScheduleService eventScheduleService;
+	@Autowired private PersistenceService persistenceService;
+	@Autowired private AssetService assetService;
 	
 	public List<ApiEventSchedule>  findAllSchedules(Long assetId) {
 		List<ApiEventSchedule> apiEventSchedules = new ArrayList<ApiEventSchedule>();		
@@ -20,6 +35,14 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		}
 		
 		return apiEventSchedules;
+	}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
+		EventSchedule eventSchedule = converApiEventSchedule(apiEventSchedule);		
+		persistenceService.save(eventSchedule);
 	}
 
 	@Override
@@ -34,5 +57,18 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		apiSchedule.setEventTypeName(schedule.getEventType().getName());
 		apiSchedule.setNextDate(schedule.getNextDate());
 		return apiSchedule;
+	}
+	
+	private EventSchedule converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
+		EventSchedule eventSchedule = new EventSchedule();
+		BaseOrg owner = persistenceService.find(BaseOrg.class, apiEventSchedule.getOwnerId());
+		
+		eventSchedule.setMobileGUID(apiEventSchedule.getSid());
+		eventSchedule.setNextDate(apiEventSchedule.getNextDate());
+		eventSchedule.setTenant(owner.getTenant());
+		eventSchedule.setAsset(assetService.findByMobileId(apiEventSchedule.getAssetId()));
+		eventSchedule.setEventType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));		
+		
+		return eventSchedule;
 	}
 }
