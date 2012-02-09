@@ -88,7 +88,6 @@
 	width:25px; 	
 }
 
-
 .mainPanel .infoSet {
     display: block;
     min-height: 40px;
@@ -106,8 +105,12 @@
     overflow:hidden;
 }
 
+.mainPanel .comment textarea {
+	margin-top:10px;
+}
+
 .mainPanel .fieldHolder select {
-    border: 1px solid #9c9c9c;
+	border: 1px solid #9c9c9c;
     color: #555;
     width: 260px;
     padding: 4px;

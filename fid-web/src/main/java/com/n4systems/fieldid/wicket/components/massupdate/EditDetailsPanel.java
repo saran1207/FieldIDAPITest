@@ -23,7 +23,9 @@ import org.apache.wicket.util.visit.IVisitor;
 
 import com.n4systems.fieldid.actions.asset.PublishedState;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.IEventBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.location.LocationPicker;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
@@ -105,6 +107,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 	
 	protected void onNext(MassUpdateAssetModel massUpdateAssetModel) {};
 
+	@SuppressWarnings("serial")
 	class MassUpdateAssetForm extends Form<MassUpdateAssetModel> {
 
 		public MassUpdateAssetForm(String id, MassUpdateAssetModel massUpdateAssetModel) {
@@ -187,6 +190,17 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			published.add(createCheckOnChangeEvent(publishedCheck));
 			add(publishedCheck);
 			add(published);
+			
+			final CheckBox commentCheck = new CheckBox("commentCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[comments]"));
+			commentCheck.setOutputMarkupId(true);
+			Comment comment = new Comment("comment", new PropertyModel<String>(massUpdateAssetModel,"asset.comments"));
+			comment.addChangeBehavior(new IEventBehavior() {
+				@Override public void onEvent(AjaxRequestTarget target) {
+					updateCheckbox(commentCheck, target);
+				} 				
+			});
+			add(commentCheck);
+			add(comment);			
 		}
 		
 		protected void clearAllCheckboxes() {
@@ -200,15 +214,19 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 		
 	}
 	
+	private void updateCheckbox(final CheckBox checkBox, AjaxRequestTarget target) {
+		IModel<Boolean> model = (IModel<Boolean>) checkBox.getDefaultModel();
+		model.setObject(true);
+		target.add(checkBox);
+	}
+	
 	private Behavior createCheckOnChangeEvent(final CheckBox checkBox) {
 		checkBox.setOutputMarkupId(true);
 		return new AjaxEventBehavior("onchange") {
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				IModel<Boolean> model = (IModel<Boolean>) checkBox.getDefaultModel();
-				model.setObject(true);
-				target.add(checkBox);
+			@Override protected void onEvent(AjaxRequestTarget target) {
+				updateCheckbox(checkBox, target);
 			}
+
 		};
 		
 	}

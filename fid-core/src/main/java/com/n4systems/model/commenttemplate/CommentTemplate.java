@@ -7,6 +7,7 @@ import javax.persistence.Table;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.EntityWithTenant;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "comment_templates")
 public class CommentTemplate extends EntityWithTenant implements Listable<Long> {
@@ -35,6 +36,11 @@ public class CommentTemplate extends EntityWithTenant implements Listable<Long> 
 
 	@Override
 	public String getDisplayName() {
+		return name;
+	}
+	
+	@Override
+	public String toString() { 
 		return name;
 	}
 

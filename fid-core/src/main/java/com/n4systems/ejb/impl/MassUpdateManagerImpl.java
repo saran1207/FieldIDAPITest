@@ -25,17 +25,15 @@ import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.Order;
-import com.n4systems.model.Project;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.EventSchedule.ScheduleStatusGrouping;
+import com.n4systems.model.Project;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
-import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -57,6 +55,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		this.assetManager = new AssetManagerImpl(em);
 	}
 
+	@Override
 	public Long updateEventSchedules(Set<Long> scheduleIds, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException {
 		if (scheduleIds.size() == 0) {
 			return 0L;
@@ -124,6 +123,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return result;
 	}
 
+	@Override
 	public Long deleteEventSchedules(Set<Long> ids) throws UpdateFailureException {
 		if (ids == null || ids.isEmpty()) {
 			return 0L;
@@ -174,6 +174,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		updateAssetModifiedDate(assetIds);
 	}
 
+	@Override
 	public Long updateAssetModifiedDate(List<Long> ids) {
 		if (ids == null || ids.size() == 0) {
 			return 0L;
@@ -183,6 +184,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return new Long(em.createQuery(updateQueryString).setParameter("now", new Date()).setParameter("ids", ids).executeUpdate());
 	}
 
+	@Override
 	public Long updateAssets(List<Long> ids, Asset assetModificationData, Map<String, Boolean> values, User modifiedBy, String orderNumber) throws UpdateFailureException, UpdateConatraintViolationException {
 		Long result = 0L;
 		try {
@@ -211,6 +213,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		}
 	}
 
+	@Override
 	public Long deleteAssets(List<Long> ids, User modifiedBy) throws UpdateFailureException {
 		Long result = 0L;
 
@@ -260,10 +263,16 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (entry.getKey().equals("nonIntegrationOrderNumber")) {
 					setOrderNumber(asset, orderNumber);
 				}
+
+				if (entry.getKey().equals("comments")) {
+					asset.setComments(assetModificationData.getComments());
+				}
 			}
 		}
 	}
 
+
+	@Override
 	public Long updateEvents(List<Long> ids, Event eventChanges, Map<String, Boolean> fieldMap, Long userId) throws UpdateFailureException {
 		if (ids.isEmpty()) {
 			return 0L;
@@ -343,6 +352,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return selectedAttributes;
 	}
 
+	@Override
 	public Long assignToJob(List<Long> scheduleIds, Project project, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
 		Long result = 0L;
 
@@ -384,6 +394,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return result;
 	}
 
+	@Override
 	public List<Long> createSchedulesForEvents(List<Long> eventIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
 		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 		query.addWhere(WhereClauseFactory.create(Comparator.IN, "id", eventIds)).addOrder("id");

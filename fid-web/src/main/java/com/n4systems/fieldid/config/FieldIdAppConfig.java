@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import com.n4systems.fieldid.service.comment.CommentService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
@@ -57,6 +58,11 @@ public class FieldIdAppConfig {
     @Bean 
     public DynamicColumnsService dynamicColumnsService() { 
     	return new DynamicColumnsService();
+    }
+    
+    @Bean
+    public CommentService commentService() {
+    	return new CommentService();
     }
     
 }
