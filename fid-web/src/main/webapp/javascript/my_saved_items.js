@@ -9,7 +9,7 @@ function showDropDown() {
         boxSelector = 'mySavedItemsBox';
         linkSelector = 'pageActions';
     }
-    translate($(boxSelector), $(linkSelector), 32, 673);
+    translate($(boxSelector), $(linkSelector), 70, 673);
 }
 
 function hideDropDown() {
