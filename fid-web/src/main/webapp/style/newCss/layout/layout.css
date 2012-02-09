@@ -31,9 +31,8 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #page, .systemNotice {
 	width: 1000px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 0px;
+	margin: auto;
+	clear: both;
 }
 
 #companyLogo, #systemLogo {
@@ -56,11 +55,8 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 }
 
 #pageHeader #pageNavigation {
-	text-align: left;
-	overflow: hidden;
-	background: #323232;
-	padding-top: 15px;
-	height: 35px;
+	background-color: #525252;
+	padding: 10px 0;
 }
 
 #pageNavigation ul {
@@ -94,23 +90,22 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	background-position: center -70px;
 }
 
-#navigationList {
+#navigationContent {
 	width: 1000px;
 	margin: auto;
 }
 
+#navigationLinks{
+	padding-top: 8px;
+	float: left;
+}
+
 #smartSearchContainer {
-	float:right;
+	padding-left: 758px;
 }
 
 #smartSearch {
-	clear:both;
-	float:right;
-}
-
-#smartSearch label {
-	font-size: 1.2em;
-	padding: 5px 0;
+	height: 38px;
 }
 
 #smartSearch input {
@@ -118,21 +113,22 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	padding: 5px;
 }
 
-#smartSearch input[type="text"],#smartSearch input.textbox {
+#smartSearch input[type="text"], #smartSearch input.textbox {
 	width: 230px;
 	border: 1px solid #999;
+	margin: 5px 0;
 }
 
 #smartSearchContainer input.description {
     color: #666;
 }
 
-#smartSearch input[type="submit"] {
-	padding: 3px;
-}
-
 #pageHeader {
 	width: 100%;
+}
+
+.frontPageHeader {
+	float : left;
 }
 
 #pageHeader #pageActions {
@@ -163,7 +159,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #listContainer .listOfLinks {
 	padding: 0.5em 0 0.5em 0.5em;
-	margin: 30px 0 0.5em 0;
+	margin: 40px 0 0.5em 0;
 	float:right;
 }
 

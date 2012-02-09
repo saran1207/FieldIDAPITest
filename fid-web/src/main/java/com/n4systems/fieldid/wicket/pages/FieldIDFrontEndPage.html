@@ -31,7 +31,7 @@
         <div id="systemNotices">
         </div>
         
-        <div id="pageHeader">
+        <div id="pageHeader" class="frontPageHeader">
 
 			<div id="pageActions">
 				<div id="companyLogo">
@@ -72,44 +72,53 @@
 		
 		
 		    <div id="pageNavigation">
-		    	<div id="navigationList">
-			        <ul>
-			            <li>
-			                <a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><img src="/fieldid/images/home.png"/></a>
-			            </li>
-			            <div wicket:id="identifyLinksContainer">
-			                <li wicket:id="identifyLinkContainer">
-			                    <a href="/fieldid/identify.action" class="speedLink textLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
-			                </li>
-			                <li wicket:id="addAssetLinkContainer">
-			                    <a href="/fieldid/assetAdd.action" class="speedLink textLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
-			                </li>
-			            </div>
-			            <li wicket:id="startEventLinkContainer">
-			                <a href="/fieldid/startEvent.action" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
-			            </li>
-			            <li>
-			                <a wicket:id="assetSearchLink" class="speedLink textLink" id="menuAssets"><wicket:message key="speed.search"/></a>
-			            </li>
-			            <li>
-			                <a wicket:id="reportingLink" class="speedLink textLink" id="menuReport"><wicket:message key="speed.reporting"/></a>
-			            </li>
-			            <li>
-			                <a href="/fieldid/schedule.action" class="speedLink textLink" id="menuSchedule"><wicket:message key="speed.schedules"/></a>
-			            </li>
-			            <li wicket:id="safetyNetworkLinkContainer">
-			                <a href="/fieldid/safetyNetwork.action" class="speedLink textLink" id="menuSafetyNetwork"><wicket:message key="speed.safety_network"/></a>
-			            </li>
-			            <li wicket:id="jobsLinkContainer">
-			                <a href="/fieldid/jobs.action" class="speedLink textLink" id="menuProject"><wicket:message key="speed.projects"/></a>
-			            </li>
-			            <li wicket:id="setupLinkContainer">
-			                <a wicket:id="setupLink" class="speedLink textLink" id="menuSetup"><wicket:message key="label.setup"/></a>
-			            </li>
-			        </ul>
-				</div>
-		    </div>
-		
+		    	<div id="navigationContent">
+			    	<div id="navigationLinks">
+				        <ul>
+				            <li>
+				                <a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><img src="/fieldid/images/home.png"/></a>
+				            </li>
+				            <div wicket:id="identifyLinksContainer">
+				                <li wicket:id="identifyLinkContainer">
+				                    <a href="/fieldid/identify.action" class="speedLink textLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
+				                </li>
+				                <li wicket:id="addAssetLinkContainer">
+				                    <a href="/fieldid/assetAdd.action" class="speedLink textLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
+				                </li>
+				            </div>
+				            <li wicket:id="startEventLinkContainer">
+				                <a href="/fieldid/startEvent.action" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
+				            </li>
+				            <li>
+				                <a wicket:id="assetSearchLink" class="speedLink textLink" id="menuAssets"><wicket:message key="speed.search"/></a>
+				            </li>
+				            <li>
+				                <a wicket:id="reportingLink" class="speedLink textLink" id="menuReport"><wicket:message key="speed.reporting"/></a>
+				            </li>
+				            <li>
+				                <a href="/fieldid/schedule.action" class="speedLink textLink" id="menuSchedule"><wicket:message key="speed.schedules"/></a>
+				            </li>
+				            <li wicket:id="safetyNetworkLinkContainer">
+				                <a href="/fieldid/safetyNetwork.action" class="speedLink textLink" id="menuSafetyNetwork"><wicket:message key="speed.safety_network"/></a>
+				            </li>
+				            <li wicket:id="jobsLinkContainer">
+				                <a href="/fieldid/jobs.action" class="speedLink textLink" id="menuProject"><wicket:message key="speed.projects"/></a>
+				            </li>
+				            <li wicket:id="setupLinkContainer">
+				                <a wicket:id="setupLink" class="speedLink textLink" id="menuSetup"><wicket:message key="label.setup"/></a>
+				            </li>
+				        </ul>
+					</div>
+			        <div id="smartSearchContainer">
+			
+						<form id="smartSearch" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
+							<input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/><input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>		
+							<input type="text" name="search" wicket:message="value:label.search" id="searchText" class="description"/></span>
+							
+						</form>
+			        </div>
+			    </div>
+			</div>		
 		</div>
         
         <div id="page">
@@ -124,16 +133,6 @@
 			
 			        <div class="backToLink">
 			            <a wicket:id="backToLink">&#171; <span wicket:id="backToLinkLabel"></span></a>
-			        </div>
-			
-			        <div id="smartSearchContainer">
-			
-						<form id="smartSearch" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
-							<label for="search">Find:</label>
-							<input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/><input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>
-			
-							<input type="text" name="search" wicket:message="value:label.smart_search_search_types" id="searchText" class="description"/></span><input type="submit" id="smartSearchButton" name="load" value="Load"/>
-						</form>
 			        </div>
     		</div>
 

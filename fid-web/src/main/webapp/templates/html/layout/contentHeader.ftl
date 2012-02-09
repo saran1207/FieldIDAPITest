@@ -30,24 +30,7 @@
 			</#if>
 		</div>
 	    
-	    <div id="smartSearchContainer">
-			<@s.form method="get" action="assetInformation" namespace="/" id="smartSearch" theme="fieldid" >
-				<label for="search"><@s.text name="label.find"/>:</label>
-				<@s.hidden name="useContext" value="true"/>
-				<@s.hidden name="usePagination" value="true"/>
-				<@s.textfield name="search" id="searchText" value="${action.getText('label.smart_search_search_types')}" cssClass="description"/>
-				<@s.submit name="load" key="label.load" id="smartSearchButton"/>
-			</@s.form>
-		</div>
 	</div>
 	
 	<#include "_options.ftl"/>
 </div>
-
-<script type="text/javascript">
-	document.observe("dom:loaded", function() {
-		$('searchText').observe('focus', clearDescription);
-		$('searchText').observe('blur', replaceDescription);
-		$('smartSearch').observe('submit', submitSmartSearch);
-	});
-</script>

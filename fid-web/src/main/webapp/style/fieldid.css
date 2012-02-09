@@ -118,12 +118,16 @@ h2 a {
 #page, .systemNotice {
 	width: 1000px;
 	margin: auto;
-	margin-top: 0px;
+	clear: both;
 }
 
 #pageHeader {
 	width: 100%;
 	overflow: hidden;
+}
+
+.frontPageHeader {
+	float : left;
 }
 
 #pageContent {
@@ -229,9 +233,8 @@ h2 a {
 }
 
 #pageHeader #pageNavigation {
-	background-color: #323232;
-	height: 35px;
-	padding-top: 15px;
+	background-color: #525252;
+	padding: 10px 0;
 }
 
 
@@ -266,9 +269,20 @@ h2 a {
 	background-position: center -70px;
 }
 
-#navigationList {
+#navigationContent {
 	width: 1000px;
 	margin: auto;
+}
+
+#navigationLinks{
+	padding-top: 8px;
+	float: left;
+}
+
+#smartSearchContainer {
+	padding-left: 758px;
+	*padding-left: 0;
+	*float : right;
 }
 
 .error {
@@ -1583,22 +1597,8 @@ h3.inline {
 	color: #333333;
 }
 
-#smartSearchContainer {
-	float:right;
-}
-
 #smartSearch {
-	clear:both;
-	float:right;
 	height: 38px;
-}
-
-
-#smartSearch label {
-	font-size: 1.2em;
-	padding: 5px 0;
-	margin-top: 5px;
-	margin-bottom: 5px;	
 }
 
 #smartSearch input {
@@ -1609,14 +1609,7 @@ h3.inline {
 #smartSearch input[type="text"],#smartSearch input.textbox {
 	width: 230px;
 	border: 1px solid #999;
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
-
-#smartSearch input[type="submit"] {
-	padding: 3px;
-	margin-top: 5px;
-	margin-bottom: 5px;
+	margin: 5px 0;
 }
 
 input.description {
@@ -1716,7 +1709,7 @@ input.description {
 
 #listContainer .listOfLinks {
 	padding: 0.5em 0 0.5em 0.5em;
-	margin: 30px 0 0.5em 0;
+	margin: 40px 0 0.5em 0;
 	float:right;
 }
 
