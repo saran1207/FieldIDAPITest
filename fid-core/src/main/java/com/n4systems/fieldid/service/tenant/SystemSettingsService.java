@@ -34,6 +34,7 @@ public class SystemSettingsService extends FieldIdPersistenceService {
         systemSettings.setIdentifierFormat(primaryOrg.getIdentifierFormat());
         systemSettings.setIdentifierLabel(primaryOrg.getIdentifierLabel());
         systemSettings.setDateFormat(primaryOrg.getDateFormat());
+        systemSettings.setSupportUrl(tenantSettings.getSupportUrl());
 
         return systemSettings;
     }
@@ -45,7 +46,9 @@ public class SystemSettingsService extends FieldIdPersistenceService {
 
     @Transactional
     public void saveSystemSettings(SystemSettings settings) {
-        tenantSettingsService.updateGpsCapture(settings.isGpsCapture());
+    	// note that some settings are really tenant settings and other are primary org settings. 
+    	// (not sure why tho...but that's the way it is).
+        tenantSettingsService.updateGpsCaptureAndSupportUrl(settings.isGpsCapture(),settings.getSupportUrl());
 
         PrimaryOrg primaryOrg = getPrimaryOrg();
 

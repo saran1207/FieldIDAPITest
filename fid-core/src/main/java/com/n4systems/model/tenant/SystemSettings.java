@@ -2,18 +2,29 @@ package com.n4systems.model.tenant;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class SystemSettings implements Serializable {
 
-    public boolean assignedTo;
-    public boolean proofTestIntegration;
-    public boolean manufacturerCertificate;
-    public boolean orderDetails;
-    public String dateFormat;
-    public String identifierLabel;
-    public String identifierFormat;
-    public boolean gpsCapture;
+	public boolean assignedTo;
+	public boolean proofTestIntegration;
+	public boolean manufacturerCertificate;
+	public boolean orderDetails;
+	public String dateFormat;
+	public String identifierLabel;
+	public String identifierFormat;
+	public boolean gpsCapture;
+	public String supportUrl;
 
-    public boolean isAssignedTo() {
+
+	public void setSupportUrl(String supportUrl) {
+		this.supportUrl = supportUrl;
+	}
+
+	public String getSupportUrl() {
+		return supportUrl;
+	}
+
+	public boolean isAssignedTo() {
         return assignedTo;
     }
 

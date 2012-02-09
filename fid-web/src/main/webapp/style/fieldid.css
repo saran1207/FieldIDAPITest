@@ -2501,15 +2501,14 @@ th.wicket_orderDown {
 
 .dateFormat select {
 	display:block;
-	margin-bottom: 10px; 
 	margin-top: 10px; 
 	padding-top:4px;
 	padding-bottom: 4px;
 }
 
-.dateFormat {
+.padded {
 	margin: 10px 10px;
-	padding-bottom: 5px; 
+	padding-bottom: 10px; 
 	padding-top: 5px; 
 }
 

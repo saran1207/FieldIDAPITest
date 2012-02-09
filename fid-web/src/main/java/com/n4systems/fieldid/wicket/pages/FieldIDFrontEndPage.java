@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -16,6 +17,7 @@ import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 
 import rfid.web.helper.SessionUser;
 
+import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -27,14 +29,15 @@ import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 
 @SuppressWarnings("serial")
-public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
-
+public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIConstants {
+	
 	@SpringBean private ConfigService configService;
 	
     private Label titleLabel;
@@ -73,6 +76,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         boolean displayInvite = sessionUser.isEmployeeUser() && getUserSecurityGuard().isAllowedManageSafetyNetwork();
         boolean displayUpgrade = !displayInvite && sessionUser.isAnEndUser();
 
+        add(new ExternalLink("support", getSupportUrl(), getString("label.support") ));
         add(new WebMarkupContainer("topInviteLinkContainer").setVisible(displayInvite));
         add(new WebMarkupContainer("topUpgradeLinkContainer").setVisible(displayUpgrade));
         add(new WebMarkupContainer("topFieldIDStoreLink").setVisible(getUserSecurityGuard().isAllowedAccessWebStore()));
@@ -102,7 +106,12 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
         add(createRelogLink());
     }
 
-    private void addCssContainers() {
+    private String getSupportUrl() {
+    	TenantSettings settings = getTenant().getSettings();
+		return settings.getSupportUrl()==null ? DEFAULT_SUPPORT_URL :settings.getSupportUrl();
+	}
+
+	private void addCssContainers() {
         add(new WebMarkupContainer("legacyCss") {
             { setRenderBodyOnly(true); }
             @Override

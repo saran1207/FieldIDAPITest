@@ -8,6 +8,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.PasswordPolicy;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "tenant_settings")
 public class TenantSettings extends EntityWithTenant {
@@ -23,6 +24,8 @@ public class TenantSettings extends EntityWithTenant {
 	private PasswordPolicy passwordPolicy = new PasswordPolicy();
 	
 	private boolean gpsCapture;
+	
+	private String supportUrl;
 
 	public boolean isSecondaryOrgsEnabled() {
 		return secondaryOrgsEnabled;
@@ -62,6 +65,14 @@ public class TenantSettings extends EntityWithTenant {
 
 	public void setGpsCapture(boolean gpsCapture) {
 		this.gpsCapture = gpsCapture;
+	}
+
+	public void setSupportUrl(String supportUrl) {
+		this.supportUrl = supportUrl;
+	}
+
+	public String getSupportUrl() {
+		return supportUrl;
 	}
 
 }

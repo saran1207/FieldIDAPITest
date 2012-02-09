@@ -21,7 +21,7 @@
 						</li>
 					</#if>
 				<li>
-		  			<a href="http://help.fieldid.com/" target="_blank"><@s.text name="label.support"/></a>
+		  			<a href="${action.supportUrl}" target="_blank"><@s.text name="label.support"/></a>
 		  			<span class="separator">|</span>
 				</li>
 				<#if userSecurityGuard.allowedAccessWebStore>

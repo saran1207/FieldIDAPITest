@@ -17,6 +17,7 @@ import rfid.web.helper.SessionUser;
 
 import com.google.gson.Gson;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.actions.ExtendedTextProviderAction;
 import com.n4systems.fieldid.actions.downloaders.DownloadLinkAction;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
@@ -60,7 +61,7 @@ import com.n4systems.util.uri.ActionURLBuilder;
 import freemarker.template.utility.StringUtil;
 
 @SuppressWarnings("serial")
-abstract public class AbstractAction extends ExtendedTextProviderAction implements FlashScopeAware, UserDateFormatValidator, LoaderFactoryProvider, WebContextProvider {
+abstract public class AbstractAction extends ExtendedTextProviderAction implements FlashScopeAware, UserDateFormatValidator, LoaderFactoryProvider, WebContextProvider, UIConstants {
 	public static final String MISSING = "missing";
 	public static final String INVALID_SECURITY = "invalid_security";
 	public static final String REDIRECT_TO_URL = "redirect_to_url";
@@ -95,6 +96,11 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
 		helper = new BaseActionHelper();
+	}
+
+	public String getSupportUrl() { 
+		String supportUrl = getSessionUser().getTenant().getSettings().getSupportUrl();
+		return supportUrl==null ? DEFAULT_SUPPORT_URL : supportUrl;
 	}
 	
 	@Override

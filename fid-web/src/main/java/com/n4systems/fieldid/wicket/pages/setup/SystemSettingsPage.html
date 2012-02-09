@@ -6,7 +6,7 @@
 		<div class="sectionContent">
 		
             <h2><wicket:message key="label.dateformat_heading"/></h2>
-            <div class="dateFormat">
+            <div class="dateFormat padded">
 				<label class="labelDescription" for="dateFormat">
 					<wicket:message key="label.preferred_date_format" />
 				</label>
@@ -55,6 +55,14 @@
 					<wicket:message key="label.gps_capture" />
 				</label>
 			</div>
+			
+ 			<h2><wicket:message key="label.support_url_header"/></h2>
+            <div  class="labelledInput padded">
+                <label for="identifierLabel">
+                    <wicket:message key="label.support_url" />
+                </label>
+           		<input type="text" wicket:id="supportUrl" />
+            </div>
 
             <h2><wicket:message key="label.identifierFormat_heading"/></h2>
             <div>
