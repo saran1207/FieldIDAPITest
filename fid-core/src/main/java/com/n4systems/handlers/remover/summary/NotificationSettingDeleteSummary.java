@@ -13,11 +13,6 @@ public class NotificationSettingDeleteSummary extends RemovalSummary {
 		this.notificationsToDelete = notifationsToDelete;
 	}
 
-	@Override
-	public boolean canBeRemoved() {
-		return true;
-	}
-
 	public Long getNotificationsToDelete() {
 		return notificationsToDelete;
 	}
@@ -30,5 +25,4 @@ public class NotificationSettingDeleteSummary extends RemovalSummary {
 		setNotificationsToDelete(new Long(notificationsToDelete));
 	}
 
-	
 }

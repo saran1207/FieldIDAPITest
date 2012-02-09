@@ -16,11 +16,6 @@ public class AssociatedEventTypeDeleteSummary extends RemovalSummary {
 		this.deleteNonCompletedEvent = deleteNonCompletedEvent;
 	}
 
-	@Override
-	public boolean canBeRemoved() {
-		return true;
-	}
-	
 	public Long getRemoveFromAssetTypes() {
 		return removeFromAssetTypes;
 	}

@@ -1,19 +1,11 @@
 ${action.setPageType('event_type', 'edit')!}
 
-
-
 <@s.form action="eventTypeDelete" id="mainContent" cssClass="fullForm fluidSets" theme="fieldid">
 	<h2><@s.text name="label.delete_summary"/></h2>
-	<#if archiveSummary.canBeRemoved()>
-		<div class="pageInstructions">
-			<@s.text name="instruction.delete_event_type"/>
-		</div>
-	<#else>
-		<div class="errors">
-			<@s.text name="error.can_not_delete_event_type.part_of_master"><@s.param>${archiveSummary.eventsPartOfMaster}</@s.param></@s.text>
-		</div>
-	</#if>
-		
+    <div class="pageInstructions">
+        <@s.text name="instruction.delete_event_type"/>
+    </div>
+
 	<@s.hidden name="uniqueID"/>
 	<div class="multiColumn">
 		<div class="infoBlock">
@@ -35,10 +27,6 @@ ${action.setPageType('event_type', 'edit')!}
 			</div>
 		</div>
 		<div class="infoBlock">
-			<div class="infoSet <#if !archiveSummary.canBeRemoved()>error</#if>">
-				<label class="label"><@s.text name="label.delete_part_of_master_events"/></label>
-				<span class="fieldHolder">${archiveSummary.eventsPartOfMaster}</span>
-			</div>
 			<div class="infoSet ">
 				<label class="label"><@s.text name="label.delete_events"/></label>
 				<span class="fieldHolder">${archiveSummary.deleteEvents}</span>
@@ -52,9 +40,7 @@ ${action.setPageType('event_type', 'edit')!}
 	</div>
 	
 	<div class="actions borderLess">
-		<#if archiveSummary.canBeRemoved()>
-			<@s.submit key="label.delete"/> <@s.text name="label.or"/> 
-		</#if>
+        <@s.submit key="label.delete"/> <@s.text name="label.or"/>
 		<a href="<@s.url action="eventTypeEdit" uniqueID="${uniqueID}"/>" ><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>

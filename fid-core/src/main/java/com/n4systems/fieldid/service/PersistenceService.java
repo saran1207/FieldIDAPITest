@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -160,6 +161,11 @@ public class PersistenceService extends FieldIdService {
     		query.setParameter(entry.getKey(), entry.getValue());
     	}    	    	
     	return query.getResultList();    	
+    }
+
+    @Transactional
+    public Query createQuery (String queryString) {
+        return createQuery(queryString, new HashMap<String, Object>());
     }
     
     @Transactional

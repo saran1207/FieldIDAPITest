@@ -13,11 +13,6 @@ public class ScheduleListRemovalSummary extends RemovalSummary {
 		this.schedulesToRemove = schedulesToRemove;
 	}
 
-	@Override
-	public boolean canBeRemoved() {
-		return true;
-	}
-
 	public Long getSchedulesToRemove() {
 		return schedulesToRemove;
 	}

@@ -1,39 +1,35 @@
  package com.n4systems.fieldid.actions.event;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+ import com.n4systems.ejb.PersistenceManager;
+ import com.n4systems.exceptions.MissingEntityException;
+ import com.n4systems.fieldid.actions.api.AbstractCrud;
+ import com.n4systems.fieldid.permissions.UserPermissionFilter;
+ import com.n4systems.fieldid.service.event.EventTypeService;
+ import com.n4systems.fieldid.service.remover.EventTypeRemovalService;
+ import com.n4systems.fieldid.utils.StrutsListHelper;
+ import com.n4systems.fieldid.viewhelpers.TrimmedString;
+ import com.n4systems.fileprocessing.ProofTestType;
+ import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
+ import com.n4systems.model.EventType;
+ import com.n4systems.model.EventTypeGroup;
+ import com.n4systems.model.eventtype.EventTypeCopier;
+ import com.n4systems.security.Permissions;
+ import com.n4systems.util.ListingPair;
+ import com.n4systems.util.persistence.QueryBuilder;
+ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+ import com.opensymphony.xwork2.validator.annotations.Validations;
+ import org.apache.log4j.Logger;
+ import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exceptions.MissingEntityException;
-import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.service.event.EventTypeService;
-import com.n4systems.fieldid.utils.StrutsListHelper;
-import com.n4systems.fieldid.viewhelpers.TrimmedString;
-import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.eventtype.EventTypeCopier;
-import com.n4systems.model.eventtype.EventTypeSaver;
-import com.n4systems.persistence.Transaction;
-import com.n4systems.security.Permissions;
-import com.n4systems.taskscheduling.TaskExecutor;
-import com.n4systems.taskscheduling.task.EventTypeArchiveTask;
-import com.n4systems.util.ListingPair;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.Validations;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.Date;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.Set;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class EventTypeCrud extends AbstractCrud {
@@ -53,11 +49,13 @@ public class EventTypeCrud extends AbstractCrud {
 	private String nameFilter;
 	private Long groupFilter;
     private EventTypeService eventTypeService;
+    private EventTypeRemovalService eventTypeRemovalService;
 
-    public EventTypeCrud(PersistenceManager persistenceManager, EventTypeService eventTypeService) {
+    public EventTypeCrud(PersistenceManager persistenceManager, EventTypeService eventTypeService, EventTypeRemovalService eventTypeRemovalService) {
 		super(persistenceManager);
 
         this.eventTypeService = eventTypeService;
+        this.eventTypeRemovalService = eventTypeRemovalService;
     }
 
 	@Override
@@ -165,15 +163,10 @@ public class EventTypeCrud extends AbstractCrud {
 	public String doDeleteConfirm() {
 		testRequiredEntities(true);
 		
-		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
-
-		
-		
 		try {
-			fillArchiveSummary(transaction);
-			transaction.commit();
+            fillArchiveSummary(eventType);
 		} catch (Exception e) {
-			transaction.rollback();
+            e.printStackTrace();
 			addActionErrorText("error.confirming_event_type_delete");
 			return ERROR;
 		}
@@ -181,29 +174,18 @@ public class EventTypeCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	private EventTypeArchiveSummary fillArchiveSummary(Transaction transaction) {
-		archiveSummary = getRemovalHandlerFactory().getEventTypeArchiveHandler().forEventType(eventType).summary(transaction);
+	private EventTypeArchiveSummary fillArchiveSummary(EventType eventType) {
+		archiveSummary = eventTypeRemovalService.summary(eventType);
 		return archiveSummary;
 	}
 
 	public String doDelete() {
 		testRequiredEntities(true);
-		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		try {
-			if (fillArchiveSummary(transaction).canBeRemoved()) {
-			
-				archiveEvent(transaction);
-				transaction.commit();
-				
-				startBackgroundTask();
-				
-				addFlashMessageText("message.deleted_event_type");
-			} else {
-				addFlashErrorText("error.can_not_delete_event_type");
-				return ERROR;
-			}
+            startBackgroundTask();
+
+            addFlashMessageText("message.deleted_event_type");
 		} catch (Exception e) {
-			transaction.rollback();
 			logger.error(getLogLinePrefix() + "could not archive event type", e);
 			addFlashErrorText("error.delete_event_type");
 			return ERROR;
@@ -229,17 +211,9 @@ public class EventTypeCrud extends AbstractCrud {
 		return new EventTypeCopier(getTenant());
 	}
 
-	private void archiveEvent(Transaction transaction) {
-		eventType.archiveEntity();
-		eventType = new EventTypeSaver().update(transaction, eventType);
-	}
-
 	private void startBackgroundTask() {
-		EventTypeArchiveTask task = new EventTypeArchiveTask(eventType, fetchCurrentUser(), getRemovalHandlerFactory());
-		TaskExecutor.getInstance().execute(task);
+        eventTypeRemovalService.startRemovalTask(eventType);
 	}
-
-	
 
 	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {

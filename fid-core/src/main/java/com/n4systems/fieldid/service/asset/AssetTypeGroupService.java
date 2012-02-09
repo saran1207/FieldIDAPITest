@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.asset;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.search.SavedReportService;
+import com.n4systems.fieldid.service.search.SavedSearchRemoveFilter;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.search.SearchCriteriaModel;
@@ -39,8 +40,13 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
 	}
 
     @Transactional
-	public void deleteAssetTypeGroup(AssetTypeGroup group) {
-        savedReportService.deleteAllSavedReportsWith(group);
+	public void deleteAssetTypeGroup(final AssetTypeGroup group) {
+        savedReportService.deleteAllSavedSearchesMatching(new SavedSearchRemoveFilter() {
+            @Override
+            public boolean removeThisSearch(SearchCriteriaModel searchCriteria) {
+                return searchCriteria.getAssetTypeGroup() != null && group.getId().equals(searchCriteria.getAssetTypeGroup().getId());
+            }
+        });
 
 		AssetTypeGroup groupToDelete = persistenceService.find(AssetTypeGroup.class, group.getId());
 

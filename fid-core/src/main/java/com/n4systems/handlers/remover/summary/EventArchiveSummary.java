@@ -2,34 +2,17 @@ package com.n4systems.handlers.remover.summary;
 
 
 public class EventArchiveSummary extends RemovalSummary {
+
 	private Long deleteEvents;
-	private Long eventsPartOfMaster;
 	private Long deleteSchedules;
 	
-	
-	
 	public EventArchiveSummary() {
-		this(0L, 0L, 0L);
+		this(0L, 0L);
 	}
 
-	public EventArchiveSummary(Long deleteEvents, Long eventsPartOfMaster, Long deleteSchedules) {
-		super();
+	public EventArchiveSummary(Long deleteEvents, Long deleteSchedules) {
 		this.deleteEvents = deleteEvents;
-		this.eventsPartOfMaster = eventsPartOfMaster;
 		this.deleteSchedules = deleteSchedules;
-	}
-
-	public boolean canBeRemoved() {
-		return eventsPartOfMaster == 0L;
-	}
-	
-	public Long getEventsPartOfMaster() {
-		return eventsPartOfMaster;
-	}
-	
-	public EventArchiveSummary setEventsPartOfMaster(Long eventsPartOfMaster) {
-		this.eventsPartOfMaster = eventsPartOfMaster;
-		return this;
 	}
 
 	public Long getDeleteEvents() {
@@ -49,4 +32,5 @@ public class EventArchiveSummary extends RemovalSummary {
 		this.deleteSchedules = deleteSchedules;
 		return this;
 	}
+
 }

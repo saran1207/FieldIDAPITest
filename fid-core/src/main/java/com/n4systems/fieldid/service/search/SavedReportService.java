@@ -63,24 +63,24 @@ public class SavedReportService extends SavedSearchService<SavedReportItem, Even
     }
 
     @Transactional
-    public void deleteAllSavedReportsWith(AssetTypeGroup assetTypeGroup) {
+    public void deleteAllSavedSearchesMatching(SavedSearchRemoveFilter filter) {
         final QueryBuilder<User> query = createTenantSecurityBuilder(User.class);
         final List<User> users = persistenceService.findAll(query);
 
         for (User user : users) {
             List<SavedItem> adjustedSavedItems = new ArrayList<SavedItem>(user.getSavedItems());
             for (SavedItem item : user.getSavedItems()) {
-                if (assetTypeGroup.getId().equals(getId(item.getSearchCriteria().getAssetTypeGroup()))) {
+                if (filter.removeThisSearch(item.getSearchCriteria())) {
                     adjustedSavedItems.remove(item);
                 }
             }
             user.setSavedItems(adjustedSavedItems);
 
-            if (user.getLastRunReport() != null && assetTypeGroup.getId().equals(getId(user.getLastRunReport().getAssetTypeGroup()))) {
+            if (user.getLastRunReport() != null && filter.removeThisSearch(user.getLastRunReport())) {
                 user.setLastRunReport(null);
             }
 
-            if (user.getLastRunSearch() != null && assetTypeGroup.getId().equals(getId(user.getLastRunSearch().getAssetTypeGroup()))) {
+            if (user.getLastRunSearch() != null && filter.removeThisSearch(user.getLastRunSearch())) {
                 user.setLastRunSearch(null);
             }
 

@@ -10,11 +10,6 @@ public class EventTypeArchiveSummary extends RemovalSummary {
 	public EventTypeArchiveSummary() {
 	}
 
-	@Override
-	public boolean canBeRemoved() {
-		return (eventArchiveSummary.canBeRemoved() && associatedEventTypeDeleteSummary.canBeRemoved());
-	}
-	
 	public EventArchiveSummary getEventArchiveSummary() {
 		return eventArchiveSummary;
 	}
@@ -22,7 +17,6 @@ public class EventTypeArchiveSummary extends RemovalSummary {
 	public void setEventArchiveSummary(EventArchiveSummary eventArchiveSummary) {
 		this.eventArchiveSummary = eventArchiveSummary;
 	}
-	
 
 	public AssociatedEventTypeDeleteSummary getAssociatedEventTypeDeleteSummary() {
 		return associatedEventTypeDeleteSummary;
@@ -41,7 +35,6 @@ public class EventTypeArchiveSummary extends RemovalSummary {
 		this.notificationSettingDeleteSummary = notificationSettingDeleteSummary;
 	}
 
-	
 	public Long getRemoveFromAssetTypes() {
 		return associatedEventTypeDeleteSummary.getRemoveFromAssetTypes();
 	}
@@ -54,16 +47,10 @@ public class EventTypeArchiveSummary extends RemovalSummary {
 		return eventArchiveSummary.getDeleteCompletedSchedules() + associatedEventTypeDeleteSummary.getDeleteNonCompletedEvent();
 	}
 
-
 	public Long getDeleteEvents() {
 		return eventArchiveSummary.getDeleteEvents();
 	}
 
-	public Long getEventsPartOfMaster() {
-		return eventArchiveSummary.getEventsPartOfMaster();
-	}
-
-	
 	public Long getNotificationsToDelete() {
 		return notificationSettingDeleteSummary.getNotificationsToDelete();
 	}

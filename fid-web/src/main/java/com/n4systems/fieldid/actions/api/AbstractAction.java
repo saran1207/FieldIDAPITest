@@ -32,7 +32,6 @@ import com.n4systems.fieldid.viewhelpers.BaseActionHelper;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.handlers.creator.CreateHandlerFactory;
-import com.n4systems.handlers.remover.RemovalHandlerFactory;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.activesession.ActiveSessionLoader;
@@ -77,7 +76,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private User user = null;
 	private NavOptionsController navOptions;
 	private String redirectUrl;
-	private RemovalHandlerFactory rhFactory;
 	private NonSecureLoaderFactory nonSecureLoaderFactory;
 	private CreateHandlerFactory createHandlerFactory;
 	private DownloadCoordinator downloadCoordinator;
@@ -398,13 +396,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 			loaderFactory = new LoaderFactory(new OpenSecurityFilter());
 		}
 		return loaderFactory;
-	}
-	
-	protected RemovalHandlerFactory getRemovalHandlerFactory() {
-		if (rhFactory == null) {
-			rhFactory = new RemovalHandlerFactory(getLoaderFactory());
-		}
-		return rhFactory;
 	}
 	
 	public String getTextArg(String text, Object param) {
