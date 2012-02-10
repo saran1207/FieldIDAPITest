@@ -30,7 +30,7 @@ public class FieldIDPage extends WebPage {
 	}
 	
 	public HomePage clickHomeLink() {
-		selenium.click("//div[@id='pageNavigation']//a[.='Home']");
+		selenium.click("//div[@id='pageNavigation']//a[@id='menuHome']");
 		return new HomePage(selenium);
 	}
 

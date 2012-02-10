@@ -30,7 +30,7 @@ public class HomePage extends FieldIDPage {
     }
 
     public LoginPage clickHomeExpectingSessionBoot() {
-        selenium.click("//div[@id='pageNavigation']//a[.='Home']");
+        selenium.click("//div[@id='pageNavigation']//a[@id='menuHome']");
         return new LoginPage(selenium);
     }
 	
