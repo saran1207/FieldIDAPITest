@@ -8,6 +8,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,8 @@ import com.n4systems.model.orgs.BaseOrg;
 @Component
 @Path("eventSchedule")
 public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, EventSchedule> {
+	private static Logger logger = Logger.getLogger(ApiEventScheduleResource.class);
+	
 	@Autowired private EventScheduleService eventScheduleService;
 	@Autowired private PersistenceService persistenceService;
 	@Autowired private AssetService assetService;
@@ -43,6 +46,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
 		EventSchedule eventSchedule = converApiEventSchedule(apiEventSchedule);		
 		persistenceService.save(eventSchedule);
+		logger.info("saved schedule for " + eventSchedule.getEventType().getName() + " on asset " + eventSchedule.getMobileGUID());
 	}
 
 	@Override

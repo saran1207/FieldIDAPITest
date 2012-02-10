@@ -5,6 +5,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,8 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 @Component
 @Path("eventBook")
 public class ApiEventBookResource extends SetupDataResource<ApiEventBook, EventBook> {
+	private static Logger logger = Logger.getLogger(ApiEventBookResource.class);
+	
 	@Autowired
     protected PersistenceService persistenceService;
 
@@ -50,6 +53,7 @@ public class ApiEventBookResource extends SetupDataResource<ApiEventBook, EventB
 	public void saveEventBook(ApiEventBook apiEventBook) {
 		EventBook eventBook = convertApiEventBook(apiEventBook);		
 		persistenceService.save(eventBook);
+		logger.info("saved event book: " + apiEventBook.getName());
 	}
 	
 	private EventBook convertApiEventBook(ApiEventBook apiEventBook) {
