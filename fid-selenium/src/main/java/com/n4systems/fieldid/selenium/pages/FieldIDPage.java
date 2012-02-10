@@ -240,7 +240,7 @@ public class FieldIDPage extends WebPage {
 	
 	public SmartSearchResultsPage searchWithMultipleResults(String criteria){
 		selenium.type("//input[@id='searchText']", criteria);
-		selenium.click("//input[@id='smartSearchButton']");
+		selenium.keyPress("//input[@id='searchText']", "\\13");
 		return new SmartSearchResultsPage(selenium);
 	}
 
