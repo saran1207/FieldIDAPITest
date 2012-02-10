@@ -66,6 +66,7 @@ public class AssetManagerImpl implements AssetManager {
 	private ProjectManager projectManager;
 
 
+
 	public AssetManagerImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
@@ -86,7 +87,7 @@ public class AssetManagerImpl implements AssetManager {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Asset> findAssetByIdentifiers(SecurityFilter filter, String searchValue, AssetType assetType) {
-		String queryString = "FROM Asset p WHERE ( UPPER( p.identifier ) = :searchValue OR UPPER( p.rfidNumber ) = :searchValue OR UPPER(p.customerRefNumber) = :searchValue ) AND " + filter.produceWhereClause(Asset.class, "p");
+		String queryString = "FROM Asset p WHERE ( p.identifier = :searchValue OR p.rfidNumber = :searchValue OR p.customerRefNumber = :searchValue ) AND " + filter.produceWhereClause(Asset.class, "p");
 
 		if (assetType != null) {
 			queryString += " AND p.type = :assetType ";
@@ -101,10 +102,7 @@ public class AssetManagerImpl implements AssetManager {
 			query.setParameter("assetType", assetType);
 		}
 		return query.getResultList();
-
-	}
-
-	
+	}	
 
 	@Override
 	public Asset findAssetAllFields(Long id, SecurityFilter filter) {
@@ -160,7 +158,7 @@ public class AssetManagerImpl implements AssetManager {
 
 		try {
 			QueryBuilder<Asset> qBuilder = basicAssetQuery(filter);
-			qBuilder.addWhere(Comparator.EQ, "identifier", "identifier", identifier.trim(), WhereParameter.IGNORE_CASE|WhereParameter.TRIM);
+			qBuilder.addWhere(Comparator.EQ, "identifier", "identifier", identifier.trim(), WhereParameter.TRIM);
 			
 			if (customerId == null) {
 				qBuilder.addWhere(new WhereParameter<Long>(WhereParameter.Comparator.NULL, "owner.customerOrg"));

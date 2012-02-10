@@ -328,7 +328,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	@Override
 	public boolean duplicateValueExists(String assetId) {
 		QueryBuilder<Project> query = new QueryBuilder<Project>(Project.class, new OpenSecurityFilter());
-		query.setCountSelect().addWhere(Comparator.EQ, "projectID", "projectID", assetId, WhereParameter.IGNORE_CASE|WhereParameter.TRIM);
+		query.setCountSelect().addWhere(Comparator.EQ, "projectID", "projectID", assetId, WhereParameter.TRIM);
 		query.addSimpleWhere("tenant", getTenant());
 		if (uniqueID != null) {
 			query.addWhere(Comparator.NE, "id", "id", project.getId());

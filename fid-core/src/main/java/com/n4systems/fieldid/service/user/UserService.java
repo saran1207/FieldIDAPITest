@@ -1,5 +1,12 @@
 package com.n4systems.fieldid.service.user;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.saveditem.SavedItem;
@@ -11,13 +18,6 @@ import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 @Transactional
 public class UserService extends FieldIdPersistenceService {
@@ -62,7 +62,6 @@ public class UserService extends FieldIdPersistenceService {
         return persistenceService.find(builder);		
 	}
 	
-	//TODO: This should test for locked users/failed login attempts
 	public User authenticateUserByPassword(String tenantName, String userId, String password) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		UserQueryHelper.applyFullyActiveFilter(builder);

@@ -61,7 +61,7 @@ public class OrderManagerImpl implements OrderManager {
 		QueryBuilder<Order> builder = new QueryBuilder<Order>(Order.class, new OpenSecurityFilter());
 
 		builder.addSimpleWhere("tenant.id", tenantId);
-		builder.addWhere(WhereParameter.Comparator.EQ, "orderNumber", "orderNumber", orderNumber, WhereParameter.IGNORE_CASE|WhereParameter.TRIM);
+		builder.addWhere(WhereParameter.Comparator.EQ, "orderNumber", "orderNumber", orderNumber, WhereParameter.TRIM);
 		builder.addSimpleWhere("orderType", type);
 
 		if (filter != null) {

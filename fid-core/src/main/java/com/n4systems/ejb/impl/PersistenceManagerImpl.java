@@ -620,7 +620,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
 	@Override
 	public <T extends LegacyBeanTenantWithCreateModifyDate> boolean uniqueAssetStatusNameAvailable(Class<T> entityClass, String name, Long id, Long tenantId){
-		String jpql = "SELECT id " + generateFromClause(defaultTableAlias, entityClass) + " WHERE tenant.id = :tenantId AND LOWER(name) = :name ";
+		String jpql = "SELECT id " + generateFromClause(defaultTableAlias, entityClass) + " WHERE tenant.id = :tenantId AND name = :name ";
 		
 		if (id != null) {
 			jpql += " AND id != :id ";
@@ -647,7 +647,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	@SuppressWarnings("unchecked")
 	private <T extends EntityWithTenant & NamedEntity> boolean uniqueNameAvailable(Class<T> entityClass, String name, Long id, Long tenantId, Long customerId, boolean useCustomer) {
 
-		String jpql = "SELECT id " + generateFromClause(defaultTableAlias, entityClass) + " WHERE tenant.id = :tenantId AND LOWER(name) = :name ";
+		String jpql = "SELECT id " + generateFromClause(defaultTableAlias, entityClass) + " WHERE tenant.id = :tenantId AND name = :name ";
 		if (useCustomer) {
 			jpql += " AND owner.customerOrg.id ";
 			if (customerId != null) {

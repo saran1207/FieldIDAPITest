@@ -59,6 +59,7 @@ public class LegacyAssetManager implements LegacyAsset {
 		assetManager =  new AssetManagerImpl(em);
 	}
 
+	@Override
 	public AssetStatus findAssetStatus(Long uniqueID, Long tenantId) {
 		Query query = em.createQuery("FROM "+AssetStatus.class.getName()+" st WHERE st.id = :uniqueID AND st.tenant.id = :tenantId");
 		query.setParameter("uniqueID", uniqueID);
@@ -72,6 +73,7 @@ public class LegacyAssetManager implements LegacyAsset {
 		return obj;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<AssetStatus> findAssetStatus(Long tenantId, Date beginDate) {
 		Query query = em.createQuery("from "+AssetStatus.class.getName()+" st where st.tenant.id = :tenantId and st.dateCreated >= :beginDate");
@@ -82,10 +84,12 @@ public class LegacyAssetManager implements LegacyAsset {
 	}
 
 
+	@Override
 	public boolean rfidExists(String rfidNumber, Long tenantId) {
 		return rfidExists(rfidNumber, tenantId, null);
 	}
 
+	@Override
 	public boolean rfidExists(String rfidNumber, Long tenantId, Long uniqueID) {
 		long rfidCount = 0;
 		String uniqueIDClause = "";
@@ -98,7 +102,7 @@ public class LegacyAssetManager implements LegacyAsset {
 			uniqueIDClause = " and p.id <> :id";
 		}
 
-		Query query = em.createQuery("select count(p) from "+Asset.class.getName()+" p where p.state = :activeState AND UPPER( p.rfidNumber ) = :rfidNumber" + uniqueIDClause
+		Query query = em.createQuery("select count(p) from "+Asset.class.getName()+" p where p.state = :activeState AND p.rfidNumber = :rfidNumber" + uniqueIDClause
 				+ " and p.tenant.id = :tenantId group by p.rfidNumber");
 
 		query.setParameter("rfidNumber", rfidNumber.toUpperCase());
@@ -120,6 +124,7 @@ public class LegacyAssetManager implements LegacyAsset {
 
 	
 	
+	@Override
 	public Asset create(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
 		runAssetSavePreRecs(asset, modifiedBy);
 		
@@ -146,6 +151,7 @@ public class LegacyAssetManager implements LegacyAsset {
 		processSubAssets(asset, modifiedBy);
 	}
 
+	@Override
 	public Asset update(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
 		asset.touch();
 		runAssetSavePreRecs(asset, modifiedBy);
@@ -253,6 +259,7 @@ public class LegacyAssetManager implements LegacyAsset {
 	 * creates the asset serial and updates the given users add
 	 * assetHistory.
 	 */
+	@Override
 	public Asset createWithHistory(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
 		asset = create(asset, modifiedBy);
 
@@ -298,12 +305,13 @@ public class LegacyAssetManager implements LegacyAsset {
 	}
 
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public AddAssetHistory getAddAssetHistory(Long rFieldidUser) {
 		Query query = em.createQuery("from "+ AddAssetHistory.class.getName()+" aph where aph.user.id = :rFieldidUser");
 		query.setParameter("rFieldidUser", rFieldidUser);
 
-		List<AddAssetHistory> addAssetHistoryList = (List<AddAssetHistory>) query.getResultList();
+		List<AddAssetHistory> addAssetHistoryList = query.getResultList();
 
 		if (addAssetHistoryList != null) {
 			if (addAssetHistoryList.size() > 0) {
@@ -314,16 +322,18 @@ public class LegacyAssetManager implements LegacyAsset {
 		return null;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<AssetExtension> getAssetExtensions(Long tenantId) {
 		Query query = em.createQuery("from "+ AssetExtension.class.getName()+" ase where ase.tenantId = :tenantId");
 		query.setParameter("tenantId", tenantId);
 
-		return (Collection<AssetExtension>) query.getResultList();
+		return query.getResultList();
 	}
 
 	
 
+	@Override
 	public boolean duplicateIdentifier(String identifier, Long uniqueID, Tenant tenant) {
 		String queryString = "select count(a.id) from Asset a where a.tenant = :tenant " + " and lower(a.identifier) = :identifier";
 		
@@ -342,6 +352,7 @@ public class LegacyAssetManager implements LegacyAsset {
 		return value != 0L;
 	}
 
+	@Override
 	public Event findLastEvents(Asset asset, SecurityFilter securityFilter) {
 		Query eventQuery = createAllEventQuery(asset, securityFilter, false, true);
 		Event event = null;
@@ -352,11 +363,13 @@ public class LegacyAssetManager implements LegacyAsset {
 		return event;
 	}
 
+	@Override
 	public Long countAllEvents(Asset asset, SecurityFilter securityFilter) {
 		Long count = countAllLocalEvents(asset, securityFilter);
 		return count;
 	}
 	
+	@Override
 	public Long countAllLocalEvents(Asset asset, SecurityFilter securityFilter) {
 		Query eventQuery = createAllEventQuery(asset, securityFilter, true);
 		return (Long)eventQuery.getSingleResult();
@@ -391,6 +404,7 @@ public class LegacyAssetManager implements LegacyAsset {
 		return eventQuery;
 	}
 
+	@Override
 	public Asset createAssetWithServiceTransaction(String transactionGUID, Asset asset, User modifiedBy) throws TransactionAlreadyProcessedException, SubAssetUniquenessException {
 
 		asset = create(asset, modifiedBy);

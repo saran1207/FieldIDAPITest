@@ -10,7 +10,10 @@ public class WhereParameter<T> implements WhereClause<T> {
 	private static final String WILDCARD_CHAR = "%";
 	public static final int WILDCARD_LEFT = (1 << 0);
 	public static final int WILDCARD_RIGHT = (1 << 1);
+		
+	@Deprecated // IMPORTANT WEB-2621 : note that the database currently uses utf_ci (case-insensitive) collation for all data so you really shouldn't need this option.
 	public static final int IGNORE_CASE = (1 << 2);
+	
 	public static final int TRIM = (1 << 3);
 	public static final int WILDCARD_BOTH = WILDCARD_LEFT | WILDCARD_RIGHT;
 
