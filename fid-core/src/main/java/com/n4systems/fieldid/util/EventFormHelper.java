@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.event;
+package com.n4systems.fieldid.util;
 
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Criteria;

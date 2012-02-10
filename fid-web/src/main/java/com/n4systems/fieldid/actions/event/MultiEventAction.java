@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
+import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.util.ListHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;

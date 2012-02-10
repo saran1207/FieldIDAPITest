@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.fieldid.util.EventFormHelper;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.n4systems.fieldid.certificate.model.InspectionImage;
@@ -186,9 +187,9 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		Map<Criteria, CriteriaResult> resultMap = new HashMap<Criteria, CriteriaResult>(getEvent().getResults().size());
 		Map<Criteria, List<Recommendation>> recommendations =  new HashMap<Criteria, List<Recommendation>>(getEvent().getResults().size());
 		Map<Criteria, List<Deficiency>> deficiencies = new HashMap<Criteria, List<Deficiency>>(getEvent().getResults().size());
-		
-		
-		flattenCriteriaResults(resultMap, recommendations, deficiencies);
+        Map<String, Double> sectionScoreMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScoresForSections(getEvent()));
+
+        flattenCriteriaResults(resultMap, recommendations, deficiencies);
 		//TODO : move criteria view to 
 		// walk the section, and criteria tree and construct report views
         if (getEvent().getEventForm() != null) {
@@ -196,6 +197,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                 for (Criteria criteria : section.getCriteria()) {
                     if (resultMap.containsKey(criteria)) {
                         CriteriaStateView stateView = new CriteriaStateView(section, criteria, recommendations.get(criteria), deficiencies.get(criteria));
+                        stateView.setSectionScoreTotal(sectionScoreMap.get(stateView.getSection()));
                         CriteriaResult result = resultMap.get(criteria);
                         if (result instanceof OneClickCriteriaResult) {
                             stateView.setStateButtonGroup(((OneClickCriteriaResult)result).getState());
@@ -228,6 +230,14 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
 		return criteriaViews;
 	}
+
+    private Map<String,Double> convertSectionScoreMapToNameScoreMap(Map<CriteriaSection,Double> sectionMap) {
+        Map<String,Double> convertedMap = new HashMap<String, Double>();
+        for (CriteriaSection criteriaSection : sectionMap.keySet()) {
+            convertedMap.put(criteriaSection.getTitle(), sectionMap.get(criteriaSection));
+        }
+        return convertedMap;
+    }
 
     private String getScoreStringValue(ScoreCriteriaResult result) {
         if (result.getScore().isNa()) {

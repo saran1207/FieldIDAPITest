@@ -17,6 +17,7 @@ public class CriteriaStateView implements Serializable {
 	private String criteria;
 	private String state;
 	private File stateImage;
+    private Double sectionScoreTotal;
 	private Integer recommendations;
 	private Integer deficiencies;
 	private String compressedRecommendations;
@@ -116,5 +117,13 @@ public class CriteriaStateView implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Double getSectionScoreTotal() {
+        return sectionScoreTotal;
+    }
+
+    public void setSectionScoreTotal(Double sectionScoreTotal) {
+        this.sectionScoreTotal = sectionScoreTotal;
     }
 }
