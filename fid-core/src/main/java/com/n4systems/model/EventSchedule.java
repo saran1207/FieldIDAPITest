@@ -1,6 +1,7 @@
 package com.n4systems.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -121,7 +122,25 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	public EventSchedule(Asset asset, AssetTypeSchedule typeSchedule) {
 		this(asset, typeSchedule.getEventType());
 	}
-
+	
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		ensureMobileGuidIsSet();
+	}
+	
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		ensureMobileGuidIsSet();
+	}
+	
+	private void ensureMobileGuidIsSet() {
+		if (mobileGUID == null) {
+			mobileGUID = UUID.randomUUID().toString();
+		}
+	}
+	
 	@AllowSafetyNetworkAccess
 	public Asset getAsset() {
 		return asset;
