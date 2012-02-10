@@ -9,6 +9,7 @@ import java.util.List;
 import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.taskdefs.Sleep;
 
 import com.n4systems.fieldid.selenium.components.LocationPicker;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
@@ -233,7 +234,7 @@ public class FieldIDPage extends WebPage {
 	
 	public AssetPage search(String criteria) {
 		selenium.type("//input[@id='searchText']", criteria);
-		selenium.click("//input[@id='smartSearchButton']");
+		selenium.keyPress("//input[@id='searchText']", "\\13");
 		return new AssetPage(selenium);
 	}
 	
