@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -16,15 +18,11 @@ import com.n4systems.util.chart.RangeType;
 
 
 @SuppressWarnings("serial")
-public class DateRangePicker extends Panel { //implements IFormModelUpdateListener {
+public class DateRangePicker extends Panel {
 
 	private DropDownChoice<RangeType> dropDownChoice;
 	private DateTimePicker fromDatePicker;
 	private DateTimePicker toDatePicker;
-	// local fields used as temporary model.
-	private Date from;
-	private Date to;
-	private RangeType dateRangeType;
 
 	public DateRangePicker(String id, IModel<DateRange> model) {
 		super(id, model);		
@@ -37,11 +35,26 @@ public class DateRangePicker extends Panel { //implements IFormModelUpdateListen
 		
 		dropDownChoice.setOutputMarkupId(true);
 		dropDownChoice.setNullValid(false);
+		dropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+			@Override protected void onUpdate(AjaxRequestTarget target) {				
+				updatePickers();
+				target.add(fromDatePicker, toDatePicker);
+			}
+
+		});
+
+		updatePickers();
 		
 		add(dropDownChoice);    	
 		add(fromDatePicker);
 		add(toDatePicker);
 	}		
+	
+	private void updatePickers() {
+		boolean isCustom = RangeType.CUSTOM.equals(dropDownChoice.getModelObject());
+		fromDatePicker.setEnabled(isCustom);
+		toDatePicker.setEnabled(isCustom);
+	}
 	
 	protected List<RangeType> getDateRanges() {
 		return Arrays.asList(RangeType.rangeTypesWithCustom());
@@ -49,10 +62,7 @@ public class DateRangePicker extends Panel { //implements IFormModelUpdateListen
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-        response.renderJavaScriptReference("javascript/dateRange.js");		
         response.renderCSSReference("style/newCss/component/dateRange.css");		
-        String javascript = "dateRangePicker.init('%s');";
-        response.renderOnDomReadyJavaScript(String.format(javascript, dropDownChoice.getMarkupId()));
         super.renderHead(response);
 	}
 }

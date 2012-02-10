@@ -4,3 +4,6 @@
 .ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }
 .ui-timepicker-div td { font-size: 90%; }
 .ui-datepicker-trigger { padding-left: 5px }
+.datetimepicker-disabled + .ui-datepicker-trigger {
+	display:none;
+}

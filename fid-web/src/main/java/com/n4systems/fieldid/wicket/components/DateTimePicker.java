@@ -54,8 +54,22 @@ public class DateTimePicker extends Panel {
                 return !FieldIDSession.get().getFeedbackMessages().hasMessageFor(component, FeedbackMessage.ERROR);
             }
         });
+        dateTextField.add(new AttributeAppender("class", getEnabledModel(), " " ));
     }
+    
+    private IModel<?> getEnabledModel() {
+		return new Model<String>() { 
+			@Override public String getObject() {
+				return isEnabled() ? "" : "datetimepicker-disabled";
+			}
+		};
+	}
 
+	@Override
+    protected void onBeforeRender() {
+    	super.onBeforeRender();
+    }
+    
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderOnLoadJavaScript(createSetupCalendarJavascript());
@@ -108,5 +122,7 @@ public class DateTimePicker extends Panel {
     public void clearInput() {
         dateTextField.clearInput();
     }
+    
+    
 
 }
