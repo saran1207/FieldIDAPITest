@@ -12,8 +12,8 @@ public class OfflineProfileService extends FieldIdPersistenceService {
 
 	@Transactional(readOnly = true)
 	public OfflineProfile find(User user) {
-		QueryBuilder<OfflineProfile> builder = createUserSecurityBuilder(OfflineProfile.class);
-		builder.addWhere(WhereClauseFactory.create("user", user));
+		QueryBuilder<OfflineProfile> builder = createTenantSecurityBuilder(OfflineProfile.class);
+		builder.addWhere(WhereClauseFactory.create("user.id", user.getId()));
 		
 		OfflineProfile profile = persistenceService.find(builder);
 		return profile;
