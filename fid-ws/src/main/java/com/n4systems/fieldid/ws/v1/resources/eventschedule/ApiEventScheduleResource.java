@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
@@ -17,9 +19,12 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 
 @Component
 @Path("eventSchedule")
@@ -47,6 +52,18 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		EventSchedule eventSchedule = converApiEventSchedule(apiEventSchedule);		
 		persistenceService.save(eventSchedule);
 		logger.info("saved schedule for " + eventSchedule.getEventType().getName() + " on asset " + eventSchedule.getMobileGUID());
+	}
+	
+	@DELETE
+	@Path("{eventScheduleId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void DeleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
+		QueryBuilder<EventSchedule> query = createUserSecurityBuilder(EventSchedule.class);
+		query.addWhere(WhereClauseFactory.create("mobileGUID", eventScheduleId));		
+		EventSchedule eventSchedule = persistenceService.find(query);		
+		persistenceService.delete(eventSchedule);
+		logger.info("deleted schedule for " + eventSchedule.getEventType().getName() + " on asset " + eventSchedule.getMobileGUID());
 	}
 
 	@Override
