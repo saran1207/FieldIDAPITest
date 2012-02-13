@@ -5,7 +5,7 @@
 		<div class="infoSet">
 			<label class="label">${infoField?html}:</label>
 			<span class="fieldHolder">
-				<@s.textfield name="encodedInfoOptionMap['${infoField?url}']"/>
+				<@s.textfield name="encodedInfoOptionMap['${infoField?url?js_string}']"/>
 			</span>
 		</div>
 	 	
