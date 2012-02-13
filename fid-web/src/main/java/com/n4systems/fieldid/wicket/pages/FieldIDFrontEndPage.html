@@ -17,10 +17,16 @@
         <span wicket:id="siteWideCss">
             <link type="text/css" href="/fieldid/style/site_wide.css" rel="stylesheet" media="all"/>
         </span>
-        <link type="text/css" href="/fieldid/style/branding/default.css" rel="stylesheet" media="all"/><link rel="shortcut icon" href="/fieldid/images/favicon.ico" type="image/x-icon" />
+        <link type="text/css" href="/fieldid/style/branding/default.css" rel="stylesheet" media="all"/>
+        <link rel="shortcut icon" href="/fieldid/images/favicon.ico" type="image/x-icon" />
         <!--[if IE 6]>
-        <script type="text/javascript" src="/fieldid/javascript/common-ie6-jquery.js"></script>
+        	<script type="text/javascript" src="/fieldid/javascript/common-ie6-jquery.js"></script>
         <![endif]-->
+        
+		<link type="text/css" href="/fieldid/style/dropdown/style.css" rel="stylesheet" media="all"/>
+	    <!--[if lte IE 7]>
+	        <link type="text/css" href="/fieldid/style/dropdown/ie.css" rel="stylesheet" media="all"/>
+	    <![endif]-->
                     
     </head>
 
@@ -74,18 +80,20 @@
 		    <div id="pageNavigation">
 		    	<div id="navigationContent">
 			    	<div id="navigationLinks">
-				        <ul>
+				        <ul class="dropdown">
 				            <li>
 				                <a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><img src="/fieldid/images/home.png"/></a>
 				            </li>
-				            <div wicket:id="identifyLinksContainer">
-				                <li wicket:id="identifyLinkContainer">
-				                    <a href="/fieldid/identify.action" class="speedLink textLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
-				                </li>
-				                <li wicket:id="addAssetLinkContainer">
-				                    <a href="/fieldid/assetAdd.action" class="speedLink textLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
-				                </li>
-				            </div>
+							<li>
+								<a wicket:id="identifyLink" class="speedLink textLink" id="menuIdentify">
+									<wicket:message key="speed.identify"/>
+									<img src="/fieldid/images/down-arrow.png" />
+								</a>
+								<ul class="sub_menu regular_menu">
+									<li><a href="/fieldid/assetMultiAdd" class="speedLink"><wicket:message key="nav.multi_add"/></a></li>
+									<li><a href="/fieldid/assetImportExport" class="speedLink"><wicket:message key="nav.import"/></a></li>
+								</ul>
+							</li>
 				            <li wicket:id="startEventLinkContainer">
 				                <a href="/fieldid/startEvent.action" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
 				            </li>
@@ -105,7 +113,19 @@
 				                <a href="/fieldid/jobs.action" class="speedLink textLink" id="menuProject"><wicket:message key="speed.projects"/></a>
 				            </li>
 				            <li wicket:id="setupLinkContainer">
-				                <a wicket:id="setupLink" class="speedLink textLink" id="menuSetup"><wicket:message key="label.setup"/></a>
+				                <a wicket:id="setupLink" class="speedLink textLink" id="menuSetup">
+				                	<wicket:message key="label.setup"/>
+				                	<img src="/fieldid/images/down-arrow.png" />
+				                </a>
+
+				                <ul wicket:id="setupSubMenuContainer" class="sub_menu wide_menu">
+									<li><a wicket:id="ownersUsersLocLink" class="speedLink"><wicket:message key="nav.owners_users_loc"/></a></li>
+									<li><a wicket:id="assetsEventsLink" class="speedLink"><wicket:message key="nav.assets_and_events"/></a></li>
+									<li><a wicket:id="importLink" class="speedLink"><wicket:message key="nav.import"/></a></li>
+									<li><a wicket:id="templatesLink" class="speedLink"><wicket:message key="nav.templates"/></a></li>
+									<li><a wicket:id="widgetsLink" class="speedLink"><wicket:message key="nav.widgets"/></a></li>
+									<li><a wicket:id="securityLink" class="speedLink"><wicket:message key="nav.security"/></a></li>
+								</ul>
 				            </li>
 				        </ul>
 					</div>

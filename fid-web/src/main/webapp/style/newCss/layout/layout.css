@@ -44,7 +44,6 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #pageHeader {
 	width: 100%;
-	overflow: hidden;
 }
 
 .pageContent {
@@ -56,18 +55,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #pageHeader #pageNavigation {
 	background-color: #525252;
-	padding: 10px 0;
-}
-
-#pageNavigation ul {
-	list-style: none;
-	display: inline;
-}
-
-#pageNavigation ul li {
-	text-align: center;
-	margin: 0px 10px;
-	float: left;
+	padding: 5px 0;
 }
 
 #pageNavigation a,#pageNavigation a:hover,#pageNavigation a:active,#pageNavigation a:visited
@@ -77,17 +65,8 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	font-size: 1.1em;
 }
 
-#pageNavigation ul li a {
-	display: block;
-	min-width: 40px;
-}
-
 #pageNavigation ul li .textLink{
-	padding-top: 3px;
-}
-
-#pageNavigation ul li a:hover {
-	background-position: center -70px;
+	padding-top: 7px;
 }
 
 #navigationContent {
@@ -96,7 +75,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 }
 
 #navigationLinks{
-	padding-top: 8px;
+	padding-top: 6px;
 	float: left;
 }
 
@@ -121,10 +100,6 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #smartSearchContainer input.description {
     color: #666;
-}
-
-#pageHeader {
-	width: 100%;
 }
 
 .frontPageHeader {
@@ -178,7 +153,6 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 .listOfLinks {
 	margin-top: 10px;
 	margin-bottom: 10px;
-	/* clear: both; */
 	width: 100%;
 	text-align: right;
 }

@@ -26,8 +26,13 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
+import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
+import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
+import com.n4systems.fieldid.wicket.pages.setup.SecurityPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
+import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
+import com.n4systems.fieldid.wicket.pages.setup.WidgetsPage;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.services.ConfigService;
@@ -154,26 +159,40 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     }
 
     private void addSpeedIdentifyLinks() {
-        boolean integration = getSecurityGuard().isIntegrationEnabled();
-        WebMarkupContainer identifySectionContainer = new WebMarkupContainer("identifyLinksContainer");
-        identifySectionContainer.setRenderBodyOnly(true);
-        identifySectionContainer.setVisible(getSessionUser().hasAccess("tag"));
-        identifySectionContainer.add(new WebMarkupContainer("identifyLinkContainer").setVisible(integration));
-        identifySectionContainer.add(new WebMarkupContainer("addAssetLinkContainer").setVisible(!integration));
-        add(identifySectionContainer);
+        String url;
+        if(getSecurityGuard().isIntegrationEnabled()) {
+        	url = "/fieldid/identify.action";
+        }else {
+        	url = "/fieldid/assetAdd.action";
+        }
+        add(new ExternalLink("identifyLink", url));
+        
     }
     
     private Component createSetupLinkContainer(SessionUser sessionUser) {
         boolean hasSetupAccess = sessionUser.hasSetupAccess();
         boolean manageSystemConfig = sessionUser.hasAccess("managesystemconfig");
         WebMarkupContainer container = new WebMarkupContainer("setupLinkContainer");
+        WebMarkupContainer subMenuContainer = new WebMarkupContainer("setupSubMenuContainer");
         if (hasSetupAccess && manageSystemConfig) {
             container.add(new BookmarkablePageLink<WebPage>("setupLink", SettingsPage.class));
         } else if (hasSetupAccess) {
             container.add(new BookmarkablePageLink<WebPage>("setupLink", OwnersUsersLocationsPage.class));
+            subMenuContainer.setVisible(false);
         } else {
             container.setVisible(false);
+            subMenuContainer.setVisible(false);
         }
+        
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("ownersUsersLocLink", OwnersUsersLocationsPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("assetsEventsLink", AssetsAndEventsPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("importLink", ImportPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("templatesLink", TemplatesPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("securityLink", SecurityPage.class));
+        
+        container.add(subMenuContainer);
+        
         return container;
     }
 
@@ -214,6 +233,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         response.renderJavaScriptReference("javascript/json2.js");
         response.renderJavaScriptReference("javascript/jquery.at_intervals.js");
         response.renderJavaScriptReference("javascript/jquery.colorbox.js");
+        response.renderJavaScriptReference("javascript/hoverIntent.js");
+        response.renderJavaScriptReference("javascript/jquery.dropdown.js");
 
         response.renderCSSReference("style/colorbox.css");
     }

@@ -123,7 +123,6 @@ h2 a {
 
 #pageHeader {
 	width: 100%;
-	overflow: hidden;
 }
 
 .frontPageHeader {
@@ -234,19 +233,7 @@ h2 a {
 
 #pageHeader #pageNavigation {
 	background-color: #525252;
-	padding: 10px 0;
-}
-
-
-#pageNavigation ul {
-	list-style: none;
-	display: inline;
-}
-
-#pageNavigation ul li {
-	text-align: center;
-	margin: 0px 10px;
-	float: left;
+	padding: 5px 0;
 }
 
 #pageNavigation a,#pageNavigation a:hover,#pageNavigation a:active,#pageNavigation a:visited
@@ -256,17 +243,8 @@ h2 a {
 	font-size: 1.1em;
 }
 
-#pageNavigation ul li a {
-	display: block;
-	min-width: 40px;
-}
-
 #pageNavigation ul li .textLink{
-	padding-top: 3px;
-}
-
-#pageNavigation ul li a:hover {
-	background-position: center -70px;
+	padding-top: 7px;
 }
 
 #navigationContent {
@@ -275,8 +253,13 @@ h2 a {
 }
 
 #navigationLinks{
-	padding-top: 8px;
+	padding-top: 4px;
 	float: left;
+}
+
+.speedLink img {
+	padding-left: 3px;
+	vertical-align: middle;
 }
 
 #smartSearchContainer {
@@ -539,7 +522,6 @@ td.formAction {
 .listOfLinks {
 	margin-top: 10px;
 	margin-bottom: 10px;
-	/* clear: both; */
 	width: 100%;
 	text-align: right;
 }

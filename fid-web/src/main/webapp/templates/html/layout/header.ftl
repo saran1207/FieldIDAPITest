@@ -1,4 +1,22 @@
+<head>
 
+	<@n4.includeStyle href="dropdown/style"/>
+    <!--[if lte IE 7]>
+        <@n4.includeStyle href="dropdown/ie"/>
+    <![endif]-->
+
+	<script type="text/javascript" language="javascript" src="/fieldid/javascript/hoverIntent.js"></script>
+	<script type="text/javascript" language="javascript" src="/fieldid/javascript/jquery.dropdown.js"></script>
+	
+	<script type="text/javascript">
+		document.observe("dom:loaded", function() {
+			$('searchText').observe('focus', clearDescription);
+			$('searchText').observe('blur', replaceDescription);
+			$('smartSearch').observe('submit', submitSmartSearch);
+		});
+	</script>
+
+</head>
 <div id="pageHeader" class="frontPageHeader">
 
 	<div id="pageActions" style="float:none;">
@@ -48,7 +66,7 @@
 	<div id="pageNavigation">
 		<div id="navigationContent">
 			<div id="navigationLinks">
-				<ul>
+				<ul class="dropdown">
 					<li>
 						<a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><img src="/fieldid/images/home.png"/></a>
 					</li>
@@ -61,7 +79,23 @@
 							<@s.url id="identifyUrl" action="assetAdd" namespace="/" />
 						</#if>
 						<li>
-							<a href="${identifyUrl}" class="speedLink textLink" id="menuIdentify"><@s.text name="speed.identify"/></a>
+							<a href="${identifyUrl}" class="speedLink textLink" id="menuIdentify">
+								<@s.text name="speed.identify"/>
+								<img src="/fieldid/images/down-arrow.png" />
+							</a>
+							<ul class="sub_menu regular_menu">
+								<li>
+									<a href="<@s.url action='assetMultiAdd' namespace='/' />" class="speedLink">
+										<@s.text name="nav.multi_add"/>
+									</a>
+								</li>
+								<li>
+									<a href="<@s.url action='assetImportExport' namespace='/' />" class="speedLink">
+										<@s.text name="nav.import"/>
+									</a>
+								</li>
+							</ul>
+							
 						</li>
 					</#if>
 					
@@ -93,7 +127,32 @@
 					<#if sessionUser.hasSetupAccess()>
 						<#if sessionUser.hasAccess("managesystemconfig")>
 							<li>
-								<a href="<@s.url value="/w/setup/settings"/>" class="speedLink textLink" id="menuSetup"><@s.text name="label.setup" /> </a>
+								<a href="<@s.url value="/w/setup/settings"/>" class="speedLink textLink" id="menuSetup">
+									<@s.text name="label.setup" />
+									<img src="/fieldid/images/down-arrow.png" />
+								</a>
+								
+								<ul class="sub_menu wide_menu">
+									<li>
+										<a href="<@s.url value="/w/setup/ownersUsersLocations" />" class="speedLink"><@s.text name="nav.owners_users_loc"/></a>
+									</li>
+									<li>
+										<a href="<@s.url value="/w/setup/assetsEvents" />" class="speedLink"><@s.text name="nav.assets_and_events"/></a>
+									</li>
+									<li>
+										<a href="<@s.url value="/w/setup/import" />" class="speedLink"><@s.text name="nav.import"/></a>
+									</li>
+									<li>
+										<a href="<@s.url value="/w/setup/templates" />" class="speedLink"><@s.text name="nav.templates"/></a>
+									</li>
+									<li>
+										<a href="<@s.url value="/w/setup/widgets" />" class="speedLink"><@s.text name="nav.widgets"/></a>
+									</li>
+									<li>
+										<a href="<@s.url value="/w/setup/security" />" class="speedLink"><@s.text name="nav.security"/></a>
+									</li>
+								</ul>
+								
 							</li>
 						<#else>
 							<li>
@@ -117,11 +176,3 @@
 	</div>
 	
 </div>
-
-<script type="text/javascript">
-	document.observe("dom:loaded", function() {
-		$('searchText').observe('focus', clearDescription);
-		$('searchText').observe('blur', replaceDescription);
-		$('smartSearch').observe('submit', submitSmartSearch);
-	});
-</script>
