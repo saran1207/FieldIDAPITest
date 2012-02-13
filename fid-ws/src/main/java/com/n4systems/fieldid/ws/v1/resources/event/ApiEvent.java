@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
 import java.util.Date;
+import java.util.List;
 
+import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachment;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
 
 public class ApiEvent extends ApiReadWriteModelWithOwner {
@@ -20,6 +22,7 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private Long gpsLatitude;
 	private Long gpsLongitude;
 	private ApiEventFormResult form;
+	private List<ApiEventAttachment> attchments;
 
 	public Long getTypeId() {
 		return typeId;
@@ -139,6 +142,13 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 
 	public void setForm(ApiEventFormResult form) {
 		this.form = form;
-	}
+	}	
 
+	public List<ApiEventAttachment> getAttchments() {
+		return attchments;
+	}
+	
+	public void setAttchments(List<ApiEventAttachment> attchments) {
+		this.attchments = attchments;
+	}
 }

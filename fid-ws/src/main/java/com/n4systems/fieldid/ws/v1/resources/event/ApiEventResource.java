@@ -18,6 +18,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
+import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.ComboBoxCriteriaResult;
@@ -56,13 +57,16 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(ApiEventResource.class);
 	
 	@Autowired private AssetService assetService;
+	@Autowired private ApiEventAttachmentResource apiAttachmentResource;
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEvent(ApiEvent apiEvent) {
 		Event event = convertApiEvent(apiEvent);
+
 		CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, securityContext.getUserSecurityFilter().getUserId());
+		createEventParameterBuilder.withUploadedImages(apiAttachmentResource.convert(apiEvent.getAttchments(), event.getTenant(), event.getCreatedBy()));
 		
 		ProductionEventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
 		eventPersistenceFactory.createEventCreator().create(createEventParameterBuilder.build());

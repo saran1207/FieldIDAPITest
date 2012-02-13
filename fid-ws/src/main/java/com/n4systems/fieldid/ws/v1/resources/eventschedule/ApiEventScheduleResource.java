@@ -19,7 +19,6 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.model.EventBook;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.orgs.BaseOrg;
