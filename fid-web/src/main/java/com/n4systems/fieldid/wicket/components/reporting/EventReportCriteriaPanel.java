@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
@@ -25,20 +24,23 @@ import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
+import com.n4systems.model.utils.DateRange;
 
-public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriteriaModel> {
+@SuppressWarnings("serial")
+public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, EventReportCriteriaModel> {
 
     private @SpringBean DynamicColumnsService dynamicColumnsService;
 
-    public EventReportCriteriaPanel(String id, IModel<EventReportCriteriaModel> criteriaModel) {
-        super(id, criteriaModel);
+    public EventReportCriteriaPanel(String id, IModel<EventReportCriteriaModel> criteriaModel, SavedReportItem savedItem) {
+        super(id, criteriaModel, savedItem);
     }
 
     public EventReportCriteriaPanel(String id) {
-        super(id, new Model<EventReportCriteriaModel>(new EventReportCriteriaModel()));
+        super(id, new Model<EventReportCriteriaModel>(new EventReportCriteriaModel()), null);
     }
 
     @Override
@@ -67,10 +69,10 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<EventReportCriter
     }
 
     @Override
-    protected WebPage createResultsPage(EventReportCriteriaModel criteria) {
+    protected WebPage createResultsPage(EventReportCriteriaModel criteria, SavedReportItem savedItem) {
         HttpSession session = ((ServletWebRequest) getRequest()).getContainerRequest().getSession();
         new LegacyReportCriteriaStorage().storeCriteria(criteria, session);
-        return new ReportingResultsPage(criteria);
+        return new ReportingResultsPage(criteria, savedItem);
     }
 
     @Override

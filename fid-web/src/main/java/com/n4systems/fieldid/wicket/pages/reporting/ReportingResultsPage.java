@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
-import com.n4systems.fieldid.service.search.SavedReportService;
-import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
-import com.n4systems.model.saveditem.SavedReportItem;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -14,14 +10,15 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
+import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionPanel;
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.services.reporting.DashboardReportingService;
 
@@ -39,22 +36,29 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
     
     public ReportingResultsPage(PageParameters params) { 
     	super(params);
-    	init(createReportCriteriaModel(params));
+    	EventReportCriteriaModel reportCriteriaModel = createReportCriteriaModel(params);
+    	SavedReportItem savedReportItem = new SavedReportItem(reportCriteriaModel);
+		init(reportCriteriaModel, savedReportItem);
     }
 
 	public ReportingResultsPage(SavedReportItem savedReportItem) {
         super(new PageParameters());
-        this.savedReportItem = savedReportItem;
-        init(savedReportItem.getSearchCriteria());
+        init(savedReportItem.getSearchCriteria(), savedReportItem);
 	}
 
-	public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel) {
+	public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel, SavedReportItem savedReportItem) {
 		super(new PageParameters());
-        savedReportItem = new SavedReportItem(reportCriteriaModel);
-		init(reportCriteriaModel);
+        SavedReportItem newSavedReportItem = new SavedReportItem(reportCriteriaModel);        
+       	newSavedReportItem.setId(savedReportItem==null ? null:savedReportItem.getId());
+		init(reportCriteriaModel, newSavedReportItem);
 	}
 
-	private void init(EventReportCriteriaModel reportCriteriaModel) {
+	public ReportingResultsPage(EventReportCriteriaModel storedCriteria) {
+		this(storedCriteria,null);
+	}
+
+	private void init(EventReportCriteriaModel reportCriteriaModel, SavedReportItem savedReportItem) {
+		this.savedReportItem = savedReportItem;
         savedReportService.saveLastSearch(reportCriteriaModel);
 		this.reportCriteriaModel = reportCriteriaModel;
 		PropertyModel<EventReportCriteriaModel> reportCriteriaPropertyModel = new PropertyModel<EventReportCriteriaModel>(this, "reportCriteriaModel");
@@ -70,7 +74,7 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
         add(createSaveReportLink("saveReportLinkAs2", false));
 
         SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.reportcriteria"));
-        criteriaExpandContainer.addContainedPanel(new EventReportCriteriaPanel("criteriaPanel", reportCriteriaPropertyModel) {
+        criteriaExpandContainer.addContainedPanel(new EventReportCriteriaPanel("criteriaPanel", reportCriteriaPropertyModel, savedReportItem) {
         	@Override
         	protected void onNoDisplayColumnsSelected() {
         		reportResultsPanel.setVisible(false);

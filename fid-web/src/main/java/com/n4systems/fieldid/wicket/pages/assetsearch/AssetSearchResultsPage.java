@@ -1,5 +1,14 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch;
 
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchMassActionPanel;
@@ -11,15 +20,8 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.services.reporting.DashboardReportingService;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
+@SuppressWarnings("serial")
 public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
     private AssetSearchResultsPanel reportResultsPanel;
@@ -35,24 +37,26 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
     public AssetSearchResultsPage(PageParameters params) { 
     	super(params);
-    	AssetSearchCriteriaModel searchCriteriaModel = createSearchCriteriaModel(params);
-    	this.savedSearchItem = new SavedSearchItem(searchCriteriaModel);
-		init(searchCriteriaModel);
+		init(createSearchCriteriaModel(params), new SavedSearchItem(searchCriteriaModel));
     }
 
 	public AssetSearchResultsPage(SavedSearchItem savedSearchItem) {
         super(new PageParameters());
-        this.savedSearchItem = savedSearchItem;
-        init(savedSearchItem.getSearchCriteria());
+        init(savedSearchItem.getSearchCriteria(), savedSearchItem);
 	}
     
-    public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel) {
+    public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem) {
     	super(new PageParameters());
-        this.savedSearchItem = new SavedSearchItem(searchCriteriaModel);
-    	init(searchCriteriaModel);
+        SavedSearchItem newSavedSearchItem = new SavedSearchItem(searchCriteriaModel);
+       	newSavedSearchItem.setId(savedSearchItem==null ? null : savedSearchItem.getId());
+    	init(searchCriteriaModel, newSavedSearchItem);
     }
 
-    private AssetSearchCriteriaModel createSearchCriteriaModel(PageParameters params) {
+	public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel) {
+		this(searchCriteriaModel,null);
+	}
+
+	private AssetSearchCriteriaModel createSearchCriteriaModel(PageParameters params) {
     	if(params!=null) {
     		// load config and set values...
     		Long widgetDefinitionId = params.get(SRSResultsPanel.WIDGET_DEFINITION_PARAMETER).toLong();
@@ -65,14 +69,15 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     	throw new IllegalStateException("must specify configId in parameters in order to create report criteria model.");
 	}
 
-    private void init(AssetSearchCriteriaModel searchCriteriaModel) {
+    private void init(AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem) {
+    	this.savedSearchItem = savedSearchItem;
         this.searchCriteriaModel = searchCriteriaModel;
         savedAssetSearchService.saveLastSearch(searchCriteriaModel);
         Model<AssetSearchCriteriaModel> criteriaModel = new Model<AssetSearchCriteriaModel>(searchCriteriaModel);
         add(reportResultsPanel = new AssetSearchResultsPanel("resultsPanel", criteriaModel));
 
         SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));
-        criteriaExpandContainer.addContainedPanel(new AssetSearchCriteriaPanel("criteriaPanel", criteriaModel) {
+        criteriaExpandContainer.addContainedPanel(new AssetSearchCriteriaPanel("criteriaPanel", criteriaModel, savedSearchItem) {
         	@Override
         	protected void onNoDisplayColumnsSelected() {
         		reportResultsPanel.setVisible(false);

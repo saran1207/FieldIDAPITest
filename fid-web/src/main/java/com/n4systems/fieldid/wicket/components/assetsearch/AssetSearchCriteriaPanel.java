@@ -1,14 +1,15 @@
 package com.n4systems.fieldid.wicket.components.assetsearch;
 
-import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.utils.DateRange;
+import java.util.List;
+
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
+import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateRangePicker;
 import com.n4systems.fieldid.wicket.components.search.IdentifiersCriteriaPanel;
@@ -16,23 +17,23 @@ import com.n4systems.fieldid.wicket.components.search.OrderDetailsCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.OwnershipCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.SRSCriteriaPanel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ReportConfiguration;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import com.n4systems.model.utils.DateRange;
 
-import java.util.List;
-
-public class AssetSearchCriteriaPanel extends SRSCriteriaPanel<AssetSearchCriteriaModel> {
+public class AssetSearchCriteriaPanel extends SRSCriteriaPanel<SavedSearchItem, AssetSearchCriteriaModel> {
 
     private @SpringBean DynamicColumnsService dynamicColumnsService;
 
-    public AssetSearchCriteriaPanel(String id, IModel<AssetSearchCriteriaModel> criteriaModel) {
-        super(id, criteriaModel);
+    public AssetSearchCriteriaPanel(String id, IModel<AssetSearchCriteriaModel> criteriaModel, SavedSearchItem savedItem) {
+        super(id, criteriaModel, savedItem);
     }
 
     public AssetSearchCriteriaPanel(String id) {
-        super(id, new Model<AssetSearchCriteriaModel>(new AssetSearchCriteriaModel()));
+        super(id, new Model<AssetSearchCriteriaModel>(new AssetSearchCriteriaModel()), null);
     }
 
     @Override
@@ -45,8 +46,8 @@ public class AssetSearchCriteriaPanel extends SRSCriteriaPanel<AssetSearchCriter
     }
 
     @Override
-    protected WebPage createResultsPage(AssetSearchCriteriaModel criteria) {
-        return new AssetSearchResultsPage(criteriaModel.getObject());
+    protected WebPage createResultsPage(AssetSearchCriteriaModel criteria, SavedSearchItem savedItem) {
+        return new AssetSearchResultsPage(criteriaModel.getObject(), savedItem);
     }
 
     @Override
