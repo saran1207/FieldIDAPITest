@@ -12,8 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 import com.n4systems.model.api.HasUser;
+import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
@@ -22,7 +22,7 @@ import com.n4systems.util.mail.MailMessage;
 
 @Entity
 @Table(name = "downloads")
-public class DownloadLink extends EntityWithTenant implements HasUser, Saveable {
+public class DownloadLink extends EntityWithTenant implements HasUser, Saveable, NamedEntity {
 	private static final long serialVersionUID = 1L;
 	private static final String DOWNLOAD_FILE_EXT = "dl";
 	public static SecurityDefiner createSecurityDefiner() {
@@ -71,10 +71,12 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 		return String.format("%s (%d) {%s}", name, getId(), user);
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -95,10 +97,12 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 		this.state = state;
 	}
 
+	@Override
 	public User getUser() {
 		return user;
 	}
 
+	@Override
 	public void setUser(User user) {
 		this.user = user;
 	}

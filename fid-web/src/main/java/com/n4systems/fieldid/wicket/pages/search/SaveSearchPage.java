@@ -1,10 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.search;
 
-import com.n4systems.fieldid.service.search.SavedReportService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.model.saveditem.SavedItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -14,6 +9,13 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import com.n4systems.fieldid.service.search.SavedReportService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.validation.UniquelyNamedEnityValidator;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.saveditem.SavedItem;
 
 public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEndPage {
 
@@ -38,13 +40,16 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
 
     class SaveReportForm extends Form {
 
-        public SaveReportForm(String id) {
+        private RequiredTextField<String> nameText;
+
+		public SaveReportForm(String id) {
             super(id);
 
             add(new Label("savedItemLabel", createSavedItemDescriptionModel()));
 
             add(new FIDFeedbackPanel("feedbackPanel"));
-            add(new RequiredTextField<String>("name", new PropertyModel<String>(SaveSearchPage.this, "name")));
+            add(nameText = new RequiredTextField<String>("name", new PropertyModel<String>(SaveSearchPage.this, "name")));
+            nameText.add(new UniquelyNamedEnityValidator(SavedItem.class));
             add(new Link("cancelLink") {
                 @Override
                 public void onClick() {

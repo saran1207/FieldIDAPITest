@@ -1,7 +1,5 @@
 package com.n4systems.model.saveditem;
 
-import com.n4systems.model.search.EventReportCriteriaModel;
-
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -10,6 +8,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+
+import com.n4systems.model.search.EventReportCriteriaModel;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -25,11 +25,13 @@ public class SavedReportItem extends SavedItem<EventReportCriteriaModel> {
 	@JoinColumn(name="report_id")
     private EventReportCriteriaModel searchCriteria;
 
-    public EventReportCriteriaModel getSearchCriteria() {
+    @Override
+	public EventReportCriteriaModel getSearchCriteria() {
         return searchCriteria;
     }
 
-    public void setSearchCriteria(EventReportCriteriaModel searchCriteria) {
+    @Override
+	public void setSearchCriteria(EventReportCriteriaModel searchCriteria) {
         this.searchCriteria = searchCriteria;
     }
 

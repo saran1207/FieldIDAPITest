@@ -10,14 +10,16 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.n4systems.model.parents.AbstractEntity;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.UnsecuredEntity;
+import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.loaders.Loader;
@@ -176,4 +178,14 @@ public class PersistenceService extends FieldIdService {
     	}    	    	
     	return query;
     }
+
+    // CAVEAT : only use this with BaseEntities that implement NamedEntity.
+	public  <T extends BaseEntity> boolean isUniqueName(Class<T> clazz, String name) {
+		Preconditions.checkArgument(NamedEntity.class.isAssignableFrom(clazz), "entity must implement "+NamedEntity.class.getSimpleName()+" in order to update its name.");
+        QueryBuilder<T> queryBuilder = createUserSecurityBuilder(clazz);
+        queryBuilder.addSimpleWhere("name", name);
+        return find(queryBuilder)==null;
+	}
+
 }
+

@@ -32,12 +32,16 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.search.SavedAssetSearchService;
+import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.behavior.TooltipBehavior;
+import com.n4systems.fieldid.wicket.behavior.validation.UniquelyNamedEnityValidator;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -60,6 +64,12 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
 
     @SpringBean
     private PersistenceService persistenceService;
+
+    @SpringBean
+    private SavedAssetSearchService savedAssetService;
+
+    @SpringBean
+    private SavedReportService savedReportService;
 
     private WebMarkupContainer itemsListContainer;
     private SortableAjaxBehavior<WebMarkupContainer> sortableBehavior;
@@ -162,7 +172,8 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         });
 
         sortableBehavior = new SimpleSortableAjaxBehavior<WebMarkupContainer>() {
-            public void onUpdate(WebMarkupContainer component, int index, AjaxRequestTarget target) {
+            @Override
+			public void onUpdate(WebMarkupContainer component, int index, AjaxRequestTarget target) {
                 SavedItem item = (SavedItem) component.getDefaultModelObject();
                 int oldIndex = savedItemsModel.getObject().indexOf(item);
                 
@@ -213,11 +224,16 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
 
         private Link viewLink;
         private WebMarkupContainer editContainer;
+		private FIDFeedbackPanel feedback;
 
         public EditItemNameForm(String id, final IModel<SavedItem> itemModel) {
             super(id);
 
-            add(new ContextImage("reorderImage", "images/reorder-small.png") {
+            add(feedback = new FIDFeedbackPanel("feedbackPanel"));
+    		feedback.setOutputMarkupId(true);
+    		feedback.setOutputMarkupPlaceholderTag(true);
+            
+            add(new ContextImage("reorderImage", "images/reorder-small.png") {            	
                 @Override
                 public boolean isVisible() {
                     return reorderState;
@@ -228,24 +244,31 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
             editContainer.setVisible(false);
             editContainer.setOutputMarkupPlaceholderTag(true);
 
-            editContainer.add(new RequiredTextField<String>("itemName", new PropertyModel<String>(itemModel, "name")));
+            final RequiredTextField<String> nameText = new RequiredTextField<String>("itemName", new PropertyModel<String>(itemModel, "name"));
+			editContainer.add(nameText);
             editContainer.add(new AjaxButton("saveNameButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    persistenceService.save(itemModel.getObject());
+                	feedback.setVisible(false);
+					persistenceService.update(itemModel.getObject());
                     setEditMode(target, false);
                 }
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
+                	feedback.setVisible(true);
+                	target.add(feedback);                	
                 }
             });
             editContainer.add(new AjaxLink("cancelLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
+                	feedback.setVisible(false);
+                	target.add(feedback);
                     setEditMode(target, false);
                 }
             });
+            nameText.add(new UniquelyNamedEnityValidator(SavedItem.class));            
         }
 
         public void setEditMode(AjaxRequestTarget target, boolean editMode) {
@@ -254,7 +277,7 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         }
 
     }
-
+    
     private LoadableDetachableModel<List<SavedItem>> createSavedItemsModel() {
         return new LoadableDetachableModel<List<SavedItem>>() {
             @Override

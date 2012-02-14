@@ -35,6 +35,7 @@ public class AssetTypeGroup extends EntityWithTenant implements NamedEntity, Lis
 		name = (name != null) ? name.trim() : null;
 	}
 
+	@Override
 	public String getDisplayName() {
 		return name;
 	}
@@ -47,10 +48,12 @@ public class AssetTypeGroup extends EntityWithTenant implements NamedEntity, Lis
 		this.orderIdx = orderIdx;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 	
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
