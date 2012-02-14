@@ -562,7 +562,7 @@ function positionDropDownForElements(a, list, actionsContainer) {
 	if($.browser.msie){
 		list.css({	'top': coordinates[1] + (actionsContainer[0].offsetHeight/2) + "px"});
 	}
-	list.css({	'left': coordinates[0] - (130 - actionsContainer[0].offsetWidth) + "px"});
+	list.css({	'left': coordinates[0] - (462 - actionsContainer[0].offsetWidth) + "px"});
 }
 
  function createBookmark(url, title) {

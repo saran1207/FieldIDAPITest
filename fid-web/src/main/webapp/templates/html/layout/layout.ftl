@@ -15,7 +15,7 @@
 		</div>
 		
 		<#include "header.ftl"/>
-		
+		<div id="headerPadding" ></div>
 		<div id="page">
 			<#include "contentHeader.ftl"/>
 			<div id="pageContent" class="pageContent">

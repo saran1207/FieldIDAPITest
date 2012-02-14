@@ -119,10 +119,21 @@ h2 a {
 	width: 1000px;
 	margin: auto;
 	clear: both;
+	position:relative;
+	z-index: 5;
 }
 
 #pageHeader {
 	width: 100%;
+	position: fixed;
+	background: none repeat scroll 0 0 #FFFFFF;
+	z-index: 10;
+	margin-top: -1px;
+}
+
+#headerPadding {
+	display:block;
+	height:120px;
 }
 
 .frontPageHeader {
