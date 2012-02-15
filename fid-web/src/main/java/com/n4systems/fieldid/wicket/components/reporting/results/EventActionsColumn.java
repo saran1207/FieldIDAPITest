@@ -16,7 +16,7 @@ public class EventActionsColumn extends AbstractColumn<RowView> {
 
     @Override
     public void populateItem(Item<ICellPopulator<RowView>> item, String id, IModel<RowView> rowModel) {
-        item.add(new EventActionsCell(id, rowModel, item.getMarkupId()));
+        item.add(new EventActionsCell(id, rowModel));
     }
     
     @Override

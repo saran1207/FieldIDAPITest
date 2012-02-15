@@ -91,6 +91,15 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     @Column(name="column_id")
 	private List<String> columns = new ArrayList<String>();
 
+    @Transient
+    private EventStatus eventStatus = EventStatus.COMPLETE;
+
+    @Transient
+    private IncludeDueDateRange includeDueDateRange;
+
+    @Transient
+    private DateRange dueDateRange = new DateRange(RangeType.CUSTOM);
+
     public Location getLocation() {
         return location;
     }
@@ -235,6 +244,35 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     @Override
 	public void setColumns(List<String> columns) {
         this.columns = columns;
+    }
+
+    public EventStatus getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(EventStatus eventStatus) {
+        this.eventStatus = eventStatus;
+    }
+
+    public DateRange getDueDateRange() {
+        return dueDateRange;
+    }
+
+    public void setDueDateRange(DateRange dueDateRange) {
+        this.dueDateRange = dueDateRange;
+    }
+
+    public IncludeDueDateRange getIncludeDueDateRange() {
+        return includeDueDateRange;
+    }
+
+    public void setIncludeDueDateRange(IncludeDueDateRange includeDueDateRange) {
+        this.includeDueDateRange = includeDueDateRange;
+    }
+
+    public void clearDateRanges() {
+        this.dateRange = new DateRange(RangeType.CUSTOM);
+        this.dueDateRange = new DateRange(RangeType.CUSTOM);
     }
 
 }

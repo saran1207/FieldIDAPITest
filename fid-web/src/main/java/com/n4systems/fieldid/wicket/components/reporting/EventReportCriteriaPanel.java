@@ -1,21 +1,8 @@
 package com.n4systems.fieldid.wicket.components.reporting;
 
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.DateRangePicker;
 import com.n4systems.fieldid.wicket.components.search.IdentifiersCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.OrderDetailsCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.OwnershipCriteriaPanel;
@@ -27,8 +14,22 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventStatus;
+import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.utils.DateRange;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 @SuppressWarnings("serial")
 public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, EventReportCriteriaModel> {
@@ -51,7 +52,18 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, 
 
     @Override
     protected void populateForm(SearchCriteriaForm form) {
-        form.add(new DateRangePicker("dateRangePicker", new PropertyModel<DateRange>(form.getModel(), "dateRange")));
+        PropertyModel<EventStatus> eventStatusModel = new PropertyModel<EventStatus>(form.getModel(), "eventStatus");
+        PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(form.getModel(), "includeDueDateRange");
+        PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(form.getModel(), "dateRange");
+        PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(form.getModel(), "dueDateRange");
+
+        form.add(new EventStatusAndDateRangePanel("eventStatusAndDateRangePanel", eventStatusModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
+            @Override
+            protected void onEventStatusChanged(AjaxRequestTarget target) {
+                // TODO: Update columns here.
+                criteriaModel.getObject().clearDateRanges();
+            }
+        });
 
         form.addAssetDetailsPanel("assetDetailsCriteriaPanel");
         form.addEventDetailsPanel("eventDetailsCriteriaPanel");

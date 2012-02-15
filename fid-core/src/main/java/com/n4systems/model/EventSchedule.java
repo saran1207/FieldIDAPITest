@@ -37,7 +37,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 		return new SecurityDefiner("tenant.id", "asset.owner", null, "state");
 	}
 
-	public enum ScheduleStatus implements DisplayEnum {
+    public enum ScheduleStatus implements DisplayEnum {
 		SCHEDULED("label.scheduled"), IN_PROGRESS("label.inprogress"), COMPLETED("label.completed");
 
 		private String label;
@@ -79,7 +79,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	private EventType eventType;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
+	@Column
 	private Date nextDate;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -88,8 +88,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	@Enumerated(EnumType.STRING)
 	private ScheduleStatus status = ScheduleStatus.SCHEDULED;
 
-	@OneToOne
-    @JoinColumn(name="event_event_id")
+	@OneToOne(mappedBy="schedule")
 	private Event event;
 
 	private Location advancedLocation = new Location();
@@ -335,6 +334,19 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
     public void setNextStandardDate(Date date) {
         this.nextDate = new PlainDate(date);
     }
-	
+
+    public static EventSchedule createPlaceholderFor(Event event) {
+        EventSchedule schedule = new EventSchedule();
+        schedule.setAsset(event.getAsset());
+        schedule.setEventType(event.getType());
+        schedule.setTenant(event.getTenant());
+        schedule.setCreated(event.getCreated());
+        schedule.setCreatedBy(event.getCreatedBy());
+        schedule.setModifiedBy(event.getModifiedBy());
+        schedule.setModified(event.getModified());
+        schedule.completed(event);
+
+        return schedule;
+    }
 
 }

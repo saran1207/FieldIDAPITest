@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.service.search;
 
-import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.util.persistence.search.JoinTerm;
@@ -8,10 +8,10 @@ import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
 import java.util.List;
 
-public class ReportService extends SearchService<EventReportCriteriaModel, Event> {
+public class ReportService extends SearchService<EventReportCriteriaModel, EventSchedule> {
 
     public ReportService() {
-        super(Event.class);
+        super(EventSchedule.class);
     }
 
     @Override
@@ -28,30 +28,32 @@ public class ReportService extends SearchService<EventReportCriteriaModel, Event
         addWildcardOrStringTerm(searchTerms, "advancedLocation.freeformLocation", criteriaModel.getLocation().getFreeformLocation());
         addSimpleTerm(searchTerms, "asset.type.id", getId(criteriaModel.getAssetType()));
         addSimpleTerm(searchTerms, "asset.type.group.id", getId(criteriaModel.getAssetTypeGroup()));
-        addSimpleTerm(searchTerms, "assetStatus.id", getId(criteriaModel.getAssetStatus()));
-        addSimpleTerm(searchTerms, "type.id", getId(criteriaModel.getEventType()));
-        addSimpleTerm(searchTerms, "type.group.id", getId(criteriaModel.getEventTypeGroup()));
-        addSimpleTerm(searchTerms, "performedBy.id", getId(criteriaModel.getPerformedBy()));
-        addSimpleTerm(searchTerms, "schedule.project.id", getId(criteriaModel.getJob()));
-        addSimpleTerm(searchTerms, "status", criteriaModel.getResult());
+
+        addSimpleTerm(searchTerms, "event.assetStatus.id", getId(criteriaModel.getAssetStatus()));
+
+        addSimpleTerm(searchTerms, "eventType.id", getId(criteriaModel.getEventType()));
+        addSimpleTerm(searchTerms, "eventType.group.id", getId(criteriaModel.getEventTypeGroup()));
+        addSimpleTerm(searchTerms, "event.performedBy.id", getId(criteriaModel.getPerformedBy()));
+        addSimpleTerm(searchTerms, "project.id", getId(criteriaModel.getJob()));
+        addSimpleTerm(searchTerms, "event.status", criteriaModel.getResult());
         if (criteriaModel.getDateRange() != null) {
-            addDateRangeTerm(searchTerms, "date", criteriaModel.getDateRange().calculateFromDate(), criteriaModel.getDateRange().calculateToDate());
+            addDateRangeTerm(searchTerms, "event.date", criteriaModel.getDateRange().calculateFromDate(), criteriaModel.getDateRange().calculateToDate());
         }
 
         if(criteriaModel.getEventBook() != null && criteriaModel.getEventBook().getId() == 0) {
-            addNullTerm(searchTerms, "book.id");
+            addNullTerm(searchTerms, "event.book.id");
         } else {
-            addSimpleTerm(searchTerms, "book.id", getId(criteriaModel.getEventBook()));
+            addSimpleTerm(searchTerms, "event.book.id", getId(criteriaModel.getEventBook()));
         }
 
         Long assignedUserId = getId(criteriaModel.getAssignedTo());
         if (assignedUserId != null) {
-            addSimpleTerm(searchTerms, "assignedTo.assignmentApplyed", true);
+            addSimpleTerm(searchTerms, "event.assignedTo.assignmentApplyed", true);
 
             if(assignedUserId == 0) {
-                addNullTerm(searchTerms, "assignedTo.assignedUser.id");
+                addNullTerm(searchTerms, "event.assignedTo.assignedUser.id");
             } else {
-                addSimpleTerm(searchTerms, "assignedTo.assignedUser.id", assignedUserId);
+                addSimpleTerm(searchTerms, "event.assignedTo.assignedUser.id", assignedUserId);
             }
         }
 

@@ -1,0 +1,25 @@
+<wicket:panel>
+
+    <h2><wicket:message key="label.event_status_and_date"/></h2>
+    <div class="infoSet">
+        <label><wicket:message key="label.event_status"/></label>
+        <span class="fieldHolder">
+            <select wicket:id="eventStatusSelect"></select>
+        </span>
+    </div>
+
+    <div class="infoSet" wicket:id="includeDueDateRangeContainer">
+        <label><input type="checkbox" wicket:id="dueRangeCheckbox"/> <wicket:message key="label.due_date"/></label>
+        <span class="fieldHolder">
+            <select wicket:id="includeDueDateRangeSelect"></select>
+        </span>
+    </div>
+
+    <div wicket:id="dueRangePicker"></div>
+
+    <div wicket:id="completeRangePicker"></div>
+
+    <div wicket:id="allRangePicker"></div>
+
+
+</wicket:panel>

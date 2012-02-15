@@ -1,6 +1,9 @@
 <wicket:extend>
 
-    <div  wicket:id="eventDetailsCriteriaPanel" class="fieldGroup floatLeft fieldGroupGap">
+    <div wicket:id="eventStatusAndDateRangePanel" class="fieldGroup floatLeft fieldGroupGap">
+    </div>
+
+    <div wicket:id="eventDetailsCriteriaPanel" class="fieldGroup floatRight">
     </div>
 
     <div wicket:id="assetDetailsCriteriaPanel" class="fieldGroup floatRight">
@@ -9,13 +12,7 @@
     <div wicket:id="ownershipCriteriaPanel" class="fieldGroup floatRight">
     </div>
 
-    <div class="fieldGroup fieldGroupGap floatLeft">
-        <h2><wicket:message key="label.eventdate"/></h2>
-        <div class="container" wicket:id="dateRangePicker">        
-        </div>
-    </div>
-
-    <div wicket:id="identifiersCriteriaPanel" class="fieldGroup floatRight">
+    <div wicket:id="identifiersCriteriaPanel" class="fieldGroup floatLeft">
     </div>
 
     <div wicket:id="orderDetailsCriteriaPanel" class="fieldGroup fieldGroupGap floatLeft">

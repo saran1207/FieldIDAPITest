@@ -89,7 +89,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	@Enumerated(EnumType.STRING)
 	private EntityState state = EntityState.ACTIVE;
 	
-	@OneToOne(mappedBy="event")
+	@OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name="schedule_id")
 	private EventSchedule schedule;
 	
 	@Embedded 
@@ -360,9 +361,16 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	protected void onCreate() {
 		super.onCreate();
 		normalizeAssignmentForPersistence();
+        fillInPlaceholderScheduleIfAbsent();
 	}
 
-	private void normalizeAssignmentForPersistence() {
+    private void fillInPlaceholderScheduleIfAbsent() {
+        if (schedule == null) {
+            schedule = EventSchedule.createPlaceholderFor(this);
+        }
+    }
+
+    private void normalizeAssignmentForPersistence() {
 		if (assignedTo == null)
 			assignedTo = AssignedToUpdate.ignoreAssignment();
 	}
