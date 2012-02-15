@@ -1,0 +1,54 @@
+/* for fluid, widge pages that take up 100% width.   eg. search results pages */
+/*
+	-moz-box-shadow: 5px 5px 5px #888;
+	-webkit-box-shadow: 5px 5px 5px #888;
+	box-shadow: 5px 5px 5px #888;
+*/
+#page {
+	margin-left:5px;
+	width:100%;
+	margin-left:0%;
+}
+#page .centre {
+	margin-left:26%; 
+}
+
+.left-menu {
+	padding:0px;
+	background:#fff;
+	left:0;
+	margin:0px;
+	border-right:3px solid #ccc;
+	width:25%;
+	top:149px;
+	bottom:0px;
+	position:fixed;
+	float:left; 
+	overflow-y:auto;
+}
+
+.sub-menu {
+	border-bottom: 1px solid #ccc;
+	height:30px; 
+}
+
+.search-config .close {
+	float:right; 
+}
+
+.search-config .title {
+	font-size: 1.5em;
+	margin-left:5px;
+}
+
+.search-config .title input {
+	float:right;
+}
+
+.search-config .content { 
+	
+}
+
+#pageFooter { 
+	display:none;
+}

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
+package com.n4systems.fieldid.wicket.components.search.results;
 
 import java.util.List;
 

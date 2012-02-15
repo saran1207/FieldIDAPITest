@@ -139,46 +139,51 @@
 			        </div>
 			    </div>
 			</div>		
+			<div wicket:id="subMenu" class="sub-menu"/>
 		</div>
 		
+		
 		<div id="headerPadding"></div>
-        
+
+		        
         <div id="page">
 
-			<div id="contentHeader">
-			
-			    <div wicket:id="topFeedbackPanel"></div>
-			
-			        <div id="contentTitle">
-			        <h1><span wicket:id="titleLabel"></span></h1>
-			
-			
-			        <div class="backToLink">
-			            <a wicket:id="backToLink">&#171; <span wicket:id="backToLinkLabel"></span></a>
-			        </div>
-    		</div>
+			<div class="left-menu" wicket:id="leftMenu"/>
 
-    		<div wicket:id="navBar"></div>
-
-		</div>
-
-		<script type="text/javascript">
-		    $(document).ready(function() {
-		        $('#searchText').bind('focus', clearDescription);
-		        $('#searchText').bind('blur', replaceDescription);
-		        $('#smartSearch').bind('submit', submitSmartSearch);
-		    });
-		</script>
-        <div id="pageContent" class="pageContent">
-	        <wicket:child></wicket:child>
-        </div>
-
-	    <div id="pageFooter">
-    	    <div>
-        	    <p><span wicket:id="versionLabel"></span></p>
-        	</div>
-			<div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/images/poweredByFieldID.jpg" border="0"/></a></div>	</div>
-        </div>
+			<div class="centre">			
+				<div id="contentHeader">			
+				    <div wicket:id="topFeedbackPanel"></div>
+				
+				    <div id="contentTitle">
+			        	<h1><span wicket:id="titleLabel"></span></h1>		
+			
+				        <div class="backToLink">
+			            	<a wicket:id="backToLink">&#171; <span wicket:id="backToLinkLabel"></span></a>
+			        	</div>
+	    			</div>
+	
+	    			<div wicket:id="navBar"></div>
+	
+				</div>
+	
+				<script type="text/javascript">
+			    	$(document).ready(function() {
+				        $('#searchText').bind('focus', clearDescription);
+			        	$('#searchText').bind('blur', replaceDescription);
+			        	$('#smartSearch').bind('submit', submitSmartSearch);
+			    	});
+				</script>
+	        	<div id="pageContent" class="pageContent">
+			        <wicket:child></wicket:child>
+		        </div>
+			
+			    <div id="pageFooter">
+		    	    <div>
+		        	    <p><span wicket:id="versionLabel"></span></p>
+		        	</div>
+					<div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/images/poweredByFieldID.jpg" border="0"/></a></div>	</div>
+		        </div>
+		</div>		        
 
     	<div wicket:id="clickTaleEnd"></div>
 

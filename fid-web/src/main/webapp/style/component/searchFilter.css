@@ -1,0 +1,26 @@
+.field {
+	margin:5px 0px 5px 5px;
+}
+
+.field label { 
+	width : 100px;
+	vertical-align:top;
+	margin-right:5px;
+}
+
+.field label {
+	  text-align:right;
+}
+
+.field label, .field input, .field select, .field .popup {
+  display:inline-block;
+}
+
+.field input, .field select, .field .component {
+  width:150px;
+}
+
+.field .date { 
+	display:inline;
+}
+

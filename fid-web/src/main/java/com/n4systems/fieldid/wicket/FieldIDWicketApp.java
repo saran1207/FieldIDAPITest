@@ -1,10 +1,5 @@
 package com.n4systems.fieldid.wicket;
 
-import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.RunSavedSearchPage;
-import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
-import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
-import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
@@ -18,14 +13,18 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AssetSearchPage2;
+import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.RunSavedSearchPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.SavedReportsDeprecatedPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
@@ -62,7 +61,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("dashboard", DashboardPage.class);
         mountPage("reporting", ReportingPage.class);
         mountPage("search", AssetSearchPage.class);
-        mountPage("search2", AssetSearchPage2.class);
         mountPage("massupdate", MassUpdatePage.class);
 
         mountPage("returnToReport", ReturnToReportPage.class);

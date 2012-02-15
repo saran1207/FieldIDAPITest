@@ -20,6 +20,7 @@ import rfid.web.helper.SessionUser;
 import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.DynamicPanel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -49,6 +50,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 	private Label topTitleLabel;
     private ConfigurationProvider configurationProvider;
 
+	private DynamicPanel leftMenu;
+	private DynamicPanel subMenu;
+
     public FieldIDFrontEndPage() {
         this(null, null);
     }
@@ -69,6 +73,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         
         SessionUser sessionUser = getSessionUser();
 
+        add(leftMenu = new DynamicPanel("leftMenu"));
+        add(subMenu = new DynamicPanel("subMenu"));
         addClickTaleScripts();
         addCssContainers();
 
@@ -280,8 +286,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             checkComponentTag( tag, "img" );
             tag.put( "src", getDefaultModelObjectAsString() );
         }
-    }
-
+    }    
+    
     // Ideally these will both be unneeded by all pages, After we convert to layout.css from site_wide.css and fieldid.css
     // (both site_wide and fieldid have accumulated a ton of irrelevant stuff that may be used only on one page and breaks new pages).
     protected boolean useLegacyCss() {
@@ -290,6 +296,14 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
     protected boolean useSiteWideCss() {
         return true;
+    }
+    
+    protected void setLeftMenuContent(Component c) { 
+    	leftMenu.setContent(c);    	
+    }
+    
+    protected void setSubMenuContent(Component c) { 
+    	subMenu.setContent(c);
     }
 
 }

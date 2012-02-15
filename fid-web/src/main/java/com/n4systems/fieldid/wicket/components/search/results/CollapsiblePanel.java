@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
+package com.n4systems.fieldid.wicket.components.search.results;
 
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -16,6 +16,10 @@ import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 @SuppressWarnings("serial")
 public abstract class CollapsiblePanel extends Panel {
 
+	// default images.
+	public static final String EXPAND_IMG = "images/columnlayout/arrow-over.png";
+	public static final String COLLAPSE_IMG = "images/columnlayout/arrow-down.png";	
+	
     private static final String CONTAINED_PANEL_MARKUP_ID = "containedPanel";
 
     private WebMarkupContainer collapseExpandLink;
@@ -36,7 +40,12 @@ public abstract class CollapsiblePanel extends Panel {
     }
 
     
-    private Panel getContainedPanel() {
+    public CollapsiblePanel(String id, IModel<String> model) {
+    	this(id, model, EXPAND_IMG, COLLAPSE_IMG);    	
+	}
+
+
+	private Panel getContainedPanel() {
 		Panel containedPanel = createContainedPanel(getContainedPanelMarkupId());
 	    containedPanel.setOutputMarkupId(true);
 	    collapseExpandLink.add(createCollapseBehavior(containedPanel.getMarkupId()));
@@ -65,7 +74,6 @@ public abstract class CollapsiblePanel extends Panel {
     public void renderHead(IHeaderResponse response) {
     	response.renderCSSReference("style/component/collapsiblePanel.css");    	
     	super.renderHead(response);
-    }
-    
+    }    
 
 }
