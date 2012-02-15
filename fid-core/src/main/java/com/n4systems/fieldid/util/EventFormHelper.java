@@ -5,6 +5,7 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
+import com.n4systems.model.Score;
 import com.n4systems.model.ScoreCriteriaResult;
 
 import java.util.ArrayList;
@@ -81,7 +82,10 @@ public class EventFormHelper {
             for (CriteriaResult result : visibleResults.get(criteriaSection)) {
                 if (result instanceof ScoreCriteriaResult) {
                     countScoreCriteria++;
-                    total += ((ScoreCriteriaResult)result).getScore().getValue();
+                    Score score = ((ScoreCriteriaResult) result).getScore();
+                    if (!score.isNa()) {
+                        total += score.getValue();
+                    }
                 }
             }
 
