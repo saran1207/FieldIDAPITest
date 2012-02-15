@@ -1718,57 +1718,15 @@ input.description {
 	border:none;
 }
 
-.floatingDropdown ul{
-	display:none;
-	position:absolute;
-	padding-top:11px;
-	width:130px;
-	z-index: 100;
-}
-.floatingDropdown ul li{
-	background-color: #333;
-	color:#cccccc;
-	text-decoration: none;
-}
-
-.floatingDropdown ul li a, .floatingDropdown ul li a:visited {
-	color:#cccccc;
-	text-decoration: none;
-	display: block;
-	padding: 7px 10px 7px 10px;
-}
-
-.floatingDropdown ul li:hover{
-	background: #1b5ccd;
-}
-.floatingDropdown ul li:hover a, .floatingDropdown ul li:hover, .floatingDropdown ul li:hover a:visited {
-	color:#fff;
-}
-
-.floatingDropdown:hover ul{
-	display:block;
-	text-align:left;
-	font-size:1em;
-}
-
-.floatingDropdownRelative:hover ul a{
-	font-size:1em;
-}
-
-.floatingDropdown:hover ul li, .floatingDropdown ul:hover li{
-	display:block;
-	border:2px solid #333;
-}
-
 #floatingDropdownStartEventLink{
 	border-top: 1px solid #cccccc;
 	border-bottom: 1px solid #cccccc;
-	}
+}
 
 #floatingDropdownStartEventLink a {
 	padding-top: 17px;
 	padding-bottom: 17px;
-	}
+}
 
 .dropDownLink{
 	text-decoration: none;

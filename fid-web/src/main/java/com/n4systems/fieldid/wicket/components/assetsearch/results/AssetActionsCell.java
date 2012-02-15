@@ -52,12 +52,6 @@ public class AssetActionsCell extends Panel {
 
         add(actionsList);
 
-        addRepositionMenuJs(actionsLink, cellMarkupId, actionsList);
-    }
-
-    private void addRepositionMenuJs(WebMarkupContainer actionsLink, String cellMarkupId, Component actionsList) {
-        actionsLink.add(new SimpleAttributeModifier("onmouseover", "positionDropDownForElements($('#" + actionsLink.getMarkupId() + "'),"
-                + "$('#" + actionsList.getMarkupId() + "'), $('#" + cellMarkupId + "'));"));
     }
 
 }

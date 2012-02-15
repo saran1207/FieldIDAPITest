@@ -1,46 +1,46 @@
 <wicket:panel>
 
-    <span class="floatingDropdown floatingDropdownRelative">
+    <ul class="floatingDropdown">
+    	<li>
+	        <a href="javascript:void(0);" class="dropDownLink" wicket:id="actionsLink">
+	            <wicket:message key="label.actions"/>
+	            <img wicket:id="dropwDownArrow"/>
+	        </a>
 
-        <a href="javascript:void(0);" class="dropDownLink" wicket:id="actionsLink">
-            <wicket:message key="label.actions"/>
-            <img wicket:id="dropwDownArrow"/>
-        </a>
-
-        <ul style="left:1123px;" wicket:id="actionsList">
-
-            <li>
-                <a wicket:id="viewLink"><wicket:message key="label.view"/></a>
-            </li>
-
-            <li>
-                <a wicket:id="viewEventsLink"><wicket:message key="label.view_events"/></a>
-            </li>
-
-            <li>
-                <a wicket:id="viewSchedulesLink"><wicket:message key="label.view_schedules"/></a>
-            </li>
-
-            <wicket:enclosure>
-                <li id="floatingDropdownStartEventLink">
-                    <a wicket:id="startEventLink"><wicket:message key="label.start_event"/></a>
-                </li>
-            </wicket:enclosure>
-
-            <wicket:enclosure>
-                <li>
-                    <a wicket:id="editAssetLink"><wicket:message key="label.edit_asset"/></a>
-                </li>
-            </wicket:enclosure>
-
-            <wicket:enclosure>
-                <li>
-                    <a wicket:id="mergeAssetLink"><wicket:message key="label.merge"/></a>
-                </li>
-            </wicket:enclosure>
-
-        </ul>
-
-    </span>
+	        <ul class="sub_menu" wicket:id="actionsList">
+	
+	            <li>
+	                <a wicket:id="viewLink"><wicket:message key="label.view"/></a>
+	            </li>
+	
+	            <li>
+	                <a wicket:id="viewEventsLink"><wicket:message key="label.view_events"/></a>
+	            </li>
+	
+	            <li>
+	                <a wicket:id="viewSchedulesLink"><wicket:message key="label.view_schedules"/></a>
+	            </li>
+	
+	            <wicket:enclosure>
+	                <li id="floatingDropdownStartEventLink">
+	                    <a wicket:id="startEventLink"><wicket:message key="label.start_event"/></a>
+	                </li>
+	            </wicket:enclosure>
+	
+	            <wicket:enclosure>
+	                <li>
+	                    <a wicket:id="editAssetLink"><wicket:message key="label.edit_asset"/></a>
+	                </li>
+	            </wicket:enclosure>
+	
+	            <wicket:enclosure>
+	                <li>
+	                    <a wicket:id="mergeAssetLink"><wicket:message key="label.merge"/></a>
+	                </li>
+	            </wicket:enclosure>
+	
+	        </ul>
+		</li>
+    </ul>
     
 </wicket:panel>

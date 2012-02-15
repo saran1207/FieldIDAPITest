@@ -22,4 +22,8 @@ $(function(){
     
     $("ul.dropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
 
+    $("ul.floatingDropdown li").hoverIntent(config);
+    
+    $("ul.floatingDropdown li ul li:has(ul)").find("a:first").append(" &raquo; ");
+
 });
