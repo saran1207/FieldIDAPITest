@@ -14,7 +14,7 @@ public class PathCreator {
             if (category == CustomColumnCategory.ASSET) {
                 return "asset.infoOptions{infoField.name="+name+"}.name";
             } else if (category == CustomColumnCategory.EVENT) {
-                return "infoOptionMap[\""+name+"\"]";
+                return "event.infoOptionMap[\""+name+"\"]";
             }
         } else if (reportType == ReportType.SCHEDULE) {
             if (category == CustomColumnCategory.ASSET) {
