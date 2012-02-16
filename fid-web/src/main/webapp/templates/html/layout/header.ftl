@@ -27,17 +27,6 @@
 					<span class="welcome"><@s.text name="label.welcome"/>, </span><a href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a> 
 					<span class="separator">|</span>
 				</li>
-					<#if sessionUser.employeeUser && userSecurityGuard.allowedManageSafetyNetwork>
-						<li>
-		  					<a href="<@s.url action="invite" namespace="/"/>" onclick:target="_blank"><@s.text name="label.invite"/></a>
-		  					<span class="separator">|</span>
-						</li>
-					<#elseif sessionUser.anEndUser>
-						<li>
-		  					<a href="http://www.fieldid.com/upgrade" target="_blank"><@s.text name="label.upgrade"/></a>
-		  					<span class="separator">|</span>
-						</li>
-					</#if>
 				<li>
 		  			<a href="${action.supportUrl}" target="_blank"><@s.text name="label.support"/></a>
 		  			<span class="separator">|</span>

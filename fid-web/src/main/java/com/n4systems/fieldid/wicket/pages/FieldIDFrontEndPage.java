@@ -84,12 +84,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
 
-        boolean displayInvite = sessionUser.isEmployeeUser() && getUserSecurityGuard().isAllowedManageSafetyNetwork();
-        boolean displayUpgrade = !displayInvite && sessionUser.isAnEndUser();
 
         add(new ExternalLink("support", getSupportUrl(), getString("label.support") ));
-        add(new WebMarkupContainer("topInviteLinkContainer").setVisible(displayInvite));
-        add(new WebMarkupContainer("topUpgradeLinkContainer").setVisible(displayUpgrade));
         add(new WebMarkupContainer("topFieldIDStoreLink").setVisible(getUserSecurityGuard().isAllowedAccessWebStore()));
 
         addSpeedIdentifyLinks();
