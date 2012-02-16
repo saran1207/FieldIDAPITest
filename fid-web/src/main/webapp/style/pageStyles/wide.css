@@ -17,6 +17,8 @@
 	padding:0px;
 	background:#fff;
 	left:0;
+	overflow-y:auto;
+	overflow:visible;
 	margin:0px;
 	border-right:3px solid #ccc;
 	width:25%;
@@ -24,7 +26,6 @@
 	bottom:0px;
 	position:fixed;
 	float:left; 
-	overflow-y:auto;
 }
 
 .sub-menu {

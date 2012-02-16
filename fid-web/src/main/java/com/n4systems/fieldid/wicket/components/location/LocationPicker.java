@@ -17,6 +17,7 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationByIdLoader;
 
+@SuppressWarnings("serial")
 public class LocationPicker extends Panel {
 
     private IModel<Location> locationModel;
@@ -28,6 +29,7 @@ public class LocationPicker extends Panel {
     private String freeformLocation;
     private int xOffset = 0;
     private int yOffset = 0;
+	private boolean relativePosition = false;
 
     public LocationPicker(String id, IModel<Location> locationModel) {
         super(id);
@@ -52,6 +54,11 @@ public class LocationPicker extends Panel {
 
         locationForm.add(predefinedLocationsPanel = new PredefinedLocationsPanel("predefinedLocationPanel"));
     }
+    
+    public LocationPicker withRelativePosition() { 
+    	this.relativePosition = true;
+    	return this;
+    }
 
     private void addBaseControls(WebMarkupContainer predefinedEnabledContainer, IModel<Location> locationModel) {
         WebMarkupContainer locationNameDisplay = new WebMarkupContainer("locationNameInput");
@@ -63,7 +70,11 @@ public class LocationPicker extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 locationPickerContainer.setVisible(true);
                 target.add(LocationPicker.this);
-                target.appendJavaScript("translate($('#" + locationPickerContainer.getMarkupId() + "'), $('#" + chooseLink.getMarkupId() + "'), " + yOffset + "," + xOffset +");");
+                if (relativePosition) { 
+                	target.appendJavaScript("translatePosition($('#" + locationPickerContainer.getMarkupId() + "'), $('#" + chooseLink.getMarkupId() + "'), " + yOffset + "," + xOffset +");");
+                } else { 
+                	target.appendJavaScript("translate($('#" + locationPickerContainer.getMarkupId() + "'), $('#" + chooseLink.getMarkupId() + "'), " + yOffset + "," + xOffset +");");
+                }
             }
         });
         chooseLink.setOutputMarkupPlaceholderTag(true);

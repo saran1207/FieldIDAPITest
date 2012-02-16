@@ -193,6 +193,13 @@ function translate(target, relativeElement, offsetY, offsetX) {
 					'left': position[0] + offsetX + "px"});
 }
 
+function translatePosition(target, relativeElement, offsetY, offsetX) {
+	var position = relativeElement.position();
+    target.css({ position: 'absolute' });
+	target.css({'top': position.top + offsetY + "px",
+					'left': position.left + offsetX + "px"});
+}
+
 function runJavascript(container) {
 	var scripts = container.getElementsByTagName("script");
 
