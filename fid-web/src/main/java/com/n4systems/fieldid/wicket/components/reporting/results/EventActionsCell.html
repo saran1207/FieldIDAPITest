@@ -7,7 +7,7 @@
 	            <img wicket:id="dropDownArrow"/>
 	        </a>
 	
-	        <ul class="sub_menu" wicket:id="actionsList">
+	        <ul class="sub_menu" wicket:id="completeEventActionsList">
 	
 	            <li>
 	                <a wicket:id="viewLink"><wicket:message key="label.view"/></a>
@@ -44,6 +44,43 @@
 	            </wicket:enclosure>
 	
 	        </ul>
+
+            <ul class="sub_menu" wicket:id="incompleteEventActionsList">
+
+                <wicket:enclosure>
+                    <li id="floatingDropdownStartEventLink">
+                        <a wicket:id="startEventLink"><wicket:message key="label.start_event"/></a>
+                    </li>
+                </wicket:enclosure>
+
+                <li>
+                    <a wicket:id="viewSchedulesLink" target="_blank"><wicket:message key="label.view_schedules"/></a>
+                </li>
+
+                <wicket:enclosure>
+                    <li>
+                        <a wicket:id="editScheduleLink" target="_blank"><wicket:message key="label.edit_schedule"/></a>
+                    </li>
+                </wicket:enclosure>
+
+                <wicket:enclosure>
+                    <li>
+                        <a wicket:id="deleteScheduleLink" target="_blank"><wicket:message key="label.delete_schedule"/></a>
+                    </li>
+                </wicket:enclosure>
+
+                <li>
+                    <a wicket:id="viewAssetLink" target="_blank"><wicket:message key="label.view_asset"/></a>
+                </li>
+
+                <wicket:enclosure>
+                    <li>
+                        <a wicket:id="editAssetLink" target="_blank"><wicket:message key="label.edit_asset"/></a>
+                    </li>
+                </wicket:enclosure>
+
+            </ul>
+
 		</li>
     </ul>
     

@@ -66,6 +66,7 @@ public class SimpleDataTable<T> extends Panel {
                 Item<T> rowItem = super.newRowItem(id, index, rowModel);
                 rowItem.setOutputMarkupId(true);
                 rowItem.add(new HighlightIfSelectedBehavior(rowModel, multiIdSelection));
+                onRowItemCreated(rowItem, rowModel);
                 return rowItem;
             }
 
@@ -174,6 +175,8 @@ public class SimpleDataTable<T> extends Panel {
     protected void onSelectionChanged(AjaxRequestTarget target) { }
 
     protected void onSortChanged(String sortProperty, SortDirection sortDirection) {}
+
+    protected void onRowItemCreated(Item<T> rowItem, IModel<T> rowModel) {}
 
     public void updateSelectionStatus(AjaxRequestTarget target) {
         target.add(selectionStatusPanel);

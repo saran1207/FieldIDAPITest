@@ -6,6 +6,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -94,6 +95,11 @@ public abstract class SRSResultsPanel<T extends SearchCriteriaModel> extends Pan
                 criteriaModel.getObject().setSortDirection(sortDirection);
                 storeCriteriaIfNecessary();
             }
+
+            @Override
+            protected void onRowItemCreated(Item<RowView> rowItem, IModel<RowView> rowModel) {
+                SRSResultsPanel.this.onRowItemCreated(rowItem, rowModel);
+            }
         });
 
         dataTable.getTable().setCurrentPage(criteriaModel.getObject().getPageNumber());
@@ -128,6 +134,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteriaModel> extends Pan
     protected void storeCriteriaIfNecessary() {}
     protected abstract IColumn<RowView> createActionsColumn();
     protected abstract FieldIdAPIDataProvider createDataProvider(IModel<T> criteriaModel);
+    protected void onRowItemCreated(Item<RowView> rowItem, IModel<RowView> rowModel) {}
 
     public void setCurrentPageSelected(boolean selected) {
         if (selected) {

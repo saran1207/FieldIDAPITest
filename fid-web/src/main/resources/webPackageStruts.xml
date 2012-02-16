@@ -125,16 +125,8 @@
 		</action>
 		
 		<action name="eventScheduleDelete" method="delete" class="com.n4systems.fieldid.actions.EventScheduleCrud">
-				<result name="error" type="redirectAction">
-				<param name="actionName">scheduleResults</param>
-				<param name="searchId">${searchId}</param>
-				<param name="currentPage">${currentPage}</param>
-			</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">scheduleResults</param>
-				<param name="searchId">${searchId}</param>
-				<param name="currentPage">${currentPage}</param>
-			</result>
+            <result name="error" type="redirect">/w/runLastReport</result>
+            <result name="success" type="redirect">/w/runLastReport</result>
 		</action>
 
 		<action name="commentTemplateList" method="list" class="com.n4systems.fieldid.actions.CommentTemplateCrud">

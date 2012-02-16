@@ -23,12 +23,64 @@ public class EventActionsCell extends Panel {
 
         add(actionsLink);
 
-        WebMarkupContainer actionsList = new WebMarkupContainer("actionsList");
-        actionsList.setOutputMarkupId(true);
-
         EventSchedule eventSchedule = (EventSchedule) rowModel.getObject().getEntity();
         Event event = eventSchedule.getEvent();
         Long eventId = event == null ? null : event.getId();
+
+        boolean localEvent = event != null && event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()).isLocal();
+        boolean localEndUser = event != null && event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()) == SecurityLevel.LOCAL_ENDUSER;
+        boolean printable = event != null && event.isEventCertPrintable();
+        boolean isReadOnly = FieldIDSession.get().getSessionUser().isReadOnlyUser();
+        boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
+        boolean hasEditEvent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
+        boolean hasTag = FieldIDSession.get().getSessionUser().hasAccess("tag");
+
+        WebMarkupContainer completeEventActionsList = createCompleteEventActionsList(eventSchedule, eventId, localEvent, localEndUser, printable, hasCreateEvent, hasEditEvent, hasTag);
+        WebMarkupContainer incompleteEventActionsList = createIncompleteEventActionsList(eventSchedule, isReadOnly, hasCreateEvent, hasTag);
+
+        completeEventActionsList.setVisible(event != null);
+        incompleteEventActionsList.setVisible(event == null);
+
+        add(completeEventActionsList);
+        add(incompleteEventActionsList);
+    }
+
+    private WebMarkupContainer createIncompleteEventActionsList(EventSchedule eventSchedule, boolean isReadOnly, boolean hasCreateEvent, boolean hasTag) {
+        WebMarkupContainer incompleteEventActionsList = new WebMarkupContainer("incompleteEventActionsList");
+        incompleteEventActionsList.setOutputMarkupId(true);
+
+        NonWicketLink startEventLink = new NonWicketLink("startEventLink", "selectEventAdd.action?scheduleId="+eventSchedule.getId()+"&type="+eventSchedule.getEventType().getId()+"&assetId="+eventSchedule.getAsset().getId());
+        NonWicketLink viewSchedulesLink = new NonWicketLink("viewSchedulesLink", "eventScheduleList.action?assetId="+eventSchedule.getAsset().getId());
+
+        NonWicketLink editSchedulesLink = new NonWicketLink("editScheduleLink", "eventScheduleList.action?assetId="+eventSchedule.getAsset().getId());
+        NonWicketLink deleteScheduleLink = new NonWicketLink("deleteScheduleLink", "eventScheduleDelete.action?uniqueID="+eventSchedule.getId() +"&assetId="+eventSchedule.getAsset().getId());
+
+        NonWicketLink viewAssetLink = new NonWicketLink("viewAssetLink", "asset.action?uniqueID="+eventSchedule.getAsset().getId());
+        NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+eventSchedule.getAsset().getId());
+
+        editSchedulesLink.setVisible(!isReadOnly);
+        deleteScheduleLink.setVisible(!isReadOnly);
+        startEventLink.setVisible(hasCreateEvent);
+        editAssetLink.setVisible(hasTag);
+
+        incompleteEventActionsList.add(startEventLink);
+        incompleteEventActionsList.add(viewSchedulesLink);
+
+        incompleteEventActionsList.add(editSchedulesLink);
+        incompleteEventActionsList.add(deleteScheduleLink);
+
+        incompleteEventActionsList.add(editSchedulesLink);
+        incompleteEventActionsList.add(deleteScheduleLink);
+
+        incompleteEventActionsList.add(viewAssetLink);
+        incompleteEventActionsList.add(editAssetLink);
+
+        return incompleteEventActionsList;
+    }
+
+    private WebMarkupContainer createCompleteEventActionsList(EventSchedule eventSchedule, Long eventId, boolean localEvent, boolean localEndUser, boolean printable, boolean hasCreateEvent, boolean hasEditEvent, boolean hasTag) {
+        WebMarkupContainer completeEventActionsList = new WebMarkupContainer("completeEventActionsList");
+        completeEventActionsList.setOutputMarkupId(true);
 
         NonWicketLink viewLink = new NonWicketIframeLink("viewLink", "aHtml/iframe/event.action?uniqueID="+eventId, true, 650, 600);
         NonWicketLink editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID="+eventId);
@@ -38,13 +90,6 @@ public class EventActionsCell extends Panel {
         NonWicketLink viewAssetLink = new NonWicketLink("viewAssetLink", "asset.action?uniqueID="+eventSchedule.getAsset().getId());
         NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+eventSchedule.getAsset().getId());
 
-        boolean localEvent = event != null && event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()).isLocal();
-        boolean localEndUser = event != null && event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()) == SecurityLevel.LOCAL_ENDUSER;
-        boolean printable = event != null && event.isEventCertPrintable();
-        boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
-        boolean hasEditEvent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
-        boolean hasTag = FieldIDSession.get().getSessionUser().hasAccess("tag");
-
         viewLink.setVisible(localEvent || localEndUser);
         editLink.setVisible(hasEditEvent && localEvent);
         printReportLink.setVisible(printable);
@@ -52,15 +97,15 @@ public class EventActionsCell extends Panel {
         startEventLink.setVisible(hasCreateEvent && localEvent);
         editAssetLink.setVisible(hasTag && localEvent);
 
-        actionsList.add(viewLink);
-        actionsList.add(editLink);
-        actionsList.add(printReportLink);
+        completeEventActionsList.add(viewLink);
+        completeEventActionsList.add(editLink);
+        completeEventActionsList.add(printReportLink);
 
-        actionsList.add(startEventLink);
-        actionsList.add(viewAssetLink);
-        actionsList.add(editAssetLink);
+        completeEventActionsList.add(startEventLink);
+        completeEventActionsList.add(viewAssetLink);
+        completeEventActionsList.add(editAssetLink);
 
-        add(actionsList);
+        return completeEventActionsList;
     }
 
 }
