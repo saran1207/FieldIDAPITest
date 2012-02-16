@@ -172,7 +172,6 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         });
 
         sortableBehavior = new SimpleSortableAjaxBehavior<WebMarkupContainer>() {
-            @Override
 			public void onUpdate(WebMarkupContainer component, int index, AjaxRequestTarget target) {
                 SavedItem item = (SavedItem) component.getDefaultModelObject();
                 int oldIndex = savedItemsModel.getObject().indexOf(item);
