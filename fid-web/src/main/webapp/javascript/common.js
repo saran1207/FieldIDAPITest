@@ -337,13 +337,12 @@ function showQuickView(elementId, event) {
 	var button = Event.findElement(event, "A");
 
 	quickViewBox.show();
-	quickViewBox.absolutize();
-	
 
-	var position = button.cumulativeOffset();
+	var position = button.positionedOffset();
 
 	quickViewBox.setStyle( {
-		top : position['top'] + "px",
+		position: "absolute",
+		top : (position['top']) + "px",
 		left : (position['left'] + 25) + "px"
 	});
 

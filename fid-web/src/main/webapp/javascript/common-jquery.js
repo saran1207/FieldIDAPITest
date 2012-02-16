@@ -325,7 +325,7 @@ function showQuickView(elementId, event) {
 
 	quickViewBox.show();
 
-	var position = $(button).offset();
+	var position = $(button).position();
 
 	quickViewBox.css( {
         position: "absolute",
