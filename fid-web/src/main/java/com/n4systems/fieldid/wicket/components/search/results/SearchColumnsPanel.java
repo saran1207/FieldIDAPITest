@@ -38,6 +38,8 @@ public class SearchColumnsPanel extends Panel {
 	public SearchColumnsPanel(String id, IModel<AssetSearchCriteriaModel> model) {
 		super(id, model);		
 		setOutputMarkupId(true);
+		setMarkupId(id);
+		
 		this.model = model;
 		dynamicAssetColumnsModel = new PropertyModel<List<ColumnMappingGroupView>>(model, "dynamicAssetColumnGroups");
 		

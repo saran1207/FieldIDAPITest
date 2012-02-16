@@ -39,10 +39,14 @@
 .search-config .title {
 	font-size: 1.5em;
 	margin-left:5px;
+	margin-top:10px;
+	margin-bottom:5px;
 }
 
 .search-config .title input {
 	float:right;
+	margin-right:5px;
+	margin-top:-4px;
 }
 
 .search-config .content { 
@@ -51,4 +55,23 @@
 
 #pageFooter { 
 	display:none;
+}
+
+
+
+.adminLink { 
+	float:right;
+	background:#fff;
+}
+
+#pageContent .crudForm .pageSection {
+	display:none;
+}
+
+.paginationWrapper {
+	position:fixed;
+	width:74%;
+	bottom:0px;
+	left:26%;	
+	background:#fff;	 
 }

@@ -24,7 +24,9 @@ import com.n4systems.model.utils.DateRange;
 public class SearchFilterPanel extends Panel {
 
 	public SearchFilterPanel(String id, final IModel<AssetSearchCriteriaModel> model) {
-		super(id,model);	
+		super(id,model);
+		setOutputMarkupId(true);
+		setMarkupId(id);
 		
 		CollapsiblePanel p1 = new CollapsiblePanel("identifiers", new StringResourceModel("label.identifiers",this,null)) {
 			@Override protected Panel createContainedPanel(String id) {

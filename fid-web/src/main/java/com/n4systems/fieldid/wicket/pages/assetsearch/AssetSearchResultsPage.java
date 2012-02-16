@@ -40,25 +40,31 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     private SavedSearchItem savedSearchItem;
     private AssetSearchCriteriaModel searchCriteriaModel;
 
+	private boolean showLeftMenu;
+
     public AssetSearchResultsPage(PageParameters params) { 
     	super(params);
-		init(createSearchCriteriaModel(params), new SavedSearchItem(searchCriteriaModel));
+		init(createSearchCriteriaModel(params), new SavedSearchItem(searchCriteriaModel), true);
     }
 
 	public AssetSearchResultsPage(SavedSearchItem savedSearchItem) {
         super(new PageParameters());
-        init(savedSearchItem.getSearchCriteria(), savedSearchItem);
+        init(savedSearchItem.getSearchCriteria(), savedSearchItem, true);
 	}
     
-    public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem) {
+    public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem, boolean showLeftMenu) {
     	super(new PageParameters());
         SavedSearchItem newSavedSearchItem = new SavedSearchItem(searchCriteriaModel);
        	newSavedSearchItem.setId(savedSearchItem==null ? null : savedSearchItem.getId());
-    	init(searchCriteriaModel, newSavedSearchItem);
+    	init(searchCriteriaModel, newSavedSearchItem, showLeftMenu);
     }
 
 	public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel) {
-		this(searchCriteriaModel,null);
+		this(searchCriteriaModel,null, true);
+	}
+
+	public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel, boolean showLeftMenu) {
+		this(searchCriteriaModel,null, showLeftMenu);
 	}
 
 	private AssetSearchCriteriaModel createSearchCriteriaModel(PageParameters params) {
@@ -77,8 +83,9 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 		return new AssetSearchCriteriaModel();
 	}
 
-    private void init(final AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem) {
+    private void init(final AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem, boolean showLeftMenu) {
     	this.savedSearchItem = savedSearchItem;
+    	this.showLeftMenu = showLeftMenu;
         this.searchCriteriaModel = searchCriteriaModel;
         savedAssetSearchService.saveLastSearch(searchCriteriaModel);
         Model<AssetSearchCriteriaModel> criteriaModel = new Model<AssetSearchCriteriaModel>(searchCriteriaModel);
@@ -104,16 +111,16 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
         add(criteriaExpandContainer);
         add(new AssetSearchMassActionPanel("massActionPanel", criteriaModel));    
         
-        final SearchConfigPanel searchConfigPanel = new SearchConfigPanel(DynamicPanel.CONTENT_ID, new Model(searchCriteriaModel)) {
+        final SearchConfigPanel searchConfigPanel = new SearchConfigPanel(DynamicPanel.CONTENT_ID, criteriaModel) {
         	@Override protected void onSearchSubmit() {
-        		setResponsePage(new AssetSearchResultsPage(searchCriteriaModel));
+        		setResponsePage(new AssetSearchResultsPage(searchCriteriaModel,false));
         	}
         	@Override protected void onNoDisplayColumnsSelected() {
         		
         	}
         };
 		setLeftMenuContent(searchConfigPanel);
-        setSubMenuContent(new SearchSubMenu(DynamicPanel.CONTENT_ID) {
+        setSubMenuContent(new SearchSubMenu(DynamicPanel.CONTENT_ID, criteriaModel) {
         	@Override protected void onClick(AjaxRequestTarget target, String id) {
         		if ("filters".equals(id)) { 
         			searchConfigPanel.showFilters();
@@ -155,7 +162,11 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
     	super.renderHead(response);
-        response.renderCSSReference("style/pageStyles/wide.css");    	
+        response.renderCSSReference("style/pageStyles/wide.css");
+        response.renderJavaScriptReference("javascript/fieldIdWide.js");
+        if (!showLeftMenu) { 
+        	response.renderCSSReference("style/pageStyles/wideNoLeftMenu.css");
+        }
     }
     
 }

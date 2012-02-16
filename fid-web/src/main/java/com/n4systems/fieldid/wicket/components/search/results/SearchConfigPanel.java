@@ -20,13 +20,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 
 @SuppressWarnings("serial")
-public class SearchConfigPanel extends Panel {
-			
-	// note : need to enforce that all datepickers, orgpickers, etc... are closed when closing config filter panel.
-	// refactor this into .JS file.
-	
-	public static final String HIDE_JS = "$('.left-menu').hide(); $('.locationSelection').remove(); $('.orgSelector').remove();$('#page').animate({width:'100%',marginLeft:'0%'},200);";
-	public static final String SHOW_JS = "$('#page').animate({width:'79%',marginLeft:'21%'},200, 'linear', function() { $('.left-menu').show();});";
+public class SearchConfigPanel extends Panel {		
 	
 	private Component filters;
 	private Component columns;
@@ -42,10 +36,10 @@ public class SearchConfigPanel extends Panel {
 				return getTitle();
 			}
 		}));
-		form.add(new WebMarkupContainer("close").add(createCloseBehavior()).setVisible(false));
+		form.add(new WebMarkupContainer("close").add(createCloseBehavior()));
 		form.add(filters = new SearchFilterPanel("filters",model));
 		form.add(columns = new SearchColumnsPanel("columns",model));
-		add(form);
+		add(form);		
 		showFilters();
 	}
 
@@ -58,7 +52,7 @@ public class SearchConfigPanel extends Panel {
 	protected Behavior createCloseBehavior() {
 		return new WiQueryEventBehavior(new Event(MouseEvent.CLICK) {
 			@Override public JsScope callback() {
-				return JsScopeUiEvent.quickScope(HIDE_JS);
+				return JsScopeUiEvent.quickScope(SearchSubMenu.HIDE_JS);
 			}
 		});
 	}	
@@ -74,17 +68,17 @@ public class SearchConfigPanel extends Panel {
 	public void showFilters() {
 		showFilters(true);		
 	}
+	
 	public void showFilters(boolean v) {
 		filters.setVisible(v);
 		columns.setVisible(!v);		
 	}
 
-
 	 public class SearchConfigForm extends Form<AssetSearchCriteriaModel> {
 
       	public SearchConfigForm(String id, final IModel<AssetSearchCriteriaModel> model) {
         	super(id, model);
-          	setOutputMarkupId(true);
+          	setOutputMarkupId(true); 
       	}
       	
       	@Override
