@@ -1,15 +1,42 @@
 <wicket:panel>	
-	<div>
-        <ul class="dropdown">
-            <li>
-                <a wicket:id="filters"><img src="/fieldid/images/home.png"/></a>
-            </li>
-            <li>
-                <a wicket:id="columns"><img src="/fieldid/images/home.png"/></a>
-            </li>
-        </ul>
-        <div wicket:id="actions">
-        </div>		
-	</div>		
+	<span class="config">
+		<a wicket:id="filters"><wicket:message key="label.filters"/></a>
+        <a wicket:id="columns"><wicket:message key="label.columns"/></a>
+    </span>
+    <span class="asset-actions">
+    	<ul class="dropdown">
+		    <li>
+		        <a href="#"><wicket:message key="label.save"/></a>
+		        <ul class="wide_menu">
+		        	<li>
+				        <a wicket:id="save"><wicket:message key="label.save_search"/></a>
+				    </li>
+				    <li>
+				        <a wicket:id="saveAs"><wicket:message key="label.save_search_as" /></a>
+				    </li>
+			    </ul>		        
+		    </li>
+		    <li>
+		        <a wicket:id="printAllCertsLink" class="lightboxPrintLink printAllPDFs"><wicket:message key="label.printselectedmanufacturercertificate"/></a>
+		    </li>
+		    <li>
+		        <a wicket:id="exportToExcelLink" class='lightboxPrintLink exportToExcel'><wicket:message key="label.exporttoexcel"/></a>
+		    </li>
+		    <li>
+		        <a href="#" ><wicket:message key="label.actions"/></a>
+		        <ul class="wide_menu">
+		        	<li>
+				        <a wicket:id="massUpdateLink"><wicket:message key="label.massupdate"/></a>
+				    </li>
+				    <li>
+				        <a wicket:id="massScheduleLink"><wicket:message key="label.mass_schedule" /></a>
+				    </li>
+				    <li>
+				        <a wicket:id="massEventLink"><wicket:message key="label.preform_mass_event" /></a>
+				    </li>
+			    </ul>
+		    </li>
+		</ul>
+	</span>
 </wicket:panel>	
 		

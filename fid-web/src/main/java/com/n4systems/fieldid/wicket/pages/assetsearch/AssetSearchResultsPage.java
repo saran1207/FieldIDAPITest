@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
@@ -83,7 +84,7 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 		return new AssetSearchCriteriaModel();
 	}
 
-    private void init(final AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem, boolean showLeftMenu) {
+    private void init(final AssetSearchCriteriaModel searchCriteriaModel, final SavedSearchItem savedSearchItem, boolean showLeftMenu) {
     	this.savedSearchItem = savedSearchItem;
     	this.showLeftMenu = showLeftMenu;
         this.searchCriteriaModel = searchCriteriaModel;
@@ -129,9 +130,17 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
         		}
         		target.add(searchConfigPanel);        		
         	}
+        	@Override protected Page getSaveResponsePage(boolean overwrite) { 
+        		return new SaveAssetSearchPage(savedSearchItem, AssetSearchResultsPage.this, overwrite);
+        	}
+        	@Override protected boolean isExistingSavedItem() {
+        		return savedSearchItem.getId()!=null;
+        	}
+        	
         });
 	}
 
+    @Deprecated // when WEB-2629 is finished, this should no longer be needed.
     private Link createSaveSearchLink(String linkId, final boolean overwrite) {
         Link link = new Link(linkId) {
             @Override

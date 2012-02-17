@@ -1,6 +1,10 @@
 package com.n4systems.fieldid.wicket.components.assetsearch.results;
 
-import com.n4systems.fieldid.actions.MassUpdate;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
+
+import rfid.web.helper.SessionUser;
+
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
@@ -8,10 +12,8 @@ import com.n4systems.fieldid.wicket.components.search.results.MassActionPanel;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.IModel;
-import rfid.web.helper.SessionUser;
 
+@Deprecated   //WEB-2629.   page being refactored so this should not be needed at end of ticket.
 public class AssetSearchMassActionPanel extends MassActionPanel {
 
     public AssetSearchMassActionPanel(String id, final IModel<AssetSearchCriteriaModel> criteriaModel) {

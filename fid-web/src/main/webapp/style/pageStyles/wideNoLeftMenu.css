@@ -6,3 +6,8 @@
 .left-menu {
 	display:none;
 }
+
+.paginationWrapper {
+	width:100%;
+	left:0%;	
+}

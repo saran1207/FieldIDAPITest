@@ -10,30 +10,59 @@
 	margin-left:0%;
 }
 #page .centre {
-	margin-left:26%; 
+	margin-left:23%; 
+}
+
+.buttonBar { 
+	float:left;
+}
+
+.buttonBar a {
+	height:24px;
 }
 
 .left-menu {
 	padding:0px;
 	background:#fff;
 	left:0;
-	overflow-y:auto;
-	overflow:visible;
+	overflow-x:visible;
+	overflow-y:visible;  /**change this to auto when location & org pickers are fixed*/ 
 	margin:0px;
 	border-right:3px solid #ccc;
-	width:25%;
+	width:22%;
 	top:149px;
 	bottom:0px;
 	position:fixed;
 	float:left; 
 }
 
-.sub-menu {
-	border-bottom: 1px solid #ccc;
-	height:30px; 
+.sub-menu a { 
+	color:#333;
 }
 
-.search-config .close {
+.sub-menu ul.dropdown li.hover a {
+	color:#ddd; 
+}
+
+.sub-menu {
+	border-bottom: 1px solid #ccc;
+	height:30px;
+	color:#000;
+}
+
+.sub-menu .asset-actions { 
+	float:right;
+	margin-top:5px;
+	margin-right:100px;
+}
+
+
+.sub-menu .config { 
+	float:left;
+	margin-top:5px;
+}
+
+.search-config .title .right {
 	float:right; 
 }
 
@@ -45,7 +74,6 @@
 }
 
 .search-config .title input {
-	float:right;
 	margin-right:5px;
 	margin-top:-4px;
 }
@@ -59,7 +87,6 @@
 }
 
 
-
 .adminLink { 
 	float:right;
 	background:#fff;
@@ -71,8 +98,10 @@
 
 .paginationWrapper {
 	position:fixed;
-	width:74%;
+	width:77%;
 	bottom:0px;
-	left:26%;	
+	left:23%;	
 	background:#fff;	 
 }
+
+

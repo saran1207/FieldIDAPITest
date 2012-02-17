@@ -2097,7 +2097,7 @@ div.unitOfMeasureName {
 }
 
 .buttonBar a {
-    color: #484848;
+	color: #484848;
 	text-decoration: none;
     text-shadow: 0 1px 0 #fff;
      font: bold 12px Helvetica, Arial, sans-serif;
@@ -2105,7 +2105,6 @@ div.unitOfMeasureName {
     height: 35px;
     display: block;
     float: left;
-    background: #f0f0f0;
     border: solid 1px #7f7f7f;
     border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -2117,6 +2116,10 @@ div.unitOfMeasureName {
     -moz-transition: border .218s;
     -o-transition: border-color .218s;
     transition: border-color .218s;
+ 	background:-webkit-linear-gradient(top, #f8f8f8, #bebebe);
+	background:-moz-linear-gradient(top, #f8f8f8, #bebebe);
+    background:-ms-linear-gradient(top, #f8f8f8, #bebebe);
+    background:-o-linear-gradient(top, #f8f8f8, #bebebe);	
 }
 
 .buttonBar a.button:hover {
