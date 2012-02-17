@@ -13,7 +13,7 @@ ul.dropdown a:active                { color: #ffa500; }
 ul.dropdown li a                    { display: block; padding: 4px 11px; text-decoration:none; }
 ul.dropdown li:last-child a         { border-right: none; } /* Doesn't work in IE */
 ul.dropdown li.hover,
-ul.dropdown li:hover                { background: #707070; color: black; position: relative; }
+ul.dropdown li:hover                { color: black; position: relative; }
 ul.dropdown li.hover a              { color: #000; }
 
 
