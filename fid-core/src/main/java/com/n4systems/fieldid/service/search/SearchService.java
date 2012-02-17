@@ -1,12 +1,5 @@
 package com.n4systems.fieldid.service.search;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.org.OrgService;
@@ -28,10 +21,17 @@ import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
+import com.n4systems.util.persistence.search.terms.NotNullTerm;
 import com.n4systems.util.persistence.search.terms.NullTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public abstract class SearchService<T extends SearchCriteriaModel, M extends BaseEntity & NetworkEntity> extends FieldIdPersistenceService {
 
@@ -174,6 +174,10 @@ public abstract class SearchService<T extends SearchCriteriaModel, M extends Bas
 
     protected void addNullTerm(List<SearchTermDefiner> searchTerms, String field) {
         searchTerms.add(new NullTerm(field));
+    }
+
+    protected void addNotNullTerm(List<SearchTermDefiner> searchTerms, String field) {
+        searchTerms.add(new NotNullTerm(field));
     }
 
     protected void addDateRangeTerm(List<SearchTermDefiner> terms, String field, Date fromDate, Date toDate) {

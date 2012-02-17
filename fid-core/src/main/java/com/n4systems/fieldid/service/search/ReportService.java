@@ -3,8 +3,13 @@ package com.n4systems.fieldid.service.search;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventStatus;
+import com.n4systems.model.search.IncludeDueDateRange;
+import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.JoinTerm;
+import com.n4systems.util.persistence.search.terms.CompletedOrDueDateRange;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
+import com.n4systems.util.persistence.search.terms.SimpleTerm;
 
 import java.util.List;
 
@@ -36,8 +41,27 @@ public class ReportService extends SearchService<EventReportCriteriaModel, Event
         addSimpleTerm(searchTerms, "event.performedBy.id", getId(criteriaModel.getPerformedBy()));
         addSimpleTerm(searchTerms, "project.id", getId(criteriaModel.getJob()));
         addSimpleTerm(searchTerms, "event.status", criteriaModel.getResult());
+
+        if (criteriaModel.getEventStatus() == EventStatus.COMPLETE) {
+            addSimpleTerm(searchTerms, "status", EventSchedule.ScheduleStatus.COMPLETED);
+        } else if (criteriaModel.getEventStatus() == EventStatus.INCOMPLETE) {
+            searchTerms.add(new SimpleTerm<EventSchedule.ScheduleStatus>("status", EventSchedule.ScheduleStatus.COMPLETED, WhereParameter.Comparator.NE));
+        }
+
+        if (IncludeDueDateRange.HAS_NO_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
+            addNullTerm(searchTerms, "nextDate");
+        } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
+            addNotNullTerm(searchTerms,  "nextDate");
+        } else if (IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange()) && criteriaModel.getDueDateRange() != null) {
+            addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), criteriaModel.getDueDateRange().calculateToDate());
+        }
+
         if (criteriaModel.getDateRange() != null) {
-            addDateRangeTerm(searchTerms, "event.date", criteriaModel.getDateRange().calculateFromDate(), criteriaModel.getDateRange().calculateToDate());
+            if (criteriaModel.getEventStatus() == EventStatus.COMPLETE) {
+                addDateRangeTerm(searchTerms, "completedDate", criteriaModel.getDateRange().calculateFromDate(), criteriaModel.getDateRange().calculateToDate());
+            } else if (criteriaModel.getEventStatus() == EventStatus.ALL) {
+                searchTerms.add(new CompletedOrDueDateRange(criteriaModel.getDateRange()));
+            }
         }
 
         if(criteriaModel.getEventBook() != null && criteriaModel.getEventBook().getId() == 0) {

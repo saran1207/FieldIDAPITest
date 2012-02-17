@@ -1,10 +1,9 @@
 package com.n4systems.fieldid.wicket.components;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.utils.EnumDropDownChoiceRenderer;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -14,12 +13,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.n4systems.fieldid.wicket.utils.EnumDropDownChoiceRenderer;
-import com.n4systems.model.utils.DateRange;
-import com.n4systems.util.chart.RangeType;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
-
-@SuppressWarnings("serial")
 public class DateRangePicker extends Panel {
 
 	private DropDownChoice<RangeType> dropDownChoice;
@@ -40,31 +37,29 @@ public class DateRangePicker extends Panel {
 				new PropertyModel<RangeType>(model, "rangeType"),
 				getDateRanges(), 
 				new EnumDropDownChoiceRenderer<RangeType>());
-		fromDatePicker = new DateTimePicker("fromDate", new PropertyModel<Date>(model, "fromDate"));
-		toDatePicker = new DateTimePicker("toDate", new PropertyModel<Date>(model, "toDate"));
+		fromDatePicker = new DateTimePicker("fromDate", new PropertyModel<Date>(model, "fromDate")) {
+            @Override
+            public boolean isEnabled() {
+                return RangeType.CUSTOM.equals(dropDownChoice.getModelObject());
+            }
+        };
+		toDatePicker = new DateTimePicker("toDate", new PropertyModel<Date>(model, "toDate")) {
+            @Override
+            public boolean isEnabled() {
+                return RangeType.CUSTOM.equals(dropDownChoice.getModelObject());
+            }
+        };
 
-		
 		dropDownChoice.setOutputMarkupId(true);
 		dropDownChoice.setNullValid(false);
 		dropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			@Override protected void onUpdate(AjaxRequestTarget target) {				
-				updatePickers();
 				target.add(fromDatePicker, toDatePicker);
 			}
 
 		});
 
-		updatePickers();
-		
-		add(dropDownChoice);    	
-		add(fromDatePicker);
-		add(toDatePicker);
-	}		
-	
-	private void updatePickers() {
-		boolean isCustom = RangeType.CUSTOM.equals(dropDownChoice.getModelObject());
-		fromDatePicker.setEnabled(isCustom);
-		toDatePicker.setEnabled(isCustom);
+		add(dropDownChoice, fromDatePicker, toDatePicker);
 	}
 	
 	protected List<RangeType> getDateRanges() {
@@ -76,5 +71,5 @@ public class DateRangePicker extends Panel {
         response.renderCSSReference("style/newCss/component/dateRange.css");		
         super.renderHead(response);
 	}
-}
 
+}

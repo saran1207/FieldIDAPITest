@@ -60,7 +60,6 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, 
         form.add(new EventStatusAndDateRangePanel("eventStatusAndDateRangePanel", eventStatusModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
             @Override
             protected void onEventStatusChanged(AjaxRequestTarget target) {
-                // TODO: Update columns here.
                 criteriaModel.getObject().clearDateRanges();
             }
         });

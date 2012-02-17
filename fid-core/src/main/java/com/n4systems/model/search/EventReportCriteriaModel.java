@@ -91,13 +91,20 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     @Column(name="column_id")
 	private List<String> columns = new ArrayList<String>();
 
-    @Transient
+    @Column(name="eventStatus")
+    @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.COMPLETE;
 
-    @Transient
+    @Column(name="includeDueDateRange")
+    @Enumerated(EnumType.STRING)
     private IncludeDueDateRange includeDueDateRange;
 
-    @Transient
+    @Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name="rangeType", column = @Column(name="dueDateRange")),
+		@AttributeOverride(name="fromDate", column = @Column(name="dueFromDate")),
+        @AttributeOverride(name="toDate", column = @Column(name="dueToDate"))
+	})
     private DateRange dueDateRange = new DateRange(RangeType.CUSTOM);
 
     public Location getLocation() {
@@ -271,6 +278,7 @@ public class EventReportCriteriaModel extends SearchCriteriaModel {
     }
 
     public void clearDateRanges() {
+        setIncludeDueDateRange(null);
         this.dateRange = new DateRange(RangeType.CUSTOM);
         this.dueDateRange = new DateRange(RangeType.CUSTOM);
     }

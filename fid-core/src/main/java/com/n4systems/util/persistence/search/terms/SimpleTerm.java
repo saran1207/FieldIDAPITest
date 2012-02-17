@@ -8,16 +8,22 @@ public class SimpleTerm<T> extends SingleTermDefiner {
 	
 	private String field;
 	private T value;
+    private WhereParameter.Comparator comparator;
 	
 	public SimpleTerm() {}
+
+    public SimpleTerm(String path, T value) {
+        this(path, value, WhereParameter.Comparator.EQ);
+    }
 	
-	public SimpleTerm(String path, T value) {
+	public SimpleTerm(String path, T value, WhereParameter.Comparator comparator) {
 		this.field = path;
 		this.value = value;
+        this.comparator = comparator;
 	}
 	
 	protected WhereParameter<T> createWhere() {
-		WhereParameter<T> param = new WhereParameter<T>(WhereParameter.Comparator.EQ, field, value);
+		WhereParameter<T> param = new WhereParameter<T>(comparator, field, value);
 		
 		// String fields are automatically ignore case & trim.
 		if (value instanceof String) {

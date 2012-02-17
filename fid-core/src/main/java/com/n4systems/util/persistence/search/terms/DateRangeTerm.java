@@ -45,7 +45,7 @@ public class DateRangeTerm implements SearchTermDefiner {
 		String fieldName = StringUtils.pathToName(field);
 		fieldName += (isStart) ? START_FIELD_POSTFIX : END_FIELD_POSTFIX;
 		
-		return new WhereParameter<Date>(comp, fieldName, field, date, null, false);
+		return new WhereParameter<Date>(comp, fieldName, field, date, null, false, WhereClause.ChainOp.AND);
 	}
 	
 	public String getField() {
