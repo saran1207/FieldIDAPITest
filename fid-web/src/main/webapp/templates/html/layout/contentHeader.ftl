@@ -22,9 +22,6 @@
 			<#if navOptions.onSetupTemplate>
 				<a href="/fieldid/w/setup/templates">&#171; <@s.text name="label.back_to_setup"/></a>
 			</#if>
-			<#if navOptions.returnToReport && reportActive>
-				<a href="/fieldid/w/returnToReport">&#171; <@s.text name="label.return_to_report"/></a>
-			</#if>
 			<#if navOptions.onSafetyNetwork>
 				<a href="<@s.url action="safetyNetwork" namespace="/"/>">&#171; <@s.text name="label.back_to_safety_network"/></a>
 			</#if>
