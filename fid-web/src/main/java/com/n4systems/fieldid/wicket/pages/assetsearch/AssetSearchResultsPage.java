@@ -43,6 +43,8 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
 	private boolean showLeftMenu;
 
+	private SearchSubMenu searchMenu;
+
     public AssetSearchResultsPage(PageParameters params) { 
     	super(params);
 		init(createSearchCriteriaModel(params), new SavedSearchItem(searchCriteriaModel), true);
@@ -90,7 +92,12 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
         this.searchCriteriaModel = searchCriteriaModel;
         savedAssetSearchService.saveLastSearch(searchCriteriaModel);
         Model<AssetSearchCriteriaModel> criteriaModel = new Model<AssetSearchCriteriaModel>(searchCriteriaModel);
-        add(resultsPanel = new AssetSearchResultsPanel("resultsPanel", criteriaModel));
+        add(resultsPanel = new AssetSearchResultsPanel("resultsPanel", criteriaModel) {
+        	@Override protected void updateSelectionStatus(AjaxRequestTarget target) {
+        		super.updateSelectionStatus(target);
+        		target.add(searchMenu);
+        	};       	
+        });
         
 
         SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));
@@ -101,10 +108,6 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
         	}
         });
         
-//        add(new BookmarkablePageLink<Void>("startNewReportLink", AssetSearchPage.class));
-//        add(createSaveSearchLink("saveReportLink", true));
-//        add(createSaveSearchLink("saveReportLinkAs", false));
-
         add(new BookmarkablePageLink<Void>("startNewReportLink2", AssetSearchPage.class));
         add(createSaveSearchLink("saveReportLink2", true));
         add(createSaveSearchLink("saveReportLinkAs2", false));
@@ -121,7 +124,7 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
         	}
         };
 		setLeftMenuContent(searchConfigPanel);
-        setSubMenuContent(new SearchSubMenu(DynamicPanel.CONTENT_ID, criteriaModel) {
+        setSubMenuContent(searchMenu = new SearchSubMenu(DynamicPanel.CONTENT_ID, criteriaModel) {
         	@Override protected void onClick(AjaxRequestTarget target, String id) {
         		if ("filters".equals(id)) { 
         			searchConfigPanel.showFilters();

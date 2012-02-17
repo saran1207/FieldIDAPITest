@@ -2,10 +2,12 @@
 	margin:5px 0px 5px 5px;
 }
 
-.field label { 
+.field label, .collapsible .dateRange label, .collapsible .dateFrom label, .collapsible .dateTo label { 
 	width : 75px;
 	vertical-align:top;
 	margin-right:5px;
+	display:inline-block;
+	text-align:right;
 }
 
 .field label {
@@ -14,9 +16,10 @@
 
 .field label, .field input, .field select, .field .popup {
   display:inline-block;
+  *display:inline;
 }
 
-.field input, .field select, .field .component {
+.field input, .field select, .field .component, .collapsible select {
   width:150px;
 }
 
@@ -24,3 +27,14 @@
 	display:inline;
 }
 
+.infoSet .fieldHolder input.date  {
+	width:150px;	
+}
+
+.infoSet .fieldHolder div  {
+	display:inline;	
+}
+
+.dateTo .dateFrom .dateRange { 
+	min-height:30px;
+}

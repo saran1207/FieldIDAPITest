@@ -9,8 +9,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
+import com.n4systems.fieldid.wicket.components.DateRangePicker;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.AssetDetailsCriteriaPanel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.DateRangePicker2;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.IdentifiersCriteriaPanel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.OrderDetailsCriteriaPanel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.OwnershipCriteriaPanel;
@@ -62,7 +62,7 @@ public class SearchFilterPanel extends Panel {
 
 		CollapsiblePanel p5 = new CollapsiblePanel("dateRangePicker", new StringResourceModel("label.daterange",this,null)) {
 			@Override 	protected Panel createContainedPanel(String id) {
-				return new DateRangePicker2(id,new PropertyModel<DateRange>(model, "dateRange"));
+				return new DateRangePicker(id,new PropertyModel<DateRange>(model, "dateRange"));
 			}			
 		};
 	  	add(p5);		  	  			

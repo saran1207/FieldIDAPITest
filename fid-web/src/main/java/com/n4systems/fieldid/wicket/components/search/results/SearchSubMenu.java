@@ -4,51 +4,86 @@ import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 
 @SuppressWarnings("serial")
 public class SearchSubMenu extends Panel {
 	
 	public static final String HIDE_JS = "fieldIdWidePage.hideLeftMenu()";
 	public static final String SHOW_JS = "fieldIdWidePage.showLeftMenu()";
-	private Link massSchedueLink;
-	private Link massUpdateLink;
-	private AssetSearchMassActionLink massEventLink;
-	private AssetSearchMassActionLink printManuCertsLink;
+	private WebMarkupContainer actions;
+	private Model<AssetSearchCriteriaModel> model;
+	private Integer maxUpdate;
+	private Integer maxSchedule;
+	private Integer maxPrint;
+	private Integer maxExport;
+	private Integer maxEvent;
 	
 	
 	public SearchSubMenu(String id, final Model<AssetSearchCriteriaModel> model) {
 		super(id);
+		this.model = model;
 		add(new SubMenuLink("columns"));
 		add(new SubMenuLink("filters"));
-        add(printManuCertsLink = new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model));
+		
+        add(new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model));
         add(new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model));
-        add(massEventLink = new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", model));
-        add(massUpdateLink = new Link("massUpdateLink") {
-            @Override
-            public void onClick() {
+        
+        actions=new WebMarkupContainer("actions");
+        
+        actions.add(new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", model));
+        actions.add(new Link("massUpdateLink") {
+            @Override public void onClick() {
                 setResponsePage(new MassUpdatePage(model));
             }
         });
 
-        add(massSchedueLink = new Link("massScheduleLink") {
-            @Override
-            public void onClick() {
+        actions.add(new Link("massScheduleLink") {
+            @Override public void onClick() {
                 setResponsePage(new MassSchedulePage(model));
             }
-        });		
-		add(new AttributeAppender("class", "sub-menu"));		
+        });
+        
+        add(actions);
 		add(createSaveLink("save",true));
-		add(createSaveLink("saveAs",false));		
-	}	
+		add(createSaveLink("saveAs",false));
+		
+		initializeLimits();
+		
+		add(new AttributeAppender("class", "sub-menu"));		
+	}		
+	
+	private void initializeLimits() {
+		// XXX : the actions stuff should roll into one "maxMassAction"??? ask matt.
+		Long tenantId = FieldIDSession.get().getSessionUser().getTenant().getId(); 
+        maxUpdate = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_UPDATE, tenantId);
+        maxExport = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_EXCEL_EXPORT, tenantId);
+        maxPrint = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_PDF_PRINT_OUTS, tenantId);
+        //ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_SUMMARY_REPORT, tenantId);
+        maxEvent = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, tenantId);
+        //ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS, tenantId);
+        maxSchedule = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_SCHEDULE, tenantId);		
+	}
+
+	@Override
+	protected void onBeforeRender() {
+		int selected = model.getObject().getSelection().getNumSelectedIds();
+		// XXX : implement correct max
+		actions.setVisible(selected>0&&selected<250);
+		super.onBeforeRender();
+	}
 	
     protected Link createSaveLink(String linkId, final boolean overwrite) {
         Link link = new Link(linkId) {
@@ -88,6 +123,5 @@ public class SearchSubMenu extends Panel {
 		}
 		
 	}
-	
-	
+
 }

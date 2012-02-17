@@ -9,10 +9,11 @@ import com.n4systems.fieldid.wicket.components.search.results.LegacySRSMassActio
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 
+@SuppressWarnings("serial")
 public class AssetSearchMassActionLink extends LegacySRSMassActionLink<AssetSearchCriteriaModel, AssetSearchContainer> {
 
-    public AssetSearchMassActionLink(String id, String url, IModel<AssetSearchCriteriaModel> reportCriteriaModel) {
-        super(id, url, reportCriteriaModel);
+    public AssetSearchMassActionLink(String id, String url, IModel<AssetSearchCriteriaModel> model) {
+        super(id, url, model);
     }
 
     @Override
