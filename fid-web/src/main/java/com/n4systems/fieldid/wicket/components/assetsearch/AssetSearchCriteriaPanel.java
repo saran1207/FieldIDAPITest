@@ -47,7 +47,7 @@ public class AssetSearchCriteriaPanel extends SRSCriteriaPanel<SavedSearchItem, 
 
     @Override
     protected WebPage createResultsPage(AssetSearchCriteriaModel criteria, SavedSearchItem savedItem) {
-        return new AssetSearchResultsPage(criteriaModel.getObject(), savedItem, true);
+        return new AssetSearchResultsPage(criteriaModel.getObject(), savedItem);
     }
 
     @Override

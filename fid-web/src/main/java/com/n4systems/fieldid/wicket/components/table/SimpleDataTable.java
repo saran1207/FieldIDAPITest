@@ -32,8 +32,8 @@ public class SimpleDataTable<T> extends Panel {
     private MultiIdSelection multiIdSelection;
     private SelectionStatusPanel selectionStatusPanel;
     private boolean displayPagination = true;
-//    private Component topPaginationBar;
     private String cssClass = "list";
+    private JumpableNavigationBar topPaginationBar;
 
     public SimpleDataTable(String id, final List<IColumn<T>> columns,
         ISortableDataProvider<T> dataProvider, int rowsPerPage) {
@@ -118,7 +118,7 @@ public class SimpleDataTable<T> extends Panel {
 
         add(table);
 
-//        add(topPaginationBar = createPaginationBar("topPagination"));
+        add(topPaginationBar = createPaginationBar("topPagination"));
         add(createPaginationBar("bottomPagination"));
         
         addEmptyResultsDisplay(emptyResultsTitleKey, emptyResultsMessageKey, table);
@@ -164,11 +164,11 @@ public class SimpleDataTable<T> extends Panel {
         };
     }
 
-//    private void scrollToTopPaginationBar(AjaxRequestTarget target) {
-//        String topPageBarId = topPaginationBar.getMarkupId();
-//
-//        target.appendJavaScript("var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('#"+topPageBarId+"'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}");
-//    }
+    private void scrollToTopPaginationBar(AjaxRequestTarget target) {
+        String topPageBarId = topPaginationBar.getMarkupId();
+
+        target.appendJavaScript("var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('#"+topPageBarId+"'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}");
+    }
 
     protected void onPageChanged(AjaxRequestTarget target) { }
 
