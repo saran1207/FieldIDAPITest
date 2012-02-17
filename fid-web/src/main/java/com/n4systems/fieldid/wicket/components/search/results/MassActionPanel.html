@@ -59,7 +59,7 @@
     function repositionPrintList(listId, linkId) {
         var list =  $('#'+listId);
         var link = $('#'+linkId);
-        translate(list, link, -list.height(), 0);
+        translatePosition(list, link, -list.height(), 0);
     }
 
     function addLightboxListeners() {
