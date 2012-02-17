@@ -57,7 +57,8 @@
 			<div id="navigationLinks">
 				<ul class="dropdown">
 					<li>
-						<a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><img src="/fieldid/images/home.png"/></a>
+						<a href="/fieldid/w/dashboard" class="speedLink" id="menuHome">
+						</a>
 					</li>
 				
 					<#if sessionUser.hasAccess("tag") == true >

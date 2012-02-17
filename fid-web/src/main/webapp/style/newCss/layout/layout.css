@@ -90,6 +90,17 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	float: left;
 }
 
+#menuHome {
+	display: block;
+	width: 35px;
+	height: 22px;
+	background: url(../../../images/home.png) no-repeat scroll center center transparent;
+}
+
+#menuHome:hover {
+	background: url(../../../images/home-over.png) no-repeat scroll center center transparent;
+}
+
 #smartSearchContainer {
 	padding-left: 758px;
 }
