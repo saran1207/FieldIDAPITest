@@ -10,7 +10,8 @@
 	margin-left:0%;
 }
 #page .centre {
-	margin-left:23%; 
+	margin-left:325px;
+	padding-left:5px; 
 }
 
 .buttonBar { 
@@ -26,12 +27,12 @@
 	background:#fff;
 	left:0;
 	overflow-x:visible;
-	overflow-y:visible;  /**change this to auto when location & org pickers are fixed*/ 
+	overflow-y:auto; 
 	margin:0px;
 	border-right:3px solid #ccc;
-	width:22%;
+	width:325px;
 	top:149px;
-	bottom:0px;
+	bottom:40px;
 	position:fixed;
 	float:left; 
 }
@@ -97,10 +98,12 @@
 }
 
 .paginationWrapper {
+	border-top:1px solid #ccc;
 	position:fixed;
-	width:77%;
+	height:40px;
+	width:100%;
 	bottom:0px;
-	left:23%;	
+	left:0;	
 	background:#fff;	 
 }
 
