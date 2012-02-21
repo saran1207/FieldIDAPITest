@@ -299,7 +299,7 @@ h2 a {
 	*float : right;
 }
 
-.error {
+.error, .errorMessage {
 	color: #F00;
 }
 
