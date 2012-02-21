@@ -130,6 +130,12 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			event.getResults().addAll(results);
 		}
 		
+		if(apiEvent.getAttributes() != null) {
+			for(ApiEventAttribute attribute : apiEvent.getAttributes()) {
+				event.getInfoOptionMap().put(attribute.getName(), attribute.getValue());
+			}
+		}
+		
 		return event;
 	}
 	
