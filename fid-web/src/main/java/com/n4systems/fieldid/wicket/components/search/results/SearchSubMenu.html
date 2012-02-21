@@ -1,21 +1,11 @@
 <wicket:panel>	
 	<span class="config">
-		<a wicket:id="filters"><wicket:message key="label.filters"/></a>
-        <a wicket:id="columns"><wicket:message key="label.columns"/></a>
+		<a wicket:id="filters" class="left"><wicket:message key="label.filters"/></a>
+        <a wicket:id="columns" class="right"><wicket:message key="label.columns"/></a>
     </span>
     <span class="asset-actions">
+    	<span wicket:id="msg" class="msg"/>
     	<ul class="dropdown">
-		    <li>
-		        <a href="#"><wicket:message key="label.save"/></a>
-		        <ul class="wide_menu">
-		        	<li>
-				        <a wicket:id="save"><wicket:message key="label.save_search"/></a>
-				    </li>
-				    <li>
-				        <a wicket:id="saveAs"><wicket:message key="label.save_search_as" /></a>
-				    </li>
-			    </ul>		        
-		    </li>
 		    <li>
 		        <a wicket:id="printAllCertsLink" class="lightboxPrintLink printAllPDFs"><wicket:message key="label.printselectedmanufacturercertificate"/></a>
 		    </li>

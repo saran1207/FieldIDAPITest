@@ -96,21 +96,15 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
         		super.updateSelectionStatus(target);
         		target.add(searchMenu);
         	};       	
-        });
-        
+        });        
 
         SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));
         criteriaExpandContainer.addContainedPanel(new AssetSearchCriteriaPanel("criteriaPanel", criteriaModel, savedSearchItem) {
-        	@Override
-        	protected void onNoDisplayColumnsSelected() {
+        	@Override protected void onNoDisplayColumnsSelected() {
         		resultsPanel.setVisible(false);
         	}
         });
         
-//        add(new BookmarkablePageLink<Void>("startNewReportLink2", SearchPage.class));
-//        add(createSaveSearchLink("saveReportLink2", true));
-//        add(createSaveSearchLink("saveReportLinkAs2", false));
-
         add(criteriaExpandContainer);
         add(new AssetSearchMassActionPanel("massActionPanel", criteriaModel));    
         
@@ -118,10 +112,15 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
         	@Override protected void onSearchSubmit() {
         		setResponsePage(new SearchResultsPage(searchCriteriaModel,false));
         	}
-        	@Override protected void onNoDisplayColumnsSelected() {
-        		
+        	@Override protected void onNoDisplayColumnsSelected() {     	}
+        	@Override protected Page getSaveResponsePage(boolean overwrite) { 
+        		return new SaveAssetSearchPage(savedSearchItem, SearchResultsPage.this, overwrite);
         	}
+        	@Override protected boolean isExistingSavedItem() {
+        		return savedSearchItem.getId()!=null;
+        	}        
         };
+        
 		setLeftMenuContent(searchConfigPanel);
         setSubMenuContent(searchMenu = new SearchSubMenu(DynamicPanel.CONTENT_ID, criteriaModel) {
         	@Override protected void onClick(AjaxRequestTarget target, String id) {
@@ -131,14 +130,7 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
         			searchConfigPanel.showColumns();
         		}
         		target.add(searchConfigPanel);        		
-        	}
-        	@Override protected Page getSaveResponsePage(boolean overwrite) { 
-        		return new SaveAssetSearchPage(savedSearchItem, SearchResultsPage.this, overwrite);
-        	}
-        	@Override protected boolean isExistingSavedItem() {
-        		return savedSearchItem.getId()!=null;
-        	}
-        	
+        	}        	
         });
 	}
 

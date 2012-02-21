@@ -1,5 +1,19 @@
 <wicket:extend>
 
+    <ul class="listOfLinks">
+        <li class="first">
+            <a wicket:id="startNewReportLink"><wicket:message key="label.new_search"/></a>
+        </li>
+        <li>
+            <a wicket:id="saveReportLink" class="saveLink" onclick="if(formChanged) {return false;}" ><wicket:message key="label.save_search"/></a>
+        </li>
+        <wicket:enclosure>
+            <li>
+                <a wicket:id="saveReportLinkAs" class="saveLink" onclick="if(formChanged) {return false;}" ><wicket:message key="label.save_search_as"/></a>
+            </li>
+        </wicket:enclosure>
+    </ul>
+
     <div class="crudForm" style="width:100%;">
         <div wicket:id="criteriaExpandContainer">
             <div wicket:id="criteriaPanel">

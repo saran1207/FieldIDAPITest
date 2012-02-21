@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.wicket.components.search.results;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -30,6 +32,8 @@ public class SearchConfigPanel extends Panel {
 		super(id, model);
 		this.model = model;
 		SearchConfigForm form = new SearchConfigForm("form", new CompoundPropertyModel<AssetSearchCriteriaModel>(model));
+		form.add(createSaveLink("save",true));
+		form.add(createSaveLink("saveAs",false));
 		form.add(new Button("submit"));
 		form.add(new Label("title", new Model<String>() { 
 			@Override public String getObject() {
@@ -42,6 +46,27 @@ public class SearchConfigPanel extends Panel {
 		add(form);		
 		showFilters();
 	}
+
+    private Link createSaveLink(String linkId, final boolean overwrite) {
+        Link link = new Link(linkId) {
+            @Override public void onClick() {
+                setResponsePage(getSaveResponsePage(overwrite));
+            }
+        };
+        if (!overwrite) {
+            // If this is not overwrite (ie the Save As link), it should be invisible if this isn't an existing saved report
+            link.setVisible(isExistingSavedItem());
+        }
+        return link;
+    }
+
+    protected boolean isExistingSavedItem() {
+		return true;
+	}
+
+	protected Page getSaveResponsePage(boolean overwrite) {
+    	throw new UnsupportedOperationException("override this to redirect on Save actions");
+    }	
 
 	protected void onNoDisplayColumnsSelected() {
 	}

@@ -1,13 +1,15 @@
 package com.n4systems.fieldid.wicket.components.search.results;
 
-import org.apache.wicket.Page;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -30,16 +32,23 @@ public class SearchSubMenu extends Panel {
 	private Integer maxPrint;
 	private Integer maxExport;
 	private Integer maxEvent;
+	private AssetSearchMassActionLink printLink;
+	private AssetSearchMassActionLink exportLink;
+	private Label msg;
+	private String clicked;
+	private SubMenuLink columns;
+	private SubMenuLink filters;
 	
 	
 	public SearchSubMenu(String id, final Model<AssetSearchCriteriaModel> model) {
 		super(id);
 		this.model = model;
-		add(new SubMenuLink("columns"));
-		add(new SubMenuLink("filters"));
+		add(columns = new SubMenuLink("columns"));
+		add(filters = new SubMenuLink("filters"));
 		
-        add(new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model));
-        add(new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model));
+        add(printLink = new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model));
+        add(exportLink = new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model));
+        add(msg = new Label("msg", new StringResourceModel("label.select_assets", this, null)));
         
         actions=new WebMarkupContainer("actions");
         
@@ -57,8 +66,6 @@ public class SearchSubMenu extends Panel {
         });
         
         add(actions);
-		add(createSaveLink("save",true));
-		add(createSaveLink("saveAs",false));
 		
 		initializeLimits();
 		
@@ -80,48 +87,45 @@ public class SearchSubMenu extends Panel {
 	@Override
 	protected void onBeforeRender() {
 		int selected = model.getObject().getSelection().getNumSelectedIds();
-		// XXX : implement correct max
-		actions.setVisible(selected>0&&selected<250);
+		boolean rowsSelected = selected>0;
+		msg.setVisible(!rowsSelected);
+		exportLink.setVisible(rowsSelected);
+		printLink.setVisible(rowsSelected);
+		actions.setVisible(rowsSelected&&selected<maxUpdate);
 		super.onBeforeRender();
 	}
 	
-    protected Link createSaveLink(String linkId, final boolean overwrite) {
-        Link link = new Link(linkId) {
-            @Override public void onClick() {
-                setResponsePage(getSaveResponsePage(overwrite));
-            }
-        };
-        if (!overwrite) {
-            // If this is not overwrite (ie the Save As link), it should be invisible if this isn't an existing saved report
-            link.setVisible(isExistingSavedItem());
-        }
-        return link;
-    }
-	
-    protected boolean isExistingSavedItem() {
-		return true;
-	}
-
-	protected Page getSaveResponsePage(boolean overwrite) {
-    	throw new UnsupportedOperationException("override this to redirect on Save actions");
-    }
-	
-
 	protected void onClick(AjaxRequestTarget target, String id) {
+	}
+	
+	private void delegateOnClick(AjaxRequestTarget target, String id) {
+		clicked = id;
+		target.add(columns);
+		target.add(filters);
+		onClick(target,id);
+	}
+	
+	private String getToggleState(SubMenuLink link) {
+		return StringUtils.equals(clicked,link.getId()) ? "true" : "";
 	}
 	
 	class SubMenuLink extends AjaxLink  {
 		
 		public SubMenuLink(final String id) {
 			super(id);
+			add(new AttributeAppender("class", new Model<String>() {
+				@Override public String getObject() {
+					return getToggleState(SubMenuLink.this);
+				}
+			}, " ") );
 		}
 		
 		@Override
-		public void onClick(AjaxRequestTarget target) {
-			SearchSubMenu.this.onClick(target, getId());
+		public void onClick(AjaxRequestTarget target) {			
+			delegateOnClick(target, getId());
 			target.appendJavaScript(SHOW_JS);
 		}
-		
+
 	}
 
 }
