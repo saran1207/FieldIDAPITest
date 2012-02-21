@@ -1,5 +1,11 @@
 package com.n4systems.fieldid.service.event;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.remover.EventFrequenciesRemovalService;
 import com.n4systems.fieldid.service.remover.ScheduleListRemovalService;
@@ -8,11 +14,6 @@ import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.util.persistence.QueryBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AssociatedEventTypesService extends FieldIdPersistenceService {
 
@@ -53,6 +54,10 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
         for (AssociatedEventType associatedEventType : toBeAdded) {
             persistenceService.save(associatedEventType);
         }
+        
+        // Mobile gets associated event types along with the asset type.  Need to update the mod date so it knows something changed. 
+        assetType.touch();
+        persistenceService.update(assetType);
     }
 
     @Transactional
@@ -66,10 +71,15 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
             eventFrequenciesRemovalService.remove(associatedEventType);
             scheduleListRemovalService.remove(associatedEventType.getAssetType(), associatedEventType.getEventType(), EventSchedule.ScheduleStatusGrouping.NON_COMPLETE);
             persistenceService.remove(associatedEventType);
+ 
+            associatedEventType.getAssetType().touch();
+            persistenceService.update(associatedEventType.getAssetType());
         }
 
         for (AssociatedEventType associatedEventType : toBeAdded) {
             persistenceService.save(associatedEventType);
+            associatedEventType.getAssetType().touch();
+            persistenceService.update(associatedEventType.getAssetType());
         }
     }
 
