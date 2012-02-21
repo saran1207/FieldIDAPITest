@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.search.results;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;

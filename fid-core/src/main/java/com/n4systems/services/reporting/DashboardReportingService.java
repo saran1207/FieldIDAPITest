@@ -194,7 +194,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	private AssetSearchCriteriaModel getModelDefaults(
 			AssetsIdentifiedWidgetConfiguration config,
 			LocalDate localDate) {		
-		AssetSearchCriteriaModel model = getDefaultAssetSearchModel();		
+		AssetSearchCriteriaModel model = getDefaultAssetSearchCritieriaModel();		
 		if (config.getGranularity()!=null) { 
 			LocalDate from = localDate;
 			LocalDate to = from.plus(config.getGranularity().getPeriod().minusDays(1));
@@ -206,14 +206,14 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 	private AssetSearchCriteriaModel getModelDefaults(
 			AssetsStatusWidgetConfiguration config, String assetStatus) {
-		AssetSearchCriteriaModel model = getDefaultAssetSearchModel();
+		AssetSearchCriteriaModel model = getDefaultAssetSearchCritieriaModel();
 		model.setAssetStatus(assetStatusService.getStatusByName(assetStatus));
 		model.setDateRange(new DateRange(config.getRangeType()));
 		model.setOwner(config.getOrg());		
 		return model;
 	}
 
-	private AssetSearchCriteriaModel getDefaultAssetSearchModel() {
+	public AssetSearchCriteriaModel getDefaultAssetSearchCritieriaModel() {
 		AssetSearchCriteriaModel model = new AssetSearchCriteriaModel();
 		ReportConfiguration reportConfiguration = new AssetColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());		
 		model.setColumnGroups(reportConfiguration.getColumnGroups());

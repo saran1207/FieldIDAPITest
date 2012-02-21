@@ -79,10 +79,10 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
 				String series = params.get(SRSResultsPanel.SERIES_PARAMETER).toString();
 				String y = params.get(SRSResultsPanel.Y_PARAMETER).toString();				 
 				return dashboardReportingService.convertWidgetDefinitionToAssetCriteria(widgetDefinitionId,x,y,series);
-			}
+			}  
 		} catch (Exception e) {						
 		}
-		return new AssetSearchCriteriaModel();
+		return dashboardReportingService.getDefaultAssetSearchCritieriaModel();
 	}
 
     private void init(final AssetSearchCriteriaModel searchCriteriaModel, final SavedSearchItem savedSearchItem, boolean showLeftMenu) {

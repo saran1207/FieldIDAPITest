@@ -16,6 +16,7 @@ import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.CollapsiblePanel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.search.AssetSearchCriteriaModel;

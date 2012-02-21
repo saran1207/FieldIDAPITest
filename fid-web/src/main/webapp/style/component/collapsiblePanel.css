@@ -1,21 +1,21 @@
-.collapsible-section-title {
+.collapsible-section {
 	padding:4px 0px;
 	width:100%;
 }
 
-.collapsible-section-title a {
+.collapsible-section a {
 	font-size:11px;	
 	font-weight:bold;
 	color:#333;
 	margin-left:10px;
 }
 
-.collapsible-section-title img {
+.collapsible-section img {
 	margin-bottom : 3px;
 }
 
-.collapsible-section-title + .collapsible {
-	margin-left:15px;
+.collapsible-section + .collapsible {
+	margin-left:22px;
 	margin-top:4px;
 	margin-bottom:8px;
 }
