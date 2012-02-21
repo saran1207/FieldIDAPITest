@@ -22,7 +22,7 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private Long gpsLatitude;
 	private Long gpsLongitude;
 	private ApiEventFormResult form;
-	private List<ApiEventAttachment> attchments;
+	private List<ApiEventAttachment> attachments;
 	private List<ApiEventAttribute> attributes;
 
 	public Long getTypeId() {
@@ -145,12 +145,12 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 		this.form = form;
 	}	
 
-	public List<ApiEventAttachment> getAttchments() {
-		return attchments;
+	public List<ApiEventAttachment> getAttachments() {
+		return attachments;
 	}
 	
-	public void setAttchments(List<ApiEventAttachment> attchments) {
-		this.attchments = attchments;
+	public void setAttchments(List<ApiEventAttachment> attachments) {
+		this.attachments = attachments;
 	}	
 
 	public List<ApiEventAttribute> getAttributes() {
