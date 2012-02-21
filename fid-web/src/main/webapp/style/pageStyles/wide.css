@@ -38,6 +38,18 @@
 	padding-left:5px; 
 }
 
+.right-menu {
+	padding:0px;
+	background:#fff;
+	left:99%;
+	width:1%;
+	top:149px;
+	bottom:0px;
+	position:fixed;
+}
+
+
+
 .sub-menu a { 
 	color:#333;
 }
