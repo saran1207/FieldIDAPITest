@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -10,6 +11,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchMassActionPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchResultsPanel;
@@ -17,6 +19,7 @@ import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleConta
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchResultsPage;
 import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.services.reporting.DashboardReportingService;
@@ -122,5 +125,13 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
         }
         return pageLabelModel.getObject();
     }
+    
+    @Override
+    protected Component createHeaderLink(String id, String label) {
+    	BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(id, SearchResultsPage.class);
+    	pageLink.add(new FlatLabel(label, new FIDLabelModel("label.search2")));
+    	return pageLink;
+    }
+    
 
 }

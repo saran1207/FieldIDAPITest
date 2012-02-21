@@ -1,0 +1,17 @@
+<wicket:panel>
+    <div class="initialMessage" >
+		<div class="textContainer">
+			<h1><wicket:message key="label.no_assets" /></h1>
+			<p><wicket:message key="message.no_assets" /></p>
+		</div>
+        <form wicket:id="form">
+            <div class="eventActions">
+                <input type="button" wicket:id="identifyFirstAssetButton" wicket:message="value:label.identify_first_asset"/>
+                <wicket:message key="label.or" />
+                <a wicket:id="multiAddLink"><wicket:message key="label.mass_identify_first_asset" /></a>
+                <wicket:message key="label.or" />
+                <a wicket:id="importPageLink"><wicket:message key="label.import_from_excel" /></a>
+            </div>
+        </form>
+	</div>
+</wicket:panel>

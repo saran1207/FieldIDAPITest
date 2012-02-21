@@ -1637,7 +1637,12 @@ input.description {
 	margin-top: 1.2em;
 }
 
-.assignToBox {
+.header-right {
+	float: right;
+}
+
+
+.assignToBox {	
 	background-color:#EAEAEA;
 	padding: 10px 10px 10px 0
 }

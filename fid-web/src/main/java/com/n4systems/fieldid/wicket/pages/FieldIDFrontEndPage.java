@@ -98,6 +98,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(topTitleLabel = createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
 
+        add(createHeaderLink("headerLink", "headerLinkLabel"));
         add(createBackToLink("backToLink", "backToLinkLabel"));
         addNavBar("navBar");
         add(new Label("loggedInUsernameLabel", sessionUser.getName()));
@@ -113,7 +114,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(createRelogLink());
     }
 
-    private String getSupportUrl() {
+	private String getSupportUrl() {
     	TenantSettings settings = getTenant().getSettings();
 		return settings.getSupportUrl()==null ? DEFAULT_SUPPORT_URL :settings.getSupportUrl();
 	}
@@ -159,6 +160,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     protected Component createBackToLink(String linkId, String linkLabelId) {
         return new WebMarkupContainer(linkId).setVisible(false);
     }
+    
+    protected Component createHeaderLink(String id, String label) {
+		return new WebMarkupContainer(id).setVisible(false);
+	}
 
     private void addSpeedIdentifyLinks() {
         String url;
