@@ -149,7 +149,7 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 		return attachments;
 	}
 	
-	public void setAttchments(List<ApiEventAttachment> attachments) {
+	public void setAttachments(List<ApiEventAttachment> attachments) {
 		this.attachments = attachments;
 	}	
 
