@@ -8,6 +8,15 @@
 	</div>
 	
 	<form class="editForm" wicket:id="form">
+    
+	    <div class="infoSet">
+	    	<input type="checkbox" wicket:id="identifiedCheck" />
+        	 <label for="massAssetUpdate.identified"><wicket:message key="label.identified"/></label>
+        	 <span class="fieldHolder">
+             	<div wicket:id="identified"></div>
+             </span>
+     	</div>
+	    
 		<div wicket:id="assignedUserContainer" class="infoSet">
 			<input type="checkbox" wicket:id="assignedUserCheck" />
 	        <label for="massAssetUpdate.assignedUser"><wicket:message key="label.assignedto"/></label>
@@ -15,7 +24,7 @@
 	            <select wicket:id="assignedTo"></select>
 	        </span>
 	    </div>
-	    
+
 	    <div class="infoSet">
 	    	<input type="checkbox" wicket:id="ownerCheck" />
 	        <label for="massAssetUpdate.owner"><wicket:message key="label.owner"/></label>
@@ -23,13 +32,11 @@
 	        	<div wicket:id="owner"></div>
 	        </span>
 	    </div>
-
-	    <div class="infoSet">
-	    	<input type="checkbox" wicket:id="assetStatusCheck" />
-	        <label for="massAssetUpdate.assetStatus"><wicket:message key="label.assetstatus"/></label>
-	        <span class="fieldHolder">
-	            <select wicket:id="assetStatus"></select>
-	        </span>
+	    
+		<div class="infoSet">
+	    	<input type="checkbox" wicket:id="locationCheck" />
+	        <label for="massAssetUpdate.location"><wicket:message key="label.location"/></label>
+        	<div wicket:id="location"></div>
 	    </div>
 	    
 	   	<div class="infoSet">
@@ -47,31 +54,26 @@
 	            <input type="text" wicket:id="nonIntergrationOrderNumber"></input>
 	        </span>
 	    </div>
-    
-		<div class="infoSet">
-	    	<input type="checkbox" wicket:id="locationCheck" />
-	        <label for="massAssetUpdate.location"><wicket:message key="label.location"/></label>
-        	<div wicket:id="location"></div>
+     
+	    <div class="infoSet">
+	    	<input type="checkbox" wicket:id="assetStatusCheck" />
+	        <label for="massAssetUpdate.assetStatus"><wicket:message key="label.assetstatus"/></label>
+	        <span class="fieldHolder">
+	            <select wicket:id="assetStatus"></select>
+	        </span>
 	    </div>
 	    
-	    <div class="infoSet">
-	    	<input type="checkbox" wicket:id="identifiedCheck" />
-        	 <label for="massAssetUpdate.identified"><wicket:message key="label.identified"/></label>
-        	 <span class="fieldHolder">
-             	<div wicket:id="identified"></div>
-             </span>
-     	</div>
-     
+     	<div class="infoSet">
+	    	<input type="checkbox" wicket:id="commentCheck" />     	
+     		<span wicket:id="comment"/>
+	    </div>
+	    
      	<div class="infoSet">
 	    	<input type="checkbox" wicket:id="publishedCheck" />
 	        <label for="massAssetUpdate.published"><wicket:message key="label.visibility"/></label>
 	        <span class="fieldHolder">
 	            <select wicket:id="published"></select>
 	        </span>
-	    </div>
-     	<div class="infoSet">
-	    	<input type="checkbox" wicket:id="commentCheck" />     	
-     		<span wicket:id="comment"/>
 	    </div>
 		<div class="formActions">
 			<input type="submit" wicket:message="value:label.pagenavigation.next" />
