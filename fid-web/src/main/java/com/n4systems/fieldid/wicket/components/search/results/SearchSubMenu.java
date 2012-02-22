@@ -40,11 +40,12 @@ public class SearchSubMenu extends Panel {
 	private SubMenuLink filters;
 	
 	
-	public SearchSubMenu(String id, final Model<AssetSearchCriteriaModel> model) {
+	public SearchSubMenu(String id, final Model<AssetSearchCriteriaModel> model, Link saveLink) {
 		super(id);
 		this.model = model;
 		add(columns = new SubMenuLink("columns"));
 		add(filters = new SubMenuLink("filters"));
+		add(saveLink);
 		
         add(printLink = new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model));
         add(exportLink = new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model));
@@ -78,9 +79,7 @@ public class SearchSubMenu extends Panel {
         maxUpdate = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_UPDATE, tenantId);
         maxExport = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_EXCEL_EXPORT, tenantId);
         maxPrint = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_PDF_PRINT_OUTS, tenantId);
-        //ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_SUMMARY_REPORT, tenantId);
         maxEvent = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, tenantId);
-        //ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS, tenantId);
         maxSchedule = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_SCHEDULE, tenantId);		
 	}
 

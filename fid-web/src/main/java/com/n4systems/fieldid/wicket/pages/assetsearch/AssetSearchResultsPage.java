@@ -92,10 +92,6 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
         add(new BookmarkablePageLink<Void>("startNewReportLink", AssetSearchPage.class));
         add(createSaveSearchLink("saveReportLink", true));
-        add(createSaveSearchLink("saveReportLinkAs", false));        
-        
-        add(new BookmarkablePageLink<Void>("startNewReportLink", AssetSearchPage.class));
-        add(createSaveSearchLink("saveReportLink", true));
         add(createSaveSearchLink("saveReportLinkAs", false));
 
         add(new BookmarkablePageLink<Void>("startNewReportLink2", AssetSearchPage.class));

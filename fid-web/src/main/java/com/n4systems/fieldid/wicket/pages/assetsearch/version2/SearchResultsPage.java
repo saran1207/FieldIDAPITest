@@ -122,7 +122,7 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
         };
         
 		setLeftMenuContent(searchConfigPanel);
-        setSubMenuContent(searchMenu = new SearchSubMenu(DynamicPanel.CONTENT_ID, criteriaModel) {
+        setSubMenuContent(searchMenu = new SearchSubMenu(DynamicPanel.CONTENT_ID, criteriaModel, createSaveSearchLink("save",true)) {
         	@Override protected void onClick(AjaxRequestTarget target, String id) {
         		if ("filters".equals(id)) { 
         			searchConfigPanel.showFilters();
