@@ -62,7 +62,6 @@
 }
 
 .search-config .title {
-	font-size: 1.4em;
 	margin-left:5px;
 	margin-top:10px;
 	margin-bottom:5px;
@@ -98,6 +97,14 @@
 }
 
 
+
+/**
+ COLUMNS
+   checkboxes in Columns panel
+*/
+.columns {
+	padding:3px; 
+}
 
 /**
  * SUB-MENU
@@ -231,19 +238,35 @@
 }
 
 
+/* 
+ BLUE-BUTTON
+    used for the search button
+*/
+.blue-button { 
+	text-shadow: 0 1px 0 #333;
+	color:#FFF;
+	padding: 3px 20px 3px 20px;
+	background:-moz-linear-gradient(top, #52adea, #1A92e2);
+	border: solid 1px #888;
+	font-size:12px;
+}	
 
 /** 
  * for modal windows 
  */
 .wicket-modal {
-	-moz-box-shadow: 10px 10px 5px #888;
-	-webkit-box-shadow: 10px 10px 5px #888;
-	box-shadow: 10px 10px 5px #888;	
+	-moz-box-shadow: 10px 10px 5px #555;
+	-webkit-box-shadow: 10px 10px 5px #555;
+	box-shadow: 10px 10px 5px #555;	
 	-moz-border-radius: 10px;
 	border-radius: 10px;
-	border:1px solid #ccc;
+	border:1px solid #999;
 } 
 
+.w_content_container div {
+	border-left:10px solid white;	 
+	border-right:10px solid white;	 
+}
 
 
 /*** hacks.  to be removed when the new asset search page completely replaces the old one.

@@ -24,6 +24,9 @@ import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.services.reporting.DashboardReportingService;
 
+//related to WEB-2629.   when switched over to the new page, this page should be removed. 
+//in the interim, any applicable bug fixes are changes should be ported to new asset search page. 
+@Deprecated 
 @SuppressWarnings("serial")
 public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 

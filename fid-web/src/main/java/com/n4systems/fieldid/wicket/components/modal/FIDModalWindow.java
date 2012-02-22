@@ -4,8 +4,6 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
-import com.n4systems.model.orgs.BaseOrg;
-
 
 public class FIDModalWindow extends ModalWindow {
 
@@ -19,7 +17,7 @@ public class FIDModalWindow extends ModalWindow {
         initializeModalWindow();
     }
 
-    public FIDModalWindow(String id, IModel<BaseOrg> model, int width, int height) {
+    public FIDModalWindow(String id, IModel<?> model, int width, int height) {
     	this(id,model);
     	setInitialWidth(width);    	
     	setInitialHeight(height);
