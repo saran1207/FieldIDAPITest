@@ -1,8 +1,16 @@
-/* for fluid, widge pages that take up 100% width.   eg. search results pages */
-/*
-	-moz-box-shadow: 5px 5px 5px #888;
-	-webkit-box-shadow: 5px 5px 5px #888;
-	box-shadow: 5px 5px 5px #888;
+/* for fluid, widge pages that take up 100% width.   eg. search results pages 
+ * because we are currently trying to support two types of pages at once (legacy=fixed size & new = fluid, 100%) this page is 
+ * a mish-mash of hacks.  
+ * in order to achieve the look of the new page while maintaining the legacy Html/Java/CSS many css classes had to be overwritten.
+ * 
+ * in general, anything done in this file should be refactored out into common style when the transition to the new page is complete.
+ */
+
+
+/** 
+ PAGE
+   high level stuff that changes the overall layout of the page.
+   this stuff is another good use case for SASS variables.     
 */
 #page {
 	margin-left:5px;
@@ -11,9 +19,132 @@
 }
 
 #page .centre {
-	margin-left:325px;
+	margin-left:325px; 
 	padding-left:10px; 
 }
+
+
+
+
+/**
+ * LEFT-MENU
+ *  panel at the left hand side of screen.  
+ * 	this is really just an empty shell that is application wide.  each page fills it with whatever they want.
+ *  for the AssetSearch page, that is done with .search-config stuff. 
+*/
+
+#left-menu {
+	padding:0px;
+	background:#fff;
+	left:0;
+	z-index:10;
+	overflow-x:visible;
+	overflow-y:auto; 
+	margin-left:10px;
+	border-right:1px solid #ccc;
+	width:315px;
+	top:149px;
+	bottom:0px;
+	position:fixed;
+	float:left;
+}
+
+
+
+
+/**
+ * SEARCH-CONFIG
+ *  panel on the left hand side with Filters & Columns 
+ *  it is the meat of the left-menu panel.
+*/
+.search-config .title .right {
+	float:right; 
+}
+
+.search-config .title {
+	font-size: 1.4em;
+	margin-left:5px;
+	margin-top:10px;
+	margin-bottom:5px;
+}
+
+.search-config .title a {
+	font-size:11px;
+}
+
+.search-config .title input {
+	margin-right:5px;
+	margin-top:-4px;
+}
+
+.search-config .content { 
+	
+}
+
+
+/**
+ * RIGHT-MENU
+ * currently only used for padding. later may contain panel like left-menu
+*/
+
+.right-menu {
+	padding:0px;
+	background:#fff;
+	left:99%;
+	width:1%;
+	top:149px;
+	bottom:0px;
+	position:fixed;
+}
+
+
+
+/**
+ * SUB-MENU
+ *  just below main black menu.  contains actions menu and stuff like that. 
+ */
+
+.sub-menu a { 
+	color:#333;
+}
+
+.sub-menu ul.dropdown li.hover a {
+	color:#ddd; 
+}
+
+.sub-menu {
+	border-bottom: 1px solid #ccc;
+	height:30px;
+	color:#333;
+	background:white;	
+}
+
+.sub-menu .asset-actions { 
+	float:right;
+	margin-top:5px;
+	margin-right:10px;	
+}
+
+.sub-menu .asset-actions .msg { 
+	line-height:20px;
+	font-style:italic;
+	color:#777;	
+}
+
+.sub-menu .config { 
+	float:left;
+	margin-top:5px;
+	margin-left:10px;
+}
+
+
+
+/*
+ SUB-MENU .CONFIG  A
+ used for toggle buttons in sub menu - Filter & Columns. 
+   note : This would be a very good use case for a SASS parameterized mixin, because this is basically a tweaked version of the 
+   buttonBar used in the EventHistory page.   
+*/
 
 .sub-menu .config a.true { 
    	background: #cbcbcb;
@@ -99,107 +230,34 @@
     border-bottom-left-radius: 0;
 }
 
-/**
-.buttonBar { 
-	float:left;
-}
 
-.buttonBar a {
-	height:24px;
-}
+
+/** 
+ * for modal windows 
+ */
+.wicket-modal {
+	-moz-box-shadow: 10px 10px 5px #888;
+	-webkit-box-shadow: 10px 10px 5px #888;
+	box-shadow: 10px 10px 5px #888;	
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	border:1px solid #ccc;
+} 
+
+
+
+/*** hacks.  to be removed when the new asset search page completely replaces the old one.
+ these are just to make both pages live together with minimal code changes.
+ i.e. instead of hiding an element, it should be removed from java/html code and this CSS hack deleted. 
 */
-
-#left-menu {
-	padding:0px;
-	background:#fff;
-	left:0;
-	z-index:10;
-	overflow-x:visible;
-	overflow-y:auto; 
-	margin-left:10px;
-	border-right:3px solid #ccc;
-	width:315px;
-	top:149px;
-	bottom:0px;
-	position:fixed;
-	float:left;
-}
-
-.right-menu {
-	padding:0px;
-	background:#fff;
-	left:99%;
-	width:1%;
-	top:149px;
-	bottom:0px;
-	position:fixed;
-}
-
-
-
-.sub-menu a { 
-	color:#333;
-}
-
-.sub-menu ul.dropdown li.hover a {
-	color:#ddd; 
-}
-
-.sub-menu {
-	border-bottom: 1px solid #ccc;
-	height:30px;
-	color:#333;
-	background:#f9f9f9;	
-}
-
-.sub-menu .asset-actions { 
-	float:right;
-	margin-top:5px;
-	margin-right:10px;	
-}
-
-.sub-menu .asset-actions .msg { 
-	line-height:20px;
-}
-
-.sub-menu .config { 
-	float:left;
-	margin-top:5px;
-	margin-left:10px;
-}
-
-.search-config .title .right {
-	float:right; 
-}
-
-.search-config .title {
-	font-size: 1.4em;
-	margin-left:5px;
-	margin-top:10px;
-	margin-bottom:5px;
-}
-
-.search-config .title a {
-	font-size:11px;
-}
-
-.search-config .title input {
-	margin-right:5px;
-	margin-top:-4px;
-}
-
-.search-config .content { 
-	
-}
 
 #pageFooter { 
 	display:none;
 }
 
 
-.adminLink { 
-	float:right;
-	background:#fff;
+.alternateActions { 
+	display:none;
 }
 
 #pageContent .crudForm .pageSection {
@@ -211,14 +269,13 @@
 	position:fixed;
 	height:40px;
 	bottom:0px;
-	left:325px;	
+	right:0px;	
 	background:#f9f9f9;	 
 }
 
 
-/*** hacks.  to be removed when the new asset search page completely replaces the old one.
- these are just to make both pages live together with minimal code changes 
-*/
+
+
 #contentTitle { 
 	display:none;
 }
@@ -234,3 +291,8 @@
 .list { 
 	margin-top:0px;
 }
+
+.orgSelector {
+	width: 350px;
+}
+

@@ -165,8 +165,8 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
     	super.renderHead(response);
+    	response.renderJavaScriptReference("javascript/fieldIdWide.js");
         response.renderCSSReference("style/pageStyles/wide.css");
-        response.renderJavaScriptReference("javascript/fieldIdWide.js");
         if (!showLeftMenu) { 
         	response.renderCSSReference("style/pageStyles/wideNoLeftMenu.css");
         }

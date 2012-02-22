@@ -4,7 +4,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
@@ -18,6 +17,7 @@ import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
 import org.odlabs.wiquery.core.javascript.JsScope;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 
@@ -27,23 +27,20 @@ public class SearchConfigPanel extends Panel {
 	private Component filters;
 	private Component columns;
 	private Model<AssetSearchCriteriaModel> model;
+	private FIDModalWindow modal;
 	
 	public SearchConfigPanel(String id, final Model<AssetSearchCriteriaModel> model) {
 		super(id, model);
 		this.model = model;
+		
 		SearchConfigForm form = new SearchConfigForm("form", new CompoundPropertyModel<AssetSearchCriteriaModel>(model));
-		form.add(createSaveLink("save",true));
-		form.add(createSaveLink("saveAs",false));
 		form.add(new Button("submit"));
-		form.add(new Label("title", new Model<String>() { 
-			@Override public String getObject() {
-				return getTitle();
-			}
-		}));
 		form.add(new WebMarkupContainer("close").add(createCloseBehavior()));
 		form.add(filters = new SearchFilterPanel("filters",model));
 		form.add(columns = new SearchColumnsPanel("columns",model));
-		add(form);		
+		
+		add(form);
+		
 		showFilters();
 	}
 
@@ -81,10 +78,6 @@ public class SearchConfigPanel extends Panel {
 			}
 		});
 	}	
-
-	private String getTitle() {		
-		return filters.isVisible() ? getString("label.filters") : getString("label.columns");
-	}
 
 	public void showColumns() {
 		showFilters(false);

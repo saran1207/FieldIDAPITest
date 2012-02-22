@@ -11,23 +11,17 @@ var fieldIdWidePage = (function() {
 	var contentWidth = '';
 	var leftMenu = $('#left-menu'); 
 	
-	var init = function(leftMenuToShow) {
-		$('#left-menu').show();		
-		$('#page .centre').css('width',contentWidth).css('marginLeft',contentLeft);			
-	};
-	
 	var showLeftMenu = function() {	
 		var leftMenu = $('#left-menu');
 		$('.paginationWrapper').css('left',leftMenuWidth);
 		if (!leftMenu.is(':visible')) {				
 			$('#page .centre').animate({marginLeft:contentLeft},300, 'linear', function() { leftMenu.show();} );
-		}		
+		}
+		// need to restore "true" state of toggle button...
 	}
 	
 	var hideLeftMenu = function() {
 		// make sure any pesky dialogs are removed first.
-		$('.locationSelection').remove(); 
-		$('.orgSelector').remove();
 		$('.paginationWrapper').css('left','0px');
 		
 		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.
@@ -37,7 +31,6 @@ var fieldIdWidePage = (function() {
 	}
 			
 	return { 
-		init: init,
 		showLeftMenu : showLeftMenu,
 		hideLeftMenu: hideLeftMenu	
 	};
