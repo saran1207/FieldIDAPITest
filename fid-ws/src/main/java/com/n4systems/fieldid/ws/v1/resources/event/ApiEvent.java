@@ -13,6 +13,7 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private String status;
 	private Long assignedUserId;
 	private Long performedById;
+	private Long modifiedById;
 	private String eventBookId;
 	private Long assetStatusId;
 	private Long predefinedLocationId;
@@ -23,7 +24,7 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private Long gpsLongitude;
 	private ApiEventFormResult form;
 	private List<ApiEventAttachment> attachments;
-	private List<ApiEventAttribute> attributes;
+	private List<ApiEventAttribute> attributes;	
 
 	public Long getTypeId() {
 		return typeId;
@@ -160,4 +161,12 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	public void setAttributes(List<ApiEventAttribute> attributes) {
 		this.attributes = attributes;
 	}
+	
+	public Long getModifiedById() {
+		return modifiedById;
+	}
+
+	public void setModifiedById(Long modifiedById) {
+		this.modifiedById = modifiedById;
+	}	
 }

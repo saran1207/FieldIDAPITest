@@ -87,6 +87,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		event.setPerformedBy(persistenceService.find(User.class, apiEvent.getPerformedById()));
 		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));
 		event.setAsset(assetService.findByMobileId(apiEvent.getAssetId()));
+		event.setModifiedBy(persistenceService.find(User.class, apiEvent.getModifiedById()));
 		
 		if (apiEvent.getStatus() != null) {
 			event.setStatus(Status.valueOf(apiEvent.getStatus()));
