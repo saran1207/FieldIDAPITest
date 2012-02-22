@@ -8,6 +8,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -225,7 +226,12 @@ public class ApiEventResource extends FieldIdPersistenceService {
 				break;
 			case SCORE:
 				result = new ScoreCriteriaResult();
-				((ScoreCriteriaResult) result).setScore(persistenceService.find(Score.class, apiResult.getScoreValue()));
+				Long scoreValue = apiResult.getScoreValue();
+				
+				if(scoreValue == null)
+					throw new NullArgumentException("Score value cannot be null. Client need to set a value.");
+				
+				((ScoreCriteriaResult) result).setScore(persistenceService.find(Score.class, scoreValue));
 				break;
 			case NUMBER_FIELD:
 				result = new NumberFieldCriteriaResult();
