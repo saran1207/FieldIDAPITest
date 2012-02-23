@@ -60,23 +60,22 @@
  *  panel on the left hand side with Filters & Columns 
  *  it is the meat of the left-menu panel.
 */
-.search-config .title .right {
-	float:right; 
-}
-
 .search-config .title {
-	margin-left:5px;
+	zoom:0;
+	margin-left:10px;
 	margin-top:10px;
 	margin-bottom:5px;
+	display:inline-block;
+}
+
+.search-config .right {
+	margin-top:15px;
+	float:right; 
+	display:inline-block;
 }
 
 .search-config .title a {
 	font-size:11px;
-}
-
-.search-config .title input {
-	margin-right:5px;
-	margin-top:-4px;
 }
 
 .search-config .content { 
@@ -148,7 +147,7 @@
 .sub-menu .config { 
 	float:left;
 	margin-top:13px;
-	margin-left:10px;
+	margin-left:20px;
 }
 
 
@@ -189,10 +188,11 @@
     -moz-transition: border .218s;
     -o-transition: border-color .218s;
     transition: border-color .218s;
+    background:#eee;	
  	background:-webkit-linear-gradient(top, #f8f8f8, #bebebe);
 	background:-moz-linear-gradient(top, #f8f8f8, #bebebe);
     background:-ms-linear-gradient(top, #f8f8f8, #bebebe);
-    background:-o-linear-gradient(top, #f8f8f8, #bebebe);	
+    background:-o-linear-gradient(top, #f8f8f8, #bebebe);
 }
 
 .sub-menu .config a:hover, .asset-actions > ul > li > a:hover  { 
@@ -266,7 +266,8 @@
 
 									  
 .asset-actions .menu { 
-	left:3px; 			/*account for border radius so it lines up smoothly */
+	left:2px; 			/*account for border radius so it lines up smoothly */
+	*left:0px; 			/*account for worlds crappiest browser */
 	position: absolute;
 	top:100%;
 	width: 125px; 
@@ -276,11 +277,11 @@
 	border-width:1px 1px 1px 1px;
 	border-color:#777;
 	border-style:solid;	 	
-	border-radius:0px 5px 5px 5px;
-	-moz-border-radius: 0px 5px 5px 5px;
-	-moz-box-shadow: 4px 4px 4px #555;
-	-webkit-box-shadow: 4px 4px 4px #555;
-	box-shadow: 4px 4px 4px #555;
+	border-radius:0px 3px 3px 3px;
+	-moz-border-radius: 0px 3px 3px 3px;
+	-moz-box-shadow: 2px 2px 2px #555;
+	-webkit-box-shadow: 2px 2px 2px #555;
+	box-shadow: 2px 2px 2px #555;
 	padding-bottom:3px;			
 } 
 
@@ -290,13 +291,13 @@
 } 
 
 .asset-actions .menu li a {
-	padding:4px;
+	padding:6px;
 	display: block;  
 	text-decoration:none;	
 } 
 
 .asset-actions .menu li a:hover {
-	background:#dde;
+	background:#CCD7E5;
 } 
 
 
@@ -313,10 +314,10 @@
 
 
 /* 
- BLUE-BUTTON
-    used for the search button
+ SEARCH
+    used for the search button at top of filters/columns panel
 */
-.blue-button {
+.search-config .title .search {
 	text-decoration: none;
     font: 11px "lucida grande",tahoma,verdana,arial,sans-serif;
     line-height: 18px;
@@ -347,9 +348,9 @@
  * for modal windows 
  */
 .wicket-modal {
-	-moz-box-shadow: 10px 10px 5px #555;
-	-webkit-box-shadow: 10px 10px 5px #555;
-	box-shadow: 10px 10px 5px #555;	
+	-moz-box-shadow: 4px 4px 4px #555;
+	-webkit-box-shadow: 4px 4px 4px #555;
+	box-shadow: 4px 4px 4px #555;	
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 	border:1px solid #999;
