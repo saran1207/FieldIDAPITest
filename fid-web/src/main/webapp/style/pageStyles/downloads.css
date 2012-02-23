@@ -134,8 +134,8 @@
 	margin-left: 10px;
 }
 
-#reportName {
-	margin: 5px 0 25px 0;
+#reportName, #modalBox_message .reportName {
+	margin: 5px 0 25px 10px;
 	font-size : 1.2em;
 	border: 1px solid #9C9C9C;
     color: #555555;

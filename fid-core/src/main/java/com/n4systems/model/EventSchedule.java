@@ -38,7 +38,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	}
 
     public enum ScheduleStatus implements DisplayEnum {
-		SCHEDULED("label.scheduled"), IN_PROGRESS("label.inprogress"), COMPLETED("label.completed");
+		SCHEDULED("Scheduled"), IN_PROGRESS("In Progress"), COMPLETED("Completed");
 
 		private String label;
 

@@ -16,6 +16,8 @@ import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereClause;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
@@ -24,6 +26,7 @@ import com.n4systems.util.persistence.search.terms.DateRangeTerm;
 import com.n4systems.util.persistence.search.terms.NotNullTerm;
 import com.n4systems.util.persistence.search.terms.NullTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
+import com.n4systems.util.persistence.search.terms.SimpleInTerm;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,10 +66,14 @@ public abstract class SearchService<T extends SearchCriteriaModel, M extends Bas
 
 		return (int)Math.ceil(count.doubleValue() / pageSize.doubleValue());
 	}
+
+    public <K> PageHolder<K> performSearch(T criteriaModel, ResultTransformer<K> transformer, Integer pageNumber, Integer pageSize) {
+        return performSearch(criteriaModel, transformer, pageNumber, pageSize, false);
+    }
 	
     @Transactional(readOnly = true)
-    public <K> PageHolder<K> performSearch(T criteriaModel, ResultTransformer<K> transformer, Integer pageNumber, Integer pageSize) {
-        SearchResult<M> eventSearchResult = performSearch(criteriaModel, pageNumber, pageSize);
+    public <K> PageHolder<K> performSearch(T criteriaModel, ResultTransformer<K> transformer, Integer pageNumber, Integer pageSize, boolean selectedOnly) {
+        SearchResult<M> eventSearchResult = performSearch(criteriaModel, pageNumber, pageSize, selectedOnly);
 
         List<M> entities = eventSearchResult.getResults();
 
@@ -77,9 +84,13 @@ public abstract class SearchService<T extends SearchCriteriaModel, M extends Bas
         return new PageHolder<K>(pageResults, eventSearchResult.getTotalResultCount());
     }
 
-    private SearchResult<M> performSearch(T criteriaModel, Integer pageNumber, Integer pageSize) {
+    private SearchResult<M> performSearch(T criteriaModel, Integer pageNumber, Integer pageSize, boolean selectedOnly) {
 		// create our base query builder (no sort terms yet)
 		QueryBuilder<M> searchBuilder = createBaseSearchQueryBuilder(criteriaModel);
+
+        if (selectedOnly) {
+            searchBuilder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "id", criteriaModel.getSelection().getSelectedIds()));
+        }
 
 		// get/set the total result count now before the sort terms get added
 		int totalResultCount = findCount(searchBuilder).intValue();

@@ -1,19 +1,20 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.model.api.DisplayEnum;
 
 
 public class EnumHandler extends WebOutputHandler {
 
-	public EnumHandler(WebContextProvider action) {
+	public EnumHandler(TableGenerationContext action) {
 		super(action);
 	}
 
 	public String handleWeb(Long entityId, Object value) {
 		DisplayEnum label = (DisplayEnum)value;
 		
-		return contextProvider.getText(label.getLabel());
+		return label.getLabel();
 	}
 
 	public Object handleExcel(Long entityId, Object value) {

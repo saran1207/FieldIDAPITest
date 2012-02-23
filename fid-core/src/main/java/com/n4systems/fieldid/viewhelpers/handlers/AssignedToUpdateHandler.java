@@ -3,7 +3,8 @@
  */
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 
@@ -11,7 +12,7 @@ public class AssignedToUpdateHandler extends WebOutputHandler {
 	private static final String NO_ASSIGNMENT = "";
 	private WebOutputHandler assignedToHandler;
 
-	public AssignedToUpdateHandler(WebContextProvider action) {
+	public AssignedToUpdateHandler(TableGenerationContext action) {
 		super(action);
 		assignedToHandler = new AssignedToHandler(action);
 	}

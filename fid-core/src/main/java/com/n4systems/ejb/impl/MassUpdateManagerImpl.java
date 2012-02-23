@@ -394,34 +394,4 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return result;
 	}
 
-	@Override
-	public List<Long> createSchedulesForEvents(List<Long> eventIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
-		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-		query.addWhere(WhereClauseFactory.create(Comparator.IN, "id", eventIds)).addOrder("id");
-		int page = 1;
-		int pageSize = 100;
-
-		Pager<Event> events = null;
-
-		do {
-			events = persistenceManager.findAllPaged(query, page, pageSize);
-			for (Event event : events.getList()) {
-                if (event.getSchedule() == null) {
-                    EventSchedule schedule = new EventSchedule(event);
-                    new EventScheduleServiceImpl(persistenceManager).createSchedule(schedule);
-                }
-			}
-			page++;
-		} while (events.isHasNextPage());
-
-		QueryBuilder<Long> scheduleQuery = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
-		scheduleQuery.setSimpleSelect("id");
-		scheduleQuery.addWhere(Comparator.IN, "ids", "event.id", eventIds).addOrder("id");
-		try {
-			return persistenceManager.findAll(scheduleQuery);
-		} catch (InvalidQueryException e) {
-			return null;
-		}
-	}
-
 }

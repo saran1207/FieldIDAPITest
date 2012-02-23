@@ -1,7 +1,7 @@
 <wicket:extend>
 
 <div class="adminLink alternateActions">
-    <div id="print_link" class="print printRelative" style="display:inline;" onMouseOver="repositionPrintList('print_list', 'print_link');">
+    <div id="print_link" class="print printRelative" style="display:inline;" onMouseOver="repositionPrintList('print_list', 'print_link');" wicket:id="printContainer">
 
         <ul id="print_list">
             <li>
@@ -26,15 +26,17 @@
 
         <a href="javascript:void(0);" class="pdfPrinting" ><img src="/fieldid/images/pdf_small.gif" /> Print</a>
 
+        |
+
     </div>
 
-    | <a wicket:id="exportToExcelLink" class='lightboxPrintLink exportToExcel'><wicket:message key="label.exporttoexcel"/></a>
+    <a wicket:id="exportToExcelLink" class='lightboxPrintLink exportToExcel'><wicket:message key="label.exporttoexcel"/></a>
 
     <wicket:enclosure>
         | <a wicket:id="massUpdateLink" class="massUpdate"><wicket:message key="label.massupdate"/></a>
     </wicket:enclosure>
 
-    | <a wicket:id="summaryReportLink" class="summaryReport"><wicket:message key="label.summary_report"/></a>
+    <!--| <a wicket:id="summaryReportLink" class="summaryReport"><wicket:message key="label.summary_report"/></a>-->
 
     <wicket:enclosure>
         | <a wicket:id="assignToJobsLink" class="assignEventsToJobs"><wicket:message key="label.assigntojob" /></a>

@@ -1,7 +1,5 @@
-package com.n4systems.fieldid.viewhelpers.handlers;
+package com.n4systems.fieldid.service.download;
 
-import com.n4systems.fieldid.actions.search.CustomizableSearchAction;
-import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.util.views.ExcelOutputHandler;
 
 /**
@@ -9,14 +7,14 @@ import com.n4systems.util.views.ExcelOutputHandler;
  * Used in {@link CustomizableSearchAction} to convert cells from the
  * TableView into the appropriate output fields. <p/>
  * @see CustomizableSearchAction
- * @see CellHandlerFactory
+ * @see com.n4systems.fieldid.service.download.CellHandlerFactory
  * @see DefaultHandler
  */
 public abstract class WebOutputHandler implements ExcelOutputHandler {
 	
-	protected final WebContextProvider contextProvider;
+	protected final TableGenerationContext contextProvider;
 	
-	protected WebOutputHandler(WebContextProvider contextProvider) {
+	protected WebOutputHandler(TableGenerationContext contextProvider) {
 		this.contextProvider = contextProvider;
 	}
 	

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.util.DateTimeDefinition;
@@ -11,7 +12,7 @@ import java.util.TimeZone;
 public class NextScheduledEventDateHandler extends WebOutputHandler implements
 		DateTimeDefinition {
 
-	protected NextScheduledEventDateHandler(WebContextProvider action) {
+	public NextScheduledEventDateHandler(TableGenerationContext action) {
 		super(action);
 	}
 
@@ -27,17 +28,17 @@ public class NextScheduledEventDateHandler extends WebOutputHandler implements
 
 	@Override
 	public String getDateFormat() {
-		return contextProvider.getSessionUser().getDateFormat();
+		return contextProvider.getDateFormat();
 	}
 
 	@Override
 	public String getDateTimeFormat() {
-		return contextProvider.getSessionUser().getDateTimeFormat();
+		return contextProvider.getDateTimeFormat();
 	}
 
 	@Override
 	public TimeZone getTimeZone() {
-		return contextProvider.getSessionUser().getTimeZone();
+		return contextProvider.getTimeZone();
 	}
 
 	private String getNextScheduledEventDate(Long entityId) {

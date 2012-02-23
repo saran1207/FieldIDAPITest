@@ -1,10 +1,11 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.WebOutputHandler;
 
 public class AssignedToHandler extends WebOutputHandler {
 
-	public AssignedToHandler(WebContextProvider action) {
+	public AssignedToHandler(TableGenerationContext action) {
 		super(action);
 	}
 
@@ -29,7 +30,7 @@ public class AssignedToHandler extends WebOutputHandler {
 
 	private String renderUser(String assignedUser) {
 		if (assignedUser == null || assignedUser.equals("")) {
-			return contextProvider.getText("label.unassigned");
+			return "Unassigned";
 		}
 		
 		return assignedUser;

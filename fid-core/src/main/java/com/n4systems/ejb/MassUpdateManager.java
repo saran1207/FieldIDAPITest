@@ -36,7 +36,5 @@ public interface MassUpdateManager {
 	
 	public Long assignToJob(List<Long> scheduleIds, Project project, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
 
-	public List<Long> createSchedulesForEvents(List<Long> eventIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
 
-	
 }

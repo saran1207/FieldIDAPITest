@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.FieldidDateFormatter;
 
@@ -9,20 +10,20 @@ import java.util.TimeZone;
 
 public class DateTimeHandler extends WebOutputHandler implements DateTimeDefinition {
 	
-	public DateTimeHandler(WebContextProvider action) {
+	public DateTimeHandler(TableGenerationContext action) {
 		super(action);
 	}
 
 	public TimeZone getTimeZone() {
-		return contextProvider.getSessionUser().getTimeZone();
+		return contextProvider.getTimeZone();
 	}
 
 	public String getDateTimeFormat() {
-		return contextProvider.getSessionUser().getDateTimeFormat();
+		return contextProvider.getDateTimeFormat();
 	}
 
 	public String getDateFormat() {
-		return contextProvider.getSessionUser().getDateFormat();
+		return contextProvider.getDateFormat();
 	}
 
 	public String handleWeb(Long entityId, Object cell) {

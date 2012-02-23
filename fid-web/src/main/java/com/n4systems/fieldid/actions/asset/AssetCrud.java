@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -688,7 +689,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	public List<StringListingPair> getPublishedStates() {
-		return PublishedState.getPublishedStates(this);
+		return PublishedState.getPublishedStates();
 	}
 
 	@CustomValidator(type = "requiredInfoFields", message = "", key = "error.attributesrequired")

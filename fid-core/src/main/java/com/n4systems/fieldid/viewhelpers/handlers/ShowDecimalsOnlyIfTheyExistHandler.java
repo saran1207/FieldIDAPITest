@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.util.DoubleFormatter;
 
 public class ShowDecimalsOnlyIfTheyExistHandler extends WebOutputHandler {
 
-    protected ShowDecimalsOnlyIfTheyExistHandler(WebContextProvider contextProvider) {
+    public ShowDecimalsOnlyIfTheyExistHandler(TableGenerationContext contextProvider) {
         super(contextProvider);
     }
 

@@ -73,8 +73,6 @@ public class EventSummaryGenerator {
 			throw new ReportException("Could not access Jasper File " + jasperFile);
 		}
 
-		//List<Long> eventIds = getSearchIds(reportDefiner, user);
-
 		Map<String, Object> reportMap = criteriaMap(reportDefiner, user.getOwner().getPrimaryOrg(), jasperFile);
 		List<Map<String, Object>> collection = new ArrayList<Map<String, Object>>();
 
@@ -191,10 +189,6 @@ public class EventSummaryGenerator {
 
 	protected PrimaryOrg getTenant(User user, Long tenantId) {
 		return new LoaderFactory(user.getSecurityFilter()).createPrimaryOrgByTenantLoader().setTenantId(tenantId).load();
-	}
-
-	protected List<Long> getSearchIds(ReportDefiner reportDefiner, User user) {
-		return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(reportDefiner), user.getSecurityFilter());
 	}
 
 	// XXX - document me

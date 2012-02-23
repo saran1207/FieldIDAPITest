@@ -4,6 +4,8 @@ import com.n4systems.ejb.PageHolder;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedAction;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.TableGenerationContextImpl;
 import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.reporting.helpers.DynamicColumnProvider;
 import com.n4systems.model.search.ColumnMappingConverter;
@@ -11,8 +13,8 @@ import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
-import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
-import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
+import com.n4systems.fieldid.service.download.CellHandlerFactory;
+import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.assettype.AssetTypesByAssetGroupIdLoader;
@@ -136,7 +138,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 	
 	private void registerCellHandler(String columnId, String className) {
-		CellHandlerFactory handlerFactory = new CellHandlerFactory(this);
+        TableGenerationContext exportContext = new TableGenerationContextImpl(getSessionUser().getTimeZone(), getSessionUser().getDateFormat(), getSessionUser().getDateTimeFormat(), getSessionUserOwner());
+		CellHandlerFactory handlerFactory = new CellHandlerFactory(exportContext);
 		
 		// ask our handlerFactory for a handler
 		cellHandlers.put(columnId, handlerFactory.getHandler(className));

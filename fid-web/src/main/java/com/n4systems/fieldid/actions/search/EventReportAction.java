@@ -150,7 +150,8 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		storedPageNumber();
 		return returnValue;
 	}
-	
+
+    @Deprecated // replaced by wicket
 	public String doPrintAllCerts() {
 		if (!isSearchIdValid()) {
 			addFlashErrorText("error.reportexpired");
@@ -160,7 +161,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 
 		try {
 			List<Long> eventIds = sortEventIdsByRowIndex(getContainer().getMultiIdSelection().getSelectedIds());
-			downloadLink = printAllCertificateService.generateEventCertificates(eventIds, reportType, getDownloadLinkUrl(), reportName);
+			downloadLink = null;//printAllCertificateService.generateEventCertificates(eventIds, reportType, getDownloadLinkUrl(), reportName);
 		} catch(RuntimeException e) {
 			logger.error("Failed to print all event certs", e);
 			addFlashErrorText("error.reportgeneration");

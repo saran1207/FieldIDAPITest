@@ -40,21 +40,6 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public List<Long> createSchedulesForEvents(List<Long> eventIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).createSchedulesForEvents(eventIds, userId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
 	public Long deleteEventSchedules(Set<Long> scheduleIds) throws UpdateFailureException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();

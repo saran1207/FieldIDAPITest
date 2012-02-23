@@ -1,21 +1,24 @@
-package com.n4systems.fieldid.actions.asset;
+package com.n4systems.fieldid.viewhelpers.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.util.StringListingPair;
-import com.opensymphony.xwork2.TextProvider;
 
 public enum PublishedState {
-	PUBLISHED		("label.publishedstateselector", "label.publishedoversafetynetwork"),
-	NOTPUBLISHED	("label.unpublishedstateselector", "label.unpublishedoversafetynetwork");
+	PUBLISHED		("label.publishedstateselector", "Publish Over Safety Network", "label.publishedoversafetynetwork", "Published Over Safety Network"),
+	NOTPUBLISHED	("label.unpublishedstateselector", "Do Not Publish Over Safety Network", "label.unpublishedoversafetynetwork", "Not Published Over Safety Network");
 	
 	private final String label;
+    private final String labelString;
 	private final String pastTenseLabel;
-	
-	PublishedState(String label, String pastTenseLabel) {
+    private final String pastTenseString;
+
+    PublishedState(String label, String labelString, String pastTenseLabel, String pastTenseString) {
 		this.label = label;
+        this.labelString = labelString;
 		this.pastTenseLabel = pastTenseLabel;
+        this.pastTenseString = pastTenseString;
 	}
 
 	public String getLabel() {
@@ -24,6 +27,10 @@ public enum PublishedState {
 	
 	public String getPastTenseLabel() {
 		return pastTenseLabel;
+	}
+
+	public String getPastTenseString() {
+		return pastTenseString;
 	}
 
 	public boolean isPublished() {
@@ -35,10 +42,10 @@ public enum PublishedState {
 	 * @param labelResolver	TextProvider to resolve labels via {@link TextProvider#getText(String)}
 	 * @return	List of StringListingParis
 	 */
-	public static List<StringListingPair> getPublishedStates(TextProvider labelResolver) {
+	public static List<StringListingPair> getPublishedStates() {
 		List<StringListingPair> states = new ArrayList<StringListingPair>();
 		for (PublishedState state: values()) {
-			states.add(new StringListingPair(state.name(), labelResolver.getText(state.getLabel())));
+			states.add(new StringListingPair(state.name(), state.labelString));
 		}
 		return states;
 	}

@@ -11,6 +11,7 @@ import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@Deprecated
 public abstract class LegacySRSMassActionLink<MODEL, LEGACY extends SearchContainer> extends Link {
 
     private String url;

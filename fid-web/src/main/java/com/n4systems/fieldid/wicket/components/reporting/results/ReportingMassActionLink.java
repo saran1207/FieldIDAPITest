@@ -8,6 +8,7 @@ import org.apache.wicket.model.IModel;
 
 import javax.servlet.http.HttpSession;
 
+@Deprecated // We should stop
 public class ReportingMassActionLink extends LegacySRSMassActionLink<EventReportCriteriaModel, EventSearchContainer> {
 
     public ReportingMassActionLink(String id, String url, IModel<EventReportCriteriaModel> reportCriteriaModel) {

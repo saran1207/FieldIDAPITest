@@ -9,7 +9,7 @@ import com.n4systems.fieldid.wicket.components.search.results.LegacySRSMassActio
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 
-@SuppressWarnings("serial")
+@Deprecated
 public class AssetSearchMassActionLink extends LegacySRSMassActionLink<AssetSearchCriteriaModel, AssetSearchContainer> {
 
     public AssetSearchMassActionLink(String id, String url, IModel<AssetSearchCriteriaModel> model) {

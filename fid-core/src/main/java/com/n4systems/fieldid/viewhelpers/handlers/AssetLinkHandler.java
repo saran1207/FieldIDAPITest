@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.WebOutputHandler;
 
 
 public class AssetLinkHandler extends WebOutputHandler {
 	
-	protected AssetLinkHandler(WebContextProvider action) {
+	public AssetLinkHandler(TableGenerationContext action) {
 		super(action);
 	}
 

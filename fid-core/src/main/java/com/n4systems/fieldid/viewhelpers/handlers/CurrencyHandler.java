@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.tools.MoneyUtils;
 
 public class CurrencyHandler extends WebOutputHandler {
 	
-	public CurrencyHandler(WebContextProvider action) {
+	public CurrencyHandler(TableGenerationContext action) {
 		super(action);
 	}
 

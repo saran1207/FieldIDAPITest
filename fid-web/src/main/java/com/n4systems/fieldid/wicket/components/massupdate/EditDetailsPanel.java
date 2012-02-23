@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
@@ -21,7 +22,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-import com.n4systems.fieldid.actions.asset.PublishedState;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
@@ -185,7 +185,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 
 			List<PublishedState> publishedStates = Arrays.asList(PublishedState.values());
 			CheckBox publishedCheck = new CheckBox("publishedCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[published]"));
-			FormComponent<PublishedState> published = new DropDownChoice<PublishedState>("published", new PropertyModel<PublishedState>(massUpdateAssetModel, "publishedState"), 
+			FormComponent<PublishedState> published = new DropDownChoice<PublishedState>("published", new PropertyModel<PublishedState>(massUpdateAssetModel, "publishedState"),
 					publishedStates, new PublishedStateChoiceRenderer());
 			published.add(createCheckOnChangeEvent(publishedCheck));
 			add(publishedCheck);

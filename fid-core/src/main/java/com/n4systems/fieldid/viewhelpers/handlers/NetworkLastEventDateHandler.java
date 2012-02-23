@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.model.asset.LastEventDateLoader;
 
 import java.util.Date;
@@ -9,7 +9,7 @@ public class NetworkLastEventDateHandler extends DateTimeHandler {
 
 	private LastEventDateLoader lastDateLoader = new LastEventDateLoader();
 	
-	public NetworkLastEventDateHandler(WebContextProvider action) {
+	public NetworkLastEventDateHandler(TableGenerationContext action) {
 		super(action);
 	}
 	

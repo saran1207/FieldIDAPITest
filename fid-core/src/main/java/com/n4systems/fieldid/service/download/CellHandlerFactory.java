@@ -1,19 +1,18 @@
-package com.n4systems.fieldid.viewhelpers.handlers;
+package com.n4systems.fieldid.service.download;
 
-import com.n4systems.fieldid.actions.search.AssetSearchAction;
-import com.n4systems.fieldid.utils.WebContextProvider;
+import com.n4systems.fieldid.viewhelpers.handlers.DefaultHandler;
 import org.apache.log4j.Logger;
 
 /**
  * Factory for creating cell OutputHandlers.
  */
 public class CellHandlerFactory {
-	private Logger logger = Logger.getLogger(AssetSearchAction.class);
+	private Logger logger = Logger.getLogger(CellHandlerFactory.class);
 
-	private final WebContextProvider contextProvider;
+	private final TableGenerationContext contextProvider;
 	private final WebOutputHandler defaultHandler;
 	
-	public CellHandlerFactory(WebContextProvider contextProvider) {
+	public CellHandlerFactory(TableGenerationContext contextProvider) {
 		this.contextProvider = contextProvider;
 		
 		// we register the default handler here so that multiple invocations of getHandler will receive the same instance 
@@ -23,7 +22,7 @@ public class CellHandlerFactory {
 	/**
 	 * Instantates the OutputHandler for a given class name.  If className is null, 
 	 * zero length or if the requested class could not be instantated, returns an
-	 * instance of {@link DefaultHandler}.
+	 * instance of {@link com.n4systems.fieldid.viewhelpers.handlers.DefaultHandler}.
 	 * @param className		Classname for this handler or null to get the default handler.
 	 * @return				The OutputHandler defined by className or an instance of {@link DefaultHandler}
 	 */
@@ -31,7 +30,7 @@ public class CellHandlerFactory {
 		WebOutputHandler handler;
 		if(className != null && className.length() != 0) {
 			try {
-				handler = (WebOutputHandler)Class.forName(className).getDeclaredConstructor(WebContextProvider.class).newInstance(contextProvider);
+				handler = (WebOutputHandler)Class.forName(className).getDeclaredConstructor(TableGenerationContext.class).newInstance(contextProvider);
 			} catch(Exception e) {
 				// if newInstance of the custom handler fails, use the default
 				logger.error("Unable to register custom handler for class [" + className + "]", e);

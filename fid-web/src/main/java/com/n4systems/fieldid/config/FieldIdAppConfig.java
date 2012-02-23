@@ -16,7 +16,7 @@ import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
 
 @Configuration
-@Import({FieldIdWsConfig.class, FieldIdCoreConfig.class, FieldIdEntityRemovalConfig.class})
+@Import({FieldIdWsConfig.class, FieldIdCoreConfig.class, FieldIdDownloadConfig.class, FieldIdEntityRemovalConfig.class})
 public class FieldIdAppConfig {
 
 	

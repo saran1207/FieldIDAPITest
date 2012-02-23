@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.n4systems.fieldid.actions.asset.PublishedState;
+import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
 import com.n4systems.model.Asset;
 
 public class MassUpdateAssetModel implements Serializable{

@@ -10,9 +10,9 @@ import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.api.DisplayEnum;
 
 public enum CompressedScheduleStatus implements DisplayEnum {
-	INCOMPLETE("label.incomplete", ScheduleStatus.SCHEDULED, ScheduleStatus.IN_PROGRESS), 
-	COMPLETE("label.complete", ScheduleStatus.COMPLETED), 
-	ALL("label.all", ScheduleStatus.values());
+	INCOMPLETE("Incomplete", ScheduleStatus.SCHEDULED, ScheduleStatus.IN_PROGRESS),
+	COMPLETE("Complete", ScheduleStatus.COMPLETED),
+	ALL("All", ScheduleStatus.values());
 	
 	private String label;
 	private List<ScheduleStatus> statuses;

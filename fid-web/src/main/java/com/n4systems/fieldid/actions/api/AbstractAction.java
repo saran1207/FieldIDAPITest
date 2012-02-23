@@ -27,7 +27,6 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.utils.CookieFactory;
 import com.n4systems.fieldid.utils.SessionUserInUse;
-import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.fieldid.viewhelpers.BaseActionHelper;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
@@ -60,7 +59,7 @@ import com.n4systems.util.uri.ActionURLBuilder;
 import freemarker.template.utility.StringUtil;
 
 @SuppressWarnings("serial")
-abstract public class AbstractAction extends ExtendedTextProviderAction implements FlashScopeAware, UserDateFormatValidator, LoaderFactoryProvider, WebContextProvider, UIConstants {
+abstract public class AbstractAction extends ExtendedTextProviderAction implements FlashScopeAware, UserDateFormatValidator, LoaderFactoryProvider, UIConstants {
 	public static final String MISSING = "missing";
 	public static final String INVALID_SECURITY = "invalid_security";
 	public static final String REDIRECT_TO_URL = "redirect_to_url";
@@ -101,7 +100,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return supportUrl==null ? DEFAULT_SUPPORT_URL : supportUrl;
 	}
 	
-	@Override
 	public SessionUser getSessionUser() {
 		return getSession().getSessionUser();
 	}
@@ -166,7 +164,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return getSessionUser().getOwner();
 	}
 	
-	@Override
 	public SecurityFilter getSecurityFilter() {
 		return getSessionUser().getSecurityFilter();
 	}

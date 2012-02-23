@@ -2,11 +2,17 @@ package com.n4systems.fieldid.service.certificate;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import com.n4systems.fieldid.service.search.ReportService;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.util.selection.MultiIdSelection;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.commons.io.IOUtils;
@@ -40,7 +46,9 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 	@Autowired private CertificateService certificateService;
 	@Autowired private ConfigService configService;
 	@Autowired private MailService mailService;
-	@Autowired private AsyncService asyncService; 
+	@Autowired private AsyncService asyncService;
+
+    @Autowired private ReportService reportService;
 	
 	public DownloadLink generateAssetCertificates(final List<Long> assetIds, final String downloadUrl, String reportName) {
 		final DownloadLink link = downloadLinkService.createDownloadLink(reportName, ContentType.ZIP);
@@ -57,13 +65,15 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 		return link;
 	}
 
-	public DownloadLink generateEventCertificates(final List<Long> eventIds, final EventReportType reportType, final String downloadUrl, String reportName) {
+	public DownloadLink generateEventCertificates(EventReportCriteriaModel criteriaModel, final EventReportType reportType, final String downloadUrl, String reportName) {
 		final DownloadLink link = downloadLinkService.createDownloadLink(reportName, ContentType.ZIP);
-		
-		AsyncTask<?> task = asyncService.createTask(new Callable<Void>() {
+        final List<Long> sortedSearchResultsList = reportService.idSearch(criteriaModel);
+        final List<Long> sortedSelectedList = sortSelectionBasedOnIndexIn(criteriaModel.getSelection(), sortedSearchResultsList);
+
+        AsyncTask<?> task = asyncService.createTask(new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
-				generateCertificatePackage(eventIds, reportType, link, downloadUrl, "printAllEventCerts");
+				generateCertificatePackage(sortedSelectedList, reportType, link, downloadUrl, "printAllEventCerts");
 				return null;
 			}
 		});
@@ -98,8 +108,9 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 					printGroup.clear();
 					pageNumber++;
 				}
-				
-				jPrint = generateCertificate(eventReportType, entityId);
+
+                EventSchedule eventSchedule = persistenceService.find(EventSchedule.class, entityId);
+                jPrint = generateCertificate(eventReportType, eventSchedule.getEvent().getId());
 				if (jPrint != null) {
 					printGroup.add(jPrint);
 				}
@@ -154,5 +165,16 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 			logger.error("Failed sending success notification", e);
 		}
 	}
+
+    private List<Long> sortSelectionBasedOnIndexIn(MultiIdSelection selection, final List<Long> idList) {
+        final List<Long> selectedIds = selection.getSelectedIds();
+        Collections.sort(selectedIds, new Comparator<Long>() {
+            @Override
+            public int compare(Long id1, Long id2) {
+                return new Integer(idList.indexOf(id1)).compareTo(idList.indexOf(id2));
+            }
+        });
+        return selectedIds;
+    }
 
 }

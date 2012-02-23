@@ -19,6 +19,8 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
     private String groupKey;
     private Long dbColumnId;
     private String joinExpression;
+
+    private String localizedLabel;
 	
 	
 	public ColumnMappingView(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean enabled, int order, String requiredExtendedFeature, String groupKey, Long dbColumnId, String joinExpression) {
@@ -134,5 +136,13 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
 
     public void setJoinExpression(String joinExpression) {
         this.joinExpression = joinExpression;
+    }
+
+    public String getLocalizedLabel() {
+        return localizedLabel;
+    }
+
+    public void setLocalizedLabel(String localizedLabel) {
+        this.localizedLabel = localizedLabel;
     }
 }

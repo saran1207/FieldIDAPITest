@@ -17,7 +17,7 @@ public class NonWicketLink extends Border {
 		linkContainer = new WebMarkupContainer("link");
         linkContainer.setOutputMarkupId(true);
 
-        String absolutePath = ContextAbsolutizer.absolutize(path);
+        String absolutePath = ContextAbsolutizer.toContextAbsoluteUrl(path);
 
 		linkContainer.add(new AttributeModifier("href", absolutePath));
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -14,10 +15,8 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.asset.AssetWebModel;
-import com.n4systems.fieldid.actions.asset.PublishedState;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.MassUpdateAssetHelper;
-import com.n4systems.fieldid.actions.search.AssetSearchAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
@@ -284,7 +283,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public List<StringListingPair> getPublishedStates() {
-		return PublishedState.getPublishedStates(this);
+		return PublishedState.getPublishedStates();
 	}
 
 	public AssetWebModel getAssetWebModel() {

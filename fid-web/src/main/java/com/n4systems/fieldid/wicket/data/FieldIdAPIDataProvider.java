@@ -1,30 +1,29 @@
 package com.n4systems.fieldid.wicket.data;
 
 import com.n4systems.ejb.PageHolder;
-import com.n4systems.fieldid.utils.WebContextProvider;
-import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
-import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
+import com.n4systems.fieldid.service.download.CellHandlerFactory;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.TableGenerationContextImpl;
+import com.n4systems.fieldid.service.download.WebOutputHandler;
+import com.n4systems.fieldid.service.event.util.ResultTransformerFactory;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.RowModel;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.SearchCriteriaModel;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
-import com.n4systems.util.persistence.search.TableViewTransformer;
 import com.n4systems.util.views.RowView;
 import com.n4systems.util.views.TableView;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.model.IModel;
 import rfid.web.helper.SessionUser;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class FieldIdAPIDataProvider extends FieldIDDataProvider<RowView> implements ListableSortableDataProvider<RowView>, WebContextProvider {
+public abstract class FieldIdAPIDataProvider extends FieldIDDataProvider<RowView> implements ListableSortableDataProvider<RowView> {
 
     private List<RowView> results;
     private Integer size;
@@ -92,7 +91,9 @@ public abstract class FieldIdAPIDataProvider extends FieldIDDataProvider<RowView
     }
 
     private void fillInStringValues(RowView row) {
-        CellHandlerFactory cellHandlerFactory = new CellHandlerFactory(this);
+        SessionUser user = FieldIDSession.get().getSessionUser();
+        TableGenerationContext exportContextProvider = new TableGenerationContextImpl(user.getTimeZone(), user.getOwner().getPrimaryOrg().getDateFormat(), user.getOwner().getPrimaryOrg().getDateFormat() + " h:mm a", user.getOwner());
+        CellHandlerFactory cellHandlerFactory = new CellHandlerFactory(exportContextProvider);
         List<String> rowValues = new ArrayList<String>();
         int index = 0;
         for (ColumnMappingView column : searchCriteria.getSortedStaticAndDynamicColumns()) {
@@ -130,35 +131,11 @@ public abstract class FieldIdAPIDataProvider extends FieldIDDataProvider<RowView
     }
 
     protected ResultTransformer<TableView> createResultTransformer() {
-		List<String> columns = new ArrayList<String>();
-		for(ColumnMappingView mapping: searchCriteria.getSortedStaticAndDynamicColumns()) {
-			if (mapping != null) {
-				columns.add(mapping.getPathExpression());
-			}
-		}
-
-		ResultTransformer<TableView> transformer = null;
-		try {
-			transformer = new TableViewTransformer("id", columns);
-		} catch (ParseException e) {
-            throw new RuntimeException(e);
-		}
-
-		return transformer;
+        return new ResultTransformerFactory().createResultTransformer(searchCriteria);
     }
 
     public List<Long> getCurrentPageIdList() {
         return currentPageIdList;
-    }
-
-    @Override
-    public String getText(String key) {
-        return new FIDLabelModel(key).getObject();
-    }
-
-    @Override
-    public SessionUser getSessionUser() {
-        return FieldIDSession.get().getSessionUser();
     }
 
 }

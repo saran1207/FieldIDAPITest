@@ -14,7 +14,6 @@ import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -75,7 +74,7 @@ public class SavedItemsDropdownPage extends FieldIDAuthenticatedPage {
         // when using bookmarkable links, and since this page is rendered inside a div in any front end page,
         // with various URLs, the relative link may be wrong. we need an absolute link. Hence the use of non wicket link for now.
         NonWicketLink savedItemLink = new NonWicketLink("savedItemLink", linkUrl);
-        savedItemLink.add(new ContextImage("savedItemIcon", ContextAbsolutizer.absolutize(imageUrl)));
+        savedItemLink.add(new ContextImage("savedItemIcon", ContextAbsolutizer.toContextAbsoluteUrl(imageUrl)));
         savedItemLink.add(new Label("savedItemName", nameModel));
 
         container.add(savedItemLink);

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -400,7 +401,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	}
 	
 	public List<StringListingPair> getPublishedStates() {
-		return PublishedState.getPublishedStates(this);
+		return PublishedState.getPublishedStates();
 	}
 
 	public void setSaveAndStartEvent(String saveAndStartEvent) {
