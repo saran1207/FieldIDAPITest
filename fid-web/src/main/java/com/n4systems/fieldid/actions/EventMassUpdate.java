@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.n4systems.model.EventSchedule;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -198,7 +199,8 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 
 	private void calculateEventRemovalSummary(List<Long> ids) {
 		for (Long id : ids) {
-			Event event = eventManager.findAllFields(id, new OpenSecurityFilter());
+            EventSchedule eventSchedule = persistenceManager.find(EventSchedule.class, id);
+            Event event = eventManager.findAllFields(eventSchedule.getEvent().getId(), new OpenSecurityFilter());
 			if (event != null) {
 				if (event.getType().isMaster()) {
 					masterEventsToDelete++;
@@ -213,8 +215,9 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 	
 	private void findAndDeleteEvents(List<Long> ids){
 		for (Long id  : ids) {
-			
-			Event event = eventManager.findAllFields(id, new OpenSecurityFilter());
+
+            EventSchedule eventSchedule = persistenceManager.find(EventSchedule.class, id);
+			Event event = eventManager.findAllFields(eventSchedule.getEvent().getId(), new OpenSecurityFilter());
 			
 			eventManager.retireEvent(event, getSessionUser().getUniqueID());
 			
