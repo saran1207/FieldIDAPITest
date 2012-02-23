@@ -4,10 +4,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 
@@ -47,8 +49,8 @@ public class SearchSubMenu extends Panel {
 		add(filters = new SubMenuLink("filters"));
 		add(saveLink);
 		
-        add(printLink = new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model));
-        add(exportLink = new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model));
+        add(printLink = new LightboxActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model));
+        add(exportLink = new LightboxActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model));
         add(msg = new Label("msg", new StringResourceModel("label.select_assets", this, null)));
         
         actions=new WebMarkupContainer("actions");
@@ -74,7 +76,7 @@ public class SearchSubMenu extends Panel {
 	}		
 	
 	private void initializeLimits() {
-		// XXX : the actions stuff should roll into one "maxMassAction"??? ask matt.
+		// XXX : the actions limits here should roll into one single "maxMassActionLimit"???    ask matt.
 		Long tenantId = FieldIDSession.get().getSessionUser().getTenant().getId(); 
         maxUpdate = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_UPDATE, tenantId);
         maxExport = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_EXCEL_EXPORT, tenantId);
@@ -95,6 +97,7 @@ public class SearchSubMenu extends Panel {
 	}
 	
 	protected void onClick(AjaxRequestTarget target, String id) {
+		// stub : override to add behaviour
 	}
 	
 	private void delegateOnClick(AjaxRequestTarget target, String id) {
@@ -107,6 +110,25 @@ public class SearchSubMenu extends Panel {
 	private String getToggleState(SubMenuLink link) {
 		return StringUtils.equals(clicked,link.getId()) ? "true" : "";
 	}
+	
+	
+	// --------------------------------------------------------------------------------------------
+	
+	
+	class LightboxActionLink extends AssetSearchMassActionLink {
+
+		public LightboxActionLink(String id, String url, IModel<AssetSearchCriteriaModel> model) {
+			super(id, url, model);
+			setOutputMarkupId(true);
+		}
+		
+		@Override
+		public void renderHead(IHeaderResponse response) {
+			response.renderOnLoadJavaScript("$('#"+getMarkupId()+"').colorbox({ ajax:true });");
+		}
+		
+	}
+	
 	
 	class SubMenuLink extends AjaxLink  {
 		
