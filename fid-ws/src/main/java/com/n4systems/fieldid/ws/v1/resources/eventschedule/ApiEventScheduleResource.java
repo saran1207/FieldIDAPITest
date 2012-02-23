@@ -48,9 +48,18 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
-		EventSchedule eventSchedule = converApiEventSchedule(apiEventSchedule);		
-		persistenceService.save(eventSchedule);
-		logger.info("saved schedule for " + eventSchedule.getEventType().getName() + " on asset " + eventSchedule.getMobileGUID());
+		EventSchedule eventSchedule = findEventScheduleByMobileId(apiEventSchedule.getSid());
+		
+		if (eventSchedule == null) {
+			eventSchedule = converApiEventSchedule(apiEventSchedule);
+			persistenceService.save(eventSchedule);
+			logger.info("Saved EventSchedule for " + eventSchedule.getEventType().getName() + " on Asset " + eventSchedule.getMobileGUID());
+		} else {
+			eventSchedule.setNextDate(apiEventSchedule.getNextDate());
+			eventSchedule.setEventType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
+			persistenceService.update(eventSchedule);
+			logger.info("Updated EventSchedule for " + eventSchedule.getEventType().getName() + " on Asset " + eventSchedule.getMobileGUID());
+		}
 	}
 	
 	@DELETE
@@ -58,11 +67,16 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void DeleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
-		QueryBuilder<EventSchedule> query = createUserSecurityBuilder(EventSchedule.class);
-		query.addWhere(WhereClauseFactory.create("mobileGUID", eventScheduleId));		
-		EventSchedule eventSchedule = persistenceService.find(query);		
+		EventSchedule eventSchedule = findEventScheduleByMobileId(eventScheduleId);	
 		persistenceService.delete(eventSchedule);
 		logger.info("deleted schedule for " + eventSchedule.getEventType().getName() + " on asset " + eventSchedule.getMobileGUID());
+	}
+
+	protected EventSchedule findEventScheduleByMobileId(String eventScheduleId) {
+		QueryBuilder<EventSchedule> query = createUserSecurityBuilder(EventSchedule.class);
+		query.addWhere(WhereClauseFactory.create("mobileGUID", eventScheduleId));		
+		EventSchedule eventSchedule = persistenceService.find(query);
+		return eventSchedule;
 	}
 
 	@Override
