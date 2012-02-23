@@ -285,7 +285,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		boolean ownershipChanged = false;
 		Event changeTarget;
 		for (Long id : ids) {
-			changeTarget = persistenceManager.find(Event.class, id);
+			changeTarget = persistenceManager.find(EventSchedule.class, id).getEvent();
 
 			for (String updateKey : updateKeys) {
 				if (updateKey.equals("owner")) {

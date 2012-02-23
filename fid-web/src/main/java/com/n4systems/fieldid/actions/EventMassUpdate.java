@@ -90,8 +90,8 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 		}
 
 		event.setAdvancedLocation(location.createLocation());
-		List<Long> eventIds = criteria.getMultiIdSelection().getSelectedIds();
-		MassUpdateEventsTask task = new MassUpdateEventsTask(massUpdateManager, eventIds, event, select, fetchCurrentUser());
+		List<Long> eventScheduleIds = criteria.getMultiIdSelection().getSelectedIds();
+		MassUpdateEventsTask task = new MassUpdateEventsTask(massUpdateManager, eventScheduleIds, event, select, fetchCurrentUser());
 		TaskExecutor.getInstance().execute(task);
 		addFlashMessage(getText("message.eventmassupdating"));
 
