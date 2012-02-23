@@ -265,13 +265,11 @@
 
 
 									  
-.asset-actions .menu { 
-	left:2px; 			/*account for border radius so it lines up smoothly */
-	*left:0px; 			/*account for worlds crappiest browser */
+.asset-actions .menu-items {
+	display:none; 		/* made visiblye by jquery click*/ 
 	position: absolute;
 	top:100%;
 	width: 125px; 
-	display: block;
 	background:#fcfcfc;
 	color:black;
 	border-width:1px 1px 1px 1px;
@@ -283,26 +281,24 @@
 	-webkit-box-shadow: 2px 2px 2px #555;
 	box-shadow: 2px 2px 2px #555;
 	padding-bottom:3px;			
+	left:2px; 			/*account for border radius so it lines up smoothly */
+	*left:0px; 			/*account for worlds crappiest browser */
 } 
 
-.asset-actions .menu li {
+.asset-actions .menu-items li {
 	border-radius:0px 5px 5px 5px;
 	-moz-border-radius: 0px 5px 5px 5px;	
 } 
 
-.asset-actions .menu li a {
+.asset-actions .menu-items li a {
 	padding:6px;
 	display: block;  
 	text-decoration:none;	
 } 
 
-.asset-actions .menu li a:hover {
+.asset-actions .menu-items li a:hover {
 	background:#CCD7E5;
 } 
-
-
-
-
 
 .asset-actions ul { 
 	display:inline;

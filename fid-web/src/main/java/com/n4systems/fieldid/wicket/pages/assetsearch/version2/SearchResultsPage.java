@@ -170,6 +170,7 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
         if (!showLeftMenu) { 
         	response.renderCSSReference("style/pageStyles/wideNoLeftMenu.css");
         }
+        response.renderOnLoadJavaScript("fieldIdWidePage.init();");
     }
     
 }
