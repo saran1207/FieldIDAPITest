@@ -43,7 +43,7 @@
 	z-index:10;
 	overflow-x:visible;
 	overflow-y:auto; 
-	margin-left:10px;
+	padding-left:10px;
 	border-right:1px solid #ccc;
 	width:315px;
 	top:169px;
@@ -131,7 +131,7 @@
 
 .sub-menu .asset-actions { 
 	float:right;
-	margin-top:5px;
+	margin-top:13px;
 	margin-right:10px;	
 }
 
@@ -140,7 +140,8 @@
 	font-style:italic;
 	color:#8F8F8F;
 	float:right;
-	margin-top:16px;	
+	margin-top:16px;
+	margin-right:10px;	
 }
 
 
@@ -168,9 +169,9 @@
     background: -o-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
 }
 
-.sub-menu .config a, .asset-actions ul li a { 
+.sub-menu .config a, .asset-actions > ul > li > a { 
 	padding: 3px 10px;
-	color: #484848;
+	color: #333;
 	text-decoration: none;
     text-shadow: 0 1px 0 #fff;
     font: 11px "lucida grande",tahoma,verdana,arial,sans-serif;
@@ -194,13 +195,13 @@
     background:-o-linear-gradient(top, #f8f8f8, #bebebe);	
 }
 
-.sub-menu .config a:hover, .asset-actions ul li a:hover  { 
+.sub-menu .config a:hover, .asset-actions > ul > li > a:hover  { 
     border: solid 1px #333;
     color: #282828;
-    background: -webkit-linear-gradient(top, #ffffff, #dfdfdf);
-    background: -moz-linear-gradient(top, #ffffff, #dfdfdf);
-    background: -ms-linear-gradient(top, #ffffff, #dfdfdf);
-    background: -o-linear-gradient(top, #ffffff, #dfdfdf);
+    background: -webkit-linear-gradient(top, #ffffff, #ddd);
+    background: -moz-linear-gradient(top, #ffffff, #ddd);
+    background: -ms-linear-gradient(top, #ffffff, #ddd);
+    background: -o-linear-gradient(top, #ffffff, #ddd);
 }
 .sub-menu .config a:active { 
     border: solid 1px #7f7f7f;
@@ -249,18 +250,6 @@
 /**
  ASSET-ACTIONS      the actions buttons/menu @ top right of results page.
 */
-/* 
-	LEVEL ONE
-*/
-
-.asset-actions ul							{ position: relative; }
-.asset-actions ul li               			{ float: left; margin-top:7px;margin-left:5px; }
-.asset-actions ul a:hover				  	{ color: #000; }
-.asset-actions ul a:active                	{ color: #ffa500; }
-.asset-actions ul li a                    	{ display: block; padding: 4px 11px; text-decoration:none; }
-.asset-actions ul li.hover,
-.asset-actions ul li:hover                	{ color: black; position: relative; }
-.asset-actions ul li.hover a              	{ color: #000; }
 
 
 /* icon beside link button */
@@ -269,22 +258,47 @@
 	padding-bottom:2px;
 } 
 
-/* 
-	LEVEL TWO
-*/
-.asset-actions ul ul 						{ display: none; position: absolute; top: 100%; left: 0; list-style: disc outside none; }
-.regular_menu								{ width: 100px }
-.wide_menu									{ width: 200px }
-.asset-actions ul ul li 					{ font-weight: normal; background: #525252; color: #000; border-bottom: 1px solid #ccc; float: none; }
-									  
-                                    /* IE 6 & 7 Needs Inline Block */
-.asset-actions ul ul li a					{ border-right: none; width: 100%; display: inline-block; } 
+.asset-actions > ul > li               		{ float: left; position:relative; margin-right:5px; }
+.asset-actions >ul >a:active                { color: #ffa500; }
+.asset-actions > ul > li > a                { display: block;  text-decoration:none; }
 
-/* 
-	LEVEL THREE
-*/
-.asset-actions ul ul ul 					{ left: 100%; top: 0; }
-.asset-actions ul li:hover > ul 			{ visibility: visible; }
+
+
+									  
+.asset-actions .menu { 
+	left:3px; 			/*account for border radius so it lines up smoothly */
+	position: absolute;
+	top:100%;
+	width: 125px; 
+	display: block;
+	background:#fcfcfc;
+	color:black;
+	border-width:1px 1px 1px 1px;
+	border-color:#777;
+	border-style:solid;	 	
+	border-radius:0px 5px 5px 5px;
+	-moz-border-radius: 0px 5px 5px 5px;
+	-moz-box-shadow: 4px 4px 4px #555;
+	-webkit-box-shadow: 4px 4px 4px #555;
+	box-shadow: 4px 4px 4px #555;
+	padding-bottom:3px;			
+} 
+
+.asset-actions .menu li {
+	border-radius:0px 5px 5px 5px;
+	-moz-border-radius: 0px 5px 5px 5px;	
+} 
+
+.asset-actions .menu li a {
+	padding:4px;
+	display: block;  
+	text-decoration:none;	
+} 
+
+.asset-actions .menu li a:hover {
+	background:#dde;
+} 
+
 
 
 
@@ -294,18 +308,37 @@
 }
 
 
+
+
+
+
 /* 
  BLUE-BUTTON
     used for the search button
 */
-.blue-button { 
+.blue-button {
+	text-decoration: none;
+    font: 11px "lucida grande",tahoma,verdana,arial,sans-serif;
+    line-height: 18px;
+    border: solid 1px #7f7f7f;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    -webkit-transition: border-color .218s;
+    -moz-transition: border .218s;
+    -o-transition: border-color .218s;
+    transition: border-color .218s;
 	text-shadow: 0 1px 0 #333;
 	color:#FFF;
 	padding: 3px 20px 3px 20px;
 	background: -webkit-linear-gradient(top, #52adea, #1A92e2);
 	background:-moz-linear-gradient(top, #52adea, #1A92e2);
     background: -ms-linear-gradient(top, #52adea, #1A92e2);
-    background: -o-linear-gradient(top, #52adea, #1A92e2);	
+    background: -o-linear-gradient(top, #52adea, #1A92e2);
+	background: #52adea;    
 	border: solid 1px #888;
 	font-size:12px;
 }	

@@ -3,6 +3,10 @@
 	width:100%;
 }
 
+#pageContent { 
+	padding:10px;
+}
+
 #left-menu {
 	display:none;
 }

@@ -7,15 +7,12 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -38,10 +35,8 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.behavior.TooltipBehavior;
-import com.n4systems.fieldid.wicket.behavior.validation.UniquelyNamedEnityValidator;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -172,8 +167,9 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         });
 
         sortableBehavior = new SimpleSortableAjaxBehavior<WebMarkupContainer>() {
-        	@Override
-			public void onUpdate(Component component, int index, AjaxRequestTarget target) {
+        	
+			@Override
+			public void onUpdate(WebMarkupContainer component, int index, AjaxRequestTarget target) {
                 SavedItem item = (SavedItem) component.getDefaultModelObject();
                 int oldIndex = savedItemsModel.getObject().indexOf(item);
                 
