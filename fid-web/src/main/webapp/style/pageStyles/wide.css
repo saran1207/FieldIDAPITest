@@ -355,7 +355,7 @@
 	border:1px solid #999;
 } 
 
-.w_content_container div {
+.w_content_container > div {
 	border-left:10px solid white;	 
 	border-right:10px solid white;	 
 }
@@ -411,3 +411,7 @@
 	width: 350px;
 }
 
+
+.freeFormLabel, .orgBrowserForm .infoSet label {
+    font-weight:normal;
+}

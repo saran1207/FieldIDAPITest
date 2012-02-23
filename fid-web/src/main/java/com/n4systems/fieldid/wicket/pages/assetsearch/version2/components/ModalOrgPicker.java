@@ -48,7 +48,7 @@ public class ModalOrgPicker extends Panel {
 	            closePicker(target);
 	        }
 	    };
-        add(modal=new FIDModalWindow("choose",orgModel,350,195));
+        add(modal=new FIDModalWindow("choose",orgModel,325,195));
         modal.setTitle(new StringResourceModel("label.owner",this,null));
         modal.setMaskType(MaskType.TRANSPARENT);
         modal.setContent(browsePanel);        
