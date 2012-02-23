@@ -10,11 +10,13 @@ var fieldIdWidePage = (function() {
 	var contentLeft = leftMenuWidth;	
 	
 	var init = function() {
-		$('.asset-actions .menu').delegate('a', 'click', function() {
-			$('.asset-actions .menu-items').show();			  
+		$(document).delegate('.asset-actions  .menu >  a', 'click', function() {
+			$('.asset-actions .menu-items').show();	
+			return false;
 		});		
-		$('.asset-actions .menu').delegate('a', 'blur', function() {
-			$('.asset-actions .menu-items').hide();			  
+		// in an ideal world we would have a single top level div surrounding  all content instead of listing all in multiple selector. 
+		$(document).delegate('"#page, #pageHeader', 'click', function(e) {
+			$('.asset-actions .menu-items').hide();					
 		});		
 	};
 	
