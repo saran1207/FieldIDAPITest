@@ -390,6 +390,10 @@ table.list tr.multiSelected {
 	background-image: url(../images/sort_arrow_up.gif);
 }
 
+.list .limitWidth{
+	max-width: 200px;
+}
+
 .simpleTable {
 	border-collapse: separate;
 	border-spacing: 0 2px;

@@ -1,0 +1,21 @@
+<wicket:extend>
+	<form class="fullForm fluidSets" wicket:id="form">
+		<div class="infoSet">
+			<label class="label"><wicket:message key="label.name"/></label>
+			<span class="fieldHolder">
+			    <input type="text" wicket:id="name"></input>
+			</span>
+		</div>
+		<div class="infoSet">
+			<label class="label"><wicket:message key="label.description"/></label>
+			<span class="fieldHolder">
+			    <textarea type="text" wicket:id="description"></textarea>
+			</span>
+		</div>
+		<div class="formActions">
+			<input type="submit" wicket:message="value:label.save" />
+			<wicket:message key="label.or"/>    
+			<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+		</div>   
+	</form>
+</wicket:extend>

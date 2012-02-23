@@ -129,13 +129,19 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         itemsListContainer.add(new ListView<SavedItem>("itemsList", savedItemsModel) {
             @Override
             protected void populateItem(final ListItem<SavedItem> item) {
-                final EditItemNameForm editItemNameForm = new EditItemNameForm("editNameForm", item.getModel());
                 item.setOutputMarkupId(true);
 
                 WebMarkupContainer firstColumn = new WebMarkupContainer("firstColumn");
                 firstColumn.add(createColspanModifier());
-                firstColumn.add(editItemNameForm);
+                firstColumn.add(createLink(item.getModelObject()));
+                firstColumn.add(new ContextImage("reorderImage", "images/reorder-small.png") {            	
+	              @Override
+	              public boolean isVisible() {
+	                  return reorderState;
+	              }
+                });
                 item.add(firstColumn);
+                
                 item.add(new DateTimeLabel("modifiedDate", new PropertyModel<Date>(item.getModel(), "modified")) {
                     @Override
                     public boolean isVisible() {
@@ -143,15 +149,9 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
                     }
                 });
                 item.add(new Label("type", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "titleLabelKey"))));
-
+                item.add(new Label("description", item.getModel().getObject().getDescription()));
                 item.add(new BookmarkablePageLink<Void>("shareLink", ShareSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
-
-                item.add(new AjaxLink<Void>("editNameLink") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        editItemNameForm.setEditMode(target, true);
-                    }
-                });
+                item.add(new BookmarkablePageLink<Void>("editLink", EditSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
 
                 item.add(new AjaxLink("deleteLink") {
                     @Override
@@ -172,7 +172,8 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         });
 
         sortableBehavior = new SimpleSortableAjaxBehavior<WebMarkupContainer>() {
-			public void onUpdate(WebMarkupContainer component, int index, AjaxRequestTarget target) {
+        	@Override
+			public void onUpdate(Component component, int index, AjaxRequestTarget target) {
                 SavedItem item = (SavedItem) component.getDefaultModelObject();
                 int oldIndex = savedItemsModel.getObject().indexOf(item);
                 
@@ -191,21 +192,21 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         itemsListContainer.add(sortableBehavior);
     }
 
-    private Link createLink(final IModel<SavedItem> model) {
-        final PageParameters params = PageParametersBuilder.id(model.getObject().getId());
+    private Link createLink(SavedItem item) {
+        final PageParameters params = PageParametersBuilder.id(item.getId());
         Link link = null;
 
-        if (model.getObject() instanceof SavedReportItem) {
+        if (item instanceof SavedReportItem) {
             link = new BookmarkablePageLink<Void>("viewItemLink", RunSavedReportPage.class, params);
-        } else if (model.getObject() instanceof SavedSearchItem) {
+        } else if (item instanceof SavedSearchItem) {
             link = new BookmarkablePageLink<Void>("viewItemLink", RunSavedSearchPage.class, params);
         }
 
         if (link == null) {
-            throw new RuntimeException("don't know how to link to view page for: " + model.getObject().getClass());
+            throw new RuntimeException("don't know how to link to view page for: " + item.getClass());
         }
 
-        link.add(new Label("itemName", new PropertyModel<String>(model, "name")));
+        link.add(new Label("itemName", new PropertyModel<String>(item, "name")));
         link.setOutputMarkupPlaceholderTag(true);
 
         return link;
@@ -217,64 +218,6 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/newCss/component/manage_saved_items.css");
         response.renderOnDomReadyJavaScript(HIGHLIGHT_REORDER_JS);
         response.renderOnDomReadyJavaScript(UNHIGHLIGHT_REORDER_JS);
-    }
-
-    class EditItemNameForm extends Form {
-
-        private Link viewLink;
-        private WebMarkupContainer editContainer;
-		private FIDFeedbackPanel feedback;
-
-        public EditItemNameForm(String id, final IModel<SavedItem> itemModel) {
-            super(id);
-
-            add(feedback = new FIDFeedbackPanel("feedbackPanel"));
-    		feedback.setOutputMarkupId(true);
-    		feedback.setOutputMarkupPlaceholderTag(true);
-            
-            add(new ContextImage("reorderImage", "images/reorder-small.png") {            	
-                @Override
-                public boolean isVisible() {
-                    return reorderState;
-                }
-            });
-            add(viewLink = createLink(itemModel));
-            add(editContainer = new WebMarkupContainer("editContainer"));
-            editContainer.setVisible(false);
-            editContainer.setOutputMarkupPlaceholderTag(true);
-
-            final RequiredTextField<String> nameText = new RequiredTextField<String>("itemName", new PropertyModel<String>(itemModel, "name"));
-			editContainer.add(nameText);
-            editContainer.add(new AjaxButton("saveNameButton") {
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                	feedback.setVisible(false);
-					persistenceService.update(itemModel.getObject());
-                    setEditMode(target, false);
-                }
-
-                @Override
-                protected void onError(AjaxRequestTarget target, Form<?> form) {
-                	feedback.setVisible(true);
-                	target.add(feedback);                	
-                }
-            });
-            editContainer.add(new AjaxLink("cancelLink") {
-                @Override
-                public void onClick(AjaxRequestTarget target) {
-                	feedback.setVisible(false);
-                	target.add(feedback);
-                    setEditMode(target, false);
-                }
-            });
-            nameText.add(new UniquelyNamedEnityValidator(SavedItem.class));            
-        }
-
-        public void setEditMode(AjaxRequestTarget target, boolean editMode) {
-            target.add(viewLink.setVisible(!editMode));
-            target.add(editContainer.setVisible(editMode));
-        }
-
     }
     
     private LoadableDetachableModel<List<SavedItem>> createSavedItemsModel() {

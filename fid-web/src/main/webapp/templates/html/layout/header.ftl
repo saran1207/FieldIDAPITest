@@ -125,6 +125,20 @@
 								<ul class="sub_menu wide_menu">
 									<li>
 										<a href="<@s.url value="/w/setup/ownersUsersLocations" />" class="speedLink"><@s.text name="nav.owners_users_loc"/></a>
+										<ul class="sub_menu wide_menu">
+											<li>
+												<a href="<@s.url action='customerList' namespace='/' />" class="speedLink"><@s.text name="title.manage_customers.plural"/></a>
+											</li>
+											<li>
+												<a href="<@s.url action='userList' namespace='/' />" class="speedLink"><@s.text name="title.manage_users.plural"/></a>
+											</li>
+											<li>
+												<a href="<@s.url action='userRequestList' namespace='/' />" class="speedLink"><@s.text name="title.manage_user_registrations.plural"/></a>
+											</li>
+											<li>
+												<a href="<@s.url action='predefinedLocations' namespace='/' />" class="speedLink"><@s.text name="title.manage_predefined_locations.plural"/></a>
+											</li>
+										</ul>
 									</li>
 									<li>
 										<a href="<@s.url value="/w/setup/assetsEvents" />" class="speedLink"><@s.text name="nav.assets_and_events"/></a>

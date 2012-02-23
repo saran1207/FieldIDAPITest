@@ -20,6 +20,9 @@
                     <wicket:message key="label.type"/>
                 </th>
                 <th>
+                    <wicket:message key="label.description"/>
+                </th>
+                <th>
                 </th>
             </tr>
         </thead>
@@ -27,19 +30,10 @@
         <tbody wicket:id="itemsListContainer">
             <tr wicket:id="itemsList">
                 <td wicket:id="firstColumn">
-                    <form wicket:id="editNameForm">
-                    	<div wicket:id="feedbackPanel"/>                    
-                        <img wicket:id="reorderImage"/>
-                        <a wicket:id="viewItemLink">
-                            <span wicket:id="itemName"/>
-                        </a>
-                        <div wicket:id="editContainer">
-                            <input type="text" wicket:id="itemName">
-                            <input type="submit" wicket:id="saveNameButton" wicket:message="value:label.save">
-                            <wicket:message key="label.or"/>
-                            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
-                        </div>
-                    </form>
+	                <img wicket:id="reorderImage"/>
+	                <a wicket:id="viewItemLink">
+	                    <span wicket:id="itemName"/>
+	                </a>
                 </td>
                 <wicket:enclosure child="modifiedDate">
                     <td>
@@ -48,8 +42,11 @@
                     <td>
                         <span wicket:id="type"/>
                     </td>
+                    <td class="limitWidth">
+                        <span wicket:id="description"/>
+                    </td>
                     <td>
-                        <a wicket:id="editNameLink"><wicket:message key="label.edit_name"/></a> |
+                        <a wicket:id="editLink"><wicket:message key="label.edit"/></a> |
                         <a wicket:id="shareLink"><wicket:message key="label.share"/></a> |
                         <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
 

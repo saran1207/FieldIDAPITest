@@ -27,6 +27,8 @@ public abstract class SavedItem<T extends SearchCriteriaModel> extends EntityWit
 	@Column(nullable=false, length=255)
 	private String name;
 	private String sharedByName;
+	@Column(length=1000)
+	private String description;
 
     @Override
 	public String getName() {
@@ -45,6 +47,14 @@ public abstract class SavedItem<T extends SearchCriteriaModel> extends EntityWit
     public void setSharedByName(String sharedByName) {
         this.sharedByName = sharedByName;
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
     @Transient
     public abstract String getTitleLabelKey();
