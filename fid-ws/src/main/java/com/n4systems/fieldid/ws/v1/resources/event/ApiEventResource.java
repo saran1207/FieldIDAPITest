@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
@@ -31,6 +32,7 @@ import com.n4systems.model.Deficiency;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventForm;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.Observation;
@@ -59,6 +61,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	
 	@Autowired private AssetService assetService;
 	@Autowired private ApiEventAttachmentResource apiAttachmentResource;
+	@Autowired private EventScheduleService eventScheduleService;
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -68,10 +71,16 @@ public class ApiEventResource extends FieldIdPersistenceService {
 
 		CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, securityContext.getUserSecurityFilter().getUserId());
 		createEventParameterBuilder.withUploadedImages(apiAttachmentResource.convert(apiEvent.getAttachments(), event.getTenant(), event.getCreatedBy()));
-		
+
 		ProductionEventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
 		eventPersistenceFactory.createEventCreator().create(createEventParameterBuilder.build());
-		logger.info("save inspections on asset " + apiEvent.getAssetId());
+		logger.info("Saved Event on Asset " + apiEvent.getAssetId());
+		
+		if (apiEvent.getEventScheduleId() != null) {
+			EventSchedule schedule = eventScheduleService.findByMobileId(apiEvent.getEventScheduleId());
+			schedule.completed(event);
+			persistenceService.update(schedule);
+		}
 	}
 	
 	private Event convertApiEvent(ApiEvent apiEvent) {
@@ -88,7 +97,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));
 		event.setAsset(assetService.findByMobileId(apiEvent.getAssetId()));
 		event.setModifiedBy(persistenceService.find(User.class, apiEvent.getModifiedById()));
-		
+
 		if (apiEvent.getStatus() != null) {
 			event.setStatus(Status.valueOf(apiEvent.getStatus()));
 		} else {

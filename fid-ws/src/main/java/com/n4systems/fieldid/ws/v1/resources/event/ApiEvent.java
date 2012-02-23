@@ -22,6 +22,7 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private String comments;
 	private Long gpsLatitude;
 	private Long gpsLongitude;
+	private String eventScheduleId;
 	private ApiEventFormResult form;
 	private List<ApiEventAttachment> attachments;
 	private List<ApiEventAttribute> attributes;	
@@ -136,6 +137,14 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 
 	public void setGpsLongitude(Long gpsLongitude) {
 		this.gpsLongitude = gpsLongitude;
+	}
+
+	public String getEventScheduleId() {
+		return eventScheduleId;
+	}
+
+	public void setEventScheduleId(String eventScheduleId) {
+		this.eventScheduleId = eventScheduleId;
 	}
 
 	public ApiEventFormResult getForm() {

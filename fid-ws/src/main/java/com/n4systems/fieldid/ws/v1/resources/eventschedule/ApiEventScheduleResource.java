@@ -22,8 +22,6 @@ import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
 
 @Component
 @Path("eventSchedule")
@@ -48,7 +46,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
-		EventSchedule eventSchedule = findEventScheduleByMobileId(apiEventSchedule.getSid());
+		EventSchedule eventSchedule = eventScheduleService.findByMobileId(apiEventSchedule.getSid());
 		
 		if (eventSchedule == null) {
 			eventSchedule = converApiEventSchedule(apiEventSchedule);
@@ -67,16 +65,9 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void DeleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
-		EventSchedule eventSchedule = findEventScheduleByMobileId(eventScheduleId);	
+		EventSchedule eventSchedule = eventScheduleService.findByMobileId(eventScheduleId);	
 		persistenceService.delete(eventSchedule);
 		logger.info("deleted schedule for " + eventSchedule.getEventType().getName() + " on asset " + eventSchedule.getMobileGUID());
-	}
-
-	protected EventSchedule findEventScheduleByMobileId(String eventScheduleId) {
-		QueryBuilder<EventSchedule> query = createUserSecurityBuilder(EventSchedule.class);
-		query.addWhere(WhereClauseFactory.create("mobileGUID", eventScheduleId));		
-		EventSchedule eventSchedule = persistenceService.find(query);
-		return eventSchedule;
 	}
 
 	@Override

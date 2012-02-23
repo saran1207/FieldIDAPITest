@@ -38,4 +38,13 @@ public class EventScheduleService extends FieldIdPersistenceService {
 		List<EventSchedule> schedules = persistenceService.findAll(query);
 		return schedules;
 	}
+	
+	@Transactional(readOnly = true)
+	public EventSchedule findByMobileId(String mobileId) {
+		QueryBuilder<EventSchedule> query = createUserSecurityBuilder(EventSchedule.class);
+		query.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));		
+		EventSchedule eventSchedule = persistenceService.find(query);
+		return eventSchedule;
+	}
+	
 }
