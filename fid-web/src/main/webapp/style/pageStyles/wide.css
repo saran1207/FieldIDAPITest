@@ -274,7 +274,7 @@
 } 
 
 .asset-actions .menu-items li a {
-	padding:6px;
+	padding:8px;
 	display: block;  
 	text-decoration:none;	
 } 
@@ -342,7 +342,8 @@
 	height:40px;
 	bottom:0px;
 	right:0px;	
-	background:#f9f9f9;	 
+	background:#f9f9f9;
+	width:auto;
 }
 
 
