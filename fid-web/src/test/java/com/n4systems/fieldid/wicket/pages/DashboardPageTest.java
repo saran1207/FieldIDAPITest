@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.job.JobService;
+import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.wicket.FieldIdPageTest;
 import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner;
 import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner.WithUsers;
@@ -54,6 +55,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	private DashboardService dashboardService;
 	private WidgetFactory widgetFactory;
 	private JobService jobService;
+	private UserLimitService userLimitService;
     
 	private DashboardLayout layout;
 	private WidgetDefinition linksWidgetDefinition;
@@ -73,6 +75,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
     	widgetFactory = wire(WidgetFactory.class);
 		linksWidgetDefinition = new WidgetDefinition(WidgetType.COMMON_LINKS);
 		jobService = wire(JobService.class);
+		userLimitService = wire(UserLimitService.class);
     	layout = createNewDashboardLayout(linksWidgetDefinition);
     	commonLinksWidget = new CommonLinksWidget(WidgetFactory.WIDGET_ID, linksWidgetDefinition);    
 		newsWidget = new NewsWidget(WidgetFactory.WIDGET_ID, new WidgetDefinition(WidgetType.NEWS));
@@ -87,6 +90,8 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(linksWidgetDefinition)).andReturn(commonLinksWidget);
 		replay(widgetFactory);
+		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
+		replay(userLimitService);
 		
 		renderFixture(this);
 		
@@ -99,7 +104,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		assertVisible(getHarness().getGoogleAnalytics());
 		assertInDocument("<script src=\"https://ssl.google-analytics.com/ga.js\" type=\"text/javascript\"></script>");
 	
-		verifyMocks(dashboardService, widgetFactory);
+		verifyMocks(dashboardService, widgetFactory, userLimitService);
 	}	
 	
 
@@ -111,13 +116,15 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(linksWidgetDefinition)).andReturn(commonLinksWidget);
 		replay(widgetFactory);
+		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
+		replay(userLimitService);
 
 		renderFixture(this);
 		
 		assertEquals(0, getHarness().getSortableColumn(1).getList().size());
 		assertInvisible(getHarness().getGoogleAnalytics());
 		
-		verifyMocks(dashboardService, widgetFactory);
+		verifyMocks(dashboardService, widgetFactory, userLimitService);
 	}	
 	
 		
@@ -131,7 +138,9 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		expect(widgetFactory.createWidget(linksWidgetDefinition)).andReturn(commonLinksWidget);		
 		expectLastCall().times(2);
 		expect(widgetFactory.createWidget(WidgetDefinitionMatcher.eq(WidgetType.NEWS))).andReturn(newsWidget);
-		replay(widgetFactory);		
+		replay(widgetFactory);	
+		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
+		replay(userLimitService);
 
 		renderFixture(this);
 
@@ -148,7 +157,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		// should be one less available after adding. 
 		assertEquals(available-1, getHarness().getAddWidgetsDropDown().getChoices().size());		
 
-		verifyMocks(dashboardService, widgetFactory);
+		verifyMocks(dashboardService, widgetFactory, userLimitService);
 	}	
 	
 	@Test 
@@ -173,6 +182,8 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		final JobsAssignedWidget jobsWidget = new JobsAssignedWidget(WidgetFactory.WIDGET_ID, new WidgetDefinition(WidgetType.JOBS_ASSIGNED));
 		expect(widgetFactory.createWidget(WidgetDefinitionMatcher.eq(WidgetType.JOBS_ASSIGNED))).andReturn(jobsWidget);
 		replay(widgetFactory);
+		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
+		replay(userLimitService);
 
 		renderFixture(this);
 
@@ -180,7 +191,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		
 		getHarness().getSortableColumn(0).visitChildren(ListItem.class, new WidgetVisitor(JobsAssignedWidget.class, CommonLinksWidget.class));		
 
-		verifyMocks(dashboardService, widgetFactory, jobService);
+		verifyMocks(dashboardService, widgetFactory, jobService, userLimitService);
 	}	
 	
 	@Test 
@@ -192,7 +203,9 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(linksWidgetDefinition)).andReturn(commonLinksWidget);
 		replay(widgetFactory);
-		renderFixture(this);
+		renderFixture(this);	
+		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
+		replay(userLimitService);
 
 		List<DashboardColumn> columns = layout.getColumns();    
 		assertEquals(1, columns.get(0).getWidgets().size());
@@ -203,7 +216,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		assertEquals(0, columns.get(0).getWidgets().size());
 		assertEquals(0, columns.get(1).getWidgets().size());
 
-		verifyMocks(dashboardService, widgetFactory);
+		verifyMocks(dashboardService, widgetFactory, userLimitService);
 	}	
 	
 	@Test 
@@ -215,7 +228,9 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		dashboardService.saveLayout(layout);
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(WidgetDefinitionMatcher.eq(WidgetType.NEWS))).andReturn(newsWidget);
-		replay(widgetFactory);		
+		replay(widgetFactory);	
+		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
+		replay(userLimitService);
 
 		renderFixture(this);
 		
@@ -231,7 +246,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		assertVisible(getHarness().getSortableColumn(0));
 		assertVisible(getHarness().getSortableColumn(1));
 		
-		verifyMocks(dashboardService, widgetFactory);
+		verifyMocks(dashboardService, widgetFactory, userLimitService);
 	}
 	
 	@Override
