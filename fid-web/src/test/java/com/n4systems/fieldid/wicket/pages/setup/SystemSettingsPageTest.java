@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
+import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.wicket.FieldIdPageTest;
 import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner;
 import com.n4systems.fieldid.wicket.IFixtureFactory;
@@ -20,8 +21,9 @@ import com.n4systems.model.tenant.SystemSettings;
 
 @RunWith(FieldIdWicketTestRunner.class)
 public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageHarness, SystemSettingsPage> implements IFixtureFactory<SystemSettingsPage> {	
-	private SystemSettingsService systemSettingsService;
 
+	private SystemSettingsService systemSettingsService;
+	private UserLimitService userLimitService;
 		
 	@Override
 	@Before
@@ -29,6 +31,7 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		super.setUp();
 		expectingConfig();
 		systemSettingsService = wire(SystemSettingsService.class, "systemSettingsService");
+		userLimitService = wire(UserLimitService.class);
 	}
 
 	@Test
@@ -40,6 +43,8 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		
 		expect(systemSettingsService.getSystemSettings()).andReturn(settings);
 		replay(systemSettingsService);
+		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
+		replay(userLimitService);
 		
 		renderFixture(this);
 		
