@@ -132,6 +132,10 @@ public class SearchSubMenu extends Panel {
 	
 	class SubMenuLink extends AjaxLink  {
 		
+		// BUG NOTE : when you do this show/hide stuff you will be losing any changes user might have entered into the form. 
+		//  i.e. if you enter a identifier, then click Columns (switch panels) then back to Filters, the changed identifier is not preserved.
+		//  need to either do this via javascript or updateForm.
+		
 		public SubMenuLink(final String id) {
 			super(id);
 			add(new AttributeAppender("class", new Model<String>() {

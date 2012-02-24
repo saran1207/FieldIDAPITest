@@ -84,23 +84,6 @@
 
 
 /**
- * RIGHT-MENU
- * currently only used for padding. later may contain panel like left-menu
-*/
-
-.right-menu {
-	padding:0px;
-	background:#fff;
-	left:99%;
-	width:1%;
-	top:169px;
-	bottom:0px;
-	position:fixed;
-}
-
-
-
-/**
  COLUMNS
    checkboxes in Columns panel
 */
@@ -168,7 +151,8 @@
     background: -o-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
 }
 
-.sub-menu .config a, .asset-actions > ul > li > a { 
+/* used for the config toggle buttons, asset actions menu items & search button. */ 
+.sub-menu .config a, .asset-actions > ul > li > a, .search-config .title .search { 
 	padding: 3px 10px;
 	color: #333;
 	text-decoration: none;
@@ -309,30 +293,7 @@
     used for the search button at top of filters/columns panel
 */
 .search-config .title .search {
-	text-decoration: none;
-    font: 11px "lucida grande",tahoma,verdana,arial,sans-serif;
-    line-height: 18px;
-    border: solid 1px #7f7f7f;
-    border-radius: 4px;
-    text-shadow: 0 1px 0 #333;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    -webkit-transition: border-color .218s;
-    -moz-transition: border .218s;
-    -o-transition: border-color .218s;
-    transition: border-color .218s;
-	color:#FFF;
 	padding: 3px 20px 3px 20px;
-	background: -webkit-linear-gradient(top, #52adea, #1A92e2);
-	background:-moz-linear-gradient(top, #52adea, #1A92e2);
-    background: -ms-linear-gradient(top, #52adea, #1A92e2);
-    background: -o-linear-gradient(top, #52adea, #1A92e2);
-	*background: #52adea;    
-	border: solid 1px #888;
-	font-size:12px;
 }	
 
 /** 
