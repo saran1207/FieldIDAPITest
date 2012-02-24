@@ -104,7 +104,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		assertVisible(getHarness().getGoogleAnalytics());
 		assertInDocument("<script src=\"https://ssl.google-analytics.com/ga.js\" type=\"text/javascript\"></script>");
 	
-		verifyMocks(dashboardService, widgetFactory, userLimitService);
+		verifyMocks(dashboardService, widgetFactory);
 	}	
 	
 
@@ -191,7 +191,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		
 		getHarness().getSortableColumn(0).visitChildren(ListItem.class, new WidgetVisitor(JobsAssignedWidget.class, CommonLinksWidget.class));		
 
-		verifyMocks(dashboardService, widgetFactory, jobService, userLimitService);
+		verifyMocks(dashboardService, widgetFactory, jobService);
 	}	
 	
 	@Test 
@@ -203,9 +203,9 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(linksWidgetDefinition)).andReturn(commonLinksWidget);
 		replay(widgetFactory);
-		renderFixture(this);	
 		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
 		replay(userLimitService);
+		renderFixture(this);	
 
 		List<DashboardColumn> columns = layout.getColumns();    
 		assertEquals(1, columns.get(0).getWidgets().size());
@@ -216,7 +216,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		assertEquals(0, columns.get(0).getWidgets().size());
 		assertEquals(0, columns.get(1).getWidgets().size());
 
-		verifyMocks(dashboardService, widgetFactory, userLimitService);
+		verifyMocks(dashboardService, widgetFactory);
 	}	
 	
 	@Test 
