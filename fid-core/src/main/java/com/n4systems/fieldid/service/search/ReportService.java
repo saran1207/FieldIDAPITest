@@ -10,7 +10,10 @@ import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.terms.CompletedOrDueDateRange;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
+import com.n4systems.util.time.DateUtil;
+import org.apache.commons.lang.time.DateUtils;
 
+import java.util.Date;
 import java.util.List;
 
 public class ReportService extends SearchService<EventReportCriteriaModel, EventSchedule> {
@@ -53,12 +56,12 @@ public class ReportService extends SearchService<EventReportCriteriaModel, Event
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
             addNotNullTerm(searchTerms,  "nextDate");
         } else if (IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange()) && criteriaModel.getDueDateRange() != null) {
-            addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), criteriaModel.getDueDateRange().calculateToDate());
+            addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), nextDay(criteriaModel.getDueDateRange().calculateToDate()));
         }
 
         if (criteriaModel.getDateRange() != null) {
             if (criteriaModel.getEventStatus() == EventStatus.COMPLETE) {
-                addDateRangeTerm(searchTerms, "completedDate", criteriaModel.getDateRange().calculateFromDate(), criteriaModel.getDateRange().calculateToDate());
+                addDateRangeTerm(searchTerms, "completedDate", criteriaModel.getDateRange().calculateFromDate(), nextDay(criteriaModel.getDateRange().calculateToDate()));
             } else if (criteriaModel.getEventStatus() == EventStatus.ALL) {
                 searchTerms.add(new CompletedOrDueDateRange(criteriaModel.getDateRange()));
             }
@@ -97,6 +100,10 @@ public class ReportService extends SearchService<EventReportCriteriaModel, Event
         if (predefLocationId != null) {
 			addRequiredLeftJoin(joinTerms, "advancedLocation.predefinedLocation.searchIds", "preLocSearchId");
 		}
+    }
+
+    private Date nextDay(Date date) {
+        return date == null ? null : DateUtils.addDays(date, 1);
     }
 
 }
