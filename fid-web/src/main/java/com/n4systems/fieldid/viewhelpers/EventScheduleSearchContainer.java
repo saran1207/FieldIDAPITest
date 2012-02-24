@@ -34,6 +34,9 @@ public class EventScheduleSearchContainer extends SearchContainer {
 	private Date toDate;
 	private Date fromDate;
 	private CompressedScheduleStatus status = CompressedScheduleStatus.INCOMPLETE;
+
+    // Temporary hack to redirect to reporting instead of schedules
+    private boolean returnToReportingAfterUpdate = false;
 	
 	public EventScheduleSearchContainer(SecurityFilter securityFilter, LoaderFactory loaderFactory, SystemSecurityGuard securityGuard) {
 		super(EventSchedule.class, "id", securityFilter, loaderFactory, securityGuard);
@@ -252,4 +255,12 @@ public class EventScheduleSearchContainer extends SearchContainer {
 	public void setAssetTypeGroup(Long assetTypeGroupId) {
 		this.assetTypeGroupId = assetTypeGroupId;
 	}
+
+    public boolean isReturnToReportingAfterUpdate() {
+        return returnToReportingAfterUpdate;
+    }
+
+    public void setReturnToReportingAfterUpdate(boolean returnToReportingAfterUpdate) {
+        this.returnToReportingAfterUpdate = returnToReportingAfterUpdate;
+    }
 }

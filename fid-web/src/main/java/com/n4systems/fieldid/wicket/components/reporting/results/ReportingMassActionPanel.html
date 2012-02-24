@@ -32,10 +32,11 @@
 
     <a wicket:id="exportToExcelLink" class='lightboxPrintLink exportToExcel'><wicket:message key="label.exporttoexcel"/></a>
 
-    <wicket:enclosure>
+    <div wicket:id="massUpdateLinkContainer">
         | <a wicket:id="massUpdateLink" class="massUpdate"><wicket:message key="label.massupdate"/></a>
-    </wicket:enclosure>
+    </div>
 
+    <!-- TODO: add new summary report! -->
     <!--| <a wicket:id="summaryReportLink" class="summaryReport"><wicket:message key="label.summary_report"/></a>-->
 
     <wicket:enclosure>

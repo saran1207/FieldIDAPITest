@@ -18,7 +18,6 @@ public class ReportingMassActionPanel extends MassActionPanel {
     public ReportingMassActionPanel(String id, final IModel<EventReportCriteriaModel> reportCriteriaModel) {
         super(id);
 
-        ReportingMassActionLink massUpdateLink;
         ReportingMassActionLink assignEventsToJobsLink;
 
         WebMarkupContainer printContainer = new WebMarkupContainer("printContainer");
@@ -39,8 +38,19 @@ public class ReportingMassActionPanel extends MassActionPanel {
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
         boolean searchIncludesSafetyNetwork = reportCriteriaModel.getObject().isIncludeSafetyNetwork();
 
-        add(massUpdateLink = new ReportingMassActionLink("massUpdateLink", "/massUpdateEvents.action?searchId=%s", reportCriteriaModel));
-        massUpdateLink.setVisible(sessionUser.hasAccess("editevent") && !searchIncludesSafetyNetwork);
+        WebMarkupContainer massUpdateLinkContainer = new WebMarkupContainer("massUpdateLinkContainer");
+        massUpdateLinkContainer.setRenderBodyOnly(true);
+        massUpdateLinkContainer.setVisible(sessionUser.hasAccess("editevent") && !searchIncludesSafetyNetwork);
+
+        if (reportCriteriaModel.getObject().getEventStatus() == EventStatus.COMPLETE) {
+            massUpdateLinkContainer.add(new ReportingMassActionLink("massUpdateLink", "/massUpdateEvents.action?searchId=%s", reportCriteriaModel));
+        } else if (reportCriteriaModel.getObject().getEventStatus() == EventStatus.INCOMPLETE) {
+            massUpdateLinkContainer.add(new ScheduleMassActionLink("massUpdateLink", "/massUpdateEventSchedule.action?searchId=%s", reportCriteriaModel));
+        } else {
+            massUpdateLinkContainer.setVisible(false);
+        }
+
+        add(massUpdateLinkContainer);
 
         add(assignEventsToJobsLink = new ReportingMassActionLink("assignToJobsLink", "/selectJobToAssignEventsTo.action?searchId=%s&reportType=OBSERVATION_CERT", reportCriteriaModel));
         assignEventsToJobsLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork);

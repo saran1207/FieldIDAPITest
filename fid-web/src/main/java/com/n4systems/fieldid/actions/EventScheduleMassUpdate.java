@@ -62,6 +62,11 @@ public class EventScheduleMassUpdate extends MassUpdate {
 				TaskExecutor.getInstance().execute(task);
 				addFlashMessage(getText("message.eventschedulemassupdating"));
 			}
+
+            if (criteria.isReturnToReportingAfterUpdate()) {
+                return "returntoreport";
+            }
+
 			return SUCCESS;
 		} catch (Exception e) {
 			logger.error("failed to run a mass update on event schedules", e);

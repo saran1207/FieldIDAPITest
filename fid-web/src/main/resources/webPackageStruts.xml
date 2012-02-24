@@ -998,6 +998,10 @@
 			class="com.n4systems.fieldid.actions.EventScheduleMassUpdate">
 			<result name="error" type="redirectAction">schedule</result>
 			<result name="input" type="freemarker">/templates/html/massUpdate/eventSchedule/form.ftl</result>
+
+            <!--Remove after schedules is gone-->
+            <result name="returntoreport" type="redirect">/w/runLastReport</result>
+
 			<result name="success" type="redirectAction">
 				<param name="actionName">scheduleResults</param>
 				<param name="searchId">${searchId}</param>

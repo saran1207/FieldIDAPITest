@@ -195,7 +195,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	 */
 	@AllowSafetyNetworkAccess
 	public static boolean isPastDue(Date nextEventDate) {
-		return DateHelper.getToday().after(nextEventDate);
+		return nextEventDate != null && DateHelper.getToday().after(nextEventDate);
 	}
 
 	@AllowSafetyNetworkAccess
