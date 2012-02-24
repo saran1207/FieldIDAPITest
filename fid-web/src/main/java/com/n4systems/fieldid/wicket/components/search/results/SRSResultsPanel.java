@@ -82,7 +82,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteriaModel> extends Pan
 
             @Override
             protected void onSelectionChanged(AjaxRequestTarget target) {
-                updateSelectionStatus(target);
+                SRSResultsPanel.this.updateSelectionStatus(target);
             }
 
             @Override

@@ -16,16 +16,22 @@ var fieldIdWidePage = (function() {
 	
 	var showLeftMenu = function() {	
 		var leftMenu = $('#left-menu');
-		$('.paginationWrapper').css('left',leftMenuWidth);
-		if (!leftMenu.is(':visible')) {				
-			$('#page .centre').animate({marginLeft:contentLeft},220, 'linear', function() { leftMenu.show();} );
+		$('.paginationWrapper').css('margin-left',leftMenuWidth);
+		if (!leftMenu.is(':visible')) {
+			$('#page .centre').css('marginLeft',contentLeft);
+			leftMenu.show();
+			// i'm finding animation is too slow.  could just use css for this??
+//			$('#page .centre').animate({marginLeft:contentLeft},220, 'linear', function() { leftMenu.show();} );
 		}
 	};
-
 	
 	var hideLeftMenu = function() {
-		hideLeftImpl();
-		$('#page .centre').animate({marginLeft:'0%'},220);
+		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.		
+		$('.paginationWrapper').css('margin-left','0px');		
+		$('#page .centre').css('marginLeft','0%');
+		$('#left-menu').hide(); 		
+		// i'm finding animation is too slow.  could just use css for this??
+//		$('#page .centre').animate({marginLeft:'0%'},220);  
 	};
 			
 	var initLeftMenu = function(showLeftMenu) {
@@ -33,17 +39,10 @@ var fieldIdWidePage = (function() {
 			// set filter toggle button to true (it's the default config panel to be shown).
 			$('.sub-menu .config .filters').addClass('true');	
 		} else {
-			hideLeftImpl();
-			$('#page .centre').css('marginLeft','0%');
+			hideLeftMenu();
 		}
 	};
 				
-	function hideLeftImpl() { 
-		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.		
-		$('.paginationWrapper').css('left','0px');		
-		$('#left-menu').hide(); 		
-	}
-		
 	function addMenuHandlers() { 
 		$(document).delegate('.asset-actions  .menu >  a', 'click', function() {
 			$('.asset-actions .menu-items').show();	

@@ -1,9 +1,13 @@
-/* for fluid, widge pages that take up 100% width.   eg. search results pages 
+/* CSS for fluid, widge pages that take up 100% width.   eg. search results pages 
  * because we are currently trying to support two types of pages at once (legacy=fixed size & new = fluid, 100%) this page is 
  * a mish-mash of hacks.  
  * in order to achieve the look of the new page while maintaining the legacy Html/Java/CSS many css classes had to be overwritten.
+ * for example, #page is overwritten to have a width of 100% instead of 100px. 
  * 
  * in general, anything done in this file should be refactored out into common style when the transition to the new page is complete.
+ *
+ * a lot of this stuff can eventually be shared (like menu styling & buttons etc.. but as of now they are only used in this page.
+ * 
  */
 
 
@@ -16,6 +20,9 @@
 	margin-left:5px;
 	width:100%;
 	margin-left:0%;
+	padding-left:0;
+	position:static;
+	padding-right:0;
 }
 
 #page .centre {
@@ -45,6 +52,7 @@
 	overflow-y:auto; 
 	padding-left:10px;
 	border-right:1px solid #ccc;
+	border-top:1px solid #ccc;
 	width:335px;
 	top:169px;
 	bottom:0px;
@@ -239,6 +247,12 @@
  ASSET-ACTIONS      the actions buttons/menu @ top right of results page.
 */
 
+.asset-actions > ul > li { 
+	float: left; 
+	position:relative; 
+	margin-right:5px; 
+}
+
 
 /* icon beside link button */
 .asset-actions ul li a img {
@@ -246,19 +260,13 @@
 	padding-bottom:2px;
 } 
 
-.asset-actions > ul > li               		{ float: left; position:relative; margin-right:5px; }
-.asset-actions >ul >a:active                { color: #ffa500; }
-.asset-actions > ul > li > a                { display: block;  text-decoration:none; }
-
-
-
 									  
 .asset-actions .menu-items {
-	display:none; 		/* made visiblye by jquery click*/ 
+	display:none; 		/* made visible by jquery click*/ 
 	position: absolute;
 	top:100%;
 	width: 125px; 
-	background:#fcfcfc;
+	background:#fff;
 	color:black;
 	border-width:1px 1px 1px 1px;
 	border-color:#777;
@@ -280,7 +288,7 @@
 } 
 
 .asset-actions .menu-items li a:hover {
-	background:#CCD7E5;
+	background:#F5F5F5;
 } 
 
 .asset-actions ul { 
@@ -301,7 +309,7 @@
 }	
 
 /** 
- * for modal windows 
+ * for modal windows used only in this page.
  */
 .wicket-modal {
 	-moz-box-shadow: 4px 4px 4px #555;
@@ -320,7 +328,7 @@
 
 /*** hacks.  to be removed when the new asset search page completely replaces the old one.
  these are just to make both pages live together with minimal code changes.
- i.e. instead of hiding an element, it should be removed from java/html code and this CSS hack deleted. 
+ e.g. instead of hiding an element, it should be removed from java/html code and this CSS hack deleted. 
 */
 
 #pageFooter { 
@@ -343,7 +351,6 @@
 	bottom:0px;
 	right:0px;	
 	background:#f9f9f9;
-	width:auto;
 }
 
 
