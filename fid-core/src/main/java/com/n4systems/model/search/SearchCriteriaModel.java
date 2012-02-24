@@ -155,6 +155,8 @@ public abstract class SearchCriteriaModel extends AbstractEntity {
         this.sortDirection = sortDirection;
     }
 
+    // This is used to determine whether the criteria panel will attempt to put in a default
+    // report configuration according to available columns and those selected in the template configuration in setup.
     public boolean isReportAlreadyRun() {
         return reportAlreadyRun;
     }
