@@ -281,13 +281,8 @@
 	-webkit-box-shadow: 2px 2px 2px #555;
 	box-shadow: 2px 2px 2px #555;
 	padding-bottom:3px;			
-	left:2px; 			/*account for border radius so it lines up smoothly */
+	left:3px; 			/*account for border radius so it lines up smoothly */
 	*left:0px; 			/*account for worlds crappiest browser */
-} 
-
-.asset-actions .menu-items li {
-	border-radius:0px 5px 5px 5px;
-	-moz-border-radius: 0px 5px 5px 5px;	
 } 
 
 .asset-actions .menu-items li a {
@@ -319,6 +314,7 @@
     line-height: 18px;
     border: solid 1px #7f7f7f;
     border-radius: 4px;
+    text-shadow: 0 1px 0 #333;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -328,14 +324,13 @@
     -moz-transition: border .218s;
     -o-transition: border-color .218s;
     transition: border-color .218s;
-	text-shadow: 0 1px 0 #333;
 	color:#FFF;
 	padding: 3px 20px 3px 20px;
 	background: -webkit-linear-gradient(top, #52adea, #1A92e2);
 	background:-moz-linear-gradient(top, #52adea, #1A92e2);
     background: -ms-linear-gradient(top, #52adea, #1A92e2);
     background: -o-linear-gradient(top, #52adea, #1A92e2);
-	background: #52adea;    
+	*background: #52adea;    
 	border: solid 1px #888;
 	font-size:12px;
 }	

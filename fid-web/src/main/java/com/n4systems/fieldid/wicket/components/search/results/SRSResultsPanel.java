@@ -82,8 +82,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteriaModel> extends Pan
 
             @Override
             protected void onSelectionChanged(AjaxRequestTarget target) {
-                storeCriteriaIfNecessary();
-                target.add(numSelectedLabel);
+                updateSelectionStatus(target);
             }
 
             @Override
