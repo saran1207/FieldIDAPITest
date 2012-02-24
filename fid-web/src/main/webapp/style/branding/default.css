@@ -1,6 +1,10 @@
+html {
+	background-color: #f8f8f8;
+}
+
 body {
 	color: #333333;
-	background-color: #fff;
+	background-color: #f8f8f8;
 }
 
 .brandedContainer, .publicContainer {
@@ -9,6 +13,7 @@ body {
 
 #pageContent.public {
 	background: #F6F6F6;
+	min-height: 0;
 }
 
 #mainContent {

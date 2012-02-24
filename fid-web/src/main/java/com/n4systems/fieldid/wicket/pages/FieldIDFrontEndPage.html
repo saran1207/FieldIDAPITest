@@ -81,9 +81,10 @@
 									<wicket:message key="speed.identify"/>
 									<img src="/fieldid/images/down-arrow.png" />
 								</a>
-								<ul class="sub_menu regular_menu">
-									<li><a href="/fieldid/assetMultiAdd" class="speedLink"><wicket:message key="nav.multi_add"/></a></li>
-									<li><a href="/fieldid/assetImportExport" class="speedLink"><wicket:message key="nav.import"/></a></li>
+								<ul class="sub_menu">
+									<li><a wicket:id="subMenuIdentifyLink"><wicket:message key="nav.single_add"/></a></li>
+									<li><a href="/fieldid/assetMultiAdd"><wicket:message key="nav.multi_add"/></a></li>
+									<li><a href="/fieldid/assetImportExport"><wicket:message key="nav.import"/></a></li>
 								</ul>
 							</li>
 				            <li wicket:id="startEventLinkContainer">
@@ -110,13 +111,47 @@
 				                	<img src="/fieldid/images/down-arrow.png" />
 				                </a>
 
-				                <ul wicket:id="setupSubMenuContainer" class="sub_menu wide_menu">
-									<li><a wicket:id="ownersUsersLocLink" class="speedLink"><wicket:message key="nav.owners_users_loc"/></a></li>
-									<li><a wicket:id="assetsEventsLink" class="speedLink"><wicket:message key="nav.assets_and_events"/></a></li>
-									<li><a wicket:id="importLink" class="speedLink"><wicket:message key="nav.import"/></a></li>
-									<li><a wicket:id="templatesLink" class="speedLink"><wicket:message key="nav.templates"/></a></li>
-									<li><a wicket:id="widgetsLink" class="speedLink"><wicket:message key="nav.widgets"/></a></li>
-									<li><a wicket:id="securityLink" class="speedLink"><wicket:message key="nav.security"/></a></li>
+				                <ul wicket:id="setupSubMenuContainer" class="">
+									<li>
+										<a wicket:id="settingsLink"><wicket:message key="nav.system_settings"/></a>
+										<ul wicket:id="settingsSubMenuContainer" class="">
+											<li><a href="/fieldid/organizations.action" ><wicket:message key="title.manage_organizational_units.plural"/></a></li>
+											<li><a wicket:id="systemSettingsLink"><wicket:message key="label.system_settings"/></a></li>
+											<li><a href="/fieldid/quickSetupWizard/startWizard.action"><wicket:message key="label.quick_setup_wizard"/></a></li>
+											<li><a href="/fieldid/branding.action" ><wicket:message key="title.manage_branding.plural"/></a></li>
+											<li><a wicket:id="yourPlanLink" ><wicket:message key="title.manage_field_id_plan.plural"/></a></li>
+										</ul>
+									</li>
+									<li><a wicket:id="ownersUsersLocLink"><wicket:message key="nav.owners_users_loc"/></a>
+										<ul wicket:id="ownersSubMenuContainer" class="sub_menu">
+											<li wicket:id="manageCustomersContainer"><a href="/fieldid/customerList.action" ><wicket:message key="title.manage_customers.plural"/></a></li>
+											<li wicket:id="manageUsersContainer"><a href="/fieldid/userList.action" ><wicket:message key="title.manage_users.plural"/></a></li>
+									        <li wicket:id="manageUserRegistrationsContainer"><a href="/fieldid/userRequestList.action" ><wicket:message key="title.manage_user_registrations.plural"/></a></li>
+									        <li wicket:id="managePredefinedLocationsContainer"><a href="/fieldid/predefinedLocations.action" ><wicket:message key="title.manage_predefined_locations.plural"/></a></li>
+										</ul>
+									</li>
+									<li><a wicket:id="assetsEventsLink"><wicket:message key="nav.assets_and_events"/></a>
+									    <ul wicket:id="assetsEventsSubMenuContainer">
+											<li><a href="/fieldid/eventTypeGroups.action" ><wicket:message key="title.manage_event_type_groups.plural"/></a></li>
+											<li><a href="/fieldid/eventTypes.action" ><wicket:message key="title.manage_event_types.plural"/></a></li>
+											<li><a href="/fieldid/eventBooks.action" ><wicket:message key="title.manage_event_books.plural"/></a></li>
+											<li><a href="/fieldid/assetTypeGroups.action" ><wicket:message key="title.manage_asset_type_groups.plural"/></a></li>
+											<li><a href="/fieldid/assetTypes.action" ><wicket:message key="title.manage_asset_types.plural"/></a></li>
+											<li><a href="/fieldid/assetStatusList.action" ><wicket:message key="title.manage_asset_statuses.plural"/></a></li>
+									    </ul>										
+									</li>
+									<li><a wicket:id="importLink"><wicket:message key="nav.import"/></a>
+								        <ul class="sub_menu">
+								           <li><a href="/fieldid/customerImportExport.action"><wicket:message key="label.import_owners"/></a></li>
+								           <li><a href="/fieldid/assetImportExport.action"><wicket:message key="label.import_assets"/></a></li>
+								           <li><a href="/fieldid/eventImportExport.action"><wicket:message key="label.import_events"/></a></li>
+								           <li><a href="/fieldid/autoAttributeImportExport.action"><wicket:message key="label.import_auto_attributes"/></a></li>
+								           <li><a href="/fieldid/userImportExport.action"><wicket:message key="label.import_users"/></a></li>
+								        </ul>
+									</li>
+									<li><a wicket:id="templatesLink"><wicket:message key="nav.templates"/></a></li>
+									<li><a wicket:id="widgetsLink"><wicket:message key="nav.widgets"/></a></li>
+									<li><a wicket:id="securityLink"><wicket:message key="nav.security"/></a></li>
 								</ul>
 				            </li>
 				        </ul>

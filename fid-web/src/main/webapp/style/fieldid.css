@@ -115,11 +115,20 @@ h2 a {
 	font-weight: normal;
 }
 
+#page {
+	-moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+	-webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+	box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;		
+	border:1px solid #CCC;
+	padding:20px;
+	background:#FFF;
+}
+
 #page, .systemNotice {
 	width: 1000px;
 	margin: auto;
 	clear: both;
-	position:relative; 
+	position:relative;
 	z-index: 5;
 }
 
@@ -133,7 +142,7 @@ h2 a {
 
 #headerPadding {
 	display:block;
-	height:120px;
+	height:130px;
 }
 
 .frontPageHeader {
@@ -145,6 +154,8 @@ h2 a {
 	margin-bottom: 10px;
 	text-align: left;
 	overflow: hidden;
+	min-height: 550px;
+	_height: auto !important;
 }
 
 #contentHeader {
@@ -207,7 +218,6 @@ h2 a {
 }
 
 #contentHeader #notifications {
-	padding: 15px 0 15px 0;
 	text-align: center;
 }
 
@@ -244,18 +254,25 @@ h2 a {
 
 #pageHeader #pageNavigation {
 	background-color: #525252;
-	padding: 5px 0;
+	-moz-box-shadow: 0px 3px 8px #AAA;
+	-webkit-box-shadow: 0px 3px 8px #AAA;
+	box-shadow: 0px 3px 8px #AAA;
 }
 
-#pageNavigation a,#pageNavigation a:hover,#pageNavigation a:active,#pageNavigation a:visited
+#pageNavigation a, #pageNavigation a:hover, #pageNavigation a:active, #pageNavigation a:visited
 {
-	color: #FFFFFF;
 	text-decoration: none;
 	font-size: 1.1em;
 }
 
+#pageNavigation .speedLink, #pageNavigation .speedLink:hover, #pageNavigation .speedLink:active, #pageNavigation .speedLink:visited
+{
+	color: #FFFFFF;
+}
+
 #pageNavigation ul li .textLink{
 	padding-top: 7px;
+	padding-bottom: 14px;
 }
 
 #navigationContent {
@@ -264,7 +281,7 @@ h2 a {
 }
 
 #navigationLinks{
-	padding-top: 4px;
+	padding-top: 10px;
 	float: left;
 }
 
@@ -286,6 +303,8 @@ h2 a {
 
 #smartSearchContainer {
 	padding-left: 758px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	*padding-left: 0;
 	*float : right;
 }

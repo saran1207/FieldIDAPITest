@@ -74,16 +74,9 @@
 								<img src="/fieldid/images/down-arrow.png" />
 							</a>
 							<ul class="sub_menu regular_menu">
-								<li>
-									<a href="<@s.url action='assetMultiAdd' namespace='/' />" class="speedLink">
-										<@s.text name="nav.multi_add"/>
-									</a>
-								</li>
-								<li>
-									<a href="<@s.url action='assetImportExport' namespace='/' />" class="speedLink">
-										<@s.text name="nav.import"/>
-									</a>
-								</li>
+								<li><a href="${identifyUrl}"><@s.text name="nav.single_add"/></a></li>
+								<li><a href="<@s.url action='assetMultiAdd' namespace='/' />"><@s.text name="nav.multi_add"/></a></li>
+								<li><a href="<@s.url action='assetImportExport' namespace='/' />"><@s.text name="nav.import"/></a></li>
 							</ul>
 							
 						</li>
@@ -121,39 +114,63 @@
 									<@s.text name="label.setup" />
 									<img src="/fieldid/images/down-arrow.png" />
 								</a>
-								
-								<ul class="sub_menu wide_menu">
+								<ul class="sub_menu">
 									<li>
-										<a href="<@s.url value="/w/setup/ownersUsersLocations" />" class="speedLink"><@s.text name="nav.owners_users_loc"/></a>
-										<ul class="sub_menu wide_menu">
-											<li>
-												<a href="<@s.url action='customerList' namespace='/' />" class="speedLink"><@s.text name="title.manage_customers.plural"/></a>
-											</li>
-											<li>
-												<a href="<@s.url action='userList' namespace='/' />" class="speedLink"><@s.text name="title.manage_users.plural"/></a>
-											</li>
-											<li>
-												<a href="<@s.url action='userRequestList' namespace='/' />" class="speedLink"><@s.text name="title.manage_user_registrations.plural"/></a>
-											</li>
-											<li>
-												<a href="<@s.url action='predefinedLocations' namespace='/' />" class="speedLink"><@s.text name="title.manage_predefined_locations.plural"/></a>
-											</li>
+										<a href="<@s.url value='/w/setup/settings'/>" ><@s.text name="nav.system_settings" /></a>
+										<ul class="sub_menu">
+											<li><a href="<@s.url action='organizations'/>"><@s.text name="title.manage_organizational_units.plural"/></a></li>
+											<li><a href="<@s.url value='/w/setup/settings'/>"><@s.text name="nav.system_settings"/></a></li>
+											<li><a href="<@s.url action='quickSetupWizard/startWizard'/>"><@s.text name="label.quick_setup_wizard"/></a></li>
+											<li><a href="<@s.url action='branding'/>"><@s.text name="title.manage_branding.plural"/></a></li>
+											<li><a href="<@s.url value='/w/setup/yourPlan'/>"><@s.text name="title.manage_field_id_plan.plural"/></a></li>
 										</ul>
 									</li>
 									<li>
-										<a href="<@s.url value="/w/setup/assetsEvents" />" class="speedLink"><@s.text name="nav.assets_and_events"/></a>
+										<a href="<@s.url value="/w/setup/ownersUsersLocations" />" ><@s.text name="nav.owners_users_loc"/></a>
+										<ul class="sub_menu">
+											<#if sessionUser.hasAccess("manageendusers") >
+												<li><a href="<@s.url action='customerList' namespace='/' />" ><@s.text name="title.manage_customers.plural"/></a></li>
+												<li><a href="<@s.url action='userList' namespace='/' />" ><@s.text name="title.manage_users.plural"/></a></li>
+												<#if sessionUser.tenant.settings.userLimits.maxReadOnlyUsers != 0>
+													<li><a href="<@s.url action='userRequestList' namespace='/' />" ><@s.text name="title.manage_user_registrations.plural"/></a></li>
+												</#if>
+											</#if>
+											<#if sessionUser.hasAccess("managesystemconfig") && locationHeirarchyFeatureEnabled>
+												<li><a href="<@s.url action='predefinedLocations' namespace='/' />" ><@s.text name="title.manage_predefined_locations.plural"/></a></li>
+											</#if>
+										</ul>
 									</li>
 									<li>
-										<a href="<@s.url value="/w/setup/import" />" class="speedLink"><@s.text name="nav.import"/></a>
+										<a href="<@s.url value="/w/setup/assetsEvents" />" ><@s.text name="nav.assets_and_events"/></a>
+										<#if sessionUser.hasAccess("managesystemconfig") >
+											<ul class="sub_menu">
+												<li><a href="<@s.url action="eventTypeGroups"/>" ><@s.text name="title.manage_event_type_groups.plural"/></a></li>
+												<li><a href="<@s.url action="eventTypes"/>" ><@s.text name="title.manage_event_types.plural"/></a></li>
+												<li><a href="<@s.url action="eventBooks"/>" ><@s.text name="title.manage_event_books.plural"/></a></li>
+												<li><a href="<@s.url action="assetTypeGroups"/>" ><@s.text name="title.manage_asset_type_groups.plural"/></a></li>	
+												<li><a href="<@s.url action="assetTypes"/>" ><@s.text name="title.manage_asset_types.plural"/></a></li>	
+												<li><a href="<@s.url action="assetStatusList"/>" ><@s.text name="title.manage_asset_statuses.plural"/></a></li>	
+											</ul>
+										</#if>
 									</li>
 									<li>
-										<a href="<@s.url value="/w/setup/templates" />" class="speedLink"><@s.text name="nav.templates"/></a>
+										<a href="<@s.url value="/w/setup/import" />" ><@s.text name="nav.import"/></a>
+										<ul class="sub_menu">
+											<li><a href="<@s.url action='customerImportExport'/>"><@s.text name="label.import_owners"/></a></li>
+											<li><a href="<@s.url action='assetImportExport'/>"><@s.text name="label.import_assets"/></a></li>
+											<li><a href="<@s.url action='eventImportExport'/>"><@s.text name="label.import_events"/></a></li>
+											<li><a href="<@s.url action='autoAttributeImportExport'/>"><@s.text name="label.import_auto_attributes"/></a></li>
+											<li><a href="<@s.url action='userImportExport'/>"><@s.text name="label.import_users"/></a></li>
+										</ul>
 									</li>
 									<li>
-										<a href="<@s.url value="/w/setup/widgets" />" class="speedLink"><@s.text name="nav.widgets"/></a>
+										<a href="<@s.url value="/w/setup/templates" />" ><@s.text name="nav.templates"/></a>
 									</li>
 									<li>
-										<a href="<@s.url value="/w/setup/security" />" class="speedLink"><@s.text name="nav.security"/></a>
+										<a href="<@s.url value="/w/setup/widgets" />" ><@s.text name="nav.widgets"/></a>
+									</li>
+									<li>
+										<a href="<@s.url value="/w/setup/security" />" ><@s.text name="nav.security"/></a>
 									</li>
 								</ul>
 								

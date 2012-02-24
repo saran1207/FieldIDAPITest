@@ -18,6 +18,7 @@ import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 import rfid.web.helper.SessionUser;
 
 import com.n4systems.fieldid.UIConstants;
+import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DynamicPanel;
@@ -32,8 +33,11 @@ import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SecurityPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
+import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
 import com.n4systems.fieldid.wicket.pages.setup.WidgetsPage;
+import com.n4systems.fieldid.wicket.pages.setup.YourPlanPage;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.services.ConfigService;
@@ -44,7 +48,11 @@ import com.n4systems.util.ConfigurationProvider;
 @SuppressWarnings("serial")
 public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIConstants {
 	
-	@SpringBean private ConfigService configService;
+	@SpringBean 
+	private ConfigService configService;
+	
+	@SpringBean
+	private UserLimitService userLimitService;
 	
     private Label titleLabel;
 	private Label topTitleLabel;
@@ -173,6 +181,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         	url = "/fieldid/assetAdd.action";
         }
         add(new ExternalLink("identifyLink", url));
+        add(new ExternalLink("subMenuIdentifyLink", url));
         
     }
     
@@ -190,9 +199,12 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             container.setVisible(false);
             subMenuContainer.setVisible(false);
         }
-        
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("settingsLink", SettingsPage.class));
+        subMenuContainer.add(createSettingsSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("ownersUsersLocLink", OwnersUsersLocationsPage.class));
+        subMenuContainer.add(createOwnersSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("assetsEventsLink", AssetsAndEventsPage.class));
+        subMenuContainer.add(createAssetEventsSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("importLink", ImportPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("templatesLink", TemplatesPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));
@@ -201,6 +213,37 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         container.add(subMenuContainer);
         
         return container;
+    }
+    
+	private Component createAssetEventsSubMenu() {
+        WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
+
+        container.setVisible(getSessionUser().hasAccess("managesystemconfig"));
+        
+        return container;
+    }
+
+	private Component createSettingsSubMenu() {
+    	WebMarkupContainer container = new WebMarkupContainer("settingsSubMenuContainer");
+    	
+    	container.add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
+    	container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
+
+    	return container;
+    }
+    
+    private Component createOwnersSubMenu() {
+    	WebMarkupContainer container = new WebMarkupContainer("ownersSubMenuContainer");
+    	
+	    boolean canManageSystemUsers = getSessionUser().hasAccess("managesystemusers");
+        boolean advancedLocationEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AdvancedLocation);
+
+        container.add(new WebMarkupContainer("manageCustomersContainer").setVisible(getSessionUser().hasAccess("manageendusers")));
+        container.add(new WebMarkupContainer("manageUsersContainer").setVisible(canManageSystemUsers));
+        container.add(new WebMarkupContainer("manageUserRegistrationsContainer").setVisible(canManageSystemUsers && userLimitService.isReadOnlyUsersEnabled()));
+        container.add(new WebMarkupContainer("managePredefinedLocationsContainer").setVisible(getSessionUser().hasAccess("managesystemconfig") && advancedLocationEnabled));
+
+    	return container;
     }
 
     protected void addNavBar(String navBarId) {

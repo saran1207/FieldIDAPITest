@@ -29,6 +29,16 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
     overflow:hidden;
 }
 
+#page {
+	-moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+	-webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+	box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+
+	border:1px solid #CCC;
+	padding:20px;
+	background:#FFF;
+}
+
 #page, .systemNotice {
 	width: 1000px;
 	margin: auto;
@@ -54,7 +64,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #headerPadding {
 	display:block;
-	height:120px;
+	height:130px;
 }
 
 .pageContent {
@@ -66,17 +76,24 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #pageHeader #pageNavigation {
 	background-color: #525252;
-	padding: 5px 0;
+	-moz-box-shadow: 0px 3px 8px #AAA;
+	-webkit-box-shadow: 0px 3px 8px #AAA;
+	box-shadow: 0px 3px 8px #AAA;
 }
 
 #pageNavigation a,#pageNavigation a:hover,#pageNavigation a:active,#pageNavigation a:visited
-	{
-	color: #FFFFFF;
+{
 	text-decoration: none;
 	font-size: 1.1em;
 }
 
+#pageNavigation .speedLink,#pageNavigation .speedLink:hover,#pageNavigation .speedLink:active,#pageNavigation .speedLink:visited
+{
+	color: #FFFFFF;
+}
+
 #pageNavigation ul li .textLink{
+	padding-bottom: 14px;
 	padding-top: 7px;
 }
 
@@ -86,7 +103,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 }
 
 #navigationLinks{
-	padding-top: 6px;
+	padding-top: 10px;
 	float: left;
 }
 
@@ -103,6 +120,8 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #smartSearchContainer {
 	padding-left: 758px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 #smartSearch {
@@ -228,7 +247,6 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 }
 
 #contentHeader #notifications {
-	padding: 15px 0 15px 0;
 	text-align: center;
 }
 
@@ -541,11 +559,6 @@ table.list tr.multiSelected {
 
 #formErrors * {
 	float: none;
-}
-
-#contentHeader #notifications {
-	padding: 15px 0 15px 0;
-	text-align: center;
 }
 
 #contentHeader #notifications span {
