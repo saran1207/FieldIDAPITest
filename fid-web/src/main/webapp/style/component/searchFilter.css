@@ -3,7 +3,7 @@
 }
 
 .field label, .collapsible .dateRange label, .collapsible .dateFrom label, .collapsible .dateTo label { 
-	width : 75px;
+	width : 105px;
 	vertical-align:top;
 	margin-right:5px;
 	display:inline-block;

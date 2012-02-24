@@ -70,7 +70,6 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
 	}
 
 	private AssetSearchCriteriaModel createSearchCriteriaModel(PageParameters params) {
-		AssetSearchCriteriaModel model = null;
 		try { 
 			if(params!=null) {
 				// 	load config and set values...
@@ -134,7 +133,6 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
         });
 	}
 
-    @Deprecated // when WEB-2629 is finished, this should no longer be needed.
     private Link createSaveSearchLink(String linkId, final boolean overwrite) {
         Link link = new Link(linkId) {
             @Override
@@ -170,7 +168,7 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
         if (!showLeftMenu) { 
         	response.renderCSSReference("style/pageStyles/wideNoLeftMenu.css");
         }
-        response.renderOnLoadJavaScript("fieldIdWidePage.init();");
+        response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+showLeftMenu+");");
     }
     
 }

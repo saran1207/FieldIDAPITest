@@ -115,20 +115,11 @@ h2 a {
 	font-weight: normal;
 }
 
-
-/*
-#page {
-	-moz-box-shadow: 5px 5px 5px #888;
-	-webkit-box-shadow: 5px 5px 5px #888;
-	box-shadow: 5px 5px 5px #888;
-}
-*/
-
 #page, .systemNotice {
 	width: 1000px;
 	margin: auto;
 	clear: both;
-	position:relative;
+	position:relative; 
 	z-index: 5;
 }
 

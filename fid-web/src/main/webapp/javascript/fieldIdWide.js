@@ -6,10 +6,10 @@
 
 var fieldIdWidePage = (function() { 
 
-	var leftMenuWidth = '325px'; 
+	var leftMenuWidth = '345px'; 
 	var contentLeft = leftMenuWidth;	
 	
-	var init = function() {
+	var init = function(showLeftMenu) {
 		$(document).delegate('.asset-actions  .menu >  a', 'click', function() {
 			$('.asset-actions .menu-items').show();	
 			return false;
@@ -18,6 +18,11 @@ var fieldIdWidePage = (function() {
 		$(document).delegate('"#page, #pageHeader', 'click', function(e) {
 			$('.asset-actions .menu-items').hide();					
 		});		
+		if (!showLeftMenu) {
+			initNoLeftMenu();
+		} else { 
+			initFilters();
+		}
 	};
 	
 	var showLeftMenu = function() {	
@@ -28,14 +33,29 @@ var fieldIdWidePage = (function() {
 		}
 		// need to restore "true" state of toggle button...
 	};
+
 	
 	var hideLeftMenu = function() {
-		$('.paginationWrapper').css('left','0px');		
-		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.		
-		$('#left-menu').hide(); 
+		hideLeftImpl();
 		$('#page .centre').animate({marginLeft:'0%'},220);
 	};
 			
+	var initNoLeftMenu = function() {
+		hideLeftImpl();
+		$('#page .centre').css('marginLeft','0%');
+	};
+				
+	function hideLeftImpl() { 
+		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.		
+		$('.paginationWrapper').css('left','0px');		
+		$('#left-menu').hide(); 		
+	}
+	
+	// set filter toggle button to true (it's the default config panel to be shown).
+	function initFilters() {
+		$('.sub-menu .config .filters').addClass('true');				
+	}
+	
 	return { 
 		init : init,
 		showLeftMenu : showLeftMenu,

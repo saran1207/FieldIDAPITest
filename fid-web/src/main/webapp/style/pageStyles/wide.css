@@ -19,7 +19,7 @@
 }
 
 #page .centre {
-	margin-left:325px;
+	margin-left:345px;
 	/* this is due to "notification" taking up 30 pixels.  the menu is 50px high so we just need to offset the remaining 20px;
 	   in future, notifications should be moved to bottom, or hidden until it has contents so it doesn't cause this awkward layout/css.
 	*/
@@ -45,7 +45,7 @@
 	overflow-y:auto; 
 	padding-left:10px;
 	border-right:1px solid #ccc;
-	width:315px;
+	width:335px;
 	top:169px;
 	bottom:0px;
 	position:fixed;
@@ -177,6 +177,10 @@
 	background:-moz-linear-gradient(top, #f8f8f8, #bebebe);
     background:-ms-linear-gradient(top, #f8f8f8, #bebebe);
     background:-o-linear-gradient(top, #f8f8f8, #bebebe);
+}
+
+.search-config .title .search:hover { 
+	cursor:pointer;
 }
 
 .sub-menu .config a:hover, .asset-actions > ul > li > a:hover  { 
