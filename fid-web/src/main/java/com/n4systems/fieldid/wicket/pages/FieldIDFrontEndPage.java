@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -28,17 +30,21 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
+import com.n4systems.fieldid.wicket.pages.setup.AccountPolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
+import com.n4systems.fieldid.wicket.pages.setup.PasswordPolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.SecurityPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
 import com.n4systems.fieldid.wicket.pages.setup.WidgetsPage;
 import com.n4systems.fieldid.wicket.pages.setup.YourPlanPage;
+import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.columns.ReportType;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigContext;
@@ -207,14 +213,39 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(createAssetEventsSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("importLink", ImportPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("templatesLink", TemplatesPage.class));
+        subMenuContainer.add(createTemplatesSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("securityLink", SecurityPage.class));
+        createSecuritySubMenu(subMenuContainer);
         
         container.add(subMenuContainer);
         
         return container;
     }
     
+	private void createSecuritySubMenu(WebMarkupContainer container) {
+		container.add(new BookmarkablePageLink<ColumnsLayoutPage>("passwordPolicyLink", PasswordPolicyPage.class));
+		container.add(new BookmarkablePageLink<ColumnsLayoutPage>("accountPolicyLink", AccountPolicyPage.class));
+
+	}
+
+	private Component createTemplatesSubMenu() {
+        boolean intergrationEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Integration);
+
+        WebMarkupContainer container = new WebMarkupContainer("templatesSubMenuContainer");
+        WebMarkupContainer assetCodeMappingcontainer = new WebMarkupContainer("assetCodeMappingContainer");
+
+        container.setVisible(getSessionUser().hasAccess("managesystemconfig"));
+        assetCodeMappingcontainer.setVisible(intergrationEnabled);
+        container.add(assetCodeMappingcontainer);
+        
+        container.add(new BookmarkablePageLink<ColumnsLayoutPage>("assetLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.ASSET)));
+        container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)));
+        container.add(new BookmarkablePageLink<ColumnsLayoutPage>("scheduleLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.SCHEDULE)));
+
+        return container;
+	}
+
 	private Component createAssetEventsSubMenu() {
         WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
 

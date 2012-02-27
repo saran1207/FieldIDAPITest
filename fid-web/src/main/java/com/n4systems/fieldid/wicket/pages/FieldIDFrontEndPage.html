@@ -113,7 +113,7 @@
 
 				                <ul wicket:id="setupSubMenuContainer" class="">
 									<li>
-										<a wicket:id="settingsLink"><wicket:message key="nav.system_settings"/></a>
+										<a wicket:id="settingsLink"><wicket:message key="nav.settings"/></a>
 										<ul wicket:id="settingsSubMenuContainer" class="">
 											<li><a href="/fieldid/organizations.action" ><wicket:message key="title.manage_organizational_units.plural"/></a></li>
 											<li><a wicket:id="systemSettingsLink"><wicket:message key="label.system_settings"/></a></li>
@@ -149,9 +149,23 @@
 								           <li><a href="/fieldid/userImportExport.action"><wicket:message key="label.import_users"/></a></li>
 								        </ul>
 									</li>
-									<li><a wicket:id="templatesLink"><wicket:message key="nav.templates"/></a></li>
+									<li><a wicket:id="templatesLink"><wicket:message key="nav.templates"/></a>
+										<ul wicket:id="templatesSubMenuContainer" class="sub_menu">
+											<li><a href="/fieldid/autoAttributeCriteriaList.action"><wicket:message key="title.auto_attribute_wizard.plural" /></a></li>
+											<li><a href="/fieldid/commentTemplateList.action"><wicket:message key="title.manage_comment_templates.plural" /></a></li>
+											<li><a wicket:id="assetLayoutLink"><wicket:message key="title.column_layout_asset" /></a></li>
+											<li><a wicket:id="eventLayoutLink"><wicket:message key="title.column_layout_event" /></a></li>
+											<li><a wicket:id="scheduleLayoutLink" ><wicket:message key="title.column_layout_schedule" /></a></li>
+											<li wicket:id="assetCodeMappingContainer"><a href="/fieldid/assetCodeMappingList.action"><wicket:message key="title.manage_asset_code_mappings.plural" /></a></li>
+										</ul>					
+									</li>
 									<li><a wicket:id="widgetsLink"><wicket:message key="nav.widgets"/></a></li>
-									<li><a wicket:id="securityLink"><wicket:message key="nav.security"/></a></li>
+									<li><a wicket:id="securityLink"><wicket:message key="nav.security"/></a>
+										<ul class="sub_menu">
+											<li><a wicket:id="passwordPolicyLink"><wicket:message key="title.password_policy"/></a></li>
+											<li><a wicket:id="accountPolicyLink"><wicket:message key="title.account_lockout_policy" /></a></li>
+										</ul>
+									</li>
 								</ul>
 				            </li>
 				        </ul>

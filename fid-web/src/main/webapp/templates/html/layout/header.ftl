@@ -116,10 +116,10 @@
 								</a>
 								<ul class="sub_menu">
 									<li>
-										<a href="<@s.url value='/w/setup/settings'/>" ><@s.text name="nav.system_settings" /></a>
+										<a href="<@s.url value='/w/setup/settings'/>" ><@s.text name="nav.settings" /></a>
 										<ul class="sub_menu">
 											<li><a href="<@s.url action='organizations'/>"><@s.text name="title.manage_organizational_units.plural"/></a></li>
-											<li><a href="<@s.url value='/w/setup/settings'/>"><@s.text name="nav.system_settings"/></a></li>
+											<li><a href="<@s.url value='/w/setup/systemSettings'/>"><@s.text name="nav.system_settings"/></a></li>
 											<li><a href="<@s.url action='quickSetupWizard/startWizard'/>"><@s.text name="label.quick_setup_wizard"/></a></li>
 											<li><a href="<@s.url action='branding'/>"><@s.text name="title.manage_branding.plural"/></a></li>
 											<li><a href="<@s.url value='/w/setup/yourPlan'/>"><@s.text name="title.manage_field_id_plan.plural"/></a></li>
@@ -165,12 +165,29 @@
 									</li>
 									<li>
 										<a href="<@s.url value="/w/setup/templates" />" ><@s.text name="nav.templates"/></a>
+										<#if sessionUser.hasAccess("managesystemconfig") >
+											<ul class="sub_menu">
+												<li><a href="<@s.url action="autoAttributeCriteriaList"/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
+												<li><a href="<@s.url action="commentTemplateList"/>" ><@s.text name="title.manage_comment_templates.plural" /></a></li>
+												<li><a href="<@s.url value='/w/setup/columnsLayout' type='ASSET'/>" ><@s.text name="title.column_layout_asset" /></a></li>
+												<li><a href="<@s.url value='/w/setup/columnsLayout' type='EVENT'/>" ><@s.text name="title.column_layout_event" /></a></li>
+												<li><a href="<@s.url value='/w/setup/columnsLayout' type='SCHEDULE'/>" ><@s.text name="title.column_layout_schedule" /></a></li>
+												<#if securityGuard.integrationEnabled>
+													<li><a href="<@s.url action="assetCodeMappingList"/>" ><@s.text name="title.manage_asset_code_mappings.plural" /></a></li>
+												</#if>
+											</ul>
+										</#if>
 									</li>
 									<li>
 										<a href="<@s.url value="/w/setup/widgets" />" ><@s.text name="nav.widgets"/></a>
 									</li>
 									<li>
 										<a href="<@s.url value="/w/setup/security" />" ><@s.text name="nav.security"/></a>
+										<ul class="sub_menu">
+											<li><a href="<@s.url value='/w/setup/passwordPolicy'/>"><@s.text name="title.password_policy"/></a></li>
+											<li><a href="<@s.url value='/w/setup/accountPolicy'/>"><@s.text name="title.account_lockout_policy"/></a></li>
+										</ul>
+										
 									</li>
 								</ul>
 								
