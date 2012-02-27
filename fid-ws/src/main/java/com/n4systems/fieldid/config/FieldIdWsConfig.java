@@ -12,7 +12,6 @@ import com.n4systems.fieldid.ws.v1.resources.assettype.ApiAssetTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.authentication.AuthenticationResource;
 import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventResource;
-import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachment;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
@@ -20,6 +19,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResou
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.hello.ApiHelloResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
+import com.n4systems.fieldid.ws.v1.resources.logging.ApiLoggingResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
 import com.n4systems.fieldid.ws.v1.resources.search.ApiSearchResource;
@@ -151,5 +151,10 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiHelloResource apiHelloResource() {
 		return new ApiHelloResource();
-	}	
+	}
+	
+	@Bean
+	public ApiLoggingResource apiLoggingResource() {
+		return new ApiLoggingResource();
+	}
 }
