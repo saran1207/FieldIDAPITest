@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private String freeformLocation;
 	private boolean printable;
 	private String comments;
-	private Long gpsLatitude;
-	private Long gpsLongitude;
+	private BigDecimal gpsLatitude;
+	private BigDecimal gpsLongitude;
 	private String eventScheduleId;
 	private ApiEventFormResult form;
 	private List<ApiEventAttachment> attachments;
@@ -123,19 +124,19 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 		this.comments = comments;
 	}
 
-	public Long getGpsLatitude() {
+	public BigDecimal getGpsLatitude() {
 		return gpsLatitude;
 	}
 
-	public void setGpsLatitude(Long gpsLatitude) {
+	public void setGpsLatitude(BigDecimal gpsLatitude) {
 		this.gpsLatitude = gpsLatitude;
 	}
 
-	public Long getGpsLongitude() {
+	public BigDecimal getGpsLongitude() {
 		return gpsLongitude;
 	}
 
-	public void setGpsLongitude(Long gpsLongitude) {
+	public void setGpsLongitude(BigDecimal gpsLongitude) {
 		this.gpsLongitude = gpsLongitude;
 	}
 
