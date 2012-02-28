@@ -314,7 +314,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         response.renderJavaScriptReference("javascript/json2.js");
         response.renderJavaScriptReference("javascript/jquery.at_intervals.js");
         response.renderJavaScriptReference("javascript/jquery.colorbox.js");
-        response.renderJavaScriptReference("javascript/hoverIntent.js");
         response.renderJavaScriptReference("javascript/jquery.dropdown.js");
 
         response.renderCSSReference("style/colorbox.css");

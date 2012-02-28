@@ -20,7 +20,7 @@ ul.dropdown li.hover a              { color: #000; }
 /* 
 	LEVEL TWO
 */
-ul.dropdown ul 						{ z-index:300; visibility: hidden; position: absolute; top: 100%; left: 0; list-style: disc outside none; width: 200px; border: 1px solid #AAA }
+ul.dropdown ul 						{ z-index:300; visibility: hidden; position: absolute; top: 100%; left: 0; list-style: disc outside none; width: 200px; border: 1px solid #AAA; margin-left: 10px; }
 ul.dropdown ul li 					{ font-weight: normal; background-color: #FFF; color: #000; float: none; padding: 5px 0;}
 ul.dropdown ul li a,
 ul.dropdown ul li.hover a           { color: #000; }
@@ -35,7 +35,7 @@ ul.dropdown li ul li:hover          { background: #F5F5F5; position: relative; }
 /* 
 	LEVEL THREE
 */
-ul.dropdown ul ul 					{ left: 100%; top: 0; }
+ul.dropdown ul ul 					{ left: 100%; top: 0; margin-left: 0;}
 ul.dropdown li:hover > ul 			{ visibility: visible; }
 
 /*
