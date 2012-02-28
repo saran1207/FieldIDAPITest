@@ -35,7 +35,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
 
 	border:1px solid #CCC;
-	padding:20px;
+	padding:12px;
 	background:#FFF;
 }
 
