@@ -34,8 +34,8 @@ public class SaveReportPage extends SaveSearchPage<SavedReportItem> {
     }
 
     @Override
-    protected void saveSearch(SavedReportItem item, boolean overwrite, String name) {
-        savedReportService.saveReport(item, overwrite, name);
+    protected void saveSearch(SavedReportItem item, boolean overwrite, String name, String description) {
+        savedReportService.saveReport(item, overwrite, name, description);
     }
 
 }

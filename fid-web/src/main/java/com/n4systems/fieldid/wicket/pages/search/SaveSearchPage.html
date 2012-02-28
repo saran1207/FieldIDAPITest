@@ -8,16 +8,18 @@
 
         <div class="contentSection">
             <div class="infoSet">
-
                 <label for="name">Name *</label>
-
                 <span class="fieldHolder">
-
                     <input type="text" wicket:id="name">
-
                 </span>
-
             </div>
+            
+            <div class="infoSet">
+				<label for="description"><wicket:message key="label.description"/></label>
+				<span class="fieldHolder">
+			   		<textarea type="text" wicket:id="description"></textarea>
+				</span>
+			</div>
 
             <div class="formAction">
                 <input wicket:id="submitButton" type="submit" wicket:message="value:label.save"/>

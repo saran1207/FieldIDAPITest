@@ -15,14 +15,17 @@ public class UniquelyNamedEnityValidator extends AbstractValidator<String> {
 	private PersistenceService persistenceService;
 	
 	private Class<? extends BaseEntity> clazz;
+	
+	private Long id;
 
-	public UniquelyNamedEnityValidator(Class<? extends BaseEntity> clazz) {
+	public UniquelyNamedEnityValidator(Class<? extends BaseEntity> clazz, Long id) {
 		this.clazz = clazz;
+		this.id = id;
 	}
 	
 	@Override
 	protected void onValidate(IValidatable<String> validatable) {
-		if (!persistenceService.isUniqueName(clazz, validatable.getValue())) {
+		if (!persistenceService.isUniqueName(clazz, validatable.getValue(), id)) {
 			ValidationError error = new ValidationError().addMessageKey("saved.item.unique.name");
 			validatable.error(error);
 		}

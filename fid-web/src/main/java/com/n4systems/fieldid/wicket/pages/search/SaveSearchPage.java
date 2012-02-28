@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -27,6 +28,7 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
     private boolean overwrite;
 
     private String name;
+    private String description;
 
     public SaveSearchPage(T savedItem, WebPage backToPage, boolean overwrite) {
         this.savedItem = savedItem;
@@ -49,7 +51,10 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
 
             add(new FIDFeedbackPanel("feedbackPanel"));
             add(nameText = new RequiredTextField<String>("name", new PropertyModel<String>(SaveSearchPage.this, "name")));
-            nameText.add(new UniquelyNamedEnityValidator(SavedItem.class));
+            nameText.add(new UniquelyNamedEnityValidator(SavedItem.class, null));
+            
+            add(new TextArea<String>("description", new PropertyModel<String>(SaveSearchPage.this, "description")));
+            
             add(new Link("cancelLink") {
                 @Override
                 public void onClick() {
@@ -61,7 +66,7 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
 
         @Override
         protected void onSubmit() {
-            saveSearch(savedItem, overwrite, name);
+            saveSearch(savedItem, overwrite, name, description);
             savedItem.getSearchCriteria().setSavedReportName(name);
             FieldIDSession.get().info(createSavedConfirmationModel().getObject());
             setResponsePage(backToPage);
@@ -72,6 +77,6 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
     protected abstract IModel<String> createSavedConfirmationModel();
     protected abstract IModel<String> createSavedItemDescriptionModel();
 
-    protected abstract void saveSearch(T item, boolean overwrite, String name);
+    protected abstract void saveSearch(T item, boolean overwrite, String name, String description);
 
 }

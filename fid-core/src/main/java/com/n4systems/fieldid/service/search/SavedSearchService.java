@@ -59,13 +59,14 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
     protected abstract void storeTransientColumns(T searchCriteria);
 
     @Transactional
-    public void saveReport(I savedItem, boolean overwrite, String name) {
+    public void saveReport(I savedItem, boolean overwrite, String name, String description) {
         boolean updating = overwrite && savedItem.getId() != null && savedItem.getSearchCriteria().getId() != null;
         final User user = getCurrentUser();
 
         savedItem.setTenant(getCurrentTenant());
         savedItem.setName(name);
-
+        savedItem.setDescription(description);
+        
         storeSelectedColumns(savedItem.getSearchCriteria());
 
         if (updating) {

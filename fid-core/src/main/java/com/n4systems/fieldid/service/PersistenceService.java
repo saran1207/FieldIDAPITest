@@ -25,6 +25,8 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class PersistenceService extends FieldIdService {
 
     @PersistenceContext
@@ -180,10 +182,13 @@ public class PersistenceService extends FieldIdService {
     }
 
     // CAVEAT : only use this with BaseEntities that implement NamedEntity.
-	public  <T extends BaseEntity> boolean isUniqueName(Class<T> clazz, String name) {
+	public  <T extends BaseEntity> boolean isUniqueName(Class<T> clazz, String name, Long id) {
 		Preconditions.checkArgument(NamedEntity.class.isAssignableFrom(clazz), "entity must implement "+NamedEntity.class.getSimpleName()+" in order to update its name.");
         QueryBuilder<T> queryBuilder = createUserSecurityBuilder(clazz);
         queryBuilder.addSimpleWhere("name", name);
+        if(id != null) {
+        	queryBuilder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", id));
+        }
         return find(queryBuilder)==null;
 	}
 
