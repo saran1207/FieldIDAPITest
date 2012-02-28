@@ -30,7 +30,7 @@
 			<@s.text name="label.no_schedules_have_been_created"/>
 		</div>
 	</div>
-	<div class="addNewSchedule"><button class="addNewScheduleButton" onclick="$('newScheduleForm').show(); translate($('newScheduleForm'), $(this), 0, 0); return false;" ><@s.text name="label.add_a_schedule"/></button></div>
+	<div class="addNewSchedule"><button class="addNewScheduleButton" onclick="$('newScheduleForm').show(); translatePosition($('newScheduleForm'), $(this), 0, 0); return false;" ><@s.text name="label.add_a_schedule"/></button></div>
 	<div class="fluentSets schedulesAdd newScheduleForm" id="newScheduleForm" style="display:none" >
 		<h2><@s.text name="label.add_a_schedule"/></h2>
 		<div class="infoSet">

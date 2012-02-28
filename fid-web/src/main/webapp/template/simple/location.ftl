@@ -54,7 +54,7 @@
 				var predefinedLocationId = $('${parameters.id}_predefinedLocationId').getValue(); 
 				jQuery("#${parameters.id}_predefinedLocationSelector").selectNode(predefinedLocationId);
 				$('${parameters.id}_locationSelection').removeClassName('offScreen');
-				translate($('${parameters.id}_locationSelection'), $('${parameters.id}_showLocationSelection'), 0, 0);
+				translatePosition($('${parameters.id}_locationSelection'), $('${parameters.id}_showLocationSelection'), 0, 0);
 				moveInsideViewPort($('${parameters.id}_locationSelection'));
 				});
 		

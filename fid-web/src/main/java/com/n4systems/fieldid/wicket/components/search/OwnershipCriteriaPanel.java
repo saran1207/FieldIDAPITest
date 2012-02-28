@@ -19,7 +19,7 @@ public class OwnershipCriteriaPanel extends Panel {
         super(id, model);
 
         add(new OrgPicker("owner", new PropertyModel<BaseOrg>(getDefaultModel(), "owner")));
-        add(new LocationPicker("location", new PropertyModel<Location>(getDefaultModel(), "location")));
+        add(new LocationPicker("location", new PropertyModel<Location>(getDefaultModel(), "location")).withRelativePosition());
 
         GroupedUserPicker groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(getDefaultModel(), "assignedTo"), new GroupedUsersForTenantModel());
         groupedUserPicker.setNullValid(true);

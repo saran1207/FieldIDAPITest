@@ -171,7 +171,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 					model.setObject(true);
 					target.add(locationCheck);
 				}
-			};
+			}.withRelativePosition();
 			location.getFreeformLocationField().add(createCheckOnChangeEvent(locationCheck));
 			
 			add(locationCheck);
