@@ -53,8 +53,8 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		assertChecked(false, getHarness().getAssetAssignmentCheckbox());
 		assertChecked(false, getHarness().getManufacturerCertificatesCheckbox());
 		assertChecked(true, getHarness().getGpsCaptureCheckbox());
-		
-		assertEquals(dateFormat, getHarness().getDateFormat().getValue());
+
+        assertEquals(dateFormat, getHarness().getDateFormat().getModelObject());
 	}
 	
 	@Override
