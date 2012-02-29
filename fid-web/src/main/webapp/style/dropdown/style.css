@@ -59,7 +59,7 @@ ul.floatingDropdown ul li 					{ font-weight: normal; background: #333; color: #
 									  
                                     /* IE 6 & 7 Needs Inline Block */
 ul.floatingDropdown ul li a, 
-ul.floatingDropdown ul li a:visited         { color:#cccccc; text-decoration: none; display: inline-block; padding: 7px 10px 7px 10px; }
+ul.floatingDropdown ul li a:visited         { color:#cccccc; text-decoration: none; display: inline-block; padding: 7px 10px 7px 10px; width: 85% }
 ul.floatingDropdown li ul li.hover,
 ul.floatingDropdown li ul li:hover          { background: #1b5ccd; position: relative; }
 
