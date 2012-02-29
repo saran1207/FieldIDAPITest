@@ -325,6 +325,14 @@
 	border-right:10px solid white;	 
 }
 
+/*
+ SEARCH RESULTS ACTIONS
+ 	shift floating drop down menu to the left so it doesn't get cut off
+*/
+
+ul.floatingDropdown ul {
+	left: -35px;
+}
 
 /*** hacks.  to be removed when the new asset search page completely replaces the old one.
  these are just to make both pages live together with minimal code changes.
