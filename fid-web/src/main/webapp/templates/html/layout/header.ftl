@@ -116,7 +116,7 @@
 								</a>
 								<ul class="sub_menu">
 									<li>
-										<a href="<@s.url value='/w/setup/settings'/>" ><@s.text name="nav.settings" /></a>
+										<a href="<@s.url value='/w/setup/settings'/>" ><@s.text name="nav.settings" /> » </a>
 										<ul class="sub_menu">
 											<li><a href="<@s.url action='organizations'/>"><@s.text name="title.manage_organizational_units.plural"/></a></li>
 											<li><a href="<@s.url value='/w/setup/systemSettings'/>"><@s.text name="nav.system_settings"/></a></li>
@@ -126,7 +126,7 @@
 										</ul>
 									</li>
 									<li>
-										<a href="<@s.url value="/w/setup/ownersUsersLocations" />" ><@s.text name="nav.owners_users_loc"/></a>
+										<a href="<@s.url value="/w/setup/ownersUsersLocations" />" ><@s.text name="nav.owners_users_loc"/> » </a>
 										<ul class="sub_menu">
 											<#if sessionUser.hasAccess("manageendusers") >
 												<li><a href="<@s.url action='customerList' namespace='/' />" ><@s.text name="title.manage_customers.plural"/></a></li>
@@ -141,7 +141,7 @@
 										</ul>
 									</li>
 									<li>
-										<a href="<@s.url value="/w/setup/assetsEvents" />" ><@s.text name="nav.assets_and_events"/></a>
+										<a href="<@s.url value="/w/setup/assetsEvents" />" ><@s.text name="nav.assets_and_events"/> » </a>
 										<#if sessionUser.hasAccess("managesystemconfig") >
 											<ul class="sub_menu">
 												<li><a href="<@s.url action="eventTypeGroups"/>" ><@s.text name="title.manage_event_type_groups.plural"/></a></li>
@@ -154,7 +154,7 @@
 										</#if>
 									</li>
 									<li>
-										<a href="<@s.url value="/w/setup/import" />" ><@s.text name="nav.import"/></a>
+										<a href="<@s.url value="/w/setup/import" />" ><@s.text name="nav.import"/> » </a>
 										<ul class="sub_menu">
 											<li><a href="<@s.url action='customerImportExport'/>"><@s.text name="label.import_owners"/></a></li>
 											<li><a href="<@s.url action='assetImportExport'/>"><@s.text name="label.import_assets"/></a></li>
@@ -164,7 +164,7 @@
 										</ul>
 									</li>
 									<li>
-										<a href="<@s.url value="/w/setup/templates" />" ><@s.text name="nav.templates"/></a>
+										<a href="<@s.url value="/w/setup/templates" />" ><@s.text name="nav.templates"/> » </a>
 										<#if sessionUser.hasAccess("managesystemconfig") >
 											<ul class="sub_menu">
 												<li><a href="<@s.url action="autoAttributeCriteriaList"/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
@@ -182,7 +182,7 @@
 										<a href="<@s.url value="/w/setup/widgets" />" ><@s.text name="nav.widgets"/></a>
 									</li>
 									<li>
-										<a href="<@s.url value="/w/setup/security" />" ><@s.text name="nav.security"/></a>
+										<a href="<@s.url value="/w/setup/security" />" ><@s.text name="nav.security"/> » </a>
 										<ul class="sub_menu">
 											<li><a href="<@s.url value='/w/setup/passwordPolicy'/>"><@s.text name="title.password_policy"/></a></li>
 											<li><a href="<@s.url value='/w/setup/accountPolicy'/>"><@s.text name="title.account_lockout_policy"/></a></li>
