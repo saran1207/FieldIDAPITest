@@ -5,7 +5,6 @@
         <@n4.includeStyle href="dropdown/ie"/>
     <![endif]-->
 
-	<script type="text/javascript" language="javascript" src="/fieldid/javascript/hoverIntent.js"></script>
 	<script type="text/javascript" language="javascript" src="/fieldid/javascript/jquery.dropdown.js"></script>
 	
 	<script type="text/javascript">
