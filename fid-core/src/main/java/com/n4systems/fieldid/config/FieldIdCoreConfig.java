@@ -3,6 +3,7 @@ package com.n4systems.fieldid.config;
 import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
 import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
+import com.n4systems.fieldid.service.search.EventResolutionService;
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,6 +68,11 @@ import com.n4systems.util.json.JsonRenderer;
 
 @Configuration
 public class FieldIdCoreConfig {
+
+    @Bean
+    public EventResolutionService eventResolutionService() {
+        return new EventResolutionService();
+    }
 
     @Bean
     public AssociatedEventTypesService associatedEventTypesService() {

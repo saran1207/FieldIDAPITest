@@ -36,8 +36,9 @@
         | <a wicket:id="massUpdateLink" class="massUpdate"><wicket:message key="label.massupdate"/></a>
     </div>
 
-    <!-- TODO: add new summary report! -->
-    <!--| <a wicket:id="summaryReportLink" class="summaryReport"><wicket:message key="label.summary_report"/></a>-->
+    <wicket:enclosure>
+        | <a wicket:id="eventResolutionLink"><wicket:message key="title.summaryreport"/></a>
+    </wicket:enclosure>
 
     <wicket:enclosure>
         | <a wicket:id="assignToJobsLink" class="assignEventsToJobs"><wicket:message key="label.assigntojob" /></a>

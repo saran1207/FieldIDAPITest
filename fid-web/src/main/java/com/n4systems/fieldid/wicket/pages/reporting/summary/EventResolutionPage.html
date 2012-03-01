@@ -1,0 +1,89 @@
+<wicket:extend>
+
+    <img class="printIcon" wicket:id="printIcon" onclick="window.print();"/>
+
+    <div class="summaryEntries">
+        <div class="summaryEntry">
+            <div class="title"><wicket:message key="label.events_due"/></div>
+            <div class="figure" wicket:id="eventsDue"></div>
+        </div>
+
+        <div class="summaryEntry">
+            <div class="title"><wicket:message key="label.completed"/></div>
+            <div class="figure" wicket:id="eventsCompleted"></div>
+        </div>
+
+        <div class="summaryEntry">
+            <div class="title"><wicket:message key="label.outstanding"/></div>
+            <div class="figure outstanding" wicket:id="eventsOutstanding"></div>
+        </div>
+
+        <div class="summaryEntry">
+            <div class="title"><wicket:message key="label.passed"/></div>
+            <div class="figure passed" wicket:id="eventsPassed"></div>
+            <div class="percentage">(<span wicket:id="passedPercentage"/>)</div>
+        </div>
+
+        <div class="summaryEntry">
+            <div class="title"><wicket:message key="label.failed"/></div>
+            <div class="figure failed" wicket:id="eventsFailed"></div>
+            <div class="percentage">(<span wicket:id="failedPercentage"/>)</div>
+        </div>
+
+    </div>
+
+    <div class="detailedBreakdown">
+
+        <h2><wicket:message key="label.detailed_breakdown"/></h2>
+
+        <div wicket:id="navigationBar"/>
+
+    </div>
+
+    <table wicket:id="breakdownContainer" class="breakdownTable">
+        <thead>
+            <tr>
+                <th class="first"></th>
+                <th>
+                    <wicket:message key="label.events_due"/>
+                </th>
+                <th>
+                    <wicket:message key="label.completed"/>
+                </th>
+                <th>
+                    <wicket:message key="label.outstanding"/>
+                </th>
+                <th>
+                    <wicket:message key="label.passed"/>
+                </th>
+                <th>
+                    <wicket:message key="label.failed"/>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr wicket:id="summaryList">
+                <td>
+                    <span wicket:id="name"></span>
+                </td>
+                <td>
+                    <span wicket:id="eventsDue"></span>
+                </td>
+                <td>
+                    <span wicket:id="eventsCompleted"></span>
+                </td>
+                <td>
+                    <span wicket:id="eventsOutstanding"></span>
+                </td>
+                <td>
+                    <span wicket:id="eventsPassed"></span>
+                </td>
+                <td>
+                    <span wicket:id="eventsFailed"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</wicket:extend>

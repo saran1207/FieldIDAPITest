@@ -1,0 +1,88 @@
+
+img.printIcon {
+    display:block;
+    float:right;
+}
+
+.summaryEntries {
+    clear:both;
+    overflow:hidden;
+    padding-bottom:15px;
+}
+
+.summaryEntry {
+    width:198px;
+    display:block;
+    float:left;
+    text-align:center;
+}
+
+.summaryEntry .figure {
+    font-size:48px;
+    display:inline;
+}
+
+.summaryEntry .percentage {
+    font-size:14px;
+    color:#8c8c8c;
+}
+
+.summaryEntry .title {
+    padding-top:8px;
+    font-size:14px;
+    color:#8c8c8c;
+}
+
+.summaryEntry .outstanding, .summaryEntry .failed {
+    color:#993333;
+}
+
+.summaryEntry .passed {
+    color:#006633;
+}
+
+.breakdownTable {
+    clear:both;
+    width:100%;
+    font-size:12px;
+}
+
+.breakdownTable thead th {
+    padding-bottom:5px;
+}
+
+.breakdownTable thead th.first {
+    width:50%;
+}
+
+.breakdownTable thead tr {
+    border-bottom: 1px solid #999999;
+}
+
+.breakdownTable tbody td {
+    padding-top:12px;
+    padding-bottom:12px;
+}
+
+.breakdownTable thead th{
+    width:10%;
+}
+
+.breakdownTable tr.odd {
+    background-color: #f6f6f6;
+}
+
+.breakdownTable tbody tr:hover {
+    background-color: #eeeeee;
+}
+
+.detailedBreakdown {
+    clear:both;
+    border-top:1px solid #999999;
+}
+
+.detailedBreakdown h2 {
+    font-weight:normal;
+    font-size:15px;
+    padding-left:0;
+}

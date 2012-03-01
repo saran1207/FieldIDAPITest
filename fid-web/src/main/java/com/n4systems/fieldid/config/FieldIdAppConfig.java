@@ -19,7 +19,7 @@ import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
 @Import({FieldIdWsConfig.class, FieldIdCoreConfig.class, FieldIdDownloadConfig.class, FieldIdEntityRemovalConfig.class})
 public class FieldIdAppConfig {
 
-	
+
     @Bean
     public OrgSubtitleHelper orgDateRangeSubtitleHelper() {
     	return new OrgDateRangeSubtitleHelper();

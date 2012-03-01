@@ -7,9 +7,11 @@ import com.n4systems.fieldid.wicket.pages.print.ExportToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
+import com.n4systems.fieldid.wicket.pages.reporting.summary.EventResolutionPage;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.EventStatus;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import rfid.web.helper.SessionUser;
 
@@ -24,8 +26,15 @@ public class ReportingMassActionPanel extends MassActionPanel {
 
         add(new MassActionLink<ExportToExcelPage>("exportToExcelLink", ExportToExcelPage.class, reportCriteriaModel));
 
-        // TOOD: This link is being replaced in this iteration with the new report summary page.
-//        add(new ReportingMassActionLink("summaryReportLink", "/summaryReport.action?searchId=%s", reportCriteriaModel));
+        Link eventResolutionLink;
+        add(eventResolutionLink = new Link("eventResolutionLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new EventResolutionPage(reportCriteriaModel));
+            }
+        });
+
+        eventResolutionLink.setVisible(reportCriteriaModel.getObject().getEventStatus() != EventStatus.INCOMPLETE);
 
         printContainer.add(new MassActionLink<PrintThisReportPage>("printThisReportLink", PrintThisReportPage.class, reportCriteriaModel));
         printContainer.add(new MassActionLink<PrintInspectionCertPage>("printSelectedPdfReportsLink", PrintInspectionCertPage.class, reportCriteriaModel));

@@ -84,7 +84,8 @@ public abstract class SearchService<T extends SearchCriteriaModel, M extends Bas
         return new PageHolder<K>(pageResults, eventSearchResult.getTotalResultCount());
     }
 
-    private SearchResult<M> performSearch(T criteriaModel, Integer pageNumber, Integer pageSize, boolean selectedOnly) {
+    @Transactional(readOnly = true)
+    public SearchResult<M> performSearch(T criteriaModel, Integer pageNumber, Integer pageSize, boolean selectedOnly) {
 		// create our base query builder (no sort terms yet)
 		QueryBuilder<M> searchBuilder = createBaseSearchQueryBuilder(criteriaModel);
 

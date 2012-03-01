@@ -1,0 +1,105 @@
+
+
+/* turn the link in the default button style */
+.mattBar a{
+	background: #ececec;
+	background: -moz-linear-gradient(top, #ececec 0%, #dadada 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ececec), color-stop(100%,#dadada));
+	background: -webkit-linear-gradient(top, #ececec 0%,#dadada 100%);
+	background: -o-linear-gradient(top, #ececec 0%,#dadada 100%);
+	background: -ms-linear-gradient(top, #ececec 0%,#dadada 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ececec', endColorstr='#dadada',GradientType=0 );
+	background: linear-gradient(top, #ececec 0%,#dadada 100%);
+	border: 1px solid #ababab;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .8) inset;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .8) inset;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .8) inset;
+	color: #555555;
+	font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	margin: 0;
+	outline: none;
+	padding: 5px 10px;
+	float: left;
+	text-align: center;
+	text-decoration:none;
+}
+
+/* hover state for default, left, middle and right */
+.buttonBar a.button:hover, a.left:hover, a.middle:hover, a.right:hover {
+	background: #f6f6f6;
+	background: -moz-linear-gradient(top, #f6f6f6 0%, #eeeeee 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f6f6f6), color-stop(100%,#eeeeee));
+	background: -webkit-linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
+	background: -o-linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
+	background: -ms-linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f6f6', endColorstr='#eeeeee',GradientType=0 );
+	background: linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
+	cursor: pointer;
+}
+
+/* active state (which is the same as pressed) for default, left, middle and right */
+.mattBar a.button:active, a.left:active, a.middle:active, a.right:active {
+	background: #ababab;
+	background: -moz-linear-gradient(top, #bababa 0%, #ededed 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bababa), color-stop(100%,#ededed));
+	background: -webkit-linear-gradient(top, #bababa 0%,#ededed 100%);
+	background: -o-linear-gradient(top, #bababa 0%,#ededed 100%);
+	background: -ms-linear-gradient(top, #bababa 0%,#ededed 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bababa', endColorstr='#ededed',GradientType=0 );
+	background: linear-gradient(top, #bababa 0%,#ededed 100%);
+	cursor: pointer;
+}
+
+/* Left Button - remove rounding on the right */
+.mattBar a.left {
+	border-right:1px solid #ababab;
+	-webkit-border-top-right-radius: 0;
+    -moz-border-radius-topright: 0;
+    border-top-right-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
+    -moz-border-radius-bottomright: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* Middle Button - remove the rounding on both side */
+.mattBar a.middle {
+ 	border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    margin: 0;
+    border-left: solid 0px #ababab;
+    border-right: solid 0px #ababab;
+}
+
+/* Right Button - remove the rounding on the left side */
+.mattBar a.right {
+ 	border-left: solid 1px #ababab;
+    -webkit-border-top-left-radius: 0;
+    -moz-border-radius-topleft: 0;
+    border-top-left-radius: 0;
+    -webkit-border-bottom-left-radius: 0;
+    -moz-border-radius-bottomleft: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* The pressed state - to be used when grouping buttons (left, middle, right) */
+.mattBar a.pressed {
+	background: #ababab;
+	background: -moz-linear-gradient(top, #bababa 0%, #ededed 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bababa), color-stop(100%,#ededed));
+	background: -webkit-linear-gradient(top, #bababa 0%,#ededed 100%);
+	background: -o-linear-gradient(top, #bababa 0%,#ededed 100%);
+	background: -ms-linear-gradient(top, #bababa 0%,#ededed 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bababa', endColorstr='#ededed',GradientType=0 );
+	background: linear-gradient(top, #bababa 0%,#ededed 100%);
+}
+
+.mattBar {
+    overflow:hidden;
+}
