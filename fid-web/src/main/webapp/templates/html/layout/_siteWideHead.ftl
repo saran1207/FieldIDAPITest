@@ -1,4 +1,4 @@
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <title><@s.text name="app.title" /> - <#include "_title.ftl"/></title>
 <@n4.includeStyle href="reset" /> 
 <#include "layoutCss.ftl">
