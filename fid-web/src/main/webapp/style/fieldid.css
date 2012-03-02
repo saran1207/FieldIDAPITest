@@ -1653,8 +1653,12 @@ input.description {
 
 .header-right {
 	float: right;
+	margin-top:10px;
 }
 
+.header-right a {
+	color:#999;
+}
 
 .assignToBox {	
 	background-color:#EAEAEA;
