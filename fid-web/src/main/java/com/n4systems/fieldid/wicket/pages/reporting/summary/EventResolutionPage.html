@@ -64,7 +64,9 @@
         <tbody>
             <tr wicket:id="summaryList">
                 <td>
-                    <span wicket:id="name"></span>
+                    <a wicket:id="itemCriteriaLink">
+                        <span wicket:id="name"></span>
+                    </a>
                 </td>
                 <td>
                     <span wicket:id="eventsDue"></span>
@@ -73,13 +75,17 @@
                     <span wicket:id="eventsCompleted"></span>
                 </td>
                 <td>
-                    <span wicket:id="eventsOutstanding"></span>
+                    <a wicket:id="outstandingCriteriaLink">
+                        <span wicket:id="eventsOutstanding"></span>
+                    </a>
                 </td>
                 <td>
                     <span wicket:id="eventsPassed"></span>
                 </td>
                 <td>
-                    <span wicket:id="eventsFailed"></span>
+                    <a wicket:id="failedCriteriaLink">
+                        <span wicket:id="eventsFailed"></span>
+                    </a>
                 </td>
             </tr>
         </tbody>

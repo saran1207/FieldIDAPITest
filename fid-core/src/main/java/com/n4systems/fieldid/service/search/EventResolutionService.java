@@ -7,10 +7,9 @@ import com.n4systems.model.Status;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.summary.EventResolutionSummary;
 import com.n4systems.model.summary.EventSetSummary;
+import com.n4systems.model.utils.PlainDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 public class EventResolutionService extends FieldIdPersistenceService {
 
@@ -19,10 +18,8 @@ public class EventResolutionService extends FieldIdPersistenceService {
 
     @Transactional(readOnly = true)
     public EventResolutionSummary getEventResolutionSummary(EventReportCriteriaModel criteria) {
-
         int summaryPageSize = 256;
 
-        List<Long> ids = reportService.idSearch(criteria);
         int totalPages = reportService.countPages(criteria, (long)summaryPageSize);
 
         EventResolutionSummary eventResolutionSummary = new EventResolutionSummary();
@@ -40,6 +37,7 @@ public class EventResolutionService extends FieldIdPersistenceService {
             addResultToSet(eventResolutionSummary.getBaseSummary(), schedule);
             addResultToSet(eventResolutionSummary.getOrCreateSummary(schedule.getAsset().getType()), schedule);
             addResultToSet(eventResolutionSummary.getOrCreateSummary(schedule.getEventType()), schedule);
+            addResultToSet(eventResolutionSummary.getOrCreateSummary(new PlainDate(schedule.getRelevantDate())), schedule);
         }
     }
 

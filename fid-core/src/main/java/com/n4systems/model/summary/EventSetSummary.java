@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 public class EventSetSummary implements Serializable {
 
     private String name;
+    private Object item;
     private int eventsDue = 0;
     private int eventsCompleted = 0;
     private int eventsPassed = 0;
@@ -63,4 +64,11 @@ public class EventSetSummary implements Serializable {
         return new DecimalFormat("0.0%").format(eventsFailed / (double)eventsCompleted);
     }
 
+    public Object getItem() {
+        return item;
+    }
+
+    public void setItem(Object item) {
+        this.item = item;
+    }
 }

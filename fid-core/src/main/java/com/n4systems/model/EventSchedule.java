@@ -349,4 +349,11 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
         return schedule;
     }
 
+    public Date getRelevantDate() {
+        if (status == ScheduleStatus.COMPLETED) {
+            return getCompletedDate();
+        }
+        return getNextDate();
+    }
+
 }

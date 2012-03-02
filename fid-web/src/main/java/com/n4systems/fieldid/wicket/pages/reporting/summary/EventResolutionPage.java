@@ -5,16 +5,22 @@ import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
+import com.n4systems.model.Status;
 import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventStatus;
 import com.n4systems.model.summary.EventResolutionSummary;
 import com.n4systems.model.summary.EventSetSummary;
-import com.sun.org.omg.CORBA.AttributeMode;
+import com.n4systems.util.chart.RangeType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -23,8 +29,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EventResolutionPage extends FieldIDFrontEndPage {
@@ -36,9 +42,11 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
 
     private WebMarkupContainer breakdownContainer;
     private ListView<EventSetSummary> summaryList;
+    private EventReportCriteriaModel criteria;
 
     public EventResolutionPage(IModel<EventReportCriteriaModel> criteriaModel) {
-        eventResolutionSummary = eventResolutionService.getEventResolutionSummary(criteriaModel.getObject());
+        criteria = criteriaModel.getObject();
+        eventResolutionSummary = eventResolutionService.getEventResolutionSummary(criteria);
 
         add(new ContextImage("printIcon", "images/print-icon.png"));
 
@@ -58,6 +66,8 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
                     summaryList.setModel(createEventBreakdownSummaryModel());
                 } else if (state.equals(2)) {
                     summaryList.setModel(createAssetBreakdownSummaryModel());
+                } else if (state.equals(3)) {
+                    summaryList.setModel(createDailyBreakdownSummaryModel());
                 }
                 target.add(breakdownContainer);
             }
@@ -66,7 +76,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         mattBar.setCurrentState(1);
         mattBar.addLink(new Model<String>("Event Types"), 1);
         mattBar.addLink(new Model<String>("Asset Types"), 2);
-//        mattBar.addLink(new Model<String>("Daily Breakdown"), 3);
+        mattBar.addLink(new Model<String>("Daily Breakdown"), 3);
 
         add(mattBar);
 
@@ -76,12 +86,23 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         breakdownContainer.add(summaryList = new ListView<EventSetSummary>("summaryList", createEventBreakdownSummaryModel()) {
             @Override
             protected void populateItem(ListItem<EventSetSummary> item) {
-                item.add(new FlatLabel("name", new PropertyModel<String>(item.getModel(), "name")));
+                Link itemCriteriaLink = createItemCriteriaLink("itemCriteriaLink", item.getModel());
+                itemCriteriaLink.add(new FlatLabel("name", new PropertyModel<String>(item.getModel(), "name")));
+                item.add(itemCriteriaLink);
+
                 item.add(new FlatLabel("eventsDue", new PropertyModel<String>(item.getModel(), "eventsDue")));
                 item.add(new FlatLabel("eventsCompleted", new PropertyModel<String>(item.getModel(), "eventsCompleted")));
-                item.add(new FlatLabel("eventsOutstanding", new PropertyModel<String>(item.getModel(), "eventsOutstanding")));
+
+                Link outstandingLink = createOutstandingItemCriteriaLink("outstandingCriteriaLink", item.getModel());
+                outstandingLink.add(new FlatLabel("eventsOutstanding", new PropertyModel<String>(item.getModel(), "eventsOutstanding")));
+                item.add(outstandingLink);
+
                 item.add(new FlatLabel("eventsPassed", new PropertyModel<String>(item.getModel(), "eventsPassed")));
-                item.add(new FlatLabel("eventsFailed", new PropertyModel<String>(item.getModel(), "eventsFailed")));
+
+                Link failedLink = createFailedItemCriteriaLink("failedCriteriaLink", item.getModel());
+                failedLink.add(new FlatLabel("eventsFailed", new PropertyModel<String>(item.getModel(), "eventsFailed")));
+                item.add(failedLink);
+
                 if (item.getIndex() % 2 == 1) {
                     item.add(new AttributeAppender("class", "odd"));
                 }
@@ -89,6 +110,58 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         });
 
         add(breakdownContainer);
+    }
+
+    private Link createFailedItemCriteriaLink(String linkId, final IModel<EventSetSummary> model) {
+        return new Link(linkId) {
+            @Override
+            public void onClick() {
+                populateCriteriaInto(model.getObject().getItem(), criteria);
+                populateFailedInto(criteria);
+                setResponsePage(new ReportingResultsPage(criteria));
+            }
+        };
+    }
+
+    private Link createOutstandingItemCriteriaLink(String linkId, final IModel<EventSetSummary> model) {
+        return new Link(linkId) {
+            @Override
+            public void onClick() {
+                populateCriteriaInto(model.getObject().getItem(), criteria);
+                populateOutstandingInto(criteria);
+                setResponsePage(new ReportingResultsPage(criteria));
+            }
+        };
+    }
+
+    private Link createItemCriteriaLink(String linkId, final IModel<EventSetSummary> model) {
+        return new Link(linkId) {
+            @Override
+            public void onClick() {
+                populateCriteriaInto(model.getObject().getItem(), criteria);
+                setResponsePage(new ReportingResultsPage(criteria));
+            }
+        };
+    }
+
+    private void populateCriteriaInto(Object item, EventReportCriteriaModel criteria) {
+        if (item instanceof Date) {
+            criteria.getDateRange().setRangeType(RangeType.CUSTOM);
+            criteria.getDateRange().setFromDate((Date) item);
+            criteria.getDateRange().setToDate((Date) item);
+        } else if (item instanceof AssetType) {
+            criteria.setAssetType((AssetType) item);
+        } else if (item instanceof EventType) {
+            criteria.setAssetType((AssetType) item);
+        }
+    }
+
+    private void populateOutstandingInto(EventReportCriteriaModel criteriaModel) {
+        criteriaModel.setEventStatus(EventStatus.INCOMPLETE);
+    }
+
+    private void populateFailedInto(EventReportCriteriaModel criteriaModel) {
+        criteriaModel.setResult(Status.FAIL);
     }
 
     private IModel<List<EventSetSummary>> createEventBreakdownSummaryModel() {
@@ -105,6 +178,15 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
             @Override
             protected List<EventSetSummary> load() {
                 return new ArrayList<EventSetSummary>(eventResolutionSummary.getAssetTypeEventSummaries().values());
+            }
+        };
+    }
+
+    private IModel<List<EventSetSummary>> createDailyBreakdownSummaryModel() {
+        return new LoadableDetachableModel<List<EventSetSummary>>() {
+            @Override
+            protected List<EventSetSummary> load() {
+                return new ArrayList<EventSetSummary>(eventResolutionSummary.getDateEventSummaries().values());
             }
         };
     }

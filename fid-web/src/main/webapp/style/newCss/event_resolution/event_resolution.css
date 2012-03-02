@@ -86,3 +86,7 @@ img.printIcon {
     font-size:15px;
     padding-left:0;
 }
+
+.breakdownTable a {
+    text-decoration:none;
+}
