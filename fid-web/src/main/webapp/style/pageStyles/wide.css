@@ -9,7 +9,10 @@
  * a lot of this stuff can eventually be shared (like menu styling & buttons etc.. but as of now they are only used in this page.
  * 
  */
-
+ 
+ html, body, #page {
+ 	height: 100%;
+ }
 
 /** 
  PAGE
@@ -23,6 +26,8 @@
 	padding-left:0;
 	position:static;
 	padding-right:0;
+	border: none;
+	box-shadow: none;
 }
 
 #page .centre {
@@ -323,6 +328,10 @@
 .w_content_container > div {
 	border-left:10px solid white;	 
 	border-right:10px solid white;	 
+}
+
+.loadingAnimationImage {
+    margin-left: 120px;
 }
 
 /*** hacks.  to be removed when the new asset search page completely replaces the old one.

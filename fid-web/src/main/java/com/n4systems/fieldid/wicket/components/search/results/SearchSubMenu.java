@@ -90,9 +90,9 @@ public class SearchSubMenu extends Panel {
 		int selected = model.getObject().getSelection().getNumSelectedIds();
 		boolean rowsSelected = selected>0;
 		msg.setVisible(!rowsSelected);
-		exportLink.setVisible(rowsSelected);
-		printLink.setVisible(rowsSelected);
-		actions.setVisible(rowsSelected&&selected<maxUpdate);
+		exportLink.setVisible(rowsSelected && (selected < maxExport));
+		printLink.setVisible(rowsSelected && (selected < maxPrint));
+		actions.setVisible(rowsSelected && (selected < maxUpdate));
 		super.onBeforeRender();
 	}
 	
