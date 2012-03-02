@@ -122,6 +122,8 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	padding-left: 758px;
 	padding-top: 5px;
 	padding-bottom: 5px;
+	*padding-left: 0;
+	*float : right;
 }
 
 #smartSearch {

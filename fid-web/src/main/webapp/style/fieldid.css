@@ -305,6 +305,8 @@ h2 a {
 	padding-left: 758px;
 	padding-top: 5px;
 	padding-bottom: 5px;
+	*padding-left: 0;
+	*float : right;
 }
 
 .error, .errorMessage {
