@@ -34,24 +34,26 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
         this.savedItem = savedItem;
         this.backToPage = backToPage;
         this.overwrite = overwrite;
+        Long savedItemId = null;
         if (overwrite && savedItem != null) {
             name = savedItem.getName();
+            savedItemId = savedItem.getId();
         }
-        add(new SaveReportForm("saveReportForm"));
+        add(new SaveReportForm("saveReportForm", savedItemId));
     }
 
     class SaveReportForm extends Form {
 
         private RequiredTextField<String> nameText;
 
-		public SaveReportForm(String id) {
+		public SaveReportForm(String id, Long savedItemId) {
             super(id);
 
             add(new Label("savedItemLabel", createSavedItemDescriptionModel()));
 
             add(new FIDFeedbackPanel("feedbackPanel"));
             add(nameText = new RequiredTextField<String>("name", new PropertyModel<String>(SaveSearchPage.this, "name")));
-            nameText.add(new UniquelyNamedEnityValidator(SavedItem.class, null));
+           	nameText.add(new UniquelyNamedEnityValidator(SavedItem.class, savedItemId, "saved.item.unique.name"));
             
             add(new TextArea<String>("description", new PropertyModel<String>(SaveSearchPage.this, "description")));
             

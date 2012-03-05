@@ -26,7 +26,6 @@ import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.services.reporting.DashboardReportingService;
 
-@SuppressWarnings("serial")
 public class SearchResultsPage extends FieldIDFrontEndPage {
 
     private AssetSearchResultsPanel resultsPanel;

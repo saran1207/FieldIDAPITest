@@ -41,7 +41,7 @@ public class EditSavedItemPage extends FieldIDFrontEndPage {
 		
 		RequiredTextField<SavedItem> nameText;
 		form.add(nameText = new RequiredTextField<SavedItem>("name", new PropertyModel<SavedItem>(savedItem, "name")));
-		nameText.add(new UniquelyNamedEnityValidator(SavedItem.class, id));
+		nameText.add(new UniquelyNamedEnityValidator(SavedItem.class, id, "saved.item.unique.name"));
 		
 		form.add(new TextArea<SavedItem>("description", new PropertyModel<SavedItem>(savedItem, "description")));
 		form.add(new BookmarkablePageLink<Void>("cancelLink", ManageSavedItemsPage.class));

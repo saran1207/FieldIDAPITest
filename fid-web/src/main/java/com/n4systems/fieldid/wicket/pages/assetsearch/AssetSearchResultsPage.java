@@ -24,10 +24,11 @@ import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.services.reporting.DashboardReportingService;
 
-//related to WEB-2629.   when switched over to the new page, this page should be removed. 
-//in the interim, any applicable bug fixes are changes should be ported to new asset search page. 
+/**related to WEB-2629.   when switched over to the new page, this page should be removed. 
+ in the interim, any applicable bug fixes or changes should be ported to new asset search page.
+ @see SearchResultsPage
+*/    
 @Deprecated 
-@SuppressWarnings("serial")
 public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
     private AssetSearchResultsPanel reportResultsPanel;
@@ -43,7 +44,8 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 
     public AssetSearchResultsPage(PageParameters params) { 
     	super(params);
-		init(createSearchCriteriaModel(params), new SavedSearchItem(searchCriteriaModel));
+		AssetSearchCriteriaModel model = createSearchCriteriaModelFromDashboardParameters(params);
+		init(model, new SavedSearchItem(model));
     }
 
 	public AssetSearchResultsPage(SavedSearchItem savedSearchItem) {
@@ -53,16 +55,15 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     
     public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem) {
     	super(new PageParameters());
-        SavedSearchItem newSavedSearchItem = new SavedSearchItem(searchCriteriaModel);
-       	newSavedSearchItem.setId(savedSearchItem==null ? null : savedSearchItem.getId());
-    	init(searchCriteriaModel, newSavedSearchItem);
+        savedSearchItem.setSearchCriteria(searchCriteriaModel);
+    	init(searchCriteriaModel, savedSearchItem);
     }
 
 	public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel) {
 		this(searchCriteriaModel,null);
 	}
 
-	private AssetSearchCriteriaModel createSearchCriteriaModel(PageParameters params) {
+	private AssetSearchCriteriaModel createSearchCriteriaModelFromDashboardParameters(PageParameters params) {
     	if(params!=null) {
     		// load config and set values...
     		Long widgetDefinitionId = params.get(SRSResultsPanel.WIDGET_DEFINITION_PARAMETER).toLong();
@@ -72,7 +73,7 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     		AssetSearchCriteriaModel model = dashboardReportingService.convertWidgetDefinitionToAssetCriteria(widgetDefinitionId,x,y,series); 
     		return model;
     	}
-    	throw new IllegalStateException("must specify configId in parameters in order to create report criteria model.");
+    	throw new IllegalStateException("you must specify expected dashboard parameters in order to create report criteria model.");
 	}
 
     private void init(AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem) {
