@@ -388,3 +388,11 @@
 .freeFormLabel, .orgBrowserForm .infoSet label {
     font-weight:normal;
 }
+
+
+.selectionNotice {  /** WEB-2717 */    
+    margin-top:0px;    
+    margin-bottom:10px;
+    padding-top:10px;
+}
+
