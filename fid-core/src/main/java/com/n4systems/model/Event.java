@@ -306,7 +306,11 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	public EventSchedule getSchedule() {
 		return schedule;
 	}
-	
+
+    public void setSchedule(EventSchedule schedule) {
+        this.schedule = schedule;
+    }
+
 	@Override
 	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
@@ -367,6 +371,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     private void fillInPlaceholderScheduleIfAbsent() {
         if (schedule == null) {
             schedule = EventSchedule.createPlaceholderFor(this);
+            schedule.completed(this);
         }
     }
 

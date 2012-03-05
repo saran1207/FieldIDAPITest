@@ -18,14 +18,15 @@ public class CreateEventParameterBuilder {
 	private FileDataContainer proofTestData = null;
 	private List<FileAttachment> uploadedImages = null;
 	private ArrayList<EventScheduleBundle> schedules = new ArrayList<EventScheduleBundle>();
+    private long scheduleId;
 
-	public CreateEventParameterBuilder(Event event, long userId) {
+    public CreateEventParameterBuilder(Event event, long userId) {
 		this.event = event;
 		this.userId = userId;
 	}
 
 	public CreateEventParameter build() {
-		return new CreateEventParameter(event, nextEventDate, userId, proofTestData, uploadedImages, schedules);
+		return new CreateEventParameter(event, nextEventDate, userId, proofTestData, uploadedImages, schedules, scheduleId);
 	}
 	
 	public CreateEventParameterBuilder withANextEventDate(Date nextEventDate) {
@@ -50,7 +51,11 @@ public class CreateEventParameterBuilder {
 	public CreateEventParameterBuilder withUploadedImages(List<FileAttachment> uploadedImages) {
 		this.uploadedImages = uploadedImages;
 		return this;
-		
+	}
+
+    public CreateEventParameterBuilder withScheduleId(long scheduleId) {
+		this.scheduleId = scheduleId;
+		return this;
 	}
 
 	public CreateEventParameterBuilder addSchedules(List<EventScheduleBundle> schedules) {

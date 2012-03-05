@@ -256,6 +256,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 			throw new InvalidScheduleStateException();
 		}
 		this.event = event;
+        event.setSchedule(this);
 		completedDate = new Date();
 		status = ScheduleStatus.COMPLETED;
 		advancedLocation = event.getAdvancedLocation();
@@ -344,7 +345,6 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
         schedule.setCreatedBy(event.getCreatedBy());
         schedule.setModifiedBy(event.getModifiedBy());
         schedule.setModified(event.getModified());
-        schedule.completed(event);
 
         return schedule;
     }

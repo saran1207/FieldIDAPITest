@@ -401,6 +401,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
 				CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, getSessionUserId())
 						.withProofTestFile(fileData)
+                        .withScheduleId(eventScheduleId)
 						.withUploadedImages(getUploadedFiles());
 
                 if (refreshAutoSchedules) {
@@ -422,9 +423,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 				// when updating, we need to remove any files that should no longer be attached
 				updateAttachmentList(event, modifiedBy);
 				event = eventManager.updateEvent(event, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
+
+                completeSchedule();
 			}
-				
-			completeSchedule();
+
 			
 		} catch (ProcessingProofTestException e) {
 			logger.error("event save failed processing prooftest", e);

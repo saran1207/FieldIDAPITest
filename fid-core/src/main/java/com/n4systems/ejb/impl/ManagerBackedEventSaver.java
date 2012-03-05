@@ -73,11 +73,31 @@ public class ManagerBackedEventSaver implements EventSaver {
 		setProofTestData(parameterObject.event, parameterObject.fileData);
 	
 		confirmSubEventsAreAgainstAttachedSubAssets(parameterObject.event);
-	
+
 		setOrderForSubEvents(parameterObject.event);
-		
-		persistenceManager.save(parameterObject.event, parameterObject.userId);
-	
+
+        EventSchedule eventSchedule = null;
+
+
+        if (parameterObject.scheduleId == -1) {
+            // This means the user selected 'create new schedule'
+            // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
+            eventSchedule = EventSchedule.createPlaceholderFor(parameterObject.event);
+            eventSchedule.setNextDate(parameterObject.event.getDate());
+            persistenceManager.save(eventSchedule);
+        } else if (parameterObject.scheduleId > 0) {
+            // There was an existing schedule selected.
+            eventSchedule = persistenceManager.find(EventSchedule.class, parameterObject.scheduleId, parameterObject.event.getTenant());
+            parameterObject.event.setSchedule(eventSchedule);
+        }
+
+        persistenceManager.save(parameterObject.event, parameterObject.userId);
+
+        if (eventSchedule != null) {
+            eventSchedule.completed(parameterObject.event);
+            persistenceManager.update(eventSchedule);
+        }
+
 		updateAsset(parameterObject.event, parameterObject.userId);
 		
 		// writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an 

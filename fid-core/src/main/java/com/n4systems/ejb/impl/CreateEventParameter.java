@@ -17,18 +17,21 @@ public class CreateEventParameter {
 	public final Long userId;
 	public final FileDataContainer fileData;
 	public final List<FileAttachment> uploadedFiles;
-	
+
 	public final List<EventScheduleBundle> schedules;
 
+    public final long scheduleId;
 
-	public CreateEventParameter(Event event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
+
+	public CreateEventParameter(Event event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules, long scheduleId) {
 		this.event = event;
 		this.nextEventDate = nextEventDate;
 		this.userId = userId;
 		this.fileData = fileData;
 		this.uploadedFiles = uploadedFiles;
 		this.schedules = schedules;
-	}
+        this.scheduleId = scheduleId;
+    }
 
 	@Override
 	public int hashCode() {
