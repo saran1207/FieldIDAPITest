@@ -46,7 +46,8 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
 
     public SearchResultsPage(PageParameters params) { 
     	super(params);
-		init(createSearchCriteriaModel(params), new SavedSearchItem(searchCriteriaModel), true);
+		AssetSearchCriteriaModel model = createSearchCriteriaModel(params);
+		init(model, new SavedSearchItem(model), true);
     }
 
 	public SearchResultsPage(SavedSearchItem savedSearchItem) {
