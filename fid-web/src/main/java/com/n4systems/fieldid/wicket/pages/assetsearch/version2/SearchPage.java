@@ -17,6 +17,7 @@ public class SearchPage extends FieldIDFrontEndPage {
 
     public SearchPage() {
         if (assetService.countAssets() == 0) {
+        	// XXX : WEB-2706 requires new blank slate here. won't be based on asset count though.
             add(new SearchBlankSlatePanel("contentPanel"));
         } else {
             add(new SearchCriteriaPanel("contentPanel"));
