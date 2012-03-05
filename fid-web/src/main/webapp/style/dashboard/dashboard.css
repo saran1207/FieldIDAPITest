@@ -119,6 +119,7 @@ div.chartTooltip {
     padding: 4px;
     background-color: #fff;
     opacity: 0.80;
+    z-index: 5;
 }
 
 div.loadingText {
