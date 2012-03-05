@@ -152,7 +152,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         } else if (item instanceof AssetType) {
             criteria.setAssetType((AssetType) item);
         } else if (item instanceof EventType) {
-            criteria.setAssetType((AssetType) item);
+            criteria.setEventType((EventType) item);
         }
     }
 
