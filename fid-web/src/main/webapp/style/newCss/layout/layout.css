@@ -44,7 +44,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	margin: auto;
 	clear: both;
 	position:relative;
-	z-index: 5;
+	z-index: 1;
 }
 
 #companyLogo, #systemLogo {
