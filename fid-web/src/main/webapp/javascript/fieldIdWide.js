@@ -4,6 +4,7 @@
  *
  */
 
+
 var fieldIdWidePage = (function() { 
 
 	var leftMenuWidth = '345px'; 
@@ -53,7 +54,8 @@ var fieldIdWidePage = (function() {
 			$('.asset-actions .menu-items').hide();					
 		});		
 	}
-	
+
+		
 	return { 
 		init : init,
 		showLeftMenu : showLeftMenu,
@@ -63,5 +65,26 @@ var fieldIdWidePage = (function() {
 })();
 
 
+/** 
+ * CAVEAT : 
+ *  deliberately overriding the existing function that positions loading panel because it is behaves differently in wide screen mode. 
+ *  remove this when merging of asset search pages is complete.  at that point we will be more free to refactor loading panel to have custom
+ *   javascript emitted.
+ * note : you may want to adjust the "top" value of the modalPanel if you don't want the translucent overlay to cover the entire page (skip the header).  
+ **/
 
-		
+function positionModalContainer(modalPanelId, componentToCoverId) {
+	var modelPanel = $("#"+modalPanelId);
+	var componentToCover = $("#page");
+	
+	translatePosition(modelPanel, componentToCover, 0, 0);
+	modelPanel.css({
+		'width': "100%",
+		'left' :'0px',
+		'height': componentToCover.height() + "px"});
+}
+
+
+
+
+

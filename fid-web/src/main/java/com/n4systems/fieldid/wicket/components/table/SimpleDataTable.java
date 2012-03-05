@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.n4systems.fieldid.wicket.components.search.results.SelectionStatusPanel;
@@ -115,16 +116,24 @@ public class SimpleDataTable<T> extends Panel {
             add(new WebMarkupContainer("selectionStatus").setVisible(false));
         }
 
-
         add(table);
 
         add(topPaginationBar = createPaginationBar("topPagination"));
         add(createPaginationBar("bottomPagination"));
+        add(new AttributeAppender("class", getPagedModel()));
         
         addEmptyResultsDisplay(emptyResultsTitleKey, emptyResultsMessageKey, table);
 	}
 
-    private void addEmptyResultsDisplay(String emptyResultsTitleKey, String emptyResultsMessageKey, final DataTable<T> table) {
+    protected IModel<?> getPagedModel() {
+		return new Model<String>() {
+			@Override public String getObject() {
+				return table.getPageCount()>1 ? "paged-table" : "";
+			}			
+		};
+	}
+
+	private void addEmptyResultsDisplay(String emptyResultsTitleKey, String emptyResultsMessageKey, final DataTable<T> table) {
         WebMarkupContainer emptyResultsContainer = new WebMarkupContainer("emptyResultsContainer") {
             @Override
             public boolean isVisible() {
@@ -153,7 +162,7 @@ public class SimpleDataTable<T> extends Panel {
         return new JumpableNavigationBar(id, this) {
             @Override
             protected void onPageChanged(AjaxRequestTarget target) {
-                //scrollToTopPaginationBar(target);
+                scrollToTopPaginationBar(target);
                 SimpleDataTable.this.onPageChanged(target);
             }
 

@@ -26,10 +26,14 @@ public class ModalLoadingPanel extends Panel {
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		String js = String.format("positionModalContainer('%s', '%s')", modalPanel.getMarkupId(), componentToCover.getMarkupId());
+		String js = getJavascript(modalPanel.getMarkupId(), componentToCover.getMarkupId());
         response.renderOnLoadJavaScript(js);
 
         response.renderCSSReference("style/ModalLoadingPanel.css");
         response.renderJavaScriptReference("javascript/ModalLoadingPanel.js");
+	}
+
+	protected String getJavascript(String modalId, String componentToCoverId) {
+		return String.format("positionModalContainer('%s', '%s')", modalId, componentToCoverId);
 	}
 }

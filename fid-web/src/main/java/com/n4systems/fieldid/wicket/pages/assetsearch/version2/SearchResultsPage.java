@@ -165,9 +165,6 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
     	super.renderHead(response);
     	response.renderJavaScriptReference("javascript/fieldIdWide.js");
         response.renderCSSReference("style/pageStyles/wide.css");
-        if (!showLeftMenu) { 
-        	response.renderCSSReference("style/pageStyles/wideNoLeftMenu.css");
-        }
         response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+showLeftMenu+");");
     }
     

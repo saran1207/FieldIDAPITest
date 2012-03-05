@@ -32,10 +32,10 @@
 
 #page .centre {
 	margin-left:345px;
-	/* this is due to "notification" taking up 30 pixels.  the menu is 50px high so we just need to offset the remaining 20px;
+	/* this is due to "notification" taking up 30 pixels.  the menu is 50px high so we just need to offset the remaining pixels;
 	   in future, notifications should be moved to bottom, or hidden until it has contents so it doesn't cause this awkward layout/css.
 	*/
-	margin-top:20px; 		 
+	margin-top:24px; 		 
 }
 
 
@@ -52,7 +52,6 @@
 	padding:0px;
 	background:#fff;
 	left:0;
-	z-index:10;
 	overflow-x:visible;
 	overflow-y:auto; 
 	padding-left:10px;
@@ -330,9 +329,6 @@
 	border-right:10px solid white;	 
 }
 
-.loadingAnimationImage {
-    margin-left: 120px;
-}
 
 /*** hacks.  to be removed when the new asset search page completely replaces the old one.
  these are just to make both pages live together with minimal code changes.
@@ -348,17 +344,27 @@
 	display:none;
 }
 
+#pageContent { 
+	padding-bottom:40px;
+}
+
 #pageContent .crudForm .pageSection {
 	display:none;
 }
 
+
 .paginationWrapper {
+	display:none;
 	border-top:1px solid #ccc;
 	position:fixed;
 	height:40px;
 	bottom:0px;
 	right:0px;	
 	background:#f9f9f9;
+}
+
+.paged-table .paginationWrapper {
+	display:block;
 }
 
 
