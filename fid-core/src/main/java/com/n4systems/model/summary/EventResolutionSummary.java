@@ -2,7 +2,6 @@ package com.n4systems.model.summary;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
-import org.apache.commons.lang.time.DateUtils;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

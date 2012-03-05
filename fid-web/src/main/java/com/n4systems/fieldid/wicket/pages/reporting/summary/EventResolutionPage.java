@@ -116,6 +116,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         return new Link(linkId) {
             @Override
             public void onClick() {
+                EventReportCriteriaModel criteria = copyOfCriteria();
                 populateCriteriaInto(model.getObject().getItem(), criteria);
                 populateFailedInto(criteria);
                 setResponsePage(new ReportingResultsPage(criteria));
@@ -127,6 +128,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         return new Link(linkId) {
             @Override
             public void onClick() {
+                EventReportCriteriaModel criteria = copyOfCriteria();
                 populateCriteriaInto(model.getObject().getItem(), criteria);
                 populateOutstandingInto(criteria);
                 setResponsePage(new ReportingResultsPage(criteria));
@@ -138,6 +140,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         return new Link(linkId) {
             @Override
             public void onClick() {
+                EventReportCriteriaModel criteria = copyOfCriteria();
                 populateCriteriaInto(model.getObject().getItem(), criteria);
                 setResponsePage(new ReportingResultsPage(criteria));
             }
@@ -193,7 +196,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.event_resolution"));
+        return new Label(labelId, new EventResolutionTitleModel(new PropertyModel<EventReportCriteriaModel>(this,"criteria")));
     }
 
     @Override
@@ -201,5 +204,14 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/event_resolution/event_resolution.css");
     }
+
+    private EventReportCriteriaModel copyOfCriteria() {
+        try {
+            return (EventReportCriteriaModel) criteria.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
