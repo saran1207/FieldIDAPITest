@@ -71,5 +71,19 @@ public class DateRangePicker extends Panel {
         response.renderCSSReference("style/newCss/component/dateRange.css");		
         super.renderHead(response);
 	}
+	
+	public void addFieldUpdatingBehavior() {
+		toDatePicker.getDateTextField().add(createFieldUpdatingBehavior());
+		fromDatePicker.getDateTextField().add(createFieldUpdatingBehavior());
+	}
+	
+	private AjaxFormComponentUpdatingBehavior createFieldUpdatingBehavior() {
+		return new AjaxFormComponentUpdatingBehavior("onchange"){
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {}
+        	
+        };
+	}
 
 }

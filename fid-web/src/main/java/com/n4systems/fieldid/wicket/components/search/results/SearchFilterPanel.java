@@ -63,7 +63,9 @@ public class SearchFilterPanel extends Panel {
 
 		CollapsiblePanel p5 = new CollapsiblePanel("dateRangePicker", new StringResourceModel("label.daterange",this,null)) {
 			@Override 	protected Panel createContainedPanel(String id) {
-				return new DateRangePicker(id,new PropertyModel<DateRange>(model, "dateRange"));
+				DateRangePicker picker = new DateRangePicker(id,new PropertyModel<DateRange>(model, "dateRange"));
+				picker.addFieldUpdatingBehavior();
+				return picker;
 			}			
 		};
 	  	add(p5);		  	  			
