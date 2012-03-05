@@ -337,6 +337,7 @@ h2 a {
 	border-collapse: collapse;
 	border-bottom: 1px solid #CACACA;
 	emtpty-cells: show;
+    background-color: #fff;
 }
 
 /* workaround for IE because it doesn't respect min-width specified in  '.list td' css */
