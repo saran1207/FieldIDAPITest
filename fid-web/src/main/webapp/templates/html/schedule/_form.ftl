@@ -26,7 +26,7 @@
 			<div class="tipContainer">
 				<p style="font-size:13px;">
 					<b>Note:</b> Schedule Search has been moved under Reporting. By combining Schedules with Reporting we have introduced more features including a new Summary Report.
-                    For more information please read our blog post <a href="http://customers.fieldid.com/?p=200">New Feature: Combined Reporting and Schedules</a>
+                    For more information please read our blog post <a target="_blank" href="http://customers.fieldid.com/?p=200">New Feature: Combined Reporting and Schedules</a>
 				</p>
 			</div>
 		</#if>
