@@ -55,8 +55,14 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     
     public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem) {
     	super(new PageParameters());
-        savedSearchItem.setSearchCriteria(searchCriteriaModel);
-    	init(searchCriteriaModel, savedSearchItem);
+    	SavedSearchItem searchItem = null;
+    	if (savedSearchItem==null) { 
+    		searchItem = new SavedSearchItem(searchCriteriaModel);    		
+    	} else {
+    		searchItem = savedSearchItem;
+    		savedSearchItem.setSearchCriteria(searchCriteriaModel);
+    	}
+    	init(searchCriteriaModel, searchItem);
     }
 
 	public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel) {
