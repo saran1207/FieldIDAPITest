@@ -92,7 +92,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	@Column(nullable=false)
 	private UserType userType=UserType.ALL;
 
-    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name="users_saved_items", joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name="item_id"))
     @IndexColumn(name="orderIdx")
     private List<SavedItem> savedItems;
