@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.search.results;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import java.util.List;
 
@@ -10,18 +10,12 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
 import com.n4systems.fieldid.wicket.components.DateRangePicker;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.AssetDetailsCriteriaPanel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.CollapsiblePanel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.IdentifiersCriteriaPanel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.OrderDetailsCriteriaPanel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.OwnershipCriteriaPanel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.model.utils.DateRange;
 
 
 
-@SuppressWarnings("serial")
 public class SearchFilterPanel extends Panel {
 
 	public SearchFilterPanel(String id, final IModel<AssetSearchCriteriaModel> model) {

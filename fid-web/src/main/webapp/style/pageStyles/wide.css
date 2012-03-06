@@ -402,3 +402,27 @@
     padding-top:10px;
 }
 
+
+.no-results { 
+	padding:10px 0px 10px 25px;
+}
+
+.no-results h1 { 
+	font-size:22px;
+	font-weight:normal;
+}
+
+.no-results li, .no-results p {
+	font-size:14px;
+	color:#777;
+	list-style-type:disc;
+}
+
+.no-results .tips li {
+	margin-left:18px;
+	margin-top:7px;
+	margin-bottom:7px;
+}
+
+
+

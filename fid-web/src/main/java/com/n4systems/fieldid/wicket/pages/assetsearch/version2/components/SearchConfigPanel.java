@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.search.results;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -21,7 +21,6 @@ import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 
-@SuppressWarnings("serial")
 public class SearchConfigPanel extends Panel {		
 	
 	private Component filters;

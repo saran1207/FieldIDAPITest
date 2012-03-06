@@ -4,7 +4,7 @@
 
 .field label, .collapsible .dateRange label, .collapsible .dateFrom label, .collapsible .dateTo label { 
 	width : 105px;
-	vertical-align:top;
+	vertical-align:middle;
 	margin-right:5px;
 	display:inline-block;
 	text-align:right;
@@ -14,6 +14,10 @@
 	  text-align:right;
 }
 
+.location label, .owner label {
+	vertical-align:top; 
+} 
+
 .field label, .field input, .field select, .field .popup {
   display:inline-block;
   *display:inline;
@@ -21,6 +25,7 @@
 
 .field input, .field select, .field .component, .collapsible select {
   width:150px;
+  padding:3px;
 }
 
 .field .date { 
@@ -37,4 +42,20 @@
 
 .dateTo .dateFrom .dateRange { 
 	min-height:30px;
+}
+
+
+/** hack to make width consistent in new search page. 
+*/
+.popup .fieldHolder input, .dateFrom .fieldHolder input, .dateTo .fieldHolder input {
+	padding-left:0px;
+	padding-right:0px;
+}
+
+.dateFrom, .dateTo {
+	padding-top:8px;
+}
+
+.dateRange select, .field select, .popup .fieldHolder input { 
+	width:158px;
 }

@@ -15,20 +15,20 @@ import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.wicket.components.DynamicPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchMassActionPanel;
-import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchResultsPanel;
 import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
-import com.n4systems.fieldid.wicket.components.search.results.SearchConfigPanel;
-import com.n4systems.fieldid.wicket.components.search.results.SearchSubMenu;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchConfigPanel;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchResultsPanel;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchSubMenu;
 import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.services.reporting.DashboardReportingService;
 
 public class SearchResultsPage extends FieldIDFrontEndPage {
 
-    private AssetSearchResultsPanel resultsPanel;
+    private SearchResultsPanel resultsPanel;
 
     @SpringBean
     private DashboardReportingService dashboardReportingService;
@@ -90,12 +90,11 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
         this.searchCriteriaModel = searchCriteriaModel;
         savedAssetSearchService.saveLastSearch(searchCriteriaModel);
         Model<AssetSearchCriteriaModel> criteriaModel = new Model<AssetSearchCriteriaModel>(searchCriteriaModel);
-        add(resultsPanel = new AssetSearchResultsPanel("resultsPanel", criteriaModel) {
+        add(resultsPanel = new SearchResultsPanel("resultsPanel", criteriaModel, showLeftMenu) {
         	@Override protected void updateSelectionStatus(AjaxRequestTarget target) {
-        		super.updateSelectionStatus(target);
         		target.add(searchMenu);
-        	};       	
-        });        
+        	};       				        	
+        });
 
         SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));
         criteriaExpandContainer.addContainedPanel(new AssetSearchCriteriaPanel("criteriaPanel", criteriaModel, savedSearchItem) {

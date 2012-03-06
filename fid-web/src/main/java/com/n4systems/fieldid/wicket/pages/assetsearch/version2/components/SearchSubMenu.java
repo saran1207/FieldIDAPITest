@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.search.results;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -22,7 +22,7 @@ import com.n4systems.model.search.AssetSearchCriteriaModel;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
-@SuppressWarnings("serial")
+
 public class SearchSubMenu extends Panel {
 	
 	public static final String HIDE_JS = "fieldIdWidePage.hideLeftMenu()";

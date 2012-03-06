@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.search.results;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.search.results.ColumnGroupPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.CollapsiblePanel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
@@ -25,7 +25,6 @@ import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.search.SearchCriteriaModel;
 
 
-@SuppressWarnings("serial")
 public class SearchColumnsPanel extends Panel {
 
 	@SpringBean private AssetColumnsService assetColumnsService;
