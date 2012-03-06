@@ -126,6 +126,9 @@ public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetT
 		ApiAssetTypeGroup apiGroup = null;
 		if (type.getGroup() != null) {
 			apiGroup = new ApiAssetTypeGroup();
+			apiGroup.setSid(type.getGroup().getId());
+			apiGroup.setActive(true);
+			apiGroup.setModified(type.getGroup().getModified());
 			apiGroup.setName(type.getGroup().getName());
 			apiGroup.setWeight(type.getGroup().getOrderIdx());
 		}
