@@ -92,7 +92,6 @@ public class FieldIDWicketApp extends WebApplication {
         getApplicationSettings().setInternalErrorPage(OopsPage.class);
 
         getRequestCycleListeners().add(new FieldIDRequestCycleListener());
-        getRequestCycleListeners().add(new FieldIDConcurrentSessionListener());
     }
 
     @Override
