@@ -32,6 +32,7 @@ import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.DoubleFormatter;
@@ -247,7 +248,11 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
     }
 
 	private String getDateStringValue(DateFieldCriteriaResult result) {
-		return formatDate(result.getValue(), ((DateFieldCriteria)result.getCriteria()).isIncludeTime());
+		boolean includeTime = ((DateFieldCriteria)result.getCriteria()).isIncludeTime();
+		if(includeTime)
+			return formatDate(result.getValue(), includeTime);
+		else
+			return formatDate(new PlainDate(result.getValue()), includeTime);
 	}
 
 	private String getNumberStringValue(CriteriaResult result) {
