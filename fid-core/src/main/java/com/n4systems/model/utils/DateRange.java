@@ -32,7 +32,7 @@ import com.n4systems.util.time.DateUtil;
  */
 @SuppressWarnings("serial")
 @Embeddable
-public class DateRange implements Serializable {
+public class DateRange implements Serializable, Cloneable {
 	
 	public static final Period OPEN_PERIOD = new Period().withYears(3000);  // can't use MAX_INT 'cause that causes overflow in certain scenarios.
 	
@@ -274,6 +274,11 @@ public class DateRange implements Serializable {
 
     public void setToDate(Date toDate) {
         this.toDate = toDate;
+    }
+
+    @Override
+    public DateRange clone() throws CloneNotSupportedException {
+        return (DateRange) super.clone();
     }
 
 }

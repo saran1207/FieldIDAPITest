@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.reporting.summary;
 import com.n4systems.fieldid.service.search.EventResolutionService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
 import com.n4systems.model.AssetType;
@@ -207,11 +206,13 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
 
     private EventReportCriteriaModel copyOfCriteria() {
         try {
-            return (EventReportCriteriaModel) criteria.clone();
+            EventReportCriteriaModel clone = (EventReportCriteriaModel) criteria.clone();
+            clone.setDateRange(criteria.getDateRange().clone());
+            clone.getSelection().clear();
+            return clone;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
     }
-
 
 }
