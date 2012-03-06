@@ -56,6 +56,10 @@
 	padding-top:8px;
 }
 
-.dateRange select, .field select, .popup .fieldHolder input { 
+.dateRange select, .field select, .popup  { 
 	width:158px;
+}
+
+.fieldHolder input {
+	width:160px;
 }

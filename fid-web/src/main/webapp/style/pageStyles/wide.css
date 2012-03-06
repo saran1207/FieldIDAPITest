@@ -1,8 +1,8 @@
 /* CSS for fluid, widge pages that take up 100% width.   eg. search results pages 
- * because we are currently trying to support two types of pages at once (legacy=fixed size & new = fluid, 100%) this page is 
- * a mish-mash of hacks.  
+ * because we are currently trying to support two types of pages at once (legacy=fixed size & new = fluid, 100%) this CSS is 
+ * a mish-mash of hacks to make old,existing html look like as desired.  
  * in order to achieve the look of the new page while maintaining the legacy Html/Java/CSS many css classes had to be overwritten.
- * for example, #page is overwritten to have a width of 100% instead of 100px. 
+ * for example, #page is overwritten to have a width of 100% instead of 1000px. 
  * 
  * in general, anything done in this file should be refactored out into common style when the transition to the new page is complete.
  *
@@ -35,7 +35,8 @@
 	/* this is due to "notification" taking up 30 pixels.  the menu is 50px high so we just need to offset the remaining pixels;
 	   in future, notifications should be moved to bottom, or hidden until it has contents so it doesn't cause this awkward layout/css.
 	*/
-	margin-top:24px; 		 
+	margin-top:24px;
+	background:white; 		 
 }
 
 
@@ -50,7 +51,7 @@
 
 #left-menu {
 	padding:0px;
-	background:#fff;
+	background:white;
 	left:0;
 	overflow-x:visible;
 	overflow-y:auto; 
@@ -168,7 +169,7 @@
 	padding: 3px 10px;
 	color: #333;
 	text-decoration: none;
-    text-shadow: 0 1px 0 #fff;
+    text-shadow: 0 1px 0 white;
     font: 11px "lucida grande",tahoma,verdana,arial,sans-serif;
     line-height: 18px;
     display: block;
@@ -198,10 +199,10 @@
 .sub-menu .config a:hover, .asset-actions > ul > li > a:hover  { 
     border: solid 1px #333;
     color: #282828;
-    background: -webkit-linear-gradient(top, #ffffff, #ddd);
-    background: -moz-linear-gradient(top, #ffffff, #ddd);
-    background: -ms-linear-gradient(top, #ffffff, #ddd);
-    background: -o-linear-gradient(top, #ffffff, #ddd);
+    background: -webkit-linear-gradient(top, white, #ddd);
+    background: -moz-linear-gradient(top, white, #ddd);
+    background: -ms-linear-gradient(top, white, #ddd);
+    background: -o-linear-gradient(top, white, #ddd);
 }
 .sub-menu .config a:active { 
     border: solid 1px #7f7f7f;
@@ -270,7 +271,7 @@
 	position: absolute;
 	top:100%;
 	width: 125px; 
-	background:#fff;
+	background:white;
 	color:black;
 	border-width:1px 1px 1px 1px;
 	border-color:#777;
