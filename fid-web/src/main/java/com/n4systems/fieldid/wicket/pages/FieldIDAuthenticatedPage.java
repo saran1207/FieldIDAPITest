@@ -22,14 +22,20 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
     @SpringBean
     private PersistenceService persistenceService;
 
+    private boolean pageTestMode;
+
     public FieldIDAuthenticatedPage(PageParameters params) {
         super(params);
         verifyLoggedIn();
-        verifyNonConcurrentSession();
     }
 
     public FieldIDAuthenticatedPage() {
         verifyLoggedIn();
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
         verifyNonConcurrentSession();
     }
 
@@ -43,6 +49,9 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
     }
 
     private void verifyNonConcurrentSession() {
+        if (pageTestMode) {
+            return;
+        }
 		FieldIDSession fieldidSession = FieldIDSession.get();
 
 		SessionUser sessionUser = fieldidSession.getSessionUser();
@@ -57,6 +66,10 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
 
     protected User getCurrentUser() {
         return persistenceService.find(User.class, getSessionUser().getUniqueID());
+    }
+
+    public void setTestMode() {
+        this.pageTestMode = true;
     }
 
 }

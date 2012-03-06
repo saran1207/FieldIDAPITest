@@ -34,6 +34,7 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 		if (fixture instanceof FieldIDFrontEndPage) {
 			FieldIDFrontEndPage fieldIdPage = fixture;
 			fieldIdPage.setConfigurationProvider(configurationProvider);
+            fieldIdPage.setTestMode();
 		}
 		return fixture;
 	}
