@@ -57,7 +57,9 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 			@QueryParam("assetType") Long assetType,
 			@QueryParam("assetTypeGroup") Long assetTypeGroup,
 			@QueryParam("identifiedFrom") Date identifiedFrom,
-			@QueryParam("identifiedTo") Date identifiedTo) {
+			@QueryParam("identifiedTo") Date identifiedTo, 
+			@QueryParam("orderByField") String orderByField,
+			@QueryParam("orderByDirection") String orderByDirection) {
 		
 		
 		AssetSearchCriteriaModel searchCriteria = new AssetSearchCriteriaModel();
@@ -106,7 +108,19 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 			searchCriteria.setDateRange(dateRange);
 		}
 		
-		QueryBuilder<Asset> query = assetSearchService.createBaseSearchQueryBuilder(searchCriteria).addOrder("identified", false);
+		// Sort column and ascending.
+		String orderBy = "identified";
+		boolean ascending = false;
+		
+		if(orderByField != null) {
+			orderBy = orderByField.equals("name") ? "type.name" : orderByField;
+		}
+		
+		if(orderByDirection != null) {
+			ascending = orderByDirection.equals("ASC");
+		}
+		
+		QueryBuilder<Asset> query = assetSearchService.createBaseSearchQueryBuilder(searchCriteria).addOrder(orderBy, ascending);
 		List<Asset> results = persistenceService.findAll(query, page, pageSize);
 		Long total = persistenceService.count(query);
 		
