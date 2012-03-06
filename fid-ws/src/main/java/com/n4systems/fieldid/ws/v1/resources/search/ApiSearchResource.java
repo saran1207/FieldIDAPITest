@@ -22,6 +22,7 @@ import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
@@ -54,6 +55,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 			@QueryParam("purchaseOrder") String purchaseOrder,
 			@QueryParam("assetStatus") Long assetStatus,
 			@QueryParam("assetType") Long assetType,
+			@QueryParam("assetTypeGroup") Long assetTypeGroup,
 			@QueryParam("identifiedFrom") Date identifiedFrom,
 			@QueryParam("identifiedTo") Date identifiedTo) {
 		
@@ -84,6 +86,10 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		
 		if (assetType != null) {
 			searchCriteria.setAssetType(persistenceService.find(AssetType.class, assetType));
+		}
+		
+		if (assetTypeGroup != null) {
+			searchCriteria.setAssetTypeGroup(persistenceService.find(AssetTypeGroup.class, assetTypeGroup));
 		}
 		
 		if (identifiedFrom != null || identifiedTo != null) {
