@@ -174,12 +174,12 @@ function findPos(obj) {
     return [ offset.left, offset.top ];
 }
 
-function translateWithin(target, relativeElement, withinElement) {
+function translateWithin(target, relativeElement, withinElement, offsetY, offsetX) {
     var withinElementPos = findPos(withinElement);
     var position = findPos(relativeElement);
 
-    var newX = position[0] - withinElementPos[0];
-    var newY = position[1] - withinElementPos[1];
+    var newX = position[0] - withinElementPos[0] + offsetX;
+    var newY = position[1] - withinElementPos[1] + offsetY;
 	target.css({position: 'absolute',
         'top': newY + "px",
 					'left': newX + "px"});

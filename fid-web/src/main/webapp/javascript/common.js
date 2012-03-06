@@ -191,6 +191,17 @@ function translate(target, relativeElement, offsetY, offsetX) {
 					'left': position[0] + offsetX + "px"});
 }
 
+function translateWithin(target, relativeElement, withinElement, offsetY, offsetX) {
+    var withinElementPos = findPos(withinElement);
+    var position = findPos(relativeElement);
+
+    var newX = position[0] - withinElementPos[0] + offsetX;
+    var newY = position[1] - withinElementPos[1] + offsetY;
+	target.setStyle({position: 'absolute',
+        'top': newY + "px",
+					'left': newX + "px"});
+}
+
 function translatePosition(target, relativeElement, offsetY, offsetX) {
 	var position = relativeElement.positionedOffset();
 
