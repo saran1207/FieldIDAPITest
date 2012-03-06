@@ -10,7 +10,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.wicket.behavior.validation.UniquelyNamedEnityValidator;
+import com.n4systems.fieldid.wicket.behavior.validation.UniquelyNamedSavedItemValidator;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.saveditem.SavedItem;
@@ -41,7 +41,7 @@ public class EditSavedItemPage extends FieldIDFrontEndPage {
 		
 		RequiredTextField<SavedItem> nameText;
 		form.add(nameText = new RequiredTextField<SavedItem>("name", new PropertyModel<SavedItem>(savedItem, "name")));
-		nameText.add(new UniquelyNamedEnityValidator(SavedItem.class, id, "saved.item.unique.name"));
+		nameText.add(new UniquelyNamedSavedItemValidator(savedItem.getId()));
 		
 		form.add(new TextArea<SavedItem>("description", new PropertyModel<SavedItem>(savedItem, "description")));
 		form.add(new BookmarkablePageLink<Void>("cancelLink", ManageSavedItemsPage.class));

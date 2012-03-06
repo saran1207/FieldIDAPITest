@@ -7,19 +7,9 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
@@ -41,7 +31,6 @@ import com.n4systems.security.UserType;
 import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.RandomString;
 import com.n4systems.util.timezone.CountryList;
-import org.hibernate.annotations.IndexColumn;
 
 @Entity
 @Table(name = "users")
@@ -99,7 +88,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	
 	private boolean registered = false;
 	
-	// TODO DD : refactor this to use PermissionType.
+	// XXX : refactor this to use PermissionType.
 	@Column(name="permissions", nullable=false)
 	private int permissions = Permissions.NO_PERMISSIONS;
 	

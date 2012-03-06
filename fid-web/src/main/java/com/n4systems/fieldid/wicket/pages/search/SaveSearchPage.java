@@ -13,7 +13,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.validation.UniquelyNamedEnityValidator;
+import com.n4systems.fieldid.wicket.behavior.validation.UniquelyNamedSavedItemValidator;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.saveditem.SavedItem;
@@ -53,7 +53,7 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
 
             add(new FIDFeedbackPanel("feedbackPanel"));
             add(nameText = new RequiredTextField<String>("name", new PropertyModel<String>(SaveSearchPage.this, "name")));
-           	nameText.add(new UniquelyNamedEnityValidator(SavedItem.class, savedItemId, "saved.item.unique.name"));
+           	nameText.add(new UniquelyNamedSavedItemValidator(savedItemId));
             
             add(new TextArea<String>("description", new PropertyModel<String>(SaveSearchPage.this, "description")));
             
