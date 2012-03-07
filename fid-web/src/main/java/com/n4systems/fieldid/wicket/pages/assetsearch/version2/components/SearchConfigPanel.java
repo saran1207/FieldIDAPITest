@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
-import org.apache.wicket.Component;
+import java.util.List;
+
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
@@ -19,12 +22,13 @@ import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.search.AssetSearchCriteriaModel;
 
 public class SearchConfigPanel extends Panel {		
 	
-	private Component filters;
-	private Component columns;
+	private SearchFilterPanel filters;
+	private SearchColumnsPanel columns;
 	private Model<AssetSearchCriteriaModel> model;
 	private FIDModalWindow modal;
 	
@@ -35,12 +39,17 @@ public class SearchConfigPanel extends Panel {
 		SearchConfigForm form = new SearchConfigForm("form", new CompoundPropertyModel<AssetSearchCriteriaModel>(model));
 		form.add(new Button("submit"));
 		form.add(new WebMarkupContainer("close").add(createCloseBehavior()));
-		form.add(filters = new SearchFilterPanel("filters",model));
 		form.add(columns = new SearchColumnsPanel("columns",model));
+		form.add(filters = new SearchFilterPanel("filters",model) {
+			@Override
+			protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
+				columns.updateAssetTypeOrGroup(target, selectedAssetType, availableAssetTypes);
+				// since we know that this can only occur when Filters panel is visible (.: we are not), we hide it.
+				columns.add(new AttributeModifier("style", "display:none;"));  
+			}			
+		});
 		
-		add(form);
-		
-		showFilters();
+		add(form);		
 	}
 
     private Link createSaveLink(String linkId, final boolean overwrite) {
@@ -77,19 +86,6 @@ public class SearchConfigPanel extends Panel {
 			}
 		});
 	}	
-
-	public void showColumns() {
-		showFilters(false);
-	}
-
-	public void showFilters() {
-		showFilters(true);		
-	}
-	
-	public void showFilters(boolean v) {
-		filters.setVisible(v);
-		columns.setVisible(!v);		
-	}
 
 	 public class SearchConfigForm extends Form<AssetSearchCriteriaModel> {
 

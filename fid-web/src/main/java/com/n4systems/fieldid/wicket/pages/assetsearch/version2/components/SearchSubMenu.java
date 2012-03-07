@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -12,6 +11,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
+import org.odlabs.wiquery.core.events.Event;
+import org.odlabs.wiquery.core.events.MouseEvent;
+import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
+import org.odlabs.wiquery.core.javascript.JsScope;
+import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -27,6 +31,10 @@ public class SearchSubMenu extends Panel {
 	
 	public static final String HIDE_JS = "fieldIdWidePage.hideLeftMenu()";
 	public static final String SHOW_JS = "fieldIdWidePage.showLeftMenu()";
+	
+	private static final String FILTERS_ID = "filters";
+	private static final String COLUMNS_ID = "columns";
+
 	private WebMarkupContainer actions;
 	private Model<AssetSearchCriteriaModel> model;
 	private Integer maxUpdate;
@@ -42,12 +50,12 @@ public class SearchSubMenu extends Panel {
 	private SubMenuLink filters;
 	
 	
-	public SearchSubMenu(String id, final Model<AssetSearchCriteriaModel> model, Link saveLink) {
+	public SearchSubMenu(String id, final Model<AssetSearchCriteriaModel> model) {
 		super(id);
 		this.model = model;
-		add(columns = new SubMenuLink("columns"));
-		add(filters = new SubMenuLink("filters"));
-		add(saveLink);
+		add(columns = new SubMenuLink(COLUMNS_ID));
+		add(filters = new SubMenuLink(FILTERS_ID));
+		add(createSaveLink("save"));
 		
         add(printLink = new LightboxActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model));
         add(exportLink = new LightboxActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model));
@@ -75,6 +83,10 @@ public class SearchSubMenu extends Panel {
 		add(new AttributeAppender("class", "sub-menu"));		
 	}		
 	
+	protected Component createSaveLink(String id) {
+		throw new IllegalStateException("you must override this method to create Save link for the SubMenu");
+	}
+
 	private void initializeLimits() {
 		// XXX : the actions limits here should roll into one single "maxMassActionLimit"???    ask matt.
 		Long tenantId = FieldIDSession.get().getSessionUser().getTenant().getId(); 
@@ -96,21 +108,6 @@ public class SearchSubMenu extends Panel {
 		super.onBeforeRender();
 	}
 	
-	protected void onClick(AjaxRequestTarget target, String id) {
-		// stub : override to add behaviour
-	}
-	
-	private void delegateOnClick(AjaxRequestTarget target, String id) {
-		clicked = id;
-		target.add(columns);
-		target.add(filters);
-		onClick(target,id);
-	}
-	
-	private String getToggleState(SubMenuLink link) {
-		return StringUtils.equals(clicked,link.getId()) ? "true" : "";
-	}
-	
 	
 	// --------------------------------------------------------------------------------------------
 	
@@ -130,27 +127,20 @@ public class SearchSubMenu extends Panel {
 	}
 	
 	
-	class SubMenuLink extends AjaxLink  {
-		
-		// BUG NOTE : when you do this show/hide stuff you will be losing any changes user might have entered into the form. 
-		//  i.e. if you enter a identifier, then click Columns (switch panels) then back to Filters, the changed identifier is not preserved.
-		//  need to either do this via javascript or updateForm.
-		
+	class SubMenuLink extends WebMarkupContainer  {		
+
 		public SubMenuLink(final String id) {
 			super(id);
-			add(new AttributeAppender("class", new Model<String>() {
-				@Override public String getObject() {
-					return getToggleState(SubMenuLink.this);
-				}
-			}, " ") );
+			add(createToggleBehavior(FILTERS_ID.equals(id)));
 		}
 		
-		@Override
-		public void onClick(AjaxRequestTarget target) {			
-			delegateOnClick(target, getId());
-			target.appendJavaScript(SHOW_JS);
-		}
-
+		 private Behavior createToggleBehavior(final boolean showFilters) {
+				return new WiQueryEventBehavior(new Event(MouseEvent.CLICK) {
+					@Override public JsScope callback() {
+						return JsScopeUiEvent.quickScope("fieldIdWidePage.showConfig("+showFilters+");");
+					}
+				});
+			}
 	}
 
 }

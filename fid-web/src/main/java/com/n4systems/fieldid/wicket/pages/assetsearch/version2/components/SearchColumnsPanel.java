@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import java.util.List;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -31,9 +31,7 @@ public class SearchColumnsPanel extends Panel {
 	@SpringBean private DynamicColumnsService dynamicColumnsService;	
 	
     private IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel;
-    WebMarkupContainer assignedUserContainer;
-    List<ColumnMappingGroupView> configuredColumnGroups;
-	private IModel<AssetSearchCriteriaModel> model;
+    private IModel<AssetSearchCriteriaModel> model;
 	
 	public SearchColumnsPanel(String id, IModel<AssetSearchCriteriaModel> model) {
 		super(id, model);		
@@ -65,19 +63,15 @@ public class SearchColumnsPanel extends Panel {
 	}
 
 
-
-//            super(id, new CompoundPropertyModel<AssetSearchCriteriaModel>(model));
-            
-
-        private Component createCollapsibleColumnsPanel(
-        		final ListItem<ColumnMappingGroupView> item) {
-        	CollapsiblePanel collapsiblePanel = new CollapsiblePanel("columnGroup",  new FIDLabelModel(new PropertyModel<String>(item.getModel(),"label"))) {
-				@Override protected Panel createContainedPanel(String id) {
-					return new ColumnGroupPanel(id, item.getModel());
-				}        		
-        	};
-        	return collapsiblePanel;        	
-        }
+    private Component createCollapsibleColumnsPanel(
+    		final ListItem<ColumnMappingGroupView> item) {
+    	CollapsiblePanel collapsiblePanel = new CollapsiblePanel("columnGroup",  new FIDLabelModel(new PropertyModel<String>(item.getModel(),"label"))) {
+			@Override protected Panel createContainedPanel(String id) {
+				return new ColumnGroupPanel(id, item.getModel());
+			}        		
+    	};
+    	return collapsiblePanel;        	
+    }
         
     private void initializeConfiguredColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel) {
         if (!getAssetSearchCriteriaModel().isReportAlreadyRun()) {
@@ -109,6 +103,11 @@ public class SearchColumnsPanel extends Panel {
 
     protected List<ColumnMappingGroupView> getDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
         return dynamicColumnsService.getDynamicAssetColumnsForSearch(assetType, availableAssetTypes);
-    }
+    }    
+
+	public void updateAssetTypeOrGroup(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
+		updateDynamicAssetColumns(selectedAssetType, availableAssetTypes);
+		target.add(this);
+	}
     
 }

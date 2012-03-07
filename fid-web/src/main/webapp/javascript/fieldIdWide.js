@@ -4,7 +4,6 @@
  *
  */
 
-
 var fieldIdWidePage = (function() { 
 
 	var leftMenuWidth = '345px'; 
@@ -15,12 +14,30 @@ var fieldIdWidePage = (function() {
 		initLeftMenu(showLeftMenu);
 	};
 	
+	// show either filters or columns panel.
+	var showConfig = function(showFilters) {
+		if (showFilters) { 
+			$('.sub-menu .config .filters').addClass('true');
+			$('.sub-menu .config .columns').removeClass('true');
+			$('#left-menu .columns').hide();
+			$('#left-menu .filters').show();
+		} else {
+			$('.sub-menu .config .columns').addClass('true');
+			$('.sub-menu .config .filters').removeClass('true');
+			$('#left-menu .filters').hide();				
+			$('#left-menu .columns').show();				
+		}
+		showLeftMenu();
+	};
+		
+	
 	var showLeftMenu = function() {	
 		var leftMenu = $('#left-menu');
-		$('.paginationWrapper').css('margin-left',leftMenuWidth);
+		$('.paginationWrapper').css('left',leftMenuWidth);
 		if (!leftMenu.is(':visible')) {
-			$('#page .centre').css('marginLeft',contentLeft);
-			leftMenu.show();
+			$('#page .centre').css('marginLeft',contentLeft);   // move centre stuff over to make room...
+			leftMenu.show();									//  ...now show the left component
+			
 			// i'm finding animation is too slow.  could just use css for this??
 //			$('#page .centre').animate({marginLeft:contentLeft},220, 'linear', function() { leftMenu.show();} );
 		}
@@ -28,7 +45,7 @@ var fieldIdWidePage = (function() {
 	
 	var hideLeftMenu = function() {
 		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.		
-		$('.paginationWrapper').css('margin-left','0px');		
+		$('.paginationWrapper').css('left','0px');		
 		$('#page .centre').css('marginLeft','0%');
 		$('#left-menu').hide(); 		
 		// i'm finding animation is too slow.  could just use css for this??
@@ -38,7 +55,7 @@ var fieldIdWidePage = (function() {
 	var initLeftMenu = function(showLeftMenu) {
 		if (showLeftMenu) {
 			// set filter toggle button to true (it's the default config panel to be shown).
-			$('.sub-menu .config .filters').addClass('true');	
+			showConfig(true);
 		} else {
 			hideLeftMenu();
 		}
@@ -58,6 +75,7 @@ var fieldIdWidePage = (function() {
 		
 	return { 
 		init : init,
+		showConfig : showConfig,
 		showLeftMenu : showLeftMenu,
 		hideLeftMenu: hideLeftMenu	
 	};

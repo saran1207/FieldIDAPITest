@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.wicket.components;
 
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.utils.EnumDropDownChoiceRenderer;
-import com.n4systems.model.utils.DateRange;
-import com.n4systems.util.chart.RangeType;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -13,9 +13,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.utils.EnumDropDownChoiceRenderer;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 
 public class DateRangePicker extends Panel {
 
@@ -70,20 +71,6 @@ public class DateRangePicker extends Panel {
 	public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/newCss/component/dateRange.css");		
         super.renderHead(response);
-	}
-	
-	public void addFieldUpdatingBehavior() {
-		toDatePicker.getDateTextField().add(createFieldUpdatingBehavior());
-		fromDatePicker.getDateTextField().add(createFieldUpdatingBehavior());
-	}
-	
-	private AjaxFormComponentUpdatingBehavior createFieldUpdatingBehavior() {
-		return new AjaxFormComponentUpdatingBehavior("onchange"){
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {}
-        	
-        };
 	}
 
 }

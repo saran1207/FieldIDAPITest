@@ -21,7 +21,6 @@ public class SearchFilterPanel extends Panel {
 	public SearchFilterPanel(String id, final IModel<AssetSearchCriteriaModel> model) {
 		super(id,model);
 		setOutputMarkupId(true);
-		setMarkupId(id);
 		
 		CollapsiblePanel p1 = new CollapsiblePanel("identifiers", new StringResourceModel("label.identifiers",this,null)) {
 			@Override protected Panel createContainedPanel(String id) {
@@ -57,9 +56,7 @@ public class SearchFilterPanel extends Panel {
 
 		CollapsiblePanel p5 = new CollapsiblePanel("dateRangePicker", new StringResourceModel("label.daterange",this,null)) {
 			@Override 	protected Panel createContainedPanel(String id) {
-				DateRangePicker picker = new DateRangePicker(id,new PropertyModel<DateRange>(model, "dateRange"));
-				picker.addFieldUpdatingBehavior();
-				return picker;
+				return new DateRangePicker(id,new PropertyModel<DateRange>(model, "dateRange"));
 			}			
 		};
 	  	add(p5);		  	  			

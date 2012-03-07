@@ -362,6 +362,7 @@
 	bottom:0px;
 	right:0px;	
 	background:#f9f9f9;
+	width:auto;
 }
 
 .paged-table .paginationWrapper {

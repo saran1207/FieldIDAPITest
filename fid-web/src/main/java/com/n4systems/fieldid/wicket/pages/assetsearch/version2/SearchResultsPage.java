@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -110,7 +111,7 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
         	@Override protected void onSearchSubmit() {
         		setResponsePage(new SearchResultsPage(searchCriteriaModel,false));
         	}
-        	@Override protected void onNoDisplayColumnsSelected() {     	}
+        	@Override protected void onNoDisplayColumnsSelected() { }
         	@Override protected Page getSaveResponsePage(boolean overwrite) { 
         		return new SaveAssetSearchPage(savedSearchItem, SearchResultsPage.this, overwrite);
         	}
@@ -120,22 +121,16 @@ public class SearchResultsPage extends FieldIDFrontEndPage {
         };
         
 		setLeftMenuContent(searchConfigPanel);
-        setSubMenuContent(searchMenu = new SearchSubMenu(DynamicPanel.CONTENT_ID, criteriaModel, createSaveSearchLink("save",true)) {
-        	@Override protected void onClick(AjaxRequestTarget target, String id) {
-        		if ("filters".equals(id)) { 
-        			searchConfigPanel.showFilters();
-        		} else if ("columns".equals(id)) { 
-        			searchConfigPanel.showColumns();
-        		}
-        		target.add(searchConfigPanel);        		
-        	}        	
+        setSubMenuContent(searchMenu = new SearchSubMenu(DynamicPanel.CONTENT_ID, criteriaModel) {
+        	@Override protected Component createSaveLink(String id) {
+        		return createSaveSearchLink(id,true);        		
+        	};        	
         });
 	}
 
     private Link createSaveSearchLink(String linkId, final boolean overwrite) {
         Link link = new Link(linkId) {
-            @Override
-            public void onClick() {
+            @Override public void onClick() {
                 setResponsePage(new SaveAssetSearchPage(savedSearchItem, SearchResultsPage.this, overwrite));
             }
         };

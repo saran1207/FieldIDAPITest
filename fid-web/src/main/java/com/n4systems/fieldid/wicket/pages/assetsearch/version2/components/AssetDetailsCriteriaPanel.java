@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.form.AbstractSingleSelectChoice;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -21,7 +20,6 @@ import com.n4systems.model.AssetTypeGroup;
 
 public class AssetDetailsCriteriaPanel extends Panel {
 
-	private AbstractSingleSelectChoice<AssetStatus> assetStatus;
     private GroupedAssetTypePicker groupedAssetTypePicker;
     private GroupedAssetTypesForTenantModel availableAssetTypesModel;
 
@@ -29,12 +27,7 @@ public class AssetDetailsCriteriaPanel extends Panel {
         super(id, model);
 
         
-        add(assetStatus = new DropDownChoice<AssetStatus>("assetStatus", new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));
-        assetStatus.add(new AjaxFormComponentUpdatingBehavior("onblur") {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				
-			}});
+        add(new DropDownChoice<AssetStatus>("assetStatus", new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));       
         final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getDefaultModel(), "assetTypeGroup");
         final IModel<AssetType> assetTypeModel = new PropertyModel<AssetType>(getDefaultModel(), "assetType");
         availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
