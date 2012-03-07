@@ -54,7 +54,7 @@
       var container_div, dd_top, dd_width, sf_width;
       this.container_id = this.form_field.id.length ? this.form_field.id.replace(/(:|\.)/g, '_') : this.generate_field_id();
       this.container_id += "_chzn";
-      this.f_width = this.form_field_jq.width();
+      this.f_width = this.form_field_jq.outerWidth();
       this.default_text = this.form_field_jq.data('placeholder') ? this.form_field_jq.data('placeholder') : this.default_text_default;
       container_div = $("<div />", {
         id: this.container_id,
@@ -72,7 +72,9 @@
       
       this.dropdown = this.container.find('div.chzn-drop').first();
       dd_top = this.container.height();
-      dd_width = this.f_width - get_side_border_padding(this.dropdown);
+      // yikes. IE returns border of -1600px!   WEB-2730
+      //   when we update jquery (which will have a fixed width method) we can & should undo this hack.
+      dd_width = this.f_width - Math.max(0,get_side_border_padding(this.dropdown));
       this.dropdown.css({
         "width": dd_width + "px",
         "top": dd_top + "px"
@@ -87,7 +89,9 @@
       } else {
         this.search_container = this.container.find('div.chzn-search').first();
         this.selected_item = this.container.find('.chzn-single').first();
-        sf_width = dd_width - get_side_border_padding(this.search_container) - get_side_border_padding(this.search_field);
+        // as above - yikes. jquery return border of -1600px on IE9!   WEB-2730
+        //   when we update jquery (which will have a fixed width method) we can & should undo this hack.        
+        sf_width = dd_width - Math.max(8,get_side_border_padding(this.search_container)) - Math.max(27,get_side_border_padding(this.search_field));
         this.search_field.css({
           "width": sf_width + "px"
         });
