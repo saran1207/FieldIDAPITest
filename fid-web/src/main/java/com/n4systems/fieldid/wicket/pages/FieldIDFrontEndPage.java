@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
+import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.*;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.ComponentTag;
@@ -30,17 +30,7 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
-import com.n4systems.fieldid.wicket.pages.setup.AccountPolicyPage;
-import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
-import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
-import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
-import com.n4systems.fieldid.wicket.pages.setup.PasswordPolicyPage;
-import com.n4systems.fieldid.wicket.pages.setup.SecurityPage;
-import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
-import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPage;
-import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
-import com.n4systems.fieldid.wicket.pages.setup.WidgetsPage;
-import com.n4systems.fieldid.wicket.pages.setup.YourPlanPage;
+import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
@@ -89,7 +79,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(leftMenu = new DynamicPanel("leftMenu"));
         add(subMenu = new DynamicPanel("subMenu"));
-        addClickTaleScripts();
         addCssContainers();
 
         add(new BookmarkablePageLink<Void>("reportingLink", ReportingPage.class));
@@ -325,11 +314,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
     protected Tenant getTenant() {
         return getSessionUser().getTenant();
-    }
-
-    private void addClickTaleScripts() {
-        add(new Label("clickTaleStart", getConfigurationProvider().getString(ConfigEntry.CLICKTALE_START)).setEscapeModelStrings(false));
-        add(new Label("clickTaleEnd", getConfigurationProvider().getString(ConfigEntry.CLICKTALE_END)).setEscapeModelStrings(false));
     }
 
 	class GoogleAnalyticsContainer extends WebMarkupContainer {

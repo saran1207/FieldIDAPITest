@@ -54,14 +54,11 @@ public abstract class SerializationHandler<T> {
 
 	@SuppressWarnings("unchecked")
 	protected T getFieldValue(Object bean) throws MarshalingException {
-		T property = null;
-		
 		try {
 			return (T) propertyUtils.getProperty(bean, getField().getName());
 		} catch (ClassCastException e) {
-			String msg = String.format("Class cast exception getting field.  Property was of type " + property.getClass().getSimpleName(), 
-					getField().getName(), 
-					bean.getClass().getName());
+			String msg = String.format("Class cast exception getting field.  [%s]:[%s] " + bean.getClass().getSimpleName(), 
+					getField().getName() );
 			throw new MarshalingException(msg, e);			
 		} catch (Exception e) {
 			String msg = String.format("Failed getting field [%s] on class [%s]", 
