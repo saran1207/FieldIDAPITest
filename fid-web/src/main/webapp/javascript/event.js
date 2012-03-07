@@ -238,7 +238,7 @@ function positionDropdown(a, groupId){
 		var list = $(a.id + "_list");
 		var actionsContainer = list.parentNode;
 		var coordinates = actionsContainer.positionedOffset();		
-		list.setStyle({	'top': coordinates[1] - (a.offsetHeight - 15 - actionsContainer.offsetHeight)+ "px"});
+		list.setStyle({	'top': coordinates[1] - (a.offsetHeight - 10 - actionsContainer.offsetHeight)+ "px"});
 		list.setStyle({	'left': coordinates[0] - 60 + "px"});			
 	}
 }
