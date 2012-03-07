@@ -228,7 +228,7 @@ function checkProofTestType( proofTestType ) {
 function repositionCertLinks(list, link) {
 	var list =  $(list);
 	var link =  $(link);
-	translate(list, $(link), link.getHeight(), (link.getWidth()) - list.getWidth());
+	translatePosition(list, $(link), link.getHeight(), (link.getWidth()) - list.getWidth());
 }
 
 function positionDropdown(a, groupId){
@@ -237,7 +237,7 @@ function positionDropdown(a, groupId){
 	} else if($(a.id + "_list") != null){
 		var list = $(a.id + "_list");
 		var actionsContainer = list.parentNode;
-		var coordinates = findPos(actionsContainer);		
+		var coordinates = actionsContainer.positionedOffset();		
 		list.setStyle({	'top': coordinates[1] - (a.offsetHeight - 15 - actionsContainer.offsetHeight)+ "px"});
 		list.setStyle({	'left': coordinates[0] - 60 + "px"});			
 	}
