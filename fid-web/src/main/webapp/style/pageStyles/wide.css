@@ -374,6 +374,14 @@
 	width:auto;
 }
 
+.show+.centre .paginationWrapper {
+	left:345px;
+}
+
+.hide+.centre .paginationWrapper {
+	left:0px;
+}
+
 .paged-table .paginationWrapper {
 	display:block;
 }

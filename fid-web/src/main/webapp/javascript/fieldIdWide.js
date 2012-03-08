@@ -6,12 +6,9 @@
 
 var fieldIdWidePage = (function() { 
 
-	var leftMenuWidth = '345px'; 
-	var contentLeft = leftMenuWidth;	
-	
-	var init = function(showLeftMenu) {
+	var init = function(showLeft) {
 		addMenuHandlers();
-		initLeftMenu(showLeftMenu);
+		initLeftMenu(showLeft);
 	};
 	
 	// show either filters or columns panel.
@@ -29,31 +26,20 @@ var fieldIdWidePage = (function() {
 		}
 		showLeftMenu();
 	};
-		
-	
-	var showLeftMenu = function() {	
-		var leftMenu = $('#left-menu');
-		$('.paginationWrapper').css('left',leftMenuWidth);
-		if (!leftMenu.is(':visible')) {
-			$('#page .centre').css('marginLeft',contentLeft);   // move centre stuff over to make room...
-			leftMenu.show();									//  ...now show the left component
-			
-			// i'm finding animation is too slow.  could just use css for this??
-//			$('#page .centre').animate({marginLeft:contentLeft},220, 'linear', function() { leftMenu.show();} );
-		}
+
+	var showLeftMenu = function() { 
+		$('#left-menu').addClass('show').removeClass('hide');
+		$('#page .centre').css('marginLeft','345px');		
 	};
 	
 	var hideLeftMenu = function() {
 		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.		
-		$('.paginationWrapper').css('left','0px');		
 		$('#page .centre').css('marginLeft','0%');
-		$('#left-menu').hide(); 		
-		// i'm finding animation is too slow.  could just use css for this??
-//		$('#page .centre').animate({marginLeft:'0%'},220);  
+		$('#left-menu').removeClass('show').addClass('hide');		
 	};
 			
-	var initLeftMenu = function(showLeftMenu) {
-		if (showLeftMenu) {
+	var initLeftMenu = function(showLeft) {
+		if (showLeft) {
 			// set filter toggle button to true (it's the default config panel to be shown).
 			showConfig(true);
 		} else {
