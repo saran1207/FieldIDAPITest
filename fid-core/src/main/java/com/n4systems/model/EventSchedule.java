@@ -246,6 +246,10 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 		return completedDate;
 	}
 
+    public void setCompletedDate(Date date) {
+        this.completedDate = date;
+    }
+
 	@AllowSafetyNetworkAccess
 	public ScheduleStatus getStatus() {
 		return status;

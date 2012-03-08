@@ -143,6 +143,13 @@ public class ManagerBackedEventSaver implements EventSaver {
 		writeSignatureImagesToDisk(event);
 		
 		event = persistenceManager.update(event, userId);
+
+        event.getSchedule().setCompletedDate(event.getDate());
+        event.getSchedule().setOwner(event.getOwner());
+        event.getSchedule().setAdvancedLocation(event.getAdvancedLocation());
+
+        persistenceManager.update(event.getSchedule(), userId);
+
 		updateAssetLastEventDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
 		saveProofTestFiles(event, fileData);
