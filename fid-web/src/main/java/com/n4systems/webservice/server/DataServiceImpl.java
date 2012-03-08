@@ -854,11 +854,9 @@ public class DataServiceImpl implements DataService {
 				PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
 				InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
 				LegacyAsset productManager = WsServiceLocator.getLegacyAssetManager(tenantId);
-				EventScheduleManager scheduleManager = WsServiceLocator.getEventScheduleManager(tenantId);
 	
 				List<Event> events = new ArrayList<Event>();
 				Map<Event, Date> nextInspectionDates = new HashMap<Event, Date>();
-				Map<Event, EventSchedule> inspectionSchedules = new HashMap<Event, EventSchedule>();
 				Asset asset = null;
 
 				EventScheduleByGuidOrIdLoader scheduleLoader = new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
@@ -881,19 +879,19 @@ public class DataServiceImpl implements DataService {
 					}
 	
 					Event event = converter.convert(inspectionServiceDTO);
+
+                    event.setSchedule(loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO));
+
 					events.add(event);
 					nextInspectionDates.put(event, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
-					inspectionSchedules.put(event, loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO));
 				}
-	
-				List<Event> savedEvents = null;
 	
 				try {
 					EventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
 	
 					EventsInAGroupCreator eventsInAGroupCreator = eventPersistenceFactory.createEventsInAGroupCreator();
 	
-					savedEvents = eventsInAGroupCreator.create(requestInformation.getMobileGuid(), events, nextInspectionDates);
+					eventsInAGroupCreator.create(requestInformation.getMobileGuid(), events, nextInspectionDates);
 					logger.info("save inspections on asset " + asset.getIdentifier());
 					populatorLogger.logMessage(tenantId, "Created inspection for asset with identifier " + asset.getIdentifier(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
 				} catch (TransactionAlreadyProcessedException e) {
@@ -901,34 +899,6 @@ public class DataServiceImpl implements DataService {
 				} catch (Exception e) {
 					logger.error("failed to save inspections", e);
 					throw new InspectionException("Failed to save inspections");
-				}
-	
-				if (savedEvents != null) {
-					for (Event savedEvent : savedEvents) {
-						for (Entry<Event, EventSchedule> scheduleEntry : inspectionSchedules.entrySet()) {
-							if (savedEvent.equals(scheduleEntry.getKey())) {
-								EventSchedule schedule = scheduleEntry.getValue();
-								try {
-									if (schedule != null) {
-										schedule.completed(scheduleEntry.getKey());
-										scheduleManager.update(schedule);
-									}
-								} catch (InvalidScheduleStateException e) {
-									logger.warn("the state of the schedule is not valid to be completed.");
-									populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with identifier "
-											+ savedEvent.getAsset().getIdentifier(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
-								} catch (Exception e) {
-									logger.error("failed to attach schedule to inspection", e);
-									populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with identifier "
-											+ savedEvent.getAsset().getIdentifier(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
-									// We allow the inspection to still go through
-									// even if this happens
-								}
-	
-								break;
-							}
-						}
-					}
 				}
 	
 				return response;

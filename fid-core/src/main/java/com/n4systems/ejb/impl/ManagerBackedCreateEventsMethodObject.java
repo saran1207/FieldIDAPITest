@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
+import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubAsset;
@@ -19,14 +21,17 @@ import com.n4systems.model.EventGroup;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.TransactionSupervisor;
+import org.apache.log4j.Logger;
 
 public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethodObject {
+
+	private static Logger logger = Logger.getLogger(ManagerBackedCreateEventsMethodObject.class);
+
 	private final PersistenceManager persistenceManager;
 	private final EventSaver eventSaver;
 
 
 	public ManagerBackedCreateEventsMethodObject(PersistenceManager persistenceManager, EventSaver eventSaver) {
-		super();
 		this.persistenceManager = persistenceManager;
 		this.eventSaver = eventSaver;
 	}
@@ -62,7 +67,7 @@ public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethod
 			// set the managed asset back onto the event.  See note above.
 			event.setAsset(managedAsset);
 			
-			// Pull the attachments off the event and send them in seperately so that they get processed properly
+			// Pull the attachments off the event and send them in separately so that they get processed properly
 			List<FileAttachment> fileAttachments = new ArrayList<FileAttachment>();
 			fileAttachments.addAll(event.getAttachments());
 			event.setAttachments(new ArrayList<FileAttachment>());
@@ -73,19 +78,27 @@ public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethod
 				subEventAttachments.put(subEvent.getAsset(), subEvent.getAttachments());
 				subEvent.setAttachments(new ArrayList<FileAttachment>());
 			}
-			
-			savedEvent = eventSaver.createEvent(new CreateEventParameterBuilder(event, event.getModifiedBy().getId())
-					.withUploadedImages(fileAttachments).build());
-			
-			// handle the subevent attachments
-			SubEvent subEvent = null;
-			for (int i =0; i < event.getSubEvents().size(); i++) {
-				subEvent = event.getSubEvents().get(i);
-				savedEvent = eventSaver.attachFilesToSubEvent(savedEvent, subEvent, new ArrayList<FileAttachment>(subEventAttachments.get(subEvent.getAsset())));
-			}			
+
+            long scheduleId = event.getSchedule() == null ? 0 : event.getSchedule().getId();
+
+            final CreateEventParameter createEventParameter = new CreateEventParameterBuilder(event, event.getModifiedBy().getId())
+                    .withUploadedImages(fileAttachments).withScheduleId(scheduleId).build();
+
+            try {
+                eventSaver.createEvent(createEventParameter);
+            } catch (InvalidScheduleStateException e) {
+                logger.warn("the state of the schedule is not valid to be completed.");
+            }
+            
+            savedEvent = createEventParameter.event;
+
+			// handle the sub event attachments
+            for (SubEvent subEvent : event.getSubEvents()) {
+                savedEvent = eventSaver.attachFilesToSubEvent(savedEvent, subEvent, new ArrayList<FileAttachment>(subEventAttachments.get(subEvent.getAsset())));
+            }
 
 			// If the event didn't have an event group before saving,
-			// and we havn't created an event group yet
+			// and we haven't created an event group yet
 			// hang on to the now created event group to apply to other
 			// events
 			if (createdEventGroup == null && event.getGroup() != null) {

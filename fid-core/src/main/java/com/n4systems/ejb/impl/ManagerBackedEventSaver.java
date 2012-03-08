@@ -93,11 +93,6 @@ public class ManagerBackedEventSaver implements EventSaver {
 
         persistenceManager.save(parameterObject.event, parameterObject.userId);
 
-        if (eventSchedule != null) {
-            eventSchedule.completed(parameterObject.event);
-            persistenceManager.update(eventSchedule);
-        }
-
 		updateAsset(parameterObject.event, parameterObject.userId);
 		
 		// writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an 
@@ -107,6 +102,12 @@ public class ManagerBackedEventSaver implements EventSaver {
 		saveProofTestFiles(parameterObject.event, parameterObject.fileData);
 	
 		processUploadedFiles(parameterObject.event, parameterObject.uploadedFiles);
+
+        // Do this last, as it can throw an exception if the schedule is in an invalid state.
+        if (eventSchedule != null) {
+            eventSchedule.completed(parameterObject.event);
+            persistenceManager.update(eventSchedule);
+        }
 	
 		return parameterObject.event;
 	}
