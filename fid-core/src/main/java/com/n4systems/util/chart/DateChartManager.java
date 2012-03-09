@@ -121,8 +121,8 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 		options.xaxis.monthNames = FlotOptions.MONTH_NAMES;
 		switch (granularity) { 
 		case DAY:
-			options.xaxis.minTickSize = new String[]{"1","day"};
-			options.xaxis.timeformat = "%b %y";
+			options.xaxis.minTickSize = new String[]{"3","day"};
+			options.xaxis.timeformat = "%b %d";
 			break;
 		case YEAR:
 			options.xaxis.timeformat = "%y";
