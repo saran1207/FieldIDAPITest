@@ -31,7 +31,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
-import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
@@ -282,6 +281,8 @@ public class EntityManagerBackedUserManager implements UserManager {
 			case LITE:
 				queryString += "AND ub.userType= " + "'" + UserType.LITE.toString() + "'";
 				break;
+			default:
+				// note : ADMIN was not accounted for here... putting in "default" just to suppress warning.
 			}
 		}
 

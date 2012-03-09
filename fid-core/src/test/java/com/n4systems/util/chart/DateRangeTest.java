@@ -64,6 +64,10 @@ public class DateRangeTest {
 		assertEquals(2010, new DateRange(RangeType.LAST_WEEK).getFrom().getYear());
 		assertEquals(1, new DateRange(RangeType.LAST_WEEK).getFrom().getDayOfWeek());
 
+		//day
+		assertEquals(jan1_2011.minusDays(1), new DateRange(RangeType.YESTERDAY).getFrom());
+		assertEquals(jan1_2011, new DateRange(RangeType.TODAY).getFrom());
+
 		// CAVEAT : "this week" for jan 1,2011 actually starts in dec and ends in jan.  
 		assertEquals(DateTimeConstants.DECEMBER, new DateRange(RangeType.THIS_WEEK).getFrom().getMonthOfYear());
 		assertEquals(2010, new DateRange(RangeType.THIS_WEEK).getFrom().getYear());
@@ -119,6 +123,10 @@ public class DateRangeTest {
 		assertEquals(DateTimeConstants.JANUARY, new DateRange(RangeType.THIS_WEEK).getTo().getMonthOfYear());
 		assertEquals(2011, new DateRange(RangeType.THIS_WEEK).getTo().getYear());
 		assertEquals(1, new DateRange(RangeType.THIS_WEEK).getTo().getDayOfWeek());
+
+		// daily
+		assertEquals(jan1_2011.plusDays(1), new DateRange(RangeType.TODAY).getTo());
+		assertEquals(jan1_2011, new DateRange(RangeType.YESTERDAY).getTo());
 		
 		// all time...forever
 		assertNull(new DateRange(RangeType.FOREVER).getTo());
@@ -162,6 +170,9 @@ public class DateRangeTest {
 		
 		assertEquals("Dec 26", new DateRange(RangeType.LAST_WEEK).getToDateDisplayString() );
 		assertEquals("Jan 2", new DateRange(RangeType.THIS_WEEK).getToDateDisplayString() );
+		
+		assertEquals("Jan 1", new DateRange(RangeType.TODAY).getFromDateDisplayString());
+		assertEquals("Dec 31", new DateRange(RangeType.YESTERDAY).getFromDateDisplayString());
 				
 	}
 	

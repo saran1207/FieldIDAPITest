@@ -4,12 +4,13 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import com.n4systems.model.utils.DateRange;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.junit.Test;
+
+import com.n4systems.model.utils.DateRange;
 
 
 public class DateChartManagerTest {
@@ -112,7 +113,6 @@ public class DateChartManagerTest {
 		assertSeries(31, 5, 0, 2);   
 		assertSeries(31, 3, 2, 1);	
 	}
-
 	
 	@Test 
 	public void test_normalize_thisweek() {
@@ -128,19 +128,34 @@ public class DateChartManagerTest {
 		assertSeries(7, 3, 0, 2);   
 		assertSeries(7, 3, 2, 1);	
 	}
-
+	
+	@Test 
+	public void test_normalize_daily() {
+		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		
+        DateRange dateRange = new DateRange(RangeType.TODAY);
+	
+		dateChartManager = new DateChartManager(ChartGranularity.DAY, dateRange);
+		assertSeries(1, 0);  
+		assertSeries(1, 1);  	
+	}	
 	
 	
-	private void assertSeries(int size, int numberOfPoints) {
-		assertSeries(size, numberOfPoints, 0, 1);
+	private void assertSeries(int expectedSize, int numberOfPoints) {
+		assertSeries(expectedSize, numberOfPoints, 0, 1);
 	}
 	
-	private void assertSeries(int size, int numberOfPoints, int offset, int periodMultiplier) {
+	private void assertSeries(int expectedSize, int numberOfPoints, int offset, int periodMultiplier) {
 		DateRange dateRange = dateChartManager.getDateRange();
-		assertSeries(dateRange.getEarliest(), dateRange.getLatest(), size, numberOfPoints, offset, periodMultiplier);
+		assertSeries(dateRange.getEarliest(), dateRange.getLatest(), expectedSize, numberOfPoints, offset, periodMultiplier);
 	}
 	
-	private void assertSeries(LocalDate from, LocalDate to, int size, int numberOfPoints, int offset, int periodMultiplier) {
+	/**
+	 * numberOfPoints is the count of the input series (before normalization).
+	 * offset & multiplier together define how often and first position of added points.
+	 * basically, these tests create sparse collections of data and assert that the manager fills them.  
+	 */
+	private void assertSeries(LocalDate from, LocalDate to, int expectedSize, int numberOfPoints, int offset, int periodMultiplier) {
 		DateRange dateRange = dateChartManager.getDateRange();
 		ChartGranularity granularity = dateChartManager.getGranularity();
 		
@@ -149,7 +164,7 @@ public class DateChartManagerTest {
 		// .: end size of series will be >= original.
 		series = dateChartManager.normalize(series);
 
-		assertEquals(size, series.size());
+		assertEquals(expectedSize, series.size());
 
 		Period offsetPeriod = multiplyPeriod(offset, granularity.getPeriod());
 		Period periodBetweenPoints = multiplyPeriod(periodMultiplier, granularity.getPeriod());  // the points we defined. (skips the padded ones).

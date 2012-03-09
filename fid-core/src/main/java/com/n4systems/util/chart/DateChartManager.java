@@ -5,7 +5,6 @@ import org.joda.time.LocalDate;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.time.DateUtil;
 
-@SuppressWarnings("serial")
 public class DateChartManager extends SimpleChartManager<LocalDate> {
 	
 	private transient ChartGranularity granularity;
@@ -70,7 +69,32 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 	public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index) {	
 		super.updateOptions(chartSeries, options, index);
 		updateTimeFormat(chartSeries, options);
+		if (dateRange.getRangeType().isDaily()) { 
+			updateForDaily(chartSeries, options);
+		}
 		options.tooltipFormat = getTooltipFormat(granularity);		
+	}
+
+	private void updateForDaily(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options) {
+		// note that for daily graphs we do the ole switcherooo.   turn a line graph into a single bar graph. 
+		// this means resetting
+		options.series = null;
+		options.bars.barWidth = 0.5;
+		options.bars.horizontal = false;
+		options.bars.clickable = true;
+		options.bars.show = true;
+		options.bars.lineWidth = 0;
+		options.yaxis.tickLength = 0;
+		options.grid.show = true;
+		options.grid.hoverable = true;
+		options.points.show = false;		
+		
+		options.lines.show = false;
+
+		options.xaxis.mode = "time";
+		options.xaxis.timeformat = "%y/%m";
+		
+		options.pan.interactive = false;						
 	}
 
 	protected String getTooltipFormat(ChartGranularity granularity) {
@@ -96,6 +120,10 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 		options.xaxis.minTickSize = null;
 		options.xaxis.monthNames = FlotOptions.MONTH_NAMES;
 		switch (granularity) { 
+		case DAY:
+			options.xaxis.minTickSize = new String[]{"1","day"};
+			options.xaxis.timeformat = "%b %y";
+			break;
 		case YEAR:
 			options.xaxis.timeformat = "%y";
 			break;

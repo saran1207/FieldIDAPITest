@@ -37,19 +37,19 @@ public class WidgetFactory implements Serializable {
 			return constructor.newInstance(id, widgetDefinition);
 		} catch (InvocationTargetException e) {
 			logger.error(e.getTargetException());
-			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " can not be created/instantiated");				
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " can not be created/instantiated. " + e.getTargetException().getMessage());				
 		} catch (IllegalArgumentException e) {
 			logger.error(e);
-			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " failed because of illegal arguments");
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " failed because of illegal arguments " + e.getMessage());
 		} catch (InstantiationException e) {
 			logger.error(e);
-			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " failed due to instantiation exception");
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " failed due to instantiation exception " + e.getMessage());
 		} catch (IllegalAccessException e) {
 			logger.error(e);
-			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " can not be created/instantiated due to illegal access");
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " can not be created/instantiated due to illegal access " + e.getMessage());
 		} catch (Exception e) {
 			logger.error(e);
-			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " failed when attempting to create instance.");
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " failed when attempting to create instance. " + e.getMessage());
 		} 
 	}
 

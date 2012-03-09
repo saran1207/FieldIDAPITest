@@ -7,7 +7,6 @@ import org.joda.time.LocalDate;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.DateRangeFormatter;
 
-@SuppressWarnings("serial")
 public class FloatingDateRangeFormatter implements DateRangeFormatter {
 
 	private String displayName;

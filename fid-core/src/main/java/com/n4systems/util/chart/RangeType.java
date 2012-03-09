@@ -14,6 +14,8 @@ public enum RangeType implements Listable<String>, Serializable {
 	THIRTY_DAYS("30 days", new DateRange.DayRangeHandler(30), new DaysRangeFormatter("30 days")),
 	SIXTY_DAYS("60 days", new DateRange.DayRangeHandler(60), new DaysRangeFormatter("60 days")),
 	NINETY_DAYS("90 days", new DateRange.DayRangeHandler(90), new DaysRangeFormatter("90 days")),
+	TODAY("Today", new DateRange.DayHandler(0),  new FloatingDateRangeFormatter("Today", "MMM d")),
+	YESTERDAY("Yesterday", new DateRange.DayHandler(-1),  new FloatingDateRangeFormatter("Yesterday", "MMM d")),
 	LAST_WEEK("Last Week", new DateRange.WeekHandler(-1),  new FloatingDateRangeFormatter("Last Week", "MMM d")),
 	LAST_MONTH("Last Month", new DateRange.MonthHandler(-1), new FloatingDateRangeFormatter("Last Month", "MMM yyyy")),
 	LAST_QUARTER("Last Quarter", new DateRange.QuarterHandler(-1), new QuarterDateRangeFormatter("Last Quarter")),
@@ -26,9 +28,10 @@ public enum RangeType implements Listable<String>, Serializable {
     CUSTOM("Custom Date Range", new DateRange.IntervalHandler(), new StaticDateRanageFormatter("Custom Date Range"));
 
 	
-	private static EnumSet<RangeType> wellDefinedRangeTypes = EnumSet.complementOf(EnumSet.of(CUSTOM,FOREVER)); // everything except the ambiguous ones like CUSTOM...
-	private static EnumSet<RangeType> floatingRangeTypes = EnumSet.of(LAST_WEEK, LAST_MONTH, LAST_QUARTER, LAST_YEAR, THIS_WEEK, THIS_MONTH, THIS_QUARTER, THIS_YEAR, FOREVER);
+	private static EnumSet<RangeType> wellDefinedRangeTypes = EnumSet.complementOf(EnumSet.of(CUSTOM,FOREVER)); // everything except the ambiguous ones like CUSTOM.
+	private static EnumSet<RangeType> floatingRangeTypes = EnumSet.of(YESTERDAY, LAST_WEEK, LAST_MONTH, LAST_QUARTER, LAST_YEAR, TODAY, THIS_WEEK, THIS_MONTH, THIS_QUARTER, THIS_YEAR, FOREVER);
 	private static EnumSet<RangeType> daysFromNowRangeTypes = EnumSet.of(SEVEN_DAYS, THIRTY_DAYS, SIXTY_DAYS, NINETY_DAYS);
+	private static EnumSet<RangeType> dailyRangeTypes = EnumSet.of(TODAY, YESTERDAY);
 
     private DateRangeHandler handler;
     private DateRangeFormatter formatter;
@@ -50,6 +53,10 @@ public enum RangeType implements Listable<String>, Serializable {
 		return set.toArray(new RangeType[]{});
 	}
 
+	public boolean isDaily() {
+		return dailyRangeTypes.contains(this);
+	}	
+	
 	public boolean isDaysFromNowRangeType()  {
 		return daysFromNowRangeTypes.contains(this);
 	}

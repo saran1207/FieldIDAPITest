@@ -196,7 +196,19 @@ public class DateRange implements Serializable, Cloneable {
 		}
 	}
 	
-	public static  class WeekHandler extends AbstractDateRangeHandler {
+	public static class DayHandler extends AbstractDateRangeHandler {
+		private int offset;
+		public DayHandler(int i) {
+			super(Period.days(1));
+			this.offset = i;
+		}
+		@Override
+		public LocalDate getNowFrom() {
+			return LocalDate.now().plusDays(offset);			
+		}
+	}
+
+	public static class WeekHandler extends AbstractDateRangeHandler {
 		private int offset;
 		public WeekHandler(int i) {
 			super(Period.weeks(1));
@@ -280,5 +292,6 @@ public class DateRange implements Serializable, Cloneable {
     public DateRange clone() throws CloneNotSupportedException {
         return (DateRange) super.clone();
     }
+
 
 }
