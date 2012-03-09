@@ -68,7 +68,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	public List<ChartSeries<String>> getAssetsStatus(DateRange dateRange, BaseOrg org) {
 		Preconditions.checkArgument(dateRange !=null);
 		
-		List<AssetsStatusReportRecord> results = assetService.getAssetsStatus(dateRange.getFromDate(), dateRange.getToDate(), org);
+		List<AssetsStatusReportRecord> results = assetService.getAssetsStatus(dateRange.calculateFromDate(), dateRange.calculateToDate(), org);
         ChartSeries<String> chartSeries = new ChartSeries<String>(results).withChartManager(new BarChartManager(true));
         return new ChartData<String>(chartSeries);
 	}		
@@ -92,6 +92,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	
 	public EventKpiRecord getEventKpi(BaseOrg owner, DateRange dateRange) {
 		Preconditions.checkArgument(dateRange !=null);
+		// shouldn't this be "calculateFromDate()"?
 		return eventService.getEventKpi(dateRange.getFromDate(), dateRange.getToDate(), owner);
 	}
 

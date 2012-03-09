@@ -81,6 +81,11 @@ public class AssetService extends FieldIdPersistenceService {
 		return null;
 	}
 
+	/**
+	 * Caveat : it is important to know that assets can have a null status.  in that case they will *not* be returned from this service call.
+	 * i.e. the groupBy assetStatus.name won't include them.  this is working as designed - just an fyi because it might be confusing if you 
+	 * have 10 assets identified, but the asset status widget shows < 10 for the same date range.   
+	 */
 	public List<AssetsStatusReportRecord> getAssetsStatus(Date fromDate, Date toDate, BaseOrg org) {
 		QueryBuilder<AssetsStatusReportRecord> builder = new QueryBuilder<AssetsStatusReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
 		

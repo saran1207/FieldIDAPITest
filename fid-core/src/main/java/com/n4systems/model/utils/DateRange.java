@@ -272,6 +272,11 @@ public class DateRange implements Serializable, Cloneable {
         this.rangeType = rangeType;
     }
 
+    /** warning : this method is here for hibernate/persistence only. end users of this object should use calculateFromDate()
+    	because it will deal with nulls correctly.  
+   		@see #getToDate()
+     */
+    @Deprecated  
     public Date getFromDate() {
         return fromDate;
     }
@@ -280,6 +285,11 @@ public class DateRange implements Serializable, Cloneable {
         this.fromDate = fromDate;
     }
 
+    /** warning : this method is here for hibernate/persistence only. end users of this object should use calculateFromDate()
+    	because it will deal with nulls correctly.  
+   		@see #getFromDate()
+     */
+    @Deprecated  
     public Date getToDate() {
         return toDate;
     }
