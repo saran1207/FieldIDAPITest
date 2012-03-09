@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.wicket.components.org;
 
-import com.n4systems.fieldid.wicket.components.CloseImagePanel;
-import com.n4systems.fieldid.wicket.components.SimplePanel;
-import com.n4systems.model.orgs.BaseOrg;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -12,15 +12,15 @@ import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.n4systems.fieldid.wicket.components.CloseImagePanel;
+import com.n4systems.fieldid.wicket.components.SimplePanel;
+import com.n4systems.model.orgs.BaseOrg;
 
 public class OrgPicker extends Panel {
 
@@ -142,7 +142,7 @@ public class OrgPicker extends Panel {
                 orgPickerContainer.setVisible(true);
                 target.add(OrgPicker.this);
                 if (translateContainerSelector != null) {
-                    target.appendJavaScript("translateWithin($('#"+orgPickerContainer.getMarkupId()+"'), $('#"+chooseLink.getMarkupId()+"'), $('"+translateContainerSelector+"'));");
+                    target.appendJavaScript("translateWithin($('#"+orgPickerContainer.getMarkupId()+"'), $('#"+chooseLink.getMarkupId()+"'), $('"+translateContainerSelector+"'), 0, 0);");
                 }
             }
         });
