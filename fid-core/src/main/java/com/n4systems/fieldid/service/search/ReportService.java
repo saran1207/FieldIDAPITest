@@ -5,16 +5,18 @@ import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.EventStatus;
 import com.n4systems.model.search.IncludeDueDateRange;
+import com.n4systems.model.user.User;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.terms.CompletedOrDueDateRange;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
-import com.n4systems.util.time.DateUtil;
 import org.apache.commons.lang.time.DateUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class ReportService extends SearchService<EventReportCriteriaModel, EventSchedule> {
 
@@ -24,6 +26,9 @@ public class ReportService extends SearchService<EventReportCriteriaModel, Event
 
     @Override
     protected void addSearchTerms(EventReportCriteriaModel criteriaModel, List<SearchTermDefiner> searchTerms) {
+        User user = getCurrentUser();
+        TimeZone timeZone = user.getTimeZone();
+
         addWildcardOrStringTerm(searchTerms, "asset.rfidNumber", criteriaModel.getRfidNumber());
         addWildcardOrStringTerm(searchTerms, "asset.identifier", criteriaModel.getIdentifier());
 		if(isIntegrationEnabled()) {
@@ -56,14 +61,14 @@ public class ReportService extends SearchService<EventReportCriteriaModel, Event
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
             addNotNullTerm(searchTerms,  "nextDate");
         } else if (IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange()) && criteriaModel.getDueDateRange() != null) {
-            addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), nextDay(criteriaModel.getDueDateRange().calculateToDate()));
+            addDateRangeTerm(searchTerms, "nextDate", DateHelper.convertToUTC(criteriaModel.getDueDateRange().calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(criteriaModel.getDueDateRange().calculateToDate()), timeZone));
         }
 
         if (criteriaModel.getDateRange() != null) {
             if (criteriaModel.getEventStatus() == EventStatus.COMPLETE) {
-                addDateRangeTerm(searchTerms, "completedDate", criteriaModel.getDateRange().calculateFromDate(), nextDay(criteriaModel.getDateRange().calculateToDate()));
+                addDateRangeTerm(searchTerms, "completedDate", DateHelper.convertToUTC(criteriaModel.getDateRange().calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(criteriaModel.getDateRange().calculateToDate()), timeZone));
             } else if (criteriaModel.getEventStatus() == EventStatus.ALL) {
-                searchTerms.add(new CompletedOrDueDateRange(criteriaModel.getDateRange()));
+                searchTerms.add(new CompletedOrDueDateRange(timeZone, criteriaModel.getDateRange()));
             }
         }
 
