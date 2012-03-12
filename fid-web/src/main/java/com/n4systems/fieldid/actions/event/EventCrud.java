@@ -95,7 +95,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	protected String peakLoadDuration;
 	protected EventSchedule eventSchedule;
 	protected Long eventScheduleId;
-	private boolean eventScheduleOnEvent = false;
 	private boolean scheduleSuggested = false;
 	private String newEventBookTitle;
 	private boolean allowNetworkResults = false;
@@ -164,7 +163,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	
 			if (event != null) {
 				eventGroup = event.getGroup();
-				eventScheduleOnEvent = (event.getSchedule() != null);
 			}
 		} catch(RuntimeException e) {
 			logger.error("Failed to load event", e);
@@ -496,15 +494,24 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 	
 	private void completeSchedule() {
-		if (eventScheduleOnEvent == false ) {
+		if (!event.getSchedule().wasScheduled()) {
 			try {
 				if (eventScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE)) {
+                    EventSchedule oldSchedule = event.getSchedule();
+
 					eventSchedule = new EventSchedule(event);
+                    persistenceManager.save(eventSchedule);
+
+                    eventSchedule.getAsset().touch();
+                    persistenceManager.update(eventSchedule.getAsset());
+                    persistenceManager.update(event);
+                    persistenceManager.delete(oldSchedule);
 				} else if (eventSchedule != null) {
 					eventSchedule.completed(event);
+                    eventScheduleManager.update(eventSchedule);
+                    persistenceManager.update(event);
 				}
 				if (eventSchedule != null) {
-					eventScheduleManager.update(eventSchedule);
 					addFlashMessageText("message.schedulecompleted");
 				}
 			} catch (Exception e) {
@@ -955,10 +962,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		return eventJobs;
 	}
 	
-	public boolean isEventScheduleOnEvent() {
-		return eventScheduleOnEvent;
-	}
-
 	public boolean isScheduleSuggested() {
 		return scheduleSuggested;
 	}

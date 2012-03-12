@@ -360,4 +360,8 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
         return getNextDate();
     }
 
+    public boolean wasScheduled() {
+        return nextDate != null;
+    }
+
 }

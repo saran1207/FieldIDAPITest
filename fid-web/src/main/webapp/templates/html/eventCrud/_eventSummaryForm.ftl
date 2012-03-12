@@ -78,7 +78,7 @@
 	</div>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.date_performed"/></label>
-		<#if form_action="ADD">		
+		<#if form_action="ADD">
 			<@s.textfield theme="fieldid" id="datePerformed" onchange="updateAutoSuggest();" name="modifiableEvent.datePerformed" cssClass="datetimepicker"/>
 		<#else>
 			<@s.textfield theme="fieldid" id="datePerformed" name="modifiableEvent.datePerformed" cssClass="datetimepicker"/>
@@ -88,18 +88,14 @@
 		</script>	
 	</div>
 
-	<#if eventScheduleOnEvent>
+	<#if event.schedule?exists && event.schedule.wasScheduled()>
 		<div class="infoSet"> 
 			<label class="label"><@s.text name="label.scheduledon"/></label>
 		
-			<#if event.schedule?exists>
-				<span class="fieldHolder">
-					${action.formatDate(event.schedule.nextDate, false )}
-				</span>
-			<#else>
-				<@s.text name="label.notscheduled"/>
-			</#if>
-			
+            <span class="fieldHolder">
+                ${action.formatDate(event.schedule.nextDate, false )}
+            </span>
+
 		</div>
 	<#else>
 		<div class="infoSet">		

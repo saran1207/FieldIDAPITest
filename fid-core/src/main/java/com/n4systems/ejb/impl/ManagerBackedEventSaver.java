@@ -88,7 +88,9 @@ public class ManagerBackedEventSaver implements EventSaver {
         } else if (parameterObject.scheduleId > 0) {
             // There was an existing schedule selected.
             eventSchedule = persistenceManager.find(EventSchedule.class, parameterObject.scheduleId, parameterObject.event.getTenant());
-            if (eventSchedule != null && eventSchedule.getStatus() != EventSchedule.ScheduleStatus.COMPLETED) {
+            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED) {
+                parameterObject.event.setSchedule(null);
+            } else {
                 parameterObject.event.setSchedule(eventSchedule);
             }
         }
