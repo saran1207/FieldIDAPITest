@@ -93,7 +93,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	public EventKpiRecord getEventKpi(BaseOrg owner, DateRange dateRange) {
 		Preconditions.checkArgument(dateRange !=null);
 		// shouldn't this be "calculateFromDate()"?
-		return eventService.getEventKpi(dateRange.getFromDate(), dateRange.getToDate(), owner);
+		return eventService.getEventKpi(dateRange.calculateFromDate(), dateRange.calculateToDate(), owner);
 	}
 
 	public List<ChartSeries<LocalDate>> getEventCompletenessEvents(ChartGranularity granularity, DateRange dateRange, BaseOrg org) {
