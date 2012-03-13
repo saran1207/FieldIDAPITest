@@ -11,6 +11,11 @@
 				parent.closeLightBox();
 			}
 		</@n4.includeScript>
+		<style type="text/css">
+	    	html, body {
+	    		background-color: #FFF;
+	    	}
+	    </style>
 	</head>
 	<body>
 		<#include "/templates/html/layout/_notificationArea.ftl"/>
