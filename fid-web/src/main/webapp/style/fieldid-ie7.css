@@ -1,9 +1,3 @@
-
-#pageNavigation ul li a {
-	
-	width: expression(this . scrollWidth <   40 ?   "40px" :   "auto");
-}
-
 * {
 	zoom:1;
 }
