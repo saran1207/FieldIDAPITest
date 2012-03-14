@@ -331,12 +331,19 @@ function showQuickView(elementId, event) {
 	var button = event.target;
 
 	quickViewBox.show();
-
-	var position = $(button).position();
-
+	
+	var position;
+	var topPadding = 0;
+	if($(button).hasClass('printAllPDFs')) {
+		position = $(button).offsetParent().position();
+		topPadding = 50;
+	} else {
+		position = $(button).position();
+	}
+	
 	quickViewBox.css( {
         position: "absolute",
-		top : position['top'] + "px",
+		top : (position['top'] + topPadding) + "px",
 		left : (position['left'] + 25) + "px"
 	});
 
