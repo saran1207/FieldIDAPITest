@@ -71,7 +71,9 @@ public class ApiEventResource extends FieldIdPersistenceService {
 
 		CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, securityContext.getUserSecurityFilter().getUserId());
 		createEventParameterBuilder.withUploadedImages(apiAttachmentResource.convert(apiEvent.getAttachments(), event.getTenant(), event.getCreatedBy()));
-        createEventParameterBuilder.withScheduleId(eventScheduleService.findByMobileId(apiEvent.getEventScheduleId()).getId());
+		
+		if(apiEvent.getEventScheduleId() != null)
+			createEventParameterBuilder.withScheduleId(eventScheduleService.findByMobileId(apiEvent.getEventScheduleId()).getId());
 
 		ProductionEventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
 		eventPersistenceFactory.createEventCreator().create(createEventParameterBuilder.build());
