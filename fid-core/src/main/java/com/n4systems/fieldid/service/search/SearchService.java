@@ -162,7 +162,7 @@ public abstract class SearchService<T extends SearchCriteriaModel, M extends Bas
             if (sortColumn.getJoinExpression() == null) {
                 searchBuilder.getOrderArguments().add(new SortTerm(sortColumn.getSortExpression().replaceAll("\\{.*\\}", ""), sortDirection).toSortField());
             } else {
-                String pathExpression = sortColumn.getPathExpression();
+                String sortExpression = sortColumn.getSortExpression();
 
                 // This is working around an issue caused when we upgraded hibernate versions. It requires us
                 // to join on a column we want to sort by when we're looking at a property Y some entity X, when
@@ -170,7 +170,13 @@ public abstract class SearchService<T extends SearchCriteriaModel, M extends Bas
                 // book will be excluded from our results.
                 SortTerm sortTerm = new SortTerm(JoinTerm.DEFAULT_SORT_JOIN_ALIAS, sortDirection);
                 sortTerm.setAlwaysDropAlias(true);
-                sortTerm.setFieldAfterAlias(pathExpression.substring(pathExpression.lastIndexOf(".") + 1));
+
+                if (sortExpression.startsWith(sortColumn.getJoinExpression())) {
+                    sortTerm.setFieldAfterAlias(sortExpression.substring(sortColumn.getJoinExpression().length() + 1));
+                } else {
+                    sortTerm.setFieldAfterAlias(sortExpression.substring(sortExpression.lastIndexOf(".") + 1));
+                }
+
                 searchBuilder.getOrderArguments().add(sortTerm.toSortField());
             }
         }
