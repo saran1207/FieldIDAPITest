@@ -16,7 +16,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class SavedReportService extends SavedSearchService<SavedReportItem, EventReportCriteriaModel> {
@@ -69,13 +69,12 @@ public class SavedReportService extends SavedSearchService<SavedReportItem, Even
         final List<User> users = persistenceService.findAll(query);
 
         for (User user : users) {
-            List<SavedItem> adjustedSavedItems = new ArrayList<SavedItem>(user.getSavedItems());
-            for (SavedItem item : user.getSavedItems()) {
-                if (filter.removeThisSearch(item.getSearchCriteria())) {
-                    adjustedSavedItems.remove(item);
+            for (Iterator<SavedItem> iterator = user.getSavedItems().iterator(); iterator.hasNext(); ) {
+                SavedItem savedItem = iterator.next();
+                if (filter.removeThisSearch(savedItem.getSearchCriteria())) {
+                    iterator.remove();
                 }
             }
-            user.setSavedItems(adjustedSavedItems);
 
             if (user.getLastRunReport() != null && filter.removeThisSearch(user.getLastRunReport())) {
                 user.setLastRunReport(null);
