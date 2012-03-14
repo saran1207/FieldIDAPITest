@@ -66,14 +66,16 @@ public class EventScheduleSearchContainer extends SearchContainer {
         addSimpleTerm("eventType.id", eventTypeId);
 		addSimpleTerm("project.id", jobId);
 		addSimpleTermOrNull("project.id", jobAndNullId);
+        // Exclude any 'dummy' schedule that wasn't actually scheduled -- nextDate will be null for these.
+        addNotNullTerm("nextDate");
 		addDateRangeTerm("nextDate", fromDate, toDate);
 		addSimpleInTerm("status", status.getScheduleStatuses());
 		
 		addPredefinedLocationTerm();
 		addAssigUserTerm();
 	}
-	
-	private void addPredefinedLocationJoin() {
+
+    private void addPredefinedLocationJoin() {
 		if (location.getPredefinedLocationId() != null) {
 			addRequiredLeftJoin("advancedLocation.predefinedLocation.searchIds", "preLocSearchId");
 		}

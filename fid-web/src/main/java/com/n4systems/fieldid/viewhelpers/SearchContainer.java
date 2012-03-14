@@ -20,6 +20,7 @@ import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.JoinTerm.JoinTermType;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
+import com.n4systems.util.persistence.search.terms.NotNullTerm;
 import com.n4systems.util.persistence.search.terms.NullTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.SimpleInTerm;
@@ -115,6 +116,10 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	public void setSortDirection(String sortDirection) {
 		this.sortDirection = sortDirection;
 	}
+
+    protected void addNotNullTerm(String field) {
+        searchTerms.add(new NotNullTerm(field));
+    }
 
 	public List<SortTerm> getSortTerms() {
 		sortTerms.clear();
