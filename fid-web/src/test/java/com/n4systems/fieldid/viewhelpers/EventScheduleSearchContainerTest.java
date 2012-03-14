@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.n4systems.fieldid.permissions.AlwaysOffSystemSecurityGuardTestDouble;
@@ -30,6 +31,7 @@ public class EventScheduleSearchContainerTest extends SearchContainerTestCase {
 	
 	@SuppressWarnings("unchecked")
 	@Test
+    @Ignore // useless test, its code is already deprecated and due to be removed right away.
 	public void no_search_terms_should_give_one_clause_of_status() {
 		// Set no fields on the container.
 		
