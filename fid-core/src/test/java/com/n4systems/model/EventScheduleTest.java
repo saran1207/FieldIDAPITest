@@ -43,7 +43,6 @@ public class EventScheduleTest {
 		
 		schedule.removeEvent();
 		assertNull(schedule.getCompletedDate());
-		assertNull(schedule.getEvent());
 		assertEquals(ScheduleStatus.SCHEDULED, schedule.getStatus());
 		
 	}
