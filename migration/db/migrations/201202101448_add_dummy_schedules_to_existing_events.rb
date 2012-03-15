@@ -26,6 +26,7 @@ class AddDummySchedulesToExistingEvents < ActiveRecord::Migration
         schedule.owner_id = master_event.owner_id
         schedule.status = 'COMPLETED'
         schedule.eventtype_id=event.type_id
+        schedule.mobileguid=uuid
 
         schedule.save
       end
@@ -42,6 +43,22 @@ class AddDummySchedulesToExistingEvents < ActiveRecord::Migration
     EventSchedule.delete_all(:all, :conditions => { :status => "COMPLETE", :nextdate => nil })
 
     execute("alter table eventschedules modify nextdate datetime not null")
+  end
+
+  def self.uuid
+    uuid = ""
+    (0..35).each do |i|
+      case (i)
+        when 14
+          # set the version to type 4 (RFC-4122)
+          uuid += "4"
+        when 8,13,18,23
+          uuid += "-"
+        else
+          uuid += "0123456789ABCDEF".chars.to_a[rand(16)]
+      end
+    end
+    return uuid
   end
 
 end
