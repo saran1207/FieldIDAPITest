@@ -179,6 +179,7 @@ public class EventManagerImpl implements EventManager {
 		eventSaver.updateAssetLastEventDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
 		eventScheduleManager.restoreScheduleForEvent(event);
+        persistenceManager.update(event);
 		return event;
 	}
 
