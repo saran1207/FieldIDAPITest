@@ -128,7 +128,9 @@ public class EventService extends FieldIdPersistenceService {
     	if (toDate!=null) { 
     		return new WhereParameter<Date>(Comparator.LT, property, toDate);
     	}
-    	return null;
+        // CAVEAT : we don't want results to include values with null dates. they are ignored.  (this makes sense for EventSchedules
+        //   because null dates are used when representing AdHoc events.
+        return new WhereParameter<Date>(Comparator.NOTNULL, property);
 	}
         
 	@Transactional(readOnly = true)
