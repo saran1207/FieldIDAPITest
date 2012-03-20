@@ -182,8 +182,7 @@ public class SubEventCrud extends EventCrud {
 			return MISSING;
 		}
 		reattachUploadedFiles();
-		setScheduleId(masterEventHelper.getScheduleId());
-		
+
 		getModifiableEvent().updateValuesToMatch(event);
 		return super.doEdit();
 	}

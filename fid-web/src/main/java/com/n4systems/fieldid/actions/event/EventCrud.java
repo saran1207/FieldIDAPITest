@@ -420,7 +420,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 				}
 				// when updating, we need to remove any files that should no longer be attached
 				updateAttachmentList(event, modifiedBy);
-				event = eventManager.updateEvent(event, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
+				event = eventManager.updateEvent(event, eventScheduleId, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
 
                 completeSchedule();
 			}

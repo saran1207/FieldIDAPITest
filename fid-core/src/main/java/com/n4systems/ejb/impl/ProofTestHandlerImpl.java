@@ -204,7 +204,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			} else {
 				try {
 					// we have a valid event, now we can update it
-					eventManager.updateEvent(event, performedBy.getId(), fileData, null);
+					eventManager.updateEvent(event, 0L, performedBy.getId(), fileData, null);
 					writeLogMessage(tenant, "Updated Event for Asset with identifier [" + identifier + "] and date performed [" + event.getDate() + "]");
 				} catch(Exception e) {
 					// we don't want a failure in one event to cause the others to fail, so we will simply log these expections and move on

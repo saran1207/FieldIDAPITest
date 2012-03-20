@@ -120,7 +120,7 @@ public class AssetMerger {
 
 	private void updateEvent(Event event) {
 		try {
-			eventManager.updateEvent(event, user.getId(), null, null);
+			eventManager.updateEvent(event, 0L, user.getId(), null, null);
 		} catch (Exception e) {
 			throw new ProcessFailureException("could not update events to new asset", e);
 		}

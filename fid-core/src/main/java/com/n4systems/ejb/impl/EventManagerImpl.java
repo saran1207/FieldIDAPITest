@@ -19,12 +19,9 @@ import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.ManualSecurityFilter;
@@ -167,8 +164,8 @@ public class EventManagerImpl implements EventManager {
 	
 
 	
-	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
-		return eventSaver.updateEvent(event, userId, fileData, uploadedFiles);
+	public Event updateEvent(Event event, Long scheduleId, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+		return eventSaver.updateEvent(event, scheduleId, userId, fileData, uploadedFiles);
 	}
 
 

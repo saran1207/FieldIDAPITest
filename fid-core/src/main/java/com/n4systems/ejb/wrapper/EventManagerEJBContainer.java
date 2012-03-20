@@ -12,7 +12,6 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventType;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubEvent;
@@ -224,14 +223,14 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+	public Event updateEvent(Event event, Long scheduleId, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		Log4JAuditLogger auditLogger = new Log4JAuditLogger(new UpdateEventAuditHandler());
 
 		Throwable t = null;
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateEvent(event, userId, fileData, uploadedFiles);
+			return createManager(transaction.getEntityManager()).updateEvent(event, scheduleId, userId, fileData, uploadedFiles);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

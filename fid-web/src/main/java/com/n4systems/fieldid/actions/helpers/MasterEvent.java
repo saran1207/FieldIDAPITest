@@ -26,40 +26,24 @@ import com.n4systems.model.user.User;
 import com.n4systems.tools.FileDataContainer;
 
 public class MasterEvent {
+
 	private String token;
-
 	private Asset masterAsset;
-
 	private Event event;
-
 	private FileDataContainer proofTestFile;
-
 	private AssetStatus assetStatus;
-
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
     private Map<Long, Map<Long, String>> subEventTemporarySignatureFileIdMap = new HashMap<Long, Map<Long,String>>();
-
 	private Long currentId = -1L;
-
 	private Long eventGroupId;
-
 	private Map<SubEvent, List<FileAttachment>> subEventUploadedFiles;
-
 	private List<FileAttachment> uploadedFiles;
-
 	private EventSchedule schedule;
-	
 	private Long scheduleId;
-
-	
 	private List<WebEventSchedule> nextSchedules = new ArrayList<WebEventSchedule>();
-
 	private User assignedTo;
-
 	private boolean assignToSomeone;
-
     private String overrideResult;
-	
     private boolean cleanToEventsToMatchConfiguration = false;
     
 	public MasterEvent() {

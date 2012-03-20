@@ -218,7 +218,8 @@ public class MasterEventCrud extends AbstractCrud {
 				CreateEventParameterBuilder createEventBuilder = new CreateEventParameterBuilder(master, getSessionUserId())
 						.withProofTestFile(masterEvent.getProofTestFile())
 						.withUploadedImages(masterEvent.getUploadedFiles());
-				
+
+                createEventBuilder.withScheduleId(masterEvent.getScheduleId());
 				
 				
 				createEventBuilder.addSchedules(createEventScheduleBundles(masterEvent.getNextSchedules()));
@@ -228,10 +229,10 @@ public class MasterEventCrud extends AbstractCrud {
 				uniqueID = event.getId();
 			} else {
 				Event master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());
-				event = eventManager.updateEvent(master, getSessionUser().getUniqueID(), masterEvent.getProofTestFile(), masterEvent.getUploadedFiles());
+				event = eventManager.updateEvent(master, masterEvent.getScheduleId(), getSessionUser().getUniqueID(), masterEvent.getProofTestFile(), masterEvent.getUploadedFiles());
 			}
 
-			completeSchedule(masterEvent.getScheduleId(), masterEvent.getSchedule());
+//			completeSchedule(masterEvent.getScheduleId(), masterEvent.getSchedule());
 
 			for (int i = 0; i < masterEvent.getSubEvents().size(); i++) {
 				SubEvent subEvent = new SubEvent();

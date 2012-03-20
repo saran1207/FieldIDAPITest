@@ -120,11 +120,7 @@ public class AssetMergerTest {
 		mockEventLists(eventsOnLosingProduct, new ArrayList<Event>());
 		
 				
-		try {
-			expect(mockEventManager.updateEvent((Event)eq(eventsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(eventsOnLosingProduct.get(0));
-		} catch (Exception e1) {
-			fail("should not throw exception");
-		} 
+        expect(mockEventManager.updateEvent((Event)eq(eventsOnLosingProduct.get(0)), eq(0L), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(eventsOnLosingProduct.get(0));
 		
 		mockArchiveOfLosingAsset();
 		
@@ -149,12 +145,8 @@ public class AssetMergerTest {
 		
 		mockEventLists(eventsOnLosingProduct, new ArrayList<Event>());
 				
-		try {
-			expect(mockEventManager.updateEvent((Event)eq(eventsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(eventsOnLosingProduct.get(0));
-		} catch (Exception e1) {
-			fail("should not throw exception");
-		} 
-		
+        expect(mockEventManager.updateEvent((Event)eq(eventsOnLosingProduct.get(0)), eq(0L), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(eventsOnLosingProduct.get(0));
+
 		mockArchiveOfLosingAsset();
 		
 		replayMocks();
@@ -182,7 +174,7 @@ public class AssetMergerTest {
 		
 		
 		try {
-			expect(mockEventManager.updateEvent(eq(masterEvents.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(masterEvents.get(0));
+			expect(mockEventManager.updateEvent(eq(masterEvents.get(0)), eq(0L), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(masterEvents.get(0));
 		} catch (Exception e) {
 			fail("should not throw exception " + e.getMessage());
 		}

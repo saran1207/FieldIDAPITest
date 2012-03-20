@@ -51,6 +51,7 @@ public class CopyEventFactory {
 		newEvent.setProofTestInfo( copyProofTestInfo( event.getProofTestInfo() ) );
 		newEvent.setSubEvents( copySubEvents( event.getSubEvents() ) );
         newEvent.setEventForm(event.getEventForm());
+        newEvent.setSchedule(event.getSchedule());
 
 		return newEvent;
 	}

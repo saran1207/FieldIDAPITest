@@ -92,7 +92,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	public void restoreScheduleForEvent(Event event) {
 		EventSchedule schedule = event.getSchedule();
 
-		if (schedule != null && schedule.getNextDate() != null) {
+		if (schedule.wasScheduled()) {
             EventSchedule newSchedule = EventSchedule.createPlaceholderFor(event);
             newSchedule.setRetired(true);
             persistenceManager.save(newSchedule);
@@ -102,7 +102,10 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 
             event.setSchedule(newSchedule);
             persistenceManager.update(event);
-		}
+		} else {
+            schedule.setRetired(true);
+            persistenceManager.update(schedule);
+        }
 	}
 	
 	public void removeAllSchedulesFor(Asset asset) {

@@ -76,24 +76,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 
 		setOrderForSubEvents(parameterObject.event);
 
-        EventSchedule eventSchedule = null;
-
-
-        if (parameterObject.scheduleId == -1) {
-            // This means the user selected 'create new schedule'
-            // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
-            eventSchedule = EventSchedule.createPlaceholderFor(parameterObject.event);
-            eventSchedule.setNextDate(parameterObject.event.getDate());
-            persistenceManager.save(eventSchedule);
-        } else if (parameterObject.scheduleId > 0) {
-            // There was an existing schedule selected.
-            eventSchedule = persistenceManager.find(EventSchedule.class, parameterObject.scheduleId, parameterObject.event.getTenant());
-            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED) {
-                parameterObject.event.setSchedule(null);
-            } else {
-                parameterObject.event.setSchedule(eventSchedule);
-            }
-        }
+        EventSchedule eventSchedule = findOrCreateSchedule(parameterObject.event, parameterObject.scheduleId);
 
         persistenceManager.save(parameterObject.event, parameterObject.userId);
 
@@ -115,6 +98,26 @@ public class ManagerBackedEventSaver implements EventSaver {
 	
 		return parameterObject.event;
 	}
+    
+    private EventSchedule findOrCreateSchedule(Event event, Long scheduleId) {
+        EventSchedule eventSchedule = null;
+        if (scheduleId == -1) {
+            // This means the user selected 'create new schedule'
+            // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
+            eventSchedule = EventSchedule.createPlaceholderFor(event);
+            eventSchedule.setNextDate(event.getDate());
+            persistenceManager.save(eventSchedule);
+        } else if (scheduleId > 0) {
+            // There was an existing schedule selected.
+            eventSchedule = persistenceManager.find(EventSchedule.class, scheduleId, event.getTenant());
+            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED) {
+                event.setSchedule(null);
+            } else {
+                event.setSchedule(eventSchedule);
+            }
+        }
+        return eventSchedule;
+    }
 	
 	private void writeSignatureImagesToDisk(Event event) {
 		SignatureService sigService = new SignatureService();
@@ -137,7 +140,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		}
     }
 
-	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+	public Event updateEvent(Event event, Long scheduleId, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		setProofTestData(event, fileData);
 		updateDeficiencies(event.getResults());
 
@@ -154,6 +157,26 @@ public class ManagerBackedEventSaver implements EventSaver {
         event.getSchedule().setAdvancedLocation(event.getAdvancedLocation());
 
         persistenceManager.update(event.getSchedule(), userId);
+        
+        EventSchedule newEventSchedule = null;
+        if (!event.getSchedule().wasScheduled()) {
+            if (scheduleId == -1) {
+                EventSchedule oldSchedule = event.getSchedule();
+
+                newEventSchedule = new EventSchedule(event);
+                persistenceManager.save(newEventSchedule);
+
+                newEventSchedule.getAsset().touch();
+                persistenceManager.update(newEventSchedule.getAsset());
+                persistenceManager.update(event);
+                persistenceManager.delete(oldSchedule);
+            } else if (scheduleId > 0 && !scheduleId.equals(event.getSchedule().getId())) {
+                newEventSchedule = persistenceManager.find(EventSchedule.class, scheduleId);
+                newEventSchedule.completed(event);
+                persistenceManager.update(newEventSchedule);
+                persistenceManager.update(event);
+            }
+        }
 
 		updateAssetLastEventDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
