@@ -1,19 +1,19 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
+import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
+import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
-import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 
 @SuppressWarnings("serial")
 public class CommonLinksWidget extends Widget<WidgetConfiguration> {
@@ -22,7 +22,7 @@ public class CommonLinksWidget extends Widget<WidgetConfiguration> {
 		super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));			
 		add(new NonWicketLink("upcomingEventsLink", "schedule!createSearch.action?criteria.status=INCOMPLETE"));
 		add(new BookmarkablePageLink<Void>("eventHistoryLink", ReportingPage.class));
-		add(new NonWicketLink("findAssetLink", "search.action"));
+		add(new BookmarkablePageLink<Void>("findAssetLink", AssetSearchPage.class));
 		
 		String companySiteUrl = FieldIDSession.get().getPrimaryOrg().getWebSite();
 		ExternalLink companySiteLink;
