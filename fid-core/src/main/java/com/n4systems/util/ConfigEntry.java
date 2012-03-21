@@ -79,11 +79,6 @@ public enum ConfigEntry {
 	MAX_SERIALS_PER_PROOFTEST					(	"50"					),
     HOUR_TO_RUN_EVENT_SCHED_NOTIFICATIONS       (	"0"	),
 	HELP_SYSTEM_URL                             (   "http://n4systems.helpserve.com/index.php?/Tickets/Submit/"),
-	// WEB-2737 - these options will be removed in the 2012.3+
-	@Deprecated 
-	CLICKTALE_START                             (   ""),
-	@Deprecated 
-	CLICKTALE_END                               (   ""),
 	RSS_FEED                                    (   "http://feeds.feedburner.com/FieldIdCustomerBlog" ),
     GOOGLE_ANALYTICS_ENABLED                    (   "false" );
 	

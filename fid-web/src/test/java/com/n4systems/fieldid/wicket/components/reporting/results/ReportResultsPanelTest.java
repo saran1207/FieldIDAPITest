@@ -19,11 +19,9 @@ import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.fieldid.wicket.IWicketTester;
 import com.n4systems.fieldid.wicket.WicketHarness;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanelTest.ReportResultsPanelHarness;
-import com.n4systems.model.Event;
-import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.TenantBuilder;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.TableViewTransformer;
 import com.n4systems.util.views.TableView;
@@ -31,13 +29,13 @@ import com.n4systems.util.views.TableView;
 public class ReportResultsPanelTest extends FieldIdPanelTest<ReportResultsPanelHarness, ReportResultsPanel> {
 
 	private ReportService reportService;
-	private EventReportCriteriaModel model = new EventReportCriteriaModel();
+	private EventReportCriteria model = new EventReportCriteria();
 	private PageHolder<TableView> results = null;
 
 	@Override
 	@Before
 	public void setUp() throws Exception { 
-		model = new EventReportCriteriaModel();
+		model = new EventReportCriteria();
 		super.setUp();
 		reportService = wire(ReportService.class, "reportService");
 	}
@@ -63,7 +61,7 @@ public class ReportResultsPanelTest extends FieldIdPanelTest<ReportResultsPanelH
 	@SuppressWarnings({"serial", "deprecation"})
 	@Override
 	public ReportResultsPanel createFixture(String id) {
-		return new ReportResultsPanel(id, new Model<EventReportCriteriaModel>(model)) {
+		return new ReportResultsPanel(id, new Model<EventReportCriteria>(model)) {
 			@Override protected SerializableSecurityGuard getSecurityGuard() {
 				return new SerializableSecurityGuard(TenantBuilder.n4(), PrimaryOrgBuilder.aPrimaryOrg().build());
 			}

@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.wicket.components.table;
 
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.components.search.results.SelectionStatusPanel;
+import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
@@ -21,11 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import com.n4systems.fieldid.wicket.components.search.results.SelectionStatusPanel;
-import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.util.persistence.search.SortDirection;
-import com.n4systems.util.selection.MultiIdSelection;
+import java.util.List;
 
 public class SimpleDataTable<T> extends Panel {
 	
@@ -34,7 +33,6 @@ public class SimpleDataTable<T> extends Panel {
     private SelectionStatusPanel selectionStatusPanel;
     private boolean displayPagination = true;
     private String cssClass = "list";
-    private JumpableNavigationBar topPaginationBar;
 
     public SimpleDataTable(String id, final List<IColumn<T>> columns,
         ISortableDataProvider<T> dataProvider, int rowsPerPage) {
@@ -118,7 +116,6 @@ public class SimpleDataTable<T> extends Panel {
 
         add(table);
 
-        add(topPaginationBar = createPaginationBar("topPagination"));
         add(createPaginationBar("bottomPagination"));
         add(new AttributeAppender("class", getPagedModel()));
         
@@ -162,7 +159,7 @@ public class SimpleDataTable<T> extends Panel {
         return new JumpableNavigationBar(id, this) {
             @Override
             protected void onPageChanged(AjaxRequestTarget target) {
-                scrollToTopPaginationBar(target);
+                scrollToTop(target);
                 SimpleDataTable.this.onPageChanged(target);
             }
 
@@ -173,10 +170,8 @@ public class SimpleDataTable<T> extends Panel {
         };
     }
 
-    private void scrollToTopPaginationBar(AjaxRequestTarget target) {
-        String topPageBarId = topPaginationBar.getMarkupId();
-
-        target.appendJavaScript("var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('#"+topPageBarId+"'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}");
+    private void scrollToTop(AjaxRequestTarget target) {
+        target.appendJavaScript("var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('#"+getMarkupId()+"'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}");
     }
 
     protected void onPageChanged(AjaxRequestTarget target) { }

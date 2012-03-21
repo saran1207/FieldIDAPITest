@@ -38,7 +38,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 
 public class MassSchedulePage extends FieldIDFrontEndPage {
 
@@ -57,7 +57,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
     @SpringBean
     private MassScheduleService massScheduleService;
 
-    public MassSchedulePage(final IModel<AssetSearchCriteriaModel> criteriaModel) {
+    public MassSchedulePage(final IModel<AssetSearchCriteria> criteriaModel) {
         selectedIds = criteriaModel.getObject().getSelection().getSelectedIds();
 
         scheduleSummary = assetService.getAssetScheduleSummary(selectedIds);

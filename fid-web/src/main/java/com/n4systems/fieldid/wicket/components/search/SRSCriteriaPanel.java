@@ -1,8 +1,17 @@
 package com.n4systems.fieldid.wicket.components.search;
 
-import java.util.Collections;
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
+import com.n4systems.fieldid.wicket.components.reporting.columns.SelectDisplayColumnsPanel;
+import com.n4systems.fieldid.wicket.model.CombinedListModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
+import com.n4systems.model.saveditem.SavedItem;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ReportConfiguration;
+import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -17,21 +26,11 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
-import com.n4systems.fieldid.wicket.components.reporting.columns.SelectDisplayColumnsPanel;
-import com.n4systems.fieldid.wicket.model.CombinedListModel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.saveditem.SavedItem;
-import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.search.ReportConfiguration;
-import com.n4systems.model.search.SearchCriteriaModel;
+import java.util.Collections;
+import java.util.List;
 
 @SuppressWarnings("serial")
-public abstract class SRSCriteriaPanel<S extends SavedItem, T extends SearchCriteriaModel> extends Panel {
+public abstract class SRSCriteriaPanel<S extends SavedItem, T extends SearchCriteria> extends Panel {
 
     private SelectDisplayColumnsPanel selectDisplayColumnsPanel;
 

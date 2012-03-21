@@ -21,7 +21,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchResultsPage;
 import com.n4systems.model.saveditem.SavedSearchItem;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.services.reporting.DashboardReportingService;
 
 /**related to WEB-2629.   when switched over to the new page, this page should be removed. 
@@ -40,11 +40,11 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     private SavedAssetSearchService savedAssetSearchService;
 
     private SavedSearchItem savedSearchItem;
-    private AssetSearchCriteriaModel searchCriteriaModel;
+    private AssetSearchCriteria searchCriteriaModel;
 
     public AssetSearchResultsPage(PageParameters params) { 
     	super(params);
-		AssetSearchCriteriaModel model = createSearchCriteriaModelFromDashboardParameters(params);
+		AssetSearchCriteria model = createSearchCriteriaModelFromDashboardParameters(params);
 		init(model, new SavedSearchItem(model));
     }
 
@@ -53,7 +53,7 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
         init(savedSearchItem.getSearchCriteria(), savedSearchItem);
 	}
     
-    public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem) {
+    public AssetSearchResultsPage(AssetSearchCriteria searchCriteriaModel, SavedSearchItem savedSearchItem) {
     	super(new PageParameters());
     	SavedSearchItem searchItem = null;
     	if (savedSearchItem==null) { 
@@ -65,28 +65,28 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     	init(searchCriteriaModel, searchItem);
     }
 
-	public AssetSearchResultsPage(AssetSearchCriteriaModel searchCriteriaModel) {
+	public AssetSearchResultsPage(AssetSearchCriteria searchCriteriaModel) {
 		this(searchCriteriaModel,null);
 	}
 
-	private AssetSearchCriteriaModel createSearchCriteriaModelFromDashboardParameters(PageParameters params) {
+	private AssetSearchCriteria createSearchCriteriaModelFromDashboardParameters(PageParameters params) {
     	if(params!=null) {
     		// load config and set values...
     		Long widgetDefinitionId = params.get(SRSResultsPanel.WIDGET_DEFINITION_PARAMETER).toLong();
     		Long x = params.get(SRSResultsPanel.X_PARAMETER).toLong();
     		String series = params.get(SRSResultsPanel.SERIES_PARAMETER).toString();
     		String y = params.get(SRSResultsPanel.Y_PARAMETER).toString();
-    		AssetSearchCriteriaModel model = dashboardReportingService.convertWidgetDefinitionToAssetCriteria(widgetDefinitionId,x,y,series); 
+    		AssetSearchCriteria model = dashboardReportingService.convertWidgetDefinitionToAssetCriteria(widgetDefinitionId,x,y,series);
     		return model;
     	}
     	throw new IllegalStateException("you must specify expected dashboard parameters in order to create report criteria model.");
 	}
 
-    private void init(AssetSearchCriteriaModel searchCriteriaModel, SavedSearchItem savedSearchItem) {
+    private void init(AssetSearchCriteria searchCriteriaModel, SavedSearchItem savedSearchItem) {
     	this.savedSearchItem = savedSearchItem;
         this.searchCriteriaModel = searchCriteriaModel;
         savedAssetSearchService.saveLastSearch(searchCriteriaModel);
-        Model<AssetSearchCriteriaModel> criteriaModel = new Model<AssetSearchCriteriaModel>(searchCriteriaModel);
+        Model<AssetSearchCriteria> criteriaModel = new Model<AssetSearchCriteria>(searchCriteriaModel);
         add(reportResultsPanel = new AssetSearchResultsPanel("resultsPanel", criteriaModel));
 
         SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));

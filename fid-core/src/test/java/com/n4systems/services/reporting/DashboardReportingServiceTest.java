@@ -1,20 +1,7 @@
 package com.n4systems.services.reporting;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.joda.time.DateTimeConstants;
-import org.joda.time.DateTimeUtils;
-import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.FieldIdUnitTest;
+import com.n4systems.fieldid.FieldIdServicesUnitTest;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
@@ -27,9 +14,20 @@ import com.n4systems.test.TestTarget;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.RangeType;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.junit.Assert.assertEquals;
 
 
-public class DashboardReportingServiceTest extends FieldIdUnitTest {
+public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
 
 	private static final Long VALUE_FOR_JAN5 = 45L;
 	private static final Long VALUE_FOR_JAN1 = 7851L;
@@ -61,9 +59,9 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 
 	@Test
 	public void test_getUpcomingScheduledEvents() {
-		DateTimeUtils.setCurrentMillisFixed(jan1.toDate().getTime());
-		
-		BaseOrg owner = OrgBuilder.aCustomerOrg().build();
+        setCurrentMillisFixed(jan1.toDate().getTime());
+
+        BaseOrg owner = OrgBuilder.aCustomerOrg().build();
 		Integer period = 7;
 		
 		List<UpcomingScheduledEventsRecord> events = createUpcomingEventResults();
@@ -151,8 +149,10 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 	}	
 
 	@Test
-	public void test_getAssetsIdentified() { 
-		BaseOrg owner = OrgBuilder.aCustomerOrg().build();
+	public void test_getAssetsIdentified() {
+        setCurrentMillisFixed(jan1.toDate().getTime());
+
+        BaseOrg owner = OrgBuilder.aCustomerOrg().build();
 		ChartGranularity granularity = ChartGranularity.WEEK;
 		List<AssetsIdentifiedReportRecord> assets = createAssetsIdentifiedResults(granularity);
         DateRange dateRange = new DateRange(RangeType.THIS_YEAR);
@@ -214,9 +214,8 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 	}
 		
 	@Test 
-	@Ignore
-	public void test_EventCompleteness() { 
-		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
+	public void test_EventCompleteness() {
+		setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		ChartGranularity granularity = ChartGranularity.WEEK;
         DateRange dateRange = new DateRange(RangeType.LAST_MONTH);
 		BaseOrg org = OrgBuilder.aDivisionOrg().build();
@@ -225,8 +224,8 @@ public class DashboardReportingServiceTest extends FieldIdUnitTest {
 		List<EventCompletenessReportRecord> allEvents = Lists.newArrayList();
 		allEvents.addAll(completedEvents);
 		allEvents.addAll(createEventCompletenessResults(granularity, 888L, 574L, 924L));
-		expect(eventService.getEventCompleteness(granularity, granularity.roundDown(dateRange.getFrom()).toDate(), jan1_2011.toDate(), org)).andReturn(allEvents);
-		expect(eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, granularity.roundDown(dateRange.getFrom()).toDate(), jan1_2011.toDate(), org)).andReturn(completedEvents);
+		expect(eventService.getEventCompleteness(granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(allEvents);
+		expect(eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(completedEvents);
 		replay(eventService);
 		replay(assetService);
 		

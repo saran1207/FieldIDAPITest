@@ -5,16 +5,15 @@ import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.saveditem.SavedSearchItem;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class SavedAssetSearchService extends SavedSearchService<SavedSearchItem, AssetSearchCriteriaModel> {
+public class SavedAssetSearchService extends SavedSearchService<SavedSearchItem, AssetSearchCriteria> {
 
     private @Autowired DynamicColumnsService dynamicColumnsService;
     private @Autowired AssetTypeService assetTypeService;
@@ -22,7 +21,7 @@ public class SavedAssetSearchService extends SavedSearchService<SavedSearchItem,
     @Override
     public void removeLastSavedSearch(User user) {
         if (user.getLastRunSearch() != null) {
-            final AssetSearchCriteriaModel lastRunSearch = user.getLastRunSearch();
+            final AssetSearchCriteria lastRunSearch = user.getLastRunSearch();
             user.setLastRunSearch(null);
             persistenceService.update(user);
             persistenceService.delete(lastRunSearch);
@@ -30,8 +29,8 @@ public class SavedAssetSearchService extends SavedSearchService<SavedSearchItem,
     }
 
     @Override
-    public AssetSearchCriteriaModel retrieveLastSearch() {
-        final AssetSearchCriteriaModel lastRunSearch = getCurrentUser().getLastRunSearch();
+    public AssetSearchCriteria retrieveLastSearch() {
+        final AssetSearchCriteria lastRunSearch = getCurrentUser().getLastRunSearch();
         lastRunSearch.setReportAlreadyRun(true);
         storeTransientColumns(lastRunSearch);
         enableSelectedColumns(lastRunSearch, lastRunSearch.getColumns());
@@ -39,12 +38,12 @@ public class SavedAssetSearchService extends SavedSearchService<SavedSearchItem,
     }
 
     @Override
-    protected void storeLastSearchInUser(User user, AssetSearchCriteriaModel searchCriteria) {
+    protected void storeLastSearchInUser(User user, AssetSearchCriteria searchCriteria) {
         user.setLastRunSearch(searchCriteria);
     }
 
     @Override
-    protected void storeTransientColumns(AssetSearchCriteriaModel searchCriteria) {
+    protected void storeTransientColumns(AssetSearchCriteria searchCriteria) {
         ReportConfiguration reportConfiguration = new AssetColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
 
         AssetTypeGroup assetTypeGroup = searchCriteria.getAssetTypeGroup();

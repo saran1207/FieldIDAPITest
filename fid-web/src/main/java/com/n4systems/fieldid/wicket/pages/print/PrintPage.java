@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.print;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.downloadlink.DownloadLink;
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.form.Button;
@@ -15,7 +15,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public abstract class PrintPage<T extends SearchCriteriaModel> extends FieldIDAuthenticatedPage {
+public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthenticatedPage {
 
     protected IModel<T> criteria;
 

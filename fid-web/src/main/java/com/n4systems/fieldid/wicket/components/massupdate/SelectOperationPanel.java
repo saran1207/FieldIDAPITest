@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.massupdate;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -13,13 +12,13 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 
 public class SelectOperationPanel extends AbstractMassUpdatePanel {
 
 	private MassUpdateOperation selected;
 	
-	public SelectOperationPanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria) {
+	public SelectOperationPanel(String id, final IModel<AssetSearchCriteria> assetSearchCriteria) {
 		super(id);
 		
 		RadioChoice<MassUpdateOperation> optType = new RadioChoice<MassUpdateOperation>("operations", new PropertyModel<MassUpdateOperation>(this, "selected"), 

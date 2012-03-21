@@ -1,19 +1,19 @@
 package com.n4systems.util.chart;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
+import com.n4systems.fieldid.FieldIdUnitTest;
+import com.n4systems.model.utils.DateRange;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.junit.Test;
 
-import com.n4systems.model.utils.DateRange;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 
 
-public class DateChartManagerTest {
+public class DateChartManagerTest extends FieldIdUnitTest {
 	
 	private DateChartManager dateChartManager;
 	private LocalDate jan1_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
@@ -23,7 +23,7 @@ public class DateChartManagerTest {
 	
 	@Test 
 	public void test_normalize_forever() {
-		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		
         DateRange dateRange = new DateRange(RangeType.FOREVER);
 
@@ -69,7 +69,7 @@ public class DateChartManagerTest {
 	
 	@Test 
 	public void test_normalize_thisquarter() {
-		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		
         DateRange dateRange = new DateRange(RangeType.THIS_QUARTER);
 
@@ -93,7 +93,9 @@ public class DateChartManagerTest {
 	
 	@Test 
 	public void test_normalize_thismonth() {
-		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		setCurrentMillisFixed(jan1_2011.toDate().getTime());
+
+
 		
         DateRange dateRange = new DateRange(RangeType.THIS_MONTH);
 	
@@ -116,7 +118,7 @@ public class DateChartManagerTest {
 	
 	@Test 
 	public void test_normalize_thisweek() {
-		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		
         DateRange dateRange = new DateRange(RangeType.THIS_WEEK);
 	
@@ -131,7 +133,7 @@ public class DateChartManagerTest {
 	
 	@Test 
 	public void test_normalize_daily() {
-		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		setCurrentMillisFixed(jan1_2011.toDate().getTime());
 		
         DateRange dateRange = new DateRange(RangeType.TODAY);
 	

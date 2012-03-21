@@ -1,12 +1,6 @@
 package com.n4systems.services.dashboard;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.fieldid.FieldIdUnitTest;
+import com.n4systems.fieldid.FieldIdServicesUnitTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.dashboard.DashboardColumn;
@@ -20,9 +14,14 @@ import com.n4systems.services.SecurityContext;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 
-public class DashboardServiceTest extends FieldIdUnitTest {
+public class DashboardServiceTest extends FieldIdServicesUnitTest {
 	
 	@TestTarget private DashboardService dashboardService;
 	

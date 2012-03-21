@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -20,23 +20,20 @@ import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
 import org.odlabs.wiquery.core.javascript.JsScope;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import java.util.List;
 
 public class SearchConfigPanel extends Panel {		
 	
 	private SearchFilterPanel filters;
 	private SearchColumnsPanel columns;
-	private Model<AssetSearchCriteriaModel> model;
 	private FIDModalWindow modal;
+    private Model<AssetSearchCriteria> model;
 	
-	public SearchConfigPanel(String id, final Model<AssetSearchCriteriaModel> model) {
-		super(id, model);
-		this.model = model;
-		
-		SearchConfigForm form = new SearchConfigForm("form", new CompoundPropertyModel<AssetSearchCriteriaModel>(model));
+	public SearchConfigPanel(String id, final Model<AssetSearchCriteria> model) {
+		super(id, new CompoundPropertyModel<AssetSearchCriteria>(model));
+        this.model = model;
+
+		SearchConfigForm form = new SearchConfigForm("form",model);
 		form.add(new Button("submit"));
 		form.add(new WebMarkupContainer("close").add(createCloseBehavior()));
 		form.add(columns = new SearchColumnsPanel("columns",model));
@@ -52,27 +49,6 @@ public class SearchConfigPanel extends Panel {
 		add(form);		
 	}
 
-    private Link createSaveLink(String linkId, final boolean overwrite) {
-        Link link = new Link(linkId) {
-            @Override public void onClick() {
-                setResponsePage(getSaveResponsePage(overwrite));
-            }
-        };
-        if (!overwrite) {
-            // If this is not overwrite (ie the Save As link), it should be invisible if this isn't an existing saved report
-            link.setVisible(isExistingSavedItem());
-        }
-        return link;
-    }
-
-    protected boolean isExistingSavedItem() {
-		return true;
-	}
-
-	protected Page getSaveResponsePage(boolean overwrite) {
-    	throw new UnsupportedOperationException("override this to redirect on Save actions");
-    }	
-
 	protected void onNoDisplayColumnsSelected() {
 	}
 	
@@ -87,9 +63,9 @@ public class SearchConfigPanel extends Panel {
 		});
 	}	
 
-	 public class SearchConfigForm extends Form<AssetSearchCriteriaModel> {
+	 public class SearchConfigForm extends Form<AssetSearchCriteria> {
 
-      	public SearchConfigForm(String id, final IModel<AssetSearchCriteriaModel> model) {
+      	public SearchConfigForm(String id, final IModel<AssetSearchCriteria> model) {
         	super(id, model);
           	setOutputMarkupId(true); 
       	}

@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 
 public class MassUpdateNavigationPanel extends Panel {
 	
@@ -17,7 +17,7 @@ public class MassUpdateNavigationPanel extends Panel {
 	private WebMarkupContainer backToOperationDetailsLabel;
 	private WebMarkupContainer confirmLabel;
 	
-	public MassUpdateNavigationPanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria, final AbstractMassUpdatePanel panel) {
+	public MassUpdateNavigationPanel(String id, final IModel<AssetSearchCriteria> assetSearchCriteria, final AbstractMassUpdatePanel panel) {
 		super(id, assetSearchCriteria);
 
 		add(new Link("backToSearch") {
@@ -59,7 +59,7 @@ public class MassUpdateNavigationPanel extends Panel {
 		}		
 	}
 	
-	private Link createLink(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria, final AbstractMassUpdatePanel panel) {
+	private Link createLink(String id, final IModel<AssetSearchCriteria> assetSearchCriteria, final AbstractMassUpdatePanel panel) {
 		return new Link(id) {
 			@Override
 			public void onClick() {

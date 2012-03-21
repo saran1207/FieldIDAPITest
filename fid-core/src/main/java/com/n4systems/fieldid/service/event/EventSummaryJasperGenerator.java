@@ -11,7 +11,7 @@ import com.n4systems.model.Status;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.reporting.EventReportMapProducer;
 import com.n4systems.reporting.PathHandler;
@@ -46,7 +46,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
     private OrgService orgService;
 
     @Transactional
-    public JasperPrint generate(EventReportCriteriaModel criteria, List<Long> sortedIdList) throws ReportException {
+    public JasperPrint generate(EventReportCriteria criteria, List<Long> sortedIdList) throws ReportException {
         File jasperFile = PathHandler.getCompiledSummaryReportFile(getCurrentTenant());
         try {
             new ReportCompiler().compileReports(jasperFile.getParentFile());
@@ -174,7 +174,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
     }
 
     // XXX - document me
-    private Map<String, Object> criteriaMap(EventReportCriteriaModel criteria, PrimaryOrg primaryOrg, File jasperFile) {
+    private Map<String, Object> criteriaMap(EventReportCriteria criteria, PrimaryOrg primaryOrg, File jasperFile) {
         Map<String, Object> reportMap = new HashMap<String, Object>();
 
         reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");

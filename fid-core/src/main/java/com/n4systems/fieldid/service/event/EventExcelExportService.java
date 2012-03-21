@@ -9,7 +9,7 @@ import com.n4systems.fieldid.service.event.util.ResultTransformerFactory;
 import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.util.ExcelBuilder;
@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventExcelExportService extends DownloadService<EventReportCriteriaModel> {
+public class EventExcelExportService extends DownloadService<EventReportCriteria> {
 
     @Autowired
     private ReportService reportService;
@@ -36,7 +36,7 @@ public class EventExcelExportService extends DownloadService<EventReportCriteria
     }
 
     @Override
-    protected void generateFile(EventReportCriteriaModel criteria, File file, String linkName) throws ReportException {
+    protected void generateFile(EventReportCriteria criteria, File file, String linkName) throws ReportException {
         User user = getCurrentUser();
 
         TableGenerationContext exportContextProvider = new TableGenerationContextImpl(user.getTimeZone(), user.getOwner().getPrimaryOrg().getDateFormat(), user.getOwner().getPrimaryOrg().getDateFormat() + " h:mm a", user.getOwner());
@@ -79,7 +79,7 @@ public class EventExcelExportService extends DownloadService<EventReportCriteria
         }
     }
 
-    private List<String> getColumnTitles(EventReportCriteriaModel criteria) {
+    private List<String> getColumnTitles(EventReportCriteria criteria) {
         final List<ColumnMappingView> columns = criteria.getSortedStaticAndDynamicColumns(true);
         List<String> columnTitles = new ArrayList<String>();
         for (ColumnMappingView columnMappingView : columns) {
@@ -88,7 +88,7 @@ public class EventExcelExportService extends DownloadService<EventReportCriteria
         return columnTitles;
     }
 
-    private ExcelOutputHandler[] createCellHandlers(EventReportCriteriaModel criteria, TableGenerationContext exportContextProvider) {
+    private ExcelOutputHandler[] createCellHandlers(EventReportCriteria criteria, TableGenerationContext exportContextProvider) {
         final List<ColumnMappingView> selectedColumns = criteria.getSortedStaticAndDynamicColumns();
         ExcelOutputHandler[] handlers = new ExcelOutputHandler[selectedColumns.size()];
         CellHandlerFactory factory = new CellHandlerFactory(exportContextProvider);

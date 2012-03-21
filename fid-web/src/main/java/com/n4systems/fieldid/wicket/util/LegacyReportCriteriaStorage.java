@@ -5,14 +5,14 @@ import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.search.EventReportCriteria;
 
 import javax.servlet.http.HttpSession;
 
 public class LegacyReportCriteriaStorage {
 
-    public EventSearchContainer storeCriteria(EventReportCriteriaModel criteriaModel, HttpSession httpSession) {
+    public EventSearchContainer storeCriteria(EventReportCriteria criteriaModel, HttpSession httpSession) {
         EventSearchContainer searchContainer = new ReportFormatConverter(new SerializableSecurityGuard(FieldIDSession.get().getTenant())).convertCriteria(criteriaModel);
         httpSession.setAttribute(WebSessionMap.REPORT_CRITERIA, searchContainer);
         httpSession.setAttribute(WebSessionMap.NEW_REPORT_CRITERIA, criteriaModel);
@@ -20,14 +20,14 @@ public class LegacyReportCriteriaStorage {
         return searchContainer;
     }
 
-    public AssetSearchContainer storeCriteria(AssetSearchCriteriaModel criteriaModel, HttpSession httpSession) {
+    public AssetSearchContainer storeCriteria(AssetSearchCriteria criteriaModel, HttpSession httpSession) {
         AssetSearchContainer assetSearchContainer = new ReportFormatConverter(new SerializableSecurityGuard(FieldIDSession.get().getTenant())).convertCriteria(criteriaModel);
         httpSession.setAttribute(WebSessionMap.SEARCH_CRITERIA, assetSearchContainer);
         return assetSearchContainer;
     }
 
-    public EventReportCriteriaModel getStoredCriteria(HttpSession session) {
-        EventReportCriteriaModel criteriaModel = (EventReportCriteriaModel) session.getAttribute(WebSessionMap.NEW_REPORT_CRITERIA);
+    public EventReportCriteria getStoredCriteria(HttpSession session) {
+        EventReportCriteria criteriaModel = (EventReportCriteria) session.getAttribute(WebSessionMap.NEW_REPORT_CRITERIA);
 
         Integer reportPageNumber = (Integer) session.getAttribute("reportPageNumber");
 

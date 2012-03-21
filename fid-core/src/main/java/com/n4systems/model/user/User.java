@@ -17,8 +17,8 @@ import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.saveditem.SavedItem;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
@@ -62,11 +62,11 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
     @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "lastRunReportId")
-    private EventReportCriteriaModel lastRunReport;
+    private EventReportCriteria lastRunReport;
 
     @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "lastRunSearchId")
-    private AssetSearchCriteriaModel lastRunSearch;
+    private AssetSearchCriteria lastRunSearch;
 
 	@Column(nullable = false, unique = true)
 	private String authKey;
@@ -492,19 +492,19 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
         this.displayLastRunSearches = displayLastRunSearches;
     }
 
-    public EventReportCriteriaModel getLastRunReport() {
+    public EventReportCriteria getLastRunReport() {
         return lastRunReport;
     }
 
-    public void setLastRunReport(EventReportCriteriaModel lastRunReport) {
+    public void setLastRunReport(EventReportCriteria lastRunReport) {
         this.lastRunReport = lastRunReport;
     }
 
-    public AssetSearchCriteriaModel getLastRunSearch() {
+    public AssetSearchCriteria getLastRunSearch() {
         return lastRunSearch;
     }
 
-    public void setLastRunSearch(AssetSearchCriteriaModel lastRunSearch) {
+    public void setLastRunSearch(AssetSearchCriteria lastRunSearch) {
         this.lastRunSearch = lastRunSearch;
     }
 }

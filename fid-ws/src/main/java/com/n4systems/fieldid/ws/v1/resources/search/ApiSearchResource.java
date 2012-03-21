@@ -26,7 +26,7 @@ import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -62,7 +62,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 			@QueryParam("orderByDirection") String orderByDirection) {
 		
 		
-		AssetSearchCriteriaModel searchCriteria = new AssetSearchCriteriaModel();
+		AssetSearchCriteria searchCriteria = new AssetSearchCriteria();
 		
 		searchCriteria.setRfidNumber(rfidNumber);
 		searchCriteria.setIdentifier(identifier);

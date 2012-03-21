@@ -1,21 +1,17 @@
 package com.n4systems.model.saveditem;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.SecurityDefiner;
+
+import javax.persistence.*;
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name="saved_items")
 @DiscriminatorColumn(name = "type")
-public abstract class SavedItem<T extends SearchCriteriaModel> extends EntityWithTenant implements NamedEntity {
+public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTenant implements NamedEntity {
 
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(SavedItem.class);

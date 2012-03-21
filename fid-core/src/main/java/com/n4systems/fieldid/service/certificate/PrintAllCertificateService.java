@@ -11,7 +11,7 @@ import java.util.zip.ZipOutputStream;
 
 import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.util.selection.MultiIdSelection;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -65,7 +65,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 		return link;
 	}
 
-	public DownloadLink generateEventCertificates(EventReportCriteriaModel criteriaModel, final EventReportType reportType, final String downloadUrl, String reportName) {
+	public DownloadLink generateEventCertificates(EventReportCriteria criteriaModel, final EventReportType reportType, final String downloadUrl, String reportName) {
 		final DownloadLink link = downloadLinkService.createDownloadLink(reportName, ContentType.ZIP);
         final List<Long> sortedSearchResultsList = reportService.idSearch(criteriaModel);
         final List<Long> sortedSelectedList = sortSelectionBasedOnIndexIn(criteriaModel.getSelection(), sortedSearchResultsList);

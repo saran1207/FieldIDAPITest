@@ -3,18 +3,18 @@ package com.n4systems.fieldid.wicket.pages.print;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.model.downloadlink.DownloadLink;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.DateHelper;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class PrintObservationCertReportPage extends PrintPage<EventReportCriteriaModel> {
+public class PrintObservationCertReportPage extends PrintPage<EventReportCriteria> {
 
     @SpringBean
     private PrintAllCertificateService printAllCertificateService;
 
-    public PrintObservationCertReportPage(IModel<EventReportCriteriaModel> criteria) {
+    public PrintObservationCertReportPage(IModel<EventReportCriteria> criteria) {
         super(criteria);
     }
 

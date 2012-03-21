@@ -13,7 +13,7 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.util.AssetRemovalSummary;
 
 public class DeleteDetailsPanel extends AbstractMassUpdatePanel{
@@ -24,7 +24,7 @@ public class DeleteDetailsPanel extends AbstractMassUpdatePanel{
 	@SpringBean
 	private AssetService assetService;
 	
-	public DeleteDetailsPanel(String id, IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
+	public DeleteDetailsPanel(String id, IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		super(id);
 
 		this.previousPanel = previousPanel;

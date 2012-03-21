@@ -19,13 +19,13 @@ import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.saveditem.SavedReportItem;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.services.reporting.DashboardReportingService;
 
 public class ReportingResultsPage extends FieldIDFrontEndPage {
 
     private SavedReportItem savedReportItem;
-	private EventReportCriteriaModel reportCriteriaModel;
+	private EventReportCriteria reportCriteriaModel;
     private ReportResultsPanel reportResultsPanel;
     
     @SpringBean
@@ -36,7 +36,7 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
     
     public ReportingResultsPage(PageParameters params) { 
     	super(params);
-    	EventReportCriteriaModel reportCriteriaModel = createReportCriteriaModel(params);
+    	EventReportCriteria reportCriteriaModel = createReportCriteriaModel(params);
     	SavedReportItem savedReportItem = new SavedReportItem(reportCriteriaModel);
 		init(reportCriteriaModel, savedReportItem);
     }
@@ -46,22 +46,22 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
         init(savedReportItem.getSearchCriteria(), savedReportItem);
 	}
 
-	public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel, SavedReportItem savedReportItem) {
+	public ReportingResultsPage(EventReportCriteria reportCriteriaModel, SavedReportItem savedReportItem) {
 		super(new PageParameters());
         SavedReportItem newSavedReportItem = new SavedReportItem(reportCriteriaModel);        
        	newSavedReportItem.setId(savedReportItem==null ? null:savedReportItem.getId());
 		init(reportCriteriaModel, newSavedReportItem);
 	}
 
-	public ReportingResultsPage(EventReportCriteriaModel storedCriteria) {
+	public ReportingResultsPage(EventReportCriteria storedCriteria) {
 		this(storedCriteria,null);
 	}
 
-	private void init(EventReportCriteriaModel reportCriteriaModel, SavedReportItem savedReportItem) {
+	private void init(EventReportCriteria reportCriteriaModel, SavedReportItem savedReportItem) {
 		this.savedReportItem = savedReportItem;
         savedReportService.saveLastSearch(reportCriteriaModel);
 		this.reportCriteriaModel = reportCriteriaModel;
-		PropertyModel<EventReportCriteriaModel> reportCriteriaPropertyModel = new PropertyModel<EventReportCriteriaModel>(this, "reportCriteriaModel");
+		PropertyModel<EventReportCriteria> reportCriteriaPropertyModel = new PropertyModel<EventReportCriteria>(this, "reportCriteriaModel");
 
         add(reportResultsPanel = new ReportResultsPanel("resultsPanel", reportCriteriaPropertyModel));
 
@@ -85,13 +85,13 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
         add(new ReportingMassActionPanel("massActionPanel", reportCriteriaPropertyModel));
 	}
 
-    private EventReportCriteriaModel createReportCriteriaModel(PageParameters params) {    	
+    private EventReportCriteria createReportCriteriaModel(PageParameters params) {
     	if(params!=null) {
     		// load config and set values...
     		Long widgetDefinitionId = params.get(SRSResultsPanel.WIDGET_DEFINITION_PARAMETER).toLong();
     		Long x = params.get(SRSResultsPanel.X_PARAMETER).toLong();
     		String series = params.get(SRSResultsPanel.SERIES_PARAMETER).toString();
-    		EventReportCriteriaModel model = dashboardReportingService.convertWidgetDefinitionToReportCriteria(widgetDefinitionId,x,series); 
+    		EventReportCriteria model = dashboardReportingService.convertWidgetDefinitionToReportCriteria(widgetDefinitionId,x,series);
     		return model;
     	}
     	throw new IllegalStateException("must specify configId in parameters in order to create report criteria model.");

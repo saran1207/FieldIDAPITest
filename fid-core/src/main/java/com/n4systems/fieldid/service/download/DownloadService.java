@@ -9,7 +9,7 @@ import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkFactory;
 import com.n4systems.model.downloadlink.DownloadState;
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.log4j.Logger;
@@ -24,7 +24,7 @@ import java.util.concurrent.Callable;
 
 import javax.mail.MessagingException;
 
-public abstract class DownloadService<T extends SearchCriteriaModel> extends FieldIdPersistenceService {
+public abstract class DownloadService<T extends SearchCriteria> extends FieldIdPersistenceService {
 
 	protected Logger logger = Logger.getLogger(getClass());
 

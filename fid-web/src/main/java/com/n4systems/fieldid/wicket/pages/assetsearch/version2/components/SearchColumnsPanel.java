@@ -19,10 +19,10 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ReportConfiguration;
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.SearchCriteria;
 
 
 public class SearchColumnsPanel extends Panel {
@@ -31,9 +31,9 @@ public class SearchColumnsPanel extends Panel {
 	@SpringBean private DynamicColumnsService dynamicColumnsService;	
 	
     private IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel;
-    private IModel<AssetSearchCriteriaModel> model;
+    private IModel<AssetSearchCriteria> model;
 	
-	public SearchColumnsPanel(String id, IModel<AssetSearchCriteriaModel> model) {
+	public SearchColumnsPanel(String id, IModel<AssetSearchCriteria> model) {
 		super(id, model);		
 		setOutputMarkupId(true);
 		setMarkupId(id);
@@ -89,7 +89,7 @@ public class SearchColumnsPanel extends Panel {
     }
 
 
-    private SearchCriteriaModel getAssetSearchCriteriaModel() {
+    private SearchCriteria getAssetSearchCriteriaModel() {
 			return model.getObject();
 	}
     

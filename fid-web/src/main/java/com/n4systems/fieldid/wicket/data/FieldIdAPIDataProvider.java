@@ -10,7 +10,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.RowModel;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.views.RowView;
@@ -29,12 +29,12 @@ public abstract class FieldIdAPIDataProvider extends FieldIDDataProvider<RowView
     private Integer size;
     private List<Long> currentPageIdList = new ArrayList<Long>();
 
-    private SearchCriteriaModel searchCriteria;
+    private SearchCriteria searchCriteria;
 
     private String defaultSortColumn;
     private SortDirection defaultSortDirection;
 
-    public FieldIdAPIDataProvider(SearchCriteriaModel searchCriteria, String defaultSortColumn, SortDirection defaultSortDirection) {
+    public FieldIdAPIDataProvider(SearchCriteria searchCriteria, String defaultSortColumn, SortDirection defaultSortDirection) {
         this.searchCriteria = searchCriteria;
         this.defaultSortColumn = defaultSortColumn;
         this.defaultSortDirection = defaultSortDirection;
@@ -44,7 +44,7 @@ public abstract class FieldIdAPIDataProvider extends FieldIDDataProvider<RowView
     protected abstract int getResultCount();
     protected abstract PageHolder<TableView> runSearch(int page, int pageSize);
 
-    private void setInitialSort(SearchCriteriaModel searchCriteria) {
+    private void setInitialSort(SearchCriteria searchCriteria) {
         if (searchCriteria.getSortColumn() == null) {
             setDefaultSort(defaultSortColumn, defaultSortDirection);
         } else {

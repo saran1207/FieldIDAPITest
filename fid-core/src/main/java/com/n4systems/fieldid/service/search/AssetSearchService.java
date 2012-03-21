@@ -2,20 +2,20 @@ package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
 import java.util.List;
 
-public class AssetSearchService extends SearchService<AssetSearchCriteriaModel, Asset> {
+public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset> {
 
     public AssetSearchService() {
         super(Asset.class);
     }
 
     @Override
-    protected void addSearchTerms(AssetSearchCriteriaModel criteriaModel, List<SearchTermDefiner> search) {
+    protected void addSearchTerms(AssetSearchCriteria criteriaModel, List<SearchTermDefiner> search) {
 		addWildcardOrStringTerm(search, "rfidNumber", criteriaModel.getRfidNumber());
 		addWildcardOrStringTerm(search, "identifier", criteriaModel.getIdentifier());
 		addWildcardOrStringTerm(search, "advancedLocation.freeformLocation", criteriaModel.getLocation().getFreeformLocation());
@@ -35,7 +35,7 @@ public class AssetSearchService extends SearchService<AssetSearchCriteriaModel, 
 		addAssignedUserTerm(search, criteriaModel);
     }
 
-	private void addPredefinedLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteriaModel criteriaModel) {
+	private void addPredefinedLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
         if (predefLocationId != null) {
 			search.add(new PredefinedLocationSearchTerm("preLocSearchId", predefLocationId));
@@ -43,14 +43,14 @@ public class AssetSearchService extends SearchService<AssetSearchCriteriaModel, 
 	}
 
     @Override
-    protected void addJoinTerms(AssetSearchCriteriaModel criteriaModel, List<JoinTerm> joinTerms) {
+    protected void addJoinTerms(AssetSearchCriteria criteriaModel, List<JoinTerm> joinTerms) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
         if (predefLocationId != null) {
 			addRequiredLeftJoin(joinTerms, "advancedLocation.predefinedLocation.searchIds", "preLocSearchId");
 		}
     }
 
-    private void addAssignedUserTerm(List<SearchTermDefiner> search, AssetSearchCriteriaModel criteriaModel) {
+    private void addAssignedUserTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
         Long assignedUserId = getId(criteriaModel.getAssignedTo());
         if(assignedUserId != null && assignedUserId == 0) {
 			addNullTerm(search, "assignedUser.id");

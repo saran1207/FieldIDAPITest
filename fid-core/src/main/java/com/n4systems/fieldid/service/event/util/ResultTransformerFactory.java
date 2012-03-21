@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.service.event.util;
 
 import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.TableViewTransformer;
 import com.n4systems.util.views.TableView;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ResultTransformerFactory {
 
-    public ResultTransformer<TableView> createResultTransformer(SearchCriteriaModel searchCriteria) {
+    public ResultTransformer<TableView> createResultTransformer(SearchCriteria searchCriteria) {
 		List<String> columns = new ArrayList<String>();
 		for(ColumnMappingView mapping: searchCriteria.getSortedStaticAndDynamicColumns()) {
 			if (mapping != null) {

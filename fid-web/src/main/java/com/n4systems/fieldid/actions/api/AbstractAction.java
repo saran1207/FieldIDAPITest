@@ -610,14 +610,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return getConfigContext().getString(ConfigEntry.HELP_SYSTEM_URL);
 	}
 	
-	public String getClickTaleStart() {
-		return getConfigContext().getString(ConfigEntry.CLICKTALE_START);
-	}
-
-	public String getClickTaleEnd() {
-		return getConfigContext().getString(ConfigEntry.CLICKTALE_END);
-	}
-
 	public UserLimitService getUserLimitService() {
 		return userLimitService;
 	}

@@ -22,7 +22,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
 
 public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
@@ -36,7 +36,7 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 	private String confirmation;
 	private Button submitButton;
 
-	public ConfirmDeletePanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
+	public ConfirmDeletePanel(String id, final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		super(id);
 		this.previousPanel = previousPanel;
 		

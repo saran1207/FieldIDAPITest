@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.data;
 
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.search.AssetSearchService;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.views.TableView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -12,9 +12,9 @@ import java.util.List;
 public class AssetSearchDataProvider extends FieldIdAPIDataProvider {
 
     private @SpringBean AssetSearchService assetSearchService;
-    private AssetSearchCriteriaModel searchCriteria;
+    private AssetSearchCriteria searchCriteria;
 
-    public AssetSearchDataProvider(AssetSearchCriteriaModel searchCriteria) {
+    public AssetSearchDataProvider(AssetSearchCriteria searchCriteria) {
         super(searchCriteria, "identified", SortDirection.DESC);
         this.searchCriteria = searchCriteria;
     }

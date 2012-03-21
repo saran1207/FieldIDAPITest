@@ -9,7 +9,7 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Iterator;
 import java.util.List;
 
-public class SavedReportService extends SavedSearchService<SavedReportItem, EventReportCriteriaModel> {
+public class SavedReportService extends SavedSearchService<SavedReportItem, EventReportCriteria> {
 
     private @Autowired DynamicColumnsService dynamicColumnsService;
     private @Autowired AssetTypeService assetTypeService;
@@ -28,7 +28,7 @@ public class SavedReportService extends SavedSearchService<SavedReportItem, Even
     @Override
     public void removeLastSavedSearch(User user) {
         if (user.getLastRunReport() != null) {
-            final EventReportCriteriaModel lastRunReport = user.getLastRunReport();
+            final EventReportCriteria lastRunReport = user.getLastRunReport();
             user.setLastRunReport(null);
             persistenceService.update(user);
             persistenceService.delete(lastRunReport);
@@ -36,8 +36,8 @@ public class SavedReportService extends SavedSearchService<SavedReportItem, Even
     }
 
     @Override
-    public EventReportCriteriaModel retrieveLastSearch() {
-        final EventReportCriteriaModel lastRunReport = getCurrentUser().getLastRunReport();
+    public EventReportCriteria retrieveLastSearch() {
+        final EventReportCriteria lastRunReport = getCurrentUser().getLastRunReport();
         lastRunReport.setReportAlreadyRun(true);
         storeTransientColumns(lastRunReport);
         enableSelectedColumns(lastRunReport, lastRunReport.getColumns());
@@ -45,12 +45,12 @@ public class SavedReportService extends SavedSearchService<SavedReportItem, Even
     }
 
     @Override
-    protected void storeLastSearchInUser(User user, EventReportCriteriaModel searchCriteria) {
+    protected void storeLastSearchInUser(User user, EventReportCriteria searchCriteria) {
         user.setLastRunReport(searchCriteria);
     }
 
     @Override
-    protected void storeTransientColumns(EventReportCriteriaModel searchCriteria) {
+    protected void storeTransientColumns(EventReportCriteria searchCriteria) {
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
 
         AssetTypeGroup assetTypeGroup = searchCriteria.getAssetTypeGroup();

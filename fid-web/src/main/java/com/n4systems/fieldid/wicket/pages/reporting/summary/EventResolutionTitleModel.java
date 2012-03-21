@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.reporting.summary;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -11,9 +11,9 @@ import java.util.Date;
 
 public class EventResolutionTitleModel extends LoadableDetachableModel<String> {
 
-    private IModel<EventReportCriteriaModel> eventReportCriteriaModel;
+    private IModel<EventReportCriteria> eventReportCriteriaModel;
 
-    public EventResolutionTitleModel(IModel<EventReportCriteriaModel> eventReportCriteriaModel) {
+    public EventResolutionTitleModel(IModel<EventReportCriteria> eventReportCriteriaModel) {
         this.eventReportCriteriaModel = eventReportCriteriaModel;
     }
 

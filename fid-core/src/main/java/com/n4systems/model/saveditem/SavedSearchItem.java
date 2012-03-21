@@ -1,39 +1,32 @@
 package com.n4systems.model.saveditem;
 
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import com.n4systems.model.search.AssetSearchCriteria;
 
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("S")
-public class SavedSearchItem extends SavedItem<AssetSearchCriteriaModel> {
+public class SavedSearchItem extends SavedItem<AssetSearchCriteria> {
 
     public SavedSearchItem() {}
 
-    public SavedSearchItem(AssetSearchCriteriaModel criteria) {
+    public SavedSearchItem(AssetSearchCriteria criteria) {
     	this.searchCriteria = criteria;
     }
     
     
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="search_id")
-    private AssetSearchCriteriaModel searchCriteria;
+    private AssetSearchCriteria searchCriteria;
 
     @Override
-	public AssetSearchCriteriaModel getSearchCriteria() {
+	public AssetSearchCriteria getSearchCriteria() {
         return searchCriteria;
     }
 
     @Override
-	public void setSearchCriteria(AssetSearchCriteriaModel searchCriteria) {
+	public void setSearchCriteria(AssetSearchCriteria searchCriteria) {
         this.searchCriteria = searchCriteria;
     }
 

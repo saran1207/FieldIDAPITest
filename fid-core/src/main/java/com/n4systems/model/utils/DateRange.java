@@ -1,21 +1,15 @@
 package com.n4systems.model.utils;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.n4systems.util.chart.RangeType;
+import com.n4systems.util.time.DateUtil;
+import org.joda.time.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.Duration;
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
-
-import com.n4systems.util.chart.RangeType;
-import com.n4systems.util.time.DateUtil;
+import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -111,7 +105,7 @@ public class DateRange implements Serializable, Cloneable {
 	// but when the user enters custom dates like Jan1-Jan8 they want to include the last day. 
 	public Date calculateToDate() {
 		LocalDate to = getTo();
-		if (rangeType.isWellDefinedRangeType()) { 
+		if (rangeType.isPredefinedType()) {
 			to = to.minusDays(1);
 		}
 		return to==null ? null : to.toDate();

@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.RangeType;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,9 +18,8 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
-import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
-import com.n4systems.model.orgs.BaseOrg;
+import java.util.Arrays;
+import java.util.List;
 
 public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfiguration> {
 
@@ -95,7 +94,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
 			}
 		};		
 		
-		DropDownChoice<RangeType> d = new DropDownChoice<RangeType>("dateRangeSelect", new PropertyModel<RangeType>(configModel,"rangeType"), Arrays.asList(RangeType.rangeTypes()), renderer);
+		DropDownChoice<RangeType> d = new DropDownChoice<RangeType>("dateRangeSelect", new PropertyModel<RangeType>(configModel,"rangeType"), Arrays.asList(RangeType.allFloatingButFutureTypes().toArray(new RangeType[]{})), renderer);
 		d.setNullValid(false);
 		return d;
 	}	        

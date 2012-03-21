@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.summary.EventResolutionPage;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventStatus;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
@@ -17,7 +17,7 @@ import rfid.web.helper.SessionUser;
 
 public class ReportingMassActionPanel extends MassActionPanel {
 
-    public ReportingMassActionPanel(String id, final IModel<EventReportCriteriaModel> reportCriteriaModel) {
+    public ReportingMassActionPanel(String id, final IModel<EventReportCriteria> reportCriteriaModel) {
         super(id);
 
         ReportingMassActionLink assignEventsToJobsLink;

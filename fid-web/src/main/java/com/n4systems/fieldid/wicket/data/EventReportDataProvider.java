@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.data;
 
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.search.ReportService;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.views.TableView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -13,9 +13,9 @@ public class EventReportDataProvider extends FieldIdAPIDataProvider {
 
     @SpringBean
     private ReportService reportService;
-    private EventReportCriteriaModel reportCriteria;
+    private EventReportCriteria reportCriteria;
 
-    public EventReportDataProvider(EventReportCriteriaModel reportCriteria) {
+    public EventReportDataProvider(EventReportCriteria reportCriteria) {
         super(reportCriteria, "date", SortDirection.DESC);
         this.reportCriteria = reportCriteria;
     }

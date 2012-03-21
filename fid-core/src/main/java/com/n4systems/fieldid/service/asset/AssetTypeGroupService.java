@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.search.SavedSearchRemoveFilter;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.AssetTypeGroupRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -30,9 +30,9 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
 		countQuery.addSimpleWhere("group", group);
         summary.setAssetTypesConnected(persistenceService.count(countQuery));
 
-        final QueryBuilder<SearchCriteriaModel> savedItemCountQuery = createTenantSecurityBuilder(SearchCriteriaModel.class);
+        final QueryBuilder<SearchCriteria> savedItemCountQuery = createTenantSecurityBuilder(SearchCriteria.class);
         savedItemCountQuery.addSimpleWhere("assetTypeGroup", group);
-        final List<SearchCriteriaModel> all = persistenceService.findAll(savedItemCountQuery);
+        final List<SearchCriteria> all = persistenceService.findAll(savedItemCountQuery);
 
         summary.setSavedReportsConnected((long)all.size());
 
@@ -43,7 +43,7 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
 	public void deleteAssetTypeGroup(final AssetTypeGroup group) {
         savedReportService.deleteAllSavedSearchesMatching(new SavedSearchRemoveFilter() {
             @Override
-            public boolean removeThisSearch(SearchCriteriaModel searchCriteria) {
+            public boolean removeThisSearch(SearchCriteria searchCriteria) {
                 return searchCriteria.getAssetTypeGroup() != null && group.getId().equals(searchCriteria.getAssetTypeGroup().getId());
             }
         });

@@ -22,7 +22,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
@@ -36,7 +36,7 @@ public class SearchSubMenu extends Panel {
 	private static final String COLUMNS_ID = "columns";
 
 	private WebMarkupContainer actions;
-	private Model<AssetSearchCriteriaModel> model;
+	private Model<AssetSearchCriteria> model;
 	private Integer maxUpdate;
 	private Integer maxSchedule;
 	private Integer maxPrint;
@@ -50,7 +50,7 @@ public class SearchSubMenu extends Panel {
 	private SubMenuLink filters;
 	
 	
-	public SearchSubMenu(String id, final Model<AssetSearchCriteriaModel> model) {
+	public SearchSubMenu(String id, final Model<AssetSearchCriteria> model) {
 		super(id);
 		this.model = model;
 		add(columns = new SubMenuLink(COLUMNS_ID));
@@ -114,7 +114,7 @@ public class SearchSubMenu extends Panel {
 	
 	class LightboxActionLink extends AssetSearchMassActionLink {
 
-		public LightboxActionLink(String id, String url, IModel<AssetSearchCriteriaModel> model) {
+		public LightboxActionLink(String id, String url, IModel<AssetSearchCriteria> model) {
 			super(id, url, model);
 			setOutputMarkupId(true);
 		}

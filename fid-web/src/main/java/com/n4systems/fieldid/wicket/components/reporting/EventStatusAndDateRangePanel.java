@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.search.EventStatus;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -84,7 +85,7 @@ public class EventStatusAndDateRangePanel extends Panel {
                 return EventStatus.COMPLETE.equals(eventStatusModel.getObject());
             }
         });
-        add(dueRangePicker = new DateRangePicker("dueRangePicker", new FIDLabelModel("label.due_date"), dueRange) {
+        add(dueRangePicker = new DateRangePicker("dueRangePicker", new FIDLabelModel("label.due_date"), dueRange, RangeType.allFloatingTypes()) {
             @Override
             public boolean isVisible() {
                 return EventStatus.INCOMPLETE.equals(eventStatusModel.getObject())

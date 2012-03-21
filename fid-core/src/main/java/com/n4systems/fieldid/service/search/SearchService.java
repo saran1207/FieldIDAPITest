@@ -9,7 +9,7 @@ import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.util.StringUtils;
@@ -26,7 +26,6 @@ import com.n4systems.util.persistence.search.terms.DateRangeTerm;
 import com.n4systems.util.persistence.search.terms.NotNullTerm;
 import com.n4systems.util.persistence.search.terms.NullTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
-import com.n4systems.util.persistence.search.terms.SimpleInTerm;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public abstract class SearchService<T extends SearchCriteriaModel, M extends BaseEntity & NetworkEntity> extends FieldIdPersistenceService {
+public abstract class SearchService<T extends SearchCriteria, M extends BaseEntity & NetworkEntity> extends FieldIdPersistenceService {
 
     @Autowired
 	public OrgService orgService;

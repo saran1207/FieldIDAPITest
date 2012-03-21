@@ -5,14 +5,14 @@ import org.apache.wicket.model.IModel;
 
 import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 
 public class MassUpdateAssetsPanel extends Panel {
 	
 	private AbstractMassUpdatePanel currentPanel;
 	private MassUpdateNavigationPanel navPanel;
 		
-	public MassUpdateAssetsPanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria) {
+	public MassUpdateAssetsPanel(String id, final IModel<AssetSearchCriteria> assetSearchCriteria) {
 		super(id);
 		
 		currentPanel = new SelectOperationPanel("massUpdatePanel", assetSearchCriteria) {
@@ -31,16 +31,16 @@ public class MassUpdateAssetsPanel extends Panel {
 		add(navPanel = getNavigationPanel(assetSearchCriteria, currentPanel));
 	}
 	
-	private MassUpdateNavigationPanel getNavigationPanel(IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel panel) {
+	private MassUpdateNavigationPanel getNavigationPanel(IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel panel) {
 		return new MassUpdateNavigationPanel("navPanel", assetSearchCriteria, panel);
 	}
 	
-	private void updateNavigationPanel(IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel panel) {
+	private void updateNavigationPanel(IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel panel) {
 		navPanel.setParent(this);
 		navPanel.replaceWith(getNavigationPanel(assetSearchCriteria, panel));		
 	}
 
-	private DeleteDetailsPanel getDeleteDetailsPanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
+	private DeleteDetailsPanel getDeleteDetailsPanel(final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		return new DeleteDetailsPanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
 			protected void onCancel() {
@@ -55,7 +55,7 @@ public class MassUpdateAssetsPanel extends Panel {
 		};
 	}
 	
-	private AbstractMassUpdatePanel getEditDetailsPanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
+	private AbstractMassUpdatePanel getEditDetailsPanel(final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		return new EditDetailsPanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
 			protected void onCancel() {
@@ -71,7 +71,7 @@ public class MassUpdateAssetsPanel extends Panel {
 		};
 	}
 
-	private ConfirmDeletePanel getConfirmDeletePanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
+	private ConfirmDeletePanel getConfirmDeletePanel(final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		return new ConfirmDeletePanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
 			protected void onCancel() {
@@ -80,7 +80,7 @@ public class MassUpdateAssetsPanel extends Panel {
 		};
 	}
 	
-	private ConfirmEditPanel getConfirmEditPanel(final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel, MassUpdateAssetModel massUpdateAssetModel) {
+	private ConfirmEditPanel getConfirmEditPanel(final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel, MassUpdateAssetModel massUpdateAssetModel) {
 		return new ConfirmEditPanel("massUpdatePanel", assetSearchCriteria, previousPanel, massUpdateAssetModel){
 			@Override
 			protected void onCancel() {

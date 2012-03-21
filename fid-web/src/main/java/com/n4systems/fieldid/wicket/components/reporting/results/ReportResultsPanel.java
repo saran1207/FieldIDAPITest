@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.table.HighlightPastDueSchedulesBe
 import com.n4systems.fieldid.wicket.data.EventReportDataProvider;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.repeater.Item;
@@ -15,9 +15,9 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import javax.servlet.http.HttpSession;
 
 @SuppressWarnings("serial")
-public class ReportResultsPanel extends SRSResultsPanel<EventReportCriteriaModel> {
+public class ReportResultsPanel extends SRSResultsPanel<EventReportCriteria> {
 
-    public ReportResultsPanel(String id, final IModel<EventReportCriteriaModel> eventCriteriaModel) {
+    public ReportResultsPanel(String id, final IModel<EventReportCriteria> eventCriteriaModel) {
         super(id, eventCriteriaModel);
     }
 
@@ -27,7 +27,7 @@ public class ReportResultsPanel extends SRSResultsPanel<EventReportCriteriaModel
     }
 
     @Override
-    protected FieldIdAPIDataProvider createDataProvider(IModel<EventReportCriteriaModel> criteriaModel) {
+    protected FieldIdAPIDataProvider createDataProvider(IModel<EventReportCriteria> criteriaModel) {
         return new EventReportDataProvider(criteriaModel.getObject());
     }
 

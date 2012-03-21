@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Status;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventStatus;
 import com.n4systems.model.summary.EventResolutionSummary;
 import com.n4systems.model.summary.EventSetSummary;
@@ -41,9 +41,9 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
 
     private WebMarkupContainer breakdownContainer;
     private ListView<EventSetSummary> summaryList;
-    private EventReportCriteriaModel criteria;
+    private EventReportCriteria criteria;
 
-    public EventResolutionPage(IModel<EventReportCriteriaModel> criteriaModel) {
+    public EventResolutionPage(IModel<EventReportCriteria> criteriaModel) {
         criteria = criteriaModel.getObject();
         eventResolutionSummary = eventResolutionService.getEventResolutionSummary(criteria);
 
@@ -115,7 +115,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         return new Link(linkId) {
             @Override
             public void onClick() {
-                EventReportCriteriaModel criteria = copyOfCriteria();
+                EventReportCriteria criteria = copyOfCriteria();
                 populateCriteriaInto(model.getObject().getItem(), criteria);
                 populateFailedInto(criteria);
                 setResponsePage(new ReportingResultsPage(criteria));
@@ -127,7 +127,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         return new Link(linkId) {
             @Override
             public void onClick() {
-                EventReportCriteriaModel criteria = copyOfCriteria();
+                EventReportCriteria criteria = copyOfCriteria();
                 populateCriteriaInto(model.getObject().getItem(), criteria);
                 populateOutstandingInto(criteria);
                 setResponsePage(new ReportingResultsPage(criteria));
@@ -139,14 +139,14 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         return new Link(linkId) {
             @Override
             public void onClick() {
-                EventReportCriteriaModel criteria = copyOfCriteria();
+                EventReportCriteria criteria = copyOfCriteria();
                 populateCriteriaInto(model.getObject().getItem(), criteria);
                 setResponsePage(new ReportingResultsPage(criteria));
             }
         };
     }
 
-    private void populateCriteriaInto(Object item, EventReportCriteriaModel criteria) {
+    private void populateCriteriaInto(Object item, EventReportCriteria criteria) {
         if (item instanceof Date) {
             criteria.getDateRange().setRangeType(RangeType.CUSTOM);
             criteria.getDateRange().setFromDate((Date) item);
@@ -158,11 +158,11 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         }
     }
 
-    private void populateOutstandingInto(EventReportCriteriaModel criteriaModel) {
+    private void populateOutstandingInto(EventReportCriteria criteriaModel) {
         criteriaModel.setEventStatus(EventStatus.INCOMPLETE);
     }
 
-    private void populateFailedInto(EventReportCriteriaModel criteriaModel) {
+    private void populateFailedInto(EventReportCriteria criteriaModel) {
         criteriaModel.setResult(Status.FAIL);
     }
 
@@ -195,7 +195,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new EventResolutionTitleModel(new PropertyModel<EventReportCriteriaModel>(this,"criteria")));
+        return new Label(labelId, new EventResolutionTitleModel(new PropertyModel<EventReportCriteria>(this,"criteria")));
     }
 
     @Override
@@ -204,9 +204,9 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/newCss/event_resolution/event_resolution.css");
     }
 
-    private EventReportCriteriaModel copyOfCriteria() {
+    private EventReportCriteria copyOfCriteria() {
         try {
-            EventReportCriteriaModel clone = (EventReportCriteriaModel) criteria.clone();
+            EventReportCriteria clone = (EventReportCriteria) criteria.clone();
             clone.setDateRange(criteria.getDateRange().clone());
             clone.getSelection().clear();
             return clone;

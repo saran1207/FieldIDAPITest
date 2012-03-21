@@ -11,7 +11,7 @@ public class EnumDropDownChoiceRenderer<E extends Enum<?>> implements IChoiceRen
 	}
 	
 	@Override
-	@SuppressWarnings({ "unchecked" })
+    @SuppressWarnings(value = {"unchecked"})
 	public Object getDisplayValue(E object) {
 		if (object instanceof Listable) { 
 			Listable<String> listable = (Listable<String>) object;

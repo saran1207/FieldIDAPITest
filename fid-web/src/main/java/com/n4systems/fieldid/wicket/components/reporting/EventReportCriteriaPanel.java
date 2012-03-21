@@ -13,7 +13,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventStatus;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.search.ReportConfiguration;
@@ -32,16 +32,16 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 @SuppressWarnings("serial")
-public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, EventReportCriteriaModel> {
+public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, EventReportCriteria> {
 
     private @SpringBean DynamicColumnsService dynamicColumnsService;
 
-    public EventReportCriteriaPanel(String id, IModel<EventReportCriteriaModel> criteriaModel, SavedReportItem savedItem) {
+    public EventReportCriteriaPanel(String id, IModel<EventReportCriteria> criteriaModel, SavedReportItem savedItem) {
         super(id, criteriaModel, savedItem);
     }
 
     public EventReportCriteriaPanel(String id) {
-        super(id, new Model<EventReportCriteriaModel>(new EventReportCriteriaModel()), null);
+        super(id, new Model<EventReportCriteria>(new EventReportCriteria()), null);
     }
 
     @Override
@@ -75,12 +75,12 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, 
     }
 
     @Override
-    protected EventReportCriteriaModel createNewCriteriaModel() {
-        return new EventReportCriteriaModel();
+    protected EventReportCriteria createNewCriteriaModel() {
+        return new EventReportCriteria();
     }
 
     @Override
-    protected WebPage createResultsPage(EventReportCriteriaModel criteria, SavedReportItem savedItem) {
+    protected WebPage createResultsPage(EventReportCriteria criteria, SavedReportItem savedItem) {
         HttpSession session = ((ServletWebRequest) getRequest()).getContainerRequest().getSession();
         new LegacyReportCriteriaStorage().storeCriteria(criteria, session);
         return new ReportingResultsPage(criteria, savedItem);

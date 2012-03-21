@@ -2,7 +2,7 @@ package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventStatus;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.user.User;
@@ -18,14 +18,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ReportService extends SearchService<EventReportCriteriaModel, EventSchedule> {
+public class ReportService extends SearchService<EventReportCriteria, EventSchedule> {
 
     public ReportService() {
         super(EventSchedule.class);
     }
 
     @Override
-    protected void addSearchTerms(EventReportCriteriaModel criteriaModel, List<SearchTermDefiner> searchTerms) {
+    protected void addSearchTerms(EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
         User user = getCurrentUser();
         TimeZone timeZone = user.getTimeZone();
 
@@ -92,7 +92,7 @@ public class ReportService extends SearchService<EventReportCriteriaModel, Event
         addPredefinedLocationTerm(searchTerms, criteriaModel);
     }
 
-	private void addPredefinedLocationTerm(List<SearchTermDefiner> search, EventReportCriteriaModel criteriaModel) {
+	private void addPredefinedLocationTerm(List<SearchTermDefiner> search, EventReportCriteria criteriaModel) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
         if (predefLocationId != null) {
 			search.add(new PredefinedLocationSearchTerm("preLocSearchId", predefLocationId));
@@ -100,7 +100,7 @@ public class ReportService extends SearchService<EventReportCriteriaModel, Event
 	}
 
     @Override
-    protected void addJoinTerms(EventReportCriteriaModel criteriaModel, List<JoinTerm> joinTerms) {
+    protected void addJoinTerms(EventReportCriteria criteriaModel, List<JoinTerm> joinTerms) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
         if (predefLocationId != null) {
 			addRequiredLeftJoin(joinTerms, "advancedLocation.predefinedLocation.searchIds", "preLocSearchId");

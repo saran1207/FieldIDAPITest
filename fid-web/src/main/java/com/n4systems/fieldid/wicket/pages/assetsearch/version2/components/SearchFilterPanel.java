@@ -11,14 +11,14 @@ import org.apache.wicket.model.StringResourceModel;
 
 import com.n4systems.fieldid.wicket.components.DateRangePicker;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.utils.DateRange;
 
 
 
 public class SearchFilterPanel extends Panel {
 
-	public SearchFilterPanel(String id, final IModel<AssetSearchCriteriaModel> model) {
+	public SearchFilterPanel(String id, final IModel<AssetSearchCriteria> model) {
 		super(id,model);
 		setOutputMarkupId(true);
 		

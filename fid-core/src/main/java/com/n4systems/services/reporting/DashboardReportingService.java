@@ -26,8 +26,8 @@ import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
 import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.EnumUtils;
@@ -128,7 +128,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	// in particular, setCommonModelDefaults().
 	//
 	
-	public EventReportCriteriaModel convertWidgetDefinitionToReportCriteria(Long widgetDefinitionId, Long x, String series) {
+	public EventReportCriteria convertWidgetDefinitionToReportCriteria(Long widgetDefinitionId, Long x, String series) {
 		WidgetDefinition<?> widgetDefinition = getWidgetDefinition(widgetDefinitionId);
 		LocalDate localDate = new LocalDate(x);
 		switch (widgetDefinition.getWidgetType()) { 
@@ -147,25 +147,25 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return persistenceService.findNonSecure(WidgetDefinition.class, widgetDefinitionId);
 	}
 
-	private EventReportCriteriaModel getModelDefaults(UpcomingEventsWidgetConfiguration config, String series, LocalDate localDate) {
-		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getRangeType(), new Period().withDays(config.getPeriod()), localDate);
+	private EventReportCriteria getModelDefaults(UpcomingEventsWidgetConfiguration config, String series, LocalDate localDate) {
+		EventReportCriteria model = getDefaultReportCriteriaModel(config.getOrg(), config.getRangeType(), new Period().withDays(config.getPeriod()), localDate);
 		return model;
 	}
 
-	private EventReportCriteriaModel getModelDefaults(CompletedEventsWidgetConfiguration config, String series, LocalDate localDate) {
-		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getDateRangeType(), config.getGranularity().getPeriod(), localDate);
+	private EventReportCriteria getModelDefaults(CompletedEventsWidgetConfiguration config, String series, LocalDate localDate) {
+		EventReportCriteria model = getDefaultReportCriteriaModel(config.getOrg(), config.getDateRangeType(), config.getGranularity().getPeriod(), localDate);
 		model.setResult(EnumUtils.valueOf(Status.class, series));		
 		return model;
 	}
 
-	private EventReportCriteriaModel getModelDefaults(EventCompletenessWidgetConfiguration config, String series, LocalDate localDate) {
-		EventReportCriteriaModel model = getDefaultReportCriteriaModel(config.getOrg(), config.getRangeType(), config.getGranularity().getPeriod(), localDate);
+	private EventReportCriteria getModelDefaults(EventCompletenessWidgetConfiguration config, String series, LocalDate localDate) {
+		EventReportCriteria model = getDefaultReportCriteriaModel(config.getOrg(), config.getRangeType(), config.getGranularity().getPeriod(), localDate);
 		model.setOwner(config.getOrg());
 		return model;
 	}
 
-	private EventReportCriteriaModel getDefaultReportCriteriaModel(BaseOrg org, RangeType rangeType, Period period, LocalDate localDate) {
-		EventReportCriteriaModel model = new EventReportCriteriaModel();
+	private EventReportCriteria getDefaultReportCriteriaModel(BaseOrg org, RangeType rangeType, Period period, LocalDate localDate) {
+		EventReportCriteria model = new EventReportCriteria();
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
         model.setColumnGroups(reportConfiguration.getColumnGroups());
         model.setSortColumn(reportConfiguration.getSortColumn());
@@ -180,7 +180,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         return model;
 	}
 
-	public AssetSearchCriteriaModel convertWidgetDefinitionToAssetCriteria(Long widgetDefinitionId, Long x, String y, String series) {
+	public AssetSearchCriteria convertWidgetDefinitionToAssetCriteria(Long widgetDefinitionId, Long x, String y, String series) {
 		WidgetDefinition<?> widgetDefinition = getWidgetDefinition(widgetDefinitionId);		
 		switch (widgetDefinition.getWidgetType()) { 
 			case ASSETS_IDENTIFIED:
@@ -192,10 +192,10 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		}
 	}
 
-	private AssetSearchCriteriaModel getModelDefaults(
+	private AssetSearchCriteria getModelDefaults(
 			AssetsIdentifiedWidgetConfiguration config,
 			LocalDate localDate) {		
-		AssetSearchCriteriaModel model = getDefaultAssetSearchCritieriaModel();		
+		AssetSearchCriteria model = getDefaultAssetSearchCritieriaModel();
 		if (config.getGranularity()!=null) { 
 			LocalDate from = localDate;
 			LocalDate to = from.plus(config.getGranularity().getPeriod().minusDays(1));
@@ -205,17 +205,17 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return model;
 	}
 
-	private AssetSearchCriteriaModel getModelDefaults(
+	private AssetSearchCriteria getModelDefaults(
 			AssetsStatusWidgetConfiguration config, String assetStatus) {
-		AssetSearchCriteriaModel model = getDefaultAssetSearchCritieriaModel();
+		AssetSearchCriteria model = getDefaultAssetSearchCritieriaModel();
 		model.setAssetStatus(assetStatusService.getStatusByName(assetStatus));
 		model.setDateRange(new DateRange(config.getRangeType()));
 		model.setOwner(config.getOrg());		
 		return model;
 	}
 
-	public AssetSearchCriteriaModel getDefaultAssetSearchCritieriaModel() {
-		AssetSearchCriteriaModel model = new AssetSearchCriteriaModel();
+	public AssetSearchCriteria getDefaultAssetSearchCritieriaModel() {
+		AssetSearchCriteria model = new AssetSearchCriteria();
 		ReportConfiguration reportConfiguration = new AssetColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());		
 		model.setColumnGroups(reportConfiguration.getColumnGroups());
         model.setSortColumn(reportConfiguration.getSortColumn());

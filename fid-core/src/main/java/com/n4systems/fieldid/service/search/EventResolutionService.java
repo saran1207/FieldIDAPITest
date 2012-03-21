@@ -4,7 +4,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Status;
-import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.summary.EventResolutionSummary;
 import com.n4systems.model.summary.EventSetSummary;
 import com.n4systems.model.utils.PlainDate;
@@ -17,7 +17,7 @@ public class EventResolutionService extends FieldIdPersistenceService {
     private ReportService reportService;
 
     @Transactional(readOnly = true)
-    public EventResolutionSummary getEventResolutionSummary(EventReportCriteriaModel criteria) {
+    public EventResolutionSummary getEventResolutionSummary(EventReportCriteria criteria) {
         int summaryPageSize = 256;
 
         int totalPages = reportService.countPages(criteria, (long)summaryPageSize);

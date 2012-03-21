@@ -7,8 +7,8 @@ import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
 import com.n4systems.handlers.remover.summary.SavedReportDeleteSummary;
 import com.n4systems.model.EventType;
-import com.n4systems.model.search.EventReportCriteriaModel;
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -42,10 +42,10 @@ private static final Logger logger = Logger.getLogger(EventTypeRemovalService.cl
 	private void deleteSavedReportsWithEventTypeCriteria(final EventType eventType) {
         savedReportService.deleteAllSavedSearchesMatching(new SavedSearchRemoveFilter() {
             @Override
-            public boolean removeThisSearch(SearchCriteriaModel searchCriteria) {
-                if (searchCriteria instanceof EventReportCriteriaModel) {
-                    EventReportCriteriaModel searchCriteria1 = (EventReportCriteriaModel) searchCriteria;
-                    return searchCriteria1.getEventType() != null && ((EventReportCriteriaModel) searchCriteria).getEventType().getId().equals(eventType.getId());
+            public boolean removeThisSearch(SearchCriteria searchCriteria) {
+                if (searchCriteria instanceof EventReportCriteria) {
+                    EventReportCriteria searchCriteria1 = (EventReportCriteria) searchCriteria;
+                    return searchCriteria1.getEventType() != null && ((EventReportCriteria) searchCriteria).getEventType().getId().equals(eventType.getId());
                 }
                 return false;
             }
@@ -86,7 +86,7 @@ private static final Logger logger = Logger.getLogger(EventTypeRemovalService.cl
 	}
 
     private SavedReportDeleteSummary countSavedReportsToBeDeleted(EventType eventType) {
-        QueryBuilder<EventReportCriteriaModel> query = createTenantSecurityBuilder(EventReportCriteriaModel.class);
+        QueryBuilder<EventReportCriteria> query = createTenantSecurityBuilder(EventReportCriteria.class);
         query.addSimpleWhere("eventType", eventType);
 
         SavedReportDeleteSummary summary = new SavedReportDeleteSummary();

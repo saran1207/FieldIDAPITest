@@ -19,21 +19,21 @@ import com.n4systems.fieldid.wicket.components.search.SRSCriteriaPanel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.saveditem.SavedSearchItem;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.utils.DateRange;
 
-public class SearchCriteriaPanel extends SRSCriteriaPanel<SavedSearchItem, AssetSearchCriteriaModel> {
+public class SearchCriteriaPanel extends SRSCriteriaPanel<SavedSearchItem, AssetSearchCriteria> {
 
     private @SpringBean DynamicColumnsService dynamicColumnsService;
 
-    public SearchCriteriaPanel(String id, IModel<AssetSearchCriteriaModel> criteriaModel, SavedSearchItem savedItem) {
+    public SearchCriteriaPanel(String id, IModel<AssetSearchCriteria> criteriaModel, SavedSearchItem savedItem) {
         super(id, criteriaModel, savedItem);
     }
 
     public SearchCriteriaPanel(String id) {
-        super(id, new Model<AssetSearchCriteriaModel>(new AssetSearchCriteriaModel()), null);
+        super(id, new Model<AssetSearchCriteria>(new AssetSearchCriteria()), null);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class SearchCriteriaPanel extends SRSCriteriaPanel<SavedSearchItem, Asset
     }
 
     @Override
-    protected WebPage createResultsPage(AssetSearchCriteriaModel criteria, SavedSearchItem savedItem) {
+    protected WebPage createResultsPage(AssetSearchCriteria criteria, SavedSearchItem savedItem) {
         return new AssetSearchResultsPage(criteriaModel.getObject(), savedItem);
     }
 
@@ -56,8 +56,8 @@ public class SearchCriteriaPanel extends SRSCriteriaPanel<SavedSearchItem, Asset
     }
 
 	@Override
-	protected AssetSearchCriteriaModel createNewCriteriaModel() {
-		return new AssetSearchCriteriaModel();
+	protected AssetSearchCriteria createNewCriteriaModel() {
+		return new AssetSearchCriteria();
 	}
 
     @Override

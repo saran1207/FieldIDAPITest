@@ -39,12 +39,12 @@ import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
 
 public class EditDetailsPanel extends AbstractMassUpdatePanel {
 	
-	public EditDetailsPanel(String id, IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
+	public EditDetailsPanel(String id, IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		super(id, assetSearchCriteria);
 		this.previousPanel = previousPanel;
 						

@@ -6,14 +6,14 @@ import com.n4systems.model.columns.SystemColumnMapping;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.ColumnMappingConverter;
 import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.user.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SavedSearchService<I extends SavedItem<T>, T extends SearchCriteriaModel>  extends FieldIdPersistenceService {
+public abstract class SavedSearchService<I extends SavedItem<T>, T extends SearchCriteria>  extends FieldIdPersistenceService {
 
     @Transactional
     public void saveLastSearch(T searchCriteria) {

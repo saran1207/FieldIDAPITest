@@ -11,12 +11,12 @@ import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassAction
 import com.n4systems.fieldid.wicket.components.search.results.MassActionPanel;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 
 @Deprecated   //WEB-2629.   page being refactored so this should not be needed at end of ticket.
 public class AssetSearchMassActionPanel extends MassActionPanel {
 
-    public AssetSearchMassActionPanel(String id, final IModel<AssetSearchCriteriaModel> criteriaModel) {
+    public AssetSearchMassActionPanel(String id, final IModel<AssetSearchCriteria> criteriaModel) {
         super(id);
 
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();

@@ -14,7 +14,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
-import com.n4systems.model.search.AssetSearchCriteriaModel;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.MassUpdateAssetsTask;
@@ -29,7 +29,7 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 	
 	private MassUpdateAssetModel massUpdateAssetModel;
 
-	public ConfirmEditPanel(String id, final IModel<AssetSearchCriteriaModel> assetSearchCriteria, AbstractMassUpdatePanel previousPanel, final MassUpdateAssetModel massUpdateAssetModel) {
+	public ConfirmEditPanel(String id, final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel, final MassUpdateAssetModel massUpdateAssetModel) {
 		super(id, assetSearchCriteria);
 		this.previousPanel = previousPanel;
 		this.massUpdateAssetModel = massUpdateAssetModel;

@@ -1,37 +1,30 @@
 package com.n4systems.model.saveditem;
 
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import com.n4systems.model.search.EventReportCriteria;
 
-import com.n4systems.model.search.EventReportCriteriaModel;
+import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("R")
-public class SavedReportItem extends SavedItem<EventReportCriteriaModel> {
+public class SavedReportItem extends SavedItem<EventReportCriteria> {
 
     public SavedReportItem() {}
-    public SavedReportItem(EventReportCriteriaModel criteria) {
+    public SavedReportItem(EventReportCriteria criteria) {
         this.searchCriteria = criteria;
     }
 
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="report_id")
-    private EventReportCriteriaModel searchCriteria;
+    private EventReportCriteria searchCriteria;
 
     @Override
-	public EventReportCriteriaModel getSearchCriteria() {
+	public EventReportCriteria getSearchCriteria() {
         return searchCriteria;
     }
 
     @Override
-	public void setSearchCriteria(EventReportCriteriaModel searchCriteria) {
+	public void setSearchCriteria(EventReportCriteria searchCriteria) {
         this.searchCriteria = searchCriteria;
     }
 

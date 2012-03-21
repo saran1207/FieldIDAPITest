@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.service.search;
 
-import com.n4systems.model.search.SearchCriteriaModel;
+import com.n4systems.model.search.SearchCriteria;
 
 public interface SavedSearchRemoveFilter {
 
-    public boolean removeThisSearch(SearchCriteriaModel searchCriteria);
+    public boolean removeThisSearch(SearchCriteria searchCriteria);
 
 }
