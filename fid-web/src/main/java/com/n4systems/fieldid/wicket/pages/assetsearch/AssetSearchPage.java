@@ -13,7 +13,6 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchResultsPage;
 
-@SuppressWarnings("serial")
 public class AssetSearchPage extends FieldIDFrontEndPage {
 
     @SpringBean

@@ -29,7 +29,7 @@ import org.apache.wicket.model.PropertyModel;
 import java.util.Collections;
 import java.util.List;
 
-@SuppressWarnings("serial")
+@Deprecated  //copy & pasted into new class for version2 of search/reporting pages.  this class should be removed when switchover is complete.  (dd-03/2012)
 public abstract class SRSCriteriaPanel<S extends SavedItem, T extends SearchCriteria> extends Panel {
 
     private SelectDisplayColumnsPanel selectDisplayColumnsPanel;

@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+@Deprecated // when we switch over to new search, this will no longer be needed.  use .version2. class.
 public class SaveAssetSearchPage extends SaveSearchPage<SavedSearchItem> {
 
     @SpringBean

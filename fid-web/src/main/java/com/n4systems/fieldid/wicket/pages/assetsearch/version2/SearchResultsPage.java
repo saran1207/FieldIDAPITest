@@ -64,7 +64,7 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
     }
 
     @Override
-    protected Component createConfigPanel(String id, final Model<AssetSearchCriteria> model) {
+    protected Component createCriteriaPanel(String id, final Model<AssetSearchCriteria> model) {
         return new SearchCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
                 setResponsePage(new SearchResultsPage(model.getObject(),false));
@@ -100,7 +100,7 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
 
     @Override
     protected Component createCriteriaPanel(String id, Model<AssetSearchCriteria> criteriaModel, SavedItem<AssetSearchCriteria> savedItem) {
-        return new AssetSearchCriteriaPanel("criteriaPanel", criteriaModel, (SavedSearchItem) savedItem);
+        return new AssetSearchCriteriaPanel(id, criteriaModel, (SavedSearchItem) savedItem);
     }
 
 	private AssetSearchCriteria createSearchCriteriaModel(PageParameters params) {

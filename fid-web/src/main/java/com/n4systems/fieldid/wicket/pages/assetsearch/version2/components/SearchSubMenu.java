@@ -1,13 +1,19 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
+import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
+import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
@@ -17,26 +23,11 @@ import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
 import org.odlabs.wiquery.core.javascript.JsScope;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
-import com.n4systems.fieldid.actions.utils.WebSessionMap;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
-import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
-import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
-import com.n4systems.model.search.AssetSearchCriteria;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 
-
-public class SearchSubMenu extends Panel {
+public class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 	
-	public static final String HIDE_JS = "fieldIdWidePage.hideLeftMenu()";
-	public static final String SHOW_JS = "fieldIdWidePage.showLeftMenu()";
-	
-	private static final String FILTERS_ID = "filters";
-	private static final String COLUMNS_ID = "columns";
 
 	private WebMarkupContainer actions;
-	private Model<AssetSearchCriteria> model;
 	private Integer maxUpdate;
 	private Integer maxSchedule;
 	private Integer maxPrint;
@@ -45,22 +36,16 @@ public class SearchSubMenu extends Panel {
 	private AssetSearchMassActionLink printLink;
 	private AssetSearchMassActionLink exportLink;
 	private Label msg;
-	private String clicked;
-	private SubMenuLink columns;
-	private SubMenuLink filters;
-	
+
 	
 	public SearchSubMenu(String id, final Model<AssetSearchCriteria> model) {
-		super(id);
-		this.model = model;
-		add(columns = new SubMenuLink(COLUMNS_ID));
-		add(filters = new SubMenuLink(FILTERS_ID));
-		add(createSaveLink("save"));
-		
+		super(id,model);
+
         add(printLink = new LightboxActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model));
         add(exportLink = new LightboxActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model));
         add(msg = new Label("msg", new StringResourceModel("label.select_assets", this, null)));
-        
+        add(createSaveLink("save"));
+
         actions=new WebMarkupContainer("actions");
         
         actions.add(new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", model));
@@ -79,8 +64,6 @@ public class SearchSubMenu extends Panel {
         add(actions);
 		
 		initializeLimits();
-		
-		add(new AttributeAppender("class", "sub-menu"));		
 	}		
 	
 	protected Component createSaveLink(String id) {

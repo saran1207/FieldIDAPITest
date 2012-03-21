@@ -6,25 +6,21 @@ import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleConta
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.saveditem.SavedItem;
-import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.services.reporting.DashboardReportingService;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public abstract class AbstractSearchPage<T extends SearchCriteria> extends FieldIDFrontEndPage {
 
-    @SpringBean
-    private DashboardReportingService dashboardReportingService;
+    private @SpringBean DashboardReportingService dashboardReportingService;
 
-    @SpringBean
-    private SavedAssetSearchService savedAssetSearchService;
+    private @SpringBean SavedAssetSearchService savedAssetSearchService;
 
     protected SavedItem<T> savedItem;
     protected T searchCriteria;
@@ -35,13 +31,6 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         super(params);
     }
 
-    public AbstractSearchPage(T searchCriteria, SavedSearchItem savedItem, boolean showLeftMenu) {
-    	super(new PageParameters());
-        SavedItem<T> newSavedSearchItem = createSavedItemFromCriteria(searchCriteria);
-        newSavedSearchItem.setId(savedItem==null ? null : savedItem.getId());
-    	init(searchCriteria, newSavedSearchItem, showLeftMenu);
-    }
-
     protected void init(final T searchCriteria, final SavedItem<T> savedItem, boolean showLeftMenu) {
     	this.savedItem = savedItem;
     	this.showLeftMenu = showLeftMenu;
@@ -49,14 +38,14 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         saveLastSearch(searchCriteria);
 
         Model<T> criteriaModel = new Model<T>(searchCriteria);
-        add(createResultsPanel("resultsPanel", criteriaModel, !showLeftMenu));
+        add(createResultsPanel("resultsPanel", criteriaModel, showLeftMenu));
 
         SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));
         criteriaExpandContainer.addContainedPanel(createCriteriaPanel("criteriaPanel", criteriaModel, savedItem));
 
         add(criteriaExpandContainer);
 
-        final Panel searchConfigPanel = createConfigPanel(DynamicPanel.CONTENT_ID, criteriaModel);
+        final Component searchConfigPanel = createCriteriaPanel(DynamicPanel.CONTENT_ID, criteriaModel);
 
 		setLeftMenuContent(searchConfigPanel);
         setSubMenuContent(searchMenu = createSubMenu(DynamicPanel.CONTENT_ID, criteriaModel));
@@ -70,11 +59,13 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
 
     protected abstract Component createSubMenu(String contentId, Model<T> criteriaModel);
 
-    protected abstract Panel createConfigPanel(String id, Model<T> criteriaModel);
+    protected abstract Component createCriteriaPanel(String id, Model<T> criteriaModel);
 
     private final Component createResultsPanel(String id, Model<T> criteriaModel, boolean showBlankSlate) {
-        return (showBlankSlate) ? createBlankSlate(id) : createResultsPanel(id, criteriaModel);
+        return (showBlankSlate || isEmptyResults()) ? createBlankSlate(id) : createResultsPanel(id, criteriaModel);
     }
+
+    protected boolean isEmptyResults() { return false; }
 
     protected abstract Component createResultsPanel(String id, Model<T> criteriaModel);
 
