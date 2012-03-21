@@ -6,7 +6,7 @@ import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchRe
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchBlankSlate;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchConfigPanel;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchCriteriaPanel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchSubMenu;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.saveditem.SavedSearchItem;
@@ -15,9 +15,7 @@ import com.n4systems.services.reporting.DashboardReportingService;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -66,8 +64,8 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
     }
 
     @Override
-    protected Panel createConfigPanel(String id, final Model<AssetSearchCriteria> model) {
-        return new SearchConfigPanel(id, model) {
+    protected Component createConfigPanel(String id, final Model<AssetSearchCriteria> model) {
+        return new SearchCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
                 setResponsePage(new SearchResultsPage(model.getObject(),false));
             }
@@ -134,12 +132,5 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
         return pageLabelModel.getObject();
     }
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-    	super.renderHead(response);
-    	response.renderJavaScriptReference("javascript/fieldIdWide.js");
-        response.renderCSSReference("style/pageStyles/wide.css");
-        response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+isShowLeftMenu()+");");
-    }
     
 }

@@ -1,11 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.search.AssetSearchCriteria;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
@@ -20,36 +16,32 @@ import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
 import org.odlabs.wiquery.core.javascript.JsScope;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
-import java.util.List;
+public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Panel {
 
-public class SearchConfigPanel extends Panel {		
-	
-	private SearchFilterPanel filters;
-	private SearchColumnsPanel columns;
-	private FIDModalWindow modal;
-    private Model<AssetSearchCriteria> model;
-	
-	public SearchConfigPanel(String id, final Model<AssetSearchCriteria> model) {
-		super(id, new CompoundPropertyModel<AssetSearchCriteria>(model));
+    private Model<T> model;
+    protected Panel columns;
+    protected Panel filters;
+    
+
+	public AbstractCriteriaPanel(String id, final Model<T> model) {
+		super(id, new CompoundPropertyModel<T>(model));
         this.model = model;
+        setOutputMarkupId(true);
 
 		SearchConfigForm form = new SearchConfigForm("form",model);
 		form.add(new Button("submit"));
-		form.add(new WebMarkupContainer("close").add(createCloseBehavior()));
-		form.add(columns = new SearchColumnsPanel("columns",model));
-		form.add(filters = new SearchFilterPanel("filters",model) {
-			@Override
-			protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
-				columns.updateAssetTypeOrGroup(target, selectedAssetType, availableAssetTypes);
-				// since we know that this can only occur when Filters panel is visible (.: we are not), we hide it.
-				columns.add(new AttributeModifier("style", "display:none;"));  
-			}			
-		});
+		form.add(new WebMarkupContainer("close").add(createCloseBehavior()));        
+		form.add(columns = createColumnsPanel(model));
+		form.add(filters = createFiltersPanel(model));
 		
 		add(form);		
 	}
 
-	protected void onNoDisplayColumnsSelected() {
+    protected abstract Panel createFiltersPanel(final Model<T> model);
+
+    protected abstract SearchColumnsPanel createColumnsPanel(Model<T> model);
+
+    protected void onNoDisplayColumnsSelected() {
 	}
 	
 	protected void onSearchSubmit() {
@@ -63,9 +55,9 @@ public class SearchConfigPanel extends Panel {
 		});
 	}	
 
-	 public class SearchConfigForm extends Form<AssetSearchCriteria> {
+	 public class SearchConfigForm extends Form<T> {
 
-      	public SearchConfigForm(String id, final IModel<AssetSearchCriteria> model) {
+      	public SearchConfigForm(String id, final IModel<T> model) {
         	super(id, model);
           	setOutputMarkupId(true); 
       	}

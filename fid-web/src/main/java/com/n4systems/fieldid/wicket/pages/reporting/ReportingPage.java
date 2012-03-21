@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.event.EventCountLoader;
 
+@Deprecated // when we completely move over to new 100% wide layout for search & reporting, this class should not be needed and .: deleted.
 public class ReportingPage extends FieldIDFrontEndPage {
 
     public ReportingPage(PageParameters params) {
