@@ -115,7 +115,8 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
 				String y = params.get(SRSResultsPanel.Y_PARAMETER).toString();				 
 				return dashboardReportingService.convertWidgetDefinitionToAssetCriteria(widgetDefinitionId,x,y,series);
 			}  
-		} catch (Exception e) {						
+		} catch (Exception e) {
+            // just return default if this doesn't work.  (most likely bad or incorrect parameters).
 		}
 		return dashboardReportingService.getDefaultAssetSearchCritieriaModel();
 	}
