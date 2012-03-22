@@ -60,8 +60,6 @@ public class SearchFilterPanel extends Panel {
 			}			
 		};
 	  	add(p5);		  	  			
-		
-		
 	}
 
 	@Override
@@ -73,7 +71,5 @@ public class SearchFilterPanel extends Panel {
 						
 	
 	protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {}
-	
-	
 
 }

@@ -16,14 +16,15 @@ import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
 import org.odlabs.wiquery.core.javascript.JsScope;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
+
 public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Panel {
 
     private Model<T> model;
-    protected Panel columns;
+    protected AbstractColumnsPanel columns;
     protected Panel filters;
-    
 
-	public AbstractCriteriaPanel(String id, final Model<T> model) {
+
+    public AbstractCriteriaPanel(String id, final Model<T> model) {
 		super(id, new CompoundPropertyModel<T>(model));
         this.model = model;
         setOutputMarkupId(true);
@@ -31,26 +32,24 @@ public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Pa
 		SearchConfigForm form = new SearchConfigForm("form",model);
 		form.add(new Button("submit"));
 		form.add(new WebMarkupContainer("close").add(createCloseBehavior()));        
-		form.add(columns = createColumnsPanel(model));
-		form.add(filters = createFiltersPanel(model));
-		
+		form.add(columns = createColumnsPanel("columns", model));
+		form.add(filters = createFiltersPanel("filters", model));
+
 		add(form);		
 	}
 
-    protected abstract Panel createFiltersPanel(final Model<T> model);
+    protected abstract Panel createFiltersPanel(String filters, final Model<T> model);
 
-    protected abstract SearchColumnsPanel createColumnsPanel(Model<T> model);
+    protected abstract AbstractColumnsPanel createColumnsPanel(String columns, Model<T> model);
 
-    protected void onNoDisplayColumnsSelected() {
-	}
+    protected void onNoDisplayColumnsSelected() { }
 	
-	protected void onSearchSubmit() {
-	}
+	protected void onSearchSubmit() { }
 	
 	protected Behavior createCloseBehavior() {
 		return new WiQueryEventBehavior(new Event(MouseEvent.CLICK) {
 			@Override public JsScope callback() {
-				return JsScopeUiEvent.quickScope(SearchSubMenu.HIDE_JS);
+				return JsScopeUiEvent.quickScope(SubMenu.HIDE_JS);
 			}
 		});
 	}	

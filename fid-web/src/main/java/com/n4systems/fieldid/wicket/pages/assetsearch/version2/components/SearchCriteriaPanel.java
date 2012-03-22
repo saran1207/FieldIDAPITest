@@ -16,7 +16,7 @@ public class SearchCriteriaPanel extends AbstractCriteriaPanel<AssetSearchCriter
 	}
 
     @Override
-    protected Panel createFiltersPanel(Model<AssetSearchCriteria> model) {
+    protected Panel createFiltersPanel(String filters, Model<AssetSearchCriteria> model) {
         return new SearchFilterPanel("filters",model) {
             @Override
             protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
@@ -28,8 +28,8 @@ public class SearchCriteriaPanel extends AbstractCriteriaPanel<AssetSearchCriter
     }
 
     @Override
-    protected SearchColumnsPanel createColumnsPanel(Model<AssetSearchCriteria> model) {
-        return new SearchColumnsPanel("columns",model);
+    protected AbstractColumnsPanel createColumnsPanel(String id, Model<AssetSearchCriteria> model) {
+        return new SearchColumnsPanel(id,model);
     }
 
     public SearchColumnsPanel getSearchColumnsPanel() {

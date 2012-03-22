@@ -4,8 +4,8 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.ReportConfiguration;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
@@ -14,9 +14,9 @@ import org.apache.wicket.model.PropertyModel;
 import java.util.List;
 
 
-public class SearchColumnsPanel extends AbstractColumnsPanel<AssetSearchCriteria> {
+public class ReportingColumnsPanel extends AbstractColumnsPanel<EventReportCriteria> {
 
-	public SearchColumnsPanel(String id, IModel<AssetSearchCriteria> model) {
+	public ReportingColumnsPanel(String id, IModel<EventReportCriteria> model) {
 		super(id, model);		
 		setOutputMarkupId(true);
 		setMarkupId(id);
@@ -29,6 +29,7 @@ public class SearchColumnsPanel extends AbstractColumnsPanel<AssetSearchCriteria
         GroupedAssetTypesForTenantModel availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
         updateDynamicAssetColumns(null, availableAssetTypesModel.getObject());
     }
+
 
     protected ReportConfiguration loadReportConfiguration() {
         return assetColumnsService.getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
