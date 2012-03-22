@@ -1,6 +1,5 @@
 <wicket:panel>
 
-    <h2><wicket:message key="label.event_details"/></h2>
     <div class="field">
         <label for="criteria.eventTypeGroup"><wicket:message key="label.eventtypegroup"/></label>
         <select wicket:id="eventTypeGroup"></select>
@@ -27,9 +26,7 @@
         <select wicket:id="result"></select>
     </div>
     <div wicket:id="includeNetworkResultsContainer" class="field">
-        <label id="reducedLineHeightLabel" for="criteria.includeNetworkResults">
-            <wicket:message key="label.includesafetynetworkresults"/>
-        </label>
+        <label id="reducedLineHeightLabel" for="criteria.includeNetworkResults"><wicket:message key="label.includesafetynetworkresults"/></label>
         <input wicket:id="includeSafetyNetwork" type="checkbox"/>
     </div>
 

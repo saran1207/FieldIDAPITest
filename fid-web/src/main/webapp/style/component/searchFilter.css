@@ -28,6 +28,10 @@
   padding:3px;
 }
 
+.field input[type='checkbox'] {
+    width:10px;
+}
+
 .field .date { 
 	display:inline;
 }

@@ -14,7 +14,7 @@ import org.apache.wicket.model.StringResourceModel;
 
 public class ReportingFilterPanel extends Panel {
 
-	public ReportingFilterPanel(String id, final IModel<EventReportCriteria> model) {
+	public ReportingFilterPanel(final String id, final IModel<EventReportCriteria> model) {
 		super(id,model);
 
         add(new CollapsiblePanel("eventDetailsCriteriaPanel", new StringResourceModel("label.event_details", this, null)) {
@@ -31,15 +31,18 @@ public class ReportingFilterPanel extends Panel {
             }
         });
 
-        PropertyModel<EventStatus> eventStatusModel = new PropertyModel<EventStatus>(model, "eventStatus");
-        PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(model, "includeDueDateRange");
-        PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(model, "dateRange");
-        PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(model, "dueDateRange");
 
-        add(new EventStatusAndDateRangePanel("eventStatusAndDateRangePanel", eventStatusModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
-            @Override
-            protected void onEventStatusChanged(AjaxRequestTarget target) {
-                model.getObject().clearDateRanges();
+        add( new CollapsiblePanel("eventStatusAndDateRangePanel", new StringResourceModel("label.event_status_and_date",this,null)) {
+            @Override protected Panel createContainedPanel(String id) {
+                PropertyModel<EventStatus> eventStatusModel = new PropertyModel<EventStatus>(model, "eventStatus");
+                PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(model, "includeDueDateRange");
+                PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(model, "dateRange");
+                PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(model, "dueDateRange");
+                return new EventStatusAndDateRangePanel(id, eventStatusModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
+                    @Override protected void onEventStatusChanged(AjaxRequestTarget target) {
+                        model.getObject().clearDateRanges();
+                    }
+                };
             }
         });
 
