@@ -1,32 +1,24 @@
 package com.n4systems.util.json;
 
 
-import static org.junit.Assert.*;
-
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.Date;
-
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.gson.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+
+import static org.junit.Assert.assertEquals;
 
 public class JsonRendererTest {
 
 	private JsonRenderer fixture = new JsonRenderer();
 
 	private GsonBuilder gb;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		gb = new GsonBuilder();
@@ -44,11 +36,11 @@ public class JsonRendererTest {
 							"\"a\":{\"" +
 								"show\":true,\"" +
 								"stringTwo\":\"twoFish\",\"" +
-								"map\":{\"7\":\"Dec 31, 1969 7:00:00 PM\",\"22\":\"Dec 31, 1969 7:00:00 PM\"}},\"" +
+								"map\":{\"7\":false,\"22\":true}},\"" +
 							"b\":{\"" +
 								"interactive\":true,\"" +
 								"o\":[\"apple\",\"orange\"],\"aLong\":12837123}" +
-							"}";		
+							"}";
 		assertEquals(expected, actual);
 	}
 
@@ -72,7 +64,7 @@ public class JsonRendererTest {
 			public Boolean show = true;
 			public String stringOne = null;
 			public String stringTwo = "twoFish";
-			public ImmutableMap<Integer,Date> map = ImmutableMap.of(7, new Date(0), 22, new Date(0));
+			public ImmutableMap<Integer,Boolean> map = ImmutableMap.of(7, Boolean.FALSE, 22, Boolean.TRUE);
 		}
 		
 		class B { 
@@ -99,7 +91,4 @@ public class JsonRendererTest {
 		}
 	}
 		
-	
-		
-	
 }

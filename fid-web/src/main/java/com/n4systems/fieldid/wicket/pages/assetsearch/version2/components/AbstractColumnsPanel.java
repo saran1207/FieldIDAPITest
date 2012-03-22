@@ -1,9 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.wicket.components.search.results.ColumnGroupPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.search.SearchCriteria;
@@ -24,21 +27,24 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
 	@SpringBean protected DynamicColumnsService dynamicColumnsService;
 
     protected IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel;
+    protected IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel;
     private IModel<T> model;
 
-	public AbstractColumnsPanel(String id, IModel<T> model) {
+    public AbstractColumnsPanel(String id, IModel<T> model) {
 		super(id, model);
         this.model = model;
         setOutputMarkupId(true);
         setMarkupId(id);
         
 		dynamicAssetColumnsModel = new PropertyModel<List<ColumnMappingGroupView>>(model, "dynamicAssetColumnGroups");
+        dynamicEventColumnsModel = new PropertyModel<List<ColumnMappingGroupView>>(model, "dynamicEventColumnGroups");
 		
 		// This has two functions - first to load the default report template configuration: columns, sort
 		// Second to initialize the dynamic columns: Some tenants have each and every asset/event type with the same attributes.
 		// They expect to see them without first selecting any event type group or event type.
 		initialize(loadReportConfiguration());
-		
+        udpateColumns(dynamicAssetColumnsModel, dynamicEventColumnsModel);
+
 		PropertyModel<List<ColumnMappingGroupView>> columnsModel = new PropertyModel<List<ColumnMappingGroupView>>(model, "columnGroups");
 		add(new ListView<ColumnMappingGroupView>("columnGroups", columnsModel)  {
 			@Override
@@ -55,6 +61,14 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
 		});            
 	}
 
+    protected void udpateColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel) {
+//        dynamicEventColumnsModel.setObject(...);
+//        dynamicAssetColumnsModel.setObject(...);
+
+//        updateDynamicAssetColumns(dynamicAssetColumnsModel, null, assetDetailsCriteriaPanel.getAvailableAssetTypesModel().getObject());
+//        updateDynamicEventColumns(dynamicEventColumnsModel, null, eventDetailsCriteriaPanel.getAvailableEventTypesModel().getObject());
+    }
+
     private Component createCollapsibleColumnsPanel(
     		final ListItem<ColumnMappingGroupView> item) {
     	CollapsiblePanel collapsiblePanel = new CollapsiblePanel("columnGroup",  new FIDLabelModel(new PropertyModel<String>(item.getModel(),"label"))) {
@@ -65,7 +79,7 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
     	return collapsiblePanel;        	
     }
 
-    protected void initialize(ReportConfiguration reportConfiguration) {
+    protected final void initialize(ReportConfiguration reportConfiguration) {
         if (!getSearchCriteria().isReportAlreadyRun()) {
             getSearchCriteria().setColumnGroups(reportConfiguration.getColumnGroups());
             getSearchCriteria().setSortColumn(reportConfiguration.getSortColumn());
@@ -79,6 +93,22 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
 
     protected abstract ReportConfiguration loadReportConfiguration();
 
+
+    protected List<ColumnMappingGroupView> getDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
+        return Lists.newArrayList();
+    }
+
+    protected List<ColumnMappingGroupView> getDynamicEventColumns(EventType eventType, List<EventType> availableEventTypes) {
+        return Lists.newArrayList();
+    }
+
+    protected void updateDynamicEventColumns(IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel, EventType eventType, List<EventType> availableEventTypes) {
+        dynamicEventColumnsModel.setObject(getDynamicEventColumns(eventType,  availableEventTypes));
+    }
+
+    protected void updateDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
+        dynamicAssetColumnsModel.setObject(getDynamicAssetColumns(assetType, availableAssetTypes));
+    }
 
 
 

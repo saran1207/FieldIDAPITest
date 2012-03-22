@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -63,11 +62,13 @@ public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Pa
       	
       	@Override
       	protected void onSubmit() {
-			 if (model.getObject().getSortedStaticAndDynamicColumns().isEmpty()) {
-                error(new FIDLabelModel("error.nocolumnsselected").getObject());
-                onNoDisplayColumnsSelected();
-                return;
-	         }
+            // XXX : put this in form validator.
+//			 if (model.getObject().getSortedStaticAndDynamicColumns().isEmpty()) {
+//                error(new FIDLabelModel("error.nocolumnsselected").getObject());
+//                onNoDisplayColumnsSelected();
+//                return;
+//	         }
+
 			 model.getObject().setReportAlreadyRun(true);
 			 model.getObject().getSelection().clear();
 			 onSearchSubmit();

@@ -7,7 +7,6 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeUtils;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.EnumSet;
@@ -237,9 +236,11 @@ public class DateRangeTest extends FieldIdUnitTest {
 		assertThat(delta.getDays(), new IsIn<Integer>(expected) );		
 	}
 
+    // CAVEAT : because the output of the date relies on TimeZone, make sure you have it set correctly.
+    //   this works fine in Eclipse & Jenkins but Intellij testsuite runner (not individual run) requires you specifically set it in JVM args.
+    // i.e. -Duser.timezone=UTC
 	@Test
-    @Ignore // note that this is hard to test because formatters rely on TimeZone which is tricky to mock.  intellij's testrunner sets TimeZone differently than Hudson/Eclipse.
-	public void test_display() {        
+	public void test_display() {
 		setCurrentMillisFixed(jan1_2011.toDate().getTime());
 
 		assertEquals("All Time", new DateRange(RangeType.FOREVER).getFromDateDisplayString() );
@@ -256,7 +257,6 @@ public class DateRangeTest extends FieldIdUnitTest {
 		assertEquals("Dec 20", new DateRange(RangeType.LAST_WEEK).getFromDateDisplayString() );
 		assertEquals("Dec 27", new DateRange(RangeType.THIS_WEEK).getFromDateDisplayString() );
 
-		
 		assertEquals("", new DateRange(RangeType.FOREVER).getToDateDisplayString() );
 		
 		assertEquals("2010", new DateRange(RangeType.LAST_YEAR).getToDateDisplayString() );

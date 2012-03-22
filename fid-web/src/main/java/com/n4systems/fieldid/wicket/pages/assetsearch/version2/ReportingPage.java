@@ -28,12 +28,19 @@ public class ReportingPage extends AbstractSearchPage<EventReportCriteria> {
     public ReportingPage(PageParameters params) {
         super(params);
         EventReportCriteria model = new EventReportCriteria();
-        init(model, createSavedItemFromCriteria(model), true);        
+        init(model, createSavedItemFromCriteria(model), true);
+    }
+
+    public ReportingPage(EventReportCriteria eventReportCriteria, SavedItem<EventReportCriteria> savedItem, boolean showLeftMenu) {
+        super(new PageParameters());
+        SavedReportItem newSavedReportItem = new SavedReportItem(eventReportCriteria);
+        newSavedReportItem.setId(savedItem == null ? null : newSavedReportItem.getId());
+        init(eventReportCriteria, newSavedReportItem, showLeftMenu);
     }
 
     @Override
     protected boolean isEmptyResults() {
-        return tenantHasEvents();
+        return !tenantHasEvents();
     }
 
     @Override
@@ -60,7 +67,7 @@ public class ReportingPage extends AbstractSearchPage<EventReportCriteria> {
     protected Component createCriteriaPanel(String id, final Model<EventReportCriteria> model) {
         return new ReportCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
-                setResponsePage(new ReportingPage(new PageParameters()));
+                setResponsePage(new ReportingPage(model.getObject(),null,false));
             }
             @Override protected void onNoDisplayColumnsSelected() { }
         };

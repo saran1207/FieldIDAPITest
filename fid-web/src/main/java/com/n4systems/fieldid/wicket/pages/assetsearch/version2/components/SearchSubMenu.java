@@ -9,7 +9,6 @@ import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,11 +16,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
-import org.odlabs.wiquery.core.events.Event;
-import org.odlabs.wiquery.core.events.MouseEvent;
-import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
-import org.odlabs.wiquery.core.javascript.JsScope;
-import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
 
 public class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
@@ -107,23 +101,6 @@ public class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 			response.renderOnLoadJavaScript("$('#"+getMarkupId()+"').colorbox({ ajax:true });");
 		}
 		
-	}
-	
-	
-	class SubMenuLink extends WebMarkupContainer  {		
-
-		public SubMenuLink(final String id) {
-			super(id);
-			add(createToggleBehavior(FILTERS_ID.equals(id)));
-		}
-		
-		 private Behavior createToggleBehavior(final boolean showFilters) {
-				return new WiQueryEventBehavior(new Event(MouseEvent.CLICK) {
-					@Override public JsScope callback() {
-						return JsScopeUiEvent.quickScope("fieldIdWidePage.showConfig("+showFilters+");");
-					}
-				});
-			}
 	}
 
 }

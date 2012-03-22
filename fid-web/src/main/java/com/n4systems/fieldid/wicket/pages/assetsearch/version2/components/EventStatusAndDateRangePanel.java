@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.reporting;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.wicket.components.DateRangePicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
@@ -18,7 +18,6 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.Arrays;
 
-@Deprecated // replaced by .version2 component.  (functionally the same, different styling & html).
 public class EventStatusAndDateRangePanel extends Panel {
 
     private DateRangePicker allRangePicker;

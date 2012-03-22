@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.search;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -10,11 +10,7 @@ import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantMode
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.Project;
-import com.n4systems.model.Status;
+import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -29,7 +25,6 @@ import rfid.web.helper.SessionUser;
 import java.util.Arrays;
 import java.util.List;
 
-@Deprecated // replaced by .version2 component.  (functionally the same, different styling & html).
 public class EventDetailsCriteriaPanel extends Panel {
 
     private DropDownChoice<EventType> eventTypeSelect;
