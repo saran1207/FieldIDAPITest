@@ -63,8 +63,8 @@ ${action.setPageType('customer', 'divisions')!}
 
 <#if archivedPage.hasResults() && archivedPage.validPage() >
 	<div>
-		<a id="expand_archived_list" onclick="openSection('archivedList', 'expand_archived_list', 'collapse_archived_list');plus.style.display='none';minus.style.display='';return false" href="javascript:void(0);" ><img id="plus" class="link_img" src="<@s.url value="/images/plus.png"/>" alt="+" /><@s.text name="label.showarchiveddivisions"/></a>
-		<a id="collapse_archived_list" onclick="closeSection('archivedList', 'collapse_archived_list', 'expand_archived_list');plus.style.display='';minus.style.display='none';return false" href="javascript:void(0);" style="display:none"><img id="minus" class="link_img" src="<@s.url value="/images/minus.png"/>" alt="-" style="display:none"/><@s.text name="label.hidearchiveddivisions"/></a>
+		<a id="expand_archived_list" onclick="openSection('archivedList', 'expand_archived_list', 'collapse_archived_list');$('plus').hide();$('minus').show();return false" href="javascript:void(0);" ><img id="plus" class="link_img" src="<@s.url value="/images/plus.png"/>" alt="+" /><@s.text name="label.showarchiveddivisions"/></a>
+		<a id="collapse_archived_list" onclick="closeSection('archivedList', 'collapse_archived_list', 'expand_archived_list');$('plus').show();$('minus').hide();return false" href="javascript:void(0);" style="display:none"><img id="minus" class="link_img" src="<@s.url value="/images/minus.png"/>" alt="-" style="display:none"/><@s.text name="label.hidearchiveddivisions"/></a>
 	</div>
 
 	<div id="archivedList" style="display:none">

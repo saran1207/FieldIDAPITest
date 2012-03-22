@@ -245,50 +245,44 @@ Ajax.Responders.register( {
 });
 
 function openSection(idToOpen, openLinkId, closeLinkId, afterEvent) {
-	var openLink = $(openLinkId);
-	var closeLink = $(closeLinkId);
-	
-	openLink.hide();
-	closeLink.show();
-	
-	closeLink.suspendedOnClick = closeLink.onclick;
-	closeLink.onclick = null;
-	
-	Effect.BlindDown(idToOpen, {
-		duration : 0.2,
-		afterFinish : function(effect) {
-			closeLink.onclick = closeLink.suspendedOnClick;
-			
-			if (afterEvent) {
-				afterEvent(this);
-			}
-		}
-	});
-	
+
+    var openLink = jQuery('#' + openLinkId);
+    var closeLink = jQuery('#' + closeLinkId);
+
+    openLink.hide();
+    closeLink.show();
+
+    closeLink.suspendedOnClick = closeLink.onclick;
+    closeLink.onclick = null;
+
+    jQuery('#' + idToOpen).show('blind',  500, function() {
+        closeLink.onclick = closeLink.suspendedOnClick;
+        if (afterEvent) {
+            afterEvent(this);
+        }
+    });
+
 	return false;
 }
 
 function closeSection(idToClose, closeLinkId, openLinkId, afterEvent) {
-	var openLink = $(openLinkId);
-	var closeLink = $(closeLinkId);
-	
-	openLink.show();
-	closeLink.hide();
-	
-	openLink.suspendedOnClick = openLink.onclick;
-	openLink.onclick = null;
-	
-	Effect.BlindUp(idToClose, {
-		duration : 0.2,
-		afterFinish : function(effect) {
-			openLink.onclick = openLink.suspendedOnClick;
-			
-			if (afterEvent) {
-				afterEvent(this);
-			}
-		}
-	});
-	
+
+    var openLink = jQuery('#' + openLinkId);
+    var closeLink = jQuery('#' + closeLinkId);
+
+    openLink.show();
+    closeLink.hide();
+
+    openLink.suspendedOnClick = openLink.onclick;
+    openLink.onclick = null;
+
+    jQuery('#' + idToClose).hide('blind',  500, function() {
+        openLink.onclick = openLink.suspendedOnClick;
+        if (afterEvent) {
+            afterEvent(this);
+        }
+    });
+
 	return false;
 }
 
