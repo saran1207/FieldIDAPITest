@@ -346,7 +346,6 @@ td[class="actionsContainer"] {
 }
 
 .list th,.list td {
-	min-width: 65px;
 	padding: 9px 5px 9px 10px;
 	empty-cells: show;
 }
