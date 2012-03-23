@@ -63,11 +63,14 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("dashboard", DashboardPage.class);
         mountPage("reporting", ReportingPage.class);
         mountPage("search", AssetSearchPage.class);
-        mountPage("reporting2", com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportingPage.class);
+
+        //uggh: colorbox doesn't render absolute urls so we have to give it this url to make sense.  i.e. the "/wicket" prefix
+        //  a preferred solution would be to put colorbox in iframe (which requires CSS love) or to force absolute urls to be rendered by wicket.
+        mountPage("wicket/reporting2", com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportingPage.class);
+
         mountPage("search2", SearchResultsPage.class);
         mountPage("massupdate", MassUpdatePage.class);
         mountPage("returnToReport", ReturnToReportPage.class);
-
 
         mountPage("savedReport", RunSavedReportPage.class);
         mountPage("savedSearch", RunSavedSearchPage.class);

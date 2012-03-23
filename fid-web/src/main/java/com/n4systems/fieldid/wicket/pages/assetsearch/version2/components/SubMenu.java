@@ -68,7 +68,7 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         maxSchedule = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_SCHEDULE, tenantId);
     }
 
-    protected Link makeLinkLightBoxed(Link link) {
+    protected <T extends Link> T makeLinkLightBoxed(T link) {
         link.setOutputMarkupId(true);
         link.add(new AttributeAppender("class", new Model<String>(COLORBOX_CLASS), " "));
         lightBoxLinks.add(link);
@@ -89,7 +89,7 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         if (!lightBoxLinks.isEmpty()) {
-            response.renderOnLoadJavaScript("$('."+COLORBOX_CLASS+"').colorbox({ ajax:true });");
+            response.renderOnLoadJavaScript("jQuery('."+COLORBOX_CLASS+"').colorbox({ ajax:true });");
         }
         super.renderHead(response);
     }
