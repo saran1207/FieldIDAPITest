@@ -1,4 +1,45 @@
 <wicket:extend>
-    <p>this is the menu for reporting....</p>
+    <span class="actions">
+    	<ul>
+            <li>
+                <a wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a>
+            </li>
+            <li>
+                <a wicket:id="summaryReportLink"><wicket:message key="label.summary_report" /></a>
+            </li>
+            <li wicket:id="print" class="menu wide">
+                <a href="javascript:void(0);" ><wicket:message key="label.print"/><img src="/fieldid/images/down-arrow.png"></a>
+                <ul class="menu-items">
+                    <li>
+                        <a wicket:id="printThisReportLink"><wicket:message key="label.printreport"/></a>
+                    </li>
+                    <li>
+                        <a wicket:id="printSelectedPdfReportsLink"><wicket:message key="label.printselectedpdfreports"/></a>
+                    </li>
+                    <li>
+                        <a wicket:id="printSelectedObservationReportsLink" ><wicket:message key="label.printselectedobservationcertificate"/></a>
+                    </li>
+                </ul>
+            </li>
+            <li wicket:id="actions" class="menu">
+                <a href="javascript:void(0);" ><wicket:message key="label.mass_actions"/><img src="/fieldid/images/down-arrow.png"></a>
+                <ul class="menu-items">
+                    <li>
+                        <a wicket:id="assignJobLink"><wicket:message key="label.assign_to_a_job" /></a>
+                    </li>
+                    <li>
+                        <a wicket:id="massUpdateLink"><wicket:message key="label.massupdate"/></a>
+                    </li>
+                    <li>
+                        <a wicket:id="massScheduleUpdateLink"><wicket:message key="label.massupdate"/></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a wicket:id="save"><wicket:message key="label.save"/></a>
+            </li>
+        </ul>
+	</span>
+    <span wicket:id="msg" class="msg"/>
 </wicket:extend>
 		

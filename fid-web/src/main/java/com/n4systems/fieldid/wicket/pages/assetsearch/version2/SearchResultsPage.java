@@ -58,7 +58,7 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
     protected Component createSubMenu(String id, Model<AssetSearchCriteria> criteriaModel) {
         return new SearchSubMenu(id, criteriaModel) {
             @Override protected Component createSaveLink(String id) {
-                return createSaveSearchLink(id,true);
+                return SearchResultsPage.this.createSaveLink(id, true);
             };
         };
     }

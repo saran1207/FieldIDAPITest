@@ -113,7 +113,7 @@
 	color:#333;
 }
 
-.sub-menu .asset-actions ul li.hover a {
+.sub-menu .actions ul li.hover a {
 	color:#ddd; 
 }
 
@@ -124,7 +124,7 @@
 	background:white;	
 }
 
-.sub-menu .asset-actions { 
+.sub-menu .actions {
 	float:right;
 	margin-top:13px;
 	margin-right:10px;	
@@ -166,7 +166,7 @@
 }
 
 /* used for the config toggle buttons, asset actions menu items & search button. */ 
-.sub-menu .config a, .asset-actions > ul > li > a, .search-config .title .search { 
+.sub-menu .config a, .actions > ul > li > a, .search-config .title .search {
 	background: -o-linear-gradient(top, #f8f8f8 0%,#bebebe 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#bebebe',GradientType=0 );    
  	background:-webkit-linear-gradient(top, #f8f8f8, #bebebe);
@@ -199,7 +199,7 @@
 	cursor:pointer;
 }
 
-.sub-menu .config a:hover, .asset-actions > ul > li > a:hover  { 
+.sub-menu .config a:hover, .actions > ul > li > a:hover  {
     border: solid 1px #333;
     color: #282828;
 	background: -o-linear-gradient(top, #fff 0%,#ddd 100%);
@@ -254,10 +254,10 @@
 
 
 /**
- ASSET-ACTIONS      the actions buttons/menu @ top right of results page.
+ actions      the actions buttons/menu @ top right of results page.
 */
 
-.asset-actions > ul > li { 
+.actions > ul > li {
 	float: left; 
 	position:relative; 
 	margin-right:5px; 
@@ -265,13 +265,16 @@
 
 
 /* icon beside link button */
-.asset-actions ul li a img {
+.actions ul li a img {
 	margin-left:5px;
 	padding-bottom:2px;
 } 
 
-									  
-.asset-actions .menu-items {
+.menu.wide .menu-items {
+    width: 200px;
+}
+
+.menu-items {
 	display:none; 		/* made visible by jquery click*/ 
 	position: absolute;
 	top:100%;
@@ -291,21 +294,15 @@
 	*left:0px; 			/*account for worlds crappiest browser */
 } 
 
-.asset-actions .menu-items li a {
+.menu-items li a {
 	padding:8px;
 	display: block;  
 	text-decoration:none;	
 } 
 
-.asset-actions .menu-items li a:hover {
+.menu-items li a:hover {
 	background:#F5F5F5;
-} 
-
-.asset-actions ul { 
-	display:inline;
 }
-
-
 
 
 

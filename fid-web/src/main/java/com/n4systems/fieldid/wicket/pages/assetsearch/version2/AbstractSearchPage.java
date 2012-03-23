@@ -85,7 +85,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+showLeftMenu+");");
     }
 
-    protected Link createSaveSearchLink(String linkId, final boolean overwrite) {
+    protected Link createSaveLink(String linkId, final boolean overwrite) {
         Link link = new Link(linkId) {
             @Override public void onClick() {
                 setResponsePage(createSaveReponsePage(overwrite));

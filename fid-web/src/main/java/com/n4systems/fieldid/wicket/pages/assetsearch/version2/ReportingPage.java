@@ -60,7 +60,11 @@ public class ReportingPage extends AbstractSearchPage<EventReportCriteria> {
 
     @Override
     protected Component createSubMenu(String id, Model<EventReportCriteria> criteriaModel) {
-        return new ReportingSubMenu(id, criteriaModel);
+        return new ReportingSubMenu(id, criteriaModel) {
+            @Override protected Component createSaveLink(String id) {
+                return ReportingPage.this.createSaveLink(id, true);
+            }
+        };
     }
 
     @Override
@@ -80,7 +84,7 @@ public class ReportingPage extends AbstractSearchPage<EventReportCriteria> {
 
     @Override
     protected Component createResultsPanel(String id, Model<EventReportCriteria> criteriaModel) {
-        return  new ReportResultsPanel(id, criteriaModel) {
+        return new ReportResultsPanel(id, criteriaModel) {
             @Override protected void updateSelectionStatus(AjaxRequestTarget target) {
                 super.updateSelectionStatus(target);
                 target.add(searchMenu);
