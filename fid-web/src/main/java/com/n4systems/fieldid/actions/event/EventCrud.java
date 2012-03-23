@@ -1,19 +1,5 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.n4systems.fieldid.util.EventFormHelper;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
@@ -21,7 +7,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.UserManager;
-import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.exceptions.MissingEntityException;
@@ -40,7 +25,9 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
+import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.ui.OptionLists;
+import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.viewhelpers.EventHelper;
 import com.n4systems.fileprocessing.ProofTestType;
@@ -67,6 +54,11 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.io.File;
+import java.util.*;
 
 
 public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, ActionWithCriteriaResults {
@@ -81,6 +73,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	protected final ProductionEventPersistenceFactory eventPersistenceFactory;
 	protected final EventHelper eventHelper;
 	protected final EventFormHelper eventFormHelper;
+    private final EventCreationService eventCreationService;
+
+
 	
 	private EventGroup eventGroup;
 	protected Asset asset;
@@ -124,9 +119,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	private boolean assignToSomeone = false;
 
 	private boolean isEditing;
-	
-	public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
-			AssetManager assetManager, EventScheduleManager eventScheduleManager) {
+
+    public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
+			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService) {
 		super(persistenceManager);
 		this.eventManager = eventManager;
 		this.legacyAssetManager = legacyAssetManager;
@@ -136,6 +131,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		this.eventScheduleManager = eventScheduleManager;
 		this.eventPersistenceFactory = new ProductionEventPersistenceFactory();
 		this.eventFormHelper = new EventFormHelper();
+        this.eventCreationService = eventCreationService;
 	}
 
 	@Override
@@ -397,20 +393,15 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 				// the criteriaResults from the form must be processed before setting them on the event
 				eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy, getSessionUser());
 
-				CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, getSessionUserId())
-						.withProofTestFile(fileData)
-                        .withScheduleId(eventScheduleId)
-						.withUploadedImages(getUploadedFiles());
 
                 if (refreshAutoSchedules) {
                     autoSchedule(modifiableEvent.isOwnerSetFromAsset() ? asset.getOwner() : modifiableEvent.getOwner());
                 }
-				
-				createEventParameterBuilder.addSchedules(createEventScheduleBundles());
+
 				Status eventStatus = (modifiableEvent.getOverrideResult() != null && !"auto".equals(modifiableEvent.getOverrideResult())) ? Status.valueOf(modifiableEvent.getOverrideResult()) : null;
                 event.setStatus(eventStatus);
 
-				event = eventPersistenceFactory.createEventCreator().create(createEventParameterBuilder.build());
+                event = eventCreationService.createEventWithSchedules(event, eventScheduleId, fileData, getUploadedFiles(), createEventScheduleBundles());
 				uniqueID = event.getId();
 				
 			} else {

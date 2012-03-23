@@ -6,6 +6,7 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Asset;
 
+@Deprecated
 public interface LastEventDateFinder {
 
 	public Date findLastEventDate(Asset asset);

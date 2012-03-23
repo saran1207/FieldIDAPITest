@@ -4,6 +4,8 @@ import com.n4systems.ejb.impl.CreateEventParameter;
 import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.exceptions.ProcessFailureException;
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.handlers.creator.BasicTransactionManagement;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.model.Event;
@@ -13,6 +15,7 @@ import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.services.NextEventScheduleSerivce;
 
+@CopiedToService(EventCreationService.class)
 public class EventCreator extends BasicTransactionManagement {
 
 	private final EventPersistenceFactory eventPersistenceFactory;

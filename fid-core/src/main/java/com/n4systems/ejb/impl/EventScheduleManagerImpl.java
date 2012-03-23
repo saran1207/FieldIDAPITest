@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
@@ -25,7 +26,8 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
- 
+@CopiedToService(com.n4systems.fieldid.service.event.EventScheduleService.class)
+@Deprecated
 public class EventScheduleManagerImpl implements EventScheduleManager {
 
 	private static Logger logger = Logger.getLogger( EventScheduleManagerImpl.class );

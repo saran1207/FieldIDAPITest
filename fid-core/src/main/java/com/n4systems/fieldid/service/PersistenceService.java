@@ -181,8 +181,22 @@ public class PersistenceService extends FieldIdService {
     	return query;
     }
 
-    // CAVEAT : only use this with BaseEntities that implement NamedEntity.
-	public  <T extends BaseEntity> boolean isUniqueName(Class<T> clazz, String name, Long id) {
+    public <T extends BaseEntity & NamedEntity> T findByName(Class<T> entityClass, String entityName) {
+        T entity;
+
+        try {
+            QueryBuilder<T> query = createTenantSecurityBuilder(entityClass);
+            query.addSimpleWhere("name", entityName);
+
+            entity = find(query);
+        } catch (NoResultException ne) {
+            entity = null;
+        }
+
+        return entity;
+    }
+
+	public  <T extends BaseEntity & NamedEntity> boolean isUniqueName(Class<T> clazz, String name, Long id) {
 		Preconditions.checkArgument(NamedEntity.class.isAssignableFrom(clazz), "entity must implement "+NamedEntity.class.getSimpleName()+" in order to update its name.");
         QueryBuilder<T> queryBuilder = createUserSecurityBuilder(clazz);
         queryBuilder.addSimpleWhere("name", name);

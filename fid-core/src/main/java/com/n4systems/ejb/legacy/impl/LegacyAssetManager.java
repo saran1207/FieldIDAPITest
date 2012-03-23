@@ -11,6 +11,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.asset.AssetService;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AddAssetHistory;
@@ -42,7 +44,8 @@ import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-
+@Deprecated
+@CopiedToService(AssetService.class)
 public class LegacyAssetManager implements LegacyAsset {
 	private static final Logger logger = Logger.getLogger(LegacyAssetManager.class);
 
@@ -72,17 +75,6 @@ public class LegacyAssetManager implements LegacyAsset {
 		}
 		return obj;
 	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<AssetStatus> findAssetStatus(Long tenantId, Date beginDate) {
-		Query query = em.createQuery("from "+AssetStatus.class.getName()+" st where st.tenant.id = :tenantId and st.dateCreated >= :beginDate");
-		query.setParameter("tenantId", tenantId);
-		query.setParameter("beginDate", beginDate);
-
-		return query.getResultList();
-	}
-
 
 	@Override
 	public boolean rfidExists(String rfidNumber, Long tenantId) {
@@ -122,8 +114,6 @@ public class LegacyAssetManager implements LegacyAsset {
 		return (rfidCount > 0) ? true : false;
 	}
 
-	
-	
 	@Override
 	public Asset create(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
 		runAssetSavePreRecs(asset, modifiedBy);
@@ -136,7 +126,6 @@ public class LegacyAssetManager implements LegacyAsset {
 		saveSubAssets(asset);
 
 		return new FindSubAssets(persistenceManager, asset).fillInSubAssets();
-		
 	}
 
 	private void saveSubAssets(Asset asset) {
@@ -152,14 +141,11 @@ public class LegacyAssetManager implements LegacyAsset {
 	}
 
 	@Override
+    @Deprecated // Use call in AssetService instead
 	public Asset update(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
 		asset.touch();
 		runAssetSavePreRecs(asset, modifiedBy);
 		
-		/*
-		 * TODO: The saving of sub assets should NOT be here!!!  The list of sub assets is marked as @Transient,
-		 * meaning that we do not want it persisted with the Asset, the following logic essentially overrides this.
-		 */
 		saveSubAssets(asset);
 		
 		AssetSaver saver = new AssetSaver();

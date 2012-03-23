@@ -32,7 +32,6 @@ public interface LegacyAsset {
 	
 	
 	
-	public List<AssetStatus> findAssetStatus(Long tenantId, Date beginDate);
 	public AssetStatus findAssetStatus(Long uniqueID, Long tenantId);
 	
 	

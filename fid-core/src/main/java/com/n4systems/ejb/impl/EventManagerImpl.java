@@ -10,6 +10,8 @@ import javax.persistence.Query;
 
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
 import org.apache.log4j.Logger;
@@ -258,10 +260,12 @@ public class EventManagerImpl implements EventManager {
 		return (event != null) ? (!event.getSubEvents().isEmpty()) : false;
 	}
 
+    @CopiedToService(LastEventDateService.class)
 	public Date findLastEventDate(EventSchedule schedule) {
 		return lastEventFinder.findLastEventDate(schedule);
 	}
 
+    @CopiedToService(LastEventDateService.class)
 	public Date findLastEventDate(Long scheduleId) {
 		return lastEventFinder.findLastEventDate(scheduleId);
 	}

@@ -1,8 +1,10 @@
 package com.n4systems.services;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.model.EventSchedule;
 
+@CopiedToService(com.n4systems.fieldid.service.event.EventScheduleService.class)
 public class EventScheduleServiceImpl implements EventScheduleService {
 
 	private final PersistenceManager persistenceManager;

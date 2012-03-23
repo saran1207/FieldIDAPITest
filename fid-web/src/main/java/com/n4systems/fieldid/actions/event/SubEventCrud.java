@@ -5,6 +5,7 @@ import static com.n4systems.fieldid.utils.CopyEventFactory.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.service.event.EventCreationService;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.AssetManager;
@@ -44,9 +45,9 @@ public class SubEventCrud extends EventCrud {
     private String overrideResult;
 
 	public SubEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
-			AssetManager assetManager, EventScheduleManager eventScheduleManager) {
+			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService) {
 
-		super(persistenceManager, eventManager, userManager, legacyAssetManager, assetManager, eventScheduleManager);
+		super(persistenceManager, eventManager, userManager, legacyAssetManager, assetManager, eventScheduleManager, eventCreationService);
 	}
 
 	@Override

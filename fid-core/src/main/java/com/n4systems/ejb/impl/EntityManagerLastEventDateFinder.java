@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.model.EventSchedule;
 import org.apache.log4j.Logger;
 
@@ -16,6 +18,8 @@ import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
+@Deprecated
+@CopiedToService(LastEventDateService.class)
 public class EntityManagerLastEventDateFinder implements LastEventDateFinder {
 	private static Logger logger = Logger.getLogger(EntityManagerLastEventDateFinder.class);
 	
@@ -24,23 +28,26 @@ public class EntityManagerLastEventDateFinder implements LastEventDateFinder {
 	private final EntityManager em;
 
 	public EntityManagerLastEventDateFinder(PersistenceManager persistenceManager, EntityManager em) {
-		super();
 		this.persistenceManager = persistenceManager;
 		this.em = em;
 	}
 
+    @CopiedToService(LastEventDateService.class)
 	public Date findLastEventDate(Asset asset) {
 		return findLastEventDate(asset, null);
 	}
 
+    @CopiedToService(LastEventDateService.class)
 	public Date findLastEventDate(Long scheduleId) {
 		return findLastEventDate(persistenceManager.find(EventSchedule.class, scheduleId));
 	}
 
+    @CopiedToService(LastEventDateService.class)
 	public Date findLastEventDate(EventSchedule schedule) {
 		return findLastEventDate(schedule.getAsset(), schedule.getEventType());
 	}
 
+    @CopiedToService(LastEventDateService.class)
 	public Date findLastEventDate(Asset asset, EventType eventType) {
 
 		QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter(), "i");

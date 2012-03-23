@@ -3,10 +3,12 @@ package com.n4systems.services;
 import java.util.List;
 
 import com.n4systems.ejb.EventScheduleManager;
+import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.util.DateHelper;
 
+@CopiedToService(com.n4systems.fieldid.service.event.NextEventScheduleService.class)
 public class ManagerBackedNextEventScheduleService implements NextEventScheduleSerivce {
 
 	

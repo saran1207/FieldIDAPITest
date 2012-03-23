@@ -1,10 +1,11 @@
 package com.n4systems.fieldid.config;
 
 import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
-import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
+import com.n4systems.fieldid.service.event.*;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.search.EventResolutionService;
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
+import com.n4systems.fieldid.service.transaction.TransactionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -33,11 +34,6 @@ import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
-import com.n4systems.fieldid.service.event.EventFormService;
-import com.n4systems.fieldid.service.event.EventScheduleService;
-import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.service.event.EventTypeService;
-import com.n4systems.fieldid.service.event.ScoreService;
 import com.n4systems.fieldid.service.export.ExportService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.mail.MailService;
@@ -68,6 +64,26 @@ import com.n4systems.util.json.JsonRenderer;
 
 @Configuration
 public class FieldIdCoreConfig {
+
+    @Bean
+    public NextEventScheduleService nextEventScheduleService() {
+        return new NextEventScheduleService();
+    }
+
+    @Bean
+    public TransactionService transactionService() {
+        return new TransactionService();
+    }
+
+    @Bean
+    public LastEventDateService lastEventDateService() {
+        return new LastEventDateService();
+    }
+
+    @Bean
+    public EventCreationService eventCreationService() {
+        return new EventCreationService();
+    }
 
     @Bean
     public EventResolutionService eventResolutionService() {

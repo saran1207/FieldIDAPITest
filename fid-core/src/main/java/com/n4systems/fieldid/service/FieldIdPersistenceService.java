@@ -6,10 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.user.User;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 public class FieldIdPersistenceService extends FieldIdService {
 
 	@Autowired
     protected PersistenceService persistenceService;
+    
+    @PersistenceContext EntityManager _entityManager;
 
 	public void setPersistenceService(PersistenceService persistenceService) {
 		this.persistenceService = persistenceService;
@@ -28,6 +33,13 @@ public class FieldIdPersistenceService extends FieldIdService {
             return null;
         }
         return entity.getId();
+    }
+
+    @Deprecated
+    // Needed to get legacy savers into service layer
+    // We need to remove the savers completely by refactoring them into services themselves
+    protected EntityManager getEntityManager() {
+        return _entityManager;
     }
 	
 }

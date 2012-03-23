@@ -24,7 +24,9 @@ public class MassUpdateService extends FieldIdPersistenceService {
 	@Autowired private AssetService assetService;
 	
 	private Logger logger = Logger.getLogger(MassUpdateService.class);
-	    
+
+
+    // TODO: This doesn't seem mass updaty, move to asset service?
 	public AssetRemovalSummary testArchive(Asset asset) {
 		AssetRemovalSummary summary = new AssetRemovalSummary(asset);
 		try {

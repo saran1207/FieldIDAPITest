@@ -224,7 +224,6 @@ public class ManagerBackedEventSaver implements EventSaver {
 			}
 		}
 		event.setSubEvents(reorderedSubEvents);
-		
 	}
 
 	private Status calculateEventResultAndScore(Event event) {

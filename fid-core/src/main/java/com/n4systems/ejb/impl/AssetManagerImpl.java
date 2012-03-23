@@ -11,6 +11,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.asset.AssetService;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AssetCodeMapping;
@@ -50,29 +52,21 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-
+@Deprecated
+@CopiedToService(AssetService.class)
 public class AssetManagerImpl implements AssetManager {
 
 	private static Logger logger = Logger.getLogger(AssetManagerImpl.class);
 
-
-	
 	private EntityManager em;
-
-	
 	private PersistenceManager persistenceManager;
-
-	
 	private ProjectManager projectManager;
-
-
 
 	public AssetManagerImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.projectManager = new ProjectManagerImpl(em);
 	}
-
 
 	@Override
 	public List<Asset> findAssetByIdentifiers(SecurityFilter filter, String searchValue) {

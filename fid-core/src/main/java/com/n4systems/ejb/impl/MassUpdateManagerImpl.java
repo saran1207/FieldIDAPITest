@@ -31,8 +31,6 @@ import com.n4systems.model.Project;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.LargeInListQueryExecutor;
-import com.n4systems.services.EventScheduleServiceImpl;
-import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -41,11 +39,8 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class MassUpdateManagerImpl implements MassUpdateManager {
 
 	private EntityManager em;
-
 	private PersistenceManager persistenceManager;
-
 	private LegacyAsset legacyAssetManager;
-
 	private AssetManager assetManager;
 
 	public MassUpdateManagerImpl(EntityManager em) {

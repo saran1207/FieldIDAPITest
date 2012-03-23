@@ -148,23 +148,6 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	
-
-	public List<AssetStatus> findAssetStatus(Long tenantId, Date beginDate) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findAssetStatus(tenantId, beginDate);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
 
 	public AssetStatus findAssetStatus(Long uniqueID, Long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
