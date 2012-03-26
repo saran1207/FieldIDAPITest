@@ -93,7 +93,7 @@ public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethod
             savedEvent = createEventParameter.event;
 
 			// handle the sub event attachments
-            for (SubEvent subEvent : event.getSubEvents()) {
+            for (SubEvent subEvent : new ArrayList<SubEvent>(event.getSubEvents())) {
                 savedEvent = eventSaver.attachFilesToSubEvent(savedEvent, subEvent, new ArrayList<FileAttachment>(subEventAttachments.get(subEvent.getAsset())));
             }
 
