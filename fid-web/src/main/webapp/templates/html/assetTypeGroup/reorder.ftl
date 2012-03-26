@@ -1,15 +1,19 @@
-	<script type="text/javascript">
-		function onDrop() {
-			var rows = Sortable.sequence("groupList");
-			var params = new Object();
-			for (var i = 0; i < rows.size(); i++) {
-				params['indexes[' + i + ']'] = rows[i];
-			}
-			
-			getResponse('<@s.url action="assetTypeGroupsUpdateOrder" namespace="/ajax"/>', 'post', params);
-		}
-		
-	</script>
+<head>
+    <script type="text/javascript">
+        document.observe("dom:loaded", function() {
+            jQuery("#groupList").sortable({
+                update: function(event, ui) {
+                    var rows = jQuery(this).sortable('toArray');
+                    var params = new Object();
+                    for (var i = 0; i < rows.size(); i++) {
+                        params['indexes[' + i + ']'] = jQuery("#" + rows[i]).attr('groupid');
+                    }
+                    getResponse('<@s.url action="assetTypeGroupsUpdateOrder" namespace="/ajax"/>', 'post', params);
+                }
+            });
+        });
+    </script>
+
 	<style>
 		.drag {
 			cursor: move;
@@ -52,7 +56,3 @@ ${action.setPageType('asset_type_group', 'list')!}
 		</#list>
 	</ul>	
 </div>
-
-<script type="text/javascript">
-	Sortable.create("groupList", {handle: 'drag', onUpdate: onDrop});
-</script>

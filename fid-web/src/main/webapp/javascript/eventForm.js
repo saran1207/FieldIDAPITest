@@ -49,22 +49,20 @@ function retireObservation(id) {
 }
 
 function fadeAndRemove(elementId) {
-	Effect.Fade(elementId, {
-		afterFinish: function() {
-			$(elementId).remove(); 
-		}
-	});
+    jQuery('#' + elementId).show('fade',  250, function() {
+        $(elementId).remove();
+    });
 }
 
 function fade(elementId) {
-	Effect.Fade(elementId);
+    jQuery('#' + elementId).show('fade',  250);
 }
 
 
 function retireCriteria( sectionIndex, criteriaIndex ) {	
 	$( 'retire_' + sectionIndex + '_' + criteriaIndex ).value="true";
 	
-	Effect.Fade( 'criteriaHolder_' + sectionIndex + '_' + criteriaIndex );
+	jQuery( '#criteriaHolder_' + sectionIndex + '_' + criteriaIndex ).hide('fade', 250);
 	if( $( 'id_' + sectionIndex + '_' + criteriaIndex ).value == "0" ) {
 		$( 'criteriaHolder_' + sectionIndex + '_' + criteriaIndex ).remove();
 	}
@@ -73,7 +71,7 @@ function retireCriteria( sectionIndex, criteriaIndex ) {
 function retireSection( sectionIndex ) {
 	$( 'retire_' + sectionIndex ).value="true";
 	
-	Effect.BlindUp( 'criteriaSection_' + sectionIndex, {duration: 0.75} );
+	jQuery( '#criteriaSection_' + sectionIndex).hide('blind', 750);
 	if( $( 'id_' + sectionIndex ).value == "0" ) {
 		$( 'criteriaSection_' + sectionIndex ).remove();
 	}

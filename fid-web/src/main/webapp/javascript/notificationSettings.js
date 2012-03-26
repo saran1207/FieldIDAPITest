@@ -11,17 +11,8 @@ function addAddress() {
 
 	emailSpan.appendChild(addressInput);
 
-	var removeLink = new Element("a", {href: 'javascript:void(0);'});
-	removeLink.observe('click', function (event) {
-    Event.stop(event);	   
-    var p = Event.element(event).parentNode.parentNode;
-    p.fade( { duration:0.25,
-          afterFinish: function() {
-        	  p.remove();
-          }
-    	});
-	});
-	
+	var removeLink = new Element("a", {href: 'javascript:void(0);', onclick: 'removeAddress('+ addressCount +'); return false;'});
+
 	removeLink.appendChild(new Element("img", {src: retireImageSrc}));
 		
 	emailDiv.appendChild(emailSpan);
@@ -34,12 +25,9 @@ function addAddress() {
 
 function removeAddress(addressIndex) {
 	var elementId = 'addressSpan_' + addressIndex;
-	
-	Effect.Fade(elementId, { duration:0.25,
-		afterFinish: function() {
-			$(elementId).remove(); 
-		}
-	});
+	jQuery('#' + elementId).show('fade',  250, function() {
+        $(elementId).remove();
+    });
 	
 }
 

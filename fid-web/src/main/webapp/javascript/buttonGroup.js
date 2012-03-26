@@ -57,7 +57,7 @@ function undoButtonGroup( stateSetId, stateSetIndex ) {
 }
 
 function enableGroupSaveButton( stateSetId ) {
-	Effect.Appear( 'buttons_' + stateSetId , { duration: 0.75 } );
+    $('buttons_' + stateSetId).show();
 	buttonsUpdated[ 'state_' + stateSetId ] = true;
 }
 
@@ -117,7 +117,7 @@ function addButtonGroup() {
 
 
 function retireButton( buttonGroup, button ) {
-	Effect.Puff( 'buttonState__' + buttonGroup + '_' + button, { duration: 0.75} );
+    jQuery('#buttonState__' + buttonGroup + '_' + button).hide('puff', 750);
 	$("buttonState__" + buttonGroup + "_" + button + "_retired").value = "true";
 	getResponse( addButtonUrl + '?buttonGroupIndex=' + buttonGroup + '&buttonIndex=' + buttonGroupIndex[buttonGroup]++ );
 }

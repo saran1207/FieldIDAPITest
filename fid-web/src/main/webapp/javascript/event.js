@@ -216,11 +216,15 @@ function checkProofTestType( proofTestType ) {
 	var value = $( proofTestType ).getValue();
 	if( proofTestTypes[ value ] ) {
 		if( !$( 'proofTestUpload' ).visible() ) {
-			Effect.Fade( 'proofTestManual', { duration: 0.75, afterFinish: function() { Effect.Appear( 'proofTestUpload', { duration: 0.75 } ); } } );
+            jQuery('#proofTestManual').hide('fade', 750, function() {
+                jQuery('#proofTestUpload').show('fade', 750);
+            });
 		}
 	} else {
 		if( !$( 'proofTestManual' ).visible() ) {
-			Effect.Fade( 'proofTestUpload', { duration: 0.75, afterFinish: function() { Effect.Appear( 'proofTestManual', { duration: 0.75 } ); } } );
+            jQuery('#proofTestUpload').hide('fade', 750, function() {
+                jQuery('#proofTestManual').show('fade', 750);
+            });
 		}
 	}
 }

@@ -1,5 +1,3 @@
-Effect.Fade( "subAsset_" + ${subAssetId}, {
-	afterFinish: function() { 
-		$( "subAsset_" + ${subAssetId} ).remove(); 
-	} 
-} );
+jQuery("#subAsset_" + ${subAssetId}).hide(fade, 250, function() {
+     $( "subAsset_" + ${subAssetId} ).remove();
+});

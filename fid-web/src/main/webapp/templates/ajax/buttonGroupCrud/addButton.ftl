@@ -7,7 +7,7 @@
 	
 	$('buttonStates__${buttonGroupIndex}').insert( "${html}" );
 	$('buttonState__${buttonGroupIndex}_${buttonIndex}').hide();
-	Effect.Appear( 'buttonState__${buttonGroupIndex}_${buttonIndex}', { duration: 0.75} );
+	$('buttonState__${buttonGroupIndex}_${buttonIndex}').show();
 	enableGroupSaveButton( ${buttonGroupIndex} );
 
 </#escape>

@@ -15,7 +15,6 @@
 <@n4.includeStyle href="branding/default"/>
 <link rel="shortcut icon" href="<@s.url value="/images/favicon.ico" />" type="image/x-icon" />		
 <@n4.includeScript src="prototype"/>
-<@n4.includeScript src="scriptaculous" />
 <@n4.includeScript src="json2" />
 <@n4.includeScript src="common" />
 <!--[if IE 6]>
@@ -25,6 +24,7 @@
 <@n4.includeScript src="jquery-1.4.2.min.js"/>
 <@n4.includeScript src="jquery-ui-1.8.13.custom.min.js"/>
 <@n4.includeScript>jQuery.noConflict();</@n4.includeScript>
+<@n4.includeStyle href="jquery-redmond/jquery-ui-1.8.13.custom"/>
 
 <@n4.includeStyle href="newCss/component/my_saved_items.css" />
 <@n4.includeScript src="my_saved_items.js" />

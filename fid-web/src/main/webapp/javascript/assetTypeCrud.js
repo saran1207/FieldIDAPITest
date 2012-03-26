@@ -108,8 +108,7 @@ function hideOptionalElements( field ) {
 }
 
 function createField() {
-	
-	
+
 	fieldName = 'field_'+ arrayIndex;
 	
 	var newDiv = $('standby').cloneNode(true);
@@ -127,10 +126,10 @@ function createField() {
 	
 	var infoOptionDivs = infoOptionContainerDivs[0].getElementsByTagName( 'div' );
 	infoOptionDivs[0].id = 'infoOptions_' + arrayIndex;
-	
-	
-	Effect.BlindDown(newDiv.id, { duration: 0.5});
-	destroyLineItemSortables();
+
+    jQuery('#' + newDiv.id).show('blind', 500);
+
+    destroyLineItemSortables();
 	createLineItemSortables();
 	arrayIndex++;
 }
@@ -182,7 +181,7 @@ function renameElementsOptions(newDiv, old_id_prefix, old_name_prefix, element_i
 
 function destroyField( target ) {
 	var handle = target.parentNode.parentNode;
-	Effect.BlindUp(handle.id, { duration: 0.5}); 
+    jQuery('#' + handle.id).hide('blind', 500);
 	removed.push( handle );
 	$('assetTypeUpdate_infoFields_'+ findFieldIndex( handle.id ) + '__deleted').value=true;
 }
@@ -203,15 +202,16 @@ function createOption( optionContainer, infoFieldContainer ) {
 	container.appendChild(newDiv);
 	$( element_id_prefix + 'infoFieldIndex' ).value = findFieldIndex( infoFieldContainer );
 	
-	Effect.BlindDown(newDiv.id, { duration: 0.5});
+	jQuery('#' + newDiv.id).show('blind', 500);
+
 	arrayIndexOptions++;
 	
 }
 
 function destroyOption( target ) {
 	var handle = target.parentNode;
-	Effect.BlindUp(handle.id, { duration: 0.5});
-	$('assetTypeUpdate_editInfoOptions_'+ findOptionIndex( handle.id ) + '__deleted').value=true;
+	jQuery('#' + handle.id).hide('blind', 500);
+    $('assetTypeUpdate_editInfoOptions_'+ findOptionIndex( handle.id ) + '__deleted').value=true;
 	
 	var id = handle.parentNode.parentNode.parentNode.id;
 	if( typeof(removedOptions[findFieldIndex( id )]) == 'undefined' ) {
@@ -224,11 +224,12 @@ function destroyOption( target ) {
 
 
 function createLineItemSortables() {
-	Sortable.create('infoFields',{tag:'div',dropOnEmpty: true, containment: ['infoFields'],only:'handle'});
+    jQuery('#infoFields').sortable({containment: 'parent', items: '.handle' });
+
 }
 
 function destroyLineItemSortables() {
-	Sortable.destroy('infoFields');
+    jQuery('#infoFields').sortable('destroy');
 }
 
 function formSubmit(){
@@ -300,7 +301,7 @@ function undoDeletes() {
 	
 	for( var index = 0; index < removed.length; index++ ) {
 		$('assetTypeUpdate_infoFields_'+ findFieldIndex( removed[index].id ) + '__deleted').value = 'false';  
-		Effect.BlindDown(removed[index].id, { duration: 0.5});
+        jQuery('#' + removed[index].id).show('blind', 500);
 	}
 	removed = new Array();
 }
@@ -316,7 +317,7 @@ function undoOptionDeletes( target ) {
 	
 	for( var index = 0; index < removedOptions[findFieldIndex( handle )].length; index++ ) {
 		$('assetTypeUpdate_editInfoOptions_'+ findOptionIndex( removedOptions[findFieldIndex( handle )][index].id ) + '__deleted').value = 'false';  
-		Effect.BlindDown(removedOptions[findFieldIndex( handle )][index].id, { duration: 0.5});
+        jQuery('#' + removedOptions[findFieldIndex( handle )][index].id).show('blind', 500);
 	}
 	
 	removedOptions[findOptionIndex( handle )] = new Array();
@@ -453,5 +454,5 @@ function correctSorting() {
 
 function removeUploadedImage() {
 	$('removeImage').value="true";
-	Effect.Fade( 'removeImageLink' );
+    jQuery('#removeImageLink').hide('fade');
 } 

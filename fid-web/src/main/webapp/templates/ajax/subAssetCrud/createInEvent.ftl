@@ -16,7 +16,7 @@
 	}
 	
 	if( $( 'subAssetCreateForm_${subAsset.asset.type.id}' ) != null ) {
-		Effect.BlindUp( 'subAssetCreateForm_${subAsset.asset.type.id}' );
+		jQuery( '#subAssetCreateForm_${subAsset.asset.type.id}' ).hide('blind', 500);
 	}
 	
 	$('subAsset_${subAsset.asset.id}').highlight();

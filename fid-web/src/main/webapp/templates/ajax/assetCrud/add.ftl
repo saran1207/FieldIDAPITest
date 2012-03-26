@@ -40,7 +40,7 @@
 		<div class="actions">
 			<@s.submit key="label.save" onclick="checkDuplicateRfids([$('subAssetRfidNumber_${assetTypeId}').getValue()], this); return false;" />
 			<@s.text name="label.or"/>
-			<a href="#" onclick="Effect.BlindUp( 'subAssetCreateForm_${assetTypeId}', { afterFinish: function() { $('subAssetCreateForm_${assetTypeId}').remove(); } } ); return false;" ><@s.text name="label.cancel"/></a>
+			<a href="#" onclick="jQuery('#subAssetCreateForm_${assetTypeId}').hide('blind', 500, function() { $('subAssetCreateForm_${assetTypeId}').remove(); }); return false;" ><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
 </#assign>
@@ -61,7 +61,7 @@
 	}
 		
 	if( ! $( 'subAssetCreateForm_${assetTypeId}' ).visible() ) {
-		Effect.BlindDown( 'subAssetCreateForm_${assetTypeId}' );
+        jQuery('#subAssetCreateForm_${assetTypeId}').show('blind', 500);
 	}
 	$( 'subAssetCreateForm_${assetTypeId}' ).observe( 'submit', submitCreateForm );
 	

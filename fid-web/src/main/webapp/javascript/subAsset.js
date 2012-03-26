@@ -101,16 +101,6 @@ function submitForm() {
 }
 
 var reorderAssetsUrl = '';
-function onDrop() {
-	var rows = Sortable.sequence("assetComponentList");
-	var params = new Object();
-	for (var i = 0; i < rows.size(); i++) {
-		params['indexes[' + i + ']'] = rows[i];
-	}
-	params['uniqueID'] = $('uniqueID').getValue();
-	
-	getResponse(reorderAssetsUrl, 'post', params);
-}
 
 var labelFormWarning = '';
 function startOrdering() {
@@ -123,7 +113,22 @@ function startOrdering() {
 	}
 	$$('.notAllowedDuringOrdering').each( function(element) { element.hide() } );
 	$$('.drag').each( function(element) { element.show() } );
-	Sortable.create("assetComponentList", {handle: 'drag', tag: 'div', onUpdate: onDrop});
+    jQuery('#assetComponentList').sortable({
+        handle: '.drag',
+        update: function(event, ui) {
+            var rows = jQuery(this).sortable('toArray');
+            var params = new Object();
+            for (var i = 0; i < rows.size(); i++) {
+                params['indexes[' + i + ']'] = jQuery("#" + rows[i]).attr('assetid');
+            }
+            params['uniqueID'] = $('uniqueID').getValue();
+
+            getResponse(reorderAssetsUrl, 'post', params);
+        }
+
+    });
+
+
 	$('startOrdering').hide();
 	$('stopOrdering').show();
 }
@@ -131,7 +136,7 @@ function startOrdering() {
 function stopOrdering() {
 	$$('.notAllowedDuringOrdering').each( function(element) { element.show() } );
 	$$('.drag').each( function(element) { element.hide() } );
-	Sortable.destroy("assetComponentList");
+    jQuery('#assetComponentList').sortable('destroy');
 	$('startOrdering').show();
 	$('stopOrdering').hide();
 }
