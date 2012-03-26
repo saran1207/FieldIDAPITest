@@ -223,6 +223,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	public com.n4systems.webservice.dto.InspectionServiceDTO convert(Event event) {
 		InspectionServiceDTO inspectionDTO = new InspectionServiceDTO();
 		persistenceManager.reattach(event, false);
+        persistenceManager.reattach(event.getSchedule(), false);
 
 		populateAbstractInspectionInfo(inspectionDTO, event);
 		inspectionDTO.setOwnerId(retrieveOwnerId(event.getOwner()));
