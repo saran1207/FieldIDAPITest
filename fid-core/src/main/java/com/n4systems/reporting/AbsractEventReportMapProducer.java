@@ -249,10 +249,11 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
 	private String getDateStringValue(DateFieldCriteriaResult result) {
 		boolean includeTime = ((DateFieldCriteria)result.getCriteria()).isIncludeTime();
-		if(includeTime)
+		if(includeTime) {
 			return formatDate(result.getValue(), includeTime);
-		else
-			return formatDate(new PlainDate(result.getValue()), includeTime);
+        } else {
+			return formatDate(result.getValue() != null ? new PlainDate(result.getValue()) : null, includeTime);
+        }
 	}
 
 	private String getNumberStringValue(CriteriaResult result) {
@@ -275,8 +276,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
     /**
 	 * Given a list of CriteriaResults, returns a Map of the same results of
 	 * Criteria to Result
-	 * 
-	 * @param results
+	 *
 	 *            The CriteriaResult list
 	 * @return The flattened map
 	 */
