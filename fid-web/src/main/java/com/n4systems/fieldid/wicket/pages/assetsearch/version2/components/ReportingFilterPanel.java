@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventStatus;
 import com.n4systems.model.search.IncludeDueDateRange;
@@ -11,6 +13,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
+import java.util.List;
+
 
 public class ReportingFilterPanel extends Panel {
 
@@ -20,14 +24,22 @@ public class ReportingFilterPanel extends Panel {
         add(new CollapsiblePanel("eventDetailsCriteriaPanel", new StringResourceModel("label.event_details", this, null)) {
             @Override
             protected Panel createContainedPanel(String id) {
-                return new EventDetailsCriteriaPanel(id, model);
+                return new EventDetailsCriteriaPanel(id, model) {
+                    @Override protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {
+                        ReportingFilterPanel.this.onEventTypeOrGroupUpdated(target, selectedEventType, availableEventTypes);
+                    }
+                };
             }
         });
 
         add(new CollapsiblePanel("assetDetailsCriteriaPanel", new StringResourceModel("label.asset_details", this, null)) {
             @Override
             protected Panel createContainedPanel(String id) {
-                return new AssetDetailsCriteriaPanel(id, model);
+                return new AssetDetailsCriteriaPanel(id, model) {
+                    @Override protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
+                        ReportingFilterPanel.this.onAssetTypeOrGroupUpdated(target, selectedAssetType, availableAssetTypes);
+                    }
+                };
             }
         });
 
@@ -65,12 +77,14 @@ public class ReportingFilterPanel extends Panel {
         });
 	}
 
-	@Override
+    protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {}
+
+    @Override
 	public void renderHead(IHeaderResponse response) {
 		response.renderCSSReference("style/component/searchFilter.css");
 		super.renderHead(response);
 	}
 
-//    protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {}
+    protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {}
 
 }

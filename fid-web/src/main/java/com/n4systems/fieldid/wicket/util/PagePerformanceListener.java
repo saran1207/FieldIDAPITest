@@ -52,7 +52,7 @@ public class PagePerformanceListener implements IComponentInitializationListener
         }
 
         private boolean isDebug(RequestCycle requestCycle) {
-            return (debug || requestCycle.getRequest().getRequestParameters().getParameterValue("debug").isNull());
+            return (debug || !requestCycle.getRequest().getRequestParameters().getParameterValue("debug").isNull());
         }
 
         private String getDebugString(Component component, boolean debugModeEnabled) {

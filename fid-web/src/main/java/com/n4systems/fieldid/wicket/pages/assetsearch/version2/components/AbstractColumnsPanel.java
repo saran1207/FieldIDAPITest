@@ -5,7 +5,9 @@ import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.wicket.components.search.results.ColumnGroupPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.EventType;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ReportConfiguration;
@@ -35,15 +37,15 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
         this.model = model;
         setOutputMarkupId(true);
         setMarkupId(id);
-        
+
+		// load the default report template configuration: columns, sort
+		initialize(loadReportConfiguration());
+
+		// initialize the dynamic columns: Some tenants have each and every asset/event type with the same attributes.
+		// They expect to see them without first selecting any event type group or event type.
 		dynamicAssetColumnsModel = new PropertyModel<List<ColumnMappingGroupView>>(model, "dynamicAssetColumnGroups");
         dynamicEventColumnsModel = new PropertyModel<List<ColumnMappingGroupView>>(model, "dynamicEventColumnGroups");
-		
-		// This has two functions - first to load the default report template configuration: columns, sort
-		// Second to initialize the dynamic columns: Some tenants have each and every asset/event type with the same attributes.
-		// They expect to see them without first selecting any event type group or event type.
-		initialize(loadReportConfiguration());
-        udpateColumns(dynamicAssetColumnsModel, dynamicEventColumnsModel);
+        updateColumns(dynamicAssetColumnsModel, dynamicEventColumnsModel);
 
 		PropertyModel<List<ColumnMappingGroupView>> columnsModel = new PropertyModel<List<ColumnMappingGroupView>>(model, "columnGroups");
 		add(new ListView<ColumnMappingGroupView>("columnGroups", columnsModel)  {
@@ -52,21 +54,28 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
 				item.add(createCollapsibleColumnsPanel(item));
 			}
 		});
-		
-		add(new ListView<ColumnMappingGroupView>("dynamicColumnGroups",  dynamicAssetColumnsModel) {
-			@Override
-			protected void populateItem(final ListItem<ColumnMappingGroupView> item) {                	
-				item.add(createCollapsibleColumnsPanel(item));
-			}
-		});            
-	}
 
-    protected void udpateColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel) {
-//        dynamicEventColumnsModel.setObject(...);
-//        dynamicAssetColumnsModel.setObject(...);
+        add(new ListView<ColumnMappingGroupView>("dynamicColumnGroups",  dynamicAssetColumnsModel) {
+            @Override
+            protected void populateItem(final ListItem<ColumnMappingGroupView> item) {
+                item.add(createCollapsibleColumnsPanel(item));
+            }
+        });
 
-//        updateDynamicAssetColumns(dynamicAssetColumnsModel, null, assetDetailsCriteriaPanel.getAvailableAssetTypesModel().getObject());
-//        updateDynamicEventColumns(dynamicEventColumnsModel, null, eventDetailsCriteriaPanel.getAvailableEventTypesModel().getObject());
+        add(new ListView<ColumnMappingGroupView>("dynamicEventColumnGroups",  dynamicEventColumnsModel) {
+            @Override
+            protected void populateItem(final ListItem<ColumnMappingGroupView> item) {
+                item.add(createCollapsibleColumnsPanel(item));
+            }
+        });
+
+    }
+
+    protected void updateColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel) {
+        final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getDefaultModel(), "assetTypeGroup");
+        final IModel<AssetType> assetTypeModel = new PropertyModel<AssetType>(getDefaultModel(), "assetType");
+        GroupedAssetTypesForTenantModel availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
+        updateDynamicAssetColumns(null, availableAssetTypesModel.getObject());
     }
 
     private Component createCollapsibleColumnsPanel(
@@ -102,67 +111,12 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
         return Lists.newArrayList();
     }
 
-    protected void updateDynamicEventColumns(IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel, EventType eventType, List<EventType> availableEventTypes) {
+    protected void updateDynamicEventColumns(EventType eventType, List<EventType> availableEventTypes) {
         dynamicEventColumnsModel.setObject(getDynamicEventColumns(eventType,  availableEventTypes));
     }
 
     protected void updateDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
         dynamicAssetColumnsModel.setObject(getDynamicAssetColumns(assetType, availableAssetTypes));
     }
-
-
-
-//    @Override
-//    protected void populateForm(SRSCriteriaPanel.SearchCriteriaForm form) {
-//        PropertyModel<EventStatus> eventStatusModel = new PropertyModel<EventStatus>(form.getModel(), "eventStatus");
-//        PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(form.getModel(), "includeDueDateRange");
-//        PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(form.getModel(), "dateRange");
-//        PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(form.getModel(), "dueDateRange");
-//
-//        form.add(new EventStatusAndDateRangePanel("eventStatusAndDateRangePanel", eventStatusModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
-//            @Override
-//            protected void onEventStatusChanged(AjaxRequestTarget target) {
-//                criteriaModel.getObject().clearDateRanges();
-//            }
-//        });
-//
-//        form.addAssetDetailsPanel("assetDetailsCriteriaPanel");
-//        form.addEventDetailsPanel("eventDetailsCriteriaPanel");
-//
-//        form.add(new com.n4systems.fieldid.wicket.components.search.IdentifiersCriteriaPanel("identifiersCriteriaPanel", form.getModel()));
-//
-//        form.add(new OwnershipCriteriaPanel("ownershipCriteriaPanel", form.getModel()));
-//
-//        form.add(new OrderDetailsCriteriaPanel("orderDetailsCriteriaPanel"));
-//    }
-//
-//    @Override
-//    protected EventReportCriteria createNewCriteriaModel() {
-//        return new EventReportCriteria();
-//    }
-//
-//    @Override
-//    protected WebPage createResultsPage(EventReportCriteria criteria, SavedReportItem savedItem) {
-//        HttpSession session = ((ServletWebRequest) getRequest()).getContainerRequest().getSession();
-//        new LegacyReportCriteriaStorage().storeCriteria(criteria, session);
-//        return new ReportingResultsPage(criteria, savedItem);
-//    }
-//
-//    @Override
-//    protected ReportConfiguration loadReportConfiguration() {
-//        return new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
-//    }
-//
-//    @Override
-//    protected List<ColumnMappingGroupView> getDynamicAssetColumns(AssetType assetType, List<AssetType> availableAssetTypes) {
-//        return dynamicColumnsService.getDynamicAssetColumnsForReporting(assetType, availableAssetTypes);
-//    }
-//
-//    @Override
-//    protected List<ColumnMappingGroupView> getDynamicEventColumns(EventType eventType, List<EventType> availableEventTypes) {
-//        return dynamicColumnsService.getDynamicEventColumnsForReporting(eventType, availableEventTypes);
-//    }
-
-
 
 }

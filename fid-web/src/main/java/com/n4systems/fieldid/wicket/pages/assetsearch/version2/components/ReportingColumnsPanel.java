@@ -2,12 +2,16 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.ReportConfiguration;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
@@ -23,17 +27,14 @@ public class ReportingColumnsPanel extends AbstractColumnsPanel<EventReportCrite
 		setMarkupId(id);
 	}
 
-//    @Override
-//    protected void udpateColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel) {
-//        final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getDefaultModel(), "assetTypeGroup");
-//        GroupedAssetTypesForTenantModel availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
-//        updateDynamicEventColumns(null, availableAssetTypesModel.getObject());
-//    }
-
-//        super.initialize(reportConfiguration);
-//        final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getDefaultModel(), "assetTypeGroup");
-//        GroupedAssetTypesForTenantModel availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
-//        updateDynamicEventColumns(null, availableAssetTypesModel.getObject());
+    @Override
+    protected void updateColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel) {
+        super.updateColumns(dynamicAssetColumnsModel, dynamicEventColumnsModel);
+        final IModel<EventTypeGroup> eventTypeGroupModel = new PropertyModel<EventTypeGroup>(getDefaultModel(), "eventTypeGroup");
+        final IModel<EventType> eventTypeModel = new PropertyModel<EventType>(getDefaultModel(), "eventType");
+        EventTypesForTenantModel availableEventTypesModel  = new EventTypesForTenantModel(eventTypeGroupModel);
+        updateDynamicEventColumns(null, availableEventTypesModel.getObject());
+    }
 
     protected ReportConfiguration loadReportConfiguration() {
         return eventColumnsService.getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
@@ -49,12 +50,13 @@ public class ReportingColumnsPanel extends AbstractColumnsPanel<EventReportCrite
         return dynamicColumnsService.getDynamicEventColumnsForReporting(eventType, availableEventTypes);
     }
 
+	public void updateAssetTypeOrGroup(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
+		updateDynamicAssetColumns(selectedAssetType, availableAssetTypes);
+		target.add(this);
+	}
 
-
-    // XXX : called when assetype is changed in filters panel.
-//	public void updateAssetTypeOrGroup(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
-//		updateDynamicEventColumns(selectedAssetType, availableAssetTypes);
-//		target.add(this);
-//	}
-    
+    public void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {
+        updateDynamicEventColumns(selectedEventType,availableEventTypes);
+        target.add(this);
+    }
 }
