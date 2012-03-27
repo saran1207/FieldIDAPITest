@@ -109,8 +109,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 					pageNumber++;
 				}
 
-                EventSchedule eventSchedule = persistenceService.find(EventSchedule.class, entityId);
-                jPrint = generateCertificate(eventReportType, eventSchedule.getEvent().getId());
+                jPrint = generateCertificate(eventReportType, entityId);
 				if (jPrint != null) {
 					printGroup.add(jPrint);
 				}
@@ -137,7 +136,9 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 		try {
 			// If eventReportType is null, assume it's an asset certificate
 			if (eventReportType != null) {
-				jPrint = certificateService.generateEventCertificate(eventReportType, entityId);
+                // Must convert from event schedule id to event id to generate the event certificate
+                EventSchedule eventSchedule = persistenceService.find(EventSchedule.class, entityId);
+				jPrint = certificateService.generateEventCertificate(eventReportType, eventSchedule.getEvent().getId());
 			} else {
 				jPrint = certificateService.generateAssetCertificate(entityId);
 			}
