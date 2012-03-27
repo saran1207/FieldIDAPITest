@@ -1,14 +1,16 @@
 <wicket:extend>
     <span class="actions">
     	<ul>
-		    <li>
-		        <a wicket:id="printAllCertsLink"><wicket:message key="label.printselectedmanufacturercertificate"/></a>
+		    <li class="mattBar">
+		        <a class="button" wicket:id="printAllCertsLink"><wicket:message key="label.printselectedmanufacturercertificate"/></a>
 		    </li>
-		    <li>
-		        <a wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a>
+		    <li class="mattBar">
+		        <a class="button" wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a>
 		    </li>
 		    <li wicket:id="actions" class="menu">
-		        <a href="javascript:void(0);" ><wicket:message key="label.mass_actions"/><img src="/fieldid/images/down-arrow.png"></a>
+                <span class="mattBar">
+		        <a href="javascript:void(0);" class="button"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/down-arrow.png"></a>
+                </span>
 		        <ul class="menu-items">
                     <li>
 				        <a wicket:id="massUpdateLink"><wicket:message key="label.massupdate2"/></a>
@@ -21,8 +23,8 @@
 				    </li>
 			    </ul>
 		    </li>
-			<li>
-				<a wicket:id="save"><wicket:message key="label.save"/></a>
+			<li class="mattBar">
+				<a wicket:id="save" class="button"><wicket:message key="label.save"/></a>
 			</li>
 		</ul>
 		

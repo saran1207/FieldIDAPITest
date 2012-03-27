@@ -1,14 +1,16 @@
 <wicket:extend>
     <span class="actions">
     	<ul>
-            <li>
+            <li class="mattBar">
                 <a wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a>
             </li>
-            <li>
+            <li class="mattBar">
                 <a wicket:id="summaryReportLink"><wicket:message key="label.summary_report" /></a>
             </li>
             <li wicket:id="print" class="menu wide">
-                <a href="javascript:void(0);" ><wicket:message key="label.print"/><img src="/fieldid/images/down-arrow.png"></a>
+                <span class="mattBar">
+                    <a href="javascript:void(0);" ><wicket:message key="label.print"/><img src="/fieldid/images/down-arrow.png"></a>
+                </span>
                 <ul class="menu-items">
                     <li>
                         <a wicket:id="printThisReportLink"><wicket:message key="label.printreport"/></a>
@@ -22,7 +24,9 @@
                 </ul>
             </li>
             <li wicket:id="actions" class="menu">
-                <a href="javascript:void(0);" ><wicket:message key="label.mass_actions"/><img src="/fieldid/images/down-arrow.png"></a>
+                <span class="mattBar">
+                    <a href="javascript:void(0);" ><wicket:message key="label.mass_actions"/><img src="/fieldid/images/down-arrow.png"></a>
+                </span>
                 <ul class="menu-items">
                     <li>
                         <a wicket:id="assignJobLink"><wicket:message key="label.assign_to_a_job" /></a>
@@ -35,7 +39,7 @@
                     </li>
                 </ul>
             </li>
-            <li>
+            <li class="mattBar">
                 <a wicket:id="save"><wicket:message key="label.save"/></a>
             </li>
         </ul>

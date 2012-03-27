@@ -3,8 +3,8 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -29,8 +29,9 @@ public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Pa
         setOutputMarkupId(true);
 
 		SearchConfigForm form = new SearchConfigForm("form",model);
-		form.add(new Button("submit"));
+        form.add(new SubmitLink("submit"));
 		form.add(new WebMarkupContainer("close").add(createCloseBehavior()));        
+
 		form.add(columns = createColumnsPanel("columns", model));
 		form.add(filters = createFiltersPanel("filters", model));
 

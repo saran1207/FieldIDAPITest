@@ -48,12 +48,12 @@ var fieldIdWidePage = (function() {
 	};
 				
 	function addMenuHandlers() { 
-		$(document).delegate('.actions  .menu >  a', 'click', function() {
-			$(this).next('.menu-items').show();
+		$(document).delegate('.actions .mattBar >  a', 'click', function() {
+			$(this).parent('.mattBar').next('.menu-items').show();
 			return false;
 		});		
 		// in an ideal world we would have a single top level div surrounding  all content instead of listing all (page,pageHeader...) in selector. 
-		$(document).delegate('"#page, #pageHeader', 'click', function(e) {
+		$(document).delegate('"#fieldidBody', 'click', function(e) {
 			$('.actions .menu-items').hide();
 		});		
 	}

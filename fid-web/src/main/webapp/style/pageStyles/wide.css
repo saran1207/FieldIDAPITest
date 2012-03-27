@@ -148,109 +148,12 @@
 
 
 
-/*
- SUB-MENU .CONFIG  A
- used for toggle buttons in sub menu - Filter & Columns. 
-   note : This would be a very good use case for a SASS parameterized mixin, because this is basically a tweaked version of the 
-   buttonBar used in the EventHistory page.   
-*/
-
-.sub-menu .config a.true { 
-   	background: #cbcbcb;
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a8a8a8', endColorstr='#eeeeee',GradientType=0 );    
-	background: -webkit-gradient(linear, left top, left bottom, from(#a8a8a8), color-stop(0.15, #c6c6c6), to(#eeeeee)) !important;
-	background: -webkit-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-    background: -moz-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-    background: -ms-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-    background: -o-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-}
-
-/* used for the config toggle buttons, asset actions menu items & search button. */ 
-.sub-menu .config a, .actions > ul > li > a, .search-config .title .search {
-	background: -o-linear-gradient(top, #f8f8f8 0%,#bebebe 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#bebebe',GradientType=0 );    
- 	background:-webkit-linear-gradient(top, #f8f8f8, #bebebe);
-	background:-moz-linear-gradient(top, #f8f8f8, #bebebe);
-    background:-ms-linear-gradient(top, #f8f8f8, #bebebe);
-    background:-o-linear-gradient(top, #f8f8f8, #bebebe);
-    border: solid 1px #7f7f7f;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    font: 11px "lucida grande",tahoma,verdana,arial,sans-serif;
-	color: #333;
-	-webkit-font-smoothing: antialiased;    
-	padding: 3px 10px;
-	text-decoration: none;
-    text-shadow: 0 1px 0 white;
-    line-height: 18px;
-    display: block;
-    float: left;
-    -webkit-transition: border-color .218s;
-    -moz-transition: border .218s;
-    -o-transition: border-color .218s;
-    transition: border-color .218s;
-}
-
-.search-config .title .search:hover { 
+.search-config .title .search:hover {
 	cursor:pointer;
-}
-
-.sub-menu .config a:hover, .actions > ul > li > a:hover  {
-    border: solid 1px #333;
-    color: #282828;
-	background: -o-linear-gradient(top, #fff 0%,#ddd 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dddddd',GradientType=0 );        
-    background: -webkit-linear-gradient(top, white, #ddd);
-    background: -moz-linear-gradient(top, white, #ddd);
-    background: -ms-linear-gradient(top, white, #ddd);
-}
-.sub-menu .config a:active { 
-    border: solid 1px #7f7f7f;
-    background: #d0d0d0;
-	background: -o-linear-gradient(top, #fff 0%,#ddd 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a8a8a8', endColorstr='#d8d8d8',GradientType=0 );        
-    background: -webkit-gradient(linear, left top, left bottom, from(#a8a8a8), color-stop(0.15, #c6c6c6), to(#d8d8d8));
-    background: -webkit-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #d8d8d8);
-    background: -moz-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #d8d8d8);
-    background: -ms-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #d8d8d8);
-}
-
-.sub-menu .config a.left { 
-    margin: 0;
-    border-right: solid 1px #b0b0b0;
-    -webkit-border-top-right-radius: 0;
-    -moz-border-radius-topright: 0;
-    border-top-right-radius: 0;
-    -webkit-border-bottom-right-radius: 0;
-    -moz-border-radius-bottomright: 0;
-    border-bottom-right-radius: 0;
-}
-.sub-menu .config a.middle { 
-    border-radius: 0;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    margin: 0;
-    border-left: solid 1px rgba(255, 255, 255, 0);
-    border-right: solid 1px #b0b0b0;
 }
 
 .buttonBar a.middle:hover, a.right:hover { border-left: solid 1px #333 }
 .buttonBar a.middle:active, a.right:active { border-left: solid 1px #7f7f7f }
-.sub-menu .config a.right { 
-    border-left: solid 1px rgba(255, 255, 255, 0);
-    -webkit-border-top-left-radius: 0;
-    -moz-border-radius-topleft: 0;
-    border-top-left-radius: 0;
-    -webkit-border-bottom-left-radius: 0;
-    -moz-border-radius-bottomleft: 0;
-    border-bottom-left-radius: 0;
-}
-
-
 
 
 /**

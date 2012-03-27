@@ -31,7 +31,10 @@
 }
 
 /* hover state for default, left, middle and right */
-.buttonBar a.button:hover, a.left:hover, a.middle:hover, a.right:hover {
+.mattBar a.button:hover,
+.mattBar a.left:hover,
+.mattBar a.middle:hover,
+.mattBar a.right:hover {
 	background: #f6f6f6;
 	background: -moz-linear-gradient(top, #f6f6f6 0%, #eeeeee 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f6f6f6), color-stop(100%,#eeeeee));
