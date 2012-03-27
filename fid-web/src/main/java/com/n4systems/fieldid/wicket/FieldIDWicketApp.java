@@ -1,14 +1,5 @@
 package com.n4systems.fieldid.wicket;
 
-import org.apache.wicket.ConverterLocator;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.Page;
-import org.apache.wicket.Session;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
-import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
@@ -17,12 +8,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSavedSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchResultsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
-import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
-import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
-import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
-import com.n4systems.fieldid.wicket.pages.reporting.SavedReportsDeprecatedPage;
+import com.n4systems.fieldid.wicket.pages.reporting.*;
 import com.n4systems.fieldid.wicket.pages.saveditems.EditSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
@@ -35,8 +21,17 @@ import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigur
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
+import com.n4systems.fieldid.wicket.util.PagePerformanceListener;
 import com.n4systems.fieldid.wicket.util.PlainDateConverter;
 import com.n4systems.model.utils.PlainDate;
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.Page;
+import org.apache.wicket.Session;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 public class FieldIDWicketApp extends WebApplication {
 
@@ -97,6 +92,8 @@ public class FieldIDWicketApp extends WebApplication {
         getApplicationSettings().setInternalErrorPage(OopsPage.class);
 
         getRequestCycleListeners().add(new FieldIDRequestCycleListener());
+        // use -Dpagetime to put JVM in permanent "render page time in debug window" mode.
+        getComponentInitializationListeners().add(new PagePerformanceListener(System.getProperty("pagetime")!=null));
     }
 
     @Override
@@ -115,5 +112,6 @@ public class FieldIDWicketApp extends WebApplication {
     	converterLocator.set(PlainDate.class, new PlainDateConverter());
     	return converterLocator;
     }
+
 
 }

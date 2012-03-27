@@ -273,3 +273,14 @@ em {
 	padding:4px;
 	border: 1px solid #333;
 }
+
+
+.debug-info  {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    border: 1px solid black;
+    z-index: 1000000;
+    background: yellow;
+    color : #0000ff;
+}
