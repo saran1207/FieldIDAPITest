@@ -1,7 +1,10 @@
 
 
 /* turn the link in the default button style */
-.mattBar a{
+a.mattButton,
+a.mattButtonLeft,
+a.mattButtonMiddle,
+a.mattButtonRight {
 	background: #ececec;
 	background: -moz-linear-gradient(top, #ececec 0%, #dadada 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ececec), color-stop(100%,#dadada));
@@ -31,10 +34,10 @@
 }
 
 /* hover state for default, left, middle and right */
-.mattBar a.button:hover,
-.mattBar a.left:hover,
-.mattBar a.middle:hover,
-.mattBar a.right:hover {
+a.mattButton:hover,
+a.mattButtonLeft:hover,
+a.mattButtonMiddle:hover,
+a.mattButtonRight:hover {
 	background: #f6f6f6;
 	background: -moz-linear-gradient(top, #f6f6f6 0%, #eeeeee 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f6f6f6), color-stop(100%,#eeeeee));
@@ -47,7 +50,10 @@
 }
 
 /* active state (which is the same as pressed) for default, left, middle and right */
-.mattBar a.button:active, a.left:active, a.middle:active, a.right:active {
+a.mattButton:active,
+a.mattButtonLeft:active,
+a.mattButtonMiddle:active,
+a.mattButtonRight:active {
 	background: #ababab;
 	background: -moz-linear-gradient(top, #bababa 0%, #ededed 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bababa), color-stop(100%,#ededed));
@@ -60,7 +66,7 @@
 }
 
 /* Left Button - remove rounding on the right */
-.mattBar a.left {
+a.mattButtonLeft {
 	border-right:1px solid #ababab;
 	-webkit-border-top-right-radius: 0;
     -moz-border-radius-topright: 0;
@@ -71,7 +77,7 @@
 }
 
 /* Middle Button - remove the rounding on both side */
-.mattBar a.middle {
+a.mattButtonMiddle {
  	border-radius: 0;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
@@ -81,7 +87,7 @@
 }
 
 /* Right Button - remove the rounding on the left side */
-.mattBar a.right {
+a.mattButtonRight {
  	border-left: solid 1px #ababab;
     -webkit-border-top-left-radius: 0;
     -moz-border-radius-topleft: 0;
@@ -92,7 +98,7 @@
 }
 
 /* The pressed state - to be used when grouping buttons (left, middle, right) */
-.mattBar a.pressed {
+a.mattButtonPressed {
 	background: #ababab;
 	background: -moz-linear-gradient(top, #bababa 0%, #ededed 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bababa), color-stop(100%,#ededed));

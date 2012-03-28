@@ -50,14 +50,14 @@ public class MattBar extends Panel {
                 item.setRenderBodyOnly(true);
 
                 if (item.getIndex() == 0) {
-                    link.add(new AttributeAppender("class", new Model<String>("left"), " "));
+                    link.add(new AttributeAppender("class", new Model<String>("mattButtonLeft"), " "));
                 } else if (item.getIndex() == linkStates.size() - 1) {
-                    link.add(new AttributeAppender("class", new Model<String>("right"), " "));
+                    link.add(new AttributeAppender("class", new Model<String>("mattButtonRight"), " "));
                 } else {
-                    link.add(new AttributeAppender("class", new Model<String>("middle"), " "));
+                    link.add(new AttributeAppender("class", new Model<String>("mattButtonMiddle"), " "));
                 }
 
-                link.add(new AttributeAppender("class", new Model<String>("pressed"), " ") {
+                link.add(new AttributeAppender("class", new Model<String>("mattButtonPressed"), " ") {
                     @Override
                     public boolean isEnabled(Component component) {
                         return currentState != null && currentState.equals(linkStates.get(item.getIndex()));
@@ -82,10 +82,10 @@ public class MattBar extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/matt_bar.css");
+        response.renderCSSReference("style/newCss/component/matt_buttons.css");
 
         for (Component component : links.visitChildren(AjaxLink.class)) {
-            response.renderOnDomReadyJavaScript("jQuery('#"+component.getMarkupId()+"').click(function(e) { jQuery(e.target).addClass('pressed'); } );");
+            response.renderOnDomReadyJavaScript("jQuery('#"+component.getMarkupId()+"').click(function(e) { jQuery(e.target).addClass('mattButtonPressed'); } );");
         }
     }
 

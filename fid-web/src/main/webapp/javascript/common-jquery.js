@@ -547,10 +547,7 @@ function onDocumentLoad(functionToRun) {
 
 
 onDocumentLoad(function() {
-		$('.hide').each(function(element) {
-			element.hide();
-			element.removeClassName('hide');
-		});
+		$('.hide').hide().removeClass('hide');
 	});
 
 
