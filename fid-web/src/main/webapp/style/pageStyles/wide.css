@@ -20,6 +20,7 @@
    this stuff is another good use case for SASS variables.     
 */
 #page {
+    background:#f8f8f8;
 	margin-left:5px;
 	width:100%;
 	margin-left:0%;
@@ -31,13 +32,26 @@
 }
 
 #page .centre {
-	margin-left:345px;
 	/* this is due to "notification" taking up 30 pixels.  the menu is 50px high so we just need to offset the remaining pixels;
 	   in future, notifications should be moved to bottom, or hidden until it has contents so it doesn't cause this awkward layout/css.
 	*/
-	margin-top:24px;
-	background:white; 		 
+	margin-top:26px;
+    border-radius:6px;
+    padding:1px;
+    border:1px solid #bbb;
+	background:white;
+    margin-right:10px;
+    margin-left:10px;
 }
+
+#page .centre.narrow {
+    margin-left:375px;
+}
+
+#pageHeader #pageNavigation {
+    box-shadow:0;
+}
+
 
 
 
@@ -52,20 +66,21 @@
 #left-menu {
 	padding:0px;
 	background:white;
-	left:0;
+	left:10px;
 	overflow-x:visible;
 	overflow-y:auto; 
 	padding-left:10px;
-	border-right:1px solid #ccc;
-	border-top:1px solid #ccc;
-	width:335px;
+	width:345px;
 	top:169px;
-	bottom:0px;
+	bottom:40px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-left:1px solid #bbb;
+    border-right:1px solid #bbb;
+    border-top:1px solid #bbb;
 	position:fixed;
 	float:left;
 }
-
-
 
 
 /**
@@ -73,12 +88,24 @@
  *  panel on the left hand side with Filters & Columns 
  *  it is the meat of the left-menu panel.
 */
-.search-config .title {
-	zoom:0;
-	margin-left:10px;
-	margin-top:10px;
-	margin-bottom:5px;
+.search-config .submit {
+    position:fixed;
+    bottom:0px;
+    left:10px;
 	display:inline-block;
+    border-bottom-right-radius:6px;
+    border-bottom-left-radius:6px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ccc;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top-style: dotted;
+    border-top-color: #ccc;
+    height:40px;
+    background:white;
+    width:355px;
+	zoom:0;
 }
 
 .search-config .right {
@@ -87,14 +114,10 @@
 	display:inline-block;
 }
 
-.search-config .title a {
-	font-size:11px;
+.search-config .submit a {
+    margin-left:10px;
+    margin-top:7px;
 }
-
-.search-config .content { 
-	
-}
-
 
 /**
  COLUMNS
@@ -109,46 +132,50 @@
  *  just below main black menu.  contains actions menu and stuff like that. 
  */
 
-.sub-menu a { 
+
+.sub-menu {
+    color:#333;
+    width: 100%;
+    position: fixed;
+    background:#f8f8f8;
+    top:120px;
+    padding-top:11px;
+    padding-bottom:11px;
+    display:block;
+}
+
+.sub-menu a {
 	color:#333;
 }
+
 
 .sub-menu .actions ul li.hover a {
 	color:#ddd; 
 }
 
-.sub-menu {
-	border-bottom: 1px solid #ccc;
-	height:50px;
-	color:#333;
-	background:white;	
-}
-
 .sub-menu .actions {
 	float:right;
-	margin-top:13px;
-	margin-right:10px;	
+	margin-right:10px;
 }
 
-.sub-menu  .msg { 
+.sub-menu .msg {
 	line-height:20px;
 	font-style:italic;
 	color:#8F8F8F;
 	float:right;
-	margin-top:16px;
-	margin-right:10px;	
+	margin-right:10px;
+    margin-top:2px;
 }
 
 
-.sub-menu .config { 
+.sub-menu .config {
 	float:left;
-	margin-top:13px;
 	margin-left:20px;
 }
 
 
 
-.search-config .title .search:hover {
+.search-config .submit .search:hover {
 	cursor:pointer;
 }
 
@@ -159,6 +186,11 @@
 /**
  actions      the actions buttons/menu @ top right of results page.
 */
+
+.actions {
+    margin-top:0px;
+    margin-bottom:0px;
+}
 
 .actions > ul > li {
 	float: left; 
@@ -214,7 +246,7 @@
  SEARCH
     used for the search button at top of filters/columns panel
 */
-.search-config .title .search {
+.search-config .submit .search {
 	padding: 3px 20px 3px 20px;
 }	
 
@@ -267,10 +299,6 @@
 	right:0px;	
 	background:#f9f9f9;
 	width:auto;
-}
-
-.show+.centre .paginationWrapper {
-	left:345px;
 }
 
 .hide+.centre .paginationWrapper {
@@ -337,6 +365,7 @@
 	margin-top:7px;
 	margin-bottom:7px;
 }
+
 
 
 

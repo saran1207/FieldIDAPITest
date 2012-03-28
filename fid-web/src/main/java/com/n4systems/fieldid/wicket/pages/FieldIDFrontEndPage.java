@@ -1,29 +1,10 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.*;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebComponent;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
-
-import rfid.web.helper.SessionUser;
-
+import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.DynamicPanel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -40,22 +21,44 @@ import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
+import rfid.web.helper.SessionUser;
+
+import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 
 @SuppressWarnings("serial")
 public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIConstants {
-	
-	@SpringBean 
+
+    public static final String SUB_MENU_ID = "subMenu";
+    public static final String LEFT_MENU_ID = "leftMenu";
+
+    @SpringBean
 	private ConfigService configService;
-	
+
 	@SpringBean
 	private UserLimitService userLimitService;
-	
+
+
     private Label titleLabel;
 	private Label topTitleLabel;
     private ConfigurationProvider configurationProvider;
 
-	private DynamicPanel leftMenu;
-	private DynamicPanel subMenu;
+	private Component leftMenu;
+	private Component subMenu;
+
 
     public FieldIDFrontEndPage() {
         this(null, null);
@@ -77,8 +80,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         
         SessionUser sessionUser = getSessionUser();
 
-        add(leftMenu = new DynamicPanel("leftMenu"));
-        add(subMenu = new DynamicPanel("subMenu"));
+        add(leftMenu = new WebMarkupContainer(LEFT_MENU_ID).setVisible(false));
+        add(subMenu = new WebMarkupContainer(SUB_MENU_ID).setVisible(false));
         addCssContainers();
 
         add(new BookmarkablePageLink<Void>("reportingLink", ReportingPage.class));
@@ -333,7 +336,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     	
     }
     
-    static class StaticImage extends WebComponent {
+    static class StaticImage extends WebComponent {        
         public StaticImage(String id, IModel<String> urlModel) {
             super( id, urlModel );
         }
@@ -356,12 +359,14 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         return true;
     }
     
-    protected void setLeftMenuContent(Component c) { 
-    	leftMenu.setContent(c);    	
+    protected void setLeftMenuContent(Component c) {
+        Preconditions.checkArgument(LEFT_MENU_ID.equals(c.getId()), " you must use 'leftMenu' as your component id");
+    	replace(c.setVisible(true));
     }
     
-    protected void setSubMenuContent(Component c) { 
-    	subMenu.setContent(c);
+    protected void setSubMenuContent(Component c) {
+        Preconditions.checkArgument(SUB_MENU_ID.equals(c.getId()), "you must use 'subMenu' as your component id.");
+    	replace(c.setVisible(true));
     }
 
 }

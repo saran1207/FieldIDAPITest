@@ -29,12 +29,12 @@ var fieldIdWidePage = (function() {
 
 	var showLeftMenu = function() { 
 		$('#left-menu').addClass('show').removeClass('hide');
-		$('#page .centre').css('marginLeft','345px');		
-	};
+        $('#page .centre').addClass('narrow');
+    };
 	
 	var hideLeftMenu = function() {
 		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.		
-		$('#page .centre').css('marginLeft','0%');
+		$('#page .centre').removeClass('narrow');
 		$('#left-menu').removeClass('show').addClass('hide');		
 	};
 			

@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
-import com.n4systems.fieldid.wicket.components.DynamicPanel;
 import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -45,10 +44,10 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
 
         add(criteriaExpandContainer);
 
-        final Component searchConfigPanel = createCriteriaPanel(DynamicPanel.CONTENT_ID, criteriaModel);
+        final Component searchConfigPanel = createCriteriaPanel(FieldIDFrontEndPage.LEFT_MENU_ID, criteriaModel);
 
 		setLeftMenuContent(searchConfigPanel);
-        setSubMenuContent(searchMenu = createSubMenu(DynamicPanel.CONTENT_ID, criteriaModel));
+        setSubMenuContent(searchMenu = createSubMenu(FieldIDFrontEndPage.SUB_MENU_ID, criteriaModel));
     }
 
     protected boolean isShowLeftMenu() {

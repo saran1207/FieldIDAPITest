@@ -279,8 +279,10 @@ em {
     position: fixed;
     top: 20px;
     left: 20px;
-    border: 1px solid black;
+    border: 1px solid #2f4f4f;
     z-index: 1000000;
-    background: yellow;
+    padding:4px;
+    border-radius:6px;
+    background: #fafad2;
     color : #0000ff;
 }
