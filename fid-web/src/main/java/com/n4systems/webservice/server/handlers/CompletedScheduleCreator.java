@@ -21,18 +21,16 @@ public class CompletedScheduleCreator {
 		this.eventScheduleSaver = eventScheduleSaver;
 		this.jobLoader = projectLoader;
 	}
-	
-	public void create(String inspectionMobileGuid, Date scheduledDate, long jobId) {
-		EventSchedule schedule = new EventSchedule();
-		schedule.setNextDate(scheduledDate);
-		schedule.setProject(findJob(jobId));
-		Event event = findInspection(inspectionMobileGuid);
-		schedule.completed(event);
-		schedule.setEventType(event.getType());
-		schedule.setAsset(event.getAsset());
-		schedule.setTenant(event.getTenant());
-		eventScheduleSaver.save(schedule);
-	}
+
+    public void create(String inspectionMobileGuid, Date scheduledDate, long jobId) {
+        Event event = findInspection(inspectionMobileGuid);
+
+        EventSchedule schedule = event.getSchedule();
+        schedule.setProject(findJob(jobId));
+        schedule.setNextDate(scheduledDate);
+
+        eventScheduleSaver.update(schedule);
+    }
 	
 	private Event findInspection(String inspectionMobileGuid) {
 		eventLoader.setMobileGuid(inspectionMobileGuid);
