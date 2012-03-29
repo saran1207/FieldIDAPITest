@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 
@@ -45,6 +46,8 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
 		super(id);
 		this.model = model;
 		
+        add(createHeader());
+        
         MattBar mattBar = createMattBar();
         mattBar.addLink(new FIDLabelModel("label.columns"), COLUMNS_ID);
         mattBar.addLink(new FIDLabelModel("label.filters"), FILTERS_ID);
@@ -56,6 +59,13 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
 
         setOutputMarkupId(true);
 	}
+
+    private Label createHeader() {
+        return new Label("header", getHeaderModel());
+    }
+
+    protected IModel<String> getHeaderModel() { return new Model<String>("title of saveditem"); }
+    
 
     private MattBar createMattBar() {
         return new MattBar("columnsOrFiltersButtons") {

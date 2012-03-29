@@ -43,7 +43,8 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIConstants {
 
     public static final String SUB_MENU_ID = "subMenu";
-    public static final String LEFT_MENU_ID = "leftMenu";
+    public static final String LEFT_PANEL_ID = "leftPanel";
+    private static final String LEFT_PANEL_CONTROLLER_ID = "leftPanelController";
 
     @SpringBean
 	private ConfigService configService;
@@ -55,9 +56,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     private Label titleLabel;
 	private Label topTitleLabel;
     private ConfigurationProvider configurationProvider;
-
-	private Component leftMenu;
-	private Component subMenu;
 
 
     public FieldIDFrontEndPage() {
@@ -80,8 +78,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         
         SessionUser sessionUser = getSessionUser();
 
-        add(leftMenu = new WebMarkupContainer(LEFT_MENU_ID).setVisible(false));
-        add(subMenu = new WebMarkupContainer(SUB_MENU_ID).setVisible(false));
+        add(new WebMarkupContainer(LEFT_PANEL_ID).setVisible(false));
+        add(new WebMarkupContainer(SUB_MENU_ID).setVisible(false));
+        add(new WebMarkupContainer(LEFT_PANEL_CONTROLLER_ID).setVisible(false));
         addCssContainers();
 
         add(new BookmarkablePageLink<Void>("reportingLink", ReportingPage.class));
@@ -359,14 +358,19 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         return true;
     }
     
-    protected void setLeftMenuContent(Component c) {
-        Preconditions.checkArgument(LEFT_MENU_ID.equals(c.getId()), " you must use 'leftMenu' as your component id");
+    protected void setLeftPanelContent(Component c) {
+        Preconditions.checkArgument(LEFT_PANEL_ID.equals(c.getId()), " you must use '" + LEFT_PANEL_ID + "' as your left panel id");
     	replace(c.setVisible(true));
+        if (c instanceof HasLeftPanelController) {
+            HasLeftPanelController lpc = (HasLeftPanelController)c;
+            Component controller = lpc.getLeftPanelController(LEFT_PANEL_CONTROLLER_ID);
+            replace(controller.setVisible(true));
+        }
     }
-    
+
     protected void setSubMenuContent(Component c) {
-        Preconditions.checkArgument(SUB_MENU_ID.equals(c.getId()), "you must use 'subMenu' as your component id.");
-    	replace(c.setVisible(true));
+        Preconditions.checkArgument(SUB_MENU_ID.equals(c.getId()), "you must use " + SUB_MENU_ID + "'as your sub menu id.");
+        replace(c.setVisible(true));
     }
 
 }

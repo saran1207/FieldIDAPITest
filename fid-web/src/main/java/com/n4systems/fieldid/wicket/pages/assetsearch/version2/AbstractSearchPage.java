@@ -44,9 +44,9 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
 
         add(criteriaExpandContainer);
 
-        final Component searchConfigPanel = createCriteriaPanel(FieldIDFrontEndPage.LEFT_MENU_ID, criteriaModel);
+        final Component searchConfigPanel = createCriteriaPanel(FieldIDFrontEndPage.LEFT_PANEL_ID, criteriaModel);
 
-		setLeftMenuContent(searchConfigPanel);
+		setLeftPanelContent(searchConfigPanel);
         setSubMenuContent(searchMenu = createSubMenu(FieldIDFrontEndPage.SUB_MENU_ID, criteriaModel));
     }
 

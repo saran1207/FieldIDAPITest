@@ -29,6 +29,7 @@ public class PagePerformanceListener implements IComponentInitializationListener
     }
 
     protected boolean monitor(Component component) {
+        // suggestion : or instanceof PerformanceMonitoredMarkerIF??
         return component instanceof FieldIDFrontEndPage;
     }
 

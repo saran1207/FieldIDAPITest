@@ -4,10 +4,13 @@
  *
  */
 
+// XXX : need to break this code out (similar to wide.css).   some of this is specific to menus, other is left-panel specific.
+//  they should be in appropriate separate files.
 var fieldIdWidePage = (function() { 
 
 	var init = function(showLeft) {
 		addMenuHandlers();
+        addControllerHandler();
 		initLeftMenu(showLeft);
 	};
 	
@@ -16,26 +19,26 @@ var fieldIdWidePage = (function() {
 		if (showFilters) { 
 			$('.sub-menu .config .filters').addClass('true');
 			$('.sub-menu .config .columns').removeClass('true');
-			$('#left-menu .columns').hide();
-			$('#left-menu .filters').show();
+			$('#left-panel .columns').hide();
+			$('#left-panel .filters').show();
 		} else {
 			$('.sub-menu .config .columns').addClass('true');
 			$('.sub-menu .config .filters').removeClass('true');
-			$('#left-menu .filters').hide();				
-			$('#left-menu .columns').show();				
+			$('#left-panel .filters').hide();
+			$('#left-panel .columns').show();
 		}
-		showLeftMenu();
+		showLeftPanel();
 	};
 
-	var showLeftMenu = function() { 
-		$('#left-menu').addClass('show').removeClass('hide');
+	var showLeftPanel = function() {
+		$('#left-panel').addClass('show').removeClass('hide');
         $('#page .centre').addClass('narrow');
     };
 	
-	var hideLeftMenu = function() {
+	var hideLeftPanel = function() {
 		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.		
 		$('#page .centre').removeClass('narrow');
-		$('#left-menu').removeClass('show').addClass('hide');		
+		$('#left-panel').removeClass('show').addClass('hide');
 	};
 			
 	var initLeftMenu = function(showLeft) {
@@ -43,7 +46,7 @@ var fieldIdWidePage = (function() {
 			// set filter toggle button to true (it's the default config panel to be shown).
 			showConfig(true);
 		} else {
-			hideLeftMenu();
+			hideLeftPanel();
 		}
 	};
 				
@@ -58,12 +61,23 @@ var fieldIdWidePage = (function() {
 		});
 	}
 
+    /* bar at left of screen that shows/hides left panel */
+    function addControllerHandler() {
+        $('#left-panel-controller').click(function() { toggleLeftMenu() });
+    }
+
+    function toggleLeftMenu() {
+        if ($('#left-panel').is(':visible')) {
+            hideLeftPanel();
+        } else {
+            showLeftPanel();
+        }
+    }
+
 		
 	return { 
 		init : init,
-		showConfig : showConfig,
-		showLeftMenu : showLeftMenu,
-		hideLeftMenu: hideLeftMenu	
+    	showConfig : showConfig
 	};
 	
 })();

@@ -1,6 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
+import com.n4systems.fieldid.wicket.pages.HasLeftPanelController;
+import com.n4systems.fieldid.wicket.components.navigation.LeftPanelController;
 import com.n4systems.model.search.SearchCriteria;
+import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -16,7 +19,7 @@ import org.odlabs.wiquery.core.javascript.JsScope;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
 
-public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Panel {
+public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Panel implements HasLeftPanelController {
 
     private Model<T> model;
     protected AbstractColumnsPanel columns;
@@ -52,9 +55,14 @@ public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Pa
 				return JsScopeUiEvent.quickScope(SubMenu.HIDE_JS);
 			}
 		});
-	}	
+	}
 
-	 public class SearchConfigForm extends Form<T> {
+    @Override
+    public Component getLeftPanelController(String id) {
+        return new LeftPanelController(id);
+    }
+
+    public class SearchConfigForm extends Form<T> {
 
       	public SearchConfigForm(String id, final IModel<T> model) {
         	super(id, model);
@@ -63,19 +71,11 @@ public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Pa
       	
       	@Override
       	protected void onSubmit() {
-            // XXX : put this in form validator.
-//			 if (model.getObject().getSortedStaticAndDynamicColumns().isEmpty()) {
-//                error(new FIDLabelModel("error.nocolumnsselected").getObject());
-//                onNoDisplayColumnsSelected();
-//                return;
-//	         }
-
 			 model.getObject().setReportAlreadyRun(true);
 			 model.getObject().getSelection().clear();
 			 onSearchSubmit();
       	}
       	
 	 }	
-	      	
-	
+
 }

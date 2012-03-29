@@ -57,13 +57,13 @@
 
 
 /**
- * LEFT-MENU
+ * LEFT-PANEL
  *  panel at the left hand side of screen.  
  * 	this is really just an empty shell that is application wide.  each page fills it with whatever they want.
  *  for the AssetSearch page, that is done with .search-config stuff. 
 */
 
-#left-menu {
+#left-panel {
 	padding:0px;
 	background:white;
 	left:10px;
@@ -82,6 +82,18 @@
 	float:left;
 }
 
+
+.left-panel-controller {
+    position: fixed;
+    width: 10px;
+    top: 175px;
+    bottom: 5px;
+    background: #aaa;
+}
+
+.left-panel-controller img {
+    margin-top: 10px;
+}
 
 /**
  * SEARCH-CONFIG
@@ -140,8 +152,14 @@
     background:#f8f8f8;
     top:120px;
     padding-top:11px;
-    padding-bottom:11px;
+    padding-bottom:10px;
     display:block;
+}
+
+.sub-menu .header {
+    float:left;
+    font-size:20px;
+    padding:0px 10px 0px;
 }
 
 .sub-menu a {
@@ -292,18 +310,23 @@
 
 .paginationWrapper {
 	display:none;
-	border-top:1px solid #ccc;
+	border:1px solid #ccc;
 	position:fixed;
 	height:40px;
 	bottom:0px;
-	right:0px;	
+	right:10px;
+    left:10px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
 	background:#f9f9f9;
 	width:auto;
 }
 
-.hide+.centre .paginationWrapper {
-	left:0px;
+.centre.narrow .paginationWrapper {
+    display:block;
+    left:375px;
 }
+
 
 .paged-table .paginationWrapper {
 	display:block;

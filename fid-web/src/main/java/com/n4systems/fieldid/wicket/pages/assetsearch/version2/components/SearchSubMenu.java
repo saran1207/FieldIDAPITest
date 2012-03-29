@@ -12,7 +12,6 @@ import org.apache.wicket.model.Model;
 
 
 public class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
-	
 
 	private WebMarkupContainer actions;
     private Link printLink;

@@ -9,12 +9,14 @@ import javax.persistence.*;
 @DiscriminatorValue("S")
 public class SavedSearchItem extends SavedItem<AssetSearchCriteria> {
 
+    private static final String DEFAULT_NAME = "New Search";
+
     public SavedSearchItem() {}
 
     public SavedSearchItem(AssetSearchCriteria criteria) {
     	this.searchCriteria = criteria;
+        setName(DEFAULT_NAME);
     }
-    
     
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="search_id")
