@@ -35,8 +35,17 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a class="mattButton" wicket:id="save"><wicket:message key="label.save"/></a>
+            <li wicket:id="saveMenu" class="menu wide">
+                <a class="mattButton"><wicket:message key="label.save"/></a>
+                <a class="mattButton mattButtonRight"><img src="/fieldid/images/down-arrow.png"></a>
+                <ul class="menu-items">
+                    <li>
+                        <a wicket:id="save"><wicket:message key="label.save_search"/></a>
+                    </li>
+                    <li>
+                        <a wicket:id="saveAs"><wicket:message key="label.save_search_as"/></a>
+                    </li>
+                </ul>
             </li>
         </ul>
 	</span>

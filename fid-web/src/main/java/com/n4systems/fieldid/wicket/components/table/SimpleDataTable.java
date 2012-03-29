@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
@@ -33,6 +34,7 @@ public class SimpleDataTable<T> extends Panel {
     private SelectionStatusPanel selectionStatusPanel;
     private boolean displayPagination = true;
     private String cssClass = "list";
+    private Component numSelectedLabel;
 
     public SimpleDataTable(String id, final List<IColumn<T>> columns,
         ISortableDataProvider<T> dataProvider, int rowsPerPage) {
@@ -120,7 +122,26 @@ public class SimpleDataTable<T> extends Panel {
         add(new AttributeAppender("class", getPagedModel()));
         
         addEmptyResultsDisplay(emptyResultsTitleKey, emptyResultsMessageKey, table);
-	}
+
+        add(new Label("totalResults", createTotalModel()).setOutputMarkupId(true).setVisible(isTotalVisible()));
+        add(numSelectedLabel = new Label("numSelected", createSelectedModel()).setOutputMarkupId(true).setVisible(isSelectedVisible()));
+    }
+
+    protected IModel<Integer> createSelectedModel() {
+        return new Model<Integer>(0);
+    }
+
+    protected IModel<Integer> createTotalModel() {
+        return new Model<Integer>(0);
+    }
+
+    protected boolean isTotalVisible() {
+        return true;
+    }
+
+    protected boolean isSelectedVisible() {
+        return true;
+    }
 
     protected IModel<?> getPagedModel() {
 		return new Model<String>() {
@@ -184,6 +205,7 @@ public class SimpleDataTable<T> extends Panel {
 
     public void updateSelectionStatus(AjaxRequestTarget target) {
         target.add(selectionStatusPanel);
+        target.add(numSelectedLabel);
     }
 
     public void setDisplayPagination(boolean displayPagination) {

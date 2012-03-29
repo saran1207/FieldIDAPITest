@@ -16,6 +16,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -62,8 +63,11 @@ public class ReportingPage extends AbstractSearchPage<EventReportCriteria> {
     @Override
     protected Component createSubMenu(String id, Model<EventReportCriteria> criteriaModel) {
         return new ReportingSubMenu(id, criteriaModel) {
-            @Override protected Component createSaveLink(String id) {
+            @Override protected Link createSaveLink(String id) {
                 return ReportingPage.this.createSaveLink(id, true);
+            }
+            @Override protected Link createSaveAsLink(String id) {
+                return ReportingPage.this.createSaveLink(id, false);
             }
             @Override protected IModel<String> getHeaderModel() {
                 return new PropertyModel<String>(savedItem, "name");

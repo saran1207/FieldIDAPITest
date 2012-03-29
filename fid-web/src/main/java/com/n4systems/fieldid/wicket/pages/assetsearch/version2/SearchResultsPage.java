@@ -16,6 +16,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -57,7 +58,7 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
     @Override
     protected Component createSubMenu(String id, Model<AssetSearchCriteria> criteriaModel) {
         return new SearchSubMenu(id, criteriaModel) {
-            @Override protected Component createSaveLink(String id) {
+            @Override protected Link createSaveLink(String id) {
                 return SearchResultsPage.this.createSaveLink(id, true);                
             };
             @Override protected IModel<String> getHeaderModel() {

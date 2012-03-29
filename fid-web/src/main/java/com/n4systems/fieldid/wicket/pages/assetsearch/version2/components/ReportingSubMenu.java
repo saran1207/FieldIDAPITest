@@ -10,13 +10,13 @@ import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.summary.EventResolutionPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventStatus;
-import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 
 
-public class ReportingSubMenu extends SubMenu<EventReportCriteria> {
+public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
     private Link printLink;
     private Link exportLink;
@@ -51,13 +51,34 @@ public class ReportingSubMenu extends SubMenu<EventReportCriteria> {
             }
         });
 
-        add(createSaveLink("save"));
+        
+        WebMarkupContainer saveMenu = createSaveMenu("saveMenu");
+        
+        initializeLimits();
+    }
 
-        initializeLimits();        
-	}
+    private WebMarkupContainer createSaveMenu(String saveMenu) {
+        WebMarkupContainer menu;
+        add(menu = new WebMarkupContainer("saveMenu"));
+        Link saveLink = createSaveLink("save");
+        menu.add(saveLink);
+        Link saveAsLink = createSaveAsLink("saveAs");
+        menu.add(saveAsLink);
+        add(menu);
+
+        if (saveAsLink.isVisible()) {
+            saveLink.add(new AttributeAppender("class", "mattButtonLeft"));
+        }
+
+        return menu;
+    }
 
 
-    protected Component createSaveLink(String id) {
+    protected Link createSaveAsLink(String id) {
+        throw new IllegalStateException("you must override this method to create Save As link for the SubMenu");
+    }
+
+    protected Link createSaveLink(String id) {
         throw new IllegalStateException("you must override this method to create Save link for the SubMenu");
     }
 

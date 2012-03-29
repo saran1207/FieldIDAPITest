@@ -50,7 +50,7 @@ public class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         return "label.select_assets";
     }
 
-    protected Component createSaveLink(String id) {
+    protected Link createSaveLink(String id) {
 		throw new IllegalStateException("you must override this method to create Save link for the SubMenu");
 	}
 

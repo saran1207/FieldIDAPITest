@@ -33,12 +33,16 @@ var fieldIdWidePage = (function() {
 	var showLeftPanel = function() {
 		$('#left-panel').addClass('show').removeClass('hide');
         $('#page .centre').addClass('narrow');
+        $('#left-panel-controller .close').show();
+        $('#left-panel-controller .open').hide();
     };
 	
 	var hideLeftPanel = function() {
 		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.		
 		$('#page .centre').removeClass('narrow');
 		$('#left-panel').removeClass('show').addClass('hide');
+        $('#left-panel-controller .open').show();
+        $('#left-panel-controller .close').hide();
 	};
 			
 	var initLeftMenu = function(showLeft) {
@@ -52,7 +56,7 @@ var fieldIdWidePage = (function() {
 				
 	function addMenuHandlers() { 
 		$(document).delegate('.actions .menu > a', 'click', function() {
-			$(this).next('.menu-items').show();
+			$(this).siblings('.menu-items').first().show();
 			return false;
 		});		
 		// in an ideal world we would have a single top level div surrounding  all content instead of listing all (page,pageHeader...) in selector. 

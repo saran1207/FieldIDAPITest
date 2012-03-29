@@ -41,7 +41,7 @@
     border:1px solid #bbb;
 	background:white;
     margin-right:10px;
-    margin-left:10px;
+    margin-left:14px;
 }
 
 #page .centre.narrow {
@@ -322,9 +322,9 @@
 	border:1px solid #ccc;
 	position:fixed;
 	height:40px;
-	bottom:0px;
+	bottom:10px;
 	right:10px;
-    left:10px;
+    left:14px;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
 	background:#f9f9f9;
@@ -364,18 +364,21 @@
 	width: 350px;
 }
 
-
 .freeFormLabel, .orgBrowserForm .infoSet label {
     font-weight:normal;
 }
 
-
-.selectionNotice {  /** WEB-2717 */    
-    margin-top:0px;    
-    margin-bottom:10px;
-    padding-top:10px;
+.selection .total {
+    padding:10px 5px;
+    display:none;
 }
 
+.selection .status {
+    margin-top:0px;
+    margin-bottom:10px;
+    padding:10px 5px;
+    float: right;
+}
 
 .no-results { 
 	padding:10px 0px 10px 25px;
@@ -397,7 +400,3 @@
 	margin-top:7px;
 	margin-bottom:7px;
 }
-
-
-
-

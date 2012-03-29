@@ -16,7 +16,6 @@ import com.n4systems.util.selection.MultiIdSelection;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
@@ -36,8 +35,6 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
     protected SimpleDataTable<RowView> dataTable;
     protected FieldIdAPIDataProvider provider;
     protected MultiIdSelection selectedRows;
-    protected Label numSelectedLabel;
-    protected Label totalResultsLabel;
     protected IModel<T> criteriaModel;
 
     public SRSResultsPanel(String id, final IModel<T> criteriaModel) {
@@ -76,7 +73,16 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
             protected void onPageChanged(AjaxRequestTarget target) {
                 ServletWebRequest request = (ServletWebRequest) getRequest();
                 new LegacyReportCriteriaStorage().storePageNumber(request.getContainerRequest().getSession(), dataTable.getTable().getCurrentPage());
-                target.add(totalResultsLabel);
+            }
+
+            @Override
+            protected IModel<Integer> createSelectedModel() {
+                return new PropertyModel<Integer>(SRSResultsPanel.this, "totalResults");
+            }
+
+            @Override
+            protected IModel<Integer> createTotalModel() {
+                return new PropertyModel<Integer>(selectedRows, "numSelectedIds");
             }
 
             @Override
@@ -102,20 +108,14 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
 
         dataTable.getTable().setCurrentPage(criteriaModel.getObject().getPageNumber());
         selectUnselectRowColumn.setDataTable(dataTable.getTable());
-
-        add(totalResultsLabel = new Label("totalResults", new PropertyModel<Integer>(this, "totalResults")));
-        add(numSelectedLabel = new Label("numSelected", new PropertyModel<Integer>(selectedRows, "numSelectedIds")));
-        totalResultsLabel.setOutputMarkupId(true);
-        numSelectedLabel.setOutputMarkupId(true);
     }
-
+    
     // package protected method is extract/overridden for testing purposes
     protected SerializableSecurityGuard getSecurityGuard() {
 		return new SerializableSecurityGuard(FieldIDSession.get().getTenant());
 	}
 
     protected void updateSelectionStatus(AjaxRequestTarget target) {
-        target.add(numSelectedLabel);
         dataTable.updateSelectionStatus(target);
         storeCriteriaIfNecessary();
     }
