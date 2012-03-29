@@ -11,6 +11,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.event.EventByMobileGuidLoader;
 import com.n4systems.model.eventschedule.EventScheduleSaver;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.Project;
@@ -25,6 +26,12 @@ public class CompletedScheduleCreatorTest {
     private final Event event = anEvent().build();
     private final Project job = aJob().build();
 
+    @Before
+    public void setUp() {
+        EventSchedule placeholderFor = EventSchedule.createPlaceholderFor(event);
+        placeholderFor.completed(event);
+    }
+
     @Test
     public void creates_schedule_with_loaded_inspection() {
         TestableScheduleSaver saver = new TestableScheduleSaver();
@@ -32,7 +39,7 @@ public class CompletedScheduleCreatorTest {
         CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, testableJobLoader());
         sut.create("SOME GUID", new Date(), 1L);
 
-        assertEquals(event, saver.getSavedSchedule().getEvent());
+        assertEquals(event, saver.getUpdatedSchedule().getEvent());
     }
 
     @Test
@@ -42,7 +49,7 @@ public class CompletedScheduleCreatorTest {
         CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, testableJobLoader());
         sut.create("SOME GUID", new Date(), 1L);
 
-        assertEquals(ScheduleStatus.COMPLETED, saver.getSavedSchedule().getStatus());
+        assertEquals(ScheduleStatus.COMPLETED, saver.getUpdatedSchedule().getStatus());
     }
 
     @Test
@@ -56,7 +63,7 @@ public class CompletedScheduleCreatorTest {
         CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, testableJobLoader());
         sut.create("SOME GUID", someDate, 1L);
 
-        assertEquals(someDate, saver.getSavedSchedule().getNextDate());
+        assertEquals(someDate, saver.getUpdatedSchedule().getNextDate());
     }
 
     @Test
@@ -66,7 +73,7 @@ public class CompletedScheduleCreatorTest {
         CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, testableJobLoader());
         sut.create("SOME GUID", new Date(), 1L);
 
-        assertEquals(job, saver.getSavedSchedule().getProject());
+        assertEquals(job, saver.getUpdatedSchedule().getProject());
     }
 
     @Test(expected=InspectionNotFoundException.class)
@@ -112,13 +119,24 @@ public class CompletedScheduleCreatorTest {
 
 class TestableScheduleSaver extends EventScheduleSaver {
     private EventSchedule savedSchedule;
+    private EventSchedule updatedSchedule;
 
     @Override
     public void save(EventSchedule schedule) {
         savedSchedule = schedule;
     }
 
+    @Override
+    public EventSchedule update(EventSchedule schedule) {
+        updatedSchedule = schedule;
+        return schedule;
+    }
+
     public EventSchedule getSavedSchedule() {
         return savedSchedule;
+    }
+
+    public EventSchedule getUpdatedSchedule() {
+        return updatedSchedule;
     }
 }
