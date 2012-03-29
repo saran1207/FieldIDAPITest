@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	private Long assetStatusId;
 	private Long identifiedById;
 	private Long assignedUserId;
-	private Long gpsLatitude;
-	private Long gpsLongitude;
+	private BigDecimal gpsLatitude;
+	private BigDecimal gpsLongitude;
 	private Long predefinedLocationId;
 	private String freeformLocation;
 	private String nonIntergrationOrderNumber;
@@ -120,19 +121,19 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 		this.assignedUserId = assignedUserId;
 	}
 
-	public Long getGpsLatitude() {
+	public BigDecimal getGpsLatitude() {
 		return gpsLatitude;
 	}
 
-	public void setGpsLatitude(Long gpsLatitude) {
+	public void setGpsLatitude(BigDecimal gpsLatitude) {
 		this.gpsLatitude = gpsLatitude;
 	}
 
-	public Long getGpsLongitude() {
+	public BigDecimal getGpsLongitude() {
 		return gpsLongitude;
 	}
 
-	public void setGpsLongitude(Long gpsLongitude) {
+	public void setGpsLongitude(BigDecimal gpsLongitude) {
 		this.gpsLongitude = gpsLongitude;
 	}
 

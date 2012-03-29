@@ -83,6 +83,14 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		return apiAttachment;
 	}
 	
+	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment attachment) {
+		return null;
+	}
+	
+	public List<AssetAttachment> convertApiListToEntityList(List<ApiAssetAttachment> apiAttachments) {
+		return null;
+	}
+	
 	private byte[] loadAttachmentData(AssetAttachment attachment) {
 		byte[] data = null;
 		File attachmentFile = PathHandler.getAssetAttachmentFile(attachment);

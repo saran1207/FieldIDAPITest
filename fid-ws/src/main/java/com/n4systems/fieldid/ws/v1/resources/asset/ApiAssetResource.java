@@ -1,13 +1,17 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -32,10 +36,18 @@ import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResou
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.GpsLocation;
 import com.n4systems.model.asset.SmartSearchWhereClause;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.services.asset.AssetSaveService;
+import com.n4systems.util.WsServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -45,7 +57,7 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	private static Logger logger = Logger.getLogger(ApiAssetResource.class);
 	
-	@Autowired private AssetService assetService;	
+	@Autowired private AssetService assetService;
 	@Autowired private ApiEventHistoryResource apiEventHistoryResource;
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
 	@Autowired private ApiAssetAttachmentResource apiAttachmentResource;
@@ -115,6 +127,30 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		ApiAsset apiModel = convertEntityToApiModel(asset);
 		return apiModel;
 	}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void saveAsset(ApiAsset apiAsset) {		
+		Asset asset = converApiAsset(apiAsset);
+		
+		AssetSaveService assetSaveService = new AssetSaveService(WsServiceLocator.getLegacyAssetManager(securityContext.getTenantSecurityFilter().getTenantId()), getCurrentUser());
+		assetSaveService.setUploadedAttachments(apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments()));
+		assetSaveService.setAsset(asset);
+		
+		/*asset.setImageName("asset.jpg");
+		File assetImagePath = PathHandler.getAssetImageFile(asset);
+		
+		try {
+			FileUtils.writeByteArrayToFile(assetImagePath, apiAsset.getImage());
+		} catch (IOException e) {			
+			e.printStackTrace();
+		}*/
+		
+		asset = assetSaveService.create();
+		
+		logger.info("Created Asset " + asset.getIdentifier());
+	}
 
 	@Override
 	protected ApiAsset convertEntityToApiModel(Asset asset) {
@@ -148,11 +184,11 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		
 		if (asset.getGpsLocation() != null) {
 			if (asset.getGpsLocation().getLatitude() != null) {
-				apiAsset.setGpsLatitude(asset.getGpsLocation().getLatitude().longValue());
+				apiAsset.setGpsLatitude(asset.getGpsLocation().getLatitude());
 			}
 			
 			if (asset.getGpsLocation().getLongitude() != null) {
-				apiAsset.setGpsLongitude(asset.getGpsLocation().getLongitude().longValue());
+				apiAsset.setGpsLongitude(asset.getGpsLocation().getLongitude());
 			}
 		}
 		
@@ -172,6 +208,57 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		return apiAsset;
 	}
 	
+	private Asset converApiAsset(ApiAsset apiAsset) {
+		Asset asset = new Asset();
+		asset.setTenant(getCurrentTenant());
+		asset.setMobileGUID(apiAsset.getSid());
+		asset.setType(persistenceService.find(AssetType.class, apiAsset.getTypeId()));
+		asset.setOwner(persistenceService.find(BaseOrg.class, apiAsset.getOwnerId()));
+		asset.setIdentifier(apiAsset.getIdentifier());
+		asset.setRfidNumber(apiAsset.getRfidNumber());
+		asset.setCustomerRefNumber(apiAsset.getCustomerRefNumber());
+		asset.setPurchaseOrder(apiAsset.getPurchaseOrder());
+		asset.setComments(apiAsset.getComments());
+		asset.setIdentified(apiAsset.getIdentified());
+		asset.setNonIntergrationOrderNumber(apiAsset.getNonIntergrationOrderNumber());
+		asset.setModified(apiAsset.getModified());
+		
+		if(apiAsset.getAssetStatusId() > 0) {
+			asset.setAssetStatus(persistenceService.find(AssetStatus.class, apiAsset.getAssetStatusId()));
+		}
+		
+		if(apiAsset.getIdentifiedById() > 0) {
+			asset.setIdentifiedBy(persistenceService.find(User.class, apiAsset.getIdentifiedById()));
+		}
+		
+		if(apiAsset.getAssignedUserId() > 0) {
+			asset.setAssignedUser(persistenceService.find(User.class, apiAsset.getAssignedUserId()));
+		}
+		
+		if(apiAsset.getGpsLatitude() != null && apiAsset.getGpsLongitude() != null) {
+			GpsLocation gpsLocation = new GpsLocation(apiAsset.getGpsLatitude(), apiAsset.getGpsLongitude());
+			
+			if(gpsLocation.isValid()) {
+				asset.setGpsLocation(gpsLocation);
+			}
+		}
+		
+		if(apiAsset.getFreeformLocation() != null || apiAsset.getPredefinedLocationId() != null) {
+			Location location = new Location();
+			location.setFreeformLocation(apiAsset.getFreeformLocation());
+			
+			if(apiAsset.getPredefinedLocationId() != null) {
+				location.setPredefinedLocation(persistenceService.find(PredefinedLocation.class, apiAsset.getPredefinedLocationId()));
+			}
+			
+			asset.setAdvancedLocation(location);
+		}
+		
+		asset.setInfoOptions(convertAttributeValues(apiAsset.getAttributeValues()));
+		
+		return asset;
+	}
+	
 	private List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
 		List<ApiAttributeValue> apiAttributeValues = new ArrayList<ApiAttributeValue>();
 		
@@ -180,6 +267,16 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		}
 		
 		return apiAttributeValues;
+	}
+	
+	private Set<InfoOptionBean> convertAttributeValues(List<ApiAttributeValue> apiAttributeValues) {
+		Set<InfoOptionBean> infoOptions = new TreeSet<InfoOptionBean>();
+		
+		for(ApiAttributeValue apiAttributeValue : apiAttributeValues) {
+			infoOptions.add(convertApiAttributeValue(apiAttributeValue));
+		}
+		
+		return infoOptions;
 	}
 	
 	private ApiAttributeValue convertInfoOption(InfoOptionBean infoOption) {
@@ -194,6 +291,18 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			attribValue.setValue(infoOption.getName());
 		}
 		return attribValue;
+	}
+	
+	private InfoOptionBean convertApiAttributeValue(ApiAttributeValue apiAttributeValue) {
+		InfoOptionBean infoOptionBean = persistenceService.findNonSecure(InfoOptionBean.class, apiAttributeValue.getAttributeId());
+		
+		if(infoOptionBean.getInfoField().isDateField()) {
+			infoOptionBean.setName(String.valueOf(((Date)apiAttributeValue.getValue()).getTime()));
+		} else {
+			infoOptionBean.setName(apiAttributeValue.getValue().toString());
+		}
+		
+		return infoOptionBean;
 	}
 	
 	private byte[] loadAssetImage(Asset asset) {
