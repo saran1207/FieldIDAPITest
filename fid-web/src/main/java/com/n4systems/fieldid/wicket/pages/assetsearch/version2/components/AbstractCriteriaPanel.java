@@ -1,22 +1,15 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
-import com.n4systems.fieldid.wicket.pages.HasLeftPanelController;
 import com.n4systems.fieldid.wicket.components.navigation.LeftPanelController;
+import com.n4systems.fieldid.wicket.pages.HasLeftPanelController;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.odlabs.wiquery.core.events.Event;
-import org.odlabs.wiquery.core.events.MouseEvent;
-import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
-import org.odlabs.wiquery.core.javascript.JsScope;
-import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
 
 public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Panel implements HasLeftPanelController {
@@ -33,7 +26,6 @@ public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Pa
 
 		SearchConfigForm form = new SearchConfigForm("form",model);
         form.add(new SubmitLink("submit"));
-		form.add(new WebMarkupContainer("close").add(createCloseBehavior()));        
 
 		form.add(columns = createColumnsPanel("columns", model));
 		form.add(filters = createFiltersPanel("filters", model));
@@ -49,14 +41,6 @@ public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Pa
 	
 	protected void onSearchSubmit() { }
 	
-	protected Behavior createCloseBehavior() {
-		return new WiQueryEventBehavior(new Event(MouseEvent.CLICK) {
-			@Override public JsScope callback() {
-				return JsScopeUiEvent.quickScope(SubMenu.HIDE_JS);
-			}
-		});
-	}
-
     @Override
     public Component getLeftPanelController(String id) {
         return new LeftPanelController(id);

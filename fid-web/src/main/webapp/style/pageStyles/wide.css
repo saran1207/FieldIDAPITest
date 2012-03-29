@@ -54,8 +54,6 @@
 
 
 
-
-
 /**
  * LEFT-PANEL
  *  panel at the left hand side of screen.  
@@ -64,16 +62,14 @@
 */
 
 #left-panel {
-	padding:0px;
+	padding:10px 0 0px 10px;
 	background:white;
-	left:10px;
+	left:13px;
 	overflow-x:visible;
-	overflow-y:auto; 
-	padding-left:10px;
+	overflow-y:auto;
 	width:345px;
 	top:169px;
-	bottom:40px;
-    border-top-left-radius: 6px;
+	bottom:50px;
     border-top-right-radius: 6px;
     border-left:1px solid #bbb;
     border-right:1px solid #bbb;
@@ -84,11 +80,12 @@
 
 
 .left-panel-controller {
+    top: 169px;
     position: fixed;
-    width: 10px;
-    top: 175px;
-    bottom: 5px;
-    background: #aaa;
+    width: 13px;
+    bottom: 10px;
+    background: #bbb;
+    border:1px solid #bbb;
 }
 
 .left-panel-controller img {
@@ -102,14 +99,13 @@
 */
 .search-config .submit {
     position:fixed;
-    bottom:0px;
-    left:10px;
+    bottom:10px;
+    left:13px;
 	display:inline-block;
     border-bottom-right-radius:6px;
-    border-bottom-left-radius:6px;
     border-style: solid;
     border-width: 1px;
-    border-color: #ccc;
+    border-color: #bbb;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     border-top-style: dotted;
@@ -187,8 +183,21 @@
 
 
 .sub-menu .config {
-	float:left;
-	margin-left:20px;
+    float:left;
+    margin-left:20px;
+}
+
+
+.config .mattBar .mattButtonLeft {
+    background : url(../../images/filter.png) center no-repeat;
+    height:12px;
+    width:12px;
+}
+
+.config .mattBar .mattButtonRight {
+    height:12px;
+    width:12px;
+    background : url(../../images/col.png) center no-repeat;
 }
 
 

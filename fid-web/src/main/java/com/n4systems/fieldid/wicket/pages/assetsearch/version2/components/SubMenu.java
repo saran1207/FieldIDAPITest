@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -49,8 +48,8 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         add(createHeader());
         
         MattBar mattBar = createMattBar();
-        mattBar.addLink(new FIDLabelModel("label.columns"), COLUMNS_ID);
-        mattBar.addLink(new FIDLabelModel("label.filters"), FILTERS_ID);
+        mattBar.addLink(new Model<String>(""), COLUMNS_ID);
+        mattBar.addLink(new Model<String>(""), FILTERS_ID);
         mattBar.setCurrentState(COLUMNS_ID);
         add(mattBar);
         

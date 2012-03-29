@@ -37,7 +37,7 @@
 }
 
 .infoSet .fieldHolder input.date  {
-	width:150px;	
+	width:140px;
 }
 
 .infoSet .fieldHolder div  {
@@ -61,9 +61,9 @@
 }
 
 .dateRange select, .field select, .popup  { 
-	width:158px;
+	width:148px;
 }
 
 .fieldHolder input {
-	width:160px;
+	width:150px;
 }
