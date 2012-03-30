@@ -9,7 +9,7 @@
 			<@s.textfield id="reportName" name="reportName" maxlength="255"/>
 					
 			<div class="formActions">
-				<@s.submit id="saveDownload" onClick="Lightview.hide();" key="hbutton.savetomydownloads" style="text-align:left"/>
+				<@s.submit id="saveDownload" onClick="closeLightbox();" key="hbutton.savetomydownloads" style="text-align:left"/>
 				&nbsp;<@s.text name="label.or" />&nbsp;
 				<a href="javascript:void(0);" onClick="closeLightbox();"><@s.text name="hbutton.saveclosemessage" /></button>
 			</div>

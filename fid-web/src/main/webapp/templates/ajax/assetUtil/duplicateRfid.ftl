@@ -44,6 +44,6 @@
 	
 	modalBox.update("${html}");
 
-	Lightview.show({href:"#modalBox", title: "<@s.text name="label.checkrfid"/>"});
+    jQuery().colorbox({inline: true, href:"#modalBox", title: "<@s.text name="label.checkrfid"/>", maxWidth: '450px'});
 	
 </#escape>

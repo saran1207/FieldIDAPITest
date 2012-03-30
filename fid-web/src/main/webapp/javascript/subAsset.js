@@ -14,8 +14,9 @@ function attachAsset( event, assetId ) {
 		element = Event.element( event );
 		assetId = element.getAttribute( 'assetId' );
 	}
-	Lightview.hide();
-	
+
+	jQuery.colorbox.close();
+
 	var url = addSubAssetUrl + "?uniqueID=" + $('uniqueID').value + "&subAsset.asset.iD=" + assetId + "&subAssetIndex=" + subAssetIndex + "&token=" + getToken();
 	subAssetIndex++;
 	getResponse( url, "get" );
@@ -64,20 +65,14 @@ function submitSearchForm(event) {
 	// block default form submit
  	event.stop();
   
-	Lightview.show({
-		href: lookupAssetUrl,
-		rel: 'ajax',
-		title: assetLookupTitle,
-		options: {
-			scrolling:true, 
-			width: 700, 
-			height: 420,
-			ajax: {
-				parameters: Form.serialize('subAssetSearchForm'),
-				onComplete: findSubAsset
-			}
-		}
-	});
+    jQuery.get(
+        lookupAssetUrl ,
+        jQuery('#subAssetSearchForm').serialize(),
+        function (data) {
+            jQuery().colorbox({html:data, width: '700px', height: '420px', onComplete: findSubAsset});
+        }
+    );
+    return false;
 }
 
 var removeSubAssetUrl = "";

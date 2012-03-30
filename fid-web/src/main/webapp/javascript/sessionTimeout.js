@@ -6,9 +6,10 @@ var timeOfLastCheck = new Date();
 var loginWindowTitle = "Session Expired";
 var sessionTimeOut = 30;
 var twoSeconds = 2;
+var loginWindowOpen = false;
 
 function testSession() {
-	if( $( 'lightview' ) == null ||  $( 'lightview' ).positionedOffset().left <= 0 ) { 
+	if( !loginWindowOpen ) {
 		getResponseNonInteractive( sessionTestUrl, "get" );
 	}
 }
@@ -21,81 +22,60 @@ function minutesToSeconds( minutes ) {
 function promptForLogin() {
 	
 	var formParams = { userName: loggedInUserName, companyID: tenantName }
-	
-	
-	Lightview.show(	{
-		href: loginUrl,
-		rel: 'ajax',
-		title: loginWindowTitle,
-		options: {
-			topclose: false,
-			closeButton: false,
-			keyboard: false,
-			width: 500,
-			height: 300,
-			ajax: {
-				method: 'get',
-				evalScripts: true,
-				parameters: formParams
-			}
-		}	
-	});
+
+    jQuery().colorbox( {
+        href: loginUrl,
+        data: jQuery.param(formParams),
+        overlayClose:false,
+        hideClose:true,
+        escKey: false,
+        width:505,
+        height:300
+    });
+    loginWindowOpen = true;
 }
 
 
 function quickLoginSubmit( event ) {
 	
 	Event.stop(event);
-	var form = $('quickLoginForm');
-	
-	Lightview.show({
-		href: form.action,
-		rel: 'ajax',
-		title: loginWindowTitle,
-		options: {
-			topclose: false,
-			closeButton: false,
-			width: 500,
-			height: 300,
-			ajax: {
-				evalScripts: true,
-				method: form.method,
-				parameters: form.serialize() 
-			}
-		}
-	});
-		
+	var form = jQuery('#quickLoginForm');
+    var data = form.serialize();
+
+    jQuery.colorbox({
+        href: form[0].action,
+        data: data,
+        overlayClose:false,
+        hideClose:true,
+        escKey: false,
+        width:505,
+        height:300
+    });
+
 }
 
 function kickOtherUserSubmit( event ) {
 	
 	Event.stop(event);
-	var form = $('kickSessionConfirm');
-	
-	Lightview.show({
-		href: form.action,
-		rel: 'ajax',
-		title: loginWindowTitle,
-		options: {
-			topclose: false,
-			width: 500,
-			height: 300,
-			ajax: {
-				evalScripts: true,
-				method: form.method,
-				parameters: form.serialize() 
-			}
-		}
-	});
+	var form = jQuery('#kickSessionConfirm');
+    var data = form.serialize();
+
+    jQuery.colorbox({
+        href: form[0].action,
+        data: data,
+        overlayClose:false,
+        hideClose:true,
+        escKey: false,
+        width:505,
+        height:300
+    });
+
 }
 
 
 onDocumentLoad(function() { new PeriodicalExecuter(testSession, minutesToSeconds(sessionTimeOut) + twoSeconds); });
 
-function interceptQuickLoginEvent(formId) {
-    $(formId).observe( 'submit', quickLoginSubmit );
-}
-
 function closeLoginLightbox() {
-    Lightview.hide();
+    closeLightbox();
+    loginWindowOpen = false;
 }

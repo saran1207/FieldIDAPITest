@@ -2,6 +2,14 @@
 <head>
 	<@n4.includeStyle href="vendor" type="page"/>
     <@n4.includeStyle href="safetyNetworkAsset" type="page"/>
+
+    <script type="text/javascript">
+
+        jQuery(document).ready(function(){
+            jQuery('.viewNetworkEventLink').colorbox({iframe: true, scrolling: true, width:'650px', height: '600px'});
+        });
+
+    </script>
 </head>
 
 <#include '../vendor/_vendorinfo.ftl'/>

@@ -13,7 +13,7 @@
       <@s.actionerror />
   </div>
 </div>
-<@s.form action="createSession" namespace="/aHtml" id="quickLoginForm" theme="fieldid" cssClass="easyForm quickLoginForm">
+<@s.form action="createSession" namespace="/aHtml" id="quickLoginForm" theme="fieldid" cssClass="easyForm quickLoginForm" onsubmit="quickLoginSubmit(event);">
 	<#include "/templates/html/common/_formErrors.ftl" />
 	<@s.hidden name="companyID" id="companyID"/>
 	<@s.hidden name="signIn.userName" id="userName"/>
@@ -27,7 +27,3 @@
 	</div>
 		
 </@s.form>
-
-<script type="text/javascript">
-    interceptQuickLoginEvent('quickLoginForm');
-</script>

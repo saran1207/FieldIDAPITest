@@ -11,6 +11,13 @@ ${action.setPageType('my_account', 'downloads')!}
 		saveDownloadNameUrl = '<@s.url action="saveDownloadName" namespace="/ajax"/>'
 		cancelDownloadNameUrl = '<@s.url action="cancelDownloadName" namespace="/ajax"/>'
 	</script>
+
+    <script type="text/javascript">
+
+        jQuery(document).ready(function(){
+            jQuery('.emailLink').colorbox( {scrolling: true, width: '900px', height: '435px'});
+        });
+    </script>
 </head>
 
 
@@ -52,7 +59,7 @@ ${action.setPageType('my_account', 'downloads')!}
 					<#if download.state.ready>
 						<a href="<@s.url action="downloadFile" includeParams="get" fileId="${download.id}" />" onClick="markDownloaded('dl_${download.id}');" ><@s.text name="label.download"/></a>
 						|
-						<a href='<@s.url action="emailDownload" namespace="/aHtml/iframe" fileId="${download.id}"/>' class='lightview' rel='iframe' title=" :: :: autosize: true, scrolling:true, width: 900, height: 435" ><@s.text name="label.share" /></a>
+						<a class='emailLink' href='<@s.url action="emailDownload" namespace="/aHtml/iframe" fileId="${download.id}"/>'><@s.text name="label.share" /></a>
 						|
 						<a href="<@s.url action="deleteDownload" fileId="${download.id}" />"><@s.text name="label.delete"/></a>
 					</#if>

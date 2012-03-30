@@ -3,6 +3,14 @@ ${action.setPageType('customer', 'import_export')!}
 <head> 
 	<@n4.includeStyle type="page" href="import"/>
 	<@n4.includeStyle type="page" href="downloads" />
+
+    <script type="text/javascript">
+
+        jQuery(document).ready(function(){
+            jQuery('#exportLink').colorbox();
+        });
+
+    </script>
 </head>
 
 <div class="leftBox">
@@ -14,7 +22,7 @@ ${action.setPageType('customer', 'import_export')!}
 		<div id="templateLink">
 			<p>
 				<@s.url id="exportExcel" action="customerExport" namespace="/aHtml" />
-				<a href='${exportExcel}' class='lightview' rel='ajax' title=' :: :: scrolling:true, autosize: true'><@s.text name="label.export_existing"><@s.param><@s.text name="label.customers"/></@s.param></@s.text></a>
+				<a id="exportLink" href='${exportExcel}' ><@s.text name="label.export_existing"><@s.param><@s.text name="label.customers"/></@s.param></@s.text></a>
 				<@s.text name="label.or"/>
 				<a href='<@s.url action="downloadExampleCustomerExport" namespace="/file" />'><@s.text name="label_download_excel"/></a>
 			</p>

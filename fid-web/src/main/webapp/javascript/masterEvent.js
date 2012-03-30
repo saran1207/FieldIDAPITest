@@ -5,7 +5,7 @@ function attachAsset( event, assetId ) {
 		element = Event.element( event );
 		assetId = element.getAttribute( 'assetId' );
 	}
-	Lightview.hide();
+    closeLightbox();
 	
 	var url = addSubAssetUrl + "?uniqueID=" + $('assetId').value + "&subAsset.asset.iD=" + assetId + "&subAssetIndex=" + subAssetIndex + "&token=" + getToken();
 	subAssetIndex++;

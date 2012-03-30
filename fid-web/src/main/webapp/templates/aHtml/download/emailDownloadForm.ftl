@@ -1,6 +1,5 @@
 <head>
 	<@n4.includeStyle href="downloads" type="page"/>
-	<#include "/templates/html/common/_lightView.ftl"/>
 
 </head>
 

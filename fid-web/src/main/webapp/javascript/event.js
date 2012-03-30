@@ -393,7 +393,7 @@ function clearDeficiency(criteriaId, defSize) {
 	checkDefComment(criteriaId, "");
 	defCounts[criteriaId] = 0;
 	updateDeficiencyImage(criteriaId);
-	Lightview.hide();
+    closeLightbox();
 }
 
 function clearRecommendation(criteriaId, recSize) {
@@ -419,7 +419,7 @@ function clearRecommendation(criteriaId, recSize) {
 	checkRecComment(criteriaId, "");
 	recCounts[criteriaId] = 0;
 	updateRecommendationImage(criteriaId);
-	Lightview.hide();
+    closeLightbox();
 }
 
 function changeToNewEventBook() {

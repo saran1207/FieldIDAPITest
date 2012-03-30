@@ -4,6 +4,14 @@ ${action.setPageType('auto_attribute', 'import_export')!}
 	<@n4.includeScript src="autoAttributeImport"/>
 	<@n4.includeStyle type="page" href="import"/>
 	<@n4.includeStyle type="page" href="downloads" />
+
+    <script type="text/javascript">
+
+        jQuery(document).ready(function(){
+            jQuery('#exportLink').colorbox();
+        });
+
+    </script>
 </head>
 
 <@s.url id="exportExample" action="downloadExampleAutoAttributeExport" namespace="/file"/>
@@ -28,7 +36,7 @@ ${action.setPageType('auto_attribute', 'import_export')!}
 			<input id="templateUrl" type="hidden" value="${exportExample}" />
 			<input id="exportUrl" type="hidden" value="${exportExcel}" />
 			<p id="assetTemplate">
-				<a id="exportLink" class='lightview' rel='ajax' title=' :: :: scrolling:true, autosize: true'><@s.text name="label.export_existing"><@s.param><@s.text name="label.autoattribute"/></@s.param></@s.text></a>
+				<a id="exportLink" ><@s.text name="label.export_existing"><@s.param><@s.text name="label.autoattribute"/></@s.param></@s.text></a>
 				<@s.text name="label.or"/>
 				<a id="downloadTemplate"><@s.text name="label_download_excel"/></a>
 			</p>

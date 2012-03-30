@@ -41,18 +41,18 @@ ${action.setPageType('my_account', 'exportEvent')!}
 	</div>				
 	<script type="text/javascript">
 		function exportEvents() {			
-				var eventTypeId = $('eventTypeId').getValue();  
-				var from=$('form_fromDate').getValue();
-				var to=$('form_toDate').getValue();				 				
-				var url = '/fieldid/aHtml/exportEvents.action?from='+from+'&eventTypeId='+eventTypeId+'&to='+to;
-					Lightview.show(	
-						{	href: url,
-							rel: 'ajax',
-							title: '',
-							options: { autosize : true }							
-						});
-						return false;
-					}
+            var eventTypeId = $('eventTypeId').getValue();
+            var from=$('form_fromDate').getValue();
+            var to=$('form_toDate').getValue();
+            var url = '/fieldid/aHtml/exportEvents.action?from='+from+'&eventTypeId='+eventTypeId+'&to='+to;
+            jQuery.get(
+                url,
+                function(data) {
+                     jQuery().colorbox({ html:data });
+                }
+            ) ;
+            return false;
+        }
 		</script>
 		
 		<script src="javascript/chosen/chosen.jquery.js" type="text/javascript"></script>

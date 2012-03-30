@@ -21,7 +21,7 @@ function checkDuplicateRfids(rfids, submitButton, uniqueId) {
 
 	
 function cancel() {
-	Lightview.hide();
+    closeLightbox();
 	unlockSubmitButtons();	
 }
 function closeAndSubmit() {
@@ -39,6 +39,10 @@ function submitForm( formId ) {
 
 	mainForm.submit();
 }
-		
-document.observe( 'lightview:hidden', function(event) {	unlockSubmitButtons(); } );
+
+jQuery(document).ready(function(){
+    jQuery(document).bind('cbox_closed', function(event) {	unlockSubmitButtons(); } );
+});
+
+
 

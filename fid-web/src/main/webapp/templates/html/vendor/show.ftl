@@ -1,6 +1,13 @@
 <title><@s.text name="title.safety_network"/></title>
 <head>
 	<@n4.includeStyle href="vendor" type="page"/>
+        <script type="text/javascript">
+
+            jQuery(document).ready(function(){
+                jQuery('#videoLighbox').colorbox({iframe: true, width: '900px', height: '570px'});
+            });
+
+        </script>
 </head>
 
 <#include '_vendorinfo.ftl'>
@@ -17,8 +24,7 @@
 		</h3>
 			<p class="vendorParagraph">
 				<@s.text name="label.register_assets.msg"/>
-				
-				<a class="vendorLink lightview" title="::  :: width: 900, height: 570" rel="iframe" href='/videos/instructions/safetynetwork/register.html'>&nbsp;<@s.text name="label.tell_me_more"/></a>
+				<a id="videoLighbox" href='/videos/instructions/safetynetwork/register.html'><@s.text name="label.tell_me_more"/></a>
 				<@s.form action="searchNetworkAsset" theme="fieldid" cssClass="fullForm" method="get">
 					<@s.textfield name="searchText" id="assetSearchBox" cssClass="inputAlign"/>
 					<@s.hidden name="vendorId" value="%{vendor.id}" />

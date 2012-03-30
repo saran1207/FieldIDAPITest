@@ -10,6 +10,6 @@
         <a class="clearSignatureLink" onclick="clearSignature(${criteriaId}, ${currentCriteriaIndex})"><@s.text name="label.clear_signature"/></a>
     <#else>
         <input type="hidden" name="criteriaResults[${currentCriteriaIndex}].signed" value="false"/>
-        <a href="/fieldid/aHtml/sign.action" criteriaid="${criteriaId}" currentcriteriaindex="${currentCriteriaIndex}" class="lightview signLink" rel="iframe" title="Signature :: :: scrolling:false, width: 790, height: 300"><@s.text name="label.sign"/></a>
+        <a class="signatureCriteriaLightBox" href="/fieldid/aHtml/sign.action" criteriaid="${criteriaId}" currentcriteriaindex="${currentCriteriaIndex}"> <@s.text name="label.sign"/></a>
     </#if>
 </div>

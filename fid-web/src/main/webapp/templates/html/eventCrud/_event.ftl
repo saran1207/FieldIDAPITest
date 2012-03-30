@@ -1,3 +1,15 @@
+<head>
+    <script type="text/javascript">
+
+        jQuery(document).ready(function(){
+            jQuery('.recDefLightBox').colorbox( {inline: true, scrolling: true, width: '550px', height: '420px'});
+            jQuery('.signatureCriteriaLightBox').colorbox( {iframe: true, scrolling: false, width: '820px', height: '360px'});
+        });
+
+    </script>
+
+</head>
+
 
 <#if !eventFormHelper.getAvailableSections( formEvent ).isEmpty() >
 	<script type="text/javascript">

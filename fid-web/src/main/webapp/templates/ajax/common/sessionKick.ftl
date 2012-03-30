@@ -1,11 +1,13 @@
-Lightview.show(	{
-		href: '<@s.url action="showKick" namespace="/aHtml"/>',
-		rel: 'ajax',
-		title: '<@s.text name="label.session_kicked"/>',
-		options: {
-			topclose: false,
-			width: 500,
-			height: 400,
-			ajax: {	method: 'get' }
-		}	
-	});
+<script type="text/javascript">
+    jQuery.colorbox({
+        href: '<@s.url action="showKick" namespace="/aHtml"/>',
+        title: '<@s.text name="label.session_kicked"/>',
+        data: data,
+        overlayClose:false,
+        hideClose:true,
+        escKey: false,
+        width:505,
+        height:300
+    });
+
+</script>

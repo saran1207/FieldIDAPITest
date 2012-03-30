@@ -3,7 +3,7 @@
 
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<@n4.includeScript src="googleMaps.js"/>
-	
+
 	<script language="Javascript" src="javascript/marryOrder.js"></script>
 	<script type="text/javascript">
 	
@@ -224,7 +224,19 @@ ${action.setPageType('asset', 'show')!}
 				<label><@s.text name="label.onumber"/></label>
 				<span class="fieldValue" id="marriedOrderDiv">
 					<#if !asset.shopOrder?exists >
-						<a href="<@s.url action="orders" namespace="/aHtml" asset="${uniqueID}"  />" class="lightview" title="<@s.text name="label.connectorder" /> :: :: scrolling:true, autosize: true, ajax: { onComplete: ajaxForm } "  rel='ajax'><@s.text name="label.connectorder" /></a>
+						<a href='<@s.url action="orders" namespace="/aHtml" asset="${uniqueID}"  />' class='connectOrderLightbox'>
+                            <@s.text name="label.connectorder" />
+                        </a>
+
+                        <script type="text/javascript">
+
+                            jQuery(document).ready(function(){
+                                jQuery('.connectOrderLightbox').colorbox({ title: '<@s.text name="label.connectorder" />', onComplete: ajaxForm });
+                            });
+
+                        </script>
+
+
 					<#else>
 						${(asset.shopOrder.order.orderNumber)!}
 					</#if>

@@ -1,7 +1,14 @@
-<#if page.hasResults() && page.validPage() >	
+<#if page.hasResults() && page.validPage() >
+    <head>
+        <script type="text/javascript">
+
+            jQuery(document).ready(function(){
+                jQuery('.registerAssetLightbox').colorbox({iframe: true, width: '770px', height: '550px'});
+            });
+
+        </script>
+    </head>
 	<#include '../common/_pagination.ftl' />
-    <#include "../common/_lightView.ftl" />
-    <#include '_lightViewBoxOptions.ftl'>
 	<table class="list" id="assetTable">
 		<tr>
 			<th><@s.text name="label.id_number" /></th>
@@ -27,7 +34,7 @@
 			    <#if action.isAssetAlreadyRegistered(asset)>
                     <@s.text name="label.already_registered"/>
                 <#else>
-                    <a href='<@s.url action="regNetworkAsset.action" namespace="/aHtml/iframe" uniqueID="${asset.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
+                    <a href='<@s.url action="regNetworkAsset.action" namespace="/aHtml/iframe" uniqueID="${asset.id}"/>' class="registerAssetLightbox" ><@s.text name="label.registerasset"/></a>
                 </#if>
 			</td>
 		</tr>

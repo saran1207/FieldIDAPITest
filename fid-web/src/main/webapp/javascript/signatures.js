@@ -4,7 +4,9 @@ var signatureClearUrl;
 var submitSignatureUrl;
 
 function initializeSignatureWindowOpenedHook() {
-    document.observe('lightview:opened', storeCriteriaId);
+    jQuery(".signatureCriteriaLightBox").bind('click', function(event) {
+        storeCriteriaId(event);
+    });
 }
 
 function getCurrentSignatureCriteriaId() {
@@ -40,9 +42,10 @@ function clearSignature(criteriaId, currentCriteriaIndex) {
 
 function performThumbnailRefresh(newThumbnailSection) {
     try {
-        Lightview.hide();
+        closeLightbox();
     } catch(err) {}
     $('signatureCriteria'+currentSignatureCriteriaId).replace(newThumbnailSection);
 }
 
 Event.observe(window, 'load', initializeSignatureWindowOpenedHook);
+

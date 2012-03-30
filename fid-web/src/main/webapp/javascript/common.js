@@ -653,5 +653,5 @@ function setAssignedToAsCurrentUser(thisUserId){
 }
 
 function closeLightbox() {
-    Lightview.hide();
+    jQuery.colorbox.close();
 }

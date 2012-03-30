@@ -7,6 +7,6 @@
 		
 	</p>
 	<p style="text-align:center">
-		<button onclick="Lightview.hide(); return false;"><@s.text name="label.ok"/></button>
+		<button onclick="closeLightbox(); return false;"><@s.text name="label.ok"/></button>
 	</p>
 </div>

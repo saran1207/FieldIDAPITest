@@ -25,6 +25,8 @@
 <@n4.includeScript src="jquery-ui-1.8.13.custom.min.js"/>
 <@n4.includeScript>jQuery.noConflict();</@n4.includeScript>
 <@n4.includeStyle href="jquery-redmond/jquery-ui-1.8.13.custom"/>
+<@n4.includeScript src='jquery.colorbox.js'/>
+<@n4.includeStyle href='colorbox'/>
 
 <@n4.includeStyle href="newCss/component/my_saved_items.css" />
 <@n4.includeScript src="my_saved_items.js" />

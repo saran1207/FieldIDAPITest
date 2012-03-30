@@ -1,6 +1,14 @@
 <title><@s.text name="title.schedulesearch"/> <@s.text name="title.results"/></title>
 <head>
 	<@n4.includeStyle href="pageStyles/schedules"/>
+    <script type="text/javascript">
+
+        jQuery(document).ready(function(){
+            jQuery('.eventLightbox').colorbox({maxHeight: '600px', width: '600px'});
+            jQuery('.exportToExcelLightbox').colorbox({scrolling: true});
+        });
+
+    </script>
 </head>
 
 <#assign listPage=true/>
@@ -17,7 +25,7 @@
 			<span class="total"><@s.text name="label.totalschedules"/> ${totalResults}</span> (<span id="numSelectedItems">${numSelectedItems}</span> selected)
 		</div>
 		<div class="adminLink alternateActions">
-			<a href='<@s.url action="scheduleResults.action" namespace="/aHtml" searchId="${searchId}"/>'  class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.exporttoexcel" /></a>  
+			<a href='<@s.url action="scheduleResults.action" namespace="/aHtml" searchId="${searchId}"/>' class="exportToExcelLightbox"> <@s.text name="label.exporttoexcel" /></a>
 			<#if sessionUser.hasAccess('createevent') >
 				| <a href="<@s.url action="massUpdateEventSchedule"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>

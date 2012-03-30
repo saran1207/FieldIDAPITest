@@ -30,8 +30,15 @@
 		removeSubAssetUrl = "<@s.url action="removeSubAsset" namespace="/ajax"/>";
 		unitOfMeasureUrl = '<@s.url action="unitOfMeasure" namespace="/ajax" />';
 		checkIdentifierUrl = '<@s.url action="checkIdentifier" namespace="/ajax" />';
-		
 	</script>
+
+    <script type="text/javascript">
+
+        jQuery(document).ready(function(){
+            jQuery('.findExistingLightbox').colorbox({ title: '<@s.text name="title.assetlookup"/>', width: '700px', height: '420px', onComplete: findSubAsset});
+        });
+
+    </script>
 </head>
 ${action.setPageType('event', 'add')!}
 
@@ -101,7 +108,7 @@ ${action.setPageType('event', 'add')!}
 					<div class="identifier">${type.name}</div> 
 					<div class="createOptions">
 						<a href="<@s.url action="assetAdd" namespace="/ajax"  assetTypeId="${type.id}" token="${token}"/>" onclick="addSubAsset(${type.id}, ${(asset.owner.id)}); return false"><@s.text name="label.add_new" /></a> |
-						<a href='<@s.url action="assets" namespace="/aHtml"  assetTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.assetlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubAsset }' >
+						<a href='<@s.url action="assets" namespace="/aHtml"  assetTypeId="${type.id}"/>' class="findExistingLightbox">
 				  			<@s.text name="label.find_existing" />
 				  		</a>
 				  	</div>

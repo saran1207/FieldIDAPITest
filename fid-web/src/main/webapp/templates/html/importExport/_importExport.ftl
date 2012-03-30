@@ -1,5 +1,12 @@
 <head>
 	<@n4.includeStyle type="page" href="importExport"/>
+        <script type="text/javascript">
+
+            jQuery(document).ready(function(){
+                jQuery('.exportExcelLighbox').colorbox({scrolling: true});
+            });
+
+        </script>
 </head>
 
 <h2 class="largeText"><@s.text name="label.import_export" /></h2>
@@ -19,7 +26,7 @@
 	<#if exportExcel?exists>	
 		<div id="exportBox">
 			<h3><@s.text name="label.export.${labelTarget}" /></h3>
-				<a href='${exportExcel}' class='lightview' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.excel_file" /></a>
+				<a class="exportExcelLighbox" href='${exportExcel}' ><@s.text name="label.excel_file" /></a>
 		</div>
 	</#if>
 </div>

@@ -6,7 +6,6 @@
 	<@n4.includeScript src="updateAttributes.js"/>
 	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
-	<#include "/templates/html/common/_lightView.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<#include "/templates/html/common/_datetimepicker.ftl"/>
 	<script type="text/javascript">

@@ -24,8 +24,16 @@
 				</p>
 			</div>
 			<div id="videoInstruction">
-				<a class="lightview" id="showVideo" title="<@s.text name="label.instructional_video"/> ::  :: width: 900, height: 570"rel="iframe" href='/videos/instructions/multi-event-video/index.html'><img src="<@s.url value="/images/multi-event-video-small.jpg"/>" alt="<@s.text name="label.multi_event_video"/>"/></a>
+				<a id="showVideo" href='/videos/instructions/multi-event-video/index.html'><img src="<@s.url value="/images/multi-event-video-small.jpg"/>" alt="<@s.text name="label.multi_event_video"/>"/></a>
 			</div>
+
+            <script type="text/javascript">
+
+                jQuery(document).ready(function(){
+                    jQuery('#showVideo').colorbox({ title: '<@s.text name="label.instructional_video"/>', width: '900px', height: '570px', iframe: true});
+                });
+
+            </script>
 		</div>
 	</div>
 	<div class="hide" id="searchLimit">
@@ -103,7 +111,7 @@
 							 
 			$$('#selectedAssets .header').first().insert({after: valueSubsitutedHtml});
 			
-			$("asset_" + id).highlight({ afterFinish:function() { $("asset_" + id).setStyle({backgroundColor:''}); } });	
+			$("asset_" + id).highlight({ afterFinish:function() { $("asset_" + id).setStyle({backgroundColor:''}); } });
 			
 			$('remove_asset_'+id).observe('click', function(event) {
 				event.stop();
@@ -166,4 +174,5 @@
 		});
 		
 	</@n4.includeScript>
+
 </head>

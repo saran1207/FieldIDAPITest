@@ -1,7 +1,6 @@
 <head>
     <@n4.includeStyle href="regNetworkAsset" type="page"/>
-	<#include "/templates/html/common/_lightView.ftl"/>
-	
+
 	<script type="text/javascript">
         function redirect(url) {
 	        closeLightbox();
