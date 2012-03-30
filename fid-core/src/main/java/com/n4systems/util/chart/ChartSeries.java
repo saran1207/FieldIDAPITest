@@ -1,6 +1,7 @@
 package com.n4systems.util.chart;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -105,6 +106,10 @@ public class ChartSeries<X> implements Serializable {
 		return data.entrySet();
 	}
 
+    public Collection<Chartable<X>> values() {
+        return data.values();
+    }
+
 	public Long sumX() {
 		long sum = 0;
 		for (Chartable<X> chartable:data.getChartables()) { 
@@ -121,7 +126,7 @@ public class ChartSeries<X> implements Serializable {
 		return sum;
 	}
 
-	public void remove(List<Chartable<X>> values) {
+	public void removeAll(List<Chartable<X>> values) {
 		for (Chartable<X> chartable:values) {
 			data.remove(chartable.getX());
 		}

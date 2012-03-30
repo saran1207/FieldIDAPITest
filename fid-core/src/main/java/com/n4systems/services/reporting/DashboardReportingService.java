@@ -57,7 +57,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
     public List<ChartSeries<LocalDate>> getUpcomingScheduledEvents(Integer period, BaseOrg owner) {
-		Preconditions.checkArgument(period!=null);		
+		Preconditions.checkArgument(period!=null);
 		List<UpcomingScheduledEventsRecord> results = eventService.getUpcomingScheduledEvents(period, owner);
 
 		DateRange dateRange = new DateRange(RangeType.forDays(period));
