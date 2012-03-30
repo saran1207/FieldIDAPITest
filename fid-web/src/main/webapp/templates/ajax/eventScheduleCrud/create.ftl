@@ -12,5 +12,4 @@
 	}
 
 	$('scheduleList').replace("${list}");
-	$('type_${eventSchedule.id}').highlight();
 </#escape>

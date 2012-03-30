@@ -4,7 +4,6 @@ $('resource_${employee.id}').remove();
 if ($$('#jobResources .jobResource').size() == 0) {
 	$('noResources').show();
 	$('jobResources').hide();
-	$('noResources').highlight();
 }
 
 var employeeSelection = $('employee');

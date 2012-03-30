@@ -6,4 +6,3 @@ var promoCode = $$('#promoCode').first();
 	promoCode.addClassName('inputError');
 	promoCode.title="<@s.text name="error.promo_code_not_valid"/>";
 </#if>
-promoCode.highlight();

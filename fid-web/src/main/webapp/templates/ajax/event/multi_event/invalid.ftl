@@ -5,5 +5,4 @@ var formError = $('formErrors');
 formError.replace('${html?js_string}');
 formError.show();
 formError.scrollTo();
-formError.highlight();
 $('continueButtonStep3').disabled = false;

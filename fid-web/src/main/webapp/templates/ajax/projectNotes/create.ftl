@@ -11,7 +11,6 @@ if( $('noNotes').visible() ) {
 }
 
 $( 'notes' ).insert( { top:'${html?js_string}' } );
-$( 'note_${note.id}' ).highlight();
 
 if( $$( '#note_${note.id} .removeNoteLink' ).size()  > 0 ) {
 	$$( '#note_${note.id} .removeNoteLink' )[0].observe( 'click', removeNote );

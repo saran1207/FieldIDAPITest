@@ -5,7 +5,4 @@
 
 <#escape x as x?js_string>
 	$('subAsset_${subAsset.asset.id}').replace('${html}');
-		
-	$('subAsset_${subAsset.asset.id}').highlight();
-	
 </#escape>

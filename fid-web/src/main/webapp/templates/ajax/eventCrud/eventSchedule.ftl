@@ -5,7 +5,6 @@
 	
 	<#escape x as x?js_string>
 		$('schedules').insert({bottom: '${html}'});
-		$('schedule_${index}').highlight();
 		index++;
 		scheduleListUpdated();
 		$('newScheduleForm').hide();

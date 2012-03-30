@@ -43,5 +43,4 @@
 
 <#escape x as x?js_string>
 	$('assetResults').replace( '${html}' );
-	$('assetResults').highlight();
 </#escape>

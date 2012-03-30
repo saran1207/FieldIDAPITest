@@ -9,7 +9,6 @@
 	}
 	
 	$( 'linkedAssets' ).insert( { top:'${html}' } );
-	$( 'asset_${asset.id}' ).highlight();
 	if( $$( '#asset_${asset.id} .removeAssetLink' ).size() > 0 ) {
 		$$( '#asset_${asset.id} .removeAssetLink' )[0].observe( 'click', removeAsset );
 	}

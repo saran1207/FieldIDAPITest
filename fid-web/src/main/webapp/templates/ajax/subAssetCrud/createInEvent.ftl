@@ -19,6 +19,4 @@
 		jQuery( '#subAssetCreateForm_${subAsset.asset.type.id}' ).hide('blind', 500);
 	}
 	
-	$('subAsset_${subAsset.asset.id}').highlight();
-	
 </#escape>

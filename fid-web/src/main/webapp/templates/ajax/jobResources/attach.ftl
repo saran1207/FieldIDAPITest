@@ -6,7 +6,6 @@ $('jobResources').insert({top:'${html?js_string}'});
 
 $('noResources').hide();
 $('jobResources').show();
-$('resource_${employee.id}').highlight();
 closeResourceForm();
 
 var employeeSelection = $('employee');

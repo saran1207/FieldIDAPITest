@@ -1,7 +1,6 @@
 
 
 	if( $( 'note_${note.id}' ) != null ) {
-		$( 'note_${note.id}' ).highlight();
 		$( 'note_${note.id}' ).remove();
 	}
 	
@@ -11,7 +10,6 @@
 			<#include "/templates/html/projects/_attachedNote.ftl"/> 
 		</#assign>
 		$( 'notes' ).insert( { bottom:'${html?js_string}' } );
-		$( 'note_${note.id}' ).highlight();
 		$$( '#note_${note.id} .removeNoteLink' )[0].observe( 'click', removeNote );
 		
 				
@@ -20,6 +18,5 @@
 	if( $$( '#notes div').size() == 0 ) {
 		$('notes').hide();
 		$('noNotes').show();
-		$('noNotes').highlight();
 	}
 	${action.clearFlashScope()}

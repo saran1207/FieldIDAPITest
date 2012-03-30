@@ -7,7 +7,6 @@
 </#assign>
 
 $('results').replace( '${html?js_string}' );
-$('results').highlight();
 
 
 ${action.clearFlashScope()}

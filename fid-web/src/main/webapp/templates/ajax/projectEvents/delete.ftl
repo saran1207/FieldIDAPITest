@@ -1,5 +1,4 @@
 	if( $( 'event_${uniqueID}' ) != null ) {
-		$( 'event_${uniqueID}' ).highlight();
 		$( 'event_${uniqueID}' ).remove();
 	}
 
@@ -11,12 +10,10 @@ if( $('linkedEvents') != null ) {
 			<#include "/templates/html/projects/_attachedEvents.ftl"/> 
 		</#assign>
 		$( 'linkedEvents' ).insert( { bottom:'${html?js_string}' } );
-		$( 'event_${event.id}' ).highlight();
 	</#if>
 	if( $$( '#linkedEvents div').size() == 0 ) {
 		$('linkedEvents').hide();
 		$('emptyEventList').show();
-		$('emptyEventList').highlight();
 	}
 }
 if ($('incompleteEventCount') != null) {

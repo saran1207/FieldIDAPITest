@@ -7,6 +7,5 @@
 <#escape x as x?js_string>	
 	$('results').replace('${html}');
 	findAssets();
-	$('results').highlight();
 	usingAjaxPagination=true;
 </#escape>

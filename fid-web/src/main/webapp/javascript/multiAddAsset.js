@@ -129,8 +129,7 @@ function validateForm1() {
 	
 	$('form1required').show();
 	$('form1required').scrollTo();
-	$('form1required').highlight();
-	
+
 	return false;
 }
 

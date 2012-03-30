@@ -110,9 +110,7 @@
 							.replace(/%%REFERENCE_NUMBER%%/, asset.customerReferenceNumber);
 							 
 			$$('#selectedAssets .header').first().insert({after: valueSubsitutedHtml});
-			
-			$("asset_" + id).highlight({ afterFinish:function() { $("asset_" + id).setStyle({backgroundColor:''}); } });
-			
+
 			$('remove_asset_'+id).observe('click', function(event) {
 				event.stop();
 				var element = Event.element(event);
@@ -161,7 +159,6 @@
 		
 		function updateResults(html) {
 			$('searchResults').update(html);
-			$('searchResults').highlight();
 		}
 		
 		onDocumentLoad(function() {

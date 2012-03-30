@@ -15,8 +15,6 @@
 	
 	form.insert( { top: '${html?js_string}' } );
 	
-	$( 'addNote_formErrors' ).highlight();
-	
 	var inputs = form.getElements();
 	
 	for( var i = 0; inputs.size() > i; i++ ) {

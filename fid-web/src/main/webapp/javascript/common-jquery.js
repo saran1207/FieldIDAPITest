@@ -163,10 +163,6 @@ function updateMessages(messages, errors, modifiedId) {
 	} else {
 		errorContainer.hide();
 	}
-
-	if (highlight) {
-		$('notifications').highlight();
-	}
 }
 
 function findPos(obj) {

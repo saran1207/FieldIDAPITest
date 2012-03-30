@@ -22,7 +22,6 @@
 		function oneResultAsset( assetId, results ) {
 			$('results').replace( results );
 			findAssets();
-			$('results').highlight();
 		}
 	
 		attachAssetToProjectUrl = "<@s.url action="jobAssetCreate" />";

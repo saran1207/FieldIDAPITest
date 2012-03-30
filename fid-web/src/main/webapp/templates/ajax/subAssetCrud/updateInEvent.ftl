@@ -7,7 +7,4 @@
 
 <#escape x as x?js_string>
 	$('subAssetHeader_${subAsset.asset.id}').update('${html}');
-		
-	$('subAssetHeader_${subAsset.asset.id}').highlight();
-	
 </#escape>
