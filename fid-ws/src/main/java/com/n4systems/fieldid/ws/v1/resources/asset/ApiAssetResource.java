@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.fieldid.service.asset.AssetService;
@@ -294,14 +294,30 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 	
 	private InfoOptionBean convertApiAttributeValue(ApiAttributeValue apiAttributeValue) {
-		InfoOptionBean infoOptionBean = persistenceService.findNonSecure(InfoOptionBean.class, apiAttributeValue.getAttributeId());
+		InfoFieldBean infoField = persistenceService.findNonSecure(InfoFieldBean.class, apiAttributeValue.getAttributeId());
 		
-		if(infoOptionBean.getInfoField().isDateField()) {
-			infoOptionBean.setName(String.valueOf(((Date)apiAttributeValue.getValue()).getTime()));
+		Object value = apiAttributeValue.getValue();
+		
+		InfoOptionBean infoOptionBean = null;
+		if (value instanceof Date) {
+			infoOptionBean = new InfoOptionBean();
+			infoOptionBean.setInfoField(infoField);
+			infoOptionBean.setName(Long.toString(((Date) value).getTime()));
 		} else {
-			infoOptionBean.setName(apiAttributeValue.getValue().toString());
+			Set<InfoOptionBean> staticOptions = infoField.getUnfilteredInfoOptions();
+			for (InfoOptionBean staticOption: staticOptions) {
+				if (staticOption.getName().equals(value)) {
+					infoOptionBean = staticOption;
+					break;
+				}
+			}
+			
+			if (infoOptionBean == null) {
+				infoOptionBean = new InfoOptionBean();
+				infoOptionBean.setInfoField(infoField);
+				infoOptionBean.setName(value.toString());
+			}
 		}
-		
 		return infoOptionBean;
 	}
 	
