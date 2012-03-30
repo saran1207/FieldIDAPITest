@@ -30,7 +30,7 @@ public abstract class DownloadAction extends AbstractAction {
 	protected String sendFile(InputStream stream) throws IOException {
 		HttpServletResponse response = getServletResponse();
 		response.setContentType(ContentTypeUtil.getContentType(fileName));
-		response.addHeader("Content-Disposition:", "attachment; filename=\"" + fileName + "\"");
+		response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 		
 		if (fileSize != null) {
 		response.setContentLength(fileSize);
