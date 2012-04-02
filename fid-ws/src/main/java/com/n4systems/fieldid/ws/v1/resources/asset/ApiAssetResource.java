@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -138,17 +139,21 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		assetSaveService.setUploadedAttachments(apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments()));
 		assetSaveService.setAsset(asset);
 		
-		/*asset.setImageName("asset.jpg");
-		File assetImagePath = PathHandler.getAssetImageFile(asset);
-		
-		try {
-			FileUtils.writeByteArrayToFile(assetImagePath, apiAsset.getImage());
-		} catch (IOException e) {			
-			e.printStackTrace();
-		}*/
+		if(apiAsset.getImage() != null) {
+			asset.setImageName("asset.jpg");
+		}
 		
 		asset = assetSaveService.create();
 		
+		if(apiAsset.getImage() != null) {
+			try {
+				File assetImagePath = PathHandler.getAssetImageFile(asset);
+				FileUtils.writeByteArrayToFile(assetImagePath, apiAsset.getImage());
+			} catch (IOException e) {
+				logger.error("Error copying Asset Image", e);
+			}
+		}
+
 		logger.info("Created Asset " + asset.getIdentifier());
 	}
 
