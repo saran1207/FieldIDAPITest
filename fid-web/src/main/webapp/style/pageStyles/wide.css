@@ -372,19 +372,21 @@
     font-weight:normal;
 }
 
-.selection .total {
+.paged-table .total {
     padding:10px 5px;
     display:none;
 }
 
-.selection .status {
-    margin-top:0px;
-    margin-bottom:10px;
+.paged-table .status {
+    margin-left:10px;
     padding:10px 5px;
-    float: right;
 }
 
-.no-results { 
+.status .select-all {
+    float:right;
+}
+
+.no-results {
 	padding:10px 0px 10px 25px;
 }
 

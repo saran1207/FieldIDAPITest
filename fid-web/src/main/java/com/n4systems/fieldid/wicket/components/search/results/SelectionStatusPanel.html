@@ -1,12 +1,13 @@
 <wicket:panel>
 
-    <span wicket:id="justSelectedPageContainer">
-        All <b><span wicket:id="numJustSelected"></span></b> items on this page are selected.
+    <span wicket:id="justSelectedPageContainer" class="clear">
+        <b><span wicket:id="total"/></b>
         <a wicket:id="selectAllLink">Select all <span wicket:id="totalAvailableItems"></span> items</a>
     </span>
 
-    <span wicket:id="regularStateContainer">
-        <span wicket:id="currentySelectedItems"></span> of <span wicket:id="totalAvailableItems"></span> items in the results are selected. <a wicket:id="clearSelectionLink">Clear selection</a>
+    <span wicket:id="regularStateContainer" class="select-all">
+        <span wicket:id="currentySelectedItems"></span> of <span wicket:id="totalAvailableItems"></span> items in the results are selected.
+        <a wicket:id="clearSelectionLink">Clear selection</a>
     </span>
 
 </wicket:panel>

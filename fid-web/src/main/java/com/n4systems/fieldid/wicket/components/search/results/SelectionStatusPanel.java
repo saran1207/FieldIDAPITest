@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.wicket.components.search.results;
 
-import com.n4systems.fieldid.utils.Predicate;
-import com.n4systems.fieldid.wicket.behavior.DisplayNoneIfCondition;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
 import com.n4systems.util.selection.MultiIdSelection;
@@ -32,25 +30,13 @@ public class SelectionStatusPanel extends Panel {
         setOutputMarkupPlaceholderTag(true);
 
         WebMarkupContainer justSelectedPageContainer = new WebMarkupContainer("justSelectedPageContainer");
-        justSelectedPageContainer.add(new DisplayNoneIfCondition(new Predicate() {
-            @Override
-            public boolean evaluate() {
-                return !justSelectedPage;
-            }
-        }));
 
         WebMarkupContainer regularStateContainer = new WebMarkupContainer("regularStateContainer");
-        regularStateContainer.add(new DisplayNoneIfCondition(new Predicate() {
-            @Override
-            public boolean evaluate() {
-                return justSelectedPage;
-            }
-        }));
 
         regularStateContainer.add(new FlatLabel("currentySelectedItems", new PropertyModel<Integer>(selection, "numSelectedIds")));
         regularStateContainer.add(new FlatLabel("totalAvailableItems", new PropertyModel<Integer>(this, "totalRows")));
 
-        justSelectedPageContainer.add(new FlatLabel("numJustSelected", new PropertyModel<Integer>(this, "numJustSelected")));
+        justSelectedPageContainer.add(new FlatLabel("total", new PropertyModel<String>(this, "totalRowsLabel")));
 
         AjaxLink clearSelectionLink = new AjaxLink("clearSelectionLink") {
             @Override
@@ -86,6 +72,10 @@ public class SelectionStatusPanel extends Panel {
 
     public Integer getTotalRows() {
         return dataProvider.size();
+    }
+
+    public String getTotalRowsLabel() {
+        return String.format("(%d items)", dataProvider.size());
     }
 
     protected void onSelectionChanged(AjaxRequestTarget target) {}
