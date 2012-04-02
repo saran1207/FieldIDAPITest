@@ -75,7 +75,7 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
             protected void onEnterState(AjaxRequestTarget target, Object state) {
                 target.appendJavaScript("fieldIdWidePage.showConfig(" + FILTERS_ID.equals(state) + ");");
             }
-        };
+        }.setCurrentState(1);
     }
 
     protected abstract String getNoneSelectedMsgKey();

@@ -36,7 +36,6 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
 		super(id, model);
         this.model = model;
         setOutputMarkupId(true);
-        setMarkupId(id);
 
 		// load the default report template configuration: columns, sort
 		initialize(loadReportConfiguration());

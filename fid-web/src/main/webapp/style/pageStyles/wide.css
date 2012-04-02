@@ -44,7 +44,7 @@
     margin-left:24px;
 }
 
-#page .centre.narrow {
+#page.narrow .centre {
     margin-left:375px;
 }
 
@@ -66,7 +66,7 @@
 	left:13px;
 	overflow-x:visible;
 	overflow-y:auto;
-	width:355px;
+	width:345px;
 	top:169px;
 	bottom:50px;
     border-top-right-radius: 6px;
@@ -77,8 +77,17 @@
 	float:left;
 }
 
+#page.narrow #left-panel {
+    display:block;
+}
+
+#page.wide #left-panel {
+    display:none;
+}
+
 #left-panel .form {
-    margin-left:10px;
+    left:0;
+    margin-left:14px;
     overflow-y:auto;
     width:345px;
     top:209px;
@@ -88,9 +97,9 @@
 }
 
 #left-panel .title {
-    margin-left:10px;
     margin-top:10px;
-    font-size:14px;
+    padding-left:5px;
+    font-size:15px;
     height:28px;
     border-bottom: 1px dotted #bbb;
 }
@@ -109,12 +118,25 @@
     margin-left: 3px;
 }
 
+#page.narrow .left-panel-controller .close {
+    display:block;
+}
+#page.narrow .left-panel-controller .open {
+    display:none;
+}
+#page.wide .left-panel-controller .close {
+    display:none;
+}
+#page.wide .left-panel-controller .open {
+    display:block;
+}
+
 /**
  * SEARCH-CONFIG
  *  panel on the left hand side with Filters & Columns 
  *  it is the meat of the left-menu panel.
 */
-.search-config .submit {
+ .search-config .submit {
     position:fixed;
     bottom:10px;
     left:13px;
@@ -129,7 +151,7 @@
     border-top-color: #ccc;
     height:40px;
     background:white;
-    width:355px;
+    width:345px;
 	zoom:0;
 }
 
@@ -148,9 +170,27 @@
  COLUMNS
    checkboxes in Columns panel
 */
-.columns {
+.collapsible .columns {
 	padding:3px; 
 }
+
+
+
+/** filters & columns criteria panels
+ toggle visibility of both depending on state of parent.
+*/
+
+/* filters on */
+#left-panel.filters .content .filters { display:block;}
+#left-panel.filters .filters-title { display:block;}
+#left-panel.filters .content .columns { display:none;}
+#left-panel.filters .columns-title { display:none; }
+/* columns on */
+#left-panel.columns .content .columns { display:block;}
+#left-panel.columns .columns-title { display:block; }
+#left-panel.columns .content .filters { display:none;}
+#left-panel.columns .filters-title { display:none;}
+
 
 /**
  * SUB-MENU
@@ -335,7 +375,8 @@
     float:right;
 }
 
-.centre.narrow .bottom-bar {
+#page.narrow .bottom-bar {
+    padding-left:2px;
     display:block;
     left:375px;
 }

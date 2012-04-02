@@ -44,6 +44,8 @@ a.mattButtonRight:hover {
 	background: -webkit-linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
 	background: -o-linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
 	background: -ms-linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
+    border-color:rgba(99,99,199,.7);
+    box-shadow: 0px 0px 3px rgba(22,22,244,.5);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f6f6', endColorstr='#eeeeee',GradientType=0 );
 	background: linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
 	cursor: pointer;

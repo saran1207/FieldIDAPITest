@@ -4,68 +4,62 @@
  *
  */
 
-// XXX : need to break this code out (similar to wide.css).   some of this is specific to menus, other is left-panel specific.
-//  they should be in appropriate separate files.
-var fieldIdWidePage = (function() { 
+var fieldIdWidePage = (function() {
+
+    var lastShownPanel;
 
 	var init = function(showLeft) {
 		addMenuHandlers();
         addControllerHandler();
-		initLeftMenu(showLeft);
+		initLeftPanel(showLeft);
 	};
 	
-	// show either filters or columns panel.
+	// show either filters or columns panel.  need to do this to initialize state.
+    //  after this, can just hide/show these via top level styling (showLeftPanel,hideLeftPanel)
 	var showConfig = function(showFilters) {
-		if (showFilters) { 
-			$('.sub-menu .config .filters').addClass('true');
-			$('.sub-menu .config .columns').removeClass('true');
-			$('#left-panel .columns').hide();
-			$('#left-panel .filters').show();
+		if (showFilters) {
+            $('#left-panel').removeClass('columns').addClass('filters');
 		} else {
-			$('.sub-menu .config .columns').addClass('true');
-			$('.sub-menu .config .filters').removeClass('true');
-			$('#left-panel .filters').hide();
-			$('#left-panel .columns').show();
+            $('#left-panel').removeClass('filters').addClass('columns');
 		}
 		showLeftPanel();
 	};
 
-	var showLeftPanel = function() {
-		$('#left-panel').addClass('show').removeClass('hide');
-        $('#page .centre').addClass('narrow');
-        $('#left-panel-controller .close').show();
-        $('#left-panel-controller .open').hide();
+	function showLeftPanel() {
+        $('#page').removeClass('wide').addClass('narrow');
+        // restore state of toggle button.
+        if (lastShownPanel) {
+            lastShownPanel.addClass('mattButtonPressed');
+        }
     };
-	
-	var hideLeftPanel = function() {
-		$('.sub-menu .config').find('a').removeClass('true');  // remove the true state from toggle buttons.		
-		$('#page .centre').removeClass('narrow');
-		$('#left-panel').removeClass('show').addClass('hide');
-        $('#left-panel-controller .open').show();
-        $('#left-panel-controller .close').hide();
+
+    function hideLeftPanel() {
+        $('#page').removeClass('narrow').addClass('wide');
+        // remove the true state from toggle buttons.
+        lastShownPanel = $('.sub-menu .config .mattButtonPressed');
+        lastShownPanel.removeClass('mattButtonPressed');
 	};
-			
-	var initLeftMenu = function(showLeft) {
-		if (showLeft) {
-			// set filter toggle button to true (it's the default config panel to be shown).
-			showConfig(true);
-		} else {
-			hideLeftPanel();
-		}
-	};
-				
-	function addMenuHandlers() { 
+
+    function initLeftPanel(showLeft) {
+        if (showLeft) {
+            showConfig(true);
+        } else {
+            hideLeftPanel();
+        }
+    };
+
+
+    function addMenuHandlers() {
 		$(document).delegate('.actions .menu > a', 'click', function() {
 			$(this).siblings('.menu-items').first().show();
 			return false;
 		});		
-		// in an ideal world we would have a single top level div surrounding  all content instead of listing all (page,pageHeader...) in selector. 
 		$(document).delegate('"#fieldidBody', 'click', function(e) {
 			$('.actions .menu-items').hide();
 		});
 	}
 
-    /* bar at left of screen that shows/hides left panel */
+    /* controller is the vertical bar at left of screen that shows/hides left panel */
     function addControllerHandler() {
         $('#left-panel-controller').click(function() { toggleLeftMenu() });
     }

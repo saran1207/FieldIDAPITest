@@ -90,8 +90,9 @@ public class MattBar extends Panel {
         linkImages.add(url);
     }
 
-    public void setCurrentState(Serializable currentState) {
+    public MattBar setCurrentState(Serializable currentState) {
         this.currentState = currentState;
+        return this;
     }
 
     @Override

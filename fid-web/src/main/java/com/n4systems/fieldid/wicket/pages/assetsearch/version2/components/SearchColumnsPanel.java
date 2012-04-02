@@ -16,8 +16,6 @@ public class SearchColumnsPanel extends AbstractColumnsPanel<AssetSearchCriteria
 
 	public SearchColumnsPanel(String id, IModel<AssetSearchCriteria> model) {
 		super(id, model);		
-		setOutputMarkupId(true);
-		setMarkupId(id);
 	}
 
 
