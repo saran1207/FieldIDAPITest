@@ -5,7 +5,6 @@ import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassAction
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.model.search.AssetSearchCriteria;
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
@@ -51,8 +50,13 @@ public class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
     }
 
     protected Link createSaveLink(String id) {
-		throw new IllegalStateException("you must override this method to create Save link for the SubMenu");
+        throw new IllegalStateException("you must override this method to create Save link for the SubMenu");
 	}
+
+    @Override
+    protected Link createSaveAsLink(String saveAs) {
+        throw new IllegalStateException("you must override this method to create Save As link for the SubMenu");
+    }
 
     protected void updateMenuBeforeRender(int selected) {
         super.updateMenuBeforeRender(selected);
@@ -61,5 +65,6 @@ public class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         printLink.setVisible(rowsSelected && (selected < maxPrint));
         actions.setVisible(rowsSelected && (selected < maxUpdate));
     }
+
 
 }

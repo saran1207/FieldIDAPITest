@@ -41,7 +41,7 @@
     border:1px solid #bbb;
 	background:white;
     margin-right:10px;
-    margin-left:14px;
+    margin-left:24px;
 }
 
 #page .centre.narrow {
@@ -62,12 +62,11 @@
 */
 
 #left-panel {
-	padding:10px 0 0px 10px;
 	background:white;
 	left:13px;
 	overflow-x:visible;
 	overflow-y:auto;
-	width:345px;
+	width:355px;
 	top:169px;
 	bottom:50px;
     border-top-right-radius: 6px;
@@ -78,6 +77,23 @@
 	float:left;
 }
 
+#left-panel .form {
+    margin-left:10px;
+    overflow-y:auto;
+    width:345px;
+    top:209px;
+    bottom:50px;
+    position:fixed;
+    float:left;
+}
+
+#left-panel .title {
+    margin-left:10px;
+    margin-top:10px;
+    font-size:14px;
+    height:28px;
+    border-bottom: 1px dotted #bbb;
+}
 
 .left-panel-controller {
     top: 169px;
@@ -90,6 +106,7 @@
 
 .left-panel-controller img {
     margin-top: 10px;
+    margin-left: 3px;
 }
 
 /**
@@ -158,11 +175,6 @@
     padding:0px 10px 0px;
 }
 
-.sub-menu a {
-	color:#333;
-}
-
-
 .sub-menu .actions ul li.hover a {
 	color:#ddd; 
 }
@@ -186,20 +198,6 @@
     float:left;
     margin-left:20px;
 }
-
-
-.config .mattBar .mattButtonLeft {
-    background : url(../../images/filter.png) center no-repeat;
-    height:12px;
-    width:12px;
-}
-
-.config .mattBar .mattButtonRight {
-    height:12px;
-    width:12px;
-    background : url(../../images/col.png) center no-repeat;
-}
-
 
 
 .search-config .submit .search:hover {
@@ -317,27 +315,33 @@
 }
 
 
-.paginationWrapper {
-	display:none;
-	border:1px solid #ccc;
-	position:fixed;
-	height:40px;
-	bottom:10px;
-	right:10px;
-    left:14px;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-	background:#f9f9f9;
-	width:auto;
+.bottom-bar {
+    display:none;
+    position:fixed;
+    height:50px;
+    bottom:0px;
+    right:10px;
+    left:26px;
+    background:#f9f9f9;
+    width:auto;
 }
 
-.centre.narrow .paginationWrapper {
+.bottom-bar .paginationWrapper {
+    height:40px;
+    border: 1px solid #bbb;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    width:100%;
+    float:right;
+}
+
+.centre.narrow .bottom-bar {
     display:block;
     left:375px;
 }
 
 
-.paged-table .paginationWrapper {
+.paged-table .bottom-bar {
 	display:block;
 }
 

@@ -10,7 +10,6 @@ import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.summary.EventResolutionPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventStatus;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
@@ -57,23 +56,6 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         initializeLimits();
     }
 
-    private WebMarkupContainer createSaveMenu(String saveMenu) {
-        WebMarkupContainer menu;
-        add(menu = new WebMarkupContainer("saveMenu"));
-        Link saveLink = createSaveLink("save");
-        menu.add(saveLink);
-        Link saveAsLink = createSaveAsLink("saveAs");
-        menu.add(saveAsLink);
-        add(menu);
-
-        if (saveAsLink.isVisible()) {
-            saveLink.add(new AttributeAppender("class", "mattButtonLeft"));
-        }
-
-        return menu;
-    }
-
-
     protected Link createSaveAsLink(String id) {
         throw new IllegalStateException("you must override this method to create Save As link for the SubMenu");
     }
@@ -84,7 +66,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
     @Override
     protected void updateMenuBeforeRender(int selected) {
-        super.updateMenuBeforeRender(selected);
+        super.updateMenuBeforeRender(selected);  // update
         exportLink.setVisible(selected > 0 && selected < maxExport);
         print.setVisible(selected > 0 && selected < maxPrint);
         actions.setVisible(selected > 0 && selected < maxUpdate);
@@ -97,6 +79,5 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
     protected String getNoneSelectedMsgKey() {
         return "label.select_events";
     }
-
 
 }

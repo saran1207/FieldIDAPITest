@@ -1,11 +1,14 @@
 package com.n4systems.fieldid.wicket.components.navigation;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -14,24 +17,22 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MattBar extends Panel {
 
     private ListView<IModel<String>> links;
-    private List<IModel<String>> linkTitles;
-    private List<Serializable> linkStates;
+    private List<IModel<String>> linkTitles = Lists.newArrayList();
+    private List<Serializable> linkStates = Lists.newArrayList();
+    private List<String> linkImages = Lists.newArrayList();
 
     private Serializable currentState;
-
+    
+    
     public MattBar(String id) {
         super(id);
 
         setOutputMarkupId(true);
-
-        linkTitles = new ArrayList<IModel<String>>();
-        linkStates = new ArrayList<Serializable>();
 
         add(links = new ListView<IModel<String>>("links",new PropertyModel<List<IModel<String>>>(this, "linkTitles")) {
             @Override
@@ -65,6 +66,13 @@ public class MattBar extends Panel {
                 });
 
                 link.add(new FlatLabel("linkLabel", item.getModelObject()));
+
+                String url = linkImages.get(item.getIndex());
+                if (url!=null) { 
+                    link.add(new ContextImage("img", url));
+                } else { 
+                    link.add(new WebComponent("img").setVisible(false));
+                }
                 item.add(link);
             }
         });
@@ -73,6 +81,13 @@ public class MattBar extends Panel {
     public void addLink(IModel<String> linkTitle, Serializable linkState) {
         linkTitles.add(linkTitle);
         linkStates.add(linkState);
+        linkImages.add(null);
+    }
+
+    public void addLinkWithImage(IModel<String> linkTitle, Serializable linkState, String url) {
+        linkTitles.add(linkTitle);
+        linkStates.add(linkState);
+        linkImages.add(url);
     }
 
     public void setCurrentState(Serializable currentState) {

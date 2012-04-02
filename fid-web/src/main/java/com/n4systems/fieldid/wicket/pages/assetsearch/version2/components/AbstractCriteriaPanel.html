@@ -1,12 +1,15 @@
 <wicket:panel>
-	<form wicket:id="form" class="search-config">
-		<div class="content">
-			<div wicket:id="filters" class="filters"/>
-			<div wicket:id="columns" class="columns"/>
-		</div>
-		<span class="submit mattBar">
-            <a wicket:id="submit" class="mattButton"><wicket:message key="label.search"/></a>
-		</span>
-	</form>
+    <div wicket:id="title" class="title"/>
+    <div class="form">
+        <form wicket:id="form" class="search-config">
+            <div class="content">
+                <div wicket:id="filters" class="filters"/>
+                <div wicket:id="columns" class="columns"/>
+            </div>
+            <span class="submit mattBar">
+                <a wicket:id="submit" class="mattButton"><wicket:message key="label.search"/></a>
+            </span>
+        </form>
+    </div>
 </wicket:panel>	
 		

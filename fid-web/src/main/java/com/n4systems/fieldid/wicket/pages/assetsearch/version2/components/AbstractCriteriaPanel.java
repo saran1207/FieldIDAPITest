@@ -4,12 +4,14 @@ import com.n4systems.fieldid.wicket.components.navigation.LeftPanelController;
 import com.n4systems.fieldid.wicket.pages.HasLeftPanelController;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 
 
 public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Panel implements HasLeftPanelController {
@@ -30,8 +32,14 @@ public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Pa
 		form.add(columns = createColumnsPanel("columns", model));
 		form.add(filters = createFiltersPanel("filters", model));
 
-		add(form);		
+        add(new Label("title", new PropertyModel<String>(this, "title")));
+
+		add(form);
 	}
+
+    public String getTitle() {
+        return filters.isVisible() ? "Filters" : "Columns";
+    }
 
     protected abstract Panel createFiltersPanel(String filters, final Model<T> model);
 

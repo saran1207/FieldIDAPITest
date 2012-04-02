@@ -9,6 +9,7 @@ import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -38,7 +39,9 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
     protected Integer maxExport;
     private Integer maxEvent;
     protected Label msg;
-
+    private Link saveAsLink;
+    private Link saveLink;
+    private WebMarkupContainer saveAsMenu;
 
 
     public SubMenu(String id, final Model<T> model) {
@@ -48,8 +51,8 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         add(createHeader());
         
         MattBar mattBar = createMattBar();
-        mattBar.addLink(new Model<String>(""), COLUMNS_ID);
-        mattBar.addLink(new Model<String>(""), FILTERS_ID);
+        mattBar.addLinkWithImage(new Model<String>(""), COLUMNS_ID, "images/col.png");
+        mattBar.addLinkWithImage(new Model<String>(""), FILTERS_ID, "images/filter.png");
         mattBar.setCurrentState(COLUMNS_ID);
         add(mattBar);
         
@@ -113,4 +116,32 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         super.renderHead(response);
     }
 
+    protected WebMarkupContainer createSaveMenu(String saveMenu) {
+        WebMarkupContainer menu;
+        add(menu = new WebMarkupContainer("saveMenu"));
+        saveLink = createSaveLink("save");
+        menu.add(saveLink);
+        saveAsLink = createSaveAsLink("saveAs");
+        menu.add(saveAsLink);
+        add(menu);
+        
+        saveAsMenu = new WebMarkupContainer("saveAsMenu");
+        saveAsMenu.add(new AttributeAppender("class", new Model<String>(getSaveAsCssClass())));
+        menu.add(saveAsMenu);
+
+        saveLink.add(new AttributeAppender("class", new Model<String>(getSaveLinkCssClass())) );
+        return menu;
+    }
+
+    private String getSaveAsCssClass() {
+        return saveAsLink.isVisible() ? " " : " hide";
+    }
+
+    private String getSaveLinkCssClass() {
+        return saveAsLink.isVisible() ? " mattBarLeft" : " ";
+    }
+
+    protected abstract Link createSaveAsLink(String saveAs);
+
+    protected abstract Link createSaveLink(String save);
 }

@@ -1,39 +1,41 @@
 <wicket:panel>
-    <div class="paginationWrapper">
-        <ul class="pagination" wicket:id="paginationContainer">
+    <div class="bottom-bar">
+        <div class="paginationWrapper">
+            <ul class="pagination" wicket:id="paginationContainer">
 
-            <wicket:enclosure child="firstLink">
-                <li><a wicket:id="firstLink"><wicket:message key="label.pagenavigation.first"/></a></li>
-                <li><a wicket:id="prevLink">&lt;<wicket:message key="label.pagenavigation.previous"/></a></li>
-            </wicket:enclosure>
+                <wicket:enclosure child="firstLink">
+                    <li><a wicket:id="firstLink"><wicket:message key="label.pagenavigation.first"/></a></li>
+                    <li><a wicket:id="prevLink">&lt;<wicket:message key="label.pagenavigation.previous"/></a></li>
+                </wicket:enclosure>
 
-            <li wicket:id="pageList">
-                <span wicket:id="pageLabel">3</span>
-                <a wicket:id="pageLink"><span wicket:id="pageLabel">3</span></a>
-            </li>
+                <li wicket:id="pageList">
+                    <span wicket:id="pageLabel">3</span>
+                    <a wicket:id="pageLink"><span wicket:id="pageLabel">3</span></a>
+                </li>
 
-            <wicket:enclosure child="lastLink">
-                <li><a wicket:id="nextLink"><wicket:message key="label.pagenavigation.next"/>&gt;</a></li>
-                <li><a wicket:id="lastLink"><wicket:message key="label.pagenavigation.last"/></a></li>
-            </wicket:enclosure>
+                <wicket:enclosure child="lastLink">
+                    <li><a wicket:id="nextLink"><wicket:message key="label.pagenavigation.next"/>&gt;</a></li>
+                    <li><a wicket:id="lastLink"><wicket:message key="label.pagenavigation.last"/></a></li>
+                </wicket:enclosure>
 
-            <li>
-                <form wicket:id="jumpForm">
-                    <span class="gotoPage">
-                        <label for="goto"><wicket:message key="label.goto_page"/></label>
+                <li>
+                    <form wicket:id="jumpForm">
+                        <span class="gotoPage">
+                            <label for="goto"><wicket:message key="label.goto_page"/></label>
 
-                        <input wicket:id="jumpPage" size="3" class="toPage" type="text"/>
-                        <label for="lastPage">
-                            <wicket:message key="label.of_pages">
-                                <span wicket:id="numPages"></span>
-                            </wicket:message>
-                        </label>
-                    </span>
-                    <button wicket:id="hiddenJumpButton" style="display:none;">jump</button>
-                </form>
-            </li>
+                            <input wicket:id="jumpPage" size="3" class="toPage" type="text"/>
+                            <label for="lastPage">
+                                <wicket:message key="label.of_pages">
+                                    <span wicket:id="numPages"></span>
+                                </wicket:message>
+                            </label>
+                        </span>
+                        <button wicket:id="hiddenJumpButton" style="display:none;">jump</button>
+                    </form>
+                </li>
 
-        </ul>
+            </ul>
+        </div>
     </div>
     <div wicket:id="loadingAnim" style="display:none;"></div>
 </wicket:panel>
