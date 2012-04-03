@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.ws.v1.resources.assetattachment;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -83,12 +86,32 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		return apiAttachment;
 	}
 	
-	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment attachment) {
-		return null;
+	public List<AssetAttachment> convertApiListToEntityList(List<ApiAssetAttachment> apiAttachments, Asset asset) {
+		List<AssetAttachment> attachments = new ArrayList<AssetAttachment>();
+		
+		for(ApiAssetAttachment apiAttachment : apiAttachments) {
+			AssetAttachment attachment = convertApiModelToEntity(apiAttachment, asset);
+			attachments.add(attachment);
+		}
+		
+		return attachments;
 	}
 	
-	public List<AssetAttachment> convertApiListToEntityList(List<ApiAssetAttachment> apiAttachments) {
-		return null;
+	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment apiAttachment, Asset asset) {
+		AssetAttachment attachment = new AssetAttachment();
+		attachment.setAsset(asset);
+		attachment.setTenant(asset.getTenant());
+		attachment.setComments(apiAttachment.getComments());
+		attachment.setFileName(apiAttachment.getFileName());
+		
+		try {
+			File attachmentPath = new File(PathHandler.getTempRoot(), attachment.getFileName());
+			FileUtils.writeByteArrayToFile(attachmentPath, apiAttachment.getData());
+		} catch (IOException e) {
+			logger.error("Error writing Asset Attachment", e);
+		}
+		
+		return attachment;
 	}
 	
 	private byte[] loadAttachmentData(AssetAttachment attachment) {

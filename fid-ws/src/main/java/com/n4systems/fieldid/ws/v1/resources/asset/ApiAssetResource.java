@@ -136,8 +136,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		Asset asset = converApiAsset(apiAsset);
 		
 		AssetSaveService assetSaveService = new AssetSaveService(WsServiceLocator.getLegacyAssetManager(securityContext.getTenantSecurityFilter().getTenantId()), getCurrentUser());
-		assetSaveService.setUploadedAttachments(apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments()));
-		assetSaveService.setAsset(asset);
+		assetSaveService.setUploadedAttachments(apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset));
+		assetSaveService.setAsset(asset);		
 		
 		if(apiAsset.getImage() != null) {
 			asset.setImageName("asset.jpg");
