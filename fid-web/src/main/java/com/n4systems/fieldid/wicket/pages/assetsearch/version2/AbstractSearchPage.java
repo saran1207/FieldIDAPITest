@@ -34,23 +34,28 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     protected SavedItem<T> savedItem;
     protected T searchCriteria;
     protected Component searchMenu;
-    private boolean showLeftMenu;
+    private boolean showLeftPanel;
 
     public AbstractSearchPage(PageParameters params) {
-        super(params);
+        this(params, null, null);  // will create default criteria & savedItems.
     }
 
-    protected void init(final T searchCriteria, final SavedItem<T> savedItem, boolean showLeftMenu) {
+    public AbstractSearchPage(PageParameters params, T searchCriteria, SavedItem<T> savedItem) {
+        super(params);
     	this.savedItem = savedItem;
-    	this.showLeftMenu = showLeftMenu;
         this.searchCriteria = searchCriteria;
-        saveLastSearch(searchCriteria);
+        init();
+    }
 
-        Model<T> criteriaModel = new Model<T>(searchCriteria);
-        add(createResultsPanel("resultsPanel", criteriaModel, showLeftMenu));
+    protected void init() {
+        showLeftPanel = calculateInitialViewState();
+        saveLastSearch(getSearchCriteria());
+
+        Model<T> criteriaModel = new Model<T>(getSearchCriteria());
+        add(createResultsPanel("resultsPanel", criteriaModel, isShowBlankSlate()));
 
         SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));
-        criteriaExpandContainer.addContainedPanel(createCriteriaPanel("criteriaPanel", criteriaModel, savedItem));
+        criteriaExpandContainer.addContainedPanel(createCriteriaPanel("criteriaPanel", criteriaModel, getSavedItem()));
 
         add(criteriaExpandContainer);
 
@@ -60,38 +65,24 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         setSubMenuContent(searchMenu = createSubMenu(FieldIDFrontEndPage.SUB_MENU_ID, criteriaModel));
     }
 
-    protected boolean isShowLeftMenu() {
-        return showLeftMenu;
+    private boolean calculateInitialViewState() {
+        return searchCriteria == null;
     }
 
-    protected abstract SavedItem<T> createSavedItemFromCriteria(T searchCriteriaModel);
-
-    protected abstract Component createSubMenu(String contentId, Model<T> criteriaModel);
-
-    protected abstract Component createCriteriaPanel(String id, Model<T> criteriaModel);
-
-    private final Component createResultsPanel(String id, Model<T> criteriaModel, boolean showBlankSlate) {
-        return (showBlankSlate || isEmptyResults()) ? createBlankSlate(id) : createResultsPanel(id, criteriaModel);
+    private boolean isShowBlankSlate() {
+        return showLeftPanel;
     }
 
-    protected boolean isEmptyResults() { return false; }
-
-    protected abstract Component createResultsPanel(String id, Model<T> criteriaModel);
-
-    protected abstract Component createBlankSlate(String id);
-
-    protected abstract void saveLastSearch(T searchCriteria);
-
-    protected abstract Page createSaveReponsePage(boolean overwrite);
-
-    protected abstract Component createCriteriaPanel(String id, Model<T> criteriaModel, SavedItem<T> savedItem);
+    protected boolean isShowLeftPanel() {
+        return showLeftPanel;
+    }
 
     @Override
     public void renderHead(IHeaderResponse response) {
     	super.renderHead(response);
     	response.renderJavaScriptReference("javascript/fieldIdWide.js");
         response.renderCSSReference("style/pageStyles/wide.css");
-        response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+showLeftMenu+");");
+        response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+ showLeftPanel +");");
     }
 
     protected Link createSaveLink(String linkId, final boolean overwrite) {
@@ -106,5 +97,43 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         }
         return link;
     }
+
+    public SavedItem<T> getSavedItem() {
+        if (savedItem==null) {
+            savedItem = createSavedItemFromCriteria(getSearchCriteria());
+        }
+        return savedItem;
+    }
+
+    public T getSearchCriteria() {
+        if (searchCriteria==null) {
+            searchCriteria = createSearchCriteria();
+        }
+        return searchCriteria;
+    }
+
+    private final Component createResultsPanel(String id, Model<T> criteriaModel, boolean showBlankSlate) {
+        return (showBlankSlate || isEmptyResults()) ? createBlankSlate(id) : createResultsPanel(id, criteriaModel);
+    }
+
+    protected abstract SavedItem<T> createSavedItemFromCriteria(T searchCriteriaModel);
+
+    protected abstract Component createSubMenu(String contentId, Model<T> criteriaModel);
+
+    protected abstract Component createCriteriaPanel(String id, Model<T> criteriaModel);
+
+    protected boolean isEmptyResults() { return false; }
+
+    protected abstract Component createResultsPanel(String id, Model<T> criteriaModel);
+
+    protected abstract Component createBlankSlate(String id);
+
+    protected abstract void saveLastSearch(T searchCriteria);
+
+    protected abstract Page createSaveReponsePage(boolean overwrite);
+
+    protected abstract Component createCriteriaPanel(String id, Model<T> criteriaModel, SavedItem<T> savedItem);
+
+    protected abstract T createSearchCriteria();
 }
 

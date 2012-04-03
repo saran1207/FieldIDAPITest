@@ -11,15 +11,22 @@ public class SavedReportItem extends SavedItem<EventReportCriteria> {
 
     private static final String DEFAULT_NAME = "New Report";
 
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name="report_id")
+    private EventReportCriteria searchCriteria;
+
     public SavedReportItem() {}
     public SavedReportItem(EventReportCriteria criteria) {
         this.searchCriteria = criteria;
         setName(DEFAULT_NAME);
     }
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name="report_id")
-    private EventReportCriteria searchCriteria;
+    public SavedReportItem(EventReportCriteria eventReportCriteria, SavedItem<EventReportCriteria> savedItem) {
+        this(eventReportCriteria);
+        if (savedItem!=null) {
+            setId(savedItem.getId());
+        }
+    }
 
     @Override
 	public EventReportCriteria getSearchCriteria() {

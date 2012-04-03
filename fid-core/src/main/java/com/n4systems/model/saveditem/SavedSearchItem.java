@@ -13,14 +13,21 @@ public class SavedSearchItem extends SavedItem<AssetSearchCriteria> {
 
     public SavedSearchItem() {}
 
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name="search_id")
+    private AssetSearchCriteria searchCriteria;
+
     public SavedSearchItem(AssetSearchCriteria criteria) {
     	this.searchCriteria = criteria;
         setName(DEFAULT_NAME);
     }
-    
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name="search_id")
-    private AssetSearchCriteria searchCriteria;
+
+    public SavedSearchItem(AssetSearchCriteria searchCriteria, SavedSearchItem savedSearchItem) {
+        this(searchCriteria);
+        if (savedSearchItem!=null) { 
+            setId(savedSearchItem.getId());
+        }
+    }
 
     @Override
 	public AssetSearchCriteria getSearchCriteria() {

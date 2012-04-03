@@ -28,29 +28,19 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     private @SpringBean SavedAssetSearchService savedAssetSearchService;
 
     public SearchPage(PageParameters params) {
-    	super(params);
-		AssetSearchCriteria model = createSearchCriteriaModel(params);
-		init(model, createSavedItemFromCriteria(model), true);
+        super(params, null, null);
     }
-
+    
 	public SearchPage(SavedSearchItem savedSearchItem) {
-        super(new PageParameters());
-        init(savedSearchItem.getSearchCriteria(), savedSearchItem, true);
+        super(new PageParameters(), savedSearchItem.getSearchCriteria(), savedSearchItem);
 	}
 
-    public SearchPage(AssetSearchCriteria searchCriteria, boolean showLeftMenu) {
-        this(searchCriteria, null, showLeftMenu);
+    public SearchPage(AssetSearchCriteria searchCriteria, SavedSearchItem savedSearchItem) {
+    	super(new PageParameters(), searchCriteria, new SavedSearchItem(searchCriteria, savedSearchItem));
     }
 
     public SearchPage(AssetSearchCriteria criteria) {
-        this(criteria, true);
-    }
-
-    public SearchPage(AssetSearchCriteria searchCriteria, SavedSearchItem savedSearchItem, boolean showLeftPanel) {
-    	super(new PageParameters());
-        SavedSearchItem newSavedSearchItem = new SavedSearchItem(searchCriteria);
-       	newSavedSearchItem.setId(savedSearchItem==null ? null : savedSearchItem.getId());
-    	init(searchCriteria, newSavedSearchItem, showLeftPanel);
+        this(criteria, null);
     }
 
     @Override
@@ -74,7 +64,7 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     protected Component createCriteriaPanel(String id, final Model<AssetSearchCriteria> model) {
         return new SearchCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
-                setResponsePage(new SearchPage(model.getObject(),false));
+                setResponsePage(new SearchPage(model.getObject()));
             }
             @Override protected void onNoDisplayColumnsSelected() { }
         };
@@ -110,21 +100,10 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
         return new AssetSearchCriteriaPanel(id, criteriaModel, (SavedSearchItem) savedItem);
     }
 
-	private AssetSearchCriteria createSearchCriteriaModel(PageParameters params) {
-		try { 
-			if(params!=null) {
-				// 	load config and set values...
-				Long widgetDefinitionId = params.get(WIDGET_DEFINITION_PARAMETER).toLong();
-				Long x = params.get(X_PARAMETER).toLong();
-				String series = params.get(SERIES_PARAMETER).toString();
-				String y = params.get(Y_PARAMETER).toString();
-				return dashboardReportingService.convertWidgetDefinitionToAssetCriteria(widgetDefinitionId,x,y,series);
-			}  
-		} catch (Exception e) {
-            // just return default if this doesn't work.  (most likely bad or incorrect parameters).
-		}
-		return dashboardReportingService.getDefaultAssetSearchCritieriaModel();
-	}
+    @Override
+    protected AssetSearchCriteria createSearchCriteria() {
+        return new AssetSearchCriteria();
+    }
 
     @Override
     protected Label createTitleLabel(String labelId) {

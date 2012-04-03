@@ -30,20 +30,18 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
 
     public ReportPage(PageParameters params) {
         super(params);
-        EventReportCriteria model = new EventReportCriteria();
-        init(model, createSavedItemFromCriteria(model), true);
     }
 
-    public ReportPage(EventReportCriteria eventReportCriteria, SavedItem<EventReportCriteria> savedItem, boolean showLeftMenu) {
-        super(new PageParameters());
-        SavedReportItem newSavedReportItem = new SavedReportItem(eventReportCriteria);
-        newSavedReportItem.setId(savedItem == null ? null : newSavedReportItem.getId());
-        init(eventReportCriteria, newSavedReportItem, showLeftMenu);
+    public ReportPage(EventReportCriteria eventReportCriteria, SavedItem<EventReportCriteria> savedItem) {
+        super(new PageParameters(), eventReportCriteria, new SavedReportItem(eventReportCriteria, savedItem));
     }
 
     public ReportPage(SavedReportItem savedReportItem) {
-        super(new PageParameters());
-        init(savedReportItem.getSearchCriteria(), savedReportItem, true);
+        super(new PageParameters(), savedReportItem.getSearchCriteria(), savedReportItem);
+    }
+
+    public ReportPage(EventReportCriteria eventReportCriteria) {
+        this(eventReportCriteria, null);
     }
 
     @Override
@@ -85,7 +83,7 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
     protected Component createCriteriaPanel(String id, final Model<EventReportCriteria> model) {
         return new ReportCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
-                setResponsePage(new ReportPage(model.getObject(),null,false));
+                setResponsePage(new ReportPage(model.getObject()));
             }
             @Override protected void onNoDisplayColumnsSelected() { }
         };
@@ -121,6 +119,11 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
         return new EventReportCriteriaPanel("criteriaPanel", criteriaModel, (SavedReportItem) savedItem);
     }
 
+    @Override
+    protected EventReportCriteria createSearchCriteria() {
+        return new EventReportCriteria();
+    }
+
     public String getPageLabel() {
         IModel<String> pageLabelModel = new FIDLabelModel("title.reporting");
         if (searchCriteria.getSavedReportName() != null) {
@@ -134,7 +137,7 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
     	super.renderHead(response);
     	response.renderJavaScriptReference("javascript/fieldIdWide.js");
         response.renderCSSReference("style/pageStyles/wide.css");
-        response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+isShowLeftMenu()+");");
+        response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+ isShowLeftPanel()+");");
     }
     
 }

@@ -84,7 +84,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         addCssContainers();
 
         add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class));
-        add(new BookmarkablePageLink<Void>("assetSearchLink", com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage.class));
+        add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
 
         add(new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
