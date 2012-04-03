@@ -87,10 +87,10 @@
 						</li>
 					</#if>
 					<li>
-						<a href="/fieldid/w/search" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" /></a>
+						<a href="/fieldid/w/search2" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" /></a>
 					</li>
 					<li>
-						<a href="/fieldid/w/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
+						<a href="/fieldid/w/wicket/reporting2" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
 					</li>
 					<li>
 						<a href="<@s.url action="schedule" namespace="/"/>" class="speedLink textLink" id="menuSchedule"><@s.text name="speed.schedules" /></a>

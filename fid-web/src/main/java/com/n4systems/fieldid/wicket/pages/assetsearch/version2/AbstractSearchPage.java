@@ -17,8 +17,18 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public abstract class AbstractSearchPage<T extends SearchCriteria> extends FieldIDFrontEndPage {
 
-    private @SpringBean DashboardReportingService dashboardReportingService;
+    //
+    public static final String SOURCE_PARAMETER = "source";
+    public static final String WIDGET_DEFINITION_PARAMETER = "wdf";
+    // different sources (i.e. where the redirection is coming from...who is requesting the search page).
+    public static final String SAVED_ITEM_SOURCE = "savedItem";
+    public static final String WIDGET_SOURCE = "widget";
+    // parameters required by the different sources.
+    public static final String X_PARAMETER = "longX";
+    public static final String SERIES_PARAMETER = "series";
+    public static final String Y_PARAMETER = "y";
 
+    private @SpringBean DashboardReportingService dashboardReportingService;
     private @SpringBean SavedAssetSearchService savedAssetSearchService;
 
     protected SavedItem<T> savedItem;

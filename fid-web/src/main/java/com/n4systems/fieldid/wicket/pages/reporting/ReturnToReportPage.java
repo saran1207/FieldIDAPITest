@@ -17,6 +17,7 @@ public class ReturnToReportPage extends FieldIDFrontEndPage {
             throw new RestartResponseException(DashboardPage.class);
         }
 
+        // XXX : WEB-2714
         setResponsePage(new ReportingResultsPage(storedCriteria));
     }
 

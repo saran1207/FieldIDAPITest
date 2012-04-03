@@ -1,9 +1,23 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.schedule.MassScheduleService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.DateLabel;
+import com.n4systems.fieldid.wicket.components.TooltipImage;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.eventtype.CommonEventTypesModel;
+import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
+import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
+import com.n4systems.model.asset.ScheduleSummaryEntry;
+import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -21,24 +35,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.fieldid.service.schedule.MassScheduleService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.DateLabel;
-import com.n4systems.fieldid.wicket.components.TooltipImage;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.eventtype.CommonEventTypesModel;
-import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
-import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.asset.ScheduleSummaryEntry;
-import com.n4systems.model.search.AssetSearchCriteria;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MassSchedulePage extends FieldIDFrontEndPage {
 
@@ -98,7 +97,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
                 }
                 massScheduleService.performSchedules(scheduleSummary, duplicateDetection);
                 FieldIDSession.get().info(new FIDLabelModel("message.mass_schedule_success").getObject());
-                setResponsePage(new AssetSearchResultsPage(criteriaModel.getObject()));
+                setResponsePage(new com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage(criteriaModel.getObject()));
             }
         };
         add(submitForm);
@@ -108,7 +107,8 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         submitForm.add(new Link("returnToSearchLink") {
             @Override
             public void onClick() {
-                setResponsePage(new AssetSearchResultsPage(criteriaModel.getObject()));
+                // XXX : WEB-2714
+                setResponsePage(new SearchPage(criteriaModel.getObject()));
             }
         });
     }

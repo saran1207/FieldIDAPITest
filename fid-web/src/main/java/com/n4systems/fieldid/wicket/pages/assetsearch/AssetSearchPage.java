@@ -11,7 +11,7 @@ import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPa
 import com.n4systems.fieldid.wicket.components.assetsearch.SearchBlankSlatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchResultsPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 
 public class AssetSearchPage extends FieldIDFrontEndPage {
 
@@ -33,7 +33,7 @@ public class AssetSearchPage extends FieldIDFrontEndPage {
     
     @Override
     protected Component createHeaderLink(String id, String label) {
-    	BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(id, SearchResultsPage.class);
+    	BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(id, SearchPage.class);
     	pageLink.add(new FlatLabel(label, new FIDLabelModel("label.search2")));
     	return pageLink;
     }

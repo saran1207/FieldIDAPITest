@@ -14,6 +14,7 @@ public class ReportClickThruHandler extends SimpleClickThruHandler {
 
 	@Override
 	protected Class<? extends FieldIDFrontEndPage> getClickThruPage() {
+        // XXX : WEB-2714
 		return ReportingResultsPage.class;
 	}    
 

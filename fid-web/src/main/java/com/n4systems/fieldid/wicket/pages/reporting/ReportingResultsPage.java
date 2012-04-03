@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -15,13 +16,13 @@ import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPane
 import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionPanel;
-import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.services.reporting.DashboardReportingService;
 
+@Deprecated // to be removed when completely switched over to new search/reporting pages
 public class ReportingResultsPage extends FieldIDFrontEndPage {
 
     private SavedReportItem savedReportItem;
@@ -88,9 +89,9 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
     private EventReportCriteria createReportCriteriaModel(PageParameters params) {
     	if(params!=null) {
     		// load config and set values...
-    		Long widgetDefinitionId = params.get(SRSResultsPanel.WIDGET_DEFINITION_PARAMETER).toLong();
-    		Long x = params.get(SRSResultsPanel.X_PARAMETER).toLong();
-    		String series = params.get(SRSResultsPanel.SERIES_PARAMETER).toString();
+    		Long widgetDefinitionId = params.get(AbstractSearchPage.WIDGET_DEFINITION_PARAMETER).toLong();
+    		Long x = params.get(AbstractSearchPage.X_PARAMETER).toLong();
+    		String series = params.get(AbstractSearchPage.SERIES_PARAMETER).toString();
     		EventReportCriteria model = dashboardReportingService.convertWidgetDefinitionToReportCriteria(widgetDefinitionId,x,series);
     		return model;
     	}

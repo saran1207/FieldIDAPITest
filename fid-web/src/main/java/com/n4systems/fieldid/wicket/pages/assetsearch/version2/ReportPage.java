@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.ReportCriteriaPanel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.ReportingSubMenu;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchBlankSlate;
 import com.n4systems.fieldid.wicket.pages.reporting.SaveReportPage;
@@ -23,21 +24,26 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class ReportingPage extends AbstractSearchPage<EventReportCriteria> {
+public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
 
     private @SpringBean SavedReportService savedReportService;
 
-    public ReportingPage(PageParameters params) {
+    public ReportPage(PageParameters params) {
         super(params);
         EventReportCriteria model = new EventReportCriteria();
         init(model, createSavedItemFromCriteria(model), true);
     }
 
-    public ReportingPage(EventReportCriteria eventReportCriteria, SavedItem<EventReportCriteria> savedItem, boolean showLeftMenu) {
+    public ReportPage(EventReportCriteria eventReportCriteria, SavedItem<EventReportCriteria> savedItem, boolean showLeftMenu) {
         super(new PageParameters());
         SavedReportItem newSavedReportItem = new SavedReportItem(eventReportCriteria);
         newSavedReportItem.setId(savedItem == null ? null : newSavedReportItem.getId());
         init(eventReportCriteria, newSavedReportItem, showLeftMenu);
+    }
+
+    public ReportPage(SavedReportItem savedReportItem) {
+        super(new PageParameters());
+        init(savedReportItem.getSearchCriteria(), savedReportItem, true);
     }
 
     @Override
@@ -64,10 +70,10 @@ public class ReportingPage extends AbstractSearchPage<EventReportCriteria> {
     protected Component createSubMenu(String id, Model<EventReportCriteria> criteriaModel) {
         return new ReportingSubMenu(id, criteriaModel) {
             @Override protected Link createSaveLink(String id) {
-                return ReportingPage.this.createSaveLink(id, true);
+                return ReportPage.this.createSaveLink(id, true);
             }
             @Override protected Link createSaveAsLink(String id) {
-                return ReportingPage.this.createSaveLink(id, false);
+                return ReportPage.this.createSaveLink(id, false);
             }
             @Override protected IModel<String> getHeaderModel() {
                 return new PropertyModel<String>(savedItem, "name");
@@ -79,7 +85,7 @@ public class ReportingPage extends AbstractSearchPage<EventReportCriteria> {
     protected Component createCriteriaPanel(String id, final Model<EventReportCriteria> model) {
         return new ReportCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
-                setResponsePage(new ReportingPage(model.getObject(),null,false));
+                setResponsePage(new ReportPage(model.getObject(),null,false));
             }
             @Override protected void onNoDisplayColumnsSelected() { }
         };
@@ -107,7 +113,7 @@ public class ReportingPage extends AbstractSearchPage<EventReportCriteria> {
 
     @Override
     protected Page createSaveReponsePage(boolean overwrite) {
-        return new SaveReportPage((SavedReportItem) savedItem, ReportingPage.this, overwrite);
+        return new SaveReportPage((SavedReportItem) savedItem, ReportPage.this, overwrite);
     }
 
     @Override

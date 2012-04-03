@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchResultsPanel;
-import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchBlankSlate;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchCriteriaPanel;
@@ -23,31 +22,35 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
+public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
 
     private @SpringBean DashboardReportingService dashboardReportingService;
     private @SpringBean SavedAssetSearchService savedAssetSearchService;
 
-    public SearchResultsPage(PageParameters params) {
+    public SearchPage(PageParameters params) {
     	super(params);
 		AssetSearchCriteria model = createSearchCriteriaModel(params);
 		init(model, createSavedItemFromCriteria(model), true);
     }
 
-	public SearchResultsPage(SavedSearchItem savedSearchItem) {
+	public SearchPage(SavedSearchItem savedSearchItem) {
         super(new PageParameters());
         init(savedSearchItem.getSearchCriteria(), savedSearchItem, true);
 	}
 
-    public SearchResultsPage(AssetSearchCriteria searchCriteria, boolean showLeftMenu) {
+    public SearchPage(AssetSearchCriteria searchCriteria, boolean showLeftMenu) {
         this(searchCriteria, null, showLeftMenu);
     }
 
-    public SearchResultsPage(AssetSearchCriteria searchCriteriaModel, SavedSearchItem savedSearchItem, boolean showLeftMenu) {
+    public SearchPage(AssetSearchCriteria criteria) {
+        this(criteria, true);
+    }
+
+    public SearchPage(AssetSearchCriteria searchCriteria, SavedSearchItem savedSearchItem, boolean showLeftPanel) {
     	super(new PageParameters());
-        SavedSearchItem newSavedSearchItem = new SavedSearchItem(searchCriteriaModel);
+        SavedSearchItem newSavedSearchItem = new SavedSearchItem(searchCriteria);
        	newSavedSearchItem.setId(savedSearchItem==null ? null : savedSearchItem.getId());
-    	init(searchCriteriaModel, newSavedSearchItem, showLeftMenu);
+    	init(searchCriteria, newSavedSearchItem, showLeftPanel);
     }
 
     @Override
@@ -59,7 +62,7 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
     protected Component createSubMenu(String id, Model<AssetSearchCriteria> criteriaModel) {
         return new SearchSubMenu(id, criteriaModel) {
             @Override protected Link createSaveLink(String id) {
-                return SearchResultsPage.this.createSaveLink(id, true);                
+                return SearchPage.this.createSaveLink(id, true);
             };
             @Override protected IModel<String> getHeaderModel() {
                 return new PropertyModel<String>(savedItem,"name");
@@ -71,7 +74,7 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
     protected Component createCriteriaPanel(String id, final Model<AssetSearchCriteria> model) {
         return new SearchCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
-                setResponsePage(new SearchResultsPage(model.getObject(),false));
+                setResponsePage(new SearchPage(model.getObject(),false));
             }
             @Override protected void onNoDisplayColumnsSelected() { }
         };
@@ -99,7 +102,7 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
 
     @Override
     protected Page createSaveReponsePage(boolean overwrite) {
-        return new SaveAssetSearchPage((SavedSearchItem) savedItem, SearchResultsPage.this, overwrite);
+        return new SaveAssetSearchPage((SavedSearchItem) savedItem, SearchPage.this, overwrite);
     }
 
     @Override
@@ -111,10 +114,10 @@ public class SearchResultsPage extends AbstractSearchPage<AssetSearchCriteria> {
 		try { 
 			if(params!=null) {
 				// 	load config and set values...
-				Long widgetDefinitionId = params.get(SRSResultsPanel.WIDGET_DEFINITION_PARAMETER).toLong();
-				Long x = params.get(SRSResultsPanel.X_PARAMETER).toLong();
-				String series = params.get(SRSResultsPanel.SERIES_PARAMETER).toString();
-				String y = params.get(SRSResultsPanel.Y_PARAMETER).toString();				 
+				Long widgetDefinitionId = params.get(WIDGET_DEFINITION_PARAMETER).toLong();
+				Long x = params.get(X_PARAMETER).toLong();
+				String series = params.get(SERIES_PARAMETER).toString();
+				String y = params.get(Y_PARAMETER).toString();
 				return dashboardReportingService.convertWidgetDefinitionToAssetCriteria(widgetDefinitionId,x,y,series);
 			}  
 		} catch (Exception e) {

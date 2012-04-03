@@ -26,12 +26,6 @@ import java.util.List;
 
 public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
 
-    public static final String WIDGET_DEFINITION_PARAMETER = "wdf";
-	public static final String X_PARAMETER = "longX";
-	public static final String SERIES_PARAMETER = "series";
-	public static final String Y_PARAMETER = "y";
-    
-	
     protected SimpleDataTable<RowView> dataTable;
     protected FieldIdAPIDataProvider provider;
     protected MultiIdSelection selectedRows;

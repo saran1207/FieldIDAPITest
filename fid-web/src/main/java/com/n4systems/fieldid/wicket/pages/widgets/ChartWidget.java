@@ -92,12 +92,12 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 			@Override
 			public Component getLazyLoadComponent(String markupId) {
 				Component chart = createFlotChartImpl(markupId);
-            	logger.warn("WIDGET end " + className + " @ " + dateFormat.format(new Date()));				
+            	logger.warn("WIDGET_SOURCE end " + className + " @ " + dateFormat.format(new Date()));
 				return chart;
 			}
             @Override
 			public Component getLoadingComponent(final String markupId) {
-            	logger.warn("WIDGET start " + className + " @ " + dateFormat.format(new Date()));
+            	logger.warn("WIDGET_SOURCE start " + className + " @ " + dateFormat.format(new Date()));
                 return new Label(markupId, "<div class='loadingText'>" + new FIDLabelModel("label.loading_ellipsis").getObject() +
                     "</div>").setEscapeModelStrings(false).add(new SimpleAttributeModifier("class", "chart-loading"));
             }
@@ -209,6 +209,7 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	}
 
 	protected Class<? extends FieldIDFrontEndPage> getClickThroughPage() {
+        // XXX : WEB-2714
 		return ReportingResultsPage.class;
 	}
 

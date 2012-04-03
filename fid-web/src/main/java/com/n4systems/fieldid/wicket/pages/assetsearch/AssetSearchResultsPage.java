@@ -1,5 +1,18 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch;
 
+import com.n4systems.fieldid.service.search.SavedAssetSearchService;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPanel;
+import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchMassActionPanel;
+import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchResultsPanel;
+import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.model.saveditem.SavedSearchItem;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.services.reporting.DashboardReportingService;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -9,20 +22,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import com.n4systems.fieldid.service.search.SavedAssetSearchService;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPanel;
-import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchMassActionPanel;
-import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchResultsPanel;
-import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
-import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchResultsPage;
-import com.n4systems.model.saveditem.SavedSearchItem;
-import com.n4systems.model.search.AssetSearchCriteria;
-import com.n4systems.services.reporting.DashboardReportingService;
 
 /**related to WEB-2629.   when switched over to the new page, this page should be removed. 
  in the interim, any applicable bug fixes or changes should be ported to new asset search page.
@@ -72,10 +71,10 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
 	private AssetSearchCriteria createSearchCriteriaModelFromDashboardParameters(PageParameters params) {
     	if(params!=null) {
     		// load config and set values...
-    		Long widgetDefinitionId = params.get(SRSResultsPanel.WIDGET_DEFINITION_PARAMETER).toLong();
-    		Long x = params.get(SRSResultsPanel.X_PARAMETER).toLong();
-    		String series = params.get(SRSResultsPanel.SERIES_PARAMETER).toString();
-    		String y = params.get(SRSResultsPanel.Y_PARAMETER).toString();
+    		Long widgetDefinitionId = params.get(AbstractSearchPage.WIDGET_DEFINITION_PARAMETER).toLong();
+    		Long x = params.get(AbstractSearchPage.X_PARAMETER).toLong();
+    		String series = params.get(AbstractSearchPage.SERIES_PARAMETER).toString();
+    		String y = params.get(AbstractSearchPage.Y_PARAMETER).toString();
     		AssetSearchCriteria model = dashboardReportingService.convertWidgetDefinitionToAssetCriteria(widgetDefinitionId,x,y,series);
     		return model;
     	}
@@ -138,7 +137,7 @@ public class AssetSearchResultsPage extends FieldIDFrontEndPage {
     
     @Override
     protected Component createHeaderLink(String id, String label) {
-    	BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(id, SearchResultsPage.class);
+    	BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(id, SearchPage.class);
     	pageLink.add(new FlatLabel(label, new FIDLabelModel("label.search2")));
     	return pageLink;
     }

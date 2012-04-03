@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.saveditem.SavedSearchItem;
@@ -22,6 +23,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
+
+import static com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage.SOURCE_PARAMETER;
 
 public class SavedItemsDropdownPage extends FieldIDAuthenticatedPage {
 
@@ -42,13 +45,12 @@ public class SavedItemsDropdownPage extends FieldIDAuthenticatedPage {
                 String imageUrl = null;
 
                 if (item.getModelObject() instanceof SavedReportItem) {
-                    linkUrl = "w/savedReport?id="+item.getModelObject().getId();
+                    linkUrl = "w/savedReport?id="+item.getModelObject().getId()+"&" + SOURCE_PARAMETER +"=" + AbstractSearchPage.SAVED_ITEM_SOURCE;
                     imageUrl = SAVED_REPORT_IMAGE_URL;
                 } else if (item.getModelObject() instanceof SavedSearchItem) {
-                    linkUrl = "w/savedSearch?id="+item.getModelObject().getId();
+                    linkUrl = "w/savedSearch?id="+item.getModelObject().getId()+"&"+ SOURCE_PARAMETER + "=" + AbstractSearchPage.SAVED_ITEM_SOURCE;
                     imageUrl = SAVED_SEARCH_IMAGE_URL;
                 }
-
                 addSavedItemLinkTo(item, new PropertyModel<String>(item.getModel(), "name"), imageUrl, linkUrl);
             }
         });

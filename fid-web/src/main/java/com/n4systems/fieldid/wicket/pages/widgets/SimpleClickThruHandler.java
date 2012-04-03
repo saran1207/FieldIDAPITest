@@ -1,18 +1,17 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.util.chart.FlotOptions;
 
-@SuppressWarnings("serial")
 public abstract class SimpleClickThruHandler implements ClickThruHandler {
-		
-	protected Long id;
+
+    protected Long id;
 	private Component component;
 
 	public SimpleClickThruHandler(Long widgetDefinitionId) {
@@ -36,7 +35,8 @@ public abstract class SimpleClickThruHandler implements ClickThruHandler {
 
 	public PageParameters getParameters() {
 	    PageParameters parameters = new PageParameters();        
-	    parameters.set(SRSResultsPanel.WIDGET_DEFINITION_PARAMETER, id);
+	    parameters.set(AbstractSearchPage.WIDGET_DEFINITION_PARAMETER, id);
+        parameters.set(AbstractSearchPage.SOURCE_PARAMETER, AbstractSearchPage.WIDGET_SOURCE);
 	    // other parameters like X,Y, etc... will be set via javascript
 	    return parameters;
 	}

@@ -12,11 +12,7 @@ import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.saveditem.SavedReportItem;
-import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.EventStatus;
-import com.n4systems.model.search.IncludeDueDateRange;
-import com.n4systems.model.search.ReportConfiguration;
+import com.n4systems.model.search.*;
 import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -27,9 +23,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, EventReportCriteria> {
@@ -80,6 +75,7 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, 
     }
 
     @Override
+    // XXX : WEB-2714   don't need this method anymore? but do i need to call legacyStorage...?
     protected WebPage createResultsPage(EventReportCriteria criteria, SavedReportItem savedItem) {
         HttpSession session = ((ServletWebRequest) getRequest()).getContainerRequest().getSession();
         new LegacyReportCriteriaStorage().storeCriteria(criteria, session);

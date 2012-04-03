@@ -6,7 +6,8 @@ import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSavedSearchPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchResultsPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
 import com.n4systems.fieldid.wicket.pages.reporting.*;
 import com.n4systems.fieldid.wicket.pages.saveditems.EditSavedItemPage;
@@ -61,9 +62,9 @@ public class FieldIDWicketApp extends WebApplication {
 
         //uggh: colorbox doesn't render absolute urls so we have to give it this url to make sense.  i.e. the "/wicket" prefix
         //  a preferred solution would be to put colorbox in iframe (which requires CSS love) or to force absolute urls to be rendered by wicket.
-        mountPage("wicket/reporting2", com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportingPage.class);
+        mountPage("wicket/reporting2", ReportPage.class);
 
-        mountPage("search2", SearchResultsPage.class);
+        mountPage("search2", SearchPage.class);
         mountPage("massupdate", MassUpdatePage.class);
         mountPage("returnToReport", ReturnToReportPage.class);
 

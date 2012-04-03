@@ -1,10 +1,6 @@
-package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.AbstractColumnsPanel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.AbstractCriteriaPanel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.ReportingColumnsPanel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.ReportingFilterPanel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.search.EventReportCriteria;
