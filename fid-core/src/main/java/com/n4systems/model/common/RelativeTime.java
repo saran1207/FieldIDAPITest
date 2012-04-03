@@ -6,37 +6,39 @@ import com.n4systems.util.DateHelper;
 import java.util.Date;
 
 public enum RelativeTime implements Listable<String> {
-	TODAY		("label.today",			DateHelper.DAY,		0),
-	TOMORROW	("label.tomorrow",		DateHelper.DAY,		1),
-	DAY_1		("label.1_day",			DateHelper.DAY,		1),
-	DAY_2		("label.2_day",			DateHelper.DAY,		2),
-	DAY_7		("label.7_day",			DateHelper.DAY,		7),
-	THIS_WEEK 	("label.this_week",		DateHelper.WEEK,	0),
-	NEXT_WEEK 	("label.next_week",		DateHelper.WEEK,	1),
-	WEEK_1		("label.1_week",		DateHelper.WEEK,	1),
-	WEEK_2		("label.2_week",		DateHelper.WEEK,	2),
-	THIS_MONTH	("label.this_month",	DateHelper.MONTH, 	0),
-	NEXT_MONTH	("label.next_month",	DateHelper.MONTH,	1),
-	MONTH_1		("label.1_month",		DateHelper.MONTH,	1),
-	MONTH_2		("label.2_month",		DateHelper.MONTH,	2),
-	MONTH_3		("label.3_month",		DateHelper.MONTH,	3),
-	MONTH_6		("label.6_month",		DateHelper.MONTH,	6),
-	MONTH_9		("label.9_month",		DateHelper.MONTH,	9),
-	MONTH_12	("label.12_month",		DateHelper.MONTH,	12),
-	MONTH_18	("label.18_month",		DateHelper.MONTH,	18),
-	MONTH_24	("label.24_month",		DateHelper.MONTH,	24),
-	THIS_YEAR	("label.this_year",		DateHelper.YEAR, 	0),
-	NEXT_YEAR	("label.next_year",		DateHelper.YEAR,	1);
+
+	TODAY		("label.today",			DateHelper.DAY,		0, false),
+	TOMORROW	("label.tomorrow",		DateHelper.DAY,		1, false),
+    THIS_WEEK 	("label.this_week",		DateHelper.WEEK,	0, false),
+    NEXT_WEEK 	("label.next_week",		DateHelper.WEEK,	1, false),
+    THIS_MONTH	("label.this_month",	DateHelper.MONTH, 	0, false),
+    NEXT_MONTH	("label.next_month",	DateHelper.MONTH,	1, false),
+
+	DAY_1		("label.1_day",			DateHelper.DAY,		1, true),
+	DAY_2		("label.2_day",			DateHelper.DAY,		2, true),
+	DAY_7		("label.7_day",			DateHelper.DAY,		7, true),
+	WEEK_1		("label.1_week",		DateHelper.WEEK,	1, true),
+	WEEK_2		("label.2_week",		DateHelper.WEEK,	2, true),
+	MONTH_1		("label.1_month",		DateHelper.MONTH,	1, true),
+	MONTH_2		("label.2_month",		DateHelper.MONTH,	2, true),
+	MONTH_3		("label.3_month",		DateHelper.MONTH,	3, true),
+	MONTH_6		("label.6_month",		DateHelper.MONTH,	6, true),
+	MONTH_9		("label.9_month",		DateHelper.MONTH,	9, true),
+	MONTH_12	("label.12_month",		DateHelper.MONTH,	12, true),
+	MONTH_18	("label.18_month",		DateHelper.MONTH,	18, true),
+	MONTH_24	("label.24_month",		DateHelper.MONTH,	24, true);
 	
 	
 	private String label;
 	private int dateField;
 	private int increment;
+    private boolean truncateJustDay;
 	
-	RelativeTime(String label, int dateField, int increment) {
+	RelativeTime(String label, int dateField, int increment, boolean truncateJustDay) {
 		this.label = label;
 		this.dateField = dateField;
 		this.increment = increment;
+        this.truncateJustDay = truncateJustDay;
 	}
 	
 	public String getDisplayName() {
@@ -66,9 +68,14 @@ public enum RelativeTime implements Listable<String> {
 	 * @return			The relative calculated time
 	 */
 	public Date getRelative(Date fromDate) {
-		// first remove less priority fields
-		Date truncated = DateHelper.truncate(fromDate, dateField);
-		
+        // first remove less priority fields
+        int fieldToTruncate = dateField;
+        if (truncateJustDay) {
+            fieldToTruncate = DateHelper.DAY;
+        }
+
+        Date truncated = DateHelper.truncate(fromDate, fieldToTruncate);
+
 		// then add the increment
 		Date incremented = DateHelper.increment(truncated, dateField, increment);
 		

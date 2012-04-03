@@ -41,10 +41,10 @@ public class RelativeTimeTest {
         assertEquals("Next Week", "31/05/2009 00:00:00.0", relDate);
 
         relDate = format.format(RelativeTime.WEEK_1.getRelative(date));
-        assertEquals("1 Week", "31/05/2009 00:00:00.0", relDate);
+        assertEquals("1 Week", "03/06/2009 00:00:00.0", relDate);
 
         relDate = format.format(RelativeTime.WEEK_2.getRelative(date));
-        assertEquals("2 Weeks", "07/06/2009 00:00:00.0", relDate);
+        assertEquals("2 Weeks", "10/06/2009 00:00:00.0", relDate);
 
         relDate = format.format(RelativeTime.THIS_MONTH.getRelative(date));
         assertEquals("This Month", "01/05/2009 00:00:00.0", relDate);
@@ -53,16 +53,10 @@ public class RelativeTimeTest {
         assertEquals("Next Month", "01/06/2009 00:00:00.0", relDate);
         
         relDate = format.format(RelativeTime.MONTH_1.getRelative(date));
-        assertEquals("1 Month", "01/06/2009 00:00:00.0", relDate);
+        assertEquals("1 Month", "27/06/2009 00:00:00.0", relDate);
 
         relDate = format.format(RelativeTime.MONTH_2.getRelative(date));
-        assertEquals("1 Month", "01/07/2009 00:00:00.0", relDate);
-        
-        relDate = format.format(RelativeTime.THIS_YEAR.getRelative(date));
-        assertEquals("This Year", "01/01/2009 00:00:00.0", relDate);
-        
-        relDate = format.format(RelativeTime.NEXT_YEAR.getRelative(date));
-        assertEquals("Next Year", "01/01/2010 00:00:00.0", relDate);
+        assertEquals("2 Months", "27/07/2009 00:00:00.0", relDate);
 	}
 
 }
