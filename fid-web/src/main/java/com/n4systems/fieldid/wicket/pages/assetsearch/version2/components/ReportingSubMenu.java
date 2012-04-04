@@ -49,19 +49,17 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
                 setResponsePage(new EventResolutionPage(model));
             }
         });
+        
+        add(new SaveMenu("saveMenu") {
+            @Override protected Link createSaveLink(String id) {
+                return ReportingSubMenu.this.createSaveLink(id);
+            }
+            @Override protected Link createSaveAsLink(String id) {
+                return ReportingSubMenu.this.createSaveAsLink(id);
+            }
+        });
 
-        
-        WebMarkupContainer saveMenu = createSaveMenu("saveMenu");
-        
         initializeLimits();
-    }
-
-    protected Link createSaveAsLink(String id) {
-        throw new IllegalStateException("you must override this method to create Save As link for the SubMenu");
-    }
-
-    protected Link createSaveLink(String id) {
-        throw new IllegalStateException("you must override this method to create Save link for the SubMenu");
     }
 
     @Override

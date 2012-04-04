@@ -25,7 +25,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**related to WEB-2629.   when switched over to the new page, this page should be removed. 
  in the interim, any applicable bug fixes or changes should be ported to new asset search page.
- @see SearchResultsPage
+ @see SearchPage
 */    
 @Deprecated 
 public class AssetSearchResultsPage extends FieldIDFrontEndPage {

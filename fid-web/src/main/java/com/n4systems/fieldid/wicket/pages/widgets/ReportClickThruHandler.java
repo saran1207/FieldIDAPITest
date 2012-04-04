@@ -1,11 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import org.apache.wicket.Component;
 
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
-
-@SuppressWarnings("serial")
 public class ReportClickThruHandler extends SimpleClickThruHandler {
 	
 	public ReportClickThruHandler(Component component, Long id) {
@@ -14,8 +12,7 @@ public class ReportClickThruHandler extends SimpleClickThruHandler {
 
 	@Override
 	protected Class<? extends FieldIDFrontEndPage> getClickThruPage() {
-        // XXX : WEB-2714
-		return ReportingResultsPage.class;
+		return ReportPage.class;
 	}    
 
 }

@@ -1,9 +1,21 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Set;
-
+import com.google.common.collect.Sets;
+import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.components.chart.FlotChart;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.EnumUtils;
+import com.n4systems.util.chart.ChartData;
+import com.n4systems.util.chart.ChartGranularity;
+import com.n4systems.util.chart.FlotOptions;
+import com.n4systems.util.chart.LineGraphOptions;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,22 +30,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.Duration;
 
-import com.google.common.collect.Sets;
-import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.wicket.components.chart.FlotChart;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
-import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
-import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
-import com.n4systems.model.utils.DateRange;
-import com.n4systems.util.EnumUtils;
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.FlotOptions;
-import com.n4systems.util.chart.LineGraphOptions;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Set;
 
 /**
  * used to render a Flot Chart based widget.     
@@ -209,8 +208,7 @@ public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widge
 	}
 
 	protected Class<? extends FieldIDFrontEndPage> getClickThroughPage() {
-        // XXX : WEB-2714
-		return ReportingResultsPage.class;
+		return ReportPage.class;
 	}
 
 	protected ChartGranularity getDefaultGranularity() {

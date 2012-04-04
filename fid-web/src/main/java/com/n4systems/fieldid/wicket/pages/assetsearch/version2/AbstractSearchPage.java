@@ -44,25 +44,44 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         super(params);
     	this.savedItem = savedItem;
         this.searchCriteria = searchCriteria;
-        init();
+        initialize();
     }
 
-    protected void init() {
+    private void initialize() {
         showLeftPanel = calculateInitialViewState();
-        saveLastSearch(getSearchCriteria());
+        initializeSearchCriteria();
+        initializeSavedItem();
+        saveLastSearch(searchCriteria);
+        addComponents();
+    }
 
-        Model<T> criteriaModel = new Model<T>(getSearchCriteria());
+    private void addComponents() {
+        Model<T> criteriaModel = new Model<T>(searchCriteria);
         add(createResultsPanel("resultsPanel", criteriaModel, isShowBlankSlate()));
 
         SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));
-        criteriaExpandContainer.addContainedPanel(createCriteriaPanel("criteriaPanel", criteriaModel, getSavedItem()));
+        criteriaExpandContainer.addContainedPanel(createCriteriaPanel("criteriaPanel", criteriaModel, savedItem));
 
         add(criteriaExpandContainer);
 
         final Component searchConfigPanel = createCriteriaPanel(FieldIDFrontEndPage.LEFT_PANEL_ID, criteriaModel);
 
-		setLeftPanelContent(searchConfigPanel);
+        setLeftPanelContent(searchConfigPanel);
         setSubMenuContent(searchMenu = createSubMenu(FieldIDFrontEndPage.SUB_MENU_ID, criteriaModel));
+    }
+
+    public void initializeSavedItem() {
+        if (savedItem==null) {
+            savedItem = createSavedItemFromCriteria(searchCriteria);
+        } else {
+            savedItem.setSearchCriteria(searchCriteria);
+        }
+    }
+
+    public void initializeSearchCriteria() {
+        if (searchCriteria==null) {
+            searchCriteria = createSearchCriteria();
+        }
     }
 
     private boolean calculateInitialViewState() {
@@ -98,22 +117,13 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         return link;
     }
 
-    public SavedItem<T> getSavedItem() {
-        if (savedItem==null) {
-            savedItem = createSavedItemFromCriteria(getSearchCriteria());
-        }
-        return savedItem;
-    }
-
-    public T getSearchCriteria() {
-        if (searchCriteria==null) {
-            searchCriteria = createSearchCriteria();
-        }
-        return searchCriteria;
-    }
-
     private final Component createResultsPanel(String id, Model<T> criteriaModel, boolean showBlankSlate) {
         return (showBlankSlate || isEmptyResults()) ? createBlankSlate(id) : createResultsPanel(id, criteriaModel);
+    }
+
+    public Page withSavedItemNamed(String name) {
+        savedItem.setName(name);
+        return this;
     }
 
     protected abstract SavedItem<T> createSavedItemFromCriteria(T searchCriteriaModel);
@@ -135,10 +145,5 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     protected abstract Component createCriteriaPanel(String id, Model<T> criteriaModel, SavedItem<T> savedItem);
 
     protected abstract T createSearchCriteria();
-
-    public Page withSavedItemNamed(String name) {
-        savedItem.setName(name);
-        return this;
-    }
 }
 

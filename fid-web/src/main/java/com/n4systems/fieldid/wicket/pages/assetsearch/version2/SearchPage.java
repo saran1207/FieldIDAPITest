@@ -31,8 +31,8 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
         super(params, null, null);
     }
     
-    public SearchPage(AssetSearchCriteria searchCriteria, SavedSearchItem savedSearchItem) {
-    	super(new PageParameters(), searchCriteria, new SavedSearchItem(searchCriteria, savedSearchItem));
+    public SearchPage(AssetSearchCriteria searchCriteria, SavedItem<AssetSearchCriteria> savedSearchItem) {
+    	super(new PageParameters(), searchCriteria, savedSearchItem);
     }
 
     public SearchPage(AssetSearchCriteria criteria) {
@@ -50,6 +50,9 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
             @Override protected Link createSaveLink(String id) {
                 return SearchPage.this.createSaveLink(id, true);
             };
+            @Override protected Link createSaveAsLink(String id) {
+                return SearchPage.this.createSaveLink(id,false);
+            }
             @Override protected IModel<String> getHeaderModel() {
                 return new PropertyModel<String>(savedItem,"name");
             }
@@ -60,7 +63,7 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     protected Component createCriteriaPanel(String id, final Model<AssetSearchCriteria> model) {
         return new SearchCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
-                setResponsePage(new SearchPage(model.getObject()));
+                setResponsePage(new SearchPage(model.getObject(), savedItem));
             }
             @Override protected void onNoDisplayColumnsSelected() { }
         };
@@ -113,6 +116,5 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
         }
         return pageLabelModel.getObject();
     }
-
     
 }

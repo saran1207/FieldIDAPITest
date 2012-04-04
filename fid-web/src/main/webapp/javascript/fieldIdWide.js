@@ -51,7 +51,7 @@ var fieldIdWidePage = (function() {
 
     function addMenuHandlers() {
 		$(document).delegate('.actions .menu > a', 'click', function() {
-			$(this).siblings('.menu-items').first().show();
+			$(this).next('.menu-items').first().show();
 			return false;
 		});		
 		$(document).delegate('"#fieldidBody', 'click', function(e) {

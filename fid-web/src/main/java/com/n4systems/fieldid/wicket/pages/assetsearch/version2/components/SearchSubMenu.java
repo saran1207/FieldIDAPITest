@@ -10,22 +10,20 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 
 
-public class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
+public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
-	private WebMarkupContainer actions;
+    private WebMarkupContainer actions;
     private Link printLink;
-	private Link exportLink;
+    private Link exportLink;
 
-	
-	public SearchSubMenu(String id, final Model<AssetSearchCriteria> model) {
-		super(id,model);
+    public SearchSubMenu(String id, final Model<AssetSearchCriteria> model) {
+        super(id,model);
 
         add(printLink = makeLinkLightBoxed(new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model)));
         add(exportLink = makeLinkLightBoxed(new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model)));
-        add(createSaveLink("save"));
 
         actions=new WebMarkupContainer("actions");
-        
+
         actions.add(new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", model));
         actions.add(new Link("massUpdateLink") {
             @Override public void onClick() {
@@ -38,24 +36,24 @@ public class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
                 setResponsePage(new MassSchedulePage(model));
             }
         });
-        
+
         add(actions);
-		
-		initializeLimits();
-	}
+        
+        add(new SaveMenu("saveMenu") {
+            @Override protected Link createSaveLink(String id) {
+                return SearchSubMenu.this.createSaveLink(id);
+            }
+            @Override protected Link createSaveAsLink(String id) {
+                return SearchSubMenu.this.createSaveAsLink(id);
+            }
+        });
+
+        initializeLimits();
+    }
 
     @Override
     protected String getNoneSelectedMsgKey() {
         return "label.select_assets";
-    }
-
-    protected Link createSaveLink(String id) {
-        throw new IllegalStateException("you must override this method to create Save link for the SubMenu");
-	}
-
-    @Override
-    protected Link createSaveAsLink(String saveAs) {
-        throw new IllegalStateException("you must override this method to create Save As link for the SubMenu");
     }
 
     protected void updateMenuBeforeRender(int selected) {

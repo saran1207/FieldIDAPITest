@@ -116,31 +116,6 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         super.renderHead(response);
     }
 
-    protected WebMarkupContainer createSaveMenu(String saveMenu) {
-        WebMarkupContainer menu;
-        add(menu = new WebMarkupContainer("saveMenu"));
-        saveLink = createSaveLink("save");
-        menu.add(saveLink);
-        saveAsLink = createSaveAsLink("saveAs");
-        menu.add(saveAsLink);
-        add(menu);
-        
-        saveAsMenu = new WebMarkupContainer("saveAsMenu");
-        saveAsMenu.add(new AttributeAppender("class", new Model<String>(getSaveAsCssClass())));
-        menu.add(saveAsMenu);
-
-        saveLink.add(new AttributeAppender("class", new Model<String>(getSaveLinkCssClass())) );
-        return menu;
-    }
-
-    private String getSaveAsCssClass() {
-        return saveAsLink.isVisible() ? " " : " hide";
-    }
-
-    private String getSaveLinkCssClass() {
-        return saveAsLink.isVisible() ? " mattBarLeft" : " ";
-    }
-
     protected abstract Link createSaveAsLink(String saveAs);
 
     protected abstract Link createSaveLink(String save);
