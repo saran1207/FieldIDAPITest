@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.reporting.results;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionPanel;
+import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.print.ExportToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
@@ -53,6 +54,12 @@ public class ReportingMassActionPanel extends MassActionPanel {
 
         if (reportCriteriaModel.getObject().getEventStatus() == EventStatus.COMPLETE) {
             massUpdateLinkContainer.add(new ReportingMassActionLink("massUpdateLink", "/massUpdateEvents.action?searchId=%s", reportCriteriaModel));
+            massUpdateLinkContainer.add(new Link("massUpdateLink2") {
+                @Override
+                public void onClick() {
+                    setResponsePage(new MassUpdateEventsPage(reportCriteriaModel));
+                }
+            });
         } else if (reportCriteriaModel.getObject().getEventStatus() == EventStatus.INCOMPLETE) {
             massUpdateLinkContainer.add(new ScheduleMassActionLink("massUpdateLink", "/massUpdateEventSchedule.action?searchId=%s", reportCriteriaModel));
         } else {

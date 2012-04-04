@@ -9,7 +9,7 @@ import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionPanel;
-import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
+import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.model.search.AssetSearchCriteria;
 
@@ -36,7 +36,7 @@ public class AssetSearchMassActionPanel extends MassActionPanel {
         add(massUpdateLink = new Link("massUpdateLink") {
             @Override
             public void onClick() {
-                setResponsePage(new MassUpdatePage(criteriaModel));
+                setResponsePage(new MassUpdateAssetsPage(criteriaModel));
             }
         });
 

@@ -1,10 +1,11 @@
-package com.n4systems.fieldid.wicket.components.massupdate;
+package com.n4systems.fieldid.wicket.components.massupdate.asset;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
+import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;

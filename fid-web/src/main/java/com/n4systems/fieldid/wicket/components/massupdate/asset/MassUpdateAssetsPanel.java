@@ -1,5 +1,11 @@
-package com.n4systems.fieldid.wicket.components.massupdate;
+package com.n4systems.fieldid.wicket.components.massupdate.asset;
 
+import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
+import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateNavigationPanel;
+import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateOperation;
+import com.n4systems.fieldid.wicket.components.massupdate.SelectOperationPanel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -15,7 +21,7 @@ public class MassUpdateAssetsPanel extends Panel {
 	public MassUpdateAssetsPanel(String id, final IModel<AssetSearchCriteria> assetSearchCriteria) {
 		super(id);
 		
-		currentPanel = new SelectOperationPanel("massUpdatePanel", assetSearchCriteria) {
+		currentPanel = new SelectOperationPanel("massUpdatePanel", (SearchCriteria) assetSearchCriteria.getObject(), new FIDLabelModel("label.assets.lc").getObject()) {
 			@Override
 			protected void onOperationSelected(MassUpdateOperation operation) {
 				if(operation == MassUpdateOperation.DELETE) {
@@ -25,6 +31,12 @@ public class MassUpdateAssetsPanel extends Panel {
 				}
 				updateNavigationPanel(assetSearchCriteria, currentPanel);
 			}
+
+            @Override
+            protected void onCancel() {
+                setResponsePage(new AssetSearchResultsPage((AssetSearchCriteria)assetSearchCriteria.getObject()));
+            }
+
 		};
 		add(currentPanel);
 		

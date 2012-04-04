@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
-import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdatePage;
+import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -29,7 +29,7 @@ public class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         actions.add(new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", model));
         actions.add(new Link("massUpdateLink") {
             @Override public void onClick() {
-                setResponsePage(new MassUpdatePage(model));
+                setResponsePage(new MassUpdateAssetsPage(model));
             }
         });
 

@@ -2,9 +2,12 @@ package com.n4systems.fieldid.service.massupdate;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.Query;
 
+import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.util.EventRemovalSummary;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +25,8 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class MassUpdateService extends FieldIdPersistenceService {
 	
 	@Autowired private AssetService assetService;
+
+    @Autowired private EventService eventService;
 	
 	private Logger logger = Logger.getLogger(MassUpdateService.class);
 
@@ -60,4 +65,20 @@ public class MassUpdateService extends FieldIdPersistenceService {
 		return summary;
 	}
 
+    public EventRemovalSummary calculateEventRemovalSummary(List<Long> ids) {
+        EventRemovalSummary removalSummary = new EventRemovalSummary();
+        for (Long id : ids) {
+            Event event = eventService.findEventByScheduleId(id);
+            if (event != null) {
+                if (event.getType().isMaster()) {
+                    removalSummary.addMasterEventToDelete();
+                    removalSummary.addStandardEventsToDelete(event.getSubEvents().size());
+                } else {
+                    removalSummary.addStandardEventsToDelete();
+                }
+                removalSummary.addEventSchedulesToDelete((event.getSchedule() == null) ? 0 : 1);
+            }
+        }
+        return removalSummary;
+    }
 }

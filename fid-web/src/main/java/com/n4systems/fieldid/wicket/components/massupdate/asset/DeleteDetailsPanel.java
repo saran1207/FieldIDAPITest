@@ -1,7 +1,8 @@
-package com.n4systems.fieldid.wicket.components.massupdate;
+package com.n4systems.fieldid.wicket.components.massupdate.asset;
 
 import java.util.List;
 
+import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -16,7 +17,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.util.AssetRemovalSummary;
 
-public class DeleteDetailsPanel extends AbstractMassUpdatePanel{
+public class DeleteDetailsPanel extends AbstractMassUpdatePanel {
 	
 	@SpringBean 
 	private MassUpdateService massUpdateService;
@@ -32,7 +33,8 @@ public class DeleteDetailsPanel extends AbstractMassUpdatePanel{
 		AssetRemovalSummary assetRemovalSummary = getRemovalSummary(assetSearchCriteria.getObject().getSelection().getSelectedIds());
 		
 		add(new Label("deleteDetailsMessage", new FIDLabelModel("message.mass_delete_details", 
-				assetSearchCriteria.getObject().getSelection().getNumSelectedIds())));
+				                                                assetSearchCriteria.getObject().getSelection().getNumSelectedIds(),
+                                                                new FIDLabelModel("label.assets.lc").getObject())));
 		add(new Label("eventsToDelete", assetRemovalSummary.getEventsToDelete().toString()));
 		add(new Label("schedulesToDelete", assetRemovalSummary.getSchedulesToDelete().toString()));
 		add(new Label("subAssetsToDetach", assetRemovalSummary.getSubAssetsToDetach().toString()));

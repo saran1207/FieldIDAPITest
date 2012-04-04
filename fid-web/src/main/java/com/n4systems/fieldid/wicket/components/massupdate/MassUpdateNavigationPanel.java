@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.massupdate;
 
+import com.n4systems.fieldid.wicket.components.massupdate.asset.*;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;

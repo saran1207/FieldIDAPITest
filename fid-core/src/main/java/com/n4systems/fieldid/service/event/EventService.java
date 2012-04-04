@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.*;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.model.security.OpenSecurityFilter;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -216,6 +217,11 @@ public class EventService extends FieldIdPersistenceService {
 		builder.addOrder("nextDate");
 		
 		return persistenceService.findAll(builder);	
-	}			    
+	}
+
+    public Event findEventByScheduleId(Long scheduleId){
+        EventSchedule eventSchedule = persistenceService.find(EventSchedule.class, scheduleId);
+        return persistenceService.find(Event.class, eventSchedule.getEvent().getId());
+    }
     
 }

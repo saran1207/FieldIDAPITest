@@ -1,9 +1,10 @@
-package com.n4systems.fieldid.wicket.components.massupdate;
+package com.n4systems.fieldid.wicket.components.massupdate.asset;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.Button;
