@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v1.resources.assetattachment;
 
-import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModel;
 
-public class ApiAssetAttachment extends ApiReadonlyModel {
+public class ApiAssetAttachment extends ApiReadWriteModel {
 	private String assetId;
 	private String comments;
 	private String fileName;

@@ -73,7 +73,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	@Override
 	protected ApiAssetAttachment convertEntityToApiModel(AssetAttachment attachment) {
 		ApiAssetAttachment apiAttachment = new ApiAssetAttachment();
-		apiAttachment.setSid(attachment.getId());
+		apiAttachment.setSid(attachment.getMobileId());
 		apiAttachment.setActive(true);
 		apiAttachment.setModified(attachment.getModified());
 		apiAttachment.setAssetId(attachment.getAsset().getMobileGUID());
@@ -99,6 +99,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	
 	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment apiAttachment, Asset asset) {
 		AssetAttachment attachment = new AssetAttachment();
+		attachment.setMobileId(apiAttachment.getSid());
 		attachment.setAsset(asset);
 		attachment.setTenant(asset.getTenant());
 		attachment.setComments(apiAttachment.getComments());
