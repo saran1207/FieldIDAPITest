@@ -139,5 +139,5 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
         response.renderCSSReference("style/pageStyles/wide.css");
         response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+ isShowLeftPanel()+");");
     }
-    
+
 }

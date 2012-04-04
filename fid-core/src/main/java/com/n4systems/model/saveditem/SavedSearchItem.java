@@ -26,6 +26,7 @@ public class SavedSearchItem extends SavedItem<AssetSearchCriteria> {
         this(searchCriteria);
         if (savedSearchItem!=null) { 
             setId(savedSearchItem.getId());
+            setName(savedSearchItem.getName());
         }
     }
 

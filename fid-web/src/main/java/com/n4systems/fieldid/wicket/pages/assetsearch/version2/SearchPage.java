@@ -31,10 +31,6 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
         super(params, null, null);
     }
     
-	public SearchPage(SavedSearchItem savedSearchItem) {
-        super(new PageParameters(), savedSearchItem.getSearchCriteria(), savedSearchItem);
-	}
-
     public SearchPage(AssetSearchCriteria searchCriteria, SavedSearchItem savedSearchItem) {
     	super(new PageParameters(), searchCriteria, new SavedSearchItem(searchCriteria, savedSearchItem));
     }

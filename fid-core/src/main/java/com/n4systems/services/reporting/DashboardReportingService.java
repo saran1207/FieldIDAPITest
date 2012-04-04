@@ -1,14 +1,5 @@
 package com.n4systems.services.reporting;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
@@ -20,23 +11,22 @@ import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.AssetsStatusWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.EnumUtils;
-import com.n4systems.util.chart.BarChartManager;
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.ChartSeries;
-import com.n4systems.util.chart.DateChartManager;
-import com.n4systems.util.chart.RangeType;
+import com.n4systems.util.chart.*;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 public class DashboardReportingService extends FieldIdPersistenceService {
@@ -195,7 +185,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	private AssetSearchCriteria getModelDefaults(
 			AssetsIdentifiedWidgetConfiguration config,
 			LocalDate localDate) {		
-		AssetSearchCriteria model = getDefaultAssetSearchCritieriaModel();
+		AssetSearchCriteria model = getDefaultAssetSearchCritieria();
 		if (config.getGranularity()!=null) { 
 			LocalDate from = localDate;
 			LocalDate to = from.plus(config.getGranularity().getPeriod().minusDays(1));
@@ -207,14 +197,14 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 	private AssetSearchCriteria getModelDefaults(
 			AssetsStatusWidgetConfiguration config, String assetStatus) {
-		AssetSearchCriteria model = getDefaultAssetSearchCritieriaModel();
+		AssetSearchCriteria model = getDefaultAssetSearchCritieria();
 		model.setAssetStatus(assetStatusService.getStatusByName(assetStatus));
 		model.setDateRange(new DateRange(config.getRangeType()));
 		model.setOwner(config.getOrg());		
 		return model;
 	}
 
-	public AssetSearchCriteria getDefaultAssetSearchCritieriaModel() {
+	public AssetSearchCriteria getDefaultAssetSearchCritieria() {
 		AssetSearchCriteria model = new AssetSearchCriteria();
 		ReportConfiguration reportConfiguration = new AssetColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());		
 		model.setColumnGroups(reportConfiguration.getColumnGroups());

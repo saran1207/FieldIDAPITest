@@ -135,5 +135,10 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     protected abstract Component createCriteriaPanel(String id, Model<T> criteriaModel, SavedItem<T> savedItem);
 
     protected abstract T createSearchCriteria();
+
+    public Page withSavedItemNamed(String name) {
+        savedItem.setName(name);
+        return this;
+    }
 }
 

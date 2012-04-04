@@ -25,6 +25,7 @@ public class SavedReportItem extends SavedItem<EventReportCriteria> {
         this(eventReportCriteria);
         if (savedItem!=null) {
             setId(savedItem.getId());
+            setName(savedItem.getName());
         }
     }
 
