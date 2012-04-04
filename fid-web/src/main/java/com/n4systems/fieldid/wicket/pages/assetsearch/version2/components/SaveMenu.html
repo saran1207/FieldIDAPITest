@@ -1,0 +1,17 @@
+<wicket:panel>
+    <li class="menu wide">
+        <span>
+            <!-- wrapping this in span will make enable this to act like link, not menu  which is what we want
+               related to javascript code that listens for clicks on $('.menu > a')
+                -->
+            <a wicket:id="save" class="mattButton"><wicket:message key="label.save"/></a>
+        </span>
+        <a wicket:id="saveAsMenu" class="mattButton mattButtonRight"><img src="/fieldid/images/menu-down.png"></a>
+        <ul class="menu-items">
+            <li>
+                <a wicket:id="saveAs"><wicket:message key="label.save_search_as"/></a>
+            </li>
+        </ul>
+    </li>
+</wicket:panel>
+
