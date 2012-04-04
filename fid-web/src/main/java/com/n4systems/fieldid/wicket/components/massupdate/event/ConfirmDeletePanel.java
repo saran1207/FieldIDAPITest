@@ -7,7 +7,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.user.User;
@@ -51,7 +51,7 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
                     eventManager.retireEvent(event, getCurrentUser().getId());
                 }
                 eventSearchCriteria.getObject().getSelection().clear();
-                setResponsePage(new ReportingResultsPage((EventReportCriteria)eventSearchCriteria.getObject()));
+                setResponsePage(new ReportPage((EventReportCriteria)eventSearchCriteria.getObject()));
                 info(new FIDLabelModel("message.event_massdelete_successful", eventIds.size()).getObject());
 			}
 		};

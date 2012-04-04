@@ -5,13 +5,12 @@ import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateNavigationPa
 import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateOperation;
 import com.n4systems.fieldid.wicket.components.massupdate.SelectOperationPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-
-import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
-import com.n4systems.model.search.AssetSearchCriteria;
 
 public class MassUpdateAssetsPanel extends Panel {
 	
@@ -34,7 +33,7 @@ public class MassUpdateAssetsPanel extends Panel {
 
             @Override
             protected void onCancel() {
-                setResponsePage(new AssetSearchResultsPage((AssetSearchCriteria)assetSearchCriteria.getObject()));
+                setResponsePage(new SearchPage((AssetSearchCriteria)assetSearchCriteria.getObject()));
             }
 
 		};
@@ -56,7 +55,7 @@ public class MassUpdateAssetsPanel extends Panel {
 		return new DeleteDetailsPanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
 			protected void onCancel() {
-				setResponsePage(new AssetSearchResultsPage(assetSearchCriteria.getObject()));
+				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
 			}
 			
 			@Override
@@ -71,7 +70,7 @@ public class MassUpdateAssetsPanel extends Panel {
 		return new EditDetailsPanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
 			protected void onCancel() {
-				setResponsePage(new AssetSearchResultsPage(assetSearchCriteria.getObject()));
+				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
 			}
 			
 			@Override
@@ -87,7 +86,7 @@ public class MassUpdateAssetsPanel extends Panel {
 		return new ConfirmDeletePanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
 			@Override
 			protected void onCancel() {
-				setResponsePage(new AssetSearchResultsPage(assetSearchCriteria.getObject()));
+				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
 			}
 		};
 	}
@@ -96,7 +95,7 @@ public class MassUpdateAssetsPanel extends Panel {
 		return new ConfirmEditPanel("massUpdatePanel", assetSearchCriteria, previousPanel, massUpdateAssetModel){
 			@Override
 			protected void onCancel() {
-				setResponsePage(new AssetSearchResultsPage(assetSearchCriteria.getObject()));
+				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
 			}			
 		};
 	}

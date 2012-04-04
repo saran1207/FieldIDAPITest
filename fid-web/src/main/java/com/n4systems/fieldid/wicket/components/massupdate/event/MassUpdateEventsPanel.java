@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePane
 import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateOperation;
 import com.n4systems.fieldid.wicket.components.massupdate.SelectOperationPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -29,7 +29,7 @@ public class MassUpdateEventsPanel extends Panel {
             }  
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportingResultsPage(eventSearchCriteria.getObject()));
+                setResponsePage(new ReportPage(eventSearchCriteria.getObject()));
             }
         };
         add(currentPanel);
@@ -40,7 +40,7 @@ public class MassUpdateEventsPanel extends Panel {
         return new DeleteDetailsPanel("massUpdatePanel", eventSearchCriteria, previousPanel) {
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportingResultsPage((EventReportCriteria)eventSearchCriteria.getObject()));
+                setResponsePage(new ReportPage((EventReportCriteria)eventSearchCriteria.getObject()));
             }
 
             @Override
@@ -55,7 +55,7 @@ public class MassUpdateEventsPanel extends Panel {
         return new ConfirmDeletePanel("massUpdatePanel", eventSearchCriteria, previousPanel) {
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportingResultsPage((EventReportCriteria)eventSearchCriteria.getObject()));
+                setResponsePage(new ReportPage((EventReportCriteria)eventSearchCriteria.getObject()));
             }
         };
     }

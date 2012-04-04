@@ -75,7 +75,6 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, 
     }
 
     @Override
-    // XXX : WEB-2714   don't need this method anymore? but do i need to call legacyStorage...?
     protected WebPage createResultsPage(EventReportCriteria criteria, SavedReportItem savedItem) {
         HttpSession session = ((ServletWebRequest) getRequest()).getContainerRequest().getSession();
         new LegacyReportCriteriaStorage().storeCriteria(criteria, session);

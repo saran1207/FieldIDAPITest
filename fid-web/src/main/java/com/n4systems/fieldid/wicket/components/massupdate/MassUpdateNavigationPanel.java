@@ -1,14 +1,13 @@
 package com.n4systems.fieldid.wicket.components.massupdate;
 
 import com.n4systems.fieldid.wicket.components.massupdate.asset.*;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
-import com.n4systems.model.search.AssetSearchCriteria;
 
 public class MassUpdateNavigationPanel extends Panel {
 	
@@ -24,7 +23,7 @@ public class MassUpdateNavigationPanel extends Panel {
 		add(new Link("backToSearch") {
 			@Override
 			public void onClick() {
-				setResponsePage(new AssetSearchResultsPage(assetSearchCriteria.getObject()));
+				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
 			}
 		});
 		

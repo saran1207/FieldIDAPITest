@@ -4,7 +4,7 @@ import com.n4systems.fieldid.service.search.EventResolutionService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Status;
@@ -118,7 +118,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
                 EventReportCriteria criteria = copyOfCriteria();
                 populateCriteriaInto(model.getObject().getItem(), criteria);
                 populateFailedInto(criteria);
-                setResponsePage(new ReportingResultsPage(criteria));
+                setResponsePage(new ReportPage(criteria));
             }
         };
     }
@@ -130,7 +130,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
                 EventReportCriteria criteria = copyOfCriteria();
                 populateCriteriaInto(model.getObject().getItem(), criteria);
                 populateOutstandingInto(criteria);
-                setResponsePage(new ReportingResultsPage(criteria));
+                setResponsePage(new ReportPage(criteria));
             }
         };
     }
@@ -141,7 +141,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
             public void onClick() {
                 EventReportCriteria criteria = copyOfCriteria();
                 populateCriteriaInto(model.getObject().getItem(), criteria);
-                setResponsePage(new ReportingResultsPage(criteria));
+                setResponsePage(new ReportPage(criteria));
             }
         };
     }

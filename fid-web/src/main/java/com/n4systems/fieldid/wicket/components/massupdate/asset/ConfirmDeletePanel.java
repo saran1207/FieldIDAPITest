@@ -1,10 +1,15 @@
 package com.n4systems.fieldid.wicket.components.massupdate.asset;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.n4systems.ejb.MassUpdateManager;
+import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.Button;
@@ -16,15 +21,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.n4systems.ejb.MassUpdateManager;
-import com.n4systems.exceptions.UpdateFailureException;
-import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
-import com.n4systems.model.search.AssetSearchCriteria;
-import com.n4systems.model.user.User;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 	
@@ -48,7 +47,7 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 				try {
 					Long results = massUpdateManager.deleteAssets(assetIds, getCurrentUser());
 					assetSearchCriteria.getObject().getSelection().clear();
-					setResponsePage(new AssetSearchResultsPage(assetSearchCriteria.getObject()));
+					setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
 					info(new FIDLabelModel("message.asset_massdelete_successful", results.toString()).getObject());
 				} catch (UpdateFailureException e) {
 					e.printStackTrace();
