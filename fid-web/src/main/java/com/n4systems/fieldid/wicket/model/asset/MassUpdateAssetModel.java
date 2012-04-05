@@ -13,7 +13,7 @@ public class MassUpdateAssetModel implements Serializable{
 	
 	private Map<String,Boolean> select;
 	
-	public MassUpdateAssetModel(Long tenantId) {
+	public MassUpdateAssetModel() {
 		asset = new Asset();
 		asset.setIdentified(null);
 		select = new HashMap<String,Boolean>();

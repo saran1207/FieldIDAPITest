@@ -1,11 +1,29 @@
-package com.n4systems.fieldid.wicket.components.massupdate.asset;
+package com.n4systems.fieldid.wicket.components.massupdate.event;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.Comment;
+import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.IEventBehavior;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.location.LocationPicker;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
+import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.StatusChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
+import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
+import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.EventBook;
+import com.n4systems.model.Status;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
@@ -15,7 +33,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -23,37 +40,20 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.Comment;
-import com.n4systems.fieldid.wicket.components.DateTimePicker;
-import com.n4systems.fieldid.wicket.components.IEventBehavior;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.location.LocationPicker;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.renderer.PublishedStateChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
-import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
-import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.search.AssetSearchCriteria;
-import com.n4systems.model.user.User;
+import java.util.Arrays;
+import java.util.Date;
 
 public class EditDetailsPanel extends AbstractMassUpdatePanel {
 	
-	public EditDetailsPanel(String id, IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
-		super(id, assetSearchCriteria);
+	public EditDetailsPanel(String id, IModel<EventReportCriteria> eventSearchCriteria, AbstractMassUpdatePanel previousPanel) {
+		super(id, eventSearchCriteria);
 		this.previousPanel = previousPanel;
 						
-		add(new Label("editDetailsMessage", new FIDLabelModel("message.mass_edit_details", 
-						assetSearchCriteria.getObject().getSelection().getNumSelectedIds())));
-		
-		MassUpdateAssetForm form;
-		add(form = new MassUpdateAssetForm("form", new MassUpdateAssetModel()) {
+		add(new Label("editDetailsMessage", new FIDLabelModel("message.mass_edit_details",
+                eventSearchCriteria.getObject().getSelection().getNumSelectedIds())));
+
+        MassUpdateEventForm form;
+		add(form = new MassUpdateEventForm("form", new MassUpdateAssetModel()) {
 			@Override
 			protected void onSubmit() {
 				
@@ -109,9 +109,9 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 	protected void onNext(MassUpdateAssetModel massUpdateAssetModel) {};
 
 	@SuppressWarnings("serial")
-	class MassUpdateAssetForm extends Form<MassUpdateAssetModel> {
+	class MassUpdateEventForm extends Form<MassUpdateAssetModel> {
 
-		public MassUpdateAssetForm(String id, MassUpdateAssetModel massUpdateAssetModel) {
+		public MassUpdateEventForm(String id, MassUpdateAssetModel massUpdateAssetModel) {
 			super(id, new CompoundPropertyModel<MassUpdateAssetModel>(massUpdateAssetModel));
 
 			CheckBox assignedUserCheck = new CheckBox("assignedUserCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[assignedUser]"));
@@ -138,28 +138,6 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			};
 			add(ownerCheck);
 			add(ownerPicker);
-			
-			CheckBox assetStatusCheck = new CheckBox("assetStatusCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[assetStatus]"));
-			FormComponent<AssetStatus> assetStatus = new DropDownChoice<AssetStatus>("assetStatus", new PropertyModel<AssetStatus>(massUpdateAssetModel, "asset.assetStatus"), 
-					new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true);
-			assetStatus.add(createCheckOnChangeEvent(assetStatusCheck));
-			add(assetStatusCheck);
-			add(assetStatus);
-			
-			CheckBox purchaseOrderCheck = new CheckBox("purchaseOrderCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[purchaseOrder]"));
-			TextField<String> purchaseOrder = new TextField<String>("purchaseOrder", new PropertyModel<String>(massUpdateAssetModel, "asset.purchaseOrder"));
-			purchaseOrder.add(createCheckOnChangeEvent(purchaseOrderCheck));
-			add(purchaseOrderCheck);
-			add(purchaseOrder);
-			
-			CheckBox nonIntegrationOrderNumberCheck = new CheckBox("nonIntegrationOrderNumberCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[nonIntegrationOrderNumber]"));
-			TextField<String> nonIntergrationOrderNumber = new TextField<String>("nonIntergrationOrderNumber", new PropertyModel<String>(massUpdateAssetModel, "asset.nonIntergrationOrderNumber"));
-			nonIntergrationOrderNumber.add(createCheckOnChangeEvent(nonIntegrationOrderNumberCheck));
-			WebMarkupContainer nonIntergrationOrderNumberContainer = new WebMarkupContainer("nonIntergrationOrderNumberContainer");
-			nonIntergrationOrderNumberContainer.setVisible(!FieldIDSession.get().getSecurityGuard().isIntegrationEnabled());
-			nonIntergrationOrderNumberContainer.add(nonIntegrationOrderNumberCheck);
-			nonIntergrationOrderNumberContainer.add(nonIntergrationOrderNumber);
-			add(nonIntergrationOrderNumberContainer);
 
 			final CheckBox locationCheck = new CheckBox("locationCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[location]"));
 			locationCheck.setOutputMarkupId(true);
@@ -173,36 +151,57 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 					target.add(locationCheck);
 				}
 			}.withRelativePosition();
-			location.getFreeformLocationField().add(createCheckOnChangeEvent(locationCheck));
-			
+			location.getFreeformLocationField().add(createCheckOnChangeEvent(locationCheck));			
 			add(locationCheck);
 			add(location);
-			
-			CheckBox identifiedCheck = new CheckBox("identifiedCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[identified]"));
-			DateTimePicker identified = new DateTimePicker("identified", new PropertyModel<Date>(massUpdateAssetModel, "asset.identified"));
-			identified.getDateTextField().add(createCheckOnChangeEvent(identifiedCheck));			
-			add(identifiedCheck);
-			add(identified);
+            
+            final CheckBox performedByCheck = new CheckBox("performedByCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[performedBy]"));
+            performedByCheck.setOutputMarkupId(true);
+            FormComponent<User> performedBy = new DropDownChoice<User>("performedBy", new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true);
+            performedBy.add(createCheckOnChangeEvent(performedByCheck));
+            add(performedByCheck);
+            add(performedBy);
 
-			List<PublishedState> publishedStates = Arrays.asList(PublishedState.values());
-			CheckBox publishedCheck = new CheckBox("publishedCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[published]"));
-			FormComponent<PublishedState> published = new DropDownChoice<PublishedState>("published", new PropertyModel<PublishedState>(massUpdateAssetModel, "publishedState"),
-					publishedStates, new PublishedStateChoiceRenderer());
-			published.add(createCheckOnChangeEvent(publishedCheck));
-			add(publishedCheck);
-			add(published);
-			
+            CheckBox datePerformedCheck = new CheckBox("datePerformedCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[datePerformed]"));
+            DateTimePicker datePerformed = new DateTimePicker("datePerformed", new PropertyModel<Date>(massUpdateAssetModel, "event.datePerformed"));
+            datePerformed.getDateTextField().add(createCheckOnChangeEvent(datePerformedCheck));
+            add(datePerformedCheck);
+            add(datePerformed);
+
+			final CheckBox eventBookCheck = new CheckBox("eventBookCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[eventbook]"));
+            eventBookCheck.setOutputMarkupId(true);
+            FormComponent<EventBook> eventBooks = new DropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true);
+            eventBooks.add(createCheckOnChangeEvent(eventBookCheck));
+            add(eventBookCheck);
+            add(eventBooks);
+
+            final CheckBox resultCheck = new CheckBox("resultCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[result]"));
+            resultCheck.setOutputMarkupId(true);
+            FormComponent<Status> results = new DropDownChoice<Status>("result", Arrays.asList(Status.values()), new StatusChoiceRenderer()).setNullValid(true);
+            results.add(createCheckOnChangeEvent(resultCheck));
+            add(resultCheck);
+            add(results);
+
 			final CheckBox commentCheck = new CheckBox("commentCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[comments]"));
 			commentCheck.setOutputMarkupId(true);
-			Comment comment = new Comment("comment", new PropertyModel<String>(massUpdateAssetModel,"asset.comments"));
+			Comment comment = new Comment("comment", new PropertyModel<String>(massUpdateAssetModel,"event.comments"));
 			comment.addChangeBehavior(new IEventBehavior() {
 				@Override public void onEvent(AjaxRequestTarget target) {
 					updateCheckbox(commentCheck, target);
 				} 				
 			});
 			add(commentCheck);
-			add(comment);			
+			add(comment);
+
+            CheckBox assetStatusCheck = new CheckBox("assetStatusCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[assetStatus]"));
+            FormComponent<AssetStatus> assetStatus = new DropDownChoice<AssetStatus>("assetStatus", new PropertyModel<AssetStatus>(massUpdateAssetModel, "event.assetStatus"),
+                    new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true);
+            assetStatus.add(createCheckOnChangeEvent(assetStatusCheck));
+            add(assetStatusCheck);
+            add(assetStatus);
+
 		}
+
 		
 		protected void clearAllCheckboxes() {
 			visitChildren(CheckBox.class, new IVisitor<CheckBox,Void>() {

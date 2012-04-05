@@ -1,0 +1,92 @@
+<wicket:panel>
+
+	<div class="feedback" wicket:id="feedbackPanel"></div>
+
+	<h1><wicket:message key="label.mass_update_step3"/></h1>
+	<div class="stepDetails">
+		<label><span wicket:id="editDetailsMessage"></span></label>
+	</div>
+	
+	<form class="editForm" wicket:id="form">
+
+		<div wicket:id="assignedUserContainer" class="infoSet">
+			<input type="checkbox" wicket:id="assignedUserCheck" />
+	        <label for="massEventUpdate.assignedUser"><wicket:message key="label.assignedto"/></label>
+	        <span class="fieldHolder">
+	            <select wicket:id="assignedTo"></select>
+	        </span>
+	    </div>
+
+	    <div class="infoSet">
+	    	<input type="checkbox" wicket:id="ownerCheck" />
+	        <label for="massEventUpdate.owner"><wicket:message key="label.owner"/></label>
+			<span class="fieldHolder">
+	        	<div wicket:id="owner"></div>
+	        </span>
+	    </div>
+	    
+		<div class="infoSet">
+	    	<input type="checkbox" wicket:id="locationCheck" />
+	        <label for="massEventUpdate.location"><wicket:message key="label.location"/></label>
+        	<div wicket:id="location"></div>
+	    </div>
+
+        <div class="infoSet">
+            <input type="checkbox" wicket:id="preformedByCheck" />
+            <label for="massEventUpdate.performedBy"><wicket:message key="label.performed_by"/></label>
+        	 <span class="fieldHolder">
+             	<select wicket:id="performedBy"></select>
+             </span>
+        </div>
+	    
+	   	<div class="infoSet">
+	    	<input type="checkbox" wicket:id="datePerformedCheck" />
+	        <label for="massEventUpdate.datePerformed"><wicket:message key="label.date_performed"/></label>
+            <div wicket:id="datePerformed"></div>
+	    </div>
+	    
+	    <div class="infoSet">
+	    	<input type="checkbox" wicket:id="eventBookCheck" />
+	        <label for="massEventUpdate.eventBook"><wicket:message key="label.eventbook"/></label>
+	        <span class="fieldHolder">
+	            <select type="text" wicket:id="eventBook"></select>
+	        </span>
+	    </div>
+     
+	    <div class="infoSet">
+	    	<input type="checkbox" wicket:id="resultCheck" />
+	        <label for="massEventUpdate.result"><wicket:message key="label.result"/></label>
+	        <span class="fieldHolder">
+	            <select wicket:id="result"></select>
+	        </span>
+	    </div>
+	    
+     	<div class="infoSet">
+	    	<input type="checkbox" wicket:id="commentCheck" />     	
+     		<span wicket:id="comment"/>
+	    </div>
+	    
+     	<div class="infoSet">
+	    	<input type="checkbox" wicket:id="assetStatusCheck" />
+	        <label for="massEventUpdate.assetStatus"><wicket:message key="label.assetstatus"/></label>
+	        <span class="fieldHolder">
+	            <select wicket:id="assetStatus"></select>
+	        </span>
+	    </div>
+
+        <div class="infoSet">
+            <input type="checkbox" wicket:id="printableCheck" />
+            <label for="massEventUpdate.printable"><wicket:message key="label.printable"/></label>
+	        <span class="fieldHolder">
+	            <input type="checkbox" wicket:id="printable"></input>
+	        </span>
+        </div>
+
+		<div class="formActions">
+			<input type="submit" wicket:message="value:label.pagenavigation.next" />
+			<wicket:message key="label.or"/>    
+			<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+		</div>    
+    </form>
+
+</wicket:panel>
