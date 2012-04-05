@@ -9,11 +9,9 @@ var fieldIdWidePage = (function() {
     var lastShownPanel;
 
 	var init = function(showLeft) {
-		addMenuHandlers();
-        addControllerHandler();
 		initLeftPanel(showLeft);
 	};
-	
+
 	// show either filters or columns panel.  need to do this to initialize state.
     //  after this, can just hide/show these via top level styling (showLeftPanel,hideLeftPanel)
 	var showConfig = function(showFilters) {
@@ -48,33 +46,19 @@ var fieldIdWidePage = (function() {
         }
     };
 
-
-    function addMenuHandlers() {
-		$(document).delegate('.actions .menu > a', 'click', function() {
-			$(this).next('.menu-items').first().show();
-			return false;
-		});		
-		$(document).delegate('"#fieldidBody', 'click', function(e) {
-			$('.actions .menu-items').hide();
-		});
-	}
-
-    /* controller is the vertical bar at left of screen that shows/hides left panel */
-    function addControllerHandler() {
-        $('#left-panel-controller').click(function() { toggleLeftMenu() });
-    }
-
-    function toggleLeftMenu() {
+    var toggleLeftPanel = function() {
         if ($('#left-panel').is(':visible')) {
             hideLeftPanel();
         } else {
             showLeftPanel();
         }
-    }
+    };
 
-		
+
+
 	return { 
 		init : init,
+        toggleLeftPanel : toggleLeftPanel,
     	showConfig : showConfig
 	};
 	

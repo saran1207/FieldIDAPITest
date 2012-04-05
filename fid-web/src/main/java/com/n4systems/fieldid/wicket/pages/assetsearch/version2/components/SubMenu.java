@@ -110,6 +110,8 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        response.renderJavaScriptReference("javascript/subMenu.js");
+        response.renderOnLoadJavaScript("subMenu.init();");
         if (!lightBoxLinks.isEmpty()) {
             response.renderOnLoadJavaScript("jQuery('."+COLORBOX_CLASS+"').colorbox({ ajax:true });");
         }
