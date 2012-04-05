@@ -4,8 +4,10 @@ import static com.google.common.base.Preconditions.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.util.DateHelper;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,14 +101,13 @@ public class EventService extends FieldIdPersistenceService {
     
     @Transactional(readOnly = true)	
 	public List<UpcomingScheduledEventsRecord> getUpcomingScheduledEvents(Integer period, BaseOrg owner) {
-		
+
 		QueryBuilder<UpcomingScheduledEventsRecord> builder = new QueryBuilder<UpcomingScheduledEventsRecord>(EventSchedule.class, securityContext.getUserSecurityFilter());
 		
 		builder.setSelectArgument(new NewObjectSelect(UpcomingScheduledEventsRecord.class, "nextDate", "COUNT(*)"));
 		
 		Date today = new PlainDate();
-		Date endDate = DateUtils.addDays(today, period);
-		
+		Date endDate = DateUtils.addDays(today, period);		
 		
 		builder.addWhere(whereFromTo(today, endDate, "nextDate"));
 		builder.addSimpleWhere("status", ScheduleStatus.SCHEDULED);
@@ -117,35 +118,46 @@ public class EventService extends FieldIdPersistenceService {
 	}
 
     private WhereClause<?> whereFromTo(Date fromDate, Date toDate, String property) {
-    	if (fromDate!=null && toDate!=null) { 
+        return whereFromTo(fromDate, toDate, property, null);
+    }
+    
+    private WhereClause<?> whereFromTo(Date fromDate, Date toDate, String property, TimeZone timeZone) {
+        if (timeZone!=null) { 
+            fromDate = DateHelper.convertToUserTimeZone(fromDate, timeZone);
+            toDate = DateHelper.convertToUserTimeZone(toDate, timeZone);
+        }
+        
+    	if (fromDate!=null && toDate!=null) {
     		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
     		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "fromDate", property, fromDate, null, ChainOp.AND));
     		filterGroup.addClause(WhereClauseFactory.create(Comparator.LE, "toDate", property, toDate, null, ChainOp.AND));
     		return filterGroup;
-    	}
-    	if (fromDate!=null) { 
+    	} else if (fromDate!=null) {
     		return new WhereParameter<Date>(Comparator.GE, property, fromDate);
-    	}
-    	if (toDate!=null) { 
+    	} else if (toDate!=null) {
     		return new WhereParameter<Date>(Comparator.LT, property, toDate);
     	}
         // CAVEAT : we don't want results to include values with null dates. they are ignored.  (this makes sense for EventSchedules
-        //   because null dates are used when representing AdHoc events.
+        //   because null dates are used when representing AdHoc events).
         return new WhereParameter<Date>(Comparator.NOTNULL, property);
 	}
         
 	@Transactional(readOnly = true)
 	public List<CompletedEventsReportRecord> getCompletedEvents(Date fromDate, Date toDate, BaseOrg org, Status status, ChartGranularity granularity) {
-		
-		QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
+        // UGGH : hack.   this is a small, focused approach to fixing yet another time zone bug.
+        // this should be reverted when a complete, system wide approach to handling time zones is implemented.
+        // see WEB-2836
+        TimeZone timeZone = getCurrentUser().getTimeZone();
+
+        QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
 		NewObjectSelect select = new NewObjectSelect(CompletedEventsReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("date", granularity));
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("date", granularity, timeZone));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		builder.addWhere(whereFromTo(fromDate, toDate, "date"));
+		builder.addWhere(whereFromTo(fromDate, toDate, "date", timeZone));
 		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"date"));		
 		builder.applyFilter(new OwnerAndDownFilter(org));
 		if (status!=null) { 
@@ -204,7 +216,7 @@ public class EventService extends FieldIdPersistenceService {
 		
 		NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("nextDate", granularity));
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("nextDate", granularity, null));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		

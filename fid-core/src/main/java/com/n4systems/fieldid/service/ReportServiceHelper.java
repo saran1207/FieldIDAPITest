@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.persistence.GroupByClause;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TimeZone;
 
 public class ReportServiceHelper {
 
@@ -40,11 +41,22 @@ public class ReportServiceHelper {
 		return result;
 	}
 
-	public List<String> getSelectConstructorArgsForGranularity(String param, ChartGranularity granularity) {
-		return Lists.newArrayList(	"'"+granularity.toString()+"'", 
-									"YEAR("+param+")", 
-									"MONTH("+param+")",
-									"DAYOFMONTH("+param+")" );
+	public List<String> getSelectConstructorArgsForGranularity(String param, ChartGranularity granularity, TimeZone timeZone) {
+        // UGGH : hack.   this is a small, focused approach to fixing yet another time zone bug.
+        // this should be reverted when a complete, system wide approach to handling time zones is implemented.
+        // see WEB-2836
+        String p = param;
+        if (timeZone!=null) {
+            // CAVEAT : this is quite likely DB specific and semi-brittle.
+            String tz1 = "+00:00";
+            int offset = timeZone.getRawOffset();
+            String tz2  = String.format("%s%02d:%02d", offset >= 0 ? "+" : "-", Math.abs(offset) / 3600000, (Math.abs(offset) / 60000) % 60);
+            p = String.format("CONVERT_TZ(%s,'%s','%s')", p, tz1, tz2);
+        }
+		return Lists.newArrayList(	"'"+granularity.toString()+"'",
+									"YEAR("+p+")",
+									"MONTH("+p+")",
+									"DAYOFMONTH("+p+")");
 	}
-	
+
 }

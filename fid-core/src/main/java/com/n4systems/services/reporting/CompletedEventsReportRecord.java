@@ -2,7 +2,6 @@ package com.n4systems.services.reporting;
 
 import com.n4systems.util.chart.DateChartable;
 
-@SuppressWarnings("serial")
 public class CompletedEventsReportRecord extends DateChartable {
 
 	public CompletedEventsReportRecord(Long value, String granularity, Integer year, Integer month, Integer day) {
