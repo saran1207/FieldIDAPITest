@@ -64,8 +64,6 @@
 #left-panel {
 	background:white;
 	left:13px;
-	overflow-x:visible;
-	overflow-y:auto;
 	width:345px;
 	top:169px;
 	bottom:50px;
@@ -89,6 +87,7 @@
     left:0;
     margin-left:14px;
     overflow-y:auto;
+    overflow-x:visible;
     width:345px;
     top:209px;
     bottom:50px;
