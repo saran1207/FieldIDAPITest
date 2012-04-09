@@ -9,11 +9,15 @@ var fieldIdWidePage = (function() {
     var lastShownPanel;
 
 	var init = function(showLeft) {
-		initLeftPanel(showLeft);
+        // show either filters or columns panel.  need to do this to initialize state.
+        //  after this, can just hide/show these via top level styling (showLeftPanel,hideLeftPanel)
+        if (showLeft) {
+            showConfig(true);
+        } else {
+            hideLeftPanel();
+        }
 	};
 
-	// show either filters or columns panel.  need to do this to initialize state.
-    //  after this, can just hide/show these via top level styling (showLeftPanel,hideLeftPanel)
 	var showConfig = function(showFilters) {
 		if (showFilters) {
             $('#left-panel').removeClass('columns').addClass('filters');
@@ -24,7 +28,7 @@ var fieldIdWidePage = (function() {
 	};
 
 	function showLeftPanel() {
-        $('#page').removeClass('wide').addClass('narrow');
+        $('#page').removeClass('without-left-panel').addClass('with-left-panel');
         // restore state of toggle button.
         if (lastShownPanel) {
             lastShownPanel.addClass('mattButtonPressed');
@@ -32,19 +36,11 @@ var fieldIdWidePage = (function() {
     };
 
     function hideLeftPanel() {
-        $('#page').removeClass('narrow').addClass('wide');
+        $('#page').removeClass('with-left-panel').addClass('without-left-panel');
         // remove the true state from toggle buttons.
         lastShownPanel = $('.sub-menu .config .mattButtonPressed');
         lastShownPanel.removeClass('mattButtonPressed');
 	};
-
-    function initLeftPanel(showLeft) {
-        if (showLeft) {
-            showConfig(true);
-        } else {
-            hideLeftPanel();
-        }
-    };
 
     var toggleLeftPanel = function() {
         if ($('#left-panel').is(':visible')) {
@@ -67,7 +63,7 @@ var fieldIdWidePage = (function() {
 
 /** 
  * CAVEAT : 
- *  deliberately overriding the existing function that positions loading panel because it is behaves differently in wide screen mode. 
+ *  deliberately overriding the existing function that positions loading panel because it is behaves differently in wide screen mode.
  *  remove this when merging of asset search pages is complete.  at that point we will be more free to refactor loading panel to have custom
  *   javascript emitted.
  * note : you may want to adjust the "top" value of the modalPanel if you don't want the translucent overlay to cover the entire page (skip the header).  

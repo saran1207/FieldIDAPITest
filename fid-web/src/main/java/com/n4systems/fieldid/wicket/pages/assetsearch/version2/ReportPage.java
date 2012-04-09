@@ -36,10 +36,6 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
         super(new PageParameters(), eventReportCriteria, new SavedReportItem(eventReportCriteria, savedItem));
     }
 
-    public ReportPage(SavedReportItem savedReportItem) {
-        super(new PageParameters(), savedReportItem.getSearchCriteria(), savedReportItem);
-    }
-
     public ReportPage(EventReportCriteria eventReportCriteria) {
         this(eventReportCriteria, null);
     }

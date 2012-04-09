@@ -1,4 +1,5 @@
-/* CSS for fluid, widge pages that take up 100% width.   eg. search results pages 
+/*
+ * CSS for fluid, widge pages that take up 100% width.   eg. search results pages
  * because we are currently trying to support two types of pages at once (legacy=fixed size & new = fluid, 100%) this CSS is 
  * a mish-mash of hacks to make old,existing html look like as desired.  
  * in order to achieve the look of the new page while maintaining the legacy Html/Java/CSS many css classes had to be overwritten.
@@ -7,7 +8,9 @@
  * in general, anything done in this file should be refactored out into common style when the transition to the new page is complete.
  *
  * a lot of this stuff can eventually be shared (like menu styling & buttons etc.. but as of now they are only used in this page.
- * 
+ *
+ * see fieldIdWide.js for related javascript.
+ *
  */
  
  html, body, #page {
@@ -44,7 +47,7 @@
     margin-left:24px;
 }
 
-#page.narrow .centre {
+#page.with-left-panel .centre {
     margin-left:375px;
 }
 
@@ -75,11 +78,11 @@
 	float:left;
 }
 
-#page.narrow #left-panel {
+#page.with-left-panel #left-panel {
     display:block;
 }
 
-#page.wide #left-panel {
+#page.without-left-panel #left-panel {
     display:none;
 }
 
@@ -131,10 +134,10 @@
 #left-panel.columns .content .filters { display:none;}
 #left-panel.columns .filters-title { display:none;}
 
-#page.narrow #left-panel-controller .close {display:block; }
-#page.narrow #left-panel-controller .open {display:none;}
-#page.wide #left-panel-controller .close {display:none;}
-#page.wide #left-panel-controller .open {display:block;}
+#page.with-left-panel #left-panel-controller .close {display:block; }
+#page.with-left-panel #left-panel-controller .open {display:none;}
+#page.without-left-panel #left-panel-controller .close {display:none;}
+#page.without-left-panel #left-panel-controller .open {display:block;}
 
 /**
  * SEARCH-CONFIG
@@ -404,12 +407,11 @@
     float:right;
 }
 
-#page.narrow .bottom-bar {
+#page.with-left-panel .bottom-bar {
+    left:375px;
     padding-left:2px;
     display:block;
-    left:375px;
 }
-
 
 .paged-table .bottom-bar {
 	display:block;
