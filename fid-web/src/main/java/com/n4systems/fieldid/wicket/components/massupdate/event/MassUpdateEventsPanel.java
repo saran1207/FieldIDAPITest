@@ -23,7 +23,7 @@ public class MassUpdateEventsPanel extends Panel {
                 if(operation == MassUpdateOperation.DELETE) {
                     this.replaceWith(currentPanel = getDeleteDetailsPanel(eventSearchCriteria, currentPanel));
                 } else {
-                    //this.replaceWith(currentPanel = getEditDetailsPanel(eventSearchCriteria, currentPanel));
+                    this.replaceWith(currentPanel = getEditDetailsPanel(eventSearchCriteria, currentPanel));
                 }
                 //updateNavigationPanel(assetSearchCriteria, currentPanel);
             }  
@@ -51,6 +51,14 @@ public class MassUpdateEventsPanel extends Panel {
         };
     }
 
+    private EditDetailsPanel getEditDetailsPanel(final IModel<EventReportCriteria> eventSearchCriteria, AbstractMassUpdatePanel previousPanel) {
+        return new EditDetailsPanel("massUpdatePanel", eventSearchCriteria, previousPanel) {
+            @Override
+            protected void onCancel() {
+                setResponsePage(new ReportPage((EventReportCriteria)eventSearchCriteria.getObject()));
+            }
+        };
+    }
 
 
     private ConfirmDeletePanel getConfirmDeletePanel(final IModel<EventReportCriteria> eventSearchCriteria, AbstractMassUpdatePanel previousPanel) {

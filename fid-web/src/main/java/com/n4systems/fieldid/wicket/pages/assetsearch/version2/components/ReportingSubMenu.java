@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionLink;
 import com.n4systems.fieldid.wicket.components.reporting.results.ScheduleMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
+import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.print.ExportToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
@@ -36,6 +37,14 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         actions.add(updateLink = new ReportingMassActionLink("massUpdateLink", "/massUpdateEvents.action?searchId=%s", model));
         actions.add(updateSchedulesLink = new ScheduleMassActionLink("massScheduleUpdateLink", "/massUpdateEventSchedule.action?searchId=%s", model));
         actions.add(assignJobLink = new ReportingMassActionLink("assignJobLink", "/selectJobToAssignEventsTo.action?searchId=%s&reportType=OBSERVATION_CERT", model));
+
+        actions.add(new Link("massUpdateLink2") {
+            @Override
+            public void onClick() {
+                setResponsePage(new MassUpdateEventsPage(model));
+            }
+        });
+
         add(actions);
 
         print = new WebMarkupContainer("print");
