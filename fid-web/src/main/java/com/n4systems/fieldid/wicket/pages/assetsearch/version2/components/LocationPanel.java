@@ -15,7 +15,6 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationByIdLoader;
 
-@SuppressWarnings("serial")
 public class LocationPanel extends Panel {
 
     private IModel<Location> locationModel;
@@ -83,7 +82,4 @@ public class LocationPanel extends Panel {
     
     protected void onLocationPicked(AjaxRequestTarget target) {}
     
-    public TextField<String> getFreeformLocationField() {
-    	return freeformLocationField;
-    }
 }

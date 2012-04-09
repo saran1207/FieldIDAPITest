@@ -17,7 +17,7 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationByIdLoader;
 
-@SuppressWarnings("serial")
+
 public class LocationPicker extends Panel {
 
     private IModel<Location> locationModel;

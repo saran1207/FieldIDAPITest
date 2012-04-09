@@ -2,8 +2,12 @@
 
     <span class="fieldHolder">
 
+        <div wicket:id="predefinedDisabledContainer">
+            <input wicket:id="freeformLocation" type="text">
+        </div>
+
         <div wicket:id="predefinedEnabledContainer">
-            <input wicket:id="locationNameInput" type="text" readonly="readonly">
+            <input wicket:id="locationNameInput" type="text">
 
             <br/><a wicket:id="chooseLink"><wicket:message key="label.choose"/></a>
         </div>

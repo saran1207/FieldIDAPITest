@@ -5,6 +5,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.MaskType;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -38,11 +39,17 @@ public class ModalLocationPicker extends Panel {
         		modal.close(target);
         	}
         });
-        
+
+        boolean advancedLocationEnabled = FieldIDSession.get().getSecurityGuard().isAdvancedLocationEnabled();
+
+        WebMarkupContainer predefinedDisabledContainer = new WebMarkupContainer("predefinedDisabledContainer");
+        predefinedDisabledContainer.add(new TextField<String>("freeformLocation", new PropertyModel<String>(locationModel, "freeformLocation")));
+        predefinedDisabledContainer.setVisible(!advancedLocationEnabled);
+        add(predefinedDisabledContainer);
 
         WebMarkupContainer predefinedEnabledContainer = new WebMarkupContainer("predefinedEnabledContainer");
         locationText = addBaseControls(predefinedEnabledContainer, locationModel);
-        predefinedEnabledContainer.setVisible(FieldIDSession.get().getSecurityGuard().isAdvancedLocationEnabled());
+        predefinedEnabledContainer.setVisible(advancedLocationEnabled);
         add(predefinedEnabledContainer);
     }
 
