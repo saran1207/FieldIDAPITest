@@ -40,6 +40,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.GpsLocation;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
@@ -132,20 +133,23 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public void saveAsset(ApiAsset apiAsset) {		
-		Asset asset = converApiAsset(apiAsset);
-		
+	public void saveAsset(ApiAsset apiAsset) {
+		Asset asset;
+		Asset existingAsset = assetService.findByMobileId(apiAsset.getSid());
 		AssetSaveService assetSaveService = new AssetSaveService(WsServiceLocator.getLegacyAssetManager(securityContext.getTenantSecurityFilter().getTenantId()), getCurrentUser());
-		assetSaveService.setUploadedAttachments(apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset));
-		assetSaveService.setAsset(asset);		
 		
-		if(apiAsset.getImage() != null) {
-			asset.setImageName("asset.jpg");
+		// Save Asset.
+		if(existingAsset == null) {
+			logger.info("Creating Asset " + apiAsset.getIdentifier());
+			asset = createAsset(assetSaveService, apiAsset);
+		} else {
+			logger.info("Updating Asset " + apiAsset.getIdentifier());
+			asset = updateAsset(assetSaveService, apiAsset, existingAsset);
 		}
 		
-		asset = assetSaveService.create();
-		
+		// Save Asset Image.
 		if(apiAsset.getImage() != null) {
+			logger.info("Writing Asset Image " + apiAsset.getIdentifier());
 			try {
 				File assetImagePath = PathHandler.getAssetImageFile(asset);
 				FileUtils.writeByteArrayToFile(assetImagePath, apiAsset.getImage());
@@ -154,7 +158,40 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			}
 		}
 
-		logger.info("Created Asset " + asset.getIdentifier());
+		logger.info("Saved Asset " + asset.getIdentifier());
+	}
+	
+	private Asset createAsset(AssetSaveService assetSaveService, ApiAsset apiAsset) {
+		Asset asset = new Asset();
+		converApiAsset(apiAsset, asset);
+		assetSaveService.setUploadedAttachments(apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset));
+		assetSaveService.setAsset(asset);
+		
+		if(apiAsset.getImage() != null) {
+			asset.setImageName("asset.jpg");
+		}
+		
+		return assetSaveService.create();
+	}
+	
+	private Asset updateAsset(AssetSaveService assetSaveService, ApiAsset apiAsset, Asset asset) {
+		converApiAsset(apiAsset, asset);
+		
+		//if(apiAsset.getAttachments().size() > 0)
+		//	assetSaveService.setUploadedAttachments(apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset));
+		
+		//THE LINE BELOW RESULTS IN DATABASE LOCK AND AN EXCEPTION THROUGH AFTER FEW MINUTES.
+		//List<AssetAttachment> attachments = apiAttachmentResource.findAllAssetAttachments(asset.getMobileGUID());
+		//if(attachments.size() > 0)
+		//	assetSaveService.setExistingAttachments(attachments);
+		
+		assetSaveService.setAsset(asset);
+		
+		if(apiAsset.getImage() != null) {
+			asset.setImageName("asset.jpg");
+		}
+		
+		return assetSaveService.update();
 	}
 
 	@Override
@@ -213,8 +250,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		return apiAsset;
 	}
 	
-	private Asset converApiAsset(ApiAsset apiAsset) {
-		Asset asset = new Asset();
+	private void converApiAsset(ApiAsset apiAsset, Asset asset) {
 		asset.setTenant(getCurrentTenant());
 		asset.setMobileGUID(apiAsset.getSid());
 		asset.setType(persistenceService.find(AssetType.class, apiAsset.getTypeId()));
@@ -259,9 +295,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			asset.setAdvancedLocation(location);
 		}
 		
-		asset.setInfoOptions(convertAttributeValues(apiAsset.getAttributeValues()));
-		
-		return asset;
+		asset.setInfoOptions(convertAttributeValues(apiAsset.getAttributeValues(), asset));
 	}
 	
 	private List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
@@ -274,11 +308,11 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		return apiAttributeValues;
 	}
 	
-	private Set<InfoOptionBean> convertAttributeValues(List<ApiAttributeValue> apiAttributeValues) {
+	private Set<InfoOptionBean> convertAttributeValues(List<ApiAttributeValue> apiAttributeValues, Asset asset) {
 		Set<InfoOptionBean> infoOptions = new TreeSet<InfoOptionBean>();
 		
 		for(ApiAttributeValue apiAttributeValue : apiAttributeValues) {
-			infoOptions.add(convertApiAttributeValue(apiAttributeValue));
+			infoOptions.add(convertApiAttributeValue(apiAttributeValue, asset));
 		}
 		
 		return infoOptions;
@@ -298,32 +332,57 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		return attribValue;
 	}
 	
-	private InfoOptionBean convertApiAttributeValue(ApiAttributeValue apiAttributeValue) {
+	private InfoOptionBean convertApiAttributeValue(ApiAttributeValue apiAttributeValue, Asset asset) {
 		InfoFieldBean infoField = persistenceService.findNonSecure(InfoFieldBean.class, apiAttributeValue.getAttributeId());
 		
 		Object value = apiAttributeValue.getValue();
 		
-		InfoOptionBean infoOptionBean = null;
-		if (value instanceof Date) {
-			infoOptionBean = new InfoOptionBean();
-			infoOptionBean.setInfoField(infoField);
-			infoOptionBean.setName(Long.toString(((Date) value).getTime()));
+		// Get the infoOption from the existing assetInfoOptions if we have a match.
+		InfoOptionBean infoOptionBean = findInfoOption(apiAttributeValue.getAttributeId(), asset);
+		
+		if(infoOptionBean != null) {
+			if(value instanceof Date) {
+				infoOptionBean.setName(Long.toString(((Date) value).getTime()));
+			} else {
+				infoOptionBean.setName(value.toString());
+			}			
 		} else {
-			Set<InfoOptionBean> staticOptions = infoField.getUnfilteredInfoOptions();
-			for (InfoOptionBean staticOption: staticOptions) {
-				if (staticOption.getName().equals(value)) {
-					infoOptionBean = staticOption;
-					break;
+			if (value instanceof Date) {
+				if(infoOptionBean == null) {
+					infoOptionBean = new InfoOptionBean();
+					infoOptionBean.setInfoField(infoField);
+				}
+				
+				infoOptionBean.setName(Long.toString(((Date) value).getTime()));
+			} else {
+				Set<InfoOptionBean> staticOptions = infoField.getUnfilteredInfoOptions();
+				for (InfoOptionBean staticOption: staticOptions) {
+					if (staticOption.getName().equals(value)) {
+						infoOptionBean = staticOption;
+						break;
+					}
+				}
+				
+				if (infoOptionBean == null) {
+					infoOptionBean = new InfoOptionBean();
+					infoOptionBean.setInfoField(infoField);
+					infoOptionBean.setName(value.toString());
 				}
 			}
-			
-			if (infoOptionBean == null) {
-				infoOptionBean = new InfoOptionBean();
-				infoOptionBean.setInfoField(infoField);
-				infoOptionBean.setName(value.toString());
+		}
+		
+		return infoOptionBean;
+	}
+	
+	// For the given InfoFieldId, check if we have an InfoOption in the asset.infoOptions.
+	private InfoOptionBean findInfoOption(Long attributeId, Asset asset) {
+		for (InfoOptionBean infoOption : asset.getInfoOptions()) {
+			if(infoOption.getInfoField().getUniqueID().equals(attributeId)) {
+				return infoOption;
 			}
 		}
-		return infoOptionBean;
+		
+		return null;
 	}
 	
 	private byte[] loadAssetImage(Asset asset) {
@@ -338,6 +397,5 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			}
 		}
 		return image;
-	}
-	
+	}	
 }

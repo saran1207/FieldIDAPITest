@@ -54,10 +54,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	}	
 	
 	public List<ApiAssetAttachment> findAllAttachments(String assetId) {
-		QueryBuilder<AssetAttachment> builder = createUserSecurityBuilder(AssetAttachment.class);
-		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
-		
-		List<AssetAttachment> attachments = persistenceService.findAll(builder);
+		List<AssetAttachment> attachments = findAllAssetAttachments(assetId);
 		List<ApiAssetAttachment> apiAttachments = convertAllEntitiesToApiModels(attachments);
 		
 		for (ApiAssetAttachment apiAttachment : apiAttachments) {
@@ -68,6 +65,13 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		}
 		
 		return apiAttachments;
+	}
+	
+	public List<AssetAttachment> findAllAssetAttachments(String assetId) {
+		QueryBuilder<AssetAttachment> builder = createUserSecurityBuilder(AssetAttachment.class);
+		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
+		//return builder.getResultList(getEntityManager());
+		return persistenceService.findAll(builder);
 	}
 	
 	@Override
