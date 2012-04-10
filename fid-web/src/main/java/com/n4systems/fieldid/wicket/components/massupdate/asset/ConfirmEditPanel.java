@@ -67,5 +67,10 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 	private String getNonIntegrationOrderNumber() {
 		return massUpdateAssetModel.getAsset().getNonIntergrationOrderNumber();
 	}
+	
+	@Override
+	public boolean isConfirmPanel() {
+		return true;
+	}
 
 }

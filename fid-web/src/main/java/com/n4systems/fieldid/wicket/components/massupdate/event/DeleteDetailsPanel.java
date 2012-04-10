@@ -55,5 +55,10 @@ public class DeleteDetailsPanel extends AbstractMassUpdatePanel {
 	}
 
 	protected void onNext() {};
+	
+	@Override
+	public boolean isDetailsPanel() {
+		return true;
+	}
 
 }

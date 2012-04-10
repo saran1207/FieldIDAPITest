@@ -1,7 +1,11 @@
 package com.n4systems.fieldid.wicket.components.massupdate.asset;
 
-import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+
 import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateNavigationPanel;
+import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateOperation;
 import com.n4systems.fieldid.wicket.components.massupdate.SelectOperationPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -9,8 +13,6 @@ import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteria;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 
 public class MassUpdateAssetsPanel extends Panel {
 	
@@ -42,8 +44,28 @@ public class MassUpdateAssetsPanel extends Panel {
 		add(navPanel = getNavigationPanel(assetSearchCriteria, currentPanel));
 	}
 	
-	private MassUpdateNavigationPanel getNavigationPanel(IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel panel) {
-		return new MassUpdateNavigationPanel("navPanel", assetSearchCriteria, panel);
+	private MassUpdateNavigationPanel getNavigationPanel(final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel panel) {
+		return new MassUpdateNavigationPanel("navPanel", assetSearchCriteria.getObject(), panel) {
+			@Override
+			protected void onBackToSearch(SearchCriteria assetSearchCriteria) {
+				setResponsePage(new SearchPage((AssetSearchCriteria)assetSearchCriteria));
+			}
+			
+			@Override
+			protected Link createLink(String id, final SearchCriteria assetSearchCriteria, final AbstractMassUpdatePanel panel) {
+				return new Link(id) {
+					@Override
+					public void onClick() {
+						AbstractMassUpdatePanel previousPanel = panel.getPreviousPanel();
+						panel.setParent(this.getParent().getParent());
+						panel.replaceWith(previousPanel);
+						((MassUpdateAssetsPanel) this.getParent().getParent()).setCurrentPanel(previousPanel);
+						this.getParent().replaceWith(new MassUpdateNavigationPanel(this.getParent().getId(), assetSearchCriteria, previousPanel));
+					}
+				};
+			}
+			
+		};
 	}
 	
 	private void updateNavigationPanel(IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel panel) {

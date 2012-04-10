@@ -21,4 +21,12 @@ public abstract class AbstractMassUpdatePanel extends Panel {
 	
 	protected void onCancel() {}
 
+	public boolean isDetailsPanel() {
+		return false;
+	}
+
+	public boolean isConfirmPanel() {
+		return false;
+	}
+
 }

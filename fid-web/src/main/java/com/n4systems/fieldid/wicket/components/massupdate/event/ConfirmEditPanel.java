@@ -64,4 +64,9 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 		return userService.getUser( FieldIDSession.get().getSessionUser().getId());
 	}
 	
+	@Override
+	public boolean isConfirmPanel() {
+		return true;
+	}
+	
 }

@@ -86,4 +86,9 @@ public class DeleteDetailsPanel extends AbstractMassUpdatePanel {
 		}		
 		return aggregateSummary;
 	}
+	
+	@Override
+	public boolean isDetailsPanel() {
+		return true;
+	}
 }

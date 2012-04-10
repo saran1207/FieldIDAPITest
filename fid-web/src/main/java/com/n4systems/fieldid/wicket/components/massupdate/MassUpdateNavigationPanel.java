@@ -1,29 +1,29 @@
 package com.n4systems.fieldid.wicket.components.massupdate;
 
-import com.n4systems.fieldid.wicket.components.massupdate.asset.*;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
-import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-public class MassUpdateNavigationPanel extends Panel {
-	
-	private Link selectOperationLink;
-	private Link operationDetailsLink;
-	private WebMarkupContainer backToSelectOperationLabel;
-	private WebMarkupContainer backToOperationDetailsLabel;
-	private WebMarkupContainer confirmLabel;
-	
-	public MassUpdateNavigationPanel(String id, final IModel<AssetSearchCriteria> assetSearchCriteria, final AbstractMassUpdatePanel panel) {
-		super(id, assetSearchCriteria);
+import com.n4systems.fieldid.wicket.components.massupdate.asset.EditDetailsPanel;
+import com.n4systems.model.search.SearchCriteria;
 
+public class MassUpdateNavigationPanel extends Panel {
+
+	protected Link selectOperationLink;
+	protected Link operationDetailsLink;
+	protected WebMarkupContainer backToSelectOperationLabel;
+	protected WebMarkupContainer backToOperationDetailsLabel;
+	protected WebMarkupContainer confirmLabel;
+
+	public MassUpdateNavigationPanel(String id, final SearchCriteria searchCriteria, final AbstractMassUpdatePanel panel) {
+		super(id);
+		
 		add(new Link("backToSearch") {
 			@Override
 			public void onClick() {
-				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
+				onBackToSearch(searchCriteria);
 			}
 		});
 		
@@ -31,8 +31,8 @@ public class MassUpdateNavigationPanel extends Panel {
 		add(backToOperationDetailsLabel = new WebMarkupContainer("backToOperationDetailsLabel"));
 		add(confirmLabel = new WebMarkupContainer("confirmLabel"));
 		
-		if(panel instanceof EditDetailsPanel || panel instanceof DeleteDetailsPanel) {
-			add(selectOperationLink = createLink("backToSelectOperation", assetSearchCriteria, panel));
+		if(panel.isDetailsPanel()) {
+			add(selectOperationLink = createLink("backToSelectOperation", searchCriteria, panel));
 			backToSelectOperationLabel.setVisible(false);
 			add(operationDetailsLink = createBlankLink("backToOperationDetails"));
 			operationDetailsLink.setVisible(false);
@@ -42,10 +42,10 @@ public class MassUpdateNavigationPanel extends Panel {
 			}else {
 				add(new AttributeModifier("class", "navMenu navMenuShort"));
 			}
-		} else if(panel instanceof ConfirmEditPanel || panel instanceof ConfirmDeletePanel) {
-			add(selectOperationLink = createLink("backToSelectOperation", assetSearchCriteria, panel.getPreviousPanel()));
+		} else if(panel.isConfirmPanel()) {
+			add(selectOperationLink = createLink("backToSelectOperation", searchCriteria, panel.getPreviousPanel()));
 			backToSelectOperationLabel.setVisible(false);			
-			add(operationDetailsLink = createLink("backToOperationDetails", assetSearchCriteria, panel));
+			add(operationDetailsLink = createLink("backToOperationDetails", searchCriteria, panel));
 			backToOperationDetailsLabel.setVisible(false);
 			confirmLabel.add(new AttributeModifier("class", "strong"));
 			add(new AttributeModifier("class", "navMenu navMenuShort"));
@@ -58,28 +58,21 @@ public class MassUpdateNavigationPanel extends Panel {
 			add(new AttributeModifier("class", "navMenu navMenuShort"));
 		}		
 	}
-	
-	private Link createLink(String id, final IModel<AssetSearchCriteria> assetSearchCriteria, final AbstractMassUpdatePanel panel) {
-		return new Link(id) {
-			@Override
-			public void onClick() {
-				AbstractMassUpdatePanel previousPanel = panel.getPreviousPanel();
-				panel.setParent(this.getParent().getParent());
-				panel.replaceWith(previousPanel);
-				((MassUpdateAssetsPanel) this.getParent().getParent()).setCurrentPanel(previousPanel);
-				this.getParent().replaceWith(new MassUpdateNavigationPanel(this.getParent().getId(), assetSearchCriteria, previousPanel));
-			}
-		};
-	}
-	
-	private Link createBlankLink(String id) {
-		return new Link(id) {
-			@Override
-			public void onClick() {
-			}
-		};
 
-		
+	protected Link createLink(String string, SearchCriteria searchCriteria, AbstractMassUpdatePanel panel){
+		return createBlankLink("");
+	};
+	
+	protected void onBackToSearch(SearchCriteria searchCriteria) {};
+
+	protected Link createBlankLink(String id) {
+		return new Link(id) {
+			@Override
+			public void onClick() {
+			}
+		};		
 	}
+	
+	
 
 }

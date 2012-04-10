@@ -92,5 +92,10 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 	private User getCurrentUser() {
 		return userService.getUser( FieldIDSession.get().getSessionUser().getId());
 	}
+	
+	@Override
+	public boolean isConfirmPanel() {
+		return true;
+	}
 
 }

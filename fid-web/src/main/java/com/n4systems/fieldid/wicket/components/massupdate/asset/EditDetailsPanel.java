@@ -231,5 +231,10 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 		};
 		
 	}
+	
+	@Override
+	public boolean isDetailsPanel() {
+		return true;
+	}
 
 }

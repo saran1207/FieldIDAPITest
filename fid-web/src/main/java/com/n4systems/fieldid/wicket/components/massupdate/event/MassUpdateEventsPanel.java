@@ -1,21 +1,23 @@
 package com.n4systems.fieldid.wicket.components.massupdate.event;
 
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+
+import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateNavigationPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateOperation;
 import com.n4systems.fieldid.wicket.components.massupdate.SelectOperationPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
 import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.SearchCriteria;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 
 public class MassUpdateEventsPanel extends Panel {
 
     private AbstractMassUpdatePanel currentPanel;
-    //private MassUpdateNavigationPanel navPanel;
+    private MassUpdateNavigationPanel navPanel;
 
     public MassUpdateEventsPanel(String id, final IModel<EventReportCriteria> eventSearchCriteria) {
         super(id);
@@ -27,7 +29,7 @@ public class MassUpdateEventsPanel extends Panel {
                 } else {
                     this.replaceWith(currentPanel = getEditDetailsPanel(eventSearchCriteria, currentPanel));
                 }
-                //updateNavigationPanel(assetSearchCriteria, currentPanel);
+                updateNavigationPanel(eventSearchCriteria, currentPanel);
             }  
             @Override
             protected void onCancel() {
@@ -35,9 +37,39 @@ public class MassUpdateEventsPanel extends Panel {
             }
         };
         add(currentPanel);
+        
+        add(navPanel = getNavigationPanel(eventSearchCriteria, currentPanel));
     }
 
 
+	private void updateNavigationPanel(IModel<EventReportCriteria> eventSearchCriteria, AbstractMassUpdatePanel panel) {
+		navPanel.setParent(this);
+		navPanel.replaceWith(getNavigationPanel(eventSearchCriteria, panel));		
+	}
+	
+	private MassUpdateNavigationPanel getNavigationPanel(IModel<EventReportCriteria> eventSearchCriteria, AbstractMassUpdatePanel panel) {
+		return new MassUpdateNavigationPanel("navPanel", eventSearchCriteria.getObject(), panel){
+			@Override
+			protected void onBackToSearch(SearchCriteria searchCriteria) {
+				setResponsePage(new ReportPage((EventReportCriteria)searchCriteria));		
+			}
+			
+			@Override
+			protected Link createLink(String id, final SearchCriteria eventSearchCriteria, final AbstractMassUpdatePanel panel) {
+				return new Link(id) {
+					@Override
+					public void onClick() {
+						AbstractMassUpdatePanel previousPanel = panel.getPreviousPanel();
+						panel.setParent(this.getParent().getParent());
+						panel.replaceWith(previousPanel);
+						((MassUpdateEventsPanel) this.getParent().getParent()).setCurrentPanel(previousPanel);
+						this.getParent().replaceWith(new MassUpdateNavigationPanel(this.getParent().getId(), eventSearchCriteria, previousPanel));
+					}
+				};
+			}
+		};
+	}
+    
     private DeleteDetailsPanel getDeleteDetailsPanel(final IModel<EventReportCriteria> eventSearchCriteria, AbstractMassUpdatePanel previousPanel) {
         return new DeleteDetailsPanel("massUpdatePanel", eventSearchCriteria, previousPanel) {
             @Override
@@ -48,7 +80,7 @@ public class MassUpdateEventsPanel extends Panel {
             @Override
             protected void onNext() {
                 this.replaceWith(currentPanel = getConfirmDeletePanel(eventSearchCriteria, currentPanel));
-                //updateNavigationPanel(eventSearchCriteria, currentPanel);
+                updateNavigationPanel(eventSearchCriteria, currentPanel);
             }
         };
     }
@@ -63,7 +95,7 @@ public class MassUpdateEventsPanel extends Panel {
             @Override
             protected void onNext(MassUpdateEventModel massUpdateEventModel) {
             	this.replaceWith( currentPanel = getConfirmEditPanel(eventSearchCriteria, currentPanel, massUpdateEventModel));
-            	//updateNavigationPanel(eventSearchCriteria, currentPanel);
+            	updateNavigationPanel(eventSearchCriteria, currentPanel);
             }
         };
     }
@@ -85,4 +117,10 @@ public class MassUpdateEventsPanel extends Panel {
             }
         };
     }
+
+
+	public void setCurrentPanel(AbstractMassUpdatePanel panel) {
+		this.currentPanel = panel;
+		
+	}
 }
