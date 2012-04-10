@@ -39,6 +39,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
         add(actions);
         
+        add(new WebMarkupContainer("emailLink"));
         add(new SaveMenu("saveMenu") {
             @Override protected Link createSaveLink(String id) {
                 return SearchSubMenu.this.createSaveLink(id);

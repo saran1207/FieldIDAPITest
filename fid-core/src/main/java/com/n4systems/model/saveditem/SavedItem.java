@@ -1,11 +1,14 @@
 package com.n4systems.model.saveditem;
 
+import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.SecurityDefiner;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 @Entity
@@ -25,6 +28,9 @@ public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTena
 	private String sharedByName;
 	@Column(length=1000)
 	private String description;
+
+    @OneToMany(mappedBy = "savedItem", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<SendSavedItemSchedule> sendSchedules = new ArrayList<SendSavedItemSchedule>();
 
     @Override
 	public String getName() {
@@ -51,6 +57,14 @@ public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTena
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+    public List<SendSavedItemSchedule> getSendSchedules() {
+        return sendSchedules;
+    }
+
+    public void setSendSchedules(List<SendSavedItemSchedule> sendSchedules) {
+        this.sendSchedules = sendSchedules;
+    }
 
     @Transient
     public abstract String getTitleLabelKey();

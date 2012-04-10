@@ -1,0 +1,41 @@
+<wicket:extend>
+
+    <table wicket:id="schedulesTable" class="list">
+
+        <tr>
+            <th>
+                <wicket:message key="label.frequency"/>
+            </th>
+            <th>
+                <wicket:message key="label.send_to"/>
+            </th>
+            <th>
+                <wicket:message key="label.send_to_me"/>
+            </th>
+            <th>
+                <wicket:message key="label.time"/>
+            </th>
+            <th></th>
+        </tr>
+
+        <tr wicket:id="schedules">
+            <td>
+                <span wicket:id="frequency"/>
+            </td>
+            <td>
+                <span wicket:id="sendTo"/>
+            </td>
+            <td>
+                <span wicket:id="sendToMe"/>
+            </td>
+            <td>
+                <span wicket:id="time"/>
+            </td>
+            <td>
+                <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+            </td>
+        </tr>
+
+    </table>
+
+</wicket:extend>

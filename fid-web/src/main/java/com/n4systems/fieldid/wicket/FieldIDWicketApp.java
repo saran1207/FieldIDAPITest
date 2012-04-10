@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSavedSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
@@ -15,6 +16,8 @@ import com.n4systems.fieldid.wicket.pages.saveditems.EditSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
@@ -64,6 +67,9 @@ public class FieldIDWicketApp extends WebApplication {
         //uggh: colorbox doesn't render absolute urls so we have to give it this url to make sense.  i.e. the "/wicket" prefix
         //  a preferred solution would be to put colorbox in iframe (which requires CSS love) or to force absolute urls to be rendered by wicket.
         mountPage("wicket/reporting2", ReportPage.class);
+        
+        mountPage("sendSavedItem", SendSavedItemPage.class);
+        mountPage("manageSendItemSchedules", ManageSendItemSchedulesPage.class);
 
         mountPage("search2", SearchPage.class);
         mountPage("assetMassUpdate", MassUpdateAssetsPage.class);
@@ -74,7 +80,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("savedSearch", RunSavedSearchPage.class);
         mountPage("massSchedule", MassSchedulePage.class);
         mountPage("savedReportsDeprecated", SavedReportsDeprecatedPage.class);
-        
+
         mountPage("savedItems", SavedItemsDropdownPage.class);
         mountPage("manageSavedItems", ManageSavedItemsPage.class);
         mountPage("shareSavedItem", ShareSavedItemPage.class);

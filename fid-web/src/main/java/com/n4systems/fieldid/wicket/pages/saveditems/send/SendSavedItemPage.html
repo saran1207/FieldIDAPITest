@@ -1,0 +1,69 @@
+<wicket:extend>
+
+    <form wicket:id="form" class="sendSavedItem">
+
+        <div wicket:id="bar"/>
+
+        <div wicket:id="feedbackPanel"/>
+
+        <div wicket:id="scheduleFieldsContainer">
+
+            <div class="left">
+                <wicket:message key="label.how_often"/>
+            </div>
+
+            <div class="right">
+                <select wicket:id="frequency">
+                </select>
+            </div>
+
+            <div class="left">
+                <wicket:message key="label.at_what_time"/>
+            </div>
+
+            <div class="right">
+                <select wicket:id="hourToSend">
+                </select>
+            </div>
+
+        </div>
+
+        <div class="left">
+            <wicket:message key="label.send_to"/>
+        </div>
+
+        <div class="right" wicket:id="emailAddressesContainer">
+            <div wicket:id="emailAddresses">
+                <input type="text" wicket:id="address"> <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+            </div>
+            <a wicket:id="addEmailAddressLink"><wicket:message key="label.add"/></a>
+            <input type="checkbox" wicket:id="sendToOwner"/> <wicket:message key="label.send_to_me"/>
+        </div>
+
+        <div class="left">
+            <wicket:message key="label.message"/>
+        </div>
+
+        <div class="right">
+            <textarea wicket:id="message">
+            </textarea>
+        </div>
+
+        <div class="left">
+            <wicket:message key="label.format"/>
+        </div>
+
+        <div class="right">
+            <select>
+                <option>HTML</option>
+                <option>Excel</option>
+            </select>
+        </div>
+
+        <div class="sendActions">
+            <a wicket:id="scheduleNowLink" class="mattButton"><wicket:message key="label.schedule_now"/></a>
+        </div>
+
+    </form>
+
+</wicket:extend>

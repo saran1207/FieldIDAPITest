@@ -3,6 +3,8 @@ package com.n4systems.fieldid.wicket.pages.saveditems;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -147,6 +149,8 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
                 item.add(new Label("description", item.getModel().getObject().getDescription()));
                 item.add(new BookmarkablePageLink<Void>("shareLink", ShareSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
                 item.add(new BookmarkablePageLink<Void>("editLink", EditSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
+                item.add(new BookmarkablePageLink<Void>("sendLink", SendSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
+                item.add(new BookmarkablePageLink<Void>("manageSchedulesLink", ManageSendItemSchedulesPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
 
                 item.add(new AjaxLink("deleteLink") {
                     @Override

@@ -58,7 +58,8 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
                 setResponsePage(new EventResolutionPage(model));
             }
         });
-        
+
+        add(new WebMarkupContainer("emailLink"));
         add(new SaveMenu("saveMenu") {
             @Override protected Link createSaveLink(String id) {
                 return ReportingSubMenu.this.createSaveLink(id);

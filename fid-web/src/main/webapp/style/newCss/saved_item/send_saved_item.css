@@ -1,0 +1,35 @@
+.sendSavedItem .mattBar {
+    padding-bottom:5px;
+}
+
+.sendSavedItem select {
+    padding:3px;
+}
+
+.sendSavedItem input[type="text"] {
+    padding:3px;
+}
+
+.sendSavedItem textarea {
+    width:250px;
+    height:70px;
+}
+
+.sendSavedItem .left {
+    clear:both;
+    display:block;
+    float:left;
+    width:100px;
+    padding-top:20px;
+}
+
+.sendSavedItem .right {
+    display:block;
+    float:left;
+    padding-top:15px;
+}
+
+.sendSavedItem .sendActions {
+    clear:both;
+    padding-top: 18px;
+}
