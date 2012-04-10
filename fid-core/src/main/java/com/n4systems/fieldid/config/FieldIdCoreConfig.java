@@ -56,6 +56,7 @@ import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
+import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.tenant.TenantCreationService;
@@ -64,6 +65,11 @@ import com.n4systems.util.json.JsonRenderer;
 
 @Configuration
 public class FieldIdCoreConfig {
+	
+	@Bean
+	public AssetSaveServiceSpring assetSaveService() {
+		return new AssetSaveServiceSpring();
+	}
 
     @Bean
     public NextEventScheduleService nextEventScheduleService() {

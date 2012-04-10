@@ -101,11 +101,16 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		return attachments;
 	}
 	
-	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment apiAttachment, Asset asset) {
-		AssetAttachment attachment = new AssetAttachment();
-		attachment.setMobileId(apiAttachment.getSid());
-		attachment.setAsset(asset);
-		attachment.setTenant(asset.getTenant());
+	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment apiAttachment, Asset asset) {		
+		AssetAttachment attachment = findExistingAttachment(apiAttachment.getSid());
+		
+		if(attachment == null) {
+			attachment = new AssetAttachment();		
+			attachment.setMobileId(apiAttachment.getSid());
+			attachment.setAsset(asset);
+			attachment.setTenant(asset.getTenant());
+		}
+		
 		attachment.setComments(apiAttachment.getComments());
 		attachment.setFileName(apiAttachment.getFileName());
 		
@@ -117,6 +122,16 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		}
 		
 		return attachment;
+	}
+	
+	public AssetAttachment findExistingAttachment(String mobileId) {
+		QueryBuilder<AssetAttachment> builder = createUserSecurityBuilder(AssetAttachment.class);
+		builder.addWhere(WhereClauseFactory.create("mobileId", mobileId));
+		List<AssetAttachment> attachments =  persistenceService.findAll(builder);
+		
+		return attachments.size() == 1
+			? attachments.get(0)
+			: null;
 	}
 	
 	private byte[] loadAttachmentData(AssetAttachment attachment) {

@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,8 +47,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.services.asset.AssetSaveService;
-import com.n4systems.util.WsServiceLocator;
+import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -60,6 +58,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	private static Logger logger = Logger.getLogger(ApiAssetResource.class);
 	
 	@Autowired private AssetService assetService;
+	@Autowired private AssetSaveServiceSpring assetSaveService;
 	@Autowired private ApiEventHistoryResource apiEventHistoryResource;
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
 	@Autowired private ApiAssetAttachmentResource apiAttachmentResource;
@@ -136,62 +135,31 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	public void saveAsset(ApiAsset apiAsset) {
 		Asset asset;
 		Asset existingAsset = assetService.findByMobileId(apiAsset.getSid());
-		AssetSaveService assetSaveService = new AssetSaveService(WsServiceLocator.getLegacyAssetManager(securityContext.getTenantSecurityFilter().getTenantId()), getCurrentUser());
 		
 		// Save Asset.
 		if(existingAsset == null) {
 			logger.info("Creating Asset " + apiAsset.getIdentifier());
-			asset = createAsset(assetSaveService, apiAsset);
+			asset = createAsset(apiAsset);
 		} else {
 			logger.info("Updating Asset " + apiAsset.getIdentifier());
-			asset = updateAsset(assetSaveService, apiAsset, existingAsset);
-		}
-		
-		// Save Asset Image.
-		if(apiAsset.getImage() != null) {
-			logger.info("Writing Asset Image " + apiAsset.getIdentifier());
-			try {
-				File assetImagePath = PathHandler.getAssetImageFile(asset);
-				FileUtils.writeByteArrayToFile(assetImagePath, apiAsset.getImage());
-			} catch (IOException e) {
-				logger.error("Error copying Asset Image", e);
-			}
+			asset = updateAsset(apiAsset, existingAsset);
 		}
 
 		logger.info("Saved Asset " + asset.getIdentifier());
 	}
 	
-	private Asset createAsset(AssetSaveService assetSaveService, ApiAsset apiAsset) {
+	private Asset createAsset(ApiAsset apiAsset) {
 		Asset asset = new Asset();
 		converApiAsset(apiAsset, asset);
-		assetSaveService.setUploadedAttachments(apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset));
-		assetSaveService.setAsset(asset);
-		
-		if(apiAsset.getImage() != null) {
-			asset.setImageName("asset.jpg");
-		}
-		
-		return assetSaveService.create();
+		List<AssetAttachment> uploadedAttachments = apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset);		
+		return assetSaveService.create(asset, uploadedAttachments, apiAsset.getImage());
 	}
 	
-	private Asset updateAsset(AssetSaveService assetSaveService, ApiAsset apiAsset, Asset asset) {
-		converApiAsset(apiAsset, asset);
-		
-		//if(apiAsset.getAttachments().size() > 0)
-		//	assetSaveService.setUploadedAttachments(apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset));
-		
-		//THE LINE BELOW RESULTS IN DATABASE LOCK AND AN EXCEPTION THROUGH AFTER FEW MINUTES.
-		//List<AssetAttachment> attachments = apiAttachmentResource.findAllAssetAttachments(asset.getMobileGUID());
-		//if(attachments.size() > 0)
-		//	assetSaveService.setExistingAttachments(attachments);
-		
-		assetSaveService.setAsset(asset);
-		
-		if(apiAsset.getImage() != null) {
-			asset.setImageName("asset.jpg");
-		}
-		
-		return assetSaveService.update();
+	private Asset updateAsset(ApiAsset apiAsset, Asset asset) {
+		converApiAsset(apiAsset, asset);		
+		List<AssetAttachment> uploadedAttachments = apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset);		
+		List<AssetAttachment> existingAttachments = apiAttachmentResource.findAllAssetAttachments(asset.getMobileGUID());
+		return assetSaveService.update(asset, existingAttachments, uploadedAttachments, apiAsset.getImage());
 	}
 
 	@Override
@@ -296,6 +264,12 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		}
 		
 		asset.setInfoOptions(convertAttributeValues(apiAsset.getAttributeValues(), asset));
+		
+		if(apiAsset.getImage() != null) {
+			asset.setImageName("asset-" + apiAsset.getSid() + ".jpg");
+		} else {
+			
+		}
 	}
 	
 	private List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
