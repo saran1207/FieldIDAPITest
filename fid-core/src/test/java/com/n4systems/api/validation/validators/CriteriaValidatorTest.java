@@ -1,6 +1,7 @@
 package com.n4systems.api.validation.validators;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
@@ -8,41 +9,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.model.*;
+import com.n4systems.model.builders.*;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.event.CriteriaResultViewBuilder;
 import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.validation.ValidationResult;
-import com.n4systems.model.ComboBoxCriteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.SignatureCriteria;
-import com.n4systems.model.TextFieldCriteria;
-import com.n4systems.model.UnitOfMeasureCriteria;
-import com.n4systems.model.builders.ComboBoxCriteriaBuilder;
-import com.n4systems.model.builders.CriteriaSectionBuilder;
-import com.n4systems.model.builders.DateFieldCriteriaBuilder;
-import com.n4systems.model.builders.EventFormBuilder;
-import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.model.builders.OneClickCriteriaBuilder;
-import com.n4systems.model.builders.SelectCriteriaBuilder;
-import com.n4systems.model.builders.StateSetBuilder;
-import com.n4systems.model.builders.TextFieldCriteriaBuilder;
-import com.n4systems.model.builders.UnitOfMeasureCriteriaBuilder;
 
 public class CriteriaValidatorTest {
-	String SECTION_TITLE = "aSection";
-	String COMBO_TITLE = "criteriaA";
-	String ONE_CLICK_TITLE = "criteriaB";
-	String DATE_TITLE = "date";
-	String TEXT_FIELD_TITLE = "text_field";
-	String SELECT_TITLE = "select";
-	String UNIT_OF_MEASURE_TITLE = "unitOfMeasure";
+    private String SECTION_TITLE = "aSection";
+    private String COMBO_TITLE = "criteriaA";
+    private String ONE_CLICK_TITLE = "criteriaB";
+    private String DATE_TITLE = "date";
+    private String TEXT_FIELD_TITLE = "text_field";
+    private String SELECT_TITLE = "select";
+    private String UNIT_OF_MEASURE_TITLE = "unitOfMeasure";
+    private String NUMBER_TITLE = "number";
 
 	@Test
 	public void validation_happy_path() {
@@ -51,9 +35,10 @@ public class CriteriaValidatorTest {
 				new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(COMBO_TITLE).build(),
 				new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(ONE_CLICK_TITLE).build(),			
 				new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(DATE_TITLE).withResult(new Date()).build(),
-				new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(TEXT_FIELD_TITLE).withSection(SECTION_TITLE).build(),				
-				new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(SELECT_TITLE).withResult("hello").build(),
-				new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(UNIT_OF_MEASURE_TITLE).withResult("feet|inches").withSection(SECTION_TITLE).build()				
+				new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(TEXT_FIELD_TITLE).withSection(SECTION_TITLE).build(),
+                new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(SELECT_TITLE).withResult("hello").build(),
+                new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(NUMBER_TITLE).withResult("99").build(),
+				new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(UNIT_OF_MEASURE_TITLE).withResult("feet|inches").withSection(SECTION_TITLE).build()
 		);
 				
 		CriteriaResultValidator validator = new CriteriaResultValidator();
@@ -65,11 +50,12 @@ public class CriteriaValidatorTest {
 		DateFieldCriteria dateFieldCriteria = new DateFieldCriteriaBuilder(DATE_TITLE).build();
 		SelectCriteria selectCriteria = new SelectCriteriaBuilder(SELECT_TITLE).withOptions("hello", "goodbye"). build();
 		TextFieldCriteria textFieldCriteria = new TextFieldCriteriaBuilder(TEXT_FIELD_TITLE).build();
+        NumberFieldCriteria numberCriteria = new NumberFieldCriteriaBuilder().withDisplayText(NUMBER_TITLE).build();
 		UnitOfMeasureCriteria unitOfMeasureCriteria = new UnitOfMeasureCriteriaBuilder(UNIT_OF_MEASURE_TITLE).build();
 		
 		CriteriaSection[] sections = {
 				CriteriaSectionBuilder.aCriteriaSection().withTitle(SECTION_TITLE).
-					withCriteria(comboBoxCriteria, oneClickCriteria, dateFieldCriteria, selectCriteria, textFieldCriteria, unitOfMeasureCriteria).build(),
+					withCriteria(comboBoxCriteria, oneClickCriteria, dateFieldCriteria, selectCriteria, textFieldCriteria, numberCriteria, unitOfMeasureCriteria).build(),
 		};
 		EventForm eventForm = EventFormBuilder.anEventForm().
 								withSections(sections).build();
@@ -211,11 +197,65 @@ public class CriteriaValidatorTest {
 		List<CriteriaResultView> values = Lists.newArrayList(
 				new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(DATE_TITLE).build()
 		);
-				
-		CriteriaResultValidator validator = new CriteriaResultValidator();		
-		
-		ValidationResult result = validator.validate(values, null, "Field Name", null, null, null /*this can't be null..required by validator*/);
-	}	
-		
+
+        CriteriaResultValidator validator = new CriteriaResultValidator();
+
+        ValidationResult result = validator.validate(values, null, "Field Name", null, null, null /*this can't be null..required by validator*/);
+	}
+    
+    @Test
+    public void validation_blank_number() {
+        List<CriteriaResultView> values = Lists.newArrayList(
+                new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(NUMBER_TITLE).withResult("").build()
+        );
+
+        CriteriaResultValidator validator = new CriteriaResultValidator();
+
+        Map<String, Object> validationContext = new HashMap<String, Object>();
+
+        NumberFieldCriteria numberCriteria = new NumberFieldCriteriaBuilder().withDisplayText(NUMBER_TITLE).build();
+
+        CriteriaSection[] sections = {
+                CriteriaSectionBuilder.aCriteriaSection().withTitle(SECTION_TITLE).
+                        withCriteria(numberCriteria).build(),
+        };
+        EventForm eventForm = EventFormBuilder.anEventForm().
+                withSections(sections).build();
+
+        EventType eventType = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
+        validationContext.put(EventViewValidator.EVENT_TYPE_KEY, eventType);
+
+        ValidationResult result = validator.validate(values, null, "Field Name", null, null, validationContext);
+
+        assertTrue(result.isPassed());
+
+    }
+
+    @Test
+    public void validation_invalid_number() {
+        List<CriteriaResultView> values = Lists.newArrayList(
+                new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(NUMBER_TITLE).withResult("this is an invalid number").build()
+        );
+
+        CriteriaResultValidator validator = new CriteriaResultValidator();
+
+        Map<String, Object> validationContext = new HashMap<String, Object>();
+
+        NumberFieldCriteria numberCriteria = new NumberFieldCriteriaBuilder().withDisplayText(NUMBER_TITLE).build();
+
+        CriteriaSection[] sections = {
+                CriteriaSectionBuilder.aCriteriaSection().withTitle(SECTION_TITLE).
+                        withCriteria(numberCriteria).build(),
+        };
+        EventForm eventForm = EventFormBuilder.anEventForm().
+                withSections(sections).build();
+
+        EventType eventType = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
+        validationContext.put(EventViewValidator.EVENT_TYPE_KEY, eventType);
+
+        ValidationResult result = validator.validate(values, null, "Field Name", null, null, validationContext);
+
+        assertFalse(result.isPassed());
+    }
 	
 }

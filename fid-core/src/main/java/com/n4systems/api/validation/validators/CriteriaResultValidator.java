@@ -77,12 +77,15 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 	}
 
 	private ValidationResult validateNumberField(NumberFieldCriteria criteria, CriteriaSection section, CriteriaResultView value) {
-		try {
-			Float.parseFloat(value.getResultString());
-			return ValidationResult.pass();
-		} catch (Exception e) {
-			return ValidationResult.fail(NotANumberFail, value.getResultString());
-		}
+        String result = value.getResultString();
+        if (StringUtils.isNotBlank(result)) {   // note : blanks are acceptable
+            try {
+                Float.parseFloat(result);
+            } catch (Exception e) {
+                return ValidationResult.fail(NotANumberFail, result, criteria.getDisplayName());
+            }
+        }
+        return ValidationResult.pass();
 	}
 
 	private ValidationResult validateUnitOfMeasure(UnitOfMeasureCriteria criteria, CriteriaSection section, CriteriaResultView value) {
