@@ -21,6 +21,18 @@ import com.n4systems.model.asset.AssetAttachmentListLoader;
 import com.n4systems.model.asset.AssetAttachmentSaver;
 import com.n4systems.reporting.PathHandler;
 
+/**
+ * 
+ * This class is currently used by new web services (IOS+) to save assets.
+ * 1. Sets asset imageName field.
+ * 2. Saves asset.
+ * 3. Saves asset attachments.
+ * 4. Saves asset image.
+ * If we are using this in web site or elsewhere, it may need few fixes. E.g.: mobileGuid needs to be set.
+ * This class was created because mixing Spring and Legacy services caused MySQL locks.
+ * This class also uses some legacy methods.
+ * 
+ */
 @Transactional
 public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 	
@@ -32,6 +44,7 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 	@LegacyMethod
 	public Asset create(Asset asset, List<AssetAttachment> uploadedAttachments, byte[] imageData) {
 		try {
+			setAssetImageName(asset, imageData != null);
 			asset = assetService.createWithHistory(asset, getCurrentUser());
 			saveUploadedAttachments(asset, uploadedAttachments);
 			saveAssetImage(asset, imageData);
@@ -44,6 +57,7 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 	@LegacyMethod
 	public Asset update(Asset asset, List<AssetAttachment> existingAttachments, List<AssetAttachment> uploadedAttachments, byte[] imageData) {
 		try {
+			setAssetImageName(asset, imageData != null);
 			asset = assetService.update(asset, getCurrentUser());
 			updateExistingAttachments(asset, existingAttachments);
 			saveUploadedAttachments(asset, uploadedAttachments);
@@ -102,6 +116,11 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 				}
 			}
 		}
+	}
+	
+	private void setAssetImageName(Asset asset, boolean hasImage) {
+		String imageName = hasImage ? ("asset-" + asset.getMobileGUID() + ".jpg") : null;
+		asset.setImageName(imageName);
 	}
 	
 	private void saveAssetImage(Asset asset, byte[] imageData) {

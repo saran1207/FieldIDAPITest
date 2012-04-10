@@ -264,12 +264,6 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		}
 		
 		asset.setInfoOptions(convertAttributeValues(apiAsset.getAttributeValues(), asset));
-		
-		if(apiAsset.getImage() != null) {
-			asset.setImageName("asset-" + apiAsset.getSid() + ".jpg");
-		} else {
-			
-		}
 	}
 	
 	private List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
@@ -306,42 +300,34 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		return attribValue;
 	}
 	
+	// Convert a given attributevalue into InfoOptionBean of date, static(select, combobox) or text type.
+	// During Edit, because we are not storing InfoOptionId in client side, we have to look up by infoFieldID for a given asset.
 	private InfoOptionBean convertApiAttributeValue(ApiAttributeValue apiAttributeValue, Asset asset) {
-		InfoFieldBean infoField = persistenceService.findNonSecure(InfoFieldBean.class, apiAttributeValue.getAttributeId());
-		
+		Long infoFieldID = apiAttributeValue.getAttributeId();
 		Object value = apiAttributeValue.getValue();
+		InfoFieldBean infoField;
 		
 		// Get the infoOption from the existing assetInfoOptions if we have a match.
-		InfoOptionBean infoOptionBean = findInfoOption(apiAttributeValue.getAttributeId(), asset);
+		InfoOptionBean infoOptionBean = findInfoOption(infoFieldID, asset);
 		
 		if(infoOptionBean != null) {
-			if(value instanceof Date) {
-				infoOptionBean.setName(Long.toString(((Date) value).getTime()));
+			infoField = infoOptionBean.getInfoField();
+		} else {
+			infoField = persistenceService.findNonSecure(InfoFieldBean.class, infoFieldID);
+			infoOptionBean = new InfoOptionBean();
+			infoOptionBean.setInfoField(infoField);
+		}		
+		
+		if(value instanceof Date) {
+			infoOptionBean.setName(Long.toString(((Date) value).getTime()));
+		} else {
+			InfoOptionBean staticOption = findStaticInfoOption(infoField, value);
+			
+			if(staticOption != null) {
+				//TODO, We need to remove the existing infoOptionBean if there was one at this point! Ask Mark.
+				infoOptionBean = staticOption;
 			} else {
 				infoOptionBean.setName(value.toString());
-			}			
-		} else {
-			if (value instanceof Date) {
-				if(infoOptionBean == null) {
-					infoOptionBean = new InfoOptionBean();
-					infoOptionBean.setInfoField(infoField);
-				}
-				
-				infoOptionBean.setName(Long.toString(((Date) value).getTime()));
-			} else {
-				Set<InfoOptionBean> staticOptions = infoField.getUnfilteredInfoOptions();
-				for (InfoOptionBean staticOption: staticOptions) {
-					if (staticOption.getName().equals(value)) {
-						infoOptionBean = staticOption;
-						break;
-					}
-				}
-				
-				if (infoOptionBean == null) {
-					infoOptionBean = new InfoOptionBean();
-					infoOptionBean.setInfoField(infoField);
-					infoOptionBean.setName(value.toString());
-				}
 			}
 		}
 		
@@ -349,10 +335,22 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 	
 	// For the given InfoFieldId, check if we have an InfoOption in the asset.infoOptions.
-	private InfoOptionBean findInfoOption(Long attributeId, Asset asset) {
+	private InfoOptionBean findInfoOption(Long infoFieldId, Asset asset) {
 		for (InfoOptionBean infoOption : asset.getInfoOptions()) {
-			if(infoOption.getInfoField().getUniqueID().equals(attributeId)) {
+			if(infoOption.getInfoField().getUniqueID().equals(infoFieldId)) {
 				return infoOption;
+			}
+		}
+		
+		return null;
+	}
+	
+	// For the given InfoField, check if we have a static InfoOption for the given value.
+	private InfoOptionBean findStaticInfoOption(InfoFieldBean infoField, Object value) {
+		Set<InfoOptionBean> staticOptions = infoField.getUnfilteredInfoOptions();
+		for (InfoOptionBean staticOption: staticOptions) {
+			if (staticOption.getName().equals(value)) {
+				return staticOption;
 			}
 		}
 		
