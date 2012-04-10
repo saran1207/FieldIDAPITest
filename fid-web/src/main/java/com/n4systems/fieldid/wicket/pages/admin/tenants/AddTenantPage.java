@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.admin.tenants;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressInfoInputPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
@@ -21,19 +20,16 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.model.AbstractCheckBoxModel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator.LengthBetweenValidator;
 
 import java.util.Set;
 
@@ -97,7 +93,7 @@ public class AddTenantPage extends FieldIDAdminPage {
             extendedFeaturesContainer.add(new CheckBox("tenant.settings.secondaryOrgsEnabled"));
             extendedFeaturesContainer.add(new CheckBox("primaryOrg.plansAndPricingAvailable"));
 
-			add(new RequiredTextField<String>("adminUser.userID"));
+			add(new RequiredTextField<String>("adminUser.userID").add(new LengthBetweenValidator(1,255)));
 			add(new RequiredTextField<String>("adminUser.firstName"));
 			add(new RequiredTextField<String>("adminUser.lastName"));
 			add(new RequiredTextField<String>("adminUser.emailAddress"));
@@ -114,9 +110,7 @@ public class AddTenantPage extends FieldIDAdminPage {
 			AddTenantModel addTenantModel = getModelObject();
 			try {
 				tenantCreateService.createTenant(addTenantModel.getTenant(), addTenantModel.getPrimaryOrg(), addTenantModel.getAdminUser());
-				
-				FieldIDSession.get().storeInfoMessageForStruts("Hello World");
-				throw new RedirectToUrlException("/admin/organizations.action");
+                redirect("/admin/organizations.action");
 			} catch (Exception e) {
 				logger.error("Failed creating Tenant [" + addTenantModel.getTenant().getName() + "]", e);
 				error("Failed creating Tenant: " + e.getMessage());
@@ -135,7 +129,8 @@ public class AddTenantPage extends FieldIDAdminPage {
 		}
 	}
 
-	private class ExtendedFeatureCheckBoxModel extends AbstractCheckBoxModel {
+
+    private class ExtendedFeatureCheckBoxModel extends AbstractCheckBoxModel {
 		private final ExtendedFeature feature;
 		private final Set<ExtendedFeature> selectedFeatures;
 		
