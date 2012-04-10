@@ -1,30 +1,8 @@
 package com.n4systems.fieldid.wicket.components.massupdate.event;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.Comment;
-import com.n4systems.fieldid.wicket.components.DateTimePicker;
-import com.n4systems.fieldid.wicket.components.IEventBehavior;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.location.LocationPicker;
-import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.renderer.StatusChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
-import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
-import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
-import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
-import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
-import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.Status;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.user.User;
+import java.util.Arrays;
+import java.util.Date;
+
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
@@ -41,8 +19,30 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-import java.util.Arrays;
-import java.util.Date;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.Comment;
+import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.IEventBehavior;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.location.LocationPicker;
+import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
+import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.StatusChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
+import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
+import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.EventBook;
+import com.n4systems.model.Status;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.user.User;
 
 public class EditDetailsPanel extends AbstractMassUpdatePanel {
 	
@@ -58,12 +58,12 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			@Override
 			protected void onSubmit() {
 				
-				MassUpdateAssetModel model = (MassUpdateAssetModel) this.getDefaultModelObject();
+				MassUpdateEventModel model = (MassUpdateEventModel) this.getDefaultModelObject();
 				
 				if(model.getSelect().containsValue(true)) {
 					String errorMessage = checkRequiredFields(model);
 					if(errorMessage.isEmpty()) {
-						onNext((MassUpdateAssetModel) this.getDefaultModelObject());						
+						onNext((MassUpdateEventModel) this.getDefaultModelObject());						
 					}
 					else {
 						error(new FIDLabelModel(errorMessage).getObject());
@@ -89,25 +89,29 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 		add(new FIDFeedbackPanel("feedbackPanel"));
 	}
 
-	private String checkRequiredFields(MassUpdateAssetModel model) {
+	private String checkRequiredFields(MassUpdateEventModel model) {
 		String errorMessage = "";
 		
-		if(model.getSelect().get("identified") && model.getAsset().getIdentified() == null) {
-			return "error.identifiedrequired";
+		if(model.getSelect().get("owner") && model.getEvent().getOwner() == null) {
+			return new FIDLabelModel("error.ownerrequiredmassupdate").getObject();
+		}
+
+		if(model.getSelect().get("performedBy") && model.getEvent().getPerformedBy() == null) {
+			return new FIDLabelModel("errors.required",new FIDLabelModel("label.performed_by").getObject()).getObject();
 		}
 		
-		if(model.getSelect().get("owner") && model.getAsset().getOwner() == null) {
-			return "error.ownerrequiredmassupdate";
+		if(model.getSelect().get("datePerformed") && model.getEvent().getDate() == null) {
+			return new FIDLabelModel("errors.required",new FIDLabelModel("label.date_performed").getObject()).getObject();
 		}
-				
-		if(Boolean.TRUE.equals(model.getSelect().get("nonIntegrationOrderNumber")) && model.getAsset().getNonIntergrationOrderNumber() == null) {
-			model.getAsset().setNonIntergrationOrderNumber("");
+		
+		if(model.getSelect().get("result") && model.getEvent().getStatus() == null) {
+			return new FIDLabelModel("errors.required",new FIDLabelModel("label.result").getObject()).getObject();
 		}
 		
 		return errorMessage;
 	}
 	
-	protected void onNext(MassUpdateAssetModel massUpdateAssetModel) {};
+	protected void onNext(MassUpdateEventModel massUpdateEventModel) {};
 
 	@SuppressWarnings("serial")
 	class MassUpdateEventForm extends Form<MassUpdateEventModel> {
@@ -117,7 +121,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 
 			CheckBox assignedUserCheck = new CheckBox("assignedUserCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[assignedUser]"));
 			GroupedUserPicker groupedUserPicker = new GroupedUserPicker("assignedTo", 
-					new PropertyModel<User>(massUpdateEventModel,	"event.assignedTo.user"), new GroupedUsersForTenantModel());
+					new PropertyModel<User>(massUpdateEventModel, "assignedTo"), new GroupedUsersForTenantModel());
 			groupedUserPicker.setNullValid(true);
 			groupedUserPicker.add(createCheckOnChangeEvent(assignedUserCheck));
 			WebMarkupContainer assignedUserContainer = new WebMarkupContainer("assignedUserContainer");
@@ -169,13 +173,14 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
             add(datePerformedCheck);
             add(datePerformed);
 
-			final CheckBox eventBookCheck = new CheckBox("eventBookCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[eventbook]"));
+			final CheckBox eventBookCheck = new CheckBox("eventBookCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[eventBook]"));
             eventBookCheck.setOutputMarkupId(true);
             FormComponent<EventBook> eventBooks = new DropDownChoice<EventBook>("eventBook", new PropertyModel<EventBook>(massUpdateEventModel, "event.book"), new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true);
             eventBooks.add(createCheckOnChangeEvent(eventBookCheck));
             add(eventBookCheck);
             add(eventBooks);
 
+            massUpdateEventModel.getEvent().setStatus(null);
             final CheckBox resultCheck = new CheckBox("resultCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[result]"));
             resultCheck.setOutputMarkupId(true);
             FormComponent<Status> results = new DropDownChoice<Status>("result", new PropertyModel<Status>(massUpdateEventModel, "event.status"), Arrays.asList(Status.values()), new StatusChoiceRenderer()).setNullValid(true);

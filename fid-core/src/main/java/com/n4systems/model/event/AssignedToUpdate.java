@@ -1,5 +1,7 @@
 package com.n4systems.model.event;
 
+import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -10,7 +12,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.n4systems.model.user.User;
 
 @Embeddable
-public class AssignedToUpdate {
+public class AssignedToUpdate implements Serializable{
 	
 	public static final User UNASSIGNED = null;
 

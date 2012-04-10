@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.wicket.model.event;
 
-import com.n4systems.model.Event;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.n4systems.model.Event;
+import com.n4systems.model.event.AssignedToUpdate;
+import com.n4systems.model.user.User;
 
 public class MassUpdateEventModel implements Serializable {
 
@@ -31,6 +33,14 @@ public class MassUpdateEventModel implements Serializable {
 
     public void setSelect(Map<String, Boolean> select) {
         this.select = select;
+    }
+    
+    public User getAssignedTo() {
+    	return event.getAssignedTo() != null ? event.getAssignedTo().getAssignedUser() : null;
+    }
+    
+    public void setAssignedTo(User user) {
+    	event.setAssignedTo(AssignedToUpdate.assignAssetToUser(user));
     }
 
 }

@@ -304,6 +304,27 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (updateKey.equals("assetStatus")) {
 					changeTarget.setAssetStatus(eventChanges.getAssetStatus());
 				}
+				
+				if (updateKey.equals("assignedUser")) {
+					changeTarget.setAssignedTo(eventChanges.getAssignedTo());
+				}
+				
+				if (updateKey.equals("performedBy")) {
+					changeTarget.setPerformedBy(eventChanges.getPerformedBy());
+				}
+				
+				if (updateKey.equals("datePerformed")) {
+					changeTarget.setDate(eventChanges.getDate());
+				}
+				
+				if (updateKey.equals("result")) {
+					changeTarget.setStatus(eventChanges.getStatus());
+				}
+				
+				if (updateKey.equals("comments")) {
+					changeTarget.setComments(eventChanges.getComments());
+				}
+				
 			}
 
 			persistenceManager.update(changeTarget, user);

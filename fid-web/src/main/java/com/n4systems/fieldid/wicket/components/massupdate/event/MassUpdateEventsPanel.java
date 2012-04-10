@@ -4,6 +4,8 @@ import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePane
 import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateOperation;
 import com.n4systems.fieldid.wicket.components.massupdate.SelectOperationPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
+import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.SearchCriteria;
@@ -57,9 +59,23 @@ public class MassUpdateEventsPanel extends Panel {
             protected void onCancel() {
                 setResponsePage(new ReportPage((EventReportCriteria)eventSearchCriteria.getObject()));
             }
+            
+            @Override
+            protected void onNext(MassUpdateEventModel massUpdateEventModel) {
+            	this.replaceWith( currentPanel = getConfirmEditPanel(eventSearchCriteria, currentPanel, massUpdateEventModel));
+            	//updateNavigationPanel(eventSearchCriteria, currentPanel);
+            }
         };
     }
 
+	private AbstractMassUpdatePanel getConfirmEditPanel(final IModel<EventReportCriteria> eventSearchCriteria, AbstractMassUpdatePanel currentPanel, MassUpdateEventModel massUpdateEventModel) {		
+		return new ConfirmEditPanel("massUpdatePanel", eventSearchCriteria, currentPanel, massUpdateEventModel) {
+            @Override
+            protected void onCancel() {
+                setResponsePage(new ReportPage((EventReportCriteria)eventSearchCriteria.getObject()));
+            }
+		};
+	}
 
     private ConfirmDeletePanel getConfirmDeletePanel(final IModel<EventReportCriteria> eventSearchCriteria, AbstractMassUpdatePanel previousPanel) {
         return new ConfirmDeletePanel("massUpdatePanel", eventSearchCriteria, previousPanel) {

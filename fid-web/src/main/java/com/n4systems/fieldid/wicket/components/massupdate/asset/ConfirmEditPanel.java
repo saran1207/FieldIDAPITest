@@ -35,7 +35,9 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 		this.previousPanel = previousPanel;
 		this.massUpdateAssetModel = massUpdateAssetModel;
 		
-		add(new Label("massEditMessage", new FIDLabelModel("message.mass_edit_confirm_details", assetSearchCriteria.getObject().getSelection().getNumSelectedIds())));
+		add(new Label("massEditMessage", new FIDLabelModel("message.mass_edit_confirm_details", 
+				                                           assetSearchCriteria.getObject().getSelection().getNumSelectedIds(), 
+				                                           new FIDLabelModel("label.assets.lc").getObject())));
 		
 		Form<Void> confirmEditForm = new Form<Void>("form") {
 			@Override
@@ -44,7 +46,7 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 				MassUpdateAssetsTask task = new MassUpdateAssetsTask(massUpdateManager, assetIds, massUpdateAssetModel.getAsset(), massUpdateAssetModel.getSelect(), getCurrentUser(), getNonIntegrationOrderNumber());
 				TaskExecutor.getInstance().execute(task);
 				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
-				info(new FIDLabelModel("message.assetmassupdating").getObject());
+				info(new FIDLabelModel("message.massupdating", new FIDLabelModel("label.assets").getObject()).getObject());
 			}
 		};
 		
