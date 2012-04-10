@@ -128,40 +128,71 @@ public class CriteriaValidatorTest {
 		assertTrue(result.isFailed());
 		assertEquals(String.format(FieldValidator.CriteriaValidatorUnitOfMeasureFail, unitOfMeasureValue), result.getMessage());
 	}
-		
-	
-	@Test
-	public void validation_select_fails() {
-		
-		String value = "notInListOfOptions";
-		List<CriteriaResultView> values = Lists.newArrayList(
-				new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(SELECT_TITLE).withResult(value).build()
-		);
-				
-		CriteriaResultValidator validator = new CriteriaResultValidator();
-		
-		Map<String, Object> validationContext = new HashMap<String, Object>();
-	
-		SelectCriteria selectCriteria = new SelectCriteriaBuilder(SELECT_TITLE).withOptions("hello", "goodbye"). build();
-		
-		CriteriaSection[] sections = {
-				CriteriaSectionBuilder.aCriteriaSection().withTitle(SECTION_TITLE).
-					withCriteria(selectCriteria).build(),
-		};
-		EventForm eventForm = EventFormBuilder.anEventForm().
-								withSections(sections).build();
-								
-		EventType eventType = EventTypeBuilder.anEventType().withEventForm(eventForm).build();		
-		validationContext.put(EventViewValidator.EVENT_TYPE_KEY, eventType);
-		
-		ValidationResult result = validator.validate(values, null, "Field Name", null, null, validationContext);
-		
-		assertTrue(result.isFailed());		
-		assertEquals(String.format(FieldValidator.CriteriaValidatorSelectFail, value, selectCriteria.getDisplayName(), selectCriteria.getOptions()), result.getMessage());
-	}	
-	
-	
-	@Test
+
+
+    @Test
+    public void validation_select_fails() {
+
+        String value = "notInListOfOptions";
+        List<CriteriaResultView> values = Lists.newArrayList(
+                new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(SELECT_TITLE).withResult(value).build()
+        );
+
+        CriteriaResultValidator validator = new CriteriaResultValidator();
+
+        Map<String, Object> validationContext = new HashMap<String, Object>();
+
+        SelectCriteria selectCriteria = new SelectCriteriaBuilder(SELECT_TITLE).withOptions("hello", "goodbye"). build();
+
+        CriteriaSection[] sections = {
+                CriteriaSectionBuilder.aCriteriaSection().withTitle(SECTION_TITLE).
+                        withCriteria(selectCriteria).build(),
+        };
+        EventForm eventForm = EventFormBuilder.anEventForm().
+                withSections(sections).build();
+
+        EventType eventType = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
+        validationContext.put(EventViewValidator.EVENT_TYPE_KEY, eventType);
+
+        ValidationResult result = validator.validate(values, null, "Field Name", null, null, validationContext);
+
+        assertTrue(result.isFailed());
+        assertEquals(String.format(FieldValidator.CriteriaValidatorSelectFail, value, selectCriteria.getDisplayName(), selectCriteria.getOptions()), result.getMessage());
+    }
+
+
+    @Test
+    public void validation_blank_select_fails() {
+
+        List<CriteriaResultView> values = Lists.newArrayList(
+                new CriteriaResultViewBuilder().aCriteriaResultView().withDisplayText(SELECT_TITLE).withResult(null/*this should pass*/).build()
+        );
+
+        CriteriaResultValidator validator = new CriteriaResultValidator();
+
+        Map<String, Object> validationContext = new HashMap<String, Object>();
+
+        SelectCriteria selectCriteria = new SelectCriteriaBuilder(SELECT_TITLE).withOptions("hello", "goodbye"). build();
+
+        CriteriaSection[] sections = {
+                CriteriaSectionBuilder.aCriteriaSection().withTitle(SECTION_TITLE).
+                        withCriteria(selectCriteria).build(),
+        };
+        EventForm eventForm = EventFormBuilder.anEventForm().
+                withSections(sections).build();
+
+        EventType eventType = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
+        validationContext.put(EventViewValidator.EVENT_TYPE_KEY, eventType);
+
+        ValidationResult result = validator.validate(values, null, "Field Name", null, null, validationContext);
+
+        assertTrue(result.isPassed());
+    }
+
+
+
+
+    @Test
 	public void validation_date_fails() {
 		
 		String invalidDateResult = "this should be a Date() object!";
@@ -257,5 +288,8 @@ public class CriteriaValidatorTest {
 
         assertFalse(result.isPassed());
     }
-	
+
+
+
+
 }

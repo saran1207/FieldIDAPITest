@@ -106,6 +106,9 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 	private ValidationResult validateSelect(SelectCriteria criteria, CriteriaSection section, CriteriaResultView value) {
 		List<String> options = criteria.getOptions();
 		final String option = value.getResultString();
+        if (StringUtils.isBlank(option)) {   // blank values are ok.
+            return ValidationResult.pass();
+        }
 		int index = Iterators.indexOf(options.iterator(), new Predicate<String>() {
 			@Override public boolean apply(String value) {
 				return StringUtils.equalsIgnoreCase(value,option);
