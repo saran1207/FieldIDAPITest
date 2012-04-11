@@ -8,8 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 
-@SuppressWarnings("serial")
-public class BarChartManager implements ChartManager<String> {
+public class BarChartManager extends SimpleChartManager<String> {
 	
 	public static final String OTHER_BAR_NAME = "Other";
 	
@@ -28,26 +27,6 @@ public class BarChartManager implements ChartManager<String> {
 		this.otherThreshold = otherThreshold;
 	}
 	
-	@Override
-	public Long getMinX(ChartSeries<String> data) {
-		return null;
-	}
-
-	@Override
-	public Long getPanMin(ChartSeries<String> data) {
-		return null;
-	}
-
-	@Override
-	public Long getPanMax(ChartSeries<String> data) {
-		return null;
-	}
-
-	@Override
-	public Long getLongX(String x) {
-		return null;
-	}
-
 	private Chartable<String> createChartable(Chartable<String> chartable, long index) {
 		return createChartable(chartable.getX(), chartable.getY(), index, null);
 	}
@@ -59,7 +38,7 @@ public class BarChartManager implements ChartManager<String> {
 	}
 	
 	@Override
-	public ChartSeries<String> normalize(ChartSeries<String> series) {
+	public ChartSeries<String> normalize(ChartSeries<String> series, String min, String max) {
 		long index = 0;
 		List<Chartable<String>> itemsClassifiedAsOther = new ArrayList<Chartable<String>>();
 		Double totalValueOfOtherItems = 0.0;		

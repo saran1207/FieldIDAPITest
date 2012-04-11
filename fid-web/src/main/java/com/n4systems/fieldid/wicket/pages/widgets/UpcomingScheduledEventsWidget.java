@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -13,9 +15,6 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.FlotOptions;
 
 @SuppressWarnings("serial")
 public class UpcomingScheduledEventsWidget extends ChartWidget<LocalDate,UpcomingEventsWidgetConfiguration> {
@@ -36,7 +35,9 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<LocalDate,Upcomin
 
 	@Override
 	protected ChartData<LocalDate> getChartData() {
-		return new ChartData<LocalDate>(reportingService.getUpcomingScheduledEvents(period, getOrg()));
+        DateChartManager chartManager = new DateChartManager(ChartGranularity.DAY, new DateRange(RangeType.forDays(period)));
+        ChartSeries<LocalDate> results = reportingService.getUpcomingScheduledEvents(period, getOrg());
+		return new ChartData<LocalDate>(chartManager, results);
 	}
 		
 	private BaseOrg getOrg() {

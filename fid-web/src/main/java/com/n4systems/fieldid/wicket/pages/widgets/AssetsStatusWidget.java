@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 
 
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -16,9 +17,6 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.AssetsStatusWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.FlotOptions;
-import com.n4systems.util.chart.HorizBarChartOptions;
 
 @SuppressWarnings("serial")
 public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetConfiguration>  implements HasDateRange {
@@ -49,7 +47,9 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
     
 	@Override
     protected ChartData<String> getChartData() {
-    	return new ChartData<String>(reportingService.getAssetsStatus(getChartDateRange(), getOrg()));
+        BarChartManager chartManager = new BarChartManager(true);
+        ChartSeries<String> results = reportingService.getAssetsStatus(getDateRange(), getOrg());
+        return new ChartData<String>(chartManager, results);
     }
 
 	private BaseOrg getOrg() {
@@ -58,7 +58,7 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 	}
 		
 	@Override
-	public DateRange getChartDateRange() {
+	public DateRange getDateRange() {
 		AssetsStatusWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return new DateRange(config.getRangeType());
 	}
@@ -70,7 +70,7 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getChartDateRange().getRangeType());
+		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getDateRange().getRangeType());
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );		
 	}
 

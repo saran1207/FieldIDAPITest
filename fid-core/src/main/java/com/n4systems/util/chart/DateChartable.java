@@ -1,10 +1,9 @@
 package com.n4systems.util.chart;
 
-import java.util.Date;
-
+import com.n4systems.util.time.DateUtil;
 import org.joda.time.LocalDate;
 
-import com.n4systems.util.time.DateUtil;
+import java.util.Date;
 
 /**
  * note that the granularity affects the actual date. 

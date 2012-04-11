@@ -1,10 +1,11 @@
 package com.n4systems.util.time;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.util.math.MathUtil;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class DateUtilTest {
@@ -18,10 +19,10 @@ public class DateUtilTest {
 	private LocalDate oct1 = new LocalDate(2011, 10,1);
 	private LocalDate dec31 = new LocalDate(2011, 12,31);
 	private LocalDate oct1_2012 = new LocalDate(2012, 10,1);
-	
-	
+
+
 	@Test
-	public void test_getMonthInQuarter() {		
+	public void test_getMonthInQuarter() {
 		assertEquals(1, DateUtil.getMonthInQuarter(jan1));
 		assertEquals(1, DateUtil.getMonthInQuarter(jan12));
 		assertEquals(2, DateUtil.getMonthInQuarter(feb1));
@@ -31,17 +32,17 @@ public class DateUtilTest {
 		assertEquals(3, DateUtil.getMonthInQuarter(dec31));
 		assertEquals(1, DateUtil.getMonthInQuarter(oct1_2012));
 	}
-	
+
 	@Test
-	public void test_quarterMonth() { 	
+	public void test_quarterMonth() {
 		assertEquals(DateTimeConstants.JANUARY, DateUtil.getQuarterMonth(jan12));
 		assertEquals(DateTimeConstants.JULY, DateUtil.getQuarterMonth(aug9));
 		assertEquals(DateTimeConstants.JANUARY, DateUtil.getQuarterMonth(mar10));
 		assertEquals(DateTimeConstants.OCTOBER, DateUtil.getQuarterMonth(oct1_2012));
 	}
-	
+
 	@Test
-	public void test_getQuarter() {		
+	public void test_getQuarter() {
 		assertEquals(1, DateUtil.getQuarter(jan1));
 		assertEquals(1, DateUtil.getQuarter(jan12));
 		assertEquals(1, DateUtil.getQuarter(feb1));
@@ -52,21 +53,21 @@ public class DateUtilTest {
 		assertEquals(4, DateUtil.getQuarter(dec31));
 		assertEquals(4, DateUtil.getQuarter(oct1_2012));
 	}
-	
+
 	@Test
 	public void test_nullSafeMin() {
 		Long x = 123L;
 		Long y = 999L;
 		Long Null = null;
 		Long anotherNull = null;
-		
-		assertEquals(x, DateUtil.nullSafeMin(Null, x));
-		assertEquals(x, DateUtil.nullSafeMin(x, Null));
-		assertEquals(null, DateUtil.nullSafeMin(anotherNull, Null));
-		assertEquals(x, DateUtil.nullSafeMin(x, x));
-		assertEquals(y, DateUtil.nullSafeMin(y, y));
-		assertEquals(x, DateUtil.nullSafeMin(y, x));
-		assertEquals(x, DateUtil.nullSafeMin(x, y));
+
+		assertEquals(x, MathUtil.nullSafeMin(Null, x));
+		assertEquals(x, MathUtil.nullSafeMin(x, Null));
+		assertEquals(null, MathUtil.nullSafeMin(anotherNull, Null));
+		assertEquals(x, MathUtil.nullSafeMin(x, x));
+		assertEquals(y, MathUtil.nullSafeMin(y, y));
+		assertEquals(x, MathUtil.nullSafeMin(y, x));
+		assertEquals(x, MathUtil.nullSafeMin(x, y));
 	}
 
 	@Test
@@ -75,13 +76,13 @@ public class DateUtilTest {
 		Long y = 999L;
 		Long Null = null;
 		Long anotherNull = null;
-		
-		assertEquals(x, DateUtil.nullSafeMax(Null, x));
-		assertEquals(x, DateUtil.nullSafeMax(x, Null));
-		assertEquals(null, DateUtil.nullSafeMax(anotherNull, Null));
-		assertEquals(x, DateUtil.nullSafeMax(x, x));
-		assertEquals(y, DateUtil.nullSafeMax(y, x));
-		assertEquals(y, DateUtil.nullSafeMax(x, y));		
+
+		assertEquals(x, MathUtil.nullSafeMax(Null, x));
+		assertEquals(x, MathUtil.nullSafeMax(x, Null));
+		assertEquals(null, MathUtil.nullSafeMax(anotherNull, Null));
+		assertEquals(x, MathUtil.nullSafeMax(x, x));
+		assertEquals(y, MathUtil.nullSafeMax(y, x));
+		assertEquals(y, MathUtil.nullSafeMax(x, y));
 		
 	}
 	

@@ -1,50 +1,49 @@
 package com.n4systems.util.chart;
 
+import com.n4systems.util.chart.FlotOptions.Lines;
+import org.apache.log4j.Logger;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 
-import com.n4systems.util.chart.FlotOptions.Lines;
-
-
-@SuppressWarnings("serial")
-public class ChartSeries<X> implements Serializable {
+public class ChartSeries<X extends Comparable> implements Serializable {
 	private static final Logger logger = Logger.getLogger(ChartSeries.class);
 
 	// typical json representation might look like this..    { label: "Foo", data: [ [10, 1], [17, -14], [30, 5] ] }	
-	private ChartableMap<X> data = new ChartableMap<X>();
+	private ChartableMap<X> data;
 	private String color;
 	private String label;
-	private String id;
+	private Object id;
 	private Lines lines = new Lines();
 	
-	// fields NOT included in Json representation.
-	private transient ChartManager<X> chartManager = null;
-	private transient boolean normalized = false;
-	
-	public ChartSeries(String label, String id, List<? extends Chartable<X>> data) {
-		this.setLabel(label);
+	public ChartSeries(Object id, String label, List<? extends Chartable<X>> chartables) {
+        this.data = createChartableMap();
 		this.id = id;
-		add(data);
+		this.setLabel(label);
+		add(chartables);
 	}
-	
-	public ChartSeries(List<? extends Chartable<X>> data) {
-		this(null,null,data);
+
+    protected ChartableMap<X> createChartableMap() {
+        // override if you want to add comparator or different flavour of map.
+        return new ChartableMap<X>();
+    }
+
+    public ChartSeries(List<? extends Chartable<X>> data) {
+		this(null, null, data);
 	}
 	
 	public ChartSeries(String label, List<? extends Chartable<X>> data) {
-		this(label,null,data);
+		this(null, label, data);
 	}
 	
 	/*pkg protected */ChartSeries<X> add(List<? extends Chartable<X>> data) {
 		for (Chartable<X> chartable:data) { 
 			add(chartable);
 		}
-		normalize();
 		return this;
 	}
 	
@@ -53,41 +52,21 @@ public class ChartSeries<X> implements Serializable {
 		return this;
 	}	
 
-	private void normalize() {
-		if (!normalized) {
-			normalized = true;
-			getChartManager().normalize(this);
-		}
-	}
-
 	public boolean isEmpty() {
 		return data.isEmpty();
 	}
 
-	public X getFirstX() {
+    public Long getMinLong() {
+        Chartable<X> first = getFirstEntry();
+        return first==null ? null : first.getLongX();
+    }
+
+    public X getFirstX() {
 		return data.isEmpty() ? null : data.firstEntry().getKey();
 	}
 
 	public X getLastX() {		
 		return data.isEmpty() ? null : data.lastEntry().getKey();
-	}
-
-	public Chartable<X> get(X x) {
-		return data.get(x);
-	}
-
-	public ChartSeries<X> withChartManager(ChartManager<X> chartManager) {
-		this.chartManager = chartManager;  // advised not to change this after you build & use it.   set only once.
-		normalized = false;
-		normalize();
-		return this;
-	}
-	
-	private ChartManager<X> getChartManager() {
-		if (chartManager==null) { 
-			chartManager=new SimpleChartManager<X>();
-		}
-		return chartManager;
 	}
 
 	public Chartable<X> getFirstEntry() {
@@ -96,6 +75,10 @@ public class ChartSeries<X> implements Serializable {
 
 	public Chartable<X> getLastEntry() {
 		return data.size()>0 ? data.lastEntry().getValue() : null;
+	}
+
+	public Chartable<X> get(X x) {
+		return data.get(x);
 	}
 
 	public int size() {
@@ -132,10 +115,6 @@ public class ChartSeries<X> implements Serializable {
 		}
 	}
 
-	public void updateOptions(FlotOptions<X> options, int index) { 
-		getChartManager().updateOptions(this, options, index);		
-	}
-
 	public void setLabel(String label) {
 		this.label = label;
 	}
@@ -165,11 +144,7 @@ public class ChartSeries<X> implements Serializable {
 		return data.toString();
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getId() {
+	public Object getId() {
 		return id;
 	}	
 }	 

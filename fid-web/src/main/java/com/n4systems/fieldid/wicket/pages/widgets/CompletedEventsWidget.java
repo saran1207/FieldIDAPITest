@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -14,9 +15,8 @@ import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.reporting.DashboardReportingService;
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.FlotOptions;
+
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEventsWidgetConfiguration> implements HasDateRange {
@@ -39,14 +39,14 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
     @Override
     protected FlotOptions<LocalDate> createOptions() {
     	FlotOptions<LocalDate> options = super.createOptions();
-    	options.lines.fill = false;
-    	options.colors = new String[]{"#32578B", "#5B8C62", "#B35045", "#999999" };
     	return options;
     }
     
 	@Override
     protected ChartData<LocalDate> getChartData() {
-    	return new ChartData<LocalDate>(reportingService.getCompletedEvents(getChartDateRange(), granularity, getOrg()));
+        ChartManager chartManager = new CompletedEventsChartManager(granularity, getDateRange());
+        List<ChartSeries<LocalDate>> results = reportingService.getCompletedEvents(getDateRange(), granularity, getOrg());
+		return new ChartData<LocalDate>(chartManager, results);
     }
 
 	private BaseOrg getOrg() {
@@ -55,7 +55,7 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
 	}	
 
 	@Override
-	public DateRange getChartDateRange() {
+	public DateRange getDateRange() {
 		CompletedEventsWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return new DateRange(config.getDateRangeType());
 	}
@@ -72,14 +72,14 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
 	
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getChartDateRange().getRangeType());
+		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getDateRange().getRangeType());
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );
 		
 	}
 
 	@Override
 	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity) {
-		return isGranularityAppicable(buttonGranularity, getChartDateRange());
+		return isGranularityAppicable(buttonGranularity, getDateRange());
 	}
 	
 }

@@ -1,11 +1,6 @@
 package com.n4systems.util.chart;
 
-
-
-
-@SuppressWarnings("serial")
 public class LineGraphOptions<X> extends FlotOptions<X> {
-
 
 	public LineGraphOptions() { 
 		points.show = true;

@@ -1,12 +1,11 @@
 package com.n4systems.util.chart;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import org.joda.time.LocalDate;
-
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.DateRangeFormatter;
+import org.joda.time.LocalDate;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class QuarterDateRangeFormatter implements DateRangeFormatter {
 

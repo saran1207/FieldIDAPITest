@@ -1,9 +1,9 @@
 package com.n4systems.util.chart;
 
-import org.joda.time.LocalDate;
-
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.math.MathUtil;
 import com.n4systems.util.time.DateUtil;
+import org.joda.time.LocalDate;
 
 public class DateChartManager extends SimpleChartManager<LocalDate> {
 	
@@ -14,20 +14,20 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 		this.granularity = granularity;
 		this.dateRange = dateRange;
 	}
-	
-	@Override
-	public Long getMinX(ChartSeries<LocalDate> series) {
-		if (series.isEmpty() || dateRange.getRangeType().isDaysFromNowRangeType()) {
-			return null;
-		}
-		Chartable<LocalDate> lastEntry = series.getLastEntry();
-		long minX = lastEntry.getX().minus(granularity.preferredRange()).toDate().getTime();
-		long firstX = series.getFirstEntry().getX().toDate().getTime();
-		// don't scroll if you have < X points. 
-		return (series.size()<PAN_THRESHOLD) ? firstX : Math.max(minX,firstX);
-	}
 
-	@Override
+    @Override
+    public Long getMin(ChartSeries<LocalDate> series) {
+        if (series.isEmpty() || dateRange.getRangeType().isDaysFromNowRangeType()) {
+            return null;
+        }
+        Chartable<LocalDate> lastEntry = series.getLastEntry();
+        long minX = lastEntry.getX().minus(granularity.preferredRange()).toDate().getTime();
+        long firstX = series.getFirstEntry().getX().toDate().getTime();
+        // don't scroll if you have < X points.
+        return (series.size()<PAN_THRESHOLD) ? firstX : Math.max(minX,firstX);
+    }
+
+    @Override
 	public Long getPanMin(ChartSeries<LocalDate> series) {
 		if (series.isEmpty()) { 
 			LocalDate from = dateRange.getFrom();
@@ -46,11 +46,18 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 	}
 
 	@Override
-	public ChartSeries<LocalDate> normalize(ChartSeries<LocalDate> series) {
-		LocalDate endDate = RangeType.FOREVER.equals(dateRange.getRangeType()) ? series.getLastX() : granularity.roundUp(dateRange.getTo());
-		LocalDate date = granularity.roundDown(dateRange.getEarliest());
-		
-		while (endDate!=null && date.isBefore(endDate)) { 
+	public ChartSeries<LocalDate> normalize(ChartSeries<LocalDate> series, LocalDate min, LocalDate max) {
+		LocalDate date = MathUtil.nullSafeMin(min, granularity.roundDown(dateRange.getEarliest()));
+        LocalDate endDate;
+        if (RangeType.FOREVER.equals(dateRange.getRangeType())) {
+            // we add one day because we want to include the max day. (loop is exclusive via isBefore
+            // so we adjust boundary to make sure it's included).
+            endDate = max==null ? null : max.plusDays(1);
+        } else {
+            endDate = granularity.roundUp(dateRange.getTo());
+        }
+
+		while (endDate!=null && date.isBefore(endDate)) {
 			Chartable<LocalDate> value = series.get(date);
 			if (value==null) {  // add some padding where no values exist. 
 				series.add(new DateChartable(date,0L));
@@ -75,7 +82,12 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 		options.tooltipFormat = getTooltipFormat(granularity);		
 	}
 
-	private void updateForDaily(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options) {
+    @Override
+    public void sortSeries(ChartData<LocalDate> chartSeries) {
+        ;
+    }
+
+    private void updateForDaily(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options) {
 		// note that for daily graphs we do the ole switcherooo.   turn a line graph into a single bar graph. 
 		// this means resetting
 		options.series = null;

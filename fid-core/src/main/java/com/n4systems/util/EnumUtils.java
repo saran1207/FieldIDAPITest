@@ -2,6 +2,8 @@ package com.n4systems.util;
 
 import com.google.common.base.Preconditions;
 
+import java.util.EnumSet;
+
 public class EnumUtils {
 	
 
@@ -57,4 +59,22 @@ public class EnumUtils {
 	    }
 	}
 
+    
+    public static class LabelledEnumSet<E extends Enum<E>>  {
+
+        private EnumSet<E> set;
+        private String label;
+
+        public LabelledEnumSet(String label, EnumSet<E> set) {
+            this.set = set;
+            this.label = label;
+        }
+        public EnumSet<E> getSet() {
+            return set;
+        }
+        public String getLabel() {
+            return label;
+        }
+    }
+    
 }

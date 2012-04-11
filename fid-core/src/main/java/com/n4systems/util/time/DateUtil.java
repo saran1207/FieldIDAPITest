@@ -29,18 +29,6 @@ public class DateUtil {
 		//return new LocalDate(Years.MAX_VALUE.getYears(), 1, 1);
 	}	
 
-	public static Long nullSafeMax(Long a, Long b) {
-		return a==null ? b : 
-			b==null ? a : 
-			a.compareTo(b) < 0 ? b : a;  
-	}
-	
-	public static Long nullSafeMin(Long a, Long b) { 
-		return a==null ? b : 
-			b==null ? a :  
-			a.compareTo(b) < 0 ? a : b;  
-	}	
-
 	public static int getMonthInQuarter(LocalDate date) {
 		// returns 1..3  e.g. getMonthInQuarter(January)=1, Feb=2 etc..     
 		return (date.getMonthOfYear()-1)%3 + 1;

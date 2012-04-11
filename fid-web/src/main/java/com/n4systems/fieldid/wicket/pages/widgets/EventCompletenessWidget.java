@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -14,9 +15,8 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.reporting.DashboardReportingService;
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.FlotOptions;
+
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class EventCompletenessWidget extends ChartWidget<LocalDate,EventCompletenessWidgetConfiguration> implements HasDateRange {
@@ -38,9 +38,9 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 
 	@Override
 	protected ChartData<LocalDate> getChartData() {
-		ChartData<LocalDate> chartData = new ChartData<LocalDate>(reportingService.getEventCompletenessEvents(granularity, getChartDateRange(), getOrg()));
-		chartData.get(1).setColor("#60986B");
-		return chartData;
+        ChartManager chartManager = new EventCompletenessChartManager(granularity, getDateRange());
+        List<ChartSeries<LocalDate>> results = reportingService.getEventCompletenessEvents(granularity, getDateRange(), getOrg());
+        return new ChartData<LocalDate>(chartManager, results);
 	}
 	
 	private BaseOrg getOrg() {
@@ -49,7 +49,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 	}	
 
 	@Override
-	public DateRange getChartDateRange() {
+	public DateRange getDateRange() {
 		EventCompletenessWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return new DateRange(config.getRangeType());
 	}
@@ -57,7 +57,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 	@Override
 	protected FlotOptions<LocalDate> createOptions() {
 		FlotOptions<LocalDate> options = super.createOptions();
-		options.pan.interactive = true;
+//		options.pan.interactive = true;
 		options.xaxis.timeformat = "%b %d";
 		return options;		
 	}
@@ -74,12 +74,12 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getChartDateRange().getRangeType());
+		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getDateRange().getRangeType());
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );		
 	}
 	
 	@Override
 	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity) {
-		return isGranularityAppicable(buttonGranularity, getChartDateRange());
+		return isGranularityAppicable(buttonGranularity, getDateRange());
 	}
 }

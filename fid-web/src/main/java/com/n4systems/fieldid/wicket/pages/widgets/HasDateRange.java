@@ -4,5 +4,5 @@ import com.n4systems.model.utils.DateRange;
 
 public interface HasDateRange {
 
-	public DateRange getChartDateRange();
+	public DateRange getDateRange();
 }

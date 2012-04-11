@@ -1,9 +1,8 @@
 package com.n4systems.util.chart;
 
-import org.joda.time.LocalDate;
-
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.DateRangeFormatter;
+import org.joda.time.LocalDate;
 
 @SuppressWarnings("serial")
 public class DaysRangeFormatter implements DateRangeFormatter {

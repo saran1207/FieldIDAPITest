@@ -1,12 +1,11 @@
 package com.n4systems.util.chart;
 
-import org.joda.time.DateTimeConstants;
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.util.EnumUtils;
 import com.n4systems.util.time.DateUtil;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
 
 public enum ChartGranularity {
 	

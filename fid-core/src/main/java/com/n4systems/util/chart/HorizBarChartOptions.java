@@ -14,6 +14,7 @@ public class HorizBarChartOptions<X> extends FlotOptions<X> {
 		yaxis.tickLength = 0;
 		grid.show = true;
 		grid.hoverable = true;
+        points.show = false;
 	}	
 	
 	 

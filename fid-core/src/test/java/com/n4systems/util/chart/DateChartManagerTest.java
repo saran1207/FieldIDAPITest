@@ -30,7 +30,7 @@ public class DateChartManagerTest extends FieldIdUnitTest {
 		for (ChartGranularity granularity:ChartGranularity.values()) {
 			dateChartManager = new DateChartManager(granularity, dateRange);
 		
-			// |0....5....10| are given (3 in total).  
+			// |0....5....10| are given (3 in total, increment of 5 starting at 0).
 			// padded to include all the others for a total of 11 
 			assertSeries(11, 3, 0, 5);
 			
@@ -164,7 +164,7 @@ public class DateChartManagerTest extends FieldIdUnitTest {
 		ChartSeries<LocalDate> series = createTestSeries(granularity, from, to, offset, periodMultiplier, numberOfPoints);
 		// create series with original numberOfPoints, the normalize() which will add padding (i.e. more 0 value points). 
 		// .: end size of series will be >= original.
-		series = dateChartManager.normalize(series);
+		series = dateChartManager.normalize(series, series.getFirstX(), series.getLastX());
 
 		assertEquals(expectedSize, series.size());
 

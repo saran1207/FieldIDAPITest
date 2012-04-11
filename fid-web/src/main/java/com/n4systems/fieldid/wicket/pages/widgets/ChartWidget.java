@@ -55,14 +55,14 @@ import java.util.Set;
  *  - in your widget's createOptions() method, fill in the required values. (e.g. set FlotOptions colors, chart type, etc... parameters)
  *  - create your WidgetConfiguration extension  (e.g. MyOrgsWidgetConfiguration).  ***make sure you implement the @WidgetConfiguration.copy() method!!!
  *  - create WidgetConfigurationPanel & HTML to make above object. 
- *  - implement your service call in DashboardReportingService.  it should return List<ChartSeries<?>>.   this result is returned in ChartWidget.getChartSeries() 
+ *  - implement your service call in DashboardReportingService.  it should return ChartData<X>.   this result is returned in ChartWidget.getChartSeries()
  *
  * see {@link http://fieldid.jira.com/wiki/display/WEB/Dashboard+Chart+Widgets} 
  * 
  */
 
 @SuppressWarnings("serial")
-public abstract class ChartWidget<X,T extends WidgetConfiguration> extends Widget<T> {
+public abstract class ChartWidget<X extends Comparable,T extends WidgetConfiguration> extends Widget<T> {
 
 	private static final Logger logger = Logger.getLogger(ChartWidget.class);
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS");

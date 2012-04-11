@@ -1,17 +1,5 @@
 package com.n4systems.fieldid.wicket.components.chart;
 
-import static org.easymock.EasyMock.*;
-
-import java.util.Calendar;
-import java.util.List;
-
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
-import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.IFixtureFactory;
 import com.n4systems.fieldid.wicket.IWicketTester;
@@ -19,13 +7,21 @@ import com.n4systems.fieldid.wicket.WicketHarness;
 import com.n4systems.fieldid.wicket.components.chart.FlotChart.ChartMarkup;
 import com.n4systems.fieldid.wicket.components.chart.FlotChartTest.FlotChartHarness;
 import com.n4systems.fieldid.wicket.components.reporting.results.FieldIdPanelTest;
-import com.n4systems.util.chart.DateChartable;
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartSeries;
-import com.n4systems.util.chart.Chartable;
-import com.n4systems.util.chart.FlotOptions;
-import com.n4systems.util.chart.LineGraphOptions;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.*;
 import com.n4systems.util.json.JsonRenderer;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
+import org.joda.time.LocalDate;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Calendar;
+import java.util.List;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
 
 
 public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<LocalDate>> implements IFixtureFactory<FlotChart<LocalDate>> {
@@ -49,7 +45,7 @@ public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<
 	public void test_Render() {
 		optionsModel = new Model<FlotOptions<LocalDate>>(new LineGraphOptions<LocalDate>());
 		final ChartSeries<LocalDate> chartSeries = new ChartSeries<LocalDate>(TEST_LABEL, createData());
-		chartList = new ChartData<LocalDate>(chartSeries);		
+		chartList = new ChartData<LocalDate>(new DateChartManager(ChartGranularity.YEAR,new DateRange(RangeType.FOREVER) ), chartSeries);
 		expect(jsonRenderer.render(optionsModel.getObject())).andReturn("{options}");
 		expect(jsonRenderer.render(chartList)).andReturn("{chartSeries}");
 		replay(jsonRenderer);
@@ -60,8 +56,8 @@ public class FlotChartTest extends FieldIdPanelTest<FlotChartHarness, FlotChart<
 		assertClassContains(TEST_CSS, getHarness().getChart());
 		
 		// make sure javascript is rendered.
-//		assertInDocument(String.format("chartWidgetFactory.createWithData('%1$s',{chartSeries},{options});", getHarness().getChart().getMarkupId()));
-        assertInDocument("chartWidgetFactory");
+		assertInDocument(String.format("chartWidgetFactory.createWithData('%1$s',{chartSeries},{options});", getHarness().getChart().getMarkupId()));
+//        assertInDocument("chartWidgetFactory");
 	}
 	
 	

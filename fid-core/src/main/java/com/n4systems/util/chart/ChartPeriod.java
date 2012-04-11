@@ -1,10 +1,10 @@
 package com.n4systems.util.chart;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public enum ChartPeriod {
 	

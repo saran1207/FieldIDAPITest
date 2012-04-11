@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.wicket.components.chart;
 
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.wicket.behavior.AbstractBehavior;
+import com.n4systems.util.chart.ChartData;
+import com.n4systems.util.chart.FlotOptions;
+import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -12,12 +12,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.FlotOptions;
-import com.n4systems.util.json.JsonRenderer;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("serial")
-public class FlotChart<X> extends Panel {
+public class FlotChart<X extends Comparable> extends Panel {
 	
 	static AtomicInteger markupId = new AtomicInteger(1);
 	

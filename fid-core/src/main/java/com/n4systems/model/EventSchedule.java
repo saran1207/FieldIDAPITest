@@ -1,6 +1,7 @@
 package com.n4systems.model;
 
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -27,6 +28,7 @@ import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.EnumUtils.LabelledEnumSet;
 
 @Entity
 @Table(name = "eventschedules")
@@ -54,6 +56,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 			return name();
 		}
 	}
+    public static LabelledEnumSet ALL_STATUS = new LabelledEnumSet<ScheduleStatus>("All", EnumSet.allOf(ScheduleStatus.class));
 
 	public enum ScheduleStatusGrouping {
 		NON_COMPLETE(ScheduleStatus.SCHEDULED, ScheduleStatus.IN_PROGRESS), COMPLETE(ScheduleStatus.COMPLETED);

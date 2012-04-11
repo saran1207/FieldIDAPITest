@@ -1,13 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import com.n4systems.model.utils.DateRange;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
-
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
@@ -15,12 +7,16 @@ import com.n4systems.fieldid.wicket.pages.widgets.config.AssetsIdentifiedConfigP
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.reporting.DashboardReportingService;
-import com.n4systems.util.chart.ChartData;
-import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.FlotOptions;
+import com.n4systems.util.chart.*;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
-@SuppressWarnings("serial")
 public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifiedWidgetConfiguration> implements HasDateRange {
 	
 	@SpringBean
@@ -41,11 +37,13 @@ public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifi
     
 	@Override
     protected ChartData<LocalDate> getChartData() {
-    	return new ChartData<LocalDate>(reportingService.getAssetsIdentified(getChartDateRange(), granularity, getOrg()));
+        ChartSeries<LocalDate> results = reportingService.getAssetsIdentified(getDateRange(), granularity, getOrg());
+        DateChartManager chartManager = new DateChartManager(granularity, getDateRange());
+        return new ChartData<LocalDate>(chartManager, results);
     }
 
 	@Override
-	public DateRange getChartDateRange() {
+	public DateRange getDateRange() {
 		AssetsIdentifiedWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
 		return new DateRange(config.getRangeType());
 	}
@@ -67,12 +65,12 @@ public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifi
 	
 	@Override
 	protected boolean isGranularityAppicable(ChartGranularity buttonGranularity) {
-		return isGranularityAppicable(buttonGranularity, getChartDateRange());
+		return isGranularityAppicable(buttonGranularity, getDateRange());
 	}
 	
 	@Override
 	protected IModel<String> getSubTitleModel() {
-		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getChartDateRange().getRangeType());
+		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getDateRange().getRangeType());
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );		
 	}
 	
