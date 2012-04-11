@@ -34,11 +34,10 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
         actions = new WebMarkupContainer("actions");
         // note that only one of these mass update links will be shown at a time - depends on the context.
-        actions.add(updateLink = new ReportingMassActionLink("massUpdateLink", "/massUpdateEvents.action?searchId=%s", model));
         actions.add(updateSchedulesLink = new ScheduleMassActionLink("massScheduleUpdateLink", "/massUpdateEventSchedule.action?searchId=%s", model));
         actions.add(assignJobLink = new ReportingMassActionLink("assignJobLink", "/selectJobToAssignEventsTo.action?searchId=%s&reportType=OBSERVATION_CERT", model));
 
-        actions.add(new Link("massUpdateLink2") {
+        actions.add(updateLink = new Link("massUpdateLink") {
             @Override
             public void onClick() {
                 setResponsePage(new MassUpdateEventsPage(model));

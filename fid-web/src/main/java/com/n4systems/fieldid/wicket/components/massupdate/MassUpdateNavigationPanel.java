@@ -37,7 +37,7 @@ public class MassUpdateNavigationPanel extends Panel {
 			add(operationDetailsLink = createBlankLink("backToOperationDetails"));
 			operationDetailsLink.setVisible(false);
 			backToOperationDetailsLabel.add(new AttributeModifier("class", "strong"));
-			if(panel instanceof EditDetailsPanel) {
+			if(panel.isDetailsPanel()) {
 				add(new AttributeModifier("class", "navMenu navMenuLong"));
 			}else {
 				add(new AttributeModifier("class", "navMenu navMenuShort"));
