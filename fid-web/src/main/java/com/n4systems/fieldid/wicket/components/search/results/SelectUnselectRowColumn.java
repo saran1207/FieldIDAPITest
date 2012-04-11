@@ -4,6 +4,7 @@ import com.n4systems.util.selection.MultiIdSelection;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -28,6 +29,7 @@ public class SelectUnselectRowColumn extends AbstractColumn<RowView> {
     @Override
     public void populateItem(final Item<ICellPopulator<RowView>> item, String componentId, final IModel<RowView> rowModel) {
         final String rowId = item.getParent().getParent().getMarkupId();
+        item.add(new AttributeAppender("class", " select-column"));
         SelectUnselectCell selectUnselectCell = new SelectUnselectCell(componentId, new ItemIsSelectedModel(rowModel)) {
             @Override
             protected void onSelectUnselect(AjaxRequestTarget target) {

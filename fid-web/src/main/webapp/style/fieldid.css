@@ -350,6 +350,10 @@ td[class="actionsContainer"] {
 	empty-cells: show;
 }
 
+.paged-table .select-column {
+    width:20px;
+}
+
 .list th {
 	background-color: #EEEEEE;
 	font-size: 1.1em;
