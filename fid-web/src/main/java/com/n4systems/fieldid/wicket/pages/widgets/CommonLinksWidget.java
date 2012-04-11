@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
@@ -22,7 +23,7 @@ public class CommonLinksWidget extends Widget<WidgetConfiguration> {
 		super(id, new Model<WidgetDefinition<WidgetConfiguration>>(widgetDefinition));			
 		add(new NonWicketLink("upcomingEventsLink", "schedule!createSearch.action?criteria.status=INCOMPLETE"));
 		add(new BookmarkablePageLink<Void>("eventHistoryLink", ReportingPage.class));
-		add(new BookmarkablePageLink<Void>("findAssetLink", AssetSearchPage.class));
+		add(new BookmarkablePageLink<Void>("findAssetLink", SearchPage.class));
 		
 		String companySiteUrl = FieldIDSession.get().getPrimaryOrg().getWebSite();
 		ExternalLink companySiteLink;
