@@ -118,4 +118,5 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
         dynamicAssetColumnsModel.setObject(getDynamicAssetColumns(assetType, availableAssetTypes));
     }
 
+
 }

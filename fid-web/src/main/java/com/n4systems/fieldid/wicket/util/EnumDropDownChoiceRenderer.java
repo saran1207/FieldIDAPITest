@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.utils;
+package com.n4systems.fieldid.wicket.util;
 
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 

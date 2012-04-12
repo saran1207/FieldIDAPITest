@@ -27,14 +27,20 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     public static final String X_PARAMETER = "longX";
     public static final String SERIES_PARAMETER = "series";
     public static final String Y_PARAMETER = "y";
+    public static final String RESULTS_PANEL_ID = "resultsPanel";
 
-    private @SpringBean DashboardReportingService dashboardReportingService;
-    private @SpringBean SavedAssetSearchService savedAssetSearchService;
+    private
+    @SpringBean
+    DashboardReportingService dashboardReportingService;
+    private
+    @SpringBean
+    SavedAssetSearchService savedAssetSearchService;
 
     protected SavedItem<T> savedItem;
     protected T searchCriteria;
     protected Component searchMenu;
-    private boolean showLeftPanel;
+    protected boolean showLeftPanel;
+    private boolean initLeftPanel = false;
 
     public AbstractSearchPage(PageParameters params) {
         this(params, null, null);  // will create default criteria & savedItems.
@@ -42,7 +48,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
 
     public AbstractSearchPage(PageParameters params, T searchCriteria, SavedItem<T> savedItem) {
         super(params);
-    	this.savedItem = savedItem;
+        this.savedItem = savedItem;
         this.searchCriteria = searchCriteria;
         initialize();
     }
@@ -51,13 +57,12 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         showLeftPanel = calculateInitialViewState();
         initializeSearchCriteria();
         initializeSavedItem();
-        saveLastSearch(searchCriteria);
         addComponents();
     }
 
     private void addComponents() {
         Model<T> criteriaModel = new Model<T>(searchCriteria);
-        add(createResultsPanel("resultsPanel", criteriaModel, isShowBlankSlate()));
+        add(createResultsPanel(RESULTS_PANEL_ID, criteriaModel, isShowBlankSlate()));
 
         SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));
         criteriaExpandContainer.addContainedPanel(createCriteriaPanel("criteriaPanel", criteriaModel, savedItem));
@@ -71,7 +76,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     }
 
     public void initializeSavedItem() {
-        if (savedItem==null) {
+        if (savedItem == null) {
             savedItem = createSavedItemFromCriteria(searchCriteria);
         } else {
             savedItem.setSearchCriteria(searchCriteria);
@@ -79,8 +84,10 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     }
 
     public void initializeSearchCriteria() {
-        if (searchCriteria==null) {
+        if (searchCriteria == null) {
             searchCriteria = createSearchCriteria();
+        } else {
+            saveLastSearch(searchCriteria);
         }
     }
 
@@ -92,21 +99,23 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         return showLeftPanel;
     }
 
-    protected boolean isShowLeftPanel() {
-        return showLeftPanel;
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderJavaScriptReference("javascript/fieldIdWide.js");
+        response.renderCSSReference("style/pageStyles/wide.css");
+        response.renderOnLoadJavaScript("fieldIdWidePage.init('" + showLeftPanel + "')");
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
-    	super.renderHead(response);
-    	response.renderJavaScriptReference("javascript/fieldIdWide.js");
-        response.renderCSSReference("style/pageStyles/wide.css");
-        response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+ showLeftPanel +");");
+    protected void onBeforeRender() {
+        super.onBeforeRender();
     }
 
     protected Link createSaveLink(String linkId, final boolean overwrite) {
         Link link = new Link(linkId) {
-            @Override public void onClick() {
+            @Override
+            public void onClick() {
                 setResponsePage(createSaveReponsePage(overwrite));
             }
         };
@@ -126,13 +135,21 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         return this;
     }
 
+    protected void resetPageOnError() {
+        // clear results panel. show left panel. go back to initial state.
+        showLeftPanel = true;
+        replace(createBlankSlate(RESULTS_PANEL_ID));
+    }
+
     protected abstract SavedItem<T> createSavedItemFromCriteria(T searchCriteriaModel);
 
     protected abstract Component createSubMenu(String contentId, Model<T> criteriaModel);
 
     protected abstract Component createCriteriaPanel(String id, Model<T> criteriaModel);
 
-    protected boolean isEmptyResults() { return false; }
+    protected boolean isEmptyResults() {
+        return false;
+    }
 
     protected abstract Component createResultsPanel(String id, Model<T> criteriaModel);
 

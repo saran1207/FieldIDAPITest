@@ -81,7 +81,9 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
             @Override protected void onSearchSubmit() {
                 setResponsePage(new ReportPage(model.getObject()));
             }
-            @Override protected void onNoDisplayColumnsSelected() { }
+            @Override protected void onSearchError() {
+                resetPageOnError();
+            }
         };
     }
 
@@ -133,7 +135,6 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
     	super.renderHead(response);
     	response.renderJavaScriptReference("javascript/fieldIdWide.js");
         response.renderCSSReference("style/pageStyles/wide.css");
-        response.renderOnDomReadyJavaScript("fieldIdWidePage.init("+ isShowLeftPanel()+");");
     }
 
 }

@@ -65,7 +65,9 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
             @Override protected void onSearchSubmit() {
                 setResponsePage(new SearchPage(model.getObject(), savedItem));
             }
-            @Override protected void onNoDisplayColumnsSelected() { }
+            @Override protected void onSearchError() {
+                resetPageOnError();
+            }
         };
     }
 
@@ -76,7 +78,7 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
 
     @Override
     protected Component createResultsPanel(String id, Model<AssetSearchCriteria> criteriaModel) {
-        return  new AssetSearchResultsPanel(id, criteriaModel) {
+        return new AssetSearchResultsPanel(id, criteriaModel) {
             @Override protected void updateSelectionStatus(AjaxRequestTarget target) {
                 super.updateSelectionStatus(target);
                 target.add(searchMenu);

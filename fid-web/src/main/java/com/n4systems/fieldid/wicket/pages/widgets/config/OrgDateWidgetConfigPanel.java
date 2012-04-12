@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
-import com.n4systems.fieldid.wicket.utils.EnumDropDownChoiceRenderer;
+import com.n4systems.fieldid.wicket.util.EnumDropDownChoiceRenderer;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.RangeType;
