@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.service.download;
 
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.views.ExcelOutputHandler;
 
 /**
@@ -19,5 +21,12 @@ public abstract class WebOutputHandler implements ExcelOutputHandler {
 	}
 	
 	public abstract String handleWeb(Long entityId, Object value);
+
+    protected String getAbsoluteUrl() {
+        String absoluteUrl = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://";
+        absoluteUrl += contextProvider.getOwner().getTenant().getName() + ".";
+        absoluteUrl += ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_DOMAIN);
+        return absoluteUrl;
+    }
 
 }

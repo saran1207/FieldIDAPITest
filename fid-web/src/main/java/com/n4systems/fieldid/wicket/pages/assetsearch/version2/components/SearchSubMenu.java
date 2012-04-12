@@ -4,6 +4,7 @@ import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
@@ -39,7 +40,12 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
         add(actions);
         
-        add(new WebMarkupContainer("emailLink"));
+        add(new Link("emailLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new SendSavedItemPage(model));
+            }
+        });
         add(new SaveMenu("saveMenu") {
             @Override protected Link createSaveLink(String id) {
                 return SearchSubMenu.this.createSaveLink(id);

@@ -4,6 +4,8 @@ import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 
 public class EventRfidNumberHandler extends WebOutputHandler {
 
@@ -23,8 +25,10 @@ public class EventRfidNumberHandler extends WebOutputHandler {
 		
 		// build the asset info link for local assets, just show the serial for network assets
 		String rfidNumber;
-		if (level.isLocal()) { 
-			rfidNumber = String.format("<a class=\"identifierLink\" href='/fieldid/asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getRfidNumber());
+		if (level.isLocal()) {
+            String absoluteUrl = getAbsoluteUrl();
+            absoluteUrl += "/fieldid/asset.action?uniqueId="+asset.getId();
+			rfidNumber = String.format("<a class=\"identifierLink\" href='%s'>%s</a>", absoluteUrl, asset.getRfidNumber());
 		} else {
 			rfidNumber = asset.getRfidNumber();
 		}
@@ -32,7 +36,7 @@ public class EventRfidNumberHandler extends WebOutputHandler {
 		return rfidNumber;
 	}
 
-	public Object handleExcel(Long entityId, Object value) {
+    public Object handleExcel(Long entityId, Object value) {
 		Asset asset = (Asset)value;
 		
 		return (asset.getRfidNumber() != null) ? asset.getRfidNumber() : "";

@@ -8,9 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name="send_saved_item_schedules")
@@ -122,5 +120,14 @@ public class SendSavedItemSchedule extends EntityWithTenant {
 
     public void setHourToSend(Integer hourToSend) {
         this.hourToSend = hourToSend;
+    }
+    
+    @Transient
+    public Set<String> getAddressesToDeliverTo() {
+        Set<String> addresses = new HashSet<String>(getEmailAddresses());
+        if (sendToOwner) {
+            addresses.add(user.getEmailAddress());
+        }
+        return addresses;
     }
 }

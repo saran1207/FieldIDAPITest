@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.event.*;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.search.EventResolutionService;
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
+import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.fieldid.service.transaction.TransactionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -65,6 +66,11 @@ import com.n4systems.util.json.JsonRenderer;
 
 @Configuration
 public class FieldIdCoreConfig {
+
+    @Bean
+    public SendSearchService sendSearchService() {
+        return new SendSearchService();
+    }
 	
 	@Bean
 	public AssetSaveServiceSpring assetSaveService() {

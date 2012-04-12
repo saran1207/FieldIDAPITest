@@ -1,10 +1,7 @@
 package com.n4systems.fieldid.wicket.data;
 
 import com.n4systems.ejb.PageHolder;
-import com.n4systems.fieldid.service.download.CellHandlerFactory;
-import com.n4systems.fieldid.service.download.TableGenerationContext;
-import com.n4systems.fieldid.service.download.TableGenerationContextImpl;
-import com.n4systems.fieldid.service.download.WebOutputHandler;
+import com.n4systems.fieldid.service.download.*;
 import com.n4systems.fieldid.service.event.util.ResultTransformerFactory;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.RowModel;
@@ -93,16 +90,7 @@ public abstract class FieldIdAPIDataProvider extends FieldIDDataProvider<RowView
     private void fillInStringValues(RowView row) {
         SessionUser user = FieldIDSession.get().getSessionUser();
         TableGenerationContext exportContextProvider = new TableGenerationContextImpl(user.getTimeZone(), user.getOwner().getPrimaryOrg().getDateFormat(), user.getOwner().getPrimaryOrg().getDateFormat() + " h:mm a", user.getOwner());
-        CellHandlerFactory cellHandlerFactory = new CellHandlerFactory(exportContextProvider);
-        List<String> rowValues = new ArrayList<String>();
-        int index = 0;
-        for (ColumnMappingView column : searchCriteria.getSortedStaticAndDynamicColumns()) {
-            WebOutputHandler handler = cellHandlerFactory.getHandler(column.getOutputHandler());
-            String cellValue = handler.handleWeb(row.getId(), row.getValues().get(index));
-            rowValues.add(cellValue);
-            index++;
-        }
-        row.setStringValues(rowValues);
+        StringRowPopulator.populateRowWithConvertedStrings(row,searchCriteria, exportContextProvider);
     }
 
     @Override

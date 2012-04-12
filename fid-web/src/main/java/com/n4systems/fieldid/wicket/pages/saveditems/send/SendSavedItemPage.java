@@ -1,29 +1,37 @@
 package com.n4systems.fieldid.wicket.pages.saveditems.send;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.components.timezone.FrequencyDropDownChoice;
 import com.n4systems.fieldid.wicket.components.timezone.HourOfDaySelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.saveditem.SavedItem;
+import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -31,6 +39,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public class SendSavedItemPage extends FieldIDFrontEndPage {
@@ -38,17 +47,40 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
     @SpringBean
     private PersistenceService persistenceService;
 
+    @SpringBean
+    private SendSearchService sendSearchService;
+
     private SavedItem savedItem;
+    private IModel<? extends SearchCriteria> criteria;
+    
+    private static final int SEND_NOW_STATE = 1;
+    private static final int SCHEDULE_STATE = 2;
+    
+    private int currentState;
+    private boolean scheduleStateAvailable = true;
+
+    private AjaxSubmitLink submitLink;
+
+    public SendSavedItemPage(IModel<? extends SearchCriteria> criteria) {
+        this.criteria = criteria;
+        currentState = SEND_NOW_STATE;
+        scheduleStateAvailable = false;
+    }
 
     public SendSavedItemPage(PageParameters params) {
         super(params);
 
         long savedItemId = params.get("id").toLong();
         savedItem = persistenceService.find(SavedItem.class, savedItemId);
+        currentState = SCHEDULE_STATE;
+    }
 
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
         add(new SendSavedItemForm("form", new Model<SendSavedItemSchedule>(new SendSavedItemSchedule())));
     }
-    
+
     class SendSavedItemForm extends Form<SendSavedItemSchedule> {
 
         public SendSavedItemForm(String id, final IModel<SendSavedItemSchedule> model) {
@@ -67,20 +99,23 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
 
             scheduleFieldsContainer.add(new FrequencyDropDownChoice("frequency", new PropertyModel<SimpleFrequency>(model, "frequency")));
             scheduleFieldsContainer.add(new HourOfDaySelect("hourToSend", new PropertyModel<Integer>(model, "hourToSend")));
+            scheduleFieldsContainer.setVisible(currentState == SCHEDULE_STATE);
             
             add(scheduleFieldsContainer);
 
             MattBar bar = new MattBar("bar") {
                 @Override
                 protected void onEnterState(AjaxRequestTarget target, Object state) {
-                    scheduleFieldsContainer.setVisible(state.equals(2));
-                    target.add(scheduleFieldsContainer);
+                    currentState = (Integer)state;
+                    scheduleFieldsContainer.setVisible(state.equals(SCHEDULE_STATE));
+                    target.add(scheduleFieldsContainer, submitLink);
                 }
             };
+            bar.setVisible(scheduleStateAvailable);
 
-            bar.addLink(new FIDLabelModel("label.send_now"), 1);
-            bar.addLink(new FIDLabelModel("label.schedule_future_runs"), 2);
-            bar.setCurrentState(1);
+            bar.addLink(new FIDLabelModel("label.send_now"), SEND_NOW_STATE);
+            bar.addLink(new FIDLabelModel("label.schedule_future_runs"), SCHEDULE_STATE);
+            bar.setCurrentState(currentState);
             add(bar);
 
             final WebMarkupContainer emailAddressesContainer = new WebMarkupContainer("emailAddressesContainer");
@@ -90,7 +125,6 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
             emailAddressesContainer.add(new ListView<String>("emailAddresses", new PropertyModel<List<String>>(model, "emailAddresses")) {
                 @Override
                 protected void populateItem(final ListItem<String> item) {
-//                    EmailTextField addressField = new EmailTextField("address", item.getModel());
                     TextField<String> addressField = new TextField<String>("address", item.getModel());
                     addressField.add(new UpdateComponentOnChange() {
                         @Override
@@ -125,18 +159,29 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
             add(messageTextArea = new TextArea<String>("message", new PropertyModel<String>(model, "message")));
             messageTextArea.add(new StringValidator.MaximumLengthValidator(1024));
             
-            add(new AjaxSubmitLink("scheduleNowLink") {
+            add(submitLink = new AjaxSubmitLink("scheduleNowLink") {
+                { setOutputMarkupId(true); }
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     SendSavedItemSchedule sendItemSchedule = model.getObject();
                     sendItemSchedule.clearBlankEmailAddresses();
                     if (validateEmailAddresses(sendItemSchedule)) {
-                        sendItemSchedule.setSavedItem(savedItem);
                         sendItemSchedule.setUser(getCurrentUser());
                         sendItemSchedule.setTenant(getCurrentUser().getTenant());
-                        persistenceService.save(sendItemSchedule);
-                        FieldIDSession.get().info("Successfully saved schedule");
-                        getRequestCycle().setResponsePage(ManageSavedItemsPage.class);
+
+                        if (currentState == SCHEDULE_STATE) {
+                            sendItemSchedule.setSavedItem(savedItem);
+                            persistenceService.save(sendItemSchedule);
+                            FieldIDSession.get().info("Successfully saved schedule");
+                            getRequestCycle().setResponsePage(ManageSavedItemsPage.class);
+                        } else {
+                            try {
+                                sendSearchService.sendSearch(criteria.getObject(), model.getObject());
+                            } catch (MessagingException e) {
+                                FieldIDSession.get().error("Error sending email");
+                            }
+                            getRequestCycle().setResponsePage(RunLastSearchPage.class);
+                        }
                     } else {
                         target.add(feedbackPanel);
                     }
@@ -147,6 +192,8 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                     target.add(feedbackPanel);
                 }
             });
+
+            submitLink.add(new FlatLabel("submitLabel", createCurrentSubmitLabelModel()));
         }
 
         // Would like to validate email addresses in a standard way -- but this has an issue
@@ -177,11 +224,31 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/saved_item/send_saved_item.css");
+        response.renderCSSReference("style/newCss/component/matt_buttons.css");
     }
 
     @Override
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("label.email"));
+    }
+    
+    public IModel<String> createCurrentSubmitLabelModel() {
+        return new IModel<String>() {
+            @Override
+            public String getObject() {
+                if (currentState == SCHEDULE_STATE) {
+                    return new FIDLabelModel("label.schedule_now").getObject();
+                }
+                return new FIDLabelModel("label.send_now").getObject();
+            }
+
+            @Override
+            public void setObject(String object) {
+            }
+            @Override
+            public void detach() {
+            }
+        };
     }
 
 }

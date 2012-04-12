@@ -2,6 +2,7 @@ package com.n4systems.util;
 
 import java.util.Map;
 
+import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -89,6 +90,10 @@ public class ServiceLocator implements ApplicationContextAware {
 	public static final ServiceDTOBeanConverter getServiceDTOBeanConverter() {
 		return getBean(ServiceDTOBeanConverter.class);
 	}
+
+    public static final SendSearchService getSendAssetSearchService() {
+        return getBean(SendSearchService.class);
+    }
 
 	public static final AutoAttributeManager getAutoAttributeManager() {
 		return new AutoAttributeManagerEJBContainer();

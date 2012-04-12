@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.summary.EventResolutionPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventStatus;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -59,7 +60,11 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
             }
         });
 
-        add(new WebMarkupContainer("emailLink"));
+        add(new Link("emailLink") {
+            @Override public void onClick() {
+                setResponsePage(new SendSavedItemPage(model));
+            }
+        });
         add(new SaveMenu("saveMenu") {
             @Override protected Link createSaveLink(String id) {
                 return ReportingSubMenu.this.createSaveLink(id);
