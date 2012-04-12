@@ -29,18 +29,13 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     public static final String Y_PARAMETER = "y";
     public static final String RESULTS_PANEL_ID = "resultsPanel";
 
-    private
-    @SpringBean
-    DashboardReportingService dashboardReportingService;
-    private
-    @SpringBean
-    SavedAssetSearchService savedAssetSearchService;
+    private @SpringBean DashboardReportingService dashboardReportingService;
+    private @SpringBean SavedAssetSearchService savedAssetSearchService;
 
     protected SavedItem<T> savedItem;
     protected T searchCriteria;
     protected Component searchMenu;
     protected boolean showLeftPanel;
-    private boolean initLeftPanel = false;
 
     public AbstractSearchPage(PageParameters params) {
         this(params, null, null);  // will create default criteria & savedItems.
@@ -104,7 +99,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/fieldIdWide.js");
         response.renderCSSReference("style/pageStyles/wide.css");
-        response.renderOnLoadJavaScript("fieldIdWidePage.init('" + showLeftPanel + "')");
+        response.renderOnDomReadyJavaScript("fieldIdWidePage.init('" + showLeftPanel + "')");
     }
 
     @Override
