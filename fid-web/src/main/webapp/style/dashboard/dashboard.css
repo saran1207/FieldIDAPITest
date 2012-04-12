@@ -191,3 +191,10 @@ div.buttonsLabel {
 .w_content_container {
     overflow:visible;
 }
+
+/* horizontal bar charts need some special lovin' to get labels aligned vertically
+  currently, only assetsStatusChart is the only such horiz bar chart.  WEB-2723
+*/
+.assetsStatusChart .tickLabel {
+    margin-top:-8px;
+}
