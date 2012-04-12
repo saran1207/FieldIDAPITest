@@ -25,6 +25,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
     private Link updateSchedulesLink;
     private WebMarkupContainer actions;
     private WebMarkupContainer print;
+    private Link summaryReportLink;
 
 
     public ReportingSubMenu(String id, final Model<EventReportCriteria> model) {
@@ -52,7 +53,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         print.add(makeLinkLightBoxed(new MassActionLink<PrintObservationCertReportPage>("printSelectedObservationReportsLink", PrintObservationCertReportPage.class, model)));
         add(print);
 
-        add(new Link("summaryReportLink") {
+        add(summaryReportLink = new Link("summaryReportLink") {
             @Override public void onClick() {
                 setResponsePage(new EventResolutionPage(model));
             }
@@ -74,6 +75,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
     @Override
     protected void updateMenuBeforeRender(int selected) {
         super.updateMenuBeforeRender(selected);  // update
+        summaryReportLink.setVisible(selected>0);
         exportLink.setVisible(selected > 0 && selected < maxExport);
         print.setVisible(selected > 0 && selected < maxPrint);
         actions.setVisible(selected > 0 && selected < maxUpdate);
