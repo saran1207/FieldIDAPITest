@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.users;
 
+import com.n4systems.taskscheduling.task.SendSavedItemsTask;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class ChangePasswordCrud extends AbstractCrud {
 
 	@SkipValidation
 	public String doEdit() {
+        new SendSavedItemsTask().run();
 		return SUCCESS;
 	}	
 

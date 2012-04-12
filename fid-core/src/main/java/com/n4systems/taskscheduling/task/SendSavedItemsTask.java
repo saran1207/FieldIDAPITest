@@ -5,15 +5,15 @@ import com.n4systems.util.ServiceLocator;
 
 import java.util.concurrent.TimeUnit;
 
-public class SendSavedItemTask extends ScheduledTask {
+public class SendSavedItemsTask extends ScheduledTask {
 
-    public SendSavedItemTask() {
+    public SendSavedItemsTask() {
         super(60 * 30, TimeUnit.SECONDS);
     }
 
     @Override
     protected void runTask() throws Exception {
-        ServiceLocator.getSendAssetSearchService().sendAll();
+        ServiceLocator.getSendAssetSearchService().sendAllDueItems();
     }
 
 }

@@ -77,7 +77,7 @@
     <tr><td style="padding: 25px;">
 
         <div class="reportContent">
-            <h1>Search Results</h1>
+            <h1>${title}</h1>
         </div>
 
         <#if message?exists>
@@ -108,4 +108,3 @@
 
 
 </td></tr></table>
-

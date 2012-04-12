@@ -18,22 +18,25 @@ import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.SearchCriteria;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.LogUtils;
 import com.n4systems.util.mail.TemplateMailMessage;
+import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.views.RowView;
 import com.n4systems.util.views.TableView;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public class SendSearchService extends FieldIdPersistenceService {
     
@@ -54,22 +57,32 @@ public class SendSearchService extends FieldIdPersistenceService {
     private SavedReportService savedReportService;
 
     @Transactional
-    public void sendAll() {
-        List<SendSavedItemSchedule> schedules = persistenceService.findAll(SendSavedItemSchedule.class);
+    public void sendAllDueItems() {
+        QueryBuilder<SendSavedItemSchedule> query = new QueryBuilder<SendSavedItemSchedule>(SendSavedItemSchedule.class, new OpenSecurityFilter());
+        List<SendSavedItemSchedule> schedules = persistenceService.findAll(query);
         for (SendSavedItemSchedule schedule : schedules) {
             try {
-                sendSavedItem(schedule.getSavedItem().getId(), schedule);
-            } catch(MessagingException e) {
-                logger.error("Error sending notification: " + schedule);
+                Date utcDateToTheHour = DateHelper.truncate(new Date(), DateHelper.HOUR);
+                if (schedule.shouldRunNow(utcDateToTheHour)) {
+                    sendSavedItem(schedule.getSavedItem().getId(), schedule);
+                }
+            } catch (Exception e) {
+                logger.error("Error sending notification: " + ToStringBuilder.reflectionToString(schedule));
             }
         }
     }
     
     @Transactional
     public void sendSavedItem(Long savedItemId, SendSavedItemSchedule schedule) throws MessagingException {
-        SavedSearchItem convertedReport = savedAssetSearchService.getConvertedReport(SavedSearchItem.class, savedItemId);
-        AssetSearchCriteria searchCriteria = convertedReport.getSearchCriteria();
-        sendSearch(searchCriteria, schedule);
+        try {
+            securityContext.setUserSecurityFilter(new UserSecurityFilter(schedule.getUser()));
+            securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(schedule.getTenant()));
+            SavedSearchItem convertedReport = savedAssetSearchService.getConvertedReport(SavedSearchItem.class, savedItemId);
+            AssetSearchCriteria searchCriteria = convertedReport.getSearchCriteria();
+            sendSearch(searchCriteria, schedule);
+        } finally {
+            securityContext.reset();
+        }
     }
 
     @Transactional
@@ -87,7 +100,7 @@ public class SendSearchService extends FieldIdPersistenceService {
     }
 
     private void sendMessage(SearchCriteria criteria, List<RowView> results, SendSavedItemSchedule schedule) throws MessagingException {
-        String messageSubject = "Search Results";
+        String title = getSanitizedTitle(schedule, criteria);
 
         Set<String> addressesToDeliverTo = schedule.getAddressesToDeliverTo();
 
@@ -96,9 +109,10 @@ public class SendSearchService extends FieldIdPersistenceService {
         StringRowPopulator.populateRowsWithConvertedStrings(results, criteria, exportContextProvider);
 
         // no we need to build the message body with the html event report table
-        TemplateMailMessage message = new TemplateMailMessage(messageSubject, "sendSavedItem");
+        TemplateMailMessage message = new TemplateMailMessage(title, "sendSavedItem");
 
         List<ColumnMappingView> columns = criteria.getSortedStaticAndDynamicColumns();
+        message.getTemplateMap().put("title", title);
         message.getTemplateMap().put("message", sanitize(schedule.getMessage()));
         message.getTemplateMap().put("columns", localizeColumnNames(columns, user));
         message.getTemplateMap().put("rows", results);
@@ -108,6 +122,13 @@ public class SendSearchService extends FieldIdPersistenceService {
         logger.info(LogUtils.prepare("Sending Notification Message to [$0] recipients", addressesToDeliverTo.size()));
 
         new SMTPMailManager().sendMessage(message);
+    }
+
+    private String getSanitizedTitle(SendSavedItemSchedule schedule, SearchCriteria criteria) {
+        if (schedule.getSavedItem() != null) {
+            return sanitize(schedule.getSavedItem().getName());
+        }
+        return criteria instanceof AssetSearchCriteria ? "Search Results" : "Reporting Results";
     }
 
     private String sanitize(String message) {

@@ -4,6 +4,8 @@ import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.user.User;
+import com.n4systems.model.utils.PlainDate;
+import com.n4systems.util.DateHelper;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.IndexColumn;
 
@@ -130,4 +132,12 @@ public class SendSavedItemSchedule extends EntityWithTenant {
         }
         return addresses;
     }
+    
+    public boolean shouldRunNow(Date utcDateTimeOnTheHour) {
+        Calendar localizedDate = Calendar.getInstance();
+        localizedDate.setTime(DateHelper.localizeDate(utcDateTimeOnTheHour, user.getTimeZone()));
+
+        return frequency.isSameDay(localizedDate.getTime()) && hourToSend == localizedDate.get(Calendar.HOUR_OF_DAY);
+    }
+    
 }
