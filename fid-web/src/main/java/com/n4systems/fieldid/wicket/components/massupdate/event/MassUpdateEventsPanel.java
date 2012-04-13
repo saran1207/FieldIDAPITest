@@ -47,7 +47,7 @@ public class MassUpdateEventsPanel extends Panel {
 		navPanel.replaceWith(getNavigationPanel(eventSearchCriteria, panel));		
 	}
 	
-	private MassUpdateNavigationPanel getNavigationPanel(IModel<EventReportCriteria> eventSearchCriteria, AbstractMassUpdatePanel panel) {
+	private MassUpdateNavigationPanel getNavigationPanel(final IModel<EventReportCriteria> eventSearchCriteria, AbstractMassUpdatePanel panel) {
 		return new MassUpdateNavigationPanel("navPanel", eventSearchCriteria.getObject(), panel){
 			@Override
 			protected void onBackToSearch(SearchCriteria searchCriteria) {
@@ -55,7 +55,7 @@ public class MassUpdateEventsPanel extends Panel {
 			}
 			
 			@Override
-			protected Link createLink(String id, final SearchCriteria eventSearchCriteria, final AbstractMassUpdatePanel panel) {
+			protected Link createLink(String id, final AbstractMassUpdatePanel panel) {
 				return new Link(id) {
 					@Override
 					public void onClick() {
@@ -63,7 +63,7 @@ public class MassUpdateEventsPanel extends Panel {
 						panel.setParent(this.getParent().getParent());
 						panel.replaceWith(previousPanel);
 						((MassUpdateEventsPanel) this.getParent().getParent()).setCurrentPanel(previousPanel);
-						this.getParent().replaceWith(new MassUpdateNavigationPanel(this.getParent().getId(), eventSearchCriteria, previousPanel));
+						this.getParent().replaceWith(getNavigationPanel(eventSearchCriteria, previousPanel));
 					}
 				};
 			}

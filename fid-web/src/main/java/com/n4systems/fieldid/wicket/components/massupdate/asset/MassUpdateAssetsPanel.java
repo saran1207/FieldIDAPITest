@@ -52,7 +52,7 @@ public class MassUpdateAssetsPanel extends Panel {
 			}
 			
 			@Override
-			protected Link createLink(String id, final SearchCriteria assetSearchCriteria, final AbstractMassUpdatePanel panel) {
+			protected Link createLink(String id, final AbstractMassUpdatePanel panel) {
 				return new Link(id) {
 					@Override
 					public void onClick() {
@@ -60,7 +60,7 @@ public class MassUpdateAssetsPanel extends Panel {
 						panel.setParent(this.getParent().getParent());
 						panel.replaceWith(previousPanel);
 						((MassUpdateAssetsPanel) this.getParent().getParent()).setCurrentPanel(previousPanel);
-						this.getParent().replaceWith(new MassUpdateNavigationPanel(this.getParent().getId(), assetSearchCriteria, previousPanel));
+						this.getParent().replaceWith(getNavigationPanel(assetSearchCriteria, previousPanel));
 					}
 				};
 			}

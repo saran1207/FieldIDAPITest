@@ -32,7 +32,7 @@ public class MassUpdateNavigationPanel extends Panel {
 		add(confirmLabel = new WebMarkupContainer("confirmLabel"));
 		
 		if(panel.isDetailsPanel()) {
-			add(selectOperationLink = createLink("backToSelectOperation", searchCriteria, panel));
+			add(selectOperationLink = createLink("backToSelectOperation", panel));
 			backToSelectOperationLabel.setVisible(false);
 			add(operationDetailsLink = createBlankLink("backToOperationDetails"));
 			operationDetailsLink.setVisible(false);
@@ -43,9 +43,9 @@ public class MassUpdateNavigationPanel extends Panel {
 				add(new AttributeModifier("class", "navMenu navMenuShort"));
 			}
 		} else if(panel.isConfirmPanel()) {
-			add(selectOperationLink = createLink("backToSelectOperation", searchCriteria, panel.getPreviousPanel()));
+			add(selectOperationLink = createLink("backToSelectOperation", panel.getPreviousPanel()));
 			backToSelectOperationLabel.setVisible(false);			
-			add(operationDetailsLink = createLink("backToOperationDetails", searchCriteria, panel));
+			add(operationDetailsLink = createLink("backToOperationDetails", panel));
 			backToOperationDetailsLabel.setVisible(false);
 			confirmLabel.add(new AttributeModifier("class", "strong"));
 			add(new AttributeModifier("class", "navMenu navMenuShort"));
@@ -59,7 +59,7 @@ public class MassUpdateNavigationPanel extends Panel {
 		}		
 	}
 
-	protected Link createLink(String string, SearchCriteria searchCriteria, AbstractMassUpdatePanel panel){
+	protected Link createLink(String string, AbstractMassUpdatePanel panel){
 		return createBlankLink("");
 	};
 	
