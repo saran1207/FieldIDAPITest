@@ -41,7 +41,7 @@ import java.util.*;
 public class SendSearchService extends FieldIdPersistenceService {
     
     private static final Logger logger = Logger.getLogger(SendSearchService.class);
-    private static final int MAX_RESULTS_FOR_SENT_SEARCH = 100;
+    private static final int MAX_RESULTS_FOR_SENT_SEARCH = 500;
     private static final Properties localizationProperties = loadProperties();
 
     @Autowired
@@ -109,7 +109,7 @@ public class SendSearchService extends FieldIdPersistenceService {
         StringRowPopulator.populateRowsWithConvertedStrings(results, criteria, exportContextProvider);
 
         // no we need to build the message body with the html event report table
-        TemplateMailMessage message = new TemplateMailMessage(title, "sendSavedItem");
+        TemplateMailMessage message = new TemplateMailMessage("FieldID: " + title, "sendSavedItem");
 
         List<ColumnMappingView> columns = criteria.getSortedStaticAndDynamicColumns();
         message.getTemplateMap().put("title", title);
@@ -128,7 +128,7 @@ public class SendSearchService extends FieldIdPersistenceService {
         if (schedule.getSavedItem() != null) {
             return sanitize(schedule.getSavedItem().getName());
         }
-        return criteria instanceof AssetSearchCriteria ? "Search Results" : "Reporting Results";
+        return criteria instanceof AssetSearchCriteria ? "Search" : "Report";
     }
 
     private String sanitize(String message) {

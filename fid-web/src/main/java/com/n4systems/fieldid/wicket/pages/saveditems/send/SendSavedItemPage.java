@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.components.timezone.FrequencyDropDownChoice;
 import com.n4systems.fieldid.wicket.components.timezone.HourOfDaySelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.StringAppendModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
@@ -57,22 +58,31 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
     private static final int SCHEDULE_STATE = 2;
     
     private int currentState;
-    private boolean scheduleStateAvailable = true;
+    private boolean scheduleStateAvailable = false;
 
     private AjaxSubmitLink submitLink;
 
     public SendSavedItemPage(IModel<? extends SearchCriteria> criteria) {
         this.criteria = criteria;
-        currentState = SEND_NOW_STATE;
-        scheduleStateAvailable = false;
+        if (criteria.getObject().getSavedReportId() != null) {
+            initializeSavedItem(criteria.getObject().getSavedReportId());
+        } else {
+            currentState = SEND_NOW_STATE;
+            scheduleStateAvailable = false;
+        }
     }
 
     public SendSavedItemPage(PageParameters params) {
         super(params);
 
         long savedItemId = params.get("id").toLong();
+        initializeSavedItem(savedItemId);
+    }
+
+    private void initializeSavedItem(long savedItemId) {
         savedItem = persistenceService.find(SavedItem.class, savedItemId);
         currentState = SCHEDULE_STATE;
+        scheduleStateAvailable = true;
     }
 
     @Override
@@ -168,15 +178,15 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                     if (validateEmailAddresses(sendItemSchedule)) {
                         sendItemSchedule.setUser(getCurrentUser());
                         sendItemSchedule.setTenant(getCurrentUser().getTenant());
+                        sendItemSchedule.setSavedItem(savedItem);
 
                         if (currentState == SCHEDULE_STATE) {
-                            sendItemSchedule.setSavedItem(savedItem);
                             persistenceService.save(sendItemSchedule);
                             FieldIDSession.get().info("Successfully saved schedule");
                             getRequestCycle().setResponsePage(ManageSavedItemsPage.class);
                         } else {
                             try {
-                                sendSearchService.sendSearch(criteria.getObject(), model.getObject());
+                                sendSearchService.sendSearch(criteria.getObject(), sendItemSchedule);
                             } catch (MessagingException e) {
                                 FieldIDSession.get().error("Error sending email");
                             }
@@ -229,7 +239,7 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.email"));
+        return new Label(labelId, createTitleModel());
     }
     
     public IModel<String> createCurrentSubmitLabelModel() {
@@ -240,6 +250,26 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                     return new FIDLabelModel("label.schedule_now").getObject();
                 }
                 return new FIDLabelModel("label.send_now").getObject();
+            }
+
+            @Override
+            public void setObject(String object) {
+            }
+            @Override
+            public void detach() {
+            }
+        };
+    }
+
+    public IModel<String> createTitleModel() {
+        return new IModel<String>() {
+            @Override
+            public String getObject() {
+                if (savedItem == null) {
+                    return new FIDLabelModel("label.email").getObject();
+                } else {
+                    return new StringAppendModel(" / ", new FIDLabelModel("label.email"), new PropertyModel<String>(savedItem, "name")).getObject();
+                }
             }
 
             @Override
