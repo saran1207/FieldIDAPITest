@@ -59,6 +59,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			protected void onSubmit() {
 				
 				MassUpdateEventModel model = (MassUpdateEventModel) this.getDefaultModelObject();
+				model.convertDatePerformedToUTC(FieldIDSession.get().getSessionUser().getTimeZone());
 				
 				if(model.getSelect().containsValue(true)) {
 					String errorMessage = checkRequiredFields(model);
@@ -168,7 +169,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
             add(performedBy);
 
             CheckBox datePerformedCheck = new CheckBox("datePerformedCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[datePerformed]"));
-            DateTimePicker datePerformed = new DateTimePicker("datePerformed", new PropertyModel<Date>(massUpdateEventModel, "event.date"));
+            DateTimePicker datePerformed = new DateTimePicker("datePerformed", new PropertyModel<Date>(massUpdateEventModel, "event.date"), true);
             datePerformed.getDateTextField().add(createCheckOnChangeEvent(datePerformedCheck));
             add(datePerformedCheck);
             add(datePerformed);
