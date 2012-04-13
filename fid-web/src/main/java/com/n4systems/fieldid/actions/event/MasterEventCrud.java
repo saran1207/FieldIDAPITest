@@ -229,7 +229,8 @@ public class MasterEventCrud extends AbstractCrud {
 				uniqueID = event.getId();
 			} else {
 				Event master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());
-				event = eventManager.updateEvent(master, masterEvent.getScheduleId(), getSessionUser().getUniqueID(), masterEvent.getProofTestFile(), masterEvent.getUploadedFiles());
+                Long scheduleId = masterEvent.getScheduleId() != null ? masterEvent.getScheduleId() : master.getSchedule().getId();
+				event = eventManager.updateEvent(master, scheduleId, getSessionUser().getUniqueID(), masterEvent.getProofTestFile(), masterEvent.getUploadedFiles());
 			}
 
 //			completeSchedule(masterEvent.getScheduleId(), masterEvent.getSchedule());
