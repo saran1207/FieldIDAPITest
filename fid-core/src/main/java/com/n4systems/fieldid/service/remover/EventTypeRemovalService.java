@@ -132,7 +132,7 @@ private static final Logger logger = Logger.getLogger(EventTypeRemovalService.cl
 
 	private void sendFailureEmailResponse(EventType eventType) {
 		String subject = "Event Type Removal Failed To Complete";
-		String body = "<h2>Event Type Removed " + eventType.getArchivedName() + "</h2>" +
+		String body = "<h2>Event Type Removed - " + eventType.getDisplayName() + "</h2>" +
 				"The event type and all other associated elements have been restored.  You may try to delete the event type again or contact support@n4systems for more information.";
 
 		logger.info("Sending logFailureAndSendFailureEmail email [" + getCurrentUser().getEmailAddress() + "]");
@@ -145,7 +145,7 @@ private static final Logger logger = Logger.getLogger(EventTypeRemovalService.cl
 
 	private void sendSuccessEmailResponse(EventType eventType) {
 		String subject = "Event Type Removal Completed";
-		String body = "<h2>Event Type Removed " +  eventType.getArchivedName() + "</h2>";
+		String body = "<h2>Event Type Removed - " +  eventType.getDisplayName() + "</h2>";
 
 		logger.info("Sending email [" + getCurrentUser().getEmailAddress() + "]");
 		try {
