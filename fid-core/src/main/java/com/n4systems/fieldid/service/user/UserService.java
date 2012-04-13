@@ -1,13 +1,7 @@
 package com.n4systems.fieldid.service.user;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -18,6 +12,12 @@ import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Transactional
 public class UserService extends FieldIdPersistenceService {
@@ -102,6 +102,8 @@ public class UserService extends FieldIdPersistenceService {
                 final User user = persistenceService.find(User.class, userId);
                 final SavedItem clonedItem = (SavedItem) savedItem.clone();
                 clonedItem.reset();
+                clonedItem.setId(null); // force it to create a new report!
+                clonedItem.setSendSchedules(new ArrayList<SendSavedItemSchedule>()); // erase any existing schedules for shared report - don't want to inherit them.
                 clonedItem.setSharedByName(sharedByName);
                 user.getSavedItems().add(clonedItem);
                 persistenceService.save(user);
