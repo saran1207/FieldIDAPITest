@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.handlers.remover.summary.EventFrequencyDeleteSummary;
 import com.n4systems.handlers.remover.summary.SimpleLongRemovalSummary;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
@@ -26,6 +27,7 @@ public class EventFrequenciesRemovalService extends FieldIdPersistenceService {
 
     @Transactional
 	public void remove(AssociatedEventType associatedEventType) {
+        associatedEventType.getAssetType();
 		List<AssetTypeSchedule> frequencies = getEventFrequencies(associatedEventType);
 		deleteFrequencies(frequencies);
 	}
@@ -40,6 +42,10 @@ public class EventFrequenciesRemovalService extends FieldIdPersistenceService {
 
 	private int deleteFrequencies(List<AssetTypeSchedule> frequencies ) {
 		for (AssetTypeSchedule assetTypeSchedule : frequencies) {
+            AssetType type = assetTypeSchedule.getAssetType();
+            type.getSchedules().remove(assetTypeSchedule);
+            persistenceService.update(type);
+
             persistenceService.remove(assetTypeSchedule);
 		}
 		return frequencies.size();

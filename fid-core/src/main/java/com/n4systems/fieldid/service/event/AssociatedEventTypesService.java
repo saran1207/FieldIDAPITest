@@ -55,7 +55,9 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
             persistenceService.save(associatedEventType);
         }
         
-        // Mobile gets associated event types along with the asset type.  Need to update the mod date so it knows something changed. 
+        // Mobile gets associated event types along with the asset type.  Need to update the mod date so it knows something changed.
+        // WEB-2804 We also need to refresh the asset type due to changes made to its associated AssetTypeSchedules in the calls above
+        assetType = persistenceService.find(AssetType.class, assetType.getId());
         assetType.touch();
         persistenceService.update(assetType);
     }
