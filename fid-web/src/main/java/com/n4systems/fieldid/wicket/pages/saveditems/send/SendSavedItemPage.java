@@ -185,11 +185,8 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                             FieldIDSession.get().info("Successfully saved schedule");
                             getRequestCycle().setResponsePage(ManageSavedItemsPage.class);
                         } else {
-                            try {
-                                sendSearchService.sendSearch(criteria.getObject(), sendItemSchedule);
-                            } catch (MessagingException e) {
-                                FieldIDSession.get().error("Error sending email");
-                            }
+                            sendSearchService.sendSearchAsync(criteria.getObject(), sendItemSchedule);
+                            FieldIDSession.get().info("Email generation in progress");
                             getRequestCycle().setResponsePage(RunLastSearchPage.class);
                         }
                     } else {

@@ -10,6 +10,7 @@ import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.service.search.SavedReportService;
+import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.mail.SMTPMailManager;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.SendSavedItemSchedule;
@@ -37,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Callable;
 
 public class SendSearchService extends FieldIdPersistenceService {
     
@@ -44,17 +46,11 @@ public class SendSearchService extends FieldIdPersistenceService {
     private static final int MAX_RESULTS_FOR_SENT_SEARCH = 500;
     private static final Properties localizationProperties = loadProperties();
 
-    @Autowired
-    private AssetSearchService searchService;
-
-    @Autowired
-    private ReportService reportService;
-
-    @Autowired
-    private SavedAssetSearchService savedAssetSearchService;
-
-    @Autowired
-    private SavedReportService savedReportService;
+    @Autowired private AsyncService asyncService;
+    @Autowired private AssetSearchService searchService;
+    @Autowired private ReportService reportService;
+    @Autowired private SavedAssetSearchService savedAssetSearchService;
+    @Autowired private SavedReportService savedReportService;
 
     @Transactional
     public void sendAllDueItems() {
@@ -83,6 +79,16 @@ public class SendSearchService extends FieldIdPersistenceService {
         } finally {
             securityContext.reset();
         }
+    }
+    
+    public @Transactional void sendSearchAsync(final SearchCriteria searchCriteria, final SendSavedItemSchedule schedule) {
+        asyncService.createTask(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                sendSearch(searchCriteria, schedule);
+                return null;
+            }
+        });
     }
 
     @Transactional
