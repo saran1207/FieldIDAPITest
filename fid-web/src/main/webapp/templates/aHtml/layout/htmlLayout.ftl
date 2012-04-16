@@ -8,7 +8,7 @@
 			}
 			
 			function closeLightBox() {
-				parent.closeLightBox();
+				parent.closeLightbox();
 			}
 		</@n4.includeScript>
 		<style type="text/css">
