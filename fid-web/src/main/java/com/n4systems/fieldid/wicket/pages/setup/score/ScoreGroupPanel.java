@@ -16,7 +16,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
-import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.ScoreService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
@@ -33,9 +32,6 @@ public class ScoreGroupPanel extends SortableListPanel {
 
     @SpringBean
     private ScoreService scoreService;
-
-    @SpringBean
-    private PersistenceService persistenceService;
 
     private ScoreGroupForm scoreGroupForm;
     private IModel<ScoreGroup> scoreGroupModel;
@@ -62,7 +58,7 @@ public class ScoreGroupPanel extends SortableListPanel {
                 sortableBehavior.setDisabled(true);
                 reorderState = false;
                 getScoreGroup().setScores(scores);
-                persistenceService.update(getScoreGroup());
+                scoreService.updateScoreGroup(getScoreGroup());
                 ScoreGroupPanel.this.setDefaultModel();
             }
 
@@ -98,7 +94,7 @@ public class ScoreGroupPanel extends SortableListPanel {
 
                     @Override
                     protected void onStoreLinkClicked(AjaxRequestTarget target) {
-                        persistenceService.update(item.getModelObject());
+                        scoreService.updateScore(getScoreGroup(), item.getModelObject());
                         target.add(ScoreGroupPanel.this);
                     }
                     @Override
