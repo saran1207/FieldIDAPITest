@@ -77,7 +77,7 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 			}
 
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(), e);
 			throw new ImportException("Failed to import view", e, currentRow);
 		} finally {
 			// clean up resources since this object could be holding a lot of them
