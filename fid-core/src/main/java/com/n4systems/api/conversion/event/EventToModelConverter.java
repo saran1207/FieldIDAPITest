@@ -159,11 +159,13 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 			@Override 
 			public CriteriaResult populate(SelectCriteriaResult result) {
 				checkArgument(criteria instanceof SelectCriteria);
+				if (StringUtils.isBlank(result.getResultString())) {
+					return result;  // leave it as nul...that's a valid value.
+				}
 				List<String> options = ((SelectCriteria)criteria).getOptions();
-				final String option = criteriaResultView.getResultString();
+				final String option = criteriaResultView.getResultString();				
 				int index = Iterators.indexOf(options.iterator(), new Predicate<String>() {
-					@Override 
-					public boolean apply(String value) {
+					@Override public boolean apply(String value) {
 						return StringUtils.equalsIgnoreCase(value,option);
 					}			
 				});							
