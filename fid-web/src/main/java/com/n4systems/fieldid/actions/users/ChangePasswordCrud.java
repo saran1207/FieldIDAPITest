@@ -52,7 +52,6 @@ public class ChangePasswordCrud extends AbstractCrud {
 
 	@SkipValidation
 	public String doEdit() {
-        new SendSavedItemsTask().run();
 		return SUCCESS;
 	}	
 

@@ -63,7 +63,7 @@ public class SendSearchService extends FieldIdPersistenceService {
                     sendSavedItem(schedule.getSavedItem().getId(), schedule);
                 }
             } catch (Exception e) {
-                logger.error("Error sending notification: " + ToStringBuilder.reflectionToString(schedule));
+                logger.error("Error sending notification: " + ToStringBuilder.reflectionToString(schedule), e);
             }
         }
     }
