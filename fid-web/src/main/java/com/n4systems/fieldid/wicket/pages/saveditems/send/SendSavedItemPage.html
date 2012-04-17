@@ -33,11 +33,23 @@
         </div>
 
         <div class="right" wicket:id="emailAddressesContainer">
+            <div class="sendToMeContainer">
+                <input type="checkbox" wicket:id="sendToOwner"/> <wicket:message key="label.send_to_me"/>
+            </div>
             <div wicket:id="emailAddresses">
                 <input type="text" wicket:id="address"> <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
             </div>
-            <a wicket:id="addEmailAddressLink"><wicket:message key="label.add"/></a>
-            <input type="checkbox" wicket:id="sendToOwner"/> <wicket:message key="label.send_to_me"/>
+            <div class="addLinkContainer">
+                <a wicket:id="addEmailAddressLink"><wicket:message key="label.add"/></a>
+            </div>
+        </div>
+
+        <div class="left">
+            <wicket:message key="label.subject"/>
+        </div>
+
+        <div class="right">
+            <input wicket:id="subject"/>
         </div>
 
         <div class="left">
@@ -51,6 +63,9 @@
 
         <div class="sendActions">
             <a wicket:id="scheduleNowLink" class="mattButton"><span wicket:id="submitLabel"/></a>
+            <div class="cancelLinkContainer">
+                <wicket:message key="label.or"/> <a class="cancelLink" wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            </div>
         </div>
 
     </form>

@@ -34,6 +34,9 @@ public class SendSavedItemSchedule extends EntityWithTenant {
 
     @Column(name="send_to_owner", nullable = false)
     private boolean sendToOwner = true;
+    
+    @Column(nullable = false, length = 255)
+    private String subject;
 
     @Column(name="message")
     private String message;
@@ -139,5 +142,12 @@ public class SendSavedItemSchedule extends EntityWithTenant {
 
         return frequency.isSameDay(localizedDate.getTime()) && hourToSend == localizedDate.get(Calendar.HOUR_OF_DAY);
     }
-    
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 }

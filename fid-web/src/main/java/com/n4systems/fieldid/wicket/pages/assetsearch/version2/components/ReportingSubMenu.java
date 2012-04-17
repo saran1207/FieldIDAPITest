@@ -62,7 +62,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
         add(new Link("emailLink") {
             @Override public void onClick() {
-                setResponsePage(new SendSavedItemPage(model));
+                setResponsePage(new SendSavedItemPage(model, getPage()));
             }
         });
         add(new SaveMenu("saveMenu") {

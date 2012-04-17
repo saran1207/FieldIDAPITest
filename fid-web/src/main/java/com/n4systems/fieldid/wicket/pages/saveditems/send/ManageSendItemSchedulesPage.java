@@ -4,12 +4,15 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.YesOrNoModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.time.HourToStringDisplayModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.saveditem.SavedItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -32,6 +35,9 @@ public class ManageSendItemSchedulesPage extends FieldIDFrontEndPage {
         schedulesTable.setOutputMarkupId(true);
 
         final IModel<SavedItem> savedItemModel = new EntityModel<SavedItem>(SavedItem.class, params.get("id").toLong());
+        
+        add(new BookmarkablePageLink<Void>("addLink", SendSavedItemPage.class, PageParametersBuilder.id(savedItemModel.getObject().getId())));
+        add(new BookmarkablePageLink<Void>("backLink", ManageSavedItemsPage.class));
 
         schedulesTable.add(new ListView<SendSavedItemSchedule>("schedules", new PropertyModel<List<SendSavedItemSchedule>>(savedItemModel, "sendSchedules")) {
             @Override
@@ -40,6 +46,7 @@ public class ManageSendItemSchedulesPage extends FieldIDFrontEndPage {
                 item.add(new Label("sendTo", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "emailAddressesJoined"))));
                 item.add(new Label("sendToMe", new YesOrNoModel(new PropertyModel<Boolean>(item.getModel(), "sendToOwner"))));
                 item.add(new Label("time", new HourToStringDisplayModel(new PropertyModel<Integer>(item.getModel(), "hourToSend"))));
+                item.add(new Label("subject", new PropertyModel<String>(item.getModel(), "subject")));
                 item.add(new Link("deleteLink") {
                     @Override
                     public void onClick() {

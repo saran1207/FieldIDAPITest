@@ -43,7 +43,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         add(new Link("emailLink") {
             @Override
             public void onClick() {
-                setResponsePage(new SendSavedItemPage(model));
+                setResponsePage(new SendSavedItemPage(model, getPage()));
             }
         });
         add(new SaveMenu("saveMenu") {

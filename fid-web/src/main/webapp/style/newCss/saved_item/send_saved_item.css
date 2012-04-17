@@ -29,7 +29,26 @@
     padding-top:15px;
 }
 
+.sendSavedItem .addLinkContainer {
+    padding-top:3px;
+}
+
+.sendSavedItem .sendToMeContainer {
+    padding-bottom:3px;
+}
+
 .sendSavedItem .sendActions {
     clear:both;
     padding-top: 18px;
+    overflow:hidden;
+}
+
+.sendSavedItem .sendActions .cancelLinkContainer {
+    overflow: hidden;
+    padding-top:4px;
+    padding-left:10px;
+}
+
+.sendSavedItem .mattBar {
+    padding-top: 4px;
 }

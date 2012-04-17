@@ -139,12 +139,14 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
                         return !reorderState;
                     }
                 });
+                BookmarkablePageLink<Void> manageSchedulesLink;
                 item.add(new Label("type", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "titleLabelKey"))));
                 item.add(new Label("description", item.getModel().getObject().getDescription()));
                 item.add(new BookmarkablePageLink<Void>("shareLink", ShareSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
                 item.add(new BookmarkablePageLink<Void>("editLink", EditSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
                 item.add(new BookmarkablePageLink<Void>("sendLink", SendSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
-                item.add(new BookmarkablePageLink<Void>("manageSchedulesLink", ManageSendItemSchedulesPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
+                item.add(manageSchedulesLink = new BookmarkablePageLink<Void>("manageSchedulesLink", ManageSendItemSchedulesPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
+                manageSchedulesLink.add(new Label("manageSchedulesLabel", new FIDLabelModel("label.manage_send_schedules_with_count", item.getModelObject().getSendSchedules().size())));
 
                 item.add(new AjaxLink("deleteLink") {
                     @Override

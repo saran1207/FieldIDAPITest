@@ -7,13 +7,16 @@
                 <wicket:message key="label.frequency"/>
             </th>
             <th>
+                <wicket:message key="label.time"/>
+            </th>
+            <th>
                 <wicket:message key="label.send_to"/>
             </th>
             <th>
                 <wicket:message key="label.send_to_me"/>
             </th>
             <th>
-                <wicket:message key="label.time"/>
+                <wicket:message key="label.subject"/>
             </th>
             <th></th>
         </tr>
@@ -23,13 +26,16 @@
                 <span wicket:id="frequency"/>
             </td>
             <td>
+                <span wicket:id="time"/>
+            </td>
+            <td>
                 <span wicket:id="sendTo"/>
             </td>
             <td>
                 <span wicket:id="sendToMe"/>
             </td>
             <td>
-                <span wicket:id="time"/>
+                <span wicket:id="subject"/>
             </td>
             <td>
                 <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
@@ -37,5 +43,9 @@
         </tr>
 
     </table>
+
+    <div style="padding:8px 0 0 3px; font-size:12px">
+        <a wicket:id="addLink"><wicket:message key="label.add_schedule"/></a> <wicket:message key="label.or"/> <a wicket:id="backLink"><wicket:message key="label.back_to_saved_items"/></a>
+    </div>
 
 </wicket:extend>

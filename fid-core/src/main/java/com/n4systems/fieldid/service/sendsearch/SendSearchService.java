@@ -14,7 +14,7 @@ import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.mail.SMTPMailManager;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.SendSavedItemSchedule;
-import com.n4systems.model.saveditem.SavedSearchItem;
+import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteria;
@@ -73,12 +73,16 @@ public class SendSearchService extends FieldIdPersistenceService {
         try {
             securityContext.setUserSecurityFilter(new UserSecurityFilter(schedule.getUser()));
             securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(schedule.getTenant()));
-            SavedSearchItem convertedReport = savedAssetSearchService.getConvertedReport(SavedSearchItem.class, savedItemId);
-            AssetSearchCriteria searchCriteria = convertedReport.getSearchCriteria();
+            SearchCriteria searchCriteria = getSearchCriteriaForSavedItem(savedItemId);
             sendSearch(searchCriteria, schedule);
         } finally {
             securityContext.reset();
         }
+    }
+    
+    private SearchCriteria getSearchCriteriaForSavedItem(Long savedItemId) {
+        SavedItem savedItem = persistenceService.find(SavedItem.class, savedItemId);
+        return savedItem.getSearchCriteria();
     }
     
     public @Transactional void sendSearchAsync(final SearchCriteria searchCriteria, final SendSavedItemSchedule schedule) {
@@ -115,7 +119,7 @@ public class SendSearchService extends FieldIdPersistenceService {
         StringRowPopulator.populateRowsWithConvertedStrings(results, criteria, exportContextProvider);
 
         // no we need to build the message body with the html event report table
-        TemplateMailMessage message = new TemplateMailMessage("FieldID: " + title, "sendSavedItem");
+        TemplateMailMessage message = new TemplateMailMessage(schedule.getSubject(), "sendSavedItem");
 
         List<ColumnMappingView> columns = criteria.getSortedStaticAndDynamicColumns();
         message.getTemplateMap().put("title", title);

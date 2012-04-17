@@ -18,21 +18,21 @@ import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.saveditem.SavedItem;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.SearchCriteria;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -40,7 +40,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import javax.mail.MessagingException;
 import java.util.List;
 
 public class SendSavedItemPage extends FieldIDFrontEndPage {
@@ -53,7 +52,8 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
 
     private SavedItem savedItem;
     private IModel<? extends SearchCriteria> criteria;
-    
+    private Page returnToPage;
+
     private static final int SEND_NOW_STATE = 1;
     private static final int SCHEDULE_STATE = 2;
     
@@ -62,8 +62,9 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
 
     private AjaxSubmitLink submitLink;
 
-    public SendSavedItemPage(IModel<? extends SearchCriteria> criteria) {
+    public SendSavedItemPage(IModel<? extends SearchCriteria> criteria, Page returnToPage) {
         this.criteria = criteria;
+        this.returnToPage = returnToPage;
         if (criteria.getObject().getSavedReportId() != null) {
             initializeSavedItem(criteria.getObject().getSavedReportId());
         } else {
@@ -81,6 +82,7 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
 
     private void initializeSavedItem(long savedItemId) {
         savedItem = persistenceService.find(SavedItem.class, savedItemId);
+        criteria = new Model<SearchCriteria>(savedItem.getSearchCriteria());
         currentState = SCHEDULE_STATE;
         scheduleStateAvailable = true;
     }
@@ -88,7 +90,17 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        add(new SendSavedItemForm("form", new Model<SendSavedItemSchedule>(new SendSavedItemSchedule())));
+        SendSavedItemSchedule sendSavedItemSchedule = new SendSavedItemSchedule();
+        prepopulateSubject(sendSavedItemSchedule);
+        add(new SendSavedItemForm("form", new Model<SendSavedItemSchedule>(sendSavedItemSchedule)));
+    }
+
+    private void prepopulateSubject(SendSavedItemSchedule sendSavedItemSchedule) {
+        if (criteria.getObject() instanceof AssetSearchCriteria) {
+            sendSavedItemSchedule.setSubject("FieldID: Search");
+        } else if (criteria.getObject() instanceof EventReportCriteria) {
+            sendSavedItemSchedule.setSubject("Field ID: Report");
+        }
     }
 
     class SendSavedItemForm extends Form<SendSavedItemSchedule> {
@@ -164,7 +176,11 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                     target.add(emailAddressesContainer);
                 }
             });
-
+            
+            TextField<String> subjectTextField = new RequiredTextField<String>("subject", new PropertyModel<String>(model, "subject"));
+            subjectTextField.add(new StringValidator.MaximumLengthValidator(255));
+            add(subjectTextField);
+            
             TextArea<String> messageTextArea;
             add(messageTextArea = new TextArea<String>("message", new PropertyModel<String>(model, "message")));
             messageTextArea.add(new StringValidator.MaximumLengthValidator(1024));
@@ -197,6 +213,17 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
                     target.add(feedbackPanel);
+                }
+            });
+
+            add(new Link("cancelLink") {
+                @Override
+                public void onClick() {
+                    if (returnToPage != null) {
+                        setResponsePage(returnToPage);
+                    } else {
+                        setResponsePage(ManageSavedItemsPage.class);
+                    }
                 }
             });
 
