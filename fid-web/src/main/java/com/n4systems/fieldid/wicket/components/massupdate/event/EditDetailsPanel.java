@@ -176,7 +176,9 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 
 			final CheckBox eventBookCheck = new CheckBox("eventBookCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[eventBook]"));
             eventBookCheck.setOutputMarkupId(true);
-            FormComponent<EventBook> eventBooks = new DropDownChoice<EventBook>("eventBook", new PropertyModel<EventBook>(massUpdateEventModel, "event.book"), new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true);
+            FormComponent<EventBook> eventBooks = new DropDownChoice<EventBook>("eventBook", new PropertyModel<EventBook>(massUpdateEventModel, "event.book"), 
+            		new EventBooksForTenantModel().addNullOption(true).setOpenBooksOnly(true), 
+            		new ListableChoiceRenderer<EventBook>()).setNullValid(true);
             eventBooks.add(createCheckOnChangeEvent(eventBookCheck));
             add(eventBookCheck);
             add(eventBooks);
