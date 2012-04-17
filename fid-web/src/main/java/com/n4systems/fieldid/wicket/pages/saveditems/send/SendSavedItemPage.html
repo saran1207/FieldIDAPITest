@@ -36,7 +36,7 @@
             <div class="sendToMeContainer">
                 <input type="checkbox" wicket:id="sendToOwner"/> <wicket:message key="label.send_to_me"/>
             </div>
-            <div wicket:id="emailAddresses">
+            <div class="emailAddress" wicket:id="emailAddresses">
                 <input type="text" wicket:id="address"> <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
             </div>
             <div class="addLinkContainer">
@@ -49,7 +49,7 @@
         </div>
 
         <div class="right">
-            <input wicket:id="subject"/>
+            <input type="text" class="subject" wicket:id="subject"/>
         </div>
 
         <div class="left">
