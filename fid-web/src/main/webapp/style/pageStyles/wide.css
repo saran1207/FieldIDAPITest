@@ -256,10 +256,9 @@
 
 
 /* icon beside link button */
-.actions ul li a img {
-	margin-left:5px;
-	padding-bottom:2px;
-} 
+.menu .mattButton {
+    padding: 5px;
+}
 
 .menu.wide .menu-items {
     width: 200px;
