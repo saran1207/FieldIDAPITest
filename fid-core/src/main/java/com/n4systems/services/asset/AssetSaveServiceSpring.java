@@ -119,7 +119,7 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 	}
 	
 	private void setAssetImageName(Asset asset, boolean hasImage) {
-		String imageName = hasImage ? ("asset-" + asset.getMobileGUID() + ".jpg") : null;
+		String imageName = hasImage ? ("Asset.jpg") : null;
 		asset.setImageName(imageName);
 	}
 	
