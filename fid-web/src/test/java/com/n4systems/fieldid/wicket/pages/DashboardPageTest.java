@@ -74,6 +74,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		dashboardService = wire(DashboardService.class);
     	widgetFactory = wire(WidgetFactory.class);
 		linksWidgetDefinition = new WidgetDefinition(WidgetType.COMMON_LINKS);
+		linksWidgetDefinition.setId(0L);
 		jobService = wire(JobService.class);
 		userLimitService = wire(UserLimitService.class);
     	layout = createNewDashboardLayout(linksWidgetDefinition);
