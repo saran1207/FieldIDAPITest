@@ -50,10 +50,7 @@ public class PopulateAssignedUserConverter implements AssignedUserConverter {
 	}
 
 	private User loadUser(InspectionServiceDTO inspectionServiceDTO) throws ConversionException {
-        TenantOnlySecurityFilter allowArchivedSecurityFilter = new TenantOnlySecurityFilter(loaderFactory.getSecurityFilter());
-        allowArchivedSecurityFilter.enableShowArchived();
-
-		UserFilteredLoader loader = new UserFilteredLoader(allowArchivedSecurityFilter);
+        UserFilteredLoader loader = createUserFilteredLoaderWithArchived();
 		User user = loader.setId(inspectionServiceDTO.getAssignedUserId()).load();
 		if (user == null) { 
 			throw new ConversionException("Assigned use lookup failed for " + inspectionServiceDTO.getAssignedUserId());
@@ -61,5 +58,12 @@ public class PopulateAssignedUserConverter implements AssignedUserConverter {
 		
 		return user;
 	}
-	
+
+    protected UserFilteredLoader createUserFilteredLoaderWithArchived() {
+        TenantOnlySecurityFilter allowArchivedSecurityFilter = new TenantOnlySecurityFilter(loaderFactory.getSecurityFilter());
+        allowArchivedSecurityFilter.enableShowArchived();
+
+        return new UserFilteredLoader(allowArchivedSecurityFilter);
+    }
+
 }
