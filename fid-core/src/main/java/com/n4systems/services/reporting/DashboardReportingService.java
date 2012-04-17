@@ -118,12 +118,20 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 				return getCriteriaDefaults(((UpcomingEventsWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
             case EVENT_KPI:
                 return getCriteriaDefaults((EventKPIWidgetConfiguration) widgetDefinition.getConfig(), series, x.intValue()/*assumed to be org index*/);
+            case COMMON_LINKS:
+            	return getCriteriaDefaults();
 			default: 
 				throw new IllegalArgumentException("Can't convert widget of type " + widgetDefinition.getWidgetType() + " into report criteria");
 		}
 	}
 
-    private WidgetDefinition<?> getWidgetDefinition(Long widgetDefinitionId) {
+    private EventReportCriteria getCriteriaDefaults() {
+    	EventReportCriteria criteria = getDefaultReportCriteria();
+    	criteria.setEventStatus(EventStatus.INCOMPLETE);
+		return criteria;
+	}
+
+	private WidgetDefinition<?> getWidgetDefinition(Long widgetDefinitionId) {
 		return persistenceService.findNonSecure(WidgetDefinition.class, widgetDefinitionId);
 	}
 
