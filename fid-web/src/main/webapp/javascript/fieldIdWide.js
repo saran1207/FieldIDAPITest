@@ -23,6 +23,7 @@ var fieldIdWidePage = (function() {
             $('#left-panel').removeClass('columns').addClass('filters');
 		} else {
             $('#left-panel').removeClass('filters').addClass('columns');
+            $('#columns').show();
 		}
 		showLeftPanel();
 	};

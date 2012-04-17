@@ -18,12 +18,6 @@ public class GroupedAssetTypePicker extends GroupedDropDownChoice<AssetType, Ass
     }
 
     @Override
-    protected void onComponentTag(ComponentTag tag) {
-        checkComponentTag(tag, "select");
-        super.onComponentTag(tag);
-    }
-
-    @Override
     protected AssetTypeGroup getGroup(AssetType choice) {
         return choice.getGroup();
     }
