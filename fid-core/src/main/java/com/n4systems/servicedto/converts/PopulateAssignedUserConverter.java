@@ -4,6 +4,7 @@ import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.event.AssignedToUpdate;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -49,9 +50,11 @@ public class PopulateAssignedUserConverter implements AssignedUserConverter {
 	}
 
 	private User loadUser(InspectionServiceDTO inspectionServiceDTO) throws ConversionException {
-		User user;
-		UserFilteredLoader loader = loaderFactory.createUserFilteredLoader().setId(inspectionServiceDTO.getAssignedUserId());
-		user = loader.load();
+        TenantOnlySecurityFilter allowArchivedSecurityFilter = new TenantOnlySecurityFilter(loaderFactory.getSecurityFilter());
+        allowArchivedSecurityFilter.enableShowArchived();
+
+		UserFilteredLoader loader = new UserFilteredLoader(allowArchivedSecurityFilter);
+		User user = loader.setId(inspectionServiceDTO.getAssignedUserId()).load();
 		if (user == null) { 
 			throw new ConversionException("Assigned use lookup failed for " + inspectionServiceDTO.getAssignedUserId());
 		}
