@@ -53,7 +53,7 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         MattBar mattBar = createMattBar();
         mattBar.addLinkWithImage(new Model<String>(""), COLUMNS_ID, "images/col.png");
         mattBar.addLinkWithImage(new Model<String>(""), FILTERS_ID, "images/filter.png");
-        mattBar.setCurrentState(COLUMNS_ID);
+        mattBar.setCurrentState(FILTERS_ID);
         add(mattBar);
         
         add(msg = new Label("msg", new StringResourceModel(getNoneSelectedMsgKey(), this, null)));

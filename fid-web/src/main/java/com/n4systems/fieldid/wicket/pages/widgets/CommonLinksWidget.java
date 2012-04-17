@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
