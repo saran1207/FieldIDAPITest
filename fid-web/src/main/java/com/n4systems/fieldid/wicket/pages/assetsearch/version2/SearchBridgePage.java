@@ -1,11 +1,9 @@
-
-package com.n4systems.fieldid.wicket.pages.assetsearch;
+package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.PageFactory;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.services.reporting.DashboardReportingService;
@@ -13,6 +11,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 
+// used as a bridge to redirect to search/report pages.
+// basically reponsible for creating criteria based on the input.
 public abstract class SearchBridgePage<P extends FieldIDFrontEndPage, T extends SearchCriteria, S extends SavedItem> extends FieldIDFrontEndPage {
 
     private @SpringBean SavedAssetSearchService savedSearchService;
@@ -72,10 +72,16 @@ public abstract class SearchBridgePage<P extends FieldIDFrontEndPage, T extends 
 
         @Override public P createPage() {
             Long widgetDefinitionId = params.get(AbstractSearchPage.WIDGET_DEFINITION_PARAMETER).toLong();
-            Long x = params.get(AbstractSearchPage.X_PARAMETER).toLong();
+            
+            StringValue xParam = params.get(AbstractSearchPage.X_PARAMETER);
+            // CAVEAT : make sure you pass a valid number for X!
+            Long x = xParam.toString()==null?null:xParam.toLong();
+            
             String series = params.get(AbstractSearchPage.SERIES_PARAMETER).toString();
+
             String y = params.get(AbstractSearchPage.Y_PARAMETER).toString();
-            T criteria = getCriteriaFromWidget(widgetDefinitionId, x, y, series);
+
+            T criteria = getCriteriaFromWidget(widgetDefinitionId,x,y,series);
             return SearchBridgePage.this.createPage(criteria, null);
         }
 

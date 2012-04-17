@@ -1,8 +1,8 @@
 package com.n4systems.services.reporting;
 
-import java.io.Serializable;
-
 import com.n4systems.model.orgs.BaseOrg;
+
+import java.io.Serializable;
 
 public class EventKpiRecord implements Serializable {
 	

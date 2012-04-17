@@ -1,10 +1,25 @@
 package com.n4systems.fieldid.wicket.pages.saveditems;
 
-import java.util.Date;
-import java.util.List;
-
+import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.search.SavedAssetSearchService;
+import com.n4systems.fieldid.service.search.SavedReportService;
+import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
+import com.n4systems.fieldid.wicket.behavior.TooltipBehavior;
+import com.n4systems.fieldid.wicket.components.DateTimeLabel;
+import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
+import com.n4systems.model.saveditem.SavedItem;
+import com.n4systems.model.saveditem.SavedReportItem;
+import com.n4systems.model.saveditem.SavedSearchItem;
+import com.n4systems.model.user.User;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,34 +35,13 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.model.*;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
-import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.search.SavedAssetSearchService;
-import com.n4systems.fieldid.service.search.SavedReportService;
-import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
-import com.n4systems.fieldid.wicket.behavior.TooltipBehavior;
-import com.n4systems.fieldid.wicket.components.DateTimeLabel;
-import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.RunSavedSearchPage;
-import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
-import com.n4systems.model.saveditem.SavedItem;
-import com.n4systems.model.saveditem.SavedReportItem;
-import com.n4systems.model.saveditem.SavedSearchItem;
-import com.n4systems.model.user.User;
+import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class ManageSavedItemsPage extends FieldIDFrontEndPage {
@@ -197,9 +191,9 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
         Link link = null;
 
         if (item instanceof SavedReportItem) {
-            link = new BookmarkablePageLink<Void>("viewItemLink", RunSavedReportPage.class, params);
+            link = new BookmarkablePageLink<Void>("viewItemLink", RunReportPage.class, params);
         } else if (item instanceof SavedSearchItem) {
-            link = new BookmarkablePageLink<Void>("viewItemLink", RunSavedSearchPage.class, params);
+            link = new BookmarkablePageLink<Void>("viewItemLink", RunSearchPage.class, params);
         }
 
         if (link == null) {

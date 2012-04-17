@@ -118,7 +118,7 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
     }
 
     @Override
-    protected EventReportCriteria createSearchCriteria() {
+    protected EventReportCriteria createCriteria() {
         return new EventReportCriteria();
     }
 

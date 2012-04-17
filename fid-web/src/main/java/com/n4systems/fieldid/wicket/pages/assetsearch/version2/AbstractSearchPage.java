@@ -80,7 +80,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
 
     public void initializeSearchCriteria() {
         if (searchCriteria == null) {
-            searchCriteria = createSearchCriteria();
+            searchCriteria = createCriteria();
         } else {
             saveLastSearch(searchCriteria);
         }
@@ -156,6 +156,6 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
 
     protected abstract Component createCriteriaPanel(String id, Model<T> criteriaModel, SavedItem<T> savedItem);
 
-    protected abstract T createSearchCriteria();
+    protected abstract T createCriteria();
 }
 

@@ -102,7 +102,7 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     }
 
     @Override
-    protected AssetSearchCriteria createSearchCriteria() {
+    protected AssetSearchCriteria createCriteria() {
         return new AssetSearchCriteria();
     }
 

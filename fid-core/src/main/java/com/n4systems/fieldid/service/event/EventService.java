@@ -1,44 +1,29 @@
 package com.n4systems.fieldid.service.event;
 
-import static com.google.common.base.Preconditions.*;
+import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.ReportServiceHelper;
+import com.n4systems.model.*;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.OwnerAndDownFilter;
+import com.n4systems.model.utils.PlainDate;
+import com.n4systems.services.reporting.*;
+import com.n4systems.util.DateHelper;
+import com.n4systems.util.chart.ChartGranularity;
+import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.WhereClause.ChainOp;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.commons.lang.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.util.DateHelper;
-import org.apache.commons.lang.time.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.fieldid.service.ReportServiceHelper;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Status;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.OwnerAndDownFilter;
-import com.n4systems.model.utils.PlainDate;
-import com.n4systems.services.reporting.CompletedEventsReportRecord;
-import com.n4systems.services.reporting.EventCompletenessReportRecord;
-import com.n4systems.services.reporting.EventKpiRecord;
-import com.n4systems.services.reporting.EventScheduleStatusCount;
-import com.n4systems.services.reporting.UpcomingScheduledEventsRecord;
-import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.persistence.NewObjectSelect;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClause.ChainOp;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
-import com.n4systems.util.persistence.WhereParameterGroup;
+import static com.google.common.base.Preconditions.checkArgument;
 
 public class EventService extends FieldIdPersistenceService {
 	

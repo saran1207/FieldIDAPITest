@@ -25,8 +25,8 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 
 	@SpringBean 
 	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
-	
-	public EventKpiWidget(String id, WidgetDefinition<EventKPIWidgetConfiguration> widgetDefinition) {
+
+    public EventKpiWidget(String id, WidgetDefinition<EventKPIWidgetConfiguration> widgetDefinition) {
         super(id, new Model<WidgetDefinition<EventKPIWidgetConfiguration>>(widgetDefinition));
 		setOutputMarkupId(true);
 
@@ -40,7 +40,7 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 			add(message);
 			arrow.setVisible(true);
 		} else {
-			add(new EventKpiTable("eventKpiContent", orgList, getConfig() ));
+			add(new EventKpiTable("eventKpiContent", orgList, getConfig(), widgetDefinition));
 			arrow.setVisible(false);
 		}
 	}
@@ -76,5 +76,5 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 		SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), null, getConfig().getRangeType());
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );
 	}
-	
+
 }

@@ -38,7 +38,7 @@ var fieldIdWidePage = (function() {
 
     function hideLeftPanel() {
         $('#page').removeClass('with-left-panel').addClass('without-left-panel');
-        // remove the true state from toggle buttons.
+        // remove the pressed state from toggle buttons.
         lastShownPanel = $('.sub-menu .config .mattButtonPressed');
         lastShownPanel.removeClass('mattButtonPressed');
 	};

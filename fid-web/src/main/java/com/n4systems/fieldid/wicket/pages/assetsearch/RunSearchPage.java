@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch;
 
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.wicket.pages.PageFactory;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchBridgePage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteria;
@@ -9,13 +10,13 @@ import com.n4systems.services.reporting.DashboardReportingService;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class RunSavedSearchPage extends SearchBridgePage<SearchPage, AssetSearchCriteria, SavedSearchItem> {
+public class RunSearchPage extends SearchBridgePage<SearchPage, AssetSearchCriteria, SavedSearchItem> {
 
     private @SpringBean SavedAssetSearchService savedSearchService;
     private @SpringBean DashboardReportingService dashboardReportingService;
 
 
-    public RunSavedSearchPage(PageParameters params) {
+    public RunSearchPage(PageParameters params) {
         super(params);
     }
 

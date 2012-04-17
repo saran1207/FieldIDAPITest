@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.RunSavedSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
 import org.apache.wicket.Component;
 
 public class AssetClickThruHandler extends SimpleClickThruHandler {
@@ -12,7 +12,7 @@ public class AssetClickThruHandler extends SimpleClickThruHandler {
 
 	@Override
 	protected Class<? extends FieldIDFrontEndPage> getClickThruPage() {
-		return RunSavedSearchPage.class;
+		return RunSearchPage.class;
 	}	
 	
 }

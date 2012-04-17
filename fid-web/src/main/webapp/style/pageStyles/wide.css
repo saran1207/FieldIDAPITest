@@ -306,7 +306,7 @@
     background: #4C8FFC;
     background: -moz-linear-gradient(top, #4C8FFC 0%, #4787ED 100%);
     background: -webkit-gradient(linear, left 4 C8FFC, left bottom, color-stop(0%, #4C8FFC), color-stop(100%, #4787ED));
-    background: -webkit-linear-gradient(top, #27ce06 0%, #4787ED 100%);
+    background: -webkit-linear-gradient(top, #4F9CFC 0%, #4787ED 100%);
     background: -o-linear-gradient(top, #4C8FFC 0%, #4787ED 100%);
     background: -ms-linear-gradient(top, #4C8FFC 0%, #4787ED 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#4C8FFC', endColorstr = '#4787ED', GradientType = 0);

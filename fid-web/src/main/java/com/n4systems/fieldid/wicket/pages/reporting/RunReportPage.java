@@ -2,26 +2,27 @@ package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.pages.PageFactory;
-import com.n4systems.fieldid.wicket.pages.assetsearch.SearchBridgePage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchBridgePage;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.services.reporting.DashboardReportingService;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class RunSavedReportPage extends SearchBridgePage<ReportPage, EventReportCriteria, SavedReportItem> {
+public class RunReportPage extends SearchBridgePage<ReportPage, EventReportCriteria, SavedReportItem> {
 
-    
     private @SpringBean SavedReportService savedReportService;
     private @SpringBean DashboardReportingService dashboardReportingService;
 
-    public RunSavedReportPage(PageParameters params) {
+    public RunReportPage(PageParameters params) {
         super(params);
     }
 
     public PageFactory<ReportPage> getPageFactory(String source, PageParameters params) {
-        return super.getPageFactory(source, params);
+        PageFactory<ReportPage> factory = super.getPageFactory(source, params);
+        return (factory==null) ? new DefaultSourcePageFactory(params) : factory;
+
     }
 
     @Override
@@ -39,5 +40,17 @@ public class RunSavedReportPage extends SearchBridgePage<ReportPage, EventReport
         return dashboardReportingService.convertWidgetDefinitionToReportCriteria(widgetDefinitionId, x, series);
     }
 
+
+    // --------------------------------------------------------------------------------------------
+
+
+    public class DefaultSourcePageFactory implements PageFactory<ReportPage> {
+        public DefaultSourcePageFactory(PageParameters params) {
+        }
+
+        @Override public ReportPage createPage() {
+            return new ReportPage(dashboardReportingService.getDefaultReportCriteria());
+        }
+    }
 
 }

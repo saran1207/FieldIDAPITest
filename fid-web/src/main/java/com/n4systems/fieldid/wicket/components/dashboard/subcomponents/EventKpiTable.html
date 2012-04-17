@@ -5,17 +5,26 @@
 				<th class="customerName"><wicket:message key="label.owner"/></th>
 				<th><wicket:message key="label.scheduled"/></th>
 				<th class="progressBar"><wicket:message key="label.completed"/></th>
-				<th><wicket:message key="label.failed"/></th>
+                <th><wicket:message key="label.incomplete"/></th>
+                <th><wicket:message key="label.failed"/></th>
 			</tr>
 			<tr wicket:id="customerEventKpiList">
 				<td><span wicket:id="customerName"></span></td>
-				<td class="centeredText"><span wicket:id="scheduledEvents"></span></td>
-				<td>
-					<span class="completedSchedules" wicket:id="completedSchedules"></span>
+                <td class="centeredText">
+                    <span wicket:id="scheduledEvents"></span></td>
+                <td>
+                    <span class="completedSchedules">
+                        <a wicket:id="completed"><span wicket:id="completedValue"/></a>
+                    </span>
 					<div wicket:id="progressBar"></div>
 					<span class="completedPercentage" wicket:id="completedPercentage"></span>
-				</td>			
-				<td class="centeredText"><span wicket:id="failedSchedules"></span></td>
+				</td>
+                <td class="centeredText">
+                    <a wicket:id="incomplete"><span wicket:id="incompleteValue"/></a>
+                </td>
+                <td class="centeredText">
+                    <a wicket:id="failedSchedules"><span wicket:id="failedValue"/></a>
+                </td>
 			</tr>
 		</table>
 	</div>
