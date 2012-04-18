@@ -25,9 +25,9 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
             searchCriteria = (T) searchCriteria.clone();
             searchCriteria.reset();
             storeSelectedColumns(searchCriteria);
-
+            
             storeLastSearchInUser(user, searchCriteria);
-
+            
             persistenceService.update(user);
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
@@ -59,7 +59,7 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
     protected abstract void storeTransientColumns(T searchCriteria);
 
     @Transactional
-    public void saveReport(I savedItem, boolean overwrite, String name, String description) {
+    public I saveReport(I savedItem, boolean overwrite, String name, String description) {
         boolean updating = overwrite && savedItem.getId() != null && savedItem.getSearchCriteria().getId() != null;
         final User user = getCurrentUser();
 
@@ -71,24 +71,25 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
 
         if (updating) {
             persistenceService.update(savedItem);
+            return savedItem;
         } else {
-            savedItem.reset();
-
-            if (savedItem.getSearchCriteria().getId() != null) {
-                T copiedSearchCriteria;
-                try {
-                    copiedSearchCriteria = (T) savedItem.getSearchCriteria().clone();
-                    copiedSearchCriteria.reset();
-                    savedItem.setSearchCriteria(copiedSearchCriteria);
-                } catch (CloneNotSupportedException e) {
-                    throw new RuntimeException(e);
-                }
+            // XXX : refactor into separated method.
+            try {
+                I newSavedItem = createSavedItem(savedItem);
+                T copiedSearchCriteria = (T) savedItem.getSearchCriteria().clone();
+                copiedSearchCriteria.reset();
+                newSavedItem.setSearchCriteria(copiedSearchCriteria);
+                user.getSavedItems().add(newSavedItem);
+                persistenceService.save(user);
+                return newSavedItem;
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
             }
 
-            user.getSavedItems().add(savedItem);
-            persistenceService.save(user);
         }
     }
+
+    protected abstract I createSavedItem(I savedItem);
 
     protected void enableSelectedColumns(T criteriaModel, List<String> columns) {
         for (ColumnMappingView columnMappingView : criteriaModel.getSortedStaticAndDynamicColumns(false)) {

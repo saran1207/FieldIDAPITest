@@ -1,7 +1,7 @@
 package com.n4systems.util;
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 public class StringUtilsTest {
 
 	@Test
@@ -83,5 +83,15 @@ public class StringUtilsTest {
 		assertFalse(StringUtils.isWholeNumber(""));
 		assertFalse(StringUtils.isWholeNumber(null));
 	}
+    
+    @Test 
+    public void test_getFileCopyName() {
+        assertEquals("Copy of hello", StringUtils.getFileCopyName("hello"));
+        assertEquals("Copy of hello (1)", StringUtils.getFileCopyName("Copy of hello"));
+        assertEquals("Copy of hello (3)", StringUtils.getFileCopyName("Copy of hello (2)"));
+        assertEquals("Copy of Coooopy of hello", StringUtils.getFileCopyName("Coooopy of hello"));
+        assertEquals("Copy of hello (2)", StringUtils.getFileCopyName("hello (2)"));
+    }
+    
 	
 }

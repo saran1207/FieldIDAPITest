@@ -57,10 +57,15 @@ public class SavedReportService extends SavedSearchService<SavedReportItem, Even
         EventTypeGroup eventTypeGroup = searchCriteria.getEventTypeGroup();
         List<ColumnMappingGroupView> dynamicAssetColumns = dynamicColumnsService.getDynamicAssetColumnsForReporting(searchCriteria.getAssetType(), assetTypeService.getAssetTypes(assetTypeGroup == null ? null : assetTypeGroup.getId()));
         List<ColumnMappingGroupView> dynamicEventColumns = dynamicColumnsService.getDynamicEventColumnsForReporting(searchCriteria.getEventType(), eventTypeService.getEventTypes(eventTypeGroup == null ? null : eventTypeGroup.getId()));
-
+        
         searchCriteria.setDynamicAssetColumnGroups(dynamicAssetColumns);
         searchCriteria.setDynamicEventColumnGroups(dynamicEventColumns);
         searchCriteria.setColumnGroups(reportConfiguration.getColumnGroups());
+    }
+
+    @Override
+    protected SavedReportItem createSavedItem(SavedReportItem savedItem) {
+        return savedItem.copy(new SavedReportItem());
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchBlankSlate;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchCriteriaPanel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchSubMenu;
@@ -93,7 +94,14 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
 
     @Override
     protected Page createSaveReponsePage(boolean overwrite) {
-        return new SaveAssetSearchPage((SavedSearchItem) savedItem, SearchPage.this, overwrite);
+        return new SaveAssetSearchPage((SavedSearchItem) savedItem, overwrite) {
+            @Override protected FieldIDFrontEndPage createCancelResponsePage() {
+                return SearchPage.this;
+            }
+            @Override protected FieldIDFrontEndPage createSaveResponsePage(SavedSearchItem newSavedItem) {
+                return new SearchPage(newSavedItem.getSearchCriteria(), newSavedItem);
+            }
+        };
     }
 
     @Override

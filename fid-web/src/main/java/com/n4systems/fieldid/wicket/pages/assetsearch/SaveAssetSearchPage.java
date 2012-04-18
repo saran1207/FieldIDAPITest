@@ -16,7 +16,7 @@ public class SaveAssetSearchPage extends SaveSearchPage<SavedSearchItem> {
     private SavedAssetSearchService savedAssetSearchService;
 
     public SaveAssetSearchPage(SavedSearchItem savedItem, WebPage backToPage, boolean overwrite) {
-        super(savedItem, backToPage, overwrite);
+        super(savedItem, overwrite);
     }
 
     @Override
@@ -35,8 +35,8 @@ public class SaveAssetSearchPage extends SaveSearchPage<SavedSearchItem> {
     }
 
     @Override
-    protected void saveSearch(SavedSearchItem item, boolean overwrite, String name, String description) {
-        savedAssetSearchService.saveReport(item, overwrite, name, description);
+    protected SavedSearchItem saveSearch(SavedSearchItem item, boolean overwrite, String name, String description) {
+        return savedAssetSearchService.saveReport(item, overwrite, name, description);
     }
 
 }

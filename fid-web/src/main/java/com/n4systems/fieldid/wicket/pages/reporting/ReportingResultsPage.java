@@ -108,7 +108,7 @@ public class ReportingResultsPage extends FieldIDFrontEndPage {
         Link link = new Link(linkId) {
             @Override
             public void onClick() {
-                setResponsePage(new SaveReportPage(savedReportItem, ReportingResultsPage.this, overwrite));
+                setResponsePage(new SaveReportPage(savedReportItem, overwrite));
             }
         };
         if (!overwrite) {

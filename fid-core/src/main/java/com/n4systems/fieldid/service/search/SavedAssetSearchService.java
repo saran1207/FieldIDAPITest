@@ -53,4 +53,9 @@ public class SavedAssetSearchService extends SavedSearchService<SavedSearchItem,
         searchCriteria.setColumnGroups(reportConfiguration.getColumnGroups());
     }
 
+    @Override
+    protected SavedSearchItem createSavedItem(SavedSearchItem savedItem) {
+        return savedItem.copy(new SavedSearchItem());
+    }
+
 }

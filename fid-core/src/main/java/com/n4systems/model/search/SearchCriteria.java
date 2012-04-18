@@ -185,7 +185,7 @@ public abstract class SearchCriteria extends AbstractEntity {
         return savedReportName;
     }
 
-    public void setSavedReportName(String savedReportName) {
+    public void  setSavedReportName(String savedReportName) {
         this.savedReportName = savedReportName;
     }
 

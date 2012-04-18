@@ -5,7 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtils {
-
+    
+    private static final String copyFilePrefix = "Copy of ";
 	private static final Pattern numericPattern = Pattern.compile("[0-9]+");
 	
 	public static <T> String concat(T[] array, String delim) {
@@ -107,4 +108,29 @@ public class StringUtils {
 		Matcher matcher = numericPattern.matcher(value.trim());
 		return matcher.matches();
 	}
+
+    /**
+     * translates file name to something appropriate for a new file (doesn't accomodate file extensions)
+     *              Foo --> Copy of Foo
+     *      Copy of Foo --> Copy of Foo (1)
+     *  Copy of Foo (5) --> Copy of Foo (6)
+     *          etc...
+     */
+    public static String getFileCopyName(String name) {
+        Pattern copyFileSuffixPattern = Pattern.compile(".*( \\(([0-9]*)\\))");
+        String suffixFormat = " (%d)";
+        if (name.startsWith(copyFilePrefix)) {
+            Matcher matcher = copyFileSuffixPattern.matcher(name);
+            StringBuffer result = new StringBuffer(name.length());
+            if (matcher.matches()) {
+                // increment the n in  "Copy of Foo (n)" name.
+                int i = Integer.parseInt(matcher.group(2)) + 1;
+                return name.replace(matcher.group(1), String.format(suffixFormat,i));
+            }
+            // append first set of (n) to end.
+            return name + String.format(suffixFormat,1);
+        }
+        // simply append prefix
+        return copyFilePrefix + name;
+    }
 }

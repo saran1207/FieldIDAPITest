@@ -9,8 +9,6 @@ import javax.persistence.*;
 @DiscriminatorValue("S")
 public class SavedSearchItem extends SavedItem<AssetSearchCriteria> {
 
-    private static final String DEFAULT_NAME = "New Search";
-
     public SavedSearchItem() {}
 
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -19,7 +17,6 @@ public class SavedSearchItem extends SavedItem<AssetSearchCriteria> {
 
     public SavedSearchItem(AssetSearchCriteria criteria) {
     	this.searchCriteria = criteria;
-        setName(DEFAULT_NAME);
     }
 
     public SavedSearchItem(AssetSearchCriteria searchCriteria, SavedSearchItem savedSearchItem) {

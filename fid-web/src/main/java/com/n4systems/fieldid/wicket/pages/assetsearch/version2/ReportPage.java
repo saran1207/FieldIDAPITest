@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.ReportCriteriaPanel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.ReportingSubMenu;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.components.SearchBlankSlate;
@@ -32,12 +33,12 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
         super(params);
     }
 
-    public ReportPage(EventReportCriteria eventReportCriteria, SavedItem<EventReportCriteria> savedItem) {
-        super(new PageParameters(), eventReportCriteria, new SavedReportItem(eventReportCriteria, savedItem));
-    }
-
     public ReportPage(EventReportCriteria eventReportCriteria) {
         this(eventReportCriteria, null);
+    }
+
+    public ReportPage(EventReportCriteria eventReportCriteria, SavedItem<EventReportCriteria> savedItem) {
+        super(new PageParameters(), eventReportCriteria, savedItem);
     }
 
     @Override
@@ -79,7 +80,7 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
     protected Component createCriteriaPanel(String id, final Model<EventReportCriteria> model) {
         return new ReportCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
-                setResponsePage(new ReportPage(model.getObject()));
+                setResponsePage(new ReportPage(model.getObject(), savedItem));
             }
             @Override protected void onSearchError() {
                 resetPageOnError();
@@ -109,7 +110,14 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
 
     @Override
     protected Page createSaveReponsePage(boolean overwrite) {
-        return new SaveReportPage((SavedReportItem) savedItem, ReportPage.this, overwrite);
+        return new SaveReportPage((SavedReportItem) savedItem, overwrite) {
+            @Override protected FieldIDFrontEndPage createCancelResponsePage() {
+                return ReportPage.this;
+            }
+            @Override protected FieldIDFrontEndPage createSaveResponsePage(SavedReportItem newSavedItem) {
+                return new ReportPage(newSavedItem.getSearchCriteria(), newSavedItem);
+            }
+        };
     }
 
     @Override

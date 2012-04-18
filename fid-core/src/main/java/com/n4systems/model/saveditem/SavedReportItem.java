@@ -9,8 +9,6 @@ import javax.persistence.*;
 @DiscriminatorValue("R")
 public class SavedReportItem extends SavedItem<EventReportCriteria> {
 
-    private static final String DEFAULT_NAME = "New Report";
-
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="report_id")
     private EventReportCriteria searchCriteria;
@@ -18,7 +16,6 @@ public class SavedReportItem extends SavedItem<EventReportCriteria> {
     public SavedReportItem() {}
     public SavedReportItem(EventReportCriteria criteria) {
         this.searchCriteria = criteria;
-        setName(DEFAULT_NAME);
     }
 
     public SavedReportItem(EventReportCriteria eventReportCriteria, SavedItem<EventReportCriteria> savedItem) {
@@ -43,4 +40,5 @@ public class SavedReportItem extends SavedItem<EventReportCriteria> {
     public String getTitleLabelKey() {
         return "label.report";
     }
+
 }

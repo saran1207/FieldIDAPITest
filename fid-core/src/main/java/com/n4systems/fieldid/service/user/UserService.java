@@ -102,7 +102,6 @@ public class UserService extends FieldIdPersistenceService {
                 final User user = persistenceService.find(User.class, userId);
                 final SavedItem clonedItem = (SavedItem) savedItem.clone();
                 clonedItem.reset();
-                clonedItem.setId(null); // force it to create a new report!
                 clonedItem.setSendSchedules(new ArrayList<SendSavedItemSchedule>()); // erase any existing schedules for shared report - don't want to inherit them.
                 clonedItem.setSharedByName(sharedByName);
                 user.getSavedItems().add(clonedItem);

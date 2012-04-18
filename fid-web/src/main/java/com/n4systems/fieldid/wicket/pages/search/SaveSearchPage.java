@@ -1,6 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.search;
 
-import org.apache.wicket.markup.html.WebPage;
+import com.n4systems.fieldid.service.search.SavedReportService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.validation.UniquelyNamedSavedItemValidator;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.saveditem.SavedItem;
+import com.n4systems.util.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -11,35 +17,40 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.n4systems.fieldid.service.search.SavedReportService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.validation.UniquelyNamedSavedItemValidator;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.model.saveditem.SavedItem;
-
 public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEndPage {
+
+    public static final String NEW_SEARCH_NAME = "New Search";
+
 
     @SpringBean
     private SavedReportService savedReportService;
 
     private T savedItem;
-    private WebPage backToPage;
     private boolean overwrite;
 
     private String name;
     private String description;
 
-    public SaveSearchPage(T savedItem, WebPage backToPage, boolean overwrite) {
+    public SaveSearchPage(T savedItem, boolean overwrite) {
         this.savedItem = savedItem;
-        this.backToPage = backToPage;
         this.overwrite = overwrite;
         Long savedItemId = null;
+        name = getName();
         if (overwrite && savedItem != null) {
-            name = savedItem.getName();
             savedItemId = savedItem.getId();
         }
         add(new SaveReportForm("saveReportForm", savedItemId));
+    }
+    
+    private String getName() { 
+        if (savedItem!=null && StringUtils.isNotEmpty(savedItem.getName())) {
+            return overwrite ? savedItem.getName() : StringUtils.getFileCopyName(savedItem.getName());
+        }
+        return getDefaultName();
+    }
+
+    protected String getDefaultName() {
+        return NEW_SEARCH_NAME;
     }
 
     class SaveReportForm extends Form {
@@ -58,9 +69,8 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
             add(new TextArea<String>("description", new PropertyModel<String>(SaveSearchPage.this, "description")));
             
             add(new Link("cancelLink") {
-                @Override
-                public void onClick() {
-                    setResponsePage(backToPage);
+                @Override public void onClick() {
+                    setResponsePage(createCancelResponsePage());
                 }
             });
             add(new Button("submitButton"));
@@ -68,17 +78,20 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
 
         @Override
         protected void onSubmit() {
-            saveSearch(savedItem, overwrite, name, description);
-            savedItem.getSearchCriteria().setSavedReportName(name);
+            T newSavedItem = saveSearch(savedItem, overwrite, name, description);
+            newSavedItem.getSearchCriteria().setSavedReportName(name); //?? why i don't think this is needed anymore?  confirm with neil.
             FieldIDSession.get().info(createSavedConfirmationModel().getObject());
-            setResponsePage(backToPage);
+            setResponsePage(createSaveResponsePage(newSavedItem));
         }
 
     }
 
+    protected FieldIDFrontEndPage createSaveResponsePage(T newSavedItem) { return null; }; // override these!
+    protected FieldIDFrontEndPage createCancelResponsePage() { return null; };
+
     protected abstract IModel<String> createSavedConfirmationModel();
     protected abstract IModel<String> createSavedItemDescriptionModel();
 
-    protected abstract void saveSearch(T item, boolean overwrite, String name, String description);
+    protected abstract T saveSearch(T item, boolean overwrite, String name, String description);
 
 }

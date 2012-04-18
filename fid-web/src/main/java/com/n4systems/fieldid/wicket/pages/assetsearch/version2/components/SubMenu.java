@@ -82,6 +82,7 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
 
     protected void initializeLimits() {
         // XXX : the actions limits here should roll into one single "maxMassActionLimit"???    ask matt.
+        // see WEB-2859
         Long tenantId = FieldIDSession.get().getSessionUser().getTenant().getId();
         maxUpdate = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_UPDATE, tenantId);
         maxExport = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_EXCEL_EXPORT, tenantId);

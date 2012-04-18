@@ -19,7 +19,7 @@ public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTena
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(SavedItem.class);
 	}
-
+    
     public abstract T getSearchCriteria();
     public abstract void setSearchCriteria(T searchCriteria);
 
@@ -28,10 +28,22 @@ public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTena
 	private String sharedByName;
 	@Column(length=1000)
 	private String description;
-
+    
     @OneToMany(mappedBy = "savedItem", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<SendSavedItemSchedule> sendSchedules = new ArrayList<SendSavedItemSchedule>();
 
+    public SavedItem() {
+        super();
+    }
+
+    public SavedItem(SavedItem<T> savedItem) {
+        super();
+        setDescription(savedItem.getDescription());
+        setName(savedItem.getName());
+        setSharedByName(savedItem.getSharedByName());
+        setTenant(savedItem.getTenant());
+    }
+    
     @Override
 	public String getName() {
         return name;
@@ -57,7 +69,7 @@ public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTena
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+    
     public List<SendSavedItemSchedule> getSendSchedules() {
         return sendSchedules;
     }
@@ -68,5 +80,17 @@ public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTena
 
     @Transient
     public abstract String getTitleLabelKey();
+    
+    @Override
+    public void reset() {
+        super.reset();
+    }
 
+    public <X extends SavedItem<?>> X copy(X savedItem) {
+        savedItem.setName(getName());
+        savedItem.setDescription(getDescription());
+        savedItem.setSharedByName(getSharedByName());
+        savedItem.setTenant(getTenant());
+        return savedItem;
+    }
 }
