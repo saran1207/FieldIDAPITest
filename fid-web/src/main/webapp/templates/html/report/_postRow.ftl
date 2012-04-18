@@ -11,9 +11,8 @@
 	</td>
 </#if>
 <td id="actionsContainer_${entityId}" class="actionsContainer">
-	<#include "../eventCrud/_eventViewLightBoxOptions.ftl"/>
 	<@s.url id="printReport" action="printReport.action" namespace="/aHtml" searchId="${searchId}"/>
-	
+
 	<ul class="floatingDropdown">
 		<li>
 			<a href="javascript:void(0);" class="dropDownLink" id="moreActions">

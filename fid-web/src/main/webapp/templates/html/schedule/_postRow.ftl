@@ -39,7 +39,6 @@
 				</#if>
 				<#if eventId != "0">
 					<li>
-						<#include "../eventCrud/_eventViewLightBoxOptions.ftl"/>
 						<a href='<@s.url action="event" namespace="/aHtml/iframe" uniqueID="${eventId}" assetId="${assetId}"/>'  class="eventLightbox">
 							<@s.text name="label.view_event"/>
 						</a>
