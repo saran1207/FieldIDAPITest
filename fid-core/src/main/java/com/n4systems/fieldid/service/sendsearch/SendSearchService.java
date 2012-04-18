@@ -14,6 +14,8 @@ import com.n4systems.mail.SMTPMailManager;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.saveditem.SavedItem;
+import com.n4systems.model.saveditem.SavedReportItem;
+import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteria;
@@ -78,6 +80,11 @@ public class SendSearchService extends FieldIdPersistenceService {
     
     private SearchCriteria getSearchCriteriaForSavedItem(Long savedItemId) {
         SavedItem savedItem = persistenceService.find(SavedItem.class, savedItemId);
+        if (savedItem instanceof SavedSearchItem) {
+            return savedAssetSearchService.getConvertedReport(SavedSearchItem.class, savedItem.getId()).getSearchCriteria();
+        } else if (savedItem instanceof SavedReportItem) {
+            return savedReportService.getConvertedReport(SavedReportItem.class, savedItem.getId()).getSearchCriteria();
+        }
         return savedItem.getSearchCriteria();
     }
 
