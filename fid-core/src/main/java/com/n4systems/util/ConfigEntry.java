@@ -40,7 +40,7 @@ public enum ConfigEntry {
 	MAX_SIZE_FOR_EXCEL_EXPORT					(   "10000"					),
 	MAX_SIZE_FOR_PDF_PRINT_OUTS					(	"10000"					),
 	MAX_SIZE_FOR_SUMMARY_REPORT					(   "6000"					),
-	MAX_SIZE_FOR_MASS_UPDATE					(	"1000"					),
+	MAX_SIZE_FOR_MASS_UPDATE					(	"250"					),
 	MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS	(	"400"					),
 	DEFAULT_EXECUTOR_POOL_SIZE					(	"4"						),
 	MINIMUM_MOBILE_MINOR_VERSION                (   "11"                    ),
