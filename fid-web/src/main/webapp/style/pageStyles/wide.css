@@ -256,12 +256,16 @@
 
 
 /* icon beside link button */
+.menu .mattButton.imageButton {
+    padding: 5px 3px 5px 0px;
+}
+
 .menu .mattButton {
     padding: 5px;
 }
 
 .menu .mattButton img {
-    padding-bottom:3px;
+    padding: 0px 0px 3px 3px;
 }
 
 .menu.wide .menu-items {
