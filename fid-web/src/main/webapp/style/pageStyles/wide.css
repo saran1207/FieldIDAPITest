@@ -260,6 +260,10 @@
     padding: 5px;
 }
 
+.menu .mattButton img {
+    padding-bottom:3px;
+}
+
 .menu.wide .menu-items {
     width: 200px;
 }
