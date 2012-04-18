@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.saveditems.send;
 
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.sendsearch.SendSearchService;
+import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
@@ -48,7 +48,7 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
     private PersistenceService persistenceService;
 
     @SpringBean
-    private SendSearchService sendSearchService;
+    private AsyncService asyncService;
 
     private SavedItem savedItem;
     private IModel<? extends SearchCriteria> criteria;
@@ -189,7 +189,7 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                 { setOutputMarkupId(true); }
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    SendSavedItemSchedule sendItemSchedule = model.getObject();
+                    final SendSavedItemSchedule sendItemSchedule = model.getObject();
                     sendItemSchedule.clearBlankEmailAddresses();
                     if (validateEmailAddresses(sendItemSchedule)) {
                         sendItemSchedule.setUser(getCurrentUser());
@@ -201,7 +201,7 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                             FieldIDSession.get().info("Successfully saved schedule");
                             getRequestCycle().setResponsePage(ManageSavedItemsPage.class);
                         } else {
-                            sendSearchService.sendSearchAsync(criteria.getObject(), sendItemSchedule);
+                            asyncService.sendSearchAsync(criteria.getObject(), sendItemSchedule);
                             FieldIDSession.get().info("Email generation in progress");
                             getRequestCycle().setResponsePage(RunLastSearchPage.class);
                         }

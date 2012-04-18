@@ -8,6 +8,9 @@ import java.util.concurrent.Callable;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import com.n4systems.fieldid.service.sendsearch.SendSearchService;
+import com.n4systems.model.SendSavedItemSchedule;
+import com.n4systems.model.search.SearchCriteria;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
@@ -26,6 +29,7 @@ public class AsyncService extends FieldIdService {
 	private static final Logger logger = Logger.getLogger(AsyncService.class);
 	
 	@Autowired private AbstractEntityManagerFactoryBean entityManagerFactory;
+    @Autowired private SendSearchService sendSearchService;
 
 	@Async	
 	public <T> T run(AsyncTask<T> task) {
@@ -39,6 +43,17 @@ public class AsyncService extends FieldIdService {
 	public <X> AsyncTask<X> createTask(Callable<X> callable) {
 		return new AsyncTask<X>(callable);
 	}
+
+    public void sendSearchAsync(final SearchCriteria searchCriteria, final SendSavedItemSchedule schedule) {
+        AsyncService.AsyncTask<Object> task = createTask(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                sendSearchService.sendSearch(searchCriteria, schedule);
+                return null;
+            }
+        });
+        run(task);
+    }
 
 	/**
 	 * local class that does all the work. the idea is that it gets the current
