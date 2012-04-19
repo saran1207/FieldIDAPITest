@@ -34,6 +34,24 @@ public class TaskAction extends AbstractAdminAction {
 		
 		return SUCCESS;
 	}
+    
+    public String doRunTask() {
+        TaskConfigLoader configLoader = new TaskConfigLoader();
+        configLoader.setId(configId);
+
+        TaskConfig conf = configLoader.load();
+        try {
+            ScheduledTask task = (ScheduledTask) Class.forName(conf.getClassName()).newInstance();
+            task.run();
+            addActionMessage("Task run successful");
+        } catch (Exception e) {
+            addActionError("Error running task" + configId);
+            logger.error("Error running task", e);
+            return ERROR;
+        }
+        
+        return SUCCESS;
+    }
 	
 	public String doEnableDisableTask() {
 
@@ -46,7 +64,7 @@ public class TaskAction extends AbstractAdminAction {
 	    	addActionError("Could not load TaskConfig with id " + configId);
 	    	return ERROR;
 	    }
-	    
+        
 	    conf.setEnabled(enable);
 	    
 	    try {

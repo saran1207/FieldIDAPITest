@@ -366,6 +366,18 @@
 			</result>
 		</action>
 
+        <action name="runTask" method="runTask"
+                class="com.n4systems.fieldidadmin.actions.TaskAction">
+            <result name="success" type="redirectAction">
+                <param name="namespace">/admin</param>
+                <param name="actionName">taskCrud</param>
+            </result>
+            <result name="error" type="redirectAction">
+                <param name="namespace">/admin</param>
+                <param name="actionName">taskCrud</param>
+            </result>
+        </action>
+
 		<action name="enableDisableScheduler" method="enableDisableScheduler"
 			class="com.n4systems.fieldidadmin.actions.TaskAction">
 			<result name="success" type="redirectAction">

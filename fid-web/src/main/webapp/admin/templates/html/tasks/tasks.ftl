@@ -30,7 +30,6 @@ ${action.setPageName('tasks')!}
 		<td><@s.property value="status" /></td>
 		<td><@s.date name="lastExecutionDate" format="dd/MM/yyyy hh:mm:ss"/></td>
 		<td><@s.property value="lastTimeElapsed" /></td>
-		<td></td>
 	</tr>
 </@s.iterator>
 </table>
@@ -39,13 +38,17 @@ ${action.setPageName('tasks')!}
 <h2>Tasks Configurations</h2>
 <table class="list">
 <tr>
-	<th>ID</th><th>Created</th><th>Modified</th><th>Cron Pattern</th><th>Group</th><th>Task Class</th><th>Enabled</th><th>Entity ID</th><th></th>
+	<th>ID</th><th>Created</th><th>Modified</th><th>Cron Pattern</th><th>Group</th><th>Task Class</th><th>Enabled</th><th>Entity ID</th><th></th><th></th>
 </tr>
 <@s.iterator id="conf" value="taskConfigs">
 	<@s.url id="enableDisableTaskUrl" namespace="/admin" value="enableDisableTask.action">
 	    <@s.param name="configId" value="id" />
 	    <@s.param name="enable" value="%{!isEnabled()}" />
 	</@s.url>
+
+    <@s.url id="runTaskUrl" namespace="/admin" value="runTask.action">
+        <@s.param name="configId" value="id" />
+    </@s.url>
 
 	<tr>
 		<td><@s.property value="id"/></td>
@@ -56,6 +59,11 @@ ${action.setPageName('tasks')!}
 		<td><@s.property value="className" /></td>
 		<td><@s.property value="isEnabled()" /></td>
 		<td><@s.property value="taskEntityId" /></td>
+        <td>
+            <@s.a href="%{runTaskUrl}">
+                Run Now
+            </@s.a>
+        </td>
 		<td>
 			<@s.a href="%{enableDisableTaskUrl}">
 				<@s.if test="isEnabled()">Disable</@s.if>
