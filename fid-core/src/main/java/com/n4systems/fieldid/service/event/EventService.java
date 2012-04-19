@@ -115,7 +115,7 @@ public class EventService extends FieldIdPersistenceService {
     	if (fromDate!=null && toDate!=null) {
     		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
     		filterGroup.addClause(WhereClauseFactory.create(Comparator.GE, "fromDate", property, fromDate, null, ChainOp.AND));
-    		filterGroup.addClause(WhereClauseFactory.create(Comparator.LE, "toDate", property, toDate, null, ChainOp.AND));
+    		filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "toDate", property, toDate, null, ChainOp.AND));
     		return filterGroup;
     	} else if (fromDate!=null) {
     		return new WhereParameter<Date>(Comparator.GE, property, fromDate);

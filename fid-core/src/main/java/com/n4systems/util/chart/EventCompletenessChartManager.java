@@ -21,6 +21,7 @@ public class EventCompletenessChartManager extends DateChartManager {
 
     @Override
     public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index) {
+        super.updateOptions(chartSeries, options, index);
         if (chartSeries.getId().equals(EventSchedule.ScheduleStatus.COMPLETED)) {
             chartSeries.setColor("#60986B");    // completed = green.
         }

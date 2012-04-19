@@ -47,14 +47,13 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 
 	@Override
 	public ChartSeries<LocalDate> normalize(ChartSeries<LocalDate> series, LocalDate min, LocalDate max) {
-		LocalDate date = MathUtil.nullSafeMin(min, granularity.roundDown(dateRange.getEarliest()));
-        LocalDate endDate;
-        if (RangeType.FOREVER.equals(dateRange.getRangeType())) {
-            // we add one day because we want to include the max day. (loop is exclusive via isBefore
-            // so we adjust boundary to make sure it's included).
-            endDate = max==null ? null : max.plusDays(1);
-        } else {
-            endDate = granularity.roundUp(dateRange.getTo());
+		LocalDate date = MathUtil.nullSafeMin(granularity.roundDown(min), granularity.roundDown(dateRange.getEarliest()));
+        LocalDate endDate = MathUtil.nullSafeMax(max, series.getLastX());
+        if (!RangeType.FOREVER.equals(dateRange.getRangeType())) {
+            // skip FOREVER case because it's end date isn't practical.
+            LocalDate calculatedMax = granularity.roundUp(dateRange.getTo());
+            // if we are given a date, we consider it inclusive. if it's less than what date range specifies we use that exclusive date.
+            endDate = (max.compareTo(calculatedMax)>0) ? max.plusDays(1) : calculatedMax;
         }
 
 		while (endDate!=null && date.isBefore(endDate)) {
@@ -65,11 +64,6 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 			date = granularity.next(date);
 		}
 		return series;
-	}
-	
-	protected DateChartable pad(LocalDate c) {		
-		LocalDate date = new LocalDate(c);
-		return new DateChartable(date,0);
 	}
 
 	@Override
