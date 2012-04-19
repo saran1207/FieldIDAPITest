@@ -68,7 +68,7 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
 
         if (criteriaModel.getDateRange() != null) {
             if (criteriaModel.getEventStatus() == EventStatus.COMPLETE) {
-                addDateRangeTerm(searchTerms, "completedDate", DateHelper.convertToUTC(criteriaModel.getDateRange().calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(criteriaModel.getDateRange().calculateToDate()), timeZone));
+                addDateRangeTerm(searchTerms, "event.date", DateHelper.convertToUTC(criteriaModel.getDateRange().calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(criteriaModel.getDateRange().calculateToDate()), timeZone));
             } else if (criteriaModel.getEventStatus() == EventStatus.ALL) {
                 searchTerms.add(new CompletedOrDueDateRange(timeZone, criteriaModel.getDateRange()));
             }
