@@ -295,6 +295,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (updateKey.equals("location")) {
 					ownershipChanged = true;
 					changeTarget.setAdvancedLocation(eventChanges.getAdvancedLocation());
+					changeTarget.getSchedule().setAdvancedLocation(eventChanges.getAdvancedLocation());
 				}
 
 				if (updateKey.equals("printable")) {
