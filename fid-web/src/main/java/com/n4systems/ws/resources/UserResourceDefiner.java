@@ -19,7 +19,7 @@ public class UserResourceDefiner implements ResourceDefiner<User, WsUser> {
 
 	@Override
 	public LastModifiedListLoader getLastModifiedLoader(LoaderFactory loaderFactory) {
-		return loaderFactory.createLastModifiedListLoader(User.class);
+		return loaderFactory.createUserLastModifiedLoader();
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class LastModifiedListLoader extends ListLoader<LastModified> {
 	private final String idField;
 	private final String modifiedField;
 	
-	private Date modifiedAfter;
+	protected Date modifiedAfter;
 	
 	public LastModifiedListLoader(SecurityFilter filter, Class<? extends AbstractEntity> clazz) {
 		this(filter, clazz, "id", "modified");

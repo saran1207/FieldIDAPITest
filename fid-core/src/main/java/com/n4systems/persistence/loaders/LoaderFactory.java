@@ -106,13 +106,7 @@ import com.n4systems.model.signup.SignupReferralListLoader;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.tenant.PrimaryOrgsWithNameLikeLoader;
 import com.n4systems.model.tenant.SetupDataLastModDatesLoader;
-import com.n4systems.model.user.EmployeePaginatedLoader;
-import com.n4systems.model.user.User;
-import com.n4systems.model.user.UserByEmailLoader;
-import com.n4systems.model.user.UserByFullNameLoader;
-import com.n4systems.model.user.UserFilteredLoader;
-import com.n4systems.model.user.UserListLoader;
-import com.n4systems.model.user.UserListableLoader;
+import com.n4systems.model.user.*;
 import com.n4systems.tools.Pager;
 
 /**
@@ -402,6 +396,10 @@ public class LoaderFactory implements Serializable {
 	public LastModifiedListLoader createLastModifiedListLoader(Class<? extends AbstractEntity> clazz) { 
 		return new LastModifiedListLoader(filter, clazz);
 	}
+
+    public UserLastModifiedLoader createUserLastModifiedLoader() {
+        return new UserLastModifiedLoader(filter);
+    }
 
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
 		return new LatestEulaAcceptanceLoader(filter);
