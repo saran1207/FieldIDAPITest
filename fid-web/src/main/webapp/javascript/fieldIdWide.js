@@ -20,10 +20,10 @@ var fieldIdWidePage = (function() {
 
 	var showConfig = function(showFilters) {
 		if (showFilters) {
+            //suggestion : would $(..).attr('css','filters') be more efficient?
             $('#left-panel').removeClass('columns').addClass('filters');
 		} else {
             $('#left-panel').removeClass('filters').addClass('columns');
-            $('#columns').show();
 		}
 		showLeftPanel();
 	};

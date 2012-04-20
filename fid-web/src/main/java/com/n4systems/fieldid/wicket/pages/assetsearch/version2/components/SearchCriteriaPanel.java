@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.search.AssetSearchCriteria;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -21,8 +20,6 @@ public class SearchCriteriaPanel extends AbstractCriteriaPanel<AssetSearchCriter
             @Override
             protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
                 getSearchColumnsPanel().updateAssetTypeOrGroup(target, selectedAssetType, availableAssetTypes);
-                // note : we know that this event can only occur when Filters panel is displayed. that's where the assetType widget lives.
-                getSearchColumnsPanel().add(new AttributeModifier("style", "display:none;"));
             }
         };
     }

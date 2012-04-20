@@ -4,7 +4,6 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.search.EventReportCriteria;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -38,8 +37,6 @@ public class ReportCriteriaPanel extends AbstractCriteriaPanel<EventReportCriter
             }
 
             private void updateDisplay() {
-                // note : we know that this event can only occur when Filters panel is displayed. that's where the assetType widget lives.
-                getReportingColumnsPanel().add(new AttributeModifier("style", "display:none;"));
             }
 
         };
