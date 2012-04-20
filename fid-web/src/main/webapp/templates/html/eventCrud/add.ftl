@@ -7,6 +7,6 @@ ${action.setPageType('event', 'add')!}
 	<div class="formAction">
 		<@s.submit key="hbutton.save" />
 		<@s.text name="label.or"/>
-		<a href="<@s.url action="eventGroups" uniqueID="${assetId}"/>"><@s.text name="label.cancel"/></a>
+		<a href="<@s.url action="quickEvent" assetId="${assetId}"/>"><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>
