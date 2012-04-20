@@ -33,7 +33,7 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
 
 	protected DropDownChoice<RangeType> createDateRangeSelect() {
 		DropDownChoice<RangeType> d = new DropDownChoice<RangeType>("dateRangeSelect", new PropertyModel<RangeType>(configModel,"rangeType"),
-                Arrays.asList(RangeType.allFloatingButFutureTypes().toArray(new RangeType[]{})), new EnumDropDownChoiceRenderer());
+                Arrays.asList(RangeType.allFloatingButFutureTypesAndCustom().toArray(new RangeType[]{})), new EnumDropDownChoiceRenderer());
 		d.setNullValid(false);
 		return d;
 	}	

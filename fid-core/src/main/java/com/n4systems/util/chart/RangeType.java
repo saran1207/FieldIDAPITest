@@ -69,6 +69,11 @@ public enum RangeType implements Listable<String>, Serializable {
         return result;
     }
 
+    public static EnumSet<RangeType> allFloatingButFutureTypesAndCustom() {
+        EnumSet<RangeType> result = allFloatingButFutureTypes();
+        result.removeAll(customTypes);
+        return result;
+    }
     public static EnumSet<RangeType> allFloatingTypes() {
         return EnumSet.complementOf(daysFromNowRangeTypes);
     }

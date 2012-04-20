@@ -94,7 +94,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
 			}
 		};		
 		
-		DropDownChoice<RangeType> d = new DropDownChoice<RangeType>("dateRangeSelect", new PropertyModel<RangeType>(configModel,"rangeType"), Arrays.asList(RangeType.allFloatingButFutureTypes().toArray(new RangeType[]{})), renderer);
+		DropDownChoice<RangeType> d = new DropDownChoice<RangeType>("dateRangeSelect", new PropertyModel<RangeType>(configModel,"rangeType"), Arrays.asList(RangeType.allFloatingButFutureTypesAndCustom().toArray(new RangeType[]{})), renderer);
 		d.setNullValid(false);
 		return d;
 	}	        
