@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.saveditem.SavedItem;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
@@ -104,12 +105,25 @@ public class UserService extends FieldIdPersistenceService {
                 clonedItem.reset();
                 clonedItem.setSendSchedules(new ArrayList<SendSavedItemSchedule>()); // erase any existing schedules for shared report - don't want to inherit them.
                 clonedItem.setSharedByName(sharedByName);
+                SearchCriteria clonedCriteria = cloneCriteria(savedItem.getSearchCriteria());
+                clonedItem.setSearchCriteria(clonedCriteria);
                 user.getSavedItems().add(clonedItem);
                 persistenceService.save(user);
             }
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
+    }
+
+    private SearchCriteria cloneCriteria(SearchCriteria criteria) throws CloneNotSupportedException {
+        SearchCriteria clonedCriteria = (SearchCriteria) criteria.clone();
+        clonedCriteria.reset();
+        List<String> columns = new ArrayList<String>();
+        for (String col: criteria.getColumns()) {
+            columns.add(col);
+        }
+        clonedCriteria.setColumns(columns);
+        return clonedCriteria;
     }
 
 }

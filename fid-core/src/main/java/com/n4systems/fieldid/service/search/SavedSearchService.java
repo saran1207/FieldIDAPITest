@@ -73,7 +73,6 @@ public abstract class SavedSearchService<I extends SavedItem<T>, T extends Searc
             persistenceService.update(savedItem);
             return savedItem;
         } else {
-            // XXX : refactor into separated method.
             try {
                 I newSavedItem = createSavedItem(savedItem);
                 T copiedSearchCriteria = (T) savedItem.getSearchCriteria().clone();
