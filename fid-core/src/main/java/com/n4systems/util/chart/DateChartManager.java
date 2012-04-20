@@ -53,7 +53,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
             // skip FOREVER case because it's end date isn't practical.
             LocalDate calculatedMax = granularity.roundUp(dateRange.getTo());
             // if we are given a date, we consider it inclusive. if it's less than what date range specifies we use that exclusive date.
-            endDate = (max.compareTo(calculatedMax)>0) ? max.plusDays(1) : calculatedMax;
+            endDate = (max != null && max.compareTo(calculatedMax) > 0) ? max.plusDays(1) : calculatedMax;
         }
 
 		while (endDate!=null && date.isBefore(endDate)) {
