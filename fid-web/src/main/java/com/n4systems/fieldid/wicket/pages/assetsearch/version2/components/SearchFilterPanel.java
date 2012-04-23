@@ -52,7 +52,8 @@ public class SearchFilterPanel extends Panel {
 				return new OrderDetailsCriteriaPanel(id);
 			}
 		};
-	  	add(p4);		  	
+        p4.setHideWhenContainedPanelInvisible(true);
+	  	add(p4);
 
 		CollapsiblePanel p5 = new CollapsiblePanel("dateRangePicker", new StringResourceModel("label.daterange",this,null)) {
 			@Override 	protected Panel createContainedPanel(String id) {

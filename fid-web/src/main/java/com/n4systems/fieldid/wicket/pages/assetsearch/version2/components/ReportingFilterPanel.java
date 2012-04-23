@@ -70,11 +70,13 @@ public class ReportingFilterPanel extends Panel {
             }
         });
 
-        add( new CollapsiblePanel("orderDetailsCriteriaPanel", new StringResourceModel("label.orderdetails",this,null)) {
+        CollapsiblePanel orderDetailsPanel;
+        add(orderDetailsPanel = new CollapsiblePanel("orderDetailsCriteriaPanel", new StringResourceModel("label.orderdetails",this,null)) {
             @Override protected Panel createContainedPanel(String id) {
                 return new OrderDetailsCriteriaPanel(id);
             }
         });
+        orderDetailsPanel.setHideWhenContainedPanelInvisible(true);
 	}
 
     protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {}

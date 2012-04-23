@@ -28,6 +28,8 @@ public abstract class CollapsiblePanel extends Panel {
     private ContextImage collapseImage;
     private ContextImage expandImage;
 
+    private boolean hideWhenContainedPanelInvisible;
+
     public CollapsiblePanel(String id, final IModel<String> titleModel, String expandImageUrl, String collapseImageUrl) {
         super(id);       
         add(collapseExpandLink = new WebMarkupContainer("collapseExpandLink"));
@@ -36,7 +38,7 @@ public abstract class CollapsiblePanel extends Panel {
         collapseExpandLink.add(collapseImage = new ContextImage("collapseImage", collapseImageUrl));
         expandImage.setOutputMarkupPlaceholderTag(true);
         collapseImage.setOutputMarkupPlaceholderTag(true);
-        add(getContainedPanel());
+        add(containedPanel = getContainedPanel());
     }
 
     
@@ -69,8 +71,19 @@ public abstract class CollapsiblePanel extends Panel {
     public String getContainedPanelMarkupId() {
         return CONTAINED_PANEL_MARKUP_ID;
     }
-    
-	@Override	
+
+    public void setHideWhenContainedPanelInvisible(boolean hideWhenContainedPanelInvisible) {
+        this.hideWhenContainedPanelInvisible = hideWhenContainedPanelInvisible;
+    }
+
+    @Override
+    public boolean isVisible() {
+        if (hideWhenContainedPanelInvisible && !containedPanel.isVisible())
+            return false;
+        return super.isVisible();
+    }
+
+    @Override
     public void renderHead(IHeaderResponse response) {
     	response.renderCSSReference("style/component/collapsiblePanel.css");    	
     	super.renderHead(response);
