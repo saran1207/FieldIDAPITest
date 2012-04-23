@@ -80,7 +80,6 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
     @Override
     protected void updateMenuBeforeRender(int selected) {
         super.updateMenuBeforeRender(selected);  // update
-        summaryReportLink.setVisible(selected>0);
         exportLink.setVisible(selected > 0 && selected < maxExport);
         print.setVisible(selected > 0 && selected < maxPrint);
         actions.setVisible(selected > 0 && selected < maxUpdate);
