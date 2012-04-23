@@ -4,7 +4,7 @@ var signatureClearUrl;
 var submitSignatureUrl;
 
 function initializeSignatureWindowOpenedHook() {
-    jQuery(".signatureCriteriaLightBox").bind('click', function(event) {
+	jQuery("#pageContent").delegate(".signatureCriteriaLightBox", 'click', function(event) {
         storeCriteriaId(event);
     });
 }
