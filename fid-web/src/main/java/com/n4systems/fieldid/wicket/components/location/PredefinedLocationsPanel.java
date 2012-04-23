@@ -94,7 +94,7 @@ public class PredefinedLocationsPanel extends Panel {
 
                         selectedLevels.add(item.getModelObject());
 
-                        target.appendJavaScript("$('"+ PredefinedLocationsPanel.this.getMarkupId()+"').scrollLeft = 10000;");
+                        target.appendJavaScript("$('#"+ PredefinedLocationsPanel.this.getMarkupId()+"').scrollLeft(10000);");
                     }
                 };
                 clickLink.add(createHighlightSelectedModifier(item, levelIndex));
