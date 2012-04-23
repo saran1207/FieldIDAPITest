@@ -23,7 +23,7 @@
 		<div id="listContainer">
 			<ul class="listOfLinks">				
 				<li class="first">
-					<span class="welcome"><@s.text name="label.welcome"/>, </span><a href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a> 
+					<span class="welcome"><@s.text name="label.welcome"/>,</span> <a href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a>
 					<span class="separator">|</span>
 				</li>
 				<li>
