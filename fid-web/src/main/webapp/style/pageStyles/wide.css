@@ -44,7 +44,7 @@
     border:1px solid #bbb;
 	background:white;
     margin-right:10px;
-    margin-left:24px;
+    margin-left:26px;
 }
 
 #page.with-left-panel .centre {
@@ -53,6 +53,31 @@
 
 #pageHeader #pageNavigation {
     box-shadow:0;
+}
+
+
+#west-padding {
+    position:fixed;
+    background:#f8f8f8;
+    bottom:0px;
+    top:169px;
+    width:15px;
+    left:11px;
+    z-index:10;
+}
+
+#south-padding {
+    /*currently not used*/
+}
+
+#east-padding {
+    position:fixed;
+    background:#f8f8f8;
+    bottom:0px;
+    top:169px;
+    right:0px;
+    width:10px;
+    z-index:20;
 }
 
 
@@ -76,10 +101,16 @@
     border-top:1px solid #bbb;
 	position:fixed;
 	float:left;
+    z-index:30;  /* so it goes above west-padding */
 }
 
 #page.with-left-panel #left-panel {
     display:block;
+}
+
+
+#page.with-left-panel #west-padding {
+    width:363px;
 }
 
 #page.without-left-panel #left-panel {
@@ -110,7 +141,8 @@
     top: 169px;
     position: fixed;
     width: 13px;
-    bottom: 10px;
+    bottom: 0px;
+    border-bottom: 10px solid #f8f8f8;
     background: #bbb;
     border:1px solid #bbb;
 }
@@ -405,7 +437,7 @@
     height:50px;
     bottom:0px;
     right:10px;
-    left:26px;
+    left:27px;
     background:#f9f9f9;
     width:auto;
 }

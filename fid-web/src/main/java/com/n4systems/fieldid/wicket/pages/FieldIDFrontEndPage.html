@@ -187,15 +187,16 @@
         <div id="page">
 
             <div id="left-panel-controller" wicket:id="leftPanelController"/>
-			<div id="left-panel" wicket:id="leftPanel"/>
+            <div id="left-panel" wicket:id="leftPanel"/>
+            <div id="west-padding"/>
 
 			<div class="centre">			
 				<div id="contentHeader">			
 				    <div wicket:id="topFeedbackPanel"></div>
-				
+
 				    <div id="contentTitle">
 			        	<h1><span wicket:id="titleLabel"></span></h1>		
-			
+
 				        <div class="backToLink">
 			            	<a wicket:id="backToLink">&#171; <span wicket:id="backToLinkLabel"></span></a>
 			        	</div>
@@ -217,9 +218,14 @@
 			        	$('#smartSearch').bind('submit', submitSmartSearch);
 			    	});
 				</script>
+
 	        	<div id="pageContent" class="pageContent">
 			        <wicket:child></wicket:child>
 		        </div>
+
+                <div id="south-padding"/>
+
+                <div id="east-padding"/>
 						
 			    <div id="pageFooter">
 		    	    <div>
