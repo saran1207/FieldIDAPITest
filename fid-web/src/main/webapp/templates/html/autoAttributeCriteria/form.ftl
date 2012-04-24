@@ -4,6 +4,9 @@ ${action.setPageType('auto_attribute', 'edit')!}
 		padding: 0;
 	}
 </style>
+<@n4.includeScript src="scriptaculous"/>
+<@n4.includeScript src="effects"/>
+<@n4.includeScript src="dragdrop"/>
 <@s.form action="autoAttributeCriteriaEdit!save" cssClass="inputForm" theme="css_xhtml" >
 	<@s.hidden name="uniqueID" id="uniqueId"/>
 	
