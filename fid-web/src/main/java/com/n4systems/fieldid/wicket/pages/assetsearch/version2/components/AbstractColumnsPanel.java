@@ -30,7 +30,7 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
 
     protected IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel;
     protected IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel;
-    private IModel<T> model;
+    protected IModel<T> model;
 
     public AbstractColumnsPanel(String id, IModel<T> model) {
 		super(id, model);
@@ -74,7 +74,9 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
         final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getDefaultModel(), "assetTypeGroup");
         final IModel<AssetType> assetTypeModel = new PropertyModel<AssetType>(getDefaultModel(), "assetType");
         GroupedAssetTypesForTenantModel availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
-        updateDynamicAssetColumns(null, availableAssetTypesModel.getObject());
+        if (!model.getObject().isReportAlreadyRun()) {
+            updateDynamicAssetColumns(null, availableAssetTypesModel.getObject());
+        }
     }
 
     private Component createCollapsibleColumnsPanel(
