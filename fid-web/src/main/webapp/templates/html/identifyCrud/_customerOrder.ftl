@@ -12,13 +12,15 @@
 </div>
 
 <script type="text/javascript">
-$( 'assetSearch' ).observe( 'submit', 
-	function( event ) {
-		event.stop(); 
-		var element = Event.element( event ); 
-		element.request( getStandardCallbacks() );
-	} );
-	
+    onDocumentLoad(function() {
+        $$( "form[name='customerOrderFindAsset']" )[0].observe( 'submit',
+                function(event) {
+                    event.stop();
+                    var element = Event.element( event );
+                    element.request( getStandardCallbacks() );
+                } );
+    });
+
 	function marryCustomerOrder(baseUrl) {
 		getResponse(baseUrl + "&customerOrderId=${order.id}");
 	}
