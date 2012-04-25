@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
@@ -10,12 +11,17 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 
+import rfid.web.helper.SessionUser;
+
 
 public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
     private WebMarkupContainer actions;
     private Link printLink;
     private Link exportLink;
+    private Link massEventLink;
+    private Link massUpdateLink;
+    private Link massScheduleLink;
 
     public SearchSubMenu(String id, final Model<AssetSearchCriteria> model) {
         super(id,model);
@@ -24,15 +30,14 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         add(exportLink = makeLinkLightBoxed(new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model)));
 
         actions=new WebMarkupContainer("actions");
-
-        actions.add(new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", model));
-        actions.add(new Link("massUpdateLink") {
+        
+        actions.add(massEventLink = new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", model));
+        actions.add(massUpdateLink = new Link("massUpdateLink") {
             @Override public void onClick() {
                 setResponsePage(new MassUpdateAssetsPage(model));
             }
         });
-
-        actions.add(new Link("massScheduleLink") {
+        actions.add(massScheduleLink = new Link("massScheduleLink") {
             @Override public void onClick() {
                 setResponsePage(new MassSchedulePage(model));
             }
@@ -68,7 +73,14 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         boolean rowsSelected = selected > 0;
         exportLink.setVisible(rowsSelected && (selected < maxExport));
         printLink.setVisible(rowsSelected && (selected < maxPrint));
-        actions.setVisible(rowsSelected && (selected < maxUpdate));
+        
+        SessionUser sessionUser = FieldIDSession.get().getSessionUser();
+        
+        massEventLink.setVisible(sessionUser.hasAccess("createevent"));
+        massUpdateLink.setVisible(sessionUser.hasAccess("tag"));
+        massScheduleLink.setVisible(sessionUser.hasAccess("createevent"));
+        
+        actions.setVisible(rowsSelected && (selected < maxUpdate) && (massEventLink.isVisible() || massUpdateLink.isVisible() || massScheduleLink.isVisible()));
     }
 
 

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionLink;
 import com.n4systems.fieldid.wicket.components.reporting.results.ScheduleMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
@@ -15,6 +16,8 @@ import com.n4systems.model.search.EventStatus;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
+
+import rfid.web.helper.SessionUser;
 
 
 public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
@@ -45,7 +48,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
                 setResponsePage(new MassUpdateEventsPage(model));
             }
         });
-
+        
         add(actions);
 
         print = new WebMarkupContainer("print");
@@ -82,10 +85,16 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         super.updateMenuBeforeRender(selected);  // update
         exportLink.setVisible(selected > 0 && selected < maxExport);
         print.setVisible(selected > 0 && selected < maxPrint);
-        actions.setVisible(selected > 0 && selected < maxUpdate);
+        
+        SessionUser sessionUser = FieldIDSession.get().getSessionUser();
+        boolean searchIncludesSafetyNetwork = model.getObject().isIncludeSafetyNetwork();
         EventStatus status = model.getObject().getEventStatus();
-        updateLink.setVisible(status==EventStatus.COMPLETE);
-        updateSchedulesLink.setVisible(status==EventStatus.INCOMPLETE);
+        
+        updateLink.setVisible(status==EventStatus.COMPLETE && sessionUser.hasAccess("editevent"));
+        updateSchedulesLink.setVisible(status==EventStatus.INCOMPLETE && sessionUser.hasAccess("editevent"));
+        assignJobLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork);
+
+        actions.setVisible(selected > 0 && selected < maxUpdate && (updateLink.isVisible() || updateSchedulesLink.isVisible() || assignJobLink.isVisible()));
     }
 
     @Override
