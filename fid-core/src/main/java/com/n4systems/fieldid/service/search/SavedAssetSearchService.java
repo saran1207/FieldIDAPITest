@@ -31,9 +31,11 @@ public class SavedAssetSearchService extends SavedSearchService<SavedSearchItem,
     @Override
     public AssetSearchCriteria retrieveLastSearch() {
         final AssetSearchCriteria lastRunSearch = getCurrentUser().getLastRunSearch();
-        lastRunSearch.setReportAlreadyRun(true);
-        storeTransientColumns(lastRunSearch);
-        enableSelectedColumns(lastRunSearch, lastRunSearch.getColumns());
+        if (lastRunSearch!=null) {
+            lastRunSearch.setReportAlreadyRun(true);
+            storeTransientColumns(lastRunSearch);
+            enableSelectedColumns(lastRunSearch, lastRunSearch.getColumns());
+        }
         return lastRunSearch;
     }
 

@@ -38,9 +38,11 @@ public class SavedReportService extends SavedSearchService<SavedReportItem, Even
     @Override
     public EventReportCriteria retrieveLastSearch() {
         final EventReportCriteria lastRunReport = getCurrentUser().getLastRunReport();
-        lastRunReport.setReportAlreadyRun(true);
-        storeTransientColumns(lastRunReport);
-        enableSelectedColumns(lastRunReport, lastRunReport.getColumns());
+        if (lastRunReport!=null) {
+            lastRunReport.setReportAlreadyRun(true);
+            storeTransientColumns(lastRunReport);
+            enableSelectedColumns(lastRunReport, lastRunReport.getColumns());
+        }
         return lastRunReport;
     }
 
