@@ -255,7 +255,7 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 	
 	public void clickSortColumn(String name) {
-		selenium.click("//a[contains(.,'" + name + "')]");
+		selenium.click("//table[contains(@class,'list')]//th//a[contains(.,'" + name + "')]");
 		waitForPageToLoad();
 	}
 

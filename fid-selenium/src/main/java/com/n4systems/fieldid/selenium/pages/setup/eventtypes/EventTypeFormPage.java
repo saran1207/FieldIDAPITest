@@ -168,11 +168,11 @@ public class EventTypeFormPage extends WicketFieldIDPage {
     }
 
     public void dragSectionToPosition(String sectionName, int position) {
-        dragSortableItem(sectionName, position, "criteriaSectionsPanel", "criteriaSections");
+        dragSortableItem(sectionName, position, "criteriaSectionsPanel", "criteriaSections", "sortableSectionContainer");
     }
 
     public void dragCriteriaToPosition(String criteriaName, int position) {
-        dragSortableItem(criteriaName, position, "criteriaPanel", "criteria");
+        dragSortableItem(criteriaName, position, "criteriaPanel", "criteria", "sortableCriteriaContainer");
     }
 
     public void clickReorderCriteria() {
@@ -180,9 +180,9 @@ public class EventTypeFormPage extends WicketFieldIDPage {
         waitForWicketAjax();
     }
 
-    private void dragSortableItem(String sectionName, int position, String containerXpath, String itemClass) {
+    private void dragSortableItem(String sectionName, int position, String containerXpath, String itemClass, String destContainerClass) {
         String sectionXpath = "//div[@id='"+containerXpath+"']//div[contains(@class,'"+itemClass+"')]//div[@class='itemLinkTitle']//a//span[text()='"+sectionName+"']//ancestor::div[@class='"+itemClass+"']";
-        String toXpath = "//div[contains(@class,'sortableSectionContainer')]";
+        String toXpath = "//div[contains(@class,'"+destContainerClass+"')]";
         if (position > 1) {
             toXpath += "//div[contains(@class,'"+itemClass+"')]["+position+"]";
         }
