@@ -33,14 +33,20 @@ public class WicketFieldIDPage extends FieldIDPage {
 
     @Override
     public List<String> getFormErrorMessages() {
+        return getFormErrorMessagesUnder("");
+    }
+    
+    public List<String> getFormErrorMessagesUnder(String parentXpath) {
         List<String> result = new ArrayList<String>();
 
-        int maxIndex = selenium.getXpathCount("//li[@class='errorMessage']").intValue();
+        int maxIndex = selenium.getXpathCount(parentXpath + "//li[@class='errorMessage']").intValue();
         for(int i = 1; i <= maxIndex; i++) {
-            String iterableErrorMessageLocator = "//ul/li["+i+"]/*[@class='errorMessage']";
+            String iterableErrorMessageLocator = parentXpath + "//ul/li["+i+"]/*[@class='errorMessage']";
             String s = selenium.getText(iterableErrorMessageLocator);
             result.add(s);
         }
         return result;
+
     }
+
 }

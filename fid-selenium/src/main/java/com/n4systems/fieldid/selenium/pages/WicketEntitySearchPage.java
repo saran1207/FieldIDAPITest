@@ -24,7 +24,7 @@ public abstract class WicketEntitySearchPage extends WicketFieldIDPage {
     }
 
     public void clickRunSearchButton() {
-        selenium.click("//input[@type='submit' and @value='Run']");
+        selenium.click("//form[contains(@class, 'search-config')]//span[contains(@class,'submit')]//a[.='Search']");
         waitForPageToLoad();
     }
 
@@ -41,33 +41,34 @@ public abstract class WicketEntitySearchPage extends WicketFieldIDPage {
 	}
 
 	public void setSearchCriteria(AssetSearchCriteria criteria) {
+
 		if (criteria.getRFIDNumber() != null) {
-			selenium.type("//input[@name='identifiersCriteriaPanel:rfidNumber']", criteria.getRFIDNumber());
+			selenium.type(criteriaInputXpath("RFID Number", "input"), criteria.getRFIDNumber());
 		}
 		if (criteria.getIdentifier() != null) {
-			selenium.type("//input[@name='identifiersCriteriaPanel:identifier']", criteria.getIdentifier());
+			selenium.type(criteriaInputXpath("Serial Number", "input"), criteria.getIdentifier());
 		}
 		if (criteria.getOrderNumber() != null) {
-			selenium.type("//input[@name='orderDetailsCriteriaPanel:orderNumber']", criteria.getOrderNumber());
+			selenium.type(criteriaInputXpath("Order Number", "input"), criteria.getOrderNumber());
 		}
 		if (criteria.getPurchaseOrder() != null) {
-			selenium.type("//input[@name='orderDetailsCriteriaPanel:purchaseOrder']", criteria.getPurchaseOrder());
+			selenium.type(criteriaInputXpath("Purchase Order", "input"), criteria.getPurchaseOrder());
 		}
 		if (criteria.getAssignedTo() != null) {
-			selenium.select("//select[@name='ownershipCriteriaPanel:assignedUserContainer:assignedTo']", criteria.getAssignedTo());
+			selenium.select(criteriaInputXpath("Assigned TO", "select"), criteria.getAssignedTo());
 		}
 		if (criteria.getReferenceNumber() != null) {
-			selenium.type("//input[@name='identifiersCriteriaPanel:referenceNumber']", criteria.getReferenceNumber());
+			selenium.type(criteriaInputXpath("Reference Number", "input"), criteria.getReferenceNumber());
 		}
 		if (criteria.getAssetStatus() != null) {
-			selenium.select("//select[@name='assetDetailsCriteriaPanel:assetStatus']", criteria.getAssetStatus());
+			selenium.select(criteriaInputXpath("Asset Status", "select"), criteria.getAssetStatus());
 		}
 		if (criteria.getAssetTypeGroup() != null) {
-			selenium.select("//select[@name='assetDetailsCriteriaPanel:assetTypeGroup']", criteria.getAssetTypeGroup());
+			selenium.select(criteriaInputXpath("AssetTypeGroup", "select"), criteria.getAssetTypeGroup());
             waitForAjax();
 		}
 		if (criteria.getAssetType() != null) {
-			selenium.select("//select[@name='assetDetailsCriteriaPanel:assetType']", criteria.getAssetType());
+			selenium.select(criteriaInputXpath("Asset Type", "select"), criteria.getAssetType());
 		}
 		if (criteria.getLocation() != null) {
 			LocationPicker locPicker = getLocationPicker();
@@ -81,13 +82,19 @@ public abstract class WicketEntitySearchPage extends WicketFieldIDPage {
 			orgPicker.setOwner(criteria.getOwner());
 			orgPicker.clickSelectOwner();
 		}
+        String parentXpath = "//div[@class='filters']//div[@class='field']";
 		if (criteria.getFromDate() != null) {
-			selenium.type("//input[@name='fromDate:dateField']", criteria.getFromDate());
+			selenium.type(parentXpath+"//input[contains(@name,'fromDate:dateField')]", criteria.getFromDate());
 		}
 		if (criteria.getToDate() != null) {
-			selenium.type("//input[@name='toDate:dateField']", criteria.getToDate());
+			selenium.type(parentXpath+"//input[contains(@name,'toDate:dateField')]", criteria.getToDate());
 		}
 	}
+    
+    private String criteriaInputXpath(String criteriaName, String inputType) {
+        String parentXpath = "//div[@class='filters']//div[@class='field']";
+        return parentXpath + "//label[.='"+criteriaName+"']/../" + inputType;
+    }
 
 	public List<String> getResultColumnHeaders() {
 		return collectTableHeaders();

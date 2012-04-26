@@ -86,7 +86,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 	public void search_with_no_display_columns_selected() throws Exception {
 		page.setDisplayColumns(new SearchDisplayColumns());
 		page.clickRunSearchButton();
-		assertEquals(1, page.getFormErrorMessages().size());
+		assertEquals(1, page.getFormErrorMessagesUnder("//div[@id='left-panel']").size());
 	}
 	
 	@Test
@@ -112,7 +112,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());		
 		List<String> expectedColumns = Arrays.asList("ID Number",  "Asset Type",  "Asset Status",  "Customer Name",  "Location",
-				"Date Identified",  "Last Event Date",  "RFID Number",  "Reference Number",  "Assigned To",  "Division",  "Organization",  
+				"Date Identified",  "Last Event Date", "Next Scheduled Date", "RFID Number",  "Reference Number",  "Assigned To",  "Division",  "Organization",
 				"Order Number",  "Purchase Order",  "Asset Type Group",  "Network Last Event Date",  "Identified By",  
 				"Modified By",  "Comments",  "Description",  "Safety Network", "");
 		assertEquals(expectedColumns, page.getResultColumnHeaders());

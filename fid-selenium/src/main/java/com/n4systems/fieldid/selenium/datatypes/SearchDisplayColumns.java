@@ -353,6 +353,7 @@ public class SearchDisplayColumns {
 		testDuration = true;		
 		peakLoadDuration = true;
 		partNumber = true;
+        scheduledDate = true;
 	}
 
 	public boolean isScheduledDate() {

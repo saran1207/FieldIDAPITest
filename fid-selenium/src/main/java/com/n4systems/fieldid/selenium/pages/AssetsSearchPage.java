@@ -18,35 +18,35 @@ public class AssetsSearchPage extends WicketEntitySearchPage {
 	}
 
 	public void setDisplayColumns(SearchDisplayColumns displayColumns, boolean isIntergationEnabled, boolean isJobSitesEnabled) {
-		setCheckBoxValue("//div//label[.='ID Number']/../input", displayColumns.isIdentifier());
-		setCheckBoxValue("//div//label[.='Reference Number']/../input", displayColumns.isReferenceNumber());
-		setCheckBoxValue("//div//label[.='RFID Number']/../input", displayColumns.isRfidNumber());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='ID Number']/../input", displayColumns.isIdentifier());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Reference Number']/../input", displayColumns.isReferenceNumber());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='RFID Number']/../input", displayColumns.isRfidNumber());
 		if (isJobSitesEnabled) {
-			setCheckBoxValue("//div//label[.='Job Site Name']/../input", displayColumns.isJobSiteName());
+			setCheckBoxValue("//div[contains(@class, 'columns')]//label[.='Job Site Name']/../input", displayColumns.isJobSiteName());
 		}
-		setCheckBoxValue("//div//label[.='Customer Name']/../input", displayColumns.isCustomer());
-		setCheckBoxValue("//div//label[.='Division']/../input", displayColumns.isDivision());
-		setCheckBoxValue("//div//label[.='Location']/../input", displayColumns.isLocation());
-		setCheckBoxValue("//div//label[.='Organization']/../input", displayColumns.isOrganization());
-		setCheckBoxValue("//div//label[.='Asset Type Group']/../input", displayColumns.isAssetTypeGroup());
-		setCheckBoxValue("//div//label[.='Asset Type']/../input", displayColumns.isAssetType());
-		setCheckBoxValue("//div//label[.='Asset Status']/../input", displayColumns.isAssetStatus());
-		setCheckBoxValue("//div//label[.='Date Identified']/../input", displayColumns.isDateIdentified());
-		setCheckBoxValue("//div//label[.='Last Event Date']/../input", displayColumns.isLastEventDate());
-		setCheckBoxValue("//div//label[.='Network Last Event Date']/../input", displayColumns.isNetworkLastEventDate());
-		setCheckBoxValue("//div//label[.='Assigned To']/../input", displayColumns.isAssignedTo());
-		setCheckBoxValue("//div//label[.='Identified By']/../input", displayColumns.isIdentifiedBy());
-		setCheckBoxValue("//div//label[.='Modified By']/../input", displayColumns.isModifiedBy());
-		setCheckBoxValue("//div//label[.='Comments']/../input", displayColumns.isComments());
-		setCheckBoxValue("//div//label[.='Description']/../input", displayColumns.isDescription());
-		setCheckBoxValue("//div//label[.='Safety Network']/../input", displayColumns.isSafetyNetwork());
-		setCheckBoxValue("//div//label[.='Next Scheduled Date']/../input", displayColumns.isScheduledDate());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Customer Name']/../input", displayColumns.isCustomer());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Division']/../input", displayColumns.isDivision());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Location']/../input", displayColumns.isLocation());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Organization']/../input", displayColumns.isOrganization());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Asset Type Group']/../input", displayColumns.isAssetTypeGroup());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Asset Type']/../input", displayColumns.isAssetType());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Asset Status']/../input", displayColumns.isAssetStatus());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Date Identified']/../input", displayColumns.isDateIdentified());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Last Event Date']/../input", displayColumns.isLastEventDate());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Network Last Event Date']/../input", displayColumns.isNetworkLastEventDate());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Assigned To']/../input", displayColumns.isAssignedTo());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Identified By']/../input", displayColumns.isIdentifiedBy());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Modified By']/../input", displayColumns.isModifiedBy());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Comments']/../input", displayColumns.isComments());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Description']/../input", displayColumns.isDescription());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Safety Network']/../input", displayColumns.isSafetyNetwork());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Next Scheduled Date']/../input", displayColumns.isScheduledDate());
 		if (isIntergationEnabled) {
-			setCheckBoxValue("//div//label[.='Organization']/../input", displayColumns.isOrderDescription());
-			setCheckBoxValue("//div//label[.='Organization']/../input", displayColumns.isOrderNumber());
+			setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Organization']/../input", displayColumns.isOrderDescription());
+			setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Organization']/../input", displayColumns.isOrderNumber());
 		} else {
-			setCheckBoxValue("//div//label[.='Purchase Order']/../input", displayColumns.isPurchaseOrder());
-			setCheckBoxValue("//div//label[.='Order Number']/../input", displayColumns.isOrderNumber());
+			setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Purchase Order']/../input", displayColumns.isPurchaseOrder());
+			setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Order Number']/../input", displayColumns.isOrderNumber());
 		}
 	}
 
