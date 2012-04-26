@@ -82,16 +82,6 @@ public class UserPermissionsTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void verify_manage_system_users_and_manage_customer_users_is_disabled() {
-
-		startAsCompany(COMPANY).login(EMPLOYEE_USER_WITH_PERMISSIONS, EMPLOYEE_USER_WITH_PERMISSIONS).clickSetupLink();
-
-		assertFalse("Shouldn't have manage employee users permission", selenium.isElementPresent("//a[contains(., 'Manage Users')]"));
-		assertFalse("Shouldn't have manage customer users permission", selenium.isElementPresent("//a[contains(., 'Manage Customers')]"));
-
-	}
-
-	@Test
 	public void verify_edit_events_is_disabled() {
         final ReportingPage reportingPage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickReportingLink();
         reportingPage.clickRunSearchButton();
