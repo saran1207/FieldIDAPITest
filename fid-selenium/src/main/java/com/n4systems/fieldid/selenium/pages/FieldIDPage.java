@@ -269,7 +269,7 @@ public class FieldIDPage extends WebPage {
 	}
 
 	public boolean isSessionExpiredLightboxVisible() {
-		String sessionExpiredLightboxLocator = "xpath=//DIV[@class='lv_Title' and contains(text(),'Session Expired')]";
+		String sessionExpiredLightboxLocator = "//div[@id='colorbox']";
 		return selenium.isElementPresent(sessionExpiredLightboxLocator) && selenium.isVisible(sessionExpiredLightboxLocator);
 	}
 	
