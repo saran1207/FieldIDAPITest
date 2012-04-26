@@ -99,8 +99,8 @@ public class TenantCleaner {
         removeAllForTenants(DownloadLink.class, tenantIds);
         removeAllForTenants(AssetCodeMapping.class, tenantIds);
         removeAllForTenants(Catalog.class, tenantIds);
-        removeAllForTenants(EventSchedule.class, tenantIds);
         removeAllForTenants(Event.class, tenantIds);
+        removeAllForTenants(EventSchedule.class, tenantIds);
         removeAllForTenants(AssociatedEventType.class, tenantIds);
         removeAllForTenants(AssetTypeSchedule.class, tenantIds);
         removeAllForTenants(EventType.class, tenantIds);
@@ -174,7 +174,7 @@ public class TenantCleaner {
         for (User user : users) {
             user.setLastRunSearch(null);
             user.setLastRunReport(null);
-            user.setSavedItems(new ArrayList<SavedItem>());
+            user.getSavedItems().clear();
             em.merge(user);
         }
     }
