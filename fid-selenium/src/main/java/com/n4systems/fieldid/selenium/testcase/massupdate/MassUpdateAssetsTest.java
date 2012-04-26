@@ -1,9 +1,18 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
+import com.n4systems.fieldid.selenium.pages.ReportingPage;
+import com.n4systems.fieldid.selenium.pages.SchedulesSearchPage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
@@ -15,10 +24,6 @@ import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.EventScheduleBuilder;
 import com.n4systems.model.builders.SubAssetBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class MassUpdateAssetsTest extends FieldIDTestCase {
 
@@ -125,7 +130,8 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
 		assertTrue("Assets weren't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 3 assets removed.')]"));
 
-		page.clickSchedulesLink();
+		SchedulesSearchPage scheduleSearch = page.clickSchedulesLink();
+		scheduleSearch.clickRunSearchButton();
 
 		assertTrue("Schedule wasn't successfully deleted", verifyAllSchedulesAreRemoved());
 	}
@@ -137,8 +143,9 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		
 		assertTrue("Asset wasn't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 1 assets removed.')]"));
 	
-		page.clickReportingLink();
-		assertTrue("Event wasn't successfully deleted", selenium.isElementPresent("//div[@class='initialMessage']"));
+		ReportingPage reportingPage = page.clickReportingLink();
+		reportingPage.clickRunSearchButton();
+		assertTrue("Event wasn't successfully deleted", selenium.isElementPresent("//div[@class='emptyList']"));
 	}
 
 	@Test
@@ -186,7 +193,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 	}
 	
 	private boolean verifyAllSchedulesAreRemoved() {
-		return selenium.isElementPresent("//div[@class='initialMessage']");
+		return selenium.isElementPresent("//div[@class='emptyList']");
 	}
 	
 }
