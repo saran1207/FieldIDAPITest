@@ -93,7 +93,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new ExternalLink("support", getSupportUrl(), getString("label.support") ));
         add(new WebMarkupContainer("topFieldIDStoreLink").setVisible(getUserSecurityGuard().isAllowedAccessWebStore()));
 
-        addSpeedIdentifyLinks();
+        addSpeedIdentifyLinks(sessionUser);
 
         storePageParameters(params);
 
@@ -170,16 +170,19 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 		return new WebMarkupContainer(id).setVisible(false);
 	}
 
-    private void addSpeedIdentifyLinks() {
+    private void addSpeedIdentifyLinks(SessionUser sessionUser) {
+        WebMarkupContainer identifyMenuContainer = new WebMarkupContainer("identifyMenuContainer");
+        identifyMenuContainer.setVisible(sessionUser.hasAccess("tag"));
+
         String url;
         if(getSecurityGuard().isIntegrationEnabled()) {
         	url = "/fieldid/identify.action";
         }else {
         	url = "/fieldid/assetAdd.action";
         }
-        add(new ExternalLink("identifyLink", url));
-        add(new ExternalLink("subMenuIdentifyLink", url));
-        
+        identifyMenuContainer.add(new ExternalLink("identifyLink", url));
+        identifyMenuContainer.add(new ExternalLink("subMenuIdentifyLink", url));
+        add(identifyMenuContainer);
     }
     
     private Component createSetupLinkContainer(SessionUser sessionUser) {
