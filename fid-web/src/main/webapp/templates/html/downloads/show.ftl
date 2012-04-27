@@ -15,7 +15,7 @@ ${action.setPageType('my_account', 'downloads')!}
     <script type="text/javascript">
 
         jQuery(document).ready(function(){
-            jQuery('.emailLink').colorbox( {scrolling: true, width: '900px', height: '435px'});
+            jQuery('.emailLink').colorbox( {scrolling: true, iframe:true, width: '900px', height: '435px'});
         });
     </script>
 </head>
