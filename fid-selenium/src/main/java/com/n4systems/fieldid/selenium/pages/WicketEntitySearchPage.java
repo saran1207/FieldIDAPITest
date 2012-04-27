@@ -20,7 +20,7 @@ public abstract class WicketEntitySearchPage extends WicketFieldIDPage {
     public abstract void setDisplayColumns(SearchDisplayColumns displayColumns);
     
     public void enterIdentifier(String identifier) {
-        selenium.type("//input[@name='identifiersCriteriaPanel:identifier']", identifier);
+        selenium.type("//input[@name='filters:identifiers:containedPanel:identifier']", identifier);
     }
 
     public void clickRunSearchButton() {

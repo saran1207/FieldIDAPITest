@@ -145,7 +145,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 	
 		ReportingPage reportingPage = page.clickReportingLink();
 		reportingPage.clickRunSearchButton();
-		assertTrue("Event wasn't successfully deleted", selenium.isElementPresent("//div[@class='emptyList']"));
+		assertTrue("Event wasn't successfully deleted", selenium.isElementPresent("//div[@class='no-results']"));
 	}
 
 	@Test

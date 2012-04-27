@@ -85,7 +85,8 @@ public class AssetsSearchPage extends WicketEntitySearchPage {
     }
 
     public AssetsMassUpdatePage clickMassUpdate() {
-        selenium.click("//a[.='Mass Update']");
+        selenium.click("//a[.='Mass Actions']");
+        selenium.click("//a[.='Update']");
         return new AssetsMassUpdatePage(selenium);
     }
 
