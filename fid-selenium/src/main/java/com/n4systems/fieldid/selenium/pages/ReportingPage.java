@@ -173,11 +173,11 @@ public class ReportingPage extends WicketEntitySearchPage {
     
     @Override
     public void enterIdentifier(String identifier) {
-        selenium.type("//input[@name='identifiersCriteriaPanel:identifier']", identifier);
+        selenium.type("//input[@name='filters:identifiersCriteriaPanel:containedPanel:identifier']", identifier);
     }
     
     public void selectResult(String result) {
-    	selenium.select("//select[@name='eventDetailsCriteriaPanel:result']", result);
+    	selenium.select("//select[@name='filters:eventDetailsCriteriaPanel:containedPanel:result']", result);
     }
     
     public boolean isBlankSlate() {
