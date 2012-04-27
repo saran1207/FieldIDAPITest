@@ -150,6 +150,7 @@ public class AssetPage extends FieldIDPage {
 	}
 
 	public void attachExistingSubcomponent(String identifier) {
+		selenium.setSpeed("500");
 		selenium.click("//a[contains(.,'Find Existing')]");
 		waitForElementToBePresent("//form[@id='subAssetSearchForm']");
 		selenium.type("//input[@id='subAssetSearchForm_search']", identifier);
@@ -157,6 +158,7 @@ public class AssetPage extends FieldIDPage {
 		waitForElementToBePresent("//div[@id='resultsTable']");
 		selenium.click("//button[@class='assetLink']");
 		waitForAjax();
+		selenium.setSpeed("0");
 
 	}
 
