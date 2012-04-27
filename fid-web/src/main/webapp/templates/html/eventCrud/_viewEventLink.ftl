@@ -9,7 +9,7 @@
 <script type="text/javascript">
 
     jQuery(document).ready(function(){
-        jQuery('.eventLightbox').colorbox({ajax:true, maxHeight: '600px', width: '600px'});
+        jQuery('.eventLightbox').colorbox({iframe:true, ajax:true, height:'600px', width: '600px'});
     });
 
 </script>
