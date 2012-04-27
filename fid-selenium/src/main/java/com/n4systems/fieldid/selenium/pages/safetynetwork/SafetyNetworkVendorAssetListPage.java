@@ -48,7 +48,7 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 	
 	public SafetyNetworkRegisterAssetForm clickRegister(int line) {
 		selenium.click("//tr[" + ++line + "]//a[.='Register']");
-		waitForElementToBePresent("//iframe[@id='lightviewContent']");
+		waitForElementToBePresent("//iframe[@class='cboxIframe']");
 		return new SafetyNetworkRegisterAssetForm(selenium);
 	}
 
