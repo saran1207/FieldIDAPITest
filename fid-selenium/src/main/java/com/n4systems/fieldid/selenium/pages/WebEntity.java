@@ -58,10 +58,10 @@ public class WebEntity {
 	}
 
     protected void dragAndDropFromTo(String sourceXpath, String destXpath) {
-        selenium.mouseDownAt(sourceXpath, "1,1");
-        selenium.mouseMoveAt(destXpath, "1,1");
+        selenium.mouseDownAt(sourceXpath, "2,2");
+        selenium.mouseMoveAt(destXpath, "2,2");
         selenium.mouseOver(destXpath);
-        selenium.mouseUpAt(destXpath, "1,1");
+        selenium.mouseUpAt(destXpath, "2,2");
     }
 
 	protected void waitForElementToBePresent(String locator)  {
