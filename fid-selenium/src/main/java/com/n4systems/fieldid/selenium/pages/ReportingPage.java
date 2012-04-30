@@ -127,7 +127,7 @@ public class ReportingPage extends WicketEntitySearchPage {
 	}
 	
 	public SaveReportPage clickSaveReport() {
-		selenium.click("//a[.='Save Report']");
+		selenium.click("//a[.='Save']");
 		return new SaveReportPage(selenium);
 	}
 	
