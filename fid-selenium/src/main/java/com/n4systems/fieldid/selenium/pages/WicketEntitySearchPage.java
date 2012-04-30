@@ -152,7 +152,7 @@ public abstract class WicketEntitySearchPage extends WicketFieldIDPage {
     }
 
     public SaveSearchPage clickSaveSearch() {
-        selenium.click("//a[.='Save Search']");
+        selenium.click("//a[.='Save']");
         return new SaveSearchPage(selenium);
     }
 
