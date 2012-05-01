@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+import com.n4systems.model.common.ReportFormat;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.saveditem.SavedItem;
@@ -24,6 +25,10 @@ public class SendSavedItemSchedule extends EntityWithTenant {
     @Enumerated(EnumType.STRING)
     private SimpleFrequency frequency = SimpleFrequency.DAILY;
 
+    @Column(name="format", nullable=false)
+    @Enumerated(EnumType.STRING)
+    private ReportFormat reportFormat = ReportFormat.HTML;
+
     // Hour on 24 hour clock, 0 = midnight
     @Column(name="hour_to_send", nullable = false)
     private Integer hourToSend = 0;
@@ -40,7 +45,7 @@ public class SendSavedItemSchedule extends EntityWithTenant {
 
     @Column(name="message")
     private String message;
-
+    
     @Column(name="email", nullable=false, length=255)
     @ElementCollection(fetch= FetchType.EAGER)
     @IndexColumn(name="orderidx")
@@ -150,4 +155,13 @@ public class SendSavedItemSchedule extends EntityWithTenant {
     public void setSubject(String subject) {
         this.subject = subject;
     }
+
+    public ReportFormat getReportFormat() {
+        return reportFormat;
+    }
+
+    public void setReportFormat(ReportFormat reportFormat) {
+        this.reportFormat = reportFormat;
+    }
+
 }

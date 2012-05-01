@@ -43,9 +43,10 @@ public class ManageSendItemSchedulesPage extends FieldIDFrontEndPage {
             @Override
             protected void populateItem(final ListItem<SendSavedItemSchedule> item) {
                 item.add(new Label("frequency", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "frequency.label"))));
+                item.add(new Label("time", new HourToStringDisplayModel(new PropertyModel<Integer>(item.getModel(), "hourToSend"))));
+                item.add(new Label("format", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "reportFormat.displayName"))));
                 item.add(new Label("sendTo", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "emailAddressesJoined"))));
                 item.add(new Label("sendToMe", new YesOrNoModel(new PropertyModel<Boolean>(item.getModel(), "sendToOwner"))));
-                item.add(new Label("time", new HourToStringDisplayModel(new PropertyModel<Integer>(item.getModel(), "hourToSend"))));
                 item.add(new Label("subject", new PropertyModel<String>(item.getModel(), "subject")));
                 item.add(new Link("deleteLink") {
                     @Override

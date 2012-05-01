@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
+import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.timezone.FrequencyDropDownChoice;
 import com.n4systems.fieldid.wicket.components.timezone.HourOfDaySelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -16,6 +17,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.model.SendSavedItemSchedule;
+import com.n4systems.model.common.ReportFormat;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.AssetSearchCriteria;
@@ -40,6 +42,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SendSavedItemPage extends FieldIDFrontEndPage {
@@ -184,6 +187,10 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
             TextArea<String> messageTextArea;
             add(messageTextArea = new TextArea<String>("message", new PropertyModel<String>(model, "message")));
             messageTextArea.add(new StringValidator.MaximumLengthValidator(1024));
+            
+            DropDownChoice<ReportFormat> formatSelect = new DropDownChoice<ReportFormat>("format", new PropertyModel<ReportFormat>(model,"reportFormat"), Arrays.asList(ReportFormat.values()), new ListableLabelChoiceRenderer<ReportFormat>());
+            formatSelect.setNullValid(false);
+            add(formatSelect);
             
             add(submitLink = new AjaxSubmitLink("scheduleNowLink") {
                 { setOutputMarkupId(true); }
