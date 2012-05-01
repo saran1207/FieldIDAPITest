@@ -2,10 +2,6 @@
 	<@n4.includeStyle href="downloads" type="page"/>
     <script type="text/javascript">
 
-        jQuery(document).ready(function(){
-            jQuery('#emailLink').colorbox({title: '<@s.text name="label.email_download"/>', width: '500px', height: '500px'});
-        });
-
     </script>
 </head>
 
