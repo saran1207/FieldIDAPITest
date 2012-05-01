@@ -8,7 +8,7 @@ end
 task :environment do
   
   ENV[ "ENVIRONMENT" ] ||= "development" 
-  ENV["ENVIRONMENT"] += "_non_java" unless RUBY_PLATFORM =~ /java/
+  #ENV["ENVIRONMENT"] += "_non_java" unless RUBY_PLATFORM =~ /java/
   puts ENV["ENVIRONMENT"]
   ENV[ "DBCONFIG" ] ||= 'config/database.yml'
   puts ENV[ "DBCONFIG" ]

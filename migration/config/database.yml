@@ -1,30 +1,26 @@
-
-
 development:
-  adapter: jdbcmysql
+  adapter: mysql
   database: fieldid
   host: localhost
   username: root
   encoding: utf8
 
-
 development_branch:
-  adapter: jdbcmysql
+  adapter: mysql
   database: fieldid_branch
   host: localhost
   username: root
   encoding: utf8
 
 minimal_security:
-  adapter: jdbcmysql
+  adapter: mysql
   database: fieldid_minimal_security
   host: localhost
   username: root
   encoding: utf8
 
-
 staging:
-  adapter: jdbcmysql
+  adapter: mysql
   database: fieldid
   host: localhost
   username: root
@@ -32,10 +28,9 @@ staging:
   encoding: utf8
  
 production:
-  adapter: jdbcmysql
+  adapter: mysql
   database: fieldid
   host: localhost
   username: fieldid
   password: qwertyNfour^
   encoding: utf8
-  

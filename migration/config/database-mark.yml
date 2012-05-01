@@ -1,7 +1,0 @@
-development:
-  adapter: jdbcmysql
-  database: fieldid
-  host: localhost
-  username: dev
-  password: dev
-  encoding: utf8

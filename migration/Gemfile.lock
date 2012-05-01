@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activerecord (2.3.2)
+      activesupport (= 2.3.2)
+    activesupport (2.3.2)
+    composite_primary_keys (2.2.2)
+      activerecord (>= 2.2.0)
+    mysql (2.8.1)
+    tzinfo (0.3.33)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activerecord
+  composite_primary_keys
+  mysql
+  tzinfo
