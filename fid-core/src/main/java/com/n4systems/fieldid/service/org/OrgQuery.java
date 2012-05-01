@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.org;
 
+import com.google.common.collect.Lists;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -9,6 +10,7 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameterGroup;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,28 +50,36 @@ public class OrgQuery {
             return new WhereParameter<String>(WhereParameter.Comparator.LIKE, "name", "name", term, WhereParameter.WILDCARD_BOTH, false);
         }
 
-        WhereParameterGroup group = new WhereParameterGroup("name-filter");
+        List<WhereClause<?>> clauses = Lists.newArrayList();
+        
         if (StringUtils.isNotBlank(getTrailingTerm())) {
-            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name", "name", getTerm(TRAILING_TERM), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.AND));
+            clauses.add(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name", "name", getTerm(TRAILING_TERM), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.AND));
         }
 
         // TODO : add if searchTerms.get() !=null....
         switch (levelsMatched()) {
             case 1:
                 if (StringUtils.isNotBlank(getPrimaryTerm())) {
-                    group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "parent_name", "parent.name", getPrimaryTerm(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.AND));
+                    clauses.add(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "parent_name", "parent.name", getPrimaryTerm(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.AND));
                 }
                 break;
             case 2:  // search for parent & grandparent.
                 if (StringUtils.isNotBlank(getCustomerTerm())) {
-                    group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "parent_name", "parent.name", getCustomerTerm(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.AND));
+                    clauses.add(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "parent_name", "parent.name", getCustomerTerm(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.AND));
                 }
                 if (StringUtils.isNotBlank(getPrimaryTerm())) {
-                    group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "parent_parent_name", "parent.parent.name", getPrimaryTerm(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.AND));
+                    clauses.add(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "parent_parent_name", "parent.parent.name", getPrimaryTerm(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.AND));
                 }
                 break;
         }
-        return group;
+
+        if (clauses.size()==0) {
+            return null;
+        } else if (clauses.size()==1) { 
+            return clauses.get(0);
+        } else {
+            return new WhereParameterGroup("filter-orgs", clauses);
+        }
     }
 
     int levelsMatched() {

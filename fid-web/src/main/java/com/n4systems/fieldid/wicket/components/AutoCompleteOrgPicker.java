@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class OrgPicker extends FormComponentPanel<BaseOrg> {
+public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
 
     // UGH: because the wicket AUtoCompleteAjaxComponent didn't expose some required fields i am just copying AbstractAUtoCompleteComponent and adding my customizations
     //   on top of that.  this obviously makes this code immune to any wicket upgrades and bug fixes.  boo.
@@ -62,14 +62,14 @@ public class OrgPicker extends FormComponentPanel<BaseOrg> {
     
 
 
-    public OrgPicker(String id, final IModel<BaseOrg> model) {
+    public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> model) {
         super(id, model);
         setOutputMarkupPlaceholderTag(true);
 
         autocompleteHidden = new HiddenField<String>("autocompleteHidden", new Model<String>(NOT_ENTERED) {
             @Override
             public String getObject() {
-                BaseOrg modelObject = OrgPicker.this.getModelObject();
+                BaseOrg modelObject = AutoCompleteOrgPicker.this.getModelObject();
                 return (modelObject != null) ? super.getObject() : null;
             }
         });
@@ -78,7 +78,7 @@ public class OrgPicker extends FormComponentPanel<BaseOrg> {
 
         autocompleteField = new InnerAutocomplete<String>("autocompleteField", new IModel<String>() {
             public String getObject() {
-                BaseOrg modelObject = OrgPicker.this.getModelObject();
+                BaseOrg modelObject = AutoCompleteOrgPicker.this.getModelObject();
                 if (modelObject != null) {
                     BaseOrg objectValue = (BaseOrg) choiceRenderer.getDisplayValue(modelObject);
                     Class<BaseOrg> objectClass =
@@ -281,7 +281,7 @@ public class OrgPicker extends FormComponentPanel<BaseOrg> {
 
     
     protected void onBeforeRenderAutocomplete(Autocomplete<?> autocomplete) {
-        BaseOrg defaultValue = OrgPicker.this.getModelObject();
+        BaseOrg defaultValue = AutoCompleteOrgPicker.this.getModelObject();
         if (defaultValue != null) {
             AutocompleteJson value = null;
             value = newAutocompleteJson(0, defaultValue);

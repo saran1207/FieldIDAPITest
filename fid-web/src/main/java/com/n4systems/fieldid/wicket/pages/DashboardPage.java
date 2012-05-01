@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
-import com.n4systems.fieldid.wicket.components.OrgPicker;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -98,8 +97,6 @@ public class DashboardPage extends FieldIDFrontEndPage {
 		WebMarkupContainer content = new WebMarkupContainer(id);
 		content.setOutputMarkupId(true);
 
-        OrgPicker orgPicker;
-        content.add(orgPicker = new OrgPicker("orgPicker", new PropertyModel<BaseOrg>(this, "org")));
         content.add(addWidgetPanel = new AddWidgetPanel("addWidgetPanel", currentLayoutModel) {
             @Override
             protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) {

@@ -1,11 +1,10 @@
 package com.n4systems.util.persistence;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.n4systems.exceptions.InvalidQueryException;
 
 import javax.persistence.Query;
-
-import com.n4systems.exceptions.InvalidQueryException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WhereParameterGroup implements WhereClause<List<WhereClause<?>>> {
 	private static final long serialVersionUID = 1L;
@@ -15,12 +14,17 @@ public class WhereParameterGroup implements WhereClause<List<WhereClause<?>>> {
 	private List<WhereClause<?>> clauses = new ArrayList<WhereClause<?>>();
 
 	public WhereParameterGroup() {}
-	
-	public WhereParameterGroup(String name) {
-		this.name = name;
-	}
-	
-	public void setName(String name) {
+
+    public WhereParameterGroup(String name) {
+        this.name = name;
+    }
+
+    public WhereParameterGroup(String name, List<WhereClause<?>> clauses) {
+        this(name);
+        setClauses(clauses);   // note : uses default ChainOp.
+    }
+
+    public void setName(String name) {
 		this.name = name;
 	}
 	
@@ -85,4 +89,19 @@ public class WhereParameterGroup implements WhereClause<List<WhereClause<?>>> {
 		return getName();
 	}
 
+    @Deprecated // for debugging only!
+    @Override
+    public String toString() {
+        String clauseString = "";
+        if (clauses != null && !clauses.isEmpty()) {
+            for (int i=0; i<clauses.size(); i++) {
+                clauseString += clauses.get(i).toString();
+                if (i<clauses.size()-1) {
+                    clauseString += " "  + clauses.get(i).getChainOperator() + " ";
+                }
+            }
+        }
+
+        return clauseString;
+    }
 }

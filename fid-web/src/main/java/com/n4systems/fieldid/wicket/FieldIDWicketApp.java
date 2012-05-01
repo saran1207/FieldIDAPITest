@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket;
 
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
+import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
@@ -89,6 +90,10 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("runLastReport", RunLastReportPage.class);
 
         mountPage("admin/addTenant", AddTenantPage.class);
+
+        // TODO : maybe add "if system.getProperty()" before doing this???
+        mountPage("secret/test", SecretTestPage.class);
+
              
         getMarkupSettings().setStripWicketTags(true);
         getResourceSettings().getStringResourceLoaders().add(0, new CustomerLanguageResourceLoader());

@@ -1,9 +1,9 @@
 package com.n4systems.util.persistence;
 
-import javax.persistence.Query;
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.util.BitField;
+
+import javax.persistence.Query;
 
 public class WhereParameter<T> implements WhereClause<T> {
 	private static final long serialVersionUID = 1L;
@@ -281,4 +281,11 @@ public class WhereParameter<T> implements WhereClause<T> {
 	public void setKey(String key) {
 		this.key = key;
 	}
+
+    
+    @Deprecated // for debugging only!
+    @Override
+    public String toString() {
+        return name + " " + comparator.toString() + " " + prepareStringValue();
+    }
 }
