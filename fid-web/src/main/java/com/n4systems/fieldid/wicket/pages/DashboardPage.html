@@ -2,7 +2,9 @@
 
 	<div wicket:id="content">
 
-	    <div wicket:id="addWidgetPanel"></div>
+        <div wicket:id="orgPicker"/>
+
+        <div wicket:id="addWidgetPanel"></div>
 
         <div wicket:id="columnsContainer">
 
@@ -46,8 +48,14 @@
 
     <script>
         $(document).ready(function() {
-            $('.ui-sortable').each(function() { $.data(this, 'sortable').options['stop'] = function(event,ui) { setTimeout(function() { $(event.target).addClass('force-redraw-for-graphs').removeClass('force-redraw-for-graphs'); }, 50); } } );
+            $('.ui-sortable').each(function() {
+                    $.data(this, 'sortable').options['stop'] = function(event,ui) { setTimeout(function() { $(event.target).addClass('force-redraw-for-graphs').removeClass('force-redraw-for-graphs'); }, 50);
+                }
+            } );
         });
     </script>
+
+    <script type="text/javascript"> $(document).ready( function() { } );</script>
+
 
 </wicket:extend>

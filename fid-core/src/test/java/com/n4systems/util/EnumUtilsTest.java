@@ -1,8 +1,8 @@
 package com.n4systems.util;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class EnumUtilsTest {
@@ -30,19 +30,19 @@ public class EnumUtilsTest {
 
 	@Test 
 	public void test_nextLooped() { 
-		assertEquals(Foo.B, EnumUtils.nextLooped(Foo.A));
-		assertEquals(Foo.C, EnumUtils.nextLooped(Foo.B));
-		assertEquals(Foo.D, EnumUtils.nextLooped(Foo.C));
-		assertEquals(Foo.A, EnumUtils.nextLooped(Foo.D));
+		assertEquals(Foo.B, EnumUtils.nextWrap(Foo.A));
+		assertEquals(Foo.C, EnumUtils.nextWrap(Foo.B));
+		assertEquals(Foo.D, EnumUtils.nextWrap(Foo.C));
+		assertEquals(Foo.A, EnumUtils.nextWrap(Foo.D));
 	}
 
 	
 	@Test 
 	public void test_previousLooped() { 
-		assertEquals(Foo.D, EnumUtils.previousLooped(Foo.A));
-		assertEquals(Foo.A, EnumUtils.previousLooped(Foo.B));
-		assertEquals(Foo.B, EnumUtils.previousLooped(Foo.C));
-		assertEquals(Foo.C, EnumUtils.previousLooped(Foo.D));
+		assertEquals(Foo.D, EnumUtils.previousWrap(Foo.A));
+		assertEquals(Foo.A, EnumUtils.previousWrap(Foo.B));
+		assertEquals(Foo.B, EnumUtils.previousWrap(Foo.C));
+		assertEquals(Foo.C, EnumUtils.previousWrap(Foo.D));
 	}
 	
 	@Test

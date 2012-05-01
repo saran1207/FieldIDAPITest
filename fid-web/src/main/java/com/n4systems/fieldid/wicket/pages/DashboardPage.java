@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
+import com.n4systems.fieldid.wicket.components.OrgPicker;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -14,6 +15,7 @@ import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.util.ConfigurationProvider;
@@ -38,7 +40,7 @@ import java.util.List;
 
 @SuppressWarnings("serial")
 public class DashboardPage extends FieldIDFrontEndPage {
-
+    
     @SpringBean
     private DashboardService dashboardService;
     
@@ -54,6 +56,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
     IModel<DashboardLayout> currentLayoutModel;
 
     private ModalWindow configurationWindow;
+    
+    private BaseOrg org;
 
     public DashboardPage() {
     	this(null);
@@ -87,11 +91,15 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
         response.renderCSSReference("style/dashboard/dashboard.css");
         response.renderCSSReference("style/dashboard/widgetconfig.css");
+        response.renderCSSReference("style/chosen/chosen.css");
     }
 
     private WebMarkupContainer addContent(String id) {
 		WebMarkupContainer content = new WebMarkupContainer(id);
 		content.setOutputMarkupId(true);
+
+        OrgPicker orgPicker;
+        content.add(orgPicker = new OrgPicker("orgPicker", new PropertyModel<BaseOrg>(this, "org")));
         content.add(addWidgetPanel = new AddWidgetPanel("addWidgetPanel", currentLayoutModel) {
             @Override
             protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) {

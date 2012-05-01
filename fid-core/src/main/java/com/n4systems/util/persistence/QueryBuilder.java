@@ -77,8 +77,9 @@ public class QueryBuilder<E> {
 	private Set<GroupByClause> groupByArguments = new LinkedHashSet<GroupByClause>();
 	private Set<OrderClause> orderArguments = new LinkedHashSet<OrderClause>();
 	private List<String> postFetchPaths = new ArrayList<String>();
-	
-	/** 
+    private Integer limit;
+
+    /** 
      * Constructs a <tt>QueryBuilder</tt> for an UnsecuredEntity.  No SecurityFilter will
      * be defined for this query.
      * 
@@ -107,7 +108,7 @@ public class QueryBuilder<E> {
      * Constructs a <tt>QueryBuilder</tt> setting the target table class and 
      * applying a {@link QueryFilter} by calling {@link #applyFilter(QueryFilter)}.
      * 
-     * @see #applyFilter(SecurityFilter)
+     * @see #applyFilter(QueryFilter)
      * 
      * @param tableClass	the target table class
      * @param filter		the {@link QueryFilter} to apply
@@ -259,9 +260,8 @@ public class QueryBuilder<E> {
 	 * Returns a {@link Map} of String WhereParameter names to the assigned {@link WhereParameter}.
 	 * 
 	 * @see WhereParameter
-	 * @see #setWhereParameters(Map)
-	 * @see #addWhere(WhereParameter) 
-	 * 
+	 * @see #addWhere(WhereClause)
+	 *
 	 * @return The {@link Map} of where parameters.
 	 */
 
@@ -386,7 +386,12 @@ public class QueryBuilder<E> {
 		addOrder(param, ascending);
 		return this;
 	}
-	
+    
+    public QueryBuilder<E> setLimit(Integer limit) {
+        this.limit = limit;
+        return this;
+    }
+
 	public Set<JoinClause> getJoinArguments() {
 		return joinArguments;
 	}
@@ -535,8 +540,8 @@ public class QueryBuilder<E> {
 		String query =  getSelectClause() + " " + getFromClause() + " " + getJoinClause() + " " + getWhereClause() + " " + getGroupByClause() + " " + getOrderClause();
 		return query;
 	}
-	
-	public QueryBuilder<E> bindParams(Query query) throws InvalidQueryException {
+
+    public QueryBuilder<E> bindParams(Query query) throws InvalidQueryException {
 		for(WhereClause<?> whereClause: whereParameters.values()) {
 			whereClause.bind(query);
 		}
@@ -545,6 +550,9 @@ public class QueryBuilder<E> {
 	
 	public Query createQuery(EntityManager em) throws InvalidQueryException {
 		Query query = em.createQuery(getQueryString());
+        if (limit!=null) { 
+            query.setMaxResults(limit);
+        }
 		bindParams(query);
 		return query;
 	}

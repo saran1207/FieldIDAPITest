@@ -21,7 +21,7 @@ public class EnumUtils {
 	    }
 	}
 	
-	public static <T extends Enum<T>> T nextLooped(T t) {
+	public static <T extends Enum<T>> T nextWrap(T t) {
 	    return next(t,true);
 	}
 
@@ -29,7 +29,7 @@ public class EnumUtils {
 	    return next(t,false);
 	}
 	
-	public static <T extends Enum<T>> T previousLooped(T t) {
+	public static <T extends Enum<T>> T previousWrap(T t) {
 	    return previous(t,true);
 	}
 
