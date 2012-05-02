@@ -91,7 +91,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
 
         add(new ExternalLink("support", getSupportUrl(), getString("label.support") ));
-        add(new WebMarkupContainer("topFieldIDStoreLink").setVisible(getUserSecurityGuard().isAllowedAccessWebStore()));
 
         addSpeedIdentifyLinks(sessionUser);
 

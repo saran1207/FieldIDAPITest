@@ -30,12 +30,6 @@
 		  			<a href="${action.supportUrl}" target="_blank"><@s.text name="label.support"/></a>
 		  			<span class="separator">|</span>
 				</li>
-				<#if userSecurityGuard.allowedAccessWebStore>
-					<li>
-			  			<a href="<@s.url action="redirectToWebStore" namespace="/"/>" target="_blank" ><@s.text name="label.fieldid_webstore"/></a>
-			  			<span class="separator">|</span>
-			  		</li>
-				</#if>
 		  		<li>
 					<a href="<@s.url action="logout"  namespace="/"/>" ><@s.text name="label.logout"/></a>
 					<span class="darkseparator">|</span>
