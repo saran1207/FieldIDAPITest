@@ -29,7 +29,7 @@ public class OrgQuery {
     private String term;
 
     public OrgQuery(String term) {
-        this.term = term;
+        this.term = term.toLowerCase();
         Pattern pattern = Pattern.compile("(.*?:)(.*?:)?(.*)");
         matcher = pattern.matcher(term);
     }
@@ -94,9 +94,15 @@ public class OrgQuery {
     String getPrimaryTerm() {
         return getTerm(PRIMARY_TERM);
     }
-
+    
     String getTrailingTerm() {
         return getTerm(TRAILING_TERM);
+    }
+    
+    public String getSearchTerm() {
+        // this is the lowest level term.
+        // e.g. for A:B:C it will return C.       A --> A     A:B  ---> B    etc...
+        return matcher.matches() ? getTrailingTerm().toLowerCase() : term;
     }
 
     private String getTerm(int groupIndex) {

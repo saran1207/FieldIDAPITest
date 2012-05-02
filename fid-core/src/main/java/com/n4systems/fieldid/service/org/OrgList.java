@@ -15,12 +15,14 @@ public class OrgList extends ArrayList<BaseOrg> {
     private TreeSet<SecondaryOrg> secondaries = new TreeSet<SecondaryOrg>(new OrgComparator());
     private boolean atThreshold = false;
     private int threshold;
+    private OrgQuery query;
 
     public OrgList(List<? extends BaseOrg> orgs) {
-        this(orgs,Integer.MAX_VALUE);
+        this(orgs,null, Integer.MAX_VALUE);
     }
     
-    public OrgList(List<? extends BaseOrg> orgs, int threshold) {
+    public OrgList(List<? extends BaseOrg> orgs, OrgQuery orgQuery, int threshold) {
+        this.query = orgQuery;   // useful to remember what search term generated this list.
         this.threshold = threshold;
         if (orgs.size()>threshold) {
             atThreshold = true;
@@ -52,5 +54,7 @@ public class OrgList extends ArrayList<BaseOrg> {
         return atThreshold;
     }
 
-
+    public OrgQuery getQuery() {
+        return query;
+    }
 }

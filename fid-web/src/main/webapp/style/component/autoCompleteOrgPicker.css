@@ -1,0 +1,41 @@
+
+
+/**
+ * @see AutoCompleteOrgPicker for java wicket component.
+*/
+
+.ui-complete {
+    border-left: 150px solid #ddd;
+}
+
+.ui-autocomplete-input {
+    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+    font-size:17px;
+    padding:4px;
+}
+
+.ui-autocomplete .matched {
+    color : #3344DD;
+}
+
+.ui-menu {
+    border-left:150px solid #ddd;
+}
+
+.ui-autocomplete .category {
+    margin-left:-150px;
+    color: #8898A8;
+    padding:.2em .4em;
+    float: left;
+    width: 125px;
+    font-style: italic;
+    height : 27px;
+}
+
+.ui-menu .ui-menu-item .link {
+    padding-left:0;
+    padding-right:0;
+    height : 27px;
+    overflow:hidden;
+}
+

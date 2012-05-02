@@ -1,9 +1,11 @@
 package com.n4systems.fieldid.wicket.components;
 
 import com.n4systems.fieldid.service.org.OrgList;
+import com.n4systems.fieldid.service.org.OrgQuery;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgEnum;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -42,15 +44,15 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
 
     // UGH: because the wicket AUtoCompleteAjaxComponent didn't expose some required fields i am just copying AbstractAUtoCompleteComponent and adding my customizations
     //   on top of that.  this obviously makes this code immune to any wicket upgrades and bug fixes.  boo.
-
+    
     private @SpringBean OrgService orgService;
-
+    
     public static final WiQueryJavaScriptResourceReference WIQUERY_AUTOCOMPLETE_JS =
             new WiQueryJavaScriptResourceReference(AutocompleteAjaxComponent.class,
                     "wiquery-autocomplete.js");
-
+    
     private static final String NOT_ENTERED = "NOT_ENTERED";
-
+    
     private boolean autoUpdate = false;
     private String term = "";
     private InnerOrgAutocompleteBehavior autocompleteBehavior;
@@ -59,12 +61,13 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
     private IChoiceRenderer<? super BaseOrg> choiceRenderer;
     private AbstractDefaultAjaxBehavior updateAjax;
     private HashSet<OrgEnum> categories;
+    private int extraWidth = 5;
     
-
 
     public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> model) {
         super(id, model);
         setOutputMarkupPlaceholderTag(true);
+        setOutputMarkupId(true);
 
         autocompleteHidden = new HiddenField<String>("autocompleteHidden", new Model<String>(NOT_ENTERED) {
             @Override
@@ -125,9 +128,162 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
     }
 
 
+
+    protected OrgList getChoices() {
+        return getChoices(term);
+    }
+
+    public OrgList getChoices(String term) {
+        return orgService.getAllOrgsLike(term);
+     }
+
+    public HiddenField<String> getAutocompleteHidden() {
+        return autocompleteHidden;
+    }
+    
+    public BaseOrg getValueOnSearchFail(String input) {
+        return null;
+    }
+    
+    public IChoiceRenderer<? super BaseOrg> getChoiceRenderer() {
+        if (choiceRenderer == null) {
+            choiceRenderer = new ChoiceRenderer<BaseOrg>();
+        }
+        return choiceRenderer;
+    }
+
+    public boolean isAutoUpdate() {
+        return autoUpdate;
+    }
+
+    
+    protected void onBeforeRenderAutocomplete(Autocomplete<?> autocomplete) {
+        BaseOrg defaultValue = AutoCompleteOrgPicker.this.getModelObject();
+        if (defaultValue != null) {
+            AutocompleteJson value = null;
+            value = newAutocompleteJson(defaultValue);
+            autocomplete.setDefaultModelObject(value.getLabel());
+            getAutocompleteHidden().setModelObject(value.getValueId());
+        }
+        
+        ((InnerAutocomplete)autocomplete).getOptions().putLiteral("source",
+                autocompleteBehavior.getCallbackUrl().toString());
+        
+    }
+
+    private void clearCategories() {
+        categories = new HashSet<OrgEnum>();
+    }
+    
+    
+    private class InnerOrgAutocompleteBehavior extends AbstractAjaxBehavior {
+
+        public void onRequest() {
+            term = this.getComponent().getRequest().getQueryParameters().getParameterValue("term").toString();
+
+            if (!Strings.isEmpty(term)) {
+                StringWriter sw = new StringWriter();
+                try {
+                    JsonGenerator gen = new JsonFactory().createJsonGenerator(sw);
+
+                    AutocompleteJson value = null;
+                    Integer index = 0;
+                    List<Object> json = new ArrayList<Object>();
+
+                    clearCategories();
+                    OrgList choices = getChoices();
+                    for (BaseOrg obj : choices) {
+                        value = newAutocompleteJson(obj, choices.getQuery());
+                        json.add(value);
+                    }
+                    if (choices.isAtThreshold()) {
+                        json.add(new OrgAutocompleteJson(-1," please refine your search blah blah blah.", "max-results"));
+                    }
+
+                    new ObjectMapper().writeValue(gen, json);
+
+                } catch (IOException e) {
+                    throw new WicketRuntimeException(e);
+                }
+
+                RequestCycle.get().scheduleRequestHandlerAfterCurrent(
+                        new TextRequestHandler("application/json", "utf-8", sw.toString()));
+            }
+        }
+    }
+    
+
+    private class OrgAutocompleteJson extends AutocompleteJson {
+        
+        private String cssClass;
+        private String category;
+        private Integer matchStart;
+        private Integer matchCount;
+        
+        public OrgAutocompleteJson(Integer id, String category, String cssClass) {
+            super(id+"","");
+            this.category = category;
+            this.cssClass = cssClass;
+        }
+        
+        public OrgAutocompleteJson(BaseOrg org, OrgQuery orgQuery) {
+            super(org.getId()+"", formatOrgIntoHierarchicalString(org));
+            this.category = addCategory(org);
+            this.cssClass = org.isPrimary() ? "primary" :
+                            org.isSecondary() ? "secondary" : 
+                            org.isDivision() ? "division" : "unknown-org-type";
+            // used as rendering hints on javascript/client side.
+            matchStart = calculateMatchStart(orgQuery);
+            matchCount = calculateMatchCount(orgQuery);
+        }
+
+        private Integer calculateMatchStart(OrgQuery orgQuery) {
+            String term = orgQuery.getSearchTerm();
+            if (StringUtils.isNotBlank(term)) {
+                return getLabel().toLowerCase().indexOf(term);
+            }
+            return -1;
+        }
+
+        private Integer calculateMatchCount(OrgQuery orgQuery) {
+            return orgQuery.getSearchTerm().length();
+        }
+
+        private String addCategory(BaseOrg org) {
+            OrgEnum category = OrgEnum.fromClass(org.getClass());
+            if (!categories.contains(category)) {
+                categories.add(category);
+                return category.toString();
+            }
+            return "";
+        }
+
+        public String getCssClass() {
+            return cssClass;
+        }
+        public void setCssClass(String cssClass) {
+            this.cssClass = cssClass;
+        }
+        public String getCategory() {
+            return category;
+        }
+        public void setCategory(String category) {
+            this.category = category;
+        }
+
+        public Integer getMatchCount() {
+            return matchCount;
+        }
+
+        public Integer getMatchStart() {
+            return matchStart;
+        }
+    }
+
     private class InnerAutocomplete<E> extends Autocomplete<E> {
         public InnerAutocomplete(String id, IModel<E> model) {
             super(id, model);
+            setOutputMarkupId(true);
         }
 
         public Options getOptions() {
@@ -181,25 +337,23 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
             super.setSelectEvent(JsScopeUiEvent.quickScope(js.append("$(event.target).blur();")
                     .toString()));
             JsStatement jsStatement = super.statement();
-            jsStatement.append(".data('autocomplete')._renderItem = " +
-                    "function( ul, item ) { " +
-                        "return $( '<li></li>' ) " +
-                        " .data(  'item.autocomplete', item ) " +
-                        " .append( '<span>'+item.category+'</span><a>' + item.label + '</a>' ) " +
-                        " .appendTo( ul ); " +
-                    "}");
+            jsStatement.append(".data('autocomplete')._renderItem = autoCompleteOrgPicker.render");
             return jsStatement;
         }
     }
 
-    protected AutocompleteJson newAutocompleteJson(int id, BaseOrg org) {
+    protected AutocompleteJson newAutocompleteJson(BaseOrg org, OrgQuery orgQuery) {
         boolean thisOneSelected = org.equals(getModelObject());
-        String displayValue = formatOrgIntoHierarchicalString(org);
         final String idValue = org.getId() + "";
         if (thisOneSelected) {
             getAutocompleteHidden().setModelObject(idValue);
         }
-        return new OrgAutocompleteJson(org, displayValue);
+        return new OrgAutocompleteJson(org, orgQuery);
+    }
+
+
+    protected AutocompleteJson newAutocompleteJson(BaseOrg org) {
+        return newAutocompleteJson(org, new OrgQuery(""));
     }
 
     private String formatOrgIntoHierarchicalString(BaseOrg value) {
@@ -207,6 +361,14 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
     }
 
     protected void onUpdate(AjaxRequestTarget target) {
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderJavaScriptReference("javascript/component/autoCompleteOrgPicker.js");
+        response.renderCSSReference("style/component/autoCompleteOrgPicker.css");
+        response.renderOnLoadJavaScript("autoCompleteOrgPicker.init('"+autocompleteField.getMarkupId()+"',"+extraWidth+");");
     }
 
     @Override
@@ -250,134 +412,6 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
         } else {
             setConvertedInput(object);
         }
-    }
-
-    protected OrgList getChoices() {
-        return getChoices(term);
-    }
-
-    public OrgList getChoices(String term) {
-        return orgService.getAllOrgsLike(term);
-     }
-
-    public HiddenField<String> getAutocompleteHidden() {
-        return autocompleteHidden;
-    }
-
-    public BaseOrg getValueOnSearchFail(String input) {
-        return null;
-    }
-
-    public IChoiceRenderer<? super BaseOrg> getChoiceRenderer() {
-        if (choiceRenderer == null) {
-            choiceRenderer = new ChoiceRenderer<BaseOrg>();
-        }
-        return choiceRenderer;
-    }
-
-    public boolean isAutoUpdate() {
-        return autoUpdate;
-    }
-
-    
-    protected void onBeforeRenderAutocomplete(Autocomplete<?> autocomplete) {
-        BaseOrg defaultValue = AutoCompleteOrgPicker.this.getModelObject();
-        if (defaultValue != null) {
-            AutocompleteJson value = null;
-            value = newAutocompleteJson(0, defaultValue);
-            autocomplete.setDefaultModelObject(value.getLabel());
-            getAutocompleteHidden().setModelObject(value.getValueId());
-        }
-        
-        ((InnerAutocomplete)autocomplete).getOptions().putLiteral("source",
-                autocompleteBehavior.getCallbackUrl().toString());
-        
-    }
-
-    private void clearCategories() {
-        categories = new HashSet<OrgEnum>();
-    }
-    
-    
-    private class InnerOrgAutocompleteBehavior extends AbstractAjaxBehavior {
-
-        public void onRequest() {
-            term = this.getComponent().getRequest().getQueryParameters().getParameterValue("term").toString();
-
-            if (!Strings.isEmpty(term)) {
-                StringWriter sw = new StringWriter();
-                try {
-                    JsonGenerator gen = new JsonFactory().createJsonGenerator(sw);
-
-                    AutocompleteJson value = null;
-                    Integer index = 0;
-                    List<Object> json = new ArrayList<Object>();
-
-                    clearCategories();
-                    OrgList choices = getChoices();
-                    for (BaseOrg obj : choices) {
-                        value = newAutocompleteJson(index++, obj);
-                        json.add(value);
-                    }
-                    if (choices.isAtThreshold()) {
-                        json.add(new OrgAutocompleteJson(-1," please refine your search blah blah blah.", "max-results"));
-                    }
-
-                    new ObjectMapper().writeValue(gen, json);
-
-                } catch (IOException e) {
-                    throw new WicketRuntimeException(e);
-                }
-
-                RequestCycle.get().scheduleRequestHandlerAfterCurrent(
-                        new TextRequestHandler("application/json", "utf-8", sw.toString()));
-            }
-        }
-    }
-
-
-    private class OrgAutocompleteJson extends AutocompleteJson {
-        
-        private String cssClass;
-        private String category;
-
-        public OrgAutocompleteJson(Integer id, String category, String cssClass) {
-            super(id+"","");
-            this.category = category;
-            this.cssClass = cssClass;
-        }
-        
-        public OrgAutocompleteJson(BaseOrg org, String displayValue) {
-            super(org.getId()+"", displayValue);
-            this.category = addCategory(org);
-            this.cssClass = org.isPrimary() ? "primary" :
-                            org.isSecondary() ? "secondary" : 
-                            org.isDivision() ? "division" : "unknown-org-type";
-        }
-
-        private String addCategory(BaseOrg org) {
-            OrgEnum category = OrgEnum.fromClass(org.getClass());
-            if (!categories.contains(category)) {
-                categories.add(category);
-                return category.toString();
-            }
-            return "";
-        }
-
-        public String getCssClass() {
-            return cssClass;
-        }
-        public void setCssClass(String cssClass) {
-            this.cssClass = cssClass;
-        }
-        public String getCategory() {
-            return category;
-        }
-        public void setCategory(String category) {
-            this.category = category;
-        }
-
-
     }
 
     
