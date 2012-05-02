@@ -59,7 +59,7 @@ ${action.setPageType('asset_type', 'schedule_frequencies')!}
 							</div>	 
 							<div id="eventFrequencyOverrideForm_${eventType.id}" class="overrideForm">
 								<#assign schedule=action.newSchedule() />
-								<a href="javascript:void(0);" onclick="setId('${eventType.id}','${eventType.name}'); translate($('orgFormContainer'), this, 0, 0); return false;" ><@s.text name="label.add_override" /></a>
+								<a href="javascript:void(0);" onclick="setId('${eventType.id}','${eventType.name}'); translatePosition($('orgFormContainer'), this, 0, 0); return false;" ><@s.text name="label.add_override" /></a>
 							</div>
 						</div>
 					</div>
