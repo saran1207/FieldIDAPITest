@@ -61,7 +61,7 @@
 
 			<td>${action.getTotal30DayAssets(primaryOrg.id)?string.number}</td>
 			<td>${action.getTotal30DayEvents(primaryOrg.id)?string.number}</td>
-			<#if primaryOrg.tenant.lastLoginUser?exists && primaryOrg.tenant.lastLoginUser.userID != 'n4systems'>
+			<#if primaryOrg.tenant.lastLoginUser?exists && primaryOrg.tenant.lastLoginUser.userID?exists && primaryOrg.tenant.lastLoginUser.userID != 'n4systems'>
 				<td>${primaryOrg.tenant.lastLoginTime?datetime}</td>
 				<td>${primaryOrg.tenant.lastLoginUser.userID}</td>
 			<#else>
