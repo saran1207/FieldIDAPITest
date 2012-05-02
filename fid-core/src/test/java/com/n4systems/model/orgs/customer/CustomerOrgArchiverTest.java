@@ -75,9 +75,10 @@ public class CustomerOrgArchiverTest {
 
 	@Test
 	public void testArchiveCustomer() throws Exception {
-					
+
 		expect(orgSaver.update(transaction, customer)).andReturn(customer);
 		expect(orgSaver.update(transaction, division)).andReturn(division);
+        expect(orgSaver.update(transaction, division.getCustomerOrg())).andReturn(customer);
 		expect(userSaver.update(transaction, user)).andReturn(user);
 		
 		replayExpectations();
@@ -92,7 +93,8 @@ public class CustomerOrgArchiverTest {
 				
 		expect(orgSaver.update(transaction, customer)).andReturn(customer);
 		expect(orgSaver.update(transaction, division)).andReturn(division);
-		
+        expect(orgSaver.update(transaction, division.getCustomerOrg())).andReturn(customer);
+
 		replayExpectations();
 		
 		customerArchiver.doArchive(customer, orgSaver, userSaver, securityFilter, true, transaction );
