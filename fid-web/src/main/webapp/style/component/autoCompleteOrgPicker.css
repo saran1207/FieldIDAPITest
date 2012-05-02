@@ -29,13 +29,31 @@
     float: left;
     width: 125px;
     font-style: italic;
-    height : 27px;
 }
 
 .ui-menu .ui-menu-item .link {
     padding-left:0;
     padding-right:0;
-    height : 27px;
+    height : 23px;
     overflow:hidden;
+}
+
+li .no-results {
+    color: #4466aa;
+    padding:.2em .4em;
+    float: left;
+    font-style:italic;
+    font-size:11px;
+    word-wrap: break-word;
+}
+
+li .max-results {
+    margin-left:-150px;
+    color: #4466aa;
+    padding:0 .1em;
+    float: left;
+    font-style:italic;
+    font-size:11px;
+    word-wrap: break-word;
 }
 

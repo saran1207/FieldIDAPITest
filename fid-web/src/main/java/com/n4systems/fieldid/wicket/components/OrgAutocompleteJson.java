@@ -2,32 +2,28 @@ package com.n4systems.fieldid.wicket.components;
 
 import com.n4systems.fieldid.service.org.OrgQuery;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.OrgEnum;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Category;
 import org.odlabs.wiquery.ui.autocomplete.AutocompleteJson;
 
 public class OrgAutocompleteJson extends AutocompleteJson {
 
-    private String cssClass;
-    private String category;
+    private String desc;
     private Integer matchStart;
     private Integer matchCount;
     private String tooltip;
+    private String descClass;
 
-    public OrgAutocompleteJson(Integer id, String category, String cssClass) {
-        super(id+"","");
-        this.category = category;
-        this.cssClass = cssClass;
+    public OrgAutocompleteJson(String desc, String descClass) {
+        super("bogusId","");
+        this.desc = desc;
+        this.descClass = descClass;
     }
     
-    public OrgAutocompleteJson(BaseOrg org, OrgQuery orgQuery, String category) {
+    public OrgAutocompleteJson(BaseOrg org, OrgQuery orgQuery, String desc) {
         super(org.getId()+"", org.getName());
-        this.category = category;
-        this.cssClass = org.isPrimary() ? "primary" :
-                org.isSecondary() ? "secondary" :
-                        org.isDivision() ? "division" : "unknown-org-type";
-        // used as rendering hints on javascript/client side.
+        this.desc = desc;
+        // properties used as rendering hints on javascript/client side.
+        descClass ="category";
         matchStart = calculateMatchStart(orgQuery);
         matchCount = calculateMatchCount(orgQuery);
         tooltip = generateTooltip(org);
@@ -49,19 +45,6 @@ public class OrgAutocompleteJson extends AutocompleteJson {
         return orgQuery.getSearchTerm().length();
     }
 
-    public String getCssClass() {
-        return cssClass;
-    }
-    public void setCssClass(String cssClass) {
-        this.cssClass = cssClass;
-    }
-    public String getCategory() {
-        return category;
-    }
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public Integer getMatchCount() {
         return matchCount;
     }
@@ -72,6 +55,14 @@ public class OrgAutocompleteJson extends AutocompleteJson {
 
     public String getTooltip() {
         return tooltip;
+    }
+
+    public String getDescClass() {
+        return descClass;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 }
 

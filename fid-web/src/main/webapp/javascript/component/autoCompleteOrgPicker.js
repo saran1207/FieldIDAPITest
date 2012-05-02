@@ -6,22 +6,44 @@ var autoCompleteOrgPicker = (function() {
     /*
      * public methods exposed.
      */
-    var render = function(ul, item) {
-            return $( '<li></li>' )
-                .data(  'item.autocomplete', item )
-                .append( categoryFor(item) + linkFor(item) )
-                .appendTo( ul );
-    };
-
-
     var init = function(id, extraWidth) {
         $("#"+id).bind("autocompleteopen", function(event, ui) {
             var menu = $(".ui-autocomplete.ui-menu");
             var width = menu.width();
             menu.width(width+extraWidth);
+            // customize our tooltips.
+            $('.link').tipsy({gravity: 'e'});
         });
     };
 
+    var render = function(ul, item) {
+            return (item.descClass=='no-results') ?
+                        renderNoResults(ul, item) :
+                    (item.descClass=='max-results') ?
+                        renderMaxResults(ul,item) :
+                        renderItem(ul, item);
+    };
+
+    function renderItem(ul,item) {
+        return renderImpl(ul, item, descFor(item) + linkFor(item));
+    }
+
+    function renderNoResults(ul,item) {
+        ul.width('200px');
+        ul.css('border-left','0px');
+        return renderImpl(ul, item,  '<span class="'+item.descClass+'">' + item.desc + '</span>' );
+    }
+
+    function renderMaxResults(ul, item) {
+        return renderImpl(ul, item, descFor(item));
+    }
+
+    function renderImpl(ul, item, anchor) {
+        return $( '<li></li>' )
+            .data(  'item.autocomplete', item )
+            .append( anchor )
+            .appendTo( ul );
+    }
 
     /**
      *  private data & functions
@@ -41,10 +63,11 @@ var autoCompleteOrgPicker = (function() {
         return '<a title="' + item.tooltip + '" class="link">' + prefix + label + suffix + '</a>';
     }
 
-    function categoryFor(item) {
-        return '<span class="category">' + item.category + '</span>';
+    function descFor(item) {
+        return item.desc ?
+            '<span class="'+item.descClass+'">' + item.desc + '</span>' :
+            '';
     }
-
 
     return {
         render : render,

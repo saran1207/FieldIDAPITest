@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.org.OrgQuery;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgEnum;
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -198,9 +197,11 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
                         json.add(value);
                     }
                     if (choices.isAtThreshold()) {
-                        json.add(new OrgAutocompleteJson(-1," please refine your search blah blah blah.", "max-results"));
+                        json.add(new OrgAutocompleteJson("Search limit reached. Please refine your search.", "max-results"));
+                    } else if (choices.isEmpty()) { 
+                        json.add(new OrgAutocompleteJson("No search results found", "no-results"));
                     }
-
+                    
                     new ObjectMapper().writeValue(gen, json);
 
                 } catch (IOException e) {
@@ -305,7 +306,9 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/component/autoCompleteOrgPicker.js");
+        response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         response.renderCSSReference("style/component/autoCompleteOrgPicker.css");
+        response.renderCSSReference("style/tipsy/tipsy.css");
         response.renderOnLoadJavaScript("autoCompleteOrgPicker.init('"+autocompleteField.getMarkupId()+"',"+extraWidth+");");
     }
 
