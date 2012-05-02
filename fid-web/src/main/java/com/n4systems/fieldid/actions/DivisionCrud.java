@@ -79,6 +79,8 @@ public class DivisionCrud extends AbstractCrud {
 			division.setParent(customer);
 			division.setTenant(getTenant());
 			saver.save(division);
+            customer.touch();
+            saver.update(customer);
 			addFlashMessageText("message.division_saved");
 		} catch (Exception e) {
 			logger.error("Failed creating division", e);
@@ -98,6 +100,8 @@ public class DivisionCrud extends AbstractCrud {
 		testRequiredEntities(true);
 		try {
 			saver.update(division);
+            customer.touch();
+            saver.update(customer);
 			addFlashMessageText("message.division_saved");
 		} catch (Exception e) {
 			logger.error("Failed updating division", e);

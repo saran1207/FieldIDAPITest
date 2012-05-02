@@ -2,6 +2,7 @@ package com.n4systems.model.orgs.division;
 
 import java.util.List;
 
+import com.n4systems.model.orgs.CustomerOrg;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.api.Archivable.EntityState;
@@ -53,6 +54,10 @@ public class DivisionOrgArchiver {
 		
 		division.setState(newState);
 		orgSaver.update(transaction, division);
+
+        CustomerOrg customer = division.getCustomerOrg();
+        customer.touch();
+        orgSaver.update(transaction, customer);
 	}
 
 	protected List<User> getUserList(SecurityFilter filter, DivisionOrg division) {
