@@ -7,12 +7,17 @@ class InspectionTypeSupportedProofTest < ActiveRecord::Base
   
   def self.resolveProofTestName(oldName)
     case oldName
-        when "chant":               "CHANT"
-        when "nationalautomation":  "NATIONALAUTOMATION"
-        when "roberts":             "ROBERTS"
-        when "wirope":              "WIROP"
-        when "wirop":               "WIROP"
-        else raise "No ProofTest mapping found for [" + oldName + "]"
+      when "chant"
+        "CHANT"
+      when "nationalautomation"
+        "NATIONALAUTOMATION"
+      when "roberts"
+        "ROBERTS"
+      when "wirope"
+        "WIROP"
+      when "wirop"
+        "WIROP"
+      else raise "No ProofTest mapping found for [" + oldName + "]"
     end
   end
 end

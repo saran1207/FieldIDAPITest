@@ -24,18 +24,23 @@ class InspectionTypeGroup < ActiveRecord::Base
     
     def self.resolveName(oldName)
       case oldName
-          when "visualinspection":  return "Visual Inspection"
-          when "repair":            return "Repair"
-          when "prooftest":         return "Proof Test"
-          else raise "No EventType mapping found for [" + oldName + "]"
+        when "visualinspection"
+          return "Visual Inspection"
+        when "repair"
+          return "Repair"
+        when "prooftest"
+          return "Proof Test"
+        else raise "No EventType mapping found for [" + oldName + "]"
       end
     end
     
     def self.resolveReportTitle(oldName)
       case oldName
-          when "visualinspection":  return "Visual Inspection"
-          when "prooftest":         return "Inspection Certificate"
-          else return "Inspection Report"
+        when "visualinspection"
+          return "Visual Inspection"
+        when "prooftest"
+          return "Inspection Certificate"
+        else return "Inspection Report"
       end
     end
     
