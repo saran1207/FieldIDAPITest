@@ -12,16 +12,23 @@ var autoCompleteOrgPicker = (function() {
             var width = menu.width();
             menu.width(width+extraWidth);
             // customize our tooltips.
-            $('.link').tipsy({gravity: 'e'});
+            $('.link').tipsy({gravity: 'e', fade:true, delayIn:150});
         });
+/*  attempt to give focus to combo box after selection...doesn't seem to work.
+        $("#"+id).bind("autocompleteselect", function(event, ui) {
+            $("#"+id).focus();
+        });
+*/
+
     };
 
     var render = function(ul, item) {
-            return (item.descClass=='no-results') ?
-                        renderNoResults(ul, item) :
-                    (item.descClass=='max-results') ?
-                        renderMaxResults(ul,item) :
-                        renderItem(ul, item);
+        ul.removeClass('empty');
+        return (item.descClass=='no-results') ?
+                    renderNoResults(ul, item) :
+                (item.descClass=='max-results') ?
+                    renderMaxResults(ul,item) :
+                    renderItem(ul, item);
     };
 
     function renderItem(ul,item) {
@@ -29,9 +36,8 @@ var autoCompleteOrgPicker = (function() {
     }
 
     function renderNoResults(ul,item) {
-        ul.width('200px');
-        ul.css('border-left','0px');
-        return renderImpl(ul, item,  '<span class="'+item.descClass+'">' + item.desc + '</span>' );
+        ul.addClass('empty');
+        return renderImpl(ul, item,  descFor(item) );
     }
 
     function renderMaxResults(ul, item) {

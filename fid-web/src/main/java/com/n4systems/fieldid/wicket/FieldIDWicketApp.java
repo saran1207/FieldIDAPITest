@@ -91,10 +91,11 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("admin/addTenant", AddTenantPage.class);
 
-        // TODO : maybe add "if system.getProperty()" before doing this???
         mountPage("secret/test", SecretTestPage.class);
 
-             
+        // TODO : this is a possible performance gain but would require full regression.
+        // getMarkupSettings().setCompressWhitespace(true);
+
         getMarkupSettings().setStripWicketTags(true);
         getResourceSettings().getStringResourceLoaders().add(0, new CustomerLanguageResourceLoader());
         getResourceSettings().getStringResourceLoaders().add(0, new TenantOverridesResourceLoader());

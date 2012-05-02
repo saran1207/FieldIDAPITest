@@ -4,10 +4,6 @@
  * @see AutoCompleteOrgPicker for java wicket component.
 */
 
-.ui-complete {
-    border-left: 150px solid #dadada;
-}
-
 .ui-autocomplete-input {
     font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
     font-size:17px;
@@ -20,6 +16,10 @@
 
 .ui-menu {
     border-left:150px solid #ddd;
+}
+
+.ui-menu.empty {
+    border-left:0;
 }
 
 .ui-autocomplete .category {
