@@ -61,6 +61,7 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
     private IChoiceRenderer<? super BaseOrg> choiceRenderer;
     private AbstractDefaultAjaxBehavior updateAjax;
     private HashSet<OrgEnum> categories;
+    // this is added because depending on styling (font, padding, etc...) you might want to tweak the width of the menu.
     private int extraWidth = 5;
     
 
@@ -213,73 +214,6 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
     }
     
 
-    private class OrgAutocompleteJson extends AutocompleteJson {
-        
-        private String cssClass;
-        private String category;
-        private Integer matchStart;
-        private Integer matchCount;
-        
-        public OrgAutocompleteJson(Integer id, String category, String cssClass) {
-            super(id+"","");
-            this.category = category;
-            this.cssClass = cssClass;
-        }
-        
-        public OrgAutocompleteJson(BaseOrg org, OrgQuery orgQuery) {
-            super(org.getId()+"", formatOrgIntoHierarchicalString(org));
-            this.category = addCategory(org);
-            this.cssClass = org.isPrimary() ? "primary" :
-                            org.isSecondary() ? "secondary" : 
-                            org.isDivision() ? "division" : "unknown-org-type";
-            // used as rendering hints on javascript/client side.
-            matchStart = calculateMatchStart(orgQuery);
-            matchCount = calculateMatchCount(orgQuery);
-        }
-
-        private Integer calculateMatchStart(OrgQuery orgQuery) {
-            String term = orgQuery.getSearchTerm();
-            if (StringUtils.isNotBlank(term)) {
-                return getLabel().toLowerCase().indexOf(term);
-            }
-            return -1;
-        }
-
-        private Integer calculateMatchCount(OrgQuery orgQuery) {
-            return orgQuery.getSearchTerm().length();
-        }
-
-        private String addCategory(BaseOrg org) {
-            OrgEnum category = OrgEnum.fromClass(org.getClass());
-            if (!categories.contains(category)) {
-                categories.add(category);
-                return category.toString();
-            }
-            return "";
-        }
-
-        public String getCssClass() {
-            return cssClass;
-        }
-        public void setCssClass(String cssClass) {
-            this.cssClass = cssClass;
-        }
-        public String getCategory() {
-            return category;
-        }
-        public void setCategory(String category) {
-            this.category = category;
-        }
-
-        public Integer getMatchCount() {
-            return matchCount;
-        }
-
-        public Integer getMatchStart() {
-            return matchStart;
-        }
-    }
-
     private class InnerAutocomplete<E> extends Autocomplete<E> {
         public InnerAutocomplete(String id, IModel<E> model) {
             super(id, model);
@@ -348,16 +282,20 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
         if (thisOneSelected) {
             getAutocompleteHidden().setModelObject(idValue);
         }
-        return new OrgAutocompleteJson(org, orgQuery);
+        return new OrgAutocompleteJson(org, orgQuery, getCategory(org));
     }
 
+    private String getCategory(BaseOrg org) {
+        OrgEnum category = OrgEnum.fromClass(org.getClass());
+        if (!categories.contains(category)) {
+            categories.add(category);
+            return category.toString();
+        }
+        return "";
+    }
 
     protected AutocompleteJson newAutocompleteJson(BaseOrg org) {
         return newAutocompleteJson(org, new OrgQuery(""));
-    }
-
-    private String formatOrgIntoHierarchicalString(BaseOrg value) {
-        return value.getName();
     }
 
     protected void onUpdate(AjaxRequestTarget target) {
