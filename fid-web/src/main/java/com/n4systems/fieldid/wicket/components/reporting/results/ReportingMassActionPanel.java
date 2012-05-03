@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionPanel;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
-import com.n4systems.fieldid.wicket.pages.print.ExportToExcelPage;
+import com.n4systems.fieldid.wicket.pages.print.ExportReportToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
@@ -25,7 +25,7 @@ public class ReportingMassActionPanel extends MassActionPanel {
 
         WebMarkupContainer printContainer = new WebMarkupContainer("printContainer");
 
-        add(new MassActionLink<ExportToExcelPage>("exportToExcelLink", ExportToExcelPage.class, reportCriteriaModel));
+        add(new MassActionLink<ExportReportToExcelPage>("exportToExcelLink", ExportReportToExcelPage.class, reportCriteriaModel));
 
         Link eventResolutionLink;
         add(eventResolutionLink = new Link("eventResolutionLink") {

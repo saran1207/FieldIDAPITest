@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.config;
 
+import com.n4systems.fieldid.service.asset.AssetExcelExportService;
 import com.n4systems.fieldid.service.event.EventExcelExportService;
 import com.n4systems.fieldid.service.event.EventPrintService;
 import com.n4systems.fieldid.service.event.EventSummaryJasperGenerator;
@@ -19,7 +20,12 @@ public class FieldIdDownloadConfig {
     }
 
     @Bean
-    public EventExcelExportService excelExportService() {
+    public EventExcelExportService eventExcelExportService() {
         return new EventExcelExportService();
+    }
+
+    @Bean
+    public AssetExcelExportService assetExcelExportService() {
+        return new AssetExcelExportService();
     }
 }

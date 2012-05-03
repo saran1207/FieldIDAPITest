@@ -21,7 +21,7 @@ import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.event.*;
-import com.n4systems.fieldid.service.export.ExportService;
+import com.n4systems.fieldid.service.export.EventTypeExportService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
@@ -293,8 +293,8 @@ public class FieldIdCoreConfig {
     }
     
     @Bean
-    public ExportService exportService() {
-        return new ExportService();
+    public EventTypeExportService exportService() {
+        return new EventTypeExportService();
     }
 
     @Bean

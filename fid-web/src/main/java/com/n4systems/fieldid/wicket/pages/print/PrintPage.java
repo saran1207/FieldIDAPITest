@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.print;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -24,6 +26,7 @@ public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthent
     public PrintPage(IModel<T> criteria) {
         this.criteria = criteria;
 
+        storeLocalizedNamesInColumns(criteria.getObject());
         final DownloadLink downloadLink = createDownloadLink();
         add(new RenameDownloadForm("renameForm", new Model<DownloadLink>(downloadLink)));
     }
@@ -50,6 +53,15 @@ public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthent
             throw new RedirectToUrlException("/showDownloads.action");
         }
 
+    }
+
+    // Issue: The 'core' is responsible for generating the tables (excel etc). But the core has no concept of
+    // localization. For now we will tell the back end what to use as the titles of its columns.
+    private void storeLocalizedNamesInColumns(SearchCriteria criteriaObject) {
+        for (ColumnMappingView columnMappingView : criteriaObject.getSortedStaticAndDynamicColumns(true)) {
+            String localizedTitle = new FIDLabelModel(columnMappingView.getLabel()).getObject();
+            columnMappingView.setLocalizedLabel(localizedTitle);
+        }
     }
 
     protected abstract DownloadLink createDownloadLink();

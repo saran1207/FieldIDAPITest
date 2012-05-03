@@ -33,7 +33,7 @@ import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.StreamUtils;
 
-public class ExportService extends FieldIdPersistenceService {
+public class EventTypeExportService extends FieldIdPersistenceService {
 	
 	@Autowired private UserService userService;
 	@Autowired private AsyncService asyncService;	

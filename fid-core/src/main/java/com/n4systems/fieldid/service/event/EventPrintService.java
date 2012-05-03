@@ -21,7 +21,7 @@ public class EventPrintService extends DownloadService<EventReportCriteria> {
     }
 
     @Override
-    protected void generateFile(EventReportCriteria criteria, File file, String linkName) throws ReportException {
+    public void generateFile(EventReportCriteria criteria, File file, boolean useSelection, int resultLimit, int pageSize) throws ReportException {
         final List<Long> searchResults = reportService.idSearch(criteria);
         final List<Long> sortedIdList = sortSelectionBasedOnIndexIn(criteria.getSelection(), searchResults);
 

@@ -14,7 +14,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.service.export.ExportService;
+import com.n4systems.fieldid.service.export.EventTypeExportService;
 import com.n4systems.model.EventType;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
@@ -26,7 +26,8 @@ import com.n4systems.security.Permissions;
 @UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
 public class ExportAction extends AbstractAction {
 
-	@Autowired ExportService exportService;
+	@Autowired
+    EventTypeExportService eventTypeEventTypeExportService;
 	@Autowired EventService eventService;
 	
 	private Long eventTypeId;
@@ -52,7 +53,7 @@ public class ExportAction extends AbstractAction {
 	
 	public String doExport() {
 		DownloadLink link = getDownloadLink();		
-		exportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId() );
+		eventTypeEventTypeExportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId() );
 		return SUCCESS;
 	}
 		

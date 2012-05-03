@@ -28,6 +28,8 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 
 	protected Logger logger = Logger.getLogger(getClass());
 
+    protected static final int PAGE_SIZE = 256;
+
 	protected MailManager mailManager;
 
     private final String templateName;
@@ -65,7 +67,7 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 		updateDownloadLinkState(downloadLink, DownloadState.INPROGRESS);
 
 		try {
-			generateFile(criteria, downloadLink.getFile(), downloadLink.getName());
+			generateFile(criteria, downloadLink.getFile(), true, 0, PAGE_SIZE);
 
 			updateDownloadLinkState(downloadLink, DownloadState.COMPLETED);
 
@@ -90,7 +92,8 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 		logger.info(String.format("Download Task Finished [%s]", downloadLink));
 	}
 
-    protected abstract void generateFile(T criteria, File file, String linkName) throws ReportException;
+    @Transactional
+    public abstract void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize) throws ReportException;
 
     private void updateDownloadLinkState(DownloadLink downloadLink, DownloadState state) {
 		downloadLink.setState(state);

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.model;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -30,8 +31,9 @@ public class ContextAbsolutizer {
     }
 
     private static String determineServerName() {
-        ServletWebRequest request = (ServletWebRequest) RequestCycle.get().getRequest();
-        return request.getContainerRequest().getContextPath();
+        String tenantName = FieldIDSession.get().getSessionUser().getTenant().getName();
+        String systemDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_DOMAIN);
+        return tenantName + "." + systemDomain;
     }
 
 

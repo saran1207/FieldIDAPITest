@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassAc
 import com.n4systems.fieldid.wicket.components.reporting.results.ScheduleMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
-import com.n4systems.fieldid.wicket.pages.print.ExportToExcelPage;
+import com.n4systems.fieldid.wicket.pages.print.ExportReportToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
@@ -35,7 +35,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
     public ReportingSubMenu(String id, final Model<EventReportCriteria> model) {
 		super(id, model);
 
-        add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportToExcelPage>("exportToExcelLink", ExportToExcelPage.class, model)));
+        add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportReportToExcelPage>("exportToExcelLink", ExportReportToExcelPage.class, model)));
 
         actions = new WebMarkupContainer("actions");
         // note that only one of these mass update links will be shown at a time - depends on the context.

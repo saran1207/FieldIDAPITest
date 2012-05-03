@@ -80,33 +80,13 @@
             <h1>${title}</h1>
         </div>
 
-        <#if message?exists>
-            <div class="reportContent">
-                ${message}
-            </div>
-        </#if>
-
-        <#include '_warningResultsTruncated.html.ftl'>
-
+    <#if message?exists>
         <div class="reportContent">
-
-            <table class="message" cellpadding=2 cellspacing=2 border>
-                <tr>
-                    <#list columns as column>
-                        <th>${column.localizedLabel}</th>
-                    </#list>
-                </tr>
-
-                <#list rows as row>
-                    <tr>
-                        <#list columns as column>
-                            <td>${row.stringValues[column_index]}</td>
-                        </#list>
-                    </tr>
-                </#list>
-            </table>
-
+        ${message}
         </div>
+    </#if>
+
+    <#include '_warningResultsTruncated.html.ftl'>
 
 
-</td></tr></table>
+    </td></tr></table>

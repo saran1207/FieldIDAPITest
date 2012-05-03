@@ -2,9 +2,11 @@ package com.n4systems.fieldid.service.sendsearch;
 
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.asset.AssetExcelExportService;
 import com.n4systems.fieldid.service.download.StringRowPopulator;
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.TableGenerationContextImpl;
+import com.n4systems.fieldid.service.event.EventExcelExportService;
 import com.n4systems.fieldid.service.event.util.ResultTransformerFactory;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.service.search.ReportService;
@@ -13,6 +15,7 @@ import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.mail.SMTPMailManager;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.SendSavedItemSchedule;
+import com.n4systems.model.common.ReportFormat;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.saveditem.SavedSearchItem;
@@ -31,14 +34,21 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.views.RowView;
 import com.n4systems.util.views.TableView;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.io.InputStream;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 
 public class SendSearchService extends FieldIdPersistenceService {
     
@@ -50,6 +60,9 @@ public class SendSearchService extends FieldIdPersistenceService {
     @Autowired private ReportService reportService;
     @Autowired private SavedAssetSearchService savedAssetSearchService;
     @Autowired private SavedReportService savedReportService;
+    
+    @Autowired private AssetExcelExportService assetExcelExportService;
+    @Autowired private EventExcelExportService eventExcelExportService;
 
     @Transactional
     public void sendAllDueItems() {
@@ -90,41 +103,89 @@ public class SendSearchService extends FieldIdPersistenceService {
 
     @Transactional
     public void sendSearch(SearchCriteria searchCriteria, SendSavedItemSchedule schedule) throws MessagingException {
-        ResultTransformer<TableView> transformer = new ResultTransformerFactory().createResultTransformer(searchCriteria);
+        localizeColumnNames(searchCriteria.getSortedStaticAndDynamicColumns());
+        if (schedule.getReportFormat() == ReportFormat.HTML) {
+            sendSearchHtml(searchCriteria, schedule);
+        } else if (schedule.getReportFormat() == ReportFormat.EXCEL) {
+            sendSearchExcel(searchCriteria, schedule);
+        }
+    }
+
+    private void sendSearchExcel(SearchCriteria criteria, SendSavedItemSchedule schedule) throws MessagingException {
+        File temporaryAttachmentFile = null;
+        try {
+            temporaryAttachmentFile = File.createTempFile("excel-export-attachment", getCurrentUser().getTenant().getName()+"."+getCurrentUser().getUserID());
+
+            if (criteria instanceof AssetSearchCriteria) {
+                assetExcelExportService.generateFile((AssetSearchCriteria)criteria, temporaryAttachmentFile, false, MAX_RESULTS_FOR_SENT_SEARCH, MAX_RESULTS_FOR_SENT_SEARCH);
+            } else if (criteria instanceof EventReportCriteria) {
+                eventExcelExportService.generateFile((EventReportCriteria)criteria, temporaryAttachmentFile, false, MAX_RESULTS_FOR_SENT_SEARCH, MAX_RESULTS_FOR_SENT_SEARCH);
+            }
+
+            TemplateMailMessage message = createBasicHtmlMessage("sendSavedItemExcel", criteria, schedule);
+
+            message.getAttachments().put("report.xls", getFileData(temporaryAttachmentFile));
+
+            logger.info(LogUtils.prepare("Sending Notification Message to [$0] recipients", message.getToAddresses().size()));
+
+            new SMTPMailManager().sendMessage(message);
+
+        } catch (Exception e) {
+            logger.error("error creating excel export", e);
+        } finally {
+            if (temporaryAttachmentFile != null) {
+                temporaryAttachmentFile.delete();
+            }
+        }
+    }
+
+    private void sendSearchHtml(SearchCriteria criteria, SendSavedItemSchedule schedule) throws MessagingException {
+        ResultTransformer<TableView> transformer = new ResultTransformerFactory().createResultTransformer(criteria);
         PageHolder<TableView> pageHolder = null;
-        if (searchCriteria instanceof AssetSearchCriteria) {
-            pageHolder = searchService.performSearch((AssetSearchCriteria)searchCriteria, transformer, 0, MAX_RESULTS_FOR_SENT_SEARCH);
-        } else if (searchCriteria instanceof EventReportCriteria) {
-            pageHolder = reportService.performSearch((EventReportCriteria)searchCriteria, transformer, 0, MAX_RESULTS_FOR_SENT_SEARCH);
+        if (criteria instanceof AssetSearchCriteria) {
+            pageHolder = searchService.performSearch((AssetSearchCriteria)criteria, transformer, 0, MAX_RESULTS_FOR_SENT_SEARCH);
+        } else if (criteria instanceof EventReportCriteria) {
+            pageHolder = reportService.performSearch((EventReportCriteria)criteria, transformer, 0, MAX_RESULTS_FOR_SENT_SEARCH);
         }
 
         List<RowView> results = pageHolder.getPageResults().getRows();
-        sendMessage(searchCriteria, results, schedule);
+        sendHtmlMessage(criteria, results, schedule);
     }
 
-    private void sendMessage(SearchCriteria criteria, List<RowView> results, SendSavedItemSchedule schedule) throws MessagingException {
-        String title = getSanitizedTitle(schedule, criteria);
-
-        Set<String> addressesToDeliverTo = schedule.getAddressesToDeliverTo();
-
+    private void sendHtmlMessage(SearchCriteria criteria, List<RowView> results, SendSavedItemSchedule schedule) throws MessagingException {
         User user = schedule.getUser();
         TableGenerationContext exportContextProvider = new TableGenerationContextImpl(user.getTimeZone(), user.getOwner().getPrimaryOrg().getDateFormat(), user.getOwner().getPrimaryOrg().getDateFormat() + " h:mm a", user.getOwner());
         StringRowPopulator.populateRowsWithConvertedStrings(results, criteria, exportContextProvider);
 
         // no we need to build the message body with the html event report table
-        TemplateMailMessage message = new TemplateMailMessage(schedule.getSubject(), "sendSavedItem");
+        TemplateMailMessage message = createBasicHtmlMessage("sendSavedItem", criteria, schedule);
 
-        List<ColumnMappingView> columns = criteria.getSortedStaticAndDynamicColumns();
-        message.getTemplateMap().put("title", title);
-        message.getTemplateMap().put("message", sanitize(schedule.getMessage()));
-        message.getTemplateMap().put("columns", localizeColumnNames(columns, user));
+        message.getTemplateMap().put("columns", criteria.getSortedStaticAndDynamicColumns());
         message.getTemplateMap().put("rows", results);
         message.getTemplateMap().put("numResults", results.size());
-        message.setToAddresses(addressesToDeliverTo);
 
-        logger.info(LogUtils.prepare("Sending Notification Message to [$0] recipients", addressesToDeliverTo.size()));
+        logger.info(LogUtils.prepare("Sending Notification Message to [$0] recipients", message.getToAddresses().size()));
 
         new SMTPMailManager().sendMessage(message);
+    }
+    
+    private TemplateMailMessage createBasicHtmlMessage(String templateName, SearchCriteria criteria, SendSavedItemSchedule schedule) {
+        Set<String> addressesToDeliverTo = schedule.getAddressesToDeliverTo();
+        String title = getSanitizedTitle(schedule, criteria);
+
+        TemplateMailMessage message = new TemplateMailMessage(schedule.getSubject(), templateName);
+
+        message.getTemplateMap().put("title", title);
+        message.getTemplateMap().put("message", sanitize(schedule.getMessage()));
+        message.getTemplateMap().put("maxResults", MAX_RESULTS_FOR_SENT_SEARCH);
+        message.setToAddresses(addressesToDeliverTo);
+
+        int preTruncateResultCount = countResults(criteria);
+        if (preTruncateResultCount > MAX_RESULTS_FOR_SENT_SEARCH) {
+            message.getTemplateMap().put("resultCountBeforeTruncation", preTruncateResultCount);
+        }
+
+        return message;
     }
 
     private String getSanitizedTitle(SendSavedItemSchedule schedule, SearchCriteria criteria) {
@@ -143,29 +204,37 @@ public class SendSearchService extends FieldIdPersistenceService {
 
     // Localization is done in the web for now.. this is a hack to get at Strut's localization file
     // since we're in core, and we can't see struts classes
-    private List<String> localizeColumnNames(List<ColumnMappingView> columns, User user) {
-        List<String> localizedNames = new ArrayList<String>(columns.size());
+    private void localizeColumnNames(List<ColumnMappingView> columns) {
+        User user = getCurrentUser();
 
         for (ColumnMappingView column : columns) {
             if (localizationProperties.get(column.getLabel()) != null) {
-                localizedNames.add(localizationProperties.get(column.getLabel()).toString());
+                column.setLocalizedLabel(localizationProperties.get(column.getLabel()).toString());
             } else {
                 if ("label.eusername".equals(column.getLabel())) {
-                    addCustomerLabel(user, localizedNames);
+                    column.setLocalizedLabel(getCustomerLabel(user));
                 } else {
-                    localizedNames.add(column.getLabel());
+                    column.setLocalizedLabel(column.getLabel());
                 }
             }
         }
-        return localizedNames;
+    }
+    
+    private int countResults(SearchCriteria criteria) {
+        if (criteria instanceof AssetSearchCriteria) {
+            return searchService.countPages((AssetSearchCriteria)criteria, 1L);
+        } else if (criteria instanceof  EventReportCriteria) {
+            return reportService.countPages((EventReportCriteria)criteria, 1L);
+        }
+        return 0;
     }
 
-    private void addCustomerLabel(User user, List<String> localizedNames) {
+    private String getCustomerLabel(User user) {
         boolean jobSiteUser = user.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.JobSites);
         if (jobSiteUser) {
-            localizedNames.add("Job Site Name");
+            return "Job Site Name";
         } else {
-            localizedNames.add("Customer Name");
+            return "Customer Name";
         }
     }
 
@@ -177,6 +246,17 @@ public class SendSearchService extends FieldIdPersistenceService {
             throw new RuntimeException(e);
         }
         return allProperties;
+    }
+
+    private byte[] getFileData(File file) throws IOException {
+        byte[] data = null;
+        InputStream in = new FileInputStream(file);
+        try {
+            data = IOUtils.toByteArray(in);
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+        return data;
     }
     
 }

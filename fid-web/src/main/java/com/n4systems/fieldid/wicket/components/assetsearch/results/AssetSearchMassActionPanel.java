@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.wicket.components.assetsearch.results;
 
+import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
+import com.n4systems.fieldid.wicket.pages.print.ExportReportToExcelPage;
+import com.n4systems.fieldid.wicket.pages.print.ExportSearchToExcelPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 
@@ -31,7 +34,7 @@ public class AssetSearchMassActionPanel extends MassActionPanel {
         AssetSearchMassActionLink massEventLink;
 
         add(printManuCertsLink = new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", criteriaModel));
-        add(new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", criteriaModel));
+        add(new MassActionLink<ExportSearchToExcelPage>("exportToExcelLink", ExportSearchToExcelPage.class, criteriaModel));
         add(massEventLink = new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", criteriaModel));
         add(massUpdateLink = new Link("massUpdateLink") {
             @Override

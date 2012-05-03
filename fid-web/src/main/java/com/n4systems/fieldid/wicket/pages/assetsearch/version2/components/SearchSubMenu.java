@@ -3,14 +3,15 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
+import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
+import com.n4systems.fieldid.wicket.pages.print.ExportSearchToExcelPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
-
 import rfid.web.helper.SessionUser;
 
 
@@ -27,7 +28,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         super(id,model);
 
         add(printLink = makeLinkLightBoxed(new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model)));
-        add(exportLink = makeLinkLightBoxed(new AssetSearchMassActionLink("exportToExcelLink", "/aHtml/searchResults.action?searchId=%s", model)));
+        add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportSearchToExcelPage>("exportToExcelLink", ExportSearchToExcelPage.class, model)));
 
         actions=new WebMarkupContainer("actions");
         

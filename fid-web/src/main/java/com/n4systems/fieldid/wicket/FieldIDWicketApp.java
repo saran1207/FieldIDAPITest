@@ -71,7 +71,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("sendSavedItem", SendSavedItemPage.class);
         mountPage("manageSendItemSchedules", ManageSendItemSchedulesPage.class);
 
-        mountPage("search2", SearchPage.class);
+        mountPage("wicket/search2", SearchPage.class);
         mountPage("assetMassUpdate", MassUpdateAssetsPage.class);
         mountPage("eventMassUpdate", MassUpdateEventsPage.class);
         mountPage("returnToReport", ReturnToReportPage.class);
