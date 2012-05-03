@@ -22,7 +22,6 @@ public class RunReportPage extends SearchBridgePage<ReportPage, EventReportCrite
     public PageFactory<ReportPage> getPageFactory(String source, PageParameters params) {
         PageFactory<ReportPage> factory = super.getPageFactory(source, params);
         return (factory==null) ? new DefaultSourcePageFactory(params) : factory;
-
     }
 
     @Override

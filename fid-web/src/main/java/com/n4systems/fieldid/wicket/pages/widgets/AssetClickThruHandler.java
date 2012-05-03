@@ -6,8 +6,8 @@ import org.apache.wicket.Component;
 
 public class AssetClickThruHandler extends SimpleClickThruHandler {
 	
-	public AssetClickThruHandler(Component component, Long id) {
-		super(component, id);		
+	public AssetClickThruHandler(Component component, Long widgetDefinitionId) {
+		super(component, widgetDefinitionId);
     }
 
 	@Override

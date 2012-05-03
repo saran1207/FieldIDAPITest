@@ -34,6 +34,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
         addGranularityButton(ChartGranularity.MONTH);
         addGranularityButton(ChartGranularity.WEEK);        	
         addGranularityButton(ChartGranularity.DAY);
+        setClickThruHandler(new ReportClickThruHandler(this,widgetDefinition.getId()));
 	}
 
 	@Override
@@ -57,7 +58,6 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 	@Override
 	protected FlotOptions<LocalDate> createOptions() {
 		FlotOptions<LocalDate> options = super.createOptions();
-//		options.pan.interactive = true;
 		options.xaxis.timeformat = "%b %d";
 		return options;		
 	}

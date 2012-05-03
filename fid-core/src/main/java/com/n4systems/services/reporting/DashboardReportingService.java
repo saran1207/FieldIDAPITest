@@ -73,7 +73,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 	public EventKpiRecord getEventKpi(BaseOrg owner, DateRange dateRange) {
 		Preconditions.checkArgument(dateRange !=null);
-		return eventService.getEventKpi(dateRange.calculateFromDate(), dateRange.calculateToDate(), owner);
+		return eventService.getEventKpi(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner);
 	}
 
 	public List<ChartSeries<LocalDate>> getEventCompletenessEvents(ChartGranularity granularity, DateRange dateRange, BaseOrg org) {
@@ -136,13 +136,15 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	}
 
 	private EventReportCriteria getCriteriaDefaults(UpcomingEventsWidgetConfiguration config, String series, LocalDate localDate) {
-		EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg(), config.getDateRange());
+		EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
+        criteria.setDueDateRange(new DateRange(localDate, localDate));// this widget displays day by day.  .: when you click on a pt the date range is always a single day.
+        criteria.setEventStatus(EventStatus.INCOMPLETE);
 		return criteria;
 	}
 
     private EventReportCriteria getCriteriaDefaults(EventKPIWidgetConfiguration config, String series, int orgIndex) {
         Preconditions.checkArgument(orgIndex >= 0 && orgIndex <=config.getOrgs().size());
-        EventReportCriteria criteria = getDefaultReportCriteria(config.getOrgs().get(orgIndex), config.getDateRange());
+        EventReportCriteria criteria = getDefaultReportCriteria(config.getOrgs().get(orgIndex));
         if (KpiType.INCOMPLETE.getLabel().equals(series)) {
             criteria.setEventStatus(EventStatus.INCOMPLETE);
             criteria.setDueDateRange(config.getDateRange());
@@ -162,17 +164,27 @@ public class DashboardReportingService extends FieldIdPersistenceService {
     }
 
     private EventReportCriteria getCriteriaDefaults(CompletedEventsWidgetConfiguration config, String series, LocalDate localDate) {
-        EventReportCriteria model = getDefaultReportCriteria(config.getOrg(), config.getDateRange());
-        model.setResult(EnumUtils.valueOf(Status.class, series));
-        return model;
+        EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
+        criteria.setResult(EnumUtils.valueOf(Status.class, series));
+        setDateRange(criteria, config.getGranularity(), localDate);
+        return criteria;
     }
 
 	private EventReportCriteria getCriteriaDefaults(EventCompletenessWidgetConfiguration config, String series, LocalDate localDate) {
-		EventReportCriteria model = getDefaultReportCriteria(config.getOrg(), config.getDateRange());
-		return model;
+		EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
+        ScheduleStatus status = EnumUtils.valueOf(ScheduleStatus.class, series);
+        if (ScheduleStatus.COMPLETED.equals(status)) {
+            criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
+            criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
+            criteria.setEventStatus(EventStatus.COMPLETE);
+        } else {
+            criteria.setEventStatus(EventStatus.ALL);
+            criteria.setDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
+        }
+		return criteria;
 	}
 
-	private EventReportCriteria getDefaultReportCriteria(BaseOrg org, DateRange dateRange) {
+    private EventReportCriteria getDefaultReportCriteria(BaseOrg org) {
 		EventReportCriteria criteria = new EventReportCriteria();
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
         criteria.setColumnGroups(reportConfiguration.getColumnGroups());
@@ -180,12 +192,22 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         criteria.setSortDirection(reportConfiguration.getSortDirection());
         criteria.setReportAlreadyRun(true);
         criteria.setOwner(org);
-        
-        if (dateRange != null) {
-            criteria.setDateRange(dateRange);
-        }
         return criteria;
 	}
+
+    private void setDateRange(EventReportCriteria criteria, ChartGranularity granularity, LocalDate localDate) {
+        if (granularity!=null) {
+            LocalDate from = localDate;
+            LocalDate to = from.plus(granularity.getPeriod().minusDays(1));  // subtract one day because it is inclusive.
+            criteria.setDateRange(new DateRange(from, to));
+        }
+    }
+
+
+
+    /**
+     * asset widget related config --> criteria methods.
+     */
 
 	public AssetSearchCriteria convertWidgetDefinitionToAssetCriteria(Long widgetDefinitionId, Long x, String y, String series) {
 		WidgetDefinition<?> widgetDefinition = getWidgetDefinition(widgetDefinitionId);		
@@ -202,42 +224,42 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	private AssetSearchCriteria getCriteriaDefaults(
             AssetsIdentifiedWidgetConfiguration config,
             LocalDate localDate) {
-		AssetSearchCriteria model = getDefaultAssetSearchCritieria();
+		AssetSearchCriteria criteria = getDefaultAssetSearchCritieria();
 		if (config.getGranularity()!=null) { 
 			LocalDate from = localDate;
 			LocalDate to = from.plus(config.getGranularity().getPeriod().minusDays(1));
-			model.setDateRange(new DateRange(from,to));
-			model.setOwner(config.getOrg());
+			criteria.setDateRange(new DateRange(from, to));
+            criteria.setOwner(config.getOrg());
 		}
-		return model;
+		return criteria;
 	}
 
 	private AssetSearchCriteria getCriteriaDefaults(
             AssetsStatusWidgetConfiguration config, String assetStatus) {
-		AssetSearchCriteria model = getDefaultAssetSearchCritieria();
-		model.setAssetStatus(assetStatusService.getStatusByName(assetStatus));
-		model.setDateRange(new DateRange(config.getRangeType()));
-		model.setOwner(config.getOrg());		
-		return model;
+		AssetSearchCriteria criteria = getDefaultAssetSearchCritieria();
+		criteria.setAssetStatus(assetStatusService.getStatusByName(assetStatus));
+		criteria.setDateRange(new DateRange(config.getRangeType()));
+        criteria.setOwner(config.getOrg());
+		return criteria;
 	}
 
 	public AssetSearchCriteria getDefaultAssetSearchCritieria() {
-		AssetSearchCriteria model = new AssetSearchCriteria();
+		AssetSearchCriteria criteria = new AssetSearchCriteria();
 		ReportConfiguration reportConfiguration = new AssetColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());		
-		model.setColumnGroups(reportConfiguration.getColumnGroups());
-        model.setSortColumn(reportConfiguration.getSortColumn());
-        model.setSortDirection(reportConfiguration.getSortDirection());
-        model.setReportAlreadyRun(true);		
-		return model;
+		criteria.setColumnGroups(reportConfiguration.getColumnGroups());
+        criteria.setSortColumn(reportConfiguration.getSortColumn());
+        criteria.setSortDirection(reportConfiguration.getSortDirection());
+        criteria.setReportAlreadyRun(true);
+		return criteria;
 	}
 
     public EventReportCriteria getDefaultReportCriteria() {
-        EventReportCriteria model = new EventReportCriteria();
+        EventReportCriteria criteria = new EventReportCriteria();
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
-        model.setColumnGroups(reportConfiguration.getColumnGroups());
-        model.setSortColumn(reportConfiguration.getSortColumn());
-        model.setSortDirection(reportConfiguration.getSortDirection());
-        model.setReportAlreadyRun(true);
-        return model;
+        criteria.setColumnGroups(reportConfiguration.getColumnGroups());
+        criteria.setSortColumn(reportConfiguration.getSortColumn());
+        criteria.setSortDirection(reportConfiguration.getSortDirection());
+        criteria.setReportAlreadyRun(true);
+        return criteria;
     }
 }

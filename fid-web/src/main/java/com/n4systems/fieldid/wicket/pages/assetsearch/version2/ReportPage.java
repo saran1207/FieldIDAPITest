@@ -46,14 +46,14 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
         return !tenantHasEvents();
     }
 
-    @Override
-    protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("speed.reporting"));
-    }
-
     private boolean tenantHasEvents() {
         // XXX : change this to spring service.   can't test this with mocks.
         return new EventCountLoader().setTenantId(getTenantId()).load() > 0;
+    }
+
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("speed.reporting"));
     }
 
     @Override
@@ -136,13 +136,6 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
             pageLabelModel = new Model<String>(pageLabelModel.getObject() + " for - " + searchCriteria.getSavedReportName());
         }
         return pageLabelModel.getObject();
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-    	super.renderHead(response);
-    	response.renderJavaScriptReference("javascript/fieldIdWide.js");
-        response.renderCSSReference("style/pageStyles/wide.css");
     }
 
 }

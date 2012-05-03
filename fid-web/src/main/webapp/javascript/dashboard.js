@@ -136,8 +136,10 @@ var chartWidgetFactory = (function() {
 			url+="&y="+item.datapoint[yIndex];
 		}
 		// series
-		if (item.series.id) { 
-			url += "&series="+item.series.id;			
+		if (typeof item.series.id=='string') {
+            url += "&series="+item.series.id;
+        } else if (item.series.id.label) {
+            url += "&series="+item.series.id.label;
 		} else { 
 			url+="&series="+item.seriesIndex;			
 		}			

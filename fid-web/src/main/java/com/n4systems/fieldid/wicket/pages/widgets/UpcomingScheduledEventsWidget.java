@@ -31,6 +31,7 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<LocalDate,Upcomin
 		addPeriodButton("30days", 30);
 		addPeriodButton("60days", 60);
 		addPeriodButton("90days", 90);
+        setClickThruHandler(new ReportClickThruHandler(this,widgetDefinition.getId()));
 	}
 
 	@Override

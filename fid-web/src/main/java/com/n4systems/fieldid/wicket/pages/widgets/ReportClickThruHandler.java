@@ -6,8 +6,8 @@ import org.apache.wicket.Component;
 
 public class ReportClickThruHandler extends SimpleClickThruHandler {
 	
-	public ReportClickThruHandler(Component component, Long id) {
-		super(component, id);		
+	public ReportClickThruHandler(Component component, Long widgetDefinitionId) {
+		super(component, widgetDefinitionId);
     }
 
 	@Override

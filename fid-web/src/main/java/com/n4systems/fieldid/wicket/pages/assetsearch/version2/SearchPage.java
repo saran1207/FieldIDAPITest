@@ -31,13 +31,18 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     public SearchPage(PageParameters params) {
         super(params, null, null);
     }
-    
+
     public SearchPage(AssetSearchCriteria searchCriteria, SavedItem<AssetSearchCriteria> savedSearchItem) {
     	super(new PageParameters(), searchCriteria, savedSearchItem);
     }
 
     public SearchPage(AssetSearchCriteria criteria) {
         this(criteria, null);
+    }
+
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new PropertyModel<String>(this, "pageLabel"));
     }
 
     @Override
@@ -112,11 +117,6 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     @Override
     protected AssetSearchCriteria createCriteria() {
         return new AssetSearchCriteria();
-    }
-
-    @Override
-    protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new PropertyModel<String>(this, "pageLabel"));
     }
 
     public String getPageLabel() {
