@@ -45,6 +45,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -124,7 +125,7 @@ public class SendSearchService extends FieldIdPersistenceService {
 
             TemplateMailMessage message = createBasicHtmlMessage("sendSavedItemExcel", criteria, schedule);
 
-            message.getAttachments().put("report.xls", getFileData(temporaryAttachmentFile));
+            message.getAttachments().put(getReportFileName(schedule), getFileData(temporaryAttachmentFile));
 
             logger.info(LogUtils.prepare("Sending Notification Message to [$0] recipients", message.getToAddresses().size()));
 
@@ -137,6 +138,19 @@ public class SendSearchService extends FieldIdPersistenceService {
                 temporaryAttachmentFile.delete();
             }
         }
+    }
+
+    private String getReportFileName(SendSavedItemSchedule schedule) {
+        StringBuffer fileName = new StringBuffer();
+        if (schedule.getSavedItem() != null) {
+            fileName.append(schedule.getSavedItem().getName());
+        } else {
+            fileName.append("notification");
+        }
+        fileName.append(" - ");
+        fileName.append(new SimpleDateFormat(getCurrentUser().getOwner().getPrimaryOrg().getDateFormat()).format(new Date()));
+        fileName.append(".xls");
+        return fileName.toString();
     }
 
     private void sendSearchHtml(SearchCriteria criteria, SendSavedItemSchedule schedule) throws MessagingException {
