@@ -95,7 +95,7 @@
 			<p class="multiEventInstructions"><@s.text name="label.you_are_about_to_perform_mass_event_on"><@s.param><span id="eventTypeToReplace">&nbsp;</span></@s.param><@s.param><span class="boldedAssetNumber">${assets.size()}</span></@s.param></@s.text></p>
 			<div class="stepAction">
 				<input type="button" id="saveEvents" value="<@s.text name="label.save_all"/>" />
-				<@s.text name="label.or"/> <a href="#" onclick="backToStep(3)"><@s.text name="label.back_to_step"/> 3</a>
+				<@s.text name="label.or"/> <a href="#" onclick="backToStep(3);$('continueButtonStep3').disabled=false;"><@s.text name="label.back_to_step"/> 3</a>
 			</div>
 			
 			<div style="overflow:hidden text-align:center" class="progress hide stepAction">

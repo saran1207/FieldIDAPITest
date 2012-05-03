@@ -2,7 +2,7 @@
 	<#include "/templates/html/event/multi_event/_form.ftl" />
 	<div class="stepAction">
 		<button id="continueButtonStep3"><@s.text name="label.continue"/></button>
-		<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(2)"><@s.text name="label.back_to_step"/> 2</a>
+		<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(2);"><@s.text name="label.back_to_step"/> 2</a>
 	</div>	
 </#assign>
 
