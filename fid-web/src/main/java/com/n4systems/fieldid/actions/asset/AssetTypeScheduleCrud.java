@@ -58,7 +58,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 
 	@Override
 	protected void initMemberFields() {
-		schedule = new AssetTypeSchedule();
+		schedule = newSchedule();
 		schedule.setTenant(getTenant());
 		
 	}
