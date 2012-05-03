@@ -40,6 +40,7 @@ public class DateRange implements Serializable, Cloneable {
     @Column
     private Date toDate;
 
+    @Deprecated // only required for hibernate/jpa reasons.  use other constructors.
     public DateRange() {
     }
 

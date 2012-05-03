@@ -29,6 +29,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.persistence.QueryBuilder;
 
 @Component
@@ -95,7 +96,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		}
 		
 		if (identifiedFrom != null || identifiedTo != null) {
-			DateRange dateRange = new DateRange();
+			DateRange dateRange = new DateRange(RangeType.CUSTOM);
 			
 			if (identifiedFrom != null) {
 				dateRange.setFromDate(identifiedFrom);
