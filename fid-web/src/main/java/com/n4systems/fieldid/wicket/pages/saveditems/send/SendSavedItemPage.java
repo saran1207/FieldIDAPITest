@@ -69,9 +69,11 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
     private boolean scheduleStateAvailable = false;
 
     private AjaxSubmitLink submitLink;
+    private Long savedReportId;
 
     public SendSavedItemPage(IModel<? extends SearchCriteria> criteria, Page returnToPage) {
         this.criteria = criteria;
+        savedReportId = criteria.getObject().getSavedReportId();
         this.returnToPage = returnToPage;
         if (criteria.getObject().getSavedReportId() != null) {
             initializeSavedItem(criteria.getObject().getSavedReportId());
@@ -216,7 +218,12 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                             AsyncService.AsyncTask<Object> task = asyncService.createTask(new Callable<Object>() {
                                 @Override
                                 public Object call() throws Exception {
-                                    sendSearchService.sendSearch(criteria.getObject(), sendItemSchedule);
+                                    if (savedReportId != null) {
+                                        sendSearchService.sendSavedItem(savedReportId, sendItemSchedule);
+                                    } else {
+                                        sendSearchService.sendSearch(criteria.getObject(), sendItemSchedule);
+                                    }
+                                    
                                     return null;
                                 }
                             });

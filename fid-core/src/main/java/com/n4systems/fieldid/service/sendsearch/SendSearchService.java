@@ -73,25 +73,30 @@ public class SendSearchService extends FieldIdPersistenceService {
             try {
                 Date utcDateToTheHour = DateHelper.truncate(new Date(), DateHelper.HOUR);
                 if (schedule.shouldRunNow(utcDateToTheHour)) {
-                    sendSavedItem(schedule.getSavedItem().getId(), schedule);
+                    sendSavedItemInsideUserContext(schedule.getSavedItem().getId(), schedule);
                 }
             } catch (Exception e) {
                 logger.error("Error sending notification: " + ToStringBuilder.reflectionToString(schedule), e);
             }
         }
     }
-    
-    private void sendSavedItem(Long savedItemId, SendSavedItemSchedule schedule) throws MessagingException {
+
+    private void sendSavedItemInsideUserContext(Long savedItemId, SendSavedItemSchedule schedule) throws MessagingException {
         try {
             securityContext.setUserSecurityFilter(new UserSecurityFilter(schedule.getUser()));
             securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(schedule.getTenant()));
-            SearchCriteria searchCriteria = getSearchCriteriaForSavedItem(savedItemId);
-            sendSearch(searchCriteria, schedule);
+            sendSavedItem(savedItemId, schedule);
         } finally {
             securityContext.reset();
         }
     }
-    
+
+    @Transactional
+    public void sendSavedItem(Long savedItemId, SendSavedItemSchedule schedule) throws MessagingException {
+        SearchCriteria searchCriteria = getSearchCriteriaForSavedItem(savedItemId);
+        sendSearch(searchCriteria, schedule);
+    }
+
     private SearchCriteria getSearchCriteriaForSavedItem(Long savedItemId) {
         SavedItem savedItem = persistenceService.find(SavedItem.class, savedItemId);
         if (savedItem instanceof SavedSearchItem) {
