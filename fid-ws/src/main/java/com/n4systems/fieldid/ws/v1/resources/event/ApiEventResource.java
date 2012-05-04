@@ -67,6 +67,12 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEvent(ApiEvent apiEvent) {
+
+        if (apiEvent.getSid() != null && eventExists(apiEvent.getSid())) {
+            logger.warn("Event with SID [" + apiEvent.getSid() + "] already exists");
+            return;
+        }
+
 		Event event = convertApiEvent(apiEvent);
 
 		CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, securityContext.getUserSecurityFilter().getUserId());
@@ -146,7 +152,15 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		
 		return event;
 	}
-	
+
+    private boolean eventExists(String sid) {
+        QueryBuilder<Event> query = createTenantSecurityBuilder(Event.class);
+        query.addWhere(WhereClauseFactory.create("mobileGUID", sid));
+
+        boolean eventExists = persistenceService.exists(query);
+        return eventExists;
+    }
+
 	private EventBook findEventBook(String eventBookId) {
 		QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class);
 		query.addWhere(WhereClauseFactory.create("mobileId", eventBookId));

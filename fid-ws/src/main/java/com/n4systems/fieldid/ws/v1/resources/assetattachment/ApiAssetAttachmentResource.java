@@ -33,8 +33,11 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	@Path("{attachmentId}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Transactional(readOnly = true)
-	public Response downloadAttachment(@PathParam("attachmentId") Long attachmentId) {
-		AssetAttachment attachment = persistenceService.find(AssetAttachment.class, attachmentId);
+	public Response downloadAttachment(@PathParam("attachmentId") String attachmentId) {
+        QueryBuilder<AssetAttachment> query = createUserSecurityBuilder(AssetAttachment.class);
+        query.addWhere(WhereClauseFactory.create("mobileId", attachmentId));
+
+		AssetAttachment attachment = persistenceService.find(query);
 		if (attachment == null) {
 			throw new NotFoundException("Asset Attachment", attachmentId);
 		}
