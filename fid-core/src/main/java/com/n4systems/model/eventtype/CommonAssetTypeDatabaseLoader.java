@@ -28,8 +28,8 @@ public class CommonAssetTypeDatabaseLoader extends ListLoader<AssetType> impleme
 	@Override
 	protected List<AssetType> load(EntityManager em, SecurityFilter filter) {
 		
-		if (assetIds.size() > configContext.getLong(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT)) {
-			throw new IdListTooBigException("the id list can not exceed [" + configContext.getLong(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT) + "]");
+		if (assetIds.size() > configContext.getLong(ConfigEntry.MASS_ACTIONS_LIMIT)) {
+			throw new IdListTooBigException("the id list can not exceed [" + configContext.getLong(ConfigEntry.MASS_ACTIONS_LIMIT) + "]");
 		}
 		
 		

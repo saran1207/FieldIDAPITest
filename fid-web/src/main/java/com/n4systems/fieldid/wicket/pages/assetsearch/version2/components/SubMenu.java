@@ -84,11 +84,11 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         // XXX : the actions limits here should roll into one single "maxMassActionLimit"???    ask matt.
         // see WEB-2859
         Long tenantId = FieldIDSession.get().getSessionUser().getTenant().getId();
-        maxUpdate = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_UPDATE, tenantId);
-        maxExport = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_EXCEL_EXPORT, tenantId);
-        maxPrint = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_PDF_PRINT_OUTS, tenantId);
-        maxEvent = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, tenantId);
-        maxSchedule = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_SCHEDULE, tenantId);
+        maxUpdate = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
+        maxExport = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
+        maxPrint = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
+        maxEvent = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
+        maxSchedule = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
     }
 
     protected <T extends Link> T makeLinkLightBoxed(T link) {

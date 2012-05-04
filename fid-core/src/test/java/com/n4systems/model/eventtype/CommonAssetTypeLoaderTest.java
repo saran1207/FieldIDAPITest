@@ -85,7 +85,7 @@ public class CommonAssetTypeLoaderTest {
 	@Test(expected=IdListTooBigException.class)
 	public void should_throw_id_set_too_big_exception_if_the_asset_id_list_exceeds_the_configuration_setting() throws Exception {
 		ConfigContextOverridableTestDouble configContext = new ConfigContextOverridableTestDouble();
-		configContext.addConfigurationValue(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, "5");
+		configContext.addConfigurationValue(ConfigEntry.MASS_ACTIONS_LIMIT, "5");
 		
 		CommonAssetTypeLoaderExtension sut = new CommonAssetTypeLoaderExtension(null, configContext);
 		sut.forAssets(ImmutableList.of(1L, 2L, 3L, 4L, 5L, 6L));
@@ -95,7 +95,7 @@ public class CommonAssetTypeLoaderTest {
 	@Test
 	public void should_allow_a_list_asset_ids_that_is_equal_to_the_configuration_setting() throws Exception {
 		ConfigContextOverridableTestDouble configContext = new ConfigContextOverridableTestDouble();
-		configContext.addConfigurationValue(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, "5");
+		configContext.addConfigurationValue(ConfigEntry.MASS_ACTIONS_LIMIT, "5");
 		
 		CommonAssetTypeLoaderExtension sut = new CommonAssetTypeLoaderExtension(null, configContext);
 		sut.forAssets(ImmutableList.of(1L, 2L, 3L, 4L, 5L));

@@ -19,6 +19,6 @@ public class AssetSelectionAction extends AbstractAction {
 	}
 	
 	public Long getListLimitSize() {
-		return getConfigContext().getLong(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, getTenantId());
+		return getConfigContext().getLong(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId());
 	}
 }

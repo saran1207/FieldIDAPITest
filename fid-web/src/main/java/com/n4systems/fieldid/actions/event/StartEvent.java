@@ -15,7 +15,7 @@ public class StartEvent extends SimpleAction {
 	
 	
 	public Long getMaxAssetsFromMassEvent() {
-		return getConfigContext().getLong(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, getTenantId());
+		return getConfigContext().getLong(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId());
 	}
 
 }

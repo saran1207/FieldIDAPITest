@@ -16,13 +16,13 @@ public abstract class MassActionPanel extends Panel {
 
         variableAssignmentScriptBuffer = new StringBuffer();
 
-        addSizeParameterLabel("maxSizeForMassUpdate", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_UPDATE, getTenantId()));
-        addSizeParameterLabel("maxSizeForExcelExport", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_EXCEL_EXPORT, getTenantId()));
-        addSizeParameterLabel("maxSizeForPDFPrintOuts", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_PDF_PRINT_OUTS, getTenantId()));
+        addSizeParameterLabel("maxSizeForMassUpdate", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId()));
+        addSizeParameterLabel("maxSizeForExcelExport", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId()));
+        addSizeParameterLabel("maxSizeForPDFPrintOuts", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId()));
         addSizeParameterLabel("maxSizeForSummaryReport", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_SUMMARY_REPORT, getTenantId()));
-        addSizeParameterLabel("maxSizeForMultiEvent", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, getTenantId()));
+        addSizeParameterLabel("maxSizeForMultiEvent", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId()));
         addSizeParameterLabel("maxSizeForAssigningEventsToJobs", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS, getTenantId()));
-        addSizeParameterLabel("maxSizeForMassSchedule", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_SCHEDULE, getTenantId()));
+        addSizeParameterLabel("maxSizeForMassSchedule", ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId()));
 
         variableAssignmentScriptBuffer.append("addLightboxListeners();");
         variableAssignmentScriptBuffer.append("addLimitGuards();");

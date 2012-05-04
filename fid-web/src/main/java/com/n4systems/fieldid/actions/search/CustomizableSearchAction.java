@@ -498,11 +498,11 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
     }
 
 	public Integer getMaxSizeForExcelExport() {
-		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_EXCEL_EXPORT, getTenantId());
+		return getConfigContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId());
 	}
 	
 	public Integer getMaxSizeForPDFPrintOuts() {
-		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_PDF_PRINT_OUTS, getTenantId());
+		return getConfigContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId());
 	}
 	
 	public Integer getMaxSizeForSummaryReport() {
@@ -510,7 +510,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 	
 	public Integer getMaxSizeForMassUpdate() {
-		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_UPDATE, getTenantId());
+		return getConfigContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId());
 	}
 	
 	public Integer getMaxSizeForAssigningEventsToJobs() {
@@ -518,11 +518,11 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 	
 	public Integer getMaxSizeForMultiEvent() {
-		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, getTenantId());
+		return getConfigContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId());
 	}
 
     public Integer getMaxSizeForMassSchedule() {
-        return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MASS_SCHEDULE, getTenantId());
+        return getConfigContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId());
     }
 
     public String getSearchContainerKey() {
