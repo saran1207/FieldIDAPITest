@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
@@ -189,7 +190,7 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
     }
 
     private Link createLink(SavedItem item) {
-        final PageParameters params = PageParametersBuilder.id(item.getId());
+        final PageParameters params = PageParametersBuilder.id(item.getId()).add(AbstractSearchPage.SOURCE_PARAMETER, AbstractSearchPage.SAVED_ITEM_SOURCE);
         Link link = null;
 
         if (item instanceof SavedReportItem) {
