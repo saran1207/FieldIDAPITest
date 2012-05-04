@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * examples of term =
  * SomeOrg:aCust:dd     yields divisions like dd that have a parent customer like aCust which have a PrimaryOrg like SomeOrg.
  * :aCust              searches for customers under all orgs.
- * ::dd                searches for divisions only under all customers/orgs.
+ * ::dd                searches for divisions like "%dd%" only under all customers/orgs.
  * :CC:                 searches for divisions under "%CC%"
  * foo                  searches for anything, any type with name like "%foo%"
  * etc...
@@ -56,7 +56,6 @@ public class OrgQuery {
             clauses.add(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name", "name", getTerm(TRAILING_TERM), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.AND));
         }
 
-        // TODO : add if searchTerms.get() !=null....
         switch (levelsMatched()) {
             case 1:
                 if (StringUtils.isNotBlank(getPrimaryTerm())) {

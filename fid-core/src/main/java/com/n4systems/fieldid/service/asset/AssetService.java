@@ -18,11 +18,13 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
-import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.chart.ChartGranularity;
+import com.n4systems.util.collections.PrioritizedList;
+import com.n4systems.util.collections.UniquePrioritizer;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -504,4 +506,45 @@ public class AssetService extends FieldIdPersistenceService {
         return asset;
     }
 
+    public List<Asset> getAssetsLike(String search) {
+        QueryBuilder<Asset> builder = createTenantSecurityBuilder(Asset.class);
+        String assetTypeTerm = getAssetTypeTerm(search);
+        String term = getIdentifierTerm(search);
+
+        if (StringUtils.isNotBlank(assetTypeTerm)) {
+            WhereParameterGroup group = new WhereParameterGroup("type");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "type_name", "type.name", assetTypeTerm, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "type_group_name", "type.group.name", assetTypeTerm, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            builder.addWhere(group);
+        }
+
+        if (StringUtils.isNotBlank(term)) {
+            WhereParameterGroup group = new WhereParameterGroup("smartsearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "identifier", "identifier", term, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "rfidNumber", "rfidNumber", term, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "customerRefNumber", "customerRefNumber", term, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            builder.addWhere(group);
+        }
+
+        builder.setLimit(100);
+        List<Asset> results = persistenceService.findAll(builder);
+        int threshold;
+        return new PrioritizedList<Asset>(results, new UniquePrioritizer("type"),threshold=25);
+    }
+
+    private String getAssetTypeTerm(String search) {
+        int index = search.indexOf(":");
+        if (index!=-1) {
+            return search.substring(0,index);
+        }
+        return null;
+    }
+
+    private String getIdentifierTerm(String search) {
+        int index = search.indexOf(":");
+        if (index!=-1) {
+            return search.substring(index+1);
+        }
+        return search;
+    }
 }

@@ -19,6 +19,13 @@ public class OrgAutocompleteJson extends AutocompleteJson {
         this.descClass = descClass;
     }
     
+    public OrgAutocompleteJson(String id, String name, String desc, String tooltip) {
+        super(id, name);
+        this.desc = desc;
+        descClass = "category";
+        this.tooltip = tooltip;
+    }
+    
     public OrgAutocompleteJson(BaseOrg org, OrgQuery orgQuery, String desc) {
         super(org.getId()+"", org.getName());
         this.desc = desc;

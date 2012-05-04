@@ -8,9 +8,11 @@ var autoCompleteOrgPicker = (function() {
      */
     var init = function(id, extraWidth) {
         $("#"+id).bind("autocompleteopen", function(event, ui) {
+/*
             var menu = $(".ui-autocomplete.ui-menu");
             var width = menu.width();
             menu.width(width+extraWidth);
+*/
             // customize our tooltips.
             $('.link').tipsy({gravity: 'e', fade:true, delayIn:150});
         });
