@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.saveditems.send;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
@@ -44,6 +45,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class SendSavedItemPage extends FieldIDFrontEndPage {
 
@@ -52,6 +54,9 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
 
     @SpringBean
     private AsyncService asyncService;
+
+    @SpringBean
+    private SendSearchService sendSearchService;
 
     private SavedItem savedItem;
     private IModel<? extends SearchCriteria> criteria;
@@ -208,7 +213,14 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                             FieldIDSession.get().info("Successfully saved schedule");
                             getRequestCycle().setResponsePage(ManageSavedItemsPage.class);
                         } else {
-                            asyncService.sendSearchAsync(criteria.getObject(), sendItemSchedule);
+                            AsyncService.AsyncTask<Object> task = asyncService.createTask(new Callable<Object>() {
+                                @Override
+                                public Object call() throws Exception {
+                                    sendSearchService.sendSearch(criteria.getObject(), sendItemSchedule);
+                                    return null;
+                                }
+                            });
+                            asyncService.run(task);
                             FieldIDSession.get().info("Email generation in progress");
                             getRequestCycle().setResponsePage(RunLastSearchPage.class);
                         }
