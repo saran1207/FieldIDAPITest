@@ -49,7 +49,7 @@ public class SavedAssetSearchService extends SavedSearchService<SavedSearchItem,
         ReportConfiguration reportConfiguration = new AssetColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
 
         AssetTypeGroup assetTypeGroup = searchCriteria.getAssetTypeGroup();
-        List<ColumnMappingGroupView> dynamicAssetColumns = dynamicColumnsService.getDynamicAssetColumnsForReporting(searchCriteria.getAssetType(), assetTypeService.getAssetTypes(assetTypeGroup == null ? null : assetTypeGroup.getId()));
+        List<ColumnMappingGroupView> dynamicAssetColumns = dynamicColumnsService.getDynamicAssetColumnsForSearch(searchCriteria.getAssetType(), assetTypeService.getAssetTypes(assetTypeGroup == null ? null : assetTypeGroup.getId()));
 
         searchCriteria.setDynamicAssetColumnGroups(dynamicAssetColumns);
         searchCriteria.setColumnGroups(reportConfiguration.getColumnGroups());
