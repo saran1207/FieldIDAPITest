@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.n4systems.model.saveditem.SavedItem;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -259,6 +260,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 			if (user.getId() == null) {
 				user.updatePassword(passwordEntry.getPassword());
 				user.assignSecruityCardNumber(securityCardNumber);
+                user.setSavedItems(new ArrayList<SavedItem>());
 				new UserSaver().save(user);
 				uniqueID = user.getId();				
 				if(!isAssignPassword()) {			
