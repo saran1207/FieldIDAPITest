@@ -26,11 +26,20 @@
 	<#assign page = pagedEvents/>
 	
 	<div class="buttonBar">
-		<a id="listButton" class="button left ${action.showList.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" ><@s.text name="label.view_events_by_list"/></a>
+		<a id="listButton" class="button left ${action.showList.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" >
+            <img src="/fieldid/images/eventList.png"/>
+            <@s.text name="label.view_events_by_list"/>
+        </a>
 		<#if !events.isEmpty() && tenant.settings.gpsCapture>		
-			<a id="mapButton" class="button middle ${action.showMap.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" ><@s.text name="label.view_events_by_map"/></a>
+			<a id="mapButton" class="button middle ${action.showMap.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" >
+                <img src="/fieldid/images/eventMap.png"/>
+                <@s.text name="label.view_events_by_map"/>
+            </a>
 		</#if>					
-		<a id="groupByDateButton" class="button right ${action.showGroups.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" ><@s.text name="label.view_events_by_date_group"/></a>
+		<a id="groupByDateButton" class="button right ${action.showGroups.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" >
+            <img src="/fieldid/images/eventGroup.png"/>
+            <@s.text name="label.view_events_by_date_group"/>
+        </a>
 	</div>
 </div>
 
