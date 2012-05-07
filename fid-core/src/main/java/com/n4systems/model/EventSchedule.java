@@ -264,7 +264,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 		}
 		this.event = event;
         event.setSchedule(this);
-		completedDate = new Date();
+		completedDate = event.getDate();
 		status = ScheduleStatus.COMPLETED;
 		advancedLocation = event.getAdvancedLocation();
 		setOwner(event.getOwner());
