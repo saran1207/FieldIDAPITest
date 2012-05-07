@@ -1,17 +1,16 @@
 package com.n4systems.model;
 
-import static com.n4systems.model.builders.EventScheduleBuilder.*;
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static org.junit.Assert.*;
-
-import java.util.Date;
-
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.EventSchedule.ScheduleStatus;
-import static com.n4systems.test.helpers.Asserts.*;
+import java.util.Date;
+
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.builders.EventScheduleBuilder.aScheduledEventSchedule;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class EventScheduleTest {
 
@@ -22,6 +21,7 @@ public class EventScheduleTest {
 	@Before public void setUp() throws Exception {
 		Asset asset = anAsset().build();
 		event = new Event();
+        event.setDate(new Date());
 		event.setId(1L);
 		event.setAsset(asset);
 		
@@ -35,7 +35,7 @@ public class EventScheduleTest {
 	@Test public void test_completed_event() {
 		schedule.completed(event);
 		assertEquals(event, schedule.getEvent());
-		assertInRange(new Date(), schedule.getCompletedDate(), 1000L);
+        assertEquals(event.getDate(), schedule.getCompletedDate());
 	}
 
 	@Test public void test_remove_event() {
