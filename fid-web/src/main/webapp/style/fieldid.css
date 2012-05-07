@@ -2039,88 +2039,16 @@ div.unitOfMeasureName {
  	margin-top: 10px;
 }
 
-#listButton {
-    background: #f2f2f2 url(../images/eventList.png) left center no-repeat;		 
-	background: url(../images/eventList.png) left center no-repeat, -webkit-linear-gradient(top, #ffffff, #c6c6c6);
-	background: url(../images/eventList.png) left center no-repeat, -moz-linear-gradient(top, #ffffff, #c6c6c6);
-    background: url(../images/eventList.png) left center no-repeat, -ms-linear-gradient(top, #ffffff, #c6c6c6);
-    background: url(../images/eventList.png) left center no-repeat, -o-linear-gradient(top, #ffffff, #c6c6c6);   
-}
-
-#groupByDateButton { 
-    background: #f2f2f2 url(../images/eventGroup.png) left center no-repeat;
-	background: url(../images/eventGroup.png) left center no-repeat, -webkit-linear-gradient(top, #ffffff, #c6c6c6);
-	background: url(../images/eventGroup.png) left center no-repeat, -moz-linear-gradient(top, #ffffff, #c6c6c6);
-    background: url(../images/eventGroup.png) left center no-repeat,-ms-linear-gradient(top, #ffffff, #c6c6c6);
-    background: url(../images/eventGroup.png) left center no-repeat, -o-linear-gradient(top, #ffffff, #c6c6c6);
-}
-
-#mapButton { 
-    background: #f2f2f2 url(../images/eventMap.png) left center no-repeat;
-	background: url(../images/eventMap.png) left center no-repeat, -webkit-linear-gradient(top, #ffffff, #c6c6c6);
-	background: url(../images/eventMap.png) left center no-repeat, -moz-linear-gradient(top, #ffffff, #c6c6c6);
-    background: url(../images/eventMap.png) left center no-repeat,-ms-linear-gradient(top, #ffffff, #c6c6c6);
-    background: url(../images/eventMap.png) left center no-repeat, -o-linear-gradient(top, #ffffff, #c6c6c6);
-}
-
-#mapButton.true { 
-   	background: #cbcbcb url(../images/eventMap.png) left center no-repeat !important;
-	background: url(../images/eventMap.png) left center no-repeat, -webkit-gradient(linear, left top, left bottom, from(#a8a8a8), color-stop(0.15, #c6c6c6), to(#d8d8d8)) !important;
-	background: url(../images/eventMap.png) left center no-repeat, -webkit-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-    background: url(../images/eventMap.png) left center no-repeat,  -moz-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-    background: url(../images/eventMap.png) left center no-repeat, -ms-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-    background: url(../images/eventMap.png) left center no-repeat, -o-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-}
-
-#mapButton:active, #mapButton:hover { 
-   	background: #e0e0e0 url(../images/eventMap.png) left center no-repeat;
-	background: url(../images/eventMap.png) left center no-repeat, -webkit-linear-gradient(top, #f8f8f8, #bebebe);
-	background: url(../images/eventMap.png) left center no-repeat, -moz-linear-gradient(top, #f8f8f8, #bebebe);
-    background: url(../images/eventMap.png) left center no-repeat,-ms-linear-gradient(top, #f8f8f8, #bebebe);
-    background: url(../images/eventMap.png) left center no-repeat, -o-linear-gradient(top, #f8f8f8, #bebebe);
-}
-
-#groupByDateButton.true { 
-   	background: #cbcbcb url(../images/eventGroup.png) left center no-repeat !important;
-	background: url(../images/eventGroup.png) left center no-repeat, -webkit-gradient(linear, left top, left bottom, from(#a8a8a8), color-stop(0.15, #c6c6c6), to(#d8d8d8))  !important;
-	background: url(../images/eventGroup.png) left center no-repeat, -webkit-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee)  !important;
-    background:url(../images/eventGroup.png) left center no-repeat,  -moz-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-    background: url(../images/eventGroup.png) left center no-repeat, -ms-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-    background: url(../images/eventGroup.png) left center no-repeat, -o-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee) !important;
-}
-
-#groupByDateButton:active, #groupByDateButton:hover {
-   	background: #e0e0e0 url(../images/eventGroup.png) left center no-repeat;
-	background: url(../images/eventGroup.png) left center no-repeat, -webkit-linear-gradient(top, #f8f8f8, #bebebe);
-	background: url(../images/eventGroup.png) left center no-repeat, -moz-linear-gradient(top, #f8f8f8, #bebebe);
-    background: url(../images/eventGroup.png) left center no-repeat,-ms-linear-gradient(top, #f8f8f8, #bebebe);
-    background: url(../images/eventGroup.png) left center no-repeat, -o-linear-gradient(top, #f8f8f8, #bebebe);
-}
-
-#listButton.true { 
-	background:#cbcbcb  url(../images/eventList.png) left center no-repeat  !important;
-	background:url(../images/eventList.png) left center no-repeat, -webkit-gradient(linear, left top, left bottom, from(#a8a8a8), color-stop(0.15, #c6c6c6), to(#d8d8d8))  !important;
-	background: url(../images/eventList.png) left center no-repeat, -webkit-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee)  !important;
-    background:url(../images/eventList.png) left center no-repeat,  -moz-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee)  !important;
-    background: url(../images/eventList.png) left center no-repeat, -ms-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee)  !important;
-    background: url(../images/eventList.png) left center no-repeat, -o-linear-gradient(top, #a8a8a8, #c6c6c6 15%, #eeeeee)  !important;
-}
-
-#listButton:hover, #listButton:active {
-	background:#e0e0e0  url(../images/eventList.png) left center no-repeat;
-	background: url(../images/eventList.png) left center no-repeat, -webkit-linear-gradient(top, #f8f8f8, #bebebe);
-	background: url(../images/eventList.png) left center no-repeat, -moz-linear-gradient(top, #f8f8f8, #bebebe);
-    background: url(../images/eventList.png) left center no-repeat,-ms-linear-gradient(top, #f8f8f8, #bebebe);
-    background: url(../images/eventList.png) left center no-repeat, -o-linear-gradient(top, #f8f8f8, #bebebe);
-} 
-
 .buttonBar { 
     float: right; /* this should not be part of this style...style this in containing element */
 }
 
 .buttonBar .button { 
-    padding-left: 25px;
-    padding-right: 10px;
+    padding: 0 10px 0 5px;
+}
+
+.buttonBar a img {
+    padding-right: 5px;
 }
 
 .buttonBar a {
@@ -2146,7 +2074,8 @@ div.unitOfMeasureName {
  	background:-webkit-linear-gradient(top, #f8f8f8, #bebebe);
 	background:-moz-linear-gradient(top, #f8f8f8, #bebebe);
     background:-ms-linear-gradient(top, #f8f8f8, #bebebe);
-    background:-o-linear-gradient(top, #f8f8f8, #bebebe);	
+    background:-o-linear-gradient(top, #f8f8f8, #bebebe);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ececec', endColorstr='#dadada',GradientType=0 );
 }
 
 .buttonBar a.button:hover {
