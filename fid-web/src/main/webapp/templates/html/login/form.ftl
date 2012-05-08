@@ -1,6 +1,7 @@
 <title>${(securityGuard.primaryOrg.displayName?html)!} <@s.text name="title.sign_in"/></title>
 <head>
     <@n4.includeStyle href="pageStyles/login" />
+    <@n4.includeScript src="jquery/watermark/jquery.watermark.js"/>
 </head>
 <div id="mainContent" class="login-page">
 	<div class="titleBlock">
@@ -31,6 +32,11 @@
 </div>
 
 <script>
-    document.observe("dom:loaded", function() { $('userName').focus(); });
+    jQuery('#password').watermark('password');
+    jQuery('#userName').watermark('username');
+
+    document.observe("dom:loaded", function() {
+        $('userName').focus();
+    });
 </script>
 

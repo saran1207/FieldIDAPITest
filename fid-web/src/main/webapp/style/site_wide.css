@@ -286,3 +286,48 @@ em {
     background: #fafad2;
     color : #0000ff;
 }
+
+
+
+
+/*
+ default style for Watermarked text fields.  note that is possible to configure components to use other css class.
+
+  arrghh : see http://code.google.com/p/jquery-watermark/#Watermark_only_appears_in_gray_text for explanation
+  lots of duplicate styling here.  this is because the browser will invalidate the class if i doesn't recognize an item.
+  i.e. if you have a class definition =>    input::-webkit-input-placeholder, input:-moz-placeholder { ...
+      a moz browser will barf after not recognizing the -webkit stuff and skip it altogether.
+  CAVEAT : make sure you update them all if you make changes to one!
+*/
+
+input::-webkit-input-placeholder {
+    color: #bbb;
+    padding-left:25px;
+    font-style:italic;
+    background-size: 22px 22px;
+    background-repeat: no-repeat;
+}
+
+
+input:-moz-placeholder {
+    color: #bbb;
+    padding-left:25px;
+    font-style:italic;
+    background-size: 22px 22px;
+    background-repeat: no-repeat;
+}
+
+
+.watermark {
+    color: #bbb !important;
+    background-size: 20px 20px !important;
+    background-repeat: no-repeat !important;
+}
+
+
+
+
+
+
+
+
