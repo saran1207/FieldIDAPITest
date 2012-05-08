@@ -33,7 +33,12 @@
     width:50%;
 }
 
-#pageFooter .poweredBy {
+#pageFooter .logo {
+    float: right;
+    margin-right:15%;
+}
+
+#pageFooter #sslCert {
     float: left;
 }
 
@@ -106,5 +111,45 @@
     margin-right:20px;
     padding-left:40px;
     padding-right:40px;
+
+
     width:100px;
+    float:left;
 }
+
+.submit:hover {
+    background: #4C8FFC;
+    background: -moz-linear-gradient(top, #4D90FE 0%, #357AE8 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4D90FE), color-stop(100%, #357AE8));
+    background: -webkit-linear-gradient(top, #4D90FE 0%, #357AE8 100%);
+    background: -o-linear-gradient(top, #4D90FE 0%, #357AE8 100%);
+    background: -ms-linear-gradient(top, #4D90FE 0%, #357AE8 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#4D90FE', endColorstr = '#357AE8', GradientType = 0);
+    background: linear-gradient(top, #4D90FE 0%, #357AE8 100%);
+    border: 1px solid #5377ff;
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
+    color: #FFFFFF;
+    text-shadow: 0 -1px 1px rgba(0, 0, 0, .33);
+}
+
+.submit:active {
+    background: #4C8FFC;
+    background: -moz-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #357AE8), color-stop(100%, #4D90FE));
+    background: -webkit-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    background: -o-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    background: -ms-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#357AE8', endColorstr = '#4D90FE', GradientType = 0);
+    background: linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+}
+
+.request {
+    float:left;
+    color:#999;
+    margin-left:-13px;
+    padding: 12px 0;
+}
+
+.request a { padding-left:5px; }

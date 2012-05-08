@@ -22,9 +22,15 @@
 		<div class="oneLine remember-me">
 			<span class="fieldHolder"><@s.checkbox name="signIn.rememberMe" theme="fieldidSimple" /><@s.text name="label.rememberme"/></span>
 		</div>	
-		
+
 		<div class="actions" id="normalActions_container"> 
 			<@s.submit cssClass="submit" key="label.sign_in" id="signInButton"/>
+            <#if userLimitService.readOnlyUsersEnabled>
+                <div class="request"><@s.text name="label.or"/><a href="<@s.url action="registerUser"/>"><span><@s.text name="label.requestanaccount"/></span></a></div>
+            </#if>
+            <#if securityGuard.plansAndPricingAvailable>
+                <div class="request"><@s.text name="label.or"/><a href="${externalPlansAndPricingUrl}"><span><@s.text name="label.plans_and_pricing"/></span></a></div>
+            </#if>
 		</div>
 						
 	</@s.form>
