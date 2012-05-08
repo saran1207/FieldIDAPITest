@@ -176,7 +176,7 @@
  *  panel on the left hand side with Filters & Columns 
  *  it is the meat of the left-menu panel.
 */
- .search-config .submit {
+ .search-config .bottom-panel {
     position:fixed;
     bottom:10px;
     left:13px;
@@ -201,10 +201,15 @@
 	display:inline-block;
 }
 
-.search-config .submit a {
-    margin-left:10px;
+
+.blue-submit {
+    text-decoration: none;
+    padding:5px 0px;
+    width:100px;
     margin-top:7px;
+    text-align: center;
 }
+
 
 /**
  COLUMNS
@@ -338,60 +343,7 @@
 
 
 
-/* 
- SEARCH
-    used for the search button at top of filters/columns panel
-*/
-.search-config .submit .mattButton {
-    background: #4C8FFC;
-    background: -moz-linear-gradient(top, #4C8FFC 0%, #4787ED 100%);
-    background: -webkit-gradient(linear, left 4 C8FFC, left bottom, color-stop(0%, #4C8FFC), color-stop(100%, #4787ED));
-    background: -webkit-linear-gradient(top, #4C8FFC 0%, #4787ED 100%);
-    background: -o-linear-gradient(top, #4C8FFC 0%, #4787ED 100%);
-    background: -ms-linear-gradient(top, #4C8FFC 0%, #4787ED 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#4C8FFC', endColorstr = '#4787ED', GradientType = 0);
-    background: linear-gradient(top, #4C8FFC 0%, #4787ED 100%);
-    border: 1px solid #333;
-    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
-    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
-    color: #FFFFFF;
-    text-shadow: 0 -1px 1px rgba(0, 0, 0, .33);
-    margin-right:20px;
-    float:right;
-    padding-left:40px;
-    padding-right:40px;
-}
-
-.search-config .submit .mattButton:hover {
-    background: #4C8FFC;
-    background: -moz-linear-gradient(top, #4D90FE 0%, #357AE8 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4D90FE), color-stop(100%, #357AE8));
-    background: -webkit-linear-gradient(top, #4D90FE 0%, #357AE8 100%);
-    background: -o-linear-gradient(top, #4D90FE 0%, #357AE8 100%);
-    background: -ms-linear-gradient(top, #4D90FE 0%, #357AE8 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#4D90FE', endColorstr = '#357AE8', GradientType = 0);
-    background: linear-gradient(top, #4D90FE 0%, #357AE8 100%);
-    border: 1px solid #138E00;
-    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
-    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
-    color: #FFFFFF;
-    text-shadow: 0 -1px 1px rgba(0, 0, 0, .33);
-}
-
-.search-config .submit .mattButton:active {
-    background: #4C8FFC;
-    background: -moz-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #357AE8), color-stop(100%, #4D90FE));
-    background: -webkit-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
-    background: -o-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
-    background: -ms-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#357AE8', endColorstr = '#4D90FE', GradientType = 0);
-    background: linear-gradient(top, #357AE8 0%, #4D90FE 100%);
-}
-
-/** 
+/**
  * for modal windows used only in this page.
  */
 .wicket-modal {

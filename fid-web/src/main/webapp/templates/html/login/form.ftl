@@ -24,7 +24,7 @@
 		</div>	
 
 		<div class="actions" id="normalActions_container"> 
-			<@s.submit cssClass="submit" key="label.sign_in" id="signInButton"/>
+			<@s.submit cssClass="blue-submit" key="label.sign_in" id="signInButton"/>
             <#if userLimitService.readOnlyUsersEnabled>
                 <div class="request"><@s.text name="label.or"/><a href="<@s.url action="registerUser"/>"><span><@s.text name="label.requestanaccount"/></span></a></div>
             </#if>
