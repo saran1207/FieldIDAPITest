@@ -10,11 +10,14 @@
 	<@s.form action="logIntoSystem" theme="fieldid" cssClass="minForm login-form" id="signInForm">
 		<#include "/templates/html/common/_formErrors.ftl" />
 		<@s.hidden name="signIn.normalLogin" id="normalLogin"/>
-		<div id="normal_container login-input">
+        <div id="normal_container" class="login-input">
 			<@s.textfield name="signIn.userName" id="userName"/>
-			<@s.password name="signIn.password" id="password"/>
-		</div>
-		
+			<@s.password name="signIn.password" id="password"></@s.password>
+            <div class="login-help">
+                <a href="<@s.url action="forgotPassword"/>"><@s.text name="link.emailpassword"/></a>
+            </div>
+        </div>
+
 		<div class="oneLine remember-me">
 			<span class="fieldHolder"><@s.checkbox name="signIn.rememberMe" theme="fieldidSimple" /><@s.text name="label.rememberme"/></span>
 		</div>	

@@ -4,33 +4,15 @@
     border:none;
 }
 
-.brandedContainer #mainContent {
-    width:75%;
+#pageContent .login-page {
+    width:85%;
     float:none;
-}
-
-#mainContent .login-page {
-    width:60%;
+    box-shadow: 2px 2px 6px 1px #ccc;
+    height:220px;
+    background:#f8f8f8;
     margin-left:auto;
     margin-right:auto;
-}
-
-
-
-#companyLogo, #systemLogo {
-    float: left;
-    padding-left: 20px;
-    width: 215px;
-    margin-top: 5px;
-}
-
-#pageFooter {
-    margin:0 0 0 10%;
-    float:left;
-}
-
-#pageFooter .poweredBy {
-    float: left;
+    padding:30px 0 60px 0;
 }
 
 #pageHeader {
@@ -40,47 +22,70 @@
     height:75px;
 }
 
-.remember-me .fieldHolder{
-    font-size:1em;
-    padding:5px;
+#pageFooter {
+    /*page is 85%, ha */
+    margin:0 0 0 7.5%;
+    float:left;
 }
 
-#pageContent .login-page {
-    box-shadow: 2px 2px 6px 1px #ccc;
-    height:220px;
-    background:#f8f8f8;
-    margin-left:auto;
-    margin-right:auto;
-}
-
-#password.passwordBox, #userName.textbox {
-    width:100%;
-    padding-left:10px;
-    padding-right:10px;
-    border:1px solid #ddd;
-    margin-top:5px;
-}
-
-.login-form {
-    margin-left:25%;
-    width:50%;
-}
-
-.login-page .titleBlock { 
+.login-page .titleBlock {
     text-align: center;
     font-size:19px;
     padding:10px 0;
     margin-bottom:0;
 }
 
-.login-form .login-input {
-    width:75%;
-    margin-left:auto;
-    margin-right:auto;
+.login-form {
+    margin-left:30%;
+    width:50%;
+}
+
+#pageFooter .poweredBy {
+    float: left;
+}
+
+.remember-me {
+    padding:10px 0;
+}
+.remember-me .fieldHolder{
+    font-size:1em;
+    padding:5px;
+
+}
+
+
+.login-input a {
+    color:#888;
+    font-size:12px;
+}
+
+.actions {
+    margin-top:15px;
 }
 
 .actions input {
-    margin-top:15px;
+    margin-top:5px;
+}
+
+.login-help {
+    margin-left:88%;
+    width:150px;
+    margin-top:-20px;
+    height:20px;
+}
+
+#companyLogo, #systemLogo {
+    float: left;
+    padding-left: 20px;
+    width: 215px;
+    margin-top: 5px;
+}
+
+#password.passwordBox, #userName.textbox {
+    width:80%;
+    padding:10px;
+    border:1px solid #ddd;
+    margin-top:5px;
 }
 
 .submit {
