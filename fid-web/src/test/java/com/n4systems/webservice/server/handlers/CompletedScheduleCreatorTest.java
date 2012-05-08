@@ -1,25 +1,24 @@
 package com.n4systems.webservice.server.handlers;
 
-import static com.n4systems.model.builders.EventBuilder.anEvent;
-import static com.n4systems.model.builders.JobBuilder.*;
-import static org.junit.Assert.assertEquals;
-
-import java.util.Calendar;
-import java.util.Date;
-
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.Project;
 import com.n4systems.model.event.EventByMobileGuidLoader;
 import com.n4systems.model.eventschedule.EventScheduleSaver;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.model.Project;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.server.InspectionNotFoundException;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import static com.n4systems.model.builders.EventBuilder.anEvent;
+import static com.n4systems.model.builders.JobBuilder.aJob;
+import static org.junit.Assert.assertEquals;
 
 public class CompletedScheduleCreatorTest {
 
@@ -28,8 +27,9 @@ public class CompletedScheduleCreatorTest {
 
     @Before
     public void setUp() {
-        EventSchedule placeholderFor = EventSchedule.createPlaceholderFor(event);
-        placeholderFor.completed(event);
+        EventSchedule eventSchedule = new EventSchedule();
+        eventSchedule.copyDataFrom(event);
+        eventSchedule.completed(event);
     }
 
     @Test

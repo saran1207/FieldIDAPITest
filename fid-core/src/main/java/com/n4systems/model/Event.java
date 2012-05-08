@@ -1,29 +1,5 @@
 package com.n4systems.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.IndexColumn;
-
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.HasOwner;
@@ -40,6 +16,13 @@ import com.n4systems.model.user.User;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
+import org.hibernate.annotations.IndexColumn;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 @Entity
 @Table(name = "masterevents")
@@ -54,10 +37,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	}
 	
 	private Location advancedLocation = new Location();
-	
-	@Column(nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
 	
 	@Column(nullable=false)
 	private boolean printable;
@@ -89,9 +68,9 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	@Enumerated(EnumType.STRING)
 	private EntityState state = EntityState.ACTIVE;
 	
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="schedule_id")
-	private EventSchedule schedule;
+	private EventSchedule schedule = new EventSchedule();
 	
 	@Embedded 
 	private GpsLocation gpsLocation = new GpsLocation();
@@ -107,16 +86,16 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
 	@AllowSafetyNetworkAccess
 	public Date getDate() {
-		return date;
+		return getSchedule().getCompletedDate();
 	}
 	
 	@AllowSafetyNetworkAccess
 	public Date getDateInUserTime(TimeZone timeZone) {
-		return DateHelper.convertToUserTimeZone(date, timeZone);
+		return DateHelper.convertToUserTimeZone(getDate(), timeZone);
 	}
 
 	public void setDate(Date date) {
-		this.date = date;
+		this.getSchedule().setCompletedDate(date);
 	}
 
 	@AllowSafetyNetworkAccess
@@ -190,7 +169,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		if( event == null ) {
 			return -1;
 		}
-		int compare = date.compareTo( event.getDate() );
+		int compare = getDate().compareTo( event.getDate() );
 		
 		return ( compare == 0 ) ? getCreated().compareTo( event.getCreated() ) : compare;
 	}
@@ -294,7 +273,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	    return	super.toString() +
 	    		"\nAssigned To: " + assignedTo +
 	    		"\nState: " + state + 
-	    		"\nDate: " + date +
+	    		"\nDate: " + getDate() +
 	    		"\nOwner: " + getOwner() +
 	    		"\nBook: " + getBook() +
 	    		"\nPerformed By: " + getPerformedBy() + 
@@ -369,8 +348,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	}
 
     private void fillInPlaceholderScheduleIfAbsent() {
-        if (schedule == null) {
-            schedule = EventSchedule.createPlaceholderFor(this);
+        if (schedule.getId() == null) {
+            schedule.copyDataFrom(this);
             schedule.completed(this);
         }
     }

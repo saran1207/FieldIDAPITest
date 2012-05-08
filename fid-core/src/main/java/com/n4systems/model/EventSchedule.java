@@ -342,17 +342,16 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
         this.nextDate = new PlainDate(date);
     }
 
-    public static EventSchedule createPlaceholderFor(Event event) {
-        EventSchedule schedule = new EventSchedule();
-        schedule.setAsset(event.getAsset());
-        schedule.setEventType(event.getType());
-        schedule.setTenant(event.getTenant());
-        schedule.setCreated(event.getCreated());
-        schedule.setCreatedBy(event.getCreatedBy());
-        schedule.setModifiedBy(event.getModifiedBy());
-        schedule.setModified(event.getModified());
+    public EventSchedule copyDataFrom(Event event) {
+        setAsset(event.getAsset());
+        setEventType(event.getType());
+        setTenant(event.getTenant());
+        setCreated(event.getCreated());
+        setCreatedBy(event.getCreatedBy());
+        setModifiedBy(event.getModifiedBy());
+        setModified(event.getModified());
 
-        return schedule;
+        return this;
     }
 
     public Date getRelevantDate() {

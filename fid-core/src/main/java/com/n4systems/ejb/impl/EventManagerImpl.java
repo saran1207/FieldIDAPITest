@@ -148,7 +148,7 @@ public class EventManagerImpl implements EventManager {
 		QueryBuilder<Event> queryBuilder = new QueryBuilder<Event>(Event.class, filter);
 		queryBuilder.setSimpleSelect();
 		queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
-		queryBuilder.addWhere(Comparator.GE, "beginingDate", "date", datePerformedRangeStart).addWhere(Comparator.LE, "endingDate", "date", datePerformedRangeEnd); 
+		queryBuilder.addWhere(Comparator.GE, "beginingDate", "schedule.completedDate", datePerformedRangeStart).addWhere(Comparator.LE, "endingDate", "schedule.completedDate", datePerformedRangeEnd);
 		queryBuilder.addSimpleWhere("asset", asset);
 
 		List<Event> events;

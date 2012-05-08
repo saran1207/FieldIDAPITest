@@ -39,8 +39,8 @@ public class EventService extends FieldIdPersistenceService {
     @Transactional(readOnly = true)	
     public List<Event> getEventsByType(Long eventTypeId, Date from, Date to) {
 		QueryBuilder<Event> builder = getEventsByTypeBuilder(eventTypeId);
-		builder.addWhere(Comparator.GE, "fromDate", "date", from).addWhere(Comparator.LE, "toDate", "date", to);
-		builder.setOrder("date", false);
+		builder.addWhere(Comparator.GE, "fromDate", "schedule.completedDate", from).addWhere(Comparator.LE, "toDate", "schedule.completedDate", to);
+		builder.setOrder("schedule.completedDate", false);
 		return persistenceService.findAll(builder);
 	}
     
@@ -48,7 +48,7 @@ public class EventService extends FieldIdPersistenceService {
     	checkArgument(eventTypeId!=null, "you must specify an event type id to get a list of events.");
     	QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);   
     	builder.addSimpleWhere("type.id", eventTypeId);
-    	builder.addOrder("date");
+    	builder.addOrder("schedule.completedDate");
     	return builder;
     }
     
@@ -138,17 +138,17 @@ public class EventService extends FieldIdPersistenceService {
 		
 		NewObjectSelect select = new NewObjectSelect(CompletedEventsReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("date", granularity, timeZone));
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("schedule.completedDate", granularity, timeZone));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		builder.addWhere(whereFromTo(fromDate, toDate, "date", timeZone));
-		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"date"));		
+		builder.addWhere(whereFromTo(fromDate, toDate, "schedule.completedDate", timeZone));
+		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"schedule.completedDate"));
 		builder.applyFilter(new OwnerAndDownFilter(org));
 		if (status!=null) { 
 			builder.addSimpleWhere("status", status);
 		}
-		builder.addOrder("date");
+		builder.addOrder("schedule.completedDate");
 		
 		return persistenceService.findAll(builder);	
 	}

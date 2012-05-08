@@ -95,7 +95,8 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 		EventSchedule schedule = event.getSchedule();
 
 		if (schedule.wasScheduled()) {
-            EventSchedule newSchedule = EventSchedule.createPlaceholderFor(event);
+            EventSchedule newSchedule = new EventSchedule();
+            newSchedule.copyDataFrom(event);
             newSchedule.setRetired(true);
             persistenceManager.save(newSchedule);
 

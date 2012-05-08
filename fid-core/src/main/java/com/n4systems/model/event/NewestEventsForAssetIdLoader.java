@@ -24,7 +24,7 @@ public class NewestEventsForAssetIdLoader extends ListLoader<Event> {
 		Asset asset = em.find(Asset.class, assetId);
 		
 		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, filter);
-		query.addSimpleWhere("date", asset.getLastEventDate());
+		query.addSimpleWhere("schedule.completedDate", asset.getLastEventDate());
 		query.addSimpleWhere("asset", asset);
 				
 		return query.getResultList(em);

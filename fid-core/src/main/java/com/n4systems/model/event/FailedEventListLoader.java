@@ -35,13 +35,13 @@ public class FailedEventListLoader extends ListLoader<Event>{
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, filter);
 		
 		builder.addWhere(WhereClauseFactory.create("status", Status.FAIL));
-		builder.addWhere(Comparator.GE, "date", "date", getFromDate());
+		builder.addWhere(Comparator.GE, "date", "schedule.completedDate", getFromDate());
 
 		if(setting != null) {
 			applyNotificationFilters(builder);
 		}
 		
-		builder.addOrder("date");
+		builder.addOrder("schedule.completedDate");
 		builder.getPostFetchPaths().addAll(Arrays.asList(Event.ALL_FIELD_PATHS));
 		return builder.getResultList(em);
 	}

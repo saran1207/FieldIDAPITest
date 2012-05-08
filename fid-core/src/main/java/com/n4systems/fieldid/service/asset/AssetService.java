@@ -483,7 +483,7 @@ public class AssetService extends FieldIdPersistenceService {
         }
 
         if (!count)
-            query += " ORDER BY event.date DESC, event.created ASC";
+            query += " ORDER BY event.schedule.completedDate DESC, event.created ASC";
 
         Query eventQuery = persistenceService.createQuery(query);
 

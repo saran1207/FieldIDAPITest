@@ -269,7 +269,8 @@ public class EventCreationService extends FieldIdPersistenceService {
         if (scheduleId == -1) {
             // This means the user selected 'create new schedule'
             // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
-            eventSchedule = EventSchedule.createPlaceholderFor(event);
+            eventSchedule = new EventSchedule();
+            eventSchedule.copyDataFrom(event);
             eventSchedule.setNextDate(event.getDate());
             persistenceService.save(eventSchedule);
         } else if (scheduleId > 0) {

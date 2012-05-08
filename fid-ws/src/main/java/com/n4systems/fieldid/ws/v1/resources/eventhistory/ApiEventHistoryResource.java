@@ -18,7 +18,7 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, Event>
 	public List<ApiEventHistory> findAllEventHistory(String assetId) {
 		QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
 		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
-		builder.addOrder("date", false);
+		builder.addOrder("schedule.completedDate", false);
 
 		List<Event> events = persistenceService.findAll(builder);
 		List<ApiEventHistory> apiEventHistory = convertAllEntitiesToApiModels(events);

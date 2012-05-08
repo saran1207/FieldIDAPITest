@@ -34,8 +34,8 @@ public class SmartFailedEventListLoader extends FailedEventListLoader {
 		statusGroup.addClause(WhereClauseFactory.create(Comparator.EQ, "passStatus", "status", Status.PASS, null, ChainOp.OR));		
 		builder.addWhere(statusGroup);		
 		
-		builder.addWhere(Comparator.GE, "date", "date", getFromDate());
-		builder.addOrder("date");
+		builder.addWhere(Comparator.GE, "date", "schedule.completedDate", getFromDate());
+		builder.addOrder("schedule.completedDate");
 
 		if(setting != null) {
 			applyNotificationFilters(builder);

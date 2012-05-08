@@ -241,8 +241,8 @@ public class SmartFailedEventListLoaderTest {
 		Date fromDate = DateHelper.increment(clock.currentTime(), DateHelper.DAY, -1);
 		List<String> postFetchPaths = Lists.newArrayList();
 		
-		expect(mockQueryBuilder.addOrder("date")).andReturn(mockQueryBuilder);
-		expect(mockQueryBuilder.addWhere(Comparator.GE, "date", "date", fromDate)).andReturn(mockQueryBuilder);		
+		expect(mockQueryBuilder.addOrder("schedule.completedDate")).andReturn(mockQueryBuilder);
+		expect(mockQueryBuilder.addWhere(Comparator.GE, "date", "schedule.completedDate", fromDate)).andReturn(mockQueryBuilder);
 		expect(mockQueryBuilder.addWhere(anyObject(WhereParameterGroup.class))).andReturn(mockQueryBuilder);
 		expect(mockQueryBuilder.getResultList(mockEntityManager)).andReturn(results);
 		expect(mockQueryBuilder.getPostFetchPaths()).andReturn(postFetchPaths);
