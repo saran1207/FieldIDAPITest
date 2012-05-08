@@ -16,7 +16,7 @@ public class PasswordResetConfirmPage extends FieldIDPage {
     }
 
     public LoginPage clickReturnToSignIn() {
-        selenium.click("//input[@value='Return to Sign In']");
+        selenium.click("//input[@value='Return to Login']");
         return new LoginPage(selenium);
     }
 

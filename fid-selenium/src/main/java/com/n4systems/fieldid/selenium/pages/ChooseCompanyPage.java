@@ -13,7 +13,7 @@ public class ChooseCompanyPage extends FieldIDPage {
 
     public void verifyChooseCompany() {
         assertTrue(selenium.isElementPresent("//input[@id='companyId']"));
-        assertTrue(selenium.isElementPresent("//input[@value='Sign In']"));
+        assertTrue(selenium.isElementPresent("//input[@value='Login']"));
     }
 
     public void enterCompanyId(String companyID) {

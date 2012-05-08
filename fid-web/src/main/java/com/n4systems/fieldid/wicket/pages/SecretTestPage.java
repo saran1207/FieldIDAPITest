@@ -1,17 +1,16 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.AutoCompleteSearch;
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.Component;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
-import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
-import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
 import java.util.ArrayList;
@@ -21,32 +20,24 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 
     private BaseOrg org;
     private Asset asset;
+    private String text;
+    private String text2;
+    private String password;
+
+    private int id=0;
     
     public SecretTestPage() {
-        List<ITab> tabs = new ArrayList<ITab>();
-        tabs.add(new TestTab("AutoComplete OrgPicker") {
-            @Override protected Component getTestComponent(String id) {
-                return new AutoCompleteOrgPicker(id, new PropertyModel<BaseOrg>(SecretTestPage.this, "org"));
-            }
-        });
 
+        List<Component> components = new ArrayList<Component>();
+        Form form = new Form("form", new CompoundPropertyModel(this));
+        
+        form.add(new AutoCompleteOrgPicker("autocompleteorg", new PropertyModel<BaseOrg>(this, "org")));
+        form.add(new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "asset")));
+        form.add(new TextField("watermark", new PropertyModel<String>(this, "text")).add(new Watermark("enter a value")));
+        form.add(new TextField("watermark2", new PropertyModel<String>(this, "text2")).add(new Watermark("enter another value")));
+        form.add(new PasswordTextField("password", new PropertyModel<String>(this, "password")).add(new Watermark("enter password")));
 
-        tabs.add(new TestTab("AutoComplete Asset Search") {
-            @Override protected Component getTestComponent(String id) {
-                return new AutoCompleteSearch(id, new PropertyModel<Asset>(SecretTestPage.this, "asset"));
-            }
-        });
-
-
-        add(new AjaxTabbedPanel("tabs", tabs));
-    }
-
-    public BaseOrg getOrg() {
-        return org;
-    }
-    
-    public void setOrg(BaseOrg org) {
-        this.org = org;
+        add(form);
     }
 
     @Override
@@ -56,23 +47,4 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         response.renderCSSReference("style/component/tabbedPanel.css");
     }
 
-    abstract class TestTab extends AbstractTab {
-        
-        private PropertyModel<String> testModel;
-        
-        public TestTab(String title) {
-            super(new Model<String>(title));
-        }
-        
-        @Override public Panel getPanel(String panelId) {
-                return new AjaxLazyLoadPanel(panelId) {
-                    @Override public Component getLazyLoadComponent(String id) {
-                        return getTestComponent(id);
-                    }
-                };
-            }
-
-        protected abstract Component getTestComponent(String id);
-
-    }
 }

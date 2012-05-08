@@ -11,7 +11,7 @@ public class ForgotPasswordPage extends FieldIDPage {
     }
 
     public LoginPage clickReturnToLogin() {
-        selenium.click("//a[.='Return to Sign In']");
+        selenium.click("//a[.='Return to Login']");
         return new LoginPage(selenium);
     }
 

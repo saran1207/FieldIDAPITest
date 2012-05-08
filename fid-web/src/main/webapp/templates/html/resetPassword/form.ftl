@@ -37,7 +37,7 @@
 		</div>
 
 		<div class="actions togglable" id="normalActions_container">
-			<@s.submit key="hbutton.save_new_password" id="signInButton"/> <@s.text name="label.or"/> <a href="<@s.url action="login"></@>"><@s.text name="label.cancel"/></a>
+			<@s.submit cssClass="mattBar" key="hbutton.save_new_password" id="signInButton"/> <@s.text name="label.or"/> <a href="<@s.url action="login"></@>"><@s.text name="label.cancel"/></a>
 		</div>
 
 	</@s.form>
