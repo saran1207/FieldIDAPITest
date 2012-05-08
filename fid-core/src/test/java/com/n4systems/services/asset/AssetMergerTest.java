@@ -121,7 +121,7 @@ public class AssetMergerTest {
 		
 				
         expect(mockEventManager.updateEvent((Event)eq(eventsOnLosingProduct.get(0)), eq(0L), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(eventsOnLosingProduct.get(0));
-		
+
 		mockArchiveOfLosingAsset();
 		
 		replayMocks();
@@ -220,18 +220,14 @@ public class AssetMergerTest {
 	@SuppressWarnings("unchecked")
 	private void mockEventLists(List<Event> events, List<Event> masterEvents) {
 		expect(mockPersistenceManager.findAll((QueryBuilder<Event>)anyObject())).andReturn(events);
+        long id = 1;
 		for (Event event : events) {
 			if (event.getSchedule() != null) {
-				expect(mockEventScheduleService.updateSchedule((EventSchedule)eq(event.getSchedule()))).andReturn(event.getSchedule());
+                event.getSchedule().setId(id++);
+				expect(mockEventScheduleService.updateSchedule(eq(event.getSchedule()))).andReturn(event.getSchedule());
 			}
 		}
 		expect(mockPersistenceManager.passThroughFindAll(contains("SELECT"), (Map<String,Object>)anyObject())).andReturn(new ArrayList<Object>(masterEvents));
-		
-		for (Event event : masterEvents) {
-			if (event.getSchedule() != null) {
-				expect(mockEventScheduleService.updateSchedule((EventSchedule)eq(event.getSchedule()))).andReturn(event.getSchedule());
-			}
-		}
 	}
 	
 	private void mockEmptyEventList() {
