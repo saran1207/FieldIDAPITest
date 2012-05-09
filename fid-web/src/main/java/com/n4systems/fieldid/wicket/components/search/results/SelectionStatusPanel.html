@@ -1,13 +1,10 @@
 <wicket:panel>
 
-    <span wicket:id="justSelectedPageContainer" class="clear">
-        <b><span wicket:id="total"/></b>
+    <span wicket:id="regularStateContainer">
+        <b><span wicket:id="currentySelectedItems"></span></b> of <b><span wicket:id="totalAvailableItems"></span></b> items in the results are selected. <br>
         <a wicket:id="selectAllLink">Select all <span wicket:id="totalAvailableItems"></span> items</a>
-    </span>
-
-    <span wicket:id="regularStateContainer" class="select-all">
-        <span wicket:id="currentySelectedItems"></span> of <span wicket:id="totalAvailableItems"></span> items in the results are selected.
         <a wicket:id="clearSelectionLink">Clear selection</a>
     </span>
+
 
 </wicket:panel>

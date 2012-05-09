@@ -6,6 +6,7 @@
 
 var fieldIdWidePage = (function() {
 
+    // use this to store state of which of columns/filters panel was shown.
     var lastShownPanel;
 
 	var init = function(showLeft) {
@@ -29,7 +30,7 @@ var fieldIdWidePage = (function() {
 	};
 
 	function showLeftPanel() {
-        $('#page').removeClass('without-left-panel').addClass('with-left-panel');
+//        $('#page').removeClass('without-left-panel').addClass('with-left-panel');
         // restore state of toggle button.
         if (lastShownPanel) {
             lastShownPanel.addClass('mattButtonPressed');

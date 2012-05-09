@@ -29,14 +29,10 @@ public class SelectionStatusPanel extends Panel {
 
         setOutputMarkupPlaceholderTag(true);
 
-        WebMarkupContainer justSelectedPageContainer = new WebMarkupContainer("justSelectedPageContainer");
-
         WebMarkupContainer regularStateContainer = new WebMarkupContainer("regularStateContainer");
 
         regularStateContainer.add(new FlatLabel("currentySelectedItems", new PropertyModel<Integer>(selection, "numSelectedIds")));
         regularStateContainer.add(new FlatLabel("totalAvailableItems", new PropertyModel<Integer>(this, "totalRows")));
-
-        justSelectedPageContainer.add(new FlatLabel("total", new PropertyModel<String>(this, "totalRowsLabel")));
 
         AjaxLink clearSelectionLink = new AjaxLink("clearSelectionLink") {
             @Override
@@ -50,7 +46,7 @@ public class SelectionStatusPanel extends Panel {
         regularStateContainer.add(clearSelectionLink);
 
         AjaxLink selectAllLink = null;
-        justSelectedPageContainer.add(selectAllLink = new AjaxLink("selectAllLink") {
+        regularStateContainer.add(selectAllLink = new AjaxLink("selectAllLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 selection.clear();
@@ -67,7 +63,6 @@ public class SelectionStatusPanel extends Panel {
         selectAllLink.add(new FlatLabel("totalAvailableItems", new PropertyModel<Integer>(this, "totalRows")));
 
         add(regularStateContainer);
-        add(justSelectedPageContainer);
     }
 
     public Integer getTotalRows() {
