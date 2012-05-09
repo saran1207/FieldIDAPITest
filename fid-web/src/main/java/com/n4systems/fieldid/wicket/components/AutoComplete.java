@@ -28,6 +28,7 @@ import org.odlabs.wiquery.ui.autocomplete.*;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
 
     private boolean autoUpdate = false;
     protected String term = "";
-    private InnerOrgAutocompleteBehavior autocompleteBehavior;
+    private InnerAutocompleteBehavior autocompleteBehavior;
     private final Autocomplete<String> autocompleteField;
     private final HiddenField<String> autocompleteHidden;
     private IChoiceRenderer<? super T> choiceRenderer;
@@ -108,10 +109,8 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
             }
         };
         add(updateAjax);
-        add(autocompleteBehavior = new InnerOrgAutocompleteBehavior());
+        add(autocompleteBehavior = new InnerAutocompleteBehavior());
     }
-
-
 
     protected List<T> getChoices() {
         return getChoices(term);
@@ -140,8 +139,8 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     protected void onBeforeRenderAutocomplete(Autocomplete<?> autocomplete) {
         T defaultValue = AutoComplete.this.getModelObject();
         if (defaultValue != null) {
-            AutocompleteJson value = null;
-            value = newAutocompleteJson(defaultValue);
+            AutoCompleteResult value = null;
+            value = createAutocompleteJson(defaultValue, normalizeSearchTerm(term));
             autocomplete.setDefaultModelObject(value.getLabel());
             getAutocompleteHidden().setModelObject(value.getValueId());
         }
@@ -153,8 +152,11 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
 
     protected void clearCategories() {};
 
+    protected String normalizeSearchTerm(String term) {
+        return term;
+    }
 
-    private class InnerOrgAutocompleteBehavior extends AbstractAjaxBehavior {
+    private class InnerAutocompleteBehavior extends AbstractAjaxBehavior {
 
         public void onRequest() {
             term = this.getComponent().getRequest().getQueryParameters().getParameterValue("term").toString();
@@ -164,14 +166,14 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                 try {
                     JsonGenerator gen = new JsonFactory().createJsonGenerator(sw);
 
-                    AutocompleteJson value = null;
+                    Serializable value = null;
                     Integer index = 0;
                     List<Object> json = new ArrayList<Object>();
 
                     clearCategories();
                     List<T> choices = getChoices();
                     for (T obj : choices) {
-                        value = newAutocompleteJson(obj);
+                        value = createAutocompleteJson(obj, normalizeSearchTerm(term));
                         json.add(value);
                     }
 
@@ -309,7 +311,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
 
     protected abstract List<T> getChoices(String term);
 
-    protected abstract AutocompleteJson newAutocompleteJson(T asset);
+    protected abstract AutoCompleteResult createAutocompleteJson(T asset, String term);
 
 
 }

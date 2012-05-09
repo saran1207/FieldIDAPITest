@@ -63,7 +63,7 @@ var autoCompleter = (function() {
         var prefix = '';
         var suffix = '';
         var end = item.matchStart + item.matchCount;
-        if (item.matchStart>0) {
+        if (item.matchStart>=0) {
             prefix = item.label.substring(0, start);
             label = '<span class="matched">' + item.label.substring(item.matchStart,end) + '</span>';
             suffix = item.label.substring(end);

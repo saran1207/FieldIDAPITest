@@ -1,48 +1,34 @@
 package com.n4systems.fieldid.wicket.components;
 
-import com.n4systems.fieldid.service.org.OrgQuery;
-import com.n4systems.model.orgs.BaseOrg;
 import org.apache.commons.lang.StringUtils;
-import org.odlabs.wiquery.ui.autocomplete.AutocompleteJson;
 
-public class OrgAutocompleteJson extends AutocompleteJson {
+import java.io.Serializable;
 
+public class AutoCompleteResult implements Serializable {
+    
+    private String valueId;
+    private String label;
     private String desc;
     private Integer matchStart;
     private Integer matchCount;
     private String tooltip;
     private String descClass;
 
-    public OrgAutocompleteJson(String desc, String descClass) {
-        super("bogusId","");
-        this.desc = desc;
-        this.descClass = descClass;
-    }
-    
-    public OrgAutocompleteJson(String id, String name, String desc, String tooltip) {
-        super(id, name);
+    public AutoCompleteResult(String id, String label, String desc, String term, String tooltip) {
+        // BUG : i need to escape these strings.
+        // e.g. if label is "&hello" it will not render correctly.
+        this.valueId = id;
+        this.label = label;
         this.desc = desc;
         descClass = "category";
         this.tooltip = tooltip;
-    }
-    
-    public OrgAutocompleteJson(BaseOrg org, String term, String desc) {
-        super(org.getId()+"", org.getName());
-        this.desc = desc;
-        // properties used as rendering hints on javascript/client side.
-        descClass ="category";
         matchStart = calculateMatchStart(term);
         matchCount = calculateMatchCount(term);
-        tooltip = generateTooltip(org);
     }
-
-    private String generateTooltip(BaseOrg org) {
-        return org.getHierarchicalDisplayName();
-    }
-
+    
     private Integer calculateMatchStart(String term) {
         if (StringUtils.isNotBlank(term)) {
-            return getLabel().toLowerCase().indexOf(term);
+            return getLabel().toLowerCase().indexOf(term.toLowerCase());
         }
         return -1;
     }
@@ -69,6 +55,14 @@ public class OrgAutocompleteJson extends AutocompleteJson {
 
     public String getDesc() {
         return desc;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public String getValueId() {
+        return valueId;
     }
 }
 
