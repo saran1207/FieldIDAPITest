@@ -30,7 +30,7 @@ var fieldIdWidePage = (function() {
 	};
 
 	function showLeftPanel() {
-//        $('#page').removeClass('without-left-panel').addClass('with-left-panel');
+        $('#page').removeClass('without-left-panel').addClass('with-left-panel');
         // restore state of toggle button.
         if (lastShownPanel) {
             lastShownPanel.addClass('mattButtonPressed');
