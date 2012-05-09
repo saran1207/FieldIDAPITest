@@ -14,6 +14,9 @@ img {
 	display: none;
 }
 
+#wicketDebugBar {
+    z-index:9999;
+}
 
 .twoStateLink {
     padding-top: 10px;

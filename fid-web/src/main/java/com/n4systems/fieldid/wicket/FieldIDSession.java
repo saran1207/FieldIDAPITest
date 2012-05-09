@@ -17,37 +17,49 @@ import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
 import rfid.web.helper.SessionUser;
 
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.servlet.http.HttpSession;
-
 @SuppressWarnings({ "unchecked", "serial" })
 public class FieldIDSession extends WebSession {
 
-    private HttpSession session;
+    private transient HttpSession session;
     private ConcurrentHashMap<String, String> localizationCache = new ConcurrentHashMap<String,String>();
 
     public FieldIDSession(Request request) {
         super(request);
         this.session = ((ServletWebRequest)request).getContainerRequest().getSession(true);
     }
-  
+    
     @Deprecated // for testing only. 
     public FieldIDSession(Request request, User user) { 
     	this(request);
-    	session.setAttribute(WebSessionMap.KEY_SESSION_USER, new SessionUser(user));
-    	session.setAttribute(WebSessionMap.KEY_USER_SECURITY_GUARD, new SessionUserSecurityGuard(user));
-    	session.setAttribute(WebSessionMap.KEY_SECURITY_GUARD, new SerializableSecurityGuard(TenantBuilder.n4(), PrimaryOrgBuilder.aPrimaryOrg().build()));
+    	getHttpSession().setAttribute(WebSessionMap.KEY_SESSION_USER, new SessionUser(user));
+        getHttpSession().setAttribute(WebSessionMap.KEY_USER_SECURITY_GUARD, new SessionUserSecurityGuard(user));
+        getHttpSession().setAttribute(WebSessionMap.KEY_SECURITY_GUARD, new SerializableSecurityGuard(TenantBuilder.n4(), PrimaryOrgBuilder.aPrimaryOrg().build()));
     }
-    
+
+    @Override
+    public void detach() {
+        session = null;
+    }
+
+    private HttpSession getHttpSession() {
+        if (session == null) {
+            session = ((ServletWebRequest)RequestCycle.get().getRequest()).getContainerRequest().getSession(true);
+        }
+        return session;
+    }
+
     @Deprecated // for testing only.
-    public void setUser(User user) { 
-    	session.setAttribute(WebSessionMap.KEY_SESSION_USER, new SessionUser(user));
+    public void setUser(User user) {
+        getHttpSession().setAttribute(WebSessionMap.KEY_SESSION_USER, new SessionUser(user));
     }
 
 	public static FieldIDSession get() {
@@ -55,39 +67,39 @@ public class FieldIDSession extends WebSession {
     }
 
     public UserSecurityGuard getUserSecurityGuard() {
-        return (UserSecurityGuard) session.getAttribute(WebSessionMap.KEY_USER_SECURITY_GUARD);
+        return (UserSecurityGuard) getHttpSession().getAttribute(WebSessionMap.KEY_USER_SECURITY_GUARD);
     }
 
     public SystemSecurityGuard getSecurityGuard() {
-        return (SystemSecurityGuard) session.getAttribute(WebSessionMap.KEY_SECURITY_GUARD);
+        return (SystemSecurityGuard) getHttpSession().getAttribute(WebSessionMap.KEY_SECURITY_GUARD);
     }
 
     public SessionUser getSessionUser() {
-        return (SessionUser) session.getAttribute(WebSessionMap.KEY_SESSION_USER);
+        return (SessionUser) getHttpSession().getAttribute(WebSessionMap.KEY_SESSION_USER);
     }
 
     public Map<String, String> getTenantLangOverrides() {
-        return (Map<String, String>) session.getAttribute(WebSessionMap.KEY_TENANT_LANG_OVERRIDES);
+        return (Map<String, String>) getHttpSession().getAttribute(WebSessionMap.KEY_TENANT_LANG_OVERRIDES);
     }
 
     public void storeInfoMessageForStruts(String message) {
-        session.setAttribute(FlashScopeMarshaller.FLASH_MESSAGES, Arrays.asList(message));
+        getHttpSession().setAttribute(FlashScopeMarshaller.FLASH_MESSAGES, Arrays.asList(message));
     }
 
     public void storeErrorMessageForStruts(String message) {
-        session.setAttribute(FlashScopeMarshaller.FLASH_ERRORS, Arrays.asList(message));
+        getHttpSession().setAttribute(FlashScopeMarshaller.FLASH_ERRORS, Arrays.asList(message));
     }
 
 	public Collection<String> getFlashMessages() {
-        return (Collection<String>) session.getAttribute(FlashScopeMarshaller.FLASH_MESSAGES);
+        return (Collection<String>) getHttpSession().getAttribute(FlashScopeMarshaller.FLASH_MESSAGES);
     }
 
     public Collection<String> getFlashErrors() {
-        return (Collection<String>) session.getAttribute(FlashScopeMarshaller.FLASH_ERRORS);
+        return (Collection<String>) getHttpSession().getAttribute(FlashScopeMarshaller.FLASH_ERRORS);
     }
 
     public SearchContainer getSearchContainer(String key) {
-        return (SearchContainer) session.getAttribute(key);
+        return (SearchContainer) getHttpSession().getAttribute(key);
     }
 
     public Tenant getTenant() {
@@ -107,6 +119,7 @@ public class FieldIDSession extends WebSession {
     }
     
     public boolean isAdminConsoleAuthenticated() {
-    	return (session.getAttribute(Constants.SESSION_USER) != null);
+    	return (getHttpSession().getAttribute(Constants.SESSION_USER) != null);
     }
+
 }

@@ -22,6 +22,7 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 import org.apache.wicket.Component;
+import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
@@ -73,6 +74,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     public FieldIDFrontEndPage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
         setConfigurationProvider(configurationProvider);
+        
+        add(new DebugBar("debugBar"));
 
         add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
         
