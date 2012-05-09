@@ -1,26 +1,27 @@
 /**
+ * usage notes : expects a json object= item {
+ *    label : the text for the item it
+ *    tooltip :
+ *    matchStart :
+ *    matchCount :
+ *    desc :
  */
 
-var autoCompleteOrgPicker = (function() {
+var autoCompleter = (function() {
 
     /*
      * public methods exposed.
      */
-    var init = function(id, extraWidth) {
+    var init = function(id) {
         $("#"+id).bind("autocompleteopen", function(event, ui) {
-/*
-            var menu = $(".ui-autocomplete.ui-menu");
-            var width = menu.width();
-            menu.width(width+extraWidth);
-*/
-            // customize our tooltips.
+            // customize our tooltips.  TODO refactor this out into separate behavior.
             $('.link').tipsy({gravity: 'e', fade:true, delayIn:150});
         });
 /*  attempt to give focus to combo box after selection...doesn't seem to work.
-        $("#"+id).bind("autocompleteselect", function(event, ui) {
+*/
+        $("#"+id).bind("autocompleteclose", function(event, ui) {
             $("#"+id).focus();
         });
-*/
 
     };
 
@@ -62,7 +63,7 @@ var autoCompleteOrgPicker = (function() {
         var prefix = '';
         var suffix = '';
         var end = item.matchStart + item.matchCount;
-        if (item.matchStart!=-1) {
+        if (item.matchStart>0) {
             prefix = item.label.substring(0, start);
             label = '<span class="matched">' + item.label.substring(item.matchStart,end) + '</span>';
             suffix = item.label.substring(end);

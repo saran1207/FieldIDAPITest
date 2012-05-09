@@ -26,13 +26,13 @@ public class OrgAutocompleteJson extends AutocompleteJson {
         this.tooltip = tooltip;
     }
     
-    public OrgAutocompleteJson(BaseOrg org, OrgQuery orgQuery, String desc) {
+    public OrgAutocompleteJson(BaseOrg org, String term, String desc) {
         super(org.getId()+"", org.getName());
         this.desc = desc;
         // properties used as rendering hints on javascript/client side.
         descClass ="category";
-        matchStart = calculateMatchStart(orgQuery);
-        matchCount = calculateMatchCount(orgQuery);
+        matchStart = calculateMatchStart(term);
+        matchCount = calculateMatchCount(term);
         tooltip = generateTooltip(org);
     }
 
@@ -40,16 +40,15 @@ public class OrgAutocompleteJson extends AutocompleteJson {
         return org.getHierarchicalDisplayName();
     }
 
-    private Integer calculateMatchStart(OrgQuery orgQuery) {
-        String term = orgQuery.getSearchTerm();
+    private Integer calculateMatchStart(String term) {
         if (StringUtils.isNotBlank(term)) {
             return getLabel().toLowerCase().indexOf(term);
         }
         return -1;
     }
 
-    private Integer calculateMatchCount(OrgQuery orgQuery) {
-        return orgQuery.getSearchTerm().length();
+    private Integer calculateMatchCount(String term) {
+        return term.length();
     }
 
     public Integer getMatchCount() {

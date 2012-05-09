@@ -1,10 +1,5 @@
 package com.n4systems.fieldid.wicket.components;
 
-import com.n4systems.fieldid.service.org.OrgList;
-import com.n4systems.fieldid.service.org.OrgQuery;
-import com.n4systems.fieldid.service.org.OrgService;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.OrgEnum;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,7 +15,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.TextRequestHandler;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
 import org.codehaus.jackson.JsonFactory;
@@ -36,44 +30,26 @@ import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
+public abstract class AutoComplete<T> extends FormComponentPanel<T> {
 
-    // UGH: because the wicket AUtoCompleteAjaxComponent didn't expose some required fields i am just copying AbstractAUtoCompleteComponent and adding my customizations
-    //   on top of that.  this obviously makes this code immune to any wicket upgrades and bug fixes.  boo.
-
-
-    /**
-     * DO NOT USE!!!!
-     *    this is for R&D & reference purposes only.   the proper way is to extend AutoComplete<T>.
-     * @see AutoCompleteSearch
-     * @see AutoComplete
-     * for proper example.
-     *
-     * TODO : rename autoCompeteOrgPicker.css --> autoComplete.css
-     */
-
-    private @SpringBean OrgService orgService;
-    
     public static final WiQueryJavaScriptResourceReference WIQUERY_AUTOCOMPLETE_JS =
             new WiQueryJavaScriptResourceReference(AutocompleteAjaxComponent.class,
                     "wiquery-autocomplete.js");
-    
+
     private static final String NOT_ENTERED = "NOT_ENTERED";
-    
+
     private boolean autoUpdate = false;
-    private String term = "";
+    protected String term = "";
     private InnerOrgAutocompleteBehavior autocompleteBehavior;
     private final Autocomplete<String> autocompleteField;
     private final HiddenField<String> autocompleteHidden;
-    private IChoiceRenderer<? super BaseOrg> choiceRenderer;
+    private IChoiceRenderer<? super T> choiceRenderer;
     private AbstractDefaultAjaxBehavior updateAjax;
-    private HashSet<OrgEnum> categories;
 
 
-    public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> model) {
+    public AutoComplete(String id, final IModel<T> model) {
         super(id, model);
         setOutputMarkupPlaceholderTag(true);
         setOutputMarkupId(true);
@@ -81,7 +57,7 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
         autocompleteHidden = new HiddenField<String>("autocompleteHidden", new Model<String>(NOT_ENTERED) {
             @Override
             public String getObject() {
-                BaseOrg modelObject = AutoCompleteOrgPicker.this.getModelObject();
+                T modelObject = AutoComplete.this.getModelObject();
                 return (modelObject != null) ? super.getObject() : null;
             }
         });
@@ -90,16 +66,15 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
 
         autocompleteField = new InnerAutocomplete<String>("autocompleteField", new IModel<String>() {
             public String getObject() {
-                BaseOrg modelObject = AutoCompleteOrgPicker.this.getModelObject();
+                T modelObject = AutoComplete.this.getModelObject();
                 if (modelObject != null) {
-                    BaseOrg objectValue = (BaseOrg) choiceRenderer.getDisplayValue(modelObject);
-                    Class<BaseOrg> objectClass =
-                            (Class<BaseOrg>) (objectValue == null ? null : objectValue.getClass());
+                    T objectValue = (T) choiceRenderer.getDisplayValue(modelObject);
+                    Class<T> objectClass =
+                            (Class<T>) (objectValue == null ? null : objectValue.getClass());
 
                     String displayValue = "";
                     if (objectClass != null) {
-                        final IConverter<BaseOrg> converter = getConverter(objectClass);
-
+                        final IConverter<T> converter = getConverter(objectClass);
                         displayValue = converter.convertToString(objectValue, getLocale());
                     } else if (objectValue != null) {
                         displayValue = objectValue.toString();
@@ -138,25 +113,21 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
 
 
 
-    protected OrgList getChoices() {
+    protected List<T> getChoices() {
         return getChoices(term);
     }
-
-    public OrgList getChoices(String term) {
-        return orgService.getAllOrgsLike(term);
-     }
 
     public HiddenField<String> getAutocompleteHidden() {
         return autocompleteHidden;
     }
-    
-    public BaseOrg getValueOnSearchFail(String input) {
+
+    public T getValueOnSearchFail(String input) {
         return null;
     }
-    
-    public IChoiceRenderer<? super BaseOrg> getChoiceRenderer() {
+
+    public IChoiceRenderer<? super T> getChoiceRenderer() {
         if (choiceRenderer == null) {
-            choiceRenderer = new ChoiceRenderer<BaseOrg>();
+            choiceRenderer = new ChoiceRenderer<T>();
         }
         return choiceRenderer;
     }
@@ -165,26 +136,24 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
         return autoUpdate;
     }
 
-    
+
     protected void onBeforeRenderAutocomplete(Autocomplete<?> autocomplete) {
-        BaseOrg defaultValue = AutoCompleteOrgPicker.this.getModelObject();
+        T defaultValue = AutoComplete.this.getModelObject();
         if (defaultValue != null) {
             AutocompleteJson value = null;
             value = newAutocompleteJson(defaultValue);
             autocomplete.setDefaultModelObject(value.getLabel());
             getAutocompleteHidden().setModelObject(value.getValueId());
         }
-        
+
         ((InnerAutocomplete)autocomplete).getOptions().putLiteral("source",
                 autocompleteBehavior.getCallbackUrl().toString());
-        
+
     }
 
-    private void clearCategories() {
-        categories = new HashSet<OrgEnum>();
-    }
-    
-    
+    protected void clearCategories() {};
+
+
     private class InnerOrgAutocompleteBehavior extends AbstractAjaxBehavior {
 
         public void onRequest() {
@@ -200,17 +169,12 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
                     List<Object> json = new ArrayList<Object>();
 
                     clearCategories();
-                    OrgList choices = getChoices();
-                    for (BaseOrg obj : choices) {
-                        value = newAutocompleteJson(obj, choices.getQuery());
+                    List<T> choices = getChoices();
+                    for (T obj : choices) {
+                        value = newAutocompleteJson(obj);
                         json.add(value);
                     }
-                    if (choices.isAtThreshold()) {
-                        json.add(new OrgAutocompleteJson("Search limit reached. Please refine your search.", "max-results"));
-                    } else if (choices.isEmpty()) { 
-                        json.add(new OrgAutocompleteJson("No search results found", "no-results"));
-                    }
-                    
+
                     new ObjectMapper().writeValue(gen, json);
 
                 } catch (IOException e) {
@@ -222,7 +186,7 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
             }
         }
     }
-    
+
 
     private class InnerAutocomplete<E> extends Autocomplete<E> {
         public InnerAutocomplete(String id, IModel<E> model) {
@@ -285,29 +249,7 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
             return jsStatement;
         }
     }
-
-    protected AutocompleteJson newAutocompleteJson(BaseOrg org, OrgQuery orgQuery) {
-        boolean thisOneSelected = org.equals(getModelObject());
-        final String idValue = org.getId() + "";
-        if (thisOneSelected) {
-            getAutocompleteHidden().setModelObject(idValue);
-        }
-        return new OrgAutocompleteJson(org, orgQuery.getSearchTerm(), getCategory(org));
-    }
-
-    private String getCategory(BaseOrg org) {
-        OrgEnum category = OrgEnum.fromClass(org.getClass());
-        if (!categories.contains(category)) {
-            categories.add(category);
-            return category.toString();
-        }
-        return "";
-    }
-
-    protected AutocompleteJson newAutocompleteJson(BaseOrg org) {
-        return newAutocompleteJson(org, new OrgQuery(""));
-    }
-
+    
     protected void onUpdate(AjaxRequestTarget target) {
     }
 
@@ -325,8 +267,8 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
     protected final void convertInput() {
         String valueId = autocompleteHidden.getConvertedInput();
         String input = autocompleteField.getConvertedInput();
-        final BaseOrg object = this.getModelObject();
-        final IChoiceRenderer<? super BaseOrg> renderer = getChoiceRenderer();
+        final T object = this.getModelObject();
+        final IChoiceRenderer<? super T> renderer = getChoiceRenderer();
 
         if (NOT_ENTERED.equals(valueId))
             valueId = null;
@@ -338,11 +280,11 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
             setConvertedInput(getValueOnSearchFail(input));
 
         } else if (object == null || input.compareTo((String) renderer.getDisplayValue(object)) != 0) {
-            final List<BaseOrg> choices = getChoices();
+            final List<T> choices = getChoices();
             boolean found = false;
             for (int index = 0; index < choices.size(); index++) {
                 // Get next choice
-                final BaseOrg choice = choices.get(index);
+                final T choice = choices.get(index);
                 final String idValue = renderer.getIdValue(choice, index + 1);
                 if (idValue.equals(valueId)) {
                     setConvertedInput(choice);
@@ -364,6 +306,11 @@ public class AutoCompleteOrgPicker extends FormComponentPanel<BaseOrg> {
         }
     }
 
-    
+
+    protected abstract List<T> getChoices(String term);
+
+    protected abstract AutocompleteJson newAutocompleteJson(T asset);
+
+
 }
 
