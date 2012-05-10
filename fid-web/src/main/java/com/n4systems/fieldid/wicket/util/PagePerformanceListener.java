@@ -18,7 +18,7 @@ public class PagePerformanceListener implements IComponentInitializationListener
     }
 
     public PagePerformanceListener() {
-        this(false);
+        this(true);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class PagePerformanceListener implements IComponentInitializationListener
     }
 
     protected boolean monitor(Component component) {
-        // suggestion : or instanceof PerformanceMonitoredMarkerIF??
+        // suggestion : create a marker interface like "instanceof PerformanceMonitoredMarkerIF"
         return component instanceof FieldIDFrontEndPage;
     }
 

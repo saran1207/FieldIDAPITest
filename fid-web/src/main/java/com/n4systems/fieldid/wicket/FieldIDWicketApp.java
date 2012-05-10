@@ -29,13 +29,11 @@ import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 import com.n4systems.fieldid.wicket.util.PagePerformanceListener;
 import com.n4systems.fieldid.wicket.util.PlainDateConverter;
 import com.n4systems.model.utils.PlainDate;
-import org.apache.wicket.ConverterLocator;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.Page;
-import org.apache.wicket.Session;
+import org.apache.wicket.*;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.settings.IRequestLoggerSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 public class FieldIDWicketApp extends WebApplication {
@@ -106,8 +104,14 @@ public class FieldIDWicketApp extends WebApplication {
         getApplicationSettings().setInternalErrorPage(OopsPage.class);
 
         getRequestCycleListeners().add(new FieldIDRequestCycleListener());
-        // use -Dpagetime to put JVM in permanent "render page time in debug window" mode.
-        getComponentInitializationListeners().add(new PagePerformanceListener(System.getProperty("pagetime")!=null));
+        if (getConfigurationType().equals(RuntimeConfigurationType.DEVELOPMENT)) {
+            getComponentInitializationListeners().add(new PagePerformanceListener());
+
+            IRequestLoggerSettings reqLogger = getRequestLoggerSettings();
+            reqLogger.setRequestLoggerEnabled(true);
+            reqLogger.setRequestsWindowSize(500);
+        }
+
     }
 
     @Override

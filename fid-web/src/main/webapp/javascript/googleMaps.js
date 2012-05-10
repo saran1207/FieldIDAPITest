@@ -8,12 +8,13 @@
  * simplest usage for a map with a single marker on it =
  *  googleMapFactory.createAndShowWithLocation('mapCanvas',44, -79)
  * ...given <div id='mapCanvas'/> exists and... 
- * 44/-79 is the latitude/longitude of the marker.   
+ * 44/-79 is the latitude/longitude of the marker.
+ * note that you MUST style the div with the desired height/width.  a map will not affect its containers size - it merely fills it up.
  * 
  * to add more markers and/or customize them...
  * 
  *  var map = googleMapFactory.create('mapCanvas');
- *	map.makeMarker = googleMapFactory.makeMarkerForStatus;     // factory to create custom markers based on status  (PASS in this case).
+ *	map.makeMarker = googleMapFactory.makeMarkerForStatus;     // factory to create custom markers based on status  (PASS status in this case).
  *  map.addLocation(44,-79, "hello show this in infowindow", "pass");   // content = "hello..." which pops up when user clicks on marker.  PASS = status
  *  map.show();
  * 

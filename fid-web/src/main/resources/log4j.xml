@@ -80,18 +80,29 @@
 			<param name="ConversionPattern" value="%d: %m%n" />
 		</layout>
 	</appender>
-	<appender name="API_LOG" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="/var/fieldid/logs/api.log" />
-		<param name="Append" value="true" />
-		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<param name="MaxBackupIndex" value="30" />
-		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
-			<param name="ConversionPattern" value="%d: %m%n" />
-		</layout>
-	</appender>
-	<category name="org.springframework">
-		<priority value="INFO" />
-	</category>
+    <appender name="API_LOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/fieldid/logs/api.log" />
+        <param name="Append" value="true" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <param name="MaxBackupIndex" value="30" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p - %-26.26c{1} - %m\n" />
+        </layout>
+    </appender>
+
+    <appender name="REQUESTS" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/fieldid/logs/wicket-requests.log" />
+        <param name="Append" value="true" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <param name="MaxBackupIndex" value="30" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+            <param name="ConversionPattern" value="%d: %m%n" />
+        </layout>
+    </appender>
+
+    <category name="org.springframework">
+        <priority value="INFO" />
+    </category>
 	<category name="org.apache">
 		<priority value="INFO" />
 	</category>
@@ -151,10 +162,14 @@
 		<priority value="INFO" />
 		<appender-ref ref="API_LOG" />
 	</category>
-	<category name="com.n4systems.persistence.utils.DefaultEntityModifiedCreatedHandler" additivity="false">
-		<priority value="ERROR" />
-	</category>
-	
+    <category name="com.n4systems.persistence.utils.DefaultEntityModifiedCreatedHandler" additivity="false">
+        <priority value="ERROR" />
+    </category>
+    <category name="org.apache.wicket.protocol.http.RequestLogger" additivity="false">
+        <priority value="INFO" />
+        <appender-ref ref="REQUESTS" />
+    </category>
+
 	<root>
 		<priority value="info" />
 		<appender-ref ref="CONSOLE" />
