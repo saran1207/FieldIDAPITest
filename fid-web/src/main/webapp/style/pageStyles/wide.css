@@ -285,6 +285,7 @@
 .menu.wide .menu-items {
     width: 200px;
     left: -146px;
+    z-index: 1;
 }
 
 .menu-items {

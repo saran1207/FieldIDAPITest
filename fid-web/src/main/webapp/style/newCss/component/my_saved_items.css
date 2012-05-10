@@ -6,6 +6,9 @@
     border:1px solid #ebebeb;
     padding-bottom: 8px;
     text-align:left;
+    overflow-y:auto;
+    max-height:500px;
+    padding-bottom:20px;
     z-index:1;  /** make sure this is above any FlotCharts that may appear below.   > 0 */
 }
 
