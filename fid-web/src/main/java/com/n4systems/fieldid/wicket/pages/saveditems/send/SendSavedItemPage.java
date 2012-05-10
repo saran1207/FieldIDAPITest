@@ -86,8 +86,8 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
     public SendSavedItemPage(PageParameters params) {
         super(params);
 
-        long savedItemId = params.get("id").toLong();
-        initializeSavedItem(savedItemId);
+        savedReportId = params.get("id").toLong();
+        initializeSavedItem(savedReportId);
     }
 
     private void initializeSavedItem(long savedItemId) {
