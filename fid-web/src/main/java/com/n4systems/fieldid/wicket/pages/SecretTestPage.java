@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.AutoCompleteSearch;
+import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.Component;
@@ -36,6 +37,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         form.add(new TextField("watermark", new PropertyModel<String>(this, "text")).add(new Watermark("enter a value")));
         form.add(new TextField("watermark2", new PropertyModel<String>(this, "text2")).add(new Watermark("enter another value")));
         form.add(new PasswordTextField("password", new PropertyModel<String>(this, "password")).add(new Watermark("enter password")));
+        form.add(new GoogleMap("map").addLocation(43.65, -79.34).addLocation(42.00, -80.00).addLocation(44.0,-79.7));
 
         add(form);
     }

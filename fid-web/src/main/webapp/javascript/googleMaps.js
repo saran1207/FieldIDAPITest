@@ -1,4 +1,4 @@
-/**
+    /**
  * requires.... 
  *  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
  *  <@n4.includeScript src="googleMaps.js"/>
@@ -23,18 +23,23 @@
  */
 
 var googleMapFactory = (function() { 
-	
+
 	var create = function(id) { 
 		return googleMap(id);
 	};
-	
-	var createAndShowWithLocation = function(id, latitude,longitude) { 
+
+	var createAndShowWithLocation = function(id) {
 		var map = create(id);
-		map.addLocation(latitude,longitude);
+        if (arguments.length>1 && (arguments.length-1)%2!=0) {
+            throw "you must specify latitude & longitude in pairs but you've only passed " + arguments.length-1 + "coordinates";
+        }
+        for (var i=1;i<arguments.length;i+=2) {
+		    map.addLocation(arguments[i], arguments[i+1]);
+        }
 		map.show();
 	};
-			
-	
+
+
 	/**
 	 * map object returned by factory 
 	 */	
