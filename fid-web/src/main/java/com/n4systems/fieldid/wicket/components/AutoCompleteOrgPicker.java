@@ -48,11 +48,11 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
     }
 
     public OrgList getChoices(String term) {
-        return orgService.getAllOrgsLike(term, threshold=10);
+        return orgService.getAllOrgsLike(term, threshold);
      }
 
     @Override
-    protected void clearCategories() {
+    protected void startRequest() {
         categories = new HashSet<OrgEnum>();
     }
 }

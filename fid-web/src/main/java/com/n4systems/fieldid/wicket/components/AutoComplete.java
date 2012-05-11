@@ -48,7 +48,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     private final HiddenField<String> autocompleteHidden;
     private IChoiceRenderer<? super T> choiceRenderer;
     private AbstractDefaultAjaxBehavior updateAjax;
-    protected int threshold;
+    protected int threshold = 15;
 
 
     public AutoComplete(String id, final IModel<T> model) {
@@ -158,7 +158,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         return new AutoCompleteResult("search limit reached for '" + term +"'", "max-results");
     }
 
-    protected void clearCategories() {};
+    protected void startRequest() {};
 
     protected String normalizeSearchTerm(String term) {
         return term;
@@ -167,6 +167,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     private class InnerAutocompleteBehavior extends AbstractAjaxBehavior {
 
         public void onRequest() {
+            startRequest();
             term = this.getComponent().getRequest().getQueryParameters().getParameterValue("term").toString();
 
             if (!Strings.isEmpty(term)) {
@@ -178,8 +179,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                     Integer index = 0;
                     List<Object> json = new ArrayList<Object>();
 
-                    clearCategories();
-                    String search = normalizeSearchTerm(term);                    
+                    String search = normalizeSearchTerm(term);
                     List<T> choices = getChoices();
                     
                     if (choices.size()==0) {
@@ -202,11 +202,14 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
 
                 RequestCycle.get().scheduleRequestHandlerAfterCurrent(
                         new TextRequestHandler("application/json", "utf-8", sw.toString()));
+
+                endRequest();
             }
         }
 
     }
 
+    private void endRequest() { }
 
     private class InnerAutocomplete<E> extends Autocomplete<E> {
         public InnerAutocomplete(String id, IModel<E> model) {

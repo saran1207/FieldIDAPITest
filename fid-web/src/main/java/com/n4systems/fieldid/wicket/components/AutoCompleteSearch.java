@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket.components;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -28,7 +30,7 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
     }
 
     @Override
-    protected void clearCategories() {
+    protected void startRequest() {
         categories = new HashSet<AssetType>();
     }
 
@@ -48,10 +50,17 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
         if (thisOneSelected) {
             getAutocompleteHidden().setModelObject(idValue);
         }
-        String tooltip = String.format("[ %s,%s,%s]",
-                asset.getIdentifier()==null ? "" : asset.getIdentifier(),
-                asset.getRfidNumber()==null ? "" : asset.getRfidNumber(),
-                asset.getCustomerRefNumber()==null ? "" : asset.getCustomerRefNumber());
+        String tooltip = "";
+        List<String> ids = Lists.newArrayList();
+        if (StringUtils.isNotBlank(asset.getCustomerRefNumber())) {
+            ids.add(asset.getCustomerRefNumber());
+        }
+        if (StringUtils.isNotBlank(asset.getRfidNumber())) {
+            ids.add(asset.getRfidNumber());
+        }
+        if (ids.size()>0) {
+            tooltip = ids.toString();
+        }
         return new AutoCompleteResult(asset.getId()+"", asset.getDisplayName(), getCategory(asset), term, tooltip);
     }
 

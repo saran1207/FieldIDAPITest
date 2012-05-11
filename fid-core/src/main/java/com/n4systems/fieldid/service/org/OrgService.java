@@ -63,7 +63,7 @@ public class OrgService extends FieldIdPersistenceService {
         query.setLimit(threshold*5/4);  // allow for a bit more than threshold, so we definitely know we have lots more matches.
         List<? extends BaseOrg> result = persistenceService.findAll(query);
         
-        return new OrgList(result, orgQuery, threshold);
+        return new OrgList(result, threshold);
     }
 
 

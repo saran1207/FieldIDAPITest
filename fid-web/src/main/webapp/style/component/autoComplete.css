@@ -26,9 +26,11 @@
 
 .ui-autocomplete .category {
     margin-left:-100px;
+    width:100px;
     color: #6c7985;
-    padding:.2em .4em;
+    padding:.2em 0;
     float: left;
+    height:13px;
     font-style: italic;
     font-size:11px;
     text-overflow: ellipsis;
@@ -53,7 +55,6 @@ li .no-results {
 li .max-results {
     border-top:1px solid #aaa;
     background:#ddd;
-    float:right;
     height:30px;
     font-size:11px;
     color: #4466aa;

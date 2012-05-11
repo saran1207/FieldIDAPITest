@@ -11,9 +11,9 @@ import java.util.List;
 public class GoogleMap extends Panel {
     public static final String GOOGLE_MAPS_JS = "googleMaps";
     private static final String GOOGLE_MAP_API = "google-map-api";
+    private static final String INIT_FORMAT = "googleMapFactory.createAndShowWithLocation('%s',%s );";
 
     private List<Coord> coords = new ArrayList<Coord>();
-    private static final String INIT_FORMAT = "googleMapFactory.createAndShowWithLocation('%s',%s );";
     private String coordsAsJsParams;
 
     public GoogleMap(String id) {

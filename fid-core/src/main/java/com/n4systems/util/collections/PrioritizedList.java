@@ -50,19 +50,20 @@ public class PrioritizedList<T> extends ArrayList<T> {
     }
 
     private void prioritize(T value, Object priority) {
-        
         List<T> values = priorities.get(priority);
         if (values == null) {
             priorities.put(priority, Lists.newArrayList(value));
         } else {
-            // todo : refactor this out so you can customize handling of priority collisons.   e.g. some might want alphabetic, other natural order or chronological...?
-
-            // note : we want to get some sort to randomness in our population of values so if they are truncated
-            int randomSpotToAdd = value.hashCode() % values.size();
-            values.add(randomSpotToAdd, value);
+            values.add(getCollisionIndex(values.size(), value), value);
         }
-    }    
-        
+    }
+
+    protected int getCollisionIndex(int size, T value) {
+        // note : we want to get some sort to randomness in our population of values so if they are truncated
+        // we'll get a non-chronological distribution of nodes.
+        return value.hashCode() % size;
+    }
+
     protected boolean isHardLimit() {
         return true;
     }
