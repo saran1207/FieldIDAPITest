@@ -1,7 +1,7 @@
 
 
 /**
- * @see AutoCompleteOrgPicker for java wicket component.
+1 * @see AutoCompleteOrgPicker for java wicket component.
 */
 
 .ui-autocomplete-input {
@@ -15,7 +15,9 @@
 }
 
 .ui-menu {
-    border-left:150px solid #ddd;
+    border-left:100px solid #ddd;
+    font-size:11px;
+    padding:0;
 }
 
 .ui-menu.empty {
@@ -23,15 +25,12 @@
 }
 
 .ui-autocomplete .category {
-    margin-left:-150px;
-    color: #8898A8;
+    margin-left:-100px;
+    color: #6c7985;
     padding:.2em .4em;
     float: left;
-    width: 125px;
     font-style: italic;
-    font-size:12px;
-    line-height:24px;
-    height:24px;
+    font-size:11px;
     text-overflow: ellipsis;
     overflow:hidden;
 }
@@ -39,7 +38,6 @@
 .ui-menu .ui-menu-item .link {
     padding-left:0;
     padding-right:0;
-    height : 23px;
     overflow:hidden;
 }
 
@@ -53,12 +51,16 @@ li .no-results {
 }
 
 li .max-results {
-    margin-left:-150px;
-    color: #4466aa;
-    padding:0 .1em;
-    float: left;
-    font-style:italic;
+    border-top:1px solid #aaa;
+    background:#ddd;
+    float:right;
+    height:30px;
     font-size:11px;
+    color: #4466aa;
+    width:100%;
+    float: left;
+    text-align: left;
+    font-style:italic;
     word-wrap: break-word;
 }
 

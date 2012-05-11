@@ -48,6 +48,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     private final HiddenField<String> autocompleteHidden;
     private IChoiceRenderer<? super T> choiceRenderer;
     private AbstractDefaultAjaxBehavior updateAjax;
+    protected int threshold;
 
 
     public AutoComplete(String id, final IModel<T> model) {
@@ -72,7 +73,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                     T objectValue = (T) choiceRenderer.getDisplayValue(modelObject);
                     Class<T> objectClass =
                             (Class<T>) (objectValue == null ? null : objectValue.getClass());
-
+                    
                     String displayValue = "";
                     if (objectClass != null) {
                         final IConverter<T> converter = getConverter(objectClass);
@@ -135,7 +136,6 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         return autoUpdate;
     }
 
-
     protected void onBeforeRenderAutocomplete(Autocomplete<?> autocomplete) {
         T defaultValue = AutoComplete.this.getModelObject();
         if (defaultValue != null) {
@@ -144,10 +144,18 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
             autocomplete.setDefaultModelObject(value.getLabel());
             getAutocompleteHidden().setModelObject(value.getValueId());
         }
-
+        
         ((InnerAutocomplete)autocomplete).getOptions().putLiteral("source",
                 autocompleteBehavior.getCallbackUrl().toString());
+        
+    }
 
+    private AutoCompleteResult createNoResultsJson(String search) {
+        return new AutoCompleteResult("no results found for '" + search + "'", "no-results");
+    }
+
+    private AutoCompleteResult createMaxResultsJson(String term) {
+        return new AutoCompleteResult("search limit reached for '" + term +"'", "max-results");
     }
 
     protected void clearCategories() {};
@@ -171,14 +179,23 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                     List<Object> json = new ArrayList<Object>();
 
                     clearCategories();
+                    String search = normalizeSearchTerm(term);                    
                     List<T> choices = getChoices();
-                    for (T obj : choices) {
-                        value = createAutocompleteJson(obj, normalizeSearchTerm(term));
-                        json.add(value);
+                    
+                    if (choices.size()==0) {
+                        json.add(createNoResultsJson(search));
+                    } else { 
+                        for (T obj : choices) {
+                            value = createAutocompleteJson(obj, search);
+                            json.add(value);
+                        }
                     }
-
+                    if (choices.size()>=threshold) {
+                        json.add(createMaxResultsJson(term));
+                    }
+                    
                     new ObjectMapper().writeValue(gen, json);
-
+                    
                 } catch (IOException e) {
                     throw new WicketRuntimeException(e);
                 }
@@ -187,6 +204,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                         new TextRequestHandler("application/json", "utf-8", sw.toString()));
             }
         }
+
     }
 
 
@@ -258,23 +276,23 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderJavaScriptReference("javascript/component/autoCompleter.js");
+        response.renderJavaScriptReference("javascript/component/autoComplete.js");
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
-        response.renderCSSReference("style/component/autoCompleteOrgPicker.css");
+        response.renderCSSReference("style/component/autoComplete.css");
         response.renderCSSReference("style/tipsy/tipsy.css");
         response.renderOnLoadJavaScript("autoCompleter.init('"+autocompleteField.getMarkupId()+"');");
     }
-
+    
     @Override
     protected final void convertInput() {
         String valueId = autocompleteHidden.getConvertedInput();
         String input = autocompleteField.getConvertedInput();
         final T object = this.getModelObject();
         final IChoiceRenderer<? super T> renderer = getChoiceRenderer();
-
+        
         if (NOT_ENTERED.equals(valueId))
             valueId = null;
-
+        
         if (valueId == null && Strings.isEmpty(input)) {
             setConvertedInput(null);
 

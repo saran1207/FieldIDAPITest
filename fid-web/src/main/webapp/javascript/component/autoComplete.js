@@ -17,12 +17,9 @@ var autoCompleter = (function() {
             // customize our tooltips.  TODO refactor this out into separate behavior.
             $('.link').tipsy({gravity: 'e', fade:true, delayIn:150});
         });
-/*  attempt to give focus to combo box after selection...doesn't seem to work.
-*/
         $("#"+id).bind("autocompleteclose", function(event, ui) {
             $("#"+id).focus();
         });
-
     };
 
     var render = function(ul, item) {

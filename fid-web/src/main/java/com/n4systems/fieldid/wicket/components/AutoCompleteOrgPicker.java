@@ -48,7 +48,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
     }
 
     public OrgList getChoices(String term) {
-        return orgService.getAllOrgsLike(term);
+        return orgService.getAllOrgsLike(term, threshold=10);
      }
 
     @Override

@@ -25,6 +25,11 @@ public class AutoCompleteResult implements Serializable {
         matchStart = calculateMatchStart(term);
         matchCount = calculateMatchCount(term);
     }
+
+    public AutoCompleteResult(String desc, String descClass) {
+        this.desc = desc;
+        this.descClass=descClass;
+    }
     
     private Integer calculateMatchStart(String term) {
         if (StringUtils.isNotBlank(term)) {
