@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetViewPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
@@ -90,6 +91,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("admin/addTenant", AddTenantPage.class);
 
         mountPage("secret/test", SecretTestPage.class);
+        mountPage("assetView", AssetViewPage.class);
 
         // TODO : this is a possible performance gain but would require full regression.
         // getMarkupSettings().setCompressWhitespace(true);

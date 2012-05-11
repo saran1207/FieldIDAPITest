@@ -1,0 +1,44 @@
+.assetImage {
+    width: 230px;
+}
+
+.googleMap {
+    border: 2px;
+}
+
+.assetMap {
+    height: 300px;
+    Width: 300px;
+}
+
+.recentActivity h1 {
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.recentActivity h1 img {
+    vertical-align: text-top;
+    padding: 0 5px;
+}
+
+.linkedAssetList img, .linkedAssetLabel, .linkedAssetLabel a{
+    float:left;
+    padding: 0 5px;
+}
+
+.linkedAssetLabel .assetLink{
+    padding: 0;
+}
+
+.linkedAssetLabel label, .linkedAssetLabel a{
+    display:block;
+}
+
+.linkedAssets {
+    display: inline-block;
+    padding: 5px 0;
+}
+
+.linkedAssets li {
+    padding: 5px 0;
+}

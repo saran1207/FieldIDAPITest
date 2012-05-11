@@ -1,0 +1,42 @@
+<wicket:extend>
+
+    <div class="leftColumn">
+
+        <img class="assetImage" wicket:id="assetImage"/>
+
+        <div id="mapCanvas" class="googleMap assetMap"></div>
+
+        <div class="recentActivity">
+            <h1>
+                <img src="/fieldid/images/calendar-icon.png"/>
+                <label> <wicket:message key="label.recent_activity"/></label>
+            </h1>
+            
+            <div class="nextEvent">
+                    <label><span wicket:id="nextEventMsg"/></label>
+            </div>
+            <div class="lastEvent">
+                <label><span wicket:id="lastEventMsg"/></label>
+            </div>
+        </div>
+        
+        <div class="linkedAssets">
+            <ul wicket:id="linkedAssets">
+                <li class="linkedAssetList" wicket:id="linkedAssetList">
+                    <img src="/fieldid/images/reorder-small.png"/>
+                    <div class="linkedAssetLabel">
+                        <label><span wicket:id="assetType"/></label>
+                        <a class="assetLink" wicket:id="linkedAssetLink"><span wicket:id="assetIdentifier"/></a>
+                    </div>
+                    <a wicket:id="removeLinkedAssetLink"><img src="/fieldid/images/small-x.png"/></a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+
+    <div class="rightColumn">
+
+    </div>
+</wicket:extend>
