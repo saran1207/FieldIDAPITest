@@ -72,7 +72,11 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
         }
         return term;
     }
-    
-    
+
+    protected String getDisplayValue(Asset asset) {
+        return asset.getIdentifier();
+    }
+
+
 }
 

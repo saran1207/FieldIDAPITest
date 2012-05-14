@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components;
 
+import com.n4systems.model.parents.AbstractEntity;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -24,7 +25,10 @@ import org.odlabs.wiquery.core.javascript.JsStatement;
 import org.odlabs.wiquery.core.javascript.JsUtils;
 import org.odlabs.wiquery.core.options.Options;
 import org.odlabs.wiquery.core.resources.WiQueryJavaScriptResourceReference;
-import org.odlabs.wiquery.ui.autocomplete.*;
+import org.odlabs.wiquery.ui.autocomplete.Autocomplete;
+import org.odlabs.wiquery.ui.autocomplete.AutocompleteAjaxComponent;
+import org.odlabs.wiquery.ui.autocomplete.AutocompleteSource;
+import org.odlabs.wiquery.ui.autocomplete.WiQueryAutocompleteJavaScriptResourceReference;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
 import java.io.IOException;
@@ -41,7 +45,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
 
     private static final String NOT_ENTERED = "NOT_ENTERED";
 
-    private boolean autoUpdate = true;
+    private boolean autoUpdate = false;
     protected String term = "";
     private InnerAutocompleteBehavior autocompleteBehavior;
     private final Autocomplete<String> autocompleteField;
@@ -127,15 +131,27 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     
     private IChoiceRenderer<? super T> getChoiceRenderer() {
         if (choiceRenderer == null) {
-            choiceRenderer = createChoiceRenderer();
+            choiceRenderer = new ChoiceRenderer<T>() {
+                @Override public Object getDisplayValue(T object) {
+                    return AutoComplete.this.getDisplayValue(object);
+                }
+                @Override public String getIdValue(T object, int index) {
+                    return AutoComplete.this.getIdValue(object, index);
+                }
+            };
         }
         return choiceRenderer;
     }
 
-    public IChoiceRenderer<? super T> createChoiceRenderer() {
-        // NOTE : you may have to override this is you are writing an AutoComplete extension for
-        // an entity that doesn't match the ChoiceRenderer parameters (e.g. doesn't have "id").
-        return new ChoiceRenderer<T>(null, "id");
+    protected String getIdValue(T object, int index) {
+        if (object instanceof AbstractEntity) {
+            return ((AbstractEntity)object).getId()+"";
+        }
+        return index+"";
+    }
+
+    protected String getDisplayValue(T object) {
+        return object==null ? "" : object.toString();
     }
 
     public boolean isAutoUpdate() {
