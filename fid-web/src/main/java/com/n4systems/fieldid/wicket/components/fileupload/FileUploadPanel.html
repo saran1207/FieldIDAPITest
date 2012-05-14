@@ -1,0 +1,21 @@
+<wicket:panel>
+
+    <form wicket:id="uploadForm">
+
+        <div wicket:id="attachedFilesContainer">
+
+            <div wicket:id="attachedFiles">
+                <span wicket:id="fileName"></span>
+                <textarea wicket:id="comments"/>
+                <br/>
+            </div>
+
+        </div>
+
+        <input wicket:id="file" type="file"/>
+
+        <span wicket:id="progress">[[upload progressbar]]</span>
+
+    </form>
+
+</wicket:panel>

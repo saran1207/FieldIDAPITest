@@ -1,0 +1,42 @@
+<wicket:panel>
+
+    <h2>
+        <span id="formTitle" class="formTitle">
+            <wicket:message key="label.eventform"/>
+        </span>
+
+        <span class="jumpto" id="jumpToSections">
+
+            <img src="/fieldid/images/jump-to-icon.png"/>
+
+            <wicket:message key="label.section_navigation">
+                <label wicket:id="currentSection"/>
+                <label wicket:id="totalSections"/>
+            </wicket:message>
+
+            <select wicket:id="jumpToSection"/>
+
+        </span>
+
+        <div style="clear:both;"/>
+
+    </h2>
+
+    <div wicket:id="criteriaSections">
+
+        <div wicket:id="sectionContainer">
+
+            <span class="eventSectionTitle" wicket:id="sectionName"></span>
+
+            <span class="eventSectionsIndex">
+            </span>
+
+            <div wicket:id="criteriaEditPanel">
+            </div>
+
+        </div>
+
+    </div>
+
+
+</wicket:panel>

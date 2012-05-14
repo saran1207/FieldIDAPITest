@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -56,7 +57,10 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 	
     @Column(nullable=false)
     private boolean editable = true;
-	
+
+    @Transient
+    private List<SectionResults> sectionResults;
+
 	private String mobileGUID;
 	
 	@AllowSafetyNetworkAccess
@@ -221,6 +225,19 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
             }
         }
 		return criteriaSection;
+    }
+
+    public static class SectionResults implements Serializable {
+        public List<CriteriaResult> results;
+        public CriteriaSection section;
+    }
+
+    public List<SectionResults> getSectionResults() {
+        return sectionResults;
+    }
+
+    public void setSectionResults(List<SectionResults> sectionResults) {
+        this.sectionResults = sectionResults;
     }
 
 }

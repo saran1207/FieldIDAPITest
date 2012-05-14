@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.SignatureResourceReference;
+import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.TemporarySignatureResourceReference;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
@@ -10,6 +12,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.fieldid.wicket.pages.event.EditEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.*;
@@ -67,6 +70,8 @@ public class FieldIDWicketApp extends WebApplication {
         //  a preferred solution would be to put colorbox in iframe (which requires CSS love) or to force absolute urls to be rendered by wicket.
         mountPage("wicket/reporting2", ReportPage.class);
         
+        mountPage("performEvent", EditEventPage.class);
+        
         mountPage("sendSavedItem", SendSavedItemPage.class);
         mountPage("manageSendItemSchedules", ManageSendItemSchedulesPage.class);
 
@@ -92,6 +97,9 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetView", AssetViewPage.class);
+        
+        mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
+        mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
 
         // TODO : this is a possible performance gain but would require full regression.
         // getMarkupSettings().setCompressWhitespace(true);
@@ -104,6 +112,7 @@ public class FieldIDWicketApp extends WebApplication {
 
         getApplicationSettings().setPageExpiredErrorPage(DashboardPage.class);
         getApplicationSettings().setInternalErrorPage(OopsPage.class);
+        getApplicationSettings().setUploadProgressUpdatesEnabled(true);
 
         getRequestCycleListeners().add(new FieldIDRequestCycleListener());
         if (getConfigurationType().equals(RuntimeConfigurationType.DEVELOPMENT)) {

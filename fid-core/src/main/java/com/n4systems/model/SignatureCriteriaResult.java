@@ -16,6 +16,9 @@ public class SignatureCriteriaResult extends CriteriaResult {
 
     @Transient
     private byte[] image;
+
+    @Transient
+    private String temporaryFileId;
     
     public boolean isSigned() {
         return signed;
@@ -38,4 +41,11 @@ public class SignatureCriteriaResult extends CriteriaResult {
 		return "";
 	}
 
+    public String getTemporaryFileId() {
+        return temporaryFileId;
+    }
+
+    public void setTemporaryFileId(String temporaryFileId) {
+        this.temporaryFileId = temporaryFileId;
+    }
 }
