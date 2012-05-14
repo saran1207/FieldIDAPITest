@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class GoogleMap extends Panel {
     }
 
 
-    private class Coord {
+    private class Coord implements Serializable {
         double latitude;
         double longitude;
         public Coord(double lat, double lng) { 

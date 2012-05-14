@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components;
 
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -24,7 +25,10 @@ import org.odlabs.wiquery.core.javascript.JsStatement;
 import org.odlabs.wiquery.core.javascript.JsUtils;
 import org.odlabs.wiquery.core.options.Options;
 import org.odlabs.wiquery.core.resources.WiQueryJavaScriptResourceReference;
-import org.odlabs.wiquery.ui.autocomplete.*;
+import org.odlabs.wiquery.ui.autocomplete.Autocomplete;
+import org.odlabs.wiquery.ui.autocomplete.AutocompleteAjaxComponent;
+import org.odlabs.wiquery.ui.autocomplete.AutocompleteSource;
+import org.odlabs.wiquery.ui.autocomplete.WiQueryAutocompleteJavaScriptResourceReference;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
 import java.io.IOException;
@@ -41,7 +45,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
 
     private static final String NOT_ENTERED = "NOT_ENTERED";
 
-    private boolean autoUpdate = false;
+    private boolean autoUpdate = true;
     protected String term = "";
     private InnerAutocompleteBehavior autocompleteBehavior;
     private final Autocomplete<String> autocompleteField;
@@ -49,7 +53,6 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     private IChoiceRenderer<? super T> choiceRenderer;
     private AbstractDefaultAjaxBehavior updateAjax;
     protected int threshold = 15;
-
 
     public AutoComplete(String id, final IModel<T> model) {
         super(id, model);
@@ -75,7 +78,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                             (Class<T>) (objectValue == null ? null : objectValue.getClass());
                     
                     String displayValue = "";
-                    if (objectClass != null) {
+                      if (objectClass != null) {
                         final IConverter<T> converter = getConverter(objectClass);
                         displayValue = converter.convertToString(objectValue, getLocale());
                     } else if (objectValue != null) {
@@ -114,22 +117,30 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     }
 
     protected List<T> getChoices() {
+        new Exception().printStackTrace();
+        System.out.println("getting choices");
         return getChoices(term);
     }
 
     public HiddenField<String> getAutocompleteHidden() {
         return autocompleteHidden;
     }
-
+    
     public T getValueOnSearchFail(String input) {
         return null;
     }
-
-    public IChoiceRenderer<? super T> getChoiceRenderer() {
+    
+    private IChoiceRenderer<? super T> getChoiceRenderer() {
         if (choiceRenderer == null) {
-            choiceRenderer = new ChoiceRenderer<T>();
+            choiceRenderer = createChoiceRenderer();
         }
         return choiceRenderer;
+    }
+
+    public IChoiceRenderer<? super T> createChoiceRenderer() {
+        // NOTE : you may have to override this is you are writing an AutoComplete extension for
+        // an entity that doesn't match the ChoiceRenderer parameters (e.g. doesn't have "id").
+        return new ChoiceRenderer<T>("id", "id");
     }
 
     public boolean isAutoUpdate() {
@@ -298,10 +309,10 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         
         if (valueId == null && Strings.isEmpty(input)) {
             setConvertedInput(null);
-
+            
         } else if (valueId == null) {
             setConvertedInput(getValueOnSearchFail(input));
-
+            
         } else if (object == null || input.compareTo((String) renderer.getDisplayValue(object)) != 0) {
             final List<T> choices = getChoices();
             boolean found = false;

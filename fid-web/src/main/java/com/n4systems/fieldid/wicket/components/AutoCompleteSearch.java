@@ -64,7 +64,6 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
         return new AutoCompleteResult(asset.getId()+"", asset.getDisplayName(), getCategory(asset), term, tooltip);
     }
 
-
     @Override
     protected String normalizeSearchTerm(String term) {
         int index = term.indexOf(":");
@@ -73,5 +72,7 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
         }
         return term;
     }
+    
+    
 }
 
