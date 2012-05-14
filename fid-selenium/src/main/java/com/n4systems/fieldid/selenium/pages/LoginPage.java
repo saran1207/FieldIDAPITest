@@ -3,7 +3,6 @@ package com.n4systems.fieldid.selenium.pages;
 import com.thoughtworks.selenium.Selenium;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class LoginPage extends WebPage {
 	
@@ -65,7 +64,10 @@ public class LoginPage extends WebPage {
 
     private void enterCredentialsAndSubmit(String userName, String password) {
 		selenium.type("//input[@id='userName']", userName);
-		selenium.type("//input[@id='password']", password);
+        selenium.focus("//input[@id='password']");
+        selenium.type("//input[@id='password']", password);
+        selenium.focus("//input[@id='password']");
+        selenium.type("//input[@id='password']", password);
 		selenium.click("//input[@id='signInButton']");
         waitForPageToLoad();
     }
@@ -110,7 +112,7 @@ public class LoginPage extends WebPage {
 	}
 
     public ForgotPasswordPage clickForgotMyPassword() {
-        selenium.click("//a[.='I forgot my password']");
+        selenium.click("//a[.='Forgot your Password?']");
         return new ForgotPasswordPage(selenium);
     }
 
