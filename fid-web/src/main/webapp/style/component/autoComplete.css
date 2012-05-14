@@ -1,12 +1,8 @@
-
-
 /**
-1 * @see AutoCompleteOrgPicker for java wicket component.
+1 * @see AutoComplete.java
 */
 
 .ui-autocomplete-input {
-    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
-    font-size:17px;
     padding:4px;
 }
 

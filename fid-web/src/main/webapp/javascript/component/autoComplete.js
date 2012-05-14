@@ -1,7 +1,7 @@
 /**
  * usage notes : expects a json object= item {
  *    label : the text for the item it
- *    tooltip :
+ *    tooltip : the "title" html element.
  *    matchStart :
  *    matchCount :
  *    desc :
@@ -14,8 +14,8 @@ var autoCompleter = (function() {
      */
     var init = function(id) {
         $("#"+id).bind("autocompleteopen", function(event, ui) {
-            // customize our tooltips.  TODO refactor this out into separate behavior.
             $('.link').tipsy({gravity: 'e', fade:true, delayIn:150});
+            $('.ui-autocomplete').removeClass('ui-corner-all');
         });
         $("#"+id).bind("autocompleteclose", function(event, ui) {
             $("#"+id).focus();
