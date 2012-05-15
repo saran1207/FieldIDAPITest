@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
-import com.n4systems.fieldid.wicket.components.reporting.SlidingCollapsibleContainer;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
@@ -58,11 +56,6 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     private void addComponents() {
         Model<T> criteriaModel = new Model<T>(searchCriteria);
         add(createResultsPanel(RESULTS_PANEL_ID, criteriaModel, isShowBlankSlate()));
-
-        SlidingCollapsibleContainer criteriaExpandContainer = new SlidingCollapsibleContainer("criteriaExpandContainer", new FIDLabelModel("label.search_settings"));
-        criteriaExpandContainer.addContainedPanel(createCriteriaPanel("criteriaPanel", criteriaModel, savedItem));
-
-        add(criteriaExpandContainer);
 
         final Component searchConfigPanel = createCriteriaPanel(FieldIDFrontEndPage.LEFT_PANEL_ID, criteriaModel);
 
