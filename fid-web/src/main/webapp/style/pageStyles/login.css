@@ -1,3 +1,7 @@
+#pageContent {
+    margin-bottom: 0px;
+}
+
 #pageContent.brandedContainer {
     background:none;
     padding-bottom:15px;
@@ -105,3 +109,7 @@
 }
 
 .request a { padding-left:5px; }
+
+#sslCert a {
+    color: #d1adb0;
+}

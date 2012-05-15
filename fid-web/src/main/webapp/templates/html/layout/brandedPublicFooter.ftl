@@ -7,7 +7,11 @@
         </div>
     </#if>
         <div class="logo">
-            <@s.text name="label.copyright"/> <a href="http://www.fieldid.com/" target="_blank"><@s.text name="label.n4systems"/></a>
-            <img src="<@s.url value="/images/poweredByFieldID.jpg"/>"/>
+            <div>
+                <img src="<@s.url value="/images/logo-icon.png"/>"/>
+            </div>
+            <div style="margin-top:4px;margin-left:4px;">
+                <@s.text name="label.copyright"/> <a href="http://www.fieldid.com/" target="_blank"><@s.text name="label.n4systems"/></a>
+            </div>
         </div>
 </div>
