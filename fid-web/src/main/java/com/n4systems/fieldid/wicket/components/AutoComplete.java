@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.TextRequestHandler;
 import org.apache.wicket.util.convert.IConverter;
@@ -74,7 +75,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
             public String getObject() {
                 T modelObject = AutoComplete.this.getModelObject();
                 if (modelObject != null) {
-                    T objectValue = (T) choiceRenderer.getDisplayValue(modelObject);
+                    T objectValue = (T) getChoiceRenderer().getDisplayValue(modelObject);
                     Class<T> objectClass =
                             (Class<T>) (objectValue == null ? null : objectValue.getClass());
                     
@@ -180,7 +181,9 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         return new AutoCompleteResult("search limit reached for '" + term +"'", "max-results");
     }
 
-    protected void startRequest() {};
+    protected void startRequest(Request request) {}
+
+    protected void endRequest(Request request) { }
 
     protected String normalizeSearchTerm(String term) {
         return term;
@@ -189,7 +192,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     private class InnerAutocompleteBehavior extends AbstractAjaxBehavior {
 
         public void onRequest() {
-            startRequest();
+            startRequest(getComponent().getRequest());
             term = this.getComponent().getRequest().getQueryParameters().getParameterValue("term").toString();
 
             if (!Strings.isEmpty(term)) {
@@ -225,13 +228,11 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                 RequestCycle.get().scheduleRequestHandlerAfterCurrent(
                         new TextRequestHandler("application/json", "utf-8", sw.toString()));
 
-                endRequest();
+                endRequest(getComponent().getRequest());
             }
         }
 
     }
-
-    private void endRequest() { }
 
     private class InnerAutocomplete<E> extends Autocomplete<E> {
         public InnerAutocomplete(String id, IModel<E> model) {

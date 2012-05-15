@@ -10,7 +10,7 @@
     color : #3344DD;
 }
 
-.ui-menu {
+.ui-menu.ui-autocomplete.ui-widget {
     border-left:100px solid #ddd;
     font-size:11px;
     padding:0;

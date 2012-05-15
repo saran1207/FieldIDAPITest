@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components;
 
-import java.util.Date;
-
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -12,11 +12,9 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
 import rfid.web.helper.SessionUser;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
+import java.util.Date;
 
 
 @SuppressWarnings("serial")
@@ -33,7 +31,7 @@ public class DateTimePicker extends Panel {
 
         setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
-        
+
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
 
         String javaDateFormat = includeTime ? sessionUser.getDateTimeFormat() : sessionUser.getDateFormat();
@@ -57,9 +55,9 @@ public class DateTimePicker extends Panel {
         });
         dateTextField.add(new AttributeAppender("class", getEnabledModel(), " " ));
     }
-    
+
     private IModel<?> getEnabledModel() {
-		return new Model<String>() { 
+		return new Model<String>() {
 			@Override public String getObject() {
 				return isEnabled() ? "" : "datetimepicker-disabled";
 			}
@@ -70,14 +68,20 @@ public class DateTimePicker extends Panel {
     protected void onBeforeRender() {
     	super.onBeforeRender();
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderOnLoadJavaScript(createSetupCalendarJavascript());
 
+        // CAVEAT : the reason a special (datepicker only) version of jquery ui was brought in
+        //  is because if you referenced the entire ui library it would conflict the use of some
+        //  wiquery ui things.  (AutoComplete in this case).
+        // the best situation would be just to have all components use the predefined wiquery js references
+        //  like CoreUIJavaScriptResourceReference.
+        response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.datepicker.min.js");
+
         response.renderCSSReference("style/datetimepicker.css");
         response.renderCSSReference("style/jquery-redmond/jquery-ui-1.8.13.custom.css");
-        response.renderJavaScriptReference("javascript/jquery-ui-1.8.13.custom.min.js");
         response.renderJavaScriptReference("javascript/jquery-ui-timepicker-addon.js");
     }
 

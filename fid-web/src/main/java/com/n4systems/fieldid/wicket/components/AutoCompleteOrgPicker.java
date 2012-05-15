@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgEnum;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.HashSet;
@@ -14,7 +15,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
     
     private @SpringBean OrgService orgService;
     
-    private HashSet<OrgEnum> categories;
+    private HashSet<OrgEnum> categories = new HashSet<OrgEnum>();
 
     public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> model) {
         super(id, model);
@@ -52,8 +53,8 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
     }
 
     @Override
-    protected void startRequest() {
-        categories = new HashSet<OrgEnum>();
+    protected void startRequest(Request request) {
+        categories.clear();
     }
 
     protected String getDisplayValue(BaseOrg org) {

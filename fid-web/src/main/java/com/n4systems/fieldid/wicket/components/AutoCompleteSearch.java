@@ -6,6 +6,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.HashSet;
@@ -30,7 +31,7 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
     }
 
     @Override
-    protected void startRequest() {
+    protected void startRequest(Request request) {
         categories = new HashSet<AssetType>();
     }
 
