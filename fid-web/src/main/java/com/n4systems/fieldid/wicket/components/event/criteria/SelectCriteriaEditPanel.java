@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.event.criteria;
 
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.model.SelectCriteriaResult;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -15,6 +16,7 @@ public class SelectCriteriaEditPanel extends Panel {
 
         DropDownChoice<String> selectField = new DropDownChoice<String>("selectField", new PropertyModel<String>(result, "value"), new PropertyModel<List<String>>(result, "criteria.options"));
         selectField.setNullValid(true);
+        selectField.add(new UpdateComponentOnChange());
         add(selectField);
     }
 

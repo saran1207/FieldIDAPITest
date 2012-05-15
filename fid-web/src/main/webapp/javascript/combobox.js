@@ -274,6 +274,7 @@ function toCombo(selectName, buttonName){
 		}
 
 		this.selectObj.focus();
+        this.selectObj.onchange();
 	}
 
 	//*********************************

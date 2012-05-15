@@ -27,6 +27,8 @@ public class CriteriaEditorFactory {
             return new UnitOfMeasureCriteriaEditPanel(componentId, (IModel<UnitOfMeasureCriteriaResult>) resultModel);
         } else if (result instanceof SignatureCriteriaResult) {
             return new SignatureCriteriaResultEditPanel(componentId, (IModel<SignatureCriteriaResult>) resultModel);
+        } else if (result instanceof ComboBoxCriteriaResult) {
+            return new ComboBoxCriteriaEditPanel(componentId, (IModel<ComboBoxCriteriaResult>) resultModel);
         } else {
             return new WebMarkupContainer(componentId);
         }
