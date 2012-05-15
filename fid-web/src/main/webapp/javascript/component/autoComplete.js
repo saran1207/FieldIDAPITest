@@ -13,11 +13,21 @@ var autoCompleter = (function() {
      * public methods exposed.
      */
     var init = function(id) {
-        $("#"+id).bind("autocompleteopen", function(event, ui) {
-            $('.link').tipsy({gravity: 'e', fade:true, delayIn:150});
+        var auto = $("#"+id);
+        auto.initialized=false;
+        auto.bind("autocompleteopen", function(event, ui) {
+            if (!auto.initialized) {
+                var menu = $('.ui-autocomplete:visible');
+                // the calculation for proper width is sometimes a wee bit short.  hack to make it look better & prevent unnecessary wrapping.
+                menu.width(menu.width()+10);
+                menu.css('min-width','75px');
+            }
+            auto.initialized=true;
+            $('.ui-autocomplete .link').tipsy({gravity: 'e', fade:true, delayIn:150});
+            // hack to remove jquery styling because rounded corners mucks up the border.
             $('.ui-autocomplete').removeClass('ui-corner-all');
         });
-        $("#"+id).bind("autocompleteclose", function(event, ui) {
+        auto.bind("autocompleteclose", function(event, ui) {
             $("#"+id).focus();
         });
     };
