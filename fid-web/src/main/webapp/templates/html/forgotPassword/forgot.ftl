@@ -1,33 +1,50 @@
 <title><@s.text name="title.forgot_password"/></title>
 
-<div id="mainContent">
-	
-	<div class="titleBlock">	
-		<h1><@s.text name="title.forgot_password"/></h1>
+<head>
+    <@n4.includeStyle href="pageStyles/login" />
+    <@n4.includeScript src="jquery/watermark/jquery.watermark.js"/>
+</head>
+<div id="mainContent" class="login-page">
+
+	<div class="titleBlock">
+		<@s.text name="title.forgot_password"/>
 		<p class="titleSummary">
 			<@s.text name="instruction.reset_your_password"/>
 		</p>
 	</div>
-	
-	
-	<@s.form action="sendPassword" theme="fieldid" cssClass="minForm">
+
+	<@s.form action="sendPassword" theme="fieldid" cssClass="minForm login-form">
 		<#include "/templates/html/common/_formErrors.ftl"/>
 		<p class="actionInstructions">
 			<@s.text name="instructions.forgotpassword"/>
 		</p>
-		
+
 		<div class="infoSet">
-			<label class='label' for="userName"><@s.text name="label.username"/></label>
 			<@s.textfield name="userName" id="userName"/>
 		</div>
 		<div class="actions">
-			<@s.submit key="label.reset_password"/> <@s.text name="label.or"/> <a href="<@s.url action="login"/>"/><@s.text name="label.return_to_sign_in"/></a>
+			<@s.submit cssClass="blue-submit" key="label.reset_password"/> <span style="color:#999;"><@s.text name="label.or"/></span> <a href="<@s.url action="login"/>"/><@s.text name="label.return_to_sign_in"/></a>
 		</div>
-		
+
 	</@s.form>
 </div>
-<#include "../common/_secondary_content.ftl"/>
 
 <script type="text/javascript">
-	$('userName').select();
-</script> 
+    jQuery('#userName').watermark('username');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

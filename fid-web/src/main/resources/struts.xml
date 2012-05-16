@@ -114,7 +114,7 @@
 	</package>
 
 	<package name="embedded" extends="default" namespace="/embedded">
-		<action name="login" method="add" class="com.n4systems.fieldid.actions.SignInAction" >
+		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction" >
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="freemarker">/templates/html/login/embedded.ftl</result>
 			<result name="alreadyLoggedIn" type="freemarker">/templates/html/login/embedded.ftl</result>

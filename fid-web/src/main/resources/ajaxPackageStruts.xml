@@ -268,7 +268,7 @@
 			<result name="success" type="freemarker">/templates/ajax/unitOfMeasure/select.ftl</result>
 		</action>
 		
-		<action name="testSession" method="test" class="com.n4systems.fieldid.actions.SignInAction">
+		<action name="testSession" method="test" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedPublicStack" />
 			<result name="noSession" type="freemarker">/templates/ajax/login/noSession.ftl</result>
 			<result name="loggedIn" type="freemarker">/templates/ajax/login/loggedIn.ftl</result>

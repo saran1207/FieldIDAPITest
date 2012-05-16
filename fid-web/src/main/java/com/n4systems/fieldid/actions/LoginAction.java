@@ -24,9 +24,9 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.time.SystemClock;
 
-public class SignInAction extends AbstractAction {
+public class LoginAction extends AbstractAction {
 
-	private static final Logger logger = Logger.getLogger(SignInAction.class);
+	private static final Logger logger = Logger.getLogger(LoginAction.class);
 	private static final long serialVersionUID = 1L;
 
 	protected UserManager userManager;
@@ -40,7 +40,7 @@ public class SignInAction extends AbstractAction {
 	@Autowired
 	private TenantSettingsService tenantSettingsService;
 	
-	public SignInAction(UserManager userManager, PersistenceManager persistenceManager) {
+	public LoginAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 	}

@@ -1,28 +1,25 @@
-#pageContent {
-    margin-bottom: 0px;
-}
-
 #pageContent.brandedContainer {
     background:none;
+    padding-top:15px;
     padding-bottom:15px;
     border:none;
+    margin-bottom:0;
 }
 
-#pageContent .login-page {
-    width:85%;
+#mainContent.login-page {
+    width:50%;
     float:none;
     box-shadow: 2px 2px 6px 1px #ccc;
-    height:220px;
     background:#f8f8f8;
     margin-left:auto;
     margin-right:auto;
-    padding:30px 0 60px 0;
+    padding:30px 0px 60px 0px;
+    margin-bottom: 0px;
 }
 
 #pageFooter {
-    /*page is 85%, ha */
-    margin:0 0 0 7.5%;
-    float:left;
+    margin:auto;
+    width: 50%;
 }
 
 .login-page .titleBlock {
@@ -32,14 +29,22 @@
     margin-bottom:0;
 }
 
+.titleBlock .action {
+    color:#888;
+}
+
+.login-page .titleSummary {
+    text-align: center;
+    font-size:17px;
+}
+
 .login-form {
-    margin-left:30%;
-    width:50%;
+    margin-left:23%;
+    width:54%;
 }
 
 #pageFooter .logo {
     float: right;
-    margin-right:15%;
 }
 
 #pageFooter #sslCert {
@@ -47,18 +52,29 @@
 }
 
 .remember-me {
-    padding:10px 0;
+    margin-bottom:30px;
 }
+
 .remember-me .fieldHolder{
-    font-size:1em;
+    font-size:11px;
     padding:5px;
-
 }
 
+.login-input {
+    margin-left:-16px;
+}
 
 .login-input a {
     color:#888;
     font-size:12px;
+}
+
+.login-input .fieldHolder {
+    display:inline;
+}
+
+.login-input img {
+    padding-right:2px;
 }
 
 .actions {
@@ -70,16 +86,14 @@
 }
 
 .login-help {
-    margin-left:88%;
-    width:150px;
-    margin-top:-20px;
-    height:20px;
+    padding-left: 10px;
+    font-size:11px;
 }
 
 #companyLogo, #systemLogo {
-    width: 215px;
     margin-top: 5px;
     margin-left:340px;
+    padding:0px;
     float:none;
 }
 
@@ -87,6 +101,7 @@
     float:none;
     margin-left:auto;
     margin-right:auto;
+    width:50%;
 }
 
 #password.passwordBox, #userName.textbox {
@@ -96,16 +111,9 @@
     margin-top:5px;
 }
 
-.blue-submit {
-    width:100px;
-    float:left;
-}
-
 .request {
-    float:left;
-    color:#999;
-    margin-left:-13px;
-    padding: 12px 0;
+    margin-top:25px;
+    margin-top:25px;
 }
 
 .request a { padding-left:5px; }

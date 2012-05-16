@@ -1362,13 +1362,13 @@
 			<result name="success" type="freemarker">/templates/html/aggregateReport/show.ftl</result>
 		</action>
 
-		<action name="login" method="add" class="com.n4systems.fieldid.actions.SignInAction">
+		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="freemarker">/templates/html/login/form.ftl</result>
 			<result name="alreadyLoggedIn" type="redirect">/w/dashboard</result>
 		</action>
 		
-		<action name="confirmKick" method="confirmKick" class="com.n4systems.fieldid.actions.SignInAction">
+		<action name="confirmKick" method="confirmKick" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="error" type="freemarker">/templates/html/login/form.ftl</result>
 			<result name="success" type="redirect">/w/dashboard</result>
@@ -1377,7 +1377,7 @@
 			</result>
 		</action>
 
-		<action name="logIntoSystem" method="create" class="com.n4systems.fieldid.actions.SignInAction">
+		<action name="logIntoSystem" method="create" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="input" type="freemarker">/templates/html/login/form.ftl</result>
 			<result name="redirect_to_url" type="redirectAction">
@@ -1393,12 +1393,12 @@
 			<result name="confirmKick" type="freemarker">/templates/html/login/confirmKick.ftl</result>
 		</action>
 
-		<action name="booted" method="booted" class="com.n4systems.fieldid.actions.SignInAction">
+		<action name="booted" method="booted" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="redirectAction">login</result>
 		</action>
 
-		<action name="logout" method="delete" class="com.n4systems.fieldid.actions.SignInAction">
+		<action name="logout" method="delete" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="redirectAction">login</result>
 		</action>

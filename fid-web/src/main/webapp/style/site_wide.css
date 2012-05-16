@@ -327,7 +327,7 @@ input:-moz-placeholder {
 
 
 /*
- Blue submit button.  no width or padding specified.
+ Blue submit button.
 */
 .blue-submit {
     background: #4C8FFC;
@@ -344,10 +344,11 @@ input:-moz-placeholder {
     box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
     color: #FFFFFF;
     text-shadow: 0 -1px 1px rgba(0, 0, 0, .33);
-    margin-right:20px;
-    float:right;
-    padding-left:40px;
-    padding-right:40px;
+    text-decoration: none;
+    padding:5px 0px;
+    min-width:100px;
+    margin-top:7px;
+    text-align: center;
 }
 
 .blue-submit:hover {

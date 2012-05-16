@@ -180,11 +180,7 @@
 
 
 .blue-submit {
-    text-decoration: none;
-    padding:5px 0px;
-    width:100px;
-    margin-top:7px;
-    text-align: center;
+    float:right;
 }
 
 

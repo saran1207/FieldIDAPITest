@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import javax.mail.MessagingException;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.handler.password.PasswordHelper;
@@ -16,8 +10,13 @@ import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class ForgotPasswordAction extends SignInAction {
+import javax.mail.MessagingException;
+
+public class ForgotPasswordAction extends LoginAction {
 
 	private static final Logger logger = Logger.getLogger(ForgotPasswordAction.class);
 	private static final long serialVersionUID = 1L;
