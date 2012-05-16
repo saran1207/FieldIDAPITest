@@ -9,6 +9,9 @@
 
 var autoCompleter = (function() {
 
+    var descriptionWidth = 120;
+    var fudgeFactor = 10;
+
     /*
      * public methods exposed.
      */
@@ -18,9 +21,7 @@ var autoCompleter = (function() {
         auto.bind("autocompleteopen", function(event, ui) {
             if (!auto.initialized) {
                 var menu = $('.ui-autocomplete:visible');
-                // the calculation for proper width is sometimes a wee bit short.  hack to make it look better & prevent unnecessary wrapping.
-                menu.width(menu.width()+10);
-                menu.css('min-width','75px');
+                menu.css('width',menu.width()+10); // add room because we've styled it with extra padding between description and result columns.
             }
             auto.initialized=true;
             $('.ui-autocomplete .link').tipsy({gravity: 'e', fade:true, delayIn:150});
@@ -33,7 +34,6 @@ var autoCompleter = (function() {
     };
 
     var render = function(ul, item) {
-        ul.removeClass('empty');
         return (item.descClass=='no-results') ?
                     renderNoResults(ul, item) :
                 (item.descClass=='max-results') ?
@@ -41,21 +41,33 @@ var autoCompleter = (function() {
                     renderItem(ul, item);
     };
 
+    var closeOnScroll = function(element) {
+        $(element).scroll(function() {
+            // bug fix...autocomplete menu should hide when mouse wheel (or other scrolling) happens.  if it's in a scrollable container then
+            // you should probably hook this up.  otherwise the menu will just sit there when you scroll the associated text field away.
+            $('.ui-autocomplete:visible').hide();
+        });
+    };
+
     function renderItem(ul,item) {
         return renderImpl(ul, item, descFor(item) + linkFor(item));
     }
 
     function renderNoResults(ul,item) {
-        ul.addClass('empty');
+        ul.width(100);
         return renderImpl(ul, item,  descFor(item) );
     }
 
     function renderMaxResults(ul, item) {
-        return renderImpl(ul, item, descFor(item));
+        return renderImpl(ul, item, descFor(item), 'ui-menu-item max-results-container');
     }
-
-    function renderImpl(ul, item, anchor) {
-        return $( '<li></li>' )
+    
+    function renderImpl(ul, item, anchor, cssClass) {
+        var li = '<li></li>';
+        if (cssClass) {
+            li = '<li class="' + cssClass + '"></li>';
+        }
+        return $(li)
             .data(  'item.autocomplete', item )
             .append( anchor )
             .appendTo( ul );
@@ -87,6 +99,7 @@ var autoCompleter = (function() {
 
     return {
         render : render,
+        closeOnScroll : closeOnScroll,
         init : init
     };
 

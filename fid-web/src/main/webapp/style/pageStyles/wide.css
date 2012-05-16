@@ -168,7 +168,8 @@
     border-top-color: #ccc;
     height:40px;
     background:white;
-    width:345px;
+    width:335px;
+    padding-right:10px;
 	zoom:0;
 }
 
@@ -281,7 +282,6 @@
 .menu.wide .menu-items {
     width: 200px;
     left: -146px;
-    z-index: 1;
 }
 
 .menu-items {
@@ -302,6 +302,7 @@
 	padding-bottom:3px;			
 	left:3px; 			/*account for border radius so it lines up smoothly */
 	*left:0px; 			/*account for worlds crappiest browser */
+    z-index: 123;
 } 
 
 .menu-items li a {

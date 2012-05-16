@@ -51,7 +51,7 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
         if (thisOneSelected) {
             getAutocompleteHidden().setModelObject(idValue);
         }
-        String tooltip = "";
+        String tooltip = asset.getType().getDisplayName();
         List<String> ids = Lists.newArrayList();
         if (StringUtils.isNotBlank(asset.getCustomerRefNumber())) {
             ids.add(asset.getCustomerRefNumber());
@@ -60,7 +60,7 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
             ids.add(asset.getRfidNumber());
         }
         if (ids.size()>0) {
-            tooltip = ids.toString();
+            tooltip += " " + ids.toString();
         }
         return new AutoCompleteResult(asset.getId()+"", asset.getDisplayName(), getCategory(asset), term, tooltip);
     }
