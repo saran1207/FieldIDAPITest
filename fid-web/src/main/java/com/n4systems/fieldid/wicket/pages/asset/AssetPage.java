@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.asset;
 
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
@@ -22,6 +23,9 @@ public abstract class AssetPage extends FieldIDFrontEndPage {
 
     @SpringBean
     protected UserService userService;
+
+    @SpringBean
+    protected EventScheduleService eventScheduleService;
 
     protected Long assetId;
     protected IModel<Asset> assetModel;

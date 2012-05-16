@@ -7,7 +7,7 @@
 }
 
 .assetMap {
-    height: 300px;
+    height: 100px;
     Width: 300px;
 }
 
@@ -21,24 +21,38 @@
     padding: 0 5px;
 }
 
-.linkedAssetList img, .linkedAssetLabel, .linkedAssetLabel a{
+.linkedAssetList img, .linkedAssetLabel, .linkedAssetLabel a, .addLinkedAsset, .linkedAssetPanel #formErrors{
     float:left;
     padding: 0 5px;
 }
 
-.linkedAssetLabel .assetLink{
+.linkedAssetLabel .assetLink {
     padding: 0;
 }
 
 .linkedAssetLabel label, .linkedAssetLabel a{
     display:block;
 }
-
-.linkedAssets {
+.linkedAssetLabel label {
+    width: 150px;
+}
+.linkedAssetPanel {
     display: inline-block;
     padding: 5px 0;
+    width: 220px;
 }
 
-.linkedAssets li {
+.linkedAssetPanel li {
     padding: 5px 0;
+    float: left;
+}
+
+.formErrors h2 {
+    display: none
+}
+
+.formErrors ul li {
+    list-style-type: none;
+    margin-left:0;
+    padding: 0;
 }
