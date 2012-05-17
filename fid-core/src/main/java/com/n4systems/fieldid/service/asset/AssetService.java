@@ -156,8 +156,7 @@ public class AssetService extends FieldIdPersistenceService {
 		try {
 			SubAsset p = persistenceService.find(query);
 			if (p != null) {
-				Asset master = p.getMasterAsset();
-				return fillInSubAssetsOnAsset(master);
+				return p.getMasterAsset();
 			}
 			return null;
 		} catch (NoResultException e) {
@@ -300,6 +299,7 @@ public class AssetService extends FieldIdPersistenceService {
         }
     }
 
+    //Delete subassets that are no longer in the subasset list
     private void clearOldSubAssets(Asset asset) {
         if (!asset.isNew()) {
             List<SubAsset> existingSubAssets = persistenceService.findAll(new QueryBuilder<SubAsset>(SubAsset.class, new OpenSecurityFilter()).addSimpleWhere("masterAsset", asset));
@@ -320,6 +320,7 @@ public class AssetService extends FieldIdPersistenceService {
 
         if (parentAsset != null && !parentAsset.equals(asset)) {
             try {
+                fillInSubAssetsOnAsset(parentAsset);
                 QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class, new OpenSecurityFilter()).addSimpleWhere("asset", subAsset.getAsset());
                 SubAsset subAssetToRemove = persistenceService.find(query);
                 parentAsset.getSubAssets().remove(subAssetToRemove);
