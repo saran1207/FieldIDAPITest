@@ -31,6 +31,11 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
     }
 
     @Override
+    protected String getWatermarkText() {
+        return "";
+    }
+
+    @Override
     protected void startRequest(Request request) {
         categories = new HashSet<AssetType>();
     }

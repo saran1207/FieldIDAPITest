@@ -31,6 +31,11 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
     }
 
     @Override
+    protected String getWatermarkText() {
+        return "type organization name";
+    }
+
+    @Override
     protected String normalizeSearchTerm(String term) {
         return new OrgQuery(term).getSearchTerm();
     }

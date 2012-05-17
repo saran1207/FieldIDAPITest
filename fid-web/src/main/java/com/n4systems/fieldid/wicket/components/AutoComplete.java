@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components;
 
 import com.google.gson.Gson;
+import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.model.parents.AbstractEntity;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -118,6 +119,12 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         };
         add(updateAjax);
         add(autocompleteBehavior = new InnerAutocompleteBehavior());
+        autocompleteField.add(new Watermark(getWatermarkText()));
+    }
+
+    protected String getWatermarkText() {
+        // override this to provide more meaningful prompt.
+        return "start typing...";
     }
 
     protected List<T> getChoices() {

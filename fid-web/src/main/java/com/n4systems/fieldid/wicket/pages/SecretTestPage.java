@@ -57,7 +57,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/reset.css");
-        response.renderCSSReference("style/component/tabbedPanel.css");
+        response.renderCSSReference("style/site_wide.css");
     }
 
 }

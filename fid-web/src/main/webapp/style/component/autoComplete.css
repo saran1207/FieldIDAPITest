@@ -17,9 +17,9 @@
     font-size:11px;
     background:white;
     padding-left:110px;
-    padding-top:0;
-    padding-bottom:0;
-    padding-right:1px;
+    padding-top:1px;
+    padding-bottom:1px;
+    padding-right:2px;
     /*min-width:220px; *//*category size + minwidth*/
 }
 
@@ -34,7 +34,7 @@
     padding:.3em 0;
     float: left;
     height:13px;
-    font-style: italic;
+    /*font-style: italic;*/
     font-size:11px;
     text-overflow: ellipsis;
     overflow:hidden;
@@ -42,7 +42,7 @@
 }
 
 .ui-menu .ui-menu-item {
-    background:#ddd;
+    background:#f9f9f9;
     border-left:1px solid #999;
 }
 
@@ -71,7 +71,15 @@ li .max-results {
     color: #4466aa;
     line-height: 25px;
     text-align: left;
+    margin-left:5px;
     font-style:italic;
     word-wrap: break-word;
 }
 
+
+#fieldidBody .ui-widget-content .ui-state-hover {
+    background: #D2E5FF;
+    border: 1px solid #D2E5FF;
+    border-left-color: #777;
+    border-radius:0;
+}

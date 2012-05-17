@@ -302,7 +302,6 @@ em {
 
 input::-webkit-input-placeholder {
     color: #bbb;
-    padding-left:25px;
     font-style:italic;
     background-size: 22px 22px;
     background-repeat: no-repeat;
@@ -311,12 +310,10 @@ input::-webkit-input-placeholder {
 
 input:-moz-placeholder {
     color: #bbb;
-    padding-left:25px;
     font-style:italic;
     background-size: 22px 22px;
     background-repeat: no-repeat;
 }
-
 
 .watermark {
     color: #bbb !important;
