@@ -17,7 +17,7 @@ public class OwnershipCriteriaPanel extends Panel {
 
 	public OwnershipCriteriaPanel(String id, IModel<?> model) {
         super(id, model);
-        add(new AutoCompleteOrgPicker("owner",  new PropertyModel<BaseOrg>(getDefaultModel(), "owner")));
+        add(new AutoCompleteOrgPicker("owner",  new PropertyModel<BaseOrg>(getDefaultModel(), "owner")).inScrollableContainers("#left-panel .form"));
         add(new ModalLocationPicker("location", new PropertyModel<Location>(getDefaultModel(), "location")));
         
         WebMarkupContainer assignedUserContainer = new WebMarkupContainer("assignedToContainer");

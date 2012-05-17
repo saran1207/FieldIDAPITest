@@ -14,8 +14,10 @@ var autoCompleter = (function() {
 
     /*
      * public methods exposed.
+     * id : id of text input element that will have autocomplete menu associated with it.
+     * containers : if the element (id) is in a scrollable entity, you will probably want to make the menu hide when a scroll event occurs.
      */
-    var init = function(id) {
+    var init = function(id, containers) {
         var auto = $("#"+id);
         auto.initialized=false;
         auto.bind("autocompleteopen", function(event, ui) {
@@ -31,6 +33,15 @@ var autoCompleter = (function() {
         auto.bind("autocompleteclose", function(event, ui) {
             $("#"+id).focus();
         });
+        if (containers) {
+            $.each(containers,function(index,selector) {
+                $(selector).scroll(function() {
+                    // bug fix...autocomplete menu should hide when mouse wheel (or other scrolling) happens.  if it's in a scrollable container then
+                    // you should probably hook this up.  otherwise the menu will just sit there when you scroll the associated text field away.
+                    $('.ui-autocomplete:visible').hide();
+                });
+            });
+        }
     };
 
     var render = function(ul, item) {
@@ -39,14 +50,6 @@ var autoCompleter = (function() {
                 (item.descClass=='max-results') ?
                     renderMaxResults(ul,item) :
                     renderItem(ul, item);
-    };
-
-    var closeOnScroll = function(element) {
-        $(element).scroll(function() {
-            // bug fix...autocomplete menu should hide when mouse wheel (or other scrolling) happens.  if it's in a scrollable container then
-            // you should probably hook this up.  otherwise the menu will just sit there when you scroll the associated text field away.
-            $('.ui-autocomplete:visible').hide();
-        });
     };
 
     function renderItem(ul,item) {
@@ -68,7 +71,7 @@ var autoCompleter = (function() {
             li = '<li class="' + cssClass + '"></li>';
         }
         return $(li)
-            .data(  'item.autocomplete', item )
+            .data('item.autocomplete', item)
             .append( anchor )
             .appendTo( ul );
     }
@@ -99,10 +102,8 @@ var autoCompleter = (function() {
 
     return {
         render : render,
-        closeOnScroll : closeOnScroll,
         init : init
     };
-
 
 })();
 

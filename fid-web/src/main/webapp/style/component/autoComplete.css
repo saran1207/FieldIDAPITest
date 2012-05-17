@@ -11,8 +11,8 @@
 }
 
 .ui-menu.ui-autocomplete.ui-widget {
-    opacity:0.85;
-    filter:alpha(opacity=85);
+    opacity:0.93;
+    filter:alpha(opacity=93);
     border:1px solid #777;
     font-size:11px;
     background:white;

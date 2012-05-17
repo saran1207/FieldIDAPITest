@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components;
 
+import com.google.gson.Gson;
 import com.n4systems.model.parents.AbstractEntity;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -39,13 +40,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AutoComplete<T> extends FormComponentPanel<T> {
-
+    
     public static final WiQueryJavaScriptResourceReference WIQUERY_AUTOCOMPLETE_JS =
             new WiQueryJavaScriptResourceReference(AutocompleteAjaxComponent.class,
                     "wiquery-autocomplete.js");
-
+    
     private static final String NOT_ENTERED = "NOT_ENTERED";
-
+    
     private boolean autoUpdate = false;
     protected String term = "";
     private InnerAutocompleteBehavior autocompleteBehavior;
@@ -54,6 +55,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     private IChoiceRenderer<? super T> choiceRenderer;
     private AbstractDefaultAjaxBehavior updateAjax;
     protected int threshold = 15;
+    private String[] containers = {"foo","bar"};
 
 
     public AutoComplete(String id, final IModel<T> model) {
@@ -121,7 +123,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     protected List<T> getChoices() {
         return getChoices(term);
     }
-
+    
     public HiddenField<String> getAutocompleteHidden() {
         return autocompleteHidden;
     }
@@ -173,12 +175,17 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         
     }
 
+    public AutoComplete<T> inScrollableContainers(String... selectors) {
+        this.containers = selectors;
+        return this;
+    }
+    
     private AutoCompleteResult createNoResultsJson(String search) {
         return new AutoCompleteResult("no results found for '" + search + "'", "no-results");
     }
 
     private AutoCompleteResult createMaxResultsJson(String term) {
-        return new AutoCompleteResult("search limit reached for '" + term +"'", "max-results");
+        return new AutoCompleteResult("Search Limit Reached. ", "max-results");
     }
 
     protected void startRequest(Request request) {}
@@ -302,11 +309,17 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        String args = "";
+        if (containers!=null && containers.length>0) {
+            Gson gson = new Gson();
+            args = "," + new Gson().toJson(containers);
+        }
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         response.renderCSSReference("style/component/autoComplete.css");
         response.renderCSSReference("style/tipsy/tipsy.css");
-        response.renderOnLoadJavaScript("autoCompleter.init('"+autocompleteField.getMarkupId()+"');");
+        response.renderOnLoadJavaScript("autoCompleter.init('"+autocompleteField.getMarkupId()+"'" + args + ");");
+//        response.renderOnLoadJavaScript("$('#"+autocompleteField.getMarkupId()+"').watermark('start typing your organization');");
     }
     
     @Override
