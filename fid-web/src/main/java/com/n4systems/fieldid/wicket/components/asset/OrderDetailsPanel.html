@@ -1,0 +1,32 @@
+<wicket:panel>
+
+    <h1><wicket:message key="label.orderdetails"/></h1>
+
+    <p>
+        <label><wicket:message key="label.onumber"/></label>
+        <span wicket:id="orderNumber"/>
+    </p>
+    <span wicket:enclosure="assetCode">
+        <p>
+            <label><wicket:message key="label.assetcode"/></label>
+            <span wicket:id="assetCode"/>
+        </p>
+        <p>
+            <label><wicket:message key="label.quantity"/></label>
+            <span wicket:id="quantity"/>
+        </p>
+        <p>
+            <label><wicket:message key="label.orderdate"/></label>
+            <span wicket:id="orderDate"/>
+        </p>
+        <p>
+            <label><wicket:message key="label.orderdescription"/></label>
+            <span wicket:id="orderDescription"/>
+        </p>
+    </span>
+    <p wicket:enclosure="purchaseOrder">
+        <label><wicket:message key="label.purchaseorder"/></label>
+        <span wicket:id="purchaseOrder"/>
+    </p>
+
+</wicket:panel>

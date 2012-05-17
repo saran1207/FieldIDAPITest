@@ -23,7 +23,7 @@
     Width: 300px;
 }
 
-h1 {
+.leftColumn h1, .rightColumn h1{
     padding: 10px 0;
     border-bottom: 1px solid #e2e2e2;
 }
@@ -86,7 +86,7 @@ h1 {
     color: #555;
 }
 
-.assetDetails span {
+.assetDetails p span {
     text-align: right;
     width: 150px;
 }

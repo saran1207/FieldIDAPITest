@@ -6,11 +6,14 @@ import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.AssetAttributeDetailsPanel;
 import com.n4systems.fieldid.wicket.components.asset.AssetDetailsPanel;
 import com.n4systems.fieldid.wicket.components.asset.LinkedAssetPanel;
+import com.n4systems.fieldid.wicket.components.asset.OrderDetailsPanel;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.ExtendedFeature;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -24,6 +27,7 @@ public class AssetViewPage extends AssetPage {
     private DateFormat dtf = new SimpleDateFormat(FieldIDSession.get().getSessionUser().getDateTimeFormat());
 
     private LinkedAssetPanel linkedAssetPanel;
+    private WebMarkupContainer map;
     
     public AssetViewPage(PageParameters params) {
         super(params);
@@ -35,8 +39,12 @@ public class AssetViewPage extends AssetPage {
         } else {
             add(new ExternalImage("assetImage", ContextAbsolutizer.toContextAbsoluteUrl("/file/downloadAssetImage.action?uniqueID=" + assetId)));
         }
-        
-        add(new GoogleMap("map").addLocation(asset.getGpsLocation().getLatitude().doubleValue(), asset.getGpsLocation().getLongitude().doubleValue()));
+
+        if(asset.getGpsLocation() != null) {
+            add(new GoogleMap("map").addLocation(asset.getGpsLocation().getLatitude().doubleValue(), asset.getGpsLocation().getLongitude().doubleValue()));
+        } else {
+            add(new WebMarkupContainer("map"));
+        }
 
         add(new Label("nextEventMsg", getNextEventMessage()));
 
@@ -45,15 +53,28 @@ public class AssetViewPage extends AssetPage {
         add(new AssetAttributeDetailsPanel("assetAttributeDetailsPanel", assetModel));
         
         add(linkedAssetPanel = new LinkedAssetPanel("linkedAssetPanel", assetModel));
-        
-        add(new AssetDetailsPanel("assetDetailsPanel", assetModel));
-        
         linkedAssetPanel.setOutputMarkupId(true);
+
+        add(new AssetDetailsPanel("assetDetailsPanel", assetModel));
+
+        Boolean integrationEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Integration);
+        Boolean orderDetailsEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.OrderDetails);
+
+        OrderDetailsPanel orderDetails;
+        add(orderDetails = new OrderDetailsPanel("orderDetailsPanel", assetModel));
+        orderDetails.setVisible(orderDetailsEnabled || integrationEnabled);
     }
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.asset").getObject() + " / " + assetModel.getObject().getIdentifier());
+        Asset asset = assetModel.getObject();
+        String title = asset.getType().getName() + " / " + asset.getIdentifier(); 
+        
+        if(asset.getAssetStatus() != null) {
+            title+= " / " + asset.getAssetStatus().getDisplayName();
+        }
+
+        return new Label(labelId, title);
     }
 
     private String getNextEventMessage() {
