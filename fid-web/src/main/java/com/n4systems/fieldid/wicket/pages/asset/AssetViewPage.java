@@ -3,6 +3,8 @@ package com.n4systems.fieldid.wicket.pages.asset;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.asset.AssetAttributeDetailsPanel;
+import com.n4systems.fieldid.wicket.components.asset.AssetDetailsPanel;
 import com.n4systems.fieldid.wicket.components.asset.LinkedAssetPanel;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -40,7 +42,12 @@ public class AssetViewPage extends AssetPage {
 
         add(new Label("lastEventMsg", getLastEventMessage()));
 
+        add(new AssetAttributeDetailsPanel("assetAttributeDetailsPanel", assetModel));
+        
         add(linkedAssetPanel = new LinkedAssetPanel("linkedAssetPanel", assetModel));
+        
+        add(new AssetDetailsPanel("assetDetailsPanel", assetModel));
+        
         linkedAssetPanel.setOutputMarkupId(true);
     }
 

@@ -1,3 +1,15 @@
+.leftColumn {
+    width: 300px;
+}
+
+.rightColumn{
+    width: 700px;
+}
+
+.leftColumn, .rightColumn, .assetAttributeDetails, .linkedAssetList, .assetDetails {
+    float: left;
+}
+
 .assetImage {
     width: 230px;
 }
@@ -11,7 +23,7 @@
     Width: 300px;
 }
 
-.recentActivity h1 {
+h1 {
     padding: 10px 0;
     border-bottom: 1px solid #e2e2e2;
 }
@@ -20,7 +32,9 @@
     vertical-align: text-top;
     padding: 0 5px;
 }
-
+.linkedAssetList {
+    padding: 5px 0;
+}
 .linkedAssetList img, .linkedAssetLabel, .linkedAssetLabel a, .addLinkedAsset, .linkedAssetPanel #formErrors{
     float:left;
     padding: 0 5px;
@@ -34,12 +48,12 @@
     display:block;
 }
 .linkedAssetLabel label {
-    width: 150px;
+    width: 230px;
 }
 .linkedAssetPanel {
     display: inline-block;
     padding: 5px 0;
-    width: 220px;
+    width: 300px;
 }
 
 .linkedAssetPanel li {
@@ -55,4 +69,24 @@
     list-style-type: none;
     margin-left:0;
     padding: 0;
+}
+
+.assetDetails p {
+    padding: 5px;
+    margin-top: 2px;
+}
+
+.assetDetails p, .assetDetails p label, .assetDetails p span  {
+    display: block;
+    float: left;
+}
+
+.assetDetails p label {
+    width: 140px;
+    color: #555;
+}
+
+.assetDetails span {
+    text-align: right;
+    width: 150px;
 }

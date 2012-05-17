@@ -122,7 +122,8 @@ public class LinkedAssetPanel extends Panel {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 Asset asset = assetModel.getObject();
-                
+                assetService.fillInSubAssetsOnAsset(asset);
+
                 if(!asset.getId().equals(assetForLinking.getId())) {
                     SubAsset subasset = new SubAsset(assetForLinking, asset);
                     asset.getSubAssets().add(subasset);
@@ -161,7 +162,7 @@ public class LinkedAssetPanel extends Panel {
         return new LoadableDetachableModel<List<SubAsset>>() {
             @Override
             protected List<SubAsset> load() {
-                return assetModel.getObject().getSubAssets();
+                return assetService.findSubAssets(assetModel.getObject());
             }
         };
     }
