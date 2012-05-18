@@ -15,8 +15,6 @@ public class AutoCompleteResult implements Serializable {
     private String descClass;
 
     public AutoCompleteResult(String id, String label, String desc, String term, String tooltip) {
-        // BUG : i need to escape these strings.
-        // e.g. if label is "&hello" it will not render correctly.
         this.valueId = id;
         this.label = label;
         this.desc = desc;

@@ -1,19 +1,15 @@
 package com.n4systems.model.orgs;
 
-import javax.persistence.*;
-
 import com.n4systems.model.AddressInfo;
-import com.n4systems.model.api.Archivable;
-import com.n4systems.model.api.Exportable;
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.api.NetworkEntity;
+import com.n4systems.model.api.*;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.GlobalID;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "org_base")

@@ -1,5 +1,6 @@
 package com.n4systems.util.collections;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 
@@ -14,14 +15,14 @@ public class PrioritizedList<T> extends ArrayList<T> {
     private TreeMap<Object,List<T>> priorities = new TreeMap<Object,List<T>>();
     private int threshold;
     private Prioritizer<T> prioritizer;
-    
+
     public PrioritizedList(List<? extends T> values, Prioritizer<T> prioritizer, int threshold) {
         this.threshold = threshold;
         this.prioritizer = prioritizer;
-        create(values);
+        populate(values);
     }
     
-    private void create(List<? extends T> unprioritizedValues) {
+    private void populate(List<? extends T> unprioritizedValues) {
         for (T value:unprioritizedValues) {
             prioritize(value, getPriority(value));
         }
@@ -59,9 +60,16 @@ public class PrioritizedList<T> extends ArrayList<T> {
     }
 
     protected int getCollisionIndex(int size, T value) {
-        // note : we want to get some sort to randomness in our population of values so if they are truncated
-        // we'll get a non-chronological distribution of nodes.
-        return value.hashCode() % size;
+        int index = 0;
+        if (prioritizer!=null) {
+            index = prioritizer.getCollisionIndex(size,value);
+        } else {         
+            // note : we want to get some sort to randomness in our population of values so if they are truncated
+            // we'll get a non-chronological distribution of nodes.
+            index = value.hashCode() % size;
+        }
+        Preconditions.checkState(index < size && index >= 0, "collision index must be 0.." + size);
+        return index;
     }
 
     protected boolean isHardLimit() {

@@ -527,7 +527,7 @@ public class AssetService extends FieldIdPersistenceService {
             builder.addWhere(group);
         }
 
-        builder.setLimit(100);
+        builder.setLimit(300);
         List<Asset> results = persistenceService.findAll(builder);
         int threshold;
         return new PrioritizedList<Asset>(results, new UniquePrioritizer("type"),threshold=25);

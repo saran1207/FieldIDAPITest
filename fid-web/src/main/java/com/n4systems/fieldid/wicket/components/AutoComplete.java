@@ -188,7 +188,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     }
     
     private AutoCompleteResult createNoResultsJson(String search) {
-        return new AutoCompleteResult("no results found for '" + search + "'", "no-results");
+        return new AutoCompleteResult("No Results Found", "no-results");
     }
 
     private AutoCompleteResult createMaxResultsJson(String term) {

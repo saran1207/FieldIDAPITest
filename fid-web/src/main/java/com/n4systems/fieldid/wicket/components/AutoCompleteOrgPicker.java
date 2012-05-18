@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components;
 
-import com.n4systems.fieldid.service.org.OrgList;
-import com.n4systems.fieldid.service.org.OrgQuery;
+import com.n4systems.util.collections.OrgList;
+import com.n4systems.fieldid.service.org.OrgQueryParser;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgEnum;
@@ -28,7 +28,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
             getAutocompleteHidden().setModelObject(idValue);
         }
         return new AutoCompleteResult(org.getId()+"", org.getName(), getCategory(org), term, org.getHierarchicalDisplayName());
-    }
+   }
 
     @Override
     protected String getWatermarkText() {
@@ -37,7 +37,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
 
     @Override
     protected String normalizeSearchTerm(String term) {
-        return new OrgQuery(term).getSearchTerm();
+        return new OrgQueryParser(term).getSearchTerm();
     }
 
     private String getCategory(BaseOrg org) {
