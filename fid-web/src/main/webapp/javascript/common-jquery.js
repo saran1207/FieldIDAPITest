@@ -617,3 +617,8 @@ function setAssignedToAsCurrentUser(thisUserId){
 function closeLightbox() {
     $.colorbox.close();
 }
+
+//Force a wicket page to reload model by removing the version number from the url
+function forceReload() {
+    window.location.href = window.location.href.replace(/\?\d+\&/, "?");
+}

@@ -2,10 +2,16 @@
 
     <h1><wicket:message key="label.orderdetails"/></h1>
 
-    <p>
+    <p wicket:enclosure="orderNumber">
         <label><wicket:message key="label.onumber"/></label>
         <span wicket:id="orderNumber"/>
     </p>
+
+    <p wicket:enclosure="connectToOrder">
+        <label><wicket:message key="label.onumber"/></label>
+        <span><a wicket:id="connectToOrder"><wicket:message key="label.connectorder"/></a></span>
+    </p>
+
     <span wicket:enclosure="assetCode">
         <p>
             <label><wicket:message key="label.assetcode"/></label>
@@ -28,5 +34,4 @@
         <label><wicket:message key="label.purchaseorder"/></label>
         <span wicket:id="purchaseOrder"/>
     </p>
-
 </wicket:panel>
