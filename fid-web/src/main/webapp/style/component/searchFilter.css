@@ -23,6 +23,10 @@
   *display:inline;
 }
 
+.field input.ui-autocomplete-input {
+    width: 144px;
+}
+
 .field input, .field select, .field .component, .collapsible select {
   width:150px;
   padding:3px;

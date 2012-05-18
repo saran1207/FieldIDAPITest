@@ -11,9 +11,9 @@
 }
 
 .ui-menu.ui-autocomplete.ui-widget {
-    opacity:0.93;
-    filter:alpha(opacity=93);
-    border:1px solid #777;
+    opacity:0.96;
+    filter:alpha(opacity=96);
+    border:1px solid #999;
     font-size:11px;
     background:white;
     padding-left:110px;
@@ -43,7 +43,7 @@
 
 .ui-menu .ui-menu-item {
     background:#f9f9f9;
-    border-left:1px solid #999;
+    border-left:1px solid #d6d6d6;
 }
 
 .ui-menu .ui-menu-item .link {
@@ -80,6 +80,6 @@ li .max-results {
 #fieldidBody .ui-widget-content .ui-state-hover {
     background: #D2E5FF;
     border: 1px solid #D2E5FF;
-    border-left-color: #777;
+    border-left-color: #d6d6d6;
     border-radius:0;
 }
