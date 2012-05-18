@@ -7,7 +7,7 @@
 }
 
 #mainContent.login-page {
-    width:50%;
+    width:600px;
     float:none;
     box-shadow: 2px 2px 6px 1px #ccc;
     background:#f8f8f8;
@@ -19,7 +19,7 @@
 
 #pageFooter {
     margin:auto;
-    width: 50%;
+    width: 600px;
 }
 
 .login-page .titleBlock {
@@ -39,8 +39,13 @@
 }
 
 .login-form {
-    margin-left:23%;
-    width:54%;
+    margin-left:175px;
+    width:250px;
+}
+
+.forgot-login-form {
+    margin-left:125px;
+    width:350px;
 }
 
 #pageFooter .logo {
@@ -105,7 +110,7 @@
 }
 
 #password.passwordBox, #userName.textbox {
-    width:80%;
+    width:84%;
     padding:10px;
     border:1px solid #ddd;
     margin-top:5px;
@@ -118,6 +123,11 @@
 
 .request a { padding-left:5px; }
 
-#sslCert a {
-    color: #d1adb0;
+#sslCert, #sslCert a, #sslCert a:hover, #sslCert a:visited, #sslCert a:active, .logo a {
+    color: #999;
+    font-size:10px;
+}
+
+p.actionInstructions {
+    color:#999;
 }

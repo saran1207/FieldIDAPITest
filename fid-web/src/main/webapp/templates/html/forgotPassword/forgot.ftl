@@ -8,12 +8,9 @@
 
 	<div class="titleBlock">
 		<@s.text name="title.forgot_password"/>
-		<p class="titleSummary">
-			<@s.text name="instruction.reset_your_password"/>
-		</p>
 	</div>
 
-	<@s.form action="sendPassword" theme="fieldid" cssClass="minForm login-form">
+	<@s.form action="sendPassword" theme="fieldid" cssClass="minForm forgot-login-form">
 		<#include "/templates/html/common/_formErrors.ftl"/>
 		<p class="actionInstructions">
 			<@s.text name="instructions.forgotpassword"/>

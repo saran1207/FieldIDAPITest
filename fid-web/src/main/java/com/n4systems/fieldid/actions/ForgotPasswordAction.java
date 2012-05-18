@@ -60,9 +60,10 @@ public class ForgotPasswordAction extends LoginAction {
 			}
 		}
 		
-		if (uniqueID != null) {
-			addFlashMessageText("message.email_sent");
-		}
+//		if (uniqueID != null) {
+//            addFlashMessageText("message.email_sent");
+//		}
+        addFlashMessageText("message.forgotten_password_email_sent");
 		return SUCCESS;
 	}
 
