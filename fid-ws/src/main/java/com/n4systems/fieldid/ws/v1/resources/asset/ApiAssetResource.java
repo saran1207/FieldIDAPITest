@@ -62,6 +62,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Autowired private ApiEventHistoryResource apiEventHistoryResource;
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
 	@Autowired private ApiAssetAttachmentResource apiAttachmentResource;
+	@Autowired private ApiSubAssetResource apiSubAssetResource;
 	
 	
 	@GET
@@ -179,6 +180,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		apiAsset.setTypeId(asset.getType().getId());
 		apiAsset.setNonIntergrationOrderNumber(asset.getNonIntergrationOrderNumber());
 		apiAsset.setImage(loadAssetImage(asset));
+		apiAsset.setMasterAsset(apiSubAssetResource.findMasterAsset(asset));
+		apiAsset.setSubAssets(apiSubAssetResource.findSubAssets(asset));
 		
 		if (asset.getAssetStatus() != null) {
 			apiAsset.setAssetStatusId(asset.getAssetStatus().getId());

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetResource;
+import com.n4systems.fieldid.ws.v1.resources.asset.ApiSubAssetResource;
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.assetcount.ApiAssetCountResource;
 import com.n4systems.fieldid.ws.v1.resources.assetstatus.ApiAssetStatusResource;
@@ -156,5 +157,10 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiLoggingResource apiLoggingResource() {
 		return new ApiLoggingResource();
+	}
+	
+	@Bean
+	public ApiSubAssetResource apiSubAssetResource() {
+		return new ApiSubAssetResource();
 	}
 }

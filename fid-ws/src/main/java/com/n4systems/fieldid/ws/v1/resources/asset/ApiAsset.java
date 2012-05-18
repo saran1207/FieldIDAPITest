@@ -28,10 +28,12 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	private String freeformLocation;
 	private String nonIntergrationOrderNumber;
 	private byte[] image;
+	private ApiSubAsset masterAsset;
+	private List<ApiSubAsset> subAssets;
 	private List<ApiAttributeValue> attributeValues;
 	private List<ApiEventSchedule> schedules;
 	private List<ApiAssetAttachment> attachments;
-	private List<ApiEventHistory> eventHistory;
+	private List<ApiEventHistory> eventHistory;	
 
 	public String getIdentifier() {
 		return identifier;
@@ -167,6 +169,22 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+	
+	public ApiSubAsset getMasterAsset() {
+		return masterAsset;
+	}
+	
+	public void setMasterAsset(ApiSubAsset masterAsset) {
+		this.masterAsset = masterAsset;
+	}
+	
+	public List<ApiSubAsset> getSubAssets() {
+		return subAssets;
+	}
+
+	public void setSubAssets(List<ApiSubAsset> subAssets) {
+		this.subAssets = subAssets;
 	}
 
 	public List<ApiAttributeValue> getAttributeValues() {
