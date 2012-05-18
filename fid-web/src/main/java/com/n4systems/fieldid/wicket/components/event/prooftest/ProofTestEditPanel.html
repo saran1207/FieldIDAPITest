@@ -1,0 +1,24 @@
+<wicket:panel>
+
+    <label class="label">
+        <select wicket:id="proofTestType"/>
+    </label>
+
+    <div class="proofTestUpload" wicket:id="uploadedProofTestContainer" style="clear:both; padding-bottom:15px;">
+            <input type="file" wicket:id="fileUpload">
+    </div>
+
+    <span class="proofTestManual" wicket:id="otherProofTestContainer" style="clear:both; padding-bottom:15px;">
+
+        <label class="label"><wicket:message key="label.peakload"/></label>
+        <input type="text" wicket:id="peakLoad" class="textbox">
+
+        <label class="label"><wicket:message key="label.duration"/></label>
+        <input type="text" wicket:id="duration" class="textbox">
+
+        <label class="label"><wicket:message key="label.peakloadduration"/></label>
+        <input type="text" wicket:id="peakLoadDuration" class="textbox">
+
+    </span>
+
+</wicket:panel>

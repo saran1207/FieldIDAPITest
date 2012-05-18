@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.event.criteria;
 
 import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.ScoreCriteriaResult;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -20,13 +19,6 @@ public class ScoreCriteriaEditPanel extends Panel {
 
     public ScoreCriteriaEditPanel(String id, final IModel<ScoreCriteriaResult> result) {
         super(id);
-
-        ScoreCriteria scoreCriteria = (ScoreCriteria) result.getObject().getCriteria();
-
-        if (result.getObject().getScore() == null) {
-            Score firstScore = scoreCriteria.getScoreGroup().getScores().get(0);
-            result.getObject().setScore(firstScore);
-        }
 
         RadioGroup<Score> scoreRadioGroup = new RadioGroup<Score>("scoresRadioGroup", new PropertyModel<Score>(result, "score"));
         scoreRadioGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {

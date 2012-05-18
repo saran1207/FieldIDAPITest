@@ -224,7 +224,13 @@ public class EventService extends FieldIdPersistenceService {
     
     @Transactional
     public Event createNewMasterEvent(Long assetId, Long eventTypeId) {
-        return createNewEvent(new Event(), assetId, eventTypeId);
+        Event masterEvent = createNewEvent(new Event(), assetId, eventTypeId);
+        masterEvent.setOwner(masterEvent.getAsset().getOwner());
+        masterEvent.setDate(new Date());
+        masterEvent.setAdvancedLocation(masterEvent.getAsset().getAdvancedLocation());
+        masterEvent.setPerformedBy(getCurrentUser());
+        masterEvent.setProofTestInfo(new ProofTestInfo());
+        return masterEvent;
     }
 
     @Transactional

@@ -49,6 +49,6 @@ public enum ProofTestType implements Listable<String> {
 	}
 
 	public String getId() {
-		return null;
+		return name();
 	}
 }

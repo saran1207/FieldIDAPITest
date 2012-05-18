@@ -19,9 +19,9 @@ import org.apache.wicket.util.lang.Bytes;
 
 import java.util.List;
 
-public class FileUploadPanel extends Panel {
+public class AttachmentsPanel extends Panel {
 
-    public FileUploadPanel(String id, IModel<List<FileAttachment>>  attachments) {
+    public AttachmentsPanel(String id, IModel<List<FileAttachment>> attachments) {
         super(id);
         add(new UploadForm("uploadForm", attachments));
     }
@@ -67,8 +67,6 @@ public class FileUploadPanel extends Panel {
                 FileAttachment attachment = new FileAttachment();
                 attachment.setFileName(fileUpload.getClientFileName());
                 getModelObject().add(attachment);
-            } else {
-                System.out.println("Nothing was uploaded TT");
             }
         }
 

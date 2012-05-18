@@ -9,6 +9,8 @@ import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.user.UserService;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -331,6 +333,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	// TODO extract to a loader it is only used by one call on event crud.
 	@Override
 	@SuppressWarnings("unchecked")
+    @CopiedToService(UserService.class)
 	public List<ListingPair> getExaminers(SecurityFilter filter) {
 		SecurityFilter justTenantFilter = new TenantOnlySecurityFilter(filter.getTenantId());
 		String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "

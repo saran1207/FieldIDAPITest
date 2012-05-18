@@ -1,20 +1,171 @@
 <wicket:extend>
 
-    <div wicket:id="eventFormPanel" class="eventForm">
-    </div>
+    <form wicket:id="outerEventForm">
 
-    <div class="attachments">
+        <div>
 
-        <div id="attachments" class="assetFormGroup">
-            <h2><wicket:message key="label.attachments"/></h2>
+            <h2><span wicket:id="assetTypeName"/> <wicket:message key="label.summary"/></h2>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.description"/></label>
+                <span class="fieldHolder" wicket:id="description">
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label class="label"><span wicket:id="identifierLabel"/></label>
+                <span class="fieldHolder">
+                    <a wicket:id="assetLink"><span wicket:id="identifier"></span></a>
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.rfidnumber"/></label>
+                <span class="fieldHolder" wicket:id="rfidNumber">
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.reference_number"/></label>
+                <span class="fieldHolder" wicket:id="referenceNumber">
+                </span>
+            </div>
+
         </div>
 
-        <p>
-            <wicket:message key="message.attachment"/>
-        </p>
+        <div>
 
-        <div wicket:id="attachmentsPanel"></div>
+            <h2><span wicket:id="eventTypeName"/> <wicket:message key="label.details"/></h2>
 
-    </div>
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.performed_by"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="performedBy"/>
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.date_performed"/></label>
+                <span class="fieldHolder">
+                    <div wicket:id="datePerformed"/>
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.schedulefor"/></label>
+                <span class="fieldHolder">
+                    <div wicket:id="schedule"/>
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.eventbook"/></label>
+                <span class="fieldHolder">
+                    <div wicket:id="newOrExistingEventBook"/>
+                </span>
+            </div>
+
+            <div wicket:id="eventAttributes"></div>
+
+        </div>
+
+        <div>
+
+            <h2><wicket:message key="label.owner"/></h2>
+
+            <div class="infoSet">
+                <label class="label">* <wicket:message key="label.owner"/></label>
+
+                <span wicket:id="orgPicker"></span>
+            </div>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.location"/></label>
+
+                <span wicket:id="locationPicker"></span>
+            </div>
+
+        </div>
+
+        <div wicket:id="eventFormPanel" class="eventForm">
+        </div>
+
+        <div style="clear:both;" wicket:id="proofTestContainer">
+            <h2><wicket:message key="label.prooftest"/></h2>
+
+            <div wicket:id="proofTest"></div>
+        </div>
+
+        <div style="clear:both;">
+            <h2><wicket:message key="label.posteventinformation"/></h2>
+
+            <div wicket:id="comments"></div>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.printable"/></label>
+
+                <span class="fieldHolder">
+                    <input type="checkbox" wicket:id="printable">
+                    <wicket:message key="label.printableexplination"/>
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.assetstatus"/></label>
+
+                <span class="fieldHolder">
+                    <select wicket:id="assetStatus"/>
+                </span>
+            </div>
+
+        </div>
+
+
+        <div style="clear:both;">
+            <h2><wicket:message key="label.schedules"/></h2>
+
+            <div wicket:id="schedulesContainer">
+                <div class="blockSeparated eventSchedule" wicket:id="schedules">
+                    <div wicket:id="addScheduleDate" class="addScheduleDate"></div>
+                    <div class="addScheduleLabel">
+                        <label wicket:id="addScheduleLabel">[sched label]</label>
+                        <wicket:enclosure>
+                            <div class="inline addScheduleJob">
+                                <wicket:message key="label.on"/>
+                                <span wicket:id="addScheduleJob"/>
+                            </div>
+                        </wicket:enclosure>
+                    </div>
+                    <a wicket:id="removeLink">
+                        <img src="/fieldid/images/small-x.png"/>
+                    </a>
+                </div>
+            </div>
+
+            <div wicket:id="schedulePicker"></div>
+        </div>
+
+        <div class="attachments">
+
+            <div id="attachments" class="assetFormGroup">
+                <h2><wicket:message key="label.attachments"/></h2>
+            </div>
+
+            <p>
+                <wicket:message key="message.attachment"/>
+            </p>
+
+            <div wicket:id="attachmentsPanel"></div>
+        </div>
+
+        <div class="formAction">
+            <input type="submit" wicket:id="saveButton" wicket:message="value:hbutton.save">
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink">
+                <wicket:message key="label.cancel"/>
+            </a>
+        </div>
+
+    </form>
 
 </wicket:extend>

@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.wicket.components.event.criteria.factory.CriteriaEditorFactory;
+import com.n4systems.fieldid.wicket.components.event.observations.DeficienciesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.observations.ObservationEditPanel;
 import com.n4systems.fieldid.wicket.components.event.observations.ObservationsButton;
+import com.n4systems.fieldid.wicket.components.event.observations.RecommendationsEditPanel;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.CriteriaResult;
@@ -45,22 +47,24 @@ public class CriteriaSectionEditPanel extends Panel {
             
             add(new ListView<CriteriaResult>("criteria", results) {
                 @Override
-                protected void populateItem(ListItem<CriteriaResult> item) {
+                protected void populateItem(final ListItem<CriteriaResult> item) {
                     item.add(new Label("criteriaName", new PropertyModel<String>(item.getModel(), "criteria.displayText")));
                     item.add(CriteriaEditorFactory.createEditorFor("criteriaEditor", item.getModel()));
-                    item.add(new ObservationsButton("recommendationsButton", new PropertyModel<List<? extends Observation>>(item.getModel(), "recommendations"), "images/rec.png", "images/rec-plus.png") {
+                    final PropertyModel<List<? extends Observation>> recommendations = new PropertyModel<List<? extends Observation>>(item.getModel(), "recommendations");
+                    item.add(new ObservationsButton("recommendationsButton", recommendations, "images/rec.png", "images/rec-plus.png") {
                         @Override
                         protected void onClick(AjaxRequestTarget target) {
                             recommendationsWindow.setTitle(new FIDLabelModel("label.recommendations"));
-                            recommendationsWindow.setContent(new ObservationEditPanel(recommendationsWindow.getContentId()));
+                            recommendationsWindow.setContent(new RecommendationsEditPanel(recommendationsWindow.getContentId(), item.getModel()));
                             recommendationsWindow.show(target);
                         }
                     });
-                    item.add(new ObservationsButton("deficienciesButton", new PropertyModel<List<? extends Observation>>(item.getModel(), "deficiencies"), "images/def.png", "images/def-plus.png") {
+                    final PropertyModel<List<? extends Observation>> deficiencies = new PropertyModel<List<? extends Observation>>(item.getModel(), "deficiencies");
+                    item.add(new ObservationsButton("deficienciesButton", deficiencies, "images/def.png", "images/def-plus.png") {
                         @Override
                         protected void onClick(AjaxRequestTarget target) {
                             recommendationsWindow.setTitle(new FIDLabelModel("label.deficiencies"));
-                            recommendationsWindow.setContent(new ObservationEditPanel(recommendationsWindow.getContentId()));
+                            recommendationsWindow.setContent(new DeficienciesEditPanel(recommendationsWindow.getContentId(), item.getModel()));
                             recommendationsWindow.show(target);
                         }
                     });

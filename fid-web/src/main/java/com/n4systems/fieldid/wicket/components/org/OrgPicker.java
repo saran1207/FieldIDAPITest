@@ -61,6 +61,7 @@ public class OrgPicker extends Panel {
                     @Override
                     protected void onOrgSelected(AjaxRequestTarget target) {
                         closePicker(target);
+                        OrgPicker.this.onOrgSelected(target);
                     }
 
                     @Override
@@ -78,6 +79,7 @@ public class OrgPicker extends Panel {
                     @Override
                     protected void onOrgSelected(AjaxRequestTarget target) {
                         closePicker(target);
+                        OrgPicker.this.onOrgSelected(target);
                     }
                 };
                 return searchPanel;
@@ -164,6 +166,7 @@ public class OrgPicker extends Panel {
 	}
 
     protected void onPickerClosed(AjaxRequestTarget target) {}
+    protected void onOrgSelected(AjaxRequestTarget target) {}
 
     public void setTranslateContainerSelector(String selector) {
         this.translateContainerSelector = selector;

@@ -115,6 +115,7 @@ textarea.comments {
     display:block;
     margin-top: 5px;
     width: 250px;
+    height:80px;
     border: 1px solid #9c9c9c;
     padding:4px;
     color:#555;
@@ -168,7 +169,6 @@ textarea.comments {
 	overflow: auto;
 	margin-left: auto;
 	margin-right: auto;
-	height: 320px;
 	width: 470px;
 }
 
@@ -496,4 +496,13 @@ span.fieldHolder img {
 .scoreEditContainer {
     padding-top:11px;
     padding-bottom:6px;
+}
+
+.openSchedulePickerButton {
+    margin:10px;
+    font-size: 11px;
+}
+
+.observationWindow a.w_close {
+    display:none;
 }

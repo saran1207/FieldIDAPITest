@@ -6,8 +6,10 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
+import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -15,6 +17,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +127,21 @@ public class UserService extends FieldIdPersistenceService {
         }
         clonedCriteria.setColumns(columns);
         return clonedCriteria;
+    }
+
+    public List<User> getExaminers() {
+        SecurityFilter filter = securityContext.getUserSecurityFilter();
+        SecurityFilter justTenantFilter = securityContext.getTenantSecurityFilter();
+        String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
+                + filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )"
+                + " ORDER BY ub.firstName, ub.lastName";
+        Query query = getEntityManager().createQuery(queryString);
+        filter.applyParameters(query, User.class);
+        justTenantFilter.applyParameters(query, User.class);
+
+        // get the userlist and filter out users not having the create/edit
+        // inspect
+        return Permissions.filterHasOneOf((List<User>) query.getResultList(), Permissions.ALLEVENT);
     }
 
 }

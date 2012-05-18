@@ -56,7 +56,7 @@ public class SchedulePicker extends Panel {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     setEditorVisible(target, true);
                     onPickerOpened(target);
-                    target.appendJavaScript("translate($('#" + editorContainer.getMarkupId() + "'), $('#" + openDialogButton.getMarkupId() + "')," + dy + "," + dx + ")");
+                    target.appendJavaScript("translateWithin($('#"+editorContainer.getMarkupId()+"'), $('#"+openDialogButton.getMarkupId()+"'), $('#pageContent'), "+dy+", "+dx+");");
                 }
 
                 @Override

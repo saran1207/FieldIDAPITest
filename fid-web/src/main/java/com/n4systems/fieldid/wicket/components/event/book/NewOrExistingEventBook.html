@@ -1,0 +1,13 @@
+<wicket:panel>
+
+    <wicket:enclosure child="newEventBookName">
+        <input type="text" wicket:id="newEventBookName"><br/>
+        <a wicket:id="selectExistingBookLink"><wicket:message key="label.select_existing"/></a>
+    </wicket:enclosure>
+
+    <wicket:enclosure child="existingEventBook">
+        <select wicket:id="existingEventBook"></select><br/>
+        <a wicket:id="addNewBookLink"><wicket:message key="label.new_event_book"/></a>
+    </wicket:enclosure>
+
+</wicket:panel>
