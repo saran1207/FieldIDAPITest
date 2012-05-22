@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<@n4.includeScript src="googleMaps.js"/>
 	<@n4.includeScript src="event.js"/>
+
 </head>
 
 <#assign events = eventsWithLocation/>
@@ -150,15 +151,31 @@
 		<#assign content>${action.getEventDescription(event)}</#assign>		
 		<#assign urlLabel>View Event Details</#assign>
 		<#assign url>
-			<#include "../eventCrud/_viewEventLink.ftl"/><br>
+            <#-- CAVEAT :
+                this used to be...
+                    <#include "../eventCrud/_viewEventLink.ftl"/><br>
+                ...but since that FTL now includes jquery stuff for colorbox i extracted the url part.
+                the end result is that the event shows in full screen - not a colorbox.
+                since this is the desired way to treat viewing of all events i have left it this way.  when we have switched over, the included
+                FTL should have the jquery removed and this should be refactored back to its old state.  DD
+            -->
+            <a href='<@s.url action="event" namespace="/aHtml/iframe"  assetId="${asset.id}" uniqueID="${event.id}"/>${additionsToQueryString!}' class="eventLightbox">
+                <#if urlLabel?exists>
+                     <@s.text name="${urlLabel}"/>
+                <#else>
+                    <@s.text name="label.view"/>
+                </#if>
+            </a>
+            <!-- see note above. WEB-2921 -->
 		</#assign>
-		<script type="text/javascript">						
-			map.addLocation(${event.gpsLocation}, "${url?j_string}"+"${content?j_string}", "${event.status}");
+
+		<script type="text/javascript">
+            map.addLocation(${event.gpsLocation}, "${url?j_string}"+"${content?j_string}", "${event.status}");
 		</script>
 	</#list>
 	
 	<script type="text/javascript">
-		map.show(); 
+		map.show();
 	</script>
 		
 </#if>
