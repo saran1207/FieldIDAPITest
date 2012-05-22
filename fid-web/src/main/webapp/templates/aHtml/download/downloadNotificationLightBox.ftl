@@ -11,7 +11,7 @@
 			<div class="formActions">
 				<@s.submit id="saveDownload" onClick="closeLightbox();" key="hbutton.savetomydownloads" style="text-align:left"/>
 				&nbsp;<@s.text name="label.or" />&nbsp;
-				<a href="javascript:void(0);" onClick="closeLightbox();"><@s.text name="hbutton.saveclosemessage" /></button>
+				<a href="javascript:void(0);" onClick="closeLightbox();"><@s.text name="hbutton.saveclosemessage" /></a>
 			</div>
 		</@s.form>
 	<#else>
