@@ -1,9 +1,46 @@
+.options, #contentTitle{
+    display : none;
+}
+
+#page {
+    background: none;
+    border: none;
+    box-shadow: none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow: none;
+}
+
+.header {
+    width: 100%;
+    float: left;
+    padding-bottom: 10px;
+}
+
+.actionButtons {
+    padding: 10px 0;
+}
+
+.actionButtons .mattButton {
+    margin-right: 10px;
+}
+
 .leftColumn {
-    width: 300px;
+    width: 275px;
 }
 
 .rightColumn{
-    width: 700px;
+    width: 693px;
+    -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    -webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    border:1px solid #CCC;
+    background:#FFF;
+    padding: 10px;
+
+}
+
+.leftColumn{
+    padding: 0 10px 10px 0;
 }
 
 .leftColumn, .rightColumn, .assetAttributeDetails, .linkedAssetList, .assetDetails {
@@ -11,7 +48,11 @@
 }
 
 .assetImage {
-    width: 230px;
+    overflow: hidden;
+}
+
+.assetImage img {
+    width: 275px;
 }
 
 .googleMap {
@@ -20,7 +61,7 @@
 
 .assetMap {
     height: 100px;
-    Width: 300px;
+    Width: 275px;
 }
 
 .leftColumn h1, .rightColumn h1{
@@ -47,9 +88,11 @@
 .linkedAssetLabel label, .linkedAssetLabel a{
     display:block;
 }
+
 .linkedAssetLabel label {
-    width: 230px;
+    width: 200px;
 }
+
 .linkedAssetPanel {
     display: inline-block;
     padding: 5px 0;
@@ -82,11 +125,31 @@
 }
 
 .assetDetails p label {
-    width: 140px;
+    width: 125px;
     color: #555;
 }
 
 .assetDetails p span {
     text-align: right;
-    width: 150px;
+    width: 140px;
+}
+
+.eventTable td {
+    padding: 5px;
+}
+
+.eventTable .eventDate {
+    width: 200px;
+}
+
+.eventTable .eventType {
+    width: 300px;
+}
+
+.attachmentImage {
+    width: 50px;
+}
+
+.greyText{
+    color: #888888;
 }

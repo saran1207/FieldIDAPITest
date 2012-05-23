@@ -1,15 +1,16 @@
 package com.n4systems.model.api;
 
-import javax.activation.FileTypeMap;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-
 import com.n4systems.model.Attachment;
 import com.n4systems.util.ContentTypeUtil;
 
+import javax.activation.FileTypeMap;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.io.Serializable;
+
 
 @Embeddable
-public class Note implements Attachment {
+public class Note implements Attachment, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String fileName;
@@ -46,7 +47,6 @@ public class Note implements Attachment {
 	 * Tests if the filename has a content type starting with <code>'image/'</code>. The
 	 * content type is queried from {@link FileTypeMap#getContentType(String)}.
 	 * 
-	 * @param fileName	String file name, including extension.
 	 * @return			<code>true</code> if content type starts with <code>'image/'</code>.
 	 */
 	public boolean isImage() {

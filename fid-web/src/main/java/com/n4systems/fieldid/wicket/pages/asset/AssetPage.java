@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.asset;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -13,8 +12,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 public abstract class AssetPage extends FieldIDFrontEndPage {
 
@@ -46,7 +43,7 @@ public abstract class AssetPage extends FieldIDFrontEndPage {
         return new Label(labelId, new FIDLabelModel("label.asset"));
     }
 
-    @Override
+/*    @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view").page(AssetViewPage.class).build(),
@@ -55,11 +52,12 @@ public abstract class AssetPage extends FieldIDFrontEndPage {
                 aNavItem().label("nav.event_history").page("assetEvents.action?uniqueID=" + assetId + "&useContext=false").build(),
                 aNavItem().label("nav.schedules").page("eventScheduleList.action?assetId=" + assetId + "&useContext=false").build()
         ));
-    }
+    }*/
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/asset/asset.css");
+        response.renderCSSReference("style/newCss/component/matt_buttons.css");
     }
 }

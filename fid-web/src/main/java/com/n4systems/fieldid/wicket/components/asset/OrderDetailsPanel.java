@@ -50,7 +50,7 @@ public class OrderDetailsPanel extends Panel {
 
         NonWicketIframeLink connectToOrderLink;
         add(connectToOrderLink = new NonWicketIframeLink("connectToOrder", "aHtml/orders.action?asset=" + asset.getId(), false, null, null, false, "onComplete: setupMarryOrder"));
-        connectToOrderLink.setVisible(shopOrder == null);
+        connectToOrderLink.setVisible(shopOrder == null && integrationEnabled);
     }
 
     @Override

@@ -1,0 +1,19 @@
+<wicket:panel>
+    <h1>
+        <label> <wicket:message key="label.upcoming_events"/></label>
+    </h1>
+
+    <table class="eventTable">
+        <tr wicket:id="upcomingEventsList">
+            <td><img wicket:id="upcomingEventState"/></td>
+            <td class="eventDate"><span wicket:id="upcomingEventDate"/></td>
+            <td class="eventType"><span wicket:id="upcomingEventType"/></td>
+            <td>
+                <a wicket:id="startEventLink"><wicket:message key="label.start_event"/></a>
+                <wicket:message key="label.or"/>
+                <a wicket:id="editScheduleLink"><wicket:message key="label.edit"/></a>
+            </td>
+        </tr>
+    </table>
+    <a wicket:id="moreUpcomingEvents"><span wicket:id="moreUpcomingEventsMsg"/></a>
+</wicket:panel>

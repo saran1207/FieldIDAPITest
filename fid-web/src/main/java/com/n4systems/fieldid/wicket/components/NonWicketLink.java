@@ -9,7 +9,11 @@ public class NonWicketLink extends Border {
 
 	protected WebMarkupContainer linkContainer;
 
-	public NonWicketLink(String id, String path) {
+    public NonWicketLink(String id, String path) {
+        this(id, path, null);
+    }
+
+	public NonWicketLink(String id, String path, AttributeModifier... attributeModifiers) {
 		super(id);
 
 		setRenderBodyOnly(true);
@@ -20,6 +24,11 @@ public class NonWicketLink extends Border {
         String absolutePath = ContextAbsolutizer.toContextAbsoluteUrl(path);
 
 		linkContainer.add(new AttributeModifier("href", absolutePath));
+
+        if (attributeModifiers != null) {
+            for (AttributeModifier attributeModifier: attributeModifiers)
+                linkContainer.add(attributeModifier);
+        }
 
 		addToBorder(linkContainer);
 		linkContainer.add(getBodyContainer());

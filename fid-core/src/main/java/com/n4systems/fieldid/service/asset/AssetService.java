@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.asset;
 
 import com.google.common.collect.Lists;
+import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.fieldid.LegacyMethod;
@@ -9,6 +10,7 @@ import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import com.n4systems.model.orgs.BaseOrg;
@@ -547,6 +549,17 @@ public class AssetService extends FieldIdPersistenceService {
         }
         return search;
     }
+
+    public List<AssetAttachment> findAssetAttachments(Asset asset) {
+        if (asset == null) {
+            throw new InvalidArgumentException("you must have an asset to load asset attachments");
+        }
+        QueryBuilder<AssetAttachment> builder = new QueryBuilder<AssetAttachment>(AssetAttachment.class, securityContext.getTenantSecurityFilter());
+        builder.addSimpleWhere("asset", asset).addOrder("id");
+
+        return persistenceService.findAll(builder);
+    }
+
 
     public List<Asset> search(int threshold) {
         // if no search term given for search, just pull up the most recently modified ones.  (arbitrary decision).
