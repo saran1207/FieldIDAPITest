@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components;
 import com.google.gson.Gson;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.model.parents.AbstractEntity;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -56,7 +57,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     private IChoiceRenderer<? super T> choiceRenderer;
     private AbstractDefaultAjaxBehavior updateAjax;
     protected int threshold = 15;
-    private String[] containers = {"foo","bar"};
+    private String[] containers;
 
 
     public AutoComplete(String id, final IModel<T> model) {
@@ -128,9 +129,17 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     }
 
     protected List<T> getChoices() {
+        if (StringUtils.isEmpty(term)) {
+            return getChoicesForEmptyTerm();
+        }        
         return getChoices(term);
+        
     }
-    
+
+    protected List<T> getChoicesForEmptyTerm() {
+        return new ArrayList<T>();
+    }
+
     public HiddenField<String> getAutocompleteHidden() {
         return autocompleteHidden;
     }
@@ -208,8 +217,8 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         public void onRequest() {
             startRequest(getComponent().getRequest());
             term = this.getComponent().getRequest().getQueryParameters().getParameterValue("term").toString();
-
-            if (!Strings.isEmpty(term)) {
+            
+                
                 StringWriter sw = new StringWriter();
                 try {
                     JsonGenerator gen = new JsonFactory().createJsonGenerator(sw);
@@ -217,7 +226,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                     Serializable value = null;
                     Integer index = 0;
                     List<Object> json = new ArrayList<Object>();
-
+                                        
                     String search = normalizeSearchTerm(term);
                     List<T> choices = getChoices();
                     
@@ -244,7 +253,6 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
 
                 endRequest(getComponent().getRequest());
             }
-        }
 
     }
 

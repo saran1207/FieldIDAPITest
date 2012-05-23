@@ -22,12 +22,19 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
         super(id, model);
     }
 
+    @Override
     protected List<Asset> getChoices() {
         return getChoices(term);
     }
 
+    @Override
     public List<Asset> getChoices(String term) {
-        return assetService.getAssetsLike(term);
+        return assetService.search(term, threshold);
+    }
+
+    @Override
+    protected List<Asset> getChoicesForEmptyTerm() {
+        return assetService.search(threshold);
     }
 
     @Override

@@ -507,8 +507,8 @@ public class AssetService extends FieldIdPersistenceService {
         return asset;
     }
 
-    public List<Asset> getAssetsLike(String search) {
-        QueryBuilder<Asset> builder = createTenantSecurityBuilder(Asset.class);
+    public List<Asset> search(String search, int threshold) {
+        QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
         String assetTypeTerm = getAssetTypeTerm(search);
         String term = getIdentifierTerm(search);
 
@@ -527,10 +527,9 @@ public class AssetService extends FieldIdPersistenceService {
             builder.addWhere(group);
         }
 
-        builder.setLimit(300);
+        builder.setLimit(threshold*4);
         List<Asset> results = persistenceService.findAll(builder);
-        int threshold;
-        return new PrioritizedList<Asset>(results, new UniquePrioritizer("type"),threshold=25);
+        return new PrioritizedList<Asset>(results, new UniquePrioritizer("type"),threshold);
     }
 
     private String getAssetTypeTerm(String search) {
@@ -547,5 +546,14 @@ public class AssetService extends FieldIdPersistenceService {
             return search.substring(index+1);
         }
         return search;
+    }
+
+    public List<Asset> search(int threshold) {
+        // if no search term given for search, just pull up the most recently modified ones.  (arbitrary decision).
+        QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
+        builder.setLimit(threshold*4);
+        builder.getOrderArguments().add(new OrderClause("modified", false));
+        List<Asset> results = persistenceService.findAll(builder);
+        return new PrioritizedList<Asset>(results, new UniquePrioritizer("type"),threshold);
     }
 }

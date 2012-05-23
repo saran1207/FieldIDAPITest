@@ -10,6 +10,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.HashSet;
+import java.util.List;
 
 public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
     
@@ -49,12 +50,19 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
         return "";
     }
 
+    @Override
     protected OrgList getChoices() {
         return getChoices(term);
     }
 
+    @Override
     public OrgList getChoices(String term) {
-        return orgService.getAllOrgsLike(term, threshold);
+        return orgService.search(term, threshold);
+    }
+
+    @Override
+    protected List<BaseOrg> getChoicesForEmptyTerm() {
+        return orgService.search(threshold);
     }
 
     @Override
@@ -62,6 +70,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
         categories.clear();
     }
 
+    @Override
     protected String getDisplayValue(BaseOrg org) {
         return org.getName();
     }

@@ -29,6 +29,7 @@ public class OrgPrioritizer extends DefaultPrioritizer<BaseOrg> {
             return super.getCollisionIndex(size,value);
         }
         String name = value.getName().toLowerCase();
+        // if match found at beginning of string, give it higher priority.
         int index = name.indexOf(orgQueryParser.getSearchTerm());
         if (index==-1) {
             index = name.indexOf(orgQueryParser.getLastParentTerm());

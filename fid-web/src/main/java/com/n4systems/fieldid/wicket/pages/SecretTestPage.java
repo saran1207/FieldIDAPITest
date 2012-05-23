@@ -6,7 +6,6 @@ import com.n4systems.fieldid.wicket.components.AutoCompleteSearch;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.BaseOrg;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -15,9 +14,6 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SecretTestPage extends FieldIDAuthenticatedPage {
 
@@ -30,7 +26,6 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     private int id=0;
     
     public SecretTestPage() {
-        List<Component> components = new ArrayList<Component>();
         Form form = new Form("form", new CompoundPropertyModel(this));
 
         form.add(new AutoCompleteOrgPicker("autocompleteorg", new PropertyModel<BaseOrg>(this, "org")));

@@ -54,21 +54,24 @@ public class OrgService extends FieldIdPersistenceService {
         return getPrimaryOrgForTenant(tenantId, true);
     }
     
-    public OrgList getAllOrgsLike(String value, int threshold) {
-        OrgQueryParser orgQueryParser = new OrgQueryParser(value);
+    public OrgList search(int threshold) {
+        // default search impl if no search term is given.  just return all primary orgs and a random sampling of divisions.
+        QueryBuilder<PrimaryOrg> query = createUserSecurityBuilder(PrimaryOrg.class);
+        List<PrimaryOrg> primaryOrgs = persistenceService.findAll(query);
+        QueryBuilder<SecondaryOrg> query2 = createUserSecurityBuilder(SecondaryOrg.class);
+        List<SecondaryOrg> secondaryOrgs = persistenceService.findAll(query2);
+        QueryBuilder<DivisionOrg> query3 = createUserSecurityBuilder(DivisionOrg.class);
+        List<DivisionOrg> divisionOrgs = persistenceService.findAll(query3);
+        query3.setLimit(threshold);
+        List<BaseOrg> result = new ArrayList<BaseOrg>();
+        result.addAll(secondaryOrgs);
+        result.addAll(primaryOrgs);
+        result.addAll(divisionOrgs);
+        return new OrgList(result, threshold );
+    }
 
-        if (StringUtils.isBlank(value)) {  // if user doesn't know what to type, we'll just return top of hierarchy.
-            // note : currently doesn't work because wiquery/js doesn't escape blank string.
-            //  so if you presses space in autocomplete box it just hangs 'cause it creates malformed url.
-            QueryBuilder<PrimaryOrg> query = createUserSecurityBuilder(PrimaryOrg.class);
-            List<PrimaryOrg> primaryOrgs = persistenceService.findAll(query);
-            QueryBuilder<SecondaryOrg> query2 = createUserSecurityBuilder(SecondaryOrg.class);
-            List<PrimaryOrg> secondaryOrgs = persistenceService.findAll(query);
-            List<BaseOrg> result = new ArrayList<BaseOrg>();
-            result.addAll(secondaryOrgs);
-            result.addAll(primaryOrgs);
-            return new OrgList(result, orgQueryParser, threshold );
-        }
+    public OrgList search(String value, int threshold) {
+        OrgQueryParser orgQueryParser = new OrgQueryParser(value);
 
         QueryBuilder<BaseOrg> query = createUserSecurityBuilder(BaseOrg.class);
         List<? extends BaseOrg> parents = findParentsLike(orgQueryParser);

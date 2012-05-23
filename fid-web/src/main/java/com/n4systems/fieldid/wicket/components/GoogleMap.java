@@ -57,7 +57,8 @@ public class GoogleMap extends Panel {
             this.longitude = lng;
         }
 
-        @Override  // CAVEAT : this is made for javascript, not everyday usage.
+        @Override  
+        @Deprecated // CAVEAT : this is made for javascript serialization, not human consumption.
         public String toString() {
             return "'"+latitude + "','" + longitude + "'";
         }
