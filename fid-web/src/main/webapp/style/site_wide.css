@@ -335,7 +335,7 @@ input:-moz-placeholder {
     background: -ms-linear-gradient(top, #4C8FFC 0%, #4787ED 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#4C8FFC', endColorstr = '#4787ED', GradientType = 0);
     background: linear-gradient(top, #4C8FFC 0%, #4787ED 100%);
-    border: 1px solid #333;
+    border: 1px solid #999;
     -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
     -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
     box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .25) inset;
