@@ -20,7 +20,9 @@ public class AttributesEditPanel extends Panel {
             @Override
             protected void populateItem(ListItem<String> item) {
                 item.add(new Label("attributeName", item.getModel()));
-                item.add(new TextField<String>("attributeValue", new PropertyModel<String>(eventModel, "infoOptionMap["+item.getModelObject()+"]")));
+                TextField<String> attributeValue = new TextField<String>("attributeValue", new PropertyModel<String>(eventModel, "infoOptionMap[" + item.getModelObject() + "]"));
+                attributeValue.setType(String.class);
+                item.add(attributeValue);
             }
         });
     }

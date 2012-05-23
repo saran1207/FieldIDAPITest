@@ -1,20 +1,13 @@
 package com.n4systems.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.persistence.*;
-
 import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.util.StringUtils;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.*;
 
 @Entity
 @Table(name = "events")
@@ -238,6 +231,26 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 
     public void setSectionResults(List<SectionResults> sectionResults) {
         this.sectionResults = sectionResults;
+    }
+    
+    public boolean containsUnfilledScoreCriteria() {
+        for (SectionResults sectionResult : getSectionResults()) {
+            for (CriteriaResult result : sectionResult.results) {
+                if (result.getCriteria().getCriteriaType() == CriteriaType.SCORE && ((ScoreCriteriaResult)result).getScore() == null) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void storeTransientCriteriaResults() {
+        for (SectionResults sectionResult : getSectionResults()) {
+            for (CriteriaResult result : sectionResult.results) {
+                result.setEvent(this);
+                results.add(result);
+            }
+        }
     }
 
 }

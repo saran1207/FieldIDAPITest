@@ -230,6 +230,8 @@ public class EventService extends FieldIdPersistenceService {
         masterEvent.setAdvancedLocation(masterEvent.getAsset().getAdvancedLocation());
         masterEvent.setPerformedBy(getCurrentUser());
         masterEvent.setProofTestInfo(new ProofTestInfo());
+        masterEvent.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
+        masterEvent.setPerformedBy(getCurrentUser());
         return masterEvent;
     }
 

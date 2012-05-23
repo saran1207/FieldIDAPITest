@@ -503,6 +503,10 @@ span.fieldHolder img {
     font-size: 11px;
 }
 
-.observationWindow a.w_close {
+a.w_close {
     display:none;
+}
+
+.observationsActions .mattButton {
+    margin-right:8px;
 }

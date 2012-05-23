@@ -1,7 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
+import com.n4systems.ejb.impl.EventScheduleBundle;
+import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
@@ -9,10 +10,12 @@ import com.n4systems.fieldid.wicket.components.event.attributes.AttributesEditPa
 import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook;
 import com.n4systems.fieldid.wicket.components.event.prooftest.ProofTestEditPanel;
 import com.n4systems.fieldid.wicket.components.event.schedule.EventSchedulePicker;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.fileupload.AttachmentsPanel;
 import com.n4systems.fieldid.wicket.components.location.LocationPicker;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -27,6 +30,7 @@ import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -43,24 +47,27 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class EditEventPage extends FieldIDFrontEndPage {
     
     @SpringBean
     private EventService eventService;
 
+    @SpringBean
+    private EventCreationService eventCreationService;
+
     private AbstractEvent event;
 
     private List<EventSchedule> schedules = new ArrayList<EventSchedule>();
     private EventSchedule scheduleToAdd = new EventSchedule();
+    private EventSchedule selectedSchedule;
 
     public EditEventPage() {
         event = eventService.createNewMasterEvent(16091209L, 204L);
         doAutoSchedule();
         
+        add(new FIDFeedbackPanel("feedbackPanel"));
         add(new OuterEventForm("outerEventForm"));
     }
     
@@ -118,14 +125,14 @@ public class EditEventPage extends FieldIDFrontEndPage {
             
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
             proofTestContainer.add(new ProofTestEditPanel("proofTest", new PropertyModel<ProofTestInfo>(event, "proofTestInfo")));
-            proofTestContainer.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ProofTestIntegration));
-            
-            DropDownChoice<User> performedBy = new DropDownChoice<User>("performedBy",new PropertyModel<User>(event, "performedBy"), new ExaminersModel(), new ListableChoiceRenderer<User>());
-            performedBy.setNullValid(true);
+            add(proofTestContainer);
+
+            PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
+            DropDownChoice<User> performedBy = new DropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
             DateTimePicker datePicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true);
-            NewOrExistingEventBook newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "eventBook"));
+            NewOrExistingEventBook newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
             
-            add(new EventSchedulePicker("schedule", new PropertyModel<EventSchedule>(event, "schedule"), new PropertyModel<Asset>(event, "asset")));
+            add(new EventSchedulePicker("schedule", new PropertyModel<EventSchedule>(EditEventPage.this, "selectedSchedule"), new PropertyModel<Asset>(event, "asset")));
 
             AttributesEditPanel attributesEditPanel = new AttributesEditPanel("eventAttributes", new Model<AbstractEvent>(event));
 
@@ -137,7 +144,20 @@ public class EditEventPage extends FieldIDFrontEndPage {
             add(new LocationPicker("locationPicker", new PropertyModel<Location>(event, "advancedLocation")).withRelativePosition());
             
             add(new Comment("comments", new PropertyModel<String>(event, "comments")));
-            add(new DropDownChoice<AssetStatus>("assetStatus", new PropertyModel<AssetStatus>(event, "assetStatus"), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).add(new UpdateComponentOnChange()));
+
+            DropDownChoice assetStatus = new DropDownChoice<AssetStatus>("assetStatus", new PropertyModel<AssetStatus>(event, "assetStatus"), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>());
+            assetStatus.add(new UpdateComponentOnChange());
+            assetStatus.setNullValid(true);
+            add(assetStatus);
+            
+            if (event instanceof Event) {
+                Event masterEvent = (Event) event;
+                DropDownChoice resultSelect = new DropDownChoice<Status>("result", new PropertyModel<Status>(event, "status"), Arrays.asList(Status.values()), new ListableLabelChoiceRenderer<Status>());
+                resultSelect.add(new UpdateComponentOnChange());
+                resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
+                add(resultSelect);
+            }
+
             add(new CheckBox("printable", new PropertyModel<Boolean>(event, "printable")).add(new UpdateComponentOnChange()));
 
             add(new EventFormEditPanel("eventFormPanel", new PropertyModel<List<AbstractEvent.SectionResults>>(event, "sectionResults")));
@@ -149,7 +169,47 @@ public class EditEventPage extends FieldIDFrontEndPage {
 
         @Override
         protected void onSubmit() {
+            if (doPostSubmitValidation()) {
+                Long scheduleId = selectedSchedule == null ? 0L : selectedSchedule.getId();
+                event.storeTransientCriteriaResults();
+                eventCreationService.createEventWithSchedules((Event)event, scheduleId, null, Collections.<FileAttachment>emptyList(), createEventScheduleBundles());
+                info("Successfully created event");
+            }
         }
+    }
+
+    private List<EventScheduleBundle> createEventScheduleBundles() {
+        List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
+
+        for (EventSchedule sched : schedules) {
+            EventScheduleBundle bundle = new EventScheduleBundle(sched.getAsset(), sched.getEventType(), sched.getProject(), sched.getNextDate());
+            scheduleBundles.add(bundle );
+        }
+
+        return scheduleBundles;
+    }
+
+    private boolean doPostSubmitValidation() {
+        if (event instanceof Event) {
+            Event masterEvent = (Event) event;
+            if (masterEvent.getBook() != null && masterEvent.getBook().getId() == null && StringUtils.isBlank(masterEvent.getBook().getName())) {
+                error(new FIDLabelModel("error.event_book_title_required").getObject());
+                return false;
+            }
+
+            if (masterEvent.getOwner() == null) {
+                error(new FIDLabelModel("error.event_book_title_required").getObject());
+                return false;
+            }
+        }
+
+        if (event.containsUnfilledScoreCriteria()) {
+            error(new FIDLabelModel("error.scores.required").getObject());
+            return false;
+        }
+
+
+        return true;
     }
 
     @Override

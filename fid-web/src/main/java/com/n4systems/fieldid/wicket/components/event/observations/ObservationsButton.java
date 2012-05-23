@@ -19,6 +19,7 @@ public class ObservationsButton extends Panel {
 
     public ObservationsButton(String id, IModel<List<? extends Observation>> observations, String emptyListImage, String nonEmptyListImage) {
         super(id, observations);
+        setRenderBodyOnly(true);
         this.observations = observations;
         this.emptyListImage = emptyListImage;
         this.nonEmptyListImage = nonEmptyListImage;

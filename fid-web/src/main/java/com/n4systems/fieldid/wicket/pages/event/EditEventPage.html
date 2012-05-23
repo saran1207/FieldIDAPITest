@@ -1,5 +1,7 @@
 <wicket:extend>
 
+    <div wicket:id="feedbackPanel"></div>
+
     <form wicket:id="outerEventForm">
 
         <div>
@@ -90,7 +92,16 @@
         <div wicket:id="eventFormPanel" class="eventForm">
         </div>
 
-        <div style="clear:both;" wicket:id="proofTestContainer">
+        <div style="clear:both; overflow:hidden">
+            <h2><wicket:message key="label.result"/></h2>
+
+            <label class="label"><wicket:message key="label.result"/></label>
+            <span class="fieldHolder">
+                <select wicket:id="result"/>
+            </span>
+        </div>
+
+        <div style="clear:both;overflow:hidden" wicket:id="proofTestContainer">
             <h2><wicket:message key="label.prooftest"/></h2>
 
             <div wicket:id="proofTest"></div>

@@ -76,6 +76,9 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	private GpsLocation gpsLocation = new GpsLocation();
 	
 	private AssignedToUpdate assignedTo;
+
+    @Transient
+    private boolean resultFromCriteriaAvailable = false;
 	
 	public Event() {
 	}
@@ -387,5 +390,35 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	public void setGpsLocation(GpsLocation gpsLocation) {
 		this.gpsLocation = gpsLocation;
 	}
+
+    public boolean isResultFromCriteriaAvailable() {
+        return resultFromCriteriaAvailable;
+    }
+
+    public void setResultFromCriteriaAvailable(boolean resultFromCriteriaAvailable) {
+        this.resultFromCriteriaAvailable = resultFromCriteriaAvailable;
+    }
+    
+    public void setInitialResultBasedOnScoreOrOneClicksBeingAvailable() {
+        resultFromCriteriaAvailable = false;
+        if (getType().getEventForm().isUseScoreForResult()) {
+            resultFromCriteriaAvailable = true;
+        } else {
+            for (CriteriaSection criteriaSection : getType().getEventForm().getAvailableSections()) {
+                for (Criteria criteria : criteriaSection.getAvailableCriteria()) {
+                    if (criteria.getCriteriaType() == CriteriaType.ONE_CLICK) {
+                        resultFromCriteriaAvailable = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (resultFromCriteriaAvailable) {
+            status = null;
+        } else {
+            status = Status.NA;
+        }
+    }
 
 }

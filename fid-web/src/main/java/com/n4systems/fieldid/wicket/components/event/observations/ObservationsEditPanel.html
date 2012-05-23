@@ -1,0 +1,31 @@
+<wicket:panel>
+
+    <div class="observationBox">
+
+        <p class="observationText" wicket:id="preConfiguredObservations">
+            <span wicket:id="observationName"></span>
+        </p>
+
+        <p class="observationComment">
+
+            <label><wicket:message key="label.comments"/></label>
+
+            <span>
+                <textarea wicket:id="comments" cols="53" rows="3"/>
+            </span>
+
+        </p>
+
+        <div class="observationActions">
+            <a wicket:id="saveButton" class="mattButton"><wicket:message key="label.store"/></a>
+            <div class="observationsActionsText">
+                <wicket:message key="label.or"/>
+                <a wicket:id="clearLink"><wicket:message key="label.clear"/></a>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            </div>
+        </div>
+
+    </div>
+
+</wicket:panel>

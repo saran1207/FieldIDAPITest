@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.wicket.components.event.criteria.factory.CriteriaEditorFactory;
 import com.n4systems.fieldid.wicket.components.event.observations.DeficienciesEditPanel;
-import com.n4systems.fieldid.wicket.components.event.observations.ObservationEditPanel;
 import com.n4systems.fieldid.wicket.components.event.observations.ObservationsButton;
 import com.n4systems.fieldid.wicket.components.event.observations.RecommendationsEditPanel;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
@@ -55,7 +54,13 @@ public class CriteriaSectionEditPanel extends Panel {
                         @Override
                         protected void onClick(AjaxRequestTarget target) {
                             recommendationsWindow.setTitle(new FIDLabelModel("label.recommendations"));
-                            recommendationsWindow.setContent(new RecommendationsEditPanel(recommendationsWindow.getContentId(), item.getModel()));
+                            recommendationsWindow.setContent(new RecommendationsEditPanel(recommendationsWindow.getContentId(), item.getModel()) {
+                                @Override
+                                protected void onClose(AjaxRequestTarget target) {
+                                    target.add(CriteriaSectionEditPanel.this);
+                                    recommendationsWindow.close(target);
+                                }
+                            });
                             recommendationsWindow.show(target);
                         }
                     });
@@ -64,7 +69,13 @@ public class CriteriaSectionEditPanel extends Panel {
                         @Override
                         protected void onClick(AjaxRequestTarget target) {
                             recommendationsWindow.setTitle(new FIDLabelModel("label.deficiencies"));
-                            recommendationsWindow.setContent(new DeficienciesEditPanel(recommendationsWindow.getContentId(), item.getModel()));
+                            recommendationsWindow.setContent(new DeficienciesEditPanel(recommendationsWindow.getContentId(), item.getModel()) {
+                                @Override
+                                protected void onClose(AjaxRequestTarget target) {
+                                    target.add(CriteriaSectionEditPanel.this);
+                                    recommendationsWindow.close(target);
+                                }
+                            });
                             recommendationsWindow.show(target);
                         }
                     });

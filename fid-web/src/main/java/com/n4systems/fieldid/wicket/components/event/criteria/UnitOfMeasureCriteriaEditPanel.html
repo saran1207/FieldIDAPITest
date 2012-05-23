@@ -2,16 +2,20 @@
 
         <div class="textCriteriaContainer unitOfMeasureCriteriaContainer">
 
-            <input type="text" wicket:id="primaryUnit" class="criteriaUnitOfMeasureField">
+            <span class="fieldHolder">
+                <input type="text" wicket:id="primaryUnit" class="criteriaUnitOfMeasureField">
+            </span>
+
             <div class="unitOfMeasureName" wicket:id="primaryUnitLabel"></div>
 
+            <div style="clear:both"></div>
+
             <div wicket:id="secondaryUnitContainer">
-                <div style="clear:both;padding-top:2px;"></div>
-                <input type="text" wicket:id="secondaryUnit" class="criteriaUnitOfMeasureField">
+                <span class="fieldHolder">
+                    <input type="text" wicket:id="secondaryUnit" class="criteriaUnitOfMeasureField">
+                </span>
                 <div class="unitOfMeasureName" wicket:id="secondaryUnitLabel"></div>
             </div>
-
-            <div style="clear:both;"></div>
 
         </div>
 
