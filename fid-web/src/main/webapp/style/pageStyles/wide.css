@@ -351,6 +351,7 @@
 
 #pageContent { 
 	padding-bottom:40px;
+    overflow:visible;
 }
 
 #pageContent .crudForm .pageSection {
