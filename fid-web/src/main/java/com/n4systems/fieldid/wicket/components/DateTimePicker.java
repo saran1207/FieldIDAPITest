@@ -77,8 +77,8 @@ public class DateTimePicker extends Panel {
         //  is because if you referenced the entire ui library it would conflict the use of some
         //  wiquery ui things.  (AutoComplete in this case).
         // the best situation would be just to have all components use the predefined wiquery js references
-        //  like CoreUIJavaScriptResourceReference.
-        response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.datepicker.min.js");
+        //  i.e. renderJavaScriptReference(CoreUIJavaScriptResourceReference.get());
+        response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
 
         response.renderCSSReference("style/datetimepicker.css");
         response.renderCSSReference("style/jquery-redmond/jquery-ui-1.8.13.custom.css");
