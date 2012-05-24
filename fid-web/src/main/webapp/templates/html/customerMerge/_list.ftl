@@ -7,10 +7,10 @@
 			<th><@s.text name="label.organization" /></th>
 			<th><@s.text name="label.created" /></th>
 		</tr>
-	
+
 	<#list customers as customer>
 		<tr>
-			<td><button onclick="selectWinner('${customer.id}', '${customer.name}', '${customer.code!}', '${action.formatDateTime(customer.created)}' );"> <@s.text name="label.select"/></button></td>
+			<td><button onclick="selectWinner('${customer.id?js_string}', '${customer.name?js_string}', '${customer.code!?js_string}', '${action.formatDateTime(customer.created)}' );"> <@s.text name="label.select"/></button></td>
 			<td>${customer.name}</td>
 			<td>${customer.code!}</td>
 			<td>${customer.getInternalOrg().name}</td>
