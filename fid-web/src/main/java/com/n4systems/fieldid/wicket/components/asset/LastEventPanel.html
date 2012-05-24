@@ -1,10 +1,7 @@
 <wicket:panel>
-    <h1>
-        <label> <wicket:message key="label.lasteventperformed"/></label>
-    </h1>
-    <table class="eventTable">
+    <table class="lastEventTable">
         <tr>
-            <td><img wicket:id="lastEventResult"></td>
+            <td><div wicket:id="result"><p wicket:id="lastEventResult"/></div></td>
             <td class="eventDate"><span wicket:id="lastEventDate"/></td>
             <td class="eventType"><span wicket:id="lastEventType"/></td>
             <td>
@@ -14,4 +11,5 @@
             </td>
         </tr>
     </table>
+    <a wicket:id="viewAllLink"><wicket:message key="label.view_all"/></a>
 </wicket:panel>

@@ -2,18 +2,38 @@
     display : none;
 }
 
+#contentHeader {
+    margin-bottom: 0;
+}
+
 #page {
     background: none;
     border: none;
     box-shadow: none;
     -moz-box-shadow:none;
     -webkit-box-shadow: none;
+    font-size: 12px;
 }
 
 .header {
     width: 100%;
     float: left;
     padding-bottom: 10px;
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    font-size: 2.1em;
+    font-weight: normal;
+}
+
+.assetView {
+    float: left;
+}
+.ownerInfo {
+    padding-top: 7px;
+    font-size: 1.2em;
 }
 
 .actionButtons {
@@ -24,19 +44,29 @@
     margin-right: 10px;
 }
 
+.viewButtons {
+    float : left;
+    width: 693px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.viewButtons div {
+    left: 25%;
+    position: relative;
+}
+
 .leftColumn {
     width: 275px;
 }
 
 .rightColumn{
-    width: 693px;
+    width: 663px;
     -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     -webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     border:1px solid #CCC;
     background:#FFF;
-    padding: 10px;
-
+    padding: 10px 20px;
 }
 
 .leftColumn{
@@ -45,6 +75,10 @@
 
 .leftColumn, .rightColumn, .assetAttributeDetails, .linkedAssetList, .assetDetails {
     float: left;
+}
+
+.rightPanel {
+    padding-bottom: 30px;
 }
 
 .assetImage {
@@ -62,21 +96,26 @@
 .assetMap {
     height: 100px;
     Width: 275px;
+    margin-top: 15px;
 }
 
 .leftColumn h1, .rightColumn h1{
-    padding: 10px 0;
+    padding: 5px 0;
     border-bottom: 1px solid #e2e2e2;
+    color: #666666
 }
 
-.recentActivity h1 img {
-    vertical-align: text-top;
-    padding: 0 5px;
-}
 .linkedAssetList {
     padding: 5px 0;
+    width: 100%;
 }
-.linkedAssetList img, .linkedAssetLabel, .linkedAssetLabel a, .addLinkedAsset, .linkedAssetPanel #formErrors{
+
+.linkedAssetList img {
+    float:left;
+    padding-right: 5px;
+}
+
+.linkedAssetLabel, .linkedAssetLabel a, .addLinkedAsset, .linkedAssetPanel #formErrors{
     float:left;
     padding: 0 5px;
 }
@@ -90,13 +129,13 @@
 }
 
 .linkedAssetLabel label {
-    width: 200px;
+    width: 215px;
 }
 
 .linkedAssetPanel {
     display: inline-block;
     padding: 5px 0;
-    width: 300px;
+    width: 100%;
 }
 
 .linkedAssetPanel li {
@@ -114,8 +153,12 @@
     padding: 0;
 }
 
+.assetDetails, .linkedAssetPanel {
+    padding-bottom: 20px;
+}
+
 .assetDetails p {
-    padding: 5px;
+    padding: 5px 0;
     margin-top: 2px;
 }
 
@@ -125,24 +168,32 @@
 }
 
 .assetDetails p label {
-    width: 125px;
+    width: 140px;
     color: #555;
 }
 
 .assetDetails p span {
     text-align: right;
-    width: 140px;
+    width: 135px;
 }
 
-.eventTable td {
-    padding: 5px;
+.upcomingEventTable td, .lastEventTable td{
+    padding: 10px 5px 5px 0;
 }
 
-.eventTable .eventDate {
-    width: 200px;
+.upcomingEventTable .eventDate {
+    width: 240px;
 }
 
-.eventTable .eventType {
+.upcomingEventTable .eventType {
+    width: 300px;
+}
+
+.lastEventTable .eventDate {
+    width: 160px;
+}
+
+.lastEventTable .eventType {
     width: 300px;
 }
 
@@ -152,4 +203,39 @@
 
 .greyText{
     color: #888888;
+}
+
+.overdue {
+    color: #900000;
+}
+
+.overdue .eventLinks {
+    color: #000000;
+}
+
+.morePanel p{
+    line-height: 1.5em;
+    padding-bottom: 30px;
+}
+
+.morePanel h2 {
+    padding: 5px 0;
+}
+
+.actionButtons .blueButton {
+    background: -moz-linear-gradient(center top , #4C8FFC 0%, #4787ED 100%) repeat scroll 0 0 transparent;
+    color: #FFFFFF;
+}
+
+.actionButtons .blueButton:hover {
+    background: #4C8FFC;
+    background: linear-gradient(top, #4D90FE 0%, #357AE8 100%);
+    border: 1px solid #6699FF;
+}
+.attachmentTable {
+    margin-top: 10px;
+}
+
+.attachmentTable td {
+    padding: 5px 0;
 }

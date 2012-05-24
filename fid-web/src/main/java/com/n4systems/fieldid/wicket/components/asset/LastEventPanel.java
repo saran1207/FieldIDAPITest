@@ -6,11 +6,12 @@ import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.Status;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.text.DateFormat;
@@ -34,8 +35,21 @@ public class LastEventPanel extends Panel {
         if(lastEvent != null) {
             String eventType = lastEvent.getType().getName();
             String lastEventDate = dtf.format(lastEvent.getDate());
+            Status status = lastEvent.getStatus();
 
-            add(new Image("lastEventResult", new ContextRelativeResource("/images/small-check.png")));
+
+            WebMarkupContainer result;
+            add(result = new WebMarkupContainer("result"));
+            Label statusLabel;
+            result.add(statusLabel = new Label("lastEventResult", status.getDisplayName()));
+            if (status.equals(Status.PASS)) {
+                result.add(new AttributeModifier("class", "passColor"));
+            } else if (status.equals(Status.FAIL)) {
+                result.add(new AttributeModifier("class", "failColor"));
+            } else {
+                result.add(new AttributeModifier("class", "naColor"));
+            }
+            
             add(new Label("lastEventDate", lastEventDate));
             add(new Label("lastEventType", eventType));
 
@@ -44,6 +58,8 @@ public class LastEventPanel extends Panel {
 
             String printEventUrl = "file/downloadEventCert.action?uniqueID="+ lastEvent.getID() + "&reportType=INSPECTION_CERT";
             add(new NonWicketLink("printLastEventLink", printEventUrl));
+            
+            add(new NonWicketLink("viewAllLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false"));
         }
     }
 }

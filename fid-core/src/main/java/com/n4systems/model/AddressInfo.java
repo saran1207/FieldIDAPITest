@@ -1,9 +1,9 @@
 package com.n4systems.model;
 
+import com.n4systems.model.parents.AbstractEntity;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import com.n4systems.model.parents.AbstractEntity;
 
 @Entity
 @Table(name = "addressinfo")
@@ -100,25 +100,42 @@ public class AddressInfo extends AbstractEntity {
 	public void setFax1(String faxNumber) {
 		this.fax1 = faxNumber;
 	}
-	
-	public String getDisplay() {
-		String display = streetAddress + "\n" +
-			city + ", " + state + "\n" +
-			country + "\n" +
-			zip;
-		
-		if(phone1 != null) {
-			display += "\nPhone 1: " + phone1;
-		}
-		
-		if(phone2 != null) {
-			display += "\nPhone 2: " + phone2;
-		}
 
-		if(fax1 != null) {
-			display += "\nFax: " + fax1;
-		}
-		
+    public String getDisplay() {
+        return getDisplay(true);
+    }
+
+	public String getDisplay(boolean includePhone) {
+		String display = "";
+
+        if(!streetAddress.isEmpty())
+            display += streetAddress + "\n";
+
+        if (!city.isEmpty())
+			display +=city;
+
+        if(!state.isEmpty())
+            display+= ", " + state + "\n";
+
+        if(!country.isEmpty())
+			display+= country + "\n";
+
+        if(!zip.isEmpty())
+			display += zip;
+
+        if(includePhone) {
+            if(!phone1.isEmpty()) {
+                display += "\nPhone 1: " + phone1;
+            }
+
+            if(!phone2.isEmpty()) {
+                display += "\nPhone 2: " + phone2;
+            }
+
+            if(!fax1.isEmpty()) {
+                display += "\nFax: " + fax1;
+            }
+        }
 		return display;
 	}
 	

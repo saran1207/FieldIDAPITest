@@ -5,37 +5,59 @@
             <span class="greyText"><span wicket:id="assetType"/> / </span><span wicket:id="assetIdentifier"/><span class="greyText" wicket:enclosure="assetStatus"> / <span wicket:id="assetStatus"/></span>
         </h1>
         <div class="ownerInfo">
-            <img src="/fieldid/images/gps-icon-small.png"/> <span wicket:id="ownerInfo"/>
+            <img src="/fieldid/images/location-icon.png"/> <span wicket:id="ownerInfo"/>
         </div>
 
         <div class="actionButtons">
-            <a wicket:id="editAssetLink" class="mattButton" ><wicket:message key="label.edit"/></a>
-            <a wicket:id="startEventLink" class="mattButton"> <wicket:message key="label.start_event"/></a>
+            <a wicket:id="editAssetLink"><wicket:message key="label.edit"/></a>
+            <a wicket:id="startEventLink"> <wicket:message key="label.start_event"/></a>
         </div>
 
     </div>
-    <div class="leftColumn">
+    <div class="assetView">
+        <div class="leftColumn">
 
-        <div class="assetImage">
-            <img wicket:id="assetImage" alt=""/>
+            <div class="assetImage">
+                <img wicket:id="assetImage" alt=""/>
+            </div>
+            <div wicket:id="map" class="googleMap assetMap"></div>
+
+            <div class="assetDetails" wicket:id="assetAttributeDetailsPanel"/>
+
+            <div class="linkedAssetPanel" wicket:id="linkedAssetPanel"/>
+
+            <div class="assetDetails" wicket:id="assetDetailsPanel"/>
+
+            <div class="assetDetails" wicket:id="orderDetailsPanel"/>
         </div>
-        <div wicket:id="map" class="googleMap assetMap"></div>
-
-        <div class="assetDetails" wicket:id="assetAttributeDetailsPanel"/>
-
-        <div class="linkedAssetList" wicket:id="linkedAssetPanel"/>
-
-        <div class="assetDetails" wicket:id="assetDetailsPanel"/>
-
-        <div class="assetDetails" wicket:id="orderDetailsPanel"/>
-    </div>
 
 
-    <div class="rightColumn">
+        <div class="rightColumn">
 
-        <div class="recentActivity" wicket:id="upcomingEventsPanel" />
-        <div class="recentActivity" wicket:id="lastEventsPanel" />
-        <div wicket:id="attachmentsPanel"/>
-        <div wicket:id="warningsAndInstructionsPanel"/>
+            <div class="viewButtons">
+                <div>
+                    <a wicket:id="summaryLink" class="mattButtonPressed mattButtonLeft"><wicket:message key="label.summary"/></a>
+                    <a wicket:id="schedulesLink"> <wicket:message key="label.scheduled_events"/></a>
+                    <a wicket:id="traceabilityLink"> <wicket:message key="nav.traceability"/></a>
+                    <a wicket:id="eventHistoryLink"> <wicket:message key="label.event_history"/></a>
+                </div>
+            </div>
+            <h1>
+                <label> <wicket:message key="label.upcoming_events"/></label>
+            </h1>
+            <div class="rightPanel" wicket:id="upcomingEventsPanel" />
+            <h1>
+                <label> <wicket:message key="label.lasteventperformed"/></label>
+            </h1>
+            <div class="rightPanel" wicket:id="lastEventsPanel" />
+            <h1>
+                <label> <wicket:message key="label.attachments"/></label>
+            </h1>
+            <div class="rightPanel" wicket:id="attachmentsPanel"/>
+            <h1>
+                <label><wicket:message key="label.more_uc"/></label>
+            </h1>
+            <div class="rightPanel morePanel" wicket:id="warningsAndInstructionsPanel"/>
+        </div>
     </div>
 </wicket:extend>

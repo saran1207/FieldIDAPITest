@@ -82,6 +82,10 @@ public class FieldIDSession extends WebSession {
     public Map<String, String> getTenantLangOverrides() {
         return (Map<String, String>) getHttpSession().getAttribute(WebSessionMap.KEY_TENANT_LANG_OVERRIDES);
     }
+    
+    public Long getVendorContext() {
+        return (Long) getHttpSession().getAttribute(WebSessionMap.VENDOR_CONTEXT);
+    }
 
     public void storeInfoMessageForStruts(String message) {
         getHttpSession().setAttribute(FlashScopeMarshaller.FLASH_MESSAGES, Arrays.asList(message));

@@ -6,13 +6,14 @@ import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.asset.*;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class AssetViewPage extends AssetPage {
@@ -36,11 +37,14 @@ public class AssetViewPage extends AssetPage {
 
         BaseOrg owner = asset.getOwner();
         
-        add(new Label("ownerInfo", owner.getDisplayName() + ", " + owner.getAddressInfo().getDisplay().replaceAll("\n", " ")));
+        String ownerLabel = owner.getDisplayName();
+        if(!owner.getAddressInfo().getDisplay(false).isEmpty())
+            ownerLabel+= ", " + owner.getAddressInfo().getDisplay(false);
+        add(new Label("ownerInfo",ownerLabel.replaceAll("\n", " ")));
         
         add(new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
 
-        add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton")));
+        add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton blueButton")));
 
         String imageUrl;
         if(asset.getImageName() == null) {
@@ -72,20 +76,37 @@ public class AssetViewPage extends AssetPage {
         add(orderDetails = new OrderDetailsPanel("orderDetailsPanel", assetModel));
         orderDetails.setVisible(orderDetailsEnabled || integrationEnabled);
 
+        add(new Link<Void>("summaryLink") {
+            @Override
+            public void onClick() {
+            }
+        });
+        
+        add(new NonWicketLink("schedulesLink", "assetEvents.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
+        NonWicketLink traceabilityLink;
+        add(traceabilityLink = new NonWicketLink("traceabilityLink", "assetTraceability.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
+        traceabilityLink.setVisible(assetService.hasLinkedAssets(asset) || isInVendorContext());
+
+        add(new NonWicketLink("eventHistoryLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonRight")));
+
+
         if (hasUpcomingEvents(asset)) {
             add(new UpcomingEventsPanel("upcomingEventsPanel", assetModel));
         } else {
-            add(new WebComponent("upcomingEventsPanel"));
+            add(new Label("upcomingEventsPanel", new FIDLabelModel("label.empty_schedule_list").getObject()));
         }
 
         if (hasLastEvent(asset)) {
             add(new LastEventPanel("lastEventsPanel", assetModel));
         } else {
-            add(new WebComponent("lastEventsPanel"));
+            add(new Label("lastEventsPanel", new FIDLabelModel("label.emptyeventlist").getObject()));
         }
-        
-        add(new AssetAttachmentsPanel("attachmentsPanel", assetModel));
-        
+        if(hasAttachments(asset)) {
+            add(new AssetAttachmentsPanel("attachmentsPanel", assetModel));
+        } else {
+            add(new Label("attachmentsPanel", new FIDLabelModel("label.no_attachments").getObject()));
+        }
+
         add(new WarningsAndInstructionsPanel("warningsAndInstructionsPanel", assetModel));
 
     }
@@ -95,7 +116,11 @@ public class AssetViewPage extends AssetPage {
     }
     
     private boolean hasUpcomingEvents(Asset asset) {
-        return eventScheduleService.getAvailableSchedulesFor(asset).size() > 0;
+        return !eventScheduleService.getAvailableSchedulesFor(asset).isEmpty();
+    }
+
+    private boolean hasAttachments(Asset asset) {
+        return !assetService.findAssetAttachments(asset).isEmpty() || !asset.getType().getAttachments().isEmpty();
     }
 
 }

@@ -3,16 +3,14 @@ package com.n4systems.fieldid.wicket.components.asset;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventSchedule;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.text.DateFormat;
@@ -50,16 +48,17 @@ public class UpcomingEventsPanel extends Panel {
             protected void populateItem(ListItem<EventSchedule> item) {
                 EventSchedule schedule = item.getModelObject();
                 
-                item.add(new Image("upcomingEventState", new ContextRelativeResource("/images/calendar-icon.png")));
                 item.add(new Label("upcomingEventDate", df.format(schedule.getNextDate())));
                 item.add(new Label("upcomingEventType", schedule.getEventType().getName()));
                 item.add(new NonWicketLink("startEventLink", "selectEventAdd.action?scheduleId=" + schedule.getId() + "&type=" + schedule.getEventType().getId() + "&assetId=" + asset.getId()));
                 item.add(new NonWicketLink("editScheduleLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false"));
+                if(schedule.isPastDue()) {
+                    item.add(new AttributeModifier("class", "overdue"));
+                }
             }
         });
-        NonWicketLink moreUpcomingEventsLink;
-        add(moreUpcomingEventsLink = new NonWicketLink("moreUpcomingEvents", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false"));
-        moreUpcomingEventsLink.add(new Label("moreUpcomingEventsMsg", new FIDLabelModel("label.x_more_scheduled_events", remainingEvents)));
+
+        add(new NonWicketLink("moreUpcomingEvents", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false"));
 
     }
 }

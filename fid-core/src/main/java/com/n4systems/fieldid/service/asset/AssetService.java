@@ -560,7 +560,6 @@ public class AssetService extends FieldIdPersistenceService {
         return persistenceService.findAll(builder);
     }
 
-
     public List<Asset> search(int threshold) {
         // if no search term given for search, just pull up the most recently modified ones.  (arbitrary decision).
         QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
@@ -568,5 +567,13 @@ public class AssetService extends FieldIdPersistenceService {
         builder.getOrderArguments().add(new OrderClause("modified", false));
         List<Asset> results = persistenceService.findAll(builder);
         return new PrioritizedList<Asset>(results, new UniquePrioritizer("type"),threshold);
+    }
+
+    public boolean hasLinkedAssets(Asset asset) {
+        QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
+        builder.addWhere(WhereClauseFactory.create("networkId", asset.getNetworkId()));
+        builder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", asset.getId()));
+
+        return persistenceService.exists(builder);
     }
 }
