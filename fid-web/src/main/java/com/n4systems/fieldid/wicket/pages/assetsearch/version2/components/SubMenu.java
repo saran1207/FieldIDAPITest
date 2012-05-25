@@ -51,11 +51,11 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         add(createHeader());
         
         MattBar mattBar = createMattBar();
-        mattBar.addLinkWithImage(new Model<String>(""), COLUMNS_ID, "images/col.png");
-        mattBar.addLinkWithImage(new Model<String>(""), FILTERS_ID, "images/filter.png");
-        mattBar.setCurrentState(FILTERS_ID);
         add(mattBar);
-        
+        mattBar.addLink(new Model<String>(""), COLUMNS_ID, "images/col.png", "label.tooltip_columns");
+        mattBar.addLink(new Model<String>(""), FILTERS_ID, "images/filter.png", "label.tooltip_filters");
+        mattBar.setCurrentState(FILTERS_ID);
+
         add(msg = new Label("msg", new StringResourceModel(getNoneSelectedMsgKey(), this, null)));
 		add(new AttributeAppender("class", "sub-menu"));
 
@@ -81,8 +81,6 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
     protected abstract String getNoneSelectedMsgKey();
 
     protected void initializeLimits() {
-        // XXX : the actions limits here should roll into one single "maxMassActionLimit"???    ask matt.
-        // see WEB-2859
         Long tenantId = FieldIDSession.get().getSessionUser().getTenant().getId();
         maxUpdate = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
         maxExport = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);

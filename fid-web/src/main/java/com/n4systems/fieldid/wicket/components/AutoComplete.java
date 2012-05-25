@@ -334,8 +334,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         response.renderCSSReference("style/component/autoComplete.css");
         response.renderCSSReference("style/tipsy/tipsy.css");
         response.renderOnLoadJavaScript("autoCompleter.init('"+autocompleteField.getMarkupId()+"'" + args + ");");
-//        response.renderOnLoadJavaScript("$('#"+autocompleteField.getMarkupId()+"').watermark('start typing your organization');");
-    }
+   }
     
     @Override
     protected final void convertInput() {

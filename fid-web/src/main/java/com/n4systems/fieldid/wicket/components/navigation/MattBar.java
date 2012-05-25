@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.navigation;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -25,10 +26,11 @@ public class MattBar extends Panel {
     private List<IModel<String>> linkTitles = Lists.newArrayList();
     private List<Serializable> linkStates = Lists.newArrayList();
     private List<String> linkImages = Lists.newArrayList();
-
+    private List<String> linkTooltips = Lists.newArrayList();
+    
     private Serializable currentState;
-    
-    
+
+
     public MattBar(String id) {
         super(id);
 
@@ -37,19 +39,11 @@ public class MattBar extends Panel {
         add(links = new ListView<IModel<String>>("links",new PropertyModel<List<IModel<String>>>(this, "linkTitles")) {
             @Override
             protected void populateItem(final ListItem<IModel<String>> item) {
-                AjaxLink link = new AjaxLink("link") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        Serializable newState = linkStates.get(item.getIndex());
-                        currentState = newState;
-                        onEnterState(target, newState);
-                        target.add(MattBar.this);
-                    }
-                };
+                AjaxLink link = createLink(item);
                 link.setOutputMarkupId(true);
 
                 item.setRenderBodyOnly(true);
-
+                
                 if (item.getIndex() == 0) {
                     link.add(new AttributeAppender("class", new Model<String>("mattButtonLeft"), " "));
                 } else if (item.getIndex() == linkStates.size() - 1) {
@@ -57,6 +51,7 @@ public class MattBar extends Panel {
                 } else {
                     link.add(new AttributeAppender("class", new Model<String>("mattButtonMiddle"), " "));
                 }
+                
 
                 link.add(new AttributeAppender("class", new Model<String>("mattButtonPressed"), " ") {
                     @Override
@@ -68,27 +63,45 @@ public class MattBar extends Panel {
                 link.add(new FlatLabel("linkLabel", item.getModelObject()));
 
                 String url = linkImages.get(item.getIndex());
-                if (url!=null) { 
+                if (url!=null) {
                     link.add(new ContextImage("img", url));
-                } else { 
+                } else {
                     link.add(new WebComponent("img").setVisible(false));
                 }
+                link.add(new AttributeAppender("class", new Model<String>("tipsy-tooltip"), " "));
                 item.add(link);
+                link.add(new AttributeModifier("title", getString(linkTooltips.get(item.getIndex()))));
             }
         });
+    }
+
+    protected AjaxLink createLink(final ListItem<IModel<String>> item) {
+        return new AjaxLink("link") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                Serializable newState = linkStates.get(item.getIndex());
+                currentState = newState;
+                onEnterState(target, newState);
+                target.add(MattBar.this);
+            }
+        };
     }
 
     public void addLink(IModel<String> linkTitle, Serializable linkState) {
         linkTitles.add(linkTitle);
         linkStates.add(linkState);
         linkImages.add(null);
+        linkTooltips.add(null);
     }
 
-    public void addLinkWithImage(IModel<String> linkTitle, Serializable linkState, String url) {
+
+    public void addLink(IModel<String> linkTitle, Serializable linkState, String url, String tooltip) {
         linkTitles.add(linkTitle);
         linkStates.add(linkState);
         linkImages.add(url);
+        linkTooltips.add(tooltip);
     }
+
 
     public MattBar setCurrentState(Serializable currentState) {
         this.currentState = currentState;
@@ -103,8 +116,13 @@ public class MattBar extends Panel {
         for (Component component : links.visitChildren(AjaxLink.class)) {
             response.renderOnDomReadyJavaScript("jQuery('#"+component.getMarkupId()+"').click(function(e) { jQuery(e.target).addClass('mattButtonPressed'); } );");
         }
+        
+        response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
+        response.renderOnDomReadyJavaScript("$('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
     }
 
     protected void onEnterState(AjaxRequestTarget target, Object state) { }
+
+    
 
 }
