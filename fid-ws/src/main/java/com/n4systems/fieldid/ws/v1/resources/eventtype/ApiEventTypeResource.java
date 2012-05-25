@@ -44,7 +44,7 @@ import com.n4systems.model.UnitOfMeasureCriteria;
 public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventType> {
 
 	public ApiEventTypeResource() {
-		super(EventType.class, false);
+		super(EventType.class, true);
 	}
 
 	@Override
