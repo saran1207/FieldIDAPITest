@@ -1,6 +1,6 @@
 require 'column_mapping'
 
-class UpdateEventDateColumn < ActiveRecord::Migration
+class DeleteOrphanedAssets < ActiveRecord::Migration
 
   def self.up
     execute("update assets a, assettypes at set a.state = 'ARCHIVED' where a.type_id = at.id and at.state='ARCHIVED' and a.state='ACTIVE'");
