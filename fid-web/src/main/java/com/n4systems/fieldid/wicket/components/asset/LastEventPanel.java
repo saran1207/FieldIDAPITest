@@ -59,7 +59,7 @@ public class LastEventPanel extends Panel {
             String printEventUrl = "file/downloadEventCert.action?uniqueID="+ lastEvent.getID() + "&reportType=INSPECTION_CERT";
             add(new NonWicketLink("printLastEventLink", printEventUrl));
             
-            add(new NonWicketLink("viewAllLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false"));
+            add(new NonWicketLink("viewAllLink", "assetEvents.action?uniqueID=" + asset.getId() + "&useContext=false"));
         }
     }
 }
