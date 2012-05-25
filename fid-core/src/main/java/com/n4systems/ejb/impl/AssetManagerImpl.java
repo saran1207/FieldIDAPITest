@@ -386,6 +386,8 @@ public class AssetManagerImpl implements AssetManager {
 			archiveTask.setAssetTypeId(assetType.getId());
 			archiveTask.setAssetTypeName(assetType.getArchivedName());
 
+            // WEB-2844  : what happens if this task fails?  we have deleted the asset type but not the assets?
+            // why can't we do everything in an atomic task?   DD
 			TaskExecutor.getInstance().execute(archiveTask);
 			
 			return type;
