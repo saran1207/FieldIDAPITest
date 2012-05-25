@@ -22,6 +22,7 @@ import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
@@ -32,7 +33,6 @@ import com.n4systems.model.Deficiency;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventForm;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.Observation;
@@ -44,6 +44,7 @@ import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Status;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
@@ -88,19 +89,16 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	
 	private Event convertApiEvent(ApiEvent apiEvent) {
 		Event event = new Event();
-		event.setTenant(getCurrentTenant());
-		event.setMobileGUID(apiEvent.getSid());
-		event.setCreated(apiEvent.getModified());
-		event.setModified(apiEvent.getModified());
+		
+		// Step 1: Convert abstract-event fields first.
+		convertApiEventForAbstractEvent(apiEvent, event);
+		
+		// Step 2: Convert the non-abstract-event fields
 		event.setDate(apiEvent.getDate());
 		event.setPrintable(apiEvent.isPrintable());
-		event.setComments(apiEvent.getComments());
 		event.setOwner(persistenceService.find(BaseOrg.class, apiEvent.getOwnerId()));
 		event.setPerformedBy(persistenceService.find(User.class, apiEvent.getPerformedById()));
-		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));
-		event.setAsset(assetService.findByMobileId(apiEvent.getAssetId()));
-		event.setModifiedBy(persistenceService.find(User.class, apiEvent.getModifiedById()));
-
+		
 		if (apiEvent.getStatus() != null) {
 			event.setStatus(Status.valueOf(apiEvent.getStatus()));
 		} else {
@@ -119,10 +117,6 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			event.setBook(findEventBook(apiEvent.getEventBookId()));
 		}
 		
-		if (apiEvent.getAssetStatusId() != null) {
-			event.setAssetStatus(persistenceService.find(AssetStatus.class, apiEvent.getAssetStatusId()));
-		}
-		
 		if (apiEvent.getPredefinedLocationId() != null) {
 			event.getAdvancedLocation().setPredefinedLocation(persistenceService.find(PredefinedLocation.class, apiEvent.getPredefinedLocationId()));
 		}
@@ -135,6 +129,42 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			event.getGpsLocation().setLatitude(apiEvent.getGpsLatitude());
 			event.getGpsLocation().setLongitude(apiEvent.getGpsLongitude());
 		}
+		
+		if(apiEvent.getSubEvents() != null && apiEvent.getSubEvents().size() > 0) {
+			List<SubEvent> subEvents = new ArrayList<SubEvent>();
+			
+			for(ApiEvent apiSubEvent: apiEvent.getSubEvents()) {
+				SubEvent subEvent = convertApiEventIntoSubEvent(apiSubEvent);
+				subEvents.add(subEvent);
+			}
+			
+			event.setSubEvents(subEvents);
+			
+			logger.info("Added " + subEvents.size() + " SubEvents for Event on Asset " + apiEvent.getAssetId());
+		}
+		
+		return event;
+	}
+	
+	private SubEvent convertApiEventIntoSubEvent(ApiEvent apiEvent) {
+		SubEvent subEvent = new SubEvent();
+		convertApiEventForAbstractEvent(apiEvent, subEvent);
+		return subEvent;
+	}
+	
+	private void convertApiEventForAbstractEvent(ApiEvent apiEvent, AbstractEvent event) {
+		event.setTenant(getCurrentTenant());
+		event.setMobileGUID(apiEvent.getSid());
+		event.setCreated(apiEvent.getModified());
+		event.setModified(apiEvent.getModified());		
+		event.setComments(apiEvent.getComments());		
+		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));
+		event.setAsset(assetService.findByMobileId(apiEvent.getAssetId()));
+		event.setModifiedBy(persistenceService.find(User.class, apiEvent.getModifiedById()));
+		
+		if (apiEvent.getAssetStatusId() != null) {
+			event.setAssetStatus(persistenceService.find(AssetStatus.class, apiEvent.getAssetStatusId()));
+		}		
 		
 		if (apiEvent.getForm() != null) {
 			EventForm form = persistenceService.find(EventForm.class, apiEvent.getForm().getFormId());
@@ -149,8 +179,6 @@ public class ApiEventResource extends FieldIdPersistenceService {
 				event.getInfoOptionMap().put(attribute.getName(), attribute.getValue());
 			}
 		}
-		
-		return event;
 	}
 
     private boolean eventExists(String sid) {
@@ -169,7 +197,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		return book;
 	}
 	
-	private List<CriteriaResult> convertEventFormResults(ApiEventFormResult eventFormResult, EventForm form, Event event) {
+	private List<CriteriaResult> convertEventFormResults(ApiEventFormResult eventFormResult, EventForm form, AbstractEvent event) {
 		List<CriteriaResult> results = new ArrayList<CriteriaResult>();
 		
 		for (ApiCriteriaSectionResult sectionResult: eventFormResult.getSections()) {
@@ -179,7 +207,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		return results;
 	}
 
-	private List<CriteriaResult> convertSectionResult(EventForm form, ApiCriteriaSectionResult sectionResult, Event event) {
+	private List<CriteriaResult> convertSectionResult(EventForm form, ApiCriteriaSectionResult sectionResult, AbstractEvent event) {
 		CriteriaSection section = null;
 		for (CriteriaSection sect: form.getSections()) {
 			if (sectionResult.getSectionId().equals(sect.getId())) {
@@ -199,7 +227,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		return results;
 	}
 
-	private CriteriaResult convertCriteriaResult(CriteriaSection section, ApiCriteriaResult apiResult, Event event) {
+	private CriteriaResult convertCriteriaResult(CriteriaSection section, ApiCriteriaResult apiResult, AbstractEvent event) {
 		Criteria criteria = null;
 		for (Criteria crit: section.getCriteria()) {
 			if (apiResult.getCriteriaId().equals(crit.getId())) {

@@ -26,7 +26,8 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private String eventScheduleId;
 	private ApiEventFormResult form;
 	private List<ApiEventAttachment> attachments;
-	private List<ApiEventAttribute> attributes;	
+	private List<ApiEventAttribute> attributes;
+	private List<ApiEvent> subEvents;
 
 	public Long getTypeId() {
 		return typeId;
@@ -178,5 +179,13 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 
 	public void setModifiedById(Long modifiedById) {
 		this.modifiedById = modifiedById;
+	}
+	
+	public List<ApiEvent> getSubEvents() {
+		return subEvents;
+	}
+
+	public void setSubEvents(List<ApiEvent> subEvents) {
+		this.subEvents = subEvents;
 	}	
 }
