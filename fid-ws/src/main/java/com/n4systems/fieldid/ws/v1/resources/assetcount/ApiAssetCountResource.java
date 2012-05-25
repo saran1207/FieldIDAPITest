@@ -31,16 +31,25 @@ public class ApiAssetCountResource extends FieldIdPersistenceService {
 	@Transactional(readOnly = true)
 	public ListResponse<ApiAssetCount> getAssetCounts(@QueryParam("orgId") List<Long> orgIds) {
 		List<ApiAssetCount> assetCounts = new ArrayList<ApiAssetCount>();
+
+        BaseOrg currentUserOwner = getCurrentUser().getOwner();
 		for (Long orgId: orgIds) {
 			QueryBuilder<Long> builder = new QueryBuilder<Long>(Asset.class, securityContext.getUserSecurityFilter());
 			builder.setCountSelect();
-			
-			BaseOrg org = persistenceService.find(BaseOrg.class, orgId);
+
+            BaseOrg org = null;
+            // This allows a division user to load its parent customer so that we can get an asset count for the customers screen on the mobile
+            if (currentUserOwner.isDivision() && currentUserOwner.getParent().getId().equals(orgId)) {
+                org = persistenceService.findNonSecure(BaseOrg.class, orgId);
+            } else {
+                org = persistenceService.find(BaseOrg.class, orgId);
+            }
+
 			if (org == null) {
 				throw new NotFoundException("Organization", orgId);
 			}
-			
-			builder.applyFilter(new OwnerAndDownFilter(org));
+
+            builder.applyFilter(new OwnerAndDownFilter(org));
 			Long assets = persistenceService.find(builder);
 			
 			assetCounts.add(new ApiAssetCount(orgId, assets));
