@@ -378,6 +378,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		targetAsset.setPurchaseOrder(productServiceDTO.getPurchaseOrder());
 		targetAsset.setRfidNumber(productServiceDTO.getRfidNumber());
 		targetAsset.setTenant(tenantOrganization);
+        targetAsset.setNonIntergrationOrderNumber(productServiceDTO.getOrderNumber());
 
 		if (productServiceDTO.getSerialNumber().equals(GENERATE_IDENTIFIER)) {
 			targetAsset.setIdentifier(identifierCounter.generateIdentifier(primaryOrg, assetType));

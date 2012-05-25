@@ -667,8 +667,6 @@ public class DataServiceImpl implements DataService {
 
 			Asset asset = converter.convert(productDTO, existingAsset);
 
-			updateShopOrderOnProduct(asset, productDTO, orderManager, tenantId);
-
 			// on edit, the identified by user is populated with the modified
 			// user
 			ServiceLocator.getLegacyAssetManager().update(asset, asset.getModifiedBy());
@@ -683,20 +681,6 @@ public class DataServiceImpl implements DataService {
 	private SystemSecurityGuard createSecurityGuard(long tenantId) {
 		SystemSecurityGuard systemSecurityGuard = new SerializableSecurityGuard(getTenantFinder().findTenant(tenantId));
 		return systemSecurityGuard;
-	}
-
-	private void updateShopOrderOnProduct(Asset asset, ProductServiceDTO productDTO, OrderManager orderManager, Long tenantId) {
-		PrimaryOrg primaryOrg = getTenantFinder().findPrimaryOrg(tenantId);
-
-		// Update the shop order only if the tenant does not have Integration
-		// and the order number has changed
-		// Integration tenants cannot add/update order information from mobile
-		if (!primaryOrg.hasExtendedFeature(ExtendedFeature.Integration) && StringUtils.isNotEmpty(productDTO.getOrderNumber())) {
-			LineItem currentProductOrder = asset.getShopOrder();
-			if (currentProductOrder == null || !currentProductOrder.getOrder().getOrderNumber().equalsIgnoreCase(productDTO.getOrderNumber().trim())) {
-				asset.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), tenantId));
-			}
-		}
 	}
 
 	@Override
@@ -788,8 +772,6 @@ public class DataServiceImpl implements DataService {
 
 		ProductServiceDTOConverter converter = createProductServiceDTOConverter(tenantId);
 		asset = converter.convert(productDTO, asset);
-
-		updateShopOrderOnProduct(asset, productDTO, orderManager, tenantId);
 
 		return asset;
 	}
