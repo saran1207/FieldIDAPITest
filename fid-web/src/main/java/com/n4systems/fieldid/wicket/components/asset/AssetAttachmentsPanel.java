@@ -6,6 +6,8 @@ import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.model.Asset;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.asset.AssetAttachment;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -35,11 +37,15 @@ public class AssetAttachmentsPanel extends Panel {
                 AssetAttachment attachment = item.getModelObject();
                 
                 String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ attachment.getFileName() + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
-                
-                if(attachment.isImage())
-                    item.add(new ExternalImage("attachmentImage", downloadUrl));
-                else
-                    item.add(new Image("attachmentImage", new ContextRelativeResource("images/default-filetype.png")));
+
+                WebComponent image;
+                if(attachment.isImage()) {
+                    item.add(image = new ExternalImage("attachmentImage", downloadUrl));
+                    image.add(new AttributeModifier("class", "attachmentImage"));
+                } else {
+                    item.add(image = new Image("attachmentImage", new ContextRelativeResource("images/file-icon.png")));
+                    image.add(new AttributeModifier("class", "attachmentIcon"));
+                }
                 ExternalLink attachmentLink;
                 item.add(attachmentLink = new ExternalLink("attachmentLink", downloadUrl));
                 attachmentLink.add(new Label("attachmentName", attachment.getFileName()));
@@ -56,10 +62,14 @@ public class AssetAttachmentsPanel extends Panel {
 
                 String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ attachment.getFileName() + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
 
-                if(attachment.isImage())
-                    item.add(new ExternalImage("attachmentImage", downloadUrl));
-                else
-                    item.add(new Image("attachmentImage", new ContextRelativeResource("images/default-filetype.png")));
+                WebComponent image;
+                if(attachment.isImage()) {
+                    item.add(image = new ExternalImage("attachmentImage", downloadUrl));
+                    image.add(new AttributeModifier("class", "attachmentImage"));
+                } else {
+                    item.add(image = new Image("attachmentImage", new ContextRelativeResource("images/file-icon.png")));
+                    image.add(new AttributeModifier("class", "attachmentIcon"));
+                }
                 ExternalLink attachmentLink;
                 item.add(attachmentLink = new ExternalLink("attachmentLink", downloadUrl));
                 attachmentLink.add(new Label("attachmentName", attachment.getFileName()));

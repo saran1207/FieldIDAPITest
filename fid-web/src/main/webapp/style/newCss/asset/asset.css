@@ -1,3 +1,5 @@
+/*Two Column Layout http://matthewjamestaylor.com/blog/ultimate-2-column-left-menu-pixels.htm*/
+
 .options, #contentTitle{
     display : none;
 }
@@ -28,9 +30,6 @@
     font-weight: normal;
 }
 
-.assetView {
-    float: left;
-}
 .ownerInfo {
     padding-top: 7px;
     font-size: 1.2em;
@@ -46,34 +45,66 @@
 
 .viewButtons {
     float : left;
-    width: 693px;
+    width: 640px;
     padding: 10px;
     margin-bottom: 15px;
 }
-.viewButtons div {
+.viewButtons .three_button {
     left: 25%;
     position: relative;
 }
 
-.leftColumn {
-    width: 275px;
+.viewButtons .four_button {
+    left: 20%;
+    position: relative;
 }
 
-.rightColumn{
-    width: 663px;
+.colmask {
+    clear: both;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.colright {
+    float: left;
+    left: 298px;
+    position: relative;
+    width: 698px;
     -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     -webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     border:1px solid #CCC;
     background:#FFF;
-    padding: 10px 20px;
 }
 
-.leftColumn{
+.colwrap {
+    float: right;
+    padding-bottom: 1em;
+    position: relative;
+    right: 210px;
+    width: 50%;
+}
+
+.leftColumn {
+    width: 275px;
     padding: 0 10px 10px 0;
+    float: left;
+    position: relative;
+    right: 299px;
 }
 
-.leftColumn, .rightColumn, .assetAttributeDetails, .linkedAssetList, .assetDetails {
+.rightColumn{
+    width: 660px;
+    padding: 10px 20px;
+    margin: 0 15px 0 210px;
+    overflow: hidden;
+    position: relative;
+    right: 100%;
+}
+
+.assetAttributeDetails, .linkedAssetList, .assetDetails {
     float: left;
 }
 
@@ -113,6 +144,7 @@
 .linkedAssetList img {
     float:left;
     padding-right: 5px;
+    padding-top: 5px;
 }
 
 .linkedAssetLabel, .linkedAssetLabel a, .addLinkedAsset, .linkedAssetPanel #formErrors{
@@ -120,6 +152,14 @@
     padding: 0 5px;
 }
 
+.addLinkedAsset{
+    padding-top: 5px;
+}
+
+.addLinkedAsset img{
+    padding-right: 5px;
+    vertical-align: middle;
+}
 .linkedAssetLabel .assetLink {
     padding: 0;
 }
@@ -129,7 +169,7 @@
 }
 
 .linkedAssetLabel label {
-    width: 215px;
+    width: 225px;
 }
 
 .linkedAssetPanel {
@@ -158,7 +198,7 @@
 }
 
 .assetDetails p {
-    padding: 5px 0;
+    padding-top: 10px;
     margin-top: 2px;
 }
 
@@ -201,6 +241,10 @@
     width: 50px;
 }
 
+.attachmentIcon {
+    padding: 0 10px;
+}
+
 .greyText{
     color: #888888;
 }
@@ -238,4 +282,23 @@
 
 .attachmentTable td {
     padding: 5px 0;
+}
+
+.linkedAssetPanel .addLinkedAssetButton {
+    padding: 2px 5px;
+}
+
+.cancelLink{
+    padding-left: 5px;
+    position:relative;
+    top: 5px;
+}
+
+.formActions {
+    padding-top: 5px;
+}
+
+.linkedWithAsset {
+    padding-top: 10px;
+    margin-left: -5px;
 }

@@ -18,8 +18,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class AssetViewPage extends AssetPage {
 
-    private LinkedAssetPanel linkedAssetPanel;
-
     public AssetViewPage(PageParameters params) {
         super(params);
            
@@ -63,9 +61,14 @@ public class AssetViewPage extends AssetPage {
         }
 
         add(new AssetAttributeDetailsPanel("assetAttributeDetailsPanel", assetModel));
-        
-        add(linkedAssetPanel = new LinkedAssetPanel("linkedAssetPanel", assetModel));
-        linkedAssetPanel.setOutputMarkupId(true);
+
+        WebMarkupContainer linkedAssetPanel;
+        if(assetService.parentAsset(asset) == null) {
+            add(linkedAssetPanel = new LinkedAssetPanel("linkedAssetPanel", assetModel));
+            linkedAssetPanel.setOutputMarkupId(true);
+        }else {
+            add(linkedAssetPanel = new LinkedWithAssetPanel("linkedAssetPanel", assetModel));
+        }
 
         add(new AssetDetailsPanel("assetDetailsPanel", assetModel));
 
@@ -76,20 +79,30 @@ public class AssetViewPage extends AssetPage {
         add(orderDetails = new OrderDetailsPanel("orderDetailsPanel", assetModel));
         orderDetails.setVisible(orderDetailsEnabled || integrationEnabled);
 
-        add(new Link<Void>("summaryLink") {
+        WebMarkupContainer buttonContainer = new WebMarkupContainer("buttonContainer");
+
+        buttonContainer.add(new Link<Void>("summaryLink") {
             @Override
             public void onClick() {
             }
         });
         
-        add(new NonWicketLink("schedulesLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
+        buttonContainer.add(new NonWicketLink("schedulesLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
+        
         NonWicketLink traceabilityLink;
-        add(traceabilityLink = new NonWicketLink("traceabilityLink", "assetTraceability.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
+        buttonContainer.add(traceabilityLink = new NonWicketLink("traceabilityLink", "assetTraceability.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
         traceabilityLink.setVisible(assetService.hasLinkedAssets(asset) || isInVendorContext());
 
-        add(new NonWicketLink("eventHistoryLink", "assetEvents.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonRight")));
+        buttonContainer.add(new NonWicketLink("eventHistoryLink", "assetEvents.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonRight")));
 
+        if (traceabilityLink.isVisible()) {
+           buttonContainer.add(new AttributeModifier("class", "four_button"));
+        } else {
+            buttonContainer.add(new AttributeModifier("class", "three_button"));
+        }
 
+        add(buttonContainer);
+        
         if (hasUpcomingEvents(asset)) {
             add(new UpcomingEventsPanel("upcomingEventsPanel", assetModel));
         } else {

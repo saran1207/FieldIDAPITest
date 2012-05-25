@@ -14,50 +14,54 @@
         </div>
 
     </div>
-    <div class="assetView">
-        <div class="leftColumn">
+    <div class="colmask">
 
-            <div class="assetImage">
-                <img wicket:id="assetImage" alt=""/>
-            </div>
-            <div wicket:id="map" class="googleMap assetMap"></div>
+        <div class="colright">
 
-            <div class="assetDetails" wicket:id="assetAttributeDetailsPanel"/>
-
-            <div class="linkedAssetPanel" wicket:id="linkedAssetPanel"/>
-
-            <div class="assetDetails" wicket:id="assetDetailsPanel"/>
-
-            <div class="assetDetails" wicket:id="orderDetailsPanel"/>
-        </div>
-
-
-        <div class="rightColumn">
-
-            <div class="viewButtons">
-                <div>
-                    <a wicket:id="summaryLink" class="mattButtonPressed mattButtonLeft"><wicket:message key="label.summary"/></a>
-                    <a wicket:id="schedulesLink"> <wicket:message key="label.scheduled_events"/></a>
-                    <a wicket:id="traceabilityLink"> <wicket:message key="nav.traceability"/></a>
-                    <a wicket:id="eventHistoryLink"> <wicket:message key="label.event_history"/></a>
+            <div class="colwrap">
+                <div class="rightColumn">
+                    <div class="viewButtons">
+                        <div wicket:id="buttonContainer">
+                            <a wicket:id="summaryLink" class="mattButtonPressed mattButtonLeft"><wicket:message key="label.summary"/></a>
+                            <a wicket:id="schedulesLink"> <wicket:message key="label.scheduled_events"/></a>
+                            <a wicket:id="traceabilityLink"> <wicket:message key="nav.traceability"/></a>
+                            <a wicket:id="eventHistoryLink"> <wicket:message key="label.event_history"/></a>
+                        </div>
+                    </div>
+                    <h1>
+                        <label> <wicket:message key="label.upcoming_events"/></label>
+                    </h1>
+                    <div class="rightPanel" wicket:id="upcomingEventsPanel" />
+                    <h1>
+                        <label> <wicket:message key="label.lasteventperformed"/></label>
+                    </h1>
+                    <div class="rightPanel" wicket:id="lastEventsPanel" />
+                    <h1>
+                        <label> <wicket:message key="label.attachments"/></label>
+                    </h1>
+                    <div class="rightPanel" wicket:id="attachmentsPanel"/>
+                    <h1>
+                        <label><wicket:message key="label.more_uc"/></label>
+                    </h1>
+                    <div class="rightPanel morePanel" wicket:id="warningsAndInstructionsPanel"/>
                 </div>
             </div>
-            <h1>
-                <label> <wicket:message key="label.upcoming_events"/></label>
-            </h1>
-            <div class="rightPanel" wicket:id="upcomingEventsPanel" />
-            <h1>
-                <label> <wicket:message key="label.lasteventperformed"/></label>
-            </h1>
-            <div class="rightPanel" wicket:id="lastEventsPanel" />
-            <h1>
-                <label> <wicket:message key="label.attachments"/></label>
-            </h1>
-            <div class="rightPanel" wicket:id="attachmentsPanel"/>
-            <h1>
-                <label><wicket:message key="label.more_uc"/></label>
-            </h1>
-            <div class="rightPanel morePanel" wicket:id="warningsAndInstructionsPanel"/>
+            <div class="leftColumn">
+
+                <div class="assetImage">
+                    <img wicket:id="assetImage" alt=""/>
+                </div>
+                <div wicket:id="map" class="googleMap assetMap"></div>
+
+                <div class="assetDetails" wicket:id="assetAttributeDetailsPanel"/>
+
+                <div class="linkedAssetPanel" wicket:id="linkedAssetPanel"/>
+
+                <div class="assetDetails" wicket:id="assetDetailsPanel"/>
+
+                <div class="assetDetails" wicket:id="orderDetailsPanel"/>
+            </div>
         </div>
+
     </div>
 </wicket:extend>
