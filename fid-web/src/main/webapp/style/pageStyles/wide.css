@@ -72,13 +72,15 @@
 	left:13px;
 	width:345px;
 	top:169px;
-	bottom:50px;
+	bottom:8px;
     border-top-right-radius: 6px;
     border-left:1px solid #bbb;
     border-right:1px solid #bbb;
     border-top:1px solid #bbb;
 	position:fixed;
 	float:left;
+    border-bottom-right-radius:6px;
+    border-bottom:1px solid #bbb;
 }
 
 #page.with-left-panel #left-panel {
@@ -101,7 +103,7 @@
     overflow-x:visible;
     width:345px;
     top:209px;
-    bottom:50px;
+    bottom:12px;
     position:fixed;
     float:left;
 }
@@ -158,18 +160,12 @@
     bottom:10px;
     left:13px;
 	display:inline-block;
-    border-bottom-right-radius:6px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #bbb;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    border-top-style: dotted;
-    border-top-color: #ccc;
+    border-style: none;
     height:40px;
-    background:white;
     width:335px;
     padding-right:10px;
+     padding-top:5px;
+     top:164px;
 	zoom:0;
 }
 
