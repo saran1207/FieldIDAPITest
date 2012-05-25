@@ -116,7 +116,6 @@ public class LinkedAssetPanel extends Panel {
             }
         });
 
-
         form.add(new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "assetForLinking")));
         form.add(new AjaxSubmitLink("saveLink", form) {
             @Override
@@ -143,11 +142,20 @@ public class LinkedAssetPanel extends Panel {
                     target.add(feedbackPanel);
                 }
             }
-
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
             }
         });
+
+        form.add(new AjaxLink<Void>("cancelLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                addLink.setVisible(true);
+                form.setVisible(false);
+                target.add(LinkedAssetPanel.this);
+            }
+        });
+
         form.setVisible(false);
         add(form);
 

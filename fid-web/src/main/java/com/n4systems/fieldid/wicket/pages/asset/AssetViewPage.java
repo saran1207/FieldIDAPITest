@@ -82,12 +82,12 @@ public class AssetViewPage extends AssetPage {
             }
         });
         
-        add(new NonWicketLink("schedulesLink", "assetEvents.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
+        add(new NonWicketLink("schedulesLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
         NonWicketLink traceabilityLink;
         add(traceabilityLink = new NonWicketLink("traceabilityLink", "assetTraceability.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
         traceabilityLink.setVisible(assetService.hasLinkedAssets(asset) || isInVendorContext());
 
-        add(new NonWicketLink("eventHistoryLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonRight")));
+        add(new NonWicketLink("eventHistoryLink", "assetEvents.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonRight")));
 
 
         if (hasUpcomingEvents(asset)) {
