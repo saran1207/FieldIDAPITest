@@ -1,20 +1,5 @@
 package com.n4systems.fieldid.actions.api;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.net.URI;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import rfid.web.helper.SessionUser;
-
 import com.google.gson.Gson;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.UIConstants;
@@ -47,16 +32,20 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.services.SecurityContext;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ConfigurationProvider;
-import com.n4systems.util.FieldidDateFormatter;
-import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.*;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.time.SystemClock;
 import com.n4systems.util.uri.ActionURLBuilder;
-
 import freemarker.template.utility.StringUtil;
+import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import rfid.web.helper.SessionUser;
+
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.util.*;
 
 @SuppressWarnings("serial")
 abstract public class AbstractAction extends ExtendedTextProviderAction implements FlashScopeAware, UserDateFormatValidator, LoaderFactoryProvider, UIConstants {
@@ -273,13 +262,13 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public boolean isValidDate(String date, boolean usingTime) {
 		return getSessionUser().createUserDateConverter().isValidDate(date, usingTime);
 	}
-	
 
-	public String formatDateTime(Date date) {
-		return formatAnyDate(date, true, true);
-	}
-	
-	public String formatDate(Date date, boolean convertTimeZone) {
+
+    public String formatDateTime(Date date) {
+        return formatAnyDate(date, true, true);
+    }
+
+    public String formatDate(Date date, boolean convertTimeZone) {
 		return formatAnyDate(date, convertTimeZone, false);
 	}
 	

@@ -1,11 +1,11 @@
 package com.n4systems.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "assetstatus")
@@ -25,5 +25,6 @@ public class AssetStatus extends ArchivableEntityWithTenant implements Listable<
 	@Override
 	public String getDisplayName() {
 		return name;
-	}	
+	}
+
 }

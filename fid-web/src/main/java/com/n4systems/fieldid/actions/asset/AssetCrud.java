@@ -1,33 +1,6 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetCodeMapping;
-import rfid.ejb.entity.AssetExtension;
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.EventManager;
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.OrderManager;
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProjectManager;
+import com.n4systems.ejb.*;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.LegacyAssetType;
@@ -37,27 +10,13 @@ import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.fieldid.actions.event.viewmodel.ScheduleToWebEventScheduleConverter;
 import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToScheduleConverter;
-import com.n4systems.fieldid.actions.helpers.AllEventHelper;
-import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
-import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
-import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
-import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
-import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
+import com.n4systems.fieldid.actions.helpers.*;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.LineItem;
-import com.n4systems.model.Order;
-import com.n4systems.model.Project;
+import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.asset.AssetAttachment;
@@ -77,11 +36,14 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleListable;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import com.opensymphony.xwork2.validator.annotations.*;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.ejb.entity.*;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class AssetCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
@@ -1027,9 +989,14 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return new ArrayList<EventType>(assetType.getEventTypes());
 	}
 	
-	public Event getLastEvent() {
+	 public Event getLastEvent() {
 		return getAllEventHelper().getLastEvent();
 	}
+    
+    public Date getNextScheduledEventDate(Long id) {
+        EventSchedule schedule = new NextEventScheduleLoader().setAssetId(id).load();
+        return schedule==null ? null : schedule.getNextDate();
+    }
 	
 	public EventSchedule getNextEvent() {
 		return new NextEventScheduleLoader().setAssetId(uniqueID).load();
