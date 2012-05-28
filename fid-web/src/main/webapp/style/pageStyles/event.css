@@ -647,3 +647,16 @@ a.clearSignatureLink {
 #pageContent {
 	overflow:visible;
 }
+
+.buttonBar a img {
+    padding-right: 5px;
+}
+
+.buttonBar a.mattButtonLeft,  .buttonBar a.mattButtonMiddle, .buttonBar a.mattButtonRight{
+    padding: 10px;
+    vertical-align: middle;
+}
+.buttonBar {
+    float: right;
+}
+

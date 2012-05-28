@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<@n4.includeScript src="googleMaps.js"/>
 	<@n4.includeScript src="event.js"/>
+    <@n4.includeStyle href="../newCss/component/matt_buttons" type="page"/>
 
 </head>
 
@@ -27,17 +28,17 @@
 	<#assign page = pagedEvents/>
 	
 	<div class="buttonBar">
-		<a id="listButton" class="button left ${action.showList.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" >
+		<a id="listButton" class="mattButtonLeft ${action.showList.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" >
             <img src="/fieldid/images/eventList.png"/>
             <@s.text name="label.view_events_by_list"/>
         </a>
 		<#if !events.isEmpty() && tenant.settings.gpsCapture>		
-			<a id="mapButton" class="button middle ${action.showMap.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" >
+			<a id="mapButton" class="mattButtonMiddle ${action.showMap.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" >
                 <img src="/fieldid/images/eventMap.png"/>
                 <@s.text name="label.view_events_by_map"/>
             </a>
 		</#if>					
-		<a id="groupByDateButton" class="button right ${action.showGroups.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" >
+		<a id="groupByDateButton" class="mattButtonRight ${action.showGroups.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" >
             <img src="/fieldid/images/eventGroup.png"/>
             <@s.text name="label.view_events_by_date_group"/>
         </a>
