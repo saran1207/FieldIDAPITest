@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.smartsearch;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -66,18 +67,13 @@ public class ApiSmartSearchResource extends FieldIdPersistenceService {
 	}
 
 	private List<ApiSmartSearchSuggestion> mergeSuggestions(List<ApiSmartSearchSuggestion> identifierSuggestions, List<ApiSmartSearchSuggestion> refNumberSuggestions) {
-		List<ApiSmartSearchSuggestion> suggestions = new ArrayList<ApiSmartSearchSuggestion>();
+		// This removes duplicates and sorts by the field length
+        TreeSet<ApiSmartSearchSuggestion> suggestions = new TreeSet<ApiSmartSearchSuggestion>();
 		suggestions.addAll(identifierSuggestions);
 		suggestions.addAll(refNumberSuggestions);
-		
-		Collections.sort(suggestions, new java.util.Comparator<ApiSmartSearchSuggestion>() {
-			@Override
-			public int compare(ApiSmartSearchSuggestion sug1, ApiSmartSearchSuggestion sug2) {
-				return sug1.getFieldLength().compareTo(sug2.getFieldLength());
-			}
-		});
 
-		return (suggestions.size() <= MaxResults) ? suggestions : suggestions.subList(0, MaxResults);
+        ArrayList<ApiSmartSearchSuggestion> suggestionList = new ArrayList<ApiSmartSearchSuggestion>(suggestions);
+		return (suggestionList.size() <= MaxResults) ? suggestionList : suggestionList.subList(0, MaxResults);
 	}
 
 }

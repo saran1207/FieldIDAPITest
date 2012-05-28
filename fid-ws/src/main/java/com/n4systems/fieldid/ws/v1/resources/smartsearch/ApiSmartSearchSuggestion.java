@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.smartsearch;
 
-public class ApiSmartSearchSuggestion {
+public class ApiSmartSearchSuggestion implements Comparable<ApiSmartSearchSuggestion> {
 	private String sid;
 	private String type;
 	private String identifier;
@@ -54,5 +54,22 @@ public class ApiSmartSearchSuggestion {
 	public void setFieldLength(Integer fieldLength) {
 		this.fieldLength = fieldLength;
 	}
+
+    @Override
+    public int compareTo(ApiSmartSearchSuggestion apiSmartSearchSuggestion) {
+        return this.fieldLength.compareTo(apiSmartSearchSuggestion.fieldLength);
+    }
+
+    @Override
+    public int hashCode() {
+        return sid.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof ApiSmartSearchSuggestion)) return false;
+
+        return this.sid.equals(((ApiSmartSearchSuggestion)o).sid);
+    }
 
 }
