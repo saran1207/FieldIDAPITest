@@ -58,6 +58,12 @@ public class PersistenceService extends FieldIdService {
     }
 
     @Transactional(readOnly = true)
+    public <T extends EntityWithTenant> T findUsingTenantOnlySecurityWithArchived(Class<T> entityClass, Long entityId) {
+        QueryBuilder<T> queryBuilder = createTenantSecurityBuilder(entityClass, true).addSimpleWhere("id", entityId);
+        return find(queryBuilder);
+    }
+
+    @Transactional(readOnly = true)
     public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass) {
         QueryBuilder<T> queryBuilder = createUserSecurityBuilder(entityClass);
         return findAll(queryBuilder);

@@ -17,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,11 +81,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		builder.addOrder("created");
 		
 		if (ownerId != null) {
-			BaseOrg owner = persistenceService.find(BaseOrg.class, ownerId);
-			if (owner == null) {
-				throw new NotFoundException("Organization", ownerId);
-			}
-			builder.applyFilter(new OwnerAndDownFilter(owner));
+			builder.applyFilter(new OwnerAndDownFilter(findEntity(BaseOrg.class, ownerId)));
 		}
 		
 		if (searchText != null) {
@@ -224,8 +221,9 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	private void converApiAsset(ApiAsset apiAsset, Asset asset) {
 		asset.setTenant(getCurrentTenant());
 		asset.setMobileGUID(apiAsset.getSid());
-		asset.setType(persistenceService.find(AssetType.class, apiAsset.getTypeId()));
-		asset.setOwner(persistenceService.find(BaseOrg.class, apiAsset.getOwnerId()));
+
+		asset.setType(findEntity(AssetType.class, apiAsset.getTypeId()));
+		asset.setOwner(findEntity(BaseOrg.class, apiAsset.getOwnerId()));
 		asset.setIdentifier(apiAsset.getIdentifier());
 		asset.setRfidNumber(apiAsset.getRfidNumber());
 		asset.setCustomerRefNumber(apiAsset.getCustomerRefNumber());
@@ -236,15 +234,15 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		asset.setModified(apiAsset.getModified());
 		
 		if(apiAsset.getAssetStatusId() > 0) {
-			asset.setAssetStatus(persistenceService.find(AssetStatus.class, apiAsset.getAssetStatusId()));
+			asset.setAssetStatus(findEntity(AssetStatus.class, apiAsset.getAssetStatusId()));
 		}
 		
 		if(apiAsset.getIdentifiedById() > 0) {
-			asset.setIdentifiedBy(persistenceService.find(User.class, apiAsset.getIdentifiedById()));
+			asset.setIdentifiedBy(findEntity(User.class, apiAsset.getIdentifiedById()));
 		}
 		
 		if(apiAsset.getAssignedUserId() > 0) {
-			asset.setAssignedUser(persistenceService.find(User.class, apiAsset.getAssignedUserId()));
+			asset.setAssignedUser(findEntity(User.class, apiAsset.getAssignedUserId()));
 		}
 		
 		if(apiAsset.getGpsLatitude() != null && apiAsset.getGpsLongitude() != null) {
@@ -260,7 +258,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			location.setFreeformLocation(apiAsset.getFreeformLocation());
 			
 			if(apiAsset.getPredefinedLocationId() != null) {
-				location.setPredefinedLocation(persistenceService.find(PredefinedLocation.class, apiAsset.getPredefinedLocationId()));
+				location.setPredefinedLocation(findEntity(PredefinedLocation.class, apiAsset.getPredefinedLocationId()));
 			}
 			
 			asset.setAdvancedLocation(location);
@@ -268,8 +266,10 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		
 		asset.setInfoOptions(convertAttributeValues(apiAsset.getAttributeValues(), asset));
 	}
-	
-	private List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
+
+
+
+    private List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
 		List<ApiAttributeValue> apiAttributeValues = new ArrayList<ApiAttributeValue>();
 		
 		for (InfoOptionBean option: asset.getInfoOptions()) {

@@ -3,6 +3,8 @@ package com.n4systems.fieldid.ws.v1.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
+import com.n4systems.model.parents.EntityWithTenant;
 import org.springframework.stereotype.Component;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
@@ -19,4 +21,12 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 		}
 		return apiModel;
 	}
+
+    protected <T extends EntityWithTenant> T findEntity(Class<T> entityClass, Long id) {
+        T entity = persistenceService.findUsingTenantOnlySecurityWithArchived(entityClass, id);
+        if (entity == null) {
+            throw new NotFoundException(entityClass.getSimpleName(), id);
+        }
+        return entity;
+    }
 }
