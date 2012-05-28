@@ -36,7 +36,7 @@ public class AssetAttachmentsPanel extends Panel {
             protected void populateItem(ListItem<AssetAttachment> item) {
                 AssetAttachment attachment = item.getModelObject();
                 
-                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ attachment.getFileName() + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
+                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ attachment.getFileName().replace(" ", "+") + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
 
                 WebComponent image;
                 if(attachment.isImage()) {
@@ -60,7 +60,7 @@ public class AssetAttachmentsPanel extends Panel {
             protected void populateItem(ListItem<FileAttachment> item) {
                 FileAttachment attachment = item.getModelObject();
 
-                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ attachment.getFileName() + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
+                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetTypeAttachedFile.action?fileName="+ attachment.getFileName().replace(" ", "+") + "&uniqueID="+ asset.getType().getId() + "&attachmentID=" + attachment.getId());
 
                 WebComponent image;
                 if(attachment.isImage()) {
@@ -77,4 +77,5 @@ public class AssetAttachmentsPanel extends Panel {
             }
         });
     }
+
 }
