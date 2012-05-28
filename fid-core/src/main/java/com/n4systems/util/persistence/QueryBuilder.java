@@ -411,6 +411,11 @@ public class QueryBuilder<E> {
 		joinArguments.add(join);
 		return this;
 	}
+
+    public QueryBuilder<E> addLeftOuterJoin(String param, String alias) {
+        joinArguments.add(new JoinClause(JoinType.LEFT_OUTER, param, alias, true));
+        return this;
+    }
 	
 	public QueryBuilder<E> addLeftJoin(String param, String alias) {
 		joinArguments.add(new JoinClause(JoinType.LEFT, param, alias, false));

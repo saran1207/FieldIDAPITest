@@ -13,7 +13,8 @@ public class JoinClause implements ClauseArgument {
 		LEFT("LEFT JOIN", true), 
 		RIGHT("RIGHT JOIN", true), 
 		FETCH("LEFT JOIN FETCH", false), 
-		INNER("INNER JOIN", true);
+		INNER("INNER JOIN", true),
+        LEFT_OUTER("LEFT OUTER JOIN", true);
 		
 		private String joinSql;
 		private boolean usesAlias;
@@ -67,6 +68,9 @@ public class JoinClause implements ClauseArgument {
 		
 		String clause = type.getJoinSql() + " " + table.prepareField(param);
 		if(type.usesAlias() && alias != null) {
+            if (type == JoinType.LEFT_OUTER) {
+                clause += " as ";
+            }
 			clause += " " + alias;
 		}
 		

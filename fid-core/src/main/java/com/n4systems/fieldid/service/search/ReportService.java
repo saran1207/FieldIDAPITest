@@ -9,9 +9,11 @@ import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.JoinTerm;
-import com.n4systems.util.persistence.search.terms.CompletedOrDueDateRange;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
+import com.n4systems.util.persistence.search.terms.completedordue.AssetStatusTerm;
+import com.n4systems.util.persistence.search.terms.completedordue.AssignedUserTerm;
+import com.n4systems.util.persistence.search.terms.completedordue.CompletedOrDueDateRange;
 import org.apache.commons.lang.time.DateUtils;
 
 import java.util.Date;
@@ -38,11 +40,12 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
 		}
         addWildcardOrStringTerm(searchTerms, "asset.purchaseOrder", criteriaModel.getPurchaseOrder());
         addWildcardOrStringTerm(searchTerms, "asset.customerRefNumber", criteriaModel.getReferenceNumber());
-        addWildcardOrStringTerm(searchTerms, "advancedLocation.freeformLocation", criteriaModel.getLocation().getFreeformLocation());
         addSimpleTerm(searchTerms, "asset.type.id", getId(criteriaModel.getAssetType()));
         addSimpleTerm(searchTerms, "asset.type.group.id", getId(criteriaModel.getAssetTypeGroup()));
 
-        addSimpleTerm(searchTerms, "event.assetStatus.id", getId(criteriaModel.getAssetStatus()));
+        if (criteriaModel.getAssetStatus() != null) {
+            addAssetStatusTerm(criteriaModel, searchTerms);
+        }
 
         addSimpleTerm(searchTerms, "eventType.id", getId(criteriaModel.getEventType()));
         addSimpleTerm(searchTerms, "eventType.group.id", getId(criteriaModel.getEventTypeGroup()));
@@ -61,12 +64,12 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
             addNotNullTerm(searchTerms,  "nextDate");
         } else if (IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange()) || criteriaModel.getEventStatus() == EventStatus.INCOMPLETE) {
-            if (criteriaModel.getDueDateRange() != null) {
+            if (criteriaModel.getDueDateRange() != null && !criteriaModel.getDateRange().isEmptyCustom()) {
                 addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), criteriaModel.getDueDateRange().calculateToDate());
             }
         }
 
-        if (criteriaModel.getDateRange() != null) {
+        if (criteriaModel.getDateRange() != null && !criteriaModel.getDateRange().isEmptyCustom()) {
             if (criteriaModel.getEventStatus() == EventStatus.COMPLETE) {
                 addDateRangeTerm(searchTerms, "event.schedule.date", DateHelper.convertToUTC(criteriaModel.getDateRange().calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(criteriaModel.getDateRange().calculateToDate()), timeZone));
             } else if (criteriaModel.getEventStatus() == EventStatus.ALL) {
@@ -82,19 +85,22 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
 
         Long assignedUserId = getId(criteriaModel.getAssignedTo());
         if (assignedUserId != null) {
-            addSimpleTerm(searchTerms, "event.assignedTo.assignmentApplyed", true);
-
-            if(assignedUserId == 0) {
-                addNullTerm(searchTerms, "event.assignedTo.assignedUser.id");
-            } else {
-                addSimpleTerm(searchTerms, "event.assignedTo.assignedUser.id", assignedUserId);
-            }
+            addAssignedUserTerm(assignedUserId, criteriaModel, searchTerms);
         }
 
+        addWildcardOrStringTerm(searchTerms, "advancedLocation.freeformLocation", criteriaModel.getLocation().getFreeformLocation());
         addPredefinedLocationTerm(searchTerms, criteriaModel);
     }
 
-	private void addPredefinedLocationTerm(List<SearchTermDefiner> search, EventReportCriteria criteriaModel) {
+    private void addAssignedUserTerm(Long assignedUserId, EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
+        searchTerms.add(new AssignedUserTerm(criteriaModel.getEventStatus(), assignedUserId));
+    }
+
+    private void addAssetStatusTerm(EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
+        searchTerms.add(new AssetStatusTerm(criteriaModel.getEventStatus(), criteriaModel.getAssetStatus()));
+    }
+
+    private void addPredefinedLocationTerm(List<SearchTermDefiner> search, EventReportCriteria criteriaModel) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
         if (predefLocationId != null) {
 			search.add(new PredefinedLocationSearchTerm("preLocSearchId", predefLocationId));

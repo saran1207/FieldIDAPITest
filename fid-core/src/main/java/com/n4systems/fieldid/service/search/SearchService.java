@@ -113,8 +113,18 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
 		QueryBuilder<M> searchBuilder = createUserSecurityBuilder(searchClass);
 
         ColumnMappingView sortColumn = criteriaModel.getSortColumn();
+
         if (sortColumn != null && sortColumn.getJoinExpression() != null) {
-            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT, sortColumn.getJoinExpression(), JoinTerm.DEFAULT_SORT_JOIN_ALIAS, true);
+            String[] joinExpressions = sortColumn.getJoinExpression().split(",");
+            for (int i = 0; i < joinExpressions.length; i++) {
+                String sortAlias = JoinTerm.DEFAULT_SORT_JOIN_ALIAS + i;
+                JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT, joinExpressions[i], sortAlias, true);
+                searchBuilder.addJoin(joinTerm.toJoinClause());
+            }
+        }
+
+        if (criteriaModel.requiresLeftOuterJoin()) {
+            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "event", "outer_event", true);
             searchBuilder.addJoin(joinTerm.toJoinClause());
         }
 
@@ -161,22 +171,32 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
             if (sortColumn.getJoinExpression() == null) {
                 searchBuilder.getOrderArguments().add(new SortTerm(sortColumn.getSortExpression().replaceAll("\\{.*\\}", ""), sortDirection).toSortField());
             } else {
-                String sortExpression = sortColumn.getSortExpression();
+                String[] sortExpressions = sortColumn.getSortExpression().split(",");
+                String[] joinExpressions = sortColumn.getJoinExpression().split(",");
 
-                // This is working around an issue caused when we upgraded hibernate versions. It requires us
-                // to join on a column we want to sort by when we're looking at a property Y some entity X, when
-                // X may be null (eg the name of an Event Book, event.book.name). If this join is omitted, events with a null event
-                // book will be excluded from our results.
-                SortTerm sortTerm = new SortTerm(JoinTerm.DEFAULT_SORT_JOIN_ALIAS, sortDirection);
-                sortTerm.setAlwaysDropAlias(true);
+                for (int i = 0; i < sortExpressions.length; i++) {
+                    String sortAlias = JoinTerm.DEFAULT_SORT_JOIN_ALIAS + i;
 
-                if (sortExpression.startsWith(sortColumn.getJoinExpression())) {
-                    sortTerm.setFieldAfterAlias(sortExpression.substring(sortColumn.getJoinExpression().length() + 1));
-                } else {
-                    sortTerm.setFieldAfterAlias(sortExpression.substring(sortExpression.lastIndexOf(".") + 1));
+                    String sortExpression = sortExpressions[i];
+                    String joinExpression = joinExpressions[i];
+
+                    // This is working around an issue caused when we upgraded hibernate versions. It requires us
+                    // to join on a column we want to sort by when we're looking at a property Y some entity X, when
+                    // X may be null (eg the name of an Event Book, event.book.name). If this join is omitted, events with a null event
+                    // book will be excluded from our results.
+                    SortTerm sortTerm = new SortTerm(sortAlias, sortDirection);
+                    sortTerm.setAlwaysDropAlias(true);
+
+                    if (sortExpression.startsWith(joinExpression)) {
+                        sortTerm.setFieldAfterAlias(sortExpression.substring(joinExpression.length() + 1));
+                    } else {
+                        sortTerm.setFieldAfterAlias(sortExpression.substring(sortExpression.lastIndexOf(".") + 1));
+                    }
+
+                    searchBuilder.getOrderArguments().add(sortTerm.toSortField());
+
                 }
 
-                searchBuilder.getOrderArguments().add(sortTerm.toSortField());
             }
         }
 

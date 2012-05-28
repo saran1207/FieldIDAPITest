@@ -298,5 +298,9 @@ public class DateRange implements Serializable, Cloneable {
         return (DateRange) super.clone();
     }
 
+    public boolean isEmptyCustom() {
+        return rangeType == RangeType.CUSTOM && fromDate == null && toDate == null;
+    }
+
 
 }

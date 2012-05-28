@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class JoinTerm implements Serializable {
     public static final String DEFAULT_SORT_JOIN_ALIAS = "sort";
 
-	public enum JoinTermType { LEFT, RIGHT, INNER }
+	public enum JoinTermType { LEFT, RIGHT, INNER, LEFT_OUTER }
 	
 	private final JoinTermType type;
 	private final String path;
@@ -34,6 +34,9 @@ public class JoinTerm implements Serializable {
 			case INNER:
 				joinType = JoinType.INNER;
 				break;
+            case LEFT_OUTER:
+                joinType = JoinType.LEFT_OUTER;
+                break;
 		}
 		return new JoinClause(joinType, path, alias, required);
 	}

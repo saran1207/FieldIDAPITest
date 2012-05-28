@@ -275,4 +275,12 @@ public class EventReportCriteria extends SearchCriteria {
         this.dueDateRange = new DateRange(RangeType.CUSTOM);
     }
 
+    @Override
+    public boolean requiresLeftOuterJoin() {
+        if (eventStatus == EventStatus.INCOMPLETE) {
+            return false;
+        }
+
+        return assetStatus != null || assignedTo != null;
+    }
 }
