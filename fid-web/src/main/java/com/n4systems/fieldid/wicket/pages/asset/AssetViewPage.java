@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -34,11 +35,8 @@ public class AssetViewPage extends AssetPage {
         }
 
         BaseOrg owner = asset.getOwner();
-        
-        String ownerLabel = owner.getDisplayName();
-        if(!owner.getAddressInfo().getDisplay(false).isEmpty())
-            ownerLabel+= ", " + owner.getAddressInfo().getDisplay(false);
-        add(new Label("ownerInfo",ownerLabel.replaceAll("\n", " ")));
+
+        add(new Label("ownerInfo", getOwnerLabel(owner, asset.getAdvancedLocation())));
         
         add(new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
 
@@ -123,7 +121,24 @@ public class AssetViewPage extends AssetPage {
         add(new WarningsAndInstructionsPanel("warningsAndInstructionsPanel", assetModel));
 
     }
-    
+
+    private String getOwnerLabel(BaseOrg owner, Location advancedLocation) {
+        StringBuffer buff = new StringBuffer();
+        if(owner.isDivision()) {
+            buff.append(owner.getCustomerOrg().getName()).append(" (").append(owner.getPrimaryOrg().getName()).append("), ").append(owner.getDivisionOrg().getName());
+        } else if(owner.isCustomer()) {
+            buff.append(owner.getCustomerOrg().getName()).append(" (").append(owner.getPrimaryOrg().getName()).append(")");
+        } else {
+            buff.append(owner.getPrimaryOrg().getName());
+        }
+        
+        if(advancedLocation != null && !advancedLocation.getFullName().isEmpty()) {
+                buff.append(", ").append(advancedLocation.getFullName());
+        }
+        return buff.toString();  
+    }
+
+
     private boolean hasLastEvent(Asset asset) {
         return assetService.findLastEvents(asset, FieldIDSession.get().getSessionUser().getSecurityFilter()) != null;
     }
