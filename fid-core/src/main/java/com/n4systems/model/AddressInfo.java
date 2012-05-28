@@ -11,13 +11,13 @@ public class AddressInfo extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 	
 	private String streetAddress = "";
-	private String city;
-	private String state;
-	private String country;
-	private String zip;
-	private String phone1;
-	private String phone2;
-	private String fax1;
+	private String city = "";
+	private String state = "";
+	private String country = "";
+	private String zip = "";
+	private String phone1 = "";
+	private String phone2 = "";
+	private String fax1 = "";
 	
 	public AddressInfo() {}
 	
@@ -108,31 +108,31 @@ public class AddressInfo extends AbstractEntity {
 	public String getDisplay(boolean includePhone) {
 		String display = "";
 
-        if(!streetAddress.isEmpty())
+        if(streetAddress != null && !streetAddress.isEmpty())
             display += streetAddress + "\n";
 
-        if (!city.isEmpty())
+        if (city != null && !city.isEmpty())
 			display +=city;
 
-        if(!state.isEmpty())
+        if(state != null && !state.isEmpty())
             display+= ", " + state + "\n";
 
-        if(!country.isEmpty())
+        if(country != null && !country.isEmpty())
 			display+= country + "\n";
 
-        if(!zip.isEmpty())
+        if(zip != null && !zip.isEmpty())
 			display += zip;
 
         if(includePhone) {
-            if(!phone1.isEmpty()) {
+            if(phone1 != null && !phone1.isEmpty()) {
                 display += "\nPhone 1: " + phone1;
             }
 
-            if(!phone2.isEmpty()) {
+            if(phone2 != null && !phone2.isEmpty()) {
                 display += "\nPhone 2: " + phone2;
             }
 
-            if(!fax1.isEmpty()) {
+            if(fax1 != null && !fax1.isEmpty()) {
                 display += "\nFax: " + fax1;
             }
         }
