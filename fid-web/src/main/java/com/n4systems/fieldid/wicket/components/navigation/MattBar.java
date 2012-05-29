@@ -70,7 +70,8 @@ public class MattBar extends Panel {
                 }
                 link.add(new AttributeAppender("class", new Model<String>("tipsy-tooltip"), " "));
                 item.add(link);
-                link.add(new AttributeModifier("title", getString(linkTooltips.get(item.getIndex()))));
+                String tooltipKey = linkTooltips.get(item.getIndex());
+                link.add(new AttributeModifier("title", tooltipKey == null ? "" : getString(tooltipKey)));
             }
         });
     }
