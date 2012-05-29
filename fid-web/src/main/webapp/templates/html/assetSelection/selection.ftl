@@ -50,29 +50,31 @@
 	</div>
 	<table id="selectedAssets" class="list hide">
 		<tr class="header">
-			<th>${identifierLabel}</th>
-			<th><@s.text name="label.rfidnumber"/></th>
-			<th><@s.text name="label.owner"/></th>
 			<th><@s.text name="label.assettype"/></th>
-			<th><@s.text name="label.identified"/></th>
+			<th>${identifierLabel}</th>
 			<th><@s.text name="label.reference_number"/></th>
+            <th><@s.text name="label.owner"/></th>
+            <th><@s.text name="label.assetstatus"/></th>
+            <th><@s.text name="label.nextscheduleddate"/></th>
 			<th>&nbsp;</th>
 		</tr>
 	</table>
 	
 </@s.form>
 
+
 <#assign row>
-<tr id="asset_%%ID%%"> 
+<tr id="asset_%%ID%%">
+	<td>%%TYPE%%</td>
 	<td>
 		%%IDENTIFIER%%
 		<@s.hidden name="assetIds[%%INDEX%%]" value="%%ID%%"/>
 	</td>
-	<td>%%RFID%%</td>
-	<td>%%OWNER%%</td>
-	<td>%%TYPE%%</td>
-	<td>%%IDENTIFIED%%</td>
+
 	<td>%%REFERENCE_NUMBER%%</td>
+    <td>%%OWNER%%</td>
+    <td>%%STATUS%%</td>
+    <td>%%NEXT%%</td>
 	<td><a href="#" id="remove_asset_%%ID%%" assetId="%%ID%%"><@s.text name="label.remove"/></a></td>
 </tr>
 </#assign>
@@ -98,15 +100,16 @@
 			$('selectEventType').show();
 		
 			var html = '${row?js_string}';
-			
-			
+
 			var valueSubsitutedHtml = html.replace(/%%INDEX%%/g, selectionIndex)
 							.replace(/%%ID%%/g, id)
 							.replace(/%%IDENTIFIER%%/g, asset.identifier)
 							.replace(/%%RFID%%/g, asset.rfidNumber)
+                            .replace(/%%STATUS%%/g, asset.assetStatus)
 							.replace(/%%OWNER%%/g, asset.owner)
 							.replace(/%%TYPE%%/g, asset.type)
 							.replace(/%%IDENTIFIED%%/g, asset.identifiedDate)
+                            .replace(/%%NEXT%%/g, asset.nextScheduledEvent )
 							.replace(/%%REFERENCE_NUMBER%%/, asset.customerReferenceNumber);
 							 
 			$$('#selectedAssets .header').first().insert({after: valueSubsitutedHtml});
