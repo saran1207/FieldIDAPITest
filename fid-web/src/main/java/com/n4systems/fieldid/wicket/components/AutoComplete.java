@@ -143,7 +143,11 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     public HiddenField<String> getAutocompleteHidden() {
         return autocompleteHidden;
     }
-    
+
+    public Autocomplete<String> getAutocompleteField() {
+        return autocompleteField;
+    }
+
     public T getValueOnSearchFail(String input) {
         return null;
     }
@@ -383,7 +387,6 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     protected abstract List<T> getChoices(String term);
 
     protected abstract AutoCompleteResult createAutocompleteJson(T asset, String term);
-
 
 }
 

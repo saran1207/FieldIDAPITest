@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
+import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.AutoCompleteSearch;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -116,10 +117,15 @@ public class LinkedAssetPanel extends Panel {
             }
         });
 
-        form.add(new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "assetForLinking")));
+        AutoCompleteSearch autoCompleteSearch;
+        form.add(autoCompleteSearch = new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "assetForLinking")));
+        autoCompleteSearch.getAutocompleteField().setRequired(true);
+        ValidationBehavior.addValidationBehaviorToComponent(autoCompleteSearch.getAutocompleteField());
+
         form.add(new AjaxSubmitLink("saveLink", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                
                 Asset asset = assetModel.getObject();
                 assetService.fillInSubAssetsOnAsset(asset);
 
@@ -144,6 +150,7 @@ public class LinkedAssetPanel extends Panel {
             }
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(feedbackPanel);
             }
         });
 
