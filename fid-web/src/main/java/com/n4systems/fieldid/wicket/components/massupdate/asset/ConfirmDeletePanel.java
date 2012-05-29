@@ -10,11 +10,9 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
@@ -22,10 +20,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
+
+    private static final Logger logger = Logger.getLogger(ConfirmDeletePanel.class);
 	
 	@SpringBean
 	private UserService userService;
@@ -42,39 +40,28 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 		
 		Form<Void> confirmDeleteForm = new Form<Void>("form") {
 			@Override
-			protected void onSubmit() {			
-				List<Long> assetIds = assetSearchCriteria.getObject().getSelection().getSelectedIds();
+			protected void onSubmit() {
+                if (!isDeletedEntered()) {
+                    error(getString("typeDeleteToContinue"));
+                    return;
+                }
+
 				try {
-					Long results = massUpdateManager.deleteAssets(assetIds, getCurrentUser());
+                    List<Long> assetIds = assetSearchCriteria.getObject().getSelection().getSelectedIds();
+                    Long results = massUpdateManager.deleteAssets(assetIds, getCurrentUser());
 					assetSearchCriteria.getObject().getSelection().clear();
 					setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
 					info(new FIDLabelModel("message.asset_massdelete_successful", results.toString()).getObject());
 				} catch (UpdateFailureException e) {
-					e.printStackTrace();
+                    error("Mass deletion failed. (Are one or more of the assets used in master events?)");
+                    logger.error("Error with mass delete", e);
 				}
 			}
 		};
 
-		TextField<String> input;
-		
-		confirmDeleteForm.add(input = new RequiredTextField<String>("confirmationField", new PropertyModel<String>(this, "confirmation")));
-		
-		input.add(new AjaxFormComponentUpdatingBehavior("onkeyup") {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				Matcher matcher = Pattern.compile("delete", Pattern.CASE_INSENSITIVE).matcher(ConfirmDeletePanel.this.confirmation);				
-				if(matcher.matches()) {
-					submitButton.setEnabled(true);
-					target.add(submitButton);
-				}else {
-					submitButton.setEnabled(false);
-					target.add(submitButton);
-				}
-			}
-		});
-		
+		confirmDeleteForm.add(new TextField<String>("confirmationField", new PropertyModel<String>(this, "confirmation")));
+
 		confirmDeleteForm.add(submitButton = new Button("submitButton"));
-		submitButton.setEnabled(false);
 		submitButton.setOutputMarkupId(true);
 		confirmDeleteForm.add(new Link("cancelLink") {
 			@Override
@@ -87,6 +74,10 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 		
 		add(new FIDFeedbackPanel("feedbackPanel"));
 	}
+
+    private boolean isDeletedEntered() {
+        return "delete".equalsIgnoreCase(confirmation);
+    }
 	
 	private User getCurrentUser() {
 		return userService.getUser( FieldIDSession.get().getSessionUser().getId());

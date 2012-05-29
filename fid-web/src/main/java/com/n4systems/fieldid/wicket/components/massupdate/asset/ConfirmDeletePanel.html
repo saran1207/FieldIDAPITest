@@ -1,5 +1,23 @@
 <wicket:panel>
 
+    <script>
+        function checkDeleteEntered() {
+            var deleteEntered = "DELETE" === $('.deleteTextInputField')[0].value.toUpperCase();
+            if (deleteEntered) {
+                $('.deleteSubmitButton').removeAttr('disabled');
+            } else {
+                $('.deleteSubmitButton').attr('disabled', 'disabled');
+            }
+        }
+
+        $(document).ready(function() {
+            $('.deleteTextInputField').keyup(function() {
+                checkDeleteEntered();
+            });
+            checkDeleteEntered();
+        });
+    </script>
+
 	<div class="feedback" wicket:id="feedbackPanel"></div>
 
 	<h1><wicket:message key="label.mass_update_step4"/></h1>
@@ -12,11 +30,11 @@
 		<div class="infoSet">
 			<label><wicket:message key="label.confirm_delete"/></label>
 			<span class="fieldHolder">
-				<input wicket:id="confirmationField" type="text"></input>
+				<input wicket:id="confirmationField" type="text" autocomplete="off" class="deleteTextInputField"/>
 			</span>
 		</div>
 		<div class="formActions">
-			<input wicket:id="submitButton" type="submit" wicket:message="value:label.delete" />
+			<input wicket:id="submitButton" type="submit" wicket:message="value:label.delete" class="deleteSubmitButton" disabled="disabled"/>
 			<wicket:message key="label.or"/>
 			<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
 		</div>
