@@ -1,5 +1,6 @@
 package com.n4systems.model.notificationsettings;
 
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -21,6 +22,7 @@ public class NotificationSettingsByTimezoneListLoader extends ListLoader<Notific
         QueryBuilder<NotificationSetting> query = new QueryBuilder<NotificationSetting>(NotificationSetting.class, filter);
 
         query.addSimpleWhere("user.timeZoneID", timeZone);
+        query.addSimpleWhere("user.state", Archivable.EntityState.ACTIVE);
 
         return query.getResultList(em);
     }

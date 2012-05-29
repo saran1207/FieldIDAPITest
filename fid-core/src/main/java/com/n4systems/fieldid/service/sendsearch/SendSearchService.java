@@ -15,6 +15,7 @@ import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.mail.SMTPMailManager;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.SendSavedItemSchedule;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.common.ReportFormat;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.saveditem.SavedReportItem;
@@ -68,6 +69,7 @@ public class SendSearchService extends FieldIdPersistenceService {
     @Transactional
     public void sendAllDueItems() {
         QueryBuilder<SendSavedItemSchedule> query = new QueryBuilder<SendSavedItemSchedule>(SendSavedItemSchedule.class, new OpenSecurityFilter());
+        query.addSimpleWhere("user.state", Archivable.EntityState.ACTIVE);
         List<SendSavedItemSchedule> schedules = persistenceService.findAll(query);
         for (SendSavedItemSchedule schedule : schedules) {
             try {
