@@ -44,8 +44,12 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 	@LegacyMethod
 	public Asset create(Asset asset, List<AssetAttachment> uploadedAttachments, byte[] imageData) {
 		try {
+            if (asset.getType().isArchived()) {
+                asset.archiveEntity();
+            }
+
 			setAssetImageName(asset, imageData != null);
-			asset = assetService.createWithHistory(asset, getCurrentUser());
+			asset = assetService.create(asset, getCurrentUser());
 			saveUploadedAttachments(asset, uploadedAttachments);
 			saveAssetImage(asset, imageData);
 			return asset;
