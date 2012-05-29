@@ -57,7 +57,10 @@ public class ApiSmartSearchSuggestion implements Comparable<ApiSmartSearchSugges
 
     @Override
     public int compareTo(ApiSmartSearchSuggestion apiSmartSearchSuggestion) {
-        return this.fieldLength.compareTo(apiSmartSearchSuggestion.fieldLength);
+        int comparison = this.fieldLength.compareTo(apiSmartSearchSuggestion.fieldLength);
+
+        // This ensures the compareTo is in line with equals.
+        return (comparison != 0) ? comparison : sid.compareTo(apiSmartSearchSuggestion.sid);
     }
 
     @Override
