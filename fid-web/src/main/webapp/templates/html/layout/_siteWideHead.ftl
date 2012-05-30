@@ -1,7 +1,7 @@
 <!-- CAVEAT : don't use "Edge" (as opposed to say "Emulate IE 9"), because it's just for testing. you probably want this to match the latest version of IE you support -->
 <!-- this is put in basically to get the Lightview.js component to work on struts pages.  without it, it won't work in IE --> 
 <!-- see WEB-2743 for details.  -->
-<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <title><@s.text name="app.title" /> - <#include "_title.ftl"/></title>
 <@n4.includeStyle href="reset" /> 
 <#include "layoutCss.ftl">
