@@ -342,7 +342,7 @@ input:-moz-placeholder {
     color: #FFFFFF;
     text-shadow: 0 -1px 1px rgba(0, 0, 0, .33);
     text-decoration: none;
-    width:100px;  /* override if you want it bigger...min-width would be preferable but not working in IE */
+    min-width:100px;  /* override if you want it bigger...min-width would be preferable but not working in IE */
     padding:5px 0px;
     margin-top:7px;
     text-align: center;
