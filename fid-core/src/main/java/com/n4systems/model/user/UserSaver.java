@@ -1,7 +1,5 @@
 package com.n4systems.model.user;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.model.offlineprofile.OfflineProfile;
@@ -12,6 +10,8 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.EntityManager;
 
 public class UserSaver extends Saver<User> {
 
@@ -83,7 +83,9 @@ public class UserSaver extends Saver<User> {
             offlineProfileQuery.addWhere(WhereClauseFactory.create("user.id", user.getId()));
 
             OfflineProfile offlineProfile = offlineProfileQuery.getSingleResult(em);
-            em.remove(offlineProfile);
+            if(offlineProfile != null) {
+                em.remove(offlineProfile);
+            }
         }
     }
 }
