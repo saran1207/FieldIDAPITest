@@ -1,5 +1,5 @@
 /**
-1 * @see AutoComplete.java
+* @see AutoComplete.java
 */
 
 .ui-autocomplete-input {
@@ -82,4 +82,5 @@ li .max-results {
     border: 1px solid #D2E5FF;
     border-left-color: #d6d6d6;
     border-radius:0;
+    margin-left:0;
 }
