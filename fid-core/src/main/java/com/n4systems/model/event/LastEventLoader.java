@@ -26,10 +26,10 @@ public class LastEventLoader extends ListLoader<Event> {
 	protected List<Event> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, filter, "i");
 		builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
-		
+
 		PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
-		String maxDateSelect = String.format("SELECT MAX(iSub.date) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId GROUP BY iSub.type", Event.class.getName());
-		latestClause.setClause(String.format("i.date IN (%s)", maxDateSelect));
+		String maxDateSelect = String.format("SELECT MAX(iSub.schedule.completedDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId GROUP BY iSub.type", Event.class.getName());
+		latestClause.setClause(String.format("i.schedule.completedDate IN (%s)", maxDateSelect));
 		latestClause.getParams().put("iSubAssetId", assetId);
 		latestClause.getParams().put("iSubState", EntityState.ACTIVE);
 		builder.addWhere(latestClause);
