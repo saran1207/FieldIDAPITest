@@ -1,18 +1,18 @@
 package com.n4systems.fieldid.selenium.pages.setup;
 
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.n4systems.fieldid.selenium.util.ConditionWaiter;
 import com.n4systems.fieldid.selenium.util.Predicate;
 import com.thoughtworks.selenium.Selenium;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.fail;
 
 public class ManageAssetTypesPage extends FieldIDPage {
 
@@ -57,7 +57,7 @@ public class ManageAssetTypesPage extends FieldIDPage {
 	}
 	
 	public ManageAssetTypesPage clickSubComponentsTab() {
-		clickNavOption("Sub-Components");
+		clickNavOption("Linked Assets");
 		return this;
 	}
 	
