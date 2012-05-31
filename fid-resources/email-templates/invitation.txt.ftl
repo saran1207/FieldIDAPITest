@@ -11,5 +11,5 @@ Secure data hosting
 Immediate safety compliance data retrieval
 The fastest path to safety success
 
-To join Field ID go to: ${signupURL}
+To learn more about Field ID go to: ${signupURL}
 
