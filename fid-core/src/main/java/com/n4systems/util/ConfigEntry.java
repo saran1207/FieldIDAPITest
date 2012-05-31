@@ -67,7 +67,6 @@ public enum ConfigEntry {
 	HOUSE_ACCOUNT_NAME							(	"fieldid"				),
 	HOUSE_ACCOUNT_PRIMARY_ORG_ID				(	"15511550"				),
 	DOWNLOAD_TTL_DAYS							(	"2"						),
-	SIGNUP_PATH									(	"/signup"				),
 	SAFETY_NETWORK_HELP_URL						(	"http://help.fieldid.com/The-Safety-Network-Overview.html"	),
 	SAFETY_NETWORK_VIDEO_URL					(	"http://www.n4systems.com/qwe__wqe/training/safety_network_invite/"		),
 	SYSTEM_PROTOCOL								(	"https"					),

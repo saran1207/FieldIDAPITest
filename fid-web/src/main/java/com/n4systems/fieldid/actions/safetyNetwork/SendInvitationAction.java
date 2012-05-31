@@ -1,29 +1,28 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
-import javax.mail.MessagingException;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.TemplateMailMessage;
-import com.n4systems.util.uri.SignupUrlBuilder;
+import com.n4systems.util.uri.BaseUrlBuilder;
 import com.n4systems.util.uri.UrlBuilder;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import javax.mail.MessagingException;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
 public class SendInvitationAction extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(SendInvitationAction.class);
+    public static final String SIGNUP_URL = "http://www.fieldid.com/l/web-demo";
 
-	private String email;
+    private String email;
 	private String subject;
 	private String body;
 	
@@ -80,7 +79,11 @@ public class SendInvitationAction extends SafetyNetwork {
 	}
 	
 	protected UrlBuilder createSignupUrlBuilder() {
-		return new SignupUrlBuilder(getBaseURI(), getConfigContext(), getUser(), getConfigContext().getString(ConfigEntry.SIGNUP_PATH));
+        return new BaseUrlBuilder(SIGNUP_URL) {
+            @Override protected String path() {
+                return SIGNUP_URL;
+            }
+        };
 	}
 
 	public String getMessageBody() {
