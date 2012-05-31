@@ -46,7 +46,7 @@ public class AssetPage extends FieldIDPage {
 
 	public EventSchedulePage clickSchedulesTab() {
 		//clickNavOption("Schedules");
-		selenium.click("//div[@id='contentHeader']/ul/li[4]/a[contains(.,'Schedules')]");
+		selenium.click("//div[@id='contentHeader']/ul//li/a[contains(.,'Schedules')]");
 		return new EventSchedulePage(selenium);
 	}
 
