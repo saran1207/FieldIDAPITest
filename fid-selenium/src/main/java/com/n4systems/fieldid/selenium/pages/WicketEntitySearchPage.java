@@ -1,8 +1,5 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.fieldid.selenium.components.LocationPicker;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.AssetSearchCriteria;
@@ -10,6 +7,9 @@ import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.pages.search.SaveSearchPage;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.thoughtworks.selenium.Selenium;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class WicketEntitySearchPage extends WicketFieldIDPage {
 
@@ -24,7 +24,7 @@ public abstract class WicketEntitySearchPage extends WicketFieldIDPage {
     }
 
     public void clickRunSearchButton() {
-        selenium.click("//form[contains(@class, 'search-config')]//span[contains(@class,'submit')]//a[.='Search']");
+        selenium.click("//form[contains(@class, 'search-config')]//span//a[.='Search']");
         waitForPageToLoad();
     }
 
@@ -37,7 +37,7 @@ public abstract class WicketEntitySearchPage extends WicketFieldIDPage {
     }
 
 	public void expandSearchCriteria() {
-    	selenium.click("//div[@class='pageSection']//h2[contains(.,'Search Settings')]//a[1]");
+    	selenium.click("//div[@class='sub-menu']//div[@class='mattBar']//a[2]");
 	}
 
 	public void setSearchCriteria(AssetSearchCriteria criteria) {
