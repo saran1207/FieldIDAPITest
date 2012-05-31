@@ -4,6 +4,7 @@ public class ApiEventAttachment {
 	private String fileName;
 	private String comments;
 	private byte[] image;
+	private String eventSid;
 	
 	public String getFileName() {
 		return fileName;
@@ -28,4 +29,12 @@ public class ApiEventAttachment {
 	public void setImage(byte[] image) {
 		this.image = image;
 	}
+	
+	public String getEventSid() {
+		return eventSid;
+	}
+
+	public void setEventSid(String eventSid) {
+		this.eventSid = eventSid;
+	}	
 }
