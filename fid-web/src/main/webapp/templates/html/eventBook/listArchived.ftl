@@ -2,7 +2,7 @@ ${action.setPageType('event_book', 'list_archived')!}
 <#assign page=archivedPage />
 
 <#if  page.hasResults() && page.validPage() >
-	<#assign currentAction="eventBooks.action" />
+	<#assign currentAction="archivedEventBooks.action" />
 	<#include '../common/_pagination.ftl' />
 	<table class="list">
 		<tr>
