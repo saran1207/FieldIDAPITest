@@ -1,28 +1,22 @@
 package com.n4systems.fieldid.selenium.testcase.safetynetwork;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.pages.SafetyNetworkPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.*;
+import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.fieldid.selenium.util.ConditionWaiter;
+import com.n4systems.fieldid.selenium.util.Predicate;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.catalog.Catalog;
+import com.n4systems.model.safetynetwork.TypedOrgConnection;
+import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
-import com.n4systems.fieldid.selenium.util.ConditionWaiter;
-import com.n4systems.fieldid.selenium.util.Predicate;
-import org.junit.Test;
-
-import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.pages.SafetyNetworkPage;
-import com.n4systems.fieldid.selenium.pages.safetynetwork.CustomerConnectionProfilePage;
-import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkCatalogImportPage;
-import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkCatalogPage;
-import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkInvitePage;
-import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkSettingsPage;
-import com.n4systems.fieldid.selenium.pages.safetynetwork.VendorConnectionProfilePage;
-import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.catalog.Catalog;
-import com.n4systems.model.safetynetwork.TypedOrgConnection;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SafetyNetworkTest extends FieldIDTestCase {
 
@@ -32,7 +26,6 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	private String safetyNetworkCatalogLocator = "//a[@id='manageCatalog']";
 	private String safetyNetworkSettingsLocator = "//a[@id='privacySettings']";
 	private String safetyNetworkOverviewLocator = "//a[@id='help_link']";
-	private String safetyNetworkVideoLocator = "//a[@id='video_link']";
 
 	// Asset Types
 	private static final String ASSET_TYPE_CHECKBOX_NAME_1 = "TestType1";
@@ -77,7 +70,6 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 		assertTrue("Could not find the link for Catalog", selenium.isElementPresent(safetyNetworkCatalogLocator));
 		assertTrue("Could not find the link for PrivacySettings", selenium.isElementPresent(safetyNetworkSettingsLocator));
 		assertTrue("Could not find the link for Overview", selenium.isElementPresent(safetyNetworkOverviewLocator));
-		assertTrue("Could not find the link for Video", selenium.isElementPresent(safetyNetworkVideoLocator));
 	}
 
 	@Test
