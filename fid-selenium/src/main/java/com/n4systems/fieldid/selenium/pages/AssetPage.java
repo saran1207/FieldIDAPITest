@@ -137,7 +137,7 @@ public class AssetPage extends FieldIDPage {
 	}
 
 	public void clickSubComponentsTab() {
-		selenium.click("//a[contains(.,'Sub-Components')]");
+		selenium.click("//a[contains(.,'Linked Assets')]");
 		waitForPageToLoad();
 	}
 
