@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -73,7 +74,11 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         setOrderForSubEvents(event);
 
+        Date completedDate = event.getDate();
+
         EventSchedule eventSchedule = findOrCreateSchedule(event, scheduleId);
+
+        event.setDate(completedDate);
 
         persistenceService.save(event);
 
