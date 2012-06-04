@@ -15,6 +15,7 @@ import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.org.BrowsePanel;
 import com.n4systems.model.orgs.BaseOrg;
 
+@Deprecated // to be replaced by AutoCompleteOrgPicker.
 public class ModalOrgPicker extends Panel {
 
     private IModel<BaseOrg> orgModel;

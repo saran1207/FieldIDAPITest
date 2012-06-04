@@ -4,6 +4,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.MaskType;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -15,6 +16,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.model.location.Location;
 
+@Deprecated // to be replaced by AutoCompleteLocationPicker.
 @SuppressWarnings("serial")
 public class ModalLocationPicker extends Panel {
 
@@ -53,6 +55,11 @@ public class ModalLocationPicker extends Panel {
         add(predefinedEnabledContainer);
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderJavaScriptReference("javascript/modalWindow.js");
+    }
+
     private WebMarkupContainer addBaseControls(WebMarkupContainer predefinedEnabledContainer, IModel<Location> locationModel) {
         WebMarkupContainer locationNameDisplay = new WebMarkupContainer("locationNameInput");
         locationNameDisplay.setOutputMarkupId(true);
@@ -70,6 +77,5 @@ public class ModalLocationPicker extends Panel {
         chooseLink.setOutputMarkupPlaceholderTag(true);
         return locationNameDisplay;
     }
-    
-    
+
 }

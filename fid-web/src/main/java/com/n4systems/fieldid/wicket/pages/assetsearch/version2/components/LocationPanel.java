@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -33,7 +34,12 @@ public class LocationPanel extends Panel {
         
         add(locationForm);
     }
-    
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/featureStyles/locationPicker.css");
+    }
+
 
     class LocationForm extends Form {
 
