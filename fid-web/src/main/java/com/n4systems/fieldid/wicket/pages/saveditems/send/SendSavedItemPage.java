@@ -117,12 +117,9 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
 
         public SendSavedItemForm(String id, final IModel<SendSavedItemSchedule> model) {
             super(id, model);
-            
-            // We want to see a blank field for an extra email address to send to if there aren't any yet
-            if (model.getObject().getEmailAddresses().isEmpty()) {
-                model.getObject().getEmailAddresses().add("");
-            }
-            
+
+            addBlankEmailIfEmptyAddressList();
+
             final FIDFeedbackPanel feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
             add(feedbackPanel);
             
@@ -265,6 +262,8 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
             boolean goodAddresses = true;
             
             if (sendItemSchedule.getEmailAddresses().size() == 0 && !sendItemSchedule.isSendToOwner()) {
+                getDefaultModel();
+                addBlankEmailIfEmptyAddressList();
                 error(new FIDLabelModel("message.at_least_one_email_address_required").getObject());
                 return false;
             }
@@ -276,6 +275,13 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                 }
             }
             return goodAddresses;
+        }
+
+        private void addBlankEmailIfEmptyAddressList() {
+            // We want to see a blank field for an extra email address to send to if there aren't any yet
+            if (getModelObject().getEmailAddresses().isEmpty()) {
+                getModelObject().getEmailAddresses().add("");
+            }
         }
 
     }
