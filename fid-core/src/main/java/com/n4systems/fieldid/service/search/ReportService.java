@@ -64,7 +64,7 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
             addNotNullTerm(searchTerms,  "nextDate");
         } else if (IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange()) || criteriaModel.getEventStatus() == EventStatus.INCOMPLETE) {
-            if (criteriaModel.getDueDateRange() != null && !criteriaModel.getDateRange().isEmptyCustom()) {
+            if (criteriaModel.getDueDateRange() != null && !criteriaModel.getDueDateRange().isEmptyCustom()) {
                 addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), criteriaModel.getDueDateRange().calculateToDate());
             }
         }
