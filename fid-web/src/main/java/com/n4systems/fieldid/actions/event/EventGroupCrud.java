@@ -1,19 +1,17 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
-import com.n4systems.model.Asset;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventType;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.model.AssociatedEventType;
+import com.n4systems.model.*;
+import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.tools.Pager;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class EventGroupCrud extends AbstractCrud {
 
@@ -170,5 +168,10 @@ public class EventGroupCrud extends AbstractCrud {
 	public Pager<Asset> getPage() {
 		return page;
 	}
+
+    public Date getNextScheduledEventDate(Long id) {
+        EventSchedule schedule = new NextEventScheduleLoader().setAssetId(id).load();
+        return schedule==null ? null : schedule.getNextDate();
+    }
 
 }

@@ -149,7 +149,7 @@ public class UserBuilder extends BaseBuilder<User> {
 		user.setUserType(userType);
 		user.setLocked(locked);
 		user.setAuthKey(authKey);
-		
+
 		if (userType.equals(UserType.ADMIN)) {
 			user.setPermissions(Permissions.ADMIN);
 		}else if (userType.equals(UserType.FULL) || userType.equals(UserType.LITE)) {
