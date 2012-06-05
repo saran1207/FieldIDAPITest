@@ -35,7 +35,7 @@
                 <@s.text name="label.section_score"/>
             </label>
             <div class="criteriaText">
-                ${eventFormHelper.getScoresForSections( formEvent ).get( section )}
+                ${eventFormHelper.getScoresForSections( formEvent ).get( section )?string('0.####')}
             </div>
         </div>
     </#if>

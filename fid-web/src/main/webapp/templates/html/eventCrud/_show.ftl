@@ -136,7 +136,7 @@
     <#if event.score?exists>
         <p class="scoreContainer">
             <label><@s.text name="label.score"/></label>
-            <span>${event.score}</span>
+            <span>${event.score?string('0.####')}</span>
         </p>
     </#if>
 
