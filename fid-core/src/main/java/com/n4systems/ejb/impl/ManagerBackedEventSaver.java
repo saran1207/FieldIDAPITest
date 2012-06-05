@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -76,7 +77,11 @@ public class ManagerBackedEventSaver implements EventSaver {
 
 		setOrderForSubEvents(parameterObject.event);
 
+        Date completedDate = parameterObject.event.getDate();
+
         EventSchedule eventSchedule = findOrCreateSchedule(parameterObject.event, parameterObject.scheduleId);
+
+        parameterObject.event.setDate(completedDate);
 
         persistenceManager.save(parameterObject.event, parameterObject.userId);
 
