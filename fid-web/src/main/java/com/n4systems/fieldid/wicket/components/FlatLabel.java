@@ -24,6 +24,10 @@ public class FlatLabel extends Label {
 
     @Override
     public boolean isVisible() {
+        // CAVEAT : be careful here.  if the call to getDefaultModelObject() throws an exception, it
+        //  will then subsequently call toString() when re-throwing in the catch block.
+        // toString() then calls isVisible() which sends you one step closer to stack overflow.
+        // suggested? do your own model getting and handle exceptions yourself.
         if (getDefaultModelObject() == null) {
             return false;
         }

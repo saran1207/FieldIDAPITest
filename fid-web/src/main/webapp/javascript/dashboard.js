@@ -138,7 +138,7 @@ var chartWidgetFactory = (function() {
 		// series
 		if (typeof item.series.id=='string') {
             url += "&series="+item.series.id;
-        } else if (item.series.id.label) {
+        } else if (item.series.id && item.series.id.label) {
             url += "&series="+item.series.id.label;
 		} else { 
 			url+="&series="+item.seriesIndex;			
