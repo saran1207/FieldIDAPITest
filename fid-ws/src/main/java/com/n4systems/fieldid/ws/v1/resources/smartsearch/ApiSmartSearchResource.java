@@ -3,7 +3,6 @@ package com.n4systems.fieldid.ws.v1.resources.smartsearch;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.TreeSet;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -67,13 +66,26 @@ public class ApiSmartSearchResource extends FieldIdPersistenceService {
 	}
 
 	private List<ApiSmartSearchSuggestion> mergeSuggestions(List<ApiSmartSearchSuggestion> identifierSuggestions, List<ApiSmartSearchSuggestion> refNumberSuggestions) {
-		// This removes duplicates and sorts by the field length
-        TreeSet<ApiSmartSearchSuggestion> suggestions = new TreeSet<ApiSmartSearchSuggestion>();
-		suggestions.addAll(identifierSuggestions);
-		suggestions.addAll(refNumberSuggestions);
-
-        ArrayList<ApiSmartSearchSuggestion> suggestionList = new ArrayList<ApiSmartSearchSuggestion>(suggestions);
-		return (suggestionList.size() <= MaxResults) ? suggestionList : suggestionList.subList(0, MaxResults);
+		List<ApiSmartSearchSuggestion> combinedSuggestions = new ArrayList<ApiSmartSearchSuggestion>(identifierSuggestions);
+		combinedSuggestions.addAll(refNumberSuggestions);
+		
+		Collections.sort(combinedSuggestions, new java.util.Comparator<ApiSmartSearchSuggestion>() {
+			@Override
+			public int compare(ApiSmartSearchSuggestion ss1, ApiSmartSearchSuggestion ss2) {
+				return ss1.getFieldLength().compareTo(ss2.getFieldLength());
+			}
+		});
+		
+		for(int i = combinedSuggestions.size() - 1; i > 0; i--) {
+			for(int j = 0; j < i; j++) {
+				if(combinedSuggestions.get(j).getSid().equals(combinedSuggestions.get(i).getSid())) {
+					combinedSuggestions.remove(i);
+					break;
+				}
+			}
+		}
+		
+		return (combinedSuggestions.size() <= MaxResults) ? combinedSuggestions : combinedSuggestions.subList(0, MaxResults);
 	}
 
 }
