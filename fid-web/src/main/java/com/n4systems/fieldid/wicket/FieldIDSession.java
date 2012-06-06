@@ -32,6 +32,7 @@ public class FieldIDSession extends WebSession {
     private transient HttpSession session;
     private ConcurrentHashMap<String, String> localizationCache = new ConcurrentHashMap<String,String>();
     private String previouslyStoredTempFileId;
+    private boolean concurrentSessionDetected;
 
     public FieldIDSession(Request request) {
         super(request);
@@ -134,4 +135,13 @@ public class FieldIDSession extends WebSession {
     public void setPreviouslyStoredTempFileId(String previouslyStoredTempFileId) {
         this.previouslyStoredTempFileId = previouslyStoredTempFileId;
     }
+
+    public void setConcurrentSessionDetectedInRequestCycle() {
+        this.concurrentSessionDetected = true;
+    }
+
+    public boolean isConcurrentSessionDetectedInRequestCycle() {
+        return concurrentSessionDetected;
+    }
+
 }

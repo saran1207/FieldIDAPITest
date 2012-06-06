@@ -3,11 +3,16 @@ package com.n4systems.fieldid.wicket;
 import com.n4systems.fieldid.context.ThreadLocalUserContext;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
+import com.n4systems.fieldid.utils.SessionUserInUse;
+import com.n4systems.model.activesession.ActiveSessionLoader;
+import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.services.SecurityContext;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.time.SystemClock;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.IRequestHandler;
@@ -34,6 +39,7 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
 
         SessionUser sessionUser = fieldidSession.getSessionUser();
         if (sessionUser != null) {
+            storeFlagIfConcurrentUser(fieldidSession.getId(), sessionUser);
             FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
             User user = userLoader.setId(sessionUser.getId()).load();
             ThreadLocalUserContext.getInstance().setCurrentUser(user);
@@ -47,6 +53,14 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
         }
 
         storeFlashMessages(cycle);
+    }
+
+    private void storeFlagIfConcurrentUser(String sessionId, SessionUser sessionUser) {
+        SessionUserInUse sessionUserInUse = new SessionUserInUse(new ActiveSessionLoader(), ConfigContext.getCurrentContext(), new SystemClock(), new ActiveSessionSaver());
+
+        if (sessionUser != null && !sessionUserInUse.doesActiveSessionBelongTo(sessionUser.getUniqueID(), sessionId)) {
+            FieldIDSession.get().setConcurrentSessionDetectedInRequestCycle();
+        }
     }
 
     @Override

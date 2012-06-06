@@ -1,14 +1,9 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.model.activesession.ActiveSessionLoader;
-import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.user.User;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.time.SystemClock;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -21,8 +16,6 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
 
     @SpringBean
     private PersistenceService persistenceService;
-
-    private boolean pageTestMode;
 
     public FieldIDAuthenticatedPage(PageParameters params) {
         super(params);
@@ -49,27 +42,17 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
     }
 
     private void verifyNonConcurrentSession() {
-        if (pageTestMode) {
-            return;
-        }
-		FieldIDSession fieldidSession = FieldIDSession.get();
-
-		SessionUser sessionUser = fieldidSession.getSessionUser();
-		String sessionId = fieldidSession.getId();
-
-		SessionUserInUse sessionUserInUse = new SessionUserInUse(new ActiveSessionLoader(), ConfigContext.getCurrentContext(), new SystemClock(), new ActiveSessionSaver());
-
-		if (sessionUser != null && !sessionUserInUse.doesActiveSessionBelongTo(sessionUser.getUniqueID(), sessionId)) {
+        // We detect concurrent sessions in the request cycle, but boot them out here.
+        // Reason is that there's a bug in wicket that prevents you from setting a response page in the RequestCycleListener
+        // We need to do it in the request cycle listener because ALL requests (including ajax requests that don't fire page constructors)
+        // need to refresh the session timeout counter.
+		if (FieldIDSession.get().isConcurrentSessionDetectedInRequestCycle()) {
 			throw new RestartResponseException(SessionBootedPage.class);
 		}
     }
 
     protected User getCurrentUser() {
         return persistenceService.find(User.class, getSessionUser().getUniqueID());
-    }
-
-    public void setTestMode() {
-        this.pageTestMode = true;
     }
 
 }
