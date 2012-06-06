@@ -26,7 +26,7 @@
 	</#if>
 
 	<#assign page = pagedEvents/>
-	
+
 	<div class="buttonBar">
 		<a id="listButton" class="mattButtonLeft ${action.showList.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" >
             <img src="/fieldid/images/eventList.png"/>
@@ -59,7 +59,7 @@
 			<@s.text id="resultLabel" name="label.result"/>
 			<@s.text id="assetStatusLabel" name="label.assetstatus"/>
 		
-			<#assign columns = [ "date", "type.name", "performedByFullName", "status", "assetStatus.name" ] >		
+			<#assign columns = [ "schedule.completedDate", "type.name", "performedByFullName", "status", "assetStatus.name" ] >
 			<#assign labels = [ "${dateLabel}", "${typeLabel}", "${performedByLabel}", "${resultLabel}", "${assetStatusLabel}"]>
 			<#assign x=0>
 			
