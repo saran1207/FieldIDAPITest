@@ -79,7 +79,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	private String generateCertificate() {
 		try {
-			byte[] pdf = certificateGenerator.generateAssetCertificatePdf(asset.getId());
+			byte[] pdf = certificateGenerator.generateAssetCertificatePdf(asset);
 			
 			fileName = "certificate-" + asset.getIdentifier() + ".pdf";
 			sendFile(new ByteArrayInputStream(pdf));

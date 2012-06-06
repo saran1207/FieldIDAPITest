@@ -50,43 +50,47 @@ public class CertificateService extends FieldIdPersistenceService {
 	@Autowired private EventScheduleService eventScheduleService;
 	@Autowired private EventService eventService;
 	
-	public byte[] generateAssetCertificatePdf(Long assetId) throws ReportException, NonPrintableManufacturerCert {
-		return printer.printToPDF(generateAssetCertificate(assetId));
+	public byte[] generateAssetCertificatePdf(Asset asset) throws ReportException, NonPrintableManufacturerCert {
+		return printer.printToPDF(generateAssetCertificate(asset));
 	}
 	
 	public JasperPrint generateAssetCertificate(Long assetId) throws ReportException, NonPrintableManufacturerCert {
 		Asset asset = persistenceService.find(Asset.class, assetId);
-		
-		if (!asset.getType().isHasManufactureCertificate()) {
-			throw new NonPrintableManufacturerCert();
-		}
-		
-		try {	
-			File jrxmlFile = PathHandler.getReportFile(asset);
-			reportCompiler.compileReports(jrxmlFile.getParentFile());
-			
-			Map<String, Object> reportMap = new HashMap<String, Object>();
-			reportMap.put("SUBREPORT_DIR", jrxmlFile.getParent() + "/");
-	
-			addIdentifiedByParams(reportMap, asset.getIdentifiedBy());
-			reportMap.putAll(new AssetReportMapProducer(asset, new DateTimeDefiner(getCurrentUser())).produceMap());
-			addAssetTypeParams(reportMap, asset.getType());
-			addShopOrderParams(reportMap, asset);
-			addOrganizationParams(reportMap, asset.getOwner().getInternalOrg());
-			addOwnerParams(reportMap, asset.getOwner());
-	
-			List<Asset> reportCollection = new ArrayList<Asset>();
-			reportCollection.add(asset);
 
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledReportFile(asset));
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JRBeanCollectionDataSource(reportCollection));
-			return jasperPrint;
-		} catch (JRException e) {
-			throw new ReportException("Failed to generate asset certificate", e);
-		}
+        return generateAssetCertificate(asset);
 	}
-	
-	public byte[] generateEventCertificatePdf(EventReportType type, Long eventId) throws NonPrintableEventType, ReportException {
+
+    public JasperPrint generateAssetCertificate(Asset asset) throws ReportException {
+        if (!asset.getType().isHasManufactureCertificate()) {
+            throw new NonPrintableManufacturerCert();
+        }
+
+        try {
+            File jrxmlFile = PathHandler.getReportFile(asset);
+            reportCompiler.compileReports(jrxmlFile.getParentFile());
+
+            Map<String, Object> reportMap = new HashMap<String, Object>();
+            reportMap.put("SUBREPORT_DIR", jrxmlFile.getParent() + "/");
+
+            addIdentifiedByParams(reportMap, asset.getIdentifiedBy());
+            reportMap.putAll(new AssetReportMapProducer(asset, new DateTimeDefiner(getCurrentUser())).produceMap());
+            addAssetTypeParams(reportMap, asset.getType());
+            addShopOrderParams(reportMap, asset);
+            addOrganizationParams(reportMap, asset.getOwner().getInternalOrg());
+            addOwnerParams(reportMap, asset.getOwner());
+
+            List<Asset> reportCollection = new ArrayList<Asset>();
+            reportCollection.add(asset);
+
+JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledReportFile(asset));
+JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JRBeanCollectionDataSource(reportCollection));
+            return jasperPrint;
+        } catch (JRException e) {
+            throw new ReportException("Failed to generate asset certificate", e);
+        }
+    }
+
+    public byte[] generateEventCertificatePdf(EventReportType type, Long eventId) throws NonPrintableEventType, ReportException {
 		return printer.printToPDF(generateEventCertificate(type, eventId));
 	}
 
