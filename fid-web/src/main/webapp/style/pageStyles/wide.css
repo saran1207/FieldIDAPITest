@@ -13,9 +13,6 @@
  *
  */
  
- html, body, #page {
- 	/*  height: 99%;  hmmm...don't know why but if this is 100%, it will show scroll bar when it shouldn't   */
- }
 
 /** 
  PAGE
@@ -356,7 +353,6 @@
 
 
 .bottom-bar {
-    display:none;
     position:fixed;
     height:50px;
     bottom:0px;
@@ -378,11 +374,6 @@
 #page.with-left-panel .bottom-bar {
     left:375px;
     padding-left:2px;
-    display:block;
-}
-
-.paged-table .bottom-bar {
-	display:block;
 }
 
 
