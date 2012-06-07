@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import java.util.List;
-
 import com.n4systems.fieldid.selenium.components.LocationPicker;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.ReportSearchCriteria;
@@ -9,6 +7,8 @@ import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.pages.event.EventMassUpdatePage;
 import com.n4systems.fieldid.selenium.pages.reporting.SaveReportPage;
 import com.thoughtworks.selenium.Selenium;
+
+import java.util.List;
 
 public class ReportingPage extends WicketEntitySearchPage {
 
@@ -51,32 +51,32 @@ public class ReportingPage extends WicketEntitySearchPage {
 	
 	public void setSearchCriteria(ReportSearchCriteria criteria) {
 		if (criteria.getRFIDNumber() != null) {
-			selenium.type("//input[@name='identifiersCriteriaPanel:rfidNumber']", criteria.getRFIDNumber());
+			selenium.type("//input[@name='filters:identifiersCriteriaPanel:containedPanel:rfidNumber']", criteria.getRFIDNumber());
 		}
 		if (criteria.getIdentifier() != null) {
-			selenium.type("//input[@name='identifiersCriteriaPanel:identifier']", criteria.getIdentifier());
+			selenium.type("//input[@name='filters:identifiersCriteriaPanel:containedPanel:identifier']", criteria.getIdentifier());
 		}
 		if (criteria.getOrderNumber() != null) {
-			selenium.type("//input[@name='orderDetailsCriteriaPanel:orderNumber']", criteria.getOrderNumber());
+			selenium.type("//input[@name='filters:orderDetailsCriteriaPanel:containedPanel:orderNumber']", criteria.getOrderNumber());
 		}
 		if (criteria.getPurchaseOrder() != null) {
-			selenium.type("//input[@name='orderDetailsCriteriaPanel:purchaseOrder']", criteria.getPurchaseOrder());
+			selenium.type("//input[@name='filters:orderDetailsCriteriaPanel:containedPanel:purchaseOrder']", criteria.getPurchaseOrder());
 		}
 		if (criteria.getAssignedTo() != null) {
-			selenium.select("//select[@name='ownershipCriteriaPanel:assignedUserContainer:assignedTo']", criteria.getAssignedTo());
+			selenium.select("//select[@name='filters:ownershipCriteriaPanel:containedPanel:assignedToContainer:assignedTo']", criteria.getAssignedTo());
 		}
 		if (criteria.getReferenceNumber() != null) {
-			selenium.type("//input[@name='identifiersCriteriaPanel:referenceNumber']", criteria.getReferenceNumber());
+			selenium.type("//input[@name='filters:identifiersCriteriaPanel:containedPanel:referenceNumber']", criteria.getReferenceNumber());
 		}
 		if (criteria.getAssetStatus() != null) {
-			selenium.select("//select[@name='assetDetailsCriteriaPanel:assetStatus']", criteria.getAssetStatus());
+			selenium.select("//select[@name='filters:assetDetailsCriteriaPanel:containedPanel:assetStatus']", criteria.getAssetStatus());
 		}
 		if (criteria.getAssetTypeGroup() != null) {
-			selenium.select("//select[@name='assetDetailsCriteriaPanel:assetTypeGroup']", criteria.getAssetTypeGroup());
+			selenium.select("//select[@name='filters:assetDetailsCriteriaPanel:containedPanel:assetTypeGroup']", criteria.getAssetTypeGroup());
             waitForAjax();
 		}
 		if (criteria.getAssetType() != null) {
-			selenium.select("//select[@name='assetDetailsCriteriaPanel:assetType']", criteria.getAssetType());
+			selenium.select("//select[@name='filters:assetDetailsCriteriaPanel:containedPanel:assetType']", criteria.getAssetType());
 		}
 		if (criteria.getLocation() != null) {
 			LocationPicker locPicker = getLocationPicker();
@@ -91,28 +91,28 @@ public class ReportingPage extends WicketEntitySearchPage {
 			orgPicker.clickSelectOwner();
 		}
 		if (criteria.getFromDate() != null) {
-			selenium.type("//input[@id='fromDate:dateField']", criteria.getFromDate());
+			selenium.type("//input[@name='filters:eventStatusAndDateRangePanel:containedPanel:completeRangePicker:fromDate:dateField']", criteria.getFromDate());
 		}
 		if (criteria.getToDate() != null) {
-			selenium.type("//input[@id='toDate:dateField']", criteria.getToDate());
+			selenium.type("//input[@name='filters:eventStatusAndDateRangePanel:containedPanel:completeRangePicker:toDate:dateField']", criteria.getToDate());
 		}
 		if(criteria.getJob() != null) {
-			selenium.select("//select[@name='jobContainer:job']", criteria.getJob());
+			selenium.select("//select[@name='filters:eventDetailsCriteriaPanel:containedPanel:jobContainer:job']", criteria.getJob());
 		}
 		if(criteria.getPerformedBy() != null) {
-			selenium.select("//select[@name='eventDetailsCriteriaPanel:performedBy']", criteria.getPerformedBy());
+			selenium.select("//select[@name='filters:eventDetailsCriteriaPanel:containedPanel:performedBy']", criteria.getPerformedBy());
 		}
 		if(criteria.getEventTypeGroup() != null) {
-			selenium.select("//select[@name='eventDetailsCriteriaPanel:eventTypeGroup']", criteria.getEventTypeGroup());
+			selenium.select("//select[@name='filters:eventDetailsCriteriaPanel:containedPanel:eventTypeGroup']", criteria.getEventTypeGroup());
 		}
 		if(criteria.getEventBook() != null) {
-			selenium.select("//select[@name='eventDetailsCriteriaPanel:eventBook']", criteria.getEventBook());
+			selenium.select("//select[@name='filters:eventDetailsCriteriaPanel:containedPanel:eventBook']", criteria.getEventBook());
 		}
 		if(criteria.getSafetyNetworkResults()) {
-			setCheckBoxValue("//input[@name='includeNetworkResultsContainer:includeSafetyNetwork']", criteria.getSafetyNetworkResults());
+			setCheckBoxValue("//input[@name='filters:eventDetailsCriteriaPanel:containedPanel:includeNetworkResultsContainer:includeSafetyNetwork']", criteria.getSafetyNetworkResults());
 		}
 		if(criteria.getResult() != null) {
-			selenium.select("//select[@name='eventDetailsCriteriaPanel:result']", criteria.getResult());
+			selenium.select("//select[@name='filters:eventDetailsCriteriaPanel:containedPanel:result']", criteria.getResult());
 		}
 	}
 	
