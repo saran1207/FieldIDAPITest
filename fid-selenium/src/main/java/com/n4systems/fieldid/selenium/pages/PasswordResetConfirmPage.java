@@ -12,11 +12,11 @@ public class PasswordResetConfirmPage extends FieldIDPage {
     }
 
     private void verifyResetConfirmPage() {
-        assertTrue(selenium.isElementPresent("//h1[.='Password Reset Email Sent']"));
+        assertTrue(selenium.isElementPresent("//div[@id='message']//span[.='Thank you. An email has been sent to you with instructions on resetting your password']"));
     }
 
     public LoginPage clickReturnToSignIn() {
-        selenium.click("//input[@value='Return to Login']");
+        selenium.click("//a[.='Return to Login']");
         return new LoginPage(selenium);
     }
 
