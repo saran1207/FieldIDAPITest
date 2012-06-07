@@ -17,8 +17,6 @@ var fieldIdWidePage = (function() {
         } else {
             hideLeftPanel();
 		}
-		// hack : move bottom bar down in DOM hierarchy so it isn't within a scrollable div (IE occasionally doesn't render it in this state...arghhh).
-		$('#page').append($('.bottom-bar'));
 	};
 
 	var showConfig = function(showFilters) {

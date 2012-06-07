@@ -45,12 +45,6 @@ public class SimpleDataTable<T> extends Panel {
     }
 
     public SimpleDataTable(String id, final List<IColumn<T>> columns,
-		ISortableDataProvider<T> dataProvider, int rowsPerPage,
-        String emptyResultsTitleKey, String emptyResultsMessageKey) {
-        this(id, columns, dataProvider, rowsPerPage, emptyResultsTitleKey, emptyResultsMessageKey, new MultiIdSelection());
-    }
-
-    public SimpleDataTable(String id, final List<IColumn<T>> columns,
 		final ISortableDataProvider<T> dataProvider, int rowsPerPage,
         String emptyResultsTitleKey, String emptyResultsMessageKey, MultiIdSelection selection) {
 		super(id);
@@ -118,7 +112,6 @@ public class SimpleDataTable<T> extends Panel {
 
         add(table);
 
-        add(createPaginationBar("bottomPagination"));
         add(new AttributeAppender("class", getPagedModel()));
         
         addEmptyResultsDisplay(emptyResultsTitleKey, emptyResultsMessageKey, table);
@@ -174,25 +167,6 @@ public class SimpleDataTable<T> extends Panel {
 
     public void justSelectedPageWithElements(int itemsJustSelected) {
         selectionStatusPanel.justSelectedPageWithElements(itemsJustSelected);
-    }
-
-    private JumpableNavigationBar createPaginationBar(String id) {
-        return new JumpableNavigationBar(id, this) {
-            @Override
-            protected void onPageChanged(AjaxRequestTarget target) {
-                scrollToTop(target);
-                SimpleDataTable.this.onPageChanged(target);
-            }
-
-            @Override
-            public boolean isVisible() {
-                return displayPagination;
-            }
-        };
-    }
-
-    private void scrollToTop(AjaxRequestTarget target) {
-        target.appendJavaScript("var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('#"+getMarkupId()+"'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}");
     }
 
     protected void onPageChanged(AjaxRequestTarget target) { }

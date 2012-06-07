@@ -99,6 +99,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
             add(hiddenSubmitButton = new AjaxButton("hiddenJumpButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    target.add(JumpableNavigationBar.this);
                     target.add(simpleDataTable);
                     onPageChanged(target);
                 }
@@ -126,6 +127,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
             public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(pageNumber - 1);
                 target.add(simpleDataTable);
+                target.add(JumpableNavigationBar.this);
                 onPageChanged(target);
             }
 
@@ -141,6 +143,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(getTable().getCurrentPage() + offset);
+                target.add(JumpableNavigationBar.this);
                 target.add(simpleDataTable);
                 onPageChanged(target);
             }
@@ -158,6 +161,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
             public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(getTable().getPageCount() - 1);
                 target.add(simpleDataTable);
+                target.add(JumpableNavigationBar.this);
                 onPageChanged(target);
             }
 

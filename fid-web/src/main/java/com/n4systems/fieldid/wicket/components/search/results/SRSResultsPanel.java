@@ -4,7 +4,6 @@ import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
-import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.loader.ColumnMappingLoader;
@@ -20,7 +19,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 
 import java.util.List;
 
@@ -63,29 +61,19 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
 
         provider = createDataProvider(criteriaModel);
         add(dataTable = new SimpleDataTable<RowView>("resultsTable", convertedColumns, provider, 20, selectedRows) {
-            @Override
-            protected void onPageChanged(AjaxRequestTarget target) {
-                ServletWebRequest request = (ServletWebRequest) getRequest();
-                new LegacyReportCriteriaStorage().storePageNumber(request.getContainerRequest().getSession(), dataTable.getTable().getCurrentPage());
-            }
-
-            @Override
-            protected IModel<Integer> createSelectedModel() {
+            @Override protected IModel<Integer> createSelectedModel() {
                 return new PropertyModel<Integer>(SRSResultsPanel.this, "totalResults");
             }
 
-            @Override
-            protected IModel<Integer> createTotalModel() {
+            @Override protected IModel<Integer> createTotalModel() {
                 return new PropertyModel<Integer>(selectedRows, "numSelectedIds");
             }
 
-            @Override
-            protected void onSelectionChanged(AjaxRequestTarget target) {
+            @Override protected void onSelectionChanged(AjaxRequestTarget target) {
                 SRSResultsPanel.this.updateSelectionStatus(target);
             }
 
-            @Override
-            protected void onSortChanged(String sortProperty, SortDirection sortDirection) {
+            @Override protected void onSortChanged(String sortProperty, SortDirection sortDirection) {
                 Long id = Long.parseLong(sortProperty);
                 ColumnMapping column = new ColumnMappingLoader(FieldIDSession.get().getSessionUser().getSecurityFilter()).id(id).load();
                 ColumnMappingView columnView = new ColumnMappingConverter().convert(column);
@@ -94,8 +82,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
                 storeCriteriaIfNecessary();
             }
 
-            @Override
-            protected void onRowItemCreated(Item<RowView> rowItem, IModel<RowView> rowModel) {
+            @Override protected void onRowItemCreated(Item<RowView> rowItem, IModel<RowView> rowModel) {
                 SRSResultsPanel.this.onRowItemCreated(rowItem, rowModel);
             }
         });
@@ -144,5 +131,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
         return provider.size();
     }
 
-
+    public SimpleDataTable<RowView> getDataTable() {
+        return dataTable;
+    }
 }

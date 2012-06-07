@@ -46,6 +46,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     public static final String SUB_MENU_ID = "subMenu";
     public static final String LEFT_PANEL_ID = "leftPanel";
     private static final String LEFT_PANEL_CONTROLLER_ID = "leftPanelController";
+    public static final String BOTTOM_PANEL_ID="bottomPanel";
 
     @SpringBean
 	private ConfigService configService;
@@ -83,6 +84,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(new WebMarkupContainer(LEFT_PANEL_ID).setVisible(false));
         add(new WebMarkupContainer(SUB_MENU_ID).setVisible(false));
+        add(new WebMarkupContainer(BOTTOM_PANEL_ID).setVisible(false));
         add(new WebMarkupContainer(LEFT_PANEL_CONTROLLER_ID).setVisible(false));
         addCssContainers();
 
@@ -363,7 +365,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         return true;
     }
     
-    protected void setLeftPanelContent(Component c) {
+    protected Component setLeftPanelContent(Component c) {
         Preconditions.checkArgument(LEFT_PANEL_ID.equals(c.getId()), " you must use '" + LEFT_PANEL_ID + "' as your left panel id");
     	replace(c.setVisible(true));
         if (c instanceof HasLeftPanelController) {
@@ -371,11 +373,19 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             Component controller = lpc.getLeftPanelController(LEFT_PANEL_CONTROLLER_ID);
             replace(controller.setVisible(true));
         }
+        return c;
     }
 
-    protected void setSubMenuContent(Component c) {
+    protected Component setBottomPanelContent(Component c) {
+        Preconditions.checkArgument(BOTTOM_PANEL_ID.equals(c.getId()), " you must use '" + BOTTOM_PANEL_ID + "' as your bottom panel id");
+        replace(c.setVisible(true));
+        return c;
+    }
+
+    protected Component setSubMenuContent(Component c) {
         Preconditions.checkArgument(SUB_MENU_ID.equals(c.getId()), "you must use " + SUB_MENU_ID + "'as your sub menu id.");
         replace(c.setVisible(true));
+        return c;
     }
 
 }

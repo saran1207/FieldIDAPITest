@@ -116,7 +116,7 @@
 #left-panel-controller {
     top: 169px;
     position: fixed;
-    width: 13px;
+    width: 12px;
     bottom: 0px;
     border-bottom: 10px solid #f8f8f8;
     background: #bbb;
@@ -152,18 +152,11 @@
  *  panel on the left hand side with Filters & Columns 
  *  it is the meat of the left-menu panel.
 */
- .search-config .bottom-panel {
+ .search-config .button-panel {
     position:fixed;
-    bottom:10px;
-    left:13px;
-	display:inline-block;
-    border-style: none;
-    height:40px;
     width:335px;
-    padding-right:10px;
      padding-top:5px;
      top:164px;
-	zoom:0;
 }
 
 .search-config .right {
@@ -352,7 +345,8 @@
 }
 
 
-.bottom-bar {
+/* used to contain stuff like navigation panels, footers, status bars etc... */
+#bottom-panel {
     position:fixed;
     height:50px;
     bottom:0px;
@@ -360,18 +354,18 @@
     left:27px;
     background:#f9f9f9;
     width:auto;
-}
-
-.bottom-bar .paginationWrapper {
-    height:40px;
     border: 1px solid #bbb;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
+}
+
+#bottom-panel .paginationWrapper {
+    height:40px;
     width:100%;
     float:right;
 }
 
-#page.with-left-panel .bottom-bar {
+#page.with-left-panel #bottom-panel {
     left:375px;
     padding-left:2px;
 }

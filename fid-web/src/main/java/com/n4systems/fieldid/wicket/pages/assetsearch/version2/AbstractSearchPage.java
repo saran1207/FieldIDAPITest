@@ -1,15 +1,21 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
+import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
+import com.n4systems.fieldid.wicket.components.table.JumpableNavigationBar;
+import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.services.reporting.DashboardReportingService;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -26,6 +32,8 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     public static final String SERIES_PARAMETER = "series";
     public static final String Y_PARAMETER = "y";
     public static final String RESULTS_PANEL_ID = "resultsPanel";
+    public static final String SCROLL_JS = "var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('#%s'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}";
+
 
     private @SpringBean DashboardReportingService dashboardReportingService;
     private @SpringBean SavedAssetSearchService savedAssetSearchService;
@@ -55,12 +63,30 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
 
     private void addComponents() {
         Model<T> criteriaModel = new Model<T>(searchCriteria);
-        add(createResultsPanel(RESULTS_PANEL_ID, criteriaModel, isShowBlankSlate()));
+        Component resultsPanel = createResultsPanel(RESULTS_PANEL_ID, criteriaModel, isShowBlankSlate());
+        add(resultsPanel);
 
         final Component searchConfigPanel = createCriteriaPanel(FieldIDFrontEndPage.LEFT_PANEL_ID, criteriaModel);
 
         setLeftPanelContent(searchConfigPanel);
+        if (resultsPanel instanceof SRSResultsPanel) {
+            setBottomPanelContent(createNavigationPanel(FieldIDFrontEndPage.BOTTOM_PANEL_ID, (SRSResultsPanel)resultsPanel));
+        }
         setSubMenuContent(searchMenu = createSubMenu(FieldIDFrontEndPage.SUB_MENU_ID, criteriaModel));
+    }
+
+    private Component createNavigationPanel(String id, final SRSResultsPanel resultsPanel) {
+        return new JumpableNavigationBar(id, resultsPanel.getDataTable()) {
+                @Override protected void onPageChanged(AjaxRequestTarget target) {
+                    target.appendJavaScript(String.format(SCROLL_JS,getMarkupId()));
+                    AbstractSearchPage.this.onPageChanged(target, resultsPanel.getDataTable());
+                }
+            };
+    }
+
+    protected void onPageChanged(AjaxRequestTarget target, SimpleDataTable dataTable) {
+        ServletWebRequest request = (ServletWebRequest) getRequest();
+        new LegacyReportCriteriaStorage().storePageNumber(request.getContainerRequest().getSession(), dataTable.getTable().getCurrentPage());
     }
 
     public void initializeSavedItem() {
