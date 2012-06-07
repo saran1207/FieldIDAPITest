@@ -77,8 +77,9 @@ public class ApiSmartSearchResource extends FieldIdPersistenceService {
 		});
 		
 		for(int i = combinedSuggestions.size() - 1; i > 0; i--) {
+			ApiSmartSearchSuggestion current = combinedSuggestions.get(i);
 			for(int j = 0; j < i; j++) {
-				if(combinedSuggestions.get(j).getSid().equals(combinedSuggestions.get(i).getSid())) {
+				if(combinedSuggestions.get(j).getSid().equals(current.getSid())) {
 					combinedSuggestions.remove(i);
 					break;
 				}
