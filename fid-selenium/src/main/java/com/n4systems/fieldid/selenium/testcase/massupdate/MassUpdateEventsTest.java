@@ -4,12 +4,7 @@ import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.pages.event.EventMassUpdatePage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -59,9 +54,7 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 		        .withTenant(scenario.defaultTenant())
 		        .withGroup(group)
 		        .build();
-			
-			scenario.anEventSchedule().completedDoing(event1).asset(asset).build();
-			
+
 			Event event2 = scenario.anEvent().on(asset2)
 		        .ofType(eventType)
 		        .withPerformedBy(scenario.defaultUser())
@@ -69,8 +62,6 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 		        .withTenant(scenario.defaultTenant())
 		        .withGroup(group)
 		        .build();
-			
-			scenario.anEventSchedule().completedDoing(event2).asset(asset2).build();
 		}
      }
 	
@@ -80,8 +71,9 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
         page.clickRunSearchButton();
         page.selectAllItemsOnPage();
         EventMassUpdatePage massUpdatePage = page.clickEventMassUpdate();
-        massUpdatePage.checkMassDelete();
-        massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+        massUpdatePage.selectDelete();
+        massUpdatePage.saveDeleteDetails();
+        massUpdatePage.clickConfirmDelete();
         assertTrue("Not all Events were properly removed", verifyAllEventsAreRemoved());
 	}
 	
@@ -91,8 +83,9 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
         page.clickRunSearchButton();
         page.selectAllItemsOnPage();
         EventMassUpdatePage massUpdatePage = page.clickEventMassUpdate();
-        massUpdatePage.checkMassDelete();
-        massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+        massUpdatePage.selectDelete();
+        massUpdatePage.saveDeleteDetails();
+        massUpdatePage.clickConfirmDelete();
         assertTrue("Not all Schedules were properly removed", verifyAllSchedulesAreRemoved());
 	}
 	
