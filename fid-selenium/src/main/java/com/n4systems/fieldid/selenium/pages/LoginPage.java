@@ -48,7 +48,7 @@ public class LoginPage extends WebPage {
 	}
 	
 	public RegistrationRequestPage clickRequestAnAccount(){
-		selenium.click("//div[@id='requestAccountButton']/a");
+		selenium.click("//a//span[.='Request an Account']");
 		return new RegistrationRequestPage(selenium);
 	}
 	
