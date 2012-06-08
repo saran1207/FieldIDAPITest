@@ -11,7 +11,6 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.*;
-import com.n4systems.util.DateHelper;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
@@ -108,10 +107,10 @@ public class EventService extends FieldIdPersistenceService {
     }
     
     private WhereClause<?> whereFromTo(Date fromDate, Date toDate, String property, TimeZone timeZone) {
-        if (timeZone!=null) { 
-            fromDate = DateHelper.convertToUserTimeZone(fromDate, timeZone);
-            toDate = DateHelper.convertToUserTimeZone(toDate, timeZone);
-        }
+//        if (timeZone!=null) {
+//            fromDate = DateHelper.convertToUserTimeZone(fromDate, timeZone);
+//            toDate = DateHelper.convertToUserTimeZone(toDate, timeZone);
+//        }
         
     	if (fromDate!=null && toDate!=null) {
     		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
