@@ -133,6 +133,7 @@ public class EventService extends FieldIdPersistenceService {
         // this should be reverted when a complete, system wide approach to handling time zones is implemented.
         // see WEB-2836
         TimeZone timeZone = getCurrentUser().getTimeZone();
+        timeZone = null;
 
         QueryBuilder<CompletedEventsReportRecord> builder = new QueryBuilder<CompletedEventsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
