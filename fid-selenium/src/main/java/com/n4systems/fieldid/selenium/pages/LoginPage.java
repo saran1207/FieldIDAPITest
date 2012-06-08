@@ -40,11 +40,11 @@ public class LoginPage extends WebPage {
 	}
 
 	public boolean isPlansAndPricingAvailable() {
-		return selenium.isElementPresent("//div[@id='plansPricingButton']/a");
+		return selenium.isElementPresent("//div[@class='request']/a/span[.='Plans and Pricing']");
 	}
 
 	public boolean isRequestAnAccountAvailable() {
-		return selenium.isElementPresent("xpath=//DIV[@id='requestAccountButton']/A");
+		return selenium.isElementPresent("//div[@class='request']/a/span[.='Request an Account']");
 	}
 	
 	public RegistrationRequestPage clickRequestAnAccount(){
@@ -53,7 +53,7 @@ public class LoginPage extends WebPage {
 	}
 	
 	public SelectPackagePage clickPlansAndPricingLink() {
-		selenium.click("//div[@id='plansPricingButton']/a");
+		selenium.click("//a//span[.='Plans and Pricing']");
 		return new SelectPackagePage(selenium);
 	}
 
