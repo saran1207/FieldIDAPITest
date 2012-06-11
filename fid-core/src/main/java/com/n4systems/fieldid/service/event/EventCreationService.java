@@ -278,6 +278,7 @@ public class EventCreationService extends FieldIdPersistenceService {
             eventSchedule.copyDataFrom(event);
             eventSchedule.setNextDate(event.getDate());
             persistenceService.save(eventSchedule);
+            event.setSchedule(eventSchedule);
         } else if (scheduleId > 0) {
             // There was an existing schedule selected.
             eventSchedule = persistenceService.find(EventSchedule.class, scheduleId);
