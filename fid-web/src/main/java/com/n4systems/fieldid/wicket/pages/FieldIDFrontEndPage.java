@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusListPage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.columns.ReportType;
@@ -246,6 +247,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
 	private Component createAssetEventsSubMenu() {
         WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
+        container.add(new BookmarkablePageLink("eventStatusListLink", EventStatusListPage.class));
 
         container.setVisible(getSessionUser().hasAccess("managesystemconfig"));
         
