@@ -2,9 +2,9 @@ package com.n4systems.fieldid.wicket.components.navigation;
 
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -46,7 +46,11 @@ public class NavigationBar extends Panel {
 
                 listItem.add(createSelectedAttributeModifier(navItem));
                 if (navItem.isOnRight()) {
-                    listItem.add(new SimpleAttributeModifier("class", "add"));
+                    if(getPage().getClass() == navItem.getPageClass() &&
+                            getPage().getPageParameters().getNamedKeys().equals(navItem.getParameters().getNamedKeys()))
+                        listItem.add(createRightSelectedAttributeModifier(navItem));
+                    else
+                        listItem.add(new AttributeModifier("class", "add"));
                 }
 
                 if (navItem.getNonWicketUrl() != null) {
@@ -63,7 +67,8 @@ public class NavigationBar extends Panel {
                 listItem.add(new Label("currentPageLabel", navItem.getLabelModel()) {
                     @Override
                     public boolean isVisible() {
-                        return getPage().getClass() == navItem.getPageClass();
+                        return getPage().getClass() == navItem.getPageClass() &&
+                                getPage().getPageParameters().getNamedKeys().equals(navItem.getParameters().getNamedKeys());
                     }
                 });
             }
@@ -100,13 +105,24 @@ public class NavigationBar extends Panel {
         return queryString.toString();
     }
 
-    private SimpleAttributeModifier createSelectedAttributeModifier(final NavigationItem navItem) {
-        return new SimpleAttributeModifier("class", "selected") {
+    private AttributeModifier createSelectedAttributeModifier(final NavigationItem navItem) {
+        return new AttributeModifier("class", "selected") {
             @Override
             public boolean isEnabled(Component component) {
-               return component.getPage().getClass() == navItem.getPageClass();
+                return component.getPage().getClass() == navItem.getPageClass()
+                        && component.getPage().getPageParameters().getNamedKeys().equals(navItem.getParameters().getNamedKeys());
             }
         };
+    }
+
+    private AttributeModifier createRightSelectedAttributeModifier(final NavigationItem navItem) {
+            return new AttributeModifier("class", "selected add") {
+                @Override
+                public boolean isEnabled(Component component) {
+                    return component.getPage().getClass() == navItem.getPageClass()
+                            && component.getPage().getPageParameters().getNamedKeys().equals(navItem.getParameters().getNamedKeys());
+                }
+            };
     }
 
 }

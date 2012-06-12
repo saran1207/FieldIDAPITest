@@ -1,0 +1,16 @@
+<wicket:extend>
+    <div class="feedback" wicket:id="feedbackPanel"></div>
+    <form wicket:id="form" class="crudForm">
+        <div class="infoSet">
+            <label class="label"><wicket:message key="label.name"/>:</label>
+            <span class="fieldHolder">
+                <input wicket:id="name" type="text"/>
+            </span>
+        </div>
+        <div class="formAction">
+            <input wicket:id="saveButton" type="submit" wicket:message="value:label.save"/>
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+</wicket:extend>

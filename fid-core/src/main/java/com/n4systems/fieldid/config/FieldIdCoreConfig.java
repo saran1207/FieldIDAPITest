@@ -379,5 +379,11 @@ public class FieldIdCoreConfig {
     	return new MassUpdateService();
     }
 
+    @Bean
+    public EventStatusService eventStatusService() {
+        return new EventStatusService();
+    }
+
+
 }
 

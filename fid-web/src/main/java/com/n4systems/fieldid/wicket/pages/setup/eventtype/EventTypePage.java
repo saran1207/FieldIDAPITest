@@ -11,8 +11,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
-import static com.n4systems.fieldid.wicket.model.navigation.
-        PageParametersBuilder.uniqueId;
+import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
 public class EventTypePage extends FieldIDFrontEndPage {
 

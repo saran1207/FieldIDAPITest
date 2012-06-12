@@ -1,0 +1,18 @@
+<wicket:extend>
+    <table class="list">
+        <tr>
+            <th><wicket:message key="label.event_status" /></th>
+            <th><wicket:message key="label.created" /></th>
+            <th><wicket:message key="label.last_modified" /></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr wicket:id="eventStatusList">
+            <td><span wicket:id="name"/></td>
+            <td><span wicket:enclosure="createdBy"><span wicket:id="createdBy"/>, </span><span wicket:id="created"/></td>
+            <td><span wicket:enclosure="modifiedBy"><span wicket:id="modifiedBy"/>, </span><span wicket:id="lastModified"/></td>
+            <td>
+                <a wicket:id="unarchive"><wicket:message key="label.unarchive" /></a>
+            </td>
+        </tr>
+    </table>
+</wicket:extend>

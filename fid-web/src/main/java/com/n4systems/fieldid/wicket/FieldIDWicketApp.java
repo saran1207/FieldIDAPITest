@@ -24,6 +24,9 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedule
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusArchivedListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusFormPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
@@ -97,7 +100,11 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetView", AssetViewPage.class);
-        
+
+        mountPage("eventStatusList", EventStatusListPage.class);
+        mountPage("eventStatusArchivedList", EventStatusArchivedListPage.class);
+        mountPage("eventStatusForm", EventStatusFormPage.class);
+
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
 

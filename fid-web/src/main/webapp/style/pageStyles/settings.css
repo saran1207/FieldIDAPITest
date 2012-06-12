@@ -50,6 +50,10 @@
 	background-image: url(../../images/asset-types-icon.png);
 }
 
+.eventStatusList{
+    background-image: url(../../images/asset-statuses-icon.png);
+}
+
 .assetStatusList{
 	background-image: url(../../images/asset-statuses-icon.png);
 }
