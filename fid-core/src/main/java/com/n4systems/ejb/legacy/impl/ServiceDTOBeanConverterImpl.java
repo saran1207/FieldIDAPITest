@@ -528,6 +528,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		event.setPrintable(inspectionServiceDTO.isPrintable());
 		event.setDate(inspectionServiceDTO.getUtcDate());
+        event.setTempCompletedDate(inspectionServiceDTO.getUtcDate());
 		
 		// Required object lookups		
 		User performedBy = (User)em.find(User.class, inspectionServiceDTO.getPerformedById());

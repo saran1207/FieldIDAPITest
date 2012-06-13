@@ -37,6 +37,9 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	}
 	
 	private Location advancedLocation = new Location();
+
+    @Transient
+    private Date tempCompletedDate;
 	
 	@Column(nullable=false)
 	private boolean printable;
@@ -421,4 +424,11 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         }
     }
 
+    public Date getTempCompletedDate() {
+        return tempCompletedDate;
+    }
+
+    public void setTempCompletedDate(Date tempCompletedDate) {
+        this.tempCompletedDate = tempCompletedDate;
+    }
 }
