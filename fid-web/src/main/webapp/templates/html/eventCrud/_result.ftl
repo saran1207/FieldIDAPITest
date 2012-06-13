@@ -17,3 +17,10 @@
         </select>
 	</span>
 </div>
+
+<div class="infoSet">
+    <label class="label" for="eventStatus"><@s.text name="label.event_status"/></label>
+    <span class="fieldHolder">
+        <@s.select name="eventStatus" headerKey="" headerValue="" list="eventStatuses" listKey="id" listValue="displayName" theme="simple"/>
+    </span>
+</div>

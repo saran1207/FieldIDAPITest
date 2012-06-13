@@ -1,29 +1,14 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
 import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.Event;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.Status;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.SubEvent;
-
 import com.n4systems.fieldid.utils.StrutsListHelper;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.*;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import com.n4systems.tools.FileDataContainer;
+
+import java.util.*;
 
 public class MasterEvent {
 
@@ -147,6 +132,7 @@ public class MasterEvent {
 		event.setModifiedBy(subEvent.getModifiedBy());
         event.setEventForm(subEvent.getEventForm());
         event.setEditable(subEvent.isEditable());
+        event.setEventStatus(subEvent.getEventStatus());
 
 		return event;
 	}
@@ -167,6 +153,7 @@ public class MasterEvent {
 		subEvent.setModifiedBy(event.getModifiedBy());
         subEvent.setEventForm(event.getEventForm());
         subEvent.setEditable(event.isEditable());
+        subEvent.setEventStatus(event.getEventStatus());
 
 		return subEvent;
 	}

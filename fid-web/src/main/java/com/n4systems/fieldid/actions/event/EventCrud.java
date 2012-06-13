@@ -703,7 +703,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	public void setBook(Long book) {
 		if (book == null) {
 			event.setBook(null);
-		} else if (event.getBook() == null || !book.equals(event.getBook())) {
+		} else if (event.getBook() == null || !book.equals(event.getBook().getId())) {
 			event.setBook(persistenceManager.find(EventBook.class, book, getTenantId()));
 		}
 	}
@@ -1125,5 +1125,22 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
     public EventHelper getEventHelper() {
         return eventHelper;
+    }
+    
+    public List<EventStatus> getEventStatuses() {
+        return persistenceManager.findAll(EventStatus.class, getTenantId(), Collections.singletonMap("name", true));
+    }
+    
+    public Long getEventStatus() {
+        return event.getEventStatus() != null ? event.getEventStatus().getId() : null;
+    }
+
+    public void setEventStatus(Long id) {
+        if(id != null) {
+            EventStatus eventStatus = persistenceManager.find(EventStatus.class, id);
+            event.setEventStatus(eventStatus);
+        } else {
+            event.setEventStatus(null);
+        }
     }
 }

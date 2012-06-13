@@ -54,6 +54,13 @@
                 <@s.select name="result" list="results" listKey="name()" listValue="%{getText( label )}" />
             </span>
         </div>
+
+        <div class="infoSet">
+            <label class="label"><@s.text name="label.event_status"/></label>
+            <span class="fieldHolder">
+                <@s.select name="eventStatus" headerKey="" headerValue="" list="eventStatuses" listKey="id" listValue="displayName" theme="simple"/>
+            </span>
+        </div>
     </#if>
     <#if !event.id?exists && action.isParentAsset()>
         <#include "_result.ftl" />

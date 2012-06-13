@@ -55,6 +55,10 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
     private List<SectionResults> sectionResults;
 
 	private String mobileGUID;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name="eventstatus_id")
+    private EventStatus eventStatus;
 	
 	@AllowSafetyNetworkAccess
 	public String getMobileGUID() {
@@ -190,6 +194,15 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    @AllowSafetyNetworkAccess
+    public EventStatus getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(EventStatus eventStatus) {
+        this.eventStatus = eventStatus;
     }
 
     public List<FileAttachment> getImageAttachments() {

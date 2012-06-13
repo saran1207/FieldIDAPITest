@@ -147,6 +147,11 @@
 		</div>
 
     </div>
+
+    <p>
+       <label><@s.text name="label.event_status"/></label>
+       <span><#if event.eventStatus?exists>${event.eventStatus.displayName}</#if></span>
+    </p>
     
 	<#if event.proofTestInfo?exists >
 		<h2><@s.text name="label.prooftest"/></h2>

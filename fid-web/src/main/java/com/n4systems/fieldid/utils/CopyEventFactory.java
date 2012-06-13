@@ -1,30 +1,9 @@
 package com.n4systems.fieldid.utils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.DateFieldCriteriaResult;
-import com.n4systems.model.Deficiency;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Event;
-import com.n4systems.model.NumberFieldCriteriaResult;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.ProofTestInfo;
-import com.n4systems.model.Recommendation;
-import com.n4systems.model.ScoreCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.*;
 import com.n4systems.model.parents.EntityWithTenant;
+
+import java.util.*;
 
 public class CopyEventFactory {
 
@@ -52,6 +31,7 @@ public class CopyEventFactory {
 		newEvent.setSubEvents( copySubEvents( event.getSubEvents() ) );
         newEvent.setEventForm(event.getEventForm());
         newEvent.setSchedule(event.getSchedule());
+        newEvent.setEventStatus(event.getEventStatus());
 
 		return newEvent;
 	}
@@ -102,6 +82,7 @@ public class CopyEventFactory {
 		
 		newEvent.setCriteriaResults( copyCriteriaResults( originalEvent.getResults(), newEvent) );
         newEvent.setEditable(originalEvent.isEditable());
+        newEvent.setEventStatus(originalEvent.getEventStatus());
 	}
 	
 	protected static List<FileAttachment> copyFileAttachments( List<FileAttachment> oldFileAttachments ) {
