@@ -83,9 +83,9 @@ public class EventReportCriteria extends SearchCriteria {
     @Column(name="column_id")
 	private List<String> columns = new ArrayList<String>();
 
-    @Column(name="eventStatus")
+    @Column(name="eventState")
     @Enumerated(EnumType.STRING)
-    private EventStatus eventStatus = EventStatus.COMPLETE;
+    private EventState eventState = EventState.COMPLETE;
 
     @Column(name="includeDueDateRange")
     @Enumerated(EnumType.STRING)
@@ -245,12 +245,12 @@ public class EventReportCriteria extends SearchCriteria {
         this.columns = columns;
     }
 
-    public EventStatus getEventStatus() {
-        return eventStatus;
+    public EventState getEventState() {
+        return eventState;
     }
 
-    public void setEventStatus(EventStatus eventStatus) {
-        this.eventStatus = eventStatus;
+    public void setEventState(EventState eventState) {
+        this.eventState = eventState;
     }
 
     public DateRange getDueDateRange() {
@@ -277,7 +277,7 @@ public class EventReportCriteria extends SearchCriteria {
 
     @Override
     public boolean requiresLeftOuterJoin() {
-        if (eventStatus == EventStatus.INCOMPLETE) {
+        if (eventState == EventState.INCOMPLETE) {
             return false;
         }
 

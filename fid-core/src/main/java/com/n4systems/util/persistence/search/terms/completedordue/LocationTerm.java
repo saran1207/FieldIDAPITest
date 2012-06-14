@@ -1,12 +1,12 @@
 package com.n4systems.util.persistence.search.terms.completedordue;
 
-import com.n4systems.model.search.EventStatus;
+import com.n4systems.model.search.EventState;
 import com.n4systems.util.persistence.WhereParameterGroup;
 
 public class LocationTerm extends CompleteOrIncompleteTerm {
 
-    public LocationTerm(EventStatus status) {
-        super(status);
+    public LocationTerm(EventState state) {
+        super(state);
     }
 
     @Override

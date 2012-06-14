@@ -1,7 +1,7 @@
 package com.n4systems.util.persistence.search.terms.completedordue;
 
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.search.EventStatus;
+import com.n4systems.model.search.EventState;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
@@ -13,14 +13,14 @@ import java.util.List;
 
 public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
 
-    private EventStatus status;
+    private EventState state;
 
     public CompleteOrIncompleteTerm() {
-        this(EventStatus.ALL);
+        this(EventState.ALL);
     }
 
-    public CompleteOrIncompleteTerm(EventStatus status) {
-        this.status = status;
+    public CompleteOrIncompleteTerm(EventState state) {
+        this.state = state;
     }
 
     @Override
@@ -29,11 +29,11 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
 
         WhereParameterGroup outerGroup = new WhereParameterGroup(getClass().getName()+".outer");
 
-        if (status == EventStatus.ALL) {
+        if (state == EventState.ALL) {
             createAndPopulateOuter(outerGroup);
-        } else if (status == EventStatus.COMPLETE) {
+        } else if (state == EventState.COMPLETE) {
             populateCompletedTerm(outerGroup);
-        } else if (status == EventStatus.INCOMPLETE) {
+        } else if (state == EventState.INCOMPLETE) {
             populateIncompleteTerm(outerGroup);
         }
 

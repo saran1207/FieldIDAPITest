@@ -9,7 +9,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Status;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.EventStatus;
+import com.n4systems.model.search.EventState;
 import com.n4systems.model.summary.EventResolutionSummary;
 import com.n4systems.model.summary.EventSetSummary;
 import com.n4systems.util.chart.RangeType;
@@ -159,7 +159,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
     }
 
     private void populateOutstandingInto(EventReportCriteria criteriaModel) {
-        criteriaModel.setEventStatus(EventStatus.INCOMPLETE);
+        criteriaModel.setEventState(EventState.INCOMPLETE);
     }
 
     private void populateFailedInto(EventReportCriteria criteriaModel) {

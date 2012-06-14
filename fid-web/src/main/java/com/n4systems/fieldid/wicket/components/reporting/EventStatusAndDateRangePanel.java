@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.components.reporting;
 import com.n4systems.fieldid.wicket.components.DateRangePicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.search.EventStatus;
+import com.n4systems.model.search.EventState;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
@@ -27,12 +27,12 @@ public class EventStatusAndDateRangePanel extends Panel {
     private WebMarkupContainer includeDueDateRangeContainer;
     private boolean useDueDate;
 
-    public EventStatusAndDateRangePanel(String id, final IModel<EventStatus> eventStatusModel, final IModel<IncludeDueDateRange> includeDueRangeModel, IModel<DateRange> completedRange, IModel<DateRange> dueRange) {
+    public EventStatusAndDateRangePanel(String id, final IModel<EventState> eventStatusModel, final IModel<IncludeDueDateRange> includeDueRangeModel, IModel<DateRange> completedRange, IModel<DateRange> dueRange) {
         super(id);
 
         useDueDate = includeDueRangeModel.getObject() != null;
 
-        DropDownChoice<EventStatus> eventStatusSelect = new DropDownChoice<EventStatus>("eventStatusSelect", eventStatusModel, Arrays.asList(EventStatus.values()), new ListableLabelChoiceRenderer<EventStatus>());
+        DropDownChoice<EventState> eventStatusSelect = new DropDownChoice<EventState>("eventStatusSelect", eventStatusModel, Arrays.asList(EventState.values()), new ListableLabelChoiceRenderer<EventState>());
         eventStatusSelect.setNullValid(false);
         add(eventStatusSelect);
 
@@ -47,7 +47,7 @@ public class EventStatusAndDateRangePanel extends Panel {
         includeDueDateRangeContainer = new WebMarkupContainer("includeDueDateRangeContainer") {
             @Override
             public boolean isVisible() {
-                return EventStatus.COMPLETE.equals(eventStatusModel.getObject());
+                return EventState.COMPLETE.equals(eventStatusModel.getObject());
             }
         };
         includeDueDateRangeContainer.setOutputMarkupPlaceholderTag(true);
@@ -83,20 +83,20 @@ public class EventStatusAndDateRangePanel extends Panel {
         add(completedRangePicker = new DateRangePicker("completeRangePicker", new FIDLabelModel("label.completed_date"), completedRange) {
             @Override
             public boolean isVisible() {
-                return EventStatus.COMPLETE.equals(eventStatusModel.getObject());
+                return EventState.COMPLETE.equals(eventStatusModel.getObject());
             }
         });
         add(dueRangePicker = new DateRangePicker("dueRangePicker", new FIDLabelModel("label.due_date"), dueRange, RangeType.allFloatingTypes()) {
             @Override
             public boolean isVisible() {
-                return EventStatus.INCOMPLETE.equals(eventStatusModel.getObject())
-                        || (EventStatus.COMPLETE.equals(eventStatusModel.getObject()) && IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(includeDueRangeModel.getObject()));
+                return EventState.INCOMPLETE.equals(eventStatusModel.getObject())
+                        || (EventState.COMPLETE.equals(eventStatusModel.getObject()) && IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(includeDueRangeModel.getObject()));
             }
         });
         add(allRangePicker = new DateRangePicker("allRangePicker", new FIDLabelModel("label.completed_or_due_date"), completedRange) {
             @Override
             public boolean isVisible() {
-                return EventStatus.ALL.equals(eventStatusModel.getObject());
+                return EventState.ALL.equals(eventStatusModel.getObject());
             }
         });
     }

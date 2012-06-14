@@ -129,7 +129,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
     private EventReportCriteria getCriteriaDefaults() {
     	EventReportCriteria criteria = getDefaultReportCriteria();
-    	criteria.setEventStatus(EventStatus.INCOMPLETE);
+    	criteria.setEventState(EventState.INCOMPLETE);
 		return criteria;
 	}
 
@@ -140,7 +140,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	private EventReportCriteria getCriteriaDefaults(UpcomingEventsWidgetConfiguration config, String series, LocalDate localDate) {
 		EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
         criteria.setDueDateRange(new DateRange(localDate, localDate));// this widget displays day by day.  .: when you click on a pt the date range is always a single day.
-        criteria.setEventStatus(EventStatus.INCOMPLETE);
+        criteria.setEventState(EventState.INCOMPLETE);
 		return criteria;
 	}
 
@@ -148,7 +148,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         Preconditions.checkArgument(orgIndex >= 0 && orgIndex <=config.getOrgs().size());
         EventReportCriteria criteria = getDefaultReportCriteria(config.getOrgs().get(orgIndex));
         if (KpiType.INCOMPLETE.getLabel().equals(series)) {
-            criteria.setEventStatus(EventStatus.INCOMPLETE);
+            criteria.setEventState(EventState.INCOMPLETE);
             criteria.setDueDateRange(config.getDateRange());
             criteria.setDateRange(new DateRange(RangeType.FOREVER));
         } else if (KpiType.FAILED.getLabel().equals(series)) {
@@ -159,7 +159,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         } else if (KpiType.COMPLETED.getLabel().equals(series)) {
             criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
             criteria.setDueDateRange(config.getDateRange());
-            criteria.setEventStatus(EventStatus.COMPLETE);
+            criteria.setEventState(EventState.COMPLETE);
             criteria.setDateRange(new DateRange(RangeType.FOREVER));
         }
         return criteria;
@@ -178,9 +178,9 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         if (ScheduleStatus.COMPLETED.equals(status)) {
             criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
             criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
-            criteria.setEventStatus(EventStatus.COMPLETE);
+            criteria.setEventState(EventState.COMPLETE);
         } else {
-            criteria.setEventStatus(EventStatus.ALL);
+            criteria.setEventState(EventState.ALL);
             criteria.setDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
         }
 		return criteria;

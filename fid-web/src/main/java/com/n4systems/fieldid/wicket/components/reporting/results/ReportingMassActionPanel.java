@@ -10,7 +10,7 @@ import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.summary.EventResolutionPage;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.EventStatus;
+import com.n4systems.model.search.EventState;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
@@ -35,13 +35,13 @@ public class ReportingMassActionPanel extends MassActionPanel {
             }
         });
 
-        eventResolutionLink.setVisible(reportCriteriaModel.getObject().getEventStatus() != EventStatus.INCOMPLETE);
+        eventResolutionLink.setVisible(reportCriteriaModel.getObject().getEventState() != EventState.INCOMPLETE);
 
         printContainer.add(new MassActionLink<PrintThisReportPage>("printThisReportLink", PrintThisReportPage.class, reportCriteriaModel));
         printContainer.add(new MassActionLink<PrintInspectionCertPage>("printSelectedPdfReportsLink", PrintInspectionCertPage.class, reportCriteriaModel));
         printContainer.add(new MassActionLink<PrintObservationCertReportPage>("printSelectedObservationReportsLink", PrintObservationCertReportPage.class, reportCriteriaModel));
 
-        printContainer.setVisible(reportCriteriaModel.getObject().getEventStatus() == EventStatus.COMPLETE);
+        printContainer.setVisible(reportCriteriaModel.getObject().getEventState() == EventState.COMPLETE);
 
         add(printContainer);
 
@@ -52,7 +52,7 @@ public class ReportingMassActionPanel extends MassActionPanel {
         massUpdateLinkContainer.setRenderBodyOnly(true);
         massUpdateLinkContainer.setVisible(sessionUser.hasAccess("editevent") && !searchIncludesSafetyNetwork);
 
-        if (reportCriteriaModel.getObject().getEventStatus() == EventStatus.COMPLETE) {
+        if (reportCriteriaModel.getObject().getEventState() == EventState.COMPLETE) {
             massUpdateLinkContainer.add(new ReportingMassActionLink("massUpdateLink", "/massUpdateEvents.action?searchId=%s", reportCriteriaModel));
             massUpdateLinkContainer.add(new Link("massUpdateLink2") {
                 @Override
@@ -60,7 +60,7 @@ public class ReportingMassActionPanel extends MassActionPanel {
                     setResponsePage(new MassUpdateEventsPage(reportCriteriaModel));
                 }
             });
-        } else if (reportCriteriaModel.getObject().getEventStatus() == EventStatus.INCOMPLETE) {
+        } else if (reportCriteriaModel.getObject().getEventState() == EventState.INCOMPLETE) {
             massUpdateLinkContainer.add(new ScheduleMassActionLink("massUpdateLink", "/massUpdateEventSchedule.action?searchId=%s", reportCriteriaModel));
         } else {
             massUpdateLinkContainer.setVisible(false);

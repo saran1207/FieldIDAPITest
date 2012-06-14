@@ -3,7 +3,7 @@ package com.n4systems.fieldid.service.search;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.EventStatus;
+import com.n4systems.model.search.EventState;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
@@ -53,9 +53,9 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
         addSimpleTerm(searchTerms, "project.id", getId(criteriaModel.getJob()));
         addSimpleTerm(searchTerms, "event.status", criteriaModel.getResult());
 
-        if (criteriaModel.getEventStatus() == EventStatus.COMPLETE) {
+        if (criteriaModel.getEventState() == EventState.COMPLETE) {
             addSimpleTerm(searchTerms, "status", EventSchedule.ScheduleStatus.COMPLETED);
-        } else if (criteriaModel.getEventStatus() == EventStatus.INCOMPLETE) {
+        } else if (criteriaModel.getEventState() == EventState.INCOMPLETE) {
             searchTerms.add(new SimpleTerm<EventSchedule.ScheduleStatus>("status", EventSchedule.ScheduleStatus.COMPLETED, WhereParameter.Comparator.NE));
         }
 
@@ -63,16 +63,16 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
             addNullTerm(searchTerms, "nextDate");
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
             addNotNullTerm(searchTerms,  "nextDate");
-        } else if (IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange()) || criteriaModel.getEventStatus() == EventStatus.INCOMPLETE) {
+        } else if (IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange()) || criteriaModel.getEventState() == EventState.INCOMPLETE) {
             if (criteriaModel.getDueDateRange() != null && !criteriaModel.getDueDateRange().isEmptyCustom()) {
                 addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), criteriaModel.getDueDateRange().calculateToDate());
             }
         }
 
         if (criteriaModel.getDateRange() != null && !criteriaModel.getDateRange().isEmptyCustom()) {
-            if (criteriaModel.getEventStatus() == EventStatus.COMPLETE) {
+            if (criteriaModel.getEventState() == EventState.COMPLETE) {
                 addDateRangeTerm(searchTerms, "event.schedule.completedDate", DateHelper.convertToUTC(criteriaModel.getDateRange().calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(criteriaModel.getDateRange().calculateToDate()), timeZone));
-            } else if (criteriaModel.getEventStatus() == EventStatus.ALL) {
+            } else if (criteriaModel.getEventState() == EventState.ALL) {
                 searchTerms.add(new CompletedOrDueDateRange(timeZone, criteriaModel.getDateRange()));
             }
         }
@@ -93,11 +93,11 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
     }
 
     private void addAssignedUserTerm(Long assignedUserId, EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
-        searchTerms.add(new AssignedUserTerm(criteriaModel.getEventStatus(), assignedUserId));
+        searchTerms.add(new AssignedUserTerm(criteriaModel.getEventState(), assignedUserId));
     }
 
     private void addAssetStatusTerm(EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
-        searchTerms.add(new AssetStatusTerm(criteriaModel.getEventStatus(), criteriaModel.getAssetStatus()));
+        searchTerms.add(new AssetStatusTerm(criteriaModel.getEventState(), criteriaModel.getAssetStatus()));
     }
 
     private void addPredefinedLocationTerm(List<SearchTermDefiner> search, EventReportCriteria criteriaModel) {

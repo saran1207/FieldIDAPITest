@@ -12,11 +12,10 @@ import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.summary.EventResolutionPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.EventStatus;
+import com.n4systems.model.search.EventState;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
-
 import rfid.web.helper.SessionUser;
 
 
@@ -88,10 +87,10 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
         boolean searchIncludesSafetyNetwork = model.getObject().isIncludeSafetyNetwork();
-        EventStatus status = model.getObject().getEventStatus();
+        EventState state = model.getObject().getEventState();
         
-        updateLink.setVisible(status==EventStatus.COMPLETE && sessionUser.hasAccess("editevent"));
-        updateSchedulesLink.setVisible(status==EventStatus.INCOMPLETE && sessionUser.hasAccess("editevent"));
+        updateLink.setVisible(state == EventState.COMPLETE && sessionUser.hasAccess("editevent"));
+        updateSchedulesLink.setVisible(state == EventState.INCOMPLETE && sessionUser.hasAccess("editevent"));
         assignJobLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork);
 
         actions.setVisible(selected > 0 && selected < maxUpdate && (updateLink.isVisible() || updateSchedulesLink.isVisible() || assignJobLink.isVisible()));

@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.EventStatus;
+import com.n4systems.model.search.EventState;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -44,14 +44,14 @@ public class ReportingFilterPanel extends Panel {
         });
 
 
-        add( new CollapsiblePanel("eventStatusAndDateRangePanel", new StringResourceModel("label.event_status_and_date",this,null)) {
+        add( new CollapsiblePanel("eventStatusAndDateRangePanel", new StringResourceModel("label.event_state_and_date",this,null)) {
             @Override protected Panel createContainedPanel(String id) {
-                PropertyModel<EventStatus> eventStatusModel = new PropertyModel<EventStatus>(model, "eventStatus");
+                PropertyModel<EventState> eventStateModel = new PropertyModel<EventState>(model, "eventState");
                 PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(model, "includeDueDateRange");
                 PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(model, "dateRange");
                 PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(model, "dueDateRange");
-                return new EventStatusAndDateRangePanel(id, eventStatusModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
-                    @Override protected void onEventStatusChanged(AjaxRequestTarget target) {
+                return new EventStatusAndDateRangePanel(id, eventStateModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
+                    @Override protected void onEventStateChanged(AjaxRequestTarget target) {
                         model.getObject().clearDateRanges();
                     }
                 };

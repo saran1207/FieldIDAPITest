@@ -47,12 +47,12 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, 
 
     @Override
     protected void populateForm(SearchCriteriaForm form) {
-        PropertyModel<EventStatus> eventStatusModel = new PropertyModel<EventStatus>(form.getModel(), "eventStatus");
+        PropertyModel<EventState> eventStateModel = new PropertyModel<EventState>(form.getModel(), "eventState");
         PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(form.getModel(), "includeDueDateRange");
         PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(form.getModel(), "dateRange");
         PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(form.getModel(), "dueDateRange");
 
-        form.add(new EventStatusAndDateRangePanel("eventStatusAndDateRangePanel", eventStatusModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
+        form.add(new EventStatusAndDateRangePanel("eventStatusAndDateRangePanel", eventStateModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
             @Override
             protected void onEventStatusChanged(AjaxRequestTarget target) {
                 criteriaModel.getObject().clearDateRanges();

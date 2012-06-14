@@ -2,13 +2,13 @@ package com.n4systems.model.search;
 
 import com.n4systems.model.api.Listable;
 
-public enum EventStatus implements Listable {
+public enum EventState implements Listable {
 
     COMPLETE("label.complete"),INCOMPLETE("label.incomplete"),ALL("label.all");
 
     private String labelKey;
 
-    EventStatus(String labelKey) {
+    EventState(String labelKey) {
         this.labelKey = labelKey;
     }
 
