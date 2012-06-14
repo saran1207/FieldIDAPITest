@@ -195,7 +195,7 @@
     padding-top:11px;
     padding-bottom:9px;
     display:block;
-    z-index:999;
+    z-index:1;
 }
 
 .sub-menu .header {
