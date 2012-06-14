@@ -1,18 +1,5 @@
 package com.n4systems.ejb.impl;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -35,6 +22,11 @@ import com.n4systems.util.ListHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.*;
 
 public class MassUpdateManagerImpl implements MassUpdateManager {
 
@@ -325,7 +317,11 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (updateKey.equals("comments")) {
 					changeTarget.setComments(eventChanges.getComments());
 				}
-				
+
+                if (updateKey.equals("eventStatus")) {
+                    changeTarget.setEventStatus(eventChanges.getEventStatus());
+                }
+
 			}
 
 			persistenceManager.update(changeTarget, user);

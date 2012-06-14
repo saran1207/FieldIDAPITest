@@ -1,8 +1,31 @@
 package com.n4systems.fieldid.wicket.components.massupdate.event;
 
-import java.util.Arrays;
-import java.util.Date;
-
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.Comment;
+import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.IEventBehavior;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.location.LocationPicker;
+import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
+import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.StatusChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
+import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
+import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
+import com.n4systems.fieldid.wicket.model.eventstatus.EventStatusesForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.EventBook;
+import com.n4systems.model.EventStatus;
+import com.n4systems.model.Status;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
@@ -19,30 +42,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.Comment;
-import com.n4systems.fieldid.wicket.components.DateTimePicker;
-import com.n4systems.fieldid.wicket.components.IEventBehavior;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.location.LocationPicker;
-import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.renderer.StatusChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
-import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
-import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
-import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
-import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.Status;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.user.User;
+import java.util.Arrays;
+import java.util.Date;
 
 public class EditDetailsPanel extends AbstractMassUpdatePanel {
 	
@@ -208,6 +209,13 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
             assetStatus.add(createCheckOnChangeEvent(assetStatusCheck));
             add(assetStatusCheck);
             add(assetStatus);
+            
+            CheckBox eventStatusCheck = new CheckBox("eventStatusCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[eventStatus]"));
+            FormComponent<EventStatus> eventStatus = new DropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(massUpdateEventModel, "event.eventStatus"),
+                    new EventStatusesForTenantModel(), new ListableChoiceRenderer<EventStatus>()).setNullValid(true);
+            eventStatus.add(createCheckOnChangeEvent(eventStatusCheck));
+            add(eventStatusCheck);
+            add(eventStatus);
 
             CheckBox printableCheck = new CheckBox("printableCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[printable]"));
             FormComponent<Boolean> printable = new CheckBox("printable", new PropertyModel<Boolean> (massUpdateEventModel, "event.printable"));

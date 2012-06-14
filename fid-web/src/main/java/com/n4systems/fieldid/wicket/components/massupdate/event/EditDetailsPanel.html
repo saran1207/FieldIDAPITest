@@ -77,6 +77,14 @@
 	    </div>
 
         <div class="infoSet">
+            <input type="checkbox" wicket:id="eventStatusCheck" />
+            <label for="massEventUpdate.eventStatus"><wicket:message key="label.event_status"/></label>
+	        <span class="fieldHolder">
+	            <select wicket:id="eventStatus"></select>
+	        </span>
+        </div>
+
+        <div class="infoSet">
             <input type="checkbox" wicket:id="printableCheck" />
             <label for="massEventUpdate.printable"><wicket:message key="label.printable"/></label>
 	        <span class="fieldHolder">
