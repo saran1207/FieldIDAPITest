@@ -62,9 +62,9 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
             @Override
             protected void onEnterState(AjaxRequestTarget target, Object state) {
                 if (state.equals(1)) {
-                    summaryList.setModel(createEventBreakdownSummaryModel());
-                } else if (state.equals(2)) {
                     summaryList.setModel(createAssetBreakdownSummaryModel());
+                } else if (state.equals(2)) {
+                    summaryList.setModel(createEventBreakdownSummaryModel());
                 } else if (state.equals(3)) {
                     summaryList.setModel(createDailyBreakdownSummaryModel());
                 }
@@ -73,8 +73,8 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         };
 
         mattBar.setCurrentState(1);
-        mattBar.addLink(new Model<String>("Event Types"), 1);
-        mattBar.addLink(new Model<String>("Asset Types"), 2);
+        mattBar.addLink(new Model<String>("Asset Types"), 1);
+        mattBar.addLink(new Model<String>("Event Types"), 2);
         mattBar.addLink(new Model<String>("Daily Breakdown"), 3);
 
         add(mattBar);
@@ -82,7 +82,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         breakdownContainer = new WebMarkupContainer("breakdownContainer");
         breakdownContainer.setOutputMarkupPlaceholderTag(true);
 
-        breakdownContainer.add(summaryList = new ListView<EventSetSummary>("summaryList", createEventBreakdownSummaryModel()) {
+        breakdownContainer.add(summaryList = new ListView<EventSetSummary>("summaryList", createAssetBreakdownSummaryModel()) {
             @Override
             protected void populateItem(ListItem<EventSetSummary> item) {
                 Link itemCriteriaLink = createItemCriteriaLink("itemCriteriaLink", item.getModel());
