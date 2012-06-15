@@ -38,7 +38,7 @@ public class GoogleMap extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderJavaScriptReference("http://maps.googleapis.com/maps/api/js?sensor=false", GOOGLE_MAP_API);
+        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GOOGLE_MAP_API);
         response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS);
         response.renderOnDomReadyJavaScript(String.format(INIT_FORMAT,getMarkupId(),getCoordsAsJsParams()));
     }
