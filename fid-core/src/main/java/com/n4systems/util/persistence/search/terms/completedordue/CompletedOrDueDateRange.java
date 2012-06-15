@@ -5,7 +5,9 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
+import org.apache.commons.lang.time.DateUtils;
 
+import java.util.Date;
 import java.util.TimeZone;
 
 // This is a special search term used  for reporting when the user wants to combine both complete and incomplete
@@ -24,7 +26,7 @@ public class CompletedOrDueDateRange extends CompleteOrIncompleteTerm {
 
     @Override
     protected void populateIncompleteTerm(WhereParameterGroup completedGroup) {
-        DateRangeTerm rangeTerm = new DateRangeTerm("nextDate", DateHelper.convertToUTC(dateRange.calculateFromDate(), timeZone), DateHelper.convertToUTC(dateRange.calculateToDate(), timeZone));
+        DateRangeTerm rangeTerm = new DateRangeTerm("nextDate", DateHelper.convertToUTC(dateRange.calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(dateRange.calculateToDate()), timeZone));
 
         for (WhereClause<?> whereClause : rangeTerm.getWhereParameters()) {
             completedGroup.addClause(whereClause);
@@ -33,11 +35,15 @@ public class CompletedOrDueDateRange extends CompleteOrIncompleteTerm {
 
     @Override
     protected void populateCompletedTerm(WhereParameterGroup incompleteGroup) {
-        DateRangeTerm rangeTerm = new DateRangeTerm("completedDate", DateHelper.convertToUTC(dateRange.calculateFromDate(), timeZone), DateHelper.convertToUTC(dateRange.calculateToDate(), timeZone));
+        DateRangeTerm rangeTerm = new DateRangeTerm("completedDate", DateHelper.convertToUTC(dateRange.calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(dateRange.calculateToDate()), timeZone));
 
         for (WhereClause<?> whereClause : rangeTerm.getWhereParameters()) {
             incompleteGroup.addClause(whereClause);
         }
+    }
+
+    private Date nextDay(Date date) {
+        return date == null ? null : DateUtils.addDays(date, 1);
     }
 
 }
