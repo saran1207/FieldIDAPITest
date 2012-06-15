@@ -21,7 +21,7 @@ public class ReportServiceHelper {
 
 		switch (granularity) { 
 			case DAY:			
-				result.add(new GroupByClause("DAY("+param+")", true));
+				result.add(new GroupByClause("DAYOFYEAR("+param+")", true));
 				break;
 			case WEEK:
 				// note : use proper mode for dates to remain consistent with JODA.  weeks start on monday.  
