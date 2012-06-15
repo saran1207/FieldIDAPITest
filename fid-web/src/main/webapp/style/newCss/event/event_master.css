@@ -4,10 +4,14 @@
 	position:absolute;
 	background-image: url(../../../images/dropdownArrow-top-left.gif);
 	padding-top:11px;
+    margin-left:-60px;
 	background-position:top center;
 	background-repeat: no-repeat;
 	width:200px;
 	z-index: 100;
+    /*IE HACK ie doesn't seem to position it same as other browsers. */
+    margin-top:10px\9;
+    margin-left:-125px\9;
 }
 .eventTypesLeft ul{
 	background-position:top left;
