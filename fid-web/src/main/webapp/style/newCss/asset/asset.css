@@ -151,7 +151,7 @@
     float:left;
 }
 
-.linkedAssetLabel, .linkedAssetLabel a, .addLinkedAsset{
+.linkedAssetLabel, .linkedAssetLabel a{
     padding: 0 5px;
 }
 
