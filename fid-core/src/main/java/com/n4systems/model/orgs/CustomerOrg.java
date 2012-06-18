@@ -32,6 +32,7 @@ public class CustomerOrg extends ExternalOrg {
 	
 	@Override
     @DenyReadOnlyUsersAccess
+    @AllowSafetyNetworkAccess
 	public PrimaryOrg getPrimaryOrg() {
 		return parent.getPrimaryOrg();
 	}

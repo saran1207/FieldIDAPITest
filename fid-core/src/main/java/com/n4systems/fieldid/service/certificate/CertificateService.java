@@ -1,23 +1,5 @@
 package com.n4systems.fieldid.service.certificate;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.NonPrintableManufacturerCert;
 import com.n4systems.exceptions.ReportException;
@@ -26,20 +8,24 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.*;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.reporting.AssetReportMapProducer;
-import com.n4systems.reporting.EventReportMapProducer;
-import com.n4systems.reporting.EventReportType;
-import com.n4systems.reporting.PathHandler;
-import com.n4systems.reporting.SubEventReportMapProducer;
+import com.n4systems.reporting.*;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StreamHelper;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Transactional(readOnly = true)
 public class CertificateService extends FieldIdPersistenceService {
@@ -205,18 +191,20 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 	}
 
 	private void addOwnerParams(Map<String, Object> reportMap, BaseOrg ownerOrg) {
-		addPrimaryOrgParams(reportMap, ownerOrg.getPrimaryOrg());
+        addPrimaryOrgParams(reportMap, ownerOrg.getPrimaryOrg());
 		addCustomerOrgParams(reportMap, ownerOrg.getCustomerOrg());
 		addDivisionOrgParams(reportMap, ownerOrg.getDivisionOrg());
 	}
 	
 	private void addPrimaryOrgParams(Map<String, Object> reportMap, PrimaryOrg ownerPrimaryOrg) {
-		reportMap.put("manName", ownerPrimaryOrg.getName());
+        if (ownerPrimaryOrg != null) {
+            reportMap.put("manName", ownerPrimaryOrg.getName());
 
-		AddressInfo ownerPrimaryOrgAddress = ownerPrimaryOrg.getAddressInfo();
-		if (ownerPrimaryOrgAddress != null) {
-			reportMap.put("manAddress", ownerPrimaryOrgAddress.getDisplay());
-		}
+            AddressInfo ownerPrimaryOrgAddress = ownerPrimaryOrg.getAddressInfo();
+            if (ownerPrimaryOrgAddress != null) {
+                reportMap.put("manAddress", ownerPrimaryOrgAddress.getDisplay());
+            }
+        }
 	}
 	
 	private void addCustomerOrgParams(Map<String, Object> reportMap, CustomerOrg customer) {
