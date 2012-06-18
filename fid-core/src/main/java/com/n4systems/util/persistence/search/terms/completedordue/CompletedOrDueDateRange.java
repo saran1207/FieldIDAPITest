@@ -26,7 +26,7 @@ public class CompletedOrDueDateRange extends CompleteOrIncompleteTerm {
 
     @Override
     protected void populateIncompleteTerm(WhereParameterGroup completedGroup) {
-        DateRangeTerm rangeTerm = new DateRangeTerm("nextDate", DateHelper.convertToUTC(dateRange.calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(dateRange.calculateToDate()), timeZone));
+        DateRangeTerm rangeTerm = new DateRangeTerm("nextDate", dateRange.calculateFromDate(), dateRange.calculateToDate());
 
         for (WhereClause<?> whereClause : rangeTerm.getWhereParameters()) {
             completedGroup.addClause(whereClause);
