@@ -1,21 +1,5 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAssetType;
@@ -39,13 +23,14 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.AssetTypeRemovalSummary;
 import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.UrlValidator;
-import com.opensymphony.xwork2.validator.annotations.Validation;
-import com.opensymphony.xwork2.validator.annotations.Validations;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import com.opensymphony.xwork2.validator.annotations.*;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.io.File;
+import java.util.*;
 
 @Validation
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
@@ -343,6 +328,14 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	public void setName(String name) {
 		assetType.setName(name);
 	}
+    
+    public boolean isLinkable() {
+        return assetType.isLinkable();
+    }
+    
+    public void setLinkable(boolean linkable) {
+        assetType.setLinkable(linkable);
+    }
 
 	public String getWarnings() {
 		return assetType.getWarnings();

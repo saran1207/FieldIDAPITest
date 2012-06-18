@@ -88,8 +88,10 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
     private String identifierFormat;
     private String identifierLabel;
     private boolean identifierOverridden;
-		
-	public AssetType() {
+
+    private boolean linkable = false;
+
+    public AssetType() {
 		this(null);
 	}
 	
@@ -520,6 +522,14 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 
     public void setIdentifierOverridden(boolean identifierOverridden) {
         this.identifierOverridden = identifierOverridden;
+    }
+
+    public boolean isLinkable() {
+        return linkable;
+    }
+
+    public void setLinkable(boolean linkable) {
+        this.linkable = linkable;
     }
 
     @Transient

@@ -110,6 +110,12 @@
 			<@s.textfield name="name"/>				
 		</span>
 	</div>
+    <div class="infoSet">
+        <label class="label"><@s.text name="label.linkable"/></label>
+            <span class="fieldHolder">
+                <@s.checkbox name="linkable"/>
+            </span>
+    </div>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.warnings"/></label>
 		<span class="fieldHolder">

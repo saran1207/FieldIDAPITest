@@ -11,7 +11,11 @@ ${action.setPageType('asset_type', 'show')!}
 		<label><@s.text name="label.name"/></label>
 		<span class="fieldValue">${assetType.name!}</span>
 	</p>
-	
+    <p>
+        <label><@s.text name="label.linkable"/></label>
+        <span class="fieldValue">${assetType.linkable?string("Yes", "No")}</span>
+    </p>
+
 	<p>
 		<label><@s.text name="label.warnings"/></label>
 		<span class="fieldValue">${assetType.warnings!}</span>

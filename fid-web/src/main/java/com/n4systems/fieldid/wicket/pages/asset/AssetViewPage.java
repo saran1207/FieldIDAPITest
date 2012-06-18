@@ -64,6 +64,7 @@ public class AssetViewPage extends AssetPage {
         if(assetService.parentAsset(asset) == null) {
             add(linkedAssetPanel = new LinkedAssetPanel("linkedAssetPanel", assetModel));
             linkedAssetPanel.setOutputMarkupId(true);
+            linkedAssetPanel.setVisible(asset.getType().isLinkable());
         }else {
             add(linkedAssetPanel = new LinkedWithAssetPanel("linkedAssetPanel", assetModel));
         }
