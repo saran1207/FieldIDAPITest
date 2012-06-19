@@ -34,6 +34,8 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
         addGranularityButton(ChartGranularity.MONTH);
         addGranularityButton(ChartGranularity.WEEK);        	
         addGranularityButton(ChartGranularity.DAY);
+        // NOTE : since what reporting & dashboard widget display for ALL series are fundamentally different at this time, we shouldn't allow
+        //   clickThru.  (June 2012).
         setClickThruHandler(new ReportClickThruHandler(this,widgetDefinition.getId()));
 	}
 

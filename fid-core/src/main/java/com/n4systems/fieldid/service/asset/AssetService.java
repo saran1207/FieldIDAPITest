@@ -55,14 +55,14 @@ public class AssetService extends FieldIdPersistenceService {
 	@Transactional(readOnly=true)
 	public List<AssetsIdentifiedReportRecord> getAssetsIdentified(ChartGranularity granularity, Date fromDate, Date toDate, BaseOrg org) {
 		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
-		
-		NewObjectSelect select = new NewObjectSelect(AssetsIdentifiedReportRecord.class);
+
+        NewObjectSelect select = new NewObjectSelect(AssetsIdentifiedReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("identified", granularity, null));
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("identified", granularity));
 		select.setConstructorArgs(args);
 		
 		builder.setSelectArgument(select);
-		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"identified"));
+        builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"identified"));
 				
 		builder.addWhere(whereFromTo(fromDate, toDate));		
 		builder.applyFilter(new OwnerAndDownFilter(org));
