@@ -8,15 +8,10 @@
 	<#if securityGuard.assignedToEnabled >
 		<div class="infoSet reducedPaddingInfoSet">
 			<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
-			<#if !parentAsset?exists>
 				<@s.select id="assignedToSelectBox" name="assignedUser" headerKey="0" headerValue="${action.getText('label.unassigned')}" >
 					<#include "/templates/html/common/_assignedToDropDown.ftl"/>
 				</@s.select>
 				<a href="#" class="assignToMeLink" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>
-			<#else>
-				<span class="fieldHolder" id="assignedUser">${(asset.assignedUser.userLabel)!}</span>
-			</#if>
-			
 		</div>
 	</#if>
 
@@ -39,23 +34,15 @@
                 <input type="checkbox" name="useOwnerFromAssets" onchange="$('ownerId_orgName').disabled = this.checked;"/> <@s.text name="label.create_owners_from_assets"/>
             </div>
         </#if>
-		<#if !parentAsset?exists >
 			<@n4.orgPicker name="owner" theme="fieldid" id="ownerId"/>
-		<#else>
-			<span class="fieldHolder" id="owner">${(asset.owner.name?html)!}</span>
-		</#if>
 	</div>
 
     <#if !bulkRegister?exists>
         <div class="infoSet">
             <label class="label" for="asset.location"><@s.text name="label.location"/></label>
-            <#if !parentAsset?exists >
                 <span class="locationTree">
                     <@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="simple"/>
                 </span>
-            <#else>
-                <span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(assetWebModel.location))?html}</span>
-            </#if>
         </div>
     </#if>
 </div>
@@ -82,11 +69,7 @@
 	<h2><@s.text name="label.asset_details"/></h2>
 	<div class="infoSet reducedPaddingInfoSet">
 		<label for="assetStatus" class="label"><@s.text name="label.assetstatus"/></label>
-		<#if !parentAsset?exists >
-			<@s.select name="assetStatus" list="assetStatuses" listKey="id" listValue="name" emptyOption="true"  />
-		<#else>
-			<span class="fieldHolder" id="assetStatus">${(asset.assetStatus.name?html)!}</span>
-		</#if>		
+		<@s.select name="assetStatus" list="assetStatuses" listKey="id" listValue="name" emptyOption="true"  />
 	</div>
 
 	<#include "_infoOptions.ftl">

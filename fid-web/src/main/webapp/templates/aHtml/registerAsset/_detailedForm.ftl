@@ -9,11 +9,7 @@
 	
 	<div class="infoSet">
 		<label for="assetStatus" class="label"><@s.text name="label.assetstatus"/></label>
-			<#if !parentAsset?exists >
-				<@s.select name="assetStatus" list="assetStatuses" listKey="Id" listValue="name" emptyOption="true"  />
-			<#else>
-				<span class="fieldHolder" id="assetStatus">${(asset.assetStatus.name?html)!}</span>
-			</#if>		
+		<@s.select name="assetStatus" list="assetStatuses" listKey="Id" listValue="name" emptyOption="true"  />
 	</div>
 	
 	<div class="formTitle">
@@ -21,22 +17,14 @@
 	</div>
 	<div class="infoSet">
 		<label for="owner" class="label"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-		<#if !parentAsset?exists >
-			<@n4.orgPicker name="owner" theme="fieldid" id="ownerId"/>
-		<#else>
-			<span class="fieldHolder" id="owner">${(asset.owner.name?html)!}</span>
-		</#if>
+		<@n4.orgPicker name="owner" theme="fieldid" id="ownerId"/>
 	</div>
 	<#if securityGuard.assignedToEnabled >
 		<div class="infoSet">
 			<label for="assignedUser" class="label"><@s.text name="label.assignedto"/></label>
-			<#if !parentAsset?exists >
-				<@s.select name="assignedUser"  headerKey="0" headerValue="${action.getText('label.unassigned')}" >
-						<#include "/templates/html/common/_assignedToDropDown.ftl"/>
-				</@s.select>
-			<#else>
-				<span class="fieldHolder" id="assignedUser">${(asset.assignedUser.userLabel)!}</span>
-			</#if>
+			<@s.select name="assignedUser"  headerKey="0" headerValue="${action.getText('label.unassigned')}" >
+				<#include "/templates/html/common/_assignedToDropDown.ftl"/>
+			</@s.select>
 		</div>
 	</#if>
 	
@@ -86,7 +74,4 @@
 			<@s.textarea id="comments"  name="comments" theme="fieldidSimple"/>
 		</span>
 	</div>
-	
-
-		
 </div>
