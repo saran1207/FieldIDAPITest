@@ -79,7 +79,7 @@ public class SchedulePicker extends Panel {
             editorContainer.setVisible(false);
             editorContainer.setOutputMarkupPlaceholderTag(true);
 
-            editorContainer.add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "nextStandardDate")));
+            editorContainer.add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "nextStandardDate"), true));
             dateTimePicker.getDateTextField().setRequired(true);
 
             DropDownChoice<EventType> eventTypeSelect = new DropDownChoice<EventType>("eventTypeSelect", new PropertyModel<EventType>(eventScheduleModel, "eventType"), eventTypeOptions, new ListableChoiceRenderer<EventType>());

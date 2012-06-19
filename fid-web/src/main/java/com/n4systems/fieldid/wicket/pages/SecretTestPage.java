@@ -39,6 +39,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         form.add(new PasswordTextField("password", new PropertyModel<String>(this, "password")).add(new Watermark("enter password")));
         form.add(new GoogleMap("map").addLocation(43.65, -79.34).addLocation(42.00, -80.00).addLocation(44.0,-79.7));
         form.add(new DateTimePicker("dateTimePicker", new PropertyModel<Date>(this,"date"), true));
+        form.add(new DateTimePicker("datePicker", new PropertyModel<Date>(this,"date"), false));
 
         form.add(new AjaxSubmitLink("submit") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

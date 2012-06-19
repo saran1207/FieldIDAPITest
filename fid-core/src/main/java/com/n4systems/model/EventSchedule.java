@@ -1,21 +1,5 @@
 package com.n4systems.model;
 
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.model.api.DisplayEnum;
 import com.n4systems.model.api.NetworkEntity;
@@ -26,9 +10,13 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
-import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.EnumUtils.LabelledEnumSet;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.UUID;
 
 @Entity
 @Table(name = "eventschedules")
@@ -169,17 +157,13 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 		this.eventType = eventType;
 	}
 
-	public void setNextDate(PlainDate nextDate) {
+	public void setNextDate(Date nextDate) {
 		this.nextDate = nextDate;
 	}
 
-	public void setNextDate(Date nextDate) {
-		this.nextDate = new PlainDate(nextDate);
-	}
-
 	@AllowSafetyNetworkAccess
-	public PlainDate getNextDate() {
-		return (nextDate != null) ? new PlainDate(nextDate) : null;
+	public Date getNextDate() {
+		return (nextDate != null) ? nextDate : null;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -339,7 +323,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
     }
 
     public void setNextStandardDate(Date date) {
-        this.nextDate = new PlainDate(date);
+        this.nextDate = date;
     }
 
     public EventSchedule copyDataFrom(Event event) {
