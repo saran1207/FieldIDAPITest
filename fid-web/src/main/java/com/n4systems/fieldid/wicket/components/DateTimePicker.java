@@ -28,8 +28,9 @@ import java.util.Date;
 import java.util.Locale;
 
 
-@SuppressWarnings("serial")
 public class DateTimePicker extends Panel {
+
+    private static final String UPDATE_JS = "$.datepicker.%s($('#%s')[0]);";
 
     private DateTextField dateTextField;
     private CheckBox allDayCheckbox;
@@ -67,12 +68,14 @@ public class DateTimePicker extends Panel {
         }) ;
         dateTextField.setOutputMarkupId(true);
 
-        add(allDayCheckbox = new AjaxCheckBox("allDay", new PropertyModel<Boolean>(this,"allDay")) {
+        add(allDayCheckbox = new AjaxCheckBox("allDay", new PropertyModel<Boolean>(this, "allDay")) {
             @Override protected void onUpdate(AjaxRequestTarget target) {
-                target.add(DateTimePicker.this);
+                String js = String.format(UPDATE_JS,
+                        allDay ? "_disableTimepickerDatepicker" : "_enableTimepickerDatepicker",
+                        dateTextField.getMarkupId());
+                target.appendJavaScript(js);
             }
-        }
-        );
+        });
 
         allDayCheckbox.setVisible(includeTime);
 
@@ -100,11 +103,6 @@ public class DateTimePicker extends Panel {
     protected String getClassModel() {
         // XXX : these extra clases seem rendunant...if i have "datetimepicker" why do i need "dateTime"???
         return includeTime ? "datetimepicker dateTime" : "datepicker date";
-    }
-
-    protected String getDatePickerMethod() {
-        // NOTE : this is coincidentally the same as the css class of the widget but that is not guaranteed.
-        return includeTime && !allDay ? "datetimepicker" : "datepicker";
     }
 
     private IModel<?> getEnabledModel() {
@@ -145,7 +143,7 @@ public class DateTimePicker extends Panel {
         StringBuffer jsBuffer = new StringBuffer();
 
         String options = new Gson().toJson(new DateTimePickerOptions());
-        jsBuffer.append("jQuery('#"+dateTextField.getMarkupId()+"')." + getDatePickerMethod() + "(" + options + ");");
+        jsBuffer.append("jQuery('#"+dateTextField.getMarkupId()+"').datetimepicker(" + options + ");");
 
         return jsBuffer.toString();
     }
