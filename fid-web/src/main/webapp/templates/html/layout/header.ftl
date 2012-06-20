@@ -86,10 +86,7 @@
 					<li>
 						<a href="/fieldid/w/wicket/reporting2" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
 					</li>
-					<li>
-						<a href="<@s.url action="schedule" namespace="/"/>" class="speedLink textLink" id="menuSchedule"><@s.text name="speed.schedules" /></a>
-					</li>
-					
+
 					<#if userSecurityGuard.allowedManageSafetyNetwork>
 						<li>
 							<a href="<@s.url action="safetyNetwork" namespace="/"/>" class="speedLink textLink" id="menuSafetyNetwork"><@s.text name="speed.safety_network" /></a>
