@@ -22,4 +22,12 @@ public enum EventState implements Listable {
         return labelKey;
     }
 
+    public boolean includesIncomplete() {
+        return this == ALL || this == INCOMPLETE;
+    }
+
+    public boolean includesComplete() {
+        return this == ALL || this == COMPLETE;
+    }
+
 }

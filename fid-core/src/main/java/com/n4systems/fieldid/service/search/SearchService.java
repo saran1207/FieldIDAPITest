@@ -12,22 +12,12 @@ import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
-import com.n4systems.util.StringUtils;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.QueryFilter;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
-import com.n4systems.util.persistence.search.terms.DateRangeTerm;
-import com.n4systems.util.persistence.search.terms.NotNullTerm;
-import com.n4systems.util.persistence.search.terms.NullTerm;
-import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
-import com.n4systems.util.persistence.search.terms.SimpleTerm;
-import com.n4systems.util.persistence.search.terms.WildcardTerm;
+import com.n4systems.util.persistence.search.terms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -145,15 +135,21 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
             searchBuilder.addJoin(joinTerm.toJoinClause());
         }
 
+        applyOwnerFilter(criteriaModel, searchBuilder);
+
+		return searchBuilder;
+    }
+
+    protected void applyOwnerFilter(T criteriaModel, QueryBuilder<M> searchBuilder) {
         List<QueryFilter> searchFilters = new ArrayList<QueryFilter>();
 
-        addOwnerFilter(searchFilters, criteriaModel.getOwner());
+        if (criteriaModel.getOwner() != null) {
+            searchFilters.add(new OwnerAndDownFilter(criteriaModel.getOwner()));
+        }
 
         for (QueryFilter filter : searchFilters) {
             filter.applyFilter(searchBuilder);
         }
-
-		return searchBuilder;
     }
 
     protected void addJoinTerms(T criteriaModel, List<JoinTerm> joinTerms) { }
@@ -167,47 +163,46 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
 	private void addSortTermsToBuilder(QueryBuilder<?> searchBuilder, T criteriaModel) {
         ColumnMappingView sortColumn = criteriaModel.getSortColumn();
         SortDirection sortDirection = criteriaModel.getSortDirection();
+
         if (sortColumn != null) {
-            if (sortColumn.getJoinExpression() == null) {
-                searchBuilder.getOrderArguments().add(new SortTerm(sortColumn.getSortExpression().replaceAll("\\{.*\\}", ""), sortDirection).toSortField());
-            } else {
-                String[] sortExpressions = sortColumn.getSortExpression().split(",");
-                String[] joinExpressions = sortColumn.getJoinExpression().split(",");
-
-                for (int i = 0; i < sortExpressions.length; i++) {
-                    String sortAlias = JoinTerm.DEFAULT_SORT_JOIN_ALIAS + i;
-
-                    String sortExpression = sortExpressions[i];
-                    String joinExpression = joinExpressions[i];
-
-                    // This is working around an issue caused when we upgraded hibernate versions. It requires us
-                    // to join on a column we want to sort by when we're looking at a property Y some entity X, when
-                    // X may be null (eg the name of an Event Book, event.book.name). If this join is omitted, events with a null event
-                    // book will be excluded from our results.
-                    SortTerm sortTerm = new SortTerm(sortAlias, sortDirection);
-                    sortTerm.setAlwaysDropAlias(true);
-
-                    if (sortExpression.startsWith(joinExpression)) {
-                        sortTerm.setFieldAfterAlias(sortExpression.substring(joinExpression.length() + 1));
-                    } else {
-                        sortTerm.setFieldAfterAlias(sortExpression.substring(sortExpression.lastIndexOf(".") + 1));
-                    }
-
-                    searchBuilder.getOrderArguments().add(sortTerm.toSortField());
-
-                }
-
-            }
+            addSortTerms(criteriaModel, searchBuilder, sortColumn, sortDirection);
         }
 
         searchBuilder.getOrderArguments().add(new SortTerm("id", sortDirection).toSortField());
     }
 
-	protected void addOwnerFilter(List<QueryFilter> searchFilters, BaseOrg owner) {
-		if (owner != null) {
-			searchFilters.add(new OwnerAndDownFilter(owner));
-		}
-	}
+    protected void addSortTerms(T criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
+        if (sortColumn.getJoinExpression() == null) {
+            searchBuilder.getOrderArguments().add(new SortTerm(sortColumn.getSortExpression().replaceAll("\\{.*\\}", ""), sortDirection).toSortField());
+        } else {
+            String[] sortExpressions = sortColumn.getSortExpression().split(",");
+            String[] joinExpressions = sortColumn.getJoinExpression().split(",");
+
+            for (int i = 0; i < sortExpressions.length; i++) {
+                String sortAlias = JoinTerm.DEFAULT_SORT_JOIN_ALIAS + i;
+
+                String sortExpression = sortExpressions[i];
+                String joinExpression = joinExpressions[i];
+
+                // This is working around an issue caused when we upgraded hibernate versions. It requires us
+                // to join on a column we want to sort by when we're looking at a property Y some entity X, when
+                // X may be null (eg the name of an Event Book, event.book.name). If this join is omitted, events with a null event
+                // book will be excluded from our results.
+                SortTerm sortTerm = new SortTerm(sortAlias, sortDirection);
+                sortTerm.setAlwaysDropAlias(true);
+
+                if (sortExpression.startsWith(joinExpression)) {
+                    sortTerm.setFieldAfterAlias(sortExpression.substring(joinExpression.length() + 1));
+                } else {
+                    sortTerm.setFieldAfterAlias(sortExpression.substring(sortExpression.lastIndexOf(".") + 1));
+                }
+
+                searchBuilder.getOrderArguments().add(sortTerm.toSortField());
+
+            }
+
+        }
+    }
 
     protected void addNullTerm(List<SearchTermDefiner> searchTerms, String field) {
         searchTerms.add(new NullTerm(field));
@@ -224,15 +219,10 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
     }
 
     protected void addWildcardOrStringTerm(List<SearchTermDefiner> terms, String field, String value) {
-        String valueString = StringUtils.clean(value);
+        SearchTermDefiner simpleOrWildcardTerm = SimpleOrWildcardTermFactory.createSimpleOrWildcardTerm(field, value, false);
 
-        if (valueString != null && !"*".equals(value)) {
-            if (isWildcard(valueString)) {
-                terms.add(new WildcardTerm(field, valueString));
-            } else {
-                addSimpleTerm(terms, field, valueString);
-            }
-
+        if (simpleOrWildcardTerm != null) {
+            terms.add(simpleOrWildcardTerm);
         }
     }
 
@@ -252,10 +242,6 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
 	protected void addRequiredLeftJoin(List<JoinTerm> joinTerms, String path, String alias) {
 		joinTerms.add(new JoinTerm(JoinTerm.JoinTermType.LEFT, path, alias, true));
 	}
-
-    protected boolean isWildcard(String value) {
-        return value.startsWith("*") || value.endsWith("*");
-    }
 
     protected PrimaryOrg getPrimaryOrg() {
 		return orgService.getPrimaryOrgForTenant(securityContext.getTenantSecurityFilter().getTenantId());

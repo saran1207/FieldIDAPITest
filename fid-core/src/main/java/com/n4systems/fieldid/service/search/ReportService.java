@@ -2,18 +2,20 @@ package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventState;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.JoinTerm;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
-import com.n4systems.util.persistence.search.terms.completedordue.AssetStatusTerm;
-import com.n4systems.util.persistence.search.terms.completedordue.AssignedUserTerm;
-import com.n4systems.util.persistence.search.terms.completedordue.CompletedOrDueDateRange;
+import com.n4systems.util.persistence.search.terms.completedordue.*;
 import org.apache.commons.lang.time.DateUtils;
 
 import java.util.Date;
@@ -88,8 +90,10 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
             addAssignedUserTerm(assignedUserId, criteriaModel, searchTerms);
         }
 
-        addWildcardOrStringTerm(searchTerms, "advancedLocation.freeformLocation", criteriaModel.getLocation().getFreeformLocation());
-        addPredefinedLocationTerm(searchTerms, criteriaModel);
+        if (!criteriaModel.getLocation().isBlank()) {
+            searchTerms.add(new LocationTerm(criteriaModel.getEventState(), getId(criteriaModel.getLocation().getPredefinedLocation()), criteriaModel.getLocation().getFreeformLocation()));
+        }
+
     }
 
     private void addAssignedUserTerm(Long assignedUserId, EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
@@ -100,23 +104,110 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
         searchTerms.add(new AssetStatusTerm(criteriaModel.getEventState(), criteriaModel.getAssetStatus()));
     }
 
-    private void addPredefinedLocationTerm(List<SearchTermDefiner> search, EventReportCriteria criteriaModel) {
-        Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
-        if (predefLocationId != null) {
-			search.add(new PredefinedLocationSearchTerm("preLocSearchId", predefLocationId));
-		}
-	}
-
     @Override
     protected void addJoinTerms(EventReportCriteria criteriaModel, List<JoinTerm> joinTerms) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
-        if (predefLocationId != null) {
-			addRequiredLeftJoin(joinTerms, "advancedLocation.predefinedLocation.searchIds", "preLocSearchId");
+
+        EventState status = criteriaModel.getEventState();
+
+        if (predefLocationId != null && status.includesIncomplete()) {
+            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "asset.advancedLocation.predefinedLocation.searchIds", "assetPreLocSearchId", true);
+            joinTerms.add(joinTerm);
 		}
+
+        if (predefLocationId != null && status.includesComplete()) {
+            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "event.advancedLocation.predefinedLocation.searchIds", "eventPreLocSearchId", true);
+            joinTerms.add(joinTerm);
+        }
+
+        if (criteriaModel.sortingByDivision()) {
+            addOrgJoinTerms(status, "divisionOrg", "assetDivisionOrg", "eventDivisionOrg", joinTerms);
+        }
+
+        if (criteriaModel.sortingByOrganization()) {
+            addOrgJoinTerms(status, "secondaryOrg", "assetSecondaryOrg", "eventSecondaryOrg", joinTerms);
+        }
+
+        if (criteriaModel.sortingByCustomer()) {
+            addOrgJoinTerms(status, "customerOrg", "assetCustomerOrg", "eventCustomerOrg", joinTerms);
+        }
+    }
+
+    private void addOrgJoinTerms(EventState status, String basePath, String assetJoinAlias, String eventJoinAlias, List<JoinTerm> joinTerms) {
+        if (status.includesIncomplete()) {
+            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "asset.owner." + basePath, assetJoinAlias, true);
+            joinTerms.add(joinTerm);
+        }
+
+        if (status.includesComplete()) {
+            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "event.owner." + basePath, eventJoinAlias, true);
+            joinTerms.add(joinTerm);
+        }
     }
 
     private Date nextDay(Date date) {
         return date == null ? null : DateUtils.addDays(date, 1);
+    }
+
+    @Override
+    protected void addSortTerms(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
+        // Reporting has a few special case sorts that are more complicated due to displaying two types of data. ie sorting on two columns.
+        // To prevent weird mixing, when one of these special cases occurs, we always sort by state first
+        if (criteriaModel.sortingByLocation()) {
+            addStatusSortIfNecessary(criteriaModel, searchBuilder, sortDirection);
+
+            if (criteriaModel.getEventState().includesComplete()) {
+                SortTerm sortTerm = new SortTerm("outer_event.advancedLocation.predefinedLocation.id", sortDirection);
+                sortTerm.setAlwaysDropAlias(true);
+
+                SortTerm sortTerm2 = new SortTerm("outer_event.advancedLocation.freeformLocation", sortDirection);
+                sortTerm2.setAlwaysDropAlias(true);
+
+                searchBuilder.getOrderArguments().add(sortTerm.toSortField());
+                searchBuilder.getOrderArguments().add(sortTerm2.toSortField());
+            }
+
+            if (criteriaModel.getEventState().includesIncomplete()) {
+                searchBuilder.addOrder("asset.advancedLocation.predefinedLocation.id", sortDirection.isAscending());
+                searchBuilder.addOrder("asset.advancedLocation.freeformLocation", sortDirection.isAscending());
+            }
+
+        } else if (criteriaModel.sortingByDivision()) {
+            addOrgSort(criteriaModel, searchBuilder, sortDirection, "assetDivisionOrg", "eventDivisionOrg");
+        } else if (criteriaModel.sortingByOrganization()) {
+            addOrgSort(criteriaModel, searchBuilder, sortDirection, "assetSecondaryOrg", "eventSecondaryOrg");
+        } else if (criteriaModel.sortingByCustomer()) {
+            addOrgSort(criteriaModel, searchBuilder, sortDirection, "assetCustomerOrg", "eventCustomerOrg");
+        } else {
+            // This is a standard sort
+            super.addSortTerms(criteriaModel, searchBuilder, sortColumn, sortDirection);
+        }
+    }
+
+    private void addOrgSort(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, SortDirection sortDirection, String assetOrgAlias, String eventOrgAlias) {
+        addStatusSortIfNecessary(criteriaModel, searchBuilder, sortDirection);
+
+        if (criteriaModel.getEventState().includesComplete()) {
+            SortTerm sortTerm = new SortTerm(eventOrgAlias+".name", sortDirection);
+            sortTerm.setAlwaysDropAlias(true);
+            searchBuilder.getOrderArguments().add(sortTerm.toSortField());
+        }
+
+        if (criteriaModel.getEventState().includesIncomplete()) {
+            SortTerm sortTerm = new SortTerm(assetOrgAlias+".name", sortDirection);
+            sortTerm.setAlwaysDropAlias(true);
+            searchBuilder.getOrderArguments().add(sortTerm.toSortField());
+        }
+
+    }
+
+    // Because the column we are sorting by is actually two columns (one for completed events and one for incomplete events)
+    // we decided to sort by status first so there's less unexpected weirdness mixing complete/incomplete.
+    private void addStatusSortIfNecessary(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, SortDirection sortDirection) {
+        if (criteriaModel.getEventState() == EventState.ALL) {
+            SortTerm sortTerm = new SortTerm("status", sortDirection);
+            searchBuilder.getOrderArguments().add(sortTerm.toSortField());
+        }
     }
 
 }

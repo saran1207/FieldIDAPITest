@@ -18,7 +18,7 @@ public class SecurityDefiner implements Serializable {
 	public static final String DEFAULT_STATE_PATH = "state";
 
 	private final String tenantPath;
-	private final String ownerPath;
+	private String ownerPath;
 	private final String userPath;
 	private final String statePath;
 	
@@ -121,4 +121,8 @@ public class SecurityDefiner implements Serializable {
 	public String getStatePath() {
 		return statePath;
 	}
+
+    public void prependToOwnerPath(String prependString) {
+        ownerPath = prependString + ownerPath;
+    }
 }

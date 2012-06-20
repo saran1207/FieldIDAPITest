@@ -17,6 +17,11 @@ import java.util.List;
 @Table(name="saved_reports")
 public class EventReportCriteria extends SearchCriteria {
 
+    private static final String EVENT_LOCATION_COLUMN = "event_search_location";
+    private static final String EVENT_DIVISION_COLUMN = "event_search_division";
+    private static final String EVENT_CUSTOMER_COLUMN = "event_search_customer";
+    private static final String EVENT_ORGANIZATION_COLUMN = "event_search_organization";
+
     private Location location = new Location();
 
     @ManyToOne
@@ -281,6 +286,27 @@ public class EventReportCriteria extends SearchCriteria {
             return false;
         }
 
-        return assetStatus != null || assignedTo != null;
+        return assetStatus != null || assignedTo != null || !location.isBlank() || sortingByLocation();
     }
+
+    public boolean sortingByLocation() {
+        ColumnMappingView sortColumn = getSortColumn();
+        return sortColumn != null && EVENT_LOCATION_COLUMN.equals(sortColumn.getId());
+    }
+
+    public boolean sortingByDivision() {
+        ColumnMappingView sortColumn = getSortColumn();
+        return sortColumn != null && EVENT_DIVISION_COLUMN.equals(sortColumn.getId());
+    }
+
+    public boolean sortingByCustomer() {
+        ColumnMappingView sortColumn = getSortColumn();
+        return sortColumn != null && EVENT_CUSTOMER_COLUMN.equals(sortColumn.getId());
+    }
+
+    public boolean sortingByOrganization() {
+        ColumnMappingView sortColumn = getSortColumn();
+        return sortColumn != null && EVENT_ORGANIZATION_COLUMN.equals(sortColumn.getId());
+    }
+
 }

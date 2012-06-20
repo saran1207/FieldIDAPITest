@@ -1,10 +1,12 @@
 package com.n4systems.model.security;
 
-import javax.persistence.Query;
-
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClause;
+import com.n4systems.util.persistence.WhereParameter;
+
+import javax.persistence.Query;
 
 public class OwnerAndDownFilter extends AbstractSecurityFilter {
 
@@ -27,15 +29,19 @@ public class OwnerAndDownFilter extends AbstractSecurityFilter {
 		if (filterOrg == null) {
 			return;
 		}
-		
-		if (filterOrg.isPrimary()) {
-			addNullFilterParameter(builder, prepareFullOwnerPathWithFilterPath(definer, SecondaryOrg.SECONDARY_ID_FILTER_PATH));
-		} else {
-			addFilterParameter(builder, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
-		}
+
+        builder.addWhere(createAppropriateParameter(definer));
 	}
 
-	@Override
+    public WhereParameter<?> createAppropriateParameter(SecurityDefiner definer) {
+        if (filterOrg.isPrimary()) {
+            return createFilterParameter(prepareFullOwnerPathWithFilterPath(definer, SecondaryOrg.SECONDARY_ID_FILTER_PATH), null, WhereParameter.Comparator.EQ_OR_NULL);
+        } else {
+            return createFilterParameter(prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
+        }
+    }
+
+    @Override
 	protected void applyParameters(Query query, SecurityDefiner definer) throws SecurityException {
 		throw new SecurityException("Not Implemented");
 	}

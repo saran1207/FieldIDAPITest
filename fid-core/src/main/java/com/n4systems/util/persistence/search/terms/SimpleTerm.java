@@ -5,7 +5,8 @@ import com.n4systems.util.persistence.WhereParameter;
 
 public class SimpleTerm<T> extends SingleTermDefiner {
 	private static final long serialVersionUID = 1L;
-	
+
+    protected boolean dropAlias = false;
 	private String field;
 	private T value;
     private WhereParameter.Comparator comparator;
@@ -23,7 +24,7 @@ public class SimpleTerm<T> extends SingleTermDefiner {
 	}
 	
 	protected WhereParameter<T> createWhere() {
-		WhereParameter<T> param = new WhereParameter<T>(comparator, field, value);
+		WhereParameter<T> param = new WhereParameter<T>(comparator, field, value, dropAlias);
 		
 		// String fields are automatically ignore case & trim.
 		if (value instanceof String) {
@@ -53,4 +54,13 @@ public class SimpleTerm<T> extends SingleTermDefiner {
 	public void setValue(T value) {
 		this.value = value;
 	}
+
+    public boolean isDropAlias() {
+        return dropAlias;
+    }
+
+    public void setDropAlias(boolean dropAlias) {
+        this.dropAlias = dropAlias;
+    }
+
 }

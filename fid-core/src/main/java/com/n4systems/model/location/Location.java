@@ -97,4 +97,9 @@ public class Location implements Serializable {
         fullName += freeformLocation;
         return fullName;
 	}
+
+    public boolean isBlank() {
+        return !hasPredefinedLocation() && !hasFreeform();
+    }
+
 }

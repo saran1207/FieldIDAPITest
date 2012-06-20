@@ -64,7 +64,11 @@ public class WhereParameter<T> implements WhereClause<T> {
 		this(comparator, name, param, null, null, false);
 	}
 
-	public WhereParameter(Comparator comparator, String param, T value) {
+    public WhereParameter(Comparator comparator, String param, T value) {
+        this(comparator, param, value, false);
+    }
+
+    public WhereParameter(Comparator comparator, String param, T value, boolean dropAlias) {
 		/*
 		 * note that .'s are replaced with _'s for the parameter name. This is
 		 * to handle cases for sub, object lookups (eg/ book.id ) since the
@@ -74,7 +78,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 		 * eg/ .... WHERE some.field = :some.field ... is corrected to WHERE
 		 * some.field = :some_field
 		 */
-		this(comparator, param.replace('.', '_'), param, value, null, false);
+		this(comparator, param.replace('.', '_'), param, value, null, dropAlias);
 	}
 
 	public WhereParameter(Comparator comparator, String name, String param, T value) {
@@ -288,4 +292,5 @@ public class WhereParameter<T> implements WhereClause<T> {
     public String toString() {
         return name + " " + comparator.toString() + " " + prepareStringValue();
     }
+
 }

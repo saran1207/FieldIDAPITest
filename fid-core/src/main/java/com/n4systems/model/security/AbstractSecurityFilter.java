@@ -10,7 +10,7 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 abstract public class AbstractSecurityFilter implements SecurityFilter {
 	private static final String FIELD_PREFIX = "filter_";
 
-	protected SecurityDefiner getSecurityDefinerFromClass(Class<?> clazz) {
+	public static SecurityDefiner getSecurityDefinerFromClass(Class<?> clazz) {
 		SecurityDefinerReflector definerReflector = new SecurityDefinerReflector(clazz);
 		return definerReflector.getDefiner();
 	}
