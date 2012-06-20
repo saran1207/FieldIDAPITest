@@ -12,7 +12,7 @@
 		});
 	
 	</@n4.includeScript>
-	
+
 	<@n4.includeScript src="schedulePickerDates"/>
 </head>
 
@@ -43,10 +43,12 @@
 					<@s.select name="project" list="jobs" listKey="id" listValue="name" emptyOption="true"/>
 				</div>
 			</#if>
-			
-			<div class="infoSet">
-				<label class="label"><@s.text name="label.when_is_it_due"/></label>
-				<@s.textfield id="nextDate" name="nextDate" cssClass="datepicker" />
+
+            <div class="infoSet">
+                 <label class="label"><@s.text name="label.when_is_it_due"/></label>
+				<@s.textfield id="nextDate" name="nextDate" cssClass="datetimepicker" />
+                <input type="checkbox" class="all-day-checkbox" onclick="updateDateTimePicker(this,'#nextDate');">
+                <label class="all-day-label">All Day</label>
 				<span class="dateQuickLinks">
 					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(new Date(), '${sessionUser.jqueryDateFormat}');">Today</a> |
 					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.tomorrow"/></a> |

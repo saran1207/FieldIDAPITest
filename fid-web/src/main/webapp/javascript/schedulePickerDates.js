@@ -10,3 +10,12 @@ function addMonths(date, months) {
 function addYears(date, years) {
 	return new Date( date.setFullYear(date.getFullYear() + years) );
 }
+
+function updateDateTimePicker(source,target) {
+	// source (All Day checkbox) is checked, turn off time picking ability.
+	if (source.checked) {
+		jQuery.datepicker._disableTimepickerDatepicker(jQuery(target)[0]);
+	} else {
+		jQuery.datepicker._enableTimepickerDatepicker(jQuery(target)[0]);
+	}
+}

@@ -13,3 +13,13 @@
 .initialMessage {
 	clear: both;
 }
+
+.all-day-checkbox {
+    margin-left:-160px;
+    margin-top:8px;
+}
+
+.all-day-label {
+    margin-left:-148px;
+    width:40px;
+}
