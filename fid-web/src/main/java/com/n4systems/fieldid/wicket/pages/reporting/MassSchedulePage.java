@@ -203,7 +203,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
                 item.add(deleteImage);
                 item.add(new Label("eventTypeName", new PropertyModel<String>(item.getModel(), "eventType.name")));
-                item.add(new DateLabel("scheduledDate", new PropertyModel<Date>(item.getModel(), "nextStandardDate")));
+                item.add(new DateLabel("scheduledDate", new PropertyModel<Date>(item.getModel(), "nextStandardDate")).withTimeAllowed());
 
                 WebMarkupContainer jobDescriptionContainer = new WebMarkupContainer("jobDescriptionContainer");
                 jobDescriptionContainer.setVisible(item.getModelObject().getProject() != null);

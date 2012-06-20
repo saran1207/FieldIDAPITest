@@ -14,10 +14,16 @@ import java.util.Date;
 public class DateLabel extends Label {
 
     private IModel<Date> model;
+    private boolean allowTime = false;
 
     public DateLabel(String id, IModel<Date> model) {
         super(id, model);
         this.model = model;
+    }
+
+    public DateLabel withTimeAllowed() {
+        allowTime = true;
+        return this;
     }
 
     @Override
@@ -26,7 +32,7 @@ public class DateLabel extends Label {
         if (date==null) {
             return;
         }
-        DateFormat df = new LocalDate(date).toDate().equals(date) ?
+        DateFormat df = !allowTime || new LocalDate(date).toDate().equals(date) ?
                 new SimpleDateFormat(FieldIDSession.get().getSessionUser().getDateFormat()) :
                 new SimpleDateFormat(FieldIDSession.get().getSessionUser().getDateTimeFormat());
         String dateString = df.format(date);
