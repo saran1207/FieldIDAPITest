@@ -17,10 +17,15 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converter.DateConverter;
 import rfid.web.helper.SessionUser;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 @SuppressWarnings("serial")
@@ -47,10 +52,19 @@ public class DateTimePicker extends Panel {
 		setOutputMarkupPlaceholderTag(true);
 
         add(dateTextField = new DateTextField("dateField", dateModel) {
-            @Override public String getTextFormat() {
-                return getDateFormat();
+            // need to make the format dynamic since we can toggle the "includeTime" attribute after component created.
+            @Override public <C> IConverter<C> getConverter(Class<C> type) {
+                return (IConverter<C>)new DateConverter() {
+                    @Override public DateFormat getDateFormat(Locale locale) {
+                        if (locale == null) {
+                            locale = Locale.getDefault();
+                        }
+                        return new SimpleDateFormat(DateTimePicker.this.getDateFormat(), locale);
+                    }
+                };
             }
-        });
+
+        }) ;
         dateTextField.setOutputMarkupId(true);
 
         add(allDayCheckbox = new AjaxCheckBox("allDay", new PropertyModel<Boolean>(this,"allDay")) {
@@ -80,7 +94,7 @@ public class DateTimePicker extends Panel {
 
     private String getDateFormat() {
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
-        return  includeTime ? sessionUser.getDateTimeFormat() : sessionUser.getDateFormat();
+        return  !allDay ? sessionUser.getDateTimeFormat() : sessionUser.getDateFormat();
     }
 
     protected String getClassModel() {
