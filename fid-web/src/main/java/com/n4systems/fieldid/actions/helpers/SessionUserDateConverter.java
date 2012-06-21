@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.util.Date;
-import java.util.TimeZone;
-
+import com.n4systems.util.DateHelper;
 import rfid.web.helper.SessionUser;
 
-import com.n4systems.util.DateHelper;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class SessionUserDateConverter implements UserDateConverter {
 
@@ -28,17 +27,27 @@ public class SessionUserDateConverter implements UserDateConverter {
 		Date day = convertDate(date);
 		return (day != null) ? DateHelper.getEndOfDay(day) : null;
 	}
-	
-	public String convertDateTime(Date date) {
-		return DateHelper.date2String(getDateTimeFormat(), date, getTimeZone());
-	}
-	
-	public Date convertDateTime(String date) {
-		return DateHelper.string2DateTime(getDateTimeFormat(), date, getTimeZone());
-	}
-	
-	
-	public boolean isValidDate(String date, boolean usingTime) {
+
+    public String convertDateTime(Date date) {
+        return DateHelper.date2String(getDateTimeFormat(), date, getTimeZone());
+    }
+
+    public Date convertDateTime(String date) {
+        return DateHelper.string2DateTime(getDateTimeFormat(), date, getTimeZone());
+    }
+
+    public String convertDateTimeWithNoTimeZone(Date date) {
+        return DateHelper.date2String(getDateTimeFormat(), date, getTimeZone());
+    }
+
+    public Date convertDateTimeWithNoTimeZone(String date) {
+        return DateHelper.string2DateTime(getDateTimeFormat(), date, null);
+    }
+
+
+
+
+    public boolean isValidDate(String date, boolean usingTime) {
 		// blank dates are ok
 		if(date == null || date.trim().length() == 0) {
 			return true;

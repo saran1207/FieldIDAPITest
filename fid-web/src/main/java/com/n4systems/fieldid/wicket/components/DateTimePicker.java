@@ -38,7 +38,7 @@ public class DateTimePicker extends Panel {
     private DateTextField dateTextField;
     private CheckBox allDayCheckbox;
     private boolean includeTime;
-    private boolean allDay = true;
+    private boolean allDay = false;
     private IModel<Date> model;
 
     public DateTimePicker(String id, IModel<Date> dateModel) {
@@ -99,7 +99,7 @@ public class DateTimePicker extends Panel {
 
     private String getDateFormat() {
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
-        return  !allDay ? sessionUser.getDateTimeFormat() : sessionUser.getDateFormat();
+        return  includeTime && !allDay ? sessionUser.getDateTimeFormat() : sessionUser.getDateFormat();
     }
 
     protected String getClassModel() {
@@ -145,15 +145,19 @@ public class DateTimePicker extends Panel {
         StringBuffer jsBuffer = new StringBuffer();
 
         String options = new Gson().toJson(new DateTimePickerOptions());
-        jsBuffer.append("jQuery('#"+dateTextField.getMarkupId()+"').datetimepicker(" + options + ");");
+        jsBuffer.append("jQuery('#"+dateTextField.getMarkupId()+"')."+getJSMethod()+"(" + options + ");");
 
-        if (allDay) {
+        if (allDay && includeTime) {
             jsBuffer.append(String.format(UPDATE_JS,
                     "_disableTimepickerDatepicker", dateTextField.getMarkupId()));
             jsBuffer.append(String.format(CLEAR_DATE_JS, dateTextField.getMarkupId(), getModelDateForJS()));
         }
 
         return jsBuffer.toString();
+    }
+
+    private String getJSMethod() {
+        return includeTime ? "datetimepicker" : "datepicker";
     }
 
     private String getModelDateForJS() {

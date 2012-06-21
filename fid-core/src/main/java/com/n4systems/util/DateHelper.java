@@ -87,7 +87,9 @@ public class DateHelper {
 
 	public static Date string2DateTime(String format, String dateStr, TimeZone timeZone) {
 		SimpleDateFormat formatter = new SimpleDateFormat(format);
-		formatter.setTimeZone(timeZone);
+        if (timeZone!=null) {
+		    formatter.setTimeZone(timeZone);
+        }
 		String strDateString = dateStr;
 
 		try {

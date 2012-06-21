@@ -21,7 +21,7 @@ public class WebEventScheduleToScheduleConverter {
 	}
 	
 	public EventSchedule convert(WebEventSchedule webSchedule, Asset asset) {
-		Date scheduledDate = dateConverter.convertDateTime(webSchedule.getDate());
+		Date scheduledDate = dateConverter.convertDateTimeWithNoTimeZone(webSchedule.getDate());
         if (scheduledDate==null) {
             // NOTE : try to parse a date without hour/mins.  not all schedules require it.
             // because scheduled dates are currently the only one with this "flexibility" the code is here but in the
