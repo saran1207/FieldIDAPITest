@@ -145,6 +145,11 @@ public class DateTimePicker extends Panel {
         String options = new Gson().toJson(new DateTimePickerOptions());
         jsBuffer.append("jQuery('#"+dateTextField.getMarkupId()+"').datetimepicker(" + options + ");");
 
+        if (!includeTime) {
+            jsBuffer.append(String.format(UPDATE_JS,
+                "_disableTimepickerDatepicker",dateTextField.getMarkupId()));
+        }
+
         return jsBuffer.toString();
     }
 
