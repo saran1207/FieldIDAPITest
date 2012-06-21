@@ -2095,6 +2095,7 @@ div.unitOfMeasureName {
 .scheduleDate{
 	float:left;
 	margin: 5px 0 0 15px;
+    width:66px;
 }
 
 .assignToMeLink{

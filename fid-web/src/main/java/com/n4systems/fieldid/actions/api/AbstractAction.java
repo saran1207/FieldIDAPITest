@@ -27,6 +27,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.utils.PlainDate;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
@@ -266,6 +267,12 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
     public String formatDateTime(Date date) {
         return formatAnyDate(date, true, true);
+    }
+
+    public String formatDateWithTime(Date date, boolean convertTimeZone) {
+        // only show time if non-midnight.
+        boolean isMidnight = new PlainDate(date).equals(date);
+        return formatAnyDate(date, convertTimeZone, !isMidnight);
     }
 
     public String formatDate(Date date, boolean convertTimeZone) {

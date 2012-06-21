@@ -20,4 +20,4 @@
 	</div>
 </#if>
 
-<div class="scheduleDate">${action.formatDate(eventSchedule.nextDate, false)}</div>
+<div class="scheduleDate">${action.formatDateWithTime(eventSchedule.nextDate, false)}</div>
