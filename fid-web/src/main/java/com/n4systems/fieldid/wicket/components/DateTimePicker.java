@@ -19,6 +19,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DateConverter;
+import org.joda.time.LocalDate;
 import rfid.web.helper.SessionUser;
 
 import java.io.Serializable;
@@ -31,11 +32,13 @@ import java.util.Locale;
 public class DateTimePicker extends Panel {
 
     private static final String UPDATE_JS = "$.datepicker.%s($('#%s')[0]);";
+    private static final String CLEAR_DATE_JS = "$('#%s').datepicker('setDate',%s);";
+    private static final String JS_DATE = "new Date(%d,%d,%d)";
 
     private DateTextField dateTextField;
     private CheckBox allDayCheckbox;
     private boolean includeTime;
-    private boolean allDay;
+    private boolean allDay = true;
     private IModel<Date> model;
 
     public DateTimePicker(String id, IModel<Date> dateModel) {
@@ -46,7 +49,6 @@ public class DateTimePicker extends Panel {
         super(id);
 
         this.includeTime = includeTime;
-        this.allDay = false;
         this.model = dateModel;
 
         setOutputMarkupId(true);
@@ -145,12 +147,23 @@ public class DateTimePicker extends Panel {
         String options = new Gson().toJson(new DateTimePickerOptions());
         jsBuffer.append("jQuery('#"+dateTextField.getMarkupId()+"').datetimepicker(" + options + ");");
 
-        if (!includeTime) {
+        if (allDay) {
             jsBuffer.append(String.format(UPDATE_JS,
-                "_disableTimepickerDatepicker",dateTextField.getMarkupId()));
+                    "_disableTimepickerDatepicker", dateTextField.getMarkupId()));
+            jsBuffer.append(String.format(CLEAR_DATE_JS, dateTextField.getMarkupId(), getModelDateForJS()));
         }
 
         return jsBuffer.toString();
+    }
+
+    private String getModelDateForJS() {
+        Date date = dateTextField.getModelObject();
+        if (date==null) {
+            return "null";
+        } else {
+            LocalDate ld = new LocalDate(date);
+            return String.format(JS_DATE,ld.getYear(), ld.getMonthOfYear()-1, ld.getDayOfMonth());
+        }
     }
 
     public DateTextField getDateTextField() {
@@ -177,6 +190,9 @@ public class DateTimePicker extends Panel {
     public boolean isAllDay() {
         return allDay;
     }
+
+
+
 
     // JSON object for javascript widget.
     class DateTimePickerOptions implements Serializable {
