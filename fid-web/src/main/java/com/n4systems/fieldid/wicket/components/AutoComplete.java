@@ -356,7 +356,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         } else if (valueId == null) {
             setConvertedInput(getValueOnSearchFail(input));
 
-        } else if (object == null || input.compareTo(renderer.getDisplayValue(object).toString()) != 0) {
+        } else if (object == null || (input!=null && input.compareTo(renderer.getDisplayValue(object).toString()) != 0)) {
             final List<T> choices = getChoices();
             boolean found = false;
             for (int index = 0; index < choices.size(); index++) {
