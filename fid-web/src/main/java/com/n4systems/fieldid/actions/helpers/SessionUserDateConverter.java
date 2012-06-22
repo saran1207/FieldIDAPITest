@@ -18,12 +18,21 @@ public class SessionUserDateConverter implements UserDateConverter {
 	public String convertDate(Date date) {
 		return DateHelper.date2String(getDateFormat(), date);
 	}
-	
-	public Date convertDate(String date) {
-		return DateHelper.string2Date(getDateFormat(), date);
-	}
-	
-	public Date convertToEndOfDay(String date) {
+
+    public Date convertDate(String date) {
+        return DateHelper.string2Date(getDateFormat(), date);
+    }
+
+    public Date convertDateWithOptionalTime(String date) {
+        Date d = convertDateTime(date);  // it *might* have the time, but not required.  if not, just try to parse date stuff.
+        if (d==null) {
+            d = convertDate(date);
+        }
+        return d;
+    }
+
+
+    public Date convertToEndOfDay(String date) {
 		Date day = convertDate(date);
 		return (day != null) ? DateHelper.getEndOfDay(day) : null;
 	}

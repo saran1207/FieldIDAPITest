@@ -1,32 +1,26 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.services.EventScheduleServiceImpl;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 public class EventScheduleCrud extends AbstractCrud {
@@ -104,7 +98,7 @@ public class EventScheduleCrud extends AbstractCrud {
 		try {
 			Project tmpProject = eventSchedule.getProject();
 			eventSchedule = new EventSchedule(asset, eventType);
-			eventSchedule.setNextDate(convertDate(nextDate));
+			eventSchedule.setNextDate(convertDateWithOptionalTime(nextDate));
 			eventSchedule.setProject(tmpProject);
 			
 			uniqueID = new EventScheduleServiceImpl(persistenceManager).createSchedule(eventSchedule);

@@ -236,14 +236,17 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public AbstractAction getAction() {
 		return this;
 	}
-	
-	
-	
-	public String convertDate(Date date) {
-		return getSessionUser().createUserDateConverter().convertDate(date);
-	}
-	
-	public Date convertDate(String date) {
+
+    public Date convertDateWithOptionalTime(String date) {
+        return getSessionUser().createUserDateConverter().convertDateWithOptionalTime(date);
+    }
+
+    public String convertDate(Date date) {
+        return getSessionUser().createUserDateConverter().convertDate(date);
+    }
+
+
+    public Date convertDate(String date) {
 		return getSessionUser().createUserDateConverter().convertDate(date);
 	}
 	

@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventState;
@@ -15,7 +14,10 @@ import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
-import com.n4systems.util.persistence.search.terms.completedordue.*;
+import com.n4systems.util.persistence.search.terms.completedordue.AssetStatusTerm;
+import com.n4systems.util.persistence.search.terms.completedordue.AssignedUserTerm;
+import com.n4systems.util.persistence.search.terms.completedordue.CompletedOrDueDateRange;
+import com.n4systems.util.persistence.search.terms.completedordue.LocationTerm;
 import org.apache.commons.lang.time.DateUtils;
 
 import java.util.Date;
@@ -65,9 +67,9 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
             addNullTerm(searchTerms, "nextDate");
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
             addNotNullTerm(searchTerms,  "nextDate");
-        } else if (IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange()) || criteriaModel.getEventState() == EventState.INCOMPLETE) {
+        } else if (criteriaModel.getEventState() == EventState.INCOMPLETE || IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange())) {
             if (criteriaModel.getDueDateRange() != null && !criteriaModel.getDueDateRange().isEmptyCustom()) {
-                addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), criteriaModel.getDueDateRange().calculateToDate());
+                addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), nextDay(criteriaModel.getDueDateRange().calculateToDate()));
             }
         }
 
