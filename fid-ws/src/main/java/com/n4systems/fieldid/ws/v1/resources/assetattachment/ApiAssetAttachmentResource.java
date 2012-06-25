@@ -45,8 +45,13 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 			throw new NotFoundException("Attachment File", attachmentId);
 		}
 
+        // TODO: Why is MimetypesFileTypeMap ignoring the locations it's supposed to look? META-INF/mime.types exists,
+        // but entries are not being respected.. Remove these lines when we get that working.
         MimetypesFileTypeMap mimetypesFileTypeMap = new MimetypesFileTypeMap();
         mimetypesFileTypeMap.addMimeTypes("application/pdf       pdf PDF");
+        mimetypesFileTypeMap.addMimeTypes("application/msword   doc DOC");
+        mimetypesFileTypeMap.addMimeTypes("image/png   png PNG");
+        mimetypesFileTypeMap.addMimeTypes("application/vnd.ms-excel   xls XLS");
 
         String mediaType = mimetypesFileTypeMap.getContentType(attachmentFile);
 
