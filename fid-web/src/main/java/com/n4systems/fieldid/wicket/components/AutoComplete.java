@@ -346,6 +346,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         String input = autocompleteField.getConvertedInput();
         final T object = this.getModelObject();
         final IChoiceRenderer<? super T> renderer = getChoiceRenderer();
+        final String selectedValueId =  renderer.getIdValue(object,0);
         
         if (NOT_ENTERED.equals(valueId))
             valueId = null;
@@ -356,13 +357,13 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         } else if (valueId == null) {
             setConvertedInput(getValueOnSearchFail(input));
 
-        } else if (object == null || (input!=null && input.compareTo(renderer.getDisplayValue(object).toString()) != 0)) {
+        } else if (object == null || (selectedValueId!=null && !selectedValueId.equals(valueId))) {
             final List<T> choices = getChoices();
             boolean found = false;
             for (int index = 0; index < choices.size(); index++) {
                 // Get next choice
                 final T choice = choices.get(index);
-                final String idValue = renderer.getIdValue(choice, index + 1);
+                final String idValue = renderer.getIdValue(choice, index);
                 if (idValue.equals(valueId)) {
                     setConvertedInput(choice);
                     found = true;
