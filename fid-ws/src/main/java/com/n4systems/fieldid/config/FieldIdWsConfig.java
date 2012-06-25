@@ -17,6 +17,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentR
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
+import com.n4systems.fieldid.ws.v1.resources.eventstatus.ApiEventStatusResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.hello.ApiHelloResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
@@ -62,6 +63,11 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiAssetStatusResource apiAssetStatusResource() {
 		return new ApiAssetStatusResource();
+	}
+	
+	@Bean
+	public ApiEventStatusResource apiEventStatusResource() {
+		return new ApiEventStatusResource();
 	}
 
 	@Bean

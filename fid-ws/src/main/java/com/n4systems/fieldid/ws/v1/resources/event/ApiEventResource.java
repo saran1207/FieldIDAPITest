@@ -33,6 +33,7 @@ import com.n4systems.model.Deficiency;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventForm;
+import com.n4systems.model.EventStatus;
 import com.n4systems.model.EventType;
 import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.Observation;
@@ -164,7 +165,11 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		
 		if (apiEvent.getAssetStatusId() != null) {
 			event.setAssetStatus(persistenceService.find(AssetStatus.class, apiEvent.getAssetStatusId()));
-		}		
+		}
+		
+		if(apiEvent.getEventStatusId() != null) {
+			event.setEventStatus(persistenceService.find(EventStatus.class, apiEvent.getEventStatusId()));
+		}
 		
 		if (apiEvent.getForm() != null) {
 			EventForm form = persistenceService.find(EventForm.class, apiEvent.getForm().getFormId());

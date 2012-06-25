@@ -12,6 +12,7 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private String assetId;
 	private Date date;
 	private String status;
+	private Long eventStatusId;
 	private Long assignedUserId;
 	private Long performedById;
 	private Long modifiedById;
@@ -187,5 +188,13 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 
 	public void setSubEvents(List<ApiEvent> subEvents) {
 		this.subEvents = subEvents;
-	}	
+	}
+	
+	public Long getEventStatusId() {
+		return eventStatusId;
+	}
+
+	public void setEventStatusId(Long eventStatusId) {
+		this.eventStatusId = eventStatusId;
+	}
 }
