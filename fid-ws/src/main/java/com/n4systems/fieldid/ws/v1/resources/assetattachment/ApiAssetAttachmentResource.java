@@ -51,7 +51,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		
 		Response response = Response
 				.ok(attachmentFile, mediaType)
-				.header("Content-Disposition", "attachment; filename=\"" + attachment.getFileName() + "\"")
+				//.header("Content-Disposition", "attachment; filename=\"" + attachment.getFileName() + "\"")
 				.build();
 		return response;
 	}	
