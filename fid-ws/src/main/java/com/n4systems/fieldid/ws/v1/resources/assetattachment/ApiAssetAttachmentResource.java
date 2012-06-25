@@ -1,9 +1,15 @@
 package com.n4systems.fieldid.ws.v1.resources.assetattachment;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
+import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.model.Asset;
+import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.ws.rs.Consumes;
@@ -12,18 +18,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
-import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.model.Asset;
-import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.reporting.PathHandler;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("assetAttachment")
 public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, AssetAttachment> {
@@ -46,9 +44,12 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		if (!attachmentFile.exists()) {
 			throw new NotFoundException("Attachment File", attachmentId);
 		}
-		
-		String mediaType = new MimetypesFileTypeMap().getContentType(attachmentFile);
-		
+
+        MimetypesFileTypeMap mimetypesFileTypeMap = new MimetypesFileTypeMap();
+        mimetypesFileTypeMap.addMimeTypes("application/pdf       pdf PDF");
+
+        String mediaType = mimetypesFileTypeMap.getContentType(attachmentFile);
+
 		Response response = Response
 				.ok(attachmentFile, mediaType)
 				//.header("Content-Disposition", "attachment; filename=\"" + attachment.getFileName() + "\"")
