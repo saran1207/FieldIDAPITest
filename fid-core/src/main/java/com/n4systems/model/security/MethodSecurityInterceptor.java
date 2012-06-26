@@ -1,19 +1,18 @@
 package com.n4systems.model.security;
 
+import com.n4systems.util.CollectionFactory;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+import org.apache.commons.collections.MapUtils;
+import org.apache.log4j.Logger;
+
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
-import org.apache.commons.collections.MapUtils;
-import org.apache.log4j.Logger;
-
-import com.n4systems.util.CollectionFactory;
-
-public class MethodSecurityInterceptor<T> implements MethodInterceptor {
+public class MethodSecurityInterceptor<T> implements MethodInterceptor, Serializable {
 	private static final Logger logger = Logger.getLogger("com.n4systems.securitylog");
 	private static final String[] alwaysAllowed = {"hashCode", "getClass"};  // methods only need appear here if they would be caught by getterPrefixes
 	private static final String[] getterPrefixes = {"get", "is", "has"};

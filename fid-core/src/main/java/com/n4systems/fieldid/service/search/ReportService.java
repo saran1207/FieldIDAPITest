@@ -122,6 +122,8 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
             joinTerms.add(joinTerm);
         }
 
+        // TODO WEB 2926 : implement searching for resolved events.
+
         if (criteriaModel.sortingByDivision()) {
             addOrgJoinTerms(status, "divisionOrg", "assetDivisionOrg", "eventDivisionOrg", joinTerms);
         }

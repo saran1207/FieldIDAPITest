@@ -3,12 +3,14 @@ package com.n4systems.fieldid.wicket.components.reporting.results;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.pages.event.ResolveEventPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -45,9 +47,15 @@ public class EventActionsCell extends Panel {
         add(incompleteEventActionsList);
     }
 
-    private WebMarkupContainer createIncompleteEventActionsList(EventSchedule eventSchedule, boolean isReadOnly, boolean hasCreateEvent, boolean hasTag) {
+    private WebMarkupContainer createIncompleteEventActionsList(final EventSchedule eventSchedule, boolean isReadOnly, boolean hasCreateEvent, boolean hasTag) {
         WebMarkupContainer incompleteEventActionsList = new WebMarkupContainer("incompleteEventActionsList");
         incompleteEventActionsList.setOutputMarkupId(true);
+
+        Link resolveEventLink = new Link("resolveEventLink") {
+            @Override public void onClick() {
+                setResponsePage(new ResolveEventPage(eventSchedule));
+            }
+        };
 
         NonWicketLink startEventLink = new NonWicketLink("startEventLink", "selectEventAdd.action?scheduleId="+eventSchedule.getId()+"&type="+eventSchedule.getEventType().getId()+"&assetId="+eventSchedule.getAsset().getId());
         NonWicketLink viewSchedulesLink = new NonWicketLink("viewSchedulesLink", "eventScheduleList.action?assetId="+eventSchedule.getAsset().getId());
@@ -74,6 +82,8 @@ public class EventActionsCell extends Panel {
 
         incompleteEventActionsList.add(viewAssetLink);
         incompleteEventActionsList.add(editAssetLink);
+
+        incompleteEventActionsList.add(resolveEventLink);
 
         return incompleteEventActionsList;
     }

@@ -1,0 +1,42 @@
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"></div>
+
+    <div class="title">
+        <wicket:message key="label.resolve_event_header">
+            <label wicket:id="event"/>
+        </wicket:message>
+    </div>
+
+    <form wicket:id="form" class="form">
+        <div class="grey-message">
+            <wicket:message key="message.resolve_event"/>
+        </div>
+
+        <div class="field">
+            <label class="label"><wicket:message key="label.due"/></label>
+            <span wicket:id="due"/>
+        </div>
+
+        <div class="field">
+            <label class="label"><wicket:message key="label.event_state"/></label>
+            <span wicket:id="state"/>
+        </div>
+
+        <div class="field">
+            <label class="label"><wicket:message key="label.status"/></label>
+            <select wicket:id="status" style="width:200px;"/>
+        </div>
+
+        <div class="field">
+            <label class="label"><wicket:message key="label.resolved_by"/></label>
+            <select wicket:id="resolver" style="width:200px;"/>
+        </div>
+
+        <div class="field">
+            <label class="label"><wicket:message key="label.comment"/></label>
+            <textarea wicket:id="comment"/>
+        </div>
+    </form>
+
+</wicket:extend>

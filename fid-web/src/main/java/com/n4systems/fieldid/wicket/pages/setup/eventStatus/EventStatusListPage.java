@@ -26,7 +26,7 @@ public class EventStatusListPage extends EventStatusPage {
     public EventStatusListPage(PageParameters params) {
         super(params);
         
-        List<EventStatus> eventStatusList = eventStatusService.getActiveStatues();
+        List<EventStatus> eventStatusList = eventStatusService.getActiveStatuses();
         
         add(new ListView<EventStatus>("eventStatusList", eventStatusList) {
             @Override

@@ -14,7 +14,7 @@ public class EventStatusesForTenantModel extends FieldIDSpringModel<List<EventSt
 
     @Override
     protected List<EventStatus> load() {
-        return eventStatusService.getActiveStatues();
+        return eventStatusService.getActiveStatuses();
     }
 
 }

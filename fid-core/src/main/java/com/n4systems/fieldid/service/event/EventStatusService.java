@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EventStatusService extends FieldIdPersistenceService {
 
-    public List<EventStatus> getActiveStatues() {
+    public List<EventStatus> getActiveStatuses() {
         QueryBuilder<EventStatus> builder = createUserSecurityBuilder(EventStatus.class);
 
         builder.addOrder("name");
