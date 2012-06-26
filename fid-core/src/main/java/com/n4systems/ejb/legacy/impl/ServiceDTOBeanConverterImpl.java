@@ -46,6 +46,7 @@ import com.n4systems.model.EventBook;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventStatus;
 import com.n4systems.model.EventType;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.GpsLocation;
@@ -236,6 +237,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		if (event.getAssetStatus() != null) {
 			inspectionDTO.setProductStatusId(event.getAssetStatus().getId());
+		}
+		
+		if(event.getEventStatus() != null) {
+			inspectionDTO.setEventStatusId(event.getEventStatus().getId());
 		}
 		
 		convertLocationToDTO(inspectionDTO, event);
@@ -565,6 +570,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		event.setAssetStatus(convertProductStatus(inspectionServiceDTO));
 		event.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, performedBy));
+		event.setEventStatus(convertEventStatus(inspectionServiceDTO));
 		
 		
 		GpsLocation gpsLocation = new GpsLocation(inspectionServiceDTO.getLatitude(), inspectionServiceDTO.getLongitude());
@@ -1055,6 +1061,14 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 
 		return (AssetStatus) em.find(AssetStatus.class, inspectionServiceDTO.getProductStatusId());
+	}
+	
+	private EventStatus convertEventStatus(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO) {
+		if(inspectionServiceDTO.getEventStatusId() == -1L) {
+			return null;
+		}
+		
+		return (EventStatus) em.find(EventStatus.class, inspectionServiceDTO.getEventStatusId());
 	}
 
 	public JobServiceDTO convert(Project job) {

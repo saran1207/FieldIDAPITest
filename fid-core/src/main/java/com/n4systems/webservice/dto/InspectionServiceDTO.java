@@ -47,6 +47,8 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private double longitude;
 	private double latitude;
 	
+	private long eventStatusId;
+	
 	public List<SubProductMapServiceDTO> getNewSubProducts() {
 		return newSubProducts;
 	}
@@ -283,6 +285,14 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 
 	public double getLatitude() {
 		return latitude;
+	}
+
+	public void setEventStatusId(long eventStatusId) {
+		this.eventStatusId = eventStatusId;
+	}
+
+	public long getEventStatusId() {
+		return eventStatusId;
 	}
 
 }
