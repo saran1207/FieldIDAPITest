@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.Status;
+import com.n4systems.util.FieldidDateFormatter;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -34,9 +35,8 @@ public class LastEventPanel extends Panel {
 
         if(lastEvent != null) {
             String eventType = lastEvent.getType().getName();
-            String lastEventDate = dtf.format(lastEvent.getDate());
+            String lastEventDate = new FieldidDateFormatter(lastEvent.getDate(), FieldIDSession.get().getSessionUser(), true, true).format();
             Status status = lastEvent.getStatus();
-
 
             WebMarkupContainer result;
             add(result = new WebMarkupContainer("result"));
