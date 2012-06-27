@@ -1,5 +1,7 @@
 package com.n4systems.ejb.impl;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -9,12 +11,9 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.*;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.EventSchedule.ScheduleStatusGrouping;
-import com.n4systems.model.Project;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.LargeInListQueryExecutor;
@@ -30,12 +29,22 @@ import java.util.*;
 
 public class MassUpdateManagerImpl implements MassUpdateManager {
 
-	private EntityManager em;
+    private static final String COMMENTS = "comments";
+    private static final String NON_INTEGRATION_ORDER_NUMBER = "nonIntegrationOrderNumber";
+    private static final String PUBLISHED = "published";
+    private static final String IDENTIFIED = "identified";
+    private static final String PURCHASE_ORDER = "purchaseOrder";
+    private static final String ASSET_STATUS = "assetStatus";
+    private static final String ASSIGNED_USER = "assignedUser";
+    private static final String LOCATION = "location";
+    private static final String OWNER = "owner";
+
+    private EntityManager em;
 	private PersistenceManager persistenceManager;
 	private LegacyAsset legacyAssetManager;
 	private AssetManager assetManager;
 
-	public MassUpdateManagerImpl(EntityManager em) {
+    public MassUpdateManagerImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.legacyAssetManager = new LegacyAssetManager(em);
@@ -174,27 +183,72 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	@Override
 	public Long updateAssets(List<Long> ids, Asset assetModificationData, Map<String, Boolean> values, User modifiedBy, String orderNumber) throws UpdateFailureException, UpdateConatraintViolationException {
 		Long result = 0L;
+        Set<Asset> assetsUpdated = Sets.newHashSet();
 		try {
 			for (Long id : ids) {
 				Asset asset = assetManager.findAssetAllFields(id, new OpenSecurityFilter());
-				
 				updateAsset(asset, assetModificationData, values, orderNumber);
-				
 				legacyAssetManager.update(asset, modifiedBy);
-
+				assetsUpdated.add(asset);
 				result++;
 			}
-
-		} catch (SubAssetUniquenessException e) {
+            auditMassUpdate(assetsUpdated, assetModificationData, values, modifiedBy, orderNumber);
+        } catch (SubAssetUniquenessException e) {
 			throw new UpdateFailureException(e);
 		} catch (EntityExistsException cve) {
 			throw new UpdateConatraintViolationException(cve);
-		}
+		} catch (Exception e) {
+            System.out.println("hmm...wha' happen?");
+        }
 
 		return result;
 	}
 
-	private void setOrderNumber(Asset asset, String orderNumber) {
+    private void auditMassUpdate(Set<Asset> assets, Asset assetModificationData, Map<String, Boolean> values, User modifiedBy, String orderNumber) {
+        AssetAudit assetAudit = new AssetAudit();
+        assetAudit.setModifiedBy(modifiedBy);
+        assetAudit.setTenant(modifiedBy.getTenant());
+        assetAudit.setAssets(assets);
+        assetAudit.setCreatedBy(modifiedBy);
+        Date now = new Date();
+        assetAudit.setCreated(now);
+        assetAudit.setModified(now);
+        assetAudit.setUserName(modifiedBy.getDisplayName());
+
+        for (Map.Entry<String, Boolean> entry : values.entrySet()) {
+            if (entry.getValue() == true) {
+                if (entry.getKey().equals(OWNER)) {
+                    assetAudit.setOwner(assetModificationData.getOwner().getDisplayName());
+                }
+                if (entry.getKey().equals(LOCATION)) {
+                    assetAudit.setLocation(assetModificationData.getAdvancedLocation().getFullName());
+                }
+
+                if (entry.getKey().equals(ASSET_STATUS)) {
+                    assetAudit.setAssetStatus(assetModificationData.getAssetStatus().getDisplayName());
+                }
+
+                if (entry.getKey().equals(PURCHASE_ORDER)) {
+                    assetAudit.setPurchaseOrder(assetModificationData.getPurchaseOrder());
+                }
+
+                if (entry.getKey().equals(IDENTIFIED)) {
+                    assetAudit.setIdentified(assetModificationData.getIdentified());
+                }
+
+                if (entry.getKey().equals(PUBLISHED)) {
+                    assetAudit.setPublished(new Boolean(assetModificationData.isPublished()).toString());
+                }
+
+                if (entry.getKey().equals(COMMENTS)) {
+                    assetAudit.setComments(assetModificationData.getComments());
+                }
+            }
+        }
+        persistenceManager.save(assetAudit);
+    }
+
+    private void setOrderNumber(Asset asset, String orderNumber) {
 		if (orderNumber != null) {
 			asset.setNonIntergrationOrderNumber(orderNumber.trim());
 		}
@@ -220,38 +274,38 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	private void updateAsset(Asset asset, Asset assetModificationData, Map<String, Boolean> values, String orderNumber) {
 		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
 			if (entry.getValue() == true) {
-				if (entry.getKey().equals("owner")) {
+				if (entry.getKey().equals(OWNER)) {
 					asset.setOwner(assetModificationData.getOwner());
 				}
-				if (entry.getKey().equals("location")) {
+				if (entry.getKey().equals(LOCATION)) {
 					asset.setAdvancedLocation(assetModificationData.getAdvancedLocation());
 				}
 
-				if (entry.getKey().equals("assignedUser")) {
+				if (entry.getKey().equals(ASSIGNED_USER)) {
 					asset.setAssignedUser(assetModificationData.getAssignedUser());
 				}
 
-				if (entry.getKey().equals("assetStatus")) {
+				if (entry.getKey().equals(ASSET_STATUS)) {
 					asset.setAssetStatus(assetModificationData.getAssetStatus());
 				}
 
-				if (entry.getKey().equals("purchaseOrder")) {
+				if (entry.getKey().equals(PURCHASE_ORDER)) {
 					asset.setPurchaseOrder(assetModificationData.getPurchaseOrder());
 				}
 
-				if (entry.getKey().equals("identified")) {
+				if (entry.getKey().equals(IDENTIFIED)) {
 					asset.setIdentified(assetModificationData.getIdentified());
 				}
 
-				if (entry.getKey().equals("published")) {
+				if (entry.getKey().equals(PUBLISHED)) {
 					asset.setPublished(assetModificationData.isPublished());
 				}
 				
-				if (entry.getKey().equals("nonIntegrationOrderNumber")) {
+				if (entry.getKey().equals(NON_INTEGRATION_ORDER_NUMBER)) {
 					setOrderNumber(asset, orderNumber);
 				}
 
-				if (entry.getKey().equals("comments")) {
+				if (entry.getKey().equals(COMMENTS)) {
 					asset.setComments(assetModificationData.getComments());
 				}
 			}
