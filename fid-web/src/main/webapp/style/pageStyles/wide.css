@@ -275,7 +275,7 @@
 	display:none; 		/* made visible by jquery click*/ 
 	position: absolute;
 	top:100%;
-	width: 125px; 
+	width: 125px;
 	background:white;
 	color:black;
 	border-width:1px 1px 1px 1px;

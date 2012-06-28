@@ -13,7 +13,7 @@ public class NonWicketLink extends Border {
         this(id, path, null);
     }
 
-	public NonWicketLink(String id, String path, AttributeModifier... attributeModifiers) {
+	public NonWicketLink(String id, String path, AttributeModifier attributeModifier) {
 		super(id);
 
 		setRenderBodyOnly(true);
@@ -25,9 +25,8 @@ public class NonWicketLink extends Border {
 
 		linkContainer.add(new AttributeModifier("href", absolutePath));
 
-        if (attributeModifiers != null) {
-            for (AttributeModifier attributeModifier: attributeModifiers)
-                linkContainer.add(attributeModifier);
+        if (attributeModifier != null) {
+            linkContainer.add(attributeModifier);
         }
 
 		addToBorder(linkContainer);

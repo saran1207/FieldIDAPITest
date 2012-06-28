@@ -117,7 +117,8 @@ public class MattBar extends Panel {
         for (Component component : links.visitChildren(AjaxLink.class)) {
             response.renderOnDomReadyJavaScript("jQuery('#"+component.getMarkupId()+"').click(function(e) { jQuery(e.target).addClass('mattButtonPressed'); } );");
         }
-        
+
+        response.renderCSSReference("style/tipsy/tipsy.css");
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         // CAVEAT : https://github.com/jaz303/tipsy/issues/19
         // after ajax call, tipsy tooltips will remain around so need to remove them explicitly.

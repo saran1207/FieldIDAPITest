@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.asset;
+package com.n4systems.fieldid.wicket.components.asset.summary;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;

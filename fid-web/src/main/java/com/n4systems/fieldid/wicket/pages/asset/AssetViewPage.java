@@ -3,18 +3,15 @@ package com.n4systems.fieldid.wicket.pages.asset;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
-import com.n4systems.fieldid.wicket.components.asset.*;
+import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
+import com.n4systems.fieldid.wicket.components.asset.summary.*;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.orgs.BaseOrg;
-import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class AssetViewPage extends AssetPage {
@@ -23,25 +20,9 @@ public class AssetViewPage extends AssetPage {
         super(params);
            
         final Asset asset = assetModel.getObject();
+
+        add(new HeaderPanel("header", assetModel, true));
         
-        add(new Label("assetType", asset.getType().getName()));
-        add(new Label("assetIdentifier", asset.getIdentifier()));
-        Label assetStatus;
-        if(asset.getAssetStatus() != null) {
-            add(assetStatus = new Label("assetStatus", asset.getAssetStatus().getDisplayName()));
-        } else {
-            add(assetStatus = new Label("assetStatus"));
-            assetStatus.setVisible(false);
-        }
-
-        BaseOrg owner = asset.getOwner();
-
-        add(new Label("ownerInfo", getOwnerLabel(owner, asset.getAdvancedLocation())));
-        
-        add(new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
-
-        add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton blueButton")));
-
         String imageUrl;
         if(asset.getImageName() == null) {
             imageUrl = "/file/downloadAssetTypeImage.action?uniqueID=" + asset.getType().getId();
@@ -78,30 +59,6 @@ public class AssetViewPage extends AssetPage {
         add(orderDetails = new OrderDetailsPanel("orderDetailsPanel", assetModel));
         orderDetails.setVisible(orderDetailsEnabled || integrationEnabled);
 
-        WebMarkupContainer buttonContainer = new WebMarkupContainer("buttonContainer");
-
-        buttonContainer.add(new Link<Void>("summaryLink") {
-            @Override
-            public void onClick() {
-            }
-        });
-        
-        buttonContainer.add(new NonWicketLink("schedulesLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
-        
-        NonWicketLink traceabilityLink;
-        buttonContainer.add(traceabilityLink = new NonWicketLink("traceabilityLink", "assetTraceability.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonMiddle")));
-        traceabilityLink.setVisible(assetService.hasLinkedAssets(asset) || isInVendorContext());
-
-        buttonContainer.add(new NonWicketLink("eventHistoryLink", "assetEvents.action?uniqueID=" + asset.getId() + "&useContext=false", new AttributeModifier("class", "mattButtonRight")));
-
-        if (traceabilityLink.isVisible()) {
-           buttonContainer.add(new AttributeModifier("class", "four_button"));
-        } else {
-            buttonContainer.add(new AttributeModifier("class", "three_button"));
-        }
-
-        add(buttonContainer);
-        
         if (hasUpcomingEvents(asset)) {
             add(new UpcomingEventsPanel("upcomingEventsPanel", assetModel));
         } else {
@@ -123,23 +80,6 @@ public class AssetViewPage extends AssetPage {
 
     }
 
-    private String getOwnerLabel(BaseOrg owner, Location advancedLocation) {
-        StringBuffer buff = new StringBuffer();
-        if(owner.isDivision()) {
-            buff.append(owner.getCustomerOrg().getName()).append(" (").append(owner.getPrimaryOrg().getName()).append("), ").append(owner.getDivisionOrg().getName());
-        } else if(owner.isCustomer()) {
-            buff.append(owner.getCustomerOrg().getName()).append(" (").append(owner.getPrimaryOrg().getName()).append(")");
-        } else {
-            buff.append(owner.getPrimaryOrg().getName());
-        }
-        
-        if(advancedLocation != null && !advancedLocation.getFullName().isEmpty()) {
-                buff.append(", ").append(advancedLocation.getFullName());
-        }
-        return buff.toString();  
-    }
-
-
     private boolean hasLastEvent(Asset asset) {
         return assetService.findLastEvents(asset, FieldIDSession.get().getSessionUser().getSecurityFilter()) != null;
     }
@@ -150,6 +90,12 @@ public class AssetViewPage extends AssetPage {
 
     private boolean hasAttachments(Asset asset) {
         return !assetService.findAssetAttachments(asset).isEmpty() || !asset.getType().getAttachments().isEmpty();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/newCss/asset/asset.css");
     }
 
 }

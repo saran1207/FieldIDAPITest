@@ -49,7 +49,6 @@ public abstract class AssetPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/asset/asset.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
     }
 

@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetViewPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
@@ -103,6 +104,7 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetView", AssetViewPage.class);
+        mountPage("assetEvents", AssetEventsPage.class);
 
         mountPage("eventStatusList", EventStatusListPage.class);
         mountPage("eventStatusArchivedList", EventStatusArchivedListPage.class);

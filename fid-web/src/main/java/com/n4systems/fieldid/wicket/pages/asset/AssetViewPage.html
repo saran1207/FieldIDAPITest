@@ -1,33 +1,12 @@
 <wicket:extend>
 
-    <div class="header">
-        <h1>
-            <span class="greyText"><span wicket:id="assetType"/> / </span><span wicket:id="assetIdentifier"/><span class="greyText" wicket:enclosure="assetStatus"> / <span wicket:id="assetStatus"/></span>
-        </h1>
-        <div class="ownerInfo">
-            <img src="/fieldid/images/location-icon.png"/> <span wicket:id="ownerInfo"/>
-        </div>
-
-        <div class="actionButtons">
-            <a wicket:id="editAssetLink"><wicket:message key="label.edit"/></a>
-            <a wicket:id="startEventLink"> <wicket:message key="label.start_event"/></a>
-        </div>
-
-    </div>
+    <div class="header" wicket:id="header" />
     <div class="colmask">
 
         <div class="colright">
 
             <div class="colwrap">
                 <div class="rightColumn">
-                    <div class="viewButtons">
-                        <div wicket:id="buttonContainer">
-                            <a wicket:id="summaryLink" class="mattButtonPressed mattButtonLeft"><wicket:message key="label.summary"/></a>
-                            <a wicket:id="schedulesLink"> <wicket:message key="label.scheduled_events"/></a>
-                            <a wicket:id="traceabilityLink"> <wicket:message key="nav.traceability"/></a>
-                            <a wicket:id="eventHistoryLink"> <wicket:message key="label.event_history"/></a>
-                        </div>
-                    </div>
                     <h1>
                         <label> <wicket:message key="label.upcoming_events"/></label>
                     </h1>

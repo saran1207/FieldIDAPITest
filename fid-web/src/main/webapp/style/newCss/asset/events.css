@@ -1,0 +1,106 @@
+#page {
+    background: none;
+    border: none;
+    box-shadow: none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow: none;
+    font-size: 12px;
+    padding: 0;
+}
+
+.content {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
+    position: relative;
+    float: left;
+    width: 958px;
+    padding: 20px;
+}
+
+.failColor {
+    color: #ff0000;
+}
+
+.passColor {
+    color: #008800;
+}
+
+.actions .menu .mattButtonRight img {
+    vertical-align: middle;
+}
+
+.actions .mattButtonLeft, .actions .mattButtonRight {
+    font-size: 11px;
+}
+
+.actions > ul > li {
+    float: left;
+    position:relative;
+}
+
+.menu-items {
+    display:none; 		/* made visible by jquery click*/
+    position: absolute;
+    top:100%;
+    width: 75px;
+    background:white;
+    color:black;
+    border-width:1px 1px 1px 1px;
+    border-color:#777;
+    border-style:solid;
+    border-radius:0px 3px 3px 3px;
+    -moz-border-radius: 0px 3px 3px 3px;
+    -moz-box-shadow: 2px 2px 2px #BBB;
+    -webkit-box-shadow: 2px 2px 2px;
+    box-shadow: 2px 2px 2px #BBB;
+    padding-bottom:3px;
+    z-index: 123;
+}
+
+.menu-items li a {
+    padding:8px;
+    display: block;
+    text-decoration:none;
+}
+
+.menu-items li a:hover {
+    background:#F5F5F5;
+}
+
+.list {
+    font-size: 11px;
+    float:left;
+}
+
+.list thead tr:hover {
+    background-color: #FFFFFF;
+}
+
+.list thead td {
+    border-top: none;
+}
+
+.navigation {
+    text-align: right;
+}
+
+.viewSelection label{
+    float:left;
+    padding-top: 7px;
+    padding-right: 5px;
+}
+
+.first, .last, .goto {
+    display: none;
+}
+
+.navigation .navigatorLabel {
+    float:left;
+    width: 97%;
+    padding-right: 5px;
+}
+.navigation .navigator {
+    float:left;
+}
+

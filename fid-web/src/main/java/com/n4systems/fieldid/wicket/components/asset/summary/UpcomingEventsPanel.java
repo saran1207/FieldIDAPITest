@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.asset;
+package com.n4systems.fieldid.wicket.components.asset.summary;
 
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.wicket.FieldIDSession;

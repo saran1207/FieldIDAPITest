@@ -1,13 +1,4 @@
 /*Two Column Layout http://matthewjamestaylor.com/blog/ultimate-2-column-left-menu-pixels.htm*/
-
-.options, #contentTitle{
-    display : none;
-}
-
-#contentHeader {
-    margin-bottom: 0;
-}
-
 #page {
     background: none;
     border: none;
@@ -17,46 +8,9 @@
     font-size: 12px;
 }
 
-.header {
-    width: 100%;
-    float: left;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #CCC;
-    margin-bottom: 10px;
-}
-
-.header h1 {
-    font-size: 2.1em;
-    font-weight: normal;
-}
-
 .ownerInfo {
     padding-top: 7px;
     font-size: 1.2em;
-}
-
-.actionButtons {
-    padding: 10px 0;
-}
-
-.actionButtons .mattButton {
-    margin-right: 10px;
-}
-
-.viewButtons {
-    float : left;
-    width: 640px;
-    padding: 10px;
-    margin-bottom: 15px;
-}
-.viewButtons .three_button {
-    left: 25%;
-    position: relative;
-}
-
-.viewButtons .four_button {
-    left: 20%;
-    position: relative;
 }
 
 .colmask {
@@ -64,7 +18,12 @@
     float: left;
     overflow: hidden;
     position: relative;
-    width: 100%;
+    width: 998px;
+    -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    -webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    border:1px solid #CCC;
+    background:#FFF;
 }
 
 .colright {
@@ -72,11 +31,6 @@
     left: 298px;
     position: relative;
     width: 698px;
-    -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
-    -webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
-    box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
-    border:1px solid #CCC;
-    background:#FFF;
 }
 
 .colwrap {
@@ -89,7 +43,7 @@
 
 .leftColumn {
     width: 275px;
-    padding: 0 10px 10px 0;
+    padding: 10px 20px;
     float: left;
     position: relative;
     right: 299px;
@@ -246,10 +200,6 @@
 
 .attachmentIcon {
     padding: 0 10px;
-}
-
-.greyText{
-    color: #888888;
 }
 
 .overdue {

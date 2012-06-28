@@ -7,8 +7,11 @@ import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.model.*;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.*;
 import com.n4systems.util.DateHelper;
@@ -305,4 +308,42 @@ public class EventService extends FieldIdPersistenceService {
         event.setSectionResults(transientResults);
     }
     
+    public List<Event> getEventsByNetworkId(Long networkId, String order, boolean ascending) {
+
+        QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId);
+
+        if (order != null) {
+            builder.addOrder(order, ascending);
+        } else {
+            builder.addOrder("schedule.completedDate", false);
+        }
+        
+        return persistenceService.findAll(builder);
+    }
+
+    public Long countEventsByNetworkId(Long networkId) {
+        QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId);
+        return persistenceService.count(builder);
+    }
+
+    private QueryBuilder<Event> createEventsByNetworkIdQuery(Long networkId) {
+        SecurityFilter filter = securityContext.getUserSecurityFilter();
+
+        QueryBuilder<Tenant> connectedTenantsQuery = new QueryBuilder<Tenant>(TypedOrgConnection.class, filter);
+        connectedTenantsQuery.setSimpleSelect("connectedOrg.tenant", true);
+
+        SubSelectInClause insideSafetyNetworkSubClause = new SubSelectInClause("asset.owner.tenant", connectedTenantsQuery);
+
+        WhereParameterGroup wpg = new WhereParameterGroup();
+        wpg.addClause(insideSafetyNetworkSubClause);
+        wpg.addClause(WhereClauseFactory.create(Comparator.EQ, "asset.owner.tenant.id", filter.getTenantId(), ChainOp.OR));
+
+        QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+        builder.addWhere(WhereClauseFactory.create("asset.networkId", networkId));
+        builder.addWhere(wpg);
+        
+        return builder;
+    }
+
+
 }

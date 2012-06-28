@@ -1,0 +1,60 @@
+.options, #contentTitle{
+    display : none;
+}
+
+#contentHeader {
+    margin-bottom: 0;
+}
+
+.header {
+    width: 100%;
+    float: left;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    font-size: 2.1em;
+    font-weight: normal;
+}
+
+.actionButtons {
+    padding: 10px 0;
+}
+
+.actionButtons .mattButton {
+    margin-right: 10px;
+}
+
+.actionButtons .blueButton {
+    background: #4C8FFC;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4C8FFC', endColorstr='#357AE8',GradientType=0 );
+    background: -moz-linear-gradient(center top , #4C8FFC 0%, #4787ED 100%) repeat scroll 0 0 transparent;
+    color: #FFFFFF;
+}
+
+.actionButtons .blueButton:hover {
+    background: #4D90FE;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4D90FE', endColorstr='#357AE8',GradientType=0 );
+    border: 1px solid #6699FF;
+}
+
+.greyText{
+    color: #888888;
+}
+
+.viewButtons {
+    float : left;
+    width: 855px;
+    padding: 10px 0;
+}
+.viewButtons .three_button {
+    left: 25%;
+    position: relative;
+}
+
+.viewButtons .four_button {
+    left: 20%;
+    position: relative;
+}

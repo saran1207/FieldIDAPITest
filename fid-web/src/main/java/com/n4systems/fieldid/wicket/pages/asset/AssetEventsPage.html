@@ -1,0 +1,14 @@
+<wicket:extend>
+    <div class="header" wicket:id="header" />
+
+    <div class="content">
+        <div class="viewSelection">
+            <label><wicket:message key="label.view_as"/>:</label>
+            <a wicket:id="listLink" class="mattButtonLeft tipsy-tooltip" title="List"><img src="/fieldid/images/list.png" /></a>
+            <a wicket:id="groupLink" class="mattButtonMiddle tipsy-tooltip" title="Group"><img src="/fieldid/images/group.png" /></a>
+            <a wicket:id="mapLink" class="mattButtonRight tipsy-tooltip" title="Map"><img src="/fieldid/images/map.png" /></a>
+        </div>
+
+        <table wicket:id="eventsTable" class="list"/>
+    </div>
+</wicket:extend>

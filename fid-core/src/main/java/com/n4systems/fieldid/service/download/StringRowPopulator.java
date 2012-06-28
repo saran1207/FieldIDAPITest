@@ -16,11 +16,30 @@ public class StringRowPopulator {
         }
     }
 
+    public static void populateRowsWithConvertedStrings(Collection<RowView> rows, List<ColumnMappingView> columns, TableGenerationContext exportContextProvider) {
+        for (RowView row : rows) {
+            populateRowWithConvertedStrings(row, columns, exportContextProvider);
+        }
+    }
+    
     public static void populateRowWithConvertedStrings(RowView row, SearchCriteria searchCriteria, TableGenerationContext exportContextProvider) {
         CellHandlerFactory cellHandlerFactory = new CellHandlerFactory(exportContextProvider);
         List<String> rowValues = new ArrayList<String>();
         int index = 0;
         for (ColumnMappingView column : searchCriteria.getSortedStaticAndDynamicColumns()) {
+            WebOutputHandler handler = cellHandlerFactory.getHandler(column.getOutputHandler());
+            String cellValue = handler.handleWeb(row.getId(), row.getValues().get(index));
+            rowValues.add(cellValue);
+            index++;
+        }
+        row.setStringValues(rowValues);
+    }
+
+    public static void populateRowWithConvertedStrings(RowView row, List<ColumnMappingView> columns, TableGenerationContext exportContextProvider) {
+        CellHandlerFactory cellHandlerFactory = new CellHandlerFactory(exportContextProvider);
+        List<String> rowValues = new ArrayList<String>();
+        int index = 0;
+        for (ColumnMappingView column : columns) {
             WebOutputHandler handler = cellHandlerFactory.getHandler(column.getOutputHandler());
             String cellValue = handler.handleWeb(row.getId(), row.getValues().get(index));
             rowValues.add(cellValue);
