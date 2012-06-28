@@ -192,7 +192,6 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				assetsUpdated.add(asset);
 				result++;
 			}
-            auditMassUpdate(assetsUpdated, assetModificationData, values, modifiedBy, orderNumber);
         } catch (SubAssetUniquenessException e) {
 			throw new UpdateFailureException(e);
 		} catch (EntityExistsException cve) {
@@ -203,50 +202,6 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 		return result;
 	}
-
-    private void auditMassUpdate(Set<Asset> assets, Asset assetModificationData, Map<String, Boolean> values, User modifiedBy, String orderNumber) {
-        AssetAudit assetAudit = new AssetAudit();
-        assetAudit.setModifiedBy(modifiedBy);
-        assetAudit.setTenant(modifiedBy.getTenant());
-        assetAudit.setAssets(assets);
-        assetAudit.setCreatedBy(modifiedBy);
-        Date now = new Date();
-        assetAudit.setCreated(now);
-        assetAudit.setModified(now);
-        assetAudit.setUserName(modifiedBy.getDisplayName());
-
-        for (Map.Entry<String, Boolean> entry : values.entrySet()) {
-            if (entry.getValue() == true) {
-                if (entry.getKey().equals(OWNER)) {
-                    assetAudit.setOwner(assetModificationData.getOwner().getDisplayName());
-                }
-                if (entry.getKey().equals(LOCATION)) {
-                    assetAudit.setLocation(assetModificationData.getAdvancedLocation().getFullName());
-                }
-
-                if (entry.getKey().equals(ASSET_STATUS)) {
-                    assetAudit.setAssetStatus(assetModificationData.getAssetStatus().getDisplayName());
-                }
-
-                if (entry.getKey().equals(PURCHASE_ORDER)) {
-                    assetAudit.setPurchaseOrder(assetModificationData.getPurchaseOrder());
-                }
-
-                if (entry.getKey().equals(IDENTIFIED)) {
-                    assetAudit.setIdentified(assetModificationData.getIdentified());
-                }
-
-                if (entry.getKey().equals(PUBLISHED)) {
-                    assetAudit.setPublished(new Boolean(assetModificationData.isPublished()).toString());
-                }
-
-                if (entry.getKey().equals(COMMENTS)) {
-                    assetAudit.setComments(assetModificationData.getComments());
-                }
-            }
-        }
-        persistenceManager.save(assetAudit);
-    }
 
     private void setOrderNumber(Asset asset, String orderNumber) {
 		if (orderNumber != null) {
@@ -325,54 +280,72 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 		boolean ownershipChanged = false;
 		Event changeTarget;
-		for (Long id : ids) {
+        Set<Event> eventsUpdated = Sets.newHashSet();
+        EventAudit audit = new EventAudit();
+        audit.setModified(new Date());
+        audit.setModifiedBy(user);
+        audit.setTenant(user.getTenant());
+
+        for (Long id : ids) {
 			changeTarget = persistenceManager.find(EventSchedule.class, id).getEvent();
+            eventsUpdated.add(changeTarget);
 
 			for (String updateKey : updateKeys) {
 				if (updateKey.equals("owner")) {
 					ownershipChanged = true;
+                    audit.setOwner(eventChanges.getOwner().getDisplayName());
 					changeTarget.setOwner(eventChanges.getOwner());
 				}
 
 				if (updateKey.equals("eventBook")) {
+                    audit.setEventBook(eventChanges.getBook().getDisplayName());
 					changeTarget.setBook(eventChanges.getBook());
 				}
 
 				if (updateKey.equals("location")) {
 					ownershipChanged = true;
+                    audit.setLocation(eventChanges.getAdvancedLocation().getFullName());
 					changeTarget.setAdvancedLocation(eventChanges.getAdvancedLocation());
 					changeTarget.getSchedule().setAdvancedLocation(eventChanges.getAdvancedLocation());
 				}
 
 				if (updateKey.equals("printable")) {
+                    audit.setPrintable(new Boolean(eventChanges.isPrintable()).toString());
 					changeTarget.setPrintable(eventChanges.isPrintable());
 				}
 
 				if (updateKey.equals("assetStatus")) {
+                    audit.setAssetStatus(eventChanges.getAssetStatus().getDisplayName());
 					changeTarget.setAssetStatus(eventChanges.getAssetStatus());
 				}
 				
 				if (updateKey.equals("assignedUser")) {
+                    audit.setAssignedUser(eventChanges.getAssignedTo().getAssignedUser().getUserID());
 					changeTarget.setAssignedTo(eventChanges.getAssignedTo());
 				}
 				
 				if (updateKey.equals("performedBy")) {
+                    audit.setPerformedBy(eventChanges.getPerformedBy().getUserID());
 					changeTarget.setPerformedBy(eventChanges.getPerformedBy());
 				}
 				
 				if (updateKey.equals("datePerformed")) {
+                    audit.setPerformed(eventChanges.getDate());
 					changeTarget.setDate(eventChanges.getDate());
 				}
 				
 				if (updateKey.equals("result")) {
+                    audit.setResult(eventChanges.getStatus().getDisplayName());
 					changeTarget.setStatus(eventChanges.getStatus());
 				}
 				
 				if (updateKey.equals("comments")) {
+                    audit.setComments(eventChanges.getComments());
 					changeTarget.setComments(eventChanges.getComments());
 				}
 
                 if (updateKey.equals("eventStatus")) {
+                    audit.setEventStatus(eventChanges.getEventStatus().getDisplayName());
                     changeTarget.setEventStatus(eventChanges.getEventStatus());
                 }
 
@@ -380,6 +353,9 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 			persistenceManager.update(changeTarget, user);
 		}
+
+        audit.setEvents(eventsUpdated);
+        persistenceManager.save(audit);
 
 		if (ownershipChanged) {
 			updateCompletedEventOwnership(ids, eventChanges, fieldMap);
