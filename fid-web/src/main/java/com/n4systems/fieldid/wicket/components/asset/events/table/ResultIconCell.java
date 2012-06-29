@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.asset.events;
+package com.n4systems.fieldid.wicket.components.asset.events.table;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;

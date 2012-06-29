@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.asset;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -74,10 +73,6 @@ public abstract class AssetPage extends FieldIDFrontEndPage {
 
     public void setUseContext(Boolean useContext) {
         this.useContext = useContext;
-    }
-
-    public boolean isInVendorContext() {
-        return (FieldIDSession.get().getVendorContext() != null && useContext );
     }
 
 }

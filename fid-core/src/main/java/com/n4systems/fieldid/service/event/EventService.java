@@ -307,8 +307,12 @@ public class EventService extends FieldIdPersistenceService {
         
         event.setSectionResults(transientResults);
     }
-    
-    public List<Event> getEventsByNetworkId(Long networkId, String order, boolean ascending) {
+
+    public List<Event> getEventsByNetworkId(Long networkId) {
+        return getEventsByNetworkId(networkId, null, null);
+    }
+
+    public List<Event> getEventsByNetworkId(Long networkId, String order, Boolean ascending) {
 
         QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId);
 

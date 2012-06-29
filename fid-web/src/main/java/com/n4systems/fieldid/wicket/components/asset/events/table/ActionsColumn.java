@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.asset.events;
+package com.n4systems.fieldid.wicket.components.asset.events.table;
 
 import com.n4systems.model.Event;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;

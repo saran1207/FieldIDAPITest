@@ -21,7 +21,7 @@ public class AssetViewPage extends AssetPage {
            
         final Asset asset = assetModel.getObject();
 
-        add(new HeaderPanel("header", assetModel, true));
+        add(new HeaderPanel("header", assetModel, true, useContext));
         
         String imageUrl;
         if(asset.getImageName() == null) {

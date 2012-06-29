@@ -76,7 +76,12 @@
 			<result name="success" type="freemarker">/templates/aHtml/eventCrud/show.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
 		</action>
-		
+
+        <action name="assetTraceability" method="traceability" class="com.n4systems.fieldid.actions.asset.TraceabilityCrud">
+            <result name="success" type="freemarker">/templates/aHtml/traceabilityCrud/show.ftl</result>
+            <result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+        </action>
+
 		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedPublicStack" />
 			<result name="success" type="freemarker">/templates/aHtml/login/form.ftl</result>

@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.wicket.components.asset;
 
+import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
@@ -14,10 +17,18 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class HeaderPanel extends Panel {
-    public HeaderPanel(String id, IModel<Asset> assetModel, boolean isView) {
+
+    @SpringBean
+    protected AssetService assetService;
+    
+    private Boolean useContext;
+
+    public HeaderPanel(String id, IModel<Asset> assetModel, Boolean isView, Boolean useContext) {
         super(id, assetModel);
+        this.useContext = useContext;
 
         final Asset asset = assetModel.getObject();
 
@@ -39,6 +50,12 @@ public class HeaderPanel extends Panel {
         BookmarkablePageLink eventHistoryLink;
         
         add(summaryLink = new BookmarkablePageLink("summaryLink", AssetViewPage.class, PageParametersBuilder.uniqueId(asset.getId())));
+
+        NonWicketIframeLink traceabilityLink;
+        add(traceabilityLink = new NonWicketIframeLink("traceabilityLink", "aHtml/iframe/assetTraceability.action?uniqueID=" + asset.getId() + "&useContext=false", false, 1000, 600, new AttributeModifier("class", "mattButtonMiddle")));
+        traceabilityLink.setVisible(assetService.hasLinkedAssets(asset) || isInVendorContext());
+
+        
         add(eventHistoryLink = new BookmarkablePageLink("eventHistoryLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
         if(isView) {
@@ -75,5 +92,9 @@ public class HeaderPanel extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/asset/header.css");
+    }
+
+    public boolean isInVendorContext() {
+        return (FieldIDSession.get().getVendorContext() != null && useContext );
     }
 }

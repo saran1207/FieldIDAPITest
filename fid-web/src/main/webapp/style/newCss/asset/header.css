@@ -19,6 +19,11 @@
     font-weight: normal;
 }
 
+.ownerInfo {
+    padding-top: 7px;
+    font-size: 1.2em;
+}
+
 .actionButtons {
     padding: 10px 0;
 }
