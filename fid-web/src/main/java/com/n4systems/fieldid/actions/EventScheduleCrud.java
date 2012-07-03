@@ -220,12 +220,11 @@ public class EventScheduleCrud extends AbstractCrud {
 			eventTypes.add(associatedEventType.getEventType());
 		}
 		return eventTypes;
-		
 	}
 
 	public String getNextDate() {
 		if (nextDate == null) {
-			nextDate = convertDate(eventSchedule.getNextDate());
+			nextDate = convertDateTime(eventSchedule.getNextDate());
 		}
 		return nextDate;
 	}

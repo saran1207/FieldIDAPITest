@@ -38,7 +38,7 @@ public class DateTimePicker extends Panel {
     private DateTextField dateTextField;
     private CheckBox allDayCheckbox;
     private boolean includeTime;
-    private boolean allDay = false;
+    private boolean allDay = true;
     private IModel<Date> model;
 
     public DateTimePicker(String id, IModel<Date> dateModel) {

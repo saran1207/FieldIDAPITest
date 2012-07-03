@@ -99,8 +99,12 @@ public class DateHelper {
 		}
 	}
 
-	public static Date string2Date(String format, String dateStr) {
-		if (format == null || dateStr == null) {
+    public static Date string2Date(String format, String dateStr) {
+        return string2Date(format, dateStr, null);
+    }
+
+    public static Date string2Date(String format, String dateStr, TimeZone timeZone) {
+        if (format == null || dateStr == null) {
 			return null;
 		}
 
@@ -109,6 +113,9 @@ public class DateHelper {
 		}
 
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
+        if (timeZone!=null) {
+            sdf.setTimeZone(timeZone);
+        }
 
 		Date date = null;
 		try {

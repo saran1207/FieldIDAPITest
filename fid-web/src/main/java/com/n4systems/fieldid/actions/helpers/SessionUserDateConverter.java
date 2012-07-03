@@ -26,7 +26,7 @@ public class SessionUserDateConverter implements UserDateConverter {
     public Date convertDateWithOptionalTime(String date) {
         Date d = convertDateTime(date);  // it *might* have the time, but not required.  if not, just try to parse date stuff.
         if (d==null) {
-            d = convertDate(date);
+            d = DateHelper.string2Date(getDateFormat(), date, null);
         }
         return d;
     }
@@ -44,16 +44,6 @@ public class SessionUserDateConverter implements UserDateConverter {
     public Date convertDateTime(String date) {
         return DateHelper.string2DateTime(getDateTimeFormat(), date, getTimeZone());
     }
-
-    public String convertDateTimeWithNoTimeZone(Date date) {
-        return DateHelper.date2String(getDateTimeFormat(), date, getTimeZone());
-    }
-
-    public Date convertDateTimeWithNoTimeZone(String date) {
-        return DateHelper.string2DateTime(getDateTimeFormat(), date, null);
-    }
-
-
 
 
     public boolean isValidDate(String date, boolean usingTime) {
