@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.asset;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
 import com.n4systems.model.Asset;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -23,8 +25,11 @@ public class AssetEventsPage extends AssetPage{
         final Asset asset = assetModel.getObject();
 
         add(new HeaderPanel("header", assetModel, false, useContext));
-
-        add(new AjaxLink<Void>("listLink") {
+        
+        AjaxLink listLink;
+        AjaxLink mapLink;
+        
+        add(listLink = new AjaxLink<Void>("listLink") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -35,16 +40,23 @@ public class AssetEventsPage extends AssetPage{
             }
         });
 
-        add(new AjaxLink<Void>("mapLink") {
+        add(mapLink = new AjaxLink<Void>("mapLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 eventPanel.setVisible(false);
                 mapPanel.setVisible(true);
-
                 target.add(eventPanel);
                 target.add(mapPanel);
             }
         });
+        
+        if (FieldIDSession.get().getTenant().getSettings().isGpsCapture()) {
+            listLink.add(new AttributeAppender("class", "mattButtonLeft").setSeparator(" "));
+            mapLink.add(new AttributeAppender("class", "mattButtonRight").setSeparator(" "));
+        } else {
+            listLink.add(new AttributeAppender("class", "mattButton").setSeparator(" "));
+            mapLink.setVisible(false);
+        }
 
         add(eventPanel = new EventListPanel("eventPanel", assetModel));
         add(mapPanel = new EventMapPanel("mapPanel", assetModel));
