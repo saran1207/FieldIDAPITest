@@ -10,7 +10,11 @@
 					$('newSchedule').request( getStandardCallbacks() );
 			});			
 		});
-	
+
+    function allDay(date) {
+        $('allDay').checked = true;
+    }
+
 	</@n4.includeScript>
 
 	<@n4.includeScript src="schedulePickerDates"/>
@@ -47,13 +51,12 @@
             <div class="infoSet">
                  <label class="label"><@s.text name="label.when_is_it_due"/></label>
 				<@s.textfield id="nextDate" name="nextDate" cssClass="datetimepicker" />
-                <label><input type="checkbox" checked="false" class="all-day-checkbox" onclick="updateDateTimePicker(this,'#nextDate');"><@s.text name="label.all_day"/></label>
+                <label><input id="allDay" type="checkbox" checked="false" class="all-day-checkbox" onclick="updateDateTimePicker(this,'#nextDate');"><@s.text name="label.all_day"/></label>
                 <span class="dateQuickLinks">
-    				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(new Date(), '${sessionUser.jqueryDateFormat}');">Today</a> |
-					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.tomorrow"/></a> |
-					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.next_month"/></a> |
-					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.in_6_months"/></a> |
-					<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.next_year"/></a>
+    				<a href="javascript:void(0);" onclick="allDay();$('nextDate').value = formatDate(new Date(), '${sessionUser.jqueryDateFormat}');">Today</a> |
+					<a href="javascript:void(0);" onclick="allDay();$('nextDate').value = formatDate(addDays(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.tomorrow"/></a> |
+					<a href="javascript:void(0);" onclick="allDay();$('nextDate').value = formatDate(addMonths(new Date(), 6), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.in_6_months"/></a> |
+					<a href="javascript:void(0);" onclick="allDay();$('nextDate').value = formatDate(addYears(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.next_year"/></a>
 				</span>
 			</div>	
 			

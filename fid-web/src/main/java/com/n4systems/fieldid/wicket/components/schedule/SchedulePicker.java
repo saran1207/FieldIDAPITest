@@ -149,6 +149,7 @@ public class SchedulePicker extends Panel {
                     scheduleModel.getObject().setNextDate(dateToSchedule);
                     // We must clear the input in case we have some raw input in the date field that had a validation error.
                     dateTimePicker.clearInput();
+                    dateTimePicker.setAllDay(true);
                     target.add(dateTimePicker);
                 }
             };

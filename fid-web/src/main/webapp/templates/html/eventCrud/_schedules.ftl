@@ -9,7 +9,12 @@
 		assetId = '${assetId!0}';
 	
 		onDocumentLoad(scheduleListUpdated);
-	</@n4.includeScript>
+
+        function allDay(date) {
+            $('allDay').checked = true;
+        }
+
+    </@n4.includeScript>
 </head>
 
 <div id="schedulesForm">
@@ -51,7 +56,7 @@
         <div class="infoSet">
             <label class="label"><@s.text name="label.when_is_it_due"/></label>
 			<@s.textfield id="nextDate" name="newScheduleDate" cssClass="datetimepicker" theme="fieldid"/>
-            <label><input type="checkbox" class="all-day-checkbox" onclick="updateDateTimePicker(this,'#nextDate');"><@s.text name="label.all_day"/></label>
+            <label><input id="allDay" type="checkbox" class="all-day-checkbox" onclick="updateDateTimePicker(this,'#nextDate');"><@s.text name="label.all_day"/></label>
             <span class="dateQuickLinks">
 				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(new Date(), '${sessionUser.jqueryDateFormat}');">Today</a> |
 				<a href="javascript:void(0);" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.tomorrow"/></a> |

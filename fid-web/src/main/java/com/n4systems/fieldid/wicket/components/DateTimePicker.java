@@ -195,8 +195,9 @@ public class DateTimePicker extends Panel {
         return allDay;
     }
 
-
-
+    public void setAllDay(boolean allDay) {
+        this.allDay = allDay;
+    }
 
     // JSON object for javascript widget.
     class DateTimePickerOptions implements Serializable {
