@@ -1,4 +1,4 @@
-    /**
+ /**
  * requires.... 
  *  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
  *  <@n4.includeScript src="googleMaps.js"/>
@@ -22,14 +22,24 @@
  * if not, delay the show call until onLoad().
  */
 
-var googleMapFactory = (function() { 
+var googleMapFactory = (function() {
 
-	var create = function(id) { 
-		return googleMap(id);
-	};
+	 var defaultOptions = {
+		 zoom: 14,
+		 mapTypeId: google.maps.MapTypeId.ROADMAP
+	 };
 
-	var createAndShowWithLocation = function(id) {
-		var map = create(id);
+	 var create = function(id) {
+		 return googleMap(id, defaultOptions);
+	 };
+
+	 var createAndShow = function(id, lat, lng, zoom) {
+		 var map = googleMap(id, {zoom:zoom, mapTypeId:google.maps.MapTypeId.ROADMAP, center:new google.maps.LatLng(lat,lng)});
+		 map.show();
+	 };
+
+	 var createAndShowWithLocation = function(id) {
+		var map = create(id, defaultOptions);
         if (arguments.length>1 && (arguments.length-1)%2!=0) {
             throw "you must specify latitude & longitude in pairs but you've only passed " + arguments.length-1 + "coordinates";
         }
@@ -44,16 +54,13 @@ var googleMapFactory = (function() {
 	/**
 	 * map object returned by factory 
 	 */	
-	function googleMap(mapId) {
+	function googleMap(mapId, opt) {
 		
 		/* private methods and properties */
 		var id = mapId;
 		var map = '';
 		var locations = [];		
-		var options = {
-				zoom: 14,
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
+		var options = opt;
 		var updateContentWithAddress = true; 
 		
 		function showInfoWindow(marker, map) {
@@ -199,6 +206,7 @@ var googleMapFactory = (function() {
 		
 	return { 
 		create : create,
+		createAndShow : createAndShow,
 		createAndShowWithLocation : createAndShowWithLocation,
 		makeMarkerForStatus : makeMarkerForStatus	
 	};

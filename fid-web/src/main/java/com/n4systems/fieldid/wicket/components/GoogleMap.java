@@ -10,12 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleMap extends Panel {
-    public static final String GOOGLE_MAPS_JS = "googleMaps";
-    private static final String GOOGLE_MAP_API = "google-map-api";
-    private static final String INIT_FORMAT = "googleMapFactory.createAndShowWithLocation('%s',%s );";
+    private static final String GOOGLE_MAPS_JS_ID = "googleMaps";
+    private static final String GOOGLE_MAP_API_ID = "google-map-api";
+    private static final String GOOGLE_MAP_WITH_LOCATION_JS = "googleMapFactory.createAndShowWithLocation('%s',%s );";
+    private static final String GOOGLE_MAP_NO_LOCATION_JS = "googleMapFactory.createAndShow('%s',%s, %d);";
 
     private List<Coord> coords = new ArrayList<Coord>();
-    private String coordsAsJsParams;
+    // centre of north america is default location.
+    private Coord centre = new Coord(43.548548, -96.987305);
+    private int defaultZoom = 3;
 
     public GoogleMap(String id) {
         super(id);
@@ -38,15 +41,30 @@ public class GoogleMap extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GOOGLE_MAP_API);
-        response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS);
-        response.renderOnDomReadyJavaScript(String.format(INIT_FORMAT,getMarkupId(),getCoordsAsJsParams()));
+        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS_ID);
+        if (coords.isEmpty()) {
+            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_NO_LOCATION_JS, getMarkupId(), centre.toString(), defaultZoom));
+        } else {
+            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_WITH_LOCATION_JS,getMarkupId(),getCoordsAsJsParams()));
+        }
     }
 
     public String getCoordsAsJsParams() {
         String s =  Joiner.on(",").join(coords);
         return s;
     }
+
+    public GoogleMap withCentredLocation(Double latitude, Double longitude) {
+        centre = new Coord(latitude,longitude);
+        return this;
+    }
+
+    public GoogleMap withDefaultZoom(int zoom) {
+        defaultZoom = zoom;
+        return this;
+    }
+
 
 
     private class Coord implements Serializable {
