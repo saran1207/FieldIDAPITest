@@ -75,6 +75,7 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
 				SubAsset subAsset = persistenceService.find(query);
 				if(subAsset != null) {
 					persistenceService.delete(subAsset);
+					logger.info("SubAsset deleted for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
 				} else {
 					logger.error("Failed to find SubAset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
 				}

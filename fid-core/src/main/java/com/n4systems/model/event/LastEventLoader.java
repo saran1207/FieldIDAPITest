@@ -15,6 +15,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 /**
  * Loads the latest Event for each Event Type for a given Asset
  */
+@Deprecated
 public class LastEventLoader extends ListLoader<Event> {
 	private Long assetId;
 	

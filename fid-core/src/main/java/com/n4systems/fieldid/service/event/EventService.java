@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.model.*;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.security.EntitySecurityEnhancer;
@@ -348,6 +349,21 @@ public class EventService extends FieldIdPersistenceService {
         
         return builder;
     }
+    
+    public List<Event> getLastEventOfEachType(Long assetId) {
+		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
+		builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
+
+		PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
+		String maxDateSelect = String.format("SELECT MAX(iSub.schedule.completedDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId GROUP BY iSub.type", Event.class.getName());
+		latestClause.setClause(String.format("i.schedule.completedDate IN (%s)", maxDateSelect));
+		latestClause.getParams().put("iSubAssetId", assetId);
+		latestClause.getParams().put("iSubState", EntityState.ACTIVE);
+		builder.addWhere(latestClause);
+		
+		List<Event> lastEvents = persistenceService.findAll(builder);
+		return lastEvents;
+	}
 
 
 }

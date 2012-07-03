@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachment;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
+import com.n4systems.fieldid.ws.v1.resources.event.ApiEvent;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistory;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
@@ -33,7 +34,8 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	private List<ApiAttributeValue> attributeValues;
 	private List<ApiEventSchedule> schedules;
 	private List<ApiAssetAttachment> attachments;
-	private List<ApiEventHistory> eventHistory;	
+	private List<ApiEventHistory> eventHistory;
+	private List<ApiEvent> events;
 
 	public String getIdentifier() {
 		return identifier;
@@ -218,4 +220,12 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	public void setEventHistory(List<ApiEventHistory> eventHistory) {
 		this.eventHistory = eventHistory;
 	}
+	
+	public List<ApiEvent> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<ApiEvent> events) {
+		this.events = events;
+	}	
 }
