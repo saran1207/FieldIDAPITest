@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.EventStatus;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 
 import java.util.List;
 
@@ -45,4 +46,9 @@ public class EventStatusService extends FieldIdPersistenceService {
         update(eventStatus);
     }
 
+    public boolean exists(String name) {
+        QueryBuilder<EventStatus> builder = createUserSecurityBuilder(EventStatus.class);
+        builder.addWhere(WhereClauseFactory.create("name", name));
+        return persistenceService.exists(builder);
+    }
 }

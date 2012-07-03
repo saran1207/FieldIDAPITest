@@ -1,12 +1,11 @@
 package com.n4systems.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import rfid.ejb.entity.IdentifierCounterBean;
-
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.util.DateHelper;
+import rfid.ejb.entity.IdentifierCounterBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseSetupDataFactory {
 	private final Tenant tenant;
@@ -89,4 +88,15 @@ public class BaseSetupDataFactory {
 		}
 		return statuses;
 	}
+    
+    public List<EventStatus> createEventStatuses() {
+        List<EventStatus> statuses = new ArrayList<EventStatus>();
+        for (String statusName: new String [] {"Could Not Inspect", "Not In Use", "Destroyed"}) {
+            EventStatus status = new EventStatus();
+            status.setTenant(tenant);
+            status.setName(statusName);
+            statuses.add(status);
+        }
+        return statuses;
+    }
 }

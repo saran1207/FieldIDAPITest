@@ -1,21 +1,16 @@
 package com.n4systems.services.tenant;
 
-import javax.mail.MessagingException;
-
-import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.util.persistence.QueryBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.BaseSetupDataFactory;
+import com.n4systems.model.EventStatus;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection.ConnectionType;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
@@ -24,7 +19,12 @@ import com.n4systems.security.UserType;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.TemplateMailMessage;
+import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.uri.ActionURLBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.MessagingException;
 
 public class TenantCreationService extends FieldIdPersistenceService {
 	
@@ -113,6 +113,10 @@ public class TenantCreationService extends FieldIdPersistenceService {
 		for (AssetStatus status: setupDataFactory.createAssetStatuses()) {
 			persistenceService.save(status);
 		}
+
+        for (EventStatus status: setupDataFactory.createEventStatuses()) {
+            persistenceService.save(status);
+        }
 	}
 
 	private void createFieldIDCatalogConnection(PrimaryOrg primaryOrg) {

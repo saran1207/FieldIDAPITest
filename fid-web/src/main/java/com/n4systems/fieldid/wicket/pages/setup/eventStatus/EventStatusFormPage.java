@@ -34,8 +34,10 @@ public class EventStatusFormPage extends EventStatusPage{
                 setResponsePage(new EventStatusListPage(new PageParameters()));
             }
         };
-        
-        form.add(new RequiredTextField<String>("name", new PropertyModel<String>(eventStatusModel.getObject(), "name")));
+        RequiredTextField name;
+        form.add(name = new RequiredTextField<String>("name", new PropertyModel<String>(eventStatusModel.getObject(), "name")));
+        name.add(new EventStatusUniqueNameValidator());
+
         Button submitButton;
         form.add(submitButton = new Button("saveButton"));
         submitButton.setOutputMarkupId(true);
