@@ -2,11 +2,12 @@ package com.n4systems.fieldid.wicket.components.assetsearch.results;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.asset.AssetViewPage;
 import com.n4systems.util.views.RowView;
-import org.apache.wicket.Component;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -24,7 +25,7 @@ public class AssetActionsCell extends Panel {
         WebMarkupContainer actionsList = new WebMarkupContainer("actionsList");
         actionsList.setOutputMarkupId(true);
 
-        NonWicketLink viewLink = new NonWicketLink("viewLink", "asset.action?uniqueID="+rowModel.getObject().getId());
+        BookmarkablePageLink viewLink = new BookmarkablePageLink<Void>("viewLink", AssetViewPage.class, PageParametersBuilder.uniqueId(rowModel.getObject().getId()));
         NonWicketLink viewEventsLink = new NonWicketLink("viewEventsLink", "assetEvents.action?uniqueID="+rowModel.getObject().getId());
         NonWicketLink viewSchedulesLink = new NonWicketLink("viewSchedulesLink", "eventScheduleList.action?assetId="+rowModel.getObject().getId());
 

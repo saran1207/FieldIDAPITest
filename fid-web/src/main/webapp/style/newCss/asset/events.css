@@ -43,7 +43,8 @@
     display:none; 		/* made visible by jquery click*/
     position: absolute;
     top:100%;
-    width: 75px;
+    width: 71px;
+    left: -45px;
     background:white;
     color:black;
     border-width:1px 1px 1px 1px;
