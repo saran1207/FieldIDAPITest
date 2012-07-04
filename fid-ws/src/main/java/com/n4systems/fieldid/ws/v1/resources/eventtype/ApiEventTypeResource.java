@@ -99,7 +99,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		return apiSection;
 	}
 
-	private ApiCriteria convertCriteria(Criteria criteria) {
+	public ApiCriteria convertCriteria(Criteria criteria) {
 		ApiCriteria apiCriteria = convertCriteriaSubType(criteria);
 		apiCriteria.setSid(criteria.getId());
 		apiCriteria.setActive(!criteria.isRetired());

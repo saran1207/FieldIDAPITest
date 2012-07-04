@@ -60,7 +60,7 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 			apiEvent.setFreeformLocation(event.getAdvancedLocation().getFreeformLocation());
 		}
 		
-		apiEvent.setForm(apiSavedEventFormResource.convertEntityToApiModel(event.getEventForm()));
+		apiEvent.setForm(apiSavedEventFormResource.convertToApiEventForm(event));
 		apiEvent.setAttributes(convertToApiEventAttributes(event.getInfoOptionMap()));
 		apiEvent.setSubEvents(convertToSubApiEvents(event.getSubEvents()));
 		
