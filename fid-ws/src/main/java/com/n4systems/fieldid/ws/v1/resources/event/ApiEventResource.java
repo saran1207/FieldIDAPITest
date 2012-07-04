@@ -2,7 +2,6 @@ package com.n4systems.fieldid.ws.v1.resources.event;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
@@ -15,10 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
-import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.AbstractEvent;
@@ -40,14 +38,13 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 
 @Component
 @Path("event")
-public class ApiEventResource extends ApiResource<ApiEvent, Event> {
+public class ApiEventResource extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(ApiEventResource.class);
 	
 	@Autowired private AssetService assetService;
 	@Autowired private ApiEventAttachmentResource apiAttachmentResource;
 	@Autowired private ApiEventFormResultResource apiEventFormResultResource;
 	@Autowired private EventScheduleService eventScheduleService;
-	@Autowired private EventService eventService;
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -137,52 +134,6 @@ public class ApiEventResource extends ApiResource<ApiEvent, Event> {
 		return subEvent;
 	}
 	
-	@Override
-	protected ApiEvent convertEntityToApiModel(Event event) {
-		ApiEvent apiEvent = new ApiEvent();
-		
-		apiEvent.setSid(event.getMobileGUID());
-		apiEvent.setModified(event.getModified());
-		apiEvent.setDate(event.getDate());
-		apiEvent.setComments(event.getComments());
-		apiEvent.setTypeId(event.getType().getId());
-		apiEvent.setAssetId(event.getAsset().getMobileGUID());
-		apiEvent.setOwnerId(event.getOwner().getId());		
-		apiEvent.setModifiedById(event.getModifiedBy().getId());
-		apiEvent.setPerformedById(event.getPerformedBy().getId());
-		apiEvent.setPrintable(event.isPrintable());
-		
-		if(event.getAssignedTo() != null) {
-			apiEvent.setAssignedUserId(event.getAssignedTo().getAssignedUser().getId());
-		}
-		
-		if(event.getBook() != null) {
-			apiEvent.setEventBookId(event.getBook().getMobileId());
-		}
-		
-		if(event.getAssetStatus() != null) {
-			apiEvent.setAssetStatusId(event.getAssetStatus().getId());
-		}
-		
-		if(event.getEventStatus() != null) {
-			apiEvent.setEventStatusId(event.getEventStatus().getId());
-		}
-		
-		if(event.getStatus() != null) {
-			apiEvent.setStatus(event.getStatus().getDisplayName());
-		}
-		
-		if(event.getAdvancedLocation() != null) {
-			apiEvent.setFreeformLocation(event.getAdvancedLocation().getFreeformLocation());
-		}
-		
-		apiEvent.setForm(apiEventFormResultResource.convertToApiEventResultForm(event.getEventForm()));
-		apiEvent.setAttributes(convertToApiEventAttributes(event.getInfoOptionMap()));
-		apiEvent.setSubEvents(convertToSubApiEvents(event.getSubEvents()));
-		
-		return apiEvent;
-	}
-	
 	private void convertApiEventForAbstractEvent(ApiEvent apiEvent, AbstractEvent event) {
 		event.setTenant(getCurrentTenant());
 		event.setMobileGUID(apiEvent.getSid());
@@ -230,31 +181,5 @@ public class ApiEventResource extends ApiResource<ApiEvent, Event> {
 		
 		EventBook book = persistenceService.find(query);
 		return book;
-	}	
-	
-	public List<ApiEvent> findLastEventOfEachType(Long assetId) {
-		List<Event> events = eventService.getLastEventOfEachType(assetId);		
-		return convertAllEntitiesToApiModels(events);
-	}
-	
-	private List<ApiEventAttribute> convertToApiEventAttributes(Map<String, String> infoOptionMap) {
-		if(infoOptionMap.size() > 0) {
-			List<ApiEventAttribute> attributes = new ArrayList<ApiEventAttribute>();
-			
-			for(Map.Entry<String, String> entry : infoOptionMap.entrySet()) {
-				ApiEventAttribute attribute = new ApiEventAttribute();
-				attribute.setName(entry.getKey());
-				attribute.setValue(entry.getValue());
-				attributes.add(attribute);
-			}
-			
-			return attributes;
-		}
-		
-		return null;
-	}
-	
-	private List<ApiEvent> convertToSubApiEvents(List<SubEvent> subEvents) {
-		return null;
 	}
 }

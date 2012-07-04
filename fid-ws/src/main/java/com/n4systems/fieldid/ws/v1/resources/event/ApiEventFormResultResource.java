@@ -39,16 +39,6 @@ public class ApiEventFormResultResource extends FieldIdPersistenceService{
 
 		return results;
 	}
-	
-	public ApiEventFormResult convertToApiEventResultForm(EventForm eventForm) {
-		/*if(eventForm != null) {
-			ApiEventFormResult formResult = new ApiEventFormResult();
-			
-			return formResult;
-		}*/
-		
-		return null;
-	}
 
 	private List<CriteriaResult> convertSectionResult(EventForm form, ApiCriteriaSectionResult sectionResult, AbstractEvent event) {
 		CriteriaSection section = null;

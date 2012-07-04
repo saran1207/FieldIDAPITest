@@ -31,6 +31,8 @@ import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationR
 import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenantResource;
 import com.n4systems.fieldid.ws.v1.resources.unit.ApiUnitResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
+import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventResource;
+import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventFormResource;
 
 @Configuration
 public class FieldIdWsConfig {
@@ -144,6 +146,16 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiEventResource apiEventResource() {
 		return new ApiEventResource();
+	}
+	
+	@Bean
+	public ApiSavedEventResource apiSavedEventResource() {
+		return new ApiSavedEventResource();
+	}
+	
+	@Bean
+	public ApiSavedEventFormResource apiSavedEventFormResource() {
+		return new ApiSavedEventFormResource();
 	}
 	
 	@Bean

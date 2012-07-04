@@ -27,23 +27,21 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
-import com.n4systems.fieldid.ws.v1.resources.event.ApiEventResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
+import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventResource;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.SmartSearchWhereClause;
-import com.n4systems.model.event.LastEventLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
@@ -66,7 +64,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
 	@Autowired private ApiAssetAttachmentResource apiAttachmentResource;
 	@Autowired private ApiSubAssetResource apiSubAssetResource;
-	@Autowired private ApiEventResource apiEventResource;
+	@Autowired private ApiSavedEventResource apiSavedEventResource;
 	
 	
 	@GET
@@ -219,7 +217,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		apiAsset.setAttachments(apiAttachmentResource.findAllAttachments(asset.getMobileGUID()));
 		
 		//TODO This need to be filtered by the config setting whether client wants or not.
-		apiAsset.setEvents(apiEventResource.findLastEventOfEachType(asset.getId()));		
+		apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));		
 		
 		return apiAsset;
 	}
