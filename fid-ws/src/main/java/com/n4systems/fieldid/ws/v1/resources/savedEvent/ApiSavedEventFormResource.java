@@ -1,13 +1,16 @@
 package com.n4systems.fieldid.ws.v1.resources.savedEvent;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
+import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiCriteriaResult;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiObservation;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiCriteriaSection;
@@ -30,9 +33,14 @@ import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.services.signature.SignatureService;
 
 public class ApiSavedEventFormResource extends FieldIdPersistenceService{
+	private static Logger logger = Logger.getLogger(ApiSavedEventFormResource.class);
+	
 	@Autowired private ApiEventTypeResource eventTypeResource;
+	private SignatureService signatureService = new SignatureService();
+	
 
 	public ApiEventForm convertToApiEventForm(Event event) {
 		if(event.getEventForm() != null) {
@@ -42,7 +50,7 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 				ApiEventForm apiEventForm = new ApiEventForm();				
 				Set<CriteriaResult> results = event.getResults();				
 				for(CriteriaSection section : event.getEventForm().getAvailableSections()) {
-					apiEventForm.getSections().add(convertCriteriaSection(section, results));
+					apiEventForm.getSections().add(convertCriteriaSection(section, results, event.getId()));
 				}
 				
 				return apiEventForm;
@@ -52,27 +60,32 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 		return null;
 	}
 	
-	private ApiCriteriaSection convertCriteriaSection(CriteriaSection section, Set<CriteriaResult> results) {
+	private ApiCriteriaSection convertCriteriaSection(CriteriaSection section, Set<CriteriaResult> results, Long eventId) {
 		ApiCriteriaSection apiSection = new ApiCriteriaSection();
 		
+		apiSection.setSid(section.getId());
+		apiSection.setActive(!section.isRetired());
+		apiSection.setModified(section.getModified());
+		apiSection.setTitle(section.getTitle());
+		
 		for (Criteria criteria : section.getCriteria()) {
-			apiSection.getCriteria().add(convertCriteria(criteria, results));
+			apiSection.getCriteria().add(convertCriteria(criteria, results, eventId));
 		}
 		
 		return apiSection;
 	}
 	
-	private ApiCriteria convertCriteria(Criteria criteria, Set<CriteriaResult> results) {
+	private ApiCriteria convertCriteria(Criteria criteria, Set<CriteriaResult> results, Long eventId) {
 		ApiCriteria apiCriteria = eventTypeResource.convertCriteria(criteria);
-		apiCriteria.setResult(findResult(criteria, results));
+		apiCriteria.setResult(findResult(criteria, results, eventId));
 		return apiCriteria;
 	}
 	
-	private ApiCriteriaResult findResult(Criteria criteria, Set<CriteriaResult> results) {
+	private ApiCriteriaResult findResult(Criteria criteria, Set<CriteriaResult> results, Long eventId) {
 		if(results != null && results.size() > 0) {
 			for(CriteriaResult result : results) {
 				if(result.getCriteria().getId() == criteria.getId()) {
-					return convertCriteriaResult(result);
+					return convertCriteriaResult(result, eventId);
 				}
 			}
 		}
@@ -80,7 +93,7 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 		return null;
 	}
 	
-	private ApiCriteriaResult convertCriteriaResult(CriteriaResult criteriaResult) {
+	private ApiCriteriaResult convertCriteriaResult(CriteriaResult criteriaResult, Long eventId) {
 		ApiCriteriaResult apiResult = new ApiCriteriaResult();
 		
 		apiResult.setCriteriaId(criteriaResult.getCriteria().getId());
@@ -111,7 +124,14 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 				break;
 			case SIGNATURE:
 				SignatureCriteriaResult signatureResult = (SignatureCriteriaResult)criteriaResult;
-				apiResult.setSignatureValue(signatureResult.getImage());
+				if(signatureResult.isSigned()) {
+					try {
+						byte[] image = signatureService.loadSignatureImage(getCurrentTenant(), eventId, criteriaResult.getCriteria().getId());
+						apiResult.setSignatureValue(image);
+					} catch (IOException ex) {
+						logger.error("Error loading signature image for event: " + eventId, ex);
+					}
+				}				
 				break;
 			case DATE_FIELD:
 				DateFieldCriteriaResult dateResult = (DateFieldCriteriaResult)criteriaResult;
@@ -133,31 +153,27 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 	}
 	
 	private List<ApiObservation> convertRecommendations(List<Recommendation> recommendations) {
-		if(recommendations != null && recommendations.size() > 0) {
-			List<ApiObservation> observations = new ArrayList<ApiObservation>();
-			
+		List<ApiObservation> observations = new ArrayList<ApiObservation>();
+		
+		if(recommendations != null  && recommendations.size() > 0) {			
 			for(Observation observation : recommendations) {
 				observations.add(convertObservation(observation));
 			}
-			
-			return observations;
 		}
 		
-		return null;
+		return observations;
 	}
 	
 	private List<ApiObservation> convertDeficiencies(List<Deficiency> deficiencies) {
+		List<ApiObservation> observations = new ArrayList<ApiObservation>();
+		
 		if(deficiencies != null && deficiencies.size() > 0) {
-			List<ApiObservation> observations = new ArrayList<ApiObservation>();
-			
 			for(Observation observation : deficiencies) {
 				observations.add(convertObservation(observation));
-			}
-			
-			return observations;
+			}			
 		}
 		
-		return null;
+		return observations;
 	}
 	
 	private ApiObservation convertObservation(Observation observation) {
