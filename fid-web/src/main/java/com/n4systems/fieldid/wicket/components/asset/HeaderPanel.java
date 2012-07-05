@@ -6,7 +6,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
-import com.n4systems.fieldid.wicket.pages.asset.AssetViewPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
@@ -49,7 +49,7 @@ public class HeaderPanel extends Panel {
         BookmarkablePageLink summaryLink;
         BookmarkablePageLink eventHistoryLink;
         
-        add(summaryLink = new BookmarkablePageLink("summaryLink", AssetViewPage.class, PageParametersBuilder.uniqueId(asset.getId())));
+        add(summaryLink = new BookmarkablePageLink("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
         NonWicketIframeLink traceabilityLink;
         add(traceabilityLink = new NonWicketIframeLink("traceabilityLink", "aHtml/iframe/assetTraceability.action?uniqueID=" + asset.getId() + "&useContext=false", false, 1000, 600, new AttributeModifier("class", "mattButtonMiddle")));

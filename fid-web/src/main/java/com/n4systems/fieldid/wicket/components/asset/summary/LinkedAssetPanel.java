@@ -9,7 +9,7 @@ import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.AutoCompleteSearch;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.asset.AssetViewPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.user.User;
@@ -63,7 +63,7 @@ public class LinkedAssetPanel extends Panel {
                 item.setOutputMarkupId(true);
                 item.add(new Label("assetType", new PropertyModel(item.getModelObject(), "asset.type.name")));
                 Link linkedAssetLink;
-                item.add(linkedAssetLink = new BookmarkablePageLink("linkedAssetLink", AssetViewPage.class, new PageParameters().add("uniqueID", item.getModelObject().getAsset().getId())));
+                item.add(linkedAssetLink = new BookmarkablePageLink("linkedAssetLink", AssetSummaryPage.class, new PageParameters().add("uniqueID", item.getModelObject().getAsset().getId())));
                 linkedAssetLink.add(new Label("assetIdentifier", new PropertyModel<Object>(item.getModelObject(), "asset.identifier")));
                 item.add(new AjaxLink<Asset>("removeLinkedAssetLink") {
                     @Override

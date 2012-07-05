@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components.asset.summary;
 
 import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.fieldid.wicket.pages.asset.AssetViewPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.Asset;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -26,7 +26,7 @@ public class LinkedWithAssetPanel extends Panel{
         
         add(new Label("assetType", new PropertyModel<Asset>(parent, "type.name")));
         Link assetLink;
-        add(assetLink = new BookmarkablePageLink("linkedAssetLink", AssetViewPage.class, new PageParameters().add("uniqueID", parent.getId())));
+        add(assetLink = new BookmarkablePageLink("linkedAssetLink", AssetSummaryPage.class, new PageParameters().add("uniqueID", parent.getId())));
         assetLink.add(new Label("assetIdentifier", new PropertyModel<Asset>(parent, "identifier")));
     }
 }

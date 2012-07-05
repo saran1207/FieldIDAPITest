@@ -57,8 +57,5 @@ public class UpcomingEventsPanel extends Panel {
                 }
             }
         });
-
-        add(new NonWicketLink("moreUpcomingEvents", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false"));
-
     }
 }

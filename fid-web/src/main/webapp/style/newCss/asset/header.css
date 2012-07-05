@@ -15,13 +15,17 @@
 }
 
 .header h1 {
-    font-size: 2.1em;
     font-weight: normal;
+    font-size:1.9em;
+    text-shadow: 1px 1px rgba(255,255,255,0.4);
 }
 
 .ownerInfo {
     padding-top: 7px;
-    font-size: 1.2em;
+    font-size: 1.1em;
+}
+.ownerInfo img {
+    vertical-align:middle;
 }
 
 .actionButtons {

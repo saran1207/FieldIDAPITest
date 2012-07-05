@@ -445,7 +445,7 @@
 		<action name="assetInformation" method="list" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">/templates/html/assetCrud/list.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/list.ftl</result>
-			<result name="oneFound" type="redirect">/w/assetView?uniqueID=${uniqueID}</result>
+			<result name="oneFound" type="redirect">/w/assetSummary?uniqueID=${uniqueID}</result>
 
 			<result name="oneFoundVendorContext" type="redirectAction">
 				<param name="actionName">assetTraceability</param>

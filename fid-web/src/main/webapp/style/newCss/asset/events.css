@@ -74,7 +74,7 @@
     float:left;
 }
 
-.noRecords {
+.no_records, .no_paging{
     margin-top: 50px;
 }
 

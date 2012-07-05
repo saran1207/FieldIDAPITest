@@ -4,8 +4,6 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.Status;
@@ -13,7 +11,6 @@ import com.n4systems.util.FieldidDateFormatter;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -61,8 +58,6 @@ public class LastEventPanel extends Panel {
 
             String printEventUrl = "file/downloadEventCert.action?uniqueID="+ lastEvent.getID() + "&reportType=INSPECTION_CERT";
             add(new NonWicketLink("printLastEventLink", printEventUrl));
-            
-            add(new BookmarkablePageLink("viewAllLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId())));
         }
     }
 }

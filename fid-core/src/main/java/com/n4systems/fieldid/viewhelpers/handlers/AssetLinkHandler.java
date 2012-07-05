@@ -13,7 +13,7 @@ public class AssetLinkHandler extends WebOutputHandler {
 	public String handleWeb(Long entityId, Object value) {
 		// create a link to the asset
         String absoluteUrl = getAbsoluteUrl();
-        absoluteUrl += "/fieldid/w/assetView?uniqueID=" +entityId;
+        absoluteUrl += "/fieldid/w/assetSummary?uniqueID=" +entityId;
 		return "<a class=\"identifierLink\" href=\"" + absoluteUrl + "\" >" + value + "</a>";
 	}
 

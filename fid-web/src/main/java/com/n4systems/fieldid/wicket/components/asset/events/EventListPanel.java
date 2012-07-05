@@ -31,7 +31,9 @@ public class EventListPanel extends Panel {
         DefaultDataTable table;
         add(table = new DefaultDataTable<Event>("eventsTable", getEventTableColumns(), new EventByNetworkIdProvider(asset.getNetworkId(), "schedule.completedDate", SortOrder.DESCENDING), 10));
         if(eventService.countEventsByNetworkId(asset.getNetworkId()).intValue() == 0) {
-            table.add(new AttributeAppender("class", " noRecords"));
+            table.add(new AttributeAppender("class", " no_records").setSeparator(" "));
+        }else if (table.getPageCount() < 2) {
+            table.add(new AttributeAppender("class", " no_paging").setSeparator(" "));
         }
     }
 

@@ -14,9 +14,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-public class AssetViewPage extends AssetPage {
+public class AssetSummaryPage extends AssetPage {
 
-    public AssetViewPage(PageParameters params) {
+    public AssetSummaryPage(PageParameters params) {
         super(params);
            
         final Asset asset = assetModel.getObject();
