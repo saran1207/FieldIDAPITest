@@ -20,7 +20,7 @@ public class EventIdentifierHandler extends WebOutputHandler {
 		String identifier;
 		if (level.isLocal()) {
             String absoluteUrl = getAbsoluteUrl();
-            absoluteUrl += "/fieldid/asset.action?uniqueID=" + asset.getId();
+            absoluteUrl += "/fieldid/w/assetView?uniqueID=" + asset.getId();
 			identifier = String.format("<a class=\"identifierLink\" href='%s'>%s</a>", absoluteUrl, asset.getIdentifier());
 		} else {
 			identifier = asset.getIdentifier();
