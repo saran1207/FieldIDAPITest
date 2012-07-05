@@ -55,7 +55,7 @@ public class AssetSaveService {
 			saveAssetImage();
 			return asset;
 		} catch (SubAssetUniquenessException e) {
-			throw new ProcessFailureException("could not save asset", e);
+			throw new ProcessFailureException("could not udpateRecurringEvents asset", e);
 		}
 	}
 
@@ -67,7 +67,7 @@ public class AssetSaveService {
 			saveAssetImage();
 			return asset;
 		} catch (SubAssetUniquenessException e) {
-			throw new ProcessFailureException("could not save asset", e);
+			throw new ProcessFailureException("could not udpateRecurringEvents asset", e);
 		}
 	}
 	

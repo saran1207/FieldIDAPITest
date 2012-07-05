@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.fieldid.wicket.pages.assettype.RecurringAssetTypeEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.EditEventPage;
 import com.n4systems.fieldid.wicket.pages.event.ResolveEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
@@ -82,6 +83,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("sendSavedItem", SendSavedItemPage.class);
         mountPage("manageSendItemSchedules", ManageSendItemSchedulesPage.class);
 
+        mountPage("recurringEvents", RecurringAssetTypeEventsPage.class);
         mountPage("wicket/search2", SearchPage.class);
         mountPage("assetMassUpdate", MassUpdateAssetsPage.class);
         mountPage("eventMassUpdate", MassUpdateEventsPage.class);

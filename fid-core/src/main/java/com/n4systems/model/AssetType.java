@@ -57,8 +57,11 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private String manufactureCertificateText;	
 	private boolean hasManufactureCertificate;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")
-	private Set<AssetTypeSchedule> schedules = new HashSet<AssetTypeSchedule>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")
+    private List<RecurringAssetTypeEvent> recurringAssetTypeEvents = new ArrayList<RecurringAssetTypeEvent>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")
+    private Set<AssetTypeSchedule> schedules = new HashSet<AssetTypeSchedule>();
 
 	@OneToMany(mappedBy = "assetInfo", targetEntity = InfoFieldBean.class, cascade = CascadeType.ALL)
 	@OrderBy("weight, name ASC")
@@ -539,6 +542,14 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
             allEventTypes.add(eventType.getEventType());
         }
         return allEventTypes;
+    }
+
+    public List<RecurringAssetTypeEvent> getRecurringAssetTypeEvents() {
+        return recurringAssetTypeEvents;
+    }
+
+    public void setRecurringAssetTypeEvents(List<RecurringAssetTypeEvent> recurringAssetTypeEvents) {
+        this.recurringAssetTypeEvents = recurringAssetTypeEvents;
     }
 
 }
