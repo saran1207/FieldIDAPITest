@@ -79,10 +79,17 @@
     margin-top: 15px;
 }
 
-.leftColumn h1, .rightColumn h1{
+.leftColumn h1, .rightColumn h1 {
     padding: 5px 0;
     border-bottom: 1px solid #e2e2e2;
-    color: #666666
+    color: #666666;
+    font-size: 1.1em;
+}
+
+.rightColumn h2 {
+    font-size: 1.0em;
+    font-weight:bold;
+    line-height:16px;
 }
 
 .linkedAssetList {
