@@ -116,10 +116,10 @@ public class AssetTypeService extends FieldIdPersistenceService {
             LocalDate day = LocalDate.now();
             System.out.println("scheduling events for asset " + asset.getIdentifier());
             for (int i = 0; i < RECURRING_EVENT_BUFFER_SIZE; i++) {
-                for (DateTime dateTime: recurringEvent.getRecurrence().getTimesForDay(day)) {
-                    System.out.println("- - - - - scheduling " +  recurringEvent.getEventType().getName() + " on " + dateTime.toDate());
-                    persistenceService.save(new EventSchedule(asset, recurringEvent.getEventType(), dateTime.toDate()));
-                }
+                DateTime dateTime = recurringEvent.getRecurrence().getTimesForDay(day);
+                System.out.println("- - - - - scheduling " +  recurringEvent.getEventType().getName() + " on " + dateTime.toDate());
+                persistenceService.save(new EventSchedule(asset, recurringEvent.getEventType(), dateTime.toDate()));
+
                 day = day.plusDays(1);
             }
         }
