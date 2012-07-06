@@ -1,11 +1,9 @@
  package com.n4systems.model;
 
-import com.google.common.collect.Lists;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.LocalDate;
-
-import java.util.List;
+ import com.n4systems.model.orgs.BaseOrg;
+ import org.joda.time.DateTime;
+ import org.joda.time.DateTimeConstants;
+ import org.joda.time.LocalDate;
 
 public enum Recurrence {
 
@@ -28,16 +26,16 @@ public enum Recurrence {
 
     }
 
-    public List<DateTime> getTimesForDay(LocalDate day) {
+    public DateTime getTimesForDay(LocalDate day) {
         if (requiresScheduleOn(day)) {
             return getTimesForDay(day, this);
         }
-        return Lists.newArrayList();
+        return new DateTime(day);
     }
 
-    private List<DateTime> getTimesForDay(LocalDate day, Recurrence recurrence) {
+    private DateTime getTimesForDay(LocalDate day, Recurrence recurrence) {
         // TODO DD : for now, just return one per day.  arbitrarily set hour to 9:00am just so i can test code.
-        return Lists.newArrayList(new DateTime(day.toDate().getTime()).withHourOfDay(9));
+        return new DateTime(day.toDate().getTime()).withHourOfDay(9);
     }
 
     public boolean requiresScheduleOn(LocalDate day) {
@@ -71,5 +69,13 @@ public enum Recurrence {
             default:
                 throw new IllegalStateException("Recurrence " + this.name() + " not supported");
         }
+    }
+    
+    public BaseOrg getOwner() {
+        return null;
+    };
+    
+    public int getHour() {
+        return 0;
     }
 }
