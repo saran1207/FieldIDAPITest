@@ -61,7 +61,11 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+//    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+//    @JoinColumn(name="recurrence_id")
+//    private RecurringAssetTypeEvent recurringAssetTypeEvent;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name="asset_id")
 	private Asset asset;
 
