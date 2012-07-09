@@ -206,7 +206,7 @@ public class DateTimePicker extends Panel {
         Boolean buttonImageOnly = true;
         Integer numberOfMonths = 3;
         Boolean showButtonPanel = true;
-        String dateFormat = "mm/dd/y";
+        String dateFormat = FieldIDSession.get().getSessionUser().getJqueryDateFormat();
         Boolean changeMonth = true;
         Boolean changeYear = true;
         Boolean ampm = null;
