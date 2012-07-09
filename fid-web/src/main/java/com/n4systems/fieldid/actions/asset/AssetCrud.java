@@ -446,7 +446,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	private String createLinkToAsset(Long uniqueID) {
-		return "<a href='asset.action?uniqueID="+uniqueID+"'>" + getText("message.view.this.asset") + "</a>";
+		return "<a href='w/assetSummary?uniqueID="+uniqueID+"'>" + getText("message.view.this.asset") + "</a>";
 	}
 
 	private void scheduleEvents(Asset asset) {
