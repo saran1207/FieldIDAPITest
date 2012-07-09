@@ -1,18 +1,5 @@
 package com.n4systems.ejb.legacy.impl;
 
-import java.net.URI;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.mail.MessagingException;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import com.n4systems.fieldid.CopiedToService;
-import com.n4systems.fieldid.service.user.UserService;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.UserManager;
@@ -20,15 +7,13 @@ import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.exceptions.LoginException;
 import com.n4systems.exceptions.LoginFailureInfo;
+import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.security.AccountPolicy;
-import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.security.PasswordPolicy;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.security.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
@@ -44,6 +29,15 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.log4j.Logger;
+
+import javax.mail.MessagingException;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.net.URI;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class EntityManagerBackedUserManager implements UserManager {
 	private static Logger logger = Logger.getLogger(EntityManagerBackedUserManager.class);
@@ -120,10 +114,12 @@ public class EntityManagerBackedUserManager implements UserManager {
 			
 		User user = builder.getSingleResult(em);
 
-		user.setLocked(true);		
-		user.setFailedLoginAttempts(failedLoginAttempts);
-		setLockedUntil(durationInMinutes, user);
-		updateUser(user);		
+        if(user != null) {
+            user.setLocked(true);
+            user.setFailedLoginAttempts(failedLoginAttempts);
+            setLockedUntil(durationInMinutes, user);
+            updateUser(user);
+        }
 	}
 
 	private void setLockedUntil(Integer durationInMinutes, User user) {
