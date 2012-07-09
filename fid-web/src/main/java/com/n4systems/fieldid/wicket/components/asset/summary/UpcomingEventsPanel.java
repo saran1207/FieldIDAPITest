@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.util.FieldidDateFormatter;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -13,17 +14,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class UpcomingEventsPanel extends Panel {
 
     @SpringBean
     protected EventScheduleService eventScheduleService;
-
-    private DateFormat df = new SimpleDateFormat(FieldIDSession.get().getSessionUser().getDateFormat());
-
 
     public UpcomingEventsPanel(String id, IModel<Asset> model) {
         super(id, model);
@@ -48,7 +44,9 @@ public class UpcomingEventsPanel extends Panel {
             protected void populateItem(ListItem<EventSchedule> item) {
                 EventSchedule schedule = item.getModelObject();
                 
-                item.add(new Label("upcomingEventDate", df.format(schedule.getNextDate())));
+                String upcomingEventDate = new FieldidDateFormatter(schedule.getNextDate(), FieldIDSession.get().getSessionUser(), false, false).format();
+                
+                item.add(new Label("upcomingEventDate", upcomingEventDate));
                 item.add(new Label("upcomingEventType", schedule.getEventType().getName()));
                 item.add(new NonWicketLink("startEventLink", "selectEventAdd.action?scheduleId=" + schedule.getId() + "&type=" + schedule.getEventType().getId() + "&assetId=" + asset.getId()));
                 item.add(new NonWicketLink("editScheduleLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false"));
