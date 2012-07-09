@@ -2,7 +2,6 @@ package com.n4systems.taskscheduling.task;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.RecurringAssetTypeEvent;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -11,9 +10,9 @@ import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -40,39 +39,31 @@ public class RecurringSchedulesTask extends ScheduledTask{
         List<RecurringAssetTypeEvent> list = persistenceManager.findAll(RecurringAssetTypeEvent.class);
         for(RecurringAssetTypeEvent event: list) {
             logger.info(event.getEventType().getName() + " " + event.getRecurrence());
-            if (event.getRecurrence().requiresScheduleOn(futureDate)) {
-                scheduleAnEventFor(event,futureDate);
+            for (DateTime dateTime : event.getRecurrence().getScheduledTimes(LocalDate.now(), futureDate)) {
+                scheduleAnEventFor(event, dateTime);
             }
         }
     }
 
-    private void scheduleAnEventFor(RecurringAssetTypeEvent event, LocalDate futureDate) {
+    private void scheduleAnEventFor(RecurringAssetTypeEvent event, DateTime futureDate) {
 
-        // find all assets where assetType = event.getAssetType [& tenant = tenantID.]
-        List<Asset> assetsToSchedule = getAssetsByAssetType(event.getAssetType());
+        List<Asset> assetsToSchedule = getAssetsByAssetType(event);
 
-        //handle overrides?
-        
         for (Asset asset : assetsToSchedule) {
-            EventSchedule eventSchedule = new EventSchedule(asset, event.getEventType(), setTimeForEvent(futureDate.toDate(), event));
-            // there should be a "SERIES-ID" stored in event....
-            // save the mofo.
+            //Check if schedule with reccurence id already exists
+            EventSchedule eventSchedule = new EventSchedule(asset, event.getEventType(), futureDate.toDate());
+            //TODO uncomment when new event entity is merged
             //persistenceManager.save(eventSchedule);
-            logger.info("AssetIdentifier: " + asset.getIdentifier());
         }
          
     }
 
-    private Date setTimeForEvent(Date date, RecurringAssetTypeEvent event) {
-        // these are UTC timezones...yes?
-        // adjust date...set to 9:00am?
-        return date;
-    }
-    
-    private List<Asset> getAssetsByAssetType(AssetType assetType) {
+    private List<Asset> getAssetsByAssetType(RecurringAssetTypeEvent event) {
         QueryBuilder<Asset> query = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
-        query.addWhere(WhereClauseFactory.create("type", assetType));
-        //add owner filter, event owner = asset owner
+        query.addWhere(WhereClauseFactory.create("type", event.getAssetType()));
+        if(event.getOwner() != null) {
+            query.addWhere(WhereClauseFactory.create("owner", event.getOwner()));
+        }
         return persistenceManager.findAll(query);
     }
     
