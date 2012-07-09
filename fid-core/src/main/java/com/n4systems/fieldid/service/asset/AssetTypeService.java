@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.service.asset;
 
-import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -19,9 +18,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     public List<AssetTypeGroup> getAssetTypeGroupsByOrder() {
         QueryBuilder<AssetTypeGroup> queryBuilder = createUserSecurityBuilder(AssetTypeGroup.class);
-
         queryBuilder.addOrder("orderIdx");
-
         return persistenceService.findAll(queryBuilder);
     }
 
@@ -44,7 +41,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
         // persist any new ones, delete unused ones, update changed ones before saving assetType itself.
         RecurringAssetTypeEvent toDelete = null;
         RecurringAssetTypeEvent toUpdate = null;
-        List<RecurringAssetTypeEvent> toBeSaved = Lists.newArrayList();
+        // TODO : just need a single "isModified" method...isNew is redundant
         for (RecurringAssetTypeEvent recurringEvent:recurringEvents) {
             if (isNewRecurringAssetTypeEvent(recurringEvent, assetType)) {
                 addRecurringEvent(recurringEvent);
@@ -58,7 +55,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     private RecurringAssetTypeEvent isModified(RecurringAssetTypeEvent recurringEvent, AssetType assetType) {
         RecurringAssetTypeEvent existing = getExistingRecurringEvent(assetType, recurringEvent.getEventType());
-        if ((existing==null || !existing.getRecurrence().equals(recurringEvent.getRecurrence())) && !recurringEvent.getRecurrence().equals(Recurrence.NONE)) {
+        if ((existing==null || !existing.getRecurrence().equals(recurringEvent.getRecurrence())) && !recurringEvent.getRecurrence().equals(RecurrenceType.NONE)) {
             return existing;
         }
         return null;
@@ -86,14 +83,14 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     private RecurringAssetTypeEvent isDeleted(RecurringAssetTypeEvent recurringEvent, AssetType assetType) {
         RecurringAssetTypeEvent existing = getExistingRecurringEvent(assetType, recurringEvent.getEventType());
-        if (existing != null && Recurrence.NONE.equals(recurringEvent.getRecurrence()) ) {
+        if (existing != null && RecurrenceType.NONE.equals(recurringEvent.getRecurrence().getType()) ) {
             return existing;
         }
         return null;
     }
 
     private boolean isNewRecurringAssetTypeEvent(RecurringAssetTypeEvent recurringEvent, AssetType assetType) {
-        return getExistingRecurringEvent(assetType, recurringEvent.getEventType())==null && !Recurrence.NONE.equals(recurringEvent.getRecurrence());
+        return getExistingRecurringEvent(assetType, recurringEvent.getEventType())==null && !RecurrenceType.NONE.equals(recurringEvent.getRecurrence().getType());
     }
 
     private RecurringAssetTypeEvent getExistingRecurringEvent(AssetType assetType, EventType eventType) {
@@ -112,19 +109,17 @@ public class AssetTypeService extends FieldIdPersistenceService {
         QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
         builder.addSimpleWhere("type", recurringEvent.getAssetType());
         List<Asset> assets = persistenceService.findAll(builder);
-        for (Asset asset:assets) {
-            LocalDate day = LocalDate.now();
-            System.out.println("scheduling events for asset " + asset.getIdentifier());
-            for (int i = 0; i < RECURRING_EVENT_BUFFER_SIZE; i++) {
-                DateTime dateTime = recurringEvent.getRecurrence().getTimesForDay(day);
-                System.out.println("- - - - - scheduling " +  recurringEvent.getEventType().getName() + " on " + dateTime.toDate());
-                persistenceService.save(new EventSchedule(asset, recurringEvent.getEventType(), dateTime.toDate()));
+        LocalDate endDate = LocalDate.now().plusDays(RECURRING_EVENT_BUFFER_SIZE);
 
-                day = day.plusDays(1);
+        for (Asset asset:assets) {
+System.out.println("scheduling events for asset " + asset.getIdentifier());
+            Recurrence recurrence = recurringEvent.getRecurrence();
+            for (DateTime nextDate:recurrence.getScheduledTimes(LocalDate.now(), endDate)) {
+System.out.println("- - - - - scheduling " + recurringEvent.getEventType().getName() + " on " + nextDate.toDate());
+                persistenceService.save(new EventSchedule(asset, recurringEvent.getEventType(), nextDate.toDate()));
             }
         }
     }
-
 
     private void removeScheduledEvents(RecurringAssetTypeEvent recurringEvent) {
         LocalDate from = LocalDate.now();
@@ -137,6 +132,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
         List<EventSchedule> schedules = persistenceService.findAll(builder);
         for (EventSchedule schedule:schedules) {
+            System.out.println("removing scheduled event for asset " + schedule.getAsset().getIdentifier() + " on " + schedule.getNextDate());
             persistenceService.delete(schedule);
         }
     }

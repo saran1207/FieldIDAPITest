@@ -39,7 +39,7 @@ public class RecurringSchedulesTask extends ScheduledTask{
 
         List<RecurringAssetTypeEvent> list = persistenceManager.findAll(RecurringAssetTypeEvent.class);
         for(RecurringAssetTypeEvent event: list) {
-            logger.info(event.getEventType().getName() + " " + event.getRecurrence().name());
+            logger.info(event.getEventType().getName() + " " + event.getRecurrence());
             if (event.getRecurrence().requiresScheduleOn(futureDate)) {
                 scheduleAnEventFor(event,futureDate);
             }

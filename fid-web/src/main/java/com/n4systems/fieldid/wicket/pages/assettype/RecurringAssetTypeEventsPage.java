@@ -7,10 +7,7 @@ import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Recurrence;
-import com.n4systems.model.RecurringAssetTypeEvent;
+import com.n4systems.model.*;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -82,7 +79,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     private List<RecurringAssetTypeEvent> getRecurringEvents(AssetType assetType) {
         Map<EventType, RecurringAssetTypeEvent> map = Maps.newHashMap();
         for (EventType eventType:assetType.getAllEventTypes()) {  // fill with defaults first...
-            map.put(eventType, new RecurringAssetTypeEvent(assetType, eventType,Recurrence.NONE));
+            map.put(eventType, new RecurringAssetTypeEvent(assetType, eventType, new Recurrence()));
         }
         for (RecurringAssetTypeEvent recurring:assetType.getRecurringAssetTypeEvents()) {
             map.put(recurring.getEventType(), recurring);
@@ -97,12 +94,12 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         public RecurringEventsForm(String id, final AssetType assetType) {
             super(id);
 
-            final List<Recurrence> recurrences= Arrays.asList(Recurrence.values());
-            final IChoiceRenderer renderer = new IChoiceRenderer<Recurrence>() {
-                @Override public Object getDisplayValue(Recurrence object) {
+            final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
+            final IChoiceRenderer renderer = new IChoiceRenderer<RecurrenceType>() {
+                @Override public Object getDisplayValue(RecurrenceType object) {
                     return new FIDLabelModel(object.toString()).getObject();
                 }
-                @Override public String getIdValue(Recurrence object, int index) {
+                @Override public String getIdValue(RecurrenceType object, int index) {
                     return object.name();
                 }
             };
@@ -111,7 +108,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 @Override
                 protected void populateItem(ListItem<RecurringAssetTypeEvent> item) {
                     item.add(new Label("eventType", new PropertyModel<String>(item.getDefaultModelObject(), "eventType.name")));
-                    item.add(new DropDownChoice<Recurrence>("recurrence", new PropertyModel<Recurrence>(item.getDefaultModelObject(), "recurrence"), recurrences, renderer));
+                    item.add(new DropDownChoice<RecurrenceType>("recurrence", new PropertyModel<RecurrenceType>(item.getDefaultModelObject(), "recurrence.type"), recurrences, renderer));
                 }
             });
 
@@ -120,7 +117,6 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
         @Override
         protected void onSubmit() {
-            // TODO : need to handle changes & deletion properly.
             AssetType assetType = assetTypeModel.getObject();
             assetTypeService.udpateRecurringEvents(assetType, recurringEventsList.getModel().getObject());
             recurringEventsList.getModel().detach();

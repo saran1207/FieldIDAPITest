@@ -21,9 +21,9 @@ public class RecurringAssetTypeEvent extends EntityWithOwner implements Saveable
     @JoinColumn(name = "event_type_id", nullable = false)
     private EventType eventType;
 
-    @Column(name = "recurrence", nullable=false)
-    @Enumerated(EnumType.STRING)
+    @Embedded
     private Recurrence recurrence;
+
 
     public RecurringAssetTypeEvent() {
     }
