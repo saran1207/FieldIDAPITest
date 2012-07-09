@@ -3,11 +3,13 @@ package com.n4systems.fieldid.wicket.pages.assettype;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
+import com.n4systems.fieldid.wicket.components.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.*;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -29,8 +31,6 @@ import java.util.Map;
 public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
     protected @SpringBean AssetTypeService assetTypeService;
-
-//    private @SpringBean PersistenceService persistenceService;
 
     protected Long assetTypeId;
     protected IModel<AssetType> assetTypeModel;
@@ -109,6 +109,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 protected void populateItem(ListItem<RecurringAssetTypeEvent> item) {
                     item.add(new Label("eventType", new PropertyModel<String>(item.getDefaultModelObject(), "eventType.name")));
                     item.add(new DropDownChoice<RecurrenceType>("recurrence", new PropertyModel<RecurrenceType>(item.getDefaultModelObject(), "recurrence.type"), recurrences, renderer));
+                    item.add(new AutoCompleteOrgPicker("org", new PropertyModel<BaseOrg>(item.getDefaultModelObject(), "owner")));
                 }
             });
 

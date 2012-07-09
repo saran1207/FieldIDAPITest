@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AssetTypeService extends FieldIdPersistenceService {
 
-    public static final int RECURRING_EVENT_BUFFER_SIZE = 14;  // in days.
+    public static final int RECURRING_EVENT_BUFFER_SIZE_IN_DAYS = 14;
 
     public List<AssetTypeGroup> getAssetTypeGroupsByOrder() {
         QueryBuilder<AssetTypeGroup> queryBuilder = createUserSecurityBuilder(AssetTypeGroup.class);
@@ -108,8 +108,12 @@ public class AssetTypeService extends FieldIdPersistenceService {
     private void scheduleInitialEvents(RecurringAssetTypeEvent recurringEvent) {
         QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
         builder.addSimpleWhere("type", recurringEvent.getAssetType());
+        if (recurringEvent.getOwner()!=null) {
+            builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner", "owner", recurringEvent.getOwner(), null, WhereClause.ChainOp.AND));
+        }
+
         List<Asset> assets = persistenceService.findAll(builder);
-        LocalDate endDate = LocalDate.now().plusDays(RECURRING_EVENT_BUFFER_SIZE);
+        LocalDate endDate = LocalDate.now().plusDays(RECURRING_EVENT_BUFFER_SIZE_IN_DAYS);
 
         for (Asset asset:assets) {
 System.out.println("scheduling events for asset " + asset.getIdentifier());
@@ -123,11 +127,14 @@ System.out.println("- - - - - scheduling " + recurringEvent.getEventType().getNa
 
     private void removeScheduledEvents(RecurringAssetTypeEvent recurringEvent) {
         LocalDate from = LocalDate.now();
-        LocalDate to = from.plusDays(RECURRING_EVENT_BUFFER_SIZE);
+        LocalDate to = from.plusDays(RECURRING_EVENT_BUFFER_SIZE_IN_DAYS);
         QueryBuilder<EventSchedule> builder = new QueryBuilder<EventSchedule>(EventSchedule.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
 
         builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "nextDate", from.toDate(), null, WhereClause.ChainOp.AND));
         builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "to", "nextDate", to.toDate(), null, WhereClause.ChainOp.AND));
+        if (recurringEvent.getOwner()!=null) {
+            builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner", "owner", recurringEvent.getOwner(), null, WhereClause.ChainOp.AND));
+        }
         // TODO DD :   AND EventSchedule.RECURRING_ID = recurringEvent.getId()
 
         List<EventSchedule> schedules = persistenceService.findAll(builder);
