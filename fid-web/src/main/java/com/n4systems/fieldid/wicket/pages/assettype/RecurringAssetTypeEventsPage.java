@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -68,6 +69,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/event/recurring.css");
         response.renderCSSReference("style/site_wide.css");
+        response.renderCSSReference("style/newCss/component/matt_buttons.css");
     }
 
     public Long getAssetTypeId() {
@@ -102,6 +104,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             for (EventType eventType:assetType.getEventTypes()) {
                 eventTypes.add(eventType);
             }
+            newEvent.setEventType(eventTypes.get(0));
 
             final IChoiceRenderer<EventType> eventTypeRenderer = new IChoiceRenderer<EventType>() {
                 @Override public Object getDisplayValue(EventType object) {
@@ -118,7 +121,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             createContainer.add(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(newEvent, "eventType"), eventTypes, eventTypeRenderer).setNullValid(false));
             createContainer.add(new DropDownChoice<RecurrenceType>("recurrence", new PropertyModel<RecurrenceType>(newEvent, "recurrence.type"), recurrences, renderer).setNullValid(false));
             createContainer.add(new AutoCompleteOrgPicker("org", new PropertyModel<BaseOrg>(newEvent, "owner")).setRequired(false));
-            createContainer.add(new TextField<Integer>("time", new PropertyModel<Integer>(newEvent, "recurrence.hour")));
+            createContainer.add(new TextField<Integer>("time", new PropertyModel<Integer>(newEvent, "recurrence.hour")).setRequired(false));
 
             AjaxSubmitLink create;
             createContainer.add(create = new AjaxSubmitLink("create") {
@@ -132,18 +135,25 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    //To change body of implemented methods use File | Settings | File Templates.
+
                 }
             });
             add(createContainer);
 
             add(recurringEventsList = new ListView<RecurringAssetTypeEvent>("eventTypes", new PropertyModel<List<RecurringAssetTypeEvent>>(RecurringAssetTypeEventsPage.this, "recurringEvents")){
                 @Override
-                protected void populateItem(ListItem<RecurringAssetTypeEvent> item) {
+                protected void populateItem(final ListItem<RecurringAssetTypeEvent> item) {
                     item.add(new Label("eventType", new PropertyModel<String>(item.getDefaultModelObject(), "eventType.name")));
-                    item.add(new Label("recurrence", new PropertyModel<String>(item.getDefaultModelObject(), "recurrence.type.name")));
+                    RecurringAssetTypeEvent event = (RecurringAssetTypeEvent) item.getDefaultModelObject();
+                    item.add(new Label("recurrence", new FIDLabelModel("enum."+event.getRecurrence().getType())));
                     item.add(new Label("org", new PropertyModel<String>(item.getDefaultModelObject(), "owner.displayName")));
                     item.add(new Label("time", new PropertyModel<String>(item.getDefaultModelObject(), "recurrence.hour")));
+                    item.add(new AjaxLink("remove") {
+                        @Override public void onClick(AjaxRequestTarget target) {
+                            recurringEvents.remove(item.getModelObject());
+                            target.add(RecurringEventsForm.this);
+                        }
+                    });
                 }
 
             });

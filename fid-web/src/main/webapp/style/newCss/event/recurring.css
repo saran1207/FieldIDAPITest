@@ -3,6 +3,7 @@
     padding-left:25px;
     padding-top:25px;
     padding-bottom:25px;
+    margin-bottom:50px;
     background: #f7f7f7;
 }
 
@@ -12,4 +13,24 @@
 
 .new-event select, .new-event input {
     padding:4px;
+}
+
+.existing-events  {
+    display:block;
+    width:100%;
+    padding-left:25px;
+    padding-bottom:20px;
+    margin-bottom:20px;
+}
+
+.existing-events label,  .existing-events a {
+    float:left;
+    display: block;
+    width:20%;
+    line-height: 25px;
+}
+
+.existing-events .remove{
+    width:60px;
+    line-height: 15px;
 }
