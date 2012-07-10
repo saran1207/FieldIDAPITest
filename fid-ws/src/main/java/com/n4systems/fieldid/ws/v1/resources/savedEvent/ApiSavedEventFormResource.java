@@ -17,6 +17,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiCriteriaSection;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventForm;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiCriteria;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
@@ -40,9 +41,8 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 	
 	@Autowired private ApiEventTypeResource eventTypeResource;
 	private SignatureService signatureService = new SignatureService();
-	
 
-	public ApiEventForm convertToApiEventForm(Event event) {
+	public ApiEventForm convertToApiEventForm(AbstractEvent event) {
 		if(event.getEventForm() != null) {
 			List<CriteriaSection> sections = event.getEventForm().getAvailableSections();
 			

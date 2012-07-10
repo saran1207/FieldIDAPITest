@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.fieldid.ws.v1.resources.event.ApiEvent;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventAttribute;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
 
@@ -25,14 +27,10 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 	protected ApiSavedEvent convertEntityToApiModel(Event event) {
 		ApiSavedEvent apiEvent = new ApiSavedEvent();
 		
-		apiEvent.setSid(event.getMobileGUID());
-		apiEvent.setModified(event.getModified());
+		convertAbstractEventToApiEvent(apiEvent, event);
+		
 		apiEvent.setDate(event.getDate());
-		apiEvent.setComments(event.getComments());
-		apiEvent.setTypeId(event.getType().getId());
-		apiEvent.setAssetId(event.getAsset().getMobileGUID());
-		apiEvent.setOwnerId(event.getOwner().getId());		
-		apiEvent.setModifiedById(event.getModifiedBy().getId());
+		apiEvent.setOwnerId(event.getOwner().getId());
 		apiEvent.setPerformedById(event.getPerformedBy().getId());
 		apiEvent.setPrintable(event.isPrintable());
 		
@@ -44,14 +42,6 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 			apiEvent.setEventBookId(event.getBook().getMobileId());
 		}
 		
-		if(event.getAssetStatus() != null) {
-			apiEvent.setAssetStatusId(event.getAssetStatus().getId());
-		}
-		
-		if(event.getEventStatus() != null) {
-			apiEvent.setEventStatusId(event.getEventStatus().getId());
-		}
-		
 		if(event.getStatus() != null) {
 			apiEvent.setStatus(event.getStatus().getDisplayName());
 		}
@@ -60,11 +50,29 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 			apiEvent.setFreeformLocation(event.getAdvancedLocation().getFreeformLocation());
 		}
 		
-		apiEvent.setForm(apiSavedEventFormResource.convertToApiEventForm(event));
-		apiEvent.setAttributes(convertToApiEventAttributes(event.getInfoOptionMap()));
 		apiEvent.setSubEvents(convertToSubApiEvents(event.getSubEvents()));
 		
 		return apiEvent;
+	}
+	
+	private void convertAbstractEventToApiEvent(ApiSavedEvent apiEvent, AbstractEvent event) {
+		apiEvent.setSid(event.getMobileGUID());
+		apiEvent.setModified(event.getModified());		
+		apiEvent.setComments(event.getComments());
+		apiEvent.setTypeId(event.getType().getId());
+		apiEvent.setAssetId(event.getAsset().getMobileGUID());				
+		apiEvent.setModifiedById(event.getModifiedBy().getId());
+		
+		if(event.getAssetStatus() != null) {
+			apiEvent.setAssetStatusId(event.getAssetStatus().getId());
+		}
+		
+		if(event.getEventStatus() != null) {
+			apiEvent.setEventStatusId(event.getEventStatus().getId());
+		}		
+		
+		apiEvent.setAttributes(convertToApiEventAttributes(event.getInfoOptionMap()));
+		apiEvent.setForm(apiSavedEventFormResource.convertToApiEventForm(event));
 	}
 	
 	private List<ApiEventAttribute> convertToApiEventAttributes(Map<String, String> infoOptionMap) {
@@ -85,6 +93,18 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 	}
 	
 	private List<ApiSavedEvent> convertToSubApiEvents(List<SubEvent> subEvents) {
+		if(subEvents != null && subEvents.size() > 0) {
+			List<ApiSavedEvent> apiSubEvents = new ArrayList<ApiSavedEvent>();
+			
+			for(SubEvent subEvent : subEvents) {
+				ApiSavedEvent apiSubEvent = new ApiSavedEvent();
+				convertAbstractEventToApiEvent(apiSubEvent, subEvent);
+				apiSubEvents.add(apiSubEvent);
+			}
+			
+			return apiSubEvents;
+		}
+		
 		return null;
 	}
 }
