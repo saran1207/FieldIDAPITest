@@ -6,6 +6,7 @@
     -moz-box-shadow:none;
     -webkit-box-shadow: none;
     font-size: 12px;
+    padding: 0;
 }
 
 .colmask {

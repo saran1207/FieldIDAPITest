@@ -1,30 +1,45 @@
 package com.n4systems.fieldid.wicket.components.asset;
 
+import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
+import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class HeaderPanel extends Panel {
 
     @SpringBean
     protected AssetService assetService;
+
+    @SpringBean
+    private EventCreationService eventCreationService;
     
     private Boolean useContext;
+
+    private EventSchedule scheduleToAdd = new EventSchedule();
 
     public HeaderPanel(String id, IModel<Asset> assetModel, Boolean isView, Boolean useContext) {
         super(id, assetModel);
@@ -67,7 +82,18 @@ public class HeaderPanel extends Panel {
         add(new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
 
         add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton blueButton")));
-        
+
+        add(new SchedulePicker("schedulePicker", new FIDLabelModel("label.schedule_event"), new PropertyModel<EventSchedule>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel(), -487, 28) {
+            @Override
+            protected void onPickComplete(AjaxRequestTarget target) {
+
+                EventScheduleBundle bundle = new EventScheduleBundle(scheduleToAdd.getAsset(), scheduleToAdd.getEventType(), scheduleToAdd.getProject(), scheduleToAdd.getNextDate());
+                //TODO create the schedule
+                //eventCreationService.createEventWithSchedules();
+            }
+        });
+
+        scheduleToAdd.setAsset(asset);
         
 
     }
