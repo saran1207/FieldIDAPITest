@@ -93,11 +93,9 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
 		return apiSubAsset;
 	}
 	
-	public List<ApiSubAsset> findSubAssets(Asset asset) {
+	public List<ApiSubAsset> findAndConvertSubAssets(Asset asset) {
 		List<ApiSubAsset> apiSubAssets = new ArrayList<ApiSubAsset>();		
-		QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class);
-		query.addWhere(WhereClauseFactory.create("masterAsset", asset));
-		List<SubAsset> subAssets = persistenceService.findAll(query);
+		List<SubAsset> subAssets = findSubAssets(asset);
 		
 		for(SubAsset subAsset: subAssets) {
 			ApiSubAsset apiSubAsset = convertToApiSubAsset(subAsset.getAsset());
@@ -105,6 +103,12 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
 		}
 		
 		return apiSubAssets;
+	}
+	
+	public List<SubAsset> findSubAssets(Asset asset) {
+		QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class);
+		query.addWhere(WhereClauseFactory.create("masterAsset", asset));
+		return persistenceService.findAll(query);
 	}
 	
 	private ApiSubAsset convertToApiSubAsset(Asset asset) {

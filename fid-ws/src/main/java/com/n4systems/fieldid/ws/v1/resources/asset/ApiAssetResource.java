@@ -158,6 +158,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		converApiAsset(apiAsset, asset);		
 		List<AssetAttachment> uploadedAttachments = apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset);		
 		List<AssetAttachment> existingAttachments = apiAttachmentResource.findAllAssetAttachments(asset.getMobileGUID());
+		asset.setSubAssets(apiSubAssetResource.findSubAssets(asset)); // So they don't get cleared! - WEB-3031
 		return assetSaveService.update(asset, existingAttachments, uploadedAttachments, apiAsset.getImage());
 	}
 
@@ -179,7 +180,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		apiAsset.setNonIntergrationOrderNumber(asset.getNonIntergrationOrderNumber());
 		apiAsset.setImage(loadAssetImage(asset));
 		apiAsset.setMasterAsset(apiSubAssetResource.findMasterAsset(asset));
-		apiAsset.setSubAssets(apiSubAssetResource.findSubAssets(asset));
+		apiAsset.setSubAssets(apiSubAssetResource.findAndConvertSubAssets(asset));
 		
 		if (asset.getAssetStatus() != null) {
 			apiAsset.setAssetStatusId(asset.getAssetStatus().getId());
