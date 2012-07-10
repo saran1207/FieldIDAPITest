@@ -46,6 +46,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
             if (isNewRecurringAssetTypeEvent(recurringEvent, assetType)) {
                 addRecurringEvent(recurringEvent);
             } else if ((toDelete = isDeleted(recurringEvent, assetType)) != null) {
+                // TODO : check to see if current list doesn't have existing one...if not, then it should be deleted.
                 deleteRecurringEvent(toDelete);
             } else if ((toUpdate = isModified(recurringEvent, assetType))!=null) {
                 updateRecurringEvents(toUpdate);
@@ -55,7 +56,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     private RecurringAssetTypeEvent isModified(RecurringAssetTypeEvent recurringEvent, AssetType assetType) {
         RecurringAssetTypeEvent existing = getExistingRecurringEvent(assetType, recurringEvent.getEventType());
-        if ((existing==null || !existing.getRecurrence().equals(recurringEvent.getRecurrence())) && !recurringEvent.getRecurrence().equals(RecurrenceType.NONE)) {
+        if ((existing==null || !existing.getRecurrence().equals(recurringEvent.getRecurrence())) ) {
             return existing;
         }
         return null;
@@ -83,14 +84,14 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     private RecurringAssetTypeEvent isDeleted(RecurringAssetTypeEvent recurringEvent, AssetType assetType) {
         RecurringAssetTypeEvent existing = getExistingRecurringEvent(assetType, recurringEvent.getEventType());
-        if (existing != null && RecurrenceType.NONE.equals(recurringEvent.getRecurrence().getType()) ) {
+        if (existing != null ) {
             return existing;
         }
         return null;
     }
 
     private boolean isNewRecurringAssetTypeEvent(RecurringAssetTypeEvent recurringEvent, AssetType assetType) {
-        return getExistingRecurringEvent(assetType, recurringEvent.getEventType())==null && !RecurrenceType.NONE.equals(recurringEvent.getRecurrence().getType());
+        return getExistingRecurringEvent(assetType, recurringEvent.getEventType())==null;
     }
 
     private RecurringAssetTypeEvent getExistingRecurringEvent(AssetType assetType, EventType eventType) {

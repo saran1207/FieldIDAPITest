@@ -1,0 +1,15 @@
+.new-event {
+    font-size:14px;
+    padding-left:25px;
+    padding-top:25px;
+    padding-bottom:25px;
+    background: #f7f7f7;
+}
+
+#contentHeader {
+    margin-bottom:0px;
+}
+
+.new-event select, .new-event input {
+    padding:4px;
+}

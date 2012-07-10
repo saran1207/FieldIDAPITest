@@ -17,11 +17,11 @@ public class Recurrence implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name="recurrence_type")
-    private RecurrenceType type = RecurrenceType.NONE;
+    private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
     private Integer hour = 0;
 
     public Recurrence() {
-        this(RecurrenceType.NONE, 0);
+        this(RecurrenceType.MONTHLY_1ST, 0);
     }
 
     public Recurrence(RecurrenceType type, int hour) {

@@ -22,7 +22,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -49,7 +48,6 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         final AssetType assetType = assetTypeModel.getObject();
         recurringEvents = assetType.getRecurringAssetTypeEvents();
         newEvent = new RecurringAssetTypeEvent(assetType);
-        add(new Label("label", new PropertyModel<String>(assetTypeModel, "name")));
         add(new RecurringEventsForm("form", assetType));
     }
 
@@ -68,6 +66,8 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        response.renderCSSReference("style/newCss/event/recurring.css");
+        response.renderCSSReference("style/site_wide.css");
     }
 
     public Long getAssetTypeId() {
@@ -91,7 +91,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
             final IChoiceRenderer<RecurrenceType> renderer = new IChoiceRenderer<RecurrenceType>() {
                 @Override public Object getDisplayValue(RecurrenceType object) {
-                    return new FIDLabelModel(object.toString()).getObject();
+                    return new FIDLabelModel("enum."+object.toString()).getObject();
                 }
                 @Override public String getIdValue(RecurrenceType object, int index) {
                     return object.name();
@@ -157,36 +157,10 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         RecurringAssetTypeEvent result = new RecurringAssetTypeEvent();
         result.setAssetType(event.getAssetType());
         result.setEventType(event.getEventType());
+        result.setOwner(event.getOwner());
         Recurrence recurrence = new Recurrence(event.getRecurrence().getType(), event.getRecurrence().getHour());
         result.setRecurrence(recurrence);
         return result;
-    }
-
-
-    private class RecurringEventsModel extends LoadableDetachableModel<List<RecurringAssetTypeEvent>> {
-
-        private IModel<AssetType> model;
-        private List<RecurringAssetTypeEvent> recurringEvents;
-
-        public RecurringEventsModel(IModel<AssetType> assetTypeModel) {
-            this.model = assetTypeModel;
-            this.recurringEvents = Lists.newArrayList(model.getObject().getRecurringAssetTypeEvents());
-        }
-
-        @Override
-        protected List<RecurringAssetTypeEvent> load() {
-            return recurringEvents;
-        }
-
-        public void add(RecurringAssetTypeEvent event) {
-            recurringEvents.add(event);
-        }
-
-        @Override
-        public void detach() {
-            System.out.println("detaching");
-            super.detach();
-        }
     }
 
 }

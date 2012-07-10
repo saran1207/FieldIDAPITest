@@ -5,7 +5,6 @@
 
  public enum RecurrenceType {
 
-     NONE,
      DAILY,
      WEEKLY_MONDAY,
      WEEKLY_TUESDAY,
@@ -25,8 +24,6 @@
 
      public LocalDate getNext(LocalDate day) {
          switch (this) {
-             case NONE:
-                 throw new IllegalStateException("you can't get nextDay date for recurrent type = NONE");
              case DAILY :
                  return day.plusDays(1);
              case WEEKLY_MONDAY:

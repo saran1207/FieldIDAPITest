@@ -1,18 +1,18 @@
 <wicket:extend>
 
-    <h2 wicket:id="label"/>
-
     <!-- NOTE : need to add optional org to each row!-->
     <form wicket:id="form">
 
         <div wicket:id="createContainer" class="new-event">
+            <wicket:message key="label.capital_schedule_a"/>
             <select wicket:id="eventType"></select>
             <select wicket:id="recurrence"></select>
-            <div style="display:inline" wicket:id="org"></div>
+            <wicket:message key="label.at"/>
             <input style="display:inline" class="time" type="text" wicket:id="time"/>
-            <a wicket:id="create"> + </a>
+            <wicket:message key="label.for"/>
+            <div style="display:inline" wicket:id="org"></div>
+            <a class="blue-submit" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
         </div>
-
 
         <div wicket:id="eventTypes">
             <label wicket:id="eventType"></label>
