@@ -1,13 +1,13 @@
 package com.n4systems.reporting;
 
-import java.io.File;
-import java.util.Date;
-
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
+
+import java.io.File;
+import java.util.Date;
 
 public class EventReportMapProducer extends AbsractEventReportMapProducer {
 	private static final String UNASSIGNED_USER_NAME = "Unassigned";
@@ -28,6 +28,9 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 		add("inspectionBook", (event.getBook() != null) ? event.getBook().getName() : null);
 		add("inspectionResult", event.getStatus().getDisplayName());
 		add("proofTestInfo", addProofTestInfoParams(event));
+
+        add("latitude", event.getGpsLocation() != null ? event.getGpsLocation().getLatitude() : "");
+        add("longitude", event.getGpsLocation() != null ? event.getGpsLocation().getLongitude() : "");
 
 		add("assignedUserName", assignedUserName());
 

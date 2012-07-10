@@ -1,18 +1,17 @@
 package com.n4systems.reporting;
 
-import java.io.File;
-import java.sql.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.DateTimeDefinition;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.io.File;
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AssetReportMapProducer extends ReportMapProducer {
 
@@ -54,6 +53,8 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		
 		add("productImage", imagePath(assetType));
 		add("ownerLogo", getOwnerLogo(asset.getOwner()));
+        add("latitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLatitude() : "");
+        add("longitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLongitude() : "");
 	}
 
 	private String assignedUserName() {
