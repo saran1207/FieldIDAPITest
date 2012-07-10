@@ -4,12 +4,23 @@
 
     <!-- NOTE : need to add optional org to each row!-->
     <form wicket:id="form">
+
+        <div wicket:id="createContainer" class="new-event">
+            <select wicket:id="eventType"></select>
+            <select wicket:id="recurrence"></select>
+            <div style="display:inline" wicket:id="org"></div>
+            <input style="display:inline" class="time" type="text" wicket:id="time"/>
+            <a wicket:id="create"> + </a>
+        </div>
+
+
         <div wicket:id="eventTypes">
             <label wicket:id="eventType"></label>
-            <select wicket:id="recurrence"></select>
-            <div wicket:id="org"></div>
+            <label wicket:id="recurrence"></label>
+            <label wicket:id="org"></label>
+            <label wicket:id="time"></label>
         </div>
-        <a wicket:id="save"><wicket:message key="label.save"/></a>
+
     </form>
 
 </wicket:extend>

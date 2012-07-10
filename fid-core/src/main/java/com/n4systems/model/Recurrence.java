@@ -2,7 +2,6 @@ package com.n4systems.model;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.n4systems.model.orgs.BaseOrg;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -19,13 +18,13 @@ public class Recurrence implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name="recurrence_type")
     private RecurrenceType type = RecurrenceType.NONE;
-    private int hour;
+    private Integer hour = 0;
 
     public Recurrence() {
-        this(RecurrenceType.NONE, 0, null);
+        this(RecurrenceType.NONE, 0);
     }
 
-    public Recurrence(RecurrenceType type, int hour, BaseOrg org) {
+    public Recurrence(RecurrenceType type, int hour) {
         setType(type);
         setHour(hour);
     }

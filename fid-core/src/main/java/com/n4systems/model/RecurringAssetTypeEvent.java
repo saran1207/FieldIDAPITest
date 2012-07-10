@@ -26,6 +26,11 @@ public class RecurringAssetTypeEvent extends EntityWithOwner implements Saveable
 
 
     public RecurringAssetTypeEvent() {
+        this(null, null, new Recurrence());
+    }
+
+    public RecurringAssetTypeEvent(AssetType assetType) {
+        this(assetType, null, new Recurrence());
     }
 
     public RecurringAssetTypeEvent(AssetType assetType, EventType eventType, Recurrence recurrence) {
