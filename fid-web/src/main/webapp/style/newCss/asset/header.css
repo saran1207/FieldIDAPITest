@@ -102,3 +102,15 @@
     text-decoration:none;
     float: left;
 }
+
+.openSchedulePickerButton:hover {
+    background: #f6f6f6;
+    background: -moz-linear-gradient(top, #f6f6f6 0%, #eeeeee 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f6f6f6), color-stop(100%,#eeeeee));
+    background: -webkit-linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
+    background: -o-linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
+    background: -ms-linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f6f6', endColorstr='#eeeeee',GradientType=0 );
+    background: linear-gradient(top, #f6f6f6 0%,#eeeeee 100%);
+    cursor: pointer;
+}
