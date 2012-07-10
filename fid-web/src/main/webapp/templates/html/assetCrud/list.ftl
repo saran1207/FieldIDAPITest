@@ -10,7 +10,7 @@ $$('.assetLink').each(function(element) {
 	});
 function goToAssetListener(event) {
 	<#if !inVendorContext>
-		var url = '<@s.url action="asset" />' + "?uniqueID=" + Event.element( event ).getAttribute( 'assetId' );
+		var url = '<@s.url value="w/assetSummary" />' + "?uniqueID=" + Event.element( event ).getAttribute( 'assetId' );
 	<#else>
 		var url = '<@s.url action="assetTraceability" useContext="true"/>' + "&uniqueID=" + Event.element( event ).getAttribute( 'assetId' );
 	</#if>
