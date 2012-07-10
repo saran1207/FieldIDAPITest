@@ -71,11 +71,11 @@ public interface ServiceDTOBeanConverter {
 
 	public BaseOrg convert(long ownerId, long tenantId);
 
-	public EventSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId);
+	public Event convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId);
 
 	public FileAttachment convert(AbstractEvent event, InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException;
 
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, Long tenantId) throws IOException;
+	public Event convert(InspectionServiceDTO inspectionServiceDTO, EventSchedule schedule, Long tenantId) throws IOException;
 
 	public User convert(UserServiceDTO user);
 

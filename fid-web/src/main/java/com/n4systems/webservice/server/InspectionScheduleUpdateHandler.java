@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.n4systems.model.Event;
+import com.n4systems.model.event.SimpleEventSaver;
 import org.apache.log4j.Logger;
 
 import com.n4systems.exceptions.EntityStillReferencedException;
@@ -17,15 +19,15 @@ public class InspectionScheduleUpdateHandler {
 	
 	private static Logger logger = Logger.getLogger(InspectionScheduleUpdateHandler.class);
 	private EventScheduleByGuidOrIdLoader eventScheduleByMobileGuidLoader;
-	private EventScheduleSaver saver;
+	private SimpleEventSaver saver;
 	
 	public InspectionScheduleUpdateHandler(
 			EventScheduleByGuidOrIdLoader eventScheduleByMobileGuidLoader,
-			EventScheduleSaver eventScheduleSaver) {
+            SimpleEventSaver eventSaver) {
 		
 		super();
 		this.eventScheduleByMobileGuidLoader = eventScheduleByMobileGuidLoader;
-		this.saver = eventScheduleSaver;
+		this.saver = eventSaver;
 		
 	}
 	
@@ -66,9 +68,10 @@ public class InspectionScheduleUpdateHandler {
 			EventSchedule eventSchedule) {
 		
 		//update only when it is not completed
-		if (eventSchedule.getStatus() != ScheduleStatus.COMPLETED) {
+		if (eventSchedule.getEvent().getEventState() == Event.EventState.OPEN) {
+            eventSchedule.getEvent().setNextDate(stringToDate(inspectionScheduleServiceDTO.getNextDate()));
 			eventSchedule.setNextDate( stringToDate(inspectionScheduleServiceDTO.getNextDate()) );
-			saver.saveOrUpdate(eventSchedule);
+			saver.saveOrUpdate(eventSchedule.getEvent());
 		}
 	}
 
@@ -76,9 +79,10 @@ public class InspectionScheduleUpdateHandler {
 			EventSchedule eventSchedule) {
 		
 		try {
-			//remove only when it is not completed
-			if (eventSchedule.getStatus() != ScheduleStatus.COMPLETED) {
-				saver.remove(eventSchedule);
+			//remove only when it is still open
+
+			if (eventSchedule.getEvent().getEventState() == Event.EventState.OPEN) {
+				saver.remove(eventSchedule.getEvent());
 			}
 		} catch (EntityStillReferencedException e) {
 			logger.error("Could not delete inspection schedule", e);

@@ -57,6 +57,8 @@ public class MasterEventCrud extends AbstractCrud {
 	private boolean dirtySession = true;
 
 	private boolean cleanToEventsToMatchConfiguration = false;
+
+    private Long scheduleId;
 	
 
 	public MasterEventCrud(PersistenceManager persistenceManager, EventManager eventManager, EventScheduleManager eventScheduleManager) {
@@ -85,7 +87,12 @@ public class MasterEventCrud extends AbstractCrud {
 
 	private void createNewMasterEvent() {
 		masterEvent = new MasterEvent();
-		masterEvent.setEvent(new Event());
+        if (scheduleId != null) {
+            Event openEvent = persistenceManager.find(Event.class, scheduleId, getTenant(), "asset", "eventForm.sections", "results", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
+            masterEvent.setEvent(openEvent);
+        } else {
+            masterEvent.setEvent(new Event());
+        }
 		token = masterEvent.getToken();
 		masterEvent.getEvent().setAsset(asset);
 		getSession().put("masterEvent", masterEvent);
@@ -219,9 +226,6 @@ public class MasterEventCrud extends AbstractCrud {
 						.withProofTestFile(masterEvent.getProofTestFile())
 						.withUploadedImages(masterEvent.getUploadedFiles());
 
-                createEventBuilder.withScheduleId(masterEvent.getScheduleId());
-				
-				
 				createEventBuilder.addSchedules(createEventScheduleBundles(masterEvent.getNextSchedules()));
 				
 				event = eventPersistenceFactory.createEventCreator().create(
@@ -295,25 +299,25 @@ public class MasterEventCrud extends AbstractCrud {
 	}
 	
 	
-	private void completeSchedule(Long eventScheduleId, EventSchedule eventSchedule) {
-		if (eventScheduleId != null) {
-
-			if (eventScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE)) {
-				eventSchedule = new EventSchedule(event);
-			} else if (eventSchedule != null) {
-				eventSchedule.completed(event);
-			}
-			if (eventSchedule != null) {
-				try {
-					eventScheduleManager.update(eventSchedule);
-					addFlashMessageText("message.schedulecompleted");
-				} catch (Exception e) {
-					logger.error("could not complete the schedule", e);
-					addFlashErrorText("error.completingschedule");
-				}
-			}
-		}
-	}
+//	private void completeSchedule(Long eventScheduleId, EventSchedule eventSchedule) {
+//		if (eventScheduleId != null) {
+//
+//			if (eventScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE)) {
+//				eventSchedule = new EventSchedule(event);
+//			} else if (eventSchedule != null) {
+//				eventSchedule.completed(event);
+//			}
+//			if (eventSchedule != null) {
+//				try {
+//					eventScheduleManager.update(event);
+//					addFlashMessageText("message.schedulecompleted");
+//				} catch (Exception e) {
+//					logger.error("could not complete the schedule", e);
+//					addFlashErrorText("error.completingschedule");
+//				}
+//			}
+//		}
+//	}
 
 	public Long getAssetId() {
 		return (asset != null) ? asset.getId() : null;
@@ -454,6 +458,7 @@ public class MasterEventCrud extends AbstractCrud {
 	}
 
 	public void setScheduleId(Long scheduleId) {
+        this.scheduleId = scheduleId;
 		if (masterEvent != null) {
 			masterEvent.setScheduleId(scheduleId);
 		}

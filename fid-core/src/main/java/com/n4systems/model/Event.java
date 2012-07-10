@@ -1,9 +1,6 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Archivable;
-import com.n4systems.model.api.Exportable;
-import com.n4systems.model.api.HasOwner;
-import com.n4systems.model.api.NetworkEntity;
+import com.n4systems.model.api.*;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
@@ -35,17 +32,41 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	public static final SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("tenant.id", "asset.owner", null, "state");
 	}
+
+    public enum EventState implements DisplayEnum {
+        @Deprecated
+        SCHEDULED("Scheduled"),
+        OPEN("Open"), COMPLETED("Completed");
+
+        private String label;
+
+        private EventState(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public String getName() {
+            return name();
+        }
+    }
 	
 	private Location advancedLocation = new Location();
 
-    @Transient
-    private Date tempCompletedDate;
-	
 	@Column(nullable=false)
 	private boolean printable;
 
-	@ManyToOne(fetch=FetchType.EAGER, optional = false)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private User performedBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column
+    private Date nextDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date completedDate;
 
 	@ManyToOne(fetch=FetchType.EAGER, optional = false)
 	private EventGroup group;
@@ -65,15 +86,25 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
 	
 	@Enumerated(EnumType.STRING)
-	@Column(nullable=false)
+	@Column
 	private Status status = Status.NA;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="event_state", nullable=false)
+    private EventState eventState = EventState.OPEN;
 		
 	@Enumerated(EnumType.STRING)
 	private EntityState state = EntityState.ACTIVE;
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="schedule_id")
+    @Deprecated
+    // Pertinent information isn't stored in the schedule anymore, it lives in the event.
 	private EventSchedule schedule = new EventSchedule();
+
+    @ManyToOne
+    @JoinColumn(name="project_id")
+    private Project project;
 	
 	@Embedded 
 	private GpsLocation gpsLocation = new GpsLocation();
@@ -92,7 +123,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
 	@AllowSafetyNetworkAccess
 	public Date getDate() {
-		return getSchedule().getCompletedDate();
+		return getCompletedDate();
 	}
 	
 	@AllowSafetyNetworkAccess
@@ -101,7 +132,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	}
 
 	public void setDate(Date date) {
-		this.getSchedule().setCompletedDate(date);
+		setCompletedDate(date);
 	}
 
 	@AllowSafetyNetworkAccess
@@ -288,10 +319,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     }
 
 	@AllowSafetyNetworkAccess
+    @Deprecated
 	public EventSchedule getSchedule() {
 		return schedule;
 	}
 
+    @Deprecated
     public void setSchedule(EventSchedule schedule) {
         this.schedule = schedule;
     }
@@ -356,7 +389,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     private void fillInPlaceholderScheduleIfAbsent() {
         if (schedule.getId() == null) {
             schedule.copyDataFrom(this);
-            schedule.completed(this);
         }
     }
 
@@ -424,11 +456,98 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         }
     }
 
-    public Date getTempCompletedDate() {
-        return tempCompletedDate;
+    public Date getNextDate() {
+        return nextDate;
     }
 
-    public void setTempCompletedDate(Date tempCompletedDate) {
-        this.tempCompletedDate = tempCompletedDate;
+    public void setNextDate(Date nextDate) {
+        this.nextDate = nextDate;
+    }
+
+    public Date getCompletedDate() {
+        return completedDate;
+    }
+
+    public void setCompletedDate(Date completedDate) {
+        this.completedDate = completedDate;
+    }
+
+    public EventState getEventState() {
+        return eventState;
+    }
+
+    public void setEventState(EventState eventState) {
+        this.eventState = eventState;
+    }
+
+    public Date getRelevantDate() {
+        if (getEventState() == EventState.COMPLETED) {
+            return getCompletedDate();
+        }
+        return getNextDate();
+    }
+
+    @AllowSafetyNetworkAccess
+    public Long getDaysPastDue() {
+        Long daysPast = null;
+        if (isPastDue()) {
+            daysPast = DateHelper.getDaysUntilToday(nextDate);
+        }
+        return daysPast;
+    }
+
+    @AllowSafetyNetworkAccess
+    public Long getDaysToDue() {
+        Long daysTo = null;
+        if (!isPastDue()) {
+            daysTo = DateHelper.getDaysFromToday(nextDate);
+        }
+        return daysTo;
+    }
+
+    @AllowSafetyNetworkAccess
+    public boolean isPastDue() {
+        return (getEventState() != EventState.COMPLETED && isPastDue(nextDate));
+    }
+/**
+     * A static method consolidating the logic for checking if a next inspection
+     * date is past due.
+     *
+     * @param nextEventDate
+     *            The next event date
+     * @return True if nextEventDate is after {@link DateHelper#getToday()
+     *         today}
+     */
+    @AllowSafetyNetworkAccess
+    public static boolean isPastDue(Date nextEventDate) {
+        return nextEventDate != null && DateHelper.getToday().after(nextEventDate);
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public boolean wasScheduled() {
+        return nextDate != null;
+    }
+
+    public Event copyDataFrom(Event event) {
+        setAsset(event.getAsset());
+        setType(event.getType());
+        setTenant(event.getTenant());
+        setCreated(event.getCreated());
+        setCreatedBy(event.getCreatedBy());
+        setModifiedBy(event.getModifiedBy());
+        setModified(event.getModified());
+
+        return this;
+    }
+
+    public EventType getEventType() {
+        return getType();
     }
 }

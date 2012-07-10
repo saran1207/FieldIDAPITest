@@ -6,7 +6,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.EventScheduleBuilder;
 import org.apache.wicket.model.Model;
 import org.junit.Before;
@@ -41,8 +43,8 @@ public class ReportResultsPanelTest extends FieldIdPanelTest<ReportResultsPanelH
 	}
 	
 	private PageHolder<TableView> makeResults() throws ParseException {
-        List<EventSchedule> entities = new ArrayList<EventSchedule>();
-        entities.add(EventScheduleBuilder.aCompletedEventSchedule().build());
+        List<Event> entities = new ArrayList<Event>();
+        entities.add(EventBuilder.anEvent().build());
         TableView pageResults = new TableViewTransformer("id", Lists.newArrayList("id")).transform(entities);
         return new PageHolder<TableView>(pageResults, 1);
 	}

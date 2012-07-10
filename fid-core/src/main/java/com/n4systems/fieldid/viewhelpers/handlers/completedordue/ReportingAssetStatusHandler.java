@@ -2,7 +2,7 @@ package com.n4systems.fieldid.viewhelpers.handlers.completedordue;
 
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Event;
 
 public class ReportingAssetStatusHandler extends WebOutputHandler {
 
@@ -21,14 +21,18 @@ public class ReportingAssetStatusHandler extends WebOutputHandler {
     }
 
     private String findAssetStatus(Object value) {
-        EventSchedule eventSchedule = (EventSchedule) value;
+        Event event = (Event) value;
 
-        if (eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED && eventSchedule.getEvent() != null && eventSchedule.getEvent().getAssetStatus() != null) {
-            return eventSchedule.getEvent().getAssetStatus().getName();
+        if (event.getEventState() == Event.EventState.COMPLETED) {
+            if (event.getAssetStatus() != null) {
+                return event.getAssetStatus().getName();
+            }
+
+            return "";
         }
 
-        if (eventSchedule.getAsset().getAssetStatus() != null) {
-            return eventSchedule.getAsset().getAssetStatus().getName();
+        if (event.getAsset().getAssetStatus() != null) {
+            return event.getAsset().getAssetStatus().getName();
         }
 
         return "";

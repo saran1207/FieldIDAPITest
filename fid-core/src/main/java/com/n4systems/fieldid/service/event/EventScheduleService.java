@@ -55,18 +55,20 @@ public class EventScheduleService extends FieldIdPersistenceService {
 
     @SuppressWarnings("deprecation")
     @Transactional
-    public List<EventSchedule> autoSchedule(Asset asset) {
-        List<EventSchedule> schedules = new ArrayList<EventSchedule>();
+    public List<Event> autoSchedule(Asset asset) {
+        List<Event> schedules = new ArrayList<Event>();
 
         AssetType assetType = persistenceService.find(AssetType.class, asset.getType().getId());
         if (assetType != null) {
             for (EventType type : assetType.getEventTypes()) {
                 AssetTypeSchedule schedule = assetType.getSchedule(type, asset.getOwner());
                 if (schedule != null && schedule.isAutoSchedule()) {
-                    EventSchedule eventSchedule = new EventSchedule(asset, type);
-                    eventSchedule.setNextDate(assetType.getSuggestedNextEventDate(new Date(), type, asset.getOwner()));
-                    schedules.add(eventSchedule);
-                    updateSchedule(eventSchedule);
+                    Event openEvent = new Event();
+                    openEvent.setAsset(asset);
+                    openEvent.setType(type);
+                    openEvent.setNextDate(assetType.getSuggestedNextEventDate(new Date(), type, asset.getOwner()));
+                    schedules.add(openEvent);
+                    updateSchedule(openEvent);
                 }
             }
         }
@@ -97,30 +99,9 @@ public class EventScheduleService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public void restoreScheduleForEvent(Event event) {
-        EventSchedule schedule = event.getSchedule();
-
-        if (schedule.wasScheduled()) {
-            EventSchedule newSchedule = new EventSchedule();
-            newSchedule.copyDataFrom(event);
-            newSchedule.setRetired(true);
-            persistenceService.save(newSchedule);
-
-            schedule.removeEvent();
-            updateSchedule(schedule);
-
-            event.setSchedule(newSchedule);
-            persistenceService.update(event);
-        } else {
-            schedule.setRetired(true);
-            persistenceService.update(schedule);
-        }
-    }
-
-    @Transactional
     public void removeAllSchedulesFor(Asset asset) {
-        for (EventSchedule schedule : getAvailableSchedulesFor(asset)) {
-            persistenceService.delete(schedule);
+        for (Event openEvent : getAvailableSchedulesFor(asset)) {
+            persistenceService.delete(openEvent);
         }
     }
 
@@ -130,9 +111,9 @@ public class EventScheduleService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public List<EventSchedule> getAvailableSchedulesFor(Asset asset) {
-        QueryBuilder<EventSchedule> query = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
-        query.addSimpleWhere("asset", asset).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
+    public List<Event> getAvailableSchedulesFor(Asset asset) {
+        QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+        query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
         query.addOrder("nextDate");
 
         return persistenceService.findAll(query);
@@ -190,20 +171,11 @@ public class EventScheduleService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public Long createSchedule(EventSchedule schedule) {
-        Long id = persistenceService.save(schedule);
-        schedule.getAsset().touch();
-        persistenceService.update(schedule.getAsset());
-        return id;
-    }
-
-    @Transactional
-    public EventSchedule updateSchedule(EventSchedule schedule) {
-        EventSchedule updatedSchedule = persistenceService.update(schedule);
+    public Event updateSchedule(Event schedule) {
+        Event updatedSchedule = persistenceService.update(schedule);
         updatedSchedule.getAsset().touch();
         persistenceService.update(updatedSchedule.getAsset());
         return updatedSchedule;
     }
-
 
 }

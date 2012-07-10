@@ -2,10 +2,7 @@ package com.n4systems.fieldid.actions.event.viewmodel;
 
 import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
-import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
 import java.util.Date;
@@ -20,9 +17,9 @@ public class WebEventScheduleToScheduleConverter {
 		this.dateConverter = dateConverter;
 	}
 	
-	public EventSchedule convert(WebEventSchedule webSchedule, Asset asset) {
+	public Event convert(WebEventSchedule webSchedule, Asset asset) {
 		Date scheduledDate = dateConverter.convertDateTime(webSchedule.getDate());
-        if (scheduledDate==null) {
+        if (scheduledDate == null) {
             // NOTE : try to parse a date without hour/mins.  not all schedules require it.
             // because scheduled dates are currently the only one with this "flexibility" the code is here but in the
             // future the dateConverter should be made more tolerant.
@@ -31,12 +28,15 @@ public class WebEventScheduleToScheduleConverter {
 
 		EventType eventType = loaderFactory.createFilteredIdLoader(EventType.class).setId(webSchedule.getType()).load();
 
-		EventSchedule schedule = new EventSchedule(asset, eventType, scheduledDate);		
+        Event openEvent = new Event();
+        openEvent.setAsset(asset);
+        openEvent.setType(eventType);
+        openEvent.setNextDate(scheduledDate);
 		
 		if (webSchedule.getJob() != null) {
 			Project scheduleJob = loaderFactory.createFilteredIdLoader(Project.class).setId(webSchedule.getJob()).load();
-			schedule.setProject(scheduleJob);
+			openEvent.setProject(scheduleJob);
 		} 
-		return schedule;
+		return openEvent;
 	}
 }

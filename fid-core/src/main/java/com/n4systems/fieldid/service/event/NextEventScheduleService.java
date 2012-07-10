@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,9 @@ public class NextEventScheduleService extends FieldIdPersistenceService {
      * @return The newly created schedule, or the already existing one.
      */
     @Transactional
-    public EventSchedule createNextSchedule(EventSchedule schedule) {
+    public Event createNextSchedule(Event schedule) {
 
-        EventSchedule eventSchedule = findExistingSchedule(schedule);
+        Event eventSchedule = findExistingSchedule(schedule);
 
         if (eventSchedule == null) {
             eventSchedule = eventScheduleService.updateSchedule(schedule);
@@ -29,14 +30,14 @@ public class NextEventScheduleService extends FieldIdPersistenceService {
         return eventSchedule;
     }
 
-    private EventSchedule findExistingSchedule(EventSchedule newSchedule) {
-        List<EventSchedule> upcomingSchedules = eventScheduleService.getAvailableSchedulesFor(newSchedule.getAsset());
+    private Event findExistingSchedule(Event newSchedule) {
+        List<Event> openEvents = eventScheduleService.getAvailableSchedulesFor(newSchedule.getAsset());
 
-        for (EventSchedule upcomingSchedule : upcomingSchedules) {
-            if (DateHelper.isEqualIgnoringTime(upcomingSchedule.getNextDate(), newSchedule.getNextDate())
-                    && upcomingSchedule.getEventType().equals(newSchedule.getEventType())
-                    && !upcomingSchedule.getStatus().equals(EventSchedule.ScheduleStatus.IN_PROGRESS)) {
-                return upcomingSchedule;
+        for (Event openEvent : openEvents) {
+            if (DateHelper.isEqualIgnoringTime(openEvent.getNextDate(), newSchedule.getNextDate())
+                    && openEvent.getEventType().equals(newSchedule.getEventType())
+                    && !openEvent.getStatus().equals(EventSchedule.ScheduleStatus.IN_PROGRESS)) {
+                return openEvent;
             }
         }
         return null;

@@ -45,6 +45,16 @@ public class SessionUserDateConverter implements UserDateConverter {
         return DateHelper.string2DateTime(getDateTimeFormat(), date, getTimeZone());
     }
 
+    public String convertDateTimeWithNoTimeZone(Date date) {
+        return DateHelper.date2String(getDateTimeFormat(), date);
+    }
+
+    public Date convertDateTimeWithNoTimeZone(String date) {
+        return DateHelper.string2DateTime(getDateTimeFormat(), date, null);
+    }
+
+
+
 
     public boolean isValidDate(String date, boolean usingTime) {
 		// blank dates are ok

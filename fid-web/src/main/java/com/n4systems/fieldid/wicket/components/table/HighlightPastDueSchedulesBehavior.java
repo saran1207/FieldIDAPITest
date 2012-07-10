@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.table;
 
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.Component;
@@ -22,8 +23,8 @@ public class HighlightPastDueSchedulesBehavior extends AttributeAppender {
         if (!(object instanceof RowView)) {
             return false;
         }
-        EventSchedule schedule = (EventSchedule) ((RowView) object).getEntity();
-        return schedule.isPastDue();
+        Event event = (Event) ((RowView) object).getEntity();
+        return event.isPastDue();
     }
 
 }

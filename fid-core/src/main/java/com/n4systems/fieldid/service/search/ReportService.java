@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.search;
 
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteria;
@@ -24,10 +25,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ReportService extends SearchService<EventReportCriteria, EventSchedule> {
+public class ReportService extends SearchService<EventReportCriteria, Event> {
 
     public ReportService() {
-        super(EventSchedule.class);
+        super(Event.class);
     }
 
     @Override
@@ -51,16 +52,16 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
             addAssetStatusTerm(criteriaModel, searchTerms);
         }
 
-        addSimpleTerm(searchTerms, "eventType.id", getId(criteriaModel.getEventType()));
-        addSimpleTerm(searchTerms, "eventType.group.id", getId(criteriaModel.getEventTypeGroup()));
-        addSimpleTerm(searchTerms, "event.performedBy.id", getId(criteriaModel.getPerformedBy()));
+        addSimpleTerm(searchTerms, "type.id", getId(criteriaModel.getEventType()));
+        addSimpleTerm(searchTerms, "type.group.id", getId(criteriaModel.getEventTypeGroup()));
+        addSimpleTerm(searchTerms, "performedBy.id", getId(criteriaModel.getPerformedBy()));
         addSimpleTerm(searchTerms, "project.id", getId(criteriaModel.getJob()));
-        addSimpleTerm(searchTerms, "event.status", criteriaModel.getResult());
+        addSimpleTerm(searchTerms, "status", criteriaModel.getResult());
 
         if (criteriaModel.getEventState() == EventState.COMPLETE) {
-            addSimpleTerm(searchTerms, "status", EventSchedule.ScheduleStatus.COMPLETED);
+            addSimpleTerm(searchTerms, "eventState", Event.EventState.COMPLETED);
         } else if (criteriaModel.getEventState() == EventState.INCOMPLETE) {
-            searchTerms.add(new SimpleTerm<EventSchedule.ScheduleStatus>("status", EventSchedule.ScheduleStatus.COMPLETED, WhereParameter.Comparator.NE));
+            searchTerms.add(new SimpleTerm<Event.EventState>("eventState", Event.EventState.COMPLETED, WhereParameter.Comparator.NE));
         }
 
         if (IncludeDueDateRange.HAS_NO_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
@@ -75,16 +76,16 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
 
         if (criteriaModel.getDateRange() != null && !criteriaModel.getDateRange().isEmptyCustom()) {
             if (criteriaModel.getEventState() == EventState.COMPLETE) {
-                addDateRangeTerm(searchTerms, "event.schedule.completedDate", DateHelper.convertToUTC(criteriaModel.getDateRange().calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(criteriaModel.getDateRange().calculateToDate()), timeZone));
+                addDateRangeTerm(searchTerms, "completedDate", DateHelper.convertToUTC(criteriaModel.getDateRange().calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(criteriaModel.getDateRange().calculateToDate()), timeZone));
             } else if (criteriaModel.getEventState() == EventState.ALL) {
                 searchTerms.add(new CompletedOrDueDateRange(timeZone, criteriaModel.getDateRange()));
             }
         }
 
         if(criteriaModel.getEventBook() != null && criteriaModel.getEventBook().getId() == 0) {
-            addNullTerm(searchTerms, "event.book.id");
+            addNullTerm(searchTerms, "book.id");
         } else {
-            addSimpleTerm(searchTerms, "event.book.id", getId(criteriaModel.getEventBook()));
+            addSimpleTerm(searchTerms, "book.id", getId(criteriaModel.getEventBook()));
         }
 
         Long assignedUserId = getId(criteriaModel.getAssignedTo());
@@ -143,10 +144,10 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
             joinTerms.add(joinTerm);
         }
 
-        if (status.includesComplete()) {
-            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "event.owner." + basePath, eventJoinAlias, true);
-            joinTerms.add(joinTerm);
-        }
+//        if (status.includesComplete()) {
+//            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "event.owner." + basePath, eventJoinAlias, true);
+//            joinTerms.add(joinTerm);
+//        }
     }
 
     private Date nextDay(Date date) {
@@ -206,10 +207,10 @@ public class ReportService extends SearchService<EventReportCriteria, EventSched
     }
 
     // Because the column we are sorting by is actually two columns (one for completed events and one for incomplete events)
-    // we decided to sort by status first so there's less unexpected weirdness mixing complete/incomplete.
+    // we decided to sort by eventState first so there's less unexpected weirdness mixing complete/incomplete.
     private void addStatusSortIfNecessary(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, SortDirection sortDirection) {
         if (criteriaModel.getEventState() == EventState.ALL) {
-            SortTerm sortTerm = new SortTerm("status", sortDirection);
+            SortTerm sortTerm = new SortTerm("eventState", sortDirection);
             searchBuilder.getOrderArguments().add(sortTerm.toSortField());
         }
     }

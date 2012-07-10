@@ -5,6 +5,7 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Project;
 import com.n4systems.model.event.EventByMobileGuidLoader;
+import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.utils.PlainDate;
@@ -35,21 +36,24 @@ public class CompletedScheduleCreatorTest {
     @Test
     public void creates_schedule_with_loaded_inspection() {
         TestableScheduleSaver saver = new TestableScheduleSaver();
+        TestableEventSaver eventSaver = new TestableEventSaver();
 
-        CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, testableJobLoader());
+        CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, eventSaver, testableJobLoader());
         sut.create("SOME GUID", new Date(), 1L);
 
-        assertEquals(event, saver.getUpdatedSchedule().getEvent());
+        assertEquals(event, saver.updatedSchedule.getEvent());
+        assertEquals(event, eventSaver.updatedEvent);
     }
 
     @Test
     public void created_schedule_should_be_marked_complete() {
         TestableScheduleSaver saver = new TestableScheduleSaver();
+        TestableEventSaver eventSaver = new TestableEventSaver();
 
-        CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, testableJobLoader());
+        CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, eventSaver, testableJobLoader());
         sut.create("SOME GUID", new Date(), 1L);
 
-        assertEquals(ScheduleStatus.COMPLETED, saver.getUpdatedSchedule().getStatus());
+        assertEquals(ScheduleStatus.COMPLETED, saver.updatedSchedule.getStatus());
     }
 
     @Test
@@ -59,28 +63,33 @@ public class CompletedScheduleCreatorTest {
         PlainDate someDate = new PlainDate(calendar.getTime());
 
         TestableScheduleSaver saver = new TestableScheduleSaver();
+        TestableEventSaver eventSaver = new TestableEventSaver();
 
-        CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, testableJobLoader());
+        CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, eventSaver, testableJobLoader());
         sut.create("SOME GUID", someDate, 1L);
 
-        assertEquals(someDate, saver.getUpdatedSchedule().getNextDate());
+        assertEquals(someDate, saver.updatedSchedule.getNextDate());
+        assertEquals(someDate, eventSaver.updatedEvent.getNextDate());
     }
 
     @Test
     public void schedule_should_be_assigned_to_job_passed_in() {
-        TestableScheduleSaver saver = new TestableScheduleSaver();
+        TestableScheduleSaver scheduleSaver = new TestableScheduleSaver();
+        TestableEventSaver eventSaver = new TestableEventSaver();
 
-        CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, testableJobLoader());
+        CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), scheduleSaver, eventSaver, testableJobLoader());
         sut.create("SOME GUID", new Date(), 1L);
 
-        assertEquals(job, saver.getUpdatedSchedule().getProject());
+        assertEquals(job, scheduleSaver.updatedSchedule.getProject());
+        assertEquals(job, eventSaver.updatedEvent.getProject());
     }
 
     @Test(expected=InspectionNotFoundException.class)
     public void should_throw_exception_when_no_exception_found() {
-        TestableScheduleSaver saver = new TestableScheduleSaver();
+        TestableScheduleSaver scheduleSaver = new TestableScheduleSaver();
+        TestableEventSaver eventSaver = new TestableEventSaver();
 
-        CompletedScheduleCreator sut = new CompletedScheduleCreator(testableNoInspectionLoader(), saver, testableJobLoader());
+        CompletedScheduleCreator sut = new CompletedScheduleCreator(testableNoInspectionLoader(), scheduleSaver, eventSaver, testableJobLoader());
         sut.create("SOME GUID", new Date(), 1L);
     }
 
@@ -118,8 +127,8 @@ public class CompletedScheduleCreatorTest {
 }
 
 class TestableScheduleSaver extends EventScheduleSaver {
-    private EventSchedule savedSchedule;
-    private EventSchedule updatedSchedule;
+    public EventSchedule savedSchedule;
+    public EventSchedule updatedSchedule;
 
     @Override
     public void save(EventSchedule schedule) {
@@ -131,12 +140,19 @@ class TestableScheduleSaver extends EventScheduleSaver {
         updatedSchedule = schedule;
         return schedule;
     }
+}
 
-    public EventSchedule getSavedSchedule() {
-        return savedSchedule;
+class TestableEventSaver extends SimpleEventSaver {
+    public Event savedEvent;
+    public Event updatedEvent;
+    @Override
+    public void save(Event entity) {
+        this.savedEvent = entity;
     }
 
-    public EventSchedule getUpdatedSchedule() {
-        return updatedSchedule;
+    @Override
+    public Event update(Event entity) {
+        this.updatedEvent = entity;
+        return entity;
     }
 }

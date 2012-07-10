@@ -454,8 +454,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 		
 		for (WebEventSchedule schedule: getNextSchedules()) {
 			if(schedule != null) {
-				EventSchedule eventSchedule = converter.convert(schedule, asset);
-				eventScheduleManager.update( eventSchedule );
+				Event openEvent = converter.convert(schedule, asset);
+				eventScheduleManager.update( openEvent );
 			}
 		}
 	}
@@ -468,14 +468,14 @@ public class AssetCrud extends UploadAttachmentSupport {
 		this.webEventSchedules = eventSchedules;
 	}
 	
-	public void setAutoEventSchedules(List<EventSchedule> eventSchedules) {
+	public void setAutoEventSchedules(List<Event> eventSchedules) {
 		ScheduleToWebEventScheduleConverter converter = new ScheduleToWebEventScheduleConverter(getSessionUser().createUserDateConverter());
-		for (EventSchedule schedule: eventSchedules) {
-			webEventSchedules.add(converter.convert(schedule)); 
+		for (Event openEvent: eventSchedules) {
+			webEventSchedules.add(converter.convert(openEvent));
 		}
 	}
 	
-	public List<EventSchedule> getAutoEventSchedules() {
+	public List<Event> getAutoEventSchedules() {
 		return eventScheduleManager.getAutoEventSchedules(asset);
 	}
 	

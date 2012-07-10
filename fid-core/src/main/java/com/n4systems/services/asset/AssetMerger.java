@@ -15,7 +15,6 @@ import com.n4systems.exceptions.asset.AssetTypeMissMatchException;
 import com.n4systems.exceptions.asset.DuplicateAssetException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.api.Archivable.EntityState;
@@ -93,14 +92,6 @@ public class AssetMerger {
 		for (Event eventToMove : eventsToMove) {
 			eventToMove.setAsset(winningAsset);
 			updateEvent(eventToMove);
-			updateSchedule(winningAsset, eventToMove.getSchedule());
-		}
-	}
-
-	private void updateSchedule(Asset winningAsset, EventSchedule schedule) {
-		if (schedule != null) {
-			schedule.setAsset(winningAsset);
-			scheduleService.updateSchedule(schedule);
 		}
 	}
 

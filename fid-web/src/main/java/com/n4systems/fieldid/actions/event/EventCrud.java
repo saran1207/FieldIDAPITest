@@ -25,7 +25,9 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.fieldid.utils.StrutsListHelper;
@@ -81,6 +83,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	protected Asset asset;
 	protected Event event;
 
+    protected EventBook eventBook;
+
 	protected List<CriteriaResultWebModel> criteriaResults;
 	protected String charge;
 	protected ProofTestType proofTestType;
@@ -88,8 +92,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	protected String peakLoad;
 	protected String testDuration;
 	protected String peakLoadDuration;
-	protected EventSchedule eventSchedule;
-	protected Long eventScheduleId;
+	protected Event openEvent;
+    protected Long openEventId;
 	private boolean scheduleSuggested = false;
 	private String newEventBookTitle;
 	private boolean allowNetworkResults = false;
@@ -119,9 +123,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	private boolean assignToSomeone = false;
 
 	private boolean isEditing;
+    private PersistenceService persistenceService;
 
     public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
-			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService) {
+			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService, PersistenceService persistenceService) {
 		super(persistenceManager);
 		this.eventManager = eventManager;
 		this.legacyAssetManager = legacyAssetManager;
@@ -132,11 +137,19 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		this.eventPersistenceFactory = new ProductionEventPersistenceFactory();
 		this.eventFormHelper = new EventFormHelper();
         this.eventCreationService = eventCreationService;
+        this.persistenceService = persistenceService;
 	}
 
 	@Override
 	protected void initMemberFields() {
-		event = new Event();
+        if (openEventId != null && !openEventId.equals(0L)) {
+            event = persistenceManager.find(Event.class, openEventId, getTenant(), "asset", "eventForm.sections", "results", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
+            event.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
+            event.setEventForm(event.getType().getEventForm());
+            eventGroup = event.getGroup();
+        } else {
+            event = new Event();
+        }
 		isEditing = false;
 		event.setDate(new Date());
 	}
@@ -252,23 +265,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		setUpSupportedProofTestTypes();
 		assignedTo = asset.getAssignedUser();
 		
-		if (eventSchedule != null) {
-			try {
-				eventSchedule.inProgress();
-				persistenceManager.update(eventSchedule, getSessionUser().getId());
-				addActionMessageText("message.scheduleinprogress");
-			} catch (InvalidScheduleStateException e) {
-				logger.warn("Schedule has already been completed", e);
-				event = eventSchedule.getEvent();
-				return ERROR;
-			} catch (Exception e) {
-				logger.warn("could not move schedule to in progress", e);
-			}
-		}
-		
 		autoSchedule();
-		
-		
+
 		modifiableEvent.updateValuesToMatch(event);
 		
 		return SUCCESS;
@@ -369,14 +367,15 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		try {
 			// get the user to set modifiedBy's later
 			User modifiedBy = fetchCurrentUser();
-			
+
+            event.setBook(eventBook);
 			findEventBook();
 			
 			//Set asset on the event before pushing other details.
 			event.setAsset(asset);
 			modifiableEvent.pushValuesTo(event);
 		
-			event.setInfoOptionMap(decodeMapKeys(encodedInfoOptionMap));
+			event.getInfoOptionMap().putAll(decodeMapKeys(encodedInfoOptionMap));
 
 			event.setGroup(eventGroup);
 			event.setTenant(getTenant());
@@ -389,7 +388,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			
 			processProofTestFile();
 
-			if (event.isNew()) {
+			if (event.getEventState() == Event.EventState.OPEN) {
 				// the criteriaResults from the form must be processed before setting them on the event
 				eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy, getSessionUser());
 
@@ -401,7 +400,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 				Status eventStatus = (modifiableEvent.getOverrideResult() != null && !"auto".equals(modifiableEvent.getOverrideResult())) ? Status.valueOf(modifiableEvent.getOverrideResult()) : null;
                 event.setStatus(eventStatus);
 
-                event = eventCreationService.createEventWithSchedules(event, eventScheduleId, fileData, getUploadedFiles(), createEventScheduleBundles());
+                event = eventCreationService.createEventWithSchedules(event, 0L, fileData, getUploadedFiles(), createEventScheduleBundles());
 				uniqueID = event.getId();
 				
 			} else {
@@ -411,7 +410,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 				}
 				// when updating, we need to remove any files that should no longer be attached
 				updateAttachmentList(event, modifiedBy);
-				event = eventManager.updateEvent(event, eventScheduleId, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
+				event = eventManager.updateEvent(event, null, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
 
                 completeSchedule();
 			}
@@ -485,31 +484,32 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 	
 	private void completeSchedule() {
-		if (!event.getSchedule().wasScheduled()) {
-			try {
-				if (eventScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE)) {
-                    EventSchedule oldSchedule = event.getSchedule();
-
-					eventSchedule = new EventSchedule(event);
-                    persistenceManager.save(eventSchedule);
-
-                    eventSchedule.getAsset().touch();
-                    persistenceManager.update(eventSchedule.getAsset());
-                    persistenceManager.update(event);
-                    persistenceManager.delete(oldSchedule);
-				} else if (eventSchedule != null) {
-					eventSchedule.completed(event);
-                    eventScheduleManager.update(eventSchedule);
-                    persistenceManager.update(event);
-				}
-				if (eventSchedule != null) {
-					addFlashMessageText("message.schedulecompleted");
-				}
-			} catch (Exception e) {
-				logger.error("could not complete the schedule", e);
-				addFlashErrorText("error.completingschedule");
-			}
-		}
+        //TODO: How to complete schedule now?
+//		if (!event.getSchedule().wasScheduled()) {
+//			try {
+//				if (eventScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE)) {
+//                    EventSchedule oldSchedule = event.getSchedule();
+//
+//					eventSchedule = new EventSchedule(event);
+//                    persistenceManager.save(eventSchedule);
+//
+//                    eventSchedule.getAsset().touch();
+//                    persistenceManager.update(eventSchedule.getAsset());
+//                    persistenceManager.update(event);
+//                    persistenceManager.delete(oldSchedule);
+//				} else if (eventSchedule != null) {
+//					eventSchedule.completed(event);
+//                    eventScheduleManager.update(eventSchedule);
+//                    persistenceManager.update(event);
+//				}
+//				if (eventSchedule != null) {
+//					addFlashMessageText("message.schedulecompleted");
+//				}
+//			} catch (Exception e) {
+//				logger.error("could not complete the schedule", e);
+//				addFlashErrorText("error.completingschedule");
+//			}
+//		}
 	}
 
 	protected void processProofTestFile() throws ProcessingProofTestException {
@@ -606,10 +606,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	public void setEventGroupId(Long eventGroupId) {
-		if (eventGroupId == null) {
-			eventGroup = null;
-		} else if (eventGroup == null || eventGroupId.equals(eventGroup.getId())) {
-			eventGroup = persistenceManager.find(EventGroup.class, eventGroupId, getTenantId());
+		if (eventGroupId == null && eventGroup == null) {
+			eventGroup = new EventGroup();
+		} else if (eventGroupId != null) {
+			eventGroup = persistenceManager.find(EventGroup.class, eventGroupId, getTenant());
 		}
 	}
 
@@ -621,7 +621,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		return (asset != null) ? asset.getId() : null;
 	}
 	
-	public List<EventSchedule> getEventSchedules() {
+	public List<Event> getEventSchedules() {
 		return eventScheduleManager.getAvailableSchedulesFor(asset);
 	}
 
@@ -692,7 +692,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		if (performedBy == null) {
 			event.setPerformedBy(null);
 		} else if (event.getPerformedBy() == null || !performedBy.equals(event.getPerformedBy())) {
-			event.setPerformedBy(persistenceManager.find(User.class, performedBy, getTenantId()));
+			event.setPerformedBy(persistenceManager.find(User.class, performedBy, getTenant()));
 		}
 	}
 
@@ -702,9 +702,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
 	public void setBook(Long book) {
 		if (book == null) {
-			event.setBook(null);
-		} else if (event.getBook() == null || !book.equals(event.getBook().getId())) {
-			event.setBook(persistenceManager.find(EventBook.class, book, getTenantId()));
+			eventBook = null;
+		} else if (eventBook == null || book.equals(eventBook.getId())) {
+			eventBook = persistenceManager.find(EventBook.class, book, getTenant());
 		}
 	}
 	
@@ -906,44 +906,47 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		return eventHelper.countObservations(criteriaResults.get(criteriaIndex).getDeficiencies());
 	}
 	
-	public Long getScheduleId() {
-		return eventScheduleId;
-	}
+//	public Long getScheduleId() {
+//		return eventScheduleId;
+//	}
+
+    public Long getScheduleId() {
+        return openEventId;
+    }
 
 	public void setScheduleId(Long eventScheduleId) {
-		if (eventScheduleId == null) {
-			eventSchedule = null;
-		} else if ((!eventScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE) && !eventScheduleId.equals(EventScheduleSuggestion.NO_SCHEDULE)) &&
-				(this.eventScheduleId == null || !eventScheduleId.equals(this.eventScheduleId))) {
-			// XXX should this lock to just the correct asset and event type?
-			eventSchedule = persistenceManager.find(EventSchedule.class, eventScheduleId, getTenantId());
-		}
-		this.eventScheduleId = eventScheduleId;
+        openEventId = eventScheduleId;
+//		if (eventScheduleId == null) {
+//			openEvent = null;
+//		} else {
+//			openEvent = persistenceManager.find(Event.class, eventScheduleId, getTenantId());
+//		}
+//		this.eventScheduleId = eventScheduleId;
 	}
 
-	public List<EventSchedule> getAvailableSchedules() {
-		if (availableSchedules == null) {
-			availableSchedules = getLoaderFactory().createIncompleteEventSchedulesListLoader()
-					.setAsset(asset)
-					.setEventType(event.getType())
-					.load();
-			if (eventSchedule != null && !availableSchedules.contains(eventSchedule)) {
-				availableSchedules.add(0, eventSchedule);
-			}
-		}
-		return availableSchedules;
-	}
-	
-	public List<ListingPair> getSchedules() {
-		List<ListingPair> scheduleOptions = new ArrayList<ListingPair>();
-		scheduleOptions.add(new ListingPair(EventScheduleSuggestion.NO_SCHEDULE, getText("label.notscheduled")));
-		scheduleOptions.add(new ListingPair(EventScheduleSuggestion.NEW_SCHEDULE, getText("label.createanewscheduled")));
-		for (EventSchedule schedule : getAvailableSchedules()) {
-			scheduleOptions.add(new ListingPair(schedule.getId(), convertDate(schedule.getNextDate())));
-		}
-		
-		return scheduleOptions;
-	}
+//	public List<EventSchedule> getAvailableSchedules() {
+//		if (availableSchedules == null) {
+//			availableSchedules = getLoaderFactory().createIncompleteEventSchedulesListLoader()
+//					.setAsset(asset)
+//					.setEventType(event.getType())
+//					.load();
+//			if (openEvent != null && !availableSchedules.contains(openEvent)) {
+//				availableSchedules.add(0, openEvent);
+//			}
+//		}
+//		return availableSchedules;
+//	}
+//
+//	public List<ListingPair> getSchedules() {
+//		List<ListingPair> scheduleOptions = new ArrayList<ListingPair>();
+//		scheduleOptions.add(new ListingPair(EventScheduleSuggestion.NO_SCHEDULE, getText("label.notscheduled")));
+//		scheduleOptions.add(new ListingPair(EventScheduleSuggestion.NEW_SCHEDULE, getText("label.createanewscheduled")));
+//		for (EventSchedule schedule : getAvailableSchedules()) {
+//			scheduleOptions.add(new ListingPair(schedule.getId(), convertDate(schedule.getNextDate())));
+//		}
+//
+//		return scheduleOptions;
+//	}
 	
 	public List<ListingPair> getJobs() {
 		if (eventJobs == null) {
@@ -1142,5 +1145,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
         } else {
             event.setEventStatus(null);
         }
+    }
+
+    public Project getProject() {
+        return getEvent().getProject();
     }
 }

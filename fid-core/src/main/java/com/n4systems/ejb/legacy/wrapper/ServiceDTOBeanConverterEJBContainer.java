@@ -8,16 +8,7 @@ import javax.persistence.EntityManager;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -29,21 +20,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
-import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
-import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
-import com.n4systems.webservice.dto.InspectionBookServiceDTO;
-import com.n4systems.webservice.dto.InspectionImageServiceDTO;
-import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
-import com.n4systems.webservice.dto.InspectionServiceDTO;
-import com.n4systems.webservice.dto.InternalOrgServiceDTO;
-import com.n4systems.webservice.dto.JobServiceDTO;
-import com.n4systems.webservice.dto.ProductServiceDTO;
-import com.n4systems.webservice.dto.ProductTypeGroupServiceDTO;
-import com.n4systems.webservice.dto.ProductTypeServiceDTO;
-import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
-import com.n4systems.webservice.dto.TenantServiceDTO;
-import com.n4systems.webservice.dto.UserServiceDTO;
-import com.n4systems.webservice.dto.VendorServiceDTO;
+import com.n4systems.webservice.dto.*;
 
 public class ServiceDTOBeanConverterEJBContainer extends EJBTransactionEmulator<ServiceDTOBeanConverter> implements ServiceDTOBeanConverter {
 
@@ -156,7 +133,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public EventSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
+	public Event convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -171,11 +148,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, Long tenantId) throws IOException {
+	public Event convert(InspectionServiceDTO inspectionServiceDTO, EventSchedule schedule, Long tenantId) throws IOException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert(inspectionServiceDTO, tenantId);
+			return createManager(transaction.getEntityManager()).convert(inspectionServiceDTO, schedule, tenantId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

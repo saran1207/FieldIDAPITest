@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
+import com.n4systems.model.*;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -30,13 +31,6 @@ import com.n4systems.fieldid.actions.helpers.MultiAddAssetCrudHelper;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.LineItem;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Note;
@@ -462,20 +456,20 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		WebEventScheduleToScheduleConverter converter = new WebEventScheduleToScheduleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
 		for (WebEventSchedule schedule: getNextSchedules()) {
 			if(schedule != null) {
-				EventSchedule eventSchedule = converter.convert(schedule, asset);
-				eventScheduleManager.update( eventSchedule );
+				Event openEvent = converter.convert(schedule, asset);
+				eventScheduleManager.update( openEvent );
 			}
 		}
 	}
 	
-	public void setAutoEventSchedules(List<EventSchedule> eventSchedules) {
+	public void setAutoEventSchedules(List<Event> openEvents) {
 		ScheduleToWebEventScheduleConverter converter = new ScheduleToWebEventScheduleConverter(getSessionUser().createUserDateConverter());
-		for (EventSchedule schedule: eventSchedules) {
-			webEventSchedules.add(converter.convert(schedule)); 
+		for (Event openEvent : openEvents) {
+			webEventSchedules.add(converter.convert(openEvent));
 		}
 	}
 	
-	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
+	public List<Event> getAutoEventSchedules(Asset asset) {
 		return eventScheduleManager.getAutoEventSchedules(asset);
 	}
 

@@ -18,7 +18,7 @@ public class CreateEventParameterBuilder {
 	private FileDataContainer proofTestData = null;
 	private List<FileAttachment> uploadedImages = null;
 	private ArrayList<EventScheduleBundle> schedules = new ArrayList<EventScheduleBundle>();
-    private long scheduleId;
+    private Long scheduleId;
 
     public CreateEventParameterBuilder(Event event, long userId) {
 		this.event = event;
@@ -53,7 +53,7 @@ public class CreateEventParameterBuilder {
 		return this;
 	}
 
-    public CreateEventParameterBuilder withScheduleId(long scheduleId) {
+    public CreateEventParameterBuilder withScheduleId(Long scheduleId) {
 		this.scheduleId = scheduleId;
 		return this;
 	}

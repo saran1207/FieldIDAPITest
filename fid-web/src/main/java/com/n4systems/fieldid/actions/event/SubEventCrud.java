@@ -5,6 +5,7 @@ import static com.n4systems.fieldid.utils.CopyEventFactory.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -45,9 +46,10 @@ public class SubEventCrud extends EventCrud {
     private String overrideResult;
 
 	public SubEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
-			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService) {
+			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService,
+            PersistenceService persistenceService) {
 
-		super(persistenceManager, eventManager, userManager, legacyAssetManager, assetManager, eventScheduleManager, eventCreationService);
+		super(persistenceManager, eventManager, userManager, legacyAssetManager, assetManager, eventScheduleManager, eventCreationService, persistenceService);
 	}
 
 	@Override
@@ -73,8 +75,8 @@ public class SubEventCrud extends EventCrud {
 				}
 			}
 			if (currentEventNew) {
-				event.setAsset(null);
-				event.setType(null);
+//				event.setAsset(null);
+//				event.setType(null);
 			} else {
 				parentAsset = masterEventHelper.getEvent().getAsset();
                 overrideResult = masterEventHelper.getOverrideResult();
@@ -297,8 +299,8 @@ public class SubEventCrud extends EventCrud {
 			}
 		
 			event.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
-			masterEventHelper.setSchedule(eventSchedule);
-			masterEventHelper.setScheduleId(eventScheduleId);
+//			masterEventHelper.setSchedule(openEvent);
+//			masterEventHelper.setScheduleId(eventScheduleId);
 			masterEventHelper.setUploadedFiles(getUploadedFiles());
 			masterEventHelper.setEvent(event);
 

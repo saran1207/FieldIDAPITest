@@ -336,6 +336,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         @Override
         protected void onBeforeRender() {
+            FieldIDSession.get().getSessionUser().getTenant();
         	if (!hasBeenRendered()) {
         		setVisible(configService.getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED));    	    		
         	}

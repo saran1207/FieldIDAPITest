@@ -5,16 +5,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.naming.NamingException;
 
+import com.n4systems.model.event.*;
 import org.apache.log4j.Logger;
 
 import rfid.util.PopulatorLogger;
 
 import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
@@ -23,7 +22,6 @@ import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.exceptions.FindAssetFailure;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -42,9 +40,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.LineItem;
 import com.n4systems.model.Project;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
@@ -52,10 +48,6 @@ import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import com.n4systems.model.asset.AssetImageFileSaver;
 import com.n4systems.model.asset.AssetSubAssetsLoader;
 import com.n4systems.model.asset.SmartSearchLoader;
-import com.n4systems.model.event.EventAttachmentSaver;
-import com.n4systems.model.event.EventByMobileGuidLoader;
-import com.n4systems.model.event.EventBySubEventLoader;
-import com.n4systems.model.event.NewestEventsForAssetIdLoader;
 import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
 import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -93,7 +85,6 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
-import com.n4systems.util.StringUtils;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.WsServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -577,7 +568,7 @@ public class DataServiceImpl implements DataService {
 	public RequestResponse createInspectionSchedule(InspectionScheduleRequest request) throws ServiceException {
 		try {
 			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(request.getTenantId());
-			EventSchedule eventSchedule = converter.convert(request.getScheduleService(), request.getTenantId());
+			Event openEvent = converter.convert(request.getScheduleService(), request.getTenantId());
 
 			TenantOnlySecurityFilter securityFilter = new TenantOnlySecurityFilter(request.getTenantId());
 			securityFilter.setShowArchived(true);
@@ -585,8 +576,8 @@ public class DataServiceImpl implements DataService {
 			new InspectionScheduleCreateHandler(new AssetByMobileGuidLoader(securityFilter), 
 					new FilteredIdLoader<Asset>(securityFilter, Asset.class), 
 					new FilteredIdLoader<EventType>(securityFilter, EventType.class), 
-					new EventScheduleSaver())
-					.createNewInspectionSchedule(eventSchedule, request.getScheduleService());
+					new SimpleEventSaver())
+					.createNewInspectionSchedule(openEvent, request.getScheduleService());
 
 		} catch (Exception e) {
 			logger.error("Exception occured while saving inspection schedule", e);
@@ -601,7 +592,7 @@ public class DataServiceImpl implements DataService {
 
 		try {
 			new InspectionScheduleUpdateHandler(new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(request.getTenantId())),
-					new EventScheduleSaver()).updateInspectionSchedule(request.getScheduleService());
+					new SimpleEventSaver()).updateInspectionSchedule(request.getScheduleService());
 
 		} catch (Exception e) {
 			logger.error("Exception occured while updating inspection schedule", e);
@@ -618,7 +609,7 @@ public class DataServiceImpl implements DataService {
 		try {
 
 			new InspectionScheduleUpdateHandler(new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(request.getTenantId())),
-					new EventScheduleSaver()).removeInspectionSchedule(request.getScheduleService());
+					new SimpleEventSaver()).removeInspectionSchedule(request.getScheduleService());
 
 		} catch (Exception e) {
 			logger.error("Exception occured while removing inspection schedule", e);
@@ -843,7 +834,7 @@ public class DataServiceImpl implements DataService {
 
 				EventScheduleByGuidOrIdLoader scheduleLoader = new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
 				for (InspectionServiceDTO inspectionServiceDTO : inspectionDTOs) {
-					asset = findOrTagProduct(tenantId, inspectionServiceDTO);
+					asset = findOrCreateAsset(tenantId, inspectionServiceDTO);
 					inspectionServiceDTO.setProductId(asset.getId());
 	
 					// lets look up or create all newly attached sub products and
@@ -855,14 +846,16 @@ public class DataServiceImpl implements DataService {
 					if (inspectionServiceDTO.getSubInspections() != null) {
 						Asset subProduct = null;
 						for (SubInspectionServiceDTO subInspection : inspectionServiceDTO.getSubInspections()) {
-							subProduct = findOrTagProduct(tenantId, subInspection);
+							subProduct = findOrCreateAsset(tenantId, subInspection);
 							subInspection.setProductId(subProduct.getId());
 						}
 					}
-	
-					Event event = converter.convert(inspectionServiceDTO);
 
-                    event.setSchedule(loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO));
+                    EventSchedule schedule = loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO);
+	
+					Event event = converter.convert(inspectionServiceDTO, schedule);
+
+                    event.setSchedule(schedule);
 
 					events.add(event);
 					nextInspectionDates.put(event, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
@@ -1039,7 +1032,7 @@ public class DataServiceImpl implements DataService {
 	 * products unique id, if not found throw error. If it is set, try looking
 	 * up by guid, if not found then tag (create) this asset.
 	 */
-	private Asset findOrTagProduct(Long tenantId, AbstractInspectionServiceDTO inspectionServiceDTO) throws FindAssetFailure {
+	private Asset findOrCreateAsset(Long tenantId, AbstractInspectionServiceDTO inspectionServiceDTO) throws FindAssetFailure {
 
 		Asset asset = null;
 		
@@ -1179,7 +1172,7 @@ public class DataServiceImpl implements DataService {
 			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(request.getTenantId());
 
 			CompletedScheduleCreator scheduleCreator = new CompletedScheduleCreator(new EventByMobileGuidLoader<Event>(filter, Event.class),
-					new EventScheduleSaver(), new FilteredIdLoader<Project>(filter, Project.class));
+					new EventScheduleSaver(), new SimpleEventSaver(), new FilteredIdLoader<Project>(filter, Project.class));
 			scheduleCreator.create(request.getInspectionMobileGuid(), convertedNextDate, request.getJobId());
 		} catch (InspectionNotFoundException e) {
 			logger.error("could not find inspection for completed job schedule", e);

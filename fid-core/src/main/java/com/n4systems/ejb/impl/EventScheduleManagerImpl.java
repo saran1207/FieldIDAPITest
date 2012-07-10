@@ -45,18 +45,20 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	}
 
 	@SuppressWarnings("deprecation")
-	public List<EventSchedule> autoSchedule(Asset asset) {
-		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
+	public List<Event> autoSchedule(Asset asset) {
+		List<Event> schedules = new ArrayList<Event>();
 		
 		AssetType assetType = persistenceManager.find(AssetType.class, asset.getType().getId());
 		if (assetType != null) {
 			for (EventType type : assetType.getEventTypes()) {
 				AssetTypeSchedule schedule = assetType.getSchedule(type, asset.getOwner());
 				if (schedule != null && schedule.isAutoSchedule()) {
-					EventSchedule eventSchedule = new EventSchedule(asset, type);
-					eventSchedule.setNextDate(assetType.getSuggestedNextEventDate(new Date(), type, asset.getOwner()));
-					schedules.add(eventSchedule);
-					update(eventSchedule);
+                    Event event = new Event();
+                    event.setAsset(asset);
+                    event.setType(type);
+					event.setNextDate(assetType.getSuggestedNextEventDate(new Date(), type, asset.getOwner()));
+					schedules.add(event);
+					update(event);
 				}
 			}
 		}
@@ -65,10 +67,10 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	}
 	
 	
-	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
-		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
+	public List<Event> getAutoEventSchedules(Asset asset) {
+		List<Event> schedules = new ArrayList<Event>();
 		
-		if(asset.getType() == null) {
+		if (asset.getType() == null) {
 			return schedules;
 		}
 		
@@ -77,43 +79,40 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 			for (AssociatedEventType type : assetType.getAssociatedEventTypes()) {
 				AssetTypeSchedule schedule = assetType.getSchedule(type.getEventType(), asset.getOwner());
 				if (schedule != null && schedule.isAutoSchedule()) {
-					EventSchedule eventSchedule = new EventSchedule(asset, type.getEventType());
-					eventSchedule.setNextDate(assetType.getSuggestedNextEventDate(asset.getIdentified(), type.getEventType(), asset.getOwner()));
-					schedules.add(eventSchedule);
+                    Event openEvent = new Event();
+                    openEvent.setAsset(asset);
+                    openEvent.setType(type.getEventType());
+                    openEvent.setNextDate(assetType.getSuggestedNextEventDate(asset.getIdentified(), type.getEventType(), asset.getOwner()));
+					schedules.add(openEvent);
 				}
 			}
 		}
 		return schedules;
 	}
-	
-	
-	public EventSchedule update(EventSchedule schedule) {
-		return eventScheduleService.updateSchedule(schedule);
+
+    public Event reattach(Event event) {
+        return persistenceManager.reattach(event);
+    }
+
+	public Event update(Event event) {
+		return eventScheduleService.updateSchedule(event);
 	}
 	
 	public void restoreScheduleForEvent(Event event) {
-		EventSchedule schedule = event.getSchedule();
+		if (event.wasScheduled()) {
+            Event restoredOpenEvent = new Event();
+            restoredOpenEvent.copyDataFrom(event);
+            persistenceManager.save(restoredOpenEvent);
 
-		if (schedule.wasScheduled()) {
-            EventSchedule newSchedule = new EventSchedule();
-            newSchedule.copyDataFrom(event);
-            newSchedule.setRetired(true);
-            persistenceManager.save(newSchedule);
+			update(event);
 
-			schedule.removeEvent();
-			update(schedule);
-
-            event.setSchedule(newSchedule);
             persistenceManager.update(event);
-		} else {
-            schedule.setRetired(true);
-            persistenceManager.update(schedule);
-        }
+		}
 	}
 	
 	public void removeAllSchedulesFor(Asset asset) {
-		for (EventSchedule schedule : getAvailableSchedulesFor(asset)) {
-			persistenceManager.delete(schedule);
+		for (Event openEvent : getAvailableSchedulesFor(asset)) {
+			persistenceManager.delete(openEvent);
 		}
 	}
 
@@ -121,18 +120,18 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 		persistenceManager.save(schedule);
 	}
 	
-	public List<EventSchedule> getAvailableSchedulesFor(Asset asset) {
-		QueryBuilder<EventSchedule> query = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
-		query.addSimpleWhere("asset", asset).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
+	public List<Event> getAvailableSchedulesFor(Asset asset) {
+		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+		query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
 		query.addOrder("nextDate");
 		
 		return persistenceManager.findAll(query);
 	}
 
-	public List<EventSchedule> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType) {
-		QueryBuilder<EventSchedule> query = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
-		query.addSimpleWhere("asset", asset).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
-		query.addSimpleWhere("eventType.id", eventType.getId());
+	public List<Event> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType) {
+		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+		query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
+		query.addSimpleWhere("type.id", eventType.getId());
 		query.addOrder("nextDate");
 		
 		return persistenceManager.findAll(query);
@@ -140,11 +139,11 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	
 	public boolean schedulePastDue(Long scheduleId) {
 		// here we'll select the next date off the schedule and see if it's after today
-		QueryBuilder<Date> builder = new QueryBuilder<Date>(EventSchedule.class, new OpenSecurityFilter());
+		QueryBuilder<Date> builder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("nextDate");
 		builder.addSimpleWhere("id", scheduleId);
-		builder.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
-		
+        builder.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
+
 		Date nextDate = persistenceManager.find(builder);
 		
 		

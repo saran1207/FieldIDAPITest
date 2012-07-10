@@ -9,6 +9,7 @@ import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.handlers.creator.BasicTransactionManagement;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -69,9 +70,15 @@ public class EventCreator extends BasicTransactionManagement {
 
 	private void createSchedules(Transaction transaction) {
 		for (EventScheduleBundle eventScheduleBundle : parameter.schedules) {
-			EventSchedule eventSchedule = new EventSchedule(eventScheduleBundle.getAsset(), eventScheduleBundle.getType(), eventScheduleBundle.getScheduledDate());
-			eventSchedule.setProject(eventScheduleBundle.getJob());
-			nextScheduleSerivce.createNextSchedule(eventSchedule);
+            Event openEvent = new Event();
+            openEvent.setAsset(eventScheduleBundle.getAsset());
+            openEvent.setType(eventScheduleBundle.getType());
+            openEvent.setProject(eventScheduleBundle.getJob());
+            openEvent.setNextDate(eventScheduleBundle.getScheduledDate());
+            openEvent.setGroup(new EventGroup());
+            openEvent.setTenant(eventScheduleBundle.getAsset().getTenant());
+            openEvent.setOwner(eventScheduleBundle.getAsset().getOwner());
+			nextScheduleSerivce.createNextSchedule(openEvent);
 		}
 	}
 

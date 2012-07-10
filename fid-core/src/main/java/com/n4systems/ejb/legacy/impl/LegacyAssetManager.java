@@ -2,7 +2,6 @@ package com.n4systems.ejb.legacy.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -340,7 +339,7 @@ public class LegacyAssetManager implements LegacyAsset {
 
 	@Override
 	public Event findLastEvents(Asset asset, SecurityFilter securityFilter) {
-		Query eventQuery = createAllEventQuery(asset, securityFilter, false, true);
+		Query eventQuery = createAllCompletedEventsQuery(asset, securityFilter, false, true);
 		Event event = null;
 		try {
 			event = (Event) eventQuery.getSingleResult();
@@ -357,15 +356,15 @@ public class LegacyAssetManager implements LegacyAsset {
 	
 	@Override
 	public Long countAllLocalEvents(Asset asset, SecurityFilter securityFilter) {
-		Query eventQuery = createAllEventQuery(asset, securityFilter, true);
+		Query eventQuery = createAllCompletedEventsQuery(asset, securityFilter, true);
 		return (Long)eventQuery.getSingleResult();
 	}
 
-	private Query createAllEventQuery(Asset asset, SecurityFilter securityFilter, boolean count) {
-		return createAllEventQuery(asset, securityFilter, count, false);
+	private Query createAllCompletedEventsQuery(Asset asset, SecurityFilter securityFilter, boolean count) {
+		return createAllCompletedEventsQuery(asset, securityFilter, count, false);
 	}
 
-	private Query createAllEventQuery(Asset asset, SecurityFilter securityFilter, boolean count, boolean lastEvent) {
+	private Query createAllCompletedEventsQuery(Asset asset, SecurityFilter securityFilter, boolean count, boolean lastEvent) {
 		String query = "from "+Event.class.getName()+" event  left join event.asset " + "WHERE  " + securityFilter.produceWhereClause(Event.class, "event")
 				+ " AND event.asset = :asset AND event.state= :activeState";
 		if (count) {
@@ -373,6 +372,8 @@ public class LegacyAssetManager implements LegacyAsset {
 		} else {
 			query = "SELECT event " + query;
 		}
+
+        query = query + " AND event_state = 'COMPLETED' ";
 
 		if (!count)
 			query += " ORDER BY event.schedule.completedDate DESC, event.created ASC";

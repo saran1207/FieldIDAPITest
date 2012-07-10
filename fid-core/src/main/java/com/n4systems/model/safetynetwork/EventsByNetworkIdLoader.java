@@ -54,6 +54,8 @@ public class EventsByNetworkIdLoader extends ListLoader<Event> {
         	}
         }
 
+        builder.addSimpleWhere("eventState", Event.EventState.COMPLETED);
+
 		List<Event> unsecuredEvents = builder.getResultList(em);
 		
 		PersistenceManager.setSessionReadOnly(em);

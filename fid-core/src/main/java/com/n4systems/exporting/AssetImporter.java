@@ -11,6 +11,7 @@ import com.n4systems.api.validation.validators.AssetViewValidator;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.services.asset.AssetSaveService;
@@ -43,9 +44,9 @@ public class AssetImporter extends AbstractImporter<AssetView> {
 	}
 
 	private void autoScheduleEvents(Asset asset) {
-		List<EventSchedule> eventSchedules = eventScheduleManager.getAutoEventSchedules(asset);
-		for (EventSchedule schedule: eventSchedules) {
-			if(schedule != null) {
+		List<Event> autoScheduledEvents = eventScheduleManager.getAutoEventSchedules(asset);
+		for (Event schedule: autoScheduledEvents) {
+			if (schedule != null) {
 				eventScheduleManager.update( schedule );
 			}
 		}

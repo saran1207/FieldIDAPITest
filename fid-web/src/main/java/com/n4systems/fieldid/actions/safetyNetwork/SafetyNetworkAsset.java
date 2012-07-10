@@ -41,7 +41,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 	}
 	
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
-    protected List<EventSchedule> eventSchedules;
+    protected List<Event> eventSchedules;
 	
 	@Override
 	protected void postInit() {
@@ -90,7 +90,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 		return assetAttachments;
 	}
 
-    public List<EventSchedule> getEventSchedules() {
+    public List<Event> getEventSchedules() {
         if (eventSchedules == null) {
             eventSchedules = eventScheduleManager.getAvailableSchedulesFor(asset);
         }

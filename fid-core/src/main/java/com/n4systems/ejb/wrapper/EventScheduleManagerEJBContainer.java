@@ -22,7 +22,7 @@ public class EventScheduleManagerEJBContainer extends EJBTransactionEmulator<Eve
 	}
 
 	@Override
-	public List<EventSchedule> autoSchedule(Asset asset) {
+	public List<Event> autoSchedule(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -38,7 +38,7 @@ public class EventScheduleManagerEJBContainer extends EJBTransactionEmulator<Eve
 	}
 
 	@Override
-	public List<EventSchedule> getAvailableSchedulesFor(Asset asset) {
+	public List<Event> getAvailableSchedulesFor(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -159,11 +159,11 @@ public class EventScheduleManagerEJBContainer extends EJBTransactionEmulator<Eve
 	}
 
 	@Override
-	public EventSchedule update(EventSchedule schedule) {
+	public Event update(Event event) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).update(schedule);
+			return createManager(transaction.getEntityManager()).update(event);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -175,7 +175,7 @@ public class EventScheduleManagerEJBContainer extends EJBTransactionEmulator<Eve
 	}
 
 	@Override
-	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
+	public List<Event> getAutoEventSchedules(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -189,7 +189,7 @@ public class EventScheduleManagerEJBContainer extends EJBTransactionEmulator<Eve
 	}
 
 	@Override
-	public List<EventSchedule> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType) {
+	public List<Event> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -203,5 +203,21 @@ public class EventScheduleManagerEJBContainer extends EJBTransactionEmulator<Eve
 			transactionManager.finishTransaction(transaction);
 		}
 	}
+
+    @Override
+    public Event reattach(Event event) {
+        TransactionManager transactionManager = new FieldIdTransactionManager();
+        Transaction transaction = transactionManager.startTransaction();
+        try {
+            return createManager(transaction.getEntityManager()).reattach(event);
+
+        } catch (RuntimeException e) {
+            transactionManager.rollbackTransaction(transaction);
+
+            throw e;
+        } finally {
+            transactionManager.finishTransaction(transaction);
+        }
+    }
 
 }

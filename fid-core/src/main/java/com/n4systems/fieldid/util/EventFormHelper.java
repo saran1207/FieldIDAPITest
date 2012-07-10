@@ -1,12 +1,6 @@
 package com.n4systems.fieldid.util;
 
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCriteriaResult;
+import com.n4systems.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +27,7 @@ public class EventFormHelper {
 						if (sections.get(event).containsKey(section)) {
 							availableSections.get(event).add(section);
 						}
-					} else if (event.isNew()) {
+					} else if (event.isNew() || isOpenEvent(event)) {
 						if (!section.isRetired()) {
 							availableSections.get(event).add(section);
 						}
@@ -45,7 +39,14 @@ public class EventFormHelper {
 		return availableSections.get(event);
 	}
 
-	public List<CriteriaSection> getCurrentCriteriaSections() {
+    private boolean isOpenEvent(AbstractEvent event) {
+        if (event instanceof Event) {
+            return ((Event)event).getEventState() == Event.EventState.OPEN;
+        }
+        return false;
+    }
+
+    public List<CriteriaSection> getCurrentCriteriaSections() {
 		return currentCriteriaSections;
 	}
 

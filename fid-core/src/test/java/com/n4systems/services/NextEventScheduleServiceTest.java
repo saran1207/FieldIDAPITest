@@ -1,23 +1,24 @@
 package com.n4systems.services;
 
-import static com.n4systems.model.builders.EventScheduleBuilder.*;
-import static com.n4systems.model.builders.EventTypeBuilder.*;
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import com.n4systems.ejb.EventScheduleManager;
+import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
+import com.n4systems.test.helpers.DateHelper;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.model.EventType;
-import com.n4systems.test.helpers.DateHelper;
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.builders.EventBuilder.anOpenEvent;
+import static com.n4systems.model.builders.EventScheduleBuilder.aScheduledEventSchedule;
+import static com.n4systems.model.builders.EventTypeBuilder.anEventType;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class NextEventScheduleServiceTest {
 
@@ -33,18 +34,18 @@ public class NextEventScheduleServiceTest {
 		Asset asset = anAsset().build();
 		EventType eventType = anEventType().build();
 		Date nextDate = DateHelper.oneYearFromToday();
-		EventSchedule schedule = aScheduledEventSchedule().asset(asset).eventType(eventType).nextDate(nextDate).build();
-		List<EventSchedule> existingSchedules = new ArrayList<EventSchedule>();
+		Event openEvent = anOpenEvent().on(asset).ofType(eventType).scheduledFor(nextDate).build();
+		List<Event> existingSchedules = new ArrayList<Event>();
 		
 		expect(mockEventScheduleManager.getAvailableSchedulesFor(asset)).andReturn(existingSchedules);
-		expect(mockEventScheduleManager.update((EventSchedule)anyObject())).andReturn(schedule);
+		expect(mockEventScheduleManager.update((Event)anyObject())).andReturn(openEvent);
 		replay(mockEventScheduleManager);
 		
 		ManagerBackedNextEventScheduleService scheduleService = new ManagerBackedNextEventScheduleService(mockEventScheduleManager);
-		EventSchedule returnedSchedule = scheduleService.createNextSchedule(new EventSchedule(asset, eventType, nextDate));
+		Event returnedSchedule = scheduleService.createNextSchedule(createOpenEvent(asset,eventType, nextDate));
 		
 		verify(mockEventScheduleManager);
-		assertEquals(schedule.getId(), returnedSchedule.getId());
+		assertEquals(openEvent.getId(), returnedSchedule.getId());
 	}
 	
 	@Test
@@ -53,17 +54,25 @@ public class NextEventScheduleServiceTest {
 		EventType eventType = anEventType().build();
 		Date nextDate = DateHelper.oneYearFromToday();
 		Date nextDateDifferentTime = new Date(nextDate.getTime() + 1);
-		EventSchedule schedule = aScheduledEventSchedule().asset(asset).eventType(eventType).nextDate(nextDate).build();
-		List<EventSchedule> existingSchedules = new ArrayList<EventSchedule>();
-		existingSchedules.add(schedule);
+		Event openEvent = anOpenEvent().on(asset).ofType(eventType).scheduledFor(nextDate).build();
+		List<Event> existingSchedules = new ArrayList<Event>();
+		existingSchedules.add(openEvent);
 				
 		expect(mockEventScheduleManager.getAvailableSchedulesFor(asset)).andReturn(existingSchedules);
 		replay(mockEventScheduleManager);
 		
 		ManagerBackedNextEventScheduleService scheduleService = new ManagerBackedNextEventScheduleService(mockEventScheduleManager);
-		EventSchedule returnedSchedule = scheduleService.createNextSchedule(new EventSchedule(asset, eventType, nextDateDifferentTime));
+		Event returnedSchedule = scheduleService.createNextSchedule(createOpenEvent(asset, eventType, nextDate));
 		
 		verify(mockEventScheduleManager);
-		assertEquals(schedule.getId(), returnedSchedule.getId());		
+		assertEquals(openEvent.getId(), returnedSchedule.getId());
 	}
+
+    private Event createOpenEvent(Asset asset, EventType eventType, Date nextDate) {
+        Event event = new Event();
+        event.setAsset(asset);
+        event.setType(eventType);
+        event.setNextDate(nextDate);
+        return event;
+    }
 }

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.viewhelpers.handlers.completedordue;
 
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 
 public class ReportingLocationHandler extends WebOutputHandler {
@@ -21,13 +22,13 @@ public class ReportingLocationHandler extends WebOutputHandler {
     }
 
     private String findLocation(Object value) {
-        EventSchedule schedule = (EventSchedule) value;
+        Event event = (Event) value;
 
-        if (schedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED && schedule.getEvent() != null) {
-            return schedule.getEvent().getAdvancedLocation().getFullName();
+        if (event.getEventState() == Event.EventState.COMPLETED) {
+            return event.getAdvancedLocation().getFullName();
         }
 
-        return schedule.getAsset().getAdvancedLocation().getFullName();
+        return event.getAsset().getAdvancedLocation().getFullName();
     }
 
 }

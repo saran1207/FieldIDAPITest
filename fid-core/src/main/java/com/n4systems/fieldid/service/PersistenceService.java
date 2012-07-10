@@ -10,6 +10,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
+import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Preconditions;
@@ -32,12 +36,37 @@ public class PersistenceService extends FieldIdService {
     @PersistenceContext
     private EntityManager em;
 
+    // Once all web calls are successfully ported to open session in view (used now in wicket)
+    // there should be no need to reattach anything.
+    @Deprecated
+    public <T> T reattach(T entity) {
+        return reattach(entity, false);
+    }
+
+    @Deprecated
+    public <T> void evict(T entity) {
+        getHibernateSession().evict(entity);
+    }
+
+    @Deprecated
+    public <T> T reattach(T entity, boolean refresh) {
+        getHibernateSession().lock(entity, LockMode.NONE);
+        if (refresh) {
+            em.refresh(entity);
+        }
+        return entity;
+    }
+
+    private Session getHibernateSession() {
+        return (Session) em.getDelegate();
+    }
+
     @Transactional(readOnly = true)
     public <T> T findNonSecure(Class<T> entityClass, Object id) {
     	T entity = em.find(entityClass, id);
         return entity;
     }
-    
+
     @Transactional(readOnly = true)
     public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId) {
         QueryBuilder<T> queryBuilder = createUserSecurityBuilder(entityClass).addSimpleWhere("id", entityId);

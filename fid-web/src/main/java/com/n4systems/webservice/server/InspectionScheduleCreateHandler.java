@@ -1,8 +1,7 @@
 package com.n4systems.webservice.server;
 
-import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
+import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
@@ -13,13 +12,13 @@ public class InspectionScheduleCreateHandler {
 	private final AssetByMobileGuidLoader assetByMobileGuidLoader;
 	private final FilteredIdLoader<Asset> filteredProductLoader;
 	private final FilteredIdLoader<EventType> inspectionTypeLoader;
-	private final EventScheduleSaver saver;
+	private final SimpleEventSaver saver;
 
 	public InspectionScheduleCreateHandler(
 			AssetByMobileGuidLoader assetByMobileGuidLoader,
 			FilteredIdLoader<Asset> filteredProductLoader,
 			FilteredIdLoader<EventType> inspectionTypeLoader,
-			EventScheduleSaver saver) {
+			SimpleEventSaver saver) {
 		super();
 		this.assetByMobileGuidLoader = assetByMobileGuidLoader;
 		this.filteredProductLoader = filteredProductLoader;
@@ -27,15 +26,18 @@ public class InspectionScheduleCreateHandler {
 		this.saver = saver;
 	}
 
-	public void createNewInspectionSchedule(EventSchedule eventSchedule, InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
-		eventSchedule.setAsset(loadProduct(eventSchedule, inspectionScheduleServiceDTO));
+	public void createNewInspectionSchedule(Event openEvent, InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
+        Asset asset = loadProduct(openEvent, inspectionScheduleServiceDTO);
+        openEvent.setAsset(asset);
 		
-		eventSchedule.setEventType(loadInspectionType(eventSchedule, inspectionScheduleServiceDTO));
-		
-		saver.saveOrUpdate(eventSchedule);
+		openEvent.setType(loadInspectionType(openEvent, inspectionScheduleServiceDTO));
+        openEvent.setTenant(asset.getTenant());
+        openEvent.setOwner(asset.getOwner());
+
+		saver.saveOrUpdate(openEvent);
 	}
 
-	private Asset loadProduct(EventSchedule eventSchedule,
+	private Asset loadProduct(Event eventSchedule,
 			InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		
 		Asset asset;
@@ -48,7 +50,7 @@ public class InspectionScheduleCreateHandler {
 		return asset;
 	}
 	
-	private EventType loadInspectionType(EventSchedule eventSchedule,
+	private EventType loadInspectionType(Event openEvent,
 			InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		return inspectionTypeLoader.setId(inspectionScheduleServiceDTO.getInspectionTypeId()).load();
 		

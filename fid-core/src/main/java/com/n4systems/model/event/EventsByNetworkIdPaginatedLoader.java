@@ -39,6 +39,7 @@ public class EventsByNetworkIdPaginatedLoader extends PaginatedLoader<Event> {
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 		builder.addWhere(WhereClauseFactory.create("asset.networkId", networkId));
         builder.addWhere(wpg);
+        builder.addSimpleWhere("eventState", Event.EventState.COMPLETED);
         
         if (order != null) {
         	if(order.equalsIgnoreCase("performedByFullName")) {

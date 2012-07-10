@@ -17,6 +17,7 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 import org.apache.log4j.Logger;
+import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	private LegacyAsset legacyAssetManager;
 	private EventScheduleManager eventScheduleManager;
-	protected EventSchedule eventSchedule;
+	protected Event openEvent;
 	
 	private EventType eventType;
 	private List<ListingPair> jobs;
@@ -38,7 +39,7 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	protected String searchId;
 
-	private List<EventSchedule> eventSchedules;
+	private List<Event> eventSchedules;
 
 	public EventScheduleCrud(LegacyAsset legacyAssetManager, PersistenceManager persistenceManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
@@ -48,12 +49,12 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		eventSchedule = new EventSchedule();
+		openEvent = new Event();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		eventSchedule = persistenceManager.find(EventSchedule.class, uniqueId, getTenantId());
+		openEvent = persistenceManager.find(Event.class, uniqueId, getTenantId());
 	}
 
 	private void testRequiredEntities(boolean existing) {
@@ -61,10 +62,10 @@ public class EventScheduleCrud extends AbstractCrud {
 	}
 	
 	protected void testRequiredEntities(boolean existing, boolean eventTypeRequired) {
-		if (eventSchedule == null) {
+		if (openEvent == null) {
 			addActionErrorText("error.noschedule");
 			throw new MissingEntityException();
-		} else if (existing && eventSchedule.isNew()) {
+		} else if (existing && openEvent.isNew()) {
 			addActionErrorText("error.noschedule");
 			throw new MissingEntityException();
 		}
@@ -96,12 +97,15 @@ public class EventScheduleCrud extends AbstractCrud {
 	public String doCreate() {
 		testRequiredEntities(false);
 		try {
-			Project tmpProject = eventSchedule.getProject();
-			eventSchedule = new EventSchedule(asset, eventType);
-			eventSchedule.setNextDate(convertDateWithOptionalTime(nextDate));
-			eventSchedule.setProject(tmpProject);
+			Project tmpProject = openEvent.getProject();
+			openEvent = new Event();
+            openEvent.setAsset(asset);
+            openEvent.setType(eventType);
+			openEvent.setNextDate(convertDateWithOptionalTime(nextDate));
+			openEvent.setProject(tmpProject);
+            openEvent.setTenant(getTenant());
 			
-			uniqueID = new EventScheduleServiceImpl(persistenceManager).createSchedule(eventSchedule);
+			uniqueID = new EventScheduleServiceImpl(persistenceManager).createSchedule(openEvent);
 			addActionMessageText("message.eventschedulesaved");
 		} catch (Exception e) {
 			logger.error("could not save schedule", e);
@@ -124,8 +128,8 @@ public class EventScheduleCrud extends AbstractCrud {
 	public String doSave() {
 		testRequiredEntities(true);
 		try {
-			eventSchedule.setNextDate(convertDate(nextDate));
-			new EventScheduleServiceImpl(persistenceManager).updateSchedule(eventSchedule);
+			openEvent.setNextDate(convertDate(nextDate));
+			new EventScheduleServiceImpl(persistenceManager).updateSchedule(openEvent);
 			addActionMessageText("message.eventschedulesaved");
 		} catch (Exception e) {
 			logger.error("could not save schedule", e);
@@ -148,7 +152,7 @@ public class EventScheduleCrud extends AbstractCrud {
 	public String doDelete() {
 		testRequiredEntities(true);
 		try {
-			persistenceManager.delete(eventSchedule);
+			persistenceManager.delete(openEvent);
 			addActionMessageText("message.eventscheduledeleted");
 		} catch (Exception e) {
 			logger.error("could not delete schedule", e);
@@ -160,18 +164,19 @@ public class EventScheduleCrud extends AbstractCrud {
 	
 	@SkipValidation
 	public String doStopProgress() {
-		testRequiredEntities(true, false);
-		try {
-			eventSchedule.stopProgress();
-			persistenceManager.update(eventSchedule, getSessionUser().getId());
-			addActionMessageText("message.eventscheduleprogressstoped");
-		} catch (Exception e) {
-			logger.error("could not stop progress on the schedule", e);
-			addActionErrorText("error.stopingprogresseventschedule");
-			return ERROR;
-		}
+        throw new InvalidOperationException("stopping progress - operation deprecated");
+//		testRequiredEntities(true, false);
+//		try {
+//			eventSchedule.stopProgress();
+//			persistenceManager.update(eventSchedule, getSessionUser().getId());
+//			addActionMessageText("message.eventscheduleprogressstoped");
+//		} catch (Exception e) {
+//			logger.error("could not stop progress on the schedule", e);
+//			addActionErrorText("error.stopingprogresseventschedule");
+//			return ERROR;
+//		}
 
-		return SUCCESS;
+//		return SUCCESS;
 	}
 
 	public Long getAssetId() {
@@ -224,7 +229,7 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	public String getNextDate() {
 		if (nextDate == null) {
-			nextDate = convertDateTime(eventSchedule.getNextDate());
+			nextDate = convertDateTime(openEvent.getNextDate());
 		}
 		return nextDate;
 	}
@@ -236,7 +241,7 @@ public class EventScheduleCrud extends AbstractCrud {
 		this.nextDate = nextDate;
 	}
 
-	public List<EventSchedule> getEventSchedules() {
+	public List<Event> getEventSchedules() {
 		if (eventSchedules == null) {
 			eventSchedules = eventScheduleManager.getAvailableSchedulesFor(asset);
 		}
@@ -247,8 +252,8 @@ public class EventScheduleCrud extends AbstractCrud {
 		return legacyAssetManager.countAllEvents(asset, getSecurityFilter());
 	}
 
-	public EventSchedule getEventSchedule() {
-		return eventSchedule;
+	public Event getEventSchedule() {
+		return openEvent;
 	}
 
 	public List<ListingPair> getJobs() {
@@ -262,14 +267,14 @@ public class EventScheduleCrud extends AbstractCrud {
 	}
 
 	public Long getProject() {
-		return (eventSchedule.getProject() != null) ? eventSchedule.getProject().getId() : null;
+		return (openEvent.getProject() != null) ? openEvent.getProject().getId() : null;
 	}
 
 	public void setProject(Long project) {
 		if (project == null) {
-			eventSchedule.setProject(null);
-		} else if (eventSchedule.getProject() == null || !project.equals(eventSchedule.getAsset().getId())) {
-			eventSchedule.setProject(persistenceManager.find(Project.class, project, getTenantId()));
+			openEvent.setProject(null);
+		} else if (openEvent.getProject() == null || !project.equals(openEvent.getAsset().getId())) {
+			openEvent.setProject(persistenceManager.find(Project.class, project, getTenantId()));
 		}
 	}
 

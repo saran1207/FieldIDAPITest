@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventStatus;
 import com.n4systems.model.user.User;
@@ -27,16 +28,16 @@ public class ResolveEventPage extends FieldIDFrontEndPage {
     private @SpringBean EventStatusService eventStatusService;
     private @SpringBean UserService userService;
 
-    private EventSchedule schedule;
+    private Event openEvent;
 
 
 
-    public ResolveEventPage(EventSchedule eventSchedule) {
-        initializeEvent(eventSchedule);
+    public ResolveEventPage(Event openEvent) {
+        initializeEvent(openEvent);
     }
 
-    private void initializeEvent(EventSchedule event) {
-        this.schedule = event;
+    private void initializeEvent(Event openEvent) {
+        this.openEvent = openEvent;
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new Label("event", Model.of("someEventName")));
         add(new ResolveForm("form"));
@@ -62,8 +63,8 @@ public class ResolveEventPage extends FieldIDFrontEndPage {
 
         public ResolveForm(String id) {
             super(id);
-            add(new Label("due", new PropertyModel<String>(schedule, "nextDate")));
-            add(new Label("state", new PropertyModel<String>(schedule, "status")));
+            add(new Label("due", new PropertyModel<String>(openEvent, "nextDate")));
+            add(new Label("state", new PropertyModel<String>(openEvent, "eventState")));
             add( new DropDownChoice<EventStatus>("status",
                     new PropertyModel<EventStatus>(this, "status"),
                     getEventStatus(),

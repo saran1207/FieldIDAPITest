@@ -76,8 +76,10 @@ public class WebServiceEventsCreator extends BasicTransactionManagement implemen
 			Event eventCreatingSchedule = nextEventDate.getKey();
 			
 			if (nextEventDate.getValue() != null) {
-				EventSchedule schedule = new EventSchedule(eventCreatingSchedule.getAsset(), eventCreatingSchedule.getType(), nextEventDate.getValue());
-				createNextEventScheduleService.createNextSchedule(schedule);
+                Event openEvent = new Event();
+                openEvent.setAsset(eventCreatingSchedule.getAsset());
+                openEvent.setType(eventCreatingSchedule.getType());
+				createNextEventScheduleService.createNextSchedule(openEvent);
 			}
 		}
 	}

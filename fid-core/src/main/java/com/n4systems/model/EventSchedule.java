@@ -277,6 +277,10 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 		return event;
 	}
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
 	public void removeEvent() {
 		status = ScheduleStatus.SCHEDULED;
 		completedDate = null;

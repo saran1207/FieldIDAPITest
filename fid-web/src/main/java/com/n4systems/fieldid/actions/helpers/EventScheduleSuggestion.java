@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions.helpers;
 
 import java.util.List;
 
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.util.DateHelper;
 
@@ -10,36 +11,31 @@ public class EventScheduleSuggestion {
 	public static final Long NO_SCHEDULE = 0L;
 	public static final Long NEW_SCHEDULE = -1L;
 	
-	List<EventSchedule> schedules;
+	List<Event> schedules;
 
-	public EventScheduleSuggestion(List<EventSchedule> schedules) {
-		super();
+	public EventScheduleSuggestion(List<Event> schedules) {
 		this.schedules = schedules;
 	}
 	
 	public Long getSuggestedScheduleId() {
-		
-		EventSchedule suggestedSchedule = selectAScheduleWithinATimeFrame();
+		Event suggestedSchedule = selectAScheduleWithinATimeFrame();
 		
 		return (suggestedSchedule != null) ? suggestedSchedule.getId() : NO_SCHEDULE;
 	}
 	
-	public EventSchedule getSuggestedSchedule(){
-		
-		EventSchedule suggestedSchedule = selectAScheduleWithinATimeFrame();
-		
-		return suggestedSchedule;
+	public Event getSuggestedSchedule() {
+		return selectAScheduleWithinATimeFrame();
 	}
 	
-	public EventSchedule selectAScheduleWithinATimeFrame(){
-		EventSchedule suggestedSchedule = null;
+	public Event selectAScheduleWithinATimeFrame() {
+		Event suggestedSchedule = null;
 		Long currentDaysFromToday = SUGGESTED_SCHEDULE_DATE_LIMIT;
-		for (EventSchedule schedule : schedules) {
-			Long currentDays = Math.abs(DateHelper.getDaysFromToday(schedule.getNextDate()));
+		for (Event openEvent : schedules) {
+			Long currentDays = Math.abs(DateHelper.getDaysFromToday(openEvent.getNextDate()));
 			if (currentDays < SUGGESTED_SCHEDULE_DATE_LIMIT) { 
 				if ((currentDays < currentDaysFromToday) || 
-						(currentDays == currentDaysFromToday && schedule.getNextDate().before(suggestedSchedule.getNextDate()))){
-					suggestedSchedule = schedule;
+						(currentDays.equals(currentDaysFromToday) && openEvent.getNextDate().before(suggestedSchedule.getNextDate()))){
+					suggestedSchedule = openEvent;
 					currentDaysFromToday = currentDays;
 				} 
 			}

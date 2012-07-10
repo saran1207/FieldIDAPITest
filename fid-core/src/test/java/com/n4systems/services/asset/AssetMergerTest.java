@@ -135,31 +135,6 @@ public class AssetMergerTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Test
-	public void should_merge_products_together_with_events_that_have_a_schedule_on_it() {
-		List<Event> eventsOnLosingProduct = new ArrayList<Event>();
-		eventsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).withTenant(TenantBuilder.aTenant().build()).build());
-		
-		// puts the schedule onto the event.
-		EventScheduleBuilder.aCompletedEventSchedule().completedDoing(eventsOnLosingProduct.get(0)).asset(eventsOnLosingProduct.get(0).getAsset()).build();
-		
-		mockEventLists(eventsOnLosingProduct, new ArrayList<Event>());
-				
-        expect(mockEventManager.updateEvent((Event)eq(eventsOnLosingProduct.get(0)), eq(0L), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(eventsOnLosingProduct.get(0));
-
-		mockArchiveOfLosingAsset();
-		
-		replayMocks();
-		
-		AssetMerger sut = createSystemUnderTest();
-		Asset mergedAsset = sut.merge(winningAsset, losingAsset);
-		
-		assertEquals(winningAsset, mergedAsset);
-		assertEquals(winningAsset, eventsOnLosingProduct.get(0).getAsset());
-		verifyMocks();
-	}
-	
-	@SuppressWarnings("unchecked")
 	@Test 
 	public void should_merge_subasset_together() {
 		SubEvent sub = SubEventBuilder.aSubEvent("tom").withAsset(losingAsset).build();
@@ -220,13 +195,6 @@ public class AssetMergerTest {
 	@SuppressWarnings("unchecked")
 	private void mockEventLists(List<Event> events, List<Event> masterEvents) {
 		expect(mockPersistenceManager.findAll((QueryBuilder<Event>)anyObject())).andReturn(events);
-        long id = 1;
-		for (Event event : events) {
-			if (event.getSchedule() != null) {
-                event.getSchedule().setId(id++);
-				expect(mockEventScheduleService.updateSchedule(eq(event.getSchedule()))).andReturn(event.getSchedule());
-			}
-		}
 		expect(mockPersistenceManager.passThroughFindAll(contains("SELECT"), (Map<String,Object>)anyObject())).andReturn(new ArrayList<Object>(masterEvents));
 	}
 	

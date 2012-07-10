@@ -1,43 +1,26 @@
 package com.n4systems.ejb.impl;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-
-import com.n4systems.model.CriteriaType;
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UnknownSubAsset;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Asset;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.ProofTestInfo;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.Status;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+
+import javax.persistence.EntityManager;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.*;
 
 public class ManagerBackedEventSaver implements EventSaver {
 	private final Logger logger = Logger.getLogger(ManagerBackedEventSaver.class);
@@ -78,41 +61,65 @@ public class ManagerBackedEventSaver implements EventSaver {
 		setOrderForSubEvents(parameterObject.event);
 
         Date completedDate = parameterObject.event.getSchedule() == null ? null : parameterObject.event.getDate();
-        if (parameterObject.event.getTempCompletedDate() != null) {
-            completedDate = parameterObject.event.getTempCompletedDate();
-        }
 
-        EventSchedule eventSchedule = findOrCreateSchedule(parameterObject.event, parameterObject.scheduleId);
+        findOrCreateSchedule(parameterObject.event, parameterObject.scheduleId);
 
         if (parameterObject.event.getSchedule() == null) {
-            parameterObject.event.setSchedule(new EventSchedule());
+            EventSchedule schedule = new EventSchedule();
+            schedule.copyDataFrom(parameterObject.event);
+            parameterObject.event.setSchedule(schedule);
         }
 
         parameterObject.event.setDate(completedDate);
 
-        persistenceManager.save(parameterObject.event, parameterObject.userId);
+        parameterObject.event.setEventState(Event.EventState.COMPLETED);
+
+        Map<Long, byte[]> rememberedSignatureImages = collectSignatureImageData(parameterObject.event);
+
+        if (parameterObject.event.getId() != null) {
+            parameterObject.event = persistenceManager.update(parameterObject.event, parameterObject.userId);
+        } else {
+            persistenceManager.save(parameterObject.event, parameterObject.userId);
+        }
 
 		updateAsset(parameterObject.event, parameterObject.userId);
 		
 		// writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an 
 		// event id is required to build the save path
-		writeSignatureImagesToDisk(parameterObject.event);
+		writeSignatureImagesToDisk(parameterObject.event, rememberedSignatureImages);
 			
 		saveProofTestFiles(parameterObject.event, parameterObject.fileData);
 	
 		processUploadedFiles(parameterObject.event, parameterObject.uploadedFiles);
 
+        // Remove after mobile doesn't care about schedules
         // Do this last, as it can throw an exception if the schedule is in an invalid state.
-        if (eventSchedule != null) {
-            eventSchedule.completed(parameterObject.event);
-            persistenceManager.update(eventSchedule);
-        }
-	
+        parameterObject.event.getSchedule().completed(parameterObject.event);
+        persistenceManager.update(parameterObject.event.getSchedule());
+
 		return parameterObject.event;
 	}
+
+    private Map<Long, byte[]> collectSignatureImageData(Event event) {
+        Map<Long,byte[]> rememberedSignatures = new HashMap<Long, byte[]>();
+        for (CriteriaResult criteriaResult : event.getResults()) {
+            if (criteriaResult instanceof SignatureCriteriaResult) {
+                SignatureCriteriaResult signatureResult = (SignatureCriteriaResult) criteriaResult;
+                if (signatureResult.isSigned() && signatureResult.getImage() != null) {
+                    rememberedSignatures.put(signatureResult.getCriteria().getId(), signatureResult.getImage());
+                }
+            }
+        }
+        return rememberedSignatures;
+    }
     
     private EventSchedule findOrCreateSchedule(Event event, Long scheduleId) {
         EventSchedule eventSchedule = null;
+
+        if (scheduleId == null) {
+            scheduleId = 0L;
+        }
+
         if (scheduleId == -1) {
             // This means the user selected 'create new schedule'
             // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
@@ -133,18 +140,20 @@ public class ManagerBackedEventSaver implements EventSaver {
         return eventSchedule;
     }
 	
-	private void writeSignatureImagesToDisk(Event event) {
+	private void writeSignatureImagesToDisk(Event event, Map<Long, byte[]> rememberedSignatureImages) {
 		SignatureService sigService = new SignatureService();
 
-        writeSignatureImagesFor(sigService, event.getResults());
+        writeSignatureImagesFor(sigService, event.getResults(), rememberedSignatureImages);
         for (SubEvent subEvent : event.getSubEvents()) {
-            writeSignatureImagesFor(sigService, subEvent.getResults());
+            writeSignatureImagesFor(sigService, subEvent.getResults(), rememberedSignatureImages);
         }
 	}
 
-    private void writeSignatureImagesFor(SignatureService sigService, Set<CriteriaResult> results) {
+    private void writeSignatureImagesFor(SignatureService sigService, Set<CriteriaResult> results, Map<Long, byte[]> rememberedSignatureImages) {
 		for (CriteriaResult result : results) {
-			if (result.getCriteria().getCriteriaType() == CriteriaType.SIGNATURE && ((SignatureCriteriaResult)result).getImage() != null) {
+            byte[] rememberedSignatureImage = rememberedSignatureImages.get(result.getCriteria().getId());
+            if (result.getCriteria().getCriteriaType() == CriteriaType.SIGNATURE && rememberedSignatureImage != null) {
+                ((SignatureCriteriaResult)result).setImage(rememberedSignatureImage);
 				try {
 					sigService.storeSignatureFileFor((SignatureCriteriaResult)result);
 				} catch (IOException e) {
@@ -162,35 +171,37 @@ public class ManagerBackedEventSaver implements EventSaver {
 		
 		// writeSignatureImagesToDisk MUST be called prior persistenceManager.update(event, userId) as the image data in the 
 		// signatures is transient and won't be there afterwards
-		writeSignatureImagesToDisk(event);
+		writeSignatureImagesToDisk(event, collectSignatureImageData(event));
 		
 		event = persistenceManager.update(event, userId);
 
-        event.getSchedule().setCompletedDate(event.getDate());
-        event.getSchedule().setOwner(event.getOwner());
-        event.getSchedule().setAdvancedLocation(event.getAdvancedLocation());
+        // TODO: Schedule is deprecated and these fields are now stored in the event (and editable there).
 
-        persistenceManager.update(event.getSchedule(), userId);
+//        event.getSchedule().setCompletedDate(event.getDate());
+//        event.getSchedule().setOwner(event.getOwner());
+//        event.getSchedule().setAdvancedLocation(event.getAdvancedLocation());
+
+//        persistenceManager.update(event.getSchedule(), userId);
         
-        EventSchedule newEventSchedule = null;
-        if (!event.getSchedule().wasScheduled()) {
-            if (scheduleId == -1) {
-                EventSchedule oldSchedule = event.getSchedule();
-
-                newEventSchedule = new EventSchedule(event);
-                persistenceManager.save(newEventSchedule);
-
-                newEventSchedule.getAsset().touch();
-                persistenceManager.update(newEventSchedule.getAsset());
-                persistenceManager.update(event);
-                persistenceManager.delete(oldSchedule);
-            } else if (scheduleId > 0 && !scheduleId.equals(event.getSchedule().getId())) {
-                newEventSchedule = persistenceManager.find(EventSchedule.class, scheduleId);
-                newEventSchedule.completed(event);
-                persistenceManager.update(newEventSchedule);
-                persistenceManager.update(event);
-            }
-        }
+//        EventSchedule newEventSchedule = null;
+//        if (!event.getSchedule().wasScheduled()) {
+//            if (scheduleId == -1) {
+//                EventSchedule oldSchedule = event.getSchedule();
+//
+//                newEventSchedule = new EventSchedule(event);
+//                persistenceManager.save(newEventSchedule);
+//
+//                newEventSchedule.getAsset().touch();
+//                persistenceManager.update(newEventSchedule.getAsset());
+//                persistenceManager.update(event);
+//                persistenceManager.delete(oldSchedule);
+//            } else if (scheduleId > 0 && !scheduleId.equals(event.getSchedule().getId())) {
+//                newEventSchedule = persistenceManager.find(EventSchedule.class, scheduleId);
+//                newEventSchedule.completed(event);
+//                persistenceManager.update(newEventSchedule);
+//                persistenceManager.update(event);
+//            }
+//        }
 
 		updateAssetLastEventDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
@@ -291,19 +302,16 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 	
 	private void gpsUpdates(Event event, Asset asset) {
-		if(event.getGpsLocation().isValid()) {
+		if (event.getGpsLocation() != null && event.getGpsLocation().isValid()) {
 			logger.info("Valid GPS recieved during inspection. Updating Asset " + asset.getIdentifier());
 			asset.setGpsLocation(event.getGpsLocation());
 		}
 	}
 
 	private void updateScheduleOwnerShip(Event event, Long userId) {
-		EventSchedule schedule = event.getSchedule();
-		if (schedule != null) {
-			schedule.setOwner(event.getOwner());
-			schedule.setAdvancedLocation(event.getAdvancedLocation());
-			new EventScheduleServiceImpl(persistenceManager).updateSchedule(schedule);
-		}
+        event.setOwner(event.getOwner());
+        event.setAdvancedLocation(event.getAdvancedLocation());
+        new EventScheduleServiceImpl(persistenceManager).updateSchedule(event);
 	}
 
 	/**

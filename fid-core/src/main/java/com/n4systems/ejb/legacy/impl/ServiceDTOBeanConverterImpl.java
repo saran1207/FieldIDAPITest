@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -76,7 +77,6 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
-import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
@@ -333,9 +333,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			}
 		}
 
-		List<EventSchedule> schedules = eventScheduleManager.getAvailableSchedulesFor(asset);
-		for (EventSchedule schedule : schedules) {
-			productDTO.getSchedules().add(convert(schedule));
+		List<Event> openEvents = eventScheduleManager.getAvailableSchedulesFor(asset);
+		for (Event openEvent : openEvents) {
+			productDTO.getSchedules().add(convertOpenEvent(openEvent));
 		}
 
 		convertLocationToDTO(productDTO, asset);
@@ -480,9 +480,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	/**
 	 * Populates an abstract inspection with the fields from an abstract
 	 * inspection service dto
-	 * 
-	 * @param event
-	 * @param inspectionDTO
 	 */
 	private void populate(AbstractEvent event, AbstractInspectionServiceDTO inspectionServiceDTO, Tenant tenant) {
 		event.setComments(inspectionServiceDTO.getComments());
@@ -523,18 +520,21 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	 * @deprecated Use the InspectionServiceDTOConverter
 	 */
 	@Deprecated
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, Long tenantId) throws IOException {
+	public Event convert(InspectionServiceDTO inspectionServiceDTO, EventSchedule schedule, Long tenantId) throws IOException {
 
 		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 
-		Event event = new Event();
+        Event event = new Event();
+
+        if (schedule != null && schedule.getEvent() != null && schedule.getEvent().getEventState() == Event.EventState.OPEN) {
+            event = persistenceManager.find(Event.class, schedule.getEvent().getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
+        }
 
 		populate(event, inspectionServiceDTO, tenant);
 		
 		event.setPrintable(inspectionServiceDTO.isPrintable());
 		event.setDate(inspectionServiceDTO.getUtcDate());
-        event.setTempCompletedDate(inspectionServiceDTO.getUtcDate());
-		
+
 		// Required object lookups		
 		User performedBy = (User)em.find(User.class, inspectionServiceDTO.getPerformedById());
 		event.setModifiedBy( performedBy );
@@ -556,7 +556,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			try {
 				status = Status.valueOf(inspectionServiceDTO.getStatus());
 			} catch (Exception e) {
-				logger.error("Unable to convert Event Status value of [" + inspectionServiceDTO.getStatus() + "] defaulting to N/A", e);
+				logger.error("Unable to convertOpenEvent Event Status value of [" + inspectionServiceDTO.getStatus() + "] defaulting to N/A", e);
 				status = Status.NA;
 			}
 		}
@@ -1087,30 +1087,36 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return jobService;
 	}
 
-	private InspectionScheduleServiceDTO convert(EventSchedule eventSchedule) {
+	private InspectionScheduleServiceDTO convertOpenEvent(Event event) {
 		InspectionScheduleServiceDTO scheduleService = new InspectionScheduleServiceDTO();
 
-		scheduleService.setId(eventSchedule.getId());
-		scheduleService.setNextDate(dateToString(eventSchedule.getNextDate()));
-		scheduleService.setProductId(eventSchedule.getAsset().getId());
-		scheduleService.setInspectionTypeId(eventSchedule.getEventType().getId());
-		scheduleService.setJobId(eventSchedule.getProject() != null ? eventSchedule.getProject().getId() : NULL_ID);
-		scheduleService.setCompleted(eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED);
+		scheduleService.setId(event.getSchedule().getId());
+		scheduleService.setNextDate(dateToString(event.getNextDate()));
+		scheduleService.setProductId(event.getAsset().getId());
+		scheduleService.setInspectionTypeId(event.getType().getId());
+		scheduleService.setJobId(event.getProject() != null ? event.getProject().getId() : NULL_ID);
+		scheduleService.setCompleted(event.getEventState() == Event.EventState.COMPLETED);
 
 		return scheduleService;
 	}
 
-	public EventSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
+	public Event convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
 
 		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 
 		EventSchedule eventSchedule = new EventSchedule();
+        Event openEvent = new Event();
 
 		eventSchedule.setMobileGUID(inspectionScheduleServiceDTO.getMobileGuid());
 		eventSchedule.setNextDate(stringToDate(inspectionScheduleServiceDTO.getNextDate()));
 		eventSchedule.setTenant(tenant);
 
-		return eventSchedule;
+        openEvent.setSchedule(eventSchedule);
+
+        openEvent.setNextDate(eventSchedule.getNextDate());
+        openEvent.setTenant(tenant);
+
+		return openEvent;
 
 	}
 

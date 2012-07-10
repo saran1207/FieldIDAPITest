@@ -43,29 +43,51 @@ public class EventCreationService extends FieldIdPersistenceService {
     public Event createEventWithSchedules(Event event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
         Event savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles);
         for (EventScheduleBundle eventScheduleBundle : schedules) {
-            EventSchedule eventSchedule = new EventSchedule(eventScheduleBundle.getAsset(), eventScheduleBundle.getType(), eventScheduleBundle.getScheduledDate());
-            eventSchedule.setProject(eventScheduleBundle.getJob());
-            nextEventScheduleService.createNextSchedule(eventSchedule);
+            Event openEvent = new Event();
+            openEvent.setAsset(eventScheduleBundle.getAsset());
+            openEvent.setType(eventScheduleBundle.getType());
+            openEvent.setOwner(eventScheduleBundle.getAsset().getOwner());
+            openEvent.setProject(eventScheduleBundle.getJob());
+            openEvent.setNextDate(eventScheduleBundle.getScheduledDate());
+            nextEventScheduleService.createNextSchedule(openEvent);
         }
         return savedEvent;
     }
 
     @Transactional
     public Event createEvent(Event event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
-        User user = getCurrentUser();
-        Tenant tenant = getCurrentTenant();
-
-        // if the event has no group, lets create a new one now
-        if (event.getGroup() == null) {
-            event.setGroup(new EventGroup());
-            event.getGroup().setTenant(tenant);
-            persistenceService.save(event.getGroup());
-        }
-
         Status calculatedStatus = calculateEventResultAndScore(event);
 
         if (event.getStatus() == null) {
             event.setStatus(calculatedStatus);
+        }
+
+        // HACK for grafting struts event creation onto new Open Events instead of schedules.
+        // Remove after struts front end event creation is destroyed.
+        // Test with mobile event creation.
+        if (event.getId() != null) {
+            for (CriteriaResult criteriaResult : event.getResults()) {
+                // Because of update shenanigans for reattachment to session, duplicate criteria results were being saved.
+                // This prevents that issue.
+                persistenceService.save(criteriaResult);
+            }
+            persistenceService.update(event);
+        }
+        // end HACK
+
+        User user = getCurrentUser();
+        Tenant tenant = getCurrentTenant();
+
+        event.setEventState(Event.EventState.COMPLETED);
+
+        // if the event has no group, lets create a new one now
+        // TODO: Remove when mobile can also remove this.
+        if (event.getGroup() == null) {
+            event.setGroup(new EventGroup());
+            event.getGroup().setTenant(tenant);
+            persistenceService.save(event.getGroup());
+        } else if (event.getGroup().getId() == null) {
+            persistenceService.save(event.getGroup());
         }
 
         setProofTestData(event, fileData);
@@ -80,7 +102,11 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         event.setDate(completedDate);
 
-        persistenceService.save(event);
+        if (event.getId() == null) {
+            persistenceService.save(event);
+        } else {
+            persistenceService.update(event);
+        }
 
         updateAsset(event, user.getId());
 
@@ -354,7 +380,7 @@ public class EventCreationService extends FieldIdPersistenceService {
     }
 
     private void gpsUpdates(Event event, Asset asset) {
-        if(event.getGpsLocation().isValid()) {
+        if (event.getGpsLocation() != null && event.getGpsLocation().isValid()) {
             logger.info("Valid GPS recieved during inspection. Updating Asset " + asset.getIdentifier());
             asset.setGpsLocation(event.getGpsLocation());
         }

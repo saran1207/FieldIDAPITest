@@ -177,8 +177,8 @@ public class WebServiceEventsCreatorTest {
 	public void should_create_all_schedules_for_the_next_event_date_map() throws Exception {
 		
 		NextEventScheduleSerivce nextEventScheduleSerivce = createMock(NextEventScheduleSerivce.class);
-		expect(nextEventScheduleSerivce.createNextSchedule(isA(EventSchedule.class)))
-			.andAnswer(new IAnswer<EventSchedule>() {	@Override public EventSchedule answer() throws Throwable { return (EventSchedule)getCurrentArguments()[0]; } })
+		expect(nextEventScheduleSerivce.createNextSchedule(isA(Event.class)))
+			.andAnswer(new IAnswer<Event>() {	@Override public Event answer() throws Throwable { return (Event)getCurrentArguments()[0]; } })
 			.times(nextEventDates.size());
 		replay(nextEventScheduleSerivce);
 		

@@ -167,7 +167,7 @@ public class EventCreatorTest {
 			.build();
 		
 		NextEventScheduleSerivce nextScheduleService = createMock(NextEventScheduleSerivce.class);
-		expect(nextScheduleService.createNextSchedule(isA(EventSchedule.class))).andReturn(null).times(2);
+		expect(nextScheduleService.createNextSchedule(isA(Event.class))).andReturn(null).times(2);
 		replay(nextScheduleService);
 		
 		eventPersistenceFactory.nextEventScheduleSerivce = nextScheduleService;

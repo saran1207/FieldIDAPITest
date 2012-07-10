@@ -2,7 +2,7 @@ package com.n4systems.fieldid.viewhelpers.handlers.completedordue;
 
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Event;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.orgs.BaseOrg;
 
@@ -23,13 +23,13 @@ public abstract class ReportingOwnerHandler extends WebOutputHandler {
     }
 
     private String getOrgName(Object value) {
-        BaseOrg org = null;
-        EventSchedule schedule = (EventSchedule) value;
+        BaseOrg org;
+        Event event = (Event) value;
 
-        if (schedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED && schedule.getEvent() != null) {
-            org = getOrg(schedule.getEvent());
+        if (event.getEventState() == Event.EventState.COMPLETED) {
+            org = getOrg(event);
         } else {
-            org = getOrg(schedule.getAsset());
+            org = getOrg(event.getAsset());
         }
 
         if (org == null) {

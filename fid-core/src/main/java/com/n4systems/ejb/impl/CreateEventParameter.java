@@ -12,7 +12,7 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.tools.FileDataContainer;
 
 public class CreateEventParameter {
-	public final Event event;
+	public Event event;
 	public final Date nextEventDate;
 	public final Long userId;
 	public final FileDataContainer fileData;
@@ -20,10 +20,10 @@ public class CreateEventParameter {
 
 	public final List<EventScheduleBundle> schedules;
 
-    public final long scheduleId;
+    public final Long scheduleId;
 
 
-	public CreateEventParameter(Event event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules, long scheduleId) {
+	public CreateEventParameter(Event event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules, Long scheduleId) {
 		this.event = event;
 		this.nextEventDate = nextEventDate;
 		this.userId = userId;

@@ -19,9 +19,12 @@ public class EventWebModel implements UserDateFormatValidator {
 	private final SessionUserDateConverter dateConverter;
 	
 	private LocationWebModel location;
-	
+
 	private Date utcDatePerformed;
 	private String datePerformed;
+
+    private Date utcNextDate;
+    private String nextDate;
 	
 	private String overrideResult;
 	
@@ -55,6 +58,7 @@ public class EventWebModel implements UserDateFormatValidator {
 		location = location.matchLocation(event.getAdvancedLocation());
 		ownerPicker.updateOwner(event.getOwner());
 		utcDatePerformed = event.getDate();
+        utcNextDate = event.getNextDate();
 	}
 	
 	public void pushValuesTo(Event event) {
@@ -75,6 +79,7 @@ public class EventWebModel implements UserDateFormatValidator {
 		}
 		
 		event.setDate(datePerformed != null ? dateConverter.convertDateTime(datePerformed) : null);
+        event.setNextDate(nextDate != null ? dateConverter.convertDateTimeWithNoTimeZone(nextDate) : null);
 	}
 	
 	public String getDatePerformed() {
@@ -83,6 +88,13 @@ public class EventWebModel implements UserDateFormatValidator {
 		}
 		return datePerformed;
 	}
+
+    public String getNextDate() {
+        if (nextDate == null) {
+            nextDate = dateConverter.convertDateTimeWithNoTimeZone(utcNextDate);
+        }
+        return nextDate;
+    }
 
 	@RequiredStringValidator(message = "", key = "error.mustbeadatetime")
 	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadatetime", parameters = { @ValidationParameter(name = "usingTime", value = "true") })

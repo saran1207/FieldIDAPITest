@@ -7,6 +7,7 @@
 <@s.hidden name="assetId"/>
 <@s.hidden name="eventGroupId"/>
 <@s.hidden id="eventTypeId" name="type"/>
+<@s.hidden name="scheduleId"/>
 <div id="assetSummary" class="assetSummary">
 	<h2>${asset.type.name!?html}  <@s.text name="label.summary"/></h2>
 
@@ -88,25 +89,26 @@
 		</script>	
 	</div>
 
-	<#if event.schedule?exists && event.schedule.wasScheduled()>
-		<div class="infoSet"> 
-			<label class="label"><@s.text name="label.scheduledon"/></label>
-		
-            <span class="fieldHolder">
-                ${action.formatDate(event.schedule.nextDate, false )}
-            </span>
+    <div class="infoSet">
+        <label class="label"><@s.text name="label.scheduledon"/></label>
 
-		</div>
-	<#else>
-		<div class="infoSet">		
-			<label class="label"><@s.text name="label.schedulefor"/></label>
-			<span class="fieldHolder">
-				<@s.select id="schedule" name="scheduleId" list="schedules" listKey="id" listValue="name" theme="fieldidSimple"/>
-			</span>
-		</div>
-	</#if>
-		
-	<div class="infoSet">
+        <span class="fieldHolder">
+            <@s.textfield theme="fieldid" id="nextDate" name="modifiableEvent.nextDate" cssClass="datetimepicker"/>
+        </span>
+    </div>
+
+    <#if securityGuard.projectsEnabled>
+        <div class="infoSet">
+            <label class="label"><@s.text name="label.job"/></label>
+
+                <span class="fieldHolder">
+                    <@s.select name="project" list="jobs" listKey="id" listValue="name" emptyOption="true"/>
+                </span>
+        </div>
+    </#if>
+
+
+<div class="infoSet">
 		<label class="label"><@s.text name="label.eventbook"/></label>
 		<div class="fieldHolder">
 			<span id="eventBookSelect" <#if newEventBookTitle?exists>style="display:none"</#if>>

@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.util.FieldidDateFormatter;
 import org.apache.wicket.AttributeModifier;
@@ -31,23 +32,23 @@ public class UpcomingEventsPanel extends Panel {
 
 
     private void addUpcomingEvents(final Asset asset) {
-        List<EventSchedule> schedules = eventScheduleService.getAvailableSchedulesFor(asset);
+        List<Event> schedules = eventScheduleService.getAvailableSchedulesFor(asset);
         int remainingEvents = schedules.size() - 3;
 
-        List<EventSchedule> scheduleSubList;
+        List<Event> scheduleSubList;
         if(schedules.size() > 3)
             scheduleSubList = schedules.subList(0, 3);
         else
             scheduleSubList = schedules;
-        add(new ListView<EventSchedule>("upcomingEventsList", scheduleSubList) {
+        add(new ListView<Event>("upcomingEventsList", scheduleSubList) {
             @Override
-            protected void populateItem(ListItem<EventSchedule> item) {
-                EventSchedule schedule = item.getModelObject();
+            protected void populateItem(ListItem<Event> item) {
+                Event schedule = item.getModelObject();
                 
                 String upcomingEventDate = new FieldidDateFormatter(schedule.getNextDate(), FieldIDSession.get().getSessionUser(), false, false).format();
                 
                 item.add(new Label("upcomingEventDate", upcomingEventDate));
-                item.add(new Label("upcomingEventType", schedule.getEventType().getName()));
+                item.add(new Label("upcomingEventType", schedule.getType().getName()));
                 item.add(new NonWicketLink("startEventLink", "selectEventAdd.action?scheduleId=" + schedule.getId() + "&type=" + schedule.getEventType().getId() + "&assetId=" + asset.getId()));
                 item.add(new NonWicketLink("editScheduleLink", "eventScheduleList.action?assetId=" + asset.getId() + "&useContext=false"));
                 if(schedule.isPastDue()) {

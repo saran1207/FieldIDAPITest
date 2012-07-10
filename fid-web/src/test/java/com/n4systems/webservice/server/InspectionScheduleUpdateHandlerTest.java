@@ -1,7 +1,7 @@
 package com.n4systems.webservice.server;
 
 import static com.n4systems.model.builders.EventBuilder.anEvent;
-import static com.n4systems.model.builders.EventScheduleBuilder.aScheduledEventSchedule;
+import static com.n4systems.model.builders.EventBuilder.anOpenEvent;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
@@ -9,13 +9,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
 import com.n4systems.model.eventschedule.EventScheduleSaver;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
@@ -23,16 +24,19 @@ import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 public class InspectionScheduleUpdateHandlerTest {
 
 
-	private EventScheduleSaver saver;
+	private SimpleEventSaver saver;
 	private EventScheduleByGuidOrIdLoader eventScheduleByMobileGuidLoader;
-	private EventSchedule eventSchedule;
+	private Event openEvent;
+    private EventSchedule eventSchedule;
 	private InspectionScheduleServiceDTO inspectionScheduleServiceDTO;
 	private Event event;
 	
 	@Before
 	public void setup() {
 		
-		eventSchedule = aScheduledEventSchedule().build();
+		openEvent = anOpenEvent().build();
+        eventSchedule = new EventSchedule();
+        eventSchedule.setEvent(openEvent);
 		
 		event = anEvent().build();
 	}
@@ -97,7 +101,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		
 		verify(saver);
 		
-		assertEquals(new PlainDate(c1.getTime()), eventSchedule.getNextDate());
+		assertEquals(new PlainDate(c1.getTime()), openEvent.getNextDate());
 		
 	}
 	
@@ -121,7 +125,7 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void do_not_update_when_schedule_is_completed() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
-		eventSchedule.completed(event);
+		openEvent.setEventState(Event.EventState.COMPLETED);
 		
 		createInspectionScheduleByMobileGuidLoaderMock();
 		
@@ -150,7 +154,7 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void do_not_remove_when_schedule_is_completed() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
-		eventSchedule.completed(event);
+		openEvent.setEventState(Event.EventState.COMPLETED);
 
 		createInspectionScheduleByMobileGuidLoaderMock();
 		
@@ -177,14 +181,14 @@ public class InspectionScheduleUpdateHandlerTest {
 	}
 	
 	private void createSaverMock() {
-		saver = createMock(EventScheduleSaver.class);
-		expect(saver.saveOrUpdate(eventSchedule)).andReturn(eventSchedule);
+		saver = createMock(SimpleEventSaver.class);
+		expect(saver.saveOrUpdate(openEvent)).andReturn(openEvent);
 		replay(saver);
 	}
 
 	private void createSaverRemoveMock() throws Exception {
-		saver = createMock(EventScheduleSaver.class);
-		saver.remove(eventSchedule);
+		saver = createMock(SimpleEventSaver.class);
+		saver.remove(openEvent);
 		replay(saver);
 	}
 

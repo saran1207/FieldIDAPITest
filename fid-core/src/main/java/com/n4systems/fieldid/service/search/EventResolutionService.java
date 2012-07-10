@@ -2,7 +2,6 @@ package com.n4systems.fieldid.service.search;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Status;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.summary.EventResolutionSummary;
@@ -25,29 +24,28 @@ public class EventResolutionService extends FieldIdPersistenceService {
         EventResolutionSummary eventResolutionSummary = new EventResolutionSummary();
 
         for (int currentPage = 0; currentPage < totalPages; currentPage++) {
-            SearchResult<EventSchedule> pageResult = reportService.performSearch(criteria, currentPage, summaryPageSize, false);
+            SearchResult<Event> pageResult = reportService.performSearch(criteria, currentPage, summaryPageSize, false);
             addResultsToSummary(eventResolutionSummary, pageResult);
         }
 
         return eventResolutionSummary;
     }
 
-    private void addResultsToSummary(EventResolutionSummary eventResolutionSummary, SearchResult<EventSchedule> pageResult) {
-        for (EventSchedule schedule : pageResult.getResults()) {
-            addResultToSet(eventResolutionSummary.getBaseSummary(), schedule);
-            addResultToSet(eventResolutionSummary.getOrCreateSummary(schedule.getAsset().getType()), schedule);
-            addResultToSet(eventResolutionSummary.getOrCreateSummary(schedule.getEventType()), schedule);
-            addResultToSet(eventResolutionSummary.getOrCreateSummary(new PlainDate(schedule.getRelevantDate())), schedule);
+    private void addResultsToSummary(EventResolutionSummary eventResolutionSummary, SearchResult<Event> pageResult) {
+        for (Event event : pageResult.getResults()) {
+            addResultToSet(eventResolutionSummary.getBaseSummary(), event);
+            addResultToSet(eventResolutionSummary.getOrCreateSummary(event.getAsset().getType()), event);
+            addResultToSet(eventResolutionSummary.getOrCreateSummary(event.getType()), event);
+            addResultToSet(eventResolutionSummary.getOrCreateSummary(new PlainDate(event.getRelevantDate())), event);
         }
     }
 
-    private void addResultToSet(EventSetSummary eventSetSummary, EventSchedule schedule) {
+    private void addResultToSet(EventSetSummary eventSetSummary, Event event) {
         eventSetSummary.incrementEventsDue();
 
-        if (schedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED) {
+        if (event.getEventState() == Event.EventState.COMPLETED) {
             eventSetSummary.incrementEventsCompleted();
 
-            Event event = schedule.getEvent();
             if (event.getStatus() == Status.PASS) {
                 eventSetSummary.incrementPassedEvents();
             }
