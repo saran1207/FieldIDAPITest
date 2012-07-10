@@ -21,10 +21,11 @@ public class EventStatusFormPage extends EventStatusPage{
     public EventStatusFormPage(PageParameters params) {
         super(params);
 
+        final EventStatus eventStatus = eventStatusModel.getObject();
+
         Form<Void> form = new Form<Void>("form") {
             @Override
             protected void onSubmit() {
-                EventStatus eventStatus = eventStatusModel.getObject();
                 if(eventStatus.isNew()) {
                     eventStatus.setTenant(FieldIDSession.get().getTenant());
                     eventStatusService.create(eventStatus);
@@ -36,7 +37,7 @@ public class EventStatusFormPage extends EventStatusPage{
         };
         RequiredTextField name;
         form.add(name = new RequiredTextField<String>("name", new PropertyModel<String>(eventStatusModel.getObject(), "name")));
-        name.add(new EventStatusUniqueNameValidator());
+        name.add(new EventStatusUniqueNameValidator(eventStatus.getId()));
 
         Button submitButton;
         form.add(submitButton = new Button("saveButton"));

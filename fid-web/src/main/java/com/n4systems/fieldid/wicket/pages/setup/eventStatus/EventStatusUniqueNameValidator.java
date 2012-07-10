@@ -11,12 +11,18 @@ public class EventStatusUniqueNameValidator extends AbstractValidator<String> {
 
     @SpringBean
     EventStatusService eventStatusService;
+    
+    Long id;
+
+    public EventStatusUniqueNameValidator(Long id) {
+        this.id = id;
+    }
 
     @Override
     public void onValidate(IValidatable<String> validatable) {
         String name = validatable.getValue();
 
-        if(eventStatusService.exists(name)) {
+        if(eventStatusService.exists(name, id)) {
             ValidationError error = new ValidationError();
             error.addMessageKey("error.eventstatusduplicate");
             validatable.error(error);
