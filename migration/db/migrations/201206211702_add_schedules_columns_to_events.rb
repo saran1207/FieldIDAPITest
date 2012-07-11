@@ -17,7 +17,7 @@ class AddSchedulesColumnsToEvents < ActiveRecord::Migration
 
     execute("alter table masterevents modify column status varchar(255) null")
 
-    incomplete_schedules = EventSchedule.find_by_sql("select * from eventschedules where status <> 'COMPLETED' and state ='ACTIVE'")
+    incomplete_schedules = EventSchedule.find_by_sql("select es.* from eventschedules es  left outer join masterevents me on es.id=me.schedule_id where es.status <> 'COMPLETED' and es.state ='ACTIVE' and me.event_id is null;")
     incomplete_schedules.each do |schedule|
       event_group = EventGroup.new
       event_group.created = schedule.created
