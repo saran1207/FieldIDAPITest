@@ -93,7 +93,7 @@
 .viewSelection {
     position: absolute;
     right: 28px;
-    top: 35px;
+    top: 34px;
 }
 
 .first, .last, .goto {
@@ -147,6 +147,7 @@ span.prev em, a.prev, span.next em, a.next{
 
 span.prev em img, a.prev img, span.next em img, a.next img {
     vertical-align: middle;
+    margin-top: -1px;
 }
 
 span.prev em, a.prev{
