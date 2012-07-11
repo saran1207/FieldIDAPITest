@@ -15,8 +15,9 @@
      WEEKLY_SUNDAY,
      MONTHLY_1ST,
      MONTHLY_15TH,
-     MONTHLY_LAST;
-     // TODO DD : ask matt about yearly.
+     MONTHLY_LAST,
+     SEMI_ANNUALY,
+     ANNUALY;
 
      RecurrenceType() {
 

@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -18,15 +19,17 @@ public class Recurrence implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name="recurrence_type")
     private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
-    private Integer hour = 0;
+    private int hour;
+    private int minute;
 
     public Recurrence() {
-        this(RecurrenceType.MONTHLY_1ST, 0);
+        this(RecurrenceType.MONTHLY_1ST, 0, 0);
     }
 
-    public Recurrence(RecurrenceType type, int hour) {
+    public Recurrence(RecurrenceType type, int hour, int minute) {
         setType(type);
         setHour(hour);
+        setMinute(minute);
     }
 
     public RecurrenceType getType() {
@@ -84,6 +87,20 @@ public class Recurrence implements Serializable {
             nextDate = type.getNext(nextDate);
         }
         return result;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setMinute(int minute) {
+        Preconditions.checkArgument(minute>=0 && minute<60);
+        this.minute = minute;
+    }
+
+    public String getDisplayTime() {
+        LocalTime time = new LocalTime().withHourOfDay(hour).withMinuteOfHour(minute);
+        return time.toString("K:mm a");
     }
 
     @Override

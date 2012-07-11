@@ -3,13 +3,16 @@ package com.n4systems.fieldid.wicket.pages.assettype;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
+import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.model.EntityModel;
+import com.n4systems.fieldid.wicket.model.EnumLabelModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
+import com.n4systems.fieldid.wicket.util.NullCoverterModel;
 import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -19,10 +22,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.*;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -51,9 +56,10 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     private RecurringAssetTypeEvent createNewEventWithDefaultValues() {
         AssetType assetType = getAssetType();
         EventType eventType = assetType.getEventTypes().iterator().next();
-        RecurrenceType type = RecurrenceType.MONTHLY_1ST;
-        int hour = 0; // default to midnight
-        return new RecurringAssetTypeEvent(assetType, eventType, new Recurrence(type,hour));
+        RecurrenceType type;
+        int hour;
+        int minute;
+        return new RecurringAssetTypeEvent(assetType, eventType, new Recurrence(type=RecurrenceType.MONTHLY_1ST,hour=0,minute=0));
     }
 
     private AssetType getAssetType() {
@@ -88,30 +94,17 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         this.assetTypeId = assetTypeId;
     }
 
-    private RecurringAssetTypeEvent copyOf(RecurringAssetTypeEvent event) {
-        Recurrence recurrence = new Recurrence(event.getRecurrence().getType(), event.getRecurrence().getHour());
-        RecurringAssetTypeEvent clone = new RecurringAssetTypeEvent(event.getAssetType(), event.getEventType(), recurrence);
-        clone.setOwner(event.getOwner());
-        return clone;
-    }
-
 
 
     private class RecurringEventsForm extends Form {
+
+        private RecurrenceTime time = RecurrenceTime.MIDNIGHT;
 
         public RecurringEventsForm(String id) {
             super(id, new CompoundPropertyModel(newEvent));
             final AssetType assetType = getAssetType();
 
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
-            final IChoiceRenderer<RecurrenceType> renderer = new IChoiceRenderer<RecurrenceType>() {
-                @Override public Object getDisplayValue(RecurrenceType object) {
-                    return new FIDLabelModel("enum."+object.toString()).getObject();
-                }
-                @Override public String getIdValue(RecurrenceType object, int index) {
-                    return object.name();
-                }
-            };
 
             final List<EventType> eventTypes = Lists.newArrayList();
             for (EventType eventType:assetType.getEventTypes()) {
@@ -131,20 +124,18 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             final WebMarkupContainer createContainer = new WebMarkupContainer("createContainer");
             createContainer.setOutputMarkupId(true);
 
-            createContainer.add(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(newEvent, "eventType"), eventTypes, eventTypeRenderer).setNullValid(false));
-            createContainer.add(new DropDownChoice<RecurrenceType>("recurrence", new PropertyModel<RecurrenceType>(newEvent, "recurrence.type"), recurrences, renderer).setNullValid(false));
+            createContainer.add(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(newEvent, "eventType"), eventTypes, eventTypeRenderer).setNullValid(false).add(new JChosenBehavior()));
+            createContainer.add(new DropDownChoice<RecurrenceType>("recurrence", new PropertyModel<RecurrenceType>(newEvent, "recurrence.type"), recurrences, new EnumPropertyChoiceRenderer<RecurrenceType>()).setNullValid(false).add(new JChosenBehavior()));
             createContainer.add(new AutoCompleteOrgPicker("org", new PropertyModel<BaseOrg>(newEvent, "owner")).setRequired(false));
-            createContainer.add(new TextField<Integer>("time", new PropertyModel<Integer>(newEvent, "recurrence.hour")).setRequired(false));
+            createContainer.add(new DropDownChoice<RecurrenceTime>("time", new PropertyModel<RecurrenceTime>(this, "time"), Arrays.asList(RecurrenceTime.values()), new EnumPropertyChoiceRenderer<RecurrenceTime>()).setNullValid(true).add(new JChosenBehavior()));
 
             AjaxSubmitLink create;
             createContainer.add(create = new AjaxSubmitLink("create") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     assetTypeService.addRecurringEvent(assetType, copyOf(newEvent));
-                    //TODO DD : ?? do i need this??
                     recurringEventsList.getModel().detach();
                     target.add(RecurringEventsForm.this);
-                    target.add(createContainer);
                 }
 
                 @Override
@@ -159,16 +150,14 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 protected void populateItem(final ListItem<RecurringAssetTypeEvent> item) {
                     item.add(new Label("eventType", new PropertyModel<String>(item.getDefaultModelObject(), "eventType.name")));
                     RecurringAssetTypeEvent event = (RecurringAssetTypeEvent) item.getDefaultModelObject();
-                    item.add(new Label("recurrence", new FIDLabelModel("enum."+event.getRecurrence().getType())));
+                    item.add(new Label("recurrence", new EnumLabelModel(event.getRecurrence().getType())));
                     item.add(new Label("org", new NullCoverterModel(new PropertyModel<String>(item.getDefaultModelObject(), "owner.displayName"), "---")));
-                    item.add(new Label("time", new PropertyModel<String>(item.getDefaultModelObject(), "recurrence.hour")));
+                    item.add(new Label("time", new PropertyModel<String>(item.getDefaultModelObject(), "recurrence.displayTime")));
                     item.add(new AjaxLink("remove") {
                         @Override public void onClick(AjaxRequestTarget target) {
                             assetTypeService.deleteRecurringEvent(assetType, item.getModelObject());
-                            System.out.println("removing..." + item.getModelObject().getRecurrence());
                             recurringEventsList.getModel().detach();
                             target.add(RecurringEventsForm.this);
-                            target.add(createContainer);
                         }
                     });
                 }
@@ -176,6 +165,13 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             });
             recurringEventsList.setReuseItems(true);
 
+        }
+
+        private RecurringAssetTypeEvent copyOf(RecurringAssetTypeEvent event) {
+            Recurrence recurrence = new Recurrence(event.getRecurrence().getType(), time.getHour(), time.getMinutes());
+            RecurringAssetTypeEvent clone = new RecurringAssetTypeEvent(event.getAssetType(), event.getEventType(), recurrence);
+            clone.setOwner(event.getOwner());
+            return clone;
         }
 
     }
@@ -201,22 +197,5 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         }
     }
 
-
-    private class NullCoverterModel extends Model<String> {
-
-        private String nullReplacement;
-        private IModel<String> model;
-
-        public NullCoverterModel(IModel<String> model, String nullReplacement) {
-            this.model = model;
-            this.nullReplacement = nullReplacement;
-        }
-
-        @Override
-        public String getObject() {
-            String value = model.getObject();
-            return (StringUtils.isEmpty(value)) ? nullReplacement : value;
-        }
-    }
 
 }
