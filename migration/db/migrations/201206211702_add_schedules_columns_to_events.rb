@@ -17,6 +17,9 @@ class AddSchedulesColumnsToEvents < ActiveRecord::Migration
 
     execute("alter table masterevents modify column status varchar(255) null")
 
+    current_schedule = 1
+    total_schedules = EventSchedule.count_by_sql("select count(*) from eventschedules es  left outer join masterevents me on es.id=me.schedule_id where es.status <> 'COMPLETED' and es.state ='ACTIVE' and me.event_id is null;")
+
     incomplete_schedules = EventSchedule.find_by_sql("select es.* from eventschedules es  left outer join masterevents me on es.id=me.schedule_id where es.status <> 'COMPLETED' and es.state ='ACTIVE' and me.event_id is null;")
     incomplete_schedules.each do |schedule|
       event_group = EventGroup.new
@@ -52,6 +55,8 @@ class AddSchedulesColumnsToEvents < ActiveRecord::Migration
       event.printable = false
 
       event.save
+      say "Migrated #{current_schedule} of #{total_schedules} schedules" if (current_schedule % 100) == 0
+      current_schedule += 1
     end
 
     execute("alter table masterevents modify column event_state varchar(255) not null")
