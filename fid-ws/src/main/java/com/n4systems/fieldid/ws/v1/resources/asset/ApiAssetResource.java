@@ -76,7 +76,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			@QueryParam("searchText") String searchText,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("100") @QueryParam("pageSize") int pageSize,
-			@QueryParam("owner") Long ownerId) {
+			@QueryParam("owner") Long ownerId,
+			@DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents) {
 		
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
 		builder.addOrder("created");
@@ -92,7 +93,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		List<Asset> assets = persistenceService.findAll(builder, page, pageSize);
 		Long total = persistenceService.count(builder);
 		
-		List<ApiAsset> apiAssets = convertAllEntitiesToApiModels(assets);
+		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents);
 		ListResponse<ApiAsset> response = new ListResponse<ApiAsset>(apiAssets, page, pageSize, total);
 		return response;
 	}
@@ -102,13 +103,14 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public ListResponse<ApiAsset> findAll(@QueryParam("id") List<String> assetIds) {
+	public ListResponse<ApiAsset> findAll(@QueryParam("id") List<String> assetIds, 
+			@DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents) {
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", assetIds));
 		
 		List<Asset> assets = persistenceService.findAll(builder);
 		
-		List<ApiAsset> apiAssets = convertAllEntitiesToApiModels(assets);
+		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents);
 		ListResponse<ApiAsset> response = new ListResponse<ApiAsset>(apiAssets, 0, assets.size(), assets.size());
 		return response;
 	}
@@ -118,13 +120,14 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public ApiAsset find(@PathParam("id") String id) {
+	public ApiAsset find(@PathParam("id") String id,
+			@DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents) {
 		Asset asset = assetService.findByMobileId(id);
 		if (asset == null) {
 			throw new NotFoundException("Asset", id);
 		}
 		
-		ApiAsset apiModel = convertEntityToApiModel(asset);
+		ApiAsset apiModel = convertToApiAsset(asset, downloadEvents);
 		return apiModel;
 	}
 	
@@ -160,6 +163,22 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		List<AssetAttachment> existingAttachments = apiAttachmentResource.findAllAssetAttachments(asset.getMobileGUID());
 		asset.setSubAssets(apiSubAssetResource.findSubAssets(asset)); // So they don't get cleared! - WEB-3031
 		return assetSaveService.update(asset, existingAttachments, uploadedAttachments, apiAsset.getImage());
+	}
+	
+	protected List<ApiAsset> convertAllAssetsToApiModels(List<Asset> assets, boolean downloadEvents) {
+		List<ApiAsset> apiAssets = new ArrayList<ApiAsset>();
+		for (Asset asset: assets) {
+			apiAssets.add(convertToApiAsset(asset, downloadEvents));
+		}
+		return apiAssets;
+	}
+	
+	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents) {
+		ApiAsset apiAsset = convertEntityToApiModel(asset);		
+		if(downloadEvents) {
+			apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));
+		}
+		return apiAsset;
 	}
 
 	@Override
@@ -215,10 +234,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		apiAsset.setAttributeValues(findAllAttributeValues(asset));
 		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId()));
 		apiAsset.setEventHistory(apiEventHistoryResource.findAllEventHistory(asset.getMobileGUID()));
-		apiAsset.setAttachments(apiAttachmentResource.findAllAttachments(asset.getMobileGUID()));
-		
-		//TODO This need to be filtered by the config setting whether client wants or not.
-		apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));		
+		apiAsset.setAttachments(apiAttachmentResource.findAllAttachments(asset.getMobileGUID()));			
 		
 		return apiAsset;
 	}
