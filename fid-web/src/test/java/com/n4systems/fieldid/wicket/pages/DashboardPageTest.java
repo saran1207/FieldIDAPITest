@@ -1,10 +1,22 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.List;
-
+import com.google.common.collect.Sets;
+import com.n4systems.fieldid.service.job.JobService;
+import com.n4systems.fieldid.service.user.UserLimitService;
+import com.n4systems.fieldid.wicket.*;
+import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner.WithUsers;
+import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
+import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
+import com.n4systems.fieldid.wicket.pages.DashboardPageTest.DashboardHarness;
+import com.n4systems.fieldid.wicket.pages.widgets.*;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.dashboard.DashboardColumn;
+import com.n4systems.model.dashboard.DashboardLayout;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.WidgetType;
+import com.n4systems.model.user.User;
+import com.n4systems.services.dashboard.DashboardService;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -21,32 +33,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.common.collect.Sets;
-import com.n4systems.fieldid.service.job.JobService;
-import com.n4systems.fieldid.service.user.UserLimitService;
-import com.n4systems.fieldid.wicket.FieldIdPageTest;
-import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner;
-import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner.WithUsers;
-import com.n4systems.fieldid.wicket.IFixtureFactory;
-import com.n4systems.fieldid.wicket.IWicketTester;
-import com.n4systems.fieldid.wicket.TestUser;
-import com.n4systems.fieldid.wicket.WicketHarness;
-import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
-import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
-import com.n4systems.fieldid.wicket.pages.DashboardPageTest.DashboardHarness;
-import com.n4systems.fieldid.wicket.pages.widgets.CommonLinksWidget;
-import com.n4systems.fieldid.wicket.pages.widgets.JobsAssignedWidget;
-import com.n4systems.fieldid.wicket.pages.widgets.NewsWidget;
-import com.n4systems.fieldid.wicket.pages.widgets.Widget;
-import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.builders.UserBuilder;
-import com.n4systems.model.dashboard.DashboardColumn;
-import com.n4systems.model.dashboard.DashboardLayout;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.WidgetType;
-import com.n4systems.model.user.User;
-import com.n4systems.services.dashboard.DashboardService;
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 @RunWith(FieldIdWicketTestRunner.class)

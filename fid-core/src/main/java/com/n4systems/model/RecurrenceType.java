@@ -2,6 +2,8 @@
 
  import org.joda.time.DateTimeConstants;
  import org.joda.time.LocalDate;
+ import org.joda.time.Period;
+ import org.joda.time.PeriodType;
 
  public enum RecurrenceType {
 
@@ -16,8 +18,7 @@
      MONTHLY_1ST,
      MONTHLY_15TH,
      MONTHLY_LAST,
-     SEMI_ANNUALY,
-     ANNUALY;
+     ANNUALLY;
 
      RecurrenceType() {
 
@@ -47,6 +48,8 @@
                  return nextMonth(day, 15);
              case MONTHLY_LAST:
                  return nextMonth(day,-1);
+             case ANNUALLY:
+                 return nextYear(day);
              default:
                  throw new IllegalStateException("Recurrence " + this.name() + " not supported");
          }
@@ -65,6 +68,14 @@
              }
              return date.withDayOfMonth(day);
          }
+     }
+
+     private LocalDate nextHalfYear(LocalDate date) {
+         return date.plus(new Period(6, PeriodType.months()));
+     }
+
+     private LocalDate nextYear(LocalDate date) {
+         return date.plusYears(1);
      }
 
      private LocalDate nextDay(LocalDate date, int day) {

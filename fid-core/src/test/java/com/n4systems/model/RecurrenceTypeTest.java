@@ -117,5 +117,14 @@ public class RecurrenceTypeTest extends TestCase {
     }
 
 
+    @Test
+    public void test_yearly() {
+        assertEquals(new LocalDate(2012, 1,1), RecurrenceType.ANNUALLY.getNext(jan1_2011));
+        assertEquals(new LocalDate(2012, 12,31), RecurrenceType.ANNUALLY.getNext(dec31_2011));
+        assertEquals(new LocalDate(2012, 2,28), RecurrenceType.ANNUALLY.getNext(feb28_2011));
+        assertEquals(new LocalDate(2013, 2,28), RecurrenceType.ANNUALLY.getNext(feb28_2012));
+        assertEquals(new LocalDate(2012, 4,30), RecurrenceType.ANNUALLY.getNext(april30_2011));
+    }
+
 
 }
