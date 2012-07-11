@@ -77,7 +77,10 @@ public class Recurrence implements Serializable {
         from = from.minusDays(1);
         LocalDate nextDate = type.getNext(from);
         while (nextDate.isBefore(to)) {
-            result.add(new DateTime(nextDate.toDate()).withHourOfDay(hour));
+            DateTime dateTime = new DateTime(nextDate.toDate()).withHourOfDay(hour);
+            if (!dateTime.isBeforeNow()) {
+                result.add(dateTime);
+            }
             nextDate = type.getNext(nextDate);
         }
         return result;

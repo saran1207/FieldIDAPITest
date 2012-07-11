@@ -1,24 +1,21 @@
 package com.n4systems.services.asset;
 
-import java.util.List;
-
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.exceptions.EntityStillReferencedException;
+import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetAttachmentListLoader;
 import com.n4systems.model.asset.AssetAttachmentSaver;
 import com.n4systems.model.asset.AssetImageFileSaver;
-
-import org.apache.log4j.Logger;
-
-
-import com.n4systems.exceptions.EntityStillReferencedException;
-import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class AssetSaveService {
 	private static Logger logger = Logger.getLogger(AssetSaveService.class);
@@ -55,7 +52,7 @@ public class AssetSaveService {
 			saveAssetImage();
 			return asset;
 		} catch (SubAssetUniquenessException e) {
-			throw new ProcessFailureException("could not udpateRecurringEvents asset", e);
+			throw new ProcessFailureException("could not addRecurringEvent asset", e);
 		}
 	}
 
@@ -67,7 +64,7 @@ public class AssetSaveService {
 			saveAssetImage();
 			return asset;
 		} catch (SubAssetUniquenessException e) {
-			throw new ProcessFailureException("could not udpateRecurringEvents asset", e);
+			throw new ProcessFailureException("could not addRecurringEvent asset", e);
 		}
 	}
 	

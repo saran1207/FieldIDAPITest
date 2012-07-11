@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "recurring_asset_type_events")
 @PrimaryKeyJoinColumn(name="id")
-public class RecurringAssetTypeEvent extends EntityWithOwner implements Saveable, SecurityEnhanced<RecurringAssetTypeEvent> {
+public class RecurringAssetTypeEvent extends EntityWithOwner implements Saveable, SecurityEnhanced<RecurringAssetTypeEvent>, Cloneable {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "asset_type_id", nullable = true)
@@ -70,4 +70,6 @@ public class RecurringAssetTypeEvent extends EntityWithOwner implements Saveable
         enhanced.setEventType(enhance(eventType, level));
         return enhanced;
     }
+
+
 }

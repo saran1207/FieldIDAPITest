@@ -3,7 +3,7 @@
     padding-left:25px;
     padding-top:25px;
     padding-bottom:25px;
-    margin-bottom:50px;
+    margin-bottom:25px;
     background: #f7f7f7;
 }
 
@@ -23,11 +23,18 @@
     margin-bottom:20px;
 }
 
-.existing-events label,  .existing-events a {
-    float:left;
-    display: block;
-    width:20%;
-    line-height: 25px;
+.existing-events th {
+    width:175px;
+    height:40px;
+    font-size:14px;
+    color:#777;
+    font-weight: bold;
+}
+
+.existing-events td {
+    height:35px;
+    color:#777;
+    font-size:13px;
 }
 
 .existing-events .remove{

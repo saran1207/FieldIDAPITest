@@ -57,7 +57,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private String manufactureCertificateText;	
 	private boolean hasManufactureCertificate;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "assetType")
     private List<RecurringAssetTypeEvent> recurringAssetTypeEvents = new ArrayList<RecurringAssetTypeEvent>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")
@@ -552,4 +552,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
         this.recurringAssetTypeEvents = recurringAssetTypeEvents;
     }
 
+    public void add(RecurringAssetTypeEvent event) {
+        recurringAssetTypeEvents.add(event);
+    }
 }

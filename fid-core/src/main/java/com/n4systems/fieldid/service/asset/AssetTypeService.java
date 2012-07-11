@@ -37,71 +37,19 @@ public class AssetTypeService extends FieldIdPersistenceService {
 		return persistenceService.findAll(builder);
     }
 
-    public void udpateRecurringEvents(AssetType assetType, List<RecurringAssetTypeEvent> recurringEvents) {
-        // persist any new ones, delete unused ones, update changed ones before saving assetType itself.
-        RecurringAssetTypeEvent toDelete = null;
-        RecurringAssetTypeEvent toUpdate = null;
-        // TODO : just need a single "isModified" method...isNew is redundant
-        for (RecurringAssetTypeEvent recurringEvent:recurringEvents) {
-            if (isNewRecurringAssetTypeEvent(recurringEvent, assetType)) {
-                addRecurringEvent(recurringEvent);
-            } else if ((toDelete = isDeleted(recurringEvent, assetType)) != null) {
-                // TODO : check to see if current list doesn't have existing one...if not, then it should be deleted.
-                deleteRecurringEvent(toDelete);
-            } else if ((toUpdate = isModified(recurringEvent, assetType))!=null) {
-                updateRecurringEvents(toUpdate);
-            }
-        }
-    }
-
-    private RecurringAssetTypeEvent isModified(RecurringAssetTypeEvent recurringEvent, AssetType assetType) {
-        RecurringAssetTypeEvent existing = getExistingRecurringEvent(assetType, recurringEvent.getEventType());
-        if ((existing==null || !existing.getRecurrence().equals(recurringEvent.getRecurrence())) ) {
-            return existing;
-        }
-        return null;
-    }
-
-    private void updateRecurringEvents(RecurringAssetTypeEvent recurringEvent) {
-        // delete the old occurrences and add the new ones.
-        RecurringAssetTypeEvent existing = getExistingRecurringEvent(recurringEvent.getAssetType(), recurringEvent.getEventType());
-        removeScheduledEvents(existing);
-
-        existing.setRecurrence(recurringEvent.getRecurrence());
-        persistenceService.update(recurringEvent);
-        scheduleInitialEvents(recurringEvent);
-    }
-
-    private void deleteRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
-        removeScheduledEvents(recurringEvent);
-        persistenceService.delete(getExistingRecurringEvent(recurringEvent.getAssetType(), recurringEvent.getEventType()));
-    }
-
-    private void addRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
+    public void addRecurringEvent(AssetType assetType, RecurringAssetTypeEvent recurringEvent) {
         persistenceService.save(recurringEvent);
+        assetType.add(recurringEvent);
+        persistenceService.update(assetType);
         scheduleInitialEvents(recurringEvent);
     }
 
-    private RecurringAssetTypeEvent isDeleted(RecurringAssetTypeEvent recurringEvent, AssetType assetType) {
-        RecurringAssetTypeEvent existing = getExistingRecurringEvent(assetType, recurringEvent.getEventType());
-        if (existing != null ) {
-            return existing;
-        }
-        return null;
+    public void deleteRecurringEvent(AssetType assetType, RecurringAssetTypeEvent recurringEvent) {
+        removeScheduledEvents(recurringEvent);
+        assetType.getRecurringAssetTypeEvents().remove(recurringEvent);
+        persistenceService.update(assetType);
     }
 
-    private boolean isNewRecurringAssetTypeEvent(RecurringAssetTypeEvent recurringEvent, AssetType assetType) {
-        return getExistingRecurringEvent(assetType, recurringEvent.getEventType())==null;
-    }
-
-    private RecurringAssetTypeEvent getExistingRecurringEvent(AssetType assetType, EventType eventType) {
-        for (RecurringAssetTypeEvent recurringAssetTypeEvent:assetType.getRecurringAssetTypeEvents()) {
-            if (recurringAssetTypeEvent.getEventType().equals(eventType)) {
-                return recurringAssetTypeEvent;
-            }
-        }
-        return null;
-    }
 
     // TODO DD : this stuff should be refactored into new service when events/schedules are merged.
     // e.g. SchedulingService or possibly in EventService?
@@ -117,10 +65,8 @@ public class AssetTypeService extends FieldIdPersistenceService {
         LocalDate endDate = LocalDate.now().plusDays(RECURRING_EVENT_BUFFER_SIZE_IN_DAYS);
 
         for (Asset asset:assets) {
-System.out.println("scheduling events for asset " + asset.getIdentifier());
             Recurrence recurrence = recurringEvent.getRecurrence();
             for (DateTime nextDate:recurrence.getScheduledTimes(LocalDate.now(), endDate)) {
-System.out.println("- - - - - scheduling " + recurringEvent.getEventType().getName() + " on " + nextDate.toDate());
                 persistenceService.save(new EventSchedule(asset, recurringEvent.getEventType(), nextDate.toDate()));
             }
         }
@@ -136,7 +82,7 @@ System.out.println("- - - - - scheduling " + recurringEvent.getEventType().getNa
         if (recurringEvent.getOwner()!=null) {
             builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner", "owner", recurringEvent.getOwner(), null, WhereClause.ChainOp.AND));
         }
-        // TODO DD :   AND EventSchedule.RECURRING_ID = recurringEvent.getId()
+        // TODO DD :   AND EventSchedule.RECURRING_ID = recurringEvent.getId() when schedules is merged!!!
 
         List<EventSchedule> schedules = persistenceService.findAll(builder);
         for (EventSchedule schedule:schedules) {
