@@ -2,13 +2,13 @@ package com.n4systems.fieldid.wicket.components.asset.events;
 
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.components.asset.events.table.*;
+import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.EventByNetworkIdProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -27,9 +27,9 @@ public class EventListPanel extends Panel {
         super(id, assetModel);
 
         Asset asset = assetModel.getObject();
-        
-        DefaultDataTable table;
-        add(table = new DefaultDataTable<Event>("eventsTable", getEventTableColumns(), new EventByNetworkIdProvider(asset.getNetworkId(), "schedule.completedDate", SortOrder.DESCENDING), 10));
+
+        SimpleDefaultDataTable table;
+        add(table = new SimpleDefaultDataTable<Event>("eventsTable", getEventTableColumns(), new EventByNetworkIdProvider(asset.getNetworkId(), "schedule.completedDate", SortOrder.DESCENDING), 10));
         if(eventService.countEventsByNetworkId(asset.getNetworkId()).intValue() == 0) {
             table.add(new AttributeAppender("class", " no_records").setSeparator(" "));
         }else if (table.getPageCount() < 2) {
