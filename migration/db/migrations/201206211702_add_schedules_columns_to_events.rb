@@ -55,7 +55,7 @@ class AddSchedulesColumnsToEvents < ActiveRecord::Migration
       event.printable = false
 
       event.save
-      say "Migrated #{current_schedule} of #{total_schedules} schedules" if (current_schedule % 100) == 0
+      say "Migrated #{current_schedule} of #{total_schedules} schedules at #{Time.now}" if (current_schedule % 100) == 0
       current_schedule += 1
     end
 
