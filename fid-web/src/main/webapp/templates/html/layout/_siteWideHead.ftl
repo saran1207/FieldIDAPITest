@@ -30,3 +30,5 @@
 
 <@n4.includeStyle href="newCss/component/my_saved_items.css" />
 <@n4.includeScript src="my_saved_items.js" />
+
+<#include "apptegic.ftl">

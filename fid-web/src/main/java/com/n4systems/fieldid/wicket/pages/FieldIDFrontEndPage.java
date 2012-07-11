@@ -36,8 +36,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.template.PackageTextTemplate;
+import org.apache.wicket.util.template.TextTemplate;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 import rfid.web.helper.SessionUser;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 
@@ -80,7 +85,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new DebugBar("debugBar"));
 
         add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
-        
+
         SessionUser sessionUser = getSessionUser();
 
         add(new WebMarkupContainer(LEFT_PANEL_ID).setVisible(false));
@@ -317,6 +322,20 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         response.renderJavaScriptReference("javascript/jquery.dropdown.js");
 
         response.renderCSSReference("style/colorbox.css");
+
+        if (configService.getBoolean(ConfigEntry.APPTEGIC_ENABLED)) {
+            SessionUser sessionUser = getSessionUser();
+
+            Map<String, String> apptegicParams = new HashMap<String, String>();
+            apptegicParams.put("user", sessionUser.getName());
+            apptegicParams.put("company", sessionUser.getTenant().getName());
+            apptegicParams.put("userType", sessionUser.getUserTypeLabel());
+            apptegicParams.put("accountType", sessionUser.getAccountType());
+            apptegicParams.put("apptegicDataset", configService.getString(ConfigEntry.APPTEGIC_DATASET));
+
+            TextTemplate apptegicTemplate = new PackageTextTemplate(FieldIDFrontEndPage.class, "apptegic.js");
+            response.renderJavaScript(apptegicTemplate.asString(apptegicParams), null);
+        }
     }
 
     protected Long getTenantId() {

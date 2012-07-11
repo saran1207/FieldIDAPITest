@@ -632,5 +632,13 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
     public boolean isGoogleAnalyticsEnabled() {
         return ConfigContext.getCurrentContext().getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED);
     }
+
+    public boolean isApptegicEnabled() {
+        return getConfigContext().getBoolean(ConfigEntry.APPTEGIC_ENABLED);
+    }
+
+    public String getApptegicDataset() {
+        return getConfigContext().getString(ConfigEntry.APPTEGIC_DATASET);
+    }
     
 }

@@ -6,6 +6,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.n4systems.security.UserType;
 import com.n4systems.util.BitField;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
@@ -36,6 +37,7 @@ public class SessionUser implements DateTimeDefinition {
 	private boolean readOnly;
 	private boolean systemUser;
 	private boolean liteUser;
+    private String userTypeLabel;
 	
 	public SessionUser( User user ) {
 		this.tenant = user.getTenant();
@@ -55,6 +57,7 @@ public class SessionUser implements DateTimeDefinition {
 		this.readOnly= user.isReadOnly();
 		this.systemUser=user.isSystem();
 		this.liteUser=user.isLiteUser();
+        this.userTypeLabel = user.getUserType().getLabel();
 	}
 
 	public Tenant getTenant() {
@@ -291,6 +294,13 @@ public class SessionUser implements DateTimeDefinition {
 	public boolean isLiteUser(){
 		return liteUser;
 	}
-	
-	
+
+    public String getUserTypeLabel() {
+        return userTypeLabel;
+    }
+
+    // This is an account field used by apptegic.  We will implement this further in the future.
+    public String getAccountType() {
+        return "Paid";
+    }
 }

@@ -75,7 +75,9 @@ public enum ConfigEntry {
     HOUR_TO_RUN_EVENT_SCHED_NOTIFICATIONS       (	"0"	),
 	HELP_SYSTEM_URL                             (   "http://n4systems.helpserve.com/index.php?/Tickets/Submit/"),
 	RSS_FEED                                    (   "http://feeds.feedburner.com/FieldIdCustomerBlog" ),
-    GOOGLE_ANALYTICS_ENABLED                    (   "false" );
+    GOOGLE_ANALYTICS_ENABLED                    (   "false" ),
+    APPTEGIC_ENABLED                            (   "false" ),
+    APPTEGIC_DATASET                            (   "test" );
 	
 	private String defaultValue;
 	
