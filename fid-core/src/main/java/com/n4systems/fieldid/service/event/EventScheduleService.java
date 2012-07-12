@@ -35,13 +35,13 @@ public class EventScheduleService extends FieldIdPersistenceService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<EventSchedule> getIncompleteSchedules(Long assetId) {
-		QueryBuilder<EventSchedule> query = createUserSecurityBuilder(EventSchedule.class)
+	public List<Event> getIncompleteSchedules(Long assetId) {
+		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 				.addOrder("nextDate")
-				.addWhere(WhereClauseFactory.create(Comparator.NE, "status", ScheduleStatus.COMPLETED))
+                .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
 				.addWhere(WhereClauseFactory.create("asset.id", assetId));
 
-		List<EventSchedule> schedules = persistenceService.findAll(query);
+		List<Event> schedules = persistenceService.findAll(query);
 		return schedules;
 	}
 	

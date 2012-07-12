@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import com.n4systems.model.Event;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ import com.n4systems.model.orgs.BaseOrg;
 
 @Component
 @Path("eventSchedule")
-public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, EventSchedule> {
+public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Event> {
 	private static Logger logger = Logger.getLogger(ApiEventScheduleResource.class);
 	
 	@Autowired private EventScheduleService eventScheduleService;
@@ -34,8 +35,8 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	
 	public List<ApiEventSchedule>  findAllSchedules(Long assetId) {
 		List<ApiEventSchedule> apiEventSchedules = new ArrayList<ApiEventSchedule>();		
-		List<EventSchedule> schedules = eventScheduleService.getIncompleteSchedules(assetId);
-		for (EventSchedule schedule: schedules) {
+		List<Event> schedules = eventScheduleService.getIncompleteSchedules(assetId);
+		for (Event schedule: schedules) {
 			apiEventSchedules.add(convertEntityToApiModel(schedule));
 		}
 		
@@ -47,17 +48,27 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Transactional
 	public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
 		EventSchedule eventSchedule = eventScheduleService.findByMobileId(apiEventSchedule.getSid());
-		
+
 		if (eventSchedule == null) {
-			eventSchedule = converApiEventSchedule(apiEventSchedule);
-			persistenceService.save(eventSchedule);
-			logger.info("Saved EventSchedule for " + eventSchedule.getEventType().getName() + " on Asset " + eventSchedule.getMobileGUID());
-		} else {
+            Event event = converApiEventSchedule(apiEventSchedule);
+			persistenceService.save(event);
+			logger.info("Saved EventSchedule for " + event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
+		} else if (eventSchedule.getEvent().getEventState() == Event.EventState.OPEN) {
+
+            EventType eventType = persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId());
+
 			eventSchedule.setNextDate(apiEventSchedule.getNextDate());
-			eventSchedule.setEventType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
+            eventSchedule.setEventType(eventType);
+
+            eventSchedule.getEvent().setNextDate(apiEventSchedule.getNextDate());
+            eventSchedule.getEvent().setType(eventType);
+
+            persistenceService.update(eventSchedule.getEvent());
 			persistenceService.update(eventSchedule);
 			logger.info("Updated EventSchedule for " + eventSchedule.getEventType().getName() + " on Asset " + eventSchedule.getMobileGUID());
-		}
+		} else {
+            logger.warn("Could not update EventSchedule due to event being already completed: " + eventSchedule.getId());
+        }
 	}
 	
 	@DELETE
@@ -66,34 +77,45 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Transactional
 	public void DeleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
 		EventSchedule eventSchedule = eventScheduleService.findByMobileId(eventScheduleId);	
-		persistenceService.delete(eventSchedule);
+		persistenceService.delete(eventSchedule.getEvent());
+        persistenceService.delete(eventSchedule);
 		logger.info("deleted schedule for " + eventSchedule.getEventType().getName() + " on asset " + eventSchedule.getMobileGUID());
 	}
 
 	@Override
-	protected ApiEventSchedule convertEntityToApiModel(EventSchedule schedule) {
+	protected ApiEventSchedule convertEntityToApiModel(Event event) {
 		ApiEventSchedule apiSchedule = new ApiEventSchedule();
-		apiSchedule.setSid(schedule.getMobileGUID());
+        // For backward compatibility, we must still use the GUID of the Schedule, since all
+        // existing schedules out there in mobile land will refer to schedule GUIDs.
+		apiSchedule.setSid(event.getSchedule().getMobileGUID());
 		apiSchedule.setActive(true);
-		apiSchedule.setModified(schedule.getModified());
-		apiSchedule.setOwnerId(schedule.getOwner().getId());
-		apiSchedule.setAssetId(schedule.getAsset().getMobileGUID());
-		apiSchedule.setEventTypeId(schedule.getEventType().getId());
-		apiSchedule.setEventTypeName(schedule.getEventType().getName());
-		apiSchedule.setNextDate(schedule.getNextDate());
+		apiSchedule.setModified(event.getModified());
+		apiSchedule.setOwnerId(event.getOwner().getId());
+		apiSchedule.setAssetId(event.getAsset().getMobileGUID());
+		apiSchedule.setEventTypeId(event.getEventType().getId());
+		apiSchedule.setEventTypeName(event.getEventType().getName());
+		apiSchedule.setNextDate(event.getNextDate());
 		return apiSchedule;
 	}
 	
-	private EventSchedule converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
+	private Event converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
 		EventSchedule eventSchedule = new EventSchedule();
 		BaseOrg owner = persistenceService.find(BaseOrg.class, apiEventSchedule.getOwnerId());
-		
+
+        Event event = new Event();
+        event.setNextDate(apiEventSchedule.getNextDate());
+        event.setTenant(owner.getTenant());
+        event.setAsset(assetService.findByMobileId(apiEventSchedule.getAssetId()));
+        event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
+
 		eventSchedule.setMobileGUID(apiEventSchedule.getSid());
 		eventSchedule.setNextDate(apiEventSchedule.getNextDate());
 		eventSchedule.setTenant(owner.getTenant());
 		eventSchedule.setAsset(assetService.findByMobileId(apiEventSchedule.getAssetId()));
-		eventSchedule.setEventType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));		
+		eventSchedule.setEventType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
+
+        event.setSchedule(eventSchedule);
 		
-		return eventSchedule;
+		return event;
 	}
 }

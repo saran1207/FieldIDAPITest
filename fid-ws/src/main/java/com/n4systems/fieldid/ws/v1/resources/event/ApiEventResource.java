@@ -8,6 +8,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import com.n4systems.ejb.EventScheduleManager;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,16 +23,6 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventStatus;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Status;
-import com.n4systems.model.SubEvent;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
@@ -45,6 +39,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	@Autowired private ApiEventAttachmentResource apiAttachmentResource;
 	@Autowired private ApiEventFormResultResource apiEventFormResultResource;
 	@Autowired private EventScheduleService eventScheduleService;
+    @Autowired private EventCreationService eventCreationService;
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -58,19 +53,21 @@ public class ApiEventResource extends FieldIdPersistenceService {
 
 		Event event = convertApiEvent(apiEvent);
 
-		CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, securityContext.getUserSecurityFilter().getUserId());
-		createEventParameterBuilder.withUploadedImages(apiAttachmentResource.convert(apiEvent.getAttachments(), event.getTenant(), event.getCreatedBy()));
-		
-		if(apiEvent.getEventScheduleId() != null)
-			createEventParameterBuilder.withScheduleId(eventScheduleService.findByMobileId(apiEvent.getEventScheduleId()).getId());
+        List<FileAttachment> uploadedFiles = apiAttachmentResource.convert(apiEvent.getAttachments(), event.getTenant(), event.getCreatedBy());
 
-		ProductionEventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
-		eventPersistenceFactory.createEventCreator().create(createEventParameterBuilder.build());
+        eventCreationService.createEvent(event, 0L, null, uploadedFiles);
 		logger.info("Saved Event on Asset " + apiEvent.getAssetId());
 	}
 
 	private Event convertApiEvent(ApiEvent apiEvent) {
 		Event event = new Event();
+
+        if (apiEvent.getEventScheduleId() != null) {
+            EventSchedule schedule = eventScheduleService.findByMobileId(apiEvent.getEventScheduleId());
+            event = schedule.getEvent();
+        }
+
+        event.setEventState(Event.EventState.COMPLETED);
 		
 		// Step 1: Convert abstract-event fields first.
 		convertApiEventForAbstractEvent(apiEvent, event);
