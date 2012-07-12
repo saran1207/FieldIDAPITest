@@ -50,19 +50,21 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     }
 
     private void init() {
-        newEvent = createNewEventWithDefaultValues();
-        add(new RecurringEventsForm("form"));
+        boolean hasEvents = getAssetType().getRecurringAssetTypeEvents().size()>0;
+        add(new RecurringEventsForm("form").setVisible(hasEvents));
+        add(new Label("blankSlate", new FIDLabelModel("message.no_event_types_for_asset_type")).setVisible(!hasEvents));
     }
 
     private RecurringAssetTypeEvent createNewEventWithDefaultValues() {
-        AssetType assetType = getAssetType();
-        Set<EventType> eventTypes = assetType.getEventTypes();
-        // TODO : don't show the RecurringEvents tab if no event types avail.
-        Preconditions.checkState(eventTypes.size()>0,"asset type has no events associated with it.");
-        EventType eventType = eventTypes.iterator().next();
         RecurrenceType type;
         int hour;
         int minute;
+        AssetType assetType = getAssetType();
+        Set<EventType> eventTypes = assetType.getEventTypes();
+        EventType eventType = null;
+        if (eventTypes.size()>0) {
+            eventType = eventTypes.iterator().next();
+        }
         return new RecurringAssetTypeEvent(assetType, eventType, new Recurrence(type=RecurrenceType.MONTHLY_1ST,hour=0,minute=0));
     }
 
@@ -106,6 +108,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
         public RecurringEventsForm(String id) {
             super(id, new CompoundPropertyModel(newEvent));
+            newEvent = createNewEventWithDefaultValues();
             final AssetType assetType = getAssetType();
 
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
@@ -114,7 +117,6 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             for (EventType eventType:assetType.getEventTypes()) {
                 eventTypes.add(eventType);
             }
-            newEvent.setEventType(eventTypes.get(0));
 
             final IChoiceRenderer<EventType> eventTypeRenderer = new IChoiceRenderer<EventType>() {
                 @Override public Object getDisplayValue(EventType object) {
