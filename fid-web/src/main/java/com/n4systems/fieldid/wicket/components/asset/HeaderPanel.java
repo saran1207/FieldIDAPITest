@@ -1,8 +1,7 @@
 package com.n4systems.fieldid.wicket.components.asset;
 
-import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -15,6 +14,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
@@ -35,7 +35,7 @@ public class HeaderPanel extends Panel {
     protected AssetService assetService;
 
     @SpringBean
-    private EventCreationService eventCreationService;
+    private EventScheduleService eventScheduleService;
     
     private Boolean useContext;
 
@@ -86,10 +86,13 @@ public class HeaderPanel extends Panel {
         add(new SchedulePicker("schedulePicker", new FIDLabelModel("label.schedule_event"), new PropertyModel<EventSchedule>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel(), -487, 28) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
-
-                EventScheduleBundle bundle = new EventScheduleBundle(scheduleToAdd.getAsset(), scheduleToAdd.getEventType(), scheduleToAdd.getProject(), scheduleToAdd.getNextDate());
-                //TODO create the schedule
-                //eventCreationService.createEventWithSchedules();
+                Event schedule = new Event();
+                schedule.setAsset(scheduleToAdd.getAsset());
+                schedule.setType(scheduleToAdd.getEventType());
+                schedule.setProject(scheduleToAdd.getProject());
+                schedule.setNextDate(scheduleToAdd.getNextDate());
+                schedule.setTenant(scheduleToAdd.getTenant());
+                eventScheduleService.createSchedule(schedule);
             }
         });
 

@@ -178,4 +178,17 @@ public class EventScheduleService extends FieldIdPersistenceService {
         return updatedSchedule;
     }
 
+    @Transactional
+    public Long createSchedule(Event schedule) {
+        EventGroup eventGroup = new EventGroup();
+        schedule.setOwner(schedule.getAsset().getOwner());
+        schedule.setGroup(eventGroup);
+        persistenceService.save(eventGroup);
+
+        Long id = persistenceService.save(schedule);
+        schedule.getAsset().touch();
+        persistenceService.update(schedule.getAsset());
+        return id;
+    }
+
 }
