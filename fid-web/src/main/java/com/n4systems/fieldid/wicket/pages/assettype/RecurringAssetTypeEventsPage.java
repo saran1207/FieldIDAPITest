@@ -24,7 +24,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -42,7 +41,6 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     protected Long assetTypeId;
     protected IModel<AssetType> assetTypeModel;
     private ListView<RecurringAssetTypeEvent> recurringEventsList;
-    private RecurringAssetTypeEvent newEvent;
 
     public RecurringAssetTypeEventsPage(PageParameters params) {
         super(params);
@@ -50,7 +48,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     }
 
     private void init() {
-        boolean hasEvents = getAssetType().getRecurringAssetTypeEvents().size()>0;
+        boolean hasEvents = getAssetType().getEventTypes().size()>0;
         add(new RecurringEventsForm("form").setVisible(hasEvents));
         add(new Label("blankSlate", new FIDLabelModel("message.no_event_types_for_asset_type")).setVisible(!hasEvents));
     }
@@ -105,10 +103,13 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     private class RecurringEventsForm extends Form {
 
         private RecurrenceTime time = RecurrenceTime.MIDNIGHT;
+        private EventType eventType = null;
+        private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
+        private BaseOrg owner;
+
 
         public RecurringEventsForm(String id) {
-            super(id, new CompoundPropertyModel(newEvent));
-            newEvent = createNewEventWithDefaultValues();
+            super(id);
             final AssetType assetType = getAssetType();
 
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
@@ -116,6 +117,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             final List<EventType> eventTypes = Lists.newArrayList();
             for (EventType eventType:assetType.getEventTypes()) {
                 eventTypes.add(eventType);
+                this.eventType = eventType; // set default value for form.
             }
 
             final IChoiceRenderer<EventType> eventTypeRenderer = new IChoiceRenderer<EventType>() {
@@ -130,23 +132,18 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             final WebMarkupContainer createContainer = new WebMarkupContainer("createContainer");
             createContainer.setOutputMarkupId(true);
 
-            createContainer.add(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(newEvent, "eventType"), eventTypes, eventTypeRenderer).setNullValid(false).add(new JChosenBehavior()));
-            createContainer.add(new DropDownChoice<RecurrenceType>("recurrence", new PropertyModel<RecurrenceType>(newEvent, "recurrence.type"), recurrences, new EnumPropertyChoiceRenderer<RecurrenceType>()).setNullValid(false).add(new JChosenBehavior()));
-            createContainer.add(new AutoCompleteOrgPicker("org", new PropertyModel<BaseOrg>(newEvent, "owner")).setRequired(false));
+            createContainer.add(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(this, "eventType"), eventTypes, eventTypeRenderer).setNullValid(false).add(new JChosenBehavior()));
+            createContainer.add(new DropDownChoice<RecurrenceType>("recurrence", new PropertyModel<RecurrenceType>(this, "type"), recurrences, new EnumPropertyChoiceRenderer<RecurrenceType>()).setNullValid(false).add(new JChosenBehavior()));
+            createContainer.add(new AutoCompleteOrgPicker("org", new PropertyModel<BaseOrg>(this, "owner")).setRequired(false));
             createContainer.add(new DropDownChoice<RecurrenceTime>("time", new PropertyModel<RecurrenceTime>(this, "time"), Arrays.asList(RecurrenceTime.values()), new EnumPropertyChoiceRenderer<RecurrenceTime>()).setNullValid(true).add(new JChosenBehavior()));
 
-            AjaxSubmitLink create;
-            createContainer.add(create = new AjaxSubmitLink("create") {
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    assetTypeService.addRecurringEvent(assetType, copyOf(newEvent));
+            createContainer.add(new AjaxSubmitLink("create") {
+                @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    assetTypeService.addRecurringEvent(assetType, createNewEventFromForm());
                     recurringEventsList.getModel().detach();
                     target.add(RecurringEventsForm.this);
                 }
-
-                @Override
-                protected void onError(AjaxRequestTarget target, Form<?> form) {
-
+                @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
                 }
             });
             add(createContainer);
@@ -173,10 +170,10 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
         }
 
-        private RecurringAssetTypeEvent copyOf(RecurringAssetTypeEvent event) {
-            Recurrence recurrence = new Recurrence(event.getRecurrence().getType(), time.getHour(), time.getMinutes());
-            RecurringAssetTypeEvent clone = new RecurringAssetTypeEvent(event.getAssetType(), event.getEventType(), recurrence);
-            clone.setOwner(event.getOwner());
+        private RecurringAssetTypeEvent createNewEventFromForm() {
+            Recurrence recurrence = new Recurrence(type,time.getHour(),time.getMinutes());
+            RecurringAssetTypeEvent clone = new RecurringAssetTypeEvent(getAssetType(), eventType, recurrence);
+            clone.setOwner(owner);
             return clone;
         }
 
