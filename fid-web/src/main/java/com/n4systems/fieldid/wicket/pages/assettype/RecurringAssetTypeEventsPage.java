@@ -33,6 +33,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
@@ -55,7 +56,10 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
     private RecurringAssetTypeEvent createNewEventWithDefaultValues() {
         AssetType assetType = getAssetType();
-        EventType eventType = assetType.getEventTypes().iterator().next();
+        Set<EventType> eventTypes = assetType.getEventTypes();
+        // TODO : don't show the RecurringEvents tab if no event types avail.
+        Preconditions.checkState(eventTypes.size()>0,"asset type has no events associated with it.");
+        EventType eventType = eventTypes.iterator().next();
         RecurrenceType type;
         int hour;
         int minute;
@@ -187,7 +191,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
         @Override
         protected List<RecurringAssetTypeEvent> load() {
-            return assetTypeModel.getObject().getRecurringAssetTypeEvents();
+            return Lists.newArrayList(assetTypeModel.getObject().getRecurringAssetTypeEvents().iterator());
         }
 
         @Override
