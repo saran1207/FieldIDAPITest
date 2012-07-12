@@ -96,6 +96,21 @@
     top: 34px;
 }
 
+.filterSelection {
+    position: absolute;
+    left: 20px;
+    top: 37px;
+}
+
+.filterSelection label {
+    padding-right: 2px;
+}
+
+.filterSelection input {
+    margin-right: 5px;
+    vertical-align: bottom;
+}
+
 .first, .last, .goto {
     display: none;
 }

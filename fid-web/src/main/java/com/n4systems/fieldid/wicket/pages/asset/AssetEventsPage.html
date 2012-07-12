@@ -2,6 +2,13 @@
     <div class="header" wicket:id="header" />
 
     <div class="content">
+
+        <div wicket:id="filters" class="filterSelection">
+            <label><wicket:message key="label.show"/></label> |
+            <label><input type="checkbox" wicket:id="open" /><wicket:message key="label.open"/></label>
+            <label><input type="checkbox" wicket:id="completed" /><wicket:message key="label.completed"/></label>
+            <label><input type="checkbox" wicket:id="closed" /><wicket:message key="label.closed"/></label>
+        </div>
         <div class="viewSelection">
             <a wicket:id="listLink" class="tipsy-tooltip" title="List"><img src="/fieldid/images/list.png" /></a>
             <a wicket:id="mapLink" class="tipsy-tooltip" title="Map"><img src="/fieldid/images/map.png" /></a>

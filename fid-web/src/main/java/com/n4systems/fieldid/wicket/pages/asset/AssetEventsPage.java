@@ -5,19 +5,28 @@ import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AssetEventsPage extends AssetPage{
 
-    public Boolean isList;
+    private EventListPanel eventPanel;
+    private EventMapPanel mapPanel;
+    private WebMarkupContainer filters;
 
-    private Panel eventPanel;
-    private Panel mapPanel;
+    private boolean open = true;
+    private boolean completed = true;
+    private boolean closed = true;
 
     public AssetEventsPage(PageParameters params) {
         super(params);
@@ -35,8 +44,10 @@ public class AssetEventsPage extends AssetPage{
             public void onClick(AjaxRequestTarget target) {
                 eventPanel.setVisible(true);
                 mapPanel.setVisible(false);
+                filters.setVisible(true);
                 target.add(eventPanel);
                 target.add(mapPanel);
+                target.add(filters);
             }
         });
 
@@ -45,8 +56,10 @@ public class AssetEventsPage extends AssetPage{
             public void onClick(AjaxRequestTarget target) {
                 eventPanel.setVisible(false);
                 mapPanel.setVisible(true);
+                filters.setVisible(false);
                 target.add(eventPanel);
                 target.add(mapPanel);
+                target.add(filters);
             }
         });
         
@@ -58,13 +71,57 @@ public class AssetEventsPage extends AssetPage{
             mapLink.setVisible(false);
         }
 
-        add(eventPanel = new EventListPanel("eventPanel", assetModel));
+        add(eventPanel = new EventListPanel("eventPanel", assetModel, getEventStates()));
         add(mapPanel = new EventMapPanel("mapPanel", assetModel));
         eventPanel.setOutputMarkupPlaceholderTag(true);
         mapPanel.setOutputMarkupPlaceholderTag(true);
         mapPanel.setVisible(false);
+
+        filters = new WebMarkupContainer("filters");
+        filters.setOutputMarkupPlaceholderTag(true);
+        filters.add(new AjaxCheckBox("open", new PropertyModel<Boolean>(this, "open")) {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                open = getModel().getObject();
+                updateEventListPanel(target);
+            }
+        });
+        filters.add(new AjaxCheckBox("completed", new PropertyModel<Boolean>(this, "completed")) {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                completed = getModel().getObject();
+                updateEventListPanel(target);
+            }
+        });
+        filters.add(new AjaxCheckBox("closed", new PropertyModel<Boolean>(this, "closed")) {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                closed = getModel().getObject();
+                updateEventListPanel(target);
+            }
+        });
+        add(filters);
     }
 
+
+    private void updateEventListPanel(AjaxRequestTarget target) {
+        eventPanel.getDataProvider().setStates(getEventStates());
+        eventPanel.getDefaultModel().detach();
+        target.add(eventPanel);
+
+    }
+    
+    private List<Event.EventState> getEventStates() {
+        List<Event.EventState> states = new ArrayList<Event.EventState>();
+        if(open)
+            states.add(Event.EventState.OPEN);
+        if(completed)
+            states.add(Event.EventState.COMPLETED);
+        //TODO Add Closed State
+        if(closed)
+            ;//states.add(Event.EventState.CLOSED);
+        return states;
+    }
 
     public static final String GOOGLE_MAPS_JS = "googleMaps";
     private static final String GOOGLE_MAP_API = "google-map-api";

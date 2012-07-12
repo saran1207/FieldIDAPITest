@@ -310,28 +310,28 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     public List<Event> getEventsByNetworkId(Long networkId) {
-        return getEventsByNetworkId(networkId, null, null);
+        return getEventsByNetworkId(networkId, null, null, null);
     }
 
-    public List<Event> getEventsByNetworkId(Long networkId, String order, Boolean ascending) {
+    public List<Event> getEventsByNetworkId(Long networkId, String order, Boolean ascending, List<Event.EventState> states) {
 
-        QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId);
+        QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId, states);
 
         if (order != null) {
             builder.addOrder(order, ascending);
         } else {
             builder.addOrder("schedule.completedDate", false);
         }
-        
+
         return persistenceService.findAll(builder);
     }
 
-    public Long countEventsByNetworkId(Long networkId) {
-        QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId);
+    public Long countEventsByNetworkId(Long networkId, List<Event.EventState> states) {
+        QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId, states);
         return persistenceService.count(builder);
     }
 
-    private QueryBuilder<Event> createEventsByNetworkIdQuery(Long networkId) {
+    private QueryBuilder<Event> createEventsByNetworkIdQuery(Long networkId, List<Event.EventState> states) {
         SecurityFilter filter = securityContext.getUserSecurityFilter();
 
         QueryBuilder<Tenant> connectedTenantsQuery = new QueryBuilder<Tenant>(TypedOrgConnection.class, filter);
@@ -346,7 +346,13 @@ public class EventService extends FieldIdPersistenceService {
         QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
         builder.addWhere(WhereClauseFactory.create("asset.networkId", networkId));
         builder.addWhere(wpg);
-        
+
+        if(states!= null && !states.isEmpty()) {
+            builder.addWhere(WhereClauseFactory.create(Comparator.IN, "eventState", states));
+        } else {
+            builder.addWhere(WhereClauseFactory.createIsNull("eventState"));
+        }
+
         return builder;
     }
     

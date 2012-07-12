@@ -92,6 +92,7 @@ public class HeaderPanel extends Panel {
                 schedule.setProject(scheduleToAdd.getProject());
                 schedule.setNextDate(scheduleToAdd.getNextDate());
                 schedule.setTenant(scheduleToAdd.getTenant());
+                schedule.setStatus(null);
                 eventScheduleService.createSchedule(schedule);
             }
         });

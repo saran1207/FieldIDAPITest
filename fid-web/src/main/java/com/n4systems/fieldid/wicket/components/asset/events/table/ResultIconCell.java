@@ -13,17 +13,27 @@ public class ResultIconCell extends Panel {
     public ResultIconCell(String id, IModel<Event> eventModel) {
         super(id);
 
-        Status status = eventModel.getObject().getStatus();
+        Event event = eventModel.getObject();
+        Event.EventState state = event.getEventState();
         ContextImage image;
-        if(status.equals(Status.FAIL)) {
-            add(image = new ContextImage("resultIcon", "images/event-completed-fail.png"));
-            image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", status.getDisplayName()).getObject()));
-        } else if(status.equals(Status.PASS)) {
-            add(image = new ContextImage("resultIcon", "images/event-completed-pass.png"));
-            image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", status.getDisplayName()).getObject()));
-        } else if(status.equals(Status.NA)) {
-            add(image = new ContextImage("resultIcon", "images/event-completed-na.png"));
-            image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", status.getDisplayName()).getObject()));
+        if(state.equals(Event.EventState.COMPLETED)) {
+            Status status = event.getStatus();
+            if(status.equals(Status.FAIL)) {
+                add(image = new ContextImage("resultIcon", "images/event-completed-fail.png"));
+                image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", status.getDisplayName()).getObject()));
+            } else if(status.equals(Status.PASS)) {
+                add(image = new ContextImage("resultIcon", "images/event-completed-pass.png"));
+                image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", status.getDisplayName()).getObject()));
+            } else if(status.equals(Status.NA)) {
+                add(image = new ContextImage("resultIcon", "images/event-completed-na.png"));
+                image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", status.getDisplayName()).getObject()));
+            }
+        } else if(state.equals(Event.EventState.OPEN)) {
+            add(image = new ContextImage("resultIcon", "images/event-open.png"));
+            image.add(new AttributeAppender("title", new FIDLabelModel("label.event_open").getObject()));
+        }else /*if(state.equals(Event.EventState.CLOSED)) */ {
+            add(image = new ContextImage("resultIcon", "images/event-closed.png"));
+            image.add(new AttributeAppender("title", new FIDLabelModel("label.event_closed").getObject()));
         }
     }
 }

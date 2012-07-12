@@ -8,6 +8,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Iterator;
+import java.util.List;
 
 public class EventByNetworkIdProvider extends FieldIDDataProvider<Event> {
 
@@ -16,24 +17,24 @@ public class EventByNetworkIdProvider extends FieldIDDataProvider<Event> {
 
     private Long networkId;
     private String order;
+    private List<Event.EventState> states;
 
-    
-    public EventByNetworkIdProvider(Long networkId, String order, SortOrder sortOrder) {
+    public EventByNetworkIdProvider(Long networkId, String order, SortOrder sortOrder, List<Event.EventState> states) {
         this.networkId = networkId;
         this.order = order;
+        this.states = states;
 
         setSort(order, sortOrder);
-
     }
 
     @Override
     public Iterator<? extends Event> iterator(int first, int count) {
-        return eventService.getEventsByNetworkId(networkId, getSort().getProperty(), getSort().isAscending()).subList(first, first + count).iterator();
+        return eventService.getEventsByNetworkId(networkId, getSort().getProperty(), getSort().isAscending(), states).subList(first, first + count).iterator();
     }
 
     @Override
     public int size() {
-        return eventService.countEventsByNetworkId(networkId).intValue();
+        return eventService.countEventsByNetworkId(networkId, states).intValue();
     }
 
     @Override
@@ -44,5 +45,9 @@ public class EventByNetworkIdProvider extends FieldIDDataProvider<Event> {
                 return (Event) object;
             }
         };
+    }
+
+    public void setStates(List<Event.EventState> states) {
+        this.states = states;
     }
 }
