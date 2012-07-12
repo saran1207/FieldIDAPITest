@@ -2,7 +2,7 @@ package com.n4systems.model;
 
 public enum RecurrenceTime {
 
-    MIDNIGHT(12,0),
+    MIDNIGHT(0,0),
     ONE_AM(1,0),
     TWO_AM(2,0),
     THREE_AM(3,0),

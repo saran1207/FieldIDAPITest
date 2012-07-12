@@ -57,7 +57,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private String manufactureCertificateText;	
 	private boolean hasManufactureCertificate;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "assetType", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RecurringAssetTypeEvent> recurringAssetTypeEvents = new HashSet<RecurringAssetTypeEvent>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")

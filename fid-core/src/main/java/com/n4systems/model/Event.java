@@ -113,6 +113,10 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
     @Transient
     private boolean resultFromCriteriaAvailable = false;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="recurring_event_id")
+    private RecurringAssetTypeEvent recurringEvent;
 	
 	public Event() {
 	}
@@ -535,6 +539,18 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         return nextDate != null;
     }
 
+    public EventType getEventType() {
+        return getType();
+    }
+
+    public RecurringAssetTypeEvent getRecurringEvent() {
+        return recurringEvent;
+    }
+
+    public void setRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
+        this.recurringEvent = recurringEvent;
+    }
+
     public Event copyDataFrom(Event event) {
         setAsset(event.getAsset());
         setType(event.getType());
@@ -547,7 +563,4 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         return this;
     }
 
-    public EventType getEventType() {
-        return getType();
-    }
 }

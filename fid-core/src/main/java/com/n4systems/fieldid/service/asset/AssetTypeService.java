@@ -50,10 +50,6 @@ public class AssetTypeService extends FieldIdPersistenceService {
         persistenceService.update(assetType);
     }
 
-
-    // TODO DD : this stuff should be refactored into new service when events/schedules are merged.
-    // e.g. SchedulingService or possibly in EventService?
-
     private void scheduleInitialEvents(RecurringAssetTypeEvent recurringEvent) {
         QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
         builder.addSimpleWhere("type", recurringEvent.getAssetType());
@@ -66,8 +62,23 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
         for (Asset asset:assets) {
             Recurrence recurrence = recurringEvent.getRecurrence();
+            // TODO DD : Do i really need to save EventGroup???? we don't use this info any more?
             for (DateTime nextDate:recurrence.getScheduledTimes(LocalDate.now(), endDate)) {
-                persistenceService.save(new EventSchedule(asset, recurringEvent.getEventType(), nextDate.toDate()));
+                Event event = new Event();
+                event.setNextDate(nextDate.toDate());
+                event.setEventState(Event.EventState.OPEN);
+                event.setAsset(asset);
+                EventGroup eventGroup = new EventGroup();
+                event.setStatus(Status.NA);  // TODO DD : what should this be?  is null ok?
+                persistenceService.save(eventGroup);
+                event.setGroup(eventGroup);
+                event.setOwner(asset.getOwner());
+                event.setTenant(asset.getTenant());
+                event.setType(recurringEvent.getEventType());
+                event.setRecurringEvent(recurringEvent);
+                event.setStatus(null);
+//                event.setSchedule(null); ??
+                persistenceService.save(event);
             }
         }
     }
@@ -75,21 +86,21 @@ public class AssetTypeService extends FieldIdPersistenceService {
     private void removeScheduledEvents(RecurringAssetTypeEvent recurringEvent) {
         LocalDate from = LocalDate.now();
         LocalDate to = from.plusDays(RECURRING_EVENT_BUFFER_SIZE_IN_DAYS);
-        QueryBuilder<EventSchedule> builder = new QueryBuilder<EventSchedule>(EventSchedule.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
+        QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
 
         builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "nextDate", from.toDate(), null, WhereClause.ChainOp.AND));
         builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "to", "nextDate", to.toDate(), null, WhereClause.ChainOp.AND));
+        builder.addSimpleWhere("eventState", Event.EventState.OPEN);
+//        builder.addSimpleWhere("recurringEvent", recurringEvent);
         if (recurringEvent.getOwner()!=null) {
             builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner", "owner", recurringEvent.getOwner(), null, WhereClause.ChainOp.AND));
         }
-        // TODO DD :   AND EventSchedule.RECURRING_ID = recurringEvent.getId() when schedules is merged!!!
 
-        List<EventSchedule> schedules = persistenceService.findAll(builder);
-        for (EventSchedule schedule:schedules) {
-            System.out.println("removing scheduled event for asset " + schedule.getAsset().getIdentifier() + " on " + schedule.getNextDate());
-            persistenceService.delete(schedule);
+        List<Event> events = persistenceService.findAll(builder);
+        for (Event event:events) {
+            System.out.println("removing scheduled event for asset " + event.getAsset().getIdentifier() + " on " + event.getNextDate());
+            persistenceService.delete(event);
         }
     }
-
 
 }
