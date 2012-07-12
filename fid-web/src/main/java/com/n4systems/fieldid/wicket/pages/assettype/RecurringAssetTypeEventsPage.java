@@ -154,7 +154,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                     item.add(new Label("eventType", new PropertyModel<String>(item.getDefaultModelObject(), "eventType.name")));
                     RecurringAssetTypeEvent event = (RecurringAssetTypeEvent) item.getDefaultModelObject();
                     item.add(new Label("recurrence", new EnumLabelModel(event.getRecurrence().getType())));
-                    item.add(new Label("org", new NullCoverterModel(new PropertyModel<String>(item.getDefaultModelObject(), "owner.displayName"), "---")));
+                    item.add(new Label("org", new NullCoverterModel(new PropertyModel<String>(item.getDefaultModelObject(), "owner.name"), "---")));
                     item.add(new Label("time", new PropertyModel<String>(item.getDefaultModelObject(), "recurrence.displayTime")));
                     item.add(new AjaxLink("remove") {
                         @Override public void onClick(AjaxRequestTarget target) {
