@@ -15,22 +15,24 @@
             <a class="blue-submit" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
         </div>
 
-        <table class="existing-events">
-            <tr>
-                <th>Event Type</th>
-                <th>Recurs</th>
-                <th>At</th>
-                <th>For</th>
-                <th></th>
-            </tr>
-            <tr wicket:id="eventTypes">
-                <td><label wicket:id="eventType"></label></td>
-                <td><label wicket:id="recurrence"></label></td>
-                <td><label wicket:id="time"></label></td>
-                <td><label wicket:id="org"></label></td>
-                <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
-            </tr>
-        </table>
+        <div wicket:id="tableContainer">
+            <table class="existing-events">
+                <tr>
+                    <th>Event Type</th>
+                    <th>Recurs</th>
+                    <th>At</th>
+                    <th>For</th>
+                    <th></th>
+                </tr>
+                <tr wicket:id="eventTypes">
+                    <td><label wicket:id="eventType"></label></td>
+                    <td><label wicket:id="recurrence"></label></td>
+                    <td><label wicket:id="time"></label></td>
+                    <td><label wicket:id="org"></label></td>
+                    <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
+                </tr>
+            </table>
+        </div>
 
     </form>
 

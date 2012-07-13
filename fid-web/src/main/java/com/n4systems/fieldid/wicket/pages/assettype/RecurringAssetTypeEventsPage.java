@@ -129,25 +129,28 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 }
             };
 
-            final WebMarkupContainer createContainer = new WebMarkupContainer("createContainer");
-            createContainer.setOutputMarkupId(true);
+            final WebMarkupContainer inputContainer = new WebMarkupContainer("createContainer");
+            inputContainer.setOutputMarkupId(true);
 
-            createContainer.add(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(this, "eventType"), eventTypes, eventTypeRenderer).setNullValid(false).add(new JChosenBehavior()));
-            createContainer.add(new DropDownChoice<RecurrenceType>("recurrence", new PropertyModel<RecurrenceType>(this, "type"), recurrences, new EnumPropertyChoiceRenderer<RecurrenceType>()).setNullValid(false).add(new JChosenBehavior()));
-            createContainer.add(new AutoCompleteOrgPicker("org", new PropertyModel<BaseOrg>(this, "owner")).setRequired(false));
-            createContainer.add(new DropDownChoice<RecurrenceTime>("time", new PropertyModel<RecurrenceTime>(this, "time"), Arrays.asList(RecurrenceTime.values()), new EnumPropertyChoiceRenderer<RecurrenceTime>()).setNullValid(true).add(new JChosenBehavior()));
+            inputContainer.add(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(this, "eventType"), eventTypes, eventTypeRenderer).setNullValid(false).add(new JChosenBehavior()));
+            inputContainer.add(new DropDownChoice<RecurrenceType>("recurrence", new PropertyModel<RecurrenceType>(this, "type"), recurrences, new EnumPropertyChoiceRenderer<RecurrenceType>()).setNullValid(false).add(new JChosenBehavior()));
+            inputContainer.add(new AutoCompleteOrgPicker("org", new PropertyModel<BaseOrg>(this, "owner")).setRequired(false));
+            inputContainer.add(new DropDownChoice<RecurrenceTime>("time", new PropertyModel<RecurrenceTime>(this, "time"), Arrays.asList(RecurrenceTime.values()), new EnumPropertyChoiceRenderer<RecurrenceTime>()).setNullValid(true).add(new JChosenBehavior()));
 
-            createContainer.add(new AjaxSubmitLink("create") {
-                @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            inputContainer.add(new AjaxSubmitLink("create") {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     assetTypeService.addRecurringEvent(assetType, createNewEventFromForm());
                     target.add(RecurringEventsForm.this);
                 }
-                @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
                 }
             });
-            add(createContainer);
+            add(inputContainer);
 
-            add(recurringEventsList = new RefreshingView<RecurringAssetTypeEvent>("eventTypes") {
+            recurringEventsList = new RefreshingView<RecurringAssetTypeEvent>("eventTypes") {
                 @Override protected Iterator<IModel<RecurringAssetTypeEvent>> getItemModels() {
                     return new RecurringEventsModel(assetTypeModel).getItems().iterator();
                 }
@@ -170,7 +173,16 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 @Override protected Item<RecurringAssetTypeEvent> newItem(String id, int index, IModel<RecurringAssetTypeEvent> recurringAssetTypeEventIModel) {
                     return super.newItem(id, index, recurringAssetTypeEventIModel);
                 }
-            });
+
+            };
+
+            WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer") {
+                @Override public boolean isVisible() {
+                    return getAssetType().getRecurringAssetTypeEvents().size()>0;
+                }
+            };
+            tableContainer.add(recurringEventsList);
+            add(tableContainer);
 
         }
 
@@ -181,6 +193,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             System.out.println(newEvent);
             return newEvent;
         }
+
 
     }
 
@@ -211,6 +224,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             }
             return result;
         }
+
     }
 
 
