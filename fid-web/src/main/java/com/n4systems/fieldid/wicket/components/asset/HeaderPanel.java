@@ -91,7 +91,7 @@ public class HeaderPanel extends Panel {
                 schedule.setType(scheduleToAdd.getEventType());
                 schedule.setProject(scheduleToAdd.getProject());
                 schedule.setNextDate(scheduleToAdd.getNextDate());
-                schedule.setTenant(scheduleToAdd.getTenant());
+                schedule.setTenant(FieldIDSession.get().getSessionUser().getTenant());
                 schedule.setStatus(null);
                 eventScheduleService.createSchedule(schedule);
             }

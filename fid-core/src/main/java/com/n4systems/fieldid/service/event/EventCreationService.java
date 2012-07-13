@@ -98,7 +98,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         Date completedDate = event.getDate();
 
-        EventSchedule eventSchedule = findOrCreateSchedule(event, scheduleId);
+        findOrCreateSchedule(event, scheduleId);
 
         event.setDate(completedDate);
 
@@ -119,10 +119,8 @@ public class EventCreationService extends FieldIdPersistenceService {
         processUploadedFiles(event, uploadedFiles);
 
         // Do this last, as it can throw an exception if the schedule is in an invalid state.
-        if (eventSchedule != null) {
-            eventSchedule.completed(event);
-            persistenceService.update(eventSchedule);
-        }
+        event.getSchedule().completed(event);
+        persistenceService.update(event.getSchedule());
 
         return event;
     }
