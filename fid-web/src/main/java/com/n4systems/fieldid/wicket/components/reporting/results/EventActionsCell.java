@@ -55,7 +55,7 @@ public class EventActionsCell extends Panel {
 
         Link resolveEventLink = new Link("resolveEventLink") {
             @Override public void onClick() {
-                setResponsePage(new ResolveEventPage(event));
+                setResponsePage(new ResolveEventPage(event.getId()));
             }
         };
 

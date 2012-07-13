@@ -187,8 +187,8 @@ public class EventService extends FieldIdPersistenceService {
 		EventKpiRecord eventKpiRecord = new EventKpiRecord();	
 		eventKpiRecord.setCustomer(owner);
 		
-		QueryBuilder<EventScheduleStatusCount> builder1 = new QueryBuilder<EventScheduleStatusCount>(EventSchedule.class, securityContext.getUserSecurityFilter());
-		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "status", "COUNT(*)"));
+		QueryBuilder<EventScheduleStatusCount> builder1 = new QueryBuilder<EventScheduleStatusCount>(Event.class, securityContext.getUserSecurityFilter());
+		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "eventState", "COUNT(*)"));
         builder1.applyFilter(new OwnerAndDownFilter(owner));
 
 		builder1.addWhere(whereFromTo(fromDate, toDate, "nextDate"));
@@ -197,18 +197,16 @@ public class EventService extends FieldIdPersistenceService {
 		List<EventScheduleStatusCount> statusCounts = persistenceService.findAll(builder1);
 		
 		for (EventScheduleStatusCount statusCount: statusCounts ) {
-			if(statusCount.status.equals(ScheduleStatus.COMPLETED))
+			if(statusCount.state.equals(Event.EventState.COMPLETED))
 				eventKpiRecord.setCompleted(statusCount.count);
-			if(statusCount.status.equals(ScheduleStatus.IN_PROGRESS))
-				eventKpiRecord.setInProgress(statusCount.count);
-			if(statusCount.status.equals(ScheduleStatus.SCHEDULED))
-				eventKpiRecord.setScheduled(statusCount.count);			
+			if(statusCount.state.equals(Event.EventState.OPEN))
+				eventKpiRecord.setScheduled(statusCount.count);
 		}
 
-		QueryBuilder<EventSchedule> builder2 = new QueryBuilder<EventSchedule>(EventSchedule.class, securityContext.getUserSecurityFilter());
+		QueryBuilder<Event> builder2 = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter());
 		builder2.applyFilter(new OwnerAndDownFilter(owner));
-		builder2.addSimpleWhere("status", ScheduleStatus.COMPLETED);
-		builder2.addSimpleWhere("event.status", Status.FAIL);
+		builder2.addSimpleWhere("eventState", Event.EventState.COMPLETED);
+		builder2.addSimpleWhere("status", Status.FAIL);
 		builder2.addWhere(whereFromTo(fromDate, toDate, "nextDate"));
 		
 		Long failedCount = persistenceService.count(builder2);

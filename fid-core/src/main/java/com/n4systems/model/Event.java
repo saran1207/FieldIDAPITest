@@ -36,7 +36,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     public enum EventState implements DisplayEnum {
         @Deprecated
         SCHEDULED("Scheduled"),
-        OPEN("Open"), COMPLETED("Completed");
+        OPEN("Open"), COMPLETED("Completed"), CLOSED("Closed");
 
         private String label;
 

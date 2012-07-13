@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventState;
@@ -62,6 +61,8 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
             addSimpleTerm(searchTerms, "eventState", Event.EventState.COMPLETED);
         } else if (criteriaModel.getEventState() == EventState.INCOMPLETE) {
             searchTerms.add(new SimpleTerm<Event.EventState>("eventState", Event.EventState.COMPLETED, WhereParameter.Comparator.NE));
+        } else if (criteriaModel.getEventState() == EventState.CLOSED) {
+            addSimpleTerm(searchTerms, "eventState", Event.EventState.CLOSED);
         }
 
         if (IncludeDueDateRange.HAS_NO_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {

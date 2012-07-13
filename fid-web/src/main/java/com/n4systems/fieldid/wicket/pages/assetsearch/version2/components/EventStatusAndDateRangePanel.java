@@ -46,7 +46,8 @@ public class EventStatusAndDateRangePanel extends Panel {
         includeDueDateRangeContainer = new WebMarkupContainer("includeDueDateRangeContainer") {
             @Override
             public boolean isVisible() {
-                return EventState.COMPLETE.equals(eventStateModel.getObject());
+                return EventState.COMPLETE.equals(eventStateModel.getObject()) ||
+                        EventState.CLOSED.equals(eventStateModel.getObject());
             }
         };
         includeDueDateRangeContainer.setOutputMarkupPlaceholderTag(true);
@@ -82,7 +83,8 @@ public class EventStatusAndDateRangePanel extends Panel {
         add(completedRangePicker = new DateRangePicker("completeRangePicker", new FIDLabelModel("label.completed_date"), completedRange) {
             @Override
             public boolean isVisible() {
-                return EventState.COMPLETE.equals(eventStateModel.getObject());
+                return EventState.COMPLETE.equals(eventStateModel.getObject())
+                        || EventState.CLOSED.equals(eventStateModel.getObject());
             }
         });
         add(dueRangePicker = new DateRangePicker("dueRangePicker", new FIDLabelModel("label.due_date"), dueRange, RangeType.allFloatingTypes()) {

@@ -2,15 +2,15 @@ package com.n4systems.services.reporting;
 
 import java.io.Serializable;
 
-import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.Event;
 
 public class EventScheduleStatusCount implements Serializable{
 		
-	public EventScheduleStatusCount(ScheduleStatus status, Long count) {
-		this.status = status;
+	public EventScheduleStatusCount(Event.EventState state, Long count) {
+		this.state = state;
 		this.count = count;
 	}
 	
-	public ScheduleStatus status;
+	public Event.EventState state;
 	public Long count;
 }

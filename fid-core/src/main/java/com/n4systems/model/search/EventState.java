@@ -4,7 +4,7 @@ import com.n4systems.model.api.Listable;
 
 public enum EventState implements Listable {
 
-    COMPLETE("label.complete"),INCOMPLETE("label.incomplete"),RESOLVED("label.resolved"),ALL("label.all");
+    COMPLETE("label.complete"),INCOMPLETE("label.incomplete"), CLOSED("label.closed"), ALL("label.all");
 
     private String labelKey;
 
@@ -28,10 +28,6 @@ public enum EventState implements Listable {
 
     public boolean includesComplete() {
         return this == ALL || this == COMPLETE;
-    }
-
-    public boolean includesResolved() {
-        return this == ALL || this == RESOLVED;
     }
 
 }
