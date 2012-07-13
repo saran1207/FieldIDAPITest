@@ -41,3 +41,13 @@
     width:60px;
     line-height: 15px;
 }
+
+
+/*To fix quirks input alignment of JChosen select boxes.  they area too high without these hacks. */
+.new-event .chzn-container-single .chzn-single span {
+    display: inline;
+}
+
+.new-event .chzn-container-single .chzn-single {
+    overflow: visible;
+}
