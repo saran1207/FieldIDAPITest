@@ -15,6 +15,14 @@ public class ActionsColumn extends PropertyColumn<Event> {
 
     @Override
     public void populateItem(Item<ICellPopulator<Event>> item, String id, IModel<Event> eventModel) {
-        item.add(new ActionsCell(id, eventModel));
+        Event.EventState state = eventModel.getObject().getEventState();
+
+        if(state.equals(Event.EventState.COMPLETED)) {
+            item.add(new EventActionsCell(id, eventModel));
+        } else if (state.equals(Event.EventState.OPEN)) {
+            item.add(new OpenActionsCell(id, eventModel));
+        } else { //CLOSED
+            item.add(new ClosedActionsCell(id, eventModel));
+        }
     }
 }

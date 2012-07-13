@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -12,7 +11,7 @@ public class EventDueCell extends Panel {
     public EventDueCell(String id, IModel<Event> eventModel) {
         super(id);
         
-        EventSchedule schedule = eventModel.getObject().getSchedule();
+        Event schedule = eventModel.getObject();
         
         if(schedule.getNextDate() == null) {
             add(new Label("dueDate", new FIDLabelModel("label.no_due_date")));

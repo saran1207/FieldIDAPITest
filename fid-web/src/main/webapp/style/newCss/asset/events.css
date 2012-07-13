@@ -99,7 +99,8 @@
 .filterSelection {
     position: absolute;
     left: 20px;
-    top: 37px;
+    top: 42px;
+    font-size: 11px;
 }
 
 .filterSelection label {
@@ -183,4 +184,8 @@ span.next em, a.next {
     -webkit-border-bottom-left-radius: 0;
     -moz-border-radius-bottomleft: 0;
     border-bottom-left-radius: 0;
+}
+
+.bold {
+    font-weight: bold;
 }

@@ -8,7 +8,6 @@ import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
@@ -19,7 +18,6 @@ import com.n4systems.fieldid.actions.exceptions.PersistenceException;
 import com.n4systems.fieldid.actions.exceptions.ValidationException;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.EventCrudHelper;
-import com.n4systems.fieldid.actions.helpers.EventScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -27,7 +25,6 @@ import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
-import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.fieldid.utils.StrutsListHelper;
@@ -241,6 +238,13 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			return MISSING;
 		}
 
+        if(event.getId() != null && event.getEventState().equals(Event.EventState.OPEN)) {
+            if (event.getType().isMaster())
+                return "scheduledmaster";
+            else
+                return "scheduled";
+        }
+        
 		if (event.getType().isMaster()) {
 			return "master";
 		}

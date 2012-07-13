@@ -1,30 +1,15 @@
 package com.n4systems.ejb.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.fieldid.CopiedToService;
-import com.n4systems.fieldid.service.event.LastEventDateService;
-import com.n4systems.model.Event;
-import com.n4systems.model.SubEvent;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.Asset;
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -35,6 +20,14 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
+import org.apache.log4j.Logger;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 public class EventManagerImpl implements EventManager {
@@ -177,7 +170,6 @@ public class EventManagerImpl implements EventManager {
 		event = persistenceManager.update(event, userId);
 		eventSaver.updateAssetLastEventDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
-		eventScheduleManager.restoreScheduleForEvent(event);
         persistenceManager.update(event);
 		return event;
 	}
