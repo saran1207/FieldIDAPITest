@@ -71,5 +71,12 @@ public class RecurringAssetTypeEvent extends EntityWithOwner implements Saveable
         return enhanced;
     }
 
-
+    @Override
+    public String toString() {
+        return "RecurringAssetTypeEvent{" +
+                "assetType=" + assetType.getName() +
+                ", eventType=" + eventType.getName() +
+                ", recurrence=" + recurrence +
+                '}';
+    }
 }

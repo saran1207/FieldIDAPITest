@@ -7,6 +7,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public class AssetTypeService extends FieldIdPersistenceService {
 
     public static final int RECURRING_EVENT_BUFFER_SIZE_IN_DAYS = 14;
+
+    private static final Logger logger= Logger.getLogger(AssetTypeService.class);
 
     public List<AssetTypeGroup> getAssetTypeGroupsByOrder() {
         QueryBuilder<AssetTypeGroup> queryBuilder = createUserSecurityBuilder(AssetTypeGroup.class);
@@ -40,7 +43,6 @@ public class AssetTypeService extends FieldIdPersistenceService {
     public void addRecurringEvent(AssetType assetType, RecurringAssetTypeEvent recurringEvent) {
         persistenceService.save(recurringEvent);
         assetType.add(recurringEvent);
-        persistenceService.update(assetType);
         scheduleInitialEvents(recurringEvent);
     }
 
@@ -69,16 +71,16 @@ public class AssetTypeService extends FieldIdPersistenceService {
                 event.setEventState(Event.EventState.OPEN);
                 event.setAsset(asset);
                 EventGroup eventGroup = new EventGroup();
-                event.setStatus(Status.NA);  // TODO DD : what should this be?  is null ok?
+                event.setStatus(Status.NA); // TODO DD : Change this to void when implemented.
                 persistenceService.save(eventGroup);
                 event.setGroup(eventGroup);
                 event.setOwner(asset.getOwner());
                 event.setTenant(asset.getTenant());
                 event.setType(recurringEvent.getEventType());
                 event.setRecurringEvent(recurringEvent);
-                event.setStatus(null);
-//                event.setSchedule(null); ??
+//                event.setSchedule(null); ??  // TODO DD : what to do here???  what does schedule mean at this point? is this concept for mobile only?
                 persistenceService.save(event);
+                logger.debug("saving recurring scheduled event " + event.getAsset().getIdentifier() + " on " + event.getNextDate());
             }
         }
     }
@@ -91,14 +93,14 @@ public class AssetTypeService extends FieldIdPersistenceService {
         builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "nextDate", from.toDate(), null, WhereClause.ChainOp.AND));
         builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "to", "nextDate", to.toDate(), null, WhereClause.ChainOp.AND));
         builder.addSimpleWhere("eventState", Event.EventState.OPEN);
-//        builder.addSimpleWhere("recurringEvent", recurringEvent);
+        builder.addSimpleWhere("recurringEvent", recurringEvent);
         if (recurringEvent.getOwner()!=null) {
             builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner", "owner", recurringEvent.getOwner(), null, WhereClause.ChainOp.AND));
         }
 
         List<Event> events = persistenceService.findAll(builder);
         for (Event event:events) {
-            System.out.println("removing scheduled event for asset " + event.getAsset().getIdentifier() + " on " + event.getNextDate());
+            logger.debug("removing scheduled event for asset " + event.getAsset().getIdentifier() + " on " + event.getNextDate());
             persistenceService.delete(event);
         }
     }

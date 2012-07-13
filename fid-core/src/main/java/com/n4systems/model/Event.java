@@ -114,7 +114,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     @Transient
     private boolean resultFromCriteriaAvailable = false;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="recurring_event_id")
     private RecurringAssetTypeEvent recurringEvent;
 	

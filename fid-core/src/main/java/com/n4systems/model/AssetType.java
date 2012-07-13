@@ -58,7 +58,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private boolean hasManufactureCertificate;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RecurringAssetTypeEvent> recurringAssetTypeEvents = new HashSet<RecurringAssetTypeEvent>();
+    private List<RecurringAssetTypeEvent> recurringAssetTypeEvents = new ArrayList<RecurringAssetTypeEvent>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")
     private Set<AssetTypeSchedule> schedules = new HashSet<AssetTypeSchedule>();
@@ -544,11 +544,11 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
         return allEventTypes;
     }
 
-    public Set<RecurringAssetTypeEvent> getRecurringAssetTypeEvents() {
+    public List<RecurringAssetTypeEvent> getRecurringAssetTypeEvents() {
         return recurringAssetTypeEvents;
     }
 
-    public void setRecurringAssetTypeEvents(Set<RecurringAssetTypeEvent> recurringAssetTypeEvents) {
+    public void setRecurringAssetTypeEvents(List<RecurringAssetTypeEvent> recurringAssetTypeEvents) {
         this.recurringAssetTypeEvents = recurringAssetTypeEvents;
     }
 
