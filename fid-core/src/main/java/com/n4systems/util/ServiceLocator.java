@@ -1,39 +1,27 @@
 package com.n4systems.util;
 
-import java.util.Map;
-
+import com.n4systems.ejb.*;
+import com.n4systems.ejb.legacy.*;
+import com.n4systems.ejb.legacy.wrapper.IdentifierCounterEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.OptionEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer;
+import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
+import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
+import com.n4systems.ejb.wrapper.EventManagerEJBContainer;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
+import com.n4systems.mail.MailManager;
+import com.n4systems.mail.MailManagerFactory;
+import com.n4systems.notifiers.EmailNotifier;
+import com.n4systems.notifiers.Notifier;
+import com.n4systems.services.EventScheduleService;
+import com.n4systems.services.EventScheduleServiceImpl;
+import com.n4systems.services.SecurityContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.AutoAttributeManager;
-import com.n4systems.ejb.ConfigManager;
-import com.n4systems.ejb.EventManager;
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.OrderManager;
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProofTestHandler;
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.ejb.legacy.LegacyAssetType;
-import com.n4systems.ejb.legacy.Option;
-import com.n4systems.ejb.legacy.PopulatorLog;
-import com.n4systems.ejb.legacy.IdentifierCounter;
-import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
-import com.n4systems.ejb.legacy.UserManager;
-import com.n4systems.ejb.legacy.wrapper.OptionEJBContainer;
-import com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer;
-import com.n4systems.ejb.legacy.wrapper.IdentifierCounterEJBContainer;
-import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
-import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
-import com.n4systems.ejb.wrapper.EventManagerEJBContainer;
-import com.n4systems.mail.MailManager;
-import com.n4systems.mail.MailManagerFactory;
-import com.n4systems.notifiers.EmailNotifier;
-import com.n4systems.notifiers.Notifier;
-import com.n4systems.services.SecurityContext;
+import java.util.Map;
 
 public class ServiceLocator implements ApplicationContextAware {
 
@@ -142,5 +130,9 @@ public class ServiceLocator implements ApplicationContextAware {
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		ServiceLocator.applicationContext = applicationContext; 
 	}
+
+    public static EventScheduleService getEventScheduleService() {
+        return new EventScheduleServiceImpl(getPersistenceManager());
+    }
 
 }

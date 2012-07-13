@@ -2,9 +2,10 @@ package com.n4systems.taskscheduling.task;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Event;
 import com.n4systems.model.RecurringAssetTypeEvent;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.services.EventScheduleService;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -24,9 +25,12 @@ public class RecurringSchedulesTask extends ScheduledTask{
 
     private PersistenceManager persistenceManager;
 
+    private EventScheduleService eventScheduleService;
+
     public RecurringSchedulesTask() {
         super(60 * 30, TimeUnit.SECONDS);
         persistenceManager = ServiceLocator.getPersistenceManager();
+        eventScheduleService = ServiceLocator.getEventScheduleService();
     }
 
     @Override
@@ -52,13 +56,28 @@ public class RecurringSchedulesTask extends ScheduledTask{
         List<Asset> assetsToSchedule = getAssetsByAssetType(event);
 
         for (Asset asset : assetsToSchedule) {
-            //Check if schedule with reccurence id already exists
-            EventSchedule eventSchedule = new EventSchedule(asset, event.getEventType(), futureDate.toDate());
-            //TODO uncomment when new event entity is merged
-            //persistenceManager.save(eventSchedule);
+            if(checkIfScheduleExists(asset, event, futureDate)) {
+                Event schedule = new Event();
+                schedule.setAsset(asset);
+                schedule.setType(event.getEventType());
+                schedule.setNextDate(futureDate.toDate());
+                schedule.setTenant(asset.getTenant());
+                schedule.setRecurringEvent(event);
+                eventScheduleService.createSchedule(schedule);
+            }
         }
          
     }
+
+    private boolean checkIfScheduleExists(Asset asset, RecurringAssetTypeEvent event, DateTime futureDate) {
+        QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+        query.addWhere(WhereClauseFactory.create("asset", asset));
+        query.addWhere(WhereClauseFactory.create("recurringEvent", event));
+        query.addWhere(WhereClauseFactory.create("nextDate", futureDate.toDate()));
+
+        return persistenceManager.find(query) != null;
+    }
+
 
     private List<Asset> getAssetsByAssetType(RecurringAssetTypeEvent event) {
         QueryBuilder<Asset> query = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
