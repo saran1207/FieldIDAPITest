@@ -1,18 +1,5 @@
 package com.n4systems.fieldid.actions.search;
 
-import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
@@ -29,12 +16,7 @@ import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGrou
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.Project;
-import com.n4systems.model.Status;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.event.EventCountLoader;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
@@ -52,6 +34,12 @@ import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
 import com.n4systems.util.views.TableView;
 import com.opensymphony.xwork2.Preparable;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.*;
+
+import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.UNASSIGNED_USER;
 
 public class EventReportAction extends CustomizableSearchAction<EventSearchContainer> implements Preparable {
 	
@@ -346,7 +334,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	}
 	
 	public List<Status> getStatuses() {
-		return Arrays.asList(Status.values());
+		return Status.getValidEventStates();
 	}
 	
 	public BaseOrg getOwner() {

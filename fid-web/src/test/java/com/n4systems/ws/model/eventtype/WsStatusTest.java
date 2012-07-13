@@ -1,10 +1,9 @@
 package com.n4systems.ws.model.eventtype;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.model.Status;
 import org.junit.Test;
 
-import com.n4systems.model.Status;
+import static org.junit.Assert.assertEquals;
 
 public class WsStatusTest {
 	
@@ -18,7 +17,7 @@ public class WsStatusTest {
 	@Test
 	public void maps_all_status_types() {
 		// if there are any unmapped status types, WsStatus.convert will throw
-		for (Status status: Status.values()) {
+		for (Status status: Status.getValidEventStates()) {
 			WsStatus.convert(status);
 		}
 	}

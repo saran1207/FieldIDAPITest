@@ -22,7 +22,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import rfid.web.helper.SessionUser;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class EventDetailsCriteriaPanel extends Panel {
@@ -59,7 +58,7 @@ public class EventDetailsCriteriaPanel extends Panel {
         add(createEventTypeGroupChoice(eventTypeGroupModel, eventTypeModel, availableEventTypesModel));
 
         add(new DropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
-        add(new DropDownChoice<Status>("result", Arrays.asList(Status.values()), new StatusChoiceRenderer()).setNullValid(true));
+        add(new DropDownChoice<Status>("result", Status.getValidEventStates(), new StatusChoiceRenderer()).setNullValid(true));
         add(new DropDownChoice<User>("performedBy", new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true));
         jobContainer.add(new DropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 

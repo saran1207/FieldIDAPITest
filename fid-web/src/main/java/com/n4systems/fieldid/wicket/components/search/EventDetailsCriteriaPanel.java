@@ -10,11 +10,7 @@ import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantMode
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.Project;
-import com.n4systems.model.Status;
+import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -26,7 +22,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import rfid.web.helper.SessionUser;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Deprecated // replaced by .version2 component.  (functionally the same, different styling & html).
@@ -64,7 +59,7 @@ public class EventDetailsCriteriaPanel extends Panel {
         add(createEventTypeGroupChoice(eventTypeGroupModel, eventTypeModel, availableEventTypesModel));
 
         add(new DropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
-        add(new DropDownChoice<Status>("result", Arrays.asList(Status.values()), new StatusChoiceRenderer()).setNullValid(true));
+        add(new DropDownChoice<Status>("result", Status.getValidEventStates(), new StatusChoiceRenderer()).setNullValid(true));
         add(new DropDownChoice<User>("performedBy", new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true));
         jobContainer.add(new DropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 

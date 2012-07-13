@@ -770,7 +770,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	public List<Status> getResults() {
-		return Arrays.asList(Status.values());
+		return Status.getValidEventStates();
 	}
 
 	@SuppressWarnings("unchecked")

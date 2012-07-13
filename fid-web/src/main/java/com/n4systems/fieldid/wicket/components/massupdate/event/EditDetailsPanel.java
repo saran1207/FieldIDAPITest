@@ -42,7 +42,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-import java.util.Arrays;
 import java.util.Date;
 
 public class EditDetailsPanel extends AbstractMassUpdatePanel {
@@ -187,7 +186,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
             massUpdateEventModel.getEvent().setStatus(null);
             final CheckBox resultCheck = new CheckBox("resultCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[result]"));
             resultCheck.setOutputMarkupId(true);
-            FormComponent<Status> results = new DropDownChoice<Status>("result", new PropertyModel<Status>(massUpdateEventModel, "event.status"), Arrays.asList(Status.values()), new StatusChoiceRenderer()).setNullValid(true);
+            FormComponent<Status> results = new DropDownChoice<Status>("result", new PropertyModel<Status>(massUpdateEventModel, "event.status"), Status.getValidEventStates(), new StatusChoiceRenderer()).setNullValid(true);
             results.add(createCheckOnChangeEvent(resultCheck));
             add(resultCheck);
             add(results);

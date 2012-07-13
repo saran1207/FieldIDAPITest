@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -135,7 +134,7 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	}
 
 	public List<Status> getButtonStatuses() {
-		return Arrays.asList( Status.values() );
+		return Status.getValidEventStates();
 	}
 		
 	public String getName() {

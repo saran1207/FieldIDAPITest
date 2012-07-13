@@ -152,7 +152,7 @@ public class EditEventPage extends FieldIDFrontEndPage {
             
             if (event instanceof Event) {
                 Event masterEvent = (Event) event;
-                DropDownChoice resultSelect = new DropDownChoice<Status>("result", new PropertyModel<Status>(event, "status"), Arrays.asList(Status.values()), new ListableLabelChoiceRenderer<Status>());
+                DropDownChoice resultSelect = new DropDownChoice<Status>("result", new PropertyModel<Status>(event, "status"), Status.getValidEventStates(), new ListableLabelChoiceRenderer<Status>());
                 resultSelect.add(new UpdateComponentOnChange());
                 resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
                 add(resultSelect);

@@ -71,7 +71,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
                 event.setEventState(Event.EventState.OPEN);
                 event.setAsset(asset);
                 EventGroup eventGroup = new EventGroup();
-                event.setStatus(Status.NA); // TODO DD : Change this to void when implemented.
+                event.setStatus(Status.VOID); // TODO DD : Change this to void when implemented.
                 persistenceService.save(eventGroup);
                 event.setGroup(eventGroup);
                 event.setOwner(asset.getOwner());
