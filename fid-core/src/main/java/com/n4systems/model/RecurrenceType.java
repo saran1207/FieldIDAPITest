@@ -84,4 +84,24 @@
          }
          return date.withDayOfWeek(day);
      }
+
+     public boolean requiresDate() {
+         switch (this) {
+             case DAILY:
+             case WEEKLY_MONDAY:
+             case WEEKLY_TUESDAY:
+             case WEEKLY_WEDNESDAY:
+             case WEEKLY_THURSDAY:
+             case WEEKLY_FRIDAY:
+             case WEEKLY_SATURDAY:
+             case WEEKLY_SUNDAY:
+             case MONTHLY_1ST:
+             case MONTHLY_15TH:
+             case MONTHLY_LAST:
+                 return false;
+             case ANNUALLY:
+                 return true;
+         }
+         throw new IllegalStateException("recurrence type " + this + " not supported");
+     }
  }

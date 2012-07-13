@@ -40,6 +40,7 @@ public class DateTimePicker extends Panel {
     private boolean includeTime;
     private boolean allDay = true;
     private IModel<Date> model;
+    private Integer monthsDisplayed = 3;
 
     public DateTimePicker(String id, IModel<Date> dateModel) {
         this(id, dateModel, false);
@@ -79,8 +80,6 @@ public class DateTimePicker extends Panel {
             }
         });
 
-        allDayCheckbox.setVisible(includeTime);
-
         getDateTextField().setOutputMarkupId(true);
 
         ValidationBehavior.addValidationBehaviorToComponent(dateTextField);
@@ -96,6 +95,7 @@ public class DateTimePicker extends Panel {
         dateTextField.add(new AttributeAppender("class", getEnabledModel(), " " ));
         dateTextField.add(new AttributeAppender("class", Model.of(getClassModel()), " "));
     }
+
 
     private String getDateFormat() {
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
@@ -114,6 +114,17 @@ public class DateTimePicker extends Panel {
 			}
 		};
 	}
+
+    public DateTimePicker withMonthsDisplayed(int months) {
+        monthsDisplayed = months>0 ? months : null;
+        return this;
+    }
+
+    public DateTimePicker withNoAllDayCheckbox() {
+        allDay = false;
+        allDayCheckbox.setVisible(false);
+        return this;
+    }
 
     @Override
     public boolean isEnabled() {
@@ -204,7 +215,7 @@ public class DateTimePicker extends Panel {
         String showOn = "button";
         String buttonImage = "/fieldid/images/calendar-icon.png";
         Boolean buttonImageOnly = true;
-        Integer numberOfMonths = 3;
+        Integer numberOfMonths = monthsDisplayed;
         Boolean showButtonPanel = true;
         String dateFormat = FieldIDSession.get().getSessionUser().getJqueryDateFormat();
         Boolean changeMonth = true;

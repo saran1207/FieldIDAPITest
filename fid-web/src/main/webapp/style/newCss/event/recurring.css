@@ -51,3 +51,8 @@
 .new-event .chzn-container-single .chzn-single {
     overflow: visible;
 }
+
+/* override with of date picker */
+.datetimepicker.dateTime {
+    width:125px;
+}

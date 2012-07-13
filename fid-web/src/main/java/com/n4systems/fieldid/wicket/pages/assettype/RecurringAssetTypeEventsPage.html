@@ -9,7 +9,8 @@
             <select wicket:id="eventType"></select>
             <select wicket:id="recurrence"></select>
             <wicket:message key="label.at"/>
-            <select class="time" wicket:id="time"/>
+            <span wicket:id="timeContainer"><select class="time" wicket:id="time"/></span>
+            <span wicket:id="dateTime"/>
             <wicket:message key="label.for"/>
             <div style="display:inline" wicket:id="org"></div>
             <a class="blue-submit" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
