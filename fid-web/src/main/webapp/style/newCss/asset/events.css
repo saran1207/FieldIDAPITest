@@ -1,3 +1,7 @@
+#pageContent {
+    overflow: visible;
+}
+
 #page {
     background: none;
     border: none;
