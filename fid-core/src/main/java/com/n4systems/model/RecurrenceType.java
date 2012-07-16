@@ -1,8 +1,10 @@
  package com.n4systems.model;
 
+ import com.google.common.base.Preconditions;
  import com.google.common.collect.Lists;
- import org.joda.time.*;
+import org.joda.time.*;
 
+ import java.util.Date;
  import java.util.List;
 
  public enum RecurrenceType {
@@ -24,7 +26,16 @@
 
      }
 
+     public LocalDate getNext(LocalDate day, Date date) {
+         if (date==null || !requiresDate()) {
+             return getNext(day);
+         } else {
+             return getNext(day, new MonthDay(date));
+         }
+     }
+
      public LocalDate getNext(LocalDate day, MonthDay triggerDate) {
+         Preconditions.checkState(requiresDate() && triggerDate!=null, "use getNext(day) if NO date required for recurrence");
          // strip away all the stuff we don't need in our date, we are only concerned with month day.
          //  e.g.   "July 1"...strip away July 1,2012 08:43.89s
          int year = day.getYear();
@@ -42,26 +53,8 @@
          }
      }
 
-     private List<LocalDate> getTriggerDatesInYear(int thisYear, MonthDay triggerDate) {
-         List<LocalDate> triggerDates = Lists.newArrayList();
-         switch (this) {
-             case ANNUALLY:
-                 return Lists.newArrayList(new LocalDate().withYear(thisYear).withMonthOfYear(triggerDate.getMonthOfYear()).withDayOfMonth(triggerDate.getDayOfMonth()));
-             // SEMI-ANNUALLY:
-             //   return [ triggerDay, triggerDay+6months]
-             default:
-                 throw new IllegalStateException("can't get trigger dates in year for type " + this);
-         }
-
-     }
-
-
-// int thisYear = LocalDate.now().getYear();
-// List<LocalDate> datesInYear = getTriggerDatesInYear(thisYear);
-
-
-
- public LocalDate getNext(LocalDate day) {
+     public LocalDate getNext(LocalDate day) {
+         Preconditions.checkState(requiresDate()==false, "use getNext(day, MonthDay) if date required for recurrence");
          switch (this) {
              case DAILY :
                  return day.plusDays(1);
@@ -86,10 +79,23 @@
              case MONTHLY_LAST:
                  return nextMonth(day,-1);
              case ANNUALLY:
-                 return nextYear(day);
+                 return null;
              default:
                  throw new IllegalStateException("Recurrence " + this.name() + " not supported");
          }
+     }
+
+     private List<LocalDate> getTriggerDatesInYear(int thisYear, MonthDay triggerDate) {
+         List<LocalDate> triggerDates = Lists.newArrayList();
+         switch (this) {
+             case ANNUALLY:
+                 return Lists.newArrayList(new LocalDate().withYear(thisYear).withMonthOfYear(triggerDate.getMonthOfYear()).withDayOfMonth(triggerDate.getDayOfMonth()));
+             // SEMI-ANNUALLY:
+             //   return [ triggerDay, triggerDay+6months]
+             default:
+                 throw new IllegalStateException("can't get trigger dates in year for type " + this);
+         }
+
      }
 
      private LocalDate nextMonth(LocalDate date, int day) {

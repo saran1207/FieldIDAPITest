@@ -1,11 +1,12 @@
 package com.n4systems.model;
 
-import junit.framework.TestCase;
 import org.joda.time.LocalDate;
 import org.joda.time.MonthDay;
 import org.junit.Test;
 
-public class RecurrenceTypeTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class RecurrenceTypeTest {
 
     private final LocalDate jan1_2011 = new LocalDate(2011, 1, 1);
     private final LocalDate dec31_2011 = new LocalDate(2011, 12, 31);
@@ -98,7 +99,6 @@ public class RecurrenceTypeTest extends TestCase {
         assertEquals(new LocalDate(2011, 5,15), RecurrenceType.MONTHLY_15TH.getNext(april30_2011));
     }
 
-
     @Test
     public void test_monthly_last() {
         assertEquals(new LocalDate(2011, 1,31), RecurrenceType.MONTHLY_LAST.getNext(jan1_2011));
@@ -117,15 +117,8 @@ public class RecurrenceTypeTest extends TestCase {
         assertEquals(new LocalDate(2011, 5,1), RecurrenceType.MONTHLY_1ST.getNext(april30_2011));
     }
 
-
     @Test
     public void test_yearly() {
-        assertEquals(new LocalDate(2012, 1,1), RecurrenceType.ANNUALLY.getNext(jan1_2011));
-        assertEquals(new LocalDate(2012, 12,31), RecurrenceType.ANNUALLY.getNext(dec31_2011));
-        assertEquals(new LocalDate(2012, 2,28), RecurrenceType.ANNUALLY.getNext(feb28_2011));
-        assertEquals(new LocalDate(2013, 2,28), RecurrenceType.ANNUALLY.getNext(feb28_2012));
-        assertEquals(new LocalDate(2012, 4,30), RecurrenceType.ANNUALLY.getNext(april30_2011));
-
         MonthDay jan23 = new MonthDay(1,23);
         MonthDay dec15 = new MonthDay(12,15);
         MonthDay july1 = new MonthDay(7,1);

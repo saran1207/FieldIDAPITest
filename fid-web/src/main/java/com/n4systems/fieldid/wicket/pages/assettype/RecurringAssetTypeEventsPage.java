@@ -127,7 +127,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             final WebMarkupContainer inputContainer = new WebMarkupContainer("createContainer");
             inputContainer.setOutputMarkupId(true);
 
-            dateTimepicker = new DateTimePicker("dateTime", new PropertyModel<Date>(this, "dateTime"),true).withMonthsDisplayed(3).withNoAllDayCheckbox().setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
+            dateTimepicker = new DateTimePicker("dateTime", new PropertyModel<Date>(this, "dateTime"),true).withMonthsDisplayed(1).withNoAllDayCheckbox().setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
             timePicker = createTimePicker();
 
             inputContainer.add(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(this, "eventType"), eventTypes, eventTypeRenderer).setNullValid(false).add(new JChosenBehavior()));

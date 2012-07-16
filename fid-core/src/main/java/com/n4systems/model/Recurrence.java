@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.joda.time.MonthDay;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -62,10 +61,6 @@ public class Recurrence implements Serializable {
         this.hour = hour;
     }
 
-    public boolean requiresScheduleOn(LocalDate day) {
-        return type.getNext(day.minusDays(1)).equals(day);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,10 +85,12 @@ public class Recurrence implements Serializable {
     public List<DateTime> getScheduledTimes(LocalDate from, LocalDate to) {
         List<DateTime> result = Lists.newArrayList();
         from = from.minusDays(1);
-        LocalDate nextDate = type.getNext(from);
-        while (nextDate.isBefore(to)) {
-            DateTime dateTime = new DateTime(nextDate.toDate()).withHourOfDay(hour);
-            if (!dateTime.isBeforeNow()) {
+
+        DateTime fromDateTime = new DateTime(from.toDate());
+        LocalDate nextDate = type.getNext(from, day);
+        while (!nextDate.isAfter(to)) {
+            DateTime dateTime = new DateTime(nextDate.toDate()).withHourOfDay(hour).withMinuteOfHour(minute);
+            if (!dateTime.isBefore(fromDateTime)) {
                 result.add(dateTime);
             }
             nextDate = getNext(nextDate);
@@ -102,11 +99,7 @@ public class Recurrence implements Serializable {
     }
 
     private LocalDate getNext(LocalDate nextDate) {
-        if (!type.requiresDate()) {
-            return type.getNext(nextDate);
-        } else {
-            return type.getNext(nextDate, new MonthDay(day));
-        }
+        return type.getNext(nextDate, day);
     }
 
     public int getMinute() {
@@ -114,7 +107,7 @@ public class Recurrence implements Serializable {
     }
 
     public void setMinute(int minute) {
-        Preconditions.checkArgument(minute>=0 && minute<60);
+        Preconditions.checkArgument(minute>=0 && minute<60, "minute must be [0..59] : " + minute);
         this.minute = minute;
     }
 
