@@ -105,6 +105,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		}
 		
 		if (apiEvent.getGpsLatitude() != null && apiEvent.getGpsLongitude() != null) {
+            if (event.getGpsLocation() == null) event.setGpsLocation(new GpsLocation());
 			event.getGpsLocation().setLatitude(apiEvent.getGpsLatitude());
 			event.getGpsLocation().setLongitude(apiEvent.getGpsLongitude());
 		}
