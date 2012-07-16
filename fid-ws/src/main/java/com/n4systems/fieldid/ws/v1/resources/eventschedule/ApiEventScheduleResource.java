@@ -10,8 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
-import com.n4systems.model.Event;
-import com.n4systems.model.EventGroup;
+import com.n4systems.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,8 +20,6 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
 import com.n4systems.model.orgs.BaseOrg;
 
 @Component
@@ -106,18 +103,22 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
         EventGroup eventGroup = new EventGroup();
         persistenceService.save(eventGroup);
 
+        Asset asset = assetService.findByMobileId(apiEventSchedule.getAssetId());
+
         Event event = new Event();
         event.setNextDate(apiEventSchedule.getNextDate());
         event.setTenant(owner.getTenant());
-        event.setAsset(assetService.findByMobileId(apiEventSchedule.getAssetId()));
+        event.setAsset(asset);
         event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
         event.setGroup(eventGroup);
+        event.setOwner(asset.getOwner());
 
 		eventSchedule.setMobileGUID(apiEventSchedule.getSid());
 		eventSchedule.setNextDate(apiEventSchedule.getNextDate());
 		eventSchedule.setTenant(owner.getTenant());
-		eventSchedule.setAsset(assetService.findByMobileId(apiEventSchedule.getAssetId()));
+		eventSchedule.setAsset(asset);
 		eventSchedule.setEventType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
+        eventSchedule.setOwner(asset.getOwner());
 
         event.setSchedule(eventSchedule);
 		
