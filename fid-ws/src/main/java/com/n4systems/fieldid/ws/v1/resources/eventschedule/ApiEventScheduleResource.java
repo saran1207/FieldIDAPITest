@@ -11,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -102,11 +103,15 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		EventSchedule eventSchedule = new EventSchedule();
 		BaseOrg owner = persistenceService.find(BaseOrg.class, apiEventSchedule.getOwnerId());
 
+        EventGroup eventGroup = new EventGroup();
+        persistenceService.save(eventGroup);
+
         Event event = new Event();
         event.setNextDate(apiEventSchedule.getNextDate());
         event.setTenant(owner.getTenant());
         event.setAsset(assetService.findByMobileId(apiEventSchedule.getAssetId()));
         event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
+        event.setGroup(eventGroup);
 
 		eventSchedule.setMobileGUID(apiEventSchedule.getSid());
 		eventSchedule.setNextDate(apiEventSchedule.getNextDate());
