@@ -18,24 +18,33 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
 import java.util.List;
 
-public class ResolveEventPage extends FieldIDFrontEndPage {
+public class CloseEventPage extends FieldIDFrontEndPage {
 
     private @SpringBean EventStatusService eventStatusService;
     private @SpringBean UserService userService;
     private @SpringBean PersistenceService persistenceService;
 
     protected IModel<Event> openEventModel;
+    private FieldIDFrontEndPage returnPage;
 
-    public ResolveEventPage(Long eventId) {
-        openEventModel = new EntityModel<Event>(Event.class, eventId);
+    public CloseEventPage(PageParameters params) {
+        super(params);
+        Long id = params.get("uniqueID").toLong();
+        openEventModel = new EntityModel<Event>(Event.class, id);
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new Label("event", PropertyModel.of(openEventModel, "type.name")));
         add(new ResolveForm("form"));
+    }
+
+    public CloseEventPage(PageParameters params, FieldIDFrontEndPage returnPage) {
+        this(params);
+        this.returnPage = returnPage;
     }
 
     @Override
@@ -54,27 +63,32 @@ public class ResolveEventPage extends FieldIDFrontEndPage {
 
         private EventStatus status;
         private String comment;
-        private User resolvedBy;
+        private User resolvedBy = getCurrentUser();
 
         public ResolveForm(String id) {
             super(id);
             resolvedBy = getCurrentUser();
+            List<EventStatus> activeStatuses = getActiveStatuses();
             add(new Label("due", new PropertyModel<String>(openEventModel, "nextDate")));
             add(new Label("state", new PropertyModel<String>(openEventModel, "eventState")));
             add( new DropDownChoice<EventStatus>("status",
                     new PropertyModel<EventStatus>(this, "status"),
-                    getEventStatus(),
-                    new ChoiceRenderer<EventStatus>("name")).add(new JChosenBehavior()));
+                    activeStatuses,
+                    new ChoiceRenderer<EventStatus>("name")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
 
             add( new DropDownChoice<User>("resolver",
                     new PropertyModel<User>(this, "resolvedBy"),
                     getUsers(),
-                    new ChoiceRenderer<User>("displayName")).add(new JChosenBehavior()));
+                    new ChoiceRenderer<User>("displayName")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
 
             add(new TextArea<String>("comment", new PropertyModel<String>(this, "comment")));
 
             add(new Button("closeButton"));
             add(new BookmarkablePageLink<Void>("cancelLink", ReportPage.class));
+
+            if (activeStatuses.size()>0) {
+                status = activeStatuses.get(0);
+            }
         }
 
         @Override
@@ -87,15 +101,22 @@ public class ResolveEventPage extends FieldIDFrontEndPage {
             openEvent.setComments(comment);
             persistenceService.update(openEvent);
             FieldIDSession.get().info(getString("message.event_closed"));
-            setResponsePage(ReportPage.class);
+            if (returnPage!=null) {
+                setResponsePage(returnPage);
+            } else {
+                setResponsePage(ReportPage.class);
+            }
         }
+
+
     }
+
 
     private List<User> getUsers() {
         return userService.getUsers(false, false);
     }
 
-    private List<EventStatus> getEventStatus() {
+    private List<EventStatus> getActiveStatuses() {
         return eventStatusService.getActiveStatuses();
     }
 

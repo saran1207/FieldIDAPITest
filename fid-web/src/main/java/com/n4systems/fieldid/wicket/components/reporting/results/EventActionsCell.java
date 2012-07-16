@@ -5,9 +5,8 @@ import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
-import com.n4systems.fieldid.wicket.pages.event.ResolveEventPage;
+import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -53,9 +52,9 @@ public class EventActionsCell extends Panel {
         WebMarkupContainer incompleteEventActionsList = new WebMarkupContainer("incompleteEventActionsList");
         incompleteEventActionsList.setOutputMarkupId(true);
 
-        Link resolveEventLink = new Link("resolveEventLink") {
+        Link resolveEventLink = new Link("closeEventLink") {
             @Override public void onClick() {
-                setResponsePage(new ResolveEventPage(event.getId()));
+                setResponsePage(new CloseEventPage(PageParametersBuilder.uniqueId(event.getId())));
             }
         };
 
@@ -69,6 +68,7 @@ public class EventActionsCell extends Panel {
 
         NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+event.getAsset().getId());
 
+        resolveEventLink.setVisible(!isReadOnly && event.getEventState().equals(Event.EventState.OPEN));
         editSchedulesLink.setVisible(!isReadOnly);
         deleteScheduleLink.setVisible(!isReadOnly);
         startEventLink.setVisible(hasCreateEvent);

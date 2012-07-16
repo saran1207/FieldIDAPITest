@@ -40,8 +40,6 @@ public class RecurringSchedulesTask extends ScheduledTask{
         LocalDate now = LocalDate.now();
         LocalDate futureDate = now.plusDays(RECURRING_EVENT_BUFFER_SIZE);
 
-        // TODO DD : need to search for all events that don't exist yet for recently identified assets that fall under schedule?  i should do that in identify code?
-
         List<RecurringAssetTypeEvent> list = persistenceManager.findAll(RecurringAssetTypeEvent.class);
         for(RecurringAssetTypeEvent event: list) {
             logger.info(event.getEventType().getName() + " " + event.getRecurrence());

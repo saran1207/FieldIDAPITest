@@ -71,14 +71,13 @@ public class AssetTypeService extends FieldIdPersistenceService {
                 event.setEventState(Event.EventState.OPEN);
                 event.setAsset(asset);
                 EventGroup eventGroup = new EventGroup();
-                event.setStatus(Status.VOID); // TODO DD : Change this to void when implemented.
+                event.setStatus(Status.VOID);
                 persistenceService.save(eventGroup);
                 event.setGroup(eventGroup);
                 event.setOwner(asset.getOwner());
                 event.setTenant(asset.getTenant());
                 event.setType(recurringEvent.getEventType());
                 event.setRecurringEvent(recurringEvent);
-//                event.setSchedule(null); ??  // TODO DD : what to do here???  what does schedule mean at this point? is this concept for mobile only?
                 persistenceService.save(event);
                 logger.debug("saving recurring scheduled event " + event.getAsset().getIdentifier() + " on " + event.getNextDate());
             }
