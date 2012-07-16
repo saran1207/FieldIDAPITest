@@ -102,6 +102,7 @@
     float:left;
     padding-right: 5px;
     padding-top: 5px;
+    padding-left: 3px;
 }
 
 .linkedAssetLabel, .linkedAssetLabel a, .addLinkedAsset, .linkedAssetPanel #formErrors{
@@ -129,7 +130,7 @@
 }
 
 .linkedAssetLabel label {
-    width: 225px;
+    width: 220px;
 }
 
 .linkedAssetPanel {
