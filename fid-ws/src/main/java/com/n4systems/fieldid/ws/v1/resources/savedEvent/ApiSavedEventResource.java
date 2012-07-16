@@ -61,7 +61,7 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 		apiEvent.setComments(event.getComments());
 		apiEvent.setTypeId(event.getType().getId());
 		apiEvent.setAssetId(event.getAsset().getMobileGUID());				
-		apiEvent.setModifiedById(event.getModifiedBy().getId());
+		apiEvent.setModifiedById(event.getModifiedBy() == null ? null : event.getModifiedBy().getId());
 		
 		if(event.getAssetStatus() != null) {
 			apiEvent.setAssetStatusId(event.getAssetStatus().getId());
