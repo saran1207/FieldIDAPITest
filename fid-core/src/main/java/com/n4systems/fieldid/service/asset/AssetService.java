@@ -478,7 +478,7 @@ public class AssetService extends FieldIdPersistenceService {
     @LegacyMethod
     private Query createAllEventQuery(Asset asset, SecurityFilter securityFilter, boolean count, boolean lastEvent) {
         String query = "from "+Event.class.getName()+" event  left join event.asset " + "WHERE  " + securityFilter.produceWhereClause(Event.class, "event")
-                + " AND event.asset = :asset AND event.state= :activeState";
+                + " AND event.asset = :asset AND event.state= :activeState AND event.eventState= :completed";
         if (count) {
             query = "SELECT count(event.id) " + query;
         } else {
@@ -497,6 +497,7 @@ public class AssetService extends FieldIdPersistenceService {
         eventQuery.setParameter("asset", asset);
         securityFilter.applyParameters(eventQuery, Event.class);
         eventQuery.setParameter("activeState", Archivable.EntityState.ACTIVE);
+        eventQuery.setParameter("completed", Event.EventState.COMPLETED);
 
         return eventQuery;
     }

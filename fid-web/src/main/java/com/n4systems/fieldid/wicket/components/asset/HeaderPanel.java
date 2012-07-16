@@ -94,6 +94,7 @@ public class HeaderPanel extends Panel {
                 schedule.setTenant(FieldIDSession.get().getSessionUser().getTenant());
                 schedule.setStatus(null);
                 eventScheduleService.createSchedule(schedule);
+                refreshContentPanel(target);
             }
         });
 
@@ -101,6 +102,8 @@ public class HeaderPanel extends Panel {
         
 
     }
+
+    protected void refreshContentPanel(AjaxRequestTarget target) {};
 
     private String getOwnerLabel(BaseOrg owner, Location advancedLocation) {
         StringBuffer buff = new StringBuffer();

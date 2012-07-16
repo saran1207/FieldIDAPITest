@@ -7,8 +7,10 @@ import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
 import com.n4systems.fieldid.wicket.components.asset.summary.*;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -16,12 +18,20 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class AssetSummaryPage extends AssetPage {
 
+    private UpcomingEventsPanel upcomingEventsPanel;
+    private Label upcomingEventsMessage;
+
     public AssetSummaryPage(PageParameters params) {
         super(params);
            
         final Asset asset = assetModel.getObject();
 
-        add(new HeaderPanel("header", assetModel, true, useContext));
+        add(new HeaderPanel("header", assetModel, true, useContext) {
+            @Override
+            protected void refreshContentPanel(AjaxRequestTarget target) {
+                updateUpcomingEventsPanel(target);
+            }
+        });
         
         String imageUrl;
         if(asset.getImageName() == null) {
@@ -58,11 +68,15 @@ public class AssetSummaryPage extends AssetPage {
         OrderDetailsPanel orderDetails;
         add(orderDetails = new OrderDetailsPanel("orderDetailsPanel", assetModel));
         orderDetails.setVisible(orderDetailsEnabled || integrationEnabled);
-
+    
+        add(upcomingEventsPanel = new UpcomingEventsPanel("upcomingEventsPanel", new UpcomingEventsListModel().setAsset(asset), asset));
+        upcomingEventsPanel.setOutputMarkupPlaceholderTag(true);
+        add(upcomingEventsMessage = new Label("upcomingEventsMessage", new FIDLabelModel("label.empty_schedule_list").getObject()));
+        upcomingEventsMessage.setOutputMarkupPlaceholderTag(true);
         if (hasUpcomingEvents(asset)) {
-            add(new UpcomingEventsPanel("upcomingEventsPanel", assetModel));
+            upcomingEventsMessage.setVisible(false);
         } else {
-            add(new Label("upcomingEventsPanel", new FIDLabelModel("label.empty_schedule_list").getObject()));
+            upcomingEventsPanel.setVisible(false);
         }
 
         if (hasLastEvent(asset)) {
@@ -78,6 +92,16 @@ public class AssetSummaryPage extends AssetPage {
 
         add(new WarningsAndInstructionsPanel("warningsAndInstructionsPanel", assetModel));
 
+    }
+
+    private void updateUpcomingEventsPanel(AjaxRequestTarget target) {
+        upcomingEventsPanel.getDefaultModel().detach();
+        if(!upcomingEventsPanel.isVisible()) {
+            upcomingEventsPanel.setVisible(true);
+            upcomingEventsMessage.setVisible(false);
+        }
+        target.add(upcomingEventsPanel);
+        target.add(upcomingEventsMessage);
     }
 
     private boolean hasLastEvent(Asset asset) {

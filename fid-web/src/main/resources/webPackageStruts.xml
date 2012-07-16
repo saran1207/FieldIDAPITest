@@ -1208,14 +1208,8 @@
 				<param name="actionName">eventEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">eventGroups</param>
-				<param name="uniqueID">${assetId}</param>
-			</result>
+			<result name="success" type="redirect">/w/assetEvents?uniqueID=${event.asset.id}</result>
 		</action>
-
-
-
 
 		<action name="masterEventAdd" method="add" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
 			<result name="success" type="freemarker">/templates/html/masterEventCrud/add.ftl</result>

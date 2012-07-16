@@ -33,7 +33,12 @@ public class AssetEventsPage extends AssetPage{
 
         final Asset asset = assetModel.getObject();
 
-        add(new HeaderPanel("header", assetModel, false, useContext));
+        add(new HeaderPanel("header", assetModel, false, useContext) {
+            @Override
+            protected void refreshContentPanel(AjaxRequestTarget target) {
+                updateEventListPanel(target);
+            }
+        });
         
         AjaxLink listLink;
         AjaxLink mapLink;
@@ -102,7 +107,6 @@ public class AssetEventsPage extends AssetPage{
         });
         add(filters);
     }
-
 
     private void updateEventListPanel(AjaxRequestTarget target) {
         eventPanel.getDataProvider().setStates(getEventStates());
