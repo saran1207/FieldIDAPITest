@@ -1,22 +1,16 @@
 .newScheduleForm {
 	overflow:hidden;
 	width:600px;
-	border:solid 1px #DDD;
-	background-color:#fff;
+	border:solid 1px #BBB;
+	background-color:#F9F9F9;
 	z-index: 1;
     position:absolute;
     top:-10000px;
     left:-10000px;
-}
-
-.pageContent .newScheduleForm h2 {
-    margin:0;
-    border-top: 0 none;
-    background-color:#eee;
-    border-bottom:1px solid #ccc;
-    font-size:1.2em;
-    padding:5px 15px;
-    line-height:21px;
+    padding: 25px;
+    -moz-box-shadow: 4px 4px 11px #AAAAAA
+    -webkit-box-shadow: 4px 4px 11px #AAAAAA
+    box-shadow: 4px 4px 11px #AAAAAA
 }
 
 .newScheduleForm button{
@@ -47,7 +41,6 @@
 .newScheduleForm .scheduleRow .datepicker {
 	width: 150px;
     padding:4px;
-    border:1px solid #9c9c9c;
 }
 
 .dateQuickLinks {
@@ -62,7 +55,6 @@
 }
 
 .newScheduleForm .scheduleRow select {
-    border: 1px solid #9c9c9c;
     color: #555;
     padding:4px;
     width:260px;
@@ -82,7 +74,6 @@
 
 .newScheduleForm .scheduleRow {
     padding: 8px 0 8px 0;
-    border-bottom:1px solid #e2e2e2;
     overflow:hidden;
 }
 
