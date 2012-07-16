@@ -55,4 +55,5 @@
 /* override with of date picker */
 .datetimepicker.dateTime {
     width:125px;
+    color:#555;
 }

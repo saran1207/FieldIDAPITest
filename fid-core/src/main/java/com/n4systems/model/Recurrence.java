@@ -2,25 +2,32 @@ package com.n4systems.model;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.MonthDay;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Embeddable
 public class Recurrence implements Serializable {
 
+    private static final Logger logger=Logger.getLogger(Recurrence.class);
+
+    private int hour;
+    private int minute;
+
     @Enumerated(EnumType.STRING)
     @Column(name="recurrence_type")
     private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
-    private int hour;
-    private int minute;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    // NOTE : the year part is ignored.  we just are concerned with the day.
+    private Date day;
 
     public Recurrence() {
         this(RecurrenceType.MONTHLY_1ST, 0, 0);
@@ -30,6 +37,11 @@ public class Recurrence implements Serializable {
         setType(type);
         setHour(hour);
         setMinute(minute);
+    }
+
+    public Recurrence(RecurrenceType type, int hour, int minutes, Date day) {
+        this(type, hour, minutes);
+        setDay(day);
     }
 
     public RecurrenceType getType() {
@@ -84,9 +96,17 @@ public class Recurrence implements Serializable {
             if (!dateTime.isBeforeNow()) {
                 result.add(dateTime);
             }
-            nextDate = type.getNext(nextDate);
+            nextDate = getNext(nextDate);
         }
         return result;
+    }
+
+    private LocalDate getNext(LocalDate nextDate) {
+        if (!type.requiresDate()) {
+            return type.getNext(nextDate);
+        } else {
+            return type.getNext(nextDate, new MonthDay(day));
+        }
     }
 
     public int getMinute() {
@@ -99,8 +119,25 @@ public class Recurrence implements Serializable {
     }
 
     public String getDisplayTime() {
+        String monthDay = (type.requiresDate() && day!=null) ? new LocalDate(day).toString("MMM d") + " " : "";
         LocalTime time = new LocalTime().withHourOfDay(hour).withMinuteOfHour(minute);
-        return time.toString("K:mm a");
+        String clock = time.toString("K:mm a");
+        if (hour==0 && minute==0) {
+            clock = type.requiresDate() ? "" : "12:00 AM";  // workaround formatter which is military.
+        }
+        return monthDay + clock;
+    }
+
+    public Date getDay() {
+        return day;
+    }
+
+    public void setDay(Date day) {
+        if (!type.requiresDate()) {
+            logger.warn("can't set date on recurrence for type : " + type);
+            return;  // ignore invalid request to set day.
+        }
+        this.day = new LocalDate(day).toDate();
     }
 
     @Override

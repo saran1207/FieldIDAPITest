@@ -33,9 +33,13 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
@@ -54,19 +58,6 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         boolean hasEvents = getAssetType().getEventTypes().size()>0;
         add(new RecurringEventsForm("form").setVisible(hasEvents));
         add(new Label("blankSlate", new FIDLabelModel("message.no_event_types_for_asset_type")).setVisible(!hasEvents));
-    }
-
-    private RecurringAssetTypeEvent createNewEventWithDefaultValues() {
-        RecurrenceType type;
-        int hour;
-        int minute;
-        AssetType assetType = getAssetType();
-        Set<EventType> eventTypes = assetType.getEventTypes();
-        EventType eventType = null;
-        if (eventTypes.size()>0) {
-            eventType = eventTypes.iterator().next();
-        }
-        return new RecurringAssetTypeEvent(assetType, eventType, new Recurrence(type=RecurrenceType.MONTHLY_1ST,hour=0,minute=0));
     }
 
     private AssetType getAssetType() {
@@ -205,7 +196,13 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         }
 
         private RecurringAssetTypeEvent createNewEventFromForm() {
-            Recurrence recurrence = new Recurrence(type,time.getHour(),time.getMinutes());
+            Recurrence recurrence = null;
+            if ( type.requiresDate() ) {
+                DateTime date = new DateTime(dateTime);
+                recurrence = new Recurrence(type,date.getHourOfDay(), date.getMinuteOfHour(), new LocalDate(dateTime).toDate());
+            } else {
+                recurrence = new Recurrence(type,time.getHour(),time.getMinutes());
+            }
             RecurringAssetTypeEvent newEvent = new RecurringAssetTypeEvent(getAssetType(), eventType, recurrence);
             newEvent.setOwner(owner);
             System.out.println(newEvent);

@@ -1,9 +1,9 @@
  package com.n4systems.model;
 
- import org.joda.time.DateTimeConstants;
- import org.joda.time.LocalDate;
- import org.joda.time.Period;
- import org.joda.time.PeriodType;
+ import com.google.common.collect.Lists;
+ import org.joda.time.*;
+
+ import java.util.List;
 
  public enum RecurrenceType {
 
@@ -24,7 +24,44 @@
 
      }
 
-     public LocalDate getNext(LocalDate day) {
+     public LocalDate getNext(LocalDate day, MonthDay triggerDate) {
+         // strip away all the stuff we don't need in our date, we are only concerned with month day.
+         //  e.g.   "July 1"...strip away July 1,2012 08:43.89s
+         int year = day.getYear();
+         List<LocalDate> triggerDates = Lists.newArrayList();
+         LocalDate d = new LocalDate().withYear(year).withMonthOfYear(triggerDate.getMonthOfYear()).withDayOfMonth(triggerDate.getDayOfMonth());
+
+         while (true) {
+            List<LocalDate> triggerDatesInYear = getTriggerDatesInYear(year, triggerDate);
+            for (LocalDate triggerDay:triggerDatesInYear) {
+                 if (triggerDay.isAfter(day)) {
+                     return triggerDay;
+                 }
+             }
+             year++;
+         }
+     }
+
+     private List<LocalDate> getTriggerDatesInYear(int thisYear, MonthDay triggerDate) {
+         List<LocalDate> triggerDates = Lists.newArrayList();
+         switch (this) {
+             case ANNUALLY:
+                 return Lists.newArrayList(new LocalDate().withYear(thisYear).withMonthOfYear(triggerDate.getMonthOfYear()).withDayOfMonth(triggerDate.getDayOfMonth()));
+             // SEMI-ANNUALLY:
+             //   return [ triggerDay, triggerDay+6months]
+             default:
+                 throw new IllegalStateException("can't get trigger dates in year for type " + this);
+         }
+
+     }
+
+
+// int thisYear = LocalDate.now().getYear();
+// List<LocalDate> datesInYear = getTriggerDatesInYear(thisYear);
+
+
+
+ public LocalDate getNext(LocalDate day) {
          switch (this) {
              case DAILY :
                  return day.plusDays(1);
