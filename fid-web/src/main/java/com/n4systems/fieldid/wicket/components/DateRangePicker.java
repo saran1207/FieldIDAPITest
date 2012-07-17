@@ -13,7 +13,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.List;
 
 public class DateRangePicker extends Panel {
 
@@ -48,13 +51,13 @@ public class DateRangePicker extends Panel {
             public boolean isEnabled() {
                 return RangeType.CUSTOM.equals(dropDownChoice.getModelObject());
             }
-        };
+        }.withNoAllDayCheckbox();
 		toDatePicker = new DateTimePicker("toDate", new PropertyModel<Date>(model, "toDate")) {
             @Override
             public boolean isEnabled() {
                 return RangeType.CUSTOM.equals(dropDownChoice.getModelObject());
             }
-        };
+        }.withNoAllDayCheckbox();
 
 		dropDownChoice.setOutputMarkupId(true);
 		dropDownChoice.setNullValid(false);
