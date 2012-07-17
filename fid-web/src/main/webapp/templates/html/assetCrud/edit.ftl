@@ -13,9 +13,9 @@ ${action.setPageType('asset', 'edit')!}
 		<@s.submit id="saveAndStartEventButton" name="saveAndStartEvent" key="hbutton.saveandstartevent"  cssClass="saveButton save"/>
 		
 		<@s.text name="label.or"/>
-		<a href="<@s.url action="asset"  uniqueID="${asset.id}"/>"><@s.text name="label.cancel"/></a>
-		
-		 | 
+		<a href="<@s.url value="w/assetSummary?uniqueID=${asset.id}"/>"><@s.text name="label.cancel"/></a>
+
+		 |
 		<a href="<@s.url action="assetMergeAdd" uniqueID="${asset.id}"/>"><@s.text name="label.merge"/></a>
 		
 		 | 
