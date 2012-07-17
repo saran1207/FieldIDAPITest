@@ -315,6 +315,8 @@ public class EventService extends FieldIdPersistenceService {
 
         QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId, states);
 
+        builder.addOrder("eventState", false);
+
         if (order != null) {
             builder.addOrder(order, ascending);
         } else {

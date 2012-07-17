@@ -106,6 +106,7 @@ public class AssetEventsPage extends AssetPage{
             }
         });
         add(filters);
+
     }
 
     private void updateEventListPanel(AjaxRequestTarget target) {
@@ -121,9 +122,8 @@ public class AssetEventsPage extends AssetPage{
             states.add(Event.EventState.OPEN);
         if(completed)
             states.add(Event.EventState.COMPLETED);
-        //TODO Add Closed State
         if(closed)
-            ;//states.add(Event.EventState.CLOSED);
+            states.add(Event.EventState.CLOSED);
         return states;
     }
 

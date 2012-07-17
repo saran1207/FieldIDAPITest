@@ -142,9 +142,13 @@
 
     <div class="resultContainer">
         <label><@s.text name="label.result"/></label>
-		<div <#if event.status.displayName== "Pass" > class="passColor" <#elseif event.status.displayName == "Fail"> class="failColor" <#else> class="naColor" </#if>>
-			<p class="inline"><@s.text name="${(event.status.label?html)!}"/></p> 
-		</div>
+        <#if event.status?exists>
+            <div <#if event.status.displayName== "Pass" > class="passColor" <#elseif event.status.displayName == "Fail"> class="failColor" <#else> class="naColor" </#if>>
+                <p class="inline"><@s.text name="${(event.status.label?html)!}"/></p> 
+            </div>
+        <#else>
+            <div><p>&nbsp;</p></div>
+        </#if>
 
     </div>
 

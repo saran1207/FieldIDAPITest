@@ -14,7 +14,10 @@ public class EventActionsCell extends Panel {
         Event event = eventModel.getObject();
         add(new NonWicketIframeLink("viewLink", "aHtml/iframe/event.action?uniqueID=" + event.getID(), true, 650, 600, new AttributeModifier("class", "mattButtonLeft")));
         add(new NonWicketLink("editLink", "selectEventEdit.action?uniqueID=" + event.getID()));
-        add(new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID=" + event.getID() + "&reportType=INSPECTION_CERT"));
+
+        NonWicketLink printLink;
+        add(printLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID=" + event.getID() + "&reportType=INSPECTION_CERT"));
+        printLink.setVisible(event.isEventCertPrintable());
 
         
     }
