@@ -99,8 +99,6 @@ public class HeaderPanel extends Panel {
         });
 
         scheduleToAdd.setAsset(asset);
-        
-
     }
 
     protected void refreshContentPanel(AjaxRequestTarget target) {};

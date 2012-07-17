@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -23,6 +24,7 @@ public class AssetEventsPage extends AssetPage{
     private EventListPanel eventPanel;
     private EventMapPanel mapPanel;
     private WebMarkupContainer filters;
+    private FIDFeedbackPanel feedbackPanel;
 
     private boolean open = true;
     private boolean completed = true;
@@ -32,6 +34,8 @@ public class AssetEventsPage extends AssetPage{
         super(params);
 
         final Asset asset = assetModel.getObject();
+
+        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
         add(new HeaderPanel("header", assetModel, false, useContext) {
             @Override
@@ -148,6 +152,10 @@ public class AssetEventsPage extends AssetPage{
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GOOGLE_MAP_API);
         response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS);
 
+    }
+
+    public FIDFeedbackPanel getFeedbackPanel() {
+        return feedbackPanel;
     }
 }
 

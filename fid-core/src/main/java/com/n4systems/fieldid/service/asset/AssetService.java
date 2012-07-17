@@ -7,6 +7,7 @@ import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.fieldid.LegacyMethod;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
+import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
@@ -43,7 +44,8 @@ public class AssetService extends FieldIdPersistenceService {
 	
 	@Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private TransactionService transactionService;
-	
+    @Autowired private LastEventDateService lastEventDateService;
+
 	private Logger logger = Logger.getLogger(AssetService.class);
 			
     @Transactional(readOnly=true)
@@ -576,5 +578,10 @@ public class AssetService extends FieldIdPersistenceService {
         builder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", asset.getId()));
 
         return persistenceService.exists(builder);
+    }
+
+    public Asset updateAssetLastEventDate(Asset asset) {
+        asset.setLastEventDate(lastEventDateService.findLastEventDate(asset));
+        return asset;
     }
 }

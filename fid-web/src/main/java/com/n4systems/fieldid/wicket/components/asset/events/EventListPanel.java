@@ -72,7 +72,7 @@ public class EventListPanel extends Panel {
         columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName"));
 
         columns.add(new GpsIconColumn(new FIDLabelModel(""), "latitude"));
-        columns.add(new ActionsColumn(new FIDLabelModel(""), "id"));
+        columns.add(new ActionsColumn(new FIDLabelModel(""), "id", this));
         return columns;
     }
 

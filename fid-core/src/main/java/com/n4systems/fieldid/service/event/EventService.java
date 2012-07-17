@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.event.CriteriaResultFactory;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.*;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.api.Archivable.EntityState;
@@ -34,6 +35,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class EventService extends FieldIdPersistenceService {
 	
     @Autowired private ReportServiceHelper reportServiceHelper;
+    @Autowired private AssetService assetService;
 
 	@Transactional(readOnly = true)
 	public List<Event> getEventsByType(Long eventTypeId) {
@@ -370,6 +372,15 @@ public class EventService extends FieldIdPersistenceService {
 		List<Event> lastEvents = persistenceService.findAll(builder);
 		return lastEvents;
 	}
+
+    public Event retireEvent(Event event) {
+        event.retireEntity();
+        event = persistenceService.update(event);
+        assetService.updateAssetLastEventDate(event.getAsset());
+        event.setAsset(persistenceService.update(event.getAsset()));
+        persistenceService.update(event);
+        return event;
+    }
 
 
 }

@@ -11,6 +11,7 @@ public class TopFeedbackPanel extends Panel {
 
     public TopFeedbackPanel(String id) {
         super(id);
+        setOutputMarkupId(true);
 
         final ErrorLevelFeedbackMessageFilter filter = new ErrorLevelFeedbackMessageFilter(FeedbackMessage.INFO) {
             @Override

@@ -64,6 +64,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     private Label titleLabel;
 	private Label topTitleLabel;
     private ConfigurationProvider configurationProvider;
+    private TopFeedbackPanel topFeedbackPanel;
 
 
     public FieldIDFrontEndPage() {
@@ -97,7 +98,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class));
         add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
 
-        add(new TopFeedbackPanel("topFeedbackPanel"));
+        add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
 
 
@@ -408,6 +409,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         Preconditions.checkArgument(SUB_MENU_ID.equals(c.getId()), "you must use " + SUB_MENU_ID + "'as your sub menu id.");
         replace(c.setVisible(true));
         return c;
+    }
+
+    public TopFeedbackPanel getTopFeedbackPanel() {
+        return topFeedbackPanel;
     }
 
 }
