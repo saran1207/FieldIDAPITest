@@ -76,6 +76,7 @@ public class DateTimePicker extends Panel {
                 String js = String.format(UPDATE_JS,
                         allDay ? "_disableTimepickerDatepicker" : "_enableTimepickerDatepicker",
                         dateTextField.getMarkupId());
+                target.add(DateTimePicker.this);
                 target.appendJavaScript(js);
             }
         });
