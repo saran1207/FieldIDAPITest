@@ -318,6 +318,7 @@ public class EventCreationService extends FieldIdPersistenceService {
     private void updateAsset(Event event, Long modifiedById) {
         User modifiedBy = getCurrentUser();
         Asset asset = persistenceService.find(Asset.class, event.getAsset().getId());
+        asset.setSubAssets(assetService.findSubAssets(asset));
 
         updateAssetLastEventDate(asset);
 
