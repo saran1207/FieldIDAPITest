@@ -5,7 +5,7 @@
     box-shadow: none;
     -moz-box-shadow:none;
     -webkit-box-shadow: none;
-    font-size: 12px;
+    font-size: 11px;
     padding: 0;
 }
 
@@ -20,6 +20,7 @@
     box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     border:1px solid #CCC;
     background:#FFF;
+    padding-top: 9px;
 }
 
 .colright {
@@ -75,9 +76,9 @@
 }
 
 .assetMap {
-    height: 100px;
+    height: 150px;
     Width: 275px;
-    margin-top: 15px;
+    margin: 15px 0;
 }
 
 .leftColumn h1, .rightColumn h1 {
@@ -170,7 +171,7 @@
 
 .assetDetails p label {
     width: 140px;
-    color: #555;
+    color: #777;
 }
 
 .assetDetails p span {
