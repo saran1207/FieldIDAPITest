@@ -4,8 +4,6 @@ import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityLevel;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 
 public class EventRfidNumberHandler extends WebOutputHandler {
 
@@ -27,7 +25,7 @@ public class EventRfidNumberHandler extends WebOutputHandler {
 		String rfidNumber;
 		if (level.isLocal()) {
             String absoluteUrl = getAbsoluteUrl();
-            absoluteUrl += "/fieldid/asset.action?uniqueId="+asset.getId();
+            absoluteUrl += "/fieldid/w/assetSummary?uniqueID="+asset.getId();
 			rfidNumber = String.format("<a class=\"identifierLink\" href='%s'>%s</a>", absoluteUrl, asset.getRfidNumber());
 		} else {
 			rfidNumber = asset.getRfidNumber();
