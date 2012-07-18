@@ -37,6 +37,6 @@ ${action.setPageType('asset', 'customer_edit')!}
 	<div class="formAction">
 		<@s.submit key="label.save"/> 
 		<@s.text name="label.or"/> 
-		<a href="<@s.url action="asset" uniqueID="${uniqueID}"/>"><@s.text name="label.cancel"/></a>
+		<a href="<@s.url value="w/assetSummary?uniqueID=${uniqueID}"/>"><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>

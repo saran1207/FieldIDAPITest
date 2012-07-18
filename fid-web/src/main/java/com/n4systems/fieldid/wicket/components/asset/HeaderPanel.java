@@ -79,11 +79,17 @@ public class HeaderPanel extends Panel {
            eventHistoryLink.add(new AttributeAppender("class", " mattButtonPressed"));
         }
 
-        add(new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
+        if (FieldIDSession.get().getSessionUser().hasAccess("editevent") && !FieldIDSession.get().getSessionUser().isReadOnlyUser())
+            add(new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
+        else
+            add(new NonWicketLink("editAssetLink", "customerInformationEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
 
-        add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton blueButton")));
+        NonWicketLink startEventLink;
+        add(startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton blueButton")));
+        startEventLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent"));
 
-        add(new SchedulePicker("schedulePicker", new FIDLabelModel("label.schedule_event"), new PropertyModel<EventSchedule>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel(), -487, 28) {
+        SchedulePicker schedulePicker;
+        add(schedulePicker = new SchedulePicker("schedulePicker", new FIDLabelModel("label.schedule_event"), new PropertyModel<EventSchedule>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel(), -487, 28) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 Event schedule = new Event();
@@ -97,6 +103,8 @@ public class HeaderPanel extends Panel {
                 refreshContentPanel(target);
             }
         });
+
+        schedulePicker.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent"));
 
         scheduleToAdd.setAsset(asset);
     }

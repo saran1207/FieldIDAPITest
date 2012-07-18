@@ -39,7 +39,6 @@ public class UpcomingEventsPanel extends Panel {
                 }
 
                 item.add(new OpenActionsCell("openActions", Model.of(schedule), UpcomingEventsPanel.this));
-
             }
         });
         

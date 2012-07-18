@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.asset.events.table;
 
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -23,6 +24,8 @@ public class OpenActionsCell extends Panel {
 
     public OpenActionsCell(String id, IModel<Event> eventModel, final Panel eventDisplayPanel) {
         super(id);
+
+        setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && FieldIDSession.get().getSessionUser().hasAccess("editevent"));
         
         final Event schedule = eventModel.getObject();
 

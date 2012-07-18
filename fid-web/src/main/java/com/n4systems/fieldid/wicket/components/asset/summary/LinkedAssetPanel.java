@@ -20,6 +20,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -57,15 +58,22 @@ public class LinkedAssetPanel extends Panel {
         linkedAssetsList.setOutputMarkupId(true);
         final IModel<List<SubAsset>> linkedAssetsModel = createLinkedAssetsModel();
 
+        final boolean isEditevent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
+
         linkedAssetsList.add(new ListView<SubAsset>("linkedAssetListView", linkedAssetsModel) {
             @Override
             protected void populateItem(final ListItem<SubAsset> item) {
                 item.setOutputMarkupId(true);
+                ContextImage sortImage;
+                item.add(sortImage = new ContextImage("sortImage", "images/drag-icon.png"));
+                sortImage.setVisible(isEditevent);
+
                 item.add(new Label("assetType", new PropertyModel(item.getModelObject(), "asset.type.name")));
                 Link linkedAssetLink;
                 item.add(linkedAssetLink = new BookmarkablePageLink("linkedAssetLink", AssetSummaryPage.class, new PageParameters().add("uniqueID", item.getModelObject().getAsset().getId())));
                 linkedAssetLink.add(new Label("assetIdentifier", new PropertyModel<Object>(item.getModelObject(), "asset.identifier")));
-                item.add(new AjaxLink<Asset>("removeLinkedAssetLink") {
+                AjaxLink removeLink;
+                item.add(removeLink = new AjaxLink<Asset>("removeLinkedAssetLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         linkedAssetsModel.getObject().remove(item.getModelObject());
@@ -80,6 +88,7 @@ public class LinkedAssetPanel extends Panel {
                         target.add(linkedAssetsList);
                     }
                 });
+                removeLink.setVisible(isEditevent);
             }
         });
 
@@ -103,7 +112,9 @@ public class LinkedAssetPanel extends Panel {
             }
         };
 
-        linkedAssetsList.add(sortableBehavior);
+        if(isEditevent) {
+            linkedAssetsList.add(sortableBehavior);
+        }
 
 
         final Form<Void> form = new Form<Void>("form");
@@ -116,6 +127,8 @@ public class LinkedAssetPanel extends Panel {
                 target.add(LinkedAssetPanel.this);
             }
         });
+
+        addLink.setVisible(isEditevent);
 
         AutoCompleteSearch autoCompleteSearch;
         form.add(autoCompleteSearch = new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "assetForLinking")));

@@ -2016,10 +2016,7 @@
 		<action name="customerInformationUpdate" method="update" class="com.n4systems.fieldid.actions.asset.CustomerInformationCrud">
 			<result name="input" type="freemarker">/templates/html/assetCrud/customerInformationEdit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetCrud/customerInformationEdit.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">asset</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
+            <result name="success" type="redirect">/w/assetSummary?uniqueID=${uniqueID}</result>
 		</action>
 
 		<action name="eulaAcceptanceAdd" method="add" class="com.n4systems.fieldid.actions.eula.EulaAcceptanceAction">

@@ -25,7 +25,7 @@ public class ActionsColumn extends PropertyColumn<Event> {
             item.add(new EventActionsCell(id, eventModel));
         } else if (state.equals(Event.EventState.OPEN)) {
             item.add(new OpenActionsCell(id, eventModel, eventListPanel));
-        } else { //CLOSED
+        } else {
             item.add(new ClosedActionsCell(id, eventModel, eventListPanel));
         }
     }

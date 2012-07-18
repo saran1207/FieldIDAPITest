@@ -31,6 +31,11 @@
 .actionButtons {
     padding: 10px 0;
     float: left;
+    width: 270px;
+}
+
+.actionButtons .mattButton {
+    float: right;
 }
 
 .actionButtons .mattButton {
@@ -70,7 +75,7 @@
 }
 
 .schedulePicker {
-    float: left;
+    float: right;
     margin-right: 10px;
 }
 
