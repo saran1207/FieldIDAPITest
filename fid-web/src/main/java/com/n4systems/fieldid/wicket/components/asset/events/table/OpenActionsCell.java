@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
-import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -22,24 +21,20 @@ public class OpenActionsCell extends Panel {
     @SpringBean
     private EventService eventService;
 
-    public OpenActionsCell(String id, IModel<Event> eventModel, final EventListPanel eventListPanel) {
+    public OpenActionsCell(String id, IModel<Event> eventModel, final Panel eventDisplayPanel) {
         super(id);
         
         final Event schedule = eventModel.getObject();
 
-        String startAction = "selectEventAdd.action?uniqueID=" + schedule.getId() + "&assetId=" + schedule.getAsset().getId() + "&type=" + schedule.getType().getId();
+        String startAction = "selectEventAdd.action?scheduleId=" + schedule.getId() + "&assetId=" + schedule.getAsset().getId() + "&type=" + schedule.getType().getId();
         add(new NonWicketLink("startLink", startAction, new AttributeModifier("class", "mattButtonLeft")));
 
         add(new Link("closeLink") {
             @Override
             public void onClick() {
-                setResponsePage(new CloseEventPage(PageParametersBuilder.uniqueId(schedule.getId()), new AssetEventsPage(PageParametersBuilder.uniqueId(schedule.getAsset().getId()))));
+                setResponsePage(new CloseEventPage(PageParametersBuilder.uniqueId(schedule.getId()), (FieldIDFrontEndPage) getPage()));
             }
         });
-
-/*
-        add(new NonWicketLink("deleteLink", "eventDelete.action?uniqueID=" + schedule.getId() + "&assetId=" + schedule.getAsset().getId()));
-*/
 
         add(new AjaxLink<Void>("deleteLink") {
             @Override
@@ -51,8 +46,8 @@ public class OpenActionsCell extends Panel {
                     target.add(((AssetEventsPage)getPage()).getFeedbackPanel());
                 }
                 info(new FIDLabelModel("message.eventdeleted").getObject());
-                eventListPanel.getDefaultModel().detach();
-                target.add(eventListPanel);
+                eventDisplayPanel.getDefaultModel().detach();
+                target.add(eventDisplayPanel);
                 target.add(((FieldIDFrontEndPage) getPage()).getTopFeedbackPanel());
             }
         });

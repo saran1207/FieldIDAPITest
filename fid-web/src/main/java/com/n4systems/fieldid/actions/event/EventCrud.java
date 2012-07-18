@@ -238,13 +238,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			return MISSING;
 		}
 
-        if(event.getId() != null && event.getEventState().equals(Event.EventState.OPEN)) {
-            if (event.getType().isMaster())
-                return "scheduledmaster";
-            else
-                return "scheduled";
-        }
-        
 		if (event.getType().isMaster()) {
 			return "master";
 		}

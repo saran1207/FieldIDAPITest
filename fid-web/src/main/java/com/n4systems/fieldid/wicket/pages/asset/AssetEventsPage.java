@@ -138,6 +138,7 @@ public class AssetEventsPage extends AssetPage{
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/asset/events.css");
+        response.renderCSSReference("style/newCss/asset/actions-menu.css");
         response.renderCSSReference("style/tipsy/tipsy.css");
 
         response.renderJavaScriptReference("javascript/subMenu.js");

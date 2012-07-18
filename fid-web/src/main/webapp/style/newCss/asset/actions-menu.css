@@ -1,0 +1,42 @@
+.actions .menu .mattButtonRight img {
+    vertical-align: middle;
+}
+
+.actions .mattButtonLeft, .actions .mattButtonRight {
+    font-size: 11px;
+}
+
+.actions > ul > li {
+    float: left;
+    position:relative;
+}
+
+.menu-items {
+    display:none; 		/* made visible by jquery click*/
+    position: absolute;
+    top:100%;
+    width: 71px;
+    left: -45px;
+    background:white;
+    color:black;
+    border-width:1px 1px 1px 1px;
+    border-color:#777;
+    border-style:solid;
+    border-radius:0px 3px 3px 3px;
+    -moz-border-radius: 0px 3px 3px 3px;
+    -moz-box-shadow: 2px 2px 2px #BBB;
+    -webkit-box-shadow: 2px 2px 2px;
+    box-shadow: 2px 2px 2px #BBB;
+    padding-bottom:3px;
+    z-index: 123;
+}
+
+.menu-items li a {
+    padding:8px;
+    display: block;
+    text-decoration:none;
+}
+
+.menu-items li a:hover {
+    background:#F5F5F5;
+}

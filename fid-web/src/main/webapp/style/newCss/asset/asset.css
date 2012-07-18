@@ -61,6 +61,8 @@
 
 .rightPanel {
     padding-bottom: 30px;
+    float: left;
+    width: 100%;
 }
 
 .assetImage {
@@ -179,18 +181,6 @@
     width: 135px;
 }
 
-.upcomingEventTable td, .lastEventTable td{
-    padding: 10px 5px 5px 0;
-}
-
-.upcomingEventTable .eventDate {
-    width: 240px;
-}
-
-.upcomingEventTable .eventType {
-    width: 300px;
-}
-
 .lastEventTable .eventDate {
     width: 160px;
 }
@@ -201,22 +191,60 @@
 
 .attachmentImage {
     width: 50px;
+    padding: 0 10px;
+
 }
 
 .attachmentIcon {
     padding: 0 10px;
 }
-
-.overdue {
-    color: #900000;
+.attachmentText {
+    line-height:19px;
 }
 
-.overdue .eventLinks {
-    color: #000000;
+.attachmentLink {
+    font-weight:bold;
+}
+
+.upcomingEvent {
+    margin: 5px 0;
+    background-color: #F0F0F0;
+    padding: 0 5px;
+    float: left;
+    width: 645px;
+}
+
+.overdue {
+    border-left: 5px solid #900000;
+}
+
+.due {
+    border-left: 5px solid #999;
+}
+
+.upcomingEventIcon {
+    float: left;
+    padding: 10px 5px;
+}
+
+.upcomingEvent .scheduleInfo {
+    width: 525px;
+    float: left;
+    margin-top: 11px;
+    padding-left: 5px;
+}
+
+.upcomingEvent .eventType {
+    font-weight: bold;
+}
+
+.actions {
+    float:left;
+    padding-top: 5px;
 }
 
 .morePanel p{
-    line-height: 1.5em;
+    line-height: 1.8em;
     padding-bottom: 30px;
 }
 

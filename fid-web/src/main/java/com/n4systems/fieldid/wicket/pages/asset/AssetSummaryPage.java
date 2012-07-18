@@ -120,6 +120,11 @@ public class AssetSummaryPage extends AssetPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/asset/asset.css");
+        response.renderCSSReference("style/newCss/asset/actions-menu.css");
+
+        response.renderJavaScriptReference("javascript/subMenu.js");
+        response.renderOnDomReadyJavaScript("subMenu.init();");
+
     }
 
 }

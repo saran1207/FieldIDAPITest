@@ -1,13 +1,10 @@
 <wicket:panel>
-    <table class="upcomingEventTable">
-        <tr wicket:id="upcomingEventsList">
-            <td class="eventDate"><span wicket:id="upcomingEventDate"/></td>
-            <td class="eventType"><span wicket:id="upcomingEventType"/></td>
-            <td class="eventLinks">
-                <a wicket:id="startEventLink"><wicket:message key="label.start_event"/></a>
-                <wicket:message key="label.or"/>
-                <a wicket:id="editScheduleLink"><wicket:message key="label.edit"/></a>
-            </td>
-        </tr>
-    </table>
+    <div class="upcomingEvent" wicket:id="upcomingEventsList">
+        <img class="upcomingEventIcon" src="/fieldid/images/event-open.png">
+        <div class="scheduleInfo">
+            <div class="eventType" wicket:id="upcomingEventType"/>
+            <div class="eventDate" wicket:id="upcomingEventDate"/>
+         </div>
+        <div  wicket:id="openActions"/>
+    </div>
 </wicket:panel>
