@@ -117,6 +117,7 @@ public class AssetEventsPage extends AssetPage{
         eventPanel.getDataProvider().setStates(getEventStates());
         eventPanel.getDefaultModel().detach();
         target.add(eventPanel);
+        target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
 
     }
     

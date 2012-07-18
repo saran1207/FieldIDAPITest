@@ -80,4 +80,6 @@ public class EventListPanel extends Panel {
     public EventByNetworkIdProvider getDataProvider() {
         return dataProvider;
     }
+
+
 }
