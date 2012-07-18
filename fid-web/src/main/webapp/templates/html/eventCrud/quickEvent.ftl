@@ -70,8 +70,9 @@ ${action.setPageType('event', 'quickEvent')!}
 	</table>
 	</#if>
 
-	<p class="footer"> 
-		<@s.url id="manageSchedule" action="eventScheduleList" assetId="${asset.id}" />
+	<p class="footer">
+
+		<@s.url id="manageSchedule" value="w/assetEvents?uniqueID=${asset.id}" />
 		<a href='${manageSchedule}'><@s.text name="label.manage_schedules"/></a> 
 	</p>
 </fieldset>
