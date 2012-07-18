@@ -14,7 +14,7 @@ public class EventCompletedCell extends Panel {
         Event event = eventModel.getObject();
         Event.EventState state = event.getEventState();
 
-        if(state.equals(Event.EventState.COMPLETED)) {
+        if(state.equals(Event.EventState.COMPLETED) || state.equals(Event.EventState.CLOSED) ) {
             Long daysCompleted = DateHelper.getDaysUntilToday(event.getCompletedDate());
             if(daysCompleted > 1) {
                 add(new Label("completedDate", new FIDLabelModel("label.x_days_ago", daysCompleted)));
