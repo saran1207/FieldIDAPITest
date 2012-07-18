@@ -30,7 +30,10 @@ public class UpcomingEventsPanel extends Panel {
                 if (schedule.isPastDue()) {
                     item.add(new Label("upcomingEventDate", new FIDLabelModel("label.x_days_ago_on", schedule.getDaysPastDue(), upcomingEventDate)));
                     item.add(new AttributeAppender("class", "overdue").setSeparator(" "));
-                }else {
+                } else if(schedule.getDaysToDue().equals(0L)) {
+                    item.add(new Label("upcomingEventDate", new FIDLabelModel("label.today_on", upcomingEventDate)));
+                    item.add(new AttributeAppender("class", "due").setSeparator(" "));
+                } else {
                     item.add(new Label("upcomingEventDate", new FIDLabelModel("label.in_x_days_on", schedule.getDaysToDue(), upcomingEventDate)));
                     item.add(new AttributeAppender("class", "due").setSeparator(" "));
                 }
