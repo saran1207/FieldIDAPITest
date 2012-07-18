@@ -18,7 +18,7 @@ public class GpsIconCell extends Panel {
         ContextImage image;
         add(image = new ContextImage("gpsIcon", "images/gps-recorded.png"));
         
-        if(gpsLocation != null) {
+        if(gpsLocation != null && gpsLocation.getLatitude() != null) {
             image.add(new AttributeAppender("title", new FIDLabelModel("label.gps_recorded", gpsLocation.getLatitude(), gpsLocation.getLongitude()).getObject()));
         } else {
             image.setVisible(false);
