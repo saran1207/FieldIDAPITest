@@ -1,34 +1,13 @@
 package com.n4systems.fieldid.wicket.components.massupdate.asset;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
-import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
-import org.apache.wicket.ajax.AjaxEventBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
-
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.IEventBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.location.LocationPicker;
+import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.PublishedStateChoiceRenderer;
@@ -42,6 +21,22 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public class EditDetailsPanel extends AbstractMassUpdatePanel {
 	
@@ -179,7 +174,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			add(location);
 			
 			CheckBox identifiedCheck = new CheckBox("identifiedCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[identified]"));
-			DateTimePicker identified = new DateTimePicker("identified", new PropertyModel<Date>(massUpdateAssetModel, "asset.identified"));
+			DateTimePicker identified = new DateTimePicker("identified", new PropertyModel<Date>(massUpdateAssetModel, "asset.identified")).withNoAllDayCheckbox();
 			identified.getDateTextField().add(createCheckOnChangeEvent(identifiedCheck));			
 			add(identifiedCheck);
 			add(identified);
