@@ -1,14 +1,20 @@
 <wicket:panel>
     <table class="lastEventTable">
         <tr>
-            <td><div wicket:id="result"><p wicket:id="lastEventResult"/></div></td>
-            <td class="eventDate"><span wicket:id="lastEventDate"/></td>
-            <td class="eventType"><span wicket:id="lastEventType"/></td>
-            <td>
-                <a wicket:id="viewLastEventLink"><wicket:message key="label.view"/></a>
-                <wicket:message key="label.or"/>
-                <a wicket:id="printLastEventLink"><wicket:message key="label.print"/></a>
+            <td class="resultIcon"><img wicket:id="resultIcon"/></td>
+            <td class="eventDate">
+                <div class="label" wicket:id="lastEventDate"/>
+                <div><wicket:message key="label.date_completed"/></div>
             </td>
+            <td class="eventType">
+                <div class="label" wicket:id="lastEventType"/>
+                <div><wicket:message key="label.eventcompleted"/></div>
+            </td>
+            <td class="performedBy">
+                <div class="label" wicket:id="performedBy"/>
+                <div ><wicket:message key="label.performed_by"/></div>
+            </td>
+            <td><div wicket:id="actions"/></td>
         </tr>
     </table>
 </wicket:panel>
