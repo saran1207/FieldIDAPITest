@@ -32,6 +32,7 @@ public class CopyEventFactory {
         newEvent.setEventForm(event.getEventForm());
         newEvent.setSchedule(event.getSchedule());
         newEvent.setEventStatus(event.getEventStatus());
+        newEvent.setEventState(event.getEventState());
 
 		return newEvent;
 	}
