@@ -30,7 +30,7 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
         WhereParameterGroup outerGroup = new WhereParameterGroup(getClass().getName()+".outer");
 
         if (state == EventState.ALL) {
-            createAndPopulateOuter(outerGroup);
+            createAndPopulateCompleteAndIncompleteOuterGroup(outerGroup);
         } else if (state == EventState.COMPLETE) {
             populateCompletedTerm(outerGroup);
         } else if (state == EventState.INCOMPLETE) {
@@ -42,7 +42,7 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
         return params;
     }
 
-    private void createAndPopulateOuter(WhereParameterGroup outerGroup) {
+    private void createAndPopulateCompleteAndIncompleteOuterGroup(WhereParameterGroup outerGroup) {
         WhereParameterGroup completedGroup = new WhereParameterGroup(getClass().getName()+".completed");
         completedGroup.setChainOperator(WhereClause.ChainOp.OR);
         completedGroup.addClause(WhereClauseFactory.create("status", EventSchedule.ScheduleStatus.COMPLETED, WhereClause.ChainOp.AND));

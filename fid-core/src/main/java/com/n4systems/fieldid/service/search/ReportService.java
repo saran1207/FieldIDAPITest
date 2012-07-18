@@ -60,7 +60,7 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
         if (criteriaModel.getEventState() == EventState.COMPLETE) {
             addSimpleTerm(searchTerms, "eventState", Event.EventState.COMPLETED);
         } else if (criteriaModel.getEventState() == EventState.INCOMPLETE) {
-            searchTerms.add(new SimpleTerm<Event.EventState>("eventState", Event.EventState.COMPLETED, WhereParameter.Comparator.NE));
+            addSimpleTerm(searchTerms, "eventState", Event.EventState.OPEN);
         } else if (criteriaModel.getEventState() == EventState.CLOSED) {
             addSimpleTerm(searchTerms, "eventState", Event.EventState.CLOSED);
         }

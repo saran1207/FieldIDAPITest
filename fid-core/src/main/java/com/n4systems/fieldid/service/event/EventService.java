@@ -361,6 +361,7 @@ public class EventService extends FieldIdPersistenceService {
     public List<Event> getLastEventOfEachType(Long assetId) {
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
 		builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
+        builder.addWhere(WhereClauseFactory.create("eventState", Event.EventState.COMPLETED));
 
 		PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
 		String maxDateSelect = String.format("SELECT MAX(iSub.schedule.completedDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId GROUP BY iSub.type", Event.class.getName());
