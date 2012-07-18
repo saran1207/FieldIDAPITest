@@ -511,7 +511,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
     @AllowSafetyNetworkAccess
     public boolean isPastDue() {
-        return (getEventState() != EventState.COMPLETED && isPastDue(nextDate));
+        return (getEventState() == EventState.OPEN && isPastDue(nextDate));
     }
 /**
      * A static method consolidating the logic for checking if a next inspection
