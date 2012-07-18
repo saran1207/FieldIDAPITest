@@ -46,8 +46,8 @@ public class EventService extends FieldIdPersistenceService {
     @Transactional(readOnly = true)	
     public List<Event> getEventsByType(Long eventTypeId, Date from, Date to) {
 		QueryBuilder<Event> builder = getEventsByTypeBuilder(eventTypeId);
-		builder.addWhere(Comparator.GE, "fromDate", "schedule.completedDate", from).addWhere(Comparator.LE, "toDate", "schedule.completedDate", to);
-		builder.setOrder("schedule.completedDate", false);
+		builder.addWhere(Comparator.GE, "fromDate", "completedDate", from).addWhere(Comparator.LE, "toDate", "completedDate", to);
+		builder.setOrder("completedDate", false);
 		return persistenceService.findAll(builder);
 	}
     
@@ -55,7 +55,7 @@ public class EventService extends FieldIdPersistenceService {
     	checkArgument(eventTypeId!=null, "you must specify an event type id to get a list of events.");
     	QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);   
     	builder.addSimpleWhere("type.id", eventTypeId);
-    	builder.addOrder("schedule.completedDate");
+    	builder.addOrder("completedDate");
     	return builder;
     }
     
@@ -94,7 +94,7 @@ public class EventService extends FieldIdPersistenceService {
     @Transactional(readOnly = true)	
 	public List<UpcomingScheduledEventsRecord> getUpcomingScheduledEvents(Integer period, BaseOrg owner) {
 
-		QueryBuilder<UpcomingScheduledEventsRecord> builder = new QueryBuilder<UpcomingScheduledEventsRecord>(EventSchedule.class, securityContext.getUserSecurityFilter());
+		QueryBuilder<UpcomingScheduledEventsRecord> builder = new QueryBuilder<UpcomingScheduledEventsRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
 		builder.setSelectArgument(new NewObjectSelect(UpcomingScheduledEventsRecord.class, "nextDate", "COUNT(*)"));
 		
@@ -102,7 +102,7 @@ public class EventService extends FieldIdPersistenceService {
 		Date endDate = DateUtils.addDays(today, period);		
 		
 		builder.addWhere(whereFromTo(today, endDate, "nextDate"));
-		builder.addSimpleWhere("status", ScheduleStatus.SCHEDULED);
+		builder.addSimpleWhere("eventState", Event.EventState.OPEN);
 
 		builder.applyFilter(new OwnerAndDownFilter(owner));
 		builder.addGroupBy("nextDate");
@@ -168,18 +168,18 @@ public class EventService extends FieldIdPersistenceService {
 		
 		NewObjectSelect select = new NewObjectSelect(CompletedEventsReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("schedule.completedDate", granularity, timeZone, fromDate));
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("completedDate", granularity, timeZone, fromDate));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		builder.addWhere(whereFromToForCompletedEvents(fromDate, toDate, "schedule.completedDate", timeZone));
+		builder.addWhere(whereFromToForCompletedEvents(fromDate, toDate, "completedDate", timeZone));
         Date sampleDate = fromDate;
-		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"schedule.completedDate", timeZone, sampleDate));
+		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity, "completedDate", timeZone, sampleDate));
 		builder.applyFilter(new OwnerAndDownFilter(org));
 		if (status!=null) { 
 			builder.addSimpleWhere("status", status);
 		}
-		builder.addOrder("schedule.completedDate");
+		builder.addOrder("completedDate");
 		
 		return persistenceService.findAll(builder);	
 	}
@@ -224,9 +224,9 @@ public class EventService extends FieldIdPersistenceService {
 	}
 
     @Transactional(readOnly = true)
-	public List<EventCompletenessReportRecord> getEventCompleteness(ScheduleStatus status, ChartGranularity granularity,
+	public List<EventCompletenessReportRecord> getEventCompleteness(Event.EventState eventState, ChartGranularity granularity,
 			Date fromDate, Date toDate, BaseOrg org) {
-		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(EventSchedule.class, securityContext.getUserSecurityFilter());
+		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 
         TimeZone timeZone = getCurrentUser().getTimeZone();
 
@@ -240,9 +240,10 @@ public class EventService extends FieldIdPersistenceService {
         Date sampleDate = fromDate;
         builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"nextDate", getCurrentUser().getTimeZone(), sampleDate));
 		builder.applyFilter(new OwnerAndDownFilter(org));
-		if (status!=null) { 
-			builder.addSimpleWhere("status", status);
+		if (eventState != null) {
+			builder.addSimpleWhere("eventState", eventState);
 		}
+        builder.addWhere(Comparator.NE, "notClosed", "eventState", Event.EventState.CLOSED);
 		builder.addOrder("nextDate");
 		
 		return persistenceService.findAll(builder);	
@@ -322,7 +323,7 @@ public class EventService extends FieldIdPersistenceService {
         if (order != null) {
             builder.addOrder(order, ascending);
         } else {
-            builder.addOrder("schedule.completedDate", false);
+            builder.addOrder("completedDate", false);
         }
 
         return persistenceService.findAll(builder);
@@ -364,8 +365,8 @@ public class EventService extends FieldIdPersistenceService {
         builder.addWhere(WhereClauseFactory.create("eventState", Event.EventState.COMPLETED));
 
 		PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
-		String maxDateSelect = String.format("SELECT MAX(iSub.schedule.completedDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId GROUP BY iSub.type", Event.class.getName());
-		latestClause.setClause(String.format("i.schedule.completedDate IN (%s)", maxDateSelect));
+		String maxDateSelect = String.format("SELECT MAX(iSub.completedDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId GROUP BY iSub.type", Event.class.getName());
+		latestClause.setClause(String.format("i.completedDate IN (%s)", maxDateSelect));
 		latestClause.getParams().put("iSubAssetId", assetId);
 		latestClause.getParams().put("iSubState", EntityState.ACTIVE);
 		builder.addWhere(latestClause);

@@ -159,7 +159,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
     }
 
     private void populateOutstandingInto(EventReportCriteria criteriaModel) {
-        criteriaModel.setEventState(EventState.INCOMPLETE);
+        criteriaModel.setEventState(EventState.OPEN);
     }
 
     private void populateFailedInto(EventReportCriteria criteriaModel) {

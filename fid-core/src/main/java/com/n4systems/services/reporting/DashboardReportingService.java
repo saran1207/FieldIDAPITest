@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
@@ -82,7 +83,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Preconditions.checkArgument(dateRange !=null);
 
 		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange),  org);
-		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
+		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(Event.EventState.COMPLETED, granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
 
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
 		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>(ScheduleStatus.COMPLETED, ScheduleStatus.COMPLETED.getLabel(), completedScheduledEvents);
@@ -129,7 +130,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
     private EventReportCriteria getCriteriaDefaults() {
     	EventReportCriteria criteria = getDefaultReportCriteria();
-    	criteria.setEventState(EventState.INCOMPLETE);
+    	criteria.setEventState(EventState.OPEN);
 		return criteria;
 	}
 
@@ -140,7 +141,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	private EventReportCriteria getCriteriaDefaults(UpcomingEventsWidgetConfiguration config, String series, LocalDate localDate) {
 		EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
         criteria.setDueDateRange(new DateRange(localDate, localDate));// this widget displays day by day.  .: when you click on a pt the date range is always a single day.
-        criteria.setEventState(EventState.INCOMPLETE);
+        criteria.setEventState(EventState.OPEN);
 		return criteria;
 	}
 
@@ -148,7 +149,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         Preconditions.checkArgument(orgIndex >= 0 && orgIndex <=config.getOrgs().size());
         EventReportCriteria criteria = getDefaultReportCriteria(config.getOrgs().get(orgIndex));
         if (KpiType.INCOMPLETE.getLabel().equals(series)) {
-            criteria.setEventState(EventState.INCOMPLETE);
+            criteria.setEventState(EventState.OPEN);
             criteria.setDueDateRange(config.getDateRange());
             criteria.setDateRange(new DateRange(RangeType.FOREVER));
         } else if (KpiType.FAILED.getLabel().equals(series)) {

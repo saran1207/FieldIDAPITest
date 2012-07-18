@@ -54,7 +54,7 @@
 	<div class="formAction">
 		<@s.submit key="label.perform_mass_update" onclick="if( !confirm( '${action.getText( 'warning.massupdate' )}' ) ) { return false; }"/>
 		<@s.text name="label.or"/>
-		<a href="<@s.url action="scheduleResults" includeParams="none" searchId="${searchId!1}"currentPager="${currentPage!1}"/>"><@s.text name="label.returntoschedules"/></a>
+		<a href="/fieldid/w/runLastReport"><@s.text name="label.returntoschedules"/></a>
 	</div>
 
 </@s.form>

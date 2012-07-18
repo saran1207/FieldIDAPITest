@@ -8,12 +8,10 @@ import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
-import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.completedordue.AssetStatusTerm;
 import com.n4systems.util.persistence.search.terms.completedordue.AssignedUserTerm;
 import com.n4systems.util.persistence.search.terms.completedordue.CompletedOrDueDateRange;
@@ -59,7 +57,7 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
 
         if (criteriaModel.getEventState() == EventState.COMPLETE) {
             addSimpleTerm(searchTerms, "eventState", Event.EventState.COMPLETED);
-        } else if (criteriaModel.getEventState() == EventState.INCOMPLETE) {
+        } else if (criteriaModel.getEventState() == EventState.OPEN) {
             addSimpleTerm(searchTerms, "eventState", Event.EventState.OPEN);
         } else if (criteriaModel.getEventState() == EventState.CLOSED) {
             addSimpleTerm(searchTerms, "eventState", Event.EventState.CLOSED);
@@ -69,7 +67,7 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
             addNullTerm(searchTerms, "nextDate");
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
             addNotNullTerm(searchTerms,  "nextDate");
-        } else if (criteriaModel.getEventState() == EventState.INCOMPLETE || IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange())) {
+        } else if (criteriaModel.getEventState() == EventState.OPEN || IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange())) {
             if (criteriaModel.getDueDateRange() != null && !criteriaModel.getDueDateRange().isEmptyCustom()) {
                 addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), nextDay(criteriaModel.getDueDateRange().calculateToDate()));
             }

@@ -1,6 +1,5 @@
 package com.n4systems.ejb.impl;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.MassUpdateManager;
@@ -13,7 +12,6 @@ import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.*;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
-import com.n4systems.model.EventSchedule.ScheduleStatusGrouping;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.LargeInListQueryExecutor;
@@ -52,120 +50,107 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	}
 
 	@Override
-	public Long updateEventSchedules(Set<Long> scheduleIds, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException {
-		if (scheduleIds.size() == 0) {
-			return 0L;
-		}
+	public Long updateEventSchedules(Set<Long> ids, EventSchedule updatedSchedule, Map<String, Boolean> values) throws UpdateFailureException {
+        if (ids.size() == 0) {
+            return 0L;
+        }
 
-		Long result = 0L;
-		String updateJpql;
-		Query updateStmt;
-		try {
-			// this date will be used to updated the modified time of our
-			// entities
-			Date modDate = new Date();
-			updateJpql = "UPDATE " + EventSchedule.class.getName() + " SET modified = :modDate";
+        Long result = 0L;
+        try {
 
-			Map<String, Object> bindParams = new HashMap<String, Object>();
+            for (Long id : ids) {
+                Event event = persistenceManager.find(Event.class, id);
+                EventSchedule schedule = event.getSchedule();
 
-			// construct our update statement and populate our list of bind
-			// parameters
-			for (String paramKey : values.keySet()) {
-				// check to see if the modify flag was set and skip over if not
-				if (!values.get(paramKey)) {
-					continue;
-				}
+                if (values.containsKey("nextDate")) {
+                    event.setNextDate(updatedSchedule.getNextDate());
+                    schedule.setNextDate(updatedSchedule.getNextDate());
+                }
 
-				if (paramKey.equals("nextDate")) {
-					updateJpql += ", nextDate = :" + paramKey;
-					bindParams.put(paramKey, eventSchedule.getNextDate());
-				}
+                if (values.containsKey("location")) {
+                    event.setAdvancedLocation(updatedSchedule.getAdvancedLocation());
+                    schedule.setAdvancedLocation(updatedSchedule.getAdvancedLocation());
+                }
 
-				if (paramKey.equals("location")) {
-					updateJpql += ", advancedLocation.freeformLocation = :" + paramKey + "_freeform";
-					updateJpql += ", advancedLocation.predefinedLocation = :" + paramKey + "_predefined";
-					bindParams.put(paramKey + "_freeform", eventSchedule.getAdvancedLocation().getFreeformLocation());
-					bindParams.put(paramKey + "_predefined", eventSchedule.getAdvancedLocation().getPredefinedLocation());
-				}
+                if (values.containsKey("owner")) {
+                    event.setOwner(updatedSchedule.getOwner());
+                    schedule.setOwner(updatedSchedule.getOwner());
+                }
 
-				if (paramKey.equals("owner")) {
-					updateJpql += ", owner = :owner ";
-					bindParams.put("owner", eventSchedule.getOwner());
-				}
+                persistenceManager.update(event);
+                persistenceManager.update(schedule);
+            }
 
-			}
-			updateJpql += " WHERE id IN ( :scheduleIds )";
+            modifyAssetsForSchedules(ids);
 
-			// create our update statement
-			updateStmt = em.createQuery(updateJpql);
+        } catch (Exception e) {
+            throw new UpdateFailureException(e);
+        }
 
-			// bind in our list of ids and param values
-			updateStmt.setParameter("scheduleIds", scheduleIds);
-			updateStmt.setParameter("modDate", modDate);
-			for (Map.Entry<String, Object> entry : bindParams.entrySet()) {
-				updateStmt.setParameter(entry.getKey(), entry.getValue());
-			}
+        return result;
+    }
 
-			// execute the update
-			result = new Long(updateStmt.executeUpdate());
-
-			// update assets as well.
-			modifyAssetsForSchedules(scheduleIds);
-
-		} catch (Exception e) {
-			throw new UpdateFailureException(e);
-		}
-
-		return result;
-	}
-
-	@Override
+    @Override
 	public Long deleteEventSchedules(Set<Long> ids) throws UpdateFailureException {
 		if (ids == null || ids.isEmpty()) {
 			return 0L;
 		}
 
-		Set<Long> incompleteSchedules = getIncompleteSchedules(ids);
+		Set<Long> openEventIds = getOpenEventIds(ids);
+        Set<Long> scheduleIds = getScheduleIds(ids);
 
-		if (incompleteSchedules.isEmpty()) {
+		if (openEventIds.isEmpty()) {
 			return 0L;
 		}
 
-		// we'll modify the assets first as we won't be able to find the asset
+        // we'll modify the assets first as we won't be able to find the asset
 		// ids
 		// after we delete.
-		modifyAssetsForSchedules(incompleteSchedules);
+		modifyAssetsForSchedules(openEventIds);
 
-		String deleteStmt = String.format("DELETE from %s WHERE id IN (:ids)", EventSchedule.class.getName());
+		String deleteScheduleStmt = String.format("DELETE from %s WHERE id IN (:ids)", EventSchedule.class.getName());
+        String deleteEventStmt = String.format("DELETE from %s WHERE id IN (:ids)", Event.class.getName());
 
-		LargeInListQueryExecutor deleteRunner = new LargeInListQueryExecutor();
-		int removeCount = deleteRunner.executeUpdate(em.createQuery(deleteStmt), ListHelper.toList(incompleteSchedules));
+        for (Long openEventId : openEventIds) {
+            Event event = persistenceManager.find(Event.class, openEventId);
+            persistenceManager.delete(event);
+        }
 
-		return new Long(removeCount);
+        LargeInListQueryExecutor deleteRunner = new LargeInListQueryExecutor();
+        int scheduleRemoveCount = deleteRunner.executeUpdate(em.createQuery(deleteScheduleStmt), ListHelper.toList(scheduleIds));
+
+		return new Long(openEventIds.size());
 	}
 
-	private Set<Long> getIncompleteSchedules(Set<Long> scheduleIds) {
-		QueryBuilder<Long> incompleteScheduleBuilder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
-		incompleteScheduleBuilder.setSimpleSelect("id", true);
-		incompleteScheduleBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "status", Arrays.asList(ScheduleStatusGrouping.NON_COMPLETE.getMembers())));
+	private Set<Long> getOpenEventIds(Set<Long> openEventIds) {
+        return createOpenEventBuilder("id", openEventIds);
+    }
 
-		// we will leave our id list empty for now as, the
-		// LargeInListQueryExecutor will handle setting this
-		incompleteScheduleBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "scheduleIds", "id", Collections.EMPTY_LIST));
+    private Set<Long> getScheduleIds(Set<Long> openEventIds) {
+        return createOpenEventBuilder("schedule.id", openEventIds);
+    }
 
-		LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("scheduleIds");
-		List<Long> incompleteSchedules = queryExecutor.getResultList(em, incompleteScheduleBuilder, ListHelper.toList(scheduleIds));
+    private Set<Long> createOpenEventBuilder(String selectClause, Set<Long> openEventIds) {
+        QueryBuilder<Long> openEventBuilder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
+        openEventBuilder.setSimpleSelect(selectClause, true);
+        openEventBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "eventState", Event.EventState.OPEN));
 
-		return ListHelper.toSet(incompleteSchedules);
-	}
+        // we will leave our id list empty for now as, the
+        // LargeInListQueryExecutor will handle setting this
+        openEventBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "openEventIds", "id", Collections.EMPTY_LIST));
+        LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("openEventIds");
+        List<Long> incompleteSchedules = queryExecutor.getResultList(em, openEventBuilder, ListHelper.toList(openEventIds));
 
-	private void modifyAssetsForSchedules(Set<Long> scheduleIds) {
-		QueryBuilder<Long> assetIdQuery = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
+        return ListHelper.toSet(incompleteSchedules);
+    }
+
+    private void modifyAssetsForSchedules(Set<Long> openEventIds) {
+		QueryBuilder<Long> assetIdQuery = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
 		assetIdQuery.setSimpleSelect("asset.id", true);
-		assetIdQuery.addWhere(WhereClauseFactory.create(Comparator.IN, "scheduleIds", "id", Collections.EMPTY_LIST));
+		assetIdQuery.addWhere(WhereClauseFactory.create(Comparator.IN, "openEventIds", "id", Collections.EMPTY_LIST));
 
-		LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("scheduleIds");
-		List<Long> assetIds = queryExecutor.getResultList(em, assetIdQuery, ListHelper.toList(scheduleIds));
+		LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("openEventIds");
+		List<Long> assetIds = queryExecutor.getResultList(em, assetIdQuery, ListHelper.toList(openEventIds));
 
 		updateAssetModifiedDate(assetIds);
 	}

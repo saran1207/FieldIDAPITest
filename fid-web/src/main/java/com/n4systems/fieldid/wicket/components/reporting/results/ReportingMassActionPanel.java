@@ -35,7 +35,7 @@ public class ReportingMassActionPanel extends MassActionPanel {
             }
         });
 
-        eventResolutionLink.setVisible(reportCriteriaModel.getObject().getEventState() != EventState.INCOMPLETE);
+        eventResolutionLink.setVisible(reportCriteriaModel.getObject().getEventState() != EventState.OPEN);
 
         printContainer.add(new MassActionLink<PrintThisReportPage>("printThisReportLink", PrintThisReportPage.class, reportCriteriaModel));
         printContainer.add(new MassActionLink<PrintInspectionCertPage>("printSelectedPdfReportsLink", PrintInspectionCertPage.class, reportCriteriaModel));
@@ -60,7 +60,7 @@ public class ReportingMassActionPanel extends MassActionPanel {
                     setResponsePage(new MassUpdateEventsPage(reportCriteriaModel));
                 }
             });
-        } else if (reportCriteriaModel.getObject().getEventState() == EventState.INCOMPLETE) {
+        } else if (reportCriteriaModel.getObject().getEventState() == EventState.OPEN) {
             massUpdateLinkContainer.add(new ScheduleMassActionLink("massUpdateLink", "/massUpdateEventSchedule.action?searchId=%s", reportCriteriaModel));
         } else {
             massUpdateLinkContainer.setVisible(false);

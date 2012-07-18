@@ -33,7 +33,7 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
             createAndPopulateCompleteAndIncompleteOuterGroup(outerGroup);
         } else if (state == EventState.COMPLETE) {
             populateCompletedTerm(outerGroup);
-        } else if (state == EventState.INCOMPLETE) {
+        } else if (state == EventState.OPEN) {
             populateIncompleteTerm(outerGroup);
         }
 

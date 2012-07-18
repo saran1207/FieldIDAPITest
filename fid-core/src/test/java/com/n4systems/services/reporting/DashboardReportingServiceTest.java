@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.FieldIdServicesUnitTest;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
@@ -218,7 +219,7 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
 		allEvents.addAll(completedEvents);
 		allEvents.addAll(createEventCompletenessResults(granularity, 888L, 574L, 924L));
 		expect(eventService.getEventCompleteness(granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(allEvents);
-		expect(eventService.getEventCompleteness(ScheduleStatus.COMPLETED, granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(completedEvents);
+		expect(eventService.getEventCompleteness(Event.EventState.COMPLETED, granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(completedEvents);
 		replay(eventService);
 		replay(assetService);
 		

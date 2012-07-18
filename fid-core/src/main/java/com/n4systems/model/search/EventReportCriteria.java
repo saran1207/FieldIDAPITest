@@ -282,7 +282,7 @@ public class EventReportCriteria extends SearchCriteria {
 
     @Override
     public boolean requiresLeftOuterJoin() {
-        if (eventState == EventState.INCOMPLETE) {
+        if (eventState == EventState.OPEN) {
             return false;
         }
 

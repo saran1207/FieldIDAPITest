@@ -90,7 +90,7 @@ public class EventStatusAndDateRangePanel extends Panel {
         add(dueRangePicker = new DateRangePicker("dueRangePicker", new FIDLabelModel("label.due_date"), dueRange, RangeType.allFloatingTypes()) {
             @Override
             public boolean isVisible() {
-                return EventState.INCOMPLETE.equals(eventStateModel.getObject())
+                return EventState.OPEN.equals(eventStateModel.getObject())
                         || (EventState.COMPLETE.equals(eventStateModel.getObject()) && IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(includeDueRangeModel.getObject()));
             }
         });

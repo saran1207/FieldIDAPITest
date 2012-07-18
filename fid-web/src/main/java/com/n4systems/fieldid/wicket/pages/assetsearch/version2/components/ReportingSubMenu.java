@@ -90,7 +90,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         EventState state = model.getObject().getEventState();
         
         updateLink.setVisible(state == EventState.COMPLETE && sessionUser.hasAccess("editevent"));
-        updateSchedulesLink.setVisible(state == EventState.INCOMPLETE && sessionUser.hasAccess("editevent"));
+        updateSchedulesLink.setVisible(state == EventState.OPEN && sessionUser.hasAccess("editevent"));
         assignJobLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork);
 
         actions.setVisible(selected > 0 && selected < maxUpdate && (updateLink.isVisible() || updateSchedulesLink.isVisible() || assignJobLink.isVisible()));
