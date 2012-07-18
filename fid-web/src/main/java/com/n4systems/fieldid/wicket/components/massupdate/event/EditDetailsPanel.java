@@ -169,7 +169,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
             add(performedBy);
 
             CheckBox datePerformedCheck = new CheckBox("datePerformedCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[datePerformed]"));
-            DateTimePicker datePerformed = new DateTimePicker("datePerformed", new PropertyModel<Date>(massUpdateEventModel, "event.date"), true);
+            DateTimePicker datePerformed = new DateTimePicker("datePerformed", new PropertyModel<Date>(massUpdateEventModel, "event.date"), true).withNoAllDayCheckbox();
             datePerformed.getDateTextField().add(createCheckOnChangeEvent(datePerformedCheck));
             add(datePerformedCheck);
             add(datePerformed);
