@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.wicket.components.asset.summary;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.asset.events.table.OpenActionsCell;
+import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.util.FieldidDateFormatter;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -26,15 +25,16 @@ public class UpcomingEventsPanel extends Panel {
 
                 item.add(new Label("upcomingEventType", schedule.getType().getName()));
 
-                String upcomingEventDate = new FieldidDateFormatter(schedule.getNextDate(), FieldIDSession.get().getSessionUser(), false, false).format();
+                DayDisplayModel upcomingEventDate = new DayDisplayModel(Model.of(schedule.getNextDate()));
+
                 if (schedule.isPastDue()) {
-                    item.add(new Label("upcomingEventDate", new FIDLabelModel("label.x_days_ago_on", schedule.getDaysPastDue(), upcomingEventDate)));
+                    item.add(new Label("upcomingEventDate", new FIDLabelModel("label.x_days_ago_on", schedule.getDaysPastDue(), upcomingEventDate.getObject())));
                     item.add(new AttributeAppender("class", "overdue").setSeparator(" "));
                 } else if(schedule.getDaysToDue().equals(0L)) {
-                    item.add(new Label("upcomingEventDate", new FIDLabelModel("label.today_on", upcomingEventDate)));
+                    item.add(new Label("upcomingEventDate", new FIDLabelModel("label.today_on", upcomingEventDate.getObject())));
                     item.add(new AttributeAppender("class", "due").setSeparator(" "));
                 } else {
-                    item.add(new Label("upcomingEventDate", new FIDLabelModel("label.in_x_days_on", schedule.getDaysToDue(), upcomingEventDate)));
+                    item.add(new Label("upcomingEventDate", new FIDLabelModel("label.in_x_days_on", schedule.getDaysToDue(), upcomingEventDate.getObject())));
                     item.add(new AttributeAppender("class", "due").setSeparator(" "));
                 }
 

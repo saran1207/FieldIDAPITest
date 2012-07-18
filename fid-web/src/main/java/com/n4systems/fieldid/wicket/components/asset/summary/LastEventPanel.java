@@ -3,10 +3,10 @@ package com.n4systems.fieldid.wicket.components.asset.summary;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.asset.events.table.EventActionsCell;
+import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.Status;
-import com.n4systems.util.FieldidDateFormatter;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -33,20 +33,17 @@ public class LastEventPanel extends Panel {
         Event lastEvent = assetService.findLastEvents(asset, FieldIDSession.get().getSessionUser().getSecurityFilter());
 
         if(lastEvent != null) {
-            String lastEventDate = new FieldidDateFormatter(lastEvent.getDate(), FieldIDSession.get().getSessionUser(), true, true).format();
             Status status = lastEvent.getStatus();
 
-            ContextImage image;
-
             if (status.equals(Status.PASS)) {
-                add(image = new ContextImage("resultIcon", "images/event-completed-pass.png"));
+                add(new ContextImage("resultIcon", "images/event-completed-pass.png"));
             } else if (status.equals(Status.FAIL)) {
-                add(image = new ContextImage("resultIcon", "images/event-completed-fail.png"));
+                add(new ContextImage("resultIcon", "images/event-completed-fail.png"));
             } else {
-                add(image = new ContextImage("resultIcon", "images/event-completed-na.png"));
+                add(new ContextImage("resultIcon", "images/event-completed-na.png"));
             }
             
-            add(new Label("lastEventDate", lastEventDate));
+            add(new Label("lastEventDate", new DayDisplayModel(Model.of(lastEvent.getDate())).includeTime()));
             add(new Label("lastEventType", lastEvent.getType().getName()));
             add(new Label("performedBy", lastEvent.getPerformedBy().getDisplayName()));
             add(new EventActionsCell("actions", Model.of(lastEvent)));

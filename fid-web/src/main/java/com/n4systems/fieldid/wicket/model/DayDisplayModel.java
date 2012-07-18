@@ -11,6 +11,8 @@ public class DayDisplayModel extends LoadableDetachableModel<String> {
 
     private IModel<Date> dayModel;
 
+    private boolean includeTime;
+
     public DayDisplayModel(IModel<Date> dayModel) {
         this.dayModel = dayModel;
     }
@@ -18,6 +20,14 @@ public class DayDisplayModel extends LoadableDetachableModel<String> {
     @Override
     protected String load() {
         Date date = dayModel.getObject();
-        return new SimpleDateFormat(FieldIDSession.get().getSessionUser().getDateFormat()).format(date);
+        if(includeTime)
+            return new SimpleDateFormat(FieldIDSession.get().getSessionUser().getDateTimeFormat()).format(date);
+        else
+            return new SimpleDateFormat(FieldIDSession.get().getSessionUser().getDateFormat()).format(date);
+    }
+
+    public DayDisplayModel includeTime() {
+        includeTime = true;
+        return this;
     }
 }
