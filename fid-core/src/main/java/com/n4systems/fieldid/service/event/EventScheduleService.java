@@ -172,6 +172,11 @@ public class EventScheduleService extends FieldIdPersistenceService {
 
     @Transactional
     public Event updateSchedule(Event schedule) {
+        if (schedule.getGroup() == null) {
+            EventGroup group = new EventGroup();
+            persistenceService.save(group);
+            schedule.setGroup(group);
+        }
         Event updatedSchedule = persistenceService.update(schedule);
         updatedSchedule.getAsset().touch();
         persistenceService.update(updatedSchedule.getAsset());

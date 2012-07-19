@@ -19,12 +19,12 @@ public class NextEventScheduleService extends FieldIdPersistenceService {
      * @return The newly created schedule, or the already existing one.
      */
     @Transactional
-    public Event createNextSchedule(Event schedule) {
+    public Event createNextSchedule(Event openEvent) {
 
-        Event eventSchedule = findExistingSchedule(schedule);
+        Event eventSchedule = findExistingSchedule(openEvent);
 
         if (eventSchedule == null) {
-            eventSchedule = eventScheduleService.updateSchedule(schedule);
+            eventSchedule = eventScheduleService.updateSchedule(openEvent);
         }
 
         return eventSchedule;

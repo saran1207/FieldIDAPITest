@@ -438,14 +438,16 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     
     public void setInitialResultBasedOnScoreOrOneClicksBeingAvailable() {
         resultFromCriteriaAvailable = false;
-        if (getType().getEventForm().isUseScoreForResult()) {
-            resultFromCriteriaAvailable = true;
-        } else {
-            for (CriteriaSection criteriaSection : getType().getEventForm().getAvailableSections()) {
-                for (Criteria criteria : criteriaSection.getAvailableCriteria()) {
-                    if (criteria.getCriteriaType() == CriteriaType.ONE_CLICK) {
-                        resultFromCriteriaAvailable = true;
-                        break;
+        if (getType().getEventForm() != null) {
+            if (getType().getEventForm().isUseScoreForResult()) {
+                resultFromCriteriaAvailable = true;
+            } else {
+                for (CriteriaSection criteriaSection : getType().getEventForm().getAvailableSections()) {
+                    for (Criteria criteria : criteriaSection.getAvailableCriteria()) {
+                        if (criteria.getCriteriaType() == CriteriaType.ONE_CLICK) {
+                            resultFromCriteriaAvailable = true;
+                            break;
+                        }
                     }
                 }
             }
