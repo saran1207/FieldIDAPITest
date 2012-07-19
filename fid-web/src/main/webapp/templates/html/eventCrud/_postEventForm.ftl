@@ -26,7 +26,7 @@
 		</span>
 	</div>
 	
-	<#if event.new >
+	<#if event.new || event.eventState = 'OPEN'>
 		<#include "_schedules.ftl"/>
 	</#if>	
 	
