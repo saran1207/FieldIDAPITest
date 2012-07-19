@@ -60,7 +60,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 
 		setOrderForSubEvents(parameterObject.event);
 
-        Date completedDate = parameterObject.event.getSchedule() == null ? null : parameterObject.event.getDate();
+        Date completedDate = parameterObject.event.getDate();
 
         findOrCreateSchedule(parameterObject.event, parameterObject.scheduleId);
 
