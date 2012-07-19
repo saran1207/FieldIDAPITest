@@ -6,6 +6,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 
 public class WarningsAndInstructionsPanel extends Panel {
     
@@ -18,10 +19,10 @@ public class WarningsAndInstructionsPanel extends Panel {
 
         AssetType type = model.getObject().getType();
         
-        add(warning = new Label("warnings", type.getWarnings()));
+        add(warning = new Label("warnings", new PropertyModel<AssetType>(type, "warnings")));
         warning.setVisible(type.getWarnings() != null && !type.getWarnings().isEmpty());
 
-        add(instructions = new Label("instructions", type.getInstructions()));
+        add(instructions = new Label("instructions", new PropertyModel<AssetType>(type, "instructions")));
         instructions.setVisible(type.getInstructions() != null && !type.getInstructions().isEmpty());
 
         String cautionUrl = type.getCautionUrl();

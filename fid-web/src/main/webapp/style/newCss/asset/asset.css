@@ -246,6 +246,9 @@
     float:left;
     padding-top: 5px;
 }
+.morePanel {
+    padding-bottom: 0;
+}
 
 .morePanel p{
     line-height: 1.8em;
