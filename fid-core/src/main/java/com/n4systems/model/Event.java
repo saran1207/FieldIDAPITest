@@ -52,7 +52,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
             return name();
         }
     }
-	
+
 	private Location advancedLocation = new Location();
 
 	@Column(nullable=false)

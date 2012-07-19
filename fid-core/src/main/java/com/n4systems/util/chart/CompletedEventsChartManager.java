@@ -29,8 +29,8 @@ public class CompletedEventsChartManager extends DateChartManager {
 
     class CompletedEventsComparator implements Comparator<ChartSeries<LocalDate>> {
 
-        // sort in reverse order of Status, with ALL_STATUS coming at the end.
-        //  0:NA, 1:FAIL, 2:PASS, 3:ALL_STATUS.
+        // sort in reverse order of Status, with ALL_STATES coming at the end.
+        //  0:NA, 1:FAIL, 2:PASS, 3:ALL_STATES.
         // assumes the id of each chartSeries is a Status object.
         @Override
         public int compare(ChartSeries<LocalDate> a, ChartSeries<LocalDate> b) {

@@ -8,8 +8,6 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.*;
@@ -86,9 +84,9 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(Event.EventState.COMPLETED, granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
 
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
-		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>(ScheduleStatus.COMPLETED, ScheduleStatus.COMPLETED.getLabel(), completedScheduledEvents);
+		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>(EventState.COMPLETE, EventState.COMPLETE.getDisplayName(), completedScheduledEvents);
 		results.add(completedChartSeries);
-		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>(EventSchedule.ALL_STATUS, EventSchedule.ALL_STATUS.getLabel(), allScheduledEvents);
+		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>(EventState.ALL_STATES, EventState.ALL_STATES.getLabel(), allScheduledEvents);
 		results.add(allChartSeries);
 
 		return results;
@@ -175,8 +173,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 	private EventReportCriteria getCriteriaDefaults(EventCompletenessWidgetConfiguration config, String series, LocalDate localDate) {
 		EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
-        ScheduleStatus status = EnumUtils.valueOf(ScheduleStatus.class, series);
-        if (ScheduleStatus.COMPLETED.equals(status)) {
+        EventState state = EnumUtils.valueOf(EventState.class, series);
+        if (EventState.COMPLETE.equals(state)) {
             criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
             criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
             criteria.setEventState(EventState.COMPLETE);

@@ -1,7 +1,7 @@
 package com.n4systems.util.chart;
 
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.Event;
+import com.n4systems.model.search.EventState;
 import com.n4systems.model.utils.DateRange;
 import org.joda.time.LocalDate;
 
@@ -22,7 +22,7 @@ public class EventCompletenessChartManager extends DateChartManager {
     @Override
     public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index) {
         super.updateOptions(chartSeries, options, index);
-        if (chartSeries.getId().equals(EventSchedule.ScheduleStatus.COMPLETED)) {
+        if (chartSeries.getId().equals(EventState.COMPLETE)) {
             chartSeries.setColor("#60986B");    // completed = green.
         }
     }
@@ -30,17 +30,17 @@ public class EventCompletenessChartManager extends DateChartManager {
 
     class EventCompletenessComparator implements Comparator<ChartSeries<LocalDate>> {
 
-        // COMPLETED, then ALL_STATUS
+        // COMPLETED, then ALL_STATES
         @Override
         public int compare(ChartSeries<LocalDate> a, ChartSeries<LocalDate> b) {
             return ordinal(a.getId())- ordinal(b.getId());
         }
 
         public int ordinal(Object id) {
-            if (EventSchedule.ALL_STATUS.equals(id)) {
-                return ScheduleStatus.values().length;
-            } else if (id instanceof ScheduleStatus) {
-                ScheduleStatus status = (ScheduleStatus)id;
+            if (EventState.ALL_STATES.equals(id)) {
+                return Event.EventState.values().length;
+            } else if (id instanceof EventState) {
+                EventState status = (EventState)id;
                 return status.ordinal();
             } else {
                 return 0;

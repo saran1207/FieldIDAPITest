@@ -1,6 +1,6 @@
 package com.n4systems.util.persistence.search.terms.completedordue;
 
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Event;
 import com.n4systems.model.search.EventState;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -45,13 +45,13 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
     private void createAndPopulateCompleteAndIncompleteOuterGroup(WhereParameterGroup outerGroup) {
         WhereParameterGroup completedGroup = new WhereParameterGroup(getClass().getName()+".completed");
         completedGroup.setChainOperator(WhereClause.ChainOp.OR);
-        completedGroup.addClause(WhereClauseFactory.create("status", EventSchedule.ScheduleStatus.COMPLETED, WhereClause.ChainOp.AND));
+        completedGroup.addClause(WhereClauseFactory.create("eventState", Event.EventState.COMPLETED, WhereClause.ChainOp.AND));
 
         populateCompletedTerm(completedGroup);
 
         WhereParameterGroup incompleteGroup = new WhereParameterGroup(getClass().getName()+".incomplete");
         incompleteGroup.setChainOperator(WhereClause.ChainOp.OR);
-        incompleteGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE, "status", EventSchedule.ScheduleStatus.COMPLETED, WhereClause.ChainOp.AND));
+        incompleteGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE, "eventState", Event.EventState.COMPLETED, WhereClause.ChainOp.AND));
 
         populateIncompleteTerm(incompleteGroup);
 
