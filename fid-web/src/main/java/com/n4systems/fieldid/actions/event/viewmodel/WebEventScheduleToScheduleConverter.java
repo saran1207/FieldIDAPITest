@@ -29,6 +29,7 @@ public class WebEventScheduleToScheduleConverter {
 		EventType eventType = loaderFactory.createFilteredIdLoader(EventType.class).setId(webSchedule.getType()).load();
 
         Event openEvent = new Event();
+        openEvent.setTenant(asset.getTenant());
         openEvent.setAsset(asset);
         openEvent.setType(eventType);
         openEvent.setNextDate(scheduledDate);
