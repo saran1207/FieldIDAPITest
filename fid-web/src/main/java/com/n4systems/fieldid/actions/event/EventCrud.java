@@ -374,7 +374,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		
 			event.getInfoOptionMap().putAll(decodeMapKeys(encodedInfoOptionMap));
 
-			event.setGroup(eventGroup);
+//			event.setGroup(eventGroup);
 			event.setTenant(getTenant());
 			
 			if (assignToSomeone) {

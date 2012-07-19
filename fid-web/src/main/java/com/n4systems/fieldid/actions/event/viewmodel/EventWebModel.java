@@ -102,6 +102,12 @@ public class EventWebModel implements UserDateFormatValidator {
 		this.datePerformed = datePerformed;
 	}
 
+    @RequiredStringValidator(message = "", key = "error.mustbeadatetime")
+    @CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadatetime", parameters = { @ValidationParameter(name = "usingTime", value = "true") })
+    public void setNextDate(String nextDate) {
+        this.nextDate = nextDate;
+    }
+
 
 	@Override
 	public boolean isValidDate(String date, boolean usingTime) {
