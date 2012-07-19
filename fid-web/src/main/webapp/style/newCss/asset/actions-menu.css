@@ -11,6 +11,10 @@
     position:relative;
 }
 
+.actions ul {
+    width: 75px;
+}
+
 .menu-items {
     display:none; 		/* made visible by jquery click*/
     position: absolute;
