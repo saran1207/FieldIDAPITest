@@ -219,14 +219,14 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
 		allEvents.addAll(completedEvents);
 		allEvents.addAll(createEventCompletenessResults(granularity, 888L, 574L, 924L));
 		expect(eventService.getEventCompleteness(granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(allEvents);
-		expect(eventService.getEventCompleteness(Event.EventState.COMPLETED, granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(completedEvents);
+		expect(eventService.getEventCompleteness(Event.EventState.OPEN, granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(completedEvents);
 		replay(eventService);
 		replay(assetService);
 		
 		List<ChartSeries<LocalDate>> results = dashboardService.getEventCompletenessEvents(granularity, dateRange, org);
 		
 		assertEquals(2, results.size());
-		assertEquals(ScheduleStatus.COMPLETED.getLabel(), results.get(0).getLabel());
+		assertEquals(Event.EventState.COMPLETED.getLabel(), results.get(0).getLabel());
 		assertEquals(EventSchedule.ALL_STATUS.getLabel(), results.get(1).getLabel());
 
 		verifyTestMocks();		

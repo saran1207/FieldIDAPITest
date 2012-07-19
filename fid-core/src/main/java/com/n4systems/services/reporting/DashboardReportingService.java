@@ -81,10 +81,10 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Preconditions.checkArgument(dateRange !=null);
 
 		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange),  org);
-		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(Event.EventState.COMPLETED, granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
+		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(Event.EventState.OPEN, granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
 
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
-		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>(EventState.COMPLETE, EventState.COMPLETE.getDisplayName(), completedScheduledEvents);
+		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>(EventState.COMPLETE, Event.EventState.COMPLETED.getLabel(), completedScheduledEvents);
 		results.add(completedChartSeries);
 		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>(EventState.ALL_STATES, EventState.ALL_STATES.getLabel(), allScheduledEvents);
 		results.add(allChartSeries);

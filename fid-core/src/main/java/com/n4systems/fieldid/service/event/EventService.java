@@ -224,7 +224,7 @@ public class EventService extends FieldIdPersistenceService {
 	}
 
     @Transactional(readOnly = true)
-	public List<EventCompletenessReportRecord> getEventCompleteness(Event.EventState eventState, ChartGranularity granularity,
+	public List<EventCompletenessReportRecord> getEventCompleteness(Event.EventState excludedState, ChartGranularity granularity,
 			Date fromDate, Date toDate, BaseOrg org) {
 		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 
@@ -240,10 +240,10 @@ public class EventService extends FieldIdPersistenceService {
         Date sampleDate = fromDate;
         builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"nextDate", getCurrentUser().getTimeZone(), sampleDate));
 		builder.applyFilter(new OwnerAndDownFilter(org));
-		if (eventState != null) {
-			builder.addSimpleWhere("eventState", eventState);
+		if (excludedState != null) {
+            builder.addWhere(Comparator.NE, "excludedEventState", "eventState", excludedState);
 		}
-        builder.addWhere(Comparator.NE, "notClosed", "eventState", Event.EventState.CLOSED);
+
 		builder.addOrder("nextDate");
 		
 		return persistenceService.findAll(builder);	
