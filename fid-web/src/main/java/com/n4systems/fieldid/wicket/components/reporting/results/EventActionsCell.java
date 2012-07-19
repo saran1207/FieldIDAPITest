@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.model.Event;
@@ -59,9 +60,8 @@ public class EventActionsCell extends Panel {
         };
 
         NonWicketLink startEventLink = new NonWicketLink("startEventLink", "selectEventAdd.action?scheduleId="+event.getId()+"&type="+event.getType().getId()+"&assetId="+event.getAsset().getId());
-        NonWicketLink viewSchedulesLink = new NonWicketLink("viewSchedulesLink", "eventScheduleList.action?assetId="+event.getAsset().getId());
+        BookmarkablePageLink viewSchedulesLink = new BookmarkablePageLink("viewSchedulesLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
 
-        NonWicketLink editSchedulesLink = new NonWicketLink("editScheduleLink", "eventScheduleList.action?assetId="+event.getAsset().getId());
         NonWicketLink deleteScheduleLink = new NonWicketLink("deleteScheduleLink", "eventScheduleDelete.action?uniqueID="+event.getId() +"&assetId="+event.getAsset().getId());
 
         BookmarkablePageLink viewAssetLink = new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
@@ -69,7 +69,6 @@ public class EventActionsCell extends Panel {
         NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+event.getAsset().getId());
 
         resolveEventLink.setVisible(!isReadOnly && event.getEventState().equals(Event.EventState.OPEN));
-        editSchedulesLink.setVisible(!isReadOnly);
         deleteScheduleLink.setVisible(!isReadOnly);
         startEventLink.setVisible(hasCreateEvent);
         editAssetLink.setVisible(hasTag);
@@ -77,10 +76,6 @@ public class EventActionsCell extends Panel {
         incompleteEventActionsList.add(startEventLink);
         incompleteEventActionsList.add(viewSchedulesLink);
 
-        incompleteEventActionsList.add(editSchedulesLink);
-        incompleteEventActionsList.add(deleteScheduleLink);
-
-        incompleteEventActionsList.add(editSchedulesLink);
         incompleteEventActionsList.add(deleteScheduleLink);
 
         incompleteEventActionsList.add(viewAssetLink);
