@@ -44,6 +44,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         Event savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles);
         for (EventScheduleBundle eventScheduleBundle : schedules) {
             Event openEvent = new Event();
+            openEvent.setTenant(eventScheduleBundle.getAsset().getTenant());
             openEvent.setAsset(eventScheduleBundle.getAsset());
             openEvent.setType(eventScheduleBundle.getType());
             openEvent.setOwner(eventScheduleBundle.getAsset().getOwner());
