@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AssetTypeService extends FieldIdPersistenceService {
 
-    public static final int RECURRING_EVENT_BUFFER_SIZE_IN_DAYS = 14;
+    public static final int RECURRING_EVENT_BUFFER_SIZE_IN_DAYS = 13;
 
     private static final Logger logger= Logger.getLogger(AssetTypeService.class);
 
@@ -41,15 +41,15 @@ public class AssetTypeService extends FieldIdPersistenceService {
     }
 
     public void addRecurringEvent(AssetType assetType, RecurringAssetTypeEvent recurringEvent) {
+        recurringEvent.setTenant(assetType.getTenant());
         persistenceService.save(recurringEvent);
-        assetType.add(recurringEvent);
         scheduleInitialEvents(recurringEvent);
     }
 
     public void deleteRecurringEvent(AssetType assetType, RecurringAssetTypeEvent recurringEvent) {
         removeScheduledEvents(recurringEvent);
-        assetType.getRecurringAssetTypeEvents().remove(recurringEvent);
-        persistenceService.update(assetType);
+        recurringEvent.archiveEntity();
+        persistenceService.update(recurringEvent);
     }
 
     private void scheduleInitialEvents(RecurringAssetTypeEvent recurringEvent) {
@@ -79,18 +79,20 @@ public class AssetTypeService extends FieldIdPersistenceService {
                 event.setType(recurringEvent.getEventType());
                 event.setRecurringEvent(recurringEvent);
                 persistenceService.save(event);
+                updateAssetToNotifyMobileOfChange(asset);
                 logger.debug("saving recurring scheduled event " + event.getAsset().getIdentifier() + " on " + event.getNextDate());
             }
         }
     }
 
+    private void updateAssetToNotifyMobileOfChange(Asset asset) {
+        asset.touch();
+        persistenceService.update(asset);
+    }
+
     private void removeScheduledEvents(RecurringAssetTypeEvent recurringEvent) {
-        LocalDate from = LocalDate.now();
-        LocalDate to = from.plusDays(RECURRING_EVENT_BUFFER_SIZE_IN_DAYS);
         QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
 
-        builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "nextDate", from.toDate(), null, WhereClause.ChainOp.AND));
-        builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "to", "nextDate", to.toDate(), null, WhereClause.ChainOp.AND));
         builder.addSimpleWhere("eventState", Event.EventState.OPEN);
         builder.addSimpleWhere("recurringEvent", recurringEvent);
         if (recurringEvent.getOwner()!=null) {
@@ -102,6 +104,12 @@ public class AssetTypeService extends FieldIdPersistenceService {
             logger.debug("removing scheduled event for asset " + event.getAsset().getIdentifier() + " on " + event.getNextDate());
             persistenceService.delete(event);
         }
+    }
+
+    public List<RecurringAssetTypeEvent> getRecurringEvents(AssetType assetType) {
+        QueryBuilder<RecurringAssetTypeEvent> query = new QueryBuilder<RecurringAssetTypeEvent>(RecurringAssetTypeEvent.class, new TenantOnlySecurityFilter(assetType.getTenant().getId()));
+        query.addSimpleWhere("assetType", assetType);
+        return persistenceService.findAll(query);
     }
 
 }

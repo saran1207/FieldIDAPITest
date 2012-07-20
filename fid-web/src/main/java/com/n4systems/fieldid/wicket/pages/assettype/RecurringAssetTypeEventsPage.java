@@ -186,7 +186,8 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
             WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer") {
                 @Override public boolean isVisible() {
-                    return getAssetType().getRecurringAssetTypeEvents().size()>0;
+                    return true;
+                    //return getAssetType().getRecurringAssetTypeEvents().size()>0;
                 }
             };
             tableContainer.add(recurringEventsList);
@@ -205,7 +206,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             }
             RecurringAssetTypeEvent newEvent = new RecurringAssetTypeEvent(getAssetType(), eventType, recurrence);
             newEvent.setOwner(owner);
-            System.out.println(newEvent);
+            newEvent.setTenant(assetTypeModel.getObject().getTenant());
             return newEvent;
         }
 
@@ -234,7 +235,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
         @Override
         protected List<RecurringAssetTypeEvent> load() {
-            return assetTypeModel.getObject().getRecurringAssetTypeEvents();
+            return assetTypeService.getRecurringEvents(model.getObject());
         }
 
         @Override

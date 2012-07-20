@@ -15,10 +15,6 @@ class AddRecurringEventsTable < ActiveRecord::Migration
         t.string    :recurrence,        :null => false
       end
 
-      add_foreign_key(:recurring_events, :assets, :source_column => :asset_id, :foreign_column => :id, :name => "fk_recurringevents_asset")
-      add_foreign_key(:recurring_events, :eventtypes, :source_column => :event_type_id, :foreign_column => :id, :name => "fk_recurringevents_event_type")
-      add_foreign_key(:recurring_events, :org_base, :source_column => :owner_id, :foreign_column => :id, :name => "fk_recurringevents_owner")
-
   end
 
   def self.down

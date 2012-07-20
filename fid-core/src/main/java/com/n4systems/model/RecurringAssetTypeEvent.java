@@ -2,7 +2,7 @@ package com.n4systems.model;
 
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
-import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "recurring_asset_type_events")
 @PrimaryKeyJoinColumn(name="id")
-public class RecurringAssetTypeEvent extends EntityWithOwner implements Saveable, SecurityEnhanced<RecurringAssetTypeEvent>, Cloneable {
+public class RecurringAssetTypeEvent extends ArchivableEntityWithOwner implements Saveable, SecurityEnhanced<RecurringAssetTypeEvent>, Cloneable {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "asset_type_id", nullable = true)
