@@ -41,7 +41,7 @@ ${action.setPageType('event', 'edit')!}
 		<div class="formAction">
 			<@s.submit key="label.save" />
 			<@s.text name="label.or"/>
-			<@s.url id="cancelUrl" action="eventGroups" uniqueID="${asset.id}"/>
+			<@s.url id="cancelUrl" value="w/assetEvents?uniqueID=${asset.id}"/>
 			<@s.url id="deleteUrl" action="masterEventDelete" uniqueID="${uniqueID}" assetId="${assetId}" /> 
 			<a href="#" onclick="return redirect( '${cancelUrl}' );"/><@s.text name="label.cancel"/></a>
 			<@s.text name="label.or"/>
