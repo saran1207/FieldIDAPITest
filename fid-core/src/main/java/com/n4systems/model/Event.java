@@ -563,4 +563,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         return this;
     }
 
+    public EntityState getState() {
+        return state;
+    }
+
 }

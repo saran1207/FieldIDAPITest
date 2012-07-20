@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.api.Archivable;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -526,8 +527,11 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
         Event event = new Event();
 
-        if (schedule != null && schedule.getEvent() != null && schedule.getEvent().getEventState() == Event.EventState.OPEN) {
-            event = persistenceManager.find(Event.class, schedule.getEvent().getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
+        if (schedule != null && schedule.getEvent() != null) {
+            // As long as this scheduled event's corresponding open event hasn't been completed or archived, we're going to use it
+            if (schedule.getEvent().getEventState() == Event.EventState.OPEN && schedule.getEvent().getState() == Archivable.EntityState.ACTIVE) {
+                event = persistenceManager.find(Event.class, schedule.getEvent().getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
+            }
         }
 
 		populate(event, inspectionServiceDTO, tenant);

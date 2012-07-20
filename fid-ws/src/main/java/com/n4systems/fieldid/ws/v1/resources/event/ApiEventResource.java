@@ -12,6 +12,7 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -63,8 +64,14 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		Event event = new Event();
 
         if (apiEvent.getEventScheduleId() != null) {
+            // We find the open event, and use this event rather than the updated one. UNLESS it's archived
             EventSchedule schedule = eventScheduleService.findByMobileId(apiEvent.getEventScheduleId());
-            event = schedule.getEvent();
+            if (schedule != null) {
+                Event loadedEvent = schedule.getEvent();
+                if (loadedEvent.getState() == Archivable.EntityState.ACTIVE && loadedEvent.getEventState() == Event.EventState.OPEN) {
+                    event = loadedEvent;
+                }
+            }
         }
 
         event.setEventState(Event.EventState.COMPLETED);

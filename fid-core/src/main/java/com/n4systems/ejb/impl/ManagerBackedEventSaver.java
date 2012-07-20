@@ -7,6 +7,7 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.reporting.PathHandler;
@@ -131,9 +132,11 @@ public class ManagerBackedEventSaver implements EventSaver {
         } else if (scheduleId > 0) {
             // There was an existing schedule selected.
             eventSchedule = persistenceManager.find(EventSchedule.class, scheduleId, event.getTenant());
-            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED) {
+            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED || eventSchedule.getEvent().getState() == null) {
                 event.setSchedule(null);
-            } else {
+            } else if (eventSchedule.getEvent() != null && (eventSchedule.getEvent().getState() != Archivable.EntityState.ACTIVE || eventSchedule.getEvent().getEventState() != Event.EventState.OPEN)) {
+                event.setSchedule(null);
+            } else{
                 event.setSchedule(eventSchedule);
             }
         }
