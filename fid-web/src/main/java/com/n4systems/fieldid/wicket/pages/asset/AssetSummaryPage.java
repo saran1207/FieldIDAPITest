@@ -41,7 +41,10 @@ public class AssetSummaryPage extends AssetPage {
         String imageUrl;
         if(asset.getImageName() == null) {
             imageUrl = "/file/downloadAssetTypeImage.action?uniqueID=" + asset.getType().getId();
-            imageExists = new File(PathHandler.getAssetTypeImageFile(asset.getType()), asset.getType().getImageName()).exists();
+            if(asset.getType().getImageName() != null)
+                imageExists = new File(PathHandler.getAssetTypeImageFile(asset.getType()), asset.getType().getImageName()).exists();
+            else
+                imageExists = false;
         } else {
             imageUrl = "/file/downloadAssetImage.action?uniqueID=" + assetId;
             imageExists = PathHandler.getAssetImageFile(asset).exists();
