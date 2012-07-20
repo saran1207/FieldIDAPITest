@@ -40,7 +40,7 @@ public class DateRangeTerm implements SearchTermDefiner {
 	}
 	
 	private WhereClause<Date> getDateParameter(String field, Date date, boolean isStart) {
-		WhereParameter.Comparator comp = (isStart) ? WhereParameter.Comparator.GE : WhereParameter.Comparator.LE;
+		WhereParameter.Comparator comp = (isStart) ? WhereParameter.Comparator.GE : WhereParameter.Comparator.LT;
 		
 		String fieldName = StringUtils.pathToName(field);
 		fieldName += (isStart) ? START_FIELD_POSTFIX : END_FIELD_POSTFIX;
