@@ -10,6 +10,9 @@ class AddForeignKeysForRecurringEvents < ActiveRecord::Migration
         execute("alter table recurring_asset_type_events modify column modifiedby bigint(21) null")
         execute("alter table recurring_asset_type_events modify column createdby bigint(21) null")
 
+        execute("update masterevents set recurring_event_id = null where recurring_event_id is not null")
+        execute("alter table masterevents modify column recurring_event_id bigint(21) null")
+
         add_column(:recurring_asset_type_events, :state, :string, :null => false)
 
         execute("alter table masterevents add constraint fk_events_recurring_events foreign key (recurring_event_id) references recurring_asset_type_events(id) on update no action on delete no action")
