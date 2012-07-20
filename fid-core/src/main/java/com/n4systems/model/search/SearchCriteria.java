@@ -197,9 +197,4 @@ public abstract class SearchCriteria extends AbstractEntity {
         this.assetTypeGroup = assetTypeGroup;
     }
 
-    @Transient
-    public boolean requiresLeftOuterJoin() {
-        return false;
-    }
-
 }

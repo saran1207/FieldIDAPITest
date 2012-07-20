@@ -113,11 +113,6 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
             }
         }
 
-        if (criteriaModel.requiresLeftOuterJoin()) {
-            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "event", "outer_event", true);
-            searchBuilder.addJoin(joinTerm.toJoinClause());
-        }
-
         List<SearchTermDefiner> searchTerms = new ArrayList<SearchTermDefiner>();
         List<JoinTerm> joinTerms = new ArrayList<JoinTerm>();
 

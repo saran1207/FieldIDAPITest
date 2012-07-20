@@ -32,7 +32,7 @@ public class LocationTerm extends CompleteOrIncompleteTerm {
     @Override
     protected void populateCompletedTerm(WhereParameterGroup incompleteGroup) {
         if (freeformLocation != null) {
-            addFreeformTerm(incompleteGroup, "outer_event.advancedLocation.freeformLocation", true);
+            addFreeformTerm(incompleteGroup, "advancedLocation.freeformLocation", false);
         }
 
         if (predefinedLocationId != null) {

@@ -280,15 +280,6 @@ public class EventReportCriteria extends SearchCriteria {
         this.dueDateRange = new DateRange(RangeType.CUSTOM);
     }
 
-    @Override
-    public boolean requiresLeftOuterJoin() {
-        if (eventState == EventState.OPEN) {
-            return false;
-        }
-
-        return assetStatus != null || assignedTo != null || !location.isBlank() || sortingByLocation();
-    }
-
     public boolean sortingByLocation() {
         ColumnMappingView sortColumn = getSortColumn();
         return sortColumn != null && EVENT_LOCATION_COLUMN.equals(sortColumn.getId());

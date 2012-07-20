@@ -25,12 +25,12 @@ public class AssignedUserTerm extends CompleteOrIncompleteTerm {
 
     @Override
     protected void populateCompletedTerm(WhereParameterGroup incompleteGroup) {
-        incompleteGroup.addClause(new WhereParameter<Boolean>(WhereParameter.Comparator.EQ, "assetAssignmentApplied", "outer_event.assignedTo.assignmentApplyed", Boolean.TRUE, null, true, WhereClause.ChainOp.AND));
+        incompleteGroup.addClause(new WhereParameter<Boolean>(WhereParameter.Comparator.EQ, "assetAssignmentApplied", "assignedTo.assignmentApplyed", Boolean.TRUE, null, false, WhereClause.ChainOp.AND));
 
         if (assignedUserId == 0) {
-            incompleteGroup.addClause(new WhereParameter<Long>(WhereParameter.Comparator.NULL, "assetAssignedTo", "outer_event.assignedTo.assignedUser.id", null, null, true, WhereClause.ChainOp.AND));
+            incompleteGroup.addClause(new WhereParameter<Long>(WhereParameter.Comparator.NULL, "assetAssignedTo", "assignedTo.assignedUser.id", null, null, false, WhereClause.ChainOp.AND));
         } else {
-            incompleteGroup.addClause(new WhereParameter<Long>(WhereParameter.Comparator.EQ, "assetAssignedTo", "outer_event.assignedTo.assignedUser.id", assignedUserId, null, true, WhereClause.ChainOp.AND));
+            incompleteGroup.addClause(new WhereParameter<Long>(WhereParameter.Comparator.EQ, "assetAssignedTo", "assignedTo.assignedUser.id", assignedUserId, null, false, WhereClause.ChainOp.AND));
         }
     }
 

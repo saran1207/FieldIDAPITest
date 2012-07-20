@@ -22,7 +22,7 @@ public class AssetStatusTerm extends CompleteOrIncompleteTerm {
 
     @Override
     protected void populateCompletedTerm(WhereParameterGroup incompleteGroup) {
-        incompleteGroup.addClause(new WhereParameter<Long>(WhereParameter.Comparator.EQ, "assetStatus", "outer_event.assetStatus.id", assetStatus.getId(), null, true, WhereClause.ChainOp.AND));
+        incompleteGroup.addClause(new WhereParameter<Long>(WhereParameter.Comparator.EQ, "assetStatus", "assetStatus.id", assetStatus.getId(), null, false, WhereClause.ChainOp.AND));
     }
 
 }

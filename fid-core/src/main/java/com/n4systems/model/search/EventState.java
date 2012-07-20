@@ -32,7 +32,7 @@ public enum EventState implements Listable {
     }
 
     public boolean includesComplete() {
-        return this == ALL || this == COMPLETE;
+        return this == ALL || this == COMPLETE || this == CLOSED;
     }
 
 }

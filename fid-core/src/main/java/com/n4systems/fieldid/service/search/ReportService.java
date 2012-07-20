@@ -118,11 +118,9 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
 		}
 
         if (predefLocationId != null && status.includesComplete()) {
-            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "event.advancedLocation.predefinedLocation.searchIds", "eventPreLocSearchId", true);
+            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "advancedLocation.predefinedLocation.searchIds", "eventPreLocSearchId", true);
             joinTerms.add(joinTerm);
         }
-
-        // TODO WEB 2926 : implement searching for resolved events.
 
         if (criteriaModel.sortingByDivision()) {
             addOrgJoinTerms(status, "divisionOrg", "assetDivisionOrg", "eventDivisionOrg", joinTerms);
@@ -143,10 +141,10 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
             joinTerms.add(joinTerm);
         }
 
-//        if (status.includesComplete()) {
-//            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "event.owner." + basePath, eventJoinAlias, true);
-//            joinTerms.add(joinTerm);
-//        }
+        if (status.includesComplete()) {
+            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "event.owner." + basePath, eventJoinAlias, true);
+            joinTerms.add(joinTerm);
+        }
     }
 
     private Date nextDay(Date date) {
@@ -161,11 +159,8 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
             addStatusSortIfNecessary(criteriaModel, searchBuilder, sortDirection);
 
             if (criteriaModel.getEventState().includesComplete()) {
-                SortTerm sortTerm = new SortTerm("outer_event.advancedLocation.predefinedLocation.id", sortDirection);
-                sortTerm.setAlwaysDropAlias(true);
-
-                SortTerm sortTerm2 = new SortTerm("outer_event.advancedLocation.freeformLocation", sortDirection);
-                sortTerm2.setAlwaysDropAlias(true);
+                SortTerm sortTerm = new SortTerm("advancedLocation.predefinedLocation.id", sortDirection);
+                SortTerm sortTerm2 = new SortTerm("advancedLocation.freeformLocation", sortDirection);
 
                 searchBuilder.getOrderArguments().add(sortTerm.toSortField());
                 searchBuilder.getOrderArguments().add(sortTerm2.toSortField());
