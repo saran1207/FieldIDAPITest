@@ -10,12 +10,15 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.reporting.PathHandler;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import java.io.File;
 
 public class AssetSummaryPage extends AssetPage {
 
@@ -34,13 +37,18 @@ public class AssetSummaryPage extends AssetPage {
             }
         });
         
+        boolean imageExists;
         String imageUrl;
         if(asset.getImageName() == null) {
             imageUrl = "/file/downloadAssetTypeImage.action?uniqueID=" + asset.getType().getId();
+            imageExists = new File(PathHandler.getAssetTypeImageFile(asset.getType()), asset.getType().getImageName()).exists();
         } else {
             imageUrl = "/file/downloadAssetImage.action?uniqueID=" + assetId;
+            imageExists = PathHandler.getAssetImageFile(asset).exists();
         }
-        add(new ExternalImage("assetImage", ContextAbsolutizer.toContextAbsoluteUrl(imageUrl)));
+        ExternalImage assetImage;
+        add(assetImage = new ExternalImage("assetImage", ContextAbsolutizer.toContextAbsoluteUrl(imageUrl)));
+        assetImage.setVisible(imageExists);
 
         if(asset.getGpsLocation() != null) {
             add(new GoogleMap("map").addLocation(asset.getGpsLocation().getLatitude().doubleValue(), asset.getGpsLocation().getLongitude().doubleValue()));
