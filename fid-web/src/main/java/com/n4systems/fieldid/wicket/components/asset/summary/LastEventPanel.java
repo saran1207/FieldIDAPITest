@@ -43,7 +43,7 @@ public class LastEventPanel extends Panel {
                 add(new ContextImage("resultIcon", "images/event-completed-na.png"));
             }
             
-            add(new Label("lastEventDate", new DayDisplayModel(Model.of(lastEvent.getDate())).includeTime()));
+            add(new Label("lastEventDate", new DayDisplayModel(Model.of(lastEvent.getDate())).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
             add(new Label("lastEventType", lastEvent.getType().getName()));
             add(new Label("performedBy", lastEvent.getPerformedBy().getDisplayName()));
             add(new EventActionsCell("actions", Model.of(lastEvent)));

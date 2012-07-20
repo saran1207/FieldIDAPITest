@@ -1,8 +1,10 @@
 package com.n4systems.util.time;
 
-import java.util.Date;
-
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+
+import java.util.Date;
 
 public class DateUtil {
 
@@ -46,5 +48,9 @@ public class DateUtil {
 	public static Date createLocalDate(LocalDate date) {
 		return date==null ? null : date.toDate();
 	}
-	
+
+    public static boolean isMidnight(Date date) {
+        DateTime dateTime = new DateTime(date);
+        return dateTime.equals(new DateMidnight(date));
+    }
 }

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.asset;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
@@ -132,8 +133,6 @@ public class AssetEventsPage extends AssetPage{
         return states;
     }
 
-    public static final String GOOGLE_MAPS_JS = "googleMaps";
-    private static final String GOOGLE_MAP_API = "google-map-api";
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -151,8 +150,8 @@ public class AssetEventsPage extends AssetPage{
         response.renderOnDomReadyJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
 
         //Needs to be included because the map panel is initially hidden.
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GOOGLE_MAP_API);
-        response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS);
+        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
 
     }
 

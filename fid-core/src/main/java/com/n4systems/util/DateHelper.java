@@ -483,7 +483,7 @@ public class DateHelper {
 	}
 
 	public static String format(Date date, DateTimeDefinition dateTimeDefinition) {
-		return new FieldidDateFormatter(date, dateTimeDefinition).format();
+		return new FieldIdDateFormatter(date, dateTimeDefinition).format();
 	}
 	
 	public static String getFormattedCurrentDate(User user) {

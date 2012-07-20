@@ -7,7 +7,7 @@ import java.util.Map;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
-import com.n4systems.util.FieldidDateFormatter;
+import com.n4systems.util.FieldIdDateFormatter;
 
 public abstract class ReportMapProducer {
 
@@ -45,9 +45,9 @@ public abstract class ReportMapProducer {
 	 */
 	protected String formatDate(Date date, boolean showTime) {
 		if (date instanceof PlainDate) {
-			return new FieldidDateFormatter(date, dateTimeDefinition, false, showTime).format();
+			return new FieldIdDateFormatter(date, dateTimeDefinition, false, showTime).format();
 		}
-		return new FieldidDateFormatter(date, dateTimeDefinition, true, showTime).format();
+		return new FieldIdDateFormatter(date, dateTimeDefinition, true, showTime).format();
 		
 	}
 

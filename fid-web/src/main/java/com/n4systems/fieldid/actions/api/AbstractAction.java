@@ -287,7 +287,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	}
 	
 	protected String formatAnyDate(Date date, boolean convertTimeZone, boolean showTime) {
-		return new FieldidDateFormatter(date, getSessionUser(), convertTimeZone, showTime).format();
+		return new FieldIdDateFormatter(date, getSessionUser(), convertTimeZone, showTime).format();
 	}
 	
 	public boolean isDevMode() {

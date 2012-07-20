@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.components.asset.summary;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.Asset;
-import com.n4systems.util.FieldidDateFormatter;
+import com.n4systems.util.FieldIdDateFormatter;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -20,7 +20,7 @@ public class AssetDetailsPanel extends Panel {
         add(new Label("modifiedBy", new PropertyModel<Object>(asset, "modifiedBy.fullName")));
         add(new Label("visibility", new PropertyModel<Object>(asset, "published")));
         
-        String identified = new FieldidDateFormatter(asset.getIdentified(), FieldIDSession.get().getSessionUser(), false, false).format();
+        String identified = new FieldIdDateFormatter(asset.getIdentified(), FieldIDSession.get().getSessionUser(), false, false).format();
         
         add(new Label("identified", identified));
     }

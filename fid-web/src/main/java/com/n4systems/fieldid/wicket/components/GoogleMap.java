@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleMap extends Panel {
-    private static final String GOOGLE_MAPS_JS_ID = "googleMaps";
-    private static final String GOOGLE_MAP_API_ID = "google-map-api";
+    public static final String GOOGLE_MAPS_JS_ID = "googleMaps";
+    public static final String GOOGLE_MAP_API_ID = "google-map-api";
     private static final String GOOGLE_MAP_WITH_LOCATION_JS = "googleMapFactory.createAndShowWithLocation('%s',%s );";
     private static final String GOOGLE_MAP_NO_LOCATION_JS = "googleMapFactory.createAndShow('%s',%s, %d);";
 

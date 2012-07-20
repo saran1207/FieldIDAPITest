@@ -25,7 +25,7 @@ public class UpcomingEventsPanel extends Panel {
 
                 item.add(new Label("upcomingEventType", schedule.getType().getName()));
 
-                DayDisplayModel upcomingEventDate = new DayDisplayModel(Model.of(schedule.getNextDate()));
+                DayDisplayModel upcomingEventDate = new DayDisplayModel(Model.of(schedule.getNextDate())).includeTime();
 
                 if (schedule.isPastDue()) {
                     item.add(new Label("upcomingEventDate", new FIDLabelModel("label.x_days_ago_on", schedule.getDaysPastDue(), upcomingEventDate.getObject())));
