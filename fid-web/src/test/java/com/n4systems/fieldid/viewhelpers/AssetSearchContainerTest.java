@@ -79,7 +79,7 @@ public class AssetSearchContainerTest extends SearchContainerTestCase {
 		assertEquals("05/02/1990", dateFormat.format(param.getValue()));
 		
 		assertEquals("identified_end", param2.getName());
-		assertEquals(Comparator.LE, param2.getComparator());
+		assertEquals(Comparator.LT, param2.getComparator());
 		assertEquals("09/09/2010", dateFormat.format(param2.getValue()));
 	}
 	
