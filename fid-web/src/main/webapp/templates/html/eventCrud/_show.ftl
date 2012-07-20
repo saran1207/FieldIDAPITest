@@ -107,7 +107,7 @@
 	<p> 
 		<label><@s.text name="label.scheduledon"/></label>
 		<span>
-			<#if event.schedule?exists>
+			<#if event.nextDate?exists>
 				${action.formatDateWithTime(event.nextDate, false)}
 			<#else>
 				<@s.text name="label.notscheduled"/>

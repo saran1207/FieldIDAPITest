@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.actions.event.viewmodel;
 
-import java.util.Date;
-
 import com.n4systems.fieldid.actions.api.LoaderFactoryProvider;
 import com.n4systems.fieldid.actions.api.UserDateFormatValidator;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
@@ -12,6 +10,8 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
+
+import java.util.Date;
 
 public class EventWebModel implements UserDateFormatValidator {
 
@@ -102,7 +102,6 @@ public class EventWebModel implements UserDateFormatValidator {
 		this.datePerformed = datePerformed;
 	}
 
-    @RequiredStringValidator(message = "", key = "error.mustbeadatetime")
     @CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadatetime", parameters = { @ValidationParameter(name = "usingTime", value = "true") })
     public void setNextDate(String nextDate) {
         this.nextDate = nextDate;
