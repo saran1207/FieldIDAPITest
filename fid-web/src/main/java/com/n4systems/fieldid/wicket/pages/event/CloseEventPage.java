@@ -15,7 +15,7 @@ import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -84,7 +84,17 @@ public class CloseEventPage extends FieldIDFrontEndPage {
             add(new TextArea<String>("comment", new PropertyModel<String>(this, "comment")));
 
             add(new Button("closeButton"));
-            add(new BookmarkablePageLink<Void>("cancelLink", ReportPage.class));
+
+            add(new Link<Void>("cancelLink") {
+                @Override
+                public void onClick() {
+                    if (returnPage!=null) {
+                        setResponsePage(returnPage);
+                    } else {
+                        setResponsePage(ReportPage.class);
+                    }
+                }
+            });
 
             if (activeStatuses.size()>0) {
                 status = activeStatuses.get(0);
