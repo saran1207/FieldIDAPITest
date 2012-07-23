@@ -6,7 +6,6 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.*;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
@@ -168,15 +167,17 @@ public class EventService extends FieldIdPersistenceService {
 		
 		NewObjectSelect select = new NewObjectSelect(CompletedEventsReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("completedDate", granularity, timeZone, fromDate));
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularityTimezoneAdjusted("completedDate", granularity, timeZone, fromDate));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
 		builder.addWhere(whereFromToForCompletedEvents(fromDate, toDate, "completedDate", timeZone));
+        builder.addSimpleWhere("eventState", Event.EventState.COMPLETED);
+
         Date sampleDate = fromDate;
 		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity, "completedDate", timeZone, sampleDate));
 		builder.applyFilter(new OwnerAndDownFilter(org));
-		if (status!=null) { 
+		if (status != null) {
 			builder.addSimpleWhere("status", status);
 		}
 		builder.addOrder("completedDate");
@@ -232,7 +233,7 @@ public class EventService extends FieldIdPersistenceService {
 
         NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("nextDate", granularity, timeZone, fromDate));
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity(granularity, "nextDate"));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		

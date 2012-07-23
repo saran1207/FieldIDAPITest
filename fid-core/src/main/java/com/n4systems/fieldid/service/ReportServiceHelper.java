@@ -48,10 +48,10 @@ public class ReportServiceHelper {
 	}
 
     public List<String> getSelectConstructorArgsForGranularity(String param, ChartGranularity granularity) {
-        return getSelectConstructorArgsForGranularity(param, granularity, null, null);
+        return getSelectConstructorArgsForGranularityTimezoneAdjusted(param, granularity, null, null);
     }
 
-    public List<String> getSelectConstructorArgsForGranularity(String param, ChartGranularity granularity, TimeZone timeZone, Date sampleDate) {
+    public List<String> getSelectConstructorArgsForGranularityTimezoneAdjusted(String param, ChartGranularity granularity, TimeZone timeZone, Date sampleDate) {
         // UGGH : hack.   this is a small, focused approach to fixing yet another time zone bug.
         // this should be reverted when a complete, system wide approach to handling time zones is implemented.
         // see WEB-2836
@@ -60,11 +60,15 @@ public class ReportServiceHelper {
         // the ultimate solution would be to have each individual queried value have its time zone converted but i don't know how
         // to do that in a query.
         String p = getTimeZoneAdjusted(param, timeZone, sampleDate);
-        return Lists.newArrayList(	"'"+granularity.toString()+"'",
-									"YEAR("+p+")",
-									"MONTH("+p+")",
-									"DAYOFMONTH("+p+")");
-	}
+        return getSelectConstructorArgsForGranularity(granularity, p);
+    }
+
+    public List<String> getSelectConstructorArgsForGranularity(ChartGranularity granularity, String paramName) {
+        return Lists.newArrayList("'" + granularity.toString() + "'",
+                "YEAR(" + paramName + ")",
+                "MONTH(" + paramName + ")",
+                "DAYOFMONTH(" + paramName + ")");
+    }
 
     private String getTimeZoneAdjusted(String p, TimeZone timeZone, Date sampleDate) {
         // note that we can't simply use timeZone.getRawOffset 'cause that doesn't take into effect
