@@ -104,6 +104,10 @@ public class EventReportCriteria extends SearchCriteria {
 	})
     private DateRange dueDateRange = new DateRange(RangeType.CUSTOM);
 
+    @ManyToOne
+    @JoinColumn(name="eventStatus")
+    private EventStatus eventStatus;
+
     public Location getLocation() {
         return location;
     }
@@ -298,6 +302,14 @@ public class EventReportCriteria extends SearchCriteria {
     public boolean sortingByOrganization() {
         ColumnMappingView sortColumn = getSortColumn();
         return sortColumn != null && EVENT_ORGANIZATION_COLUMN.equals(sortColumn.getId());
+    }
+
+    public EventStatus getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(EventStatus eventStatus) {
+        this.eventStatus = eventStatus;
     }
 
 }

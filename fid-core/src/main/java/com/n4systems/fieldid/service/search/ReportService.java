@@ -54,6 +54,7 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
         addSimpleTerm(searchTerms, "performedBy.id", getId(criteriaModel.getPerformedBy()));
         addSimpleTerm(searchTerms, "project.id", getId(criteriaModel.getJob()));
         addSimpleTerm(searchTerms, "status", criteriaModel.getResult());
+        addSimpleTerm(searchTerms, "eventStatus", criteriaModel.getEventStatus());
 
         if (criteriaModel.getEventState() == EventState.COMPLETE) {
             addSimpleTerm(searchTerms, "eventState", Event.EventState.COMPLETED);
