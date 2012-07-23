@@ -18,7 +18,6 @@ import com.n4systems.services.reporting.DashboardReportingService;
 
 import java.util.List;
 
-@SuppressWarnings("serial")
 public class EventCompletenessWidget extends ChartWidget<LocalDate,EventCompletenessWidgetConfiguration> implements HasDateRange {
 
 	@SpringBean

@@ -85,11 +85,14 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
 		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>(EventState.COMPLETE, Event.EventState.COMPLETED.getLabel(), completedScheduledEvents);
-		results.add(completedChartSeries);
+        results.add(completedChartSeries);
 		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>(EventState.ALL_STATES, EventState.ALL_STATES.getLabel(), allScheduledEvents);
 		results.add(allChartSeries);
+        // hack. because ALL isn't the exact same on reporting, we will just disable the click thru on it now.
+        //  COMPLETED is still clickable though by default.
+        allChartSeries.setClickable(false);
 
-		return results;
+        return results;
 	}
 
 	private Date getTo(ChartGranularity granularity, DateRange dateRange) {

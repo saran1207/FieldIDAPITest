@@ -61,7 +61,8 @@ public class FlotOptions<X> implements Serializable {
 		public String fillColor;
 		public Boolean steps;
 		public Integer lineWidth;
-	}
+        public Boolean clickable;  // custom attribute. handled by dashboard.js, not by FLOT engine.
+    }
 	
 	public static class Points  implements Serializable { 
 		public Boolean show;

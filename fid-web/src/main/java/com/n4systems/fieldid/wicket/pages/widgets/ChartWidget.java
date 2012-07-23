@@ -129,7 +129,6 @@ public abstract class ChartWidget<X extends Comparable,T extends WidgetConfigura
 		this.period = period;
 	}
 
-	@SuppressWarnings("rawtypes")
 	protected void addGranularityButton(final ChartGranularity granularity) {
         AjaxLink granularityButton = new AjaxLink(granularity.name().toLowerCase()) {
             @Override

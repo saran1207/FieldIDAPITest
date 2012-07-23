@@ -139,6 +139,10 @@ public class ChartSeries<X extends Comparable> implements Serializable {
 		return color;
 	}
 
+    public void setClickable(boolean clickable) {
+        this.lines.clickable = clickable;
+    }
+
 	@Override
 	public String toString() { 
 		return data.toString();

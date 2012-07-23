@@ -114,11 +114,24 @@ var chartWidgetFactory = (function() {
     
     function bindClick(id,options) {    	  
     	$('#'+id).bind("plotclick", function(event,pos,item) {
-    		if (item) {   // generate URL & parameters via options and arguments. 
+    		if (item && isClickableSeries(item)) {   // generate URL & parameters via options and arguments.
     			window.location=clickUrl(options, event, pos, item);
     		}
     	});
     }
+
+	function isClickableSeries(item) {
+		// hack : for now, the ALL series in the event completeness widget will not be clickthru even though the other series will be.
+		// currently, flot doesn't allow series by series disabling of clickthru so we have to do this.
+		if (item.series) {
+			if (item.series.lines) {
+				if ('clickable' in item.series.lines) {
+					return item.series.lines.clickable;
+				}
+			}
+		}
+		return true;
+	}
 
 	function clickUrl (options, event, pos, item) {
 		var transposed = options.bars.horizontal;
