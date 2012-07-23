@@ -13,7 +13,7 @@ class AddEventStatusToColumnMappings < ActiveRecord::Migration
     column_mapping.created = Time.now
     column_mapping.modified = Time.now
     column_mapping.label = 'label.event_status'
-    column_mapping.path_expression = 'eventStatus'
+    column_mapping.path_expression = 'eventStatus.name'
     column_mapping.sortable = true
     column_mapping.default_order = 10125
     column_mapping.column_mapping_group = grp_event_event_details
