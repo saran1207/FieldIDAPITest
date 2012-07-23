@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.service.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.remover.EventFrequenciesRemovalService;
 import com.n4systems.fieldid.service.remover.ScheduleListRemovalService;
@@ -14,6 +8,11 @@ import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AssociatedEventTypesService extends FieldIdPersistenceService {
 
@@ -47,7 +46,10 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
 
         for (AssociatedEventType associatedEventType : toBeRemoved) {
             eventFrequenciesRemovalService.remove(associatedEventType);
-            scheduleListRemovalService.remove(associatedEventType.getAssetType(), associatedEventType.getEventType(), EventSchedule.ScheduleStatusGrouping.NON_COMPLETE);
+            // NOTE : EventSchedules are now deprecated (july 2012). so we'll just logically delete them to keep data integrity so mobile app won't complain.
+            // the real work will be done on the Events table via deleteAssociatedEvents().
+            scheduleListRemovalService.archiveLegacySchedules(associatedEventType.getAssetType(), associatedEventType.getEventType());
+            scheduleListRemovalService.deleteAssociatedEvents(associatedEventType.getAssetType(), associatedEventType.getEventType());
             persistenceService.remove(associatedEventType);
         }
 
