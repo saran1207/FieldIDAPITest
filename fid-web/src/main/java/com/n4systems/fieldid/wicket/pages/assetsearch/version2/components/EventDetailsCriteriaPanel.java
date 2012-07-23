@@ -4,8 +4,10 @@ import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.PropertyRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.StatusChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
+import com.n4systems.fieldid.wicket.model.eventstatus.EventStatusesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
@@ -28,6 +30,7 @@ public class EventDetailsCriteriaPanel extends Panel {
 
     private DropDownChoice<EventType> eventTypeSelect;
     private EventTypesForTenantModel availableEventTypesModel;
+    private EventStatus foo;
 
     public EventDetailsCriteriaPanel(String id, IModel<?> model) {
         super(id, model);
@@ -46,8 +49,7 @@ public class EventDetailsCriteriaPanel extends Panel {
         availableEventTypesModel = new EventTypesForTenantModel(eventTypeGroupModel);
         add(eventTypeSelect = new DropDownChoice<EventType>("eventType", availableEventTypesModel, new EventTypeChoiceRenderer()));
         eventTypeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            @Override protected void onUpdate(AjaxRequestTarget target) {
                 onEventTypeOrGroupUpdated(target, eventTypeModel.getObject(), availableEventTypesModel.getObject());
             }
         });
@@ -59,6 +61,7 @@ public class EventDetailsCriteriaPanel extends Panel {
 
         add(new DropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
         add(new DropDownChoice<Status>("result", Status.getValidEventStates(), new StatusChoiceRenderer()).setNullValid(true));
+        add(new DropDownChoice<EventStatus>("eventStatus", new EventStatusesForTenantModel(), new PropertyRenderer<EventStatus>("displayName", "id")).setNullValid(true));
         add(new DropDownChoice<User>("performedBy", new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true));
         jobContainer.add(new DropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 
