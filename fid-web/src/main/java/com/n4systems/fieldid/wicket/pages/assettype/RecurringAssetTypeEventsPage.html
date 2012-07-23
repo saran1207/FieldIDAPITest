@@ -5,13 +5,13 @@
     <form wicket:id="form">
 
         <div wicket:id="createContainer" class="new-event">
-            <wicket:message key="label.capital_schedule_a"/>
-            <select wicket:id="eventType"></select>
-            <select wicket:id="recurrence"></select>
-            <wicket:message key="label.at"/>
-            <span wicket:id="timeContainer"><select class="time" wicket:id="time"/></span>
+            <p><wicket:message key="label.capital_schedule_a"/></p>
+            <span class="chosen"><select class="event-type" wicket:id="eventType"></select></span>
+            <span class="chosen"><select class="recurrence" wicket:id="recurrence"></select></span>
+            <p><wicket:message key="label.at"/></p>
+            <span class="chosen" wicket:id="timeContainer"><select class="time" wicket:id="time"/></span>
             <span wicket:id="dateTime"/>
-            <wicket:message key="label.for"/>
+            <p><wicket:message key="label.for"/></p>
             <div style="display:inline" wicket:id="org"></div>
             <a class="blue-submit" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
         </div>

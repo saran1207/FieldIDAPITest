@@ -7,6 +7,22 @@
     background: #f7f7f7;
 }
 
+.new-event .event-type {
+    width:175px;
+}
+
+.new-event .recurrence {
+    width:150px;
+}
+
+.new-event .chosen {
+    vertical-align: top;
+}
+
+.new-event p {
+    display: inline;
+}
+
 #contentHeader {
     margin-bottom:0px;
 }
@@ -14,6 +30,8 @@
 .new-event select, .new-event input {
     padding:4px;
 }
+
+
 
 .existing-events  {
     display:block;
@@ -45,11 +63,11 @@
 
 /*To fix quirks input alignment of JChosen select boxes.  they area too high without these hacks. */
 .new-event .chzn-container-single .chzn-single span {
-    display: inline;
+    /*display: inline;*/
 }
 
 .new-event .chzn-container-single .chzn-single {
-    overflow: visible;
+    /*overflow: hidden;*/
 }
 
 /* override with of date picker */
