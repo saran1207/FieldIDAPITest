@@ -1275,7 +1275,7 @@
 				<param name="actionName">masterEventEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-            <result name="success" type="redirect">/w/assetEvents?uniqueID=${uniqueID}</result>
+            <result name="success" type="redirect">/w/assetEvents?uniqueID=${assetId}</result>
 		</action>
 
 		<action name="eventBooks" method="list" class="com.n4systems.fieldid.actions.event.EventBookCrud">
