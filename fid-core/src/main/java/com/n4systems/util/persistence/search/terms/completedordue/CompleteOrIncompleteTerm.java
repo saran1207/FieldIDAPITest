@@ -29,7 +29,7 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
 
         WhereParameterGroup outerGroup = new WhereParameterGroup(getClass().getName()+".outer");
 
-        if (state == EventState.ALL) {
+        if (state == null || state == EventState.ALL) {
             createAndPopulateCompleteAndIncompleteOuterGroup(outerGroup);
         } else if (state == EventState.COMPLETE) {
             populateCompletedTerm(outerGroup);
