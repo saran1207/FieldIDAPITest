@@ -24,10 +24,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -95,7 +92,7 @@ public class EventService extends FieldIdPersistenceService {
 
 		QueryBuilder<UpcomingScheduledEventsRecord> builder = new QueryBuilder<UpcomingScheduledEventsRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
-		builder.setSelectArgument(new NewObjectSelect(UpcomingScheduledEventsRecord.class, "nextDate", "COUNT(*)"));
+		builder.setSelectArgument(new NewObjectSelect(UpcomingScheduledEventsRecord.class, "date(nextDate)", "COUNT(*)"));
 		
 		Date today = new PlainDate();
 		Date endDate = DateUtils.addDays(today, period);		
@@ -104,8 +101,8 @@ public class EventService extends FieldIdPersistenceService {
 		builder.addSimpleWhere("eventState", Event.EventState.OPEN);
 
 		builder.applyFilter(new OwnerAndDownFilter(owner));
-		builder.addGroupBy("nextDate");
-		return persistenceService.findAll(builder);		
+		builder.addGroupByClauses(Arrays.asList(new GroupByClause("date(nextDate)", true)));
+		return persistenceService.findAll(builder);
 	}
 
     private WhereClause<?> whereFromTo(Date fromDate, Date toDate, String property) {
