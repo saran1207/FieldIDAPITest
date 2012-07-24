@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.search;
 
+import com.n4systems.model.Event;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.AssetManager;
@@ -88,8 +89,8 @@ public class EventScheduleJobAssignment extends EventScheduleAction {
 		return job;
 	}
 	
-	public Long getJobForSchedule(String scheduleId) {
-		QueryBuilder<Long> jobId = new QueryBuilder<Long>(EventSchedule.class, getSecurityFilter());
+	public Long getJobForOpenEvent(String scheduleId) {
+		QueryBuilder<Long> jobId = new QueryBuilder<Long>(Event.class, getSecurityFilter());
 		jobId.setSimpleSelect("project.id").addLeftJoin("project", "project").addSimpleWhere("id", Long.valueOf(scheduleId));
 		return persistenceManager.find(jobId);
 	}

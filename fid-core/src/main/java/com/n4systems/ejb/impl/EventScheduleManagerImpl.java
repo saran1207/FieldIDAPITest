@@ -151,7 +151,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	}
 	
 	public Long getAssetIdForSchedule(Long scheduleId) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("asset.id");
 		builder.addSimpleWhere("id", scheduleId);
 		
@@ -159,19 +159,15 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	}
 	
 	public Long getEventTypeIdForSchedule(Long scheduleId) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
-		builder.setSimpleSelect("eventType.id");
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
+		builder.setSimpleSelect("type.id");
 		builder.addSimpleWhere("id", scheduleId);
 		
 		return persistenceManager.find(builder);
 	}
 
 	public Long getEventIdForSchedule(Long scheduleId) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
-		builder.setSimpleSelect("event.id");
-		builder.addSimpleWhere("id", scheduleId);
-		
-		return persistenceManager.find(builder);
+		return scheduleId;
 	}
 
 	

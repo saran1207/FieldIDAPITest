@@ -79,6 +79,9 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
     
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
     private Set<EventSchedule> schedules = new HashSet<EventSchedule>();
+
+    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
+    private Set<Event> events = new HashSet<Event>();
     
     @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     private Set<User> resources = new HashSet<User>();
@@ -256,4 +259,12 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 	public void setResources(Set<User> resources) {
 		this.resources = resources;
 	}
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
 }

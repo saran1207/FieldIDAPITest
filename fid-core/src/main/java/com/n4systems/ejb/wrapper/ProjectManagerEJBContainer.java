@@ -8,10 +8,7 @@ import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.impl.ProjectManagerImpl;
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
@@ -171,7 +168,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public Pager<EventSchedule> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<ScheduleStatus> statuses) {
+	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<Event.EventState> statuses) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

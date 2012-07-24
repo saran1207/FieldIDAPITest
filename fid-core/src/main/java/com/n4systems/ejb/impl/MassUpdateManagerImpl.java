@@ -381,41 +381,26 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	}
 
 	@Override
-	public Long assignToJob(List<Long> scheduleIds, Project project, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
+	public Long assignToJob(List<Long> openEventIds, Project project, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
 		Long result = 0L;
 
-		if (scheduleIds == null || scheduleIds.isEmpty()) {
+		if (openEventIds == null || openEventIds.isEmpty()) {
 			return 0L;
 		}
 
+        result = Long.valueOf(openEventIds.size());
+
 		try {
-			String updateQueryString = "UPDATE " + EventSchedule.class.getName() + " SET modified = :now ";
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("now", new Date());
-			if (project == null) {
-				updateQueryString += ", project = null";
-			} else {
-				updateQueryString += ", project = :project";
-				parameters.put("project", project);
-			}
 
-			if (userId == null) {
-				updateQueryString += ", modifiedBy = null ";
-			} else {
-				updateQueryString += ", modifiedBy = :modifiedBy ";
-				parameters.put("modifiedBy", em.find(User.class, userId));
-			}
-			updateQueryString += " WHERE id IN (:ids)";
-			parameters.put("ids", scheduleIds);
+            for (Long openEventId : openEventIds) {
+                Event event = persistenceManager.find(Event.class, openEventId);
 
-			Query updateQuery = em.createQuery(updateQueryString);
-			for (Map.Entry<String, Object> entry : parameters.entrySet()) {
-				updateQuery.setParameter(entry.getKey(), entry.getValue());
-			}
+                event.setProject(project);
+                event.getSchedule().setProject(project);
 
-			updateQuery.executeUpdate();
+                persistenceManager.update(event);
+            }
 
-			result = new Long(scheduleIds.size());
 		} catch (InvalidQueryException iqe) {
 			throw new UpdateFailureException(iqe);
 		}

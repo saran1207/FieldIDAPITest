@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
@@ -39,7 +40,7 @@ public class EventScheduleSearchContainer extends SearchContainer {
     private boolean returnToReportingAfterUpdate = false;
 	
 	public EventScheduleSearchContainer(SecurityFilter securityFilter, LoaderFactory loaderFactory, SystemSecurityGuard securityGuard) {
-		super(EventSchedule.class, "id", securityFilter, loaderFactory, securityGuard);
+		super(Event.class, "id", securityFilter, loaderFactory, securityGuard);
 	}
 
 	@Override
@@ -62,14 +63,15 @@ public class EventScheduleSearchContainer extends SearchContainer {
 		addSimpleTerm("asset.assetStatus.id", assetStatusId);
 		addSimpleTerm("asset.type.id", assetTypeId);
 		addSimpleTerm("asset.type.group.id", assetTypeGroupId);
-		addSimpleTerm("eventType.group.id", eventTypeGroupId);
-        addSimpleTerm("eventType.id", eventTypeId);
+		addSimpleTerm("type.group.id", eventTypeGroupId);
+        addSimpleTerm("type.id", eventTypeId);
 		addSimpleTerm("project.id", jobId);
 		addSimpleTermOrNull("project.id", jobAndNullId);
         // Exclude any 'dummy' schedule that wasn't actually scheduled -- nextDate will be null for these.
-        addNotNullTerm("nextDate");
+//        addNotNullTerm("nextDate");
+        addSimpleTerm("eventState", Event.EventState.OPEN);
 		addDateRangeTerm("nextDate", fromDate, toDate);
-		addSimpleInTerm("status", status.getScheduleStatuses());
+		addSimpleInTerm("eventState", status.getEventStates());
 		
 		addPredefinedLocationTerm();
 		addAssigUserTerm();

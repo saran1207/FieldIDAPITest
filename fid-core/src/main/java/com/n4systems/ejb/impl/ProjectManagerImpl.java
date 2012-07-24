@@ -1,5 +1,6 @@
 package com.n4systems.ejb.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,10 +11,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
@@ -77,18 +75,18 @@ public class ProjectManagerImpl implements ProjectManager {
 		return new Page<Asset>(selectQuery, countQuery, page, pageSize);
 	}
 	
-	public Pager<EventSchedule> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<EventSchedule.ScheduleStatus> statuses ) {
+	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<Event.EventState> statuses) {
 		Query countQuery = scheduleCountQuery(project, filter, statuses);
 		Query selectQuery = scheduleSelectQuery(project, filter, statuses);
-		return new Page<EventSchedule>(selectQuery, countQuery, page, pageSize);
+		return new Page<Event>(selectQuery, countQuery, page, pageSize);
 	}
 	
-	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<EventSchedule.ScheduleStatus> statuses) {
-		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "schedule");
-		String countQueryStr = "SELECT count( schedule ) FROM " + Project.class.getName() + " p , IN( p.schedules ) schedule where p = :project and " + filter.produceWhereClause();
+	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<Event.EventState> statuses) {
+		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "event");
+		String countQueryStr = "SELECT count( event ) FROM " + Project.class.getName() + " p , IN( p.events ) event where p = :project and " + filter.produceWhereClause();
 		
 		if (statuses != null && !statuses.isEmpty()) {
-			countQueryStr += " AND schedule.status IN (:statuses) ";
+			countQueryStr += " AND event.eventState IN (:statuses) ";
 		}
 		
 		Query countQuery = em.createQuery(countQueryStr).setParameter("project", project);
@@ -107,14 +105,14 @@ public class ProjectManagerImpl implements ProjectManager {
 		return filter;
 	}
 	
-	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<EventSchedule.ScheduleStatus> statuses) {
-		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "schedule");
-		String queryStr = "SELECT schedule FROM " + Project.class.getName() + " p , IN( p.schedules ) schedule where p = :project AND " + filter.produceWhereClause();
+	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<Event.EventState> statuses) {
+		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "event");
+		String queryStr = "SELECT event FROM " + Project.class.getName() + " p , IN( p.events ) event where p = :project AND " + filter.produceWhereClause();
 		if (statuses != null && !statuses.isEmpty()) {
-			queryStr += " AND schedule.status IN (:statuses) ";
+			queryStr += " AND event.eventState IN (:statuses) ";
 		}
 		
-		queryStr += " ORDER BY schedule.nextDate";
+		queryStr += " ORDER BY event.nextDate";
 		
 		Query selectQuery = em.createQuery(queryStr).setParameter("project", project);
 		filter.applyParameters(selectQuery);
@@ -125,12 +123,12 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 	
 	public Long getIncompleteSchedules(Project project, SecurityFilter filter) {
-		Query countQuery = scheduleCountQuery(project, filter, CompressedScheduleStatus.INCOMPLETE.getScheduleStatuses());
+		Query countQuery = scheduleCountQuery(project, filter, Arrays.asList(Event.EventState.OPEN));
 		return (Long)(countQuery.getSingleResult());
 	}
 	
 	public Long getCompleteSchedules(Project project, SecurityFilter filter) {
-		Query countQuery = scheduleCountQuery(project, filter, CompressedScheduleStatus.COMPLETE.getScheduleStatuses());
+        Query countQuery = scheduleCountQuery(project, filter, Arrays.asList(Event.EventState.COMPLETED));
 		return (Long)(countQuery.getSingleResult());
 	}
 

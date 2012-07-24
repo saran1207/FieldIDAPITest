@@ -4,10 +4,7 @@ import java.util.List;
 
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
 
@@ -18,7 +15,7 @@ public interface ProjectManager {
 
 	public Pager<Asset> getAssetsPaged(Project project, SecurityFilter filter, int page, int pageSize);
 
-	public Pager<EventSchedule> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<EventSchedule.ScheduleStatus> statuses);
+	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<Event.EventState> statuses);
 	
 	public Long getIncompleteSchedules(Project project, SecurityFilter filter);
 	

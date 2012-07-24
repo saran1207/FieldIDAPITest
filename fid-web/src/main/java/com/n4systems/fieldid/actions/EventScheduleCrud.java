@@ -290,4 +290,5 @@ public class EventScheduleCrud extends AbstractCrud {
 	public void setSearchId(String searchId) {
 		this.searchId = searchId;
 	}
+
 }

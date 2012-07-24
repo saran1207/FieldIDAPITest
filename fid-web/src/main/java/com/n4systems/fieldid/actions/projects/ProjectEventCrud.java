@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.projects;
 
+import com.n4systems.model.Event;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -25,11 +26,11 @@ public class ProjectEventCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
 	private ProjectManager projectManager;
-	private EventSchedule schedule;
+	private Event openEvent;
 
 	private Project project;
 
-	private Pager<EventSchedule> page;
+	private Pager<Event> page;
 
 	private CompressedScheduleStatus searchStatuses = CompressedScheduleStatus.ALL;
 
@@ -44,7 +45,7 @@ public class ProjectEventCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		schedule = persistenceManager.find(EventSchedule.class, uniqueId, getSecurityFilter());
+		openEvent = persistenceManager.find(Event.class, uniqueId, getSecurityFilter());
 	}
 	
 	@SkipValidation
@@ -64,15 +65,15 @@ public class ProjectEventCrud extends AbstractCrud {
 			addActionErrorText("error.noproject");
 			return MISSING;
 		}
-		if (schedule == null) {
+		if (openEvent == null) {
 			addActionErrorText("error.noschedule");
 			return MISSING;
 		}
 
 		try {
-			schedule.setProject(null);
-			persistenceManager.update(schedule, getSessionUser().getId());
-			logger.info(getLogLinePrefix() + "schedule " + schedule.getId() + " detached from " + project.getProjectID());
+			openEvent.setProject(null);
+			persistenceManager.update(openEvent, getSessionUser().getId());
+			logger.info(getLogLinePrefix() + "schedule " + openEvent.getId() + " detached from " + project.getProjectID());
 			addFlashMessageText("message.assetdetachedfromproject");
 			return SUCCESS;
 		} catch (Exception e) {
@@ -103,16 +104,16 @@ public class ProjectEventCrud extends AbstractCrud {
 		}
 	}
 
-	public Pager<EventSchedule> getPage() {
+	public Pager<Event> getPage() {
 		if (page == null) {
-			page = projectManager.getSchedulesPaged(project, getSecurityFilter(), getCurrentPage(), Constants.PAGE_SIZE, searchStatuses.getScheduleStatuses());
+			page = projectManager.getSchedulesPaged(project, getSecurityFilter(), getCurrentPage(), Constants.PAGE_SIZE, searchStatuses.getEventStates());
 		}
 
 		return page;
 	}
 
-	public EventSchedule getSchedule() {
-		return schedule;
+	public Event getSchedule() {
+		return openEvent;
 	}
 
 	public String getSearchStatuses() {

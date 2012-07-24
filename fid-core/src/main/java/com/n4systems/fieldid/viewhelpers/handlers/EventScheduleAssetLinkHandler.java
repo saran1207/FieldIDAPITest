@@ -3,6 +3,7 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.ServiceLocator;
@@ -10,7 +11,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 public class EventScheduleAssetLinkHandler extends WebOutputHandler {
 	private final PersistenceManager persistenceManager;
-	private final QueryBuilder<Long> builder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
+	private final QueryBuilder<Long> builder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
 	
 	public EventScheduleAssetLinkHandler(TableGenerationContext action) {
 		super(action);
