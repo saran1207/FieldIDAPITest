@@ -272,7 +272,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
         audit.setTenant(user.getTenant());
 
         for (Long id : ids) {
-			changeTarget = persistenceManager.find(EventSchedule.class, id).getEvent();
+			changeTarget = persistenceManager.find(Event.class, id);
             eventsUpdated.add(changeTarget);
 
 			for (String updateKey : updateKeys) {
