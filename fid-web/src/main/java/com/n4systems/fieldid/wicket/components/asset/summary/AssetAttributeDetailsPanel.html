@@ -1,5 +1,11 @@
 <wicket:panel>
     <h1><wicket:message key="label.details"/></h1>
+    <p wicket:enclosure align="manufactureCertificateLink">
+        <label><wicket:message key="label.manufacturecertificate"/></label>
+        <span>
+            <img src="/fieldid/images/pdf_small.gif"/><a wicket:id="manufactureCertificateLink"><wicket:message key="label.downloadnow"/></a>
+        </span>
+    </p>
     <p>
         <label><wicket:message key="label.assignedto"/></label>
         <span wicket:id="assignedTo"/>
