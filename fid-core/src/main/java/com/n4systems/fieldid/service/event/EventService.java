@@ -192,8 +192,8 @@ public class EventService extends FieldIdPersistenceService {
         builder1.applyFilter(new OwnerAndDownFilter(owner));
 
 		builder1.addWhere(whereFromTo(fromDate, toDate, "nextDate"));
-        
-		builder1.addGroupBy("status");
+		builder1.addGroupBy("eventState");
+
 		List<EventScheduleStatusCount> statusCounts = persistenceService.findAll(builder1);
 		
 		for (EventScheduleStatusCount statusCount: statusCounts ) {
