@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventStatus;
 import com.n4systems.model.user.User;
@@ -91,7 +92,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
                     if (returnPage!=null) {
                         setResponsePage(returnPage);
                     } else {
-                        setResponsePage(ReportPage.class);
+                        setResponsePage(RunLastReportPage.class);
                     }
                 }
             });
