@@ -15,6 +15,8 @@ import org.apache.wicket.model.PropertyModel;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class AssetAttributeDetailsPanel extends Panel {
@@ -37,8 +39,11 @@ public class AssetAttributeDetailsPanel extends Panel {
         NonWicketLink manufactureCertificateLink;
         add(manufactureCertificateLink = new NonWicketLink("manufactureCertificateLink", "/file/downloadManufacturerCert.action?uniqueID=" + asset.getId(), new AttributeModifier("target", "_blank")));
         manufactureCertificateLink.setVisible(manufacturerCertificateEnabled && asset.getType().isHasManufactureCertificate());
-        
-        add(new ListView<InfoOptionBean>("attributeListView", new ArrayList<InfoOptionBean>(infoOptions)) {
+
+        List<InfoOptionBean> infoOptionList = new ArrayList<InfoOptionBean>(infoOptions);
+        Collections.sort(infoOptionList);
+
+        add(new ListView<InfoOptionBean>("attributeListView", infoOptionList) {
             @Override
             protected void populateItem(ListItem<InfoOptionBean> item) {
                 item.add(new Label("attributelabel", new PropertyModel<Object>(item.getModelObject(), "infoField.name")));
