@@ -97,7 +97,7 @@ public class SubEventCrud extends EventCrud {
 			return MISSING;
 		}
 		reattachUploadedFiles();
-		event.setId(null);
+//		event.setId(null);
 		if (event.getResults() != null) {
 			restoreCriteriaResultsFromStoredEvent();
 		}
@@ -121,7 +121,7 @@ public class SubEventCrud extends EventCrud {
 		setUpAssignTo();
 		event.setAssetStatus(masterEventHelper.getAssetStatus());
 		
-		setScheduleId(masterEventHelper.getScheduleId());
+//		setScheduleId(masterEventHelper.getScheduleId());
 		reattachUploadedFiles();
 
 		getModifiableEvent().updateValuesToMatch(event);
