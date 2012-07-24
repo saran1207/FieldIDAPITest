@@ -10,8 +10,10 @@ import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventStatus;
+import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
@@ -105,11 +107,15 @@ public class CloseEventPage extends FieldIDFrontEndPage {
         @Override
         protected void onSubmit() {
             Event openEvent = openEventModel.getObject();
+            Asset asset = openEvent.getAsset();
             openEvent.setEventState(Event.EventState.CLOSED);
             openEvent.setDate(new Date());
             openEvent.setPerformedBy(resolvedBy);
             openEvent.setEventStatus(status);
             openEvent.setComments(comment);
+            openEvent.setOwner(asset.getOwner());
+            openEvent.setAdvancedLocation(asset.getAdvancedLocation());
+            openEvent.setAssignedTo(AssignedToUpdate.assignAssetToUser(asset.getAssignedUser()));
             persistenceService.update(openEvent);
             FieldIDSession.get().info(getString("message.event_closed"));
             if (returnPage!=null) {
