@@ -14,7 +14,7 @@ import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import com.n4systems.model.search.AssetSearchCriteria;
@@ -45,7 +45,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
     private List<ScheduleSummaryEntry> scheduleSummary;
     private boolean duplicateDetection = true;
     private boolean aSchedulePickerIsOpen = false;
-    private EventSchedule scheduleForAll = new EventSchedule();
+    private Event scheduleForAll = new Event();
 
     private WebMarkupContainer assetTypesListContainer;
     private SchedulePicker scheduleAllPicker;
@@ -120,12 +120,12 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
     }
 
     private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<EventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {
-        final Model<EventSchedule> eventScheduleModel = new Model<EventSchedule>(new EventSchedule());
+        final Model<Event> eventScheduleModel = new Model<Event>(new Event());
         return new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), eventScheduleModel, eventTypesForAssetType, jobsOptions, -400, 0) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 item.getModelObject().getSchedules().add(eventScheduleModel.getObject());
-                eventScheduleModel.setObject(new EventSchedule());
+                eventScheduleModel.setObject(new Event());
                 target.add(assetTypesListContainer);
                 updateSchedulePickerButtonsForPickerOpened(target, false);
             }
@@ -147,13 +147,13 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
     }
 
     private SchedulePicker createScheduleAllPicker(final IModel<List<EventType>> commonEventTypesModel, final EventJobsForTenantModel jobsOptions) {
-        return new SchedulePicker("scheduleAllPicker", new FIDLabelModel("label.schedule_all"), new PropertyModel<EventSchedule>(this, "scheduleForAll"), commonEventTypesModel, jobsOptions, 0, 0) {
+        return new SchedulePicker("scheduleAllPicker", new FIDLabelModel("label.schedule_all"), new PropertyModel<Event>(this, "scheduleForAll"), commonEventTypesModel, jobsOptions, 0, 0) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 for (ScheduleSummaryEntry scheduleSummaryEntry : scheduleSummary) {
                     scheduleSummaryEntry.getSchedules().add(scheduleForAll);
                 }
-                scheduleForAll = new EventSchedule();
+                scheduleForAll = new Event();
                 target.add(assetTypesListContainer);
                 updateSchedulePickerButtonsForPickerOpened(target, false);
             }
@@ -189,9 +189,9 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
             }
         };
         container.setOutputMarkupPlaceholderTag(true);
-        container.add(new ListView<EventSchedule>("schedules", new PropertyModel<List<EventSchedule>>(model, "schedules")) {
+        container.add(new ListView<Event>("schedules", new PropertyModel<List<Event>>(model, "schedules")) {
             @Override
-            protected void populateItem(final ListItem<EventSchedule> item) {
+            protected void populateItem(final ListItem<Event> item) {
                 ContextImage deleteImage = new ContextImage("deleteImage", "images/small-x.png");
                 deleteImage.add(new AjaxEventBehavior("onclick") {
                     @Override
@@ -202,8 +202,8 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
                 });
 
                 item.add(deleteImage);
-                item.add(new Label("eventTypeName", new PropertyModel<String>(item.getModel(), "eventType.name")));
-                item.add(new DateLabel("scheduledDate", new PropertyModel<Date>(item.getModel(), "nextStandardDate")).withTimeAllowed());
+                item.add(new Label("eventTypeName", new PropertyModel<String>(item.getModel(), "type.name")));
+                item.add(new DateLabel("scheduledDate", new PropertyModel<Date>(item.getModel(), "nextDate")).withTimeAllowed());
 
                 WebMarkupContainer jobDescriptionContainer = new WebMarkupContainer("jobDescriptionContainer");
                 jobDescriptionContainer.setVisible(item.getModelObject().getProject() != null);

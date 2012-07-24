@@ -15,7 +15,6 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
@@ -39,7 +38,7 @@ public class HeaderPanel extends Panel {
     
     private Boolean useContext;
 
-    private EventSchedule scheduleToAdd = new EventSchedule();
+    private Event scheduleToAdd = new Event();
 
     public HeaderPanel(String id, IModel<Asset> assetModel, Boolean isView, Boolean useContext) {
         super(id, assetModel);
@@ -89,17 +88,11 @@ public class HeaderPanel extends Panel {
         startEventLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent"));
 
         SchedulePicker schedulePicker;
-        add(schedulePicker = new SchedulePicker("schedulePicker", new FIDLabelModel("label.schedule_event"), new PropertyModel<EventSchedule>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel(), -487, 28) {
+        add(schedulePicker = new SchedulePicker("schedulePicker", new FIDLabelModel("label.schedule_event"), new PropertyModel<Event>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel(), -487, 28) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
-                Event schedule = new Event();
-                schedule.setAsset(scheduleToAdd.getAsset());
-                schedule.setType(scheduleToAdd.getEventType());
-                schedule.setProject(scheduleToAdd.getProject());
-                schedule.setNextDate(scheduleToAdd.getNextDate());
-                schedule.setTenant(FieldIDSession.get().getSessionUser().getTenant());
-                schedule.setStatus(null);
-                eventScheduleService.createSchedule(schedule);
+                scheduleToAdd.setTenant(FieldIDSession.get().getSessionUser().getTenant());
+                eventScheduleService.createSchedule(scheduleToAdd);
                 refreshContentPanel(target);
             }
         });

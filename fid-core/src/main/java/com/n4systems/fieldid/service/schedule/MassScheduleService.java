@@ -2,8 +2,8 @@ package com.n4systems.fieldid.service.schedule;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,25 +29,29 @@ public class MassScheduleService extends FieldIdPersistenceService {
     }
 
     private void performScheduleForAsset(ScheduleSummaryEntry scheduleSummary, Asset asset, boolean duplicateDetection) {
-        List<EventSchedule> existingSchedules = duplicateDetection ? scheduleService.findIncompleteSchedulesForAsset(asset) : Collections.<EventSchedule>emptyList() ;
+        List<Event> existingSchedules = duplicateDetection ? scheduleService.findIncompleteSchedulesForAsset(asset) : Collections.<Event>emptyList() ;
 
-        for (EventSchedule eventSchedule : scheduleSummary.getSchedules()) {
+        for (Event eventSchedule : scheduleSummary.getSchedules()) {
             if (!duplicateDetection || !duplicateScheduleAlreadyExists(eventSchedule, existingSchedules)) {
                 // Copy and save the new schedule
-                EventSchedule newSchedule = new EventSchedule();
-                newSchedule.setEventType(eventSchedule.getEventType());
+                Event newSchedule = new Event();
+                newSchedule.setType(eventSchedule.getEventType());
                 newSchedule.setNextDate(eventSchedule.getNextDate());
                 newSchedule.setProject(eventSchedule.getProject());
                 newSchedule.setAsset(asset);
                 newSchedule.setTenant(getCurrentTenant());
+                newSchedule.setOwner(asset.getOwner());
+                EventGroup eventGroup = new EventGroup();
+                newSchedule.setGroup(eventGroup);
+                persistenceService.save(eventGroup);
                 persistenceService.save(newSchedule);
             }
         }
     }
 
-    private boolean duplicateScheduleAlreadyExists(EventSchedule eventSchedule, List<EventSchedule> existingSchedules) {
+    private boolean duplicateScheduleAlreadyExists(Event eventSchedule, List<Event> existingSchedules) {
 
-        for (EventSchedule existingSchedule : existingSchedules) {
+        for (Event existingSchedule : existingSchedules) {
             if (existingSchedule.getNextDate().equals(eventSchedule.getNextDate()) && existingSchedule.getEventType().equals(eventSchedule.getEventType())) {
                 if (existingSchedule.getProject() == null) {
                     if (eventSchedule.getProject() == null)

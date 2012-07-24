@@ -4,7 +4,7 @@ import com.n4systems.fieldid.service.schedule.ScheduleService;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Event;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -17,37 +17,37 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EventSchedulePicker extends FormComponentPanel<EventSchedule> {
+public class EventSchedulePicker extends FormComponentPanel<Event> {
 
     @SpringBean
     private ScheduleService scheduleService;
 
     private IModel<Asset> asset;
 
-    public EventSchedulePicker(String id, IModel<EventSchedule> eventSchedule, IModel<Asset> asset) {
+    public EventSchedulePicker(String id, IModel<Event> eventSchedule, IModel<Asset> asset) {
         super(id, eventSchedule);
         this.asset = asset;
 
-        add(new DropDownChoice<EventSchedule>("eventSchedule", eventSchedule, createSchedulesListModel(asset), createScheduleChoiceRenderer()).setNullValid(true));
+        add(new DropDownChoice<Event>("eventSchedule", eventSchedule, createSchedulesListModel(asset), createScheduleChoiceRenderer()).setNullValid(true));
     }
     
-    private IModel<List<EventSchedule>> createSchedulesListModel(final IModel<Asset> assetModel) {
-        return new LoadableDetachableModel<List<EventSchedule>>() {
+    private IModel<List<Event>> createSchedulesListModel(final IModel<Asset> assetModel) {
+        return new LoadableDetachableModel<List<Event>>() {
             @Override
-            protected List<EventSchedule> load() {
-                List<EventSchedule> pickableSchedulesWithNewAndNone = new ArrayList<EventSchedule>();
-                List<EventSchedule> incompleteSchedules = scheduleService.findIncompleteSchedulesForAsset(assetModel.getObject());
-                pickableSchedulesWithNewAndNone.add(new EventSchedule());
+            protected List<Event> load() {
+                List<Event> pickableSchedulesWithNewAndNone = new ArrayList<Event>();
+                List<Event> incompleteSchedules = scheduleService.findIncompleteSchedulesForAsset(assetModel.getObject());
+                pickableSchedulesWithNewAndNone.add(new Event());
                 pickableSchedulesWithNewAndNone.addAll(incompleteSchedules);
                 return pickableSchedulesWithNewAndNone;
             }
         };
     }
     
-    private IChoiceRenderer<EventSchedule> createScheduleChoiceRenderer() {
-        return new IChoiceRenderer<EventSchedule>() {
+    private IChoiceRenderer<Event> createScheduleChoiceRenderer() {
+        return new IChoiceRenderer<Event>() {
             @Override
-            public Object getDisplayValue(EventSchedule object) {
+            public Object getDisplayValue(Event object) {
                 if (object.getId() == null) {
                     return new FIDLabelModel("label.createanewscheduled").getObject();
                 }
@@ -55,7 +55,7 @@ public class EventSchedulePicker extends FormComponentPanel<EventSchedule> {
             }
 
             @Override
-            public String getIdValue(EventSchedule object, int index) {
+            public String getIdValue(Event object, int index) {
                 if (object.getId() == null) {
                     return "0";
                 }

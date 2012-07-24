@@ -47,7 +47,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 public class EditEventPage extends FieldIDFrontEndPage {
     
@@ -59,9 +62,9 @@ public class EditEventPage extends FieldIDFrontEndPage {
 
     private AbstractEvent event;
 
-    private List<EventSchedule> schedules = new ArrayList<EventSchedule>();
-    private EventSchedule scheduleToAdd = new EventSchedule();
-    private EventSchedule selectedSchedule;
+    private List<Event> schedules = new ArrayList<Event>();
+    private Event scheduleToAdd = new Event();
+    private Event selectedSchedule;
 
     public EditEventPage() {
         event = eventService.createNewMasterEvent(16091209L, 204L);
@@ -112,11 +115,11 @@ public class EditEventPage extends FieldIDFrontEndPage {
             });
             add(schedulesContainer);
 
-            add(new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), new PropertyModel<EventSchedule>(EditEventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel(), 0, 0) {
+            add(new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), new PropertyModel<Event>(EditEventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel(), 0, 0) {
                 @Override
                 protected void onPickComplete(AjaxRequestTarget target) {
                     schedules.add(scheduleToAdd);
-                    scheduleToAdd = new EventSchedule();
+                    scheduleToAdd = new Event();
                     target.add(schedulesContainer);
                 }
             });
@@ -132,7 +135,7 @@ public class EditEventPage extends FieldIDFrontEndPage {
             DateTimePicker datePicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true);
             NewOrExistingEventBook newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
             
-            add(new EventSchedulePicker("schedule", new PropertyModel<EventSchedule>(EditEventPage.this, "selectedSchedule"), new PropertyModel<Asset>(event, "asset")));
+            add(new EventSchedulePicker("schedule", new PropertyModel<Event>(EditEventPage.this, "selectedSchedule"), new PropertyModel<Asset>(event, "asset")));
 
             AttributesEditPanel attributesEditPanel = new AttributesEditPanel("eventAttributes", new Model<AbstractEvent>(event));
 
@@ -181,7 +184,7 @@ public class EditEventPage extends FieldIDFrontEndPage {
     private List<EventScheduleBundle> createEventScheduleBundles() {
         List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
 
-        for (EventSchedule sched : schedules) {
+        for (Event sched : schedules) {
             EventScheduleBundle bundle = new EventScheduleBundle(sched.getAsset(), sched.getEventType(), sched.getProject(), sched.getNextDate());
             scheduleBundles.add(bundle );
         }
@@ -227,9 +230,9 @@ public class EditEventPage extends FieldIDFrontEndPage {
     private void doAutoSchedule() {
         AssetTypeSchedule schedule = event.getAsset().getType().getSchedule(event.getType(), ((Event) event).getOwner());
         schedules.clear();
-        EventSchedule eventSchedule = new EventSchedule();
+        Event eventSchedule = new Event();
         eventSchedule.setAsset(event.getAsset());
-        eventSchedule.setEventType(event.getType());
+        eventSchedule.setType(event.getType());
         eventSchedule.setNextDate(schedule.getNextDate(((Event) event).getDate()));
         schedules.add(eventSchedule);
     }

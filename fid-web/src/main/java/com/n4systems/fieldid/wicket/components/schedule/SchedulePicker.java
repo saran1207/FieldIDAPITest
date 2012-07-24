@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
@@ -26,12 +26,12 @@ import java.util.List;
 
 public class SchedulePicker extends Panel {
 
-    private IModel<EventSchedule> scheduleModel;
+    private IModel<Event> scheduleModel;
     private ScheduleForm scheduleForm;
     private int dx;
     private int dy;
 
-    public SchedulePicker(String id, IModel<String> openPickerLabel, IModel<EventSchedule> scheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions, int dx, int dy) {
+    public SchedulePicker(String id, IModel<String> openPickerLabel, IModel<Event> scheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions, int dx, int dy) {
         super(id);
         this.scheduleModel = scheduleModel;
         this.dx = dx;
@@ -41,14 +41,14 @@ public class SchedulePicker extends Panel {
         add(scheduleForm = new ScheduleForm("scheduleForm", openPickerLabel, scheduleModel, eventTypeOptions, jobsOptions));
     }
 
-    class ScheduleForm extends Form<EventSchedule> {
+    class ScheduleForm extends Form<Event> {
 
         FIDFeedbackPanel feedbackPanel;
         AjaxButton openDialogButton;
         WebMarkupContainer editorContainer;
         DateTimePicker dateTimePicker;
 
-        public ScheduleForm(String id, IModel<String> openPickerLabel, final IModel<EventSchedule> eventScheduleModel, final IModel<List<EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
+        public ScheduleForm(String id, IModel<String> openPickerLabel, final IModel<Event> eventScheduleModel, final IModel<List<EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
             super(id, eventScheduleModel);
 
             add(openDialogButton = new AjaxButton("openDialogButton") {
@@ -79,7 +79,7 @@ public class SchedulePicker extends Panel {
             editorContainer.setVisible(false);
             editorContainer.setOutputMarkupPlaceholderTag(true);
 
-            editorContainer.add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "nextStandardDate"), true));
+            editorContainer.add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "nextDate"), true));
             dateTimePicker.getDateTextField().setRequired(true);
 
             DropDownChoice<EventType> eventTypeSelect = new DropDownChoice<EventType>("eventTypeSelect", new PropertyModel<EventType>(eventScheduleModel, "eventType"), eventTypeOptions, new ListableChoiceRenderer<EventType>());
@@ -126,11 +126,11 @@ public class SchedulePicker extends Panel {
 
         }
 
-        private void setDefaultEventType(IModel<EventSchedule> eventScheduleModel, IModel<List<EventType>> eventTypeOptions) {
+        private void setDefaultEventType(IModel<Event> eventScheduleModel, IModel<List<EventType>> eventTypeOptions) {
             List<EventType> availableEventTypes = eventTypeOptions.getObject();
-            EventSchedule eventSchedule = eventScheduleModel.getObject();
-            if (eventSchedule.getEventType() == null && availableEventTypes.size() > 0) {
-                eventSchedule.setEventType(availableEventTypes.get(0));
+            Event eventSchedule = eventScheduleModel.getObject();
+            if (eventSchedule.getType() == null && availableEventTypes.size() > 0) {
+                eventSchedule.setType(availableEventTypes.get(0));
             }
         }
 
