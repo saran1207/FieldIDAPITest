@@ -62,13 +62,15 @@ public class DateTimePicker extends Panel {
                             locale = Locale.getDefault();
                         }
                         SimpleDateFormat format = new SimpleDateFormat(DateTimePicker.this.getDateFormat(), locale);
-                        format.setTimeZone(FieldIDSession.get().getSessionUser().getTimeZone());
+//                        format.setTimeZone(FieldIDSession.get().getSessionUser().getTimeZone());
                         return format;
                     }
                     // strip off hours if "allDay"
                     @Override public Date convertToObject(String value, Locale locale) {
                         Date date = super.convertToObject(value, locale);
-                        return allDay ? new LocalDate(date).toDate() : date;
+                        return allDay ?
+                            new LocalDate(date).toDate() :
+                            date;
                     }
                 };
             }
