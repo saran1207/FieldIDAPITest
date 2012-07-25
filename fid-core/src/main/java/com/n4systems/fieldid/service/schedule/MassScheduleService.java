@@ -52,14 +52,18 @@ public class MassScheduleService extends FieldIdPersistenceService {
     private boolean duplicateScheduleAlreadyExists(Event eventSchedule, List<Event> existingSchedules) {
 
         for (Event existingSchedule : existingSchedules) {
-            if (existingSchedule.getNextDate().equals(eventSchedule.getNextDate()) && existingSchedule.getEventType().equals(eventSchedule.getEventType())) {
-                if (existingSchedule.getProject() == null) {
-                    if (eventSchedule.getProject() == null)
-                        return true;
-                }
-
-                if (existingSchedule.getProject().equals(eventSchedule.getProject()))
+            // CAVEAT :
+            //    existingSchedule.getNextDate().equals(eventSchedule.getNextDate()) will return false but         <---what code used to be
+            //    eventSchedule.getNextDate().equals(existingSchedule.getNextDate()) will return TRUE!
+            // this is because existingSchedule has a Timestamp (read in via hibernate, extends Date) and eventSchedule has a plain ole Date.
+            // the moral of the story is don't count on our pal symmetry when using Timestamps & Dates equality checking.
+            // @see http://blogs.sourceallies.com/2012/02/hibernate-date-vs-timestamp/ where he talks about "Timestamp does violate symmetry".
+            if (eventSchedule.getNextDate().equals(existingSchedule.getNextDate()) && existingSchedule.getEventType().equals(eventSchedule.getEventType())) {
+                if (existingSchedule.getProject() == null && eventSchedule.getProject() == null) {
                     return true;
+                } else if (existingSchedule.getProject().equals(eventSchedule.getProject())) {
+                    return true;
+                }
             }
         }
         return false;

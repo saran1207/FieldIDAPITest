@@ -8,11 +8,15 @@
 }
 
 .new-event .event-type {
-    width:175px;
+    width:120px;
 }
 
 .new-event .recurrence {
-    width:150px;
+    width:175px;
+}
+
+.new-event .time {
+    width:100px;
 }
 
 .new-event .chosen {

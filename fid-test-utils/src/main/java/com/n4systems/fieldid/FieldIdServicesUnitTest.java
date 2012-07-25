@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -29,7 +31,12 @@ public class FieldIdServicesUnitTest extends FieldIdUnitTest {
 
 	private static final Logger logger = Logger.getLogger(FieldIdServicesUnitTest.class);
 
-	public FieldIdServicesUnitTest() {
+    protected LocalDate jan1_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
+    protected LocalDate jan1_2015 = new LocalDate().withYear(2015).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
+    protected LocalDate feb29_2012 = new LocalDate().withYear(2012).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(29);
+    protected LocalDate dec27_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.DECEMBER).withDayOfMonth(27);
+
+    public FieldIdServicesUnitTest() {
 		super();
 	}
 

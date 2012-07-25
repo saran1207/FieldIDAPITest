@@ -39,7 +39,6 @@ public class DateTimePicker extends Panel {
     private CheckBox allDayCheckbox;
     private boolean includeTime;
     private boolean allDay = true;
-    private IModel<Date> model;
     private Integer monthsDisplayed = 3;
 
     public DateTimePicker(String id, IModel<Date> dateModel) {
@@ -50,7 +49,6 @@ public class DateTimePicker extends Panel {
         super(id);
 
         this.includeTime = includeTime;
-        this.model = dateModel;
 
         setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
@@ -63,12 +61,19 @@ public class DateTimePicker extends Panel {
                         if (locale == null) {
                             locale = Locale.getDefault();
                         }
-                        return new SimpleDateFormat(DateTimePicker.this.getDateFormat(), locale);
+                        SimpleDateFormat format = new SimpleDateFormat(DateTimePicker.this.getDateFormat(), locale);
+                        format.setTimeZone(FieldIDSession.get().getSessionUser().getTimeZone());
+                        return format;
+                    }
+                    // strip off hours if "allDay"
+                    @Override public Date convertToObject(String value, Locale locale) {
+                        Date date = super.convertToObject(value, locale);
+                        return allDay ? new LocalDate(date).toDate() : date;
                     }
                 };
             }
 
-        }) ;
+        });
         dateTextField.setOutputMarkupId(true);
 
         add(allDayCheckbox = new AjaxCheckBox("allDay", new PropertyModel<Boolean>(this, "allDay")) {
@@ -231,6 +236,7 @@ public class DateTimePicker extends Panel {
             }
         }
     }
+
 
 }
 
