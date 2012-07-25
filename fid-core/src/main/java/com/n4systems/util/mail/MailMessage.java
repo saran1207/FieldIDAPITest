@@ -55,7 +55,7 @@ public class MailMessage implements Serializable {
 		}
 		
 		public String getContentTypeString() {
-			return contentTypeString;
+			return contentTypeString + "; charset=utf-8";
 		}
 		
 		public boolean isHtml() {
@@ -159,7 +159,7 @@ public class MailMessage implements Serializable {
 	
 	public Message compileMessage(Session session) throws MessagingException {
 		message = new MimeMessage(session);
-		
+
 		message.setFrom(stringToAddress(getFromAddress()));
 		message.setSubject(getFullSubject());
 		
