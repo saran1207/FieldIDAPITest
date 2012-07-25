@@ -10,9 +10,10 @@ import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -40,21 +41,27 @@ public class RecurringSchedulesTask extends ScheduledTask{
         LocalDate now = LocalDate.now();
         LocalDate futureDate = now.plusDays(RECURRING_EVENT_BUFFER_SIZE);
 
-        List<RecurringAssetTypeEvent> list = persistenceManager.findAll(RecurringAssetTypeEvent.class);
+        List<RecurringAssetTypeEvent> list = getRecurringAssetTypeEvents();
         for(RecurringAssetTypeEvent event: list) {
             logger.info(event.getEventType().getName() + " " + event.getRecurrence());
-            for (DateTime dateTime : event.getRecurrence().getScheduledTimes(LocalDate.now(), futureDate)) {
+            for (LocalDateTime dateTime : event.getRecurrence().getScheduledTimes(LocalDate.now(), futureDate)) {
                 scheduleAnEventFor(event, dateTime);
             }
         }
     }
 
-    private void scheduleAnEventFor(RecurringAssetTypeEvent event, DateTime futureDate) {
+    private List<RecurringAssetTypeEvent> getRecurringAssetTypeEvents() {
+        QueryBuilder<RecurringAssetTypeEvent> query = new QueryBuilder<RecurringAssetTypeEvent>(RecurringAssetTypeEvent.class, new OpenSecurityFilter());
+        return persistenceManager.findAll(query);
+
+    }
+
+    private void scheduleAnEventFor(RecurringAssetTypeEvent event, LocalDateTime futureDate) {
 
         List<Asset> assetsToSchedule = getAssetsByAssetType(event);
 
         for (Asset asset : assetsToSchedule) {
-            if(checkIfScheduleExists(asset, event, futureDate)) {
+            if(!checkIfScheduleExists(asset, event, futureDate)) {
                 Event schedule = new Event();
                 schedule.setAsset(asset);
                 schedule.setType(event.getEventType());
@@ -67,13 +74,16 @@ public class RecurringSchedulesTask extends ScheduledTask{
          
     }
 
-    private boolean checkIfScheduleExists(Asset asset, RecurringAssetTypeEvent event, DateTime futureDate) {
+    private boolean checkIfScheduleExists(Asset asset, RecurringAssetTypeEvent event, LocalDateTime futureDate) {
         QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
         query.addWhere(WhereClauseFactory.create("asset", asset));
         query.addWhere(WhereClauseFactory.create("recurringEvent", event));
-        query.addWhere(WhereClauseFactory.create("nextDate", futureDate.toDate()));
 
-        return persistenceManager.find(query) != null;
+        //A simple equals does not work due to comparison problems comparing Timestamps and Date see java.sql.Timestamp
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "nextDate", futureDate.minusMillis(1).toDate()));
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LE, "to", "nextDate", futureDate.toDate()));
+
+        return persistenceManager.findCount(query) > 0;
     }
 
 

@@ -3,8 +3,8 @@ package com.n4systems.model;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import javax.persistence.*;
@@ -82,14 +82,14 @@ public class Recurrence implements Serializable {
     }
 
     // CAVEAT : this is on a day granularity (i.e. from & to don't currently support hours).
-    public List<DateTime> getScheduledTimes(LocalDate from, LocalDate to) {
-        List<DateTime> result = Lists.newArrayList();
+    public List<LocalDateTime> getScheduledTimes(LocalDate from, LocalDate to) {
+        List<LocalDateTime> result = Lists.newArrayList();
         from = from.minusDays(1);
 
-        DateTime fromDateTime = new DateTime(from.toDate());
+        LocalDateTime fromDateTime = new LocalDateTime(from.toDate());
         LocalDate nextDate = type.getNext(from, day);
         while (!nextDate.isAfter(to)) {
-            DateTime dateTime = new DateTime(nextDate.toDate()).withHourOfDay(hour).withMinuteOfHour(minute);
+            LocalDateTime dateTime = new LocalDateTime(nextDate.toDate()).withHourOfDay(hour).withMinuteOfHour(minute);
             if (!dateTime.isBefore(fromDateTime)) {
                 result.add(dateTime);
             }

@@ -8,8 +8,8 @@ import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import java.util.List;
 
@@ -65,7 +65,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
         for (Asset asset:assets) {
             Recurrence recurrence = recurringEvent.getRecurrence();
             // TODO DD : Do i really need to save EventGroup???? we don't use this info any more?
-            for (DateTime nextDate:recurrence.getScheduledTimes(LocalDate.now(), endDate)) {
+            for (LocalDateTime nextDate:recurrence.getScheduledTimes(LocalDate.now(), endDate)) {
                 Event event = new Event();
                 event.setNextDate(nextDate.toDate());
                 event.setEventState(Event.EventState.OPEN);
