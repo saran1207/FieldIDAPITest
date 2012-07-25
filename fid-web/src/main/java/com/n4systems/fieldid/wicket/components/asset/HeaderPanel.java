@@ -38,7 +38,7 @@ public class HeaderPanel extends Panel {
     
     private Boolean useContext;
 
-    private Event scheduleToAdd = new Event();
+    private Event scheduleToAdd;
 
     public HeaderPanel(String id, IModel<Asset> assetModel, Boolean isView, Boolean useContext) {
         super(id, assetModel);
@@ -87,6 +87,8 @@ public class HeaderPanel extends Panel {
         add(startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton blueButton")));
         startEventLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent"));
 
+        scheduleToAdd = createNewSchedule(asset);
+
         SchedulePicker schedulePicker;
         add(schedulePicker = new SchedulePicker("schedulePicker", new FIDLabelModel("label.schedule_event"), new PropertyModel<Event>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel(), -487, 28) {
             @Override
@@ -94,12 +96,17 @@ public class HeaderPanel extends Panel {
                 scheduleToAdd.setTenant(FieldIDSession.get().getSessionUser().getTenant());
                 eventScheduleService.createSchedule(scheduleToAdd);
                 refreshContentPanel(target);
+                scheduleToAdd = createNewSchedule(asset);
             }
         });
 
         schedulePicker.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent"));
+    }
 
-        scheduleToAdd.setAsset(asset);
+    private Event createNewSchedule(Asset asset) {
+        Event schedule = new Event();
+        schedule.setAsset(asset);
+        return schedule;
     }
 
     protected void refreshContentPanel(AjaxRequestTarget target) {};
@@ -129,4 +136,5 @@ public class HeaderPanel extends Panel {
     public boolean isInVendorContext() {
         return (FieldIDSession.get().getVendorContext() != null && useContext );
     }
+
 }
