@@ -28,6 +28,9 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	private List<Boolean> eventTypeAssets;
 	private List<AssetType> assetTypes;
 
+    private List<AssociatedEventType> associatedEventTypes;
+    private List<AssociatedEventType> associatedAssetTypes;
+
     private AssociatedEventTypesService associatedEventTypesService;
 
 	public AssociatedEventTypeCrud(PersistenceManager persistenceManager, AssociatedEventTypesService associatedEventTypesService) {
@@ -179,14 +182,14 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	 * @return the eventTypeAssets
 	 */
 	public List<Boolean> getEventTypeAssetTypes(){
-		if (eventTypeAssets == null){
+		if (eventTypeAssets == null) {
 			eventTypeAssets = new ArrayList<Boolean>();
 			for (AssetType assetType : getAssetTypes()){
 				boolean found=false;
-				for(AssociatedEventType associatedAssetType : associatedAssetTypes()){
-					if(assetType.equals(associatedAssetType.getAssetType())){
+				for (AssociatedEventType associatedAssetType : associatedAssetTypes()) {
+					if (assetType.equals(associatedAssetType.getAssetType())){
 						eventTypeAssets.add(true);
-						found=true;
+						found = true;
 						break;
 					}
 				}
@@ -199,11 +202,17 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	}
 
 	private List<AssociatedEventType> associatedEventTypes() {
-		return getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(assetType).load();
+        if (associatedEventTypes == null) {
+            associatedEventTypes = getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(assetType).load();
+        }
+		return associatedEventTypes;
 	}
 	
-	private List<AssociatedEventType> associatedAssetTypes(){
-		return getLoaderFactory().createAssociatedEventTypesLoader().setEventType(eventType).load();
+    private List<AssociatedEventType> associatedAssetTypes() {
+        if (associatedAssetTypes == null) {
+            associatedAssetTypes = getLoaderFactory().createAssociatedEventTypesLoader().setEventType(eventType).load();
+        }
+		return associatedAssetTypes;
 	}
 
 	public void setAssetTypeEventTypes(List<Boolean> assetTypeEvents) {
@@ -219,11 +228,11 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	 */
 	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
-			QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
+            QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
 			queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 			queryBuilder.addOrder("name");
 			eventTypes = persistenceManager.findAll(queryBuilder);
-		}
+        }
 		return eventTypes;
 	}
 
