@@ -9,7 +9,7 @@
 	<h1><@s.text name="label.messagetitle"/></h1>
 	
 	<div id="messageHeader">
-		<#assign tenant = message.sender>
+		<#assign tenant = message.sender.tenant>
 		<#include "../common/_displayTenantLogo.ftl"/>
 		<div class="viewSection smallViewSection">
 			<p id="subject">${message.subject?html}</p>
