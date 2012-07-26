@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.asset;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.taskscheduling.task.RecurringSchedulesTask;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -60,10 +61,9 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     }
 
-    public void deleteRecurringEvent(AssetType assetType, RecurringAssetTypeEvent recurringEvent) {
+    public void purgeRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
         removeScheduledEvents(recurringEvent);
-        recurringEvent.archiveEntity();
-        persistenceService.update(recurringEvent);
+        deleteRecurringEvent(recurringEvent);
     }
 
     /**
@@ -132,5 +132,18 @@ public class AssetTypeService extends FieldIdPersistenceService {
     }
 
 
+    public void deleteRecurringEvent(AssetType assetType, EventType eventType) {
+        QueryBuilder<RecurringAssetTypeEvent> query = new QueryBuilder<RecurringAssetTypeEvent>(RecurringAssetTypeEvent.class, new OpenSecurityFilter());
+        query.addSimpleWhere("assetType", assetType);
+        query.addSimpleWhere("eventType", eventType);
+        List<RecurringAssetTypeEvent> recurringEvents = persistenceService.findAll(query);
+        for (RecurringAssetTypeEvent recurringEvent:recurringEvents) {
+            deleteRecurringEvent(recurringEvent);
+        }
+    }
 
+    private void deleteRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
+        recurringEvent.archiveEntity();
+        persistenceService.update(recurringEvent);
+    }
 }

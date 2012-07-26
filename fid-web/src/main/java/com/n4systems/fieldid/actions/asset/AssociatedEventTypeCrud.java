@@ -135,7 +135,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	}
 	
 	/**
-	 * @param assetType
+	 * @param eventType
 	 *            the assetType to set
 	 */
 	public void setEventTypeId(Long eventType) {

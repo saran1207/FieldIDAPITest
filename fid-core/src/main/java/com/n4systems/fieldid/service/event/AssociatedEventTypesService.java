@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.remover.EventFrequenciesRemovalService;
 import com.n4systems.fieldid.service.remover.ScheduleListRemovalService;
 import com.n4systems.model.AssetType;
@@ -21,6 +22,9 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
 
     @Autowired
     private ScheduleListRemovalService scheduleListRemovalService;
+
+    @Autowired
+    private AssetTypeService assetTypeService;
 
     @Transactional
     public List<AssociatedEventType> getAssociatedEventTypes(AssetType assetType, EventType eventType) {
@@ -48,6 +52,7 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
             eventFrequenciesRemovalService.remove(associatedEventType);
             // NOTE : EventSchedules are now deprecated (july 2012). so we'll just logically delete them to keep data integrity so mobile app won't complain.
             // the real work will be done on the Events table via deleteAssociatedEvents().
+            assetTypeService.deleteRecurringEvent(assetType, associatedEventType.getEventType());
             scheduleListRemovalService.archiveLegacySchedules(associatedEventType.getAssetType(), associatedEventType.getEventType());
             scheduleListRemovalService.deleteAssociatedEvents(associatedEventType.getAssetType(), associatedEventType.getEventType());
             persistenceService.remove(associatedEventType);
@@ -75,7 +80,8 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
             eventFrequenciesRemovalService.remove(associatedEventType);
             scheduleListRemovalService.remove(associatedEventType.getAssetType(), associatedEventType.getEventType(), EventSchedule.ScheduleStatusGrouping.NON_COMPLETE);
             persistenceService.remove(associatedEventType);
- 
+
+
             associatedEventType.getAssetType().touch();
             persistenceService.update(associatedEventType.getAssetType());
         }

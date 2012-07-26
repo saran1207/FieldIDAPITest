@@ -172,9 +172,8 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             recurrenceTypeDropDown.setNullValid(false).setOutputMarkupId(true).add(new JChosenBehavior()).add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override protected void onUpdate(AjaxRequestTarget target) {
                     updateTimeComponents(recurrenceTypeDropDown.getModel().getObject());
-                    target.add(RecurringEventsForm.this);
+                    target.add(timePicker, dateTimepicker);
                 }
-
             });
 
             inputContainer.add(new AjaxSubmitLink("create") {
@@ -261,7 +260,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     }
 
     private void deleteRecurringEvent(final AssetType assetType, final RecurringAssetTypeEvent event) {
-        assetTypeService.deleteRecurringEvent(assetType, event);
+        assetTypeService.purgeRecurringEvent(event);
     }
 
 
