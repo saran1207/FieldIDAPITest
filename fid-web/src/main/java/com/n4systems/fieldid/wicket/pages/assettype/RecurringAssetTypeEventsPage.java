@@ -6,10 +6,13 @@ import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.EnumLabelModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
 import com.n4systems.fieldid.wicket.util.NullCoverterModel;
 import com.n4systems.model.*;
@@ -25,6 +28,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
@@ -40,6 +44,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
+import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
+import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
 public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
@@ -74,6 +82,27 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         Preconditions.checkArgument(params.get("uniqueId") != null, "must pass asset type Id to page via uniqueId parameter.");
         assetTypeId = params.get("uniqueID").toLong();
         assetTypeModel = new EntityModel<AssetType>(AssetType.class, assetTypeId);
+    }
+
+    @Override
+    protected void addNavBar(String navBarId) {
+        add(new NavigationBar(navBarId,
+                aNavItem().label("nav.view_all").page("assetTypes.action").build(),
+                aNavItem().label("nav.view").page("assetType.action").params(uniqueId(assetTypeId)).build(),
+                aNavItem().label("nav.edit").page("assetTypeEdit.action").params(uniqueId(assetTypeId)).build(),
+                aNavItem().label("nav.event_type_associations").page("selectEventTypes.action").params(param("assetTypeId", assetTypeId)).build(),
+                aNavItem().label("nav.event_frequencies").page("eventFrequencies.action").params(param("assetTypeId", assetTypeId)).build(),
+                aNavItem().label("label.recurring_events").page(RecurringAssetTypeEventsPage.class).params(uniqueId(assetTypeId)).build(),
+                aNavItem().label("label.subassets").page("assetTypeConfiguration.action").params(uniqueId(assetTypeId)).build(),
+                aNavItem().label("nav.add").page("assetTypeEdit.action").onRight().build()
+        ));
+    }
+
+    @Override
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, AssetsAndEventsPage.class);
+        pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
+        return pageLink;
     }
 
     @Override
