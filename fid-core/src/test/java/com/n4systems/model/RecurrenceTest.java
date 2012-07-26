@@ -1,7 +1,7 @@
 package com.n4systems.model;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.junit.Test;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class RecurrenceTest {
     public void test_daily() {
 
         Recurrence recurrence = new Recurrence(RecurrenceType.DAILY, 0, 0);
-        List<DateTime> times;
+        List<LocalDateTime> times;
         times = recurrence.getScheduledTimes(jan1_2011, jan31_2011);
         assertEquals(31, times.size());
         assertEquals(new LocalDate(2011,1,1), new LocalDate(times.get(0)));
@@ -55,7 +55,7 @@ public class RecurrenceTest {
     @Test
     public void test_monthly() {
         Recurrence recurrence = new Recurrence(RecurrenceType.MONTHLY_1ST, 15, 44);
-        List<DateTime> times;
+        List<LocalDateTime> times;
         times = recurrence.getScheduledTimes(jan1_2011, dec31_2011);
         assertEquals(12, times.size());
         assertEquals(new LocalDate(2011,1,1), new LocalDate(times.get(0)));
@@ -97,8 +97,8 @@ public class RecurrenceTest {
 
     @Test
     public void test_weekly() {
-        Recurrence recurrence = null;new Recurrence(RecurrenceType.WEEKLY_FRIDAY, 15, 44);
-        List<DateTime> times;
+        Recurrence recurrence = null;
+        List<LocalDateTime> times;
 
         recurrence = new Recurrence(RecurrenceType.WEEKLY_MONDAY, 15, 44);
         times = recurrence.getScheduledTimes(jan1_2011, dec31_2011);
@@ -148,7 +148,7 @@ public class RecurrenceTest {
     public void test_annually() {
 
         Recurrence recurrence = null;
-        List<DateTime> times;
+        List<LocalDateTime> times;
 
         recurrence = new Recurrence(RecurrenceType.ANNUALLY, 15, 44, april30_2011.toDate());  // once a year. every april 30th
         times = recurrence.getScheduledTimes(jan1_2011, dec31_2011);
