@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assettype;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
+import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
@@ -51,11 +52,13 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 
 public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
-    protected @SpringBean AssetTypeService assetTypeService;
+    private @SpringBean AssetTypeService assetTypeService;
+    private @SpringBean AsyncService asyncService;
 
     protected Long assetTypeId;
     protected IModel<AssetType> assetTypeModel;
     private RefreshingView<RecurringAssetTypeEvent> recurringEventsList;
+    private static final String SHOW_MESSAGE_JS  = "$('.fade-out').show();setTimeout( function(){ $('.fade-out').fadeOut(2000);}, 3000);";
 
     public RecurringAssetTypeEventsPage(PageParameters params) {
         super(params);
@@ -177,7 +180,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             inputContainer.add(new AjaxSubmitLink("create") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    assetTypeService.addRecurringEvent(assetType, createNewEventFromForm());
+                    addRecurringEvent(assetType, createNewEventFromForm());
                     target.add(RecurringEventsForm.this);
                 }
 
@@ -201,7 +204,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                     item.add(new AjaxLink("remove") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
-                            assetTypeService.deleteRecurringEvent(assetType, item.getModelObject());
+                            deleteRecurringEvent(assetType, item.getModelObject());
                             target.add(RecurringEventsForm.this);
                         }
                     });
@@ -215,8 +218,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
             WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer") {
                 @Override public boolean isVisible() {
-                    return true;
-                    //return getAssetType().getRecurringAssetTypeEvents().size()>0;
+                    return new RecurringEventsModel(assetTypeModel).getItems().size() > 0;
                 }
             };
             tableContainer.add(recurringEventsList);
@@ -251,6 +253,15 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             dateTimepicker.setVisible(recurrenceType.requiresDate());
             timePicker.setVisible(!recurrenceType.requiresDate());
         }
+    }
+
+
+    private void addRecurringEvent(final AssetType assetType, final RecurringAssetTypeEvent event) {
+        assetTypeService.addRecurringEvent(assetType, event);
+    }
+
+    private void deleteRecurringEvent(final AssetType assetType, final RecurringAssetTypeEvent event) {
+        assetTypeService.deleteRecurringEvent(assetType, event);
     }
 
 

@@ -20,12 +20,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+/**
+ * usage notes : this can be used to run code asynchronously in a few ways...
+ * 1: delegate to an existing Spring service by creating a task.
+ * 2: delegate to an existing legacy manager by creating a "legacyTask"
+ * 3: just plunking code down here and putting an @Async tag on the public method.
+ *
+ * Third option is for when you ALWAYS want to run the method asynchronously.
+ * The first two are more flexible and you don't want to restrict the usage of the method.
+ *
+ */
 public class AsyncService extends FieldIdService {
 	private static final Logger logger = Logger.getLogger(AsyncService.class);
 	
-	@Autowired private AbstractEntityManagerFactoryBean entityManagerFactory;
+	private @Autowired AbstractEntityManagerFactoryBean entityManagerFactory;
 
-	@Async	
+    @Async
 	public <T> T run(AsyncTask<T> task) {
 		return task.call();
 	}
@@ -38,8 +48,8 @@ public class AsyncService extends FieldIdService {
 		return new AsyncTask<X>(callable);
 	}
 
-	/**
-	 * local class that does all the work. the idea is that it gets the current
+    /**
+	 * local class that does all the task work. the idea is that it gets the current
 	 * thread's context at construction time (recall, SecurityContext is thread
 	 * scoped bean) and passes this information along when the thread executes in
 	 * the call() method.
@@ -104,5 +114,6 @@ public class AsyncService extends FieldIdService {
 			}
 		}
 	}
-		
+
+
 }

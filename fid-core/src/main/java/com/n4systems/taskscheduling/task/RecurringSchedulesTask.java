@@ -22,7 +22,7 @@ public class RecurringSchedulesTask extends ScheduledTask{
 
     private static Logger logger = Logger.getLogger(RecurringSchedulesTask.class);
 
-    private static final int RECURRING_EVENT_BUFFER_SIZE = 14;
+    public static final int RECURRING_EVENT_BUFFER_SIZE = 14;
 
     private PersistenceManager persistenceManager;
 
@@ -43,7 +43,6 @@ public class RecurringSchedulesTask extends ScheduledTask{
 
         List<RecurringAssetTypeEvent> list = getRecurringAssetTypeEvents();
         for(RecurringAssetTypeEvent event: list) {
-            logger.info(event.getEventType().getName() + " " + event.getRecurrence());
             for (LocalDateTime dateTime : event.getRecurrence().getScheduledTimes(LocalDate.now(), futureDate)) {
                 scheduleAnEventFor(event, dateTime);
             }
