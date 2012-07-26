@@ -59,8 +59,10 @@ public class MassScheduleService extends FieldIdPersistenceService {
             // the moral of the story is don't count on our pal symmetry when using Timestamps & Dates equality checking.
             // @see http://blogs.sourceallies.com/2012/02/hibernate-date-vs-timestamp/ where he talks about "Timestamp does violate symmetry".
             if (eventSchedule.getNextDate().equals(existingSchedule.getNextDate()) && existingSchedule.getEventType().equals(eventSchedule.getEventType())) {
-                if (existingSchedule.getProject() == null && eventSchedule.getProject() == null) {
-                    return true;
+                if (existingSchedule.getProject() == null) {
+                    // Do not combine these two statements -- prevents null pointer in else if
+                    if (eventSchedule.getProject() == null)
+                        return true;
                 } else if (existingSchedule.getProject().equals(eventSchedule.getProject())) {
                     return true;
                 }
