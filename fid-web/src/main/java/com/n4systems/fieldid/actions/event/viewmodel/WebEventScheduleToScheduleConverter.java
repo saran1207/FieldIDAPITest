@@ -35,6 +35,7 @@ public class WebEventScheduleToScheduleConverter {
         openEvent.setNextDate(scheduledDate);
         openEvent.setGroup(new EventGroup());
         openEvent.setOwner(asset.getOwner());
+        openEvent.setStatus(Status.VOID);
 		
 		if (webSchedule.getJob() != null) {
 			Project scheduleJob = loaderFactory.createFilteredIdLoader(Project.class).setId(webSchedule.getJob()).load();
