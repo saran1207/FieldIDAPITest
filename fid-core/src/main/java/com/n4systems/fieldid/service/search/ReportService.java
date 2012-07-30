@@ -143,7 +143,7 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
         }
 
         if (status.includesComplete()) {
-            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "event.owner." + basePath, eventJoinAlias, true);
+            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "owner." + basePath, eventJoinAlias, true);
             joinTerms.add(joinTerm);
         }
     }
