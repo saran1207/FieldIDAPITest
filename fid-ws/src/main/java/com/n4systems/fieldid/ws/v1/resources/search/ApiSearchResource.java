@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.n4systems.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +20,6 @@ import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteria;
@@ -144,9 +140,9 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		apiResult.setDivisionOwnerName(asset.getOwner().getDivisionOrg() != null ? asset.getOwner().getDivisionOrg().getName() : null);
 		apiResult.setLocation(asset.getAdvancedLocation() != null ? asset.getAdvancedLocation().getFreeformLocation() : null);
 		
-		EventSchedule schedule = eventScheduleService.getNextEventSchedule(asset.getId(), null);
-		if (schedule != null) {
-			apiResult.setNextEventDate(schedule.getNextDate());
+		Event openEvent = eventScheduleService.getNextEventSchedule(asset.getId(), null);
+		if (openEvent != null) {
+			apiResult.setNextEventDate(openEvent.getNextDate());
 		}
 		
 		return apiResult;

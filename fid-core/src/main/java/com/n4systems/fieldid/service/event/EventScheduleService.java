@@ -20,17 +20,17 @@ public class EventScheduleService extends FieldIdPersistenceService {
     private static Logger logger = Logger.getLogger( EventScheduleService.class );
 
 	@Transactional(readOnly = true)
-	public EventSchedule getNextEventSchedule(Long assetId, Long eventTypeId) {
-		QueryBuilder<EventSchedule> query = createUserSecurityBuilder(EventSchedule.class)
+	public Event getNextEventSchedule(Long assetId, Long eventTypeId) {
+		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 				.addOrder("nextDate")
-				.addWhere(WhereClauseFactory.create(Comparator.NE, "status", ScheduleStatus.COMPLETED))
+				.addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
 				.addWhere(WhereClauseFactory.create("asset.id", assetId));
 
 		if (eventTypeId != null) {
-			query.addWhere(WhereClauseFactory.create("eventType.id", eventTypeId));
+			query.addWhere(WhereClauseFactory.create("type.id", eventTypeId));
 		}
 
-		List<EventSchedule> schedules = persistenceService.findAll(query);
+		List<Event> schedules = persistenceService.findAll(query);
 		return (schedules.isEmpty()) ? null : schedules.get(0);
 	}
 
