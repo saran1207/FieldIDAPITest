@@ -1044,7 +1044,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	public Long getEventId() {
 		return event.getId();
 	}
-	
+
+    public boolean isOpen() {
+        return event != null && Event.EventState.OPEN.equals(event.getEventState());
+    }
+
 	public AssignedToUserGrouper getUserGrouper() {
 		if (userGrouper == null){
 			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());

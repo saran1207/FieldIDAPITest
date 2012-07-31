@@ -46,7 +46,7 @@
 	<#assign identifier="eventForm">
 	<#include "_event.ftl" />
 
-    <#if event.id?exists && action.isParentAsset() >
+    <#if event.id?exists && !action.isOpen() && action.isParentAsset() >
         <h2><@s.text name="label.result"/></h2>
         <div class="infoSet">
             <label class="label"><@s.text name="label.result"/></label>
@@ -62,7 +62,7 @@
             </span>
         </div>
     </#if>
-    <#if !event.id?exists && action.isParentAsset()>
+    <#if (!event.id?exists || action.isOpen()) && action.isParentAsset()>
         <#include "_result.ftl" />
     </#if>
 	
