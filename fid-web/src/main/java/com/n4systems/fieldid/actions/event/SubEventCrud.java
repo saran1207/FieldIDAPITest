@@ -1,14 +1,5 @@
 package com.n4systems.fieldid.actions.event;
 
-import static com.n4systems.fieldid.utils.CopyEventFactory.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventCreationService;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
@@ -23,18 +14,18 @@ import com.n4systems.fieldid.actions.exceptions.PersistenceException;
 import com.n4systems.fieldid.actions.exceptions.ValidationException;
 import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.ProofTestInfo;
-import com.n4systems.model.Status;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.n4systems.fieldid.utils.CopyEventFactory.copyEvent;
 
 public class SubEventCrud extends EventCrud {
 	private static final long serialVersionUID = 1L;
@@ -220,7 +211,7 @@ public class SubEventCrud extends EventCrud {
 		SubEvent subEvent = masterEventHelper.createSubEventFromEvent(event);
 		subEvent.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
 
-		if (!masterEventHelper.getEvent().isNew()) {
+		if (!masterEventHelper.isNewOrScheduled()) {
 			updateAttachmentList(event, modifiedBy);
 		}
 
@@ -276,7 +267,7 @@ public class SubEventCrud extends EventCrud {
 			masterEventHelper.setAssignToUpdate(getAssignedTo(), isAssignToSomeone());
             masterEventHelper.setOverrideResult(getOverrideResult());
 
-			if (masterEventHelper.getEvent().isNew()) {
+			if (masterEventHelper.isNewOrScheduled()) {
 				event.setTenant(getTenant());
 				event.setAsset(asset);
 

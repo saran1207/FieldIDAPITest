@@ -388,4 +388,10 @@ public class MasterEvent {
         return subEventTemporarySignatureFileIdMap.get(eventId).get(criteriaId);
     }
 
+    public boolean isNewOrScheduled() {
+        if (event==null) {
+            return false;
+        }
+        return Event.EventState.OPEN.equals(event.getEventState()) ||  event.isNew();
+    }
 }
