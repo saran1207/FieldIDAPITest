@@ -68,7 +68,7 @@ public class MassUpdateService extends FieldIdPersistenceService {
     public EventRemovalSummary calculateEventRemovalSummary(List<Long> ids) {
         EventRemovalSummary removalSummary = new EventRemovalSummary();
         for (Long id : ids) {
-            Event event = eventService.findEventByScheduleId(id);
+            Event event = persistenceService.find(Event.class, id);
             if (event != null) {
                 if (event.getType().isMaster()) {
                     removalSummary.addMasterEventToDelete();

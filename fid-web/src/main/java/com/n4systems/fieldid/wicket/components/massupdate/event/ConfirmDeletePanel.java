@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.massupdate.event;
 
 import com.n4systems.ejb.EventManager;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -29,8 +30,10 @@ import java.util.regex.Pattern;
 public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 	
 	@SpringBean private UserService userService;
-    
-    @SpringBean private EventService eventService;            
+
+    @SpringBean private PersistenceService persistenceService;
+
+    @SpringBean private EventService eventService;
     
 	@SpringBean	private EventManager eventManager;
 	
@@ -47,7 +50,7 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
                 
                 List<Long> eventIds =   eventSearchCriteria.getObject().getSelection().getSelectedIds();
                 for (Long id: eventIds) {
-                    Event event = eventService.findEventByScheduleId(id);
+                    Event event = persistenceService.find(Event.class, id);
                     eventManager.retireEvent(event, getCurrentUser().getId());
                 }
                 eventSearchCriteria.getObject().getSelection().clear();
