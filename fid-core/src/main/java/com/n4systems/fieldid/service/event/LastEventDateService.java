@@ -33,9 +33,10 @@ public class LastEventDateService extends FieldIdPersistenceService {
 
         QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter(), "i");
 
-        qBuilder.setMaxSelect("schedule.completedDate");
+        qBuilder.setMaxSelect("completedDate");
         qBuilder.addSimpleWhere("asset.id", asset.getId());
         qBuilder.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+        qBuilder.addSimpleWhere("eventState", Event.EventState.COMPLETED);
 
         if (eventType != null) {
             qBuilder.addSimpleWhere("type.id", eventType.getId());
