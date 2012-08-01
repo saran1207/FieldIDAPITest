@@ -82,8 +82,8 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		// Step 2: Convert the non-abstract-event fields
 		event.setDate(apiEvent.getDate());
 		event.setPrintable(apiEvent.isPrintable());
-		event.setOwner(persistenceService.find(BaseOrg.class, apiEvent.getOwnerId()));
-		event.setPerformedBy(persistenceService.find(User.class, apiEvent.getPerformedById()));
+		event.setOwner(persistenceService.findUsingTenantOnlySecurityWithArchived(BaseOrg.class, apiEvent.getOwnerId()));
+		event.setPerformedBy(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getPerformedById()));
 		
 		if (apiEvent.getStatus() != null) {
 			event.setStatus(Status.valueOf(apiEvent.getStatus()));
@@ -95,7 +95,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			if (apiEvent.getAssignedUserId() < 0) {
 				event.setAssignedTo(AssignedToUpdate.unassignAsset());
 			} else {
-				event.setAssignedTo(AssignedToUpdate.assignAssetToUser(persistenceService.find(User.class, apiEvent.getAssignedUserId())));
+				event.setAssignedTo(AssignedToUpdate.assignAssetToUser(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getAssignedUserId())));
 			}
 		}
 		
@@ -104,7 +104,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		}
 		
 		if (apiEvent.getPredefinedLocationId() != null) {
-			event.getAdvancedLocation().setPredefinedLocation(persistenceService.find(PredefinedLocation.class, apiEvent.getPredefinedLocationId()));
+			event.getAdvancedLocation().setPredefinedLocation(persistenceService.findUsingTenantOnlySecurityWithArchived(PredefinedLocation.class, apiEvent.getPredefinedLocationId()));
 		}
 		
 		if (apiEvent.getFreeformLocation() != null) {
@@ -147,18 +147,18 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		event.setComments(apiEvent.getComments());		
 		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));
 		event.setAsset(assetService.findByMobileId(apiEvent.getAssetId()));
-		event.setModifiedBy(persistenceService.find(User.class, apiEvent.getModifiedById()));
+		event.setModifiedBy(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getModifiedById()));
 		
 		if (apiEvent.getAssetStatusId() != null) {
-			event.setAssetStatus(persistenceService.find(AssetStatus.class, apiEvent.getAssetStatusId()));
+			event.setAssetStatus(persistenceService.findUsingTenantOnlySecurityWithArchived(AssetStatus.class, apiEvent.getAssetStatusId()));
 		}
 		
 		if(apiEvent.getEventStatusId() != null) {
-			event.setEventStatus(persistenceService.find(EventStatus.class, apiEvent.getEventStatusId()));
+			event.setEventStatus(persistenceService.findUsingTenantOnlySecurityWithArchived(EventStatus.class, apiEvent.getEventStatusId()));
 		}
 		
 		if (apiEvent.getForm() != null) {
-			EventForm form = persistenceService.find(EventForm.class, apiEvent.getForm().getFormId());
+			EventForm form = persistenceService.findUsingTenantOnlySecurityWithArchived(EventForm.class, apiEvent.getForm().getFormId());
 			event.setEventForm(form);
 			
 			List<CriteriaResult> results = apiEventFormResultResource.convertApiEventFormResults(apiEvent.getForm(), form, event);
@@ -173,7 +173,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	}
 
     private boolean eventExists(String sid) {
-        QueryBuilder<Event> query = createTenantSecurityBuilder(Event.class);
+        QueryBuilder<Event> query = createTenantSecurityBuilder(Event.class, true);
         query.addWhere(WhereClauseFactory.create("mobileGUID", sid));
 
         boolean eventExists = persistenceService.exists(query);
@@ -181,7 +181,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
     }
 
 	private EventBook findEventBook(String eventBookId) {
-		QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class);
+		QueryBuilder<EventBook> query = createTenantSecurityBuilder(EventBook.class, true);
 		query.addWhere(WhereClauseFactory.create("mobileId", eventBookId));
 		
 		EventBook book = persistenceService.find(query);
