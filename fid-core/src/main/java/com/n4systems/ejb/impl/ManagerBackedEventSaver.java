@@ -103,6 +103,15 @@ public class ManagerBackedEventSaver implements EventSaver {
 
     private Map<Long, byte[]> collectSignatureImageData(Event event) {
         Map<Long,byte[]> rememberedSignatures = new HashMap<Long, byte[]>();
+        addSignatureResultsFor(event, rememberedSignatures);
+        for (SubEvent subEvent : event.getSubEvents()) {
+            addSignatureResultsFor(subEvent, rememberedSignatures);
+        }
+
+        return rememberedSignatures;
+    }
+
+    private void addSignatureResultsFor(AbstractEvent event, Map<Long, byte[]> rememberedSignatures) {
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (criteriaResult instanceof SignatureCriteriaResult) {
                 SignatureCriteriaResult signatureResult = (SignatureCriteriaResult) criteriaResult;
@@ -111,9 +120,8 @@ public class ManagerBackedEventSaver implements EventSaver {
                 }
             }
         }
-        return rememberedSignatures;
     }
-    
+
     private EventSchedule findOrCreateSchedule(Event event, Long scheduleId) {
         EventSchedule eventSchedule = null;
 
@@ -156,8 +164,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		for (CriteriaResult result : results) {
             byte[] rememberedSignatureImage = rememberedSignatureImages.get(result.getCriteria().getId());
             if (result.getCriteria().getCriteriaType() == CriteriaType.SIGNATURE && rememberedSignatureImage != null) {
-                ((SignatureCriteriaResult)result).setImage(rememberedSignatureImage);
-				try {
+                try {
 					sigService.storeSignatureFileFor((SignatureCriteriaResult)result);
 				} catch (IOException e) {
 					throw new FileAttachmentException("Unable to store signature image for result [" + result + "]", e);
