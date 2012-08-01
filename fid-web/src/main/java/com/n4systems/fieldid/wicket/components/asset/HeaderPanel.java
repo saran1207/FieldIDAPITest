@@ -15,6 +15,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
+import com.n4systems.model.Status;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
@@ -105,6 +106,7 @@ public class HeaderPanel extends Panel {
 
     private Event createNewSchedule(Asset asset) {
         Event schedule = new Event();
+        schedule.setStatus(Status.VOID);
         schedule.setAsset(asset);
         return schedule;
     }

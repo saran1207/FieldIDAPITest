@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventStatus;
+import com.n4systems.model.Status;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -108,6 +109,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
         protected void onSubmit() {
             Event openEvent = openEventModel.getObject();
             Asset asset = openEvent.getAsset();
+            openEvent.setStatus(Status.VOID);
             openEvent.setEventState(Event.EventState.CLOSED);
             openEvent.setDate(new Date());
             openEvent.setPerformedBy(resolvedBy);
