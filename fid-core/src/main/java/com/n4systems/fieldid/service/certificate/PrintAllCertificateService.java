@@ -1,5 +1,30 @@
 package com.n4systems.fieldid.service.certificate;
 
+import com.n4systems.exceptions.NonPrintableEventType;
+import com.n4systems.exceptions.NonPrintableManufacturerCert;
+import com.n4systems.exceptions.ReportException;
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.mail.MailService;
+import com.n4systems.fieldid.service.search.ReportService;
+import com.n4systems.fieldid.service.task.AsyncService;
+import com.n4systems.fieldid.service.task.AsyncService.AsyncTask;
+import com.n4systems.fieldid.service.task.DownloadLinkService;
+import com.n4systems.model.Event;
+import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.downloadlink.DownloadState;
+import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.reporting.EventReportType;
+import com.n4systems.services.ConfigService;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.mail.TemplateMailMessage;
+import com.n4systems.util.selection.MultiIdSelection;
+import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,33 +33,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import com.n4systems.fieldid.service.search.ReportService;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.util.selection.MultiIdSelection;
-import net.sf.jasperreports.engine.JasperPrint;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.exceptions.NonPrintableManufacturerCert;
-import com.n4systems.exceptions.ReportException;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.fieldid.service.mail.MailService;
-import com.n4systems.fieldid.service.task.AsyncService;
-import com.n4systems.fieldid.service.task.AsyncService.AsyncTask;
-import com.n4systems.fieldid.service.task.DownloadLinkService;
-import com.n4systems.model.downloadlink.ContentType;
-import com.n4systems.model.downloadlink.DownloadLink;
-import com.n4systems.model.downloadlink.DownloadState;
-import com.n4systems.reporting.EventReportType;
-import com.n4systems.services.ConfigService;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.mail.TemplateMailMessage;
 
 @Transactional(readOnly = true)
 public class PrintAllCertificateService extends FieldIdPersistenceService {
@@ -137,8 +135,8 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 			// If eventReportType is null, assume it's an asset certificate
 			if (eventReportType != null) {
                 // Must convert from event schedule id to event id to generate the event certificate
-                EventSchedule eventSchedule = persistenceService.find(EventSchedule.class, entityId);
-				jPrint = certificateService.generateEventCertificate(eventReportType, eventSchedule.getEvent().getId());
+                Event eventSchedule = persistenceService.find(Event.class, entityId);
+				jPrint = certificateService.generateEventCertificate(eventReportType, eventSchedule.getId());
 			} else {
 				jPrint = certificateService.generateAssetCertificate(entityId);
 			}
