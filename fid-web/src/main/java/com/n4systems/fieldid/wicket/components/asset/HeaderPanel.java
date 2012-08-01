@@ -113,13 +113,7 @@ public class HeaderPanel extends Panel {
 
     private String getOwnerLabel(BaseOrg owner, Location advancedLocation) {
         StringBuffer buff = new StringBuffer();
-        if(owner.isDivision()) {
-            buff.append(owner.getCustomerOrg().getName()).append(" (").append(owner.getPrimaryOrg().getName()).append("), ").append(owner.getDivisionOrg().getName());
-        } else if(owner.isCustomer()) {
-            buff.append(owner.getCustomerOrg().getName()).append(" (").append(owner.getPrimaryOrg().getName()).append(")");
-        } else {
-            buff.append(owner.getPrimaryOrg().getName());
-        }
+        buff.append(owner.getHierarchicalDisplayName());
 
         if(advancedLocation != null && !advancedLocation.getFullName().isEmpty()) {
             buff.append(", ").append(advancedLocation.getFullName());
