@@ -1,19 +1,16 @@
 package com.n4systems.model.eventschedule;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
+import javax.persistence.EntityManager;
+import java.util.List;
+
 // This loader is a direct migration from EventScheduleManager.getNextScheduleFor(Long, Long)
-public class NextEventScheduleLoader extends Loader<EventSchedule> {
+public class NextEventScheduleLoader extends Loader<Event> {
 
 	private Long assetId;
 	private Long typeId;
@@ -21,16 +18,16 @@ public class NextEventScheduleLoader extends Loader<EventSchedule> {
 	public NextEventScheduleLoader() {}
 
 	@Override
-	public EventSchedule load(EntityManager em) {
-		EventSchedule schedule = null;
+	public Event load(EntityManager em) {
+		Event schedule = null;
 		
-		QueryBuilder<EventSchedule> query = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
-		query.addSimpleWhere("asset.id", assetId).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
-		if(typeId != null)
-			query.addSimpleWhere("eventType.id", typeId);
+		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+		query.addSimpleWhere("asset.id", assetId).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
+		if (typeId != null)
+			query.addSimpleWhere("type.id", typeId);
 		query.addOrder("nextDate");
 		
-		List<EventSchedule> schedules = query.getResultList(em, 0, 1);
+		List<Event> schedules = query.getResultList(em, 0, 1);
 			
 		if (!schedules.isEmpty()) {
 			schedule = schedules.get(0);

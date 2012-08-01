@@ -2,6 +2,7 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.util.DateTimeDefinition;
@@ -42,9 +43,9 @@ public class NextScheduledEventDateHandler extends WebOutputHandler implements
 	}
 
 	private String getNextScheduledEventDate(Long entityId) {
-		EventSchedule nextScheduledEvent = new NextEventScheduleLoader().setAssetId(entityId).load();
-		if(nextScheduledEvent != null)
-			return new FieldIdDateFormatter(nextScheduledEvent.getNextDate(), this, false, false).format();
+		Event nextOpenEvent = new NextEventScheduleLoader().setAssetId(entityId).load();
+		if (nextOpenEvent != null)
+			return new FieldIdDateFormatter(nextOpenEvent.getNextDate(), this, false, false).format();
 		else
 			return "";
 	}

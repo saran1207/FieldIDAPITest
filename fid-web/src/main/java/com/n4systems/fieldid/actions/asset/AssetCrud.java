@@ -994,11 +994,11 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
     
     public Date getNextScheduledEventDate(Long id) {
-        EventSchedule schedule = new NextEventScheduleLoader().setAssetId(id).load();
+        Event schedule = new NextEventScheduleLoader().setAssetId(id).load();
         return schedule==null ? null : schedule.getNextDate();
     }
 	
-	public EventSchedule getNextEvent() {
+	public Event getNextEvent() {
 		return new NextEventScheduleLoader().setAssetId(uniqueID).load();
 	}
 

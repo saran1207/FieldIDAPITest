@@ -170,8 +170,8 @@ public class EventGroupCrud extends AbstractCrud {
 	}
 
     public Date getNextScheduledEventDate(Long id) {
-        EventSchedule schedule = new NextEventScheduleLoader().setAssetId(id).load();
-        return schedule==null ? null : schedule.getNextDate();
+        Event openEvent = new NextEventScheduleLoader().setAssetId(id).load();
+        return openEvent==null ? null : openEvent.getNextDate();
     }
 
 }

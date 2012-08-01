@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.event;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.security.Permissions;
@@ -27,8 +28,8 @@ public class AssetSelectionAction extends AbstractAction {
 	}
 
     public Date getNextScheduledEventDate(Long id) {
-        EventSchedule schedule = new NextEventScheduleLoader().setAssetId(id).load();
-        return schedule==null ? null : schedule.getNextDate();
+        Event openEvent = new NextEventScheduleLoader().setAssetId(id).load();
+        return openEvent==null ? null : openEvent.getNextDate();
     }
 
 }
