@@ -72,7 +72,7 @@ public class EventAttributeDynamicGroupGenerator {
 		String id = idPrefix + "_insattribute_" + fieldName.toLowerCase().replaceAll(" ", "_");
 
 		String path = (pathPrefix != null) ? pathPrefix + "." : "";
-		path += "event.infoOptionMap['" + fieldName + "']";
+		path += "infoOptionMap['" + fieldName + "']";
 
 		return new ColumnMappingView(id, fieldName, path, null, null, false, false, order, null, null, null, null);
 	}
