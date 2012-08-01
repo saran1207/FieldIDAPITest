@@ -97,7 +97,7 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
         } else if (getCustomerOrg() != null) {
             buff.append(getCustomerOrg().getName()).append(" (").append(getRootOrgName()).append(")");
         } else {
-            buff.append(getPrimaryOrg().getName());
+            buff.append(getRootOrgName());
         }
 		return buff.toString();
 	}
