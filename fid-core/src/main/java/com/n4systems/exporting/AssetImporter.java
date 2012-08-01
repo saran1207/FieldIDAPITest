@@ -1,7 +1,5 @@
 package com.n4systems.exporting;
 
-import java.util.List;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.asset.AssetToModelConverter;
 import com.n4systems.api.model.AssetView;
@@ -12,10 +10,11 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.ServiceLocator;
+
+import java.util.List;
 
 public class AssetImporter extends AbstractImporter<AssetView> {
 	private final AssetSaveService saver;

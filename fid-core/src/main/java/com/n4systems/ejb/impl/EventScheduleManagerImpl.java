@@ -1,30 +1,21 @@
 package com.n4systems.ejb.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import com.n4systems.fieldid.CopiedToService;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.services.EventScheduleService;
-import com.n4systems.services.EventScheduleServiceImpl;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.model.*;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.services.EventScheduleService;
+import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.log4j.Logger;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @CopiedToService(com.n4systems.fieldid.service.event.EventScheduleService.class)
 @Deprecated
@@ -80,9 +71,12 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 				AssetTypeSchedule schedule = assetType.getSchedule(type.getEventType(), asset.getOwner());
 				if (schedule != null && schedule.isAutoSchedule()) {
                     Event openEvent = new Event();
+                    openEvent.setOwner(asset.getOwner());
+                    openEvent.setTenant(asset.getTenant());
                     openEvent.setAsset(asset);
                     openEvent.setType(type.getEventType());
                     openEvent.setNextDate(assetType.getSuggestedNextEventDate(asset.getIdentified(), type.getEventType(), asset.getOwner()));
+                    openEvent.setGroup(new EventGroup());
 					schedules.add(openEvent);
 				}
 			}
