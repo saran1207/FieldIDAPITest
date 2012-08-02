@@ -51,6 +51,7 @@ public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetT
 		apiType.setIdentifierOverridden(type.isIdentifierOverridden());
 		apiType.setImage(loadAssetTypeImage(type));
 		apiType.setGroup(convertAssetTypeGroup(type));
+		apiType.setLinkable(type.isLinkable());
 		
 		for (AssociatedEventType associatedEventType: type.getAssociatedEventTypes()) {
 			apiType.getAllowedEventTypes().add(associatedEventType.getEventType().getId());

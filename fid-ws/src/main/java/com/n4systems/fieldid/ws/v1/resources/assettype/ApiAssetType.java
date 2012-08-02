@@ -17,6 +17,7 @@ public class ApiAssetType extends ApiReadonlyModel {
 	private boolean identifierOverridden;
 	private byte[] image;
 	private ApiAssetTypeGroup group;
+	private boolean linkable;
 	private List<ApiAssetTypeSchedule> schedules = new ArrayList<ApiAssetTypeSchedule>();
 	private List<Long> allowedEventTypes = new ArrayList<Long>();
 	private List<ApiAttribute> attributes = new ArrayList<ApiAttribute>();
@@ -124,4 +125,12 @@ public class ApiAssetType extends ApiReadonlyModel {
 	public void setAttributes(List<ApiAttribute> attributes) {
 		this.attributes = attributes;
 	}
+	
+	public boolean isLinkable() {
+		return linkable;
+	}
+
+	public void setLinkable(boolean linkable) {
+		this.linkable = linkable;
+	}	
 }
