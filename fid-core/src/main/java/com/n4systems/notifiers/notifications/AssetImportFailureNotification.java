@@ -9,6 +9,7 @@ public class AssetImportFailureNotification extends ImportFailureNotification {
 
 	public AssetImportFailureNotification(User notifiyUser, AssetType assetType) {
 		super(notifiyUser);
+        this.assetType = assetType;
 	}
 
 	@Override
