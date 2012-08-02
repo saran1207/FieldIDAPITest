@@ -1,56 +1,11 @@
 package com.n4systems.fieldid.selenium.persistence;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Query;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.log4j.Logger;
-
 import com.n4systems.fieldid.selenium.persistence.builder.SafetyNetworkConnectionBuilder;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Configuration;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assettype.AssetTypeByNameLoader;
-import com.n4systems.model.builders.AbstractEntityBuilder;
-import com.n4systems.model.builders.ActiveColumnMappingBuilder;
-import com.n4systems.model.builders.AssetBuilder;
-import com.n4systems.model.builders.AssetStatusBuilder;
-import com.n4systems.model.builders.AssetTypeBuilder;
-import com.n4systems.model.builders.AssetTypeGroupBuilder;
-import com.n4systems.model.builders.BaseBuilder;
-import com.n4systems.model.builders.ColumnLayoutBuilder;
-import com.n4systems.model.builders.ComboBoxCriteriaBuilder;
-import com.n4systems.model.builders.CriteriaSectionBuilder;
-import com.n4systems.model.builders.DateFieldCriteriaBuilder;
-import com.n4systems.model.builders.DownloadLinkBuilder;
-import com.n4systems.model.builders.EntityWithOwnerBuilder;
-import com.n4systems.model.builders.EntityWithTenantBuilder;
-import com.n4systems.model.builders.EventBookBuilder;
-import com.n4systems.model.builders.EventBuilder;
-import com.n4systems.model.builders.EventFormBuilder;
-import com.n4systems.model.builders.EventGroupBuilder;
-import com.n4systems.model.builders.EventScheduleBuilder;
-import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.model.builders.EventTypeGroupBuilder;
-import com.n4systems.model.builders.InfoFieldBuilder;
-import com.n4systems.model.builders.InfoOptionBeanBuilder;
-import com.n4systems.model.builders.JobBuilder;
-import com.n4systems.model.builders.NumberFieldCriteriaBuilder;
-import com.n4systems.model.builders.OneClickCriteriaBuilder;
-import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.SelectCriteriaBuilder;
-import com.n4systems.model.builders.StateBuilder;
-import com.n4systems.model.builders.StateSetBuilder;
-import com.n4systems.model.builders.SubEventBuilder;
-import com.n4systems.model.builders.TextFieldCriteriaBuilder;
-import com.n4systems.model.builders.UnitOfMeasureCriteriaBuilder;
-import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.builders.*;
 import com.n4systems.model.columns.SystemColumnMapping;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -62,6 +17,12 @@ import com.n4systems.model.tenant.TenantByNameLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ConfigEntry;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.log4j.Logger;
+
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Scenario {
 	private static final Logger logger = Logger.getLogger(Scenario.class);
@@ -172,6 +133,11 @@ public class Scenario {
     
     public AssetStatusBuilder anAssetStatus() {
         AssetStatusBuilder builder = AssetStatusBuilder.anAssetStatus();
+        return createPersistentBuilder(builder);
+    }
+
+    public EventStatusBuilder anEventStatus() {
+        EventStatusBuilder builder = EventStatusBuilder.anEventStatus();
         return createPersistentBuilder(builder);
     }
 
@@ -365,6 +331,12 @@ public class Scenario {
         }
         if (builder instanceof AssetStatusBuilder) {
             AssetStatusBuilder statusBuilder = (AssetStatusBuilder) builder;
+            if (statusBuilder.getTenant() == null) {
+                statusBuilder.setTenant(defaultTenant);
+            }
+        }
+        if (builder instanceof EventStatusBuilder) {
+            EventStatusBuilder statusBuilder = (EventStatusBuilder) builder;
             if (statusBuilder.getTenant() == null) {
                 statusBuilder.setTenant(defaultTenant);
             }

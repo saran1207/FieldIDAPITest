@@ -1,37 +1,8 @@
 package com.n4systems.fieldid.selenium.persistence;
 
-import java.util.HashMap;
-
 import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetSaver;
 import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetTypeSaver;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.ComboBoxCriteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.LineItem;
-import com.n4systems.model.LineItemSaver;
-import com.n4systems.model.NumberFieldCriteria;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.Order;
-import com.n4systems.model.OrderSaver;
-import com.n4systems.model.Project;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.State;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.TextFieldCriteria;
-import com.n4systems.model.UnitOfMeasureCriteria;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.assettype.AssetTypeGroupSaver;
@@ -50,14 +21,11 @@ import com.n4systems.model.event.EventGroupSaver;
 import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventbook.EventBookSaver;
 import com.n4systems.model.eventschedule.EventScheduleSaver;
+import com.n4systems.model.eventstatus.EventStatusSaver;
 import com.n4systems.model.eventtype.AssociatedEventTypeSaver;
 import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.OrgSaver;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.project.ProjectSaver;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
@@ -69,6 +37,8 @@ import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
+import java.util.HashMap;
+
 public class SaverMap {
 
 	@SuppressWarnings("rawtypes")
@@ -77,6 +47,7 @@ public class SaverMap {
     static {
         classToSaverMap.put(Asset.class, new SeleniumAssetSaver());
         classToSaverMap.put(AssetStatus.class, new AssetStatusSaver());
+        classToSaverMap.put(EventStatus.class, new EventStatusSaver());
         classToSaverMap.put(AssetType.class, new SeleniumAssetTypeSaver());
         classToSaverMap.put(Event.class, new SimpleEventSaver());
         classToSaverMap.put(SubEvent.class, new SimpleEventSaver());

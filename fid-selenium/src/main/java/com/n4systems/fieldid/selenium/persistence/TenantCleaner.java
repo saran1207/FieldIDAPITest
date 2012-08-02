@@ -1,71 +1,35 @@
 package com.n4systems.fieldid.selenium.persistence;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import com.n4systems.model.columns.ActiveColumnMapping;
-import com.n4systems.model.columns.ColumnLayout;
-import com.n4systems.model.commenttemplate.CommentTemplate;
-import com.n4systems.model.saveditem.SavedItem;
-import com.n4systems.model.tenant.SetupDataLastModDates;
-import org.apache.log4j.Logger;
-
-import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetCodeMapping;
-
 import com.n4systems.fieldid.selenium.util.TimeLogger;
-import com.n4systems.model.AddressInfo;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Configuration;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.LineItem;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.Order;
-import com.n4systems.model.Project;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.UserRequest;
+import com.n4systems.model.*;
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.catalog.Catalog;
+import com.n4systems.model.columns.ActiveColumnMapping;
+import com.n4systems.model.columns.ColumnLayout;
+import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.eula.EulaAcceptance;
 import com.n4systems.model.messages.Message;
 import com.n4systems.model.notificationsettings.NotificationSetting;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.ExternalOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
+import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.ui.seenit.SeenItStorageItem;
 import com.n4systems.model.user.User;
+import org.apache.log4j.Logger;
+import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.IdentifierCounterBean;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 public class TenantCleaner {
 	private static final Logger logger = Logger.getLogger(TenantCleaner.class);
@@ -139,6 +103,7 @@ public class TenantCleaner {
         removeAllForTenants(AssetType.class, tenantIds);
         removeAllForTenants(AssetTypeGroup.class, tenantIds);
         removeAllForTenants(AssetStatus.class, tenantIds);
+        removeAllForTenants(EventStatus.class, tenantIds);
         removeAllForTenants(FileAttachment.class, tenantIds);
         removeAllForTenants(UserRequest.class, tenantIds);
         removeAllForTenants(AutoAttributeCriteria.class, tenantIds);

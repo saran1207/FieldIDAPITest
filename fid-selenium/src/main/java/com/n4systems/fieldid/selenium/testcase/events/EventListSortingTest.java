@@ -1,27 +1,18 @@
 package com.n4systems.fieldid.selenium.testcase.events;
 
-import static org.junit.Assert.*;
-
-import java.util.Date;
-import java.util.TreeSet;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.misc.DateUtil;
 import com.n4systems.fieldid.selenium.pages.EventsPerformedPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Status;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
+import org.junit.Test;
+
+import java.util.Date;
+import java.util.TreeSet;
+
+import static org.junit.Assert.assertEquals;
 
 public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformedPage> {
 
@@ -56,7 +47,11 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 		AssetStatus assetStatus1 = scenario.anAssetStatus().named("AssetStatus1").build();
 		AssetStatus assetStatus2 = scenario.anAssetStatus().named("AssetStatus2").build();
 		AssetStatus assetStatus3 = scenario.anAssetStatus().named("AssetStatus3").build();
-		
+
+        EventStatus eventStatus1 = scenario.anEventStatus().named("EventStatus1").build();
+        EventStatus eventStatus2 = scenario.anEventStatus().named("EventStatus2").build();
+        EventStatus eventStatus3 = scenario.anEventStatus().named("EventStatus3").build();
+
 		Asset asset1 = scenario.anAsset()
 				              .withOwner(primaryOrg)
 				              .withIdentifier(ASSET_IDENTIFIER1)
@@ -99,6 +94,8 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 		                      .withGroup(group)		                      
 		                      .withResult(Status.PASS)
 		                      .withAssetStatus(assetStatus1)
+                              .withEventStatus(eventStatus1)
+                              .scheduledFor(DateUtil.addDays(new Date(), 1))
 		                      .build();
 
 		Event event2 = scenario.anEvent()
@@ -111,7 +108,9 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 					           .withGroup(group)		                      
 					           .withResult(Status.FAIL)
 		                       .withAssetStatus(assetStatus2)
-					           .build();
+                               .withEventStatus(eventStatus2)
+                               .scheduledFor(DateUtil.addDays(new Date(), 2))
+                               .build();
 		
 		Event event3 = scenario.anEvent()
 					           .on(asset1)
@@ -122,6 +121,8 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 					           .withGroup(group)		                      
 					           .withResult(Status.NA)
 		                       .withAssetStatus(assetStatus3)
+                               .withEventStatus(eventStatus3)
+                               .scheduledFor(DateUtil.addDays(new Date(), 3))
 					           .build();
 		
 		TreeSet<Event> events = new TreeSet<Event>();
@@ -140,30 +141,31 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 	
 	@Test
 	public void sort_by_date_performed() throws Exception {
-		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
-		page.clickSortColumn("Date Performed");
+        page.clickSortColumn("Completed");
 		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+		page.clickSortColumn("Completed");
+		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
 	}
 	
 	@Test
 	public void sort_by_event_type() throws Exception {
+        page.clickSortColumn("Event");
+        assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+        page.clickSortColumn("Event");
 		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
-		page.clickSortColumn("Event Type");
-		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
 	}
 	
 	@Test
 	public void sort_by_performed_by() throws Exception {
+        page.clickSortColumn("Completed By");
+        assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+        page.clickSortColumn("Completed By");
 		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
-		page.clickSortColumn("Performed By");
-		assertEquals(TEST_EVENT_TYPE2, page.getEventTypes().get(0));
-		page.clickSortColumn("Performed By");
-		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
 	}
 	
 	@Test
 	public void sort_by_result() throws Exception {
-		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
+		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
 		page.clickSortColumn("Result");
 		assertEquals(TEST_EVENT_TYPE2, page.getEventTypes().get(0));
 		page.clickSortColumn("Result");
@@ -172,11 +174,30 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 
 	@Test
 	public void sort_by_asset_status() throws Exception {
-		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
+		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
 		page.clickSortColumn("Asset Status");
 		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
 		page.clickSortColumn("Asset Status");
 		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
 	}
-	
+
+    @Test
+    public void sort_by_event_status() throws Exception {
+        assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+        page.clickSortColumn("Event Status");
+        assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+        page.clickSortColumn("Event Status");
+        assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
+    }
+
+    @Test
+    public void sort_by_due_date() throws Exception {
+        assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+        page.clickSortColumn("Due");
+        assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+        page.clickSortColumn("Due");
+        assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
+    }
+
+
 }

@@ -1,22 +1,22 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import com.n4systems.fieldid.selenium.components.LocationPicker;
+import com.n4systems.fieldid.selenium.components.OrgPicker;
+import com.n4systems.fieldid.selenium.lib.PageErrorException;
+import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
+import com.n4systems.fieldid.selenium.util.ConditionWaiter;
+import com.n4systems.fieldid.selenium.util.Predicate;
+import com.thoughtworks.selenium.Selenium;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.apache.tools.ant.taskdefs.Sleep;
-
-import com.n4systems.fieldid.selenium.components.LocationPicker;
-import com.n4systems.fieldid.selenium.components.OrgPicker;
-import com.n4systems.fieldid.selenium.lib.PageErrorException;
-import com.n4systems.fieldid.selenium.util.ConditionWaiter;
-import com.n4systems.fieldid.selenium.util.Predicate;
-import com.thoughtworks.selenium.Selenium;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class FieldIDPage extends WebPage {
 	private static final Logger logger = Logger.getLogger(FieldIDPage.class);
@@ -125,7 +125,7 @@ public class FieldIDPage extends WebPage {
 	}
 
     protected List<String> collectTableValuesUnderCellForCurrentPage(int firstRow, int cellNumber, String subXpath) {
-        int numRows = selenium.getXpathCount("//table[@class='list']//tbody/tr").intValue();
+        int numRows = selenium.getXpathCount("//table[contains(@class, 'list')]//tbody/tr").intValue();
         List<String> values = new ArrayList<String>(numRows - firstRow + 1);
 
         if (!StringUtils.isBlank(subXpath)) {
@@ -133,7 +133,7 @@ public class FieldIDPage extends WebPage {
         }
 
         for (int i = firstRow; i <= numRows; i++) {
-            String value = selenium.getText("//table[@class='list']//tbody/tr["+i+"]/td["+cellNumber+"]" + subXpath);
+            String value = selenium.getText("//table[contains(@class, 'list')]//tbody/tr["+i+"]/td["+cellNumber+"]" + subXpath);
             values.add(value);
         }
 

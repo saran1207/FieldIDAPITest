@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import java.util.List;
-
 import com.n4systems.fieldid.selenium.components.EventInfoPopup;
 import com.thoughtworks.selenium.Selenium;
+
+import java.util.List;
 
 public class EventsPerformedPage extends FieldIDPage {
 
@@ -40,11 +40,11 @@ public class EventsPerformedPage extends FieldIDPage {
     }
     
     public List<String> getEventTypes() {
-    	return collectTableValuesUnderCellForCurrentPage(2, 2, "");
+    	return collectTableValuesUnderCellForCurrentPage(1, 5, "");
     }
     
     public void clickSortColumn(String columnName) {
-    	selenium.click("//th//a[contains(.,'" + columnName + "')]");
+    	selenium.click("//th//a[.='" + columnName + "']");
     	waitForPageToLoad();
     }
 

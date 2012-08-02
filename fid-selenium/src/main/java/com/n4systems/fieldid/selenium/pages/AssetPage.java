@@ -120,7 +120,7 @@ public class AssetPage extends FieldIDPage {
 	}
 
 	public EventsPerformedPage clickEventHistoryTab() {
-		selenium.click("//a[contains(.,'Event History')]");
+		selenium.click("//div[@class='viewButtons']//a[contains(.,'Events')]");
 		return new EventsPerformedPage(selenium);
 	}
 
