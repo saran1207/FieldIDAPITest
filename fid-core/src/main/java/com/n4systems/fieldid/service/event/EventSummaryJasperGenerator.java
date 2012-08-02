@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.certificate.ReportCompiler;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubEvent;
@@ -75,7 +74,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
             Event event;
             for (Long eventScheduleId : sortedIdList) {
 
-                event = persistenceService.find(EventSchedule.class, eventScheduleId).getEvent();
+                event = persistenceService.find(Event.class, eventScheduleId);
 
                 Map<String, Object> eventMap = new HashMap<String, Object>();
                 eventMap.put("date", event.getDate());
@@ -252,8 +251,6 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
      *
      * @param organization
      *            An Organization
-     * @param tenant
-     *            The Tenant
      * @return An InputStream or null if no logo could be resolved.
      * @throws ReportException
      */
