@@ -2,6 +2,9 @@ package com.n4systems.fieldid.ws.v1.resources.synchronization;
 
 import java.util.Date;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 public class ApiSynchronizationAsset {
 	private String assetId;
 	private Date modified;
@@ -31,4 +34,15 @@ public class ApiSynchronizationAsset {
 		this.modified = modified;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return EqualsBuilder.reflectionEquals(this, obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
+
+	
 }
