@@ -27,6 +27,11 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
         super(id, proofTestInfo);
         setOutputMarkupId(true);
 
+        if (proofTestInfo.getObject() == null) {
+            setVisible(false);
+            return;
+        }
+
         if (proofTestInfo.getObject().getProofTestType() == null) {
             proofTestInfo.getObject().setProofTestType(ProofTestType.NATIONALAUTOMATION);
         }

@@ -108,15 +108,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         storePageParameters(params);
 
-        add(titleLabel = createTitleLabel("titleLabel"));
-        titleLabel.setRenderBodyOnly(true);
-
-        add(topTitleLabel = createTitleLabel("topTitleLabel"));
-        topTitleLabel.setRenderBodyOnly(true);
-
         add(createHeaderLink("headerLink", "headerLinkLabel"));
         add(createBackToLink("backToLink", "backToLinkLabel"));
-        addNavBar("navBar");
         add(new Label("loggedInUsernameLabel", sessionUser.getName()));
         add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent")));
         add(createSetupLinkContainer(sessionUser));
@@ -130,7 +123,22 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(createRelogLink());
     }
 
-	private String getSupportUrl() {
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        // We add these components here rather than in the constructor
+        // So subclasses that need to override them can finish their constructors before doing so
+        // eg. Labels may require details of entities to be loaded.
+        addNavBar("navBar");
+
+        add(titleLabel = createTitleLabel("titleLabel"));
+        titleLabel.setRenderBodyOnly(true);
+
+        add(topTitleLabel = createTitleLabel("topTitleLabel"));
+        topTitleLabel.setRenderBodyOnly(true);
+    }
+
+    private String getSupportUrl() {
     	TenantSettings settings = getTenant().getSettings();
 		return settings.getSupportUrl()==null ? DEFAULT_SUPPORT_URL :settings.getSupportUrl();
 	}

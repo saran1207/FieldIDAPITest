@@ -1,10 +1,11 @@
 package com.n4systems.fieldid.service.event;
 
 import com.google.common.collect.Lists;
-import com.n4systems.api.conversion.event.CriteriaResultFactory;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.util.ExistingEventTransientCriteriaResultPopulator;
+import com.n4systems.fieldid.service.event.util.NewEventTransientCriteriaResultPopulator;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
@@ -24,7 +25,10 @@ import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -280,34 +284,19 @@ public class EventService extends FieldIdPersistenceService {
         event.setType(eventType);
         event.setEventForm(eventType.getEventForm());
 
-        populateTransientCriteriaResultsForNewEvent(event);
+        new NewEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(event);
+
+        return event;
+    }
+
+    public <T extends AbstractEvent> T lookupExistingEvent(Class<T> clazz, Long eventId) {
+        T event = persistenceService.find(clazz, eventId);
+
+        new ExistingEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(event);
 
         return event;
     }
     
-    private void populateTransientCriteriaResultsForNewEvent(AbstractEvent event) {
-        EventForm eventForm = event.getEventForm();
-        CriteriaResultFactory resultFactory = new CriteriaResultFactory();
-
-        List<AbstractEvent.SectionResults> transientResults = new ArrayList<AbstractEvent.SectionResults>();
-
-        for (CriteriaSection section : eventForm.getAvailableSections()) {
-            List<CriteriaResult> transientSectionResults = new ArrayList<CriteriaResult>();
-            AbstractEvent.SectionResults sectionResults = new AbstractEvent.SectionResults();
-            for (Criteria criteria : section.getCriteria()) {
-                CriteriaResult transientResult = resultFactory.createCriteriaResult(criteria.getCriteriaType());
-                transientResult.setCriteria(criteria);
-                transientResult.setTenant(getCurrentTenant());
-                transientSectionResults.add(transientResult);
-            }
-            sectionResults.results = transientSectionResults;
-            sectionResults.section = section;
-            transientResults.add(sectionResults);
-        }
-        
-        event.setSectionResults(transientResults);
-    }
-
     public List<Event> getEventsByNetworkId(Long networkId) {
         return getEventsByNetworkId(networkId, null, null, null);
     }

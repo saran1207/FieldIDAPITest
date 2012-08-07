@@ -9,10 +9,7 @@
 
             <img src="/fieldid/images/jump-to-icon.png"/>
 
-            <wicket:message key="label.section_navigation">
-                <label wicket:id="currentSection"/>
-                <label wicket:id="totalSections"/>
-            </wicket:message>
+            <wicket:message key="label.jumpto"/>
 
             <select wicket:id="jumpToSection"/>
 
@@ -22,21 +19,31 @@
 
     </h2>
 
+    <h3>
+        <span class="eventSectionIndex" wicket:id="topSectionPager"></span>
+    </h3>
+
     <div wicket:id="criteriaSections">
+
 
         <div wicket:id="sectionContainer">
 
-            <span class="eventSectionTitle" wicket:id="sectionName"></span>
-
-            <span class="eventSectionsIndex">
-            </span>
+            <h3>
+                <span class="eventSectionTitle" wicket:id="sectionName"></span>
+            </h3>
 
             <div wicket:id="criteriaEditPanel">
             </div>
 
         </div>
 
+
     </div>
+
+    <h3>
+        <span class="eventSectionIndex" wicket:id="bottomSectionPager"></span>
+    </h3>
+
 
 
 </wicket:panel>

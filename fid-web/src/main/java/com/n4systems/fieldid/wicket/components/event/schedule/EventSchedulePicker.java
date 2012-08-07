@@ -5,6 +5,8 @@ import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -28,7 +30,14 @@ public class EventSchedulePicker extends FormComponentPanel<Event> {
         super(id, eventSchedule);
         this.asset = asset;
 
-        add(new DropDownChoice<Event>("eventSchedule", eventSchedule, createSchedulesListModel(asset), createScheduleChoiceRenderer()).setNullValid(true));
+        DropDownChoice<Event> schedulePicker = new DropDownChoice<Event>("eventSchedule", eventSchedule, createSchedulesListModel(asset), createScheduleChoiceRenderer());
+        schedulePicker.setNullValid(true);
+        schedulePicker.add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+            }
+        });
+        add(schedulePicker);
     }
     
     private IModel<List<Event>> createSchedulesListModel(final IModel<Asset> assetModel) {
@@ -63,4 +72,6 @@ public class EventSchedulePicker extends FormComponentPanel<Event> {
             }
         };
     }
+
+    protected void onScheduleChanged(AjaxRequestTarget target) { }
 }

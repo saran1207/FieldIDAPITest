@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.fieldid.wicket.pages.assettype.RecurringAssetTypeEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.fieldid.wicket.pages.event.EditEventPage;
+import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.*;
@@ -76,7 +77,8 @@ public class FieldIDWicketApp extends WebApplication {
         //  a preferred solution would be to put colorbox in iframe (which requires CSS love) or to force absolute urls to be rendered by wicket.
         mountPage("wicket/reporting2", ReportPage.class);
         
-        mountPage("performEvent", EditEventPage.class);
+        mountPage("performEvent", PerformEventPage.class);
+        mountPage("editEvent", EditEventPage.class);
 
         mountPage("closeEvent", CloseEventPage.class);
 

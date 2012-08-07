@@ -1124,13 +1124,7 @@
 		</action>
 
 		<action name="selectEventAdd" method="select" class="com.n4systems.fieldid.actions.event.EventCrud">
-			<result name="regular" type="redirectAction">
-				<param name="actionName">eventAdd</param>
-				<param name="assetId">${assetId}</param>
-				<param name="type">${type}</param>
-				<param name="eventGroupId">${eventGroupId}</param>
-				<param name="scheduleId">${scheduleId}</param>
-			</result>
+            <result name="regular" type="redirect">/w/performEvent?assetId=${assetId}&amp;type=${type}&amp;scheduleId=${scheduleId}</result>
 			<result name="master" type="redirectAction">
 				<param name="actionName">masterEventAdd</param>
 				<param name="assetId">${assetId}</param>
@@ -1141,10 +1135,7 @@
 		</action>
 
 		<action name="selectEventEdit" method="select" class="com.n4systems.fieldid.actions.event.EventCrud">
-			<result name="regular" type="redirectAction">
-				<param name="actionName">eventEdit</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
+            <result name="regular" type="redirect">/w/editEvent?uniqueID=${uniqueID}</result>
 			<result name="master" type="redirectAction">
 				<param name="actionName">masterEventEdit</param>
 				<param name="uniqueID">${uniqueID}</param>

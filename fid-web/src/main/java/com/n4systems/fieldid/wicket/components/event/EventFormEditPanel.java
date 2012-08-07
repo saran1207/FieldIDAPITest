@@ -21,9 +21,11 @@ public class EventFormEditPanel extends Panel {
     private AbstractEvent.SectionResults currentSection;
     private int currentSectionNumber = 1;
     private int totalSections;
+    private IModel<List<AbstractEvent.SectionResults>> results;
 
     public EventFormEditPanel(String id, IModel<List<AbstractEvent.SectionResults>> results) {
         super(id);
+        this.results = results;
         setOutputMarkupId(true);
 
         totalSections = results.getObject().size();
@@ -31,9 +33,9 @@ public class EventFormEditPanel extends Panel {
         if (!results.getObject().isEmpty()) {
             currentSection = results.getObject().get(0);
         }
-        
-        add(new Label("currentSection", new PropertyModel<Object>(this, "currentSectionNumber")));
-        add(new Label("totalSections", new PropertyModel<Object>(this, "totalSections")));
+
+        PropertyModel<Integer> currentSectionModel = new PropertyModel<Integer>(this, "currentSectionNumber");
+        PropertyModel<Integer> totalSectionsModel = new PropertyModel<Integer>(this, "totalSections");
 
         add(new ListView<AbstractEvent.SectionResults>("criteriaSections", results) {
             @Override
@@ -60,6 +62,9 @@ public class EventFormEditPanel extends Panel {
             }
         });
         add(jumpToSection);
+
+        add(createCriteriaSectionPager("topSectionPager", currentSectionModel, totalSectionsModel));
+        add(createCriteriaSectionPager("bottomSectionPager", currentSectionModel, totalSectionsModel));
     }
     
     private IChoiceRenderer<AbstractEvent.SectionResults> sectionChoiceRenderer() {
@@ -74,6 +79,26 @@ public class EventFormEditPanel extends Panel {
                 return object.section.getTitle();
             }
         };
+    }
+
+    private CriteriaSectionPager createCriteriaSectionPager(String pagerId, IModel<Integer> currentPageModel, IModel<Integer> totalPagesModel) {
+        return new CriteriaSectionPager(pagerId, currentPageModel, totalPagesModel) {
+            @Override
+            protected void onBack(AjaxRequestTarget target) {
+                changeSection(target, -1);
+            }
+
+            @Override
+            protected void onForward(AjaxRequestTarget target) {
+                changeSection(target, 1);
+            }
+        };
+    }
+
+    private void changeSection(AjaxRequestTarget target, int delta) {
+        currentSectionNumber = ((currentSectionNumber + delta - 1) % totalSections) + 1;
+        currentSection = results.getObject().get(currentSectionNumber - 1);
+        target.add(EventFormEditPanel.this);
     }
 
 }

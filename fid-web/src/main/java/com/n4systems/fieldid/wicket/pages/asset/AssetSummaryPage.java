@@ -64,11 +64,11 @@ public class AssetSummaryPage extends AssetPage {
         add(new AssetAttributeDetailsPanel("assetAttributeDetailsPanel", assetModel));
 
         WebMarkupContainer linkedAssetPanel;
-        if(assetService.parentAsset(asset) == null) {
+        if (assetService.parentAsset(asset) == null) {
             add(linkedAssetPanel = new LinkedAssetPanel("linkedAssetPanel", assetModel));
             linkedAssetPanel.setOutputMarkupId(true);
             linkedAssetPanel.setVisible(asset.getType().isLinkable());
-        }else {
+        } else {
             add(linkedAssetPanel = new LinkedWithAssetPanel("linkedAssetPanel", assetModel));
         }
 
