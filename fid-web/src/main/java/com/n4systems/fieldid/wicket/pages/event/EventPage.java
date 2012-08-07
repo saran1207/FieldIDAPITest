@@ -138,8 +138,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             DateTimePicker datePicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
             NewOrExistingEventBook newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
 
-
-            addSchedulePicker();
+            add(new EventSchedulePicker("schedule", new PropertyModel<Event>(EventPage.this, "selectedSchedule"), new PropertyModel<Asset>(event, "asset")));
 
             AttributesEditPanel attributesEditPanel = new AttributesEditPanel("eventAttributes", new Model<AbstractEvent>(event));
 
@@ -249,10 +248,6 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             eventSchedule.setNextDate(schedule.getNextDate(((Event) event).getDate()));
             schedules.add(eventSchedule);
         }
-    }
-
-    private void addSchedulePicker() {
-        add(new EventSchedulePicker("schedule", new PropertyModel<Event>(EventPage.this, "selectedSchedule"), new PropertyModel<Asset>(event, "asset")));
     }
 
     @Override
