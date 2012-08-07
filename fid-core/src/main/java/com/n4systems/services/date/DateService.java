@@ -42,7 +42,9 @@ public class DateService extends FieldIdService {
     //  for other range types like TODAY, LAST_WEEK etc... this is already handled.
     public Date calculateInclusiveToDateWithTimeZone(DateRange dateRange, TimeZone timeZone) {
         LocalDate to = dateRange.withTimeZone(timeZone).getTo();
-        to = dateRange.getRangeType().isCustom() ? to.plusDays(1) : to;
+        if (dateRange.getRangeType().isCustom() && to!=null) {
+            to = to.plusDays(1);
+        }
         return to==null ? null : to.toDate();
     }
 
