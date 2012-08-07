@@ -84,7 +84,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
             modifyAssetsForSchedules(ids);
 
         } catch (Exception e) {
-            throw new UpdateFailureException(e);
+            throw new UpdateFailureException(e.getMessage(), e);
         }
 
         return result;
@@ -341,10 +341,6 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
         audit.setEvents(eventsUpdated);
         persistenceManager.save(audit);
-
-		if (ownershipChanged) {
-			updateCompletedEventOwnership(ids, eventChanges, fieldMap);
-		}
 
 		return new Long(ids.size());
 	}
