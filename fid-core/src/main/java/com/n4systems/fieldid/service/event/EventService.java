@@ -251,14 +251,23 @@ public class EventService extends FieldIdPersistenceService {
 		return persistenceService.findAll(builder);	
 	}
 
-    public Event findEventByScheduleId(Long scheduleId){
-        EventSchedule eventSchedule = persistenceService.find(EventSchedule.class, scheduleId);
-        return persistenceService.find(Event.class, eventSchedule.getEvent().getId());
-    }
-    
     @Transactional
     public Event createNewMasterEvent(Long assetId, Long eventTypeId) {
         Event masterEvent = createNewEvent(new Event(), assetId, eventTypeId);
+        populateNewEvent(masterEvent);
+        return masterEvent;
+    }
+
+    @Transactional
+    public Event createEventFromOpenEvent(Long openEventId) {
+        Event event = persistenceService.find(Event.class, openEventId);
+        event.setEventForm(event.getType().getEventForm());
+        populateNewEvent(event);
+        new NewEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(event);
+        return event;
+    }
+
+    private void populateNewEvent(Event masterEvent) {
         masterEvent.setOwner(masterEvent.getAsset().getOwner());
         masterEvent.setDate(new Date());
         masterEvent.setAdvancedLocation(masterEvent.getAsset().getAdvancedLocation());
@@ -266,12 +275,6 @@ public class EventService extends FieldIdPersistenceService {
         masterEvent.setProofTestInfo(new ProofTestInfo());
         masterEvent.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
         masterEvent.setPerformedBy(getCurrentUser());
-        return masterEvent;
-    }
-
-    @Transactional
-    public SubEvent createNewSubEvent(Long assetId, Long eventTypeId) {
-        return createNewEvent(new SubEvent(), assetId, eventTypeId);
     }
 
     @Transactional
