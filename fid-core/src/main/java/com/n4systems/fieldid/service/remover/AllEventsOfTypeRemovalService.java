@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.handlers.remover.summary.EventArchiveSummary;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -17,14 +16,13 @@ import com.n4systems.util.persistence.SimpleSelect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 public class AllEventsOfTypeRemovalService extends FieldIdPersistenceService {
 
@@ -37,7 +35,7 @@ public class AllEventsOfTypeRemovalService extends FieldIdPersistenceService {
     @Transactional
 	public void remove(EventType eventType) {
 		archiveEvents(eventType);
-        scheduleListRemovalService.remove(null, eventType, EventSchedule.ScheduleStatusGrouping.COMPLETE);
+        scheduleListRemovalService.remove(null, eventType, Event.EventStateGrouping.COMPLETE);
 	}
 
 	private void archiveEvents(EventType eventType) {
@@ -94,16 +92,17 @@ public class AllEventsOfTypeRemovalService extends FieldIdPersistenceService {
 		EventArchiveSummary summary = new EventArchiveSummary();
 
 		summary.setDeleteEvents(eventToBeDeleted(eventType));
-		summary.setDeleteSchedules(scheduleListRemovalService.summary(null, eventType, EventSchedule.ScheduleStatusGrouping.COMPLETE).getSchedulesToRemove());
+		summary.setDeleteSchedules(scheduleListRemovalService.summary(null, eventType, Event.EventStateGrouping.COMPLETE).getSchedulesToRemove());
 
 		return summary;
 	}
 
 	private Long eventToBeDeleted(EventType eventType) {
-		String archiveQuery = "SELECT COUNT(id) FROM " + Event.class.getName() + " i WHERE i.type = :eventType AND i.state = :active";
+		String archiveQuery = "SELECT COUNT(id) FROM " + Event.class.getName() + " i WHERE i.type = :eventType AND i.state = :active AND i.eventState = :eventState";
 		Query query = persistenceService.createQuery(archiveQuery);
 		query.setParameter("eventType", eventType);
 		query.setParameter("active", Archivable.EntityState.ACTIVE);
+        query.setParameter("eventState", Event.EventState.COMPLETED);
 
 		return (Long)query.getSingleResult();
 	}

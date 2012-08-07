@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
 import com.n4systems.handlers.remover.summary.AssociatedEventTypeDeleteSummary;
 import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,7 @@ public class AssociatedEventTypeRemovalService extends FieldIdPersistenceService
 		AssociatedEventTypeDeleteSummary summary = new AssociatedEventTypeDeleteSummary();
 
 		summary.setDeleteEventFrequencies(eventFrequenciesRemovalService.summary(associatedEventType).getElementsToRemove());
-		summary.setDeleteNonCompletedEvent(scheduleListRemovalService.summary(associatedEventType.getAssetType(), associatedEventType.getEventType(), EventSchedule.ScheduleStatusGrouping.NON_COMPLETE).getSchedulesToRemove());
+		summary.setDeleteNonCompletedEvent(scheduleListRemovalService.summary(associatedEventType.getAssetType(), associatedEventType.getEventType(), Event.EventStateGrouping.NON_COMPLETE).getSchedulesToRemove());
 		return summary;
 	}
 
@@ -53,7 +53,7 @@ public class AssociatedEventTypeRemovalService extends FieldIdPersistenceService
 	}
 
 	private void deleteNonCompleteSchedules(AssociatedEventType associatedEventType) {
-		scheduleListRemovalService.remove(associatedEventType.getAssetType(), associatedEventType.getEventType(), EventSchedule.ScheduleStatusGrouping.NON_COMPLETE);
+		scheduleListRemovalService.remove(associatedEventType.getAssetType(), associatedEventType.getEventType(), Event.EventStateGrouping.NON_COMPLETE);
 	}
 
 

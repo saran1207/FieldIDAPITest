@@ -12,6 +12,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleSelect;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,12 +32,12 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
     public static final String DELETE_IDS_QUERY = "DELETE FROM %s WHERE id IN (:ids)";
 
     @Transactional
-    public void remove(AssetType assetType, EventType eventType, EventSchedule.ScheduleStatusGrouping scheduleStatus) {
-        List<Long> ids = scheduleIds(assetType, eventType, scheduleStatus);
+    public void remove(AssetType assetType, EventType eventType, Event.EventStateGrouping eventStates) {
+        List<Long> ids = scheduleIds(assetType, eventType, eventStates);
         Query query = null;
 
-        if (scheduleStatus == EventSchedule.ScheduleStatusGrouping.NON_COMPLETE) {
-            String archiveQuery = String.format(DELETE_IDS_QUERY,EventSchedule.class.getName());
+        if (eventStates == Event.EventStateGrouping.NON_COMPLETE) {
+            String archiveQuery = String.format(DELETE_IDS_QUERY, EventSchedule.class.getName());
             query = persistenceService.createQuery(archiveQuery, new HashMap<String, Object>());
         } else {
             String archiveQuery = String.format(ARCHIVE_IDS_QUERY, EventSchedule.class.getName());
@@ -53,7 +54,7 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
 
     @Transactional
     public void archiveLegacySchedules(AssetType assetType, EventType eventType) {
-        List<Long> ids = scheduleIds(assetType, eventType, EventSchedule.ScheduleStatusGrouping.NON_COMPLETE);
+        List<Long> ids = scheduleIds(assetType, eventType, Event.EventStateGrouping.NON_COMPLETE);
 
         String archiveQuery = String.format(ARCHIVE_IDS_QUERY, EventSchedule.class.getName());
         final HashMap<String, Object> queryParams = new HashMap<String, Object>();
@@ -79,7 +80,8 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
 
     private List<Long> eventIds(AssetType assetType, EventType eventType) {
         QueryBuilder<Long> query = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(assetType.getTenant()));
-        query.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("eventState", Event.EventState.OPEN).addSimpleWhere("type", eventType);
+        query.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("eventState", Event.EventState.COMPLETED).addSimpleWhere("type", eventType);
+        query.addWhere(WhereClauseFactory.createIsNull("nextDate"));
 
         if (assetType != null) {
             query.addSimpleWhere("asset.type", assetType);
@@ -90,10 +92,11 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
 
 
 
-    private List<Long> scheduleIds(AssetType assetType, EventType eventType, EventSchedule.ScheduleStatusGrouping scheduleStatus) {
-        QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
-        schedulesToDelete.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("eventType", eventType);
-        schedulesToDelete.addWhere(WhereParameter.Comparator.IN, "status", "status", Arrays.asList(scheduleStatus.getMembers()));
+    private List<Long> scheduleIds(AssetType assetType, EventType eventType, Event.EventStateGrouping eventStates) {
+        QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
+        schedulesToDelete.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("type", eventType);
+        schedulesToDelete.addWhere(WhereParameter.Comparator.IN, "eventState", "eventState", Arrays.asList(eventStates.getMembers()));
+        schedulesToDelete.addWhere(WhereClauseFactory.createNotNull("nextDate"));
 
         if (assetType != null) {
             schedulesToDelete.addSimpleWhere("asset.type", assetType);
@@ -103,8 +106,8 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
     }
 
     @Transactional
-	public ScheduleListRemovalSummary summary(AssetType assetType, EventType eventType, EventSchedule.ScheduleStatusGrouping scheduleStatus) {
-		return new ScheduleListRemovalSummary((long)scheduleIds(assetType,  eventType, scheduleStatus).size());
+	public ScheduleListRemovalSummary summary(AssetType assetType, EventType eventType, Event.EventStateGrouping eventStates) {
+		return new ScheduleListRemovalSummary((long)scheduleIds(assetType,  eventType, eventStates).size());
 	}
 
 }

@@ -51,6 +51,21 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         }
     }
 
+    public enum EventStateGrouping {
+        NON_COMPLETE(EventState.OPEN, EventState.CLOSED), COMPLETE(EventState.COMPLETED);
+
+        private EventState[] members;
+
+        private EventStateGrouping(EventState... members) {
+            this.members = members;
+        }
+
+        public EventState[] getMembers() {
+            return members;
+        }
+
+    }
+
 	private Location advancedLocation = new Location();
 
 	@Column(nullable=false)
