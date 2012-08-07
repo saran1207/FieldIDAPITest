@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.chart.RangeType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -12,6 +15,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
+import java.util.TimeZone;
 
 @SuppressWarnings("serial")
 public abstract class Widget<W extends WidgetConfiguration> extends Panel {
@@ -65,5 +70,10 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
     }    
 
 	public abstract Component createConfigPanel(String id);
+
+    protected DateRange getTimeZoneDateRange(RangeType rangeType) {
+        TimeZone timeZone = FieldIDSession.get().getSessionUser().getTimeZone();
+        return new DateRange(rangeType).withTimeZone(timeZone);
+    }
 
 }

@@ -45,7 +45,7 @@ public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifi
 	@Override
 	public DateRange getDateRange() {
 		AssetsIdentifiedWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
-		return new DateRange(config.getRangeType());
+		return getTimeZoneDateRange(config.getRangeType());
 	}
 
 	private BaseOrg getOrg() {

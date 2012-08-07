@@ -10,6 +10,8 @@ import java.util.List;
 
 public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset> {
 
+
+
     public AssetSearchService() {
         super(Asset.class);
     }
@@ -29,7 +31,7 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 		addSimpleTerm(search, "type.id", getId(criteriaModel.getAssetType()));
 		addSimpleTerm(search, "type.group.id", getId(criteriaModel.getAssetTypeGroup()));
 		addSimpleTerm(search, "assetStatus.id", getId(criteriaModel.getAssetStatus()));
-		addDateRangeTerm(search, "identified", criteriaModel.getIdentifiedFromDate(), criteriaModel.getIdentifiedToDate());
+		addDateRangeTerm(search, "identified", dateService.calculateFromDate(criteriaModel.getDateRange()), dateService.calculateToDate(criteriaModel.getDateRange()));
 
 		addPredefinedLocationTerm(search, criteriaModel);
 		addAssignedUserTerm(search, criteriaModel);

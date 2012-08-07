@@ -53,7 +53,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 	@Override
 	public DateRange getDateRange() {
 		EventCompletenessWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
-		return new DateRange(config.getRangeType());
+		return getTimeZoneDateRange(config.getRangeType());
 	}
 	
 	@Override

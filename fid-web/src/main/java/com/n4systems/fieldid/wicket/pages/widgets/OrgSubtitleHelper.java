@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import java.util.List;
-
-import org.apache.wicket.model.PropertyModel;
-
 import com.google.common.collect.Lists;
 import com.n4systems.model.orgs.BaseOrg;
+import org.apache.wicket.model.PropertyModel;
+
+import java.util.List;
 
 public abstract class OrgSubtitleHelper {
 

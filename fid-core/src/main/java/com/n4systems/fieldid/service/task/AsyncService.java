@@ -1,9 +1,9 @@
-
 package com.n4systems.fieldid.service.task;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.services.SecurityContext;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +88,7 @@ public class AsyncService extends FieldIdService {
 	public class AsyncTask<T> implements Callable<T> {
 		private final Callable<T> callable;
 		private final SecurityFilter tenantSecurityFilter;
-		private final SecurityFilter userSecurityFilter;
+		private final UserSecurityFilter userSecurityFilter;
 
 		private AsyncTask(Callable<T> callable) {
 			this(callable, securityContext);

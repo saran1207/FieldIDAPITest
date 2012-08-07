@@ -6,12 +6,12 @@ import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.NetworkEntity;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
+import com.n4systems.services.date.DateService;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.ResultTransformer;
@@ -27,8 +27,10 @@ import java.util.List;
 
 public abstract class SearchService<T extends SearchCriteria, M extends BaseEntity & NetworkEntity> extends FieldIdPersistenceService {
 
-    @Autowired
-	public OrgService orgService;
+	public @Autowired OrgService orgService;
+
+    protected @Autowired DateService dateService;
+
 
     private Class<M> searchClass;
 

@@ -10,7 +10,6 @@ import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -118,13 +117,15 @@ public class AssetSearchCriteria extends SearchCriteria {
         this.assetType = assetType;
     }
 
-    public Date getIdentifiedFromDate() { 
-    	return dateRange.calculateFromDate();
-    }
 
-    public Date getIdentifiedToDate() { 
-		return dateRange.calculateToDate();
-	}
+    ///????? need to resolve this one????
+//    public Date getIdentifiedFromDate() {
+//    	return dateRange.calculateFromDate();
+//    }
+//
+//    public Date getIdentifiedToDate() {
+//		return dateRange.calculateToDate();
+//	}
 
     public User getAssignedTo() {
         return assignedTo;

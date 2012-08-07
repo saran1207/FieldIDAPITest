@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.pages.widgets.config.EventKPIConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
+public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> implements HasDateRange {
 
 	@SpringBean 
 	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
@@ -77,4 +78,9 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> {
 		return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );
 	}
 
+    @Override
+    public DateRange getDateRange() {
+        EventKPIWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
+        return getTimeZoneDateRange(config.getRangeType());
+    }
 }

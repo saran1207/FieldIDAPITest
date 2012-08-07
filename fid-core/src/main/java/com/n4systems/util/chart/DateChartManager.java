@@ -47,7 +47,11 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 
 	@Override
 	public ChartSeries<LocalDate> normalize(ChartSeries<LocalDate> series, LocalDate min, LocalDate max) {
-		LocalDate date = MathUtil.nullSafeMin(granularity.roundDown(min), granularity.roundDown(dateRange.getEarliest()));
+
+        LocalDate earliest = dateRange.getFrom();
+        earliest = earliest==null ? DateUtil.getEarliestFieldIdDate() : earliest;
+
+        LocalDate date = MathUtil.nullSafeMin(granularity.roundDown(min), granularity.roundDown(earliest));
         LocalDate endDate = MathUtil.nullSafeMax(max, series.getLastX());
         if (!RangeType.FOREVER.equals(dateRange.getRangeType())) {
             // skip FOREVER case because it's end date isn't practical.

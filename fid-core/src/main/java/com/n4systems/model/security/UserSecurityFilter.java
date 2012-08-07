@@ -1,25 +1,28 @@
 package com.n4systems.model.security;
 
-import javax.persistence.Query;
-
-
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 
+import javax.persistence.Query;
+import java.util.TimeZone;
+
 public class UserSecurityFilter extends AbstractSecurityFilter {
 	
 	private final BaseOrg filterOrg;
 	private final Long filterUserId;
-	
-	public UserSecurityFilter(BaseOrg filterOrg, Long filterUserId) {
+    private TimeZone timeZone;
+
+
+    public UserSecurityFilter(BaseOrg filterOrg, Long filterUserId, TimeZone timeZone) {
 		this.filterOrg = filterOrg;
 		this.filterUserId = filterUserId;
+        this.timeZone = timeZone;
 	}
 	
 	public UserSecurityFilter(User user) {
-		this(user.getOwner(), user.getId());
+		this(user.getOwner(), user.getId(), user.getTimeZone());
 	}
 
 	@Override
@@ -113,4 +116,12 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 	public boolean hasOwner() {
 		return filterOrg != null;
 	}
+
+    public TimeZone getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(TimeZone timeZone) {
+        this.timeZone = timeZone;
+    }
 }

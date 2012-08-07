@@ -21,11 +21,12 @@ public class CompletedOrDueDateRange extends CompleteOrIncompleteTerm {
 
     public CompletedOrDueDateRange(TimeZone timeZone, DateRange dateRange) {
         this.timeZone = timeZone;
-        this.dateRange = dateRange;
+        this.dateRange = dateRange.withTimeZone(timeZone);
     }
 
     @Override
     protected void populateIncompleteTerm(WhereParameterGroup completedGroup) {
+        // set timezone for dateRange in calling reportService.
         DateRangeTerm rangeTerm = new DateRangeTerm("nextDate", dateRange.calculateFromDate(), dateRange.calculateToDate());
 
         for (WhereClause<?> whereClause : rangeTerm.getWhereParameters()) {

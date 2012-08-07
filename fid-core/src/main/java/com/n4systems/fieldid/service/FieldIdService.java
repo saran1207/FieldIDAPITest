@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.util.persistence.QueryBuilder;
 
+import java.util.TimeZone;
+
 public class FieldIdService {
 
 	@Autowired
@@ -29,4 +31,10 @@ public class FieldIdService {
     		return new QueryBuilder<T>(clazz, securityContext.getTenantSecurityFilter());
     	}
     }
+
+    protected TimeZone getUserTimeZone() {
+        return securityContext.getUserSecurityFilter().getTimeZone();
+    }
+
+
 }

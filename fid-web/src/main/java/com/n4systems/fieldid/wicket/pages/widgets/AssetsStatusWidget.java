@@ -60,7 +60,7 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 	@Override
 	public DateRange getDateRange() {
 		AssetsStatusWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
-		return new DateRange(config.getRangeType());
+		return getTimeZoneDateRange(config.getRangeType());
 	}
 	
 	@Override

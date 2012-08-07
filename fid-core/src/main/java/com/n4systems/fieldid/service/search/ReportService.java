@@ -6,6 +6,7 @@ import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventState;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.user.User;
+import com.n4systems.services.date.DateService;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.JoinTerm;
@@ -17,12 +18,16 @@ import com.n4systems.util.persistence.search.terms.completedordue.AssignedUserTe
 import com.n4systems.util.persistence.search.terms.completedordue.CompletedOrDueDateRange;
 import com.n4systems.util.persistence.search.terms.completedordue.LocationTerm;
 import org.apache.commons.lang.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
 public class ReportService extends SearchService<EventReportCriteria, Event> {
+
+    @Autowired
+    private DateService dateService;
 
     public ReportService() {
         super(Event.class);
@@ -64,19 +69,28 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
             addSimpleTerm(searchTerms, "eventState", Event.EventState.CLOSED);
         }
 
+        // use DateService here...
         if (IncludeDueDateRange.HAS_NO_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
             addNullTerm(searchTerms, "nextDate");
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
             addNotNullTerm(searchTerms,  "nextDate");
         } else if (criteriaModel.getEventState() == EventState.OPEN || IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange())) {
             if (criteriaModel.getDueDateRange() != null && !criteriaModel.getDueDateRange().isEmptyCustom()) {
-                addDateRangeTerm(searchTerms, "nextDate", criteriaModel.getDueDateRange().calculateFromDate(), nextDay(criteriaModel.getDueDateRange().calculateToDate()));
+                // recall : due dates don't have timeZone.
+                Date from = dateService.calculateFromDate(criteriaModel.getDueDateRange());
+                Date to = DateUtils.addDays(dateService.calculateToDate(criteriaModel.getDueDateRange()),1);  // return day after TO
+                addDateRangeTerm(searchTerms, "nextDate", from, to);
             }
         }
 
         if (criteriaModel.getDateRange() != null && !criteriaModel.getDateRange().isEmptyCustom()) {
             if (criteriaModel.getEventState() == EventState.COMPLETE) {
-                addDateRangeTerm(searchTerms, "completedDate", DateHelper.convertToUTC(criteriaModel.getDateRange().calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(criteriaModel.getDateRange().calculateToDate()), timeZone));
+                Date from = dateService.calculateFromDateWithTimeZone(criteriaModel.getDateRange(), timeZone);
+                Date to = dateService.calculateInclusiveToDateWithTimeZone(criteriaModel.getDateRange(), timeZone);
+                addDateRangeTerm(searchTerms, "completedDate", DateHelper.convertToUTC(from, timeZone), DateHelper.convertToUTC(to, timeZone));
+// original=    addDateRangeTerm(searchTerms, "completedDate",
+//      FROM            DateHelper.convertToUTC(criteriaModel.getDateRange().calculateFromDate(), timeZone),
+//      TO              DateHelper.convertToUTC(nextDay(criteriaModel.getDateRange().calculateToDate()), timeZone));
             } else if (criteriaModel.getEventState() == EventState.ALL) {
                 searchTerms.add(new CompletedOrDueDateRange(timeZone, criteriaModel.getDateRange()));
             }
@@ -148,9 +162,9 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
         }
     }
 
-    private Date nextDay(Date date) {
-        return date == null ? null : DateUtils.addDays(date, 1);
-    }
+//    private Date nextDay(Date date) {
+//        return date == null ? null : DateUtils.addDays(date, 1);
+//    }
 
     @Override
     protected void addSortTerms(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {

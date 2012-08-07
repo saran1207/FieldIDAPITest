@@ -15,6 +15,7 @@ import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.reporting.EventReportMapProducer;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.reporting.SubEventReportMapProducer;
+import com.n4systems.services.date.DateService;
 import com.n4systems.util.StringListingPair;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -41,8 +42,9 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
     private static final String n4LogoFileName = "n4_logo.gif";
     private Logger logger = Logger.getLogger(EventSummaryJasperGenerator.class);
 
-    @Autowired
-    private OrgService orgService;
+    private @Autowired OrgService orgService;
+    private @Autowired DateService dateService;
+
 
     @Transactional
     public JasperPrint generate(EventReportCriteria criteria, List<Long> sortedIdList) throws ReportException {
@@ -181,8 +183,8 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
         reportMap.put("rfidNumber", criteria.getRfidNumber());
         reportMap.put("orderNumber", criteria.getOrderNumber());
         reportMap.put("purchaseOrder", criteria.getPurchaseOrder());
-        reportMap.put("toDate", criteria.getDateRange().calculateFromDate());
-        reportMap.put("fromDate", criteria.getDateRange().calculateToDate());
+        reportMap.put("toDate", dateService.calculateFromDate(criteria.getDateRange()));
+        reportMap.put("fromDate", dateService.calculateToDate(criteria.getDateRange()));
         reportMap.put("hasIntegration", primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
 
         if (criteria.getAssetType() != null) {

@@ -1,11 +1,5 @@
 package com.n4systems.model.event;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Event;
 import com.n4systems.model.Status;
 import com.n4systems.model.common.SimpleFrequency;
@@ -19,6 +13,11 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.time.Clock;
+
+import javax.persistence.EntityManager;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public class FailedEventListLoader extends ListLoader<Event>{
 	
@@ -35,13 +34,13 @@ public class FailedEventListLoader extends ListLoader<Event>{
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, filter);
 		
 		builder.addWhere(WhereClauseFactory.create("status", Status.FAIL));
-		builder.addWhere(Comparator.GE, "date", "schedule.completedDate", getFromDate());
+		builder.addWhere(Comparator.GE, "date", "completedDate", getFromDate());  // this needs to be converted toUTC(timeZone)!!!
 
 		if(setting != null) {
 			applyNotificationFilters(builder);
 		}
 		
-		builder.addOrder("schedule.completedDate");
+		builder.addOrder("completedDate");
 		builder.getPostFetchPaths().addAll(Arrays.asList(Event.ALL_FIELD_PATHS));
 		return builder.getResultList(em);
 	}
@@ -71,7 +70,7 @@ public class FailedEventListLoader extends ListLoader<Event>{
 		}
 	}
 
-	protected Date getFromDate() {
+	public Date getFromDate() {
 		Date date = new PlainDate(clock.currentTime());
 		if (frequency.equals(SimpleFrequency.DAILY)) {
 			date = DateHelper.increment(date, DateHelper.DAY, -1);

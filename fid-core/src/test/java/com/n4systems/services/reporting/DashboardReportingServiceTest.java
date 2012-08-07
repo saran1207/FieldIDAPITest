@@ -6,11 +6,11 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.Status;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.services.date.DateService;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import com.n4systems.util.chart.ChartGranularity;
@@ -22,11 +22,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
-import static com.n4systems.model.EventSchedule.*;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 
@@ -44,6 +46,7 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
 	@TestTarget private DashboardReportingService dashboardService; 
 	@TestMock private AssetService assetService;
 	@TestMock private EventService eventService;
+    @TestMock private DateService dateService;
 
 	private LocalDate jan1 = new LocalDate(2011, 1, 1);
 	private LocalDate jan2 = new LocalDate(2011, 1, 2);
@@ -99,7 +102,7 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
 		assertEquals(VALUE_FOR_JAN1, results.get(jan1).getY());
 		assertEquals(VALUE_FOR_JAN5, results.get(jan5).getY());
 		
-		verifyTestMocks();
+		verify(eventService, assetService);
 	}
 	
 	@Test 
@@ -107,10 +110,15 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
         DateRange dateRange = new DateRange(RangeType.FOREVER);
 		BaseOrg owner = OrgBuilder.aCustomerOrg().build();		
 		List<AssetsStatusReportRecord> assetStatuses = createAssetStatusResults(STATUS_FOO, STATUS_BAR, STATUS_HELLO, STATUS_WORLD);
-        
-		expect(assetService.getAssetsStatus(dateRange.getFromDate(), dateRange.getToDate(), owner)).andReturn(assetStatuses);
+        Date from = LocalDate.now().toDate();
+        Date to = LocalDate.now().plusDays(7).toDate();
+
+        expect(dateService.calculateFromDate(dateRange)).andReturn(from);
+        expect(dateService.calculateToDate(dateRange)).andReturn(to);
+        replay(dateService);
+
+        expect(assetService.getAssetsStatus(from, to, owner)).andReturn(assetStatuses);
 		replay(assetService);
-		replay(eventService);
 
         ChartSeries<String> results = dashboardService.getAssetsStatus(dateRange, owner);
 		
@@ -120,7 +128,7 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
         assertEquals(assetStatuses.get(2), results.get(STATUS_HELLO));
         assertEquals(assetStatuses.get(3), results.get(STATUS_WORLD));
 
-		verifyTestMocks();		
+		verify(dateService, assetService);
 	}	
 	
 	@Test 
@@ -129,14 +137,21 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
 		BaseOrg owner = OrgBuilder.aCustomerOrg().build();		
 		List<AssetsStatusReportRecord> assetStatuses = createAssetStatusResults();
 		int sizeOfBigData = assetStatuses.size();
-		expect(assetService.getAssetsStatus(dateRange.getFromDate(), dateRange.getToDate(), owner)).andReturn(assetStatuses);
+        Date from = LocalDate.now().toDate();
+        Date to = LocalDate.now().plusDays(7).toDate();
+
+        expect(dateService.calculateFromDate(dateRange)).andReturn(from);
+        expect(dateService.calculateToDate(dateRange)).andReturn(to);
+        replay(dateService);
+
+		expect(assetService.getAssetsStatus(from, to, owner)).andReturn(assetStatuses);
 		replay(assetService);
 
         ChartSeries<String> results = dashboardService.getAssetsStatus(dateRange, owner);
 		
 		assertEquals(sizeOfBigData, results.size());  // add one for the Other section (which aggregrates the 3 smaller valued records).
 
-		verifyTestMocks();		
+		verify(dateService, assetService);
 	}	
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -151,7 +166,7 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
         BaseOrg owner = OrgBuilder.aCustomerOrg().build();
 		ChartGranularity granularity = ChartGranularity.MONTH;
 		List<AssetsIdentifiedReportRecord> assets = createAssetsIdentifiedResults(granularity, jan1_2011, 100L, 200L);
-        DateRange dateRange = new DateRange(RangeType.THIS_YEAR);
+        DateRange dateRange = new DateRange(RangeType.THIS_YEAR, TimeZone.getDefault());
 		expect(assetService.getAssetsIdentified(granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(dateRange.getTo()).toDate(), owner)).andReturn(assets);
 		replay(assetService);
 
@@ -161,7 +176,7 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
         assertEquals(100L, results.get(jan1_2011).getY().longValue());
         assertEquals(200L, results.get(jan1_2011.plusMonths(1)).getY().longValue());
 
-		verifyTestMocks();
+		verify(assetService);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
@@ -175,7 +190,7 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
 	public void test_getCompletedEvents() { 
 		BaseOrg owner = OrgBuilder.aCustomerOrg().build();
 		ChartGranularity granularity = ChartGranularity.DAY;
-        DateRange dateRange = new DateRange(RangeType.THIS_YEAR);
+        DateRange dateRange = new DateRange(RangeType.THIS_YEAR, TimeZone.getDefault());
 		
 		int failedCount = 3;
 		int passCount = 7;
@@ -204,7 +219,7 @@ public class DashboardReportingServiceTest extends FieldIdServicesUnitTest {
 		assertEquals(Status.FAIL.getDisplayName(), results.get(2).getLabel());
 		assertEquals(Status.NA.getDisplayName(), results.get(3).getLabel());
 
-		verifyTestMocks();
+		verify(eventService,assetService);
 	}
 		
 	@Test 

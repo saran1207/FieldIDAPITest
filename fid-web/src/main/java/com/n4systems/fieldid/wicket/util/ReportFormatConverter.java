@@ -62,6 +62,7 @@ public class ReportFormatConverter {
         container.setEventType(getId(criteriaModel.getEventType()));
         container.setEventTypeGroup(getId(criteriaModel.getEventTypeGroup()));
         if (criteriaModel.getDateRange() != null) {
+            // should this be in UTC...or have a TimeZone???
             container.setFromDate(criteriaModel.getDateRange().calculateFromDate());
             container.setToDate(criteriaModel.getDateRange().calculateToDate());
         }
@@ -93,8 +94,12 @@ public class ReportFormatConverter {
         container.setAssetType(getId(criteriaModel.getAssetType()));
         container.setAssignedUser(getId(criteriaModel.getAssignedTo()));
         container.setAssetTypeGroup(getId(criteriaModel.getAssetTypeGroup()));
-        container.setFromDate(criteriaModel.getIdentifiedFromDate());
-        container.setToDate(criteriaModel.getIdentifiedToDate());
+
+        // DD : timezone's don't really make sense for floating date ranges here so i'll just use defaults.
+        //   confirm...not really sure about the usage of this class w.r.t date ranges. i think it only dealt with
+        //   specific dates in the past.
+        container.setFromDate(criteriaModel.getDateRange().calculateFromDate());
+        container.setToDate(criteriaModel.getDateRange().calculateToDate());
         container.setOrderNumber(criteriaModel.getOrderNumber());
         container.setRfidNumber(criteriaModel.getRfidNumber());
         container.setReferenceNumber(criteriaModel.getReferenceNumber());

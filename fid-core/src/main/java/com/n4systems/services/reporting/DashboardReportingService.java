@@ -14,6 +14,7 @@ import com.n4systems.model.dashboard.widget.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.*;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.services.date.DateService;
 import com.n4systems.util.EnumUtils;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
@@ -32,6 +33,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
     private @Autowired AssetService assetService;
 	private @Autowired EventService eventService;
 	private @Autowired AssetStatusService assetStatusService;
+    private @Autowired DateService dateService;
 	
 	@Transactional(readOnly = true)
     public ChartSeries<LocalDate> getAssetsIdentified(DateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
@@ -47,9 +49,11 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return new ChartSeries<LocalDate>(results);
 	}
 
+
+    // use DateService.
 	public ChartSeries<String> getAssetsStatus(DateRange dateRange, BaseOrg org) {
 		Preconditions.checkArgument(dateRange !=null);
-		List<AssetsStatusReportRecord> results = assetService.getAssetsStatus(dateRange.calculateFromDate(), dateRange.calculateToDate(), org);
+        List<AssetsStatusReportRecord> results = assetService.getAssetsStatus(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), org);
         return new ChartSeries<String>(results);
 	}
 

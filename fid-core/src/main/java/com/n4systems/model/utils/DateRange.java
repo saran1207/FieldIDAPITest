@@ -2,6 +2,7 @@ package com.n4systems.model.utils;
 
 import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.time.DateUtil;
+import org.apache.log4j.Logger;
 import org.joda.time.*;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.TimeZone;
 
 
 /**
@@ -33,13 +35,13 @@ public class DateRange implements Serializable, Cloneable {
     @Column(name="dateRange", nullable = false)
     @Enumerated(EnumType.STRING)
     private RangeType rangeType = RangeType.FOREVER;
-
+    
     @Column
     private Date fromDate;
-
+    
     @Column
     private Date toDate;
-
+    
     @Deprecated // only required for hibernate/jpa reasons.  use other constructors.
     public DateRange() {
     }
@@ -50,8 +52,16 @@ public class DateRange implements Serializable, Cloneable {
         this.rangeType = RangeType.CUSTOM;
     }
 
+    // it is preferred that you specify the timezone up front. it won't blow up if no timezone is specified as it will
+    // use default but it's better to be explicit.
+    @Deprecated
     public DateRange(RangeType rangeType) {
         this.rangeType = rangeType;
+    }
+
+    public DateRange(RangeType rangeType, TimeZone timeZone) {
+        this.rangeType = rangeType;
+        withTimeZone(timeZone);
     }
 
     public static LocalDate earliestDate() {
@@ -61,7 +71,7 @@ public class DateRange implements Serializable, Cloneable {
 	public String getFromDateDisplayString() {
 		return rangeType.getFormatter().getFromDateDisplayString(getFrom());
 	}
-
+    
 	public String getToDateDisplayString() {
 		return rangeType.getFormatter().getToDateDisplayString(getInclusiveTo());
 	}
@@ -87,30 +97,36 @@ public class DateRange implements Serializable, Cloneable {
 	public LocalDate getFrom() {
 		return getHandler().getNowFrom();
 	}
-	
-	private DateRangeHandler getHandler() {
-		if (RangeType.CUSTOM.equals(rangeType)) {
-			return new IntervalHandler(fromDate,toDate);
-		} else { 
-			return rangeType.getHandler();
-		}
-	}
 
-	
-	public Date calculateFromDate() {
+    // you must make sure you have set timezone before calling this to get correct results.
+    // preferrable to use DateService.
+    @Deprecated
+    public Date calculateFromDate() {
 		LocalDate from = getFrom();
 		return from==null ? null : from.toDate();
 	}
 
-	// NOTE : static date ranges like LastWeek are inclusive.   i.e. From = Jan1, To=Jan8
-	// but when the user enters custom dates like Jan1-Jan8 they want to include the last day. 
-	public Date calculateToDate() {
+    // you must make sure you have set timezone before calling this to get correct results.
+    // preferrable to use DateService.
+    @Deprecated
+    public Date calculateToDate() {
 		LocalDate to = getTo();
-		if (rangeType.isPredefinedType()) {
-			to = to.minusDays(1);
-		}
 		return to==null ? null : to.toDate();
 	}
+
+    public DateRange withTimeZone(TimeZone timeZone) {
+        getHandler().setTimeZone(timeZone);
+        return this;
+    }
+
+    private DateRangeHandler getHandler() {
+		if (RangeType.CUSTOM.equals(rangeType)) {
+			return new IntervalHandler(fromDate,toDate);
+		} else {
+			return rangeType.getHandler();
+		}
+	}
+
 
 	public String getDisplayName() {
 		return rangeType.getFormatter().getDisplayName(this);
@@ -130,47 +146,54 @@ public class DateRange implements Serializable, Cloneable {
 		}
 	}
 
-	public LocalDate getEarliest() {
-		return getFrom()==null ? DateUtil.getEarliestFieldIdDate() : getFrom();
-	}
-
-	public LocalDate getLatest() {
-		return getTo()==null ? DateUtil.getLatestFieldIdDate() : getTo();
-	}
-	
-	
-	// ---------------------------------- internal classes -----------------------------------------------
-
-	
 
 
 
-
+    // ---------------------------------- internal handler impl classes -----------------------------------------------
 
 
 	static abstract class AbstractDateRangeHandler implements DateRangeHandler {
+        private static final Logger logger= Logger.getLogger(AbstractDateRangeHandler.class);
 		private Period period;
+        private TimeZone timeZone = null;
 
 		public AbstractDateRangeHandler(Period period) { 
 			this.period = period;
 		}
 		@Override public LocalDate getNowFrom() {
-			return LocalDate.now();
+			return new LocalDate(today());
 		}
-		@Override public LocalDate getNowTo() {
-			return getNowFrom().plus(period);			
+
+        @Override public LocalDate getNowTo() {
+			return getNowFrom().plus(period);
 		}
 		@Override public Period getPeriod() {
 			return period;
 		}
-		
-	}
+
+        public TimeZone getTimeZone() {
+            return timeZone;
+        }
+
+        public void setTimeZone(TimeZone timeZone) {
+            this.timeZone = timeZone;
+        }
+
+        protected DateMidnight today() {
+            if (timeZone==null) {
+                logger.error("calling date range without using timezone!  using default timezone instead.");
+                return new DateMidnight(DateTimeZone.forTimeZone(TimeZone.getDefault()));
+            }
+            return new DateMidnight(DateTimeZone.forTimeZone(timeZone));
+        }
+    }
 	
 	public static class IntervalHandler implements DateRangeHandler {
 		private LocalDate from;
 		private LocalDate to;
+        private TimeZone timeZone;
 
-		public IntervalHandler() {
+        public IntervalHandler() {
 			this((Date)null,(Date)null);
 		}
 		public IntervalHandler(Date from, Date to) { 
@@ -189,7 +212,12 @@ public class DateRange implements Serializable, Cloneable {
 		@Override public Period getPeriod() {
 			return from==null||to==null ? OPEN_PERIOD : new Period(from,to);
 		}
-	}
+
+        @Override
+        public void setTimeZone(TimeZone timeZone) {
+            this.timeZone = timeZone; // irrelevant...user is specifying dates like Jan1-Feb 23.  not TZ's needed.
+        }
+    }
 	
 	public static class DayHandler extends AbstractDateRangeHandler {
 		private int offset;
@@ -199,7 +227,7 @@ public class DateRange implements Serializable, Cloneable {
 		}
 		@Override
 		public LocalDate getNowFrom() {
-			return LocalDate.now().plusDays(offset);			
+			return new LocalDate(today()).plusDays(offset);
 		}
 	}
 
@@ -211,9 +239,10 @@ public class DateRange implements Serializable, Cloneable {
 		}
 		@Override
 		public LocalDate getNowFrom() {
-			return LocalDate.now().withDayOfWeek(DateTimeConstants.MONDAY).plusWeeks(offset);			
+			return new LocalDate(today()).withDayOfWeek(DateTimeConstants.MONDAY).plusWeeks(offset);
 		}
-	}
+
+    }
 
 	public static class MonthHandler extends AbstractDateRangeHandler {
 		private int offset;
@@ -223,7 +252,7 @@ public class DateRange implements Serializable, Cloneable {
 		}
 		@Override
 		public LocalDate getNowFrom() {
-			return LocalDate.now().withDayOfMonth(1).plusMonths(offset);			
+			return new LocalDate(today()).withDayOfMonth(1).plusMonths(offset);
 		}
 	}
 
@@ -235,8 +264,8 @@ public class DateRange implements Serializable, Cloneable {
 			this.offset = i;
 		}
 		@Override
-		public LocalDate getNowFrom() {			
-			LocalDate now = LocalDate.now();
+		public LocalDate getNowFrom() {
+            LocalDate now = new LocalDate(today());
 			return now.plusMonths(3*offset).minusMonths((now.getMonthOfYear()-1)%3).withDayOfMonth(1);
 		}
 	}
@@ -248,8 +277,8 @@ public class DateRange implements Serializable, Cloneable {
 			this.offset = i;
 		}
 		@Override
-		public LocalDate getNowFrom() {			
-			return LocalDate.now().plusYears(offset).withDayOfYear(1);
+		public LocalDate getNowFrom() {
+			return new LocalDate(today()).plusYears(offset).withDayOfYear(1);
 		}
 	}
 	
@@ -258,15 +287,15 @@ public class DateRange implements Serializable, Cloneable {
 			super(new Period().withDays(days));
 		}
 	}
-
+    
     public RangeType getRangeType() {
         return rangeType;
     }
-
+    
     public void setRangeType(RangeType rangeType) {
         this.rangeType = rangeType;
     }
-
+    
     /** warning : this method is here for hibernate/persistence only. end users of this object should use calculateFromDate()
     	because it will deal with nulls correctly.  
    		@see #getToDate()

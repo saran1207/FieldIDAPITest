@@ -46,6 +46,7 @@ import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.services.dashboard.DashboardService;
+import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ServiceLocator;
@@ -384,6 +385,9 @@ public class FieldIdCoreConfig {
         return new EventStatusService();
     }
 
-
+    @Bean
+    public DateService dateService() {
+        return new DateService();
+    }
 }
 

@@ -1,7 +1,5 @@
 package com.n4systems.model.orgs;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.persistence.loaders.Loader;
@@ -11,8 +9,9 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.joda.time.LocalDate;
 
-import java.util.Date;
+import javax.persistence.EntityManager;
 
 public class AllPrimaryOrgsPaginatedLoader extends Loader<Pager<PrimaryOrg>> {
 	
@@ -39,8 +38,8 @@ public class AllPrimaryOrgsPaginatedLoader extends Loader<Pager<PrimaryOrg>> {
 		}
 
         if (inactiveSince != null) {
-            final Date fromDate = new DateRange(inactiveSince).calculateFromDate();
-            builder.addWhere(WhereClauseFactory.create(Comparator.LE, "tenant.lastLoginTime", fromDate));
+            final LocalDate from = new DateRange(inactiveSince).getFrom();
+            builder.addWhere(WhereClauseFactory.create(Comparator.LE, "tenant.lastLoginTime", from==null ? null : from.toDate()));
         }
 
         if (activeOnly) {

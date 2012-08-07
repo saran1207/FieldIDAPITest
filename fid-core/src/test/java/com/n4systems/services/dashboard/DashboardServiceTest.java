@@ -7,7 +7,6 @@ import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
-import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
@@ -28,7 +27,7 @@ public class DashboardServiceTest extends FieldIdServicesUnitTest {
 	@TestMock private PersistenceService persistenceService;
 	@TestMock private SecurityContext securityContext;
 	
-	private SecurityFilter securityFilter;
+	private UserSecurityFilter securityFilter;
 	
 	@Override
 	@Before

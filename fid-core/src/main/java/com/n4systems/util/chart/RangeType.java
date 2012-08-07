@@ -78,7 +78,11 @@ public enum RangeType implements Listable<String>, Serializable {
         return EnumSet.complementOf(daysFromNowRangeTypes);
     }
 
-	public boolean isDaily() {
+    public boolean isCustom() {
+        return this.equals(CUSTOM);
+    }
+
+    public boolean isDaily() {
 		return dailyRangeTypes.contains(this);
 	}	
 	

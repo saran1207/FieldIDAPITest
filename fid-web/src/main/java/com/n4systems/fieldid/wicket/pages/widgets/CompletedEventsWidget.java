@@ -1,13 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import com.n4systems.util.chart.*;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
-
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
 import com.n4systems.fieldid.wicket.pages.widgets.config.CompletedEventsConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
@@ -15,6 +7,13 @@ import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.reporting.DashboardReportingService;
+import com.n4systems.util.chart.*;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.LocalDate;
 
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
 	@Override
 	public DateRange getDateRange() {
 		CompletedEventsWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
-		return new DateRange(config.getDateRangeType());
+        return getTimeZoneDateRange(config.getDateRangeType());
 	}
 	
 	@Override
