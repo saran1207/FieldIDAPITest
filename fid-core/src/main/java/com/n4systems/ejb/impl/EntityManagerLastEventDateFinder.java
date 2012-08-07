@@ -52,7 +52,7 @@ public class EntityManagerLastEventDateFinder implements LastEventDateFinder {
 
 		QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter(), "i");
 
-		qBuilder.setMaxSelect("schedule.completedDate");
+		qBuilder.setMaxSelect("completedDate");
 		qBuilder.addSimpleWhere("asset.id", asset.getId());
 		qBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 

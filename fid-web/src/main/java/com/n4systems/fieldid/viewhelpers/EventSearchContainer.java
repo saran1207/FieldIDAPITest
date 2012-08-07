@@ -75,7 +75,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		addSimpleTerm("performedBy.id", performedBy);
 		addSimpleTerm("schedule.project.id", jobId);
 		addSimpleTerm("status", status);
-		addDateRangeTerm("schedule.completedDate", fromDate, toDate);
+		addDateRangeTerm("completedDate", fromDate, toDate);
 		
 		addEventBookTerm();
 		addAssignedToTerm();
@@ -129,7 +129,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	
 	@Override
 	public String defaultSortColumn() {
-		return "schedule.completedDate";
+		return "completedDate";
 	}
 	
 	@Override

@@ -16,7 +16,7 @@ public class EventReportDataProvider extends FieldIdAPIDataProvider {
     private EventReportCriteria reportCriteria;
 
     public EventReportDataProvider(EventReportCriteria reportCriteria) {
-        super(reportCriteria, "schedule.completedDate", SortDirection.DESC);
+        super(reportCriteria, "completedDate", SortDirection.DESC);
         this.reportCriteria = reportCriteria;
     }
 

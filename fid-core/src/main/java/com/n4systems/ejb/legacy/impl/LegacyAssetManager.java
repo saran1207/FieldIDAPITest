@@ -376,7 +376,7 @@ public class LegacyAssetManager implements LegacyAsset {
         query = query + " AND event_state = 'COMPLETED' ";
 
 		if (!count)
-			query += " ORDER BY event.schedule.completedDate DESC, event.created ASC";
+			query += " ORDER BY event.completedDate DESC, event.created ASC";
 
 		Query eventQuery = em.createQuery(query);
 

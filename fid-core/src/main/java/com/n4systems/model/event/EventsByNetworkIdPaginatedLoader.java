@@ -49,7 +49,7 @@ public class EventsByNetworkIdPaginatedLoader extends PaginatedLoader<Event> {
         		builder.addOrder(order, ascending);
         	}
         } else {
-        	builder.addOrder("schedule.completedDate", false);
+        	builder.addOrder("completedDate", false);
         }
         return builder;
 	}

@@ -31,7 +31,7 @@ public class EventListPanel extends Panel {
 
         Asset asset = assetModel.getObject();
 
-        dataProvider = new EventByNetworkIdProvider(asset.getNetworkId(), "schedule.completedDate", SortOrder.DESCENDING, states);
+        dataProvider = new EventByNetworkIdProvider(asset.getNetworkId(), "completedDate", SortOrder.DESCENDING, states);
 
         SimpleDefaultDataTable table;
         add(table = new SimpleDefaultDataTable<Event>("eventsTable", getEventTableColumns(),dataProvider, 10));
