@@ -56,9 +56,16 @@
             </div>
 
             <div class="infoSet">
-                <label class="label"><wicket:message key="label.schedulefor"/></label>
+                <label class="label"><wicket:message key="label.scheduledon"/></label>
                 <span class="fieldHolder">
-                    <div wicket:id="schedule"/>
+                    <div wicket:id="dateScheduled"/>
+                </span>
+            </div>
+
+            <div class="infoSet" wicket:id="jobsContainer">
+                <label class="label"><wicket:message key="label.job"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="job"/>
                 </span>
             </div>
 

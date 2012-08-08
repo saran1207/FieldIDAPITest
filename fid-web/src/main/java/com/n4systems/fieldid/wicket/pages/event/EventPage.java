@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.ejb.impl.EventScheduleBundle;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
@@ -12,7 +13,6 @@ import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.event.attributes.AttributesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook;
 import com.n4systems.fieldid.wicket.components.event.prooftest.ProofTestEditPanel;
-import com.n4systems.fieldid.wicket.components.event.schedule.EventSchedulePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.fileupload.AttachmentsPanel;
 import com.n4systems.fieldid.wicket.components.location.LocationPicker;
@@ -63,6 +63,7 @@ import java.util.List;
 public abstract class EventPage extends FieldIDFrontEndPage {
     
     @SpringBean private EventCreationService eventCreationService;
+    @SpringBean private PersistenceService persistenceService;
 
     protected AbstractEvent event;
 
@@ -135,17 +136,24 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
             DropDownChoice<User> performedBy = new DropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
-            DateTimePicker datePicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
+            DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
+            DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "nextDate"), true).withNoAllDayCheckbox();
             NewOrExistingEventBook newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
-
-            add(new EventSchedulePicker("schedule", new PropertyModel<Event>(EventPage.this, "selectedSchedule"), new PropertyModel<Asset>(event, "asset")));
 
             AttributesEditPanel attributesEditPanel = new AttributesEditPanel("eventAttributes", new Model<AbstractEvent>(event));
 
             add(newOrExistingEventBook);
             add(attributesEditPanel);
-            add(datePicker);
+            add(datePerformedPicker);
+            add(dateScheduledPicker);
             add(performedBy);
+
+            WebMarkupContainer jobsContainer = new WebMarkupContainer("jobsContainer");
+            add(jobsContainer);
+            jobsContainer.setVisible(getSessionUser().getOrganization().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.Projects));
+            DropDownChoice<Project> jobSelect = new DropDownChoice<Project>("job", new PropertyModel<Project>(event, "project"), new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>());
+            jobSelect.setNullValid(true);
+            jobsContainer.add(jobSelect);
 
             add(new LocationPicker("locationPicker", new PropertyModel<Location>(event, "advancedLocation")).withRelativePosition());
             
@@ -178,9 +186,23 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             if (doPostSubmitValidation()) {
                 Long scheduleId = selectedSchedule == null ? 0L : selectedSchedule.getId();
                 event.storeTransientCriteriaResults();
+
+                // TODO: Needs a little refactoring to be able to deal with sub events (book is only for master)
+                saveEventBookIfNecessary();
+
                 Event savedEvent = eventCreationService.createEventWithSchedules((Event)event, scheduleId, null, Collections.<FileAttachment>emptyList(), createEventScheduleBundles());
-                FieldIDSession.get().info(getString("message.eventsaved"));
+
+                FieldIDSession.get().storeInfoMessageForStruts(getString("message.eventsaved"));
                 throw new RedirectToUrlException("/event.action?uniqueID="+savedEvent.getId());
+            }
+        }
+
+        private void saveEventBookIfNecessary() {
+            EventBook book = ((Event) event).getBook();
+            if (book != null && book.getId() == null) {
+                book.setTenant(getCurrentUser().getTenant());
+                book.setOwner(getCurrentUser().getOwner());
+                persistenceService.save(book);
             }
         }
     }
