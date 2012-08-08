@@ -39,10 +39,6 @@ public class InfoOptionBean extends LegacyBaseEntity implements Comparable<InfoO
 	@JoinColumn(name = "r_infofield")
 	private InfoFieldBean infoField;
 	
-	@ManyToMany(targetEntity = AddAssetHistory.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "addassethistory_infooption", inverseJoinColumns = @JoinColumn(name = "r_addproducthistory", referencedColumnName = "uniqueid"), joinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
-	private Collection<AddAssetHistory> addAssetHistory;
-		
 	@PreUpdate
 	@PrePersist
 	protected void presave() {
