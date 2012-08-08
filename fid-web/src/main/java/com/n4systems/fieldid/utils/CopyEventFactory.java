@@ -34,6 +34,7 @@ public class CopyEventFactory {
         newEvent.setEventStatus(event.getEventStatus());
         newEvent.setEventState(event.getEventState());
         newEvent.setNextDate(event.getNextDate());
+        newEvent.setProject(event.getProject());
 
 		return newEvent;
 	}

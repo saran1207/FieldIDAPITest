@@ -102,7 +102,7 @@
             <label class="label"><@s.text name="label.job"/></label>
 
                 <span class="fieldHolder">
-                    <@s.select name="project" list="jobs" listKey="id" listValue="name" emptyOption="true"/>
+                    <@s.select name="projectId" list="jobs" listKey="id" listValue="name" emptyOption="true"/>
                 </span>
         </div>
     </#if>
