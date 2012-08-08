@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.print.ExportSearchToExcelPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
@@ -73,10 +74,13 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         super.updateMenuBeforeRender(selected);
         boolean rowsSelected = selected > 0;
         exportLink.setVisible(rowsSelected && (selected < maxExport));
-        printLink.setVisible(rowsSelected && (selected < maxPrint));
+
+        boolean isManufacturerCertificate = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
+
+        printLink.setVisible(rowsSelected && (selected < maxPrint) && isManufacturerCertificate);
         
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
-        
+
         massEventLink.setVisible(sessionUser.hasAccess("createevent"));
         massUpdateLink.setVisible(sessionUser.hasAccess("tag"));
         massScheduleLink.setVisible(sessionUser.hasAccess("createevent"));
