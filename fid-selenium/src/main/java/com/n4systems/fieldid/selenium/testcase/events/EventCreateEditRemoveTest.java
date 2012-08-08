@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.selenium.testcase.events;
 
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage> {
 
@@ -31,6 +30,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
                 .named("Master Asset Type")
                 .withSubTypes(subType)
                 .withEventTypes(eventType)
+                .setLinkable()
                 .build();
 
         scenario.anAsset()
@@ -53,7 +53,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 
 	@Test
 	public void create_master_event_no_sub_events() {
-        EventPage eventPage = page.clickEventHistoryTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
+        EventPage eventPage = page.clickStartNewEvent("Master Event Type");
 
         performMandatoryEvent(eventPage);
 
@@ -64,10 +64,9 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 
     @Test
 	public void create_master_with_sub_event() {
-		page.clickSubComponentsTab();
-		page.addNewSubcomponent(TEST_SUB_IDENTIFIER);
+		page.attachExistingSubcomponent(TEST_SUB_IDENTIFIER);
 		
-		EventPage eventPage = page.clickEventHistoryTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
+		EventPage eventPage = page.clickStartNewEvent("Master Event Type");
 
 		performMandatoryEvent(eventPage);
 		performSubEvent(eventPage);
@@ -79,10 +78,9 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
     
     @Test
     public void create_master_with_sub_event_from_existing_sub_component(){
-    	page.clickSubComponentsTab();
     	page.attachExistingSubcomponent(TEST_SUB_IDENTIFIER);
-    	
-    	EventPage eventPage = page.clickEventHistoryTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
+
+        EventPage eventPage = page.clickStartNewEvent("Master Event Type");
 
 		performMandatoryEvent(eventPage);
 		performSubEvent(eventPage);
@@ -94,10 +92,9 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
     
     @Test
     public void create_master_with_sub_event_and_then_remove_the_sub_component(){
-    	page.clickSubComponentsTab();
-		page.addNewSubcomponent(TEST_SUB_IDENTIFIER);
-		
-		EventPage eventPage = page.clickEventHistoryTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
+		page.attachExistingSubcomponent(TEST_SUB_IDENTIFIER);
+
+        EventPage eventPage = page.clickStartNewEvent("Master Event Type");
 
 		performMandatoryEvent(eventPage);
 		performSubEvent(eventPage);
@@ -113,6 +110,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 	private void performMandatoryEvent(EventPage eventPage) {
 		eventPage.clickMandatoryEventToPerformLink();
 		eventPage.clickStore();
+
 	}
 
 	private void performSubEvent(EventPage eventPage) {

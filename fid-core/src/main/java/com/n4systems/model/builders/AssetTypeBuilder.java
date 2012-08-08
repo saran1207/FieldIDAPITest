@@ -1,20 +1,11 @@
 package com.n4systems.model.builders;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.n4systems.exceptions.Defect;
+import com.n4systems.model.*;
 import rfid.ejb.entity.InfoFieldBean;
 
-import com.n4systems.exceptions.Defect;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Tenant;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
 
@@ -29,16 +20,17 @@ public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
     private final Collection<InfoFieldBean> infoFields;
     private final Set<AssetType> subTypes;
 	private final EventType[] eventTypes;
+    private final Boolean linkable;
 
 	public static AssetTypeBuilder anAssetType() {
 		return new AssetTypeBuilder();
 	}
 	
 	public AssetTypeBuilder() {
-		this("*", "warnings", "instructions", "http://www.example.com", "no description", true, new ArrayList<InfoFieldBean>(), new HashSet<AssetType>(), null, new EventType[]{}, null, null);
+		this("*", "warnings", "instructions", "http://www.example.com", "no description", true, new ArrayList<InfoFieldBean>(), new HashSet<AssetType>(), null, new EventType[]{}, null, null, false);
 	}
 	
-	private AssetTypeBuilder(String name, String warnings, String instructions, String cautionsURL, String descriptionTemplate, boolean manufactureCertificate, Collection<InfoFieldBean> infoFields, Set<AssetType> subTypes, AssetTypeGroup group, EventType[] eventTypes, Tenant tenant, String manufactureCertificateText) {
+	private AssetTypeBuilder(String name, String warnings, String instructions, String cautionsURL, String descriptionTemplate, boolean manufactureCertificate, Collection<InfoFieldBean> infoFields, Set<AssetType> subTypes, AssetTypeGroup group, EventType[] eventTypes, Tenant tenant, String manufactureCertificateText, Boolean linkable) {
         super(tenant);
 		this.name = name;
 		this.warnings = warnings;
@@ -51,50 +43,55 @@ public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
 		this.group = group;
 		this.eventTypes = eventTypes;
         this.manufactureCertificateText = manufactureCertificateText;
+        this.linkable = linkable;
 	}
 
 	public AssetTypeBuilder named(String name) {
-		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
 	}
 	
 	public AssetTypeBuilder withFields(InfoFieldBean...infoFields) {
-		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, Arrays.asList(infoFields), subTypes, group, eventTypes, tenant, manufactureCertificateText));
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, Arrays.asList(infoFields), subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
 	}
 	
 	public AssetTypeBuilder withSubTypes(AssetType...subTypes) {
-		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, new HashSet<AssetType>(Arrays.asList(subTypes)), group, eventTypes, tenant, manufactureCertificateText));
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, new HashSet<AssetType>(Arrays.asList(subTypes)), group, eventTypes, tenant, manufactureCertificateText, linkable));
 	}
 	
 	public AssetTypeBuilder withGroup(AssetTypeGroup group) {
-		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
 	}
 	
 	public AssetTypeBuilder withEventTypes(EventType... eventTypes) {
-		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
 	}
 
 	public AssetTypeBuilder warnings(String warnings) {
-		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
 	}
 
     public AssetTypeBuilder instructions(String instructions) {
-        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
+        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
     }
 
     public AssetTypeBuilder manufactureCertificate(boolean manufactureCertificate) {
-        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
+        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
     }
 
     public AssetTypeBuilder cautionsURL(String cautionsURL) {
-        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
+        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
     }
 
     public AssetTypeBuilder manufactureCertificateText(String manufactureCertificateText) {
-        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
+        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
     }
 
     public AssetTypeBuilder descriptionTemplate(String descriptionTemplate) {
-        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
+        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
+    }
+
+    public AssetTypeBuilder setLinkable() {
+        return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, true));
     }
 
 	@Override
@@ -115,6 +112,7 @@ public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
 		}
 		assetType.setInfoFields(new ArrayList<InfoFieldBean>(infoFields));
 		assetType.setSubTypes(subTypes);
+        assetType.setLinkable(linkable);
 		
 		addEventTypes(assetType);
 		

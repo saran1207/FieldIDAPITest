@@ -8,7 +8,7 @@ import com.thoughtworks.selenium.Selenium;
 
 import static org.junit.Assert.fail;
 
-public class AssetPage extends FieldIDPage {
+public class AssetPage extends WicketFieldIDPage {
 
 	// Locators
 	private String editAssetIdentifierTextFieldLocator = "xpath=//INPUT[@id='identifierText']";
@@ -136,30 +136,39 @@ public class AssetPage extends FieldIDPage {
 		return new IdentifyPage(selenium);
 	}
 
-	public void clickSubComponentsTab() {
+/*	public void clickSubComponentsTab() {
 		selenium.click("//a[contains(.,'Linked Assets')]");
 		waitForPageToLoad();
-	}
+	}*/
 
 	public void addNewSubcomponent(String identifier) {
-		selenium.click("//a[contains(.,'Add New')]");
-		waitForAjax();
-		selenium.type("//input[@name='identifier']", identifier);
-		selenium.click("//input[@value='Save']");
-		waitForAjax();
+		selenium.click("//a[@class='addLinkedAsset']");
+		waitForWicketAjax();
+		selenium.type("//input[@name='autocompletesearch:autocompleteField']", identifier);
+        selenium.fireEvent("//input[@name='autocompletesearch:autocompleteField']", "keydown");
+        selenium.fireEvent("//input[@name='autocompletesearch:autocompleteField']", "keyup");
+        waitForWicketAjax();
+        selenium.setSpeed("500");
+        selenium.keyDown("//input[@name='autocompletesearch:autocompleteField']", "\\40");
+        selenium.keyDown("//input[@name='autocompletesearch:autocompleteField']", "\\13");
+        selenium.setSpeed("0");
+		selenium.click("//a[contains(@class, 'addLinkedAssetButton')]");
+        waitForWicketAjax();
 	}
 
 	public void attachExistingSubcomponent(String identifier) {
-		selenium.setSpeed("500");
-		selenium.click("//a[contains(.,'Find Existing')]");
-		waitForElementToBePresent("//form[@id='subAssetSearchForm']");
-		selenium.type("//input[@id='subAssetSearchForm_search']", identifier);
-		selenium.click("//input[@id='subAssetSearchForm_load']");
-		waitForElementToBePresent("//div[@id='resultsTable']");
-		selenium.click("//button[@class='assetLink']");
-		waitForAjax();
-		selenium.setSpeed("0");
-
+        selenium.click("//a[@class='addLinkedAsset']");
+        waitForWicketAjax();
+        selenium.type("//input[@name='autocompletesearch:autocompleteField']", identifier);
+        selenium.fireEvent("//input[@name='autocompletesearch:autocompleteField']", "keydown");
+        selenium.fireEvent("//input[@name='autocompletesearch:autocompleteField']", "keyup");
+        waitForWicketAjax();
+        selenium.setSpeed("500");
+        selenium.keyDown("//input[@name='autocompletesearch:autocompleteField']", "\\40");
+        selenium.keyDown("//input[@name='autocompletesearch:autocompleteField']", "\\13");
+        selenium.setSpeed("0");
+        selenium.click("//a[contains(@class, 'addLinkedAssetButton')]");
+        waitForWicketAjax();
 	}
 
 	public void clickRemoveSubComponent() {
@@ -264,4 +273,11 @@ public class AssetPage extends FieldIDPage {
 		orgPicker.setOwner(owner);
 		orgPicker.clickSelectOwner();	
 	}
+
+    public EventPage clickStartNewEvent(String eventType) {
+        selenium.click("//div[@class='actionButtons']//a[contains(.,'Start Event')]");
+        waitForPageToLoad();
+        selenium.click("//a[contains(., '" + eventType + "')]");
+        return new EventPage(selenium);
+    }
 }

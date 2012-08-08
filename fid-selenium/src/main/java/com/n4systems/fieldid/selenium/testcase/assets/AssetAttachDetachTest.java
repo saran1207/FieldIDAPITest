@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.selenium.testcase.assets;
 
-import static org.junit.Assert.*;
-
-import com.n4systems.fieldid.selenium.datatypes.Asset;
-import com.n4systems.fieldid.selenium.persistence.Scenario;
-import org.junit.Before;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.IdentifyPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import org.junit.Before;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AssetAttachDetachTest extends FieldIDTestCase {
 
@@ -42,7 +42,6 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 
 		assertTrue("Master component wasn't successfully created ", selenium.isElementPresent("//h1[contains(.,'Asset - " + TEST_MASTER_IDENTIFIER + "')]"));
 
-		masterAssetPage.clickSubComponentsTab();
 		masterAssetPage.addNewSubcomponent(TEST_SUB_IDENTIFIER);
 
 		assertTrue("Sub component wasn't successfully created and attached", selenium.isElementPresent("//div[@class='subComponent']"));
@@ -54,7 +53,6 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 		
 		AssetPage masterAssetPage = page.search(TEST_MASTER_IDENTIFIER);
 
-		masterAssetPage.clickSubComponentsTab();
 		masterAssetPage.addNewSubcomponent(TEST_SUB_IDENTIFIER);
 
 		masterAssetPage.clickRemoveSubComponent();
@@ -70,7 +68,6 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 
 		AssetPage masterAssetPage = page.search(TEST_MASTER_IDENTIFIER);
 
-		masterAssetPage.clickSubComponentsTab();
 		masterAssetPage.attachExistingSubcomponent(TEST_SUB_IDENTIFIER);
 
 		assertTrue("Sub component wasn't successfully found and attached", selenium.isElementPresent("//div[@class='subComponent']"));
