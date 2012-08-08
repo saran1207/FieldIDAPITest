@@ -259,6 +259,7 @@ public class SubEventCrud extends EventCrud {
 		User modifiedBy = fetchCurrentUser();
 
 		try {
+            event.setBook(eventBook);
 			findEventBook();
 			processProofTestFile();
 			getModifiableEvent().pushValuesTo(event);
