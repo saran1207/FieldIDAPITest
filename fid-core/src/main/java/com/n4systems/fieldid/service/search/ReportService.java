@@ -17,7 +17,6 @@ import com.n4systems.util.persistence.search.terms.completedordue.AssetStatusTer
 import com.n4systems.util.persistence.search.terms.completedordue.AssignedUserTerm;
 import com.n4systems.util.persistence.search.terms.completedordue.CompletedOrDueDateRange;
 import com.n4systems.util.persistence.search.terms.completedordue.LocationTerm;
-import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -69,7 +68,6 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
             addSimpleTerm(searchTerms, "eventState", Event.EventState.CLOSED);
         }
 
-        // use DateService here...
         if (IncludeDueDateRange.HAS_NO_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
             addNullTerm(searchTerms, "nextDate");
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
@@ -78,13 +76,13 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
             if (criteriaModel.getDueDateRange() != null && !criteriaModel.getDueDateRange().isEmptyCustom()) {
                 // recall : due dates don't have timeZone.
                 Date from = dateService.calculateFromDate(criteriaModel.getDueDateRange());
-                Date to = DateUtils.addDays(dateService.calculateToDate(criteriaModel.getDueDateRange()),1);  // return day after TO
+                Date to = dateService.calculateInclusiveToDate(criteriaModel.getDueDateRange());
                 addDateRangeTerm(searchTerms, "nextDate", from, to);
             }
         }
 
         if (criteriaModel.getDateRange() != null && !criteriaModel.getDateRange().isEmptyCustom()) {
-            if (criteriaModel.getEventState() == EventState.COMPLETE) {
+            if (criteriaModel.getEventState() == EventState.COMPLETE || criteriaModel.getEventState()==EventState.CLOSED) {
                 Date from = dateService.calculateFromDateWithTimeZone(criteriaModel.getDateRange(), timeZone);
                 Date to = dateService.calculateInclusiveToDateWithTimeZone(criteriaModel.getDateRange(), timeZone);
                 addDateRangeTerm(searchTerms, "completedDate", DateHelper.convertToUTC(from, timeZone), DateHelper.convertToUTC(to, timeZone));

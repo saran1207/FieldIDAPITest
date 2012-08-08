@@ -1,7 +1,6 @@
 package com.n4systems.model.utils;
 
 import com.n4systems.util.chart.RangeType;
-import com.n4systems.util.time.DateUtil;
 import org.apache.log4j.Logger;
 import org.joda.time.*;
 
@@ -64,32 +63,23 @@ public class DateRange implements Serializable, Cloneable {
         withTimeZone(timeZone);
     }
 
-    public static LocalDate earliestDate() {
-        return DateUtil.getEarliestFieldIdDate();
-    }
-	
 	public String getFromDateDisplayString() {
 		return rangeType.getFormatter().getFromDateDisplayString(getFrom());
 	}
     
 	public String getToDateDisplayString() {
-		return rangeType.getFormatter().getToDateDisplayString(getInclusiveTo());
+		return rangeType.getFormatter().getToDateDisplayString(getDisplayTo());
 	}
 	
 	// note that getTo() is exclusive.  e.g. for a year 2011
 	// Jan 1, 2011 is getFrom() and getTo() is Jan 1, 2012  *not*  dec 31,2011    [11:59:59.9999...]
-	// this method is used for display reasons.  (e.g.  "Searching oct 1,2011 - oct 31,2011")
+	// this method is used for display reasons.  (e.g.  "Searching Oct 1,2011 - oct 31,2011")
 	// @see getToDateDisplayString();
-	private LocalDate getInclusiveTo() {
+	private LocalDate getDisplayTo() {
 		LocalDate to = getTo();
 		return (to==null) ? null : to.minusDays(1);
 	}
 	
-	public Date getInclusiveToDate() {
-		LocalDate to = getInclusiveTo();
-		return (to==null) ? null : to.toDate();
-	}
-
 	public LocalDate getTo() {
 		return getHandler().getNowTo();
 	}

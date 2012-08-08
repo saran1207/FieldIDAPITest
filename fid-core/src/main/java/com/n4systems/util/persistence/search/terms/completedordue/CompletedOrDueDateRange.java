@@ -5,7 +5,7 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
-import org.apache.commons.lang.time.DateUtils;
+import org.joda.time.LocalDate;
 
 import java.util.Date;
 import java.util.TimeZone;
@@ -26,8 +26,7 @@ public class CompletedOrDueDateRange extends CompleteOrIncompleteTerm {
 
     @Override
     protected void populateIncompleteTerm(WhereParameterGroup completedGroup) {
-        // set timezone for dateRange in calling reportService.
-        DateRangeTerm rangeTerm = new DateRangeTerm("nextDate", dateRange.calculateFromDate(), dateRange.calculateToDate());
+        DateRangeTerm rangeTerm = new DateRangeTerm("nextDate", dateRange.calculateFromDate(), getToDate());
 
         for (WhereClause<?> whereClause : rangeTerm.getWhereParameters()) {
             completedGroup.addClause(whereClause);
@@ -36,15 +35,21 @@ public class CompletedOrDueDateRange extends CompleteOrIncompleteTerm {
 
     @Override
     protected void populateCompletedTerm(WhereParameterGroup incompleteGroup) {
-        DateRangeTerm rangeTerm = new DateRangeTerm("completedDate", DateHelper.convertToUTC(dateRange.calculateFromDate(), timeZone), DateHelper.convertToUTC(nextDay(dateRange.calculateToDate()), timeZone));
+        DateRangeTerm rangeTerm = new DateRangeTerm("completedDate", DateHelper.convertToUTC(dateRange.calculateFromDate(), timeZone), DateHelper.convertToUTC(getToDate(), timeZone));
 
         for (WhereClause<?> whereClause : rangeTerm.getWhereParameters()) {
             incompleteGroup.addClause(whereClause);
         }
     }
 
-    private Date nextDay(Date date) {
-        return date == null ? null : DateUtils.addDays(date, 1);
+
+    // TODO : should put the isCustom() logic in the actual dateRange object itself.
+    private Date getToDate() {
+        LocalDate to = dateRange.getTo();
+        if (dateRange.getRangeType().isCustom() && to!=null) {
+            to = to.plusDays(1);
+        }
+        return to.toDate();
     }
 
 }

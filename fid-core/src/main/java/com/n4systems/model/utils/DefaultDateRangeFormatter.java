@@ -1,9 +1,9 @@
 package com.n4systems.model.utils;
 
+import org.joda.time.LocalDate;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
-import org.joda.time.LocalDate;
 
 
 public class DefaultDateRangeFormatter implements DateRangeFormatter {
