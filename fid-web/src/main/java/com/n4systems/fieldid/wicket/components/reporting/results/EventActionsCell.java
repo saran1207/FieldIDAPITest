@@ -68,9 +68,9 @@ public class EventActionsCell extends Panel {
 
         NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+event.getAsset().getId());
 
-        resolveEventLink.setVisible(!isReadOnly && event.getEventState().equals(Event.EventState.OPEN));
+        resolveEventLink.setVisible(!isReadOnly && Event.EventState.OPEN.equals(event.getEventState()));
         deleteScheduleLink.setVisible(!isReadOnly);
-        startEventLink.setVisible(hasCreateEvent);
+        startEventLink.setVisible(hasCreateEvent && Event.EventState.OPEN.equals(event.getEventState()));
         editAssetLink.setVisible(hasTag);
 
         incompleteEventActionsList.add(startEventLink);
