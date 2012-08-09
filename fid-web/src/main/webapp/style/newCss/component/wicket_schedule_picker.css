@@ -1,85 +1,107 @@
 .newScheduleForm {
 	overflow:hidden;
-	width:600px;
+	width:300px;
 	border:solid 1px #BBB;
 	background-color:#F9F9F9;
 	z-index: 1;
     position:absolute;
     top:-10000px;
     left:-10000px;
-    padding: 25px;
+    padding: 11px;
     -moz-box-shadow: 4px 4px 11px #AAAAAA
     -webkit-box-shadow: 4px 4px 11px #AAAAAA
     box-shadow: 4px 4px 11px #AAAAAA
 }
 
-.newScheduleForm button{
+.newScheduleForm .assignmentSection {
+    padding: 13px 0;
+    border-top:1px solid #bbb;
+    border-bottom:1px solid #bbb;
+    color:#888;
+}
+
+.newScheduleForm .closeImage {
+    display:block;
+    float:right;
+    padding-bottom:8px;
+}
+
+.newScheduleForm .assignmentSection select{
+    margin-top: 12px;
+}
+
+.newScheduleForm .assignmentSection .assignmentSectionTitle {
+    font-size:1.2em;
+    color:#555;
+    width:300px;
+    display:block;
+}
+
+.newScheduleForm .schedulePickerTitle {
+    font-size:1.8em;
+    display:block;
+    padding-bottom:15px;
+    color:#888;
+}
+
+.newScheduleForm select {
+    color: #555;
+    padding:4px;
+    width:290px;
+}
+
+.newScheduleForm .formActions .mattButton {
+    float:left;
+}
+
+.newScheduleForm button {
 	padding: 4px;
 }
 
-.newScheduleForm .blockSeparated {
+.newScheduleForm .formActions {
 	font-size: 1.1em;
-	padding: 5px;
+	padding: 15px 5px;
     display:block;
     float:left;
 }
 
-.newScheduleForm .scheduleRow .fieldHolder {
-	width: 295px;
+.newScheduleForm .formActions .blueButton {
+    background:#4c8ffc;
+    border:1px solid #69f;
+    color:white;
+    margin-right:10px;
 }
 
-.newScheduleForm .scheduleRow .label {
-	font-weight: normal;
-	width: 170px;
-	color: black;
-}
-
-.optionalMessage {
-	color: #999999;
-}
-
-.newScheduleForm .scheduleRow .datepicker {
-	width: 150px;
+.newScheduleForm .scheduleRow .datetimepicker {
+	width: 190px;
     padding:4px;
+    border:1px solid #9c9c9c;
 }
 
 .dateQuickLinks {
     display:block;
 	clear: both;
-    padding-top:2px;
-    padding-left: 195px;
+    padding-top:7px;
+    font-size:0.9em;
 }
 
 .newScheduleButton{
 	background-image: url(../../../images/calendar-icon.png);
 }
 
-.newScheduleForm .scheduleRow select {
-    color: #555;
-    padding:4px;
-    width:260px;
-}
-
 .newScheduleForm .scheduleRow .label {
-    width: 170px;
-    padding-left:15px;
-    padding-right:10px;
+    width: 250px;
     font-weight:normal;
-    text-align:right;
     display:block;
     float:left;
-    padding-top:5px;
-    padding-bottom:5px;
+    font-size:1.1em;
+    color:#555;
+    padding-bottom:2px;
 }
 
 .newScheduleForm .scheduleRow {
-    padding: 8px 0 8px 0;
+    padding: 12px 0 15px 0;
     overflow:hidden;
-}
-
-.newScheduleForm .scheduleRow .rightSide {
-    display:block;
-    float:left;
 }
 
 .openSchedulePickerButton {

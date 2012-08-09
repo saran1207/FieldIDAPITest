@@ -121,7 +121,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
     private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<EventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {
         final Model<Event> eventScheduleModel = new Model<Event>(new Event());
-        return new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), eventScheduleModel, eventTypesForAssetType, jobsOptions, -400, 0) {
+        return new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), eventScheduleModel, eventTypesForAssetType, jobsOptions, -200, 0) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 item.getModelObject().getSchedules().add(eventScheduleModel.getObject());

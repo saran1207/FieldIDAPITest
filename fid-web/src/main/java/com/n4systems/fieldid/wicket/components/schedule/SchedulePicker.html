@@ -1,47 +1,29 @@
 <wicket:panel>
 
-    <form wicket:id="scheduleForm">
-
+    <form wicket:id="openForm">
         <input type="submit" wicket:id="openDialogButton" class="openSchedulePickerButton">
+    </form>
+
+    <form wicket:id="scheduleForm">
 
         <div wicket:id="scheduleEditorContainer" class="newScheduleForm schedulesAdd">
 
             <div wicket:id="feedbackPanel"></div>
 
-            <div class="scheduleRow">
-
-                <label class="label">
-                    <wicket:message key="label.what_should_be_scheduled"/>
-                </label>
-
-                <div class="rightSide">
-                    <select wicket:id="eventTypeSelect"></select>
-                </div>
-
+            <div class="schedulePickerTitle">
+                <wicket:message key="label.schedule_event"/>
+                <img wicket:id="closeImage" class="closeImage" src="/fieldid/images/modal-close.png">
             </div>
 
-            <div class="scheduleRow" wicket:id="jobSelectRow">
-
-                <label class="label">
-                    <wicket:message key="label.assign_to_a_job"/>
-                    <span class="optionalMessage">(<wicket:message key="label.optional"/>)</span>
-                </label>
-
-                <div class="rightSide">
-                    <select wicket:id="jobSelect"></select>
-                </div>
-
-            </div>
+            <select wicket:id="eventTypeSelect"></select>
 
             <div class="scheduleRow">
 
                 <label class="label">
-                    <wicket:message key="label.when_is_it_due"/>
+                    <wicket:message key="label.set_the_due_date"/>
                 </label>
 
-                <div class="rightSide">
-                    <div wicket:id="datePicker"></div>
-                </div>
+                <div wicket:id="datePicker"></div>
 
                 <span class="dateQuickLinks">
                     <a wicket:id="quickLinkToday"><wicket:message key="label.today"/></a> |
@@ -53,10 +35,26 @@
 
             </div>
 
-            <div class="blockSeparated">
-                <input type="submit" wicket:id="addScheduleButton" wicket:message="value:label.addschedule" class="pickScheduleButton">
-                <wicket:message key="label.or"/>
-                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            <div class="assignmentSection">
+
+                <span class="assignmentSectionTitle"><wicket:message key="label.assignment"/></span>
+
+                <wicket:message key="message.person_assigned_will_be_notified_by_email"/>
+
+                <select wicket:id="assignee"></select>
+
+                <div wicket:id="jobSelectContainer">
+                    <select wicket:id="jobSelect"></select>
+                </div>
+
+            </div>
+
+            <div class="formActions blockSeparated">
+                <a wicket:id="addScheduleButton" class="mattButton blueButton"><wicket:message key="label.create_schedule"/></a>
+                <div style="display:block;float:left;padding-top:5px;">
+                    <wicket:message key="label.or"/>
+                    <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+                </div>
             </div>
 
         </div>

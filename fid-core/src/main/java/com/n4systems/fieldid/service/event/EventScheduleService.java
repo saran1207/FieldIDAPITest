@@ -9,6 +9,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import java.util.List;
 public class EventScheduleService extends FieldIdPersistenceService {
 
     private static Logger logger = Logger.getLogger( EventScheduleService.class );
+
+    @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
 
 	@Transactional(readOnly = true)
 	public Event getNextEventSchedule(Long assetId, Long eventTypeId) {
@@ -184,15 +187,16 @@ public class EventScheduleService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public Long createSchedule(Event schedule) {
+    public Long createSchedule(Event openEvent) {
         EventGroup eventGroup = new EventGroup();
-        schedule.setOwner(schedule.getAsset().getOwner());
-        schedule.setGroup(eventGroup);
+        openEvent.setOwner(openEvent.getAsset().getOwner());
+        openEvent.setGroup(eventGroup);
         persistenceService.save(eventGroup);
 
-        Long id = persistenceService.save(schedule);
-        schedule.getAsset().touch();
-        persistenceService.update(schedule.getAsset());
+        Long id = persistenceService.save(openEvent);
+        openEvent.getAsset().touch();
+        persistenceService.update(openEvent.getAsset());
+        notifyEventAssigneeService.notifyEventAssignee(openEvent);
         return id;
     }
 

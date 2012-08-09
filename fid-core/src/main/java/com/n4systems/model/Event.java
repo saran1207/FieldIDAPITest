@@ -86,8 +86,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private EventBook book;
-	
-	@ManyToOne(fetch=FetchType.EAGER, optional=false)
+
+    @ManyToOne
+    @JoinColumn(name="assignee_id")
+    private User assignee;
+
+    @ManyToOne(fetch=FetchType.EAGER, optional=false)
 	@JoinColumn(name="owner_id", nullable = false)
 	private BaseOrg owner;
 	
@@ -580,6 +584,14 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
     public EntityState getState() {
         return state;
+    }
+
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
     }
 
 }

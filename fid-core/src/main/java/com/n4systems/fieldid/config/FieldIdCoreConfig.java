@@ -64,6 +64,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class FieldIdCoreConfig {
 
     @Bean
+    public NotifyEventAssigneeService notifyEventAssigneeService() {
+        return new NotifyEventAssigneeService();
+    }
+
+    @Bean
     public SendSearchService sendSearchService() {
         return new SendSearchService();
     }

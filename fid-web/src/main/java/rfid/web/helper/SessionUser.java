@@ -25,6 +25,7 @@ public class SessionUser implements DateTimeDefinition {
 	private int permissions;
 	private String prevAction;
 	private String dateFormat;
+    private String dateTimeFormat;
 	private String otherDateFormat;
 	private String orderNumber;
 	private String searchType;
@@ -49,7 +50,8 @@ public class SessionUser implements DateTimeDefinition {
 		this.fromQuickLogin = true;
 		this.permissions = user.getPermissions();
 		this.timeZone = user.getTimeZone();
-		this.dateFormat = owner.getPrimaryOrg().getDateFormat();
+		this.dateFormat = user.getDateFormat();
+        this.dateTimeFormat = user.getDateTimeFormat();
 		this.otherDateFormat = DateHelper.java2Unix(dateFormat);
 		this.securityFilter = new UserSecurityFilter(user);
 		this.admin = user.isAdmin(); 
@@ -112,7 +114,7 @@ public class SessionUser implements DateTimeDefinition {
 	 * @see rfid.web.helper.DateTimeDefinition#getDateTimeFormat()
 	 */
 	public String getDateTimeFormat() {
-		return dateFormat +  " h:mm a";
+		return dateTimeFormat;
 	}
 	
 	/* (non-Javadoc)

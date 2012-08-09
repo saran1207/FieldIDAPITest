@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.model.FieldIDSpringModel;
 import com.n4systems.model.user.User;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
@@ -13,6 +14,10 @@ public class ExaminersModel extends FieldIDSpringModel<List<User>> {
     @SpringBean
     private UserService userService;
     private IModel<User> defaultUserEntry;
+
+    public ExaminersModel() {
+        this(new Model<User>());
+    }
 
     public ExaminersModel(IModel<User> defaultUserEntry) {
         this.defaultUserEntry = defaultUserEntry;

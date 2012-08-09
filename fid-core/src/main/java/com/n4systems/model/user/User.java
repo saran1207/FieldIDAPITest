@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.persistence.*;
 
+import com.n4systems.util.DateTimeDefinition;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.api.Exportable;
@@ -34,7 +35,7 @@ import com.n4systems.util.timezone.CountryList;
 
 @Entity
 @Table(name = "users")
-public class User extends ArchivableEntityWithOwner implements Listable<Long>, Saveable, SecurityEnhanced<User>, Exportable {
+public class User extends ArchivableEntityWithOwner implements Listable<Long>, Saveable, SecurityEnhanced<User>, Exportable, DateTimeDefinition {
 	private static final long serialVersionUID = 1L;
 	public static final int REFERRAL_KEY_LENGTH = 10;
 	
@@ -506,5 +507,17 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
     public void setLastRunSearch(AssetSearchCriteria lastRunSearch) {
         this.lastRunSearch = lastRunSearch;
+    }
+
+    @Override
+    @Transient
+    public String getDateFormat() {
+        return getOwner().getPrimaryOrg().getDateFormat();
+    }
+
+    @Override
+    @Transient
+    public String getDateTimeFormat() {
+        return getDateFormat() + " h:mm a";
     }
 }
