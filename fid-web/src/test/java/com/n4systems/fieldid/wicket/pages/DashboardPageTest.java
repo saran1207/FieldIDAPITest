@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.collect.Sets;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.wicket.*;
@@ -33,6 +34,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
@@ -47,6 +50,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	private WidgetFactory widgetFactory;
 	private JobService jobService;
 	private UserLimitService userLimitService;
+    private S3Service s3Service;
     
 	private DashboardLayout layout;
 	private WidgetDefinition linksWidgetDefinition;
@@ -68,6 +72,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		linksWidgetDefinition.setId(0L);
 		jobService = wire(JobService.class);
 		userLimitService = wire(UserLimitService.class);
+        s3Service = wire(S3Service.class);
     	layout = createNewDashboardLayout(linksWidgetDefinition);
     	commonLinksWidget = new CommonLinksWidget(WidgetFactory.WIDGET_ID, linksWidgetDefinition);    
 		newsWidget = new NewsWidget(WidgetFactory.WIDGET_ID, new WidgetDefinition(WidgetType.NEWS));
@@ -75,7 +80,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
     
 	@Test 
 	@WithUsers({TestUser.ALL_PERMISSIONS_USER, TestUser.NO_PERMISSIONS_USER, TestUser.JOBS_USER})
-	public void testRender()  {
+	public void testRender() throws MalformedURLException {
 		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2);	//extra invocation for assertion using getList().
@@ -84,7 +89,9 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(widgetFactory);
 		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
 		replay(userLimitService);
-		
+        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
+        replay(s3Service);
+
 		renderFixture(this);
 		
 		assertVisible(getHarness().getWidgetPanel());
@@ -101,7 +108,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	
 
 	@Test 
-	public void testRender_noGoogleAnalytics()  {
+	public void testRender_noGoogleAnalytics() throws MalformedURLException {
 		expectingConfig(false);
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2);	//extra invocation for assertion using getList().
@@ -110,6 +117,8 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(widgetFactory);
 		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
 		replay(userLimitService);
+        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
+        replay(s3Service);
 
 		renderFixture(this);
 		
@@ -121,7 +130,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	
 		
 	@Test 
-	public void testAddWidget()  {
+	public void testAddWidget() throws MalformedURLException {
 		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(4);  // have to add some expectations because our asserts actually trigger calls...yecccch. 
@@ -133,6 +142,8 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(widgetFactory);	
 		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
 		replay(userLimitService);
+        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
+        replay(s3Service);
 
 		renderFixture(this);
 
@@ -153,7 +164,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	}	
 	
 	@Test 
-	public void testAddWidgetWithJobsUser()  {
+	public void testAddWidgetWithJobsUser() throws MalformedURLException {
 		User user = UserBuilder.aFullUser().build();
 		user.getOwner().getPrimaryOrg().setExtendedFeatures(Sets.newHashSet(ExtendedFeature.Projects));
 		setSessionUser(user);
@@ -176,6 +187,8 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(widgetFactory);
 		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
 		replay(userLimitService);
+        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
+        replay(s3Service);
 
 		renderFixture(this);
 
@@ -187,7 +200,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	}	
 	
 	@Test 
-	public void testRemoveWidget()  {
+	public void testRemoveWidget() throws MalformedURLException {
 		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2);
@@ -197,6 +210,9 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(widgetFactory);
 		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
 		replay(userLimitService);
+        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
+        replay(s3Service);
+
 		renderFixture(this);	
 
 		List<DashboardColumn> columns = layout.getColumns();    
@@ -212,7 +228,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	}	
 	
 	@Test 
-	public void test_BlankSlate()  {
+	public void test_BlankSlate() throws MalformedURLException {
 		layout = createNewDashboardLayout();
 		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
@@ -223,6 +239,8 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		replay(widgetFactory);	
 		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
 		replay(userLimitService);
+        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
+        replay(s3Service);
 
 		renderFixture(this);
 		

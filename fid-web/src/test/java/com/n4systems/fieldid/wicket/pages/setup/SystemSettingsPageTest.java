@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
 import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.*;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.junit.Before;
@@ -19,11 +21,15 @@ import com.n4systems.fieldid.wicket.WicketHarness;
 import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPageTest.SystemsSettingsPageHarness;
 import com.n4systems.model.tenant.SystemSettings;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 @RunWith(FieldIdWicketTestRunner.class)
 public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageHarness, SystemSettingsPage> implements IFixtureFactory<SystemSettingsPage> {	
 
 	private SystemSettingsService systemSettingsService;
 	private UserLimitService userLimitService;
+    private S3Service s3Service;
 		
 	@Override
 	@Before
@@ -32,10 +38,11 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		expectingConfig();
 		systemSettingsService = wire(SystemSettingsService.class, "systemSettingsService");
 		userLimitService = wire(UserLimitService.class);
+        s3Service = wire(S3Service.class);
 	}
 
 	@Test
-	public void testRender() {
+	public void testRender() throws MalformedURLException {
 		SystemSettings settings = new SystemSettings();
 		String dateFormat = "mm/dd/yy";
 		settings.setDateFormat(dateFormat);
@@ -45,7 +52,9 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		replay(systemSettingsService);
 		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
 		replay(userLimitService);
-		
+        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
+        replay(s3Service);
+
 		renderFixture(this);
 		
 		assertRenderedPage(SystemSettingsPage.class);
