@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.UIConstants;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -60,6 +61,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 	@SpringBean
 	private UserLimitService userLimitService;
 
+    @SpringBean
+    private S3Service s3Service;
 
     private Label titleLabel;
 	private Label topTitleLabel;
@@ -118,7 +121,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(new SavedItemsDropdown("savedItemsDropdown"));
 
-        add(new StaticImage("tenantLogo", new Model<String>( "/fieldid/file/downloadTenantLogo.action?uniqueID=" + getSessionUser().getTenant().getId() ) ) );
+        add(new StaticImage("tenantLogo", new Model<String>(s3Service.getBrandingLogoURL().toString())).setEscapeModelStrings(false));
 
         add(createRelogLink());
     }

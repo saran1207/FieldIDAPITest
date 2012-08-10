@@ -96,10 +96,6 @@ public class SafetyNetworkVendor extends SafetyNetwork {
 		return vendor;
 	}
 
-	public String getLogo() {
-		return PathHandler.getTenantLogo(vendor.getTenant()).getAbsolutePath();
-	}
-
 	private SafetyNetworkSmartSearchLoader setupLoader() {
 		SafetyNetworkSmartSearchLoader smartSearchLoader = getLoaderFactory().createSafetyNetworkSmartSearchLoader();
 		smartSearchLoader.setVendor(vendor);

@@ -5,6 +5,7 @@ import com.n4systems.exceptions.NonPrintableManufacturerCert;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.certificate.model.Job;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.*;
@@ -18,10 +19,14 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,13 +34,15 @@ import java.util.Map;
 
 @Transactional(readOnly = true)
 public class CertificateService extends FieldIdPersistenceService {
-	
+	private static Logger logger = Logger.getLogger(CertificateService.class);
+
 	private final ReportCompiler reportCompiler = new ReportCompiler();
 	private final CertificatePrinter printer = new CertificatePrinter();
 	
 	@Autowired private EventScheduleService eventScheduleService;
 	@Autowired private EventService eventService;
-	
+	@Autowired private S3Service s3service;
+
 	public byte[] generateAssetCertificatePdf(Asset asset) throws ReportException, NonPrintableManufacturerCert {
 		return printer.printToPDF(generateAssetCertificate(asset));
 	}
@@ -59,7 +66,7 @@ public class CertificateService extends FieldIdPersistenceService {
             reportMap.put("SUBREPORT_DIR", jrxmlFile.getParent() + "/");
 
             addIdentifiedByParams(reportMap, asset.getIdentifiedBy());
-            reportMap.putAll(new AssetReportMapProducer(asset, new DateTimeDefiner(getCurrentUser())).produceMap());
+            reportMap.putAll(new AssetReportMapProducer(asset, new DateTimeDefiner(getCurrentUser()), s3service).produceMap());
             addAssetTypeParams(reportMap, asset.getType());
             addShopOrderParams(reportMap, asset);
             addOrganizationParams(reportMap, asset.getOwner().getInternalOrg());
@@ -118,7 +125,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		addNextEventScheduleParams(reportMap, event, dateDefiner);
 		addEventScheduleParams(reportMap, event);
 
-		Map<String, Object> masterEventReportMap = new EventReportMapProducer(event, dateDefiner).produceMap();
+		Map<String, Object> masterEventReportMap = new EventReportMapProducer(event, dateDefiner, s3service).produceMap();
 		reportMap.put("mainInspection", masterEventReportMap);
 		reportMap.put("product", masterEventReportMap.get("product"));
 
@@ -126,7 +133,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		eventResultMaps.add(masterEventReportMap);
 
 		for (SubEvent subEvent : event.getSubEvents()) {
-			eventResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner).produceMap());
+			eventResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service).produceMap());
 		}
 		reportMap.put("allInspections", eventResultMaps);
 
@@ -152,9 +159,9 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		addAssetTypeParams(reportMap, event.getAsset().getType());
 		addShopOrderParams(reportMap, event.getAsset());
 
-		reportMap.putAll(new AssetReportMapProducer(event.getAsset(), dateDefiner).produceMap());
+		reportMap.putAll(new AssetReportMapProducer(event.getAsset(), dateDefiner, s3service).produceMap());
 
-		Map<String, Object> eventMap = new EventReportMapProducer(event, dateDefiner).produceMap();
+		Map<String, Object> eventMap = new EventReportMapProducer(event, dateDefiner, s3service).produceMap();
 		reportMap.putAll(eventMap);
 
 		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledPrintOutFile(printOut));
@@ -258,7 +265,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 	private void addOrganizationParams(Map<String, Object> reportMap, InternalOrg ownerInternalOrg) {
 		reportMap.put("organizationalPrintName", ownerInternalOrg.getCertificateName());
 		reportMap.put("n4LogoImage", StreamHelper.openQuietly(PathHandler.getN4LogoImageFile()));
-		reportMap.put("logoImage", StreamHelper.openQuietly(PathHandler.getCertificateLogo(ownerInternalOrg)));
+        reportMap.put("logoImage", getCertificateLogo(ownerInternalOrg));
 
 		AddressInfo ownerInternalOrgAddress = ownerInternalOrg.getAddressInfo();
 		if (ownerInternalOrgAddress != null) {
@@ -271,6 +278,16 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 			reportMap.put("organizationalFaxNumber", ownerInternalOrgAddress.getFax1());
 		}
 	}
+
+    private InputStream getCertificateLogo(InternalOrg organization) {
+        try {
+            byte[] image = s3service.downloadInternalOrgCertificateLogo(organization);
+            return new ByteArrayInputStream(image);
+        } catch (IOException e) {
+            logger.warn("Failed downloading internal org certificate logo", e);
+            return null;
+        }
+    }
 
 	private void addEventTypeGroupParams(Map<String, Object> reportMap, EventTypeGroup eventTypeGroup) {
 		reportMap.put("reportTitle", eventTypeGroup.getReportTitle());

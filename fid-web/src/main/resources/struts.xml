@@ -177,8 +177,6 @@
 		<action name="downloadAssetTypeImage" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeImage" />
 		
 		<action name="downloadAssetTypeImageSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetTypeImage" />
-		<action name="downloadCertLogo" method="downloadCertLogo" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" />
-		<action name="downloadOrgLogo" method="downloadOrgLogo" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" />
 		<action name="downloadPrintOutPreview" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
 		<action name="downloadPrintOutThumb" method="downloadThumb" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
 		<action name="downloadAssetAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetAttachmentFile" />
@@ -205,9 +203,6 @@
         <action name="downloadSafetyNetworkManufacturerCert" method="downloadSafetyNetwork" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
             <result name="cantprint" type="httpheader"><param name="error">404</param></result>
         </action>
-		<action name="downloadTenantLogo" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" >
-			<interceptor-ref name="publicStack" />
-		</action>				
 		<action name="currentEula" method="show" class="com.n4systems.fieldid.actions.eula.CurrentEulaAction" >
 			<interceptor-ref name="loggedInStack" />
 			<result name="success" type="freemarker">/templates/html/currentEula/show.ftl</result>

@@ -1,1 +1,1 @@
-<img id="safetyNetworkTenantLogo" alt="${(tenant.displayName?html)!}" title="${(tenant.displayName?html)!}" src="<@s.url action="downloadTenantLogo" namespace="/file" uniqueID="${tenant.id}" />" width="100"/>
+<img id="safetyNetworkTenantLogo" alt="${(tenant.displayName?html)!}" title="${(tenant.displayName?html)!}" src="${action.getMainLogoUrl(tenant.id)}" width="100"/>

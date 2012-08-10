@@ -214,34 +214,32 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	}
 
 	private void processImage() {
-		
-		File ouCertLogo = PathHandler.getCertificateLogo(organization, false);
 		if (removeImage) {
-			if (ouCertLogo.exists()) {
-				ouCertLogo.delete();
-			}
+            if (organization.isPrimary() && s3Service.primaryOrgCertificateLogoExists()) {
+                s3Service.removePrimaryOrgCertificateLogo();
+            } else if (organization.isSecondary() && s3Service.secondaryOrgCertificateLogoExists(organization.getId())) {
+                s3Service.removeSecondaryOrgCertificateLogo(organization.getId());
+            }
 		}
 		if (newImage == true && certImageDirectory != null && certImageDirectory.length() != 0) {
-			try {
-				if (ouCertLogo.exists()) {
-					ouCertLogo.delete();
-				}
-				
-				File tmpDirectory = PathHandler.getTempRoot();
-				File uploadedImage = new File(tmpDirectory.getAbsolutePath() + '/' + certImageDirectory);
-				
-				FileUtils.copyFile( uploadedImage, ouCertLogo );
-				uploadedImage.delete();
-				
-			} catch (IOException e) {
-				logger.error("Could not save logo file",e);
-			}
+            File uploadedImage = new File(PathHandler.getTempRoot(), certImageDirectory);
+            if (organization.isPrimary()) {
+                s3Service.uploadPrimaryOrgCertificateLogo(uploadedImage);
+            } else if (organization.isSecondary()) {
+                s3Service.uploadSecondaryOrgCertificateLogo(uploadedImage, organization.getId());
+            }
+            uploadedImage.delete();
 		}
 	}
 	
 	private String certImageExists() {
-		File ouCertLogo = PathHandler.getCertificateLogo(organization, false);
-		return (ouCertLogo.exists()) ? ouCertLogo.getName() : null; 
+        String imageUrl = null;
+        if (organization.isPrimary() && s3Service.primaryOrgCertificateLogoExists()) {
+            imageUrl = s3Service.getPrimaryOrgCertificateLogoURL().toString();
+        } else if (organization.isSecondary() && s3Service.secondaryOrgCertificateLogoExists(organization.getId())) {
+            imageUrl = s3Service.getSecondaryOrgCertificateLogoURL(organization.getId()).toString();
+        }
+        return imageUrl;
 	}
 	
 	@SkipValidation

@@ -20,7 +20,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 
 public class PathHandler {
-	// XXX - All these constants should be moved into a properties file
 	private static final String PRIVATE_PATH_BASE = "private";
 	private static final String COMMON_PATH_BASE = "common";
 	private static final String TEMP_PATH_BASE = "tmp";
@@ -28,17 +27,12 @@ public class PathHandler {
 	private static final String REPORT_FILE_EXT = ".jrxml";
 	private static final String PROPERTIES_FILE_EXT = ".properties";
 	private static final String PACKAGE_PROPERTIES_FILE = "package.properties";
-	private static final String SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + REPORT_FILE_EXT;
 	private static final String COMPILED_SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + COMPILED_REPORT_FILE_EXT;
 	private static final String ASSET_REPORT_FILE_NAME = "product" + REPORT_FILE_EXT;
     private static final String COMPILED_ASSET_REPORT_FILE_NAME = "product" + COMPILED_REPORT_FILE_EXT;
 	private static final String CHART_FILE_NAME = "proof_test_chart.png";
 	private static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
-	private static final String LOGO_IMAGE_FILE_NAME = "logo.gif";
-	private static final String CERTIFICATE_LOGO_IMAGE_FILE_NAME = "certlogo.gif";
 	private static final String SIGNATURE_IMAGE_FILE_NAME = "signature.gif";
-	private static final String ORGANIZATION_PATH_PART =  "orgs";
-	private static final String TENANT_IMAGE_PATH_BASE = PRIVATE_PATH_BASE + "/images";
 	private static final String EVENT_PATH_BASE = PRIVATE_PATH_BASE + "/inspections";
 	private static final String ASSET_PATH_BASE = PRIVATE_PATH_BASE + "/products";
 	private static final String ASSET_TYPE_PATH_BASE = PRIVATE_PATH_BASE + "/productTypes";
@@ -56,7 +50,6 @@ public class PathHandler {
     private static final String EVENT_SIGNATURE_PATH_BASE = EVENT_PATH_BASE + "/signatures";
 	private static final String REPORT_PATH_BASE = PRIVATE_PATH_BASE + "/reports";
 	private static final String ALL_TENANT_REPORT_PATH = REPORT_PATH_BASE + "/all_tenants";
-	private static final String DEFAULT_EVENT_REPORTNAME = "default_inspection_cert" + REPORT_FILE_EXT;
 	private static final String COMMON_IMAGE_PATH_BASE = COMMON_PATH_BASE + "/images";
 	private static final String COMMON_TEMPLATE_BASE = COMMON_PATH_BASE + "/templates";
 	private static final String COMMON_CONFIG_BASE = COMMON_PATH_BASE + "/conf";
@@ -67,7 +60,6 @@ public class PathHandler {
 	
 	// paths are in the format <tenant id>/<created year>/<created month>/<event id>
 	private static final String CREATED_DATE_PATH_FORMAT = "yy/MM";
-	private static final String ORGANIZATION_LOGO_IMAGE_FILE_NAME = "orgLogo.gif";
 	
 	/**
 	 * Merges path parts into a file system path.
@@ -166,24 +158,9 @@ public class PathHandler {
 	public static File getTempFile(String fileName) {
 		return parentize(getTempDir(), fileName);
 	}
-	
-	/**
-	 * Construct the File for a report in the all tenant directory.
-	 * @see #getAllTenantReportFile(File)
-	 * @param reportName		The name of the report
-	 * @return	 				An absolute File object for this report
-	 */
+
 	public static File getAllTenantReportFile(String reportName) {
 		return absolutize(mergePaths(ALL_TENANT_REPORT_PATH, reportName));
-	}
-	
-	/**
-	 * Construct the File for a report in the all tenant directory.
-	 * @see #getDefaultReportFile(File)
-	 * @return	 				An absolute File object for this report
-	*/
-	public static File getDefaultReportFile() {
-		return absolutize(mergePaths(ALL_TENANT_REPORT_PATH, DEFAULT_EVENT_REPORTNAME));
 	}
 	
 	/**
@@ -194,41 +171,6 @@ public class PathHandler {
 	private static String getTenantPathPart(Tenant tenant) {
 		return tenant.getName();
 	}
-	
-	/**
-	 * Constructs a relative path for a organizations private directory.  If the Organization is a TenantOrganization,
-	 * the path will be the same as {@link #getTenantPathPart(Tenant)}.
-	 * @param 	organization	An Organization
-	 * @return					A string path representing an Organizations private path
-	 */
-	private static String getOrganizationPathPart(InternalOrg organization) {
-		String path;
-		if (organization.isSecondary()) {
-			path = mergePaths(getTenantPathPart(organization.getTenant()), ORGANIZATION_PATH_PART, organization.getId().toString());
-		} else {
-			path = getTenantPathPart(organization.getTenant());
-		}
-		return path;
-	}
-	
-	/**
-	 * Converts an absolute File to a path relative to {@link #getAppRoot()}.  Warning: using a path that is not a sub-directory of
-	 * {@link #getAppRoot()} will yield unexpected results.
-	 * @param path	Path to convert.
-	 * @return		relative path
-	 */
-	public static String makeRelative(File path) {
-		return path.getAbsolutePath().substring((int)getAppRoot().getAbsoluteFile().length());
-	}
-	
-//	/**
-//	 * Constructs the private path for a user within a tenant directory.
-//	 * @param user	A UserBean
-//	 * @return		A string path representing the users private path
-//	 */
-//	private static String getUserSignaturePathPart(UserBean user) {
-//		return mergePaths(getTenantUserBasePath(user.getTenant()), user.getId().toString());
-//	}
 	
 	/**
 	 * Returns the base directory for user files for the given tenant.
@@ -255,32 +197,17 @@ public class PathHandler {
 	private static String getCompiledReportPath(Asset asset) {
 		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), COMPILED_ASSET_REPORT_FILE_NAME);
 	}
-	
-	/**
-	 * Finds a report file for an Asset.  Defaults to the all Tenant report directory if the Tenant specific report does not exist.
-	 * @see 	#getReportPath(com.n4systems.model.Asset)
-	 * @param	getAppRoot()	A base directory to resolve the file from
-	 * @param 	asset			A Asset
-	 * @return					A File object for the resolved report
-	 */
+
 	public static File getReportFile(Asset asset) {
 		File tenantReport = absolutize(getReportPath(asset));
 		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(ASSET_REPORT_FILE_NAME);
 	}
 
-
 	public static File getCompiledReportFile(Asset asset) {
 		File tenantReport = absolutize(getCompiledReportPath(asset));
 		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(COMPILED_ASSET_REPORT_FILE_NAME);
 	}
-	
-	/**
-	 * Resolves an EventTypeGroup to its report file name.  Appends the master suffix if isMaster is true.
-	 * @see 	com.n4systems.model.EventTypeGroup#getFileSystemName()
-	 * @param 	group		An EventTypeGroup
-	 * @param	isMaster	Appends the master suffix when true.
-	 * @return				A string representing the reports file name
-	 */
+
 	private static String getReportFileName(PrintOut printOut) {
 		return printOut.getPdfTemplate() + REPORT_FILE_EXT;
 	}
@@ -288,15 +215,7 @@ public class PathHandler {
 	private static String getCompiledReportFileName(PrintOut printOut) {
 		return printOut.getPdfTemplate() + COMPILED_REPORT_FILE_EXT;
 	}
-	
-	/**
-	 * Finds the relative Tenant specific path to an EventTypeGroup's report.  Uses the Tenant from the EventTypeGroup to resolve the Tenant path part. Appends the master suffix if isMaster is true.
-	 * @see 	#getTenantPathPart(Tenant)
-	 * @see 	#getReportFileName(com.n4systems.model.EventTypeGroup)
-	 * @param 	group		An EventTypeGroup
-	 * @param 	isMaster	Appends the master suffix when true.
-	 * @return				A string path relative to the application root
-	 */
+
 	private static String getReportPath(PrintOut printOut) {
 		return mergePaths(getReportPathBase(printOut), getReportFileName(printOut));
 	}
@@ -319,13 +238,7 @@ public class PathHandler {
 		}
 		return printOutPath;
 	}
-	
-	/**
-	 * Finds a report file for an EventTypeGroup.
-	 * 		
-	 * @param 	type			An EventType
-	 * @return					A File object for the resolved report
-	 */
+
 	public static File getPrintOutFile(PrintOut printOut) {
 		return absolutize(getReportPath(printOut));
 	}
@@ -340,18 +253,6 @@ public class PathHandler {
 	
 	public static File getPreviewThumb(PrintOut printOut) {
 		return absolutize(getPrintOutPreveiwThumbPath(printOut));
-	}
-
-	/**
-	 * Finds a summary report for a Tenant.  Defaults to the all tenant report directory if the Tenant specific report does not exist.
-	 * @see 	#getSummaryReportPath(Tenant)
-	 * @param	getAppRoot()	A base directory to resolve the file from
-	 * @param 	tenant			A Tenant
-	 * @return					A File object for the resolved report
-	 */
-	public static File getSummaryReportFile(Tenant tenant) {
-		File tenantReport = absolutize(mergePaths(REPORT_PATH_BASE, getTenantPathPart(tenant), SUMMARY_REPORT_FILE_NAME));
-		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(SUMMARY_REPORT_FILE_NAME);
 	}
 	
 	public static File getCompiledSummaryReportFile(Tenant tenant) {
@@ -430,10 +331,6 @@ public class PathHandler {
 		return absolutize(mergePaths(getJobAttachmentBasePath(project.getTenant()), getProjectPath(project), getNotePath(note)));
 	}
 	
-	public static File getJobAttachmentFileBaseFile(Tenant tenant) {
-		return absolutize(getJobAttachmentBasePath(tenant));
-	}
-	
 	public static File getAssetAttachmentDir(AssetAttachment attachment) {
 		return absolutize(mergePaths(getAssetAttachmentBasePath(attachment.getTenant()), getAssetPath(attachment.getAsset()), getAssetAttachmentPath(attachment)));
 	}
@@ -502,10 +399,6 @@ public class PathHandler {
 		return absolutize(COMMON_TEMPLATE_BASE);
 	}
 	
-	public static File getCommonConfigPath() {
-		return absolutize(COMMON_CONFIG_BASE);
-	}
-	
 	public static File getAssetTypeAttachmentFile(FileAttachment attachment, Long assetTypeId) {
 		return absolutize(mergePaths(getAssetTypeAttachmentBasePath(attachment.getTenant()), getAssetTypePath(assetTypeId), attachment.getFileName()));
 	}
@@ -522,10 +415,6 @@ public class PathHandler {
 		return mergePaths(EVENT_SIGNATURE_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
-	public static File getAssetTypeAttachmentBaseFile(Tenant tenant) {
-		return absolutize(getAssetTypeAttachmentBasePath(tenant));
-	}
-	
 	public static File getAssetTypeImageFile(AssetType assetType) {
 		return absolutize(mergePaths(getAssetTypeImageBasePath(assetType.getTenant()), getAssetTypePath(assetType)));
 	}
@@ -537,10 +426,6 @@ public class PathHandler {
     public static File getEventSignatureDirectory(Tenant tenant, Long eventId) {
         return absolutize(mergePaths(getEventSignatureBasePath(tenant), eventId.toString()));
     }
-	
-	public static File getAssetTypeImageBaseFile(Tenant tenant) {
-		return absolutize(getAssetTypeImageBasePath(tenant));
-	}
 	
 	public static String getAssetTypeImageBasePath(Tenant tenant) {
 		return mergePaths(ASSET_TYPE_IMAGE_PATH_BASE, getTenantPathPart(tenant));
@@ -561,32 +446,6 @@ public class PathHandler {
 		return parentize(getConfDir(tenant), mergePaths(pack.getName(), PACKAGE_PROPERTIES_FILE));
 	}
 	
-	/** @return The Tenant main logo */
-	public static File getTenantLogo(Tenant tenant) {
-		return absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(tenant), LOGO_IMAGE_FILE_NAME));
-	}
-	
-	/** @return The certificate logo for an Organization defaulting up the parent chain*/
-	public static File getCertificateLogo(InternalOrg organization) {
-		return getCertificateLogo(organization, true);
-	}
-	
-	/** @return The certificate logo for an Organization */
-	public static File getCertificateLogo(InternalOrg organization, boolean defaultToParent) {
-		File logo = absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getOrganizationPathPart(organization), CERTIFICATE_LOGO_IMAGE_FILE_NAME));
-		
-		// if we're dealing with a SecondaryOrg and the file does not exist, fall back to the tenant
-		if (!logo.exists() && organization.isSecondary() && defaultToParent) {
-			logo = absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(organization.getTenant()), CERTIFICATE_LOGO_IMAGE_FILE_NAME));
-		}
-		
-		return logo;
-	}
-	
-	public static File getOrgLogo(BaseOrg org) {
-		return absolutize(mergePaths(TENANT_IMAGE_PATH_BASE, getTenantPathPart(org.getTenant()), ORGANIZATION_PATH_PART , org.getId().toString(), ORGANIZATION_LOGO_IMAGE_FILE_NAME));
-	}
-	
 	private static String getUserPrivatePath(User user) {
 		return mergePaths(getTenantUserBasePath(user.getTenant()), user.getId().toString());
 	}
@@ -605,16 +464,9 @@ public class PathHandler {
 	public static File getSignatureImage(User user) {
 		return getUserFile(user, SIGNATURE_IMAGE_FILE_NAME);
 	}
-	
-	/** @return A file from the common config directory */
-	public static File getCommonConfigFile(String fileName) {
-		return absolutize(mergePaths(COMMON_CONFIG_BASE, fileName));
-	}
 
 	public static File getReleaseNotesPath() {
-		
 		return absolutize(mergePaths(COMMON_PATH_BASE, "releaseNotes.xml"));
-		
 	}
 	
 	public static File getReservedTenantNamesConfigFile() {

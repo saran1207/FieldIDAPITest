@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,7 +43,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 	private String webSite;
 	private File uploadedImage;
 	private String imageDirectory;
-	private boolean removeImage = false;
 	private boolean newImage = false;
 	private boolean assignedTo = false;
 	private boolean proofTestIntegration=false;
@@ -53,6 +52,9 @@ public class SystemSettingsCrud extends AbstractCrud {
 	
 	@Autowired
 	private TenantSettingsService tenantSettingsService;
+
+    @Autowired
+    private S3Service s3Service;
 
 	public SystemSettingsCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -86,11 +88,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 		manufacturerCertificate = primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
 		gpsCapture = getTenant().getSettings().isGpsCapture();
 		webSite = primaryOrg.getWebSite();
-
-		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
-		if (privateLogoPath.exists()) {
-			imageDirectory = privateLogoPath.getName();
-		}
 		return SUCCESS;
 	}
 	
@@ -98,11 +95,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 	public String doEditQuickSetupWizard() {
 		dateFormat = primaryOrg.getDateFormat();
 		webSite = primaryOrg.getWebSite();
-
-		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
-		if (privateLogoPath.exists()) {
-			imageDirectory = privateLogoPath.getName();
-		}
 		return SUCCESS;
 	}
 
@@ -208,17 +200,12 @@ public class SystemSettingsCrud extends AbstractCrud {
 	}
 
 	private void processLogo() throws IOException {
-		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
 		if (newImage && imageDirectory != null && imageDirectory.length() != 0) {
-			if (!privateLogoPath.getParentFile().exists()) {
-				privateLogoPath.getParentFile().mkdirs();
-			}
-			File tmpDirectory = PathHandler.getTempRoot();
-			uploadedImage = new File(tmpDirectory.getAbsolutePath() + '/' + imageDirectory);
+            File tmpDirectory = PathHandler.getTempRoot();
 
-			FileUtils.copyFile(uploadedImage, privateLogoPath);
-		} else if (removeImage && privateLogoPath.exists()) {
-			privateLogoPath.delete();
+            uploadedImage = new File(tmpDirectory.getAbsolutePath() + '/' + imageDirectory);
+
+            s3Service.uploadBrandingLogo(uploadedImage);
 		}
 	}
 
@@ -249,14 +236,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 	public void setImageDirectory(String imageDirectory) {
 		this.imageDirectory = imageDirectory;
-	}
-
-	public boolean isRemoveImage() {
-		return removeImage;
-	}
-
-	public void setRemoveImage(boolean removeImage) {
-		this.removeImage = removeImage;
 	}
 
 	public boolean isNewImage() {

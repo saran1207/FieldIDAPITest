@@ -1,6 +1,6 @@
 ${action.setPageType('branding', 'list')!}
 
-<@s.form action="brandingUpdate" cssClass="crudForm pageSection largeForm" theme="fieldid">
+<@s.form id="brandingUpdateForm" action="brandingUpdate" cssClass="crudForm pageSection largeForm" theme="fieldid">
 	<#include "../common/_formErrors.ftl"/>
 
 	<#include "_branding.ftl">

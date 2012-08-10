@@ -1,6 +1,7 @@
 package com.n4systems.services.tenant;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.BaseSetupDataFactory;
@@ -28,8 +29,8 @@ import javax.mail.MessagingException;
 
 public class TenantCreationService extends FieldIdPersistenceService {
 	
-	@Autowired
-	public ConfigService configService;
+	@Autowired public ConfigService configService;
+    @Autowired public S3Service s3Service;
 	
 	private OrgSaver orgSaver = new OrgSaver();
 	private UserSaver userSaver = new UserSaver();
@@ -43,7 +44,8 @@ public class TenantCreationService extends FieldIdPersistenceService {
 		createAdminUser(primaryOrg, adminUser);
 		createDefaultSetupData(tenant);
 		createFieldIDCatalogConnection(primaryOrg);
-		
+        s3Service.uploadDefaultBrandingLogo(tenant.getId());
+
 		sendWelcomeMessage(adminUser);
 	}
 

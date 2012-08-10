@@ -1,8 +1,8 @@
 package com.n4systems.reporting;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.DateTimeDefinition;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import rfid.ejb.entity.InfoFieldBean;
@@ -18,8 +18,8 @@ public class AssetReportMapProducer extends ReportMapProducer {
 	private static final String UNASSIGNED_USER_NAME = "Unassigned";
 	private final Asset asset;
 
-	public AssetReportMapProducer(Asset asset, DateTimeDefinition dateTimeDefinition) {
-		super(dateTimeDefinition);
+	public AssetReportMapProducer(Asset asset, DateTimeDefinition dateTimeDefinition, S3Service s3Service) {
+		super(dateTimeDefinition, s3Service);
 		this.asset = asset;
 	}
 
@@ -52,7 +52,7 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("productInstructions", assetType.getInstructions());
 		
 		add("productImage", imagePath(assetType));
-		add("ownerLogo", getOwnerLogo(asset.getOwner()));
+		add("ownerLogo", getCustomerLogo(asset.getOwner()));
         add("latitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLatitude() : "");
         add("longitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLongitude() : "");
 	}
@@ -63,10 +63,6 @@ public class AssetReportMapProducer extends ReportMapProducer {
 
 	private File imagePath(AssetType assetType) {
 		return (assetType.hasImage()) ? new File(PathHandler.getAssetTypeImageFile(assetType), assetType.getImageName()) : null;
-	}
-	
-	private File getOwnerLogo(BaseOrg owner) {
-		return owner != null ? PathHandler.getOrgLogo(owner) : null;
 	}
 
 	private Map<String, Object> produceInfoOptionMap() {

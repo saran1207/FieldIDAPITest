@@ -89,9 +89,7 @@
 						<span id="uploadInfo"><@s.text name="label.org_image_looks_best"/></span>
 					</#if>
 					<span id="imageUploaded" <#if (action.fieldErrors['logoImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !logoImageDirectory?exists || logoImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
-						<@s.url id="previewImage" uniqueID="${uniqueID!}" action="downloadOrgLogo" namespace="/file" />
-						<img src="${previewImage}" width="150px" <#if newImage > style="display:none"</#if> id="previewImage"/>
-						
+                        <img src="${logoImageDirectory!""}" width="150px" <#if newImage > style="display:none"</#if> id="previewImage"/>
 						<@s.hidden name="removeImage" id="removeImage"/>  <a href="removeImage" id="removeImageLink" onclick="removeUploadImage(); return false;"><@s.text name="label.remove"/></a>
 						<@s.hidden name="newImage" id="newImage"/>
 						<@s.hidden name="logoImageDirectory" id="imageDirectory"/>

@@ -33,18 +33,14 @@
 					<@s.text name="label.account_image_looks_best"/>
 				</span><br/>
 				<span id="imageUploadField"  >
-					<#if !imageDirectory?exists || imageDirectory.length() == 0  || removeImage >
-						<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="240" height="35" ></iframe>
-					</#if>
-					<span id="imageUploaded" <#if (action.fieldErrors['uploadedImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !imageDirectory?exists || imageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
-						
+					<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="240" height="35" ></iframe>
+
+                    <span id="imageUploaded">
 						<@s.hidden name="newImage" id="newImage"/>
 						<@s.hidden name="imageDirectory" id="imageDirectory"/>
-						<span id="newImageUploaded" <#if !newImage >style="display:none"</#if>><@s.text name="label.new_image_uploaded"/> </span> 
-						 
-						<img src="<@s.url action="downloadTenantLogo"  namespace="/file" uniqueID="${tenant.id}" />" <#if newImage > style="display:none"</#if> id="previewImage" target="_blank" alt="<@s.text name="label.logo_image" />" width="215" height="61"/>
-						 
-						<@s.hidden name="removeImage" id="removeImage"/> <a href="removeImage" id="removeImageLink" onclick="removeUploadImage(); return false;"><@s.text name="label.remove"/></a>
+
+                        <span id="newImageUploaded" style="display:none"><@s.text name="label.new_image_uploaded" /></span>
+						<img src="${action.getMainLogoUrl(tenant.id)}" id="previewImage" target="_blank" width="215" height="61"/>
 					</span>
 				</span>
 			</span>

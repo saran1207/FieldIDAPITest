@@ -23,7 +23,7 @@ public class AssetReportMapProducerTest {
 	public void should_be_make_assigned_user_to_the_users_first_name_and_last_name_available_when_asset_assinged() throws Exception {
 		Asset asset = anAsset().assignedTo(anEmployee().withFirstName("first").withLastName("last").build()).build();
 		
-		AssetReportMapProducer sut = new AssetReportMapProducer(asset, DEFAULT_DATE_TIME_DEFINITION);
+		AssetReportMapProducer sut = new AssetReportMapProducer(asset, DEFAULT_DATE_TIME_DEFINITION, null);
 		
 		Map<String, Object> reportMap = sut.produceMap();
 		
@@ -34,7 +34,7 @@ public class AssetReportMapProducerTest {
 	public void should_be_make_assigned_user_unassigned_when_asset_is_unassigned() throws Exception {
 		Asset asset = anAsset().unassigned().build();
 		
-		AssetReportMapProducer sut = new AssetReportMapProducer(asset, DEFAULT_DATE_TIME_DEFINITION);
+		AssetReportMapProducer sut = new AssetReportMapProducer(asset, DEFAULT_DATE_TIME_DEFINITION, null);
 		
 		Map<String, Object> reportMap = sut.produceMap();
 		

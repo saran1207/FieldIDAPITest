@@ -1,14 +1,12 @@
 package com.n4systems.reporting;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -22,7 +20,6 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.service.certificate.ReportCompiler;
 import com.n4systems.model.AssetType;
@@ -40,7 +37,6 @@ import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StringListingPair;
-import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
 
 public class EventSummaryGenerator {
 	private static final String n4LogoFileName = "n4_logo.gif";
@@ -49,15 +45,17 @@ public class EventSummaryGenerator {
 	private final PersistenceManager persistenceManager;
 	private final EventManager eventManager;
 	private final DateTimeDefiner dateDefiner;
-	
-	public EventSummaryGenerator(DateTimeDefiner dateDefiner, PersistenceManager persistenceManager, EventManager eventManager) {
+    private final S3Service s3service;
+
+	public EventSummaryGenerator(DateTimeDefiner dateDefiner, PersistenceManager persistenceManager, EventManager eventManager, S3Service s3service) {
 		this.dateDefiner = dateDefiner;
 		this.persistenceManager = persistenceManager;
 		this.eventManager = eventManager;
+        this.s3service = s3service;
 	}
 	
 	public EventSummaryGenerator(DateTimeDefiner dateDefiner) {
-		this(dateDefiner, ServiceLocator.getPersistenceManager(), ServiceLocator.getEventManager());
+		this(dateDefiner, ServiceLocator.getPersistenceManager(), ServiceLocator.getEventManager(), ServiceLocator.getS3Service());
 	}
 	
 	public JasperPrint generate(ReportDefiner reportDefiner, List<Long> eventIds, User user) throws ReportException {
@@ -124,7 +122,7 @@ public class EventSummaryGenerator {
 						? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 				
-				Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner).produceMap();
+				Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service).produceMap();
 				eventMap.put("mainInspection", eventReportMap);
 				eventMap.put("product", eventReportMap.get("product"));
 				
@@ -132,7 +130,7 @@ public class EventSummaryGenerator {
 				inspectionResultMaps.add(eventReportMap);
 				
 				for (SubEvent subEvent : event.getSubEvents()) {
-					inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner).produceMap());
+					inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service).produceMap());
 				}
 
 				eventMap.put("allInspections", inspectionResultMaps);
@@ -263,30 +261,14 @@ public class EventSummaryGenerator {
 		return imageStream;
 	}
 
-	/**
-	 * Returns an input stream of the logo for an Organization. If the
-	 * organization is not null and has a logo, that logo is returned. Failing
-	 * that, the tenants logo is returned. If the tenant has no logo, null is
-	 * returned.
-	 * 
-	 * @param organization
-	 *            An Organization
-	 * @param tenant
-	 *            The Tenant
-	 * @return An InputStream or null if no logo could be resolved.
-	 * @throws ReportException
-	 */
 	private InputStream resolveCertificateMainLogo(InternalOrg organization) throws ReportException {
-		InputStream logoStream = null;
-		File tenantLogo = PathHandler.getCertificateLogo(organization);
-
 		try {
-			logoStream = new FileInputStream(tenantLogo);
-		} catch (FileNotFoundException e) {
+            byte[] image = s3service.downloadInternalOrgCertificateLogo(organization);
+            return new ByteArrayInputStream(image);
+		} catch (IOException e) {
+            logger.warn("Failed downloading internal org certificate logo", e);
 			return null;
 		}
-
-		return logoStream;
 	}
 	
 	private List<StringListingPair> produceInfoOptionLP(List<InfoOptionBean> infoOptionList) {

@@ -13,8 +13,7 @@ public class TenantPathUpdater {
 	Logger logger = Logger.getLogger(TenantPathUpdater.class);
 			
 	public void renameTenantPaths(Tenant tenant, String newName) throws IOException {
-		File [] files = {new File(PathHandler.getTenantLogo(tenant).getParent()), 
-		                 PathHandler.getEventAttachmentBaseFile(tenant), 
+		File [] files = {PathHandler.getEventAttachmentBaseFile(tenant),
 		                 PathHandler.getEventProoftestBaseFile(tenant),
 		                 PathHandler.getEventChartImageBaseFile(tenant),
 		                 PathHandler.getEventSignatureBaseFile(tenant),

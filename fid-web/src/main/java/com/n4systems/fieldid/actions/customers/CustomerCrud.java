@@ -1,28 +1,14 @@
 package com.n4systems.fieldid.actions.customers;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.web.helper.Constants;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.downloadlink.DownloadLink;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
-import com.n4systems.model.orgs.DivisionOrgsForCustomerOrgLoader;
-import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.orgs.customer.CustomerOrgArchiver;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.user.User;
@@ -33,13 +19,15 @@ import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.EmailValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.Validation;
-import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import com.opensymphony.xwork2.validator.annotations.*;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
+import rfid.web.helper.Constants;
+
+import java.io.File;
+import java.net.URL;
+import java.util.List;
 
 @Validation
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
@@ -65,7 +53,9 @@ public class CustomerCrud extends AbstractCrud {
 	private String logoImageDirectory;
 	private boolean removeImage = false;
 	private boolean newImage = false;
-	
+
+    @Autowired
+    private S3Service s3Service;
 	
 	public CustomerCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -109,8 +99,13 @@ public class CustomerCrud extends AbstractCrud {
 		if (customer.getId() == null) {
 			return null;
 		}
-		File logo = PathHandler.getOrgLogo(customer);
-		return logo.exists() ? logo.getName() : null;
+
+        if (!s3Service.customerLogoExists(customer.getId())) {
+            return null;
+        }
+
+		URL logoUrl = s3Service.getCustomerLogoURL(customer.getId());
+		return logoUrl.toString();
 	}
 	
 	@SkipValidation
@@ -217,28 +212,13 @@ public class CustomerCrud extends AbstractCrud {
 	}
 	
 	private void processImage() {
-		
-		File orgLogo = PathHandler.getOrgLogo(customer);
 		if (removeImage) {
-			if (orgLogo.exists()) {
-				orgLogo.delete();
-			}
+            s3Service.removeCustomerLogo(customer.getId());
 		}
 		if (newImage == true && logoImageDirectory != null && logoImageDirectory.length() != 0) {
-			try {
-				if (orgLogo.exists()) {
-					orgLogo.delete();
-				}
-				
-				File tmpDirectory = PathHandler.getTempRoot();
-				File uploadedImage = new File(tmpDirectory.getAbsolutePath() + '/' + logoImageDirectory);
-				
-				FileUtils.copyFile( uploadedImage, orgLogo );
-				uploadedImage.delete();
-				
-			} catch (IOException e) {
-				logger.error("Could not save logo file",e);
-			}
+            File uploadedImage = new File(PathHandler.getTempRoot(), logoImageDirectory);
+            s3Service.uploadCustomerLogo(uploadedImage, customer.getId());
+            uploadedImage.delete();
 		}
 	}
 	

@@ -15,7 +15,7 @@
 
 <div id="orgInfo">
 	<#assign tenant = primaryOrg.tenant>
-    <img class="logo" alt="${(tenant.displayName?html)!}" src='<@s.url action="downloadTenantLogo" namespace="/file" uniqueID="${tenant.id}" />'/>
+    <img class="logo" alt="${(tenant.displayName?html)!}" src='${action.getMainLogoUrl(tenant.id)}'/>
 	<h3>${primaryOrg.displayName}</h3>	
 	<div id="loginUrl">
 		<#include "_loginUrl.ftl"/>	

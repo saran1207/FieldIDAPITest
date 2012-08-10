@@ -122,8 +122,7 @@
 					<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />"  scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
 				</#if>
 				<span id="imageUploaded" <#if (action.fieldErrors['certImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !certImageDirectory?exists || certImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
-					<@s.url id="previewImage" uniqueID="${uniqueID!}" action="downloadCertLogo" namespace="/file" />
-					<img src="${previewImage}" <#if newImage > style="display:none"</#if> id="previewImage" style="width=500;height=200"/>
+					<img src="${certImageDirectory!""}" <#if newImage > style="display:none"</#if> id="previewImage" style="width=500;height=200"/>
 					
 					<@s.hidden name="removeImage" id="removeImage"/>  <a href="removeImage" id="removeImageLink" onclick="removeUploadImage(); return false;"><@s.text name="label.remove"/></a>
 					<@s.hidden name="newImage" id="newImage"/>

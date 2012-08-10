@@ -2,6 +2,7 @@ package com.n4systems.reporting;
 
 import java.io.File;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
@@ -13,8 +14,8 @@ public class SubEventReportMapProducer extends AbsractEventReportMapProducer {
 	private final SubEvent event;
 	private final Event masterEvent;
 	
-	public SubEventReportMapProducer(SubEvent event, Event masterEvent, DateTimeDefinition dateTimeDefinition) {
-		super(dateTimeDefinition);
+	public SubEventReportMapProducer(SubEvent event, Event masterEvent, DateTimeDefinition dateTimeDefinition, S3Service s3service) {
+		super(dateTimeDefinition, s3service);
 		this.event = event;
 		this.masterEvent = masterEvent;
 	}

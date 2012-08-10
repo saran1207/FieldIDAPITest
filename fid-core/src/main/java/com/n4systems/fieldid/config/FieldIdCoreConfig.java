@@ -14,6 +14,7 @@ import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.SecurityContextInitializer;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
@@ -388,6 +389,11 @@ public class FieldIdCoreConfig {
     @Bean
     public EventStatusService eventStatusService() {
         return new EventStatusService();
+    }
+
+    @Bean
+    public S3Service s3Service() {
+        return new S3Service();
     }
 
     @Bean

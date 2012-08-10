@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.certificate.ReportCompiler;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.Event;
@@ -28,10 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +43,9 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
     private @Autowired OrgService orgService;
     private @Autowired DateService dateService;
 
+
+    @Autowired
+    private S3Service s3service;
 
     @Transactional
     public JasperPrint generate(EventReportCriteria criteria, List<Long> sortedIdList) throws ReportException {
@@ -111,7 +112,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                         ? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 
-                Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner).produceMap();
+                Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service).produceMap();
                 eventMap.put("mainInspection", eventReportMap);
                 eventMap.put("product", eventReportMap.get("product"));
 
@@ -119,7 +120,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                 inspectionResultMaps.add(eventReportMap);
 
                 for (SubEvent subEvent : event.getSubEvents()) {
-                    inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner).produceMap());
+                    inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service).produceMap());
                 }
 
                 eventMap.put("allInspections", inspectionResultMaps);
@@ -245,28 +246,14 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
         return imageStream;
     }
 
-    /**
-     * Returns an input stream of the logo for an Organization. If the
-     * organization is not null and has a logo, that logo is returned. Failing
-     * that, the tenants logo is returned. If the tenant has no logo, null is
-     * returned.
-     *
-     * @param organization
-     *            An Organization
-     * @return An InputStream or null if no logo could be resolved.
-     * @throws ReportException
-     */
     private InputStream resolveCertificateMainLogo(InternalOrg organization) throws ReportException {
-        InputStream logoStream = null;
-        File tenantLogo = PathHandler.getCertificateLogo(organization);
-
         try {
-            logoStream = new FileInputStream(tenantLogo);
-        } catch (FileNotFoundException e) {
+            byte[] image = s3service.downloadInternalOrgCertificateLogo(organization);
+            return new ByteArrayInputStream(image);
+        } catch (IOException e) {
+            logger.warn("Failed downloading internal org certificate logo", e);
             return null;
         }
-
-        return logoStream;
     }
 
     private List<StringListingPair> produceInfoOptionLP(List<InfoOptionBean> infoOptionList) {

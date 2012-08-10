@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.util.EventFormHelper;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -31,7 +32,6 @@ import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.DateTimeDefinition;
@@ -39,8 +39,8 @@ import com.n4systems.util.DoubleFormatter;
 
 public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
-	public AbsractEventReportMapProducer(DateTimeDefinition dateTimeDefinition) {
-		super(dateTimeDefinition);
+	public AbsractEventReportMapProducer(DateTimeDefinition dateTimeDefinition, S3Service s3Service) {
+		super(dateTimeDefinition, s3Service);
 	}
 
 	public void addParameters() {
@@ -63,7 +63,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		add("eventTypeDescription", getEvent().getType().getName());
 		add("eventInfoOptionMap", eventInfoOptions());
 		
-		add("product", new AssetReportMapProducer(getEvent().getAsset(), dateTimeDefinition).produceMap());
+		add("product", new AssetReportMapProducer(getEvent().getAsset(), dateTimeDefinition, s3Service).produceMap());
 		
 		List<CriteriaStateView> createCriteriaViews = createCriteriaViews();
 		add("resultsBeanList", createCriteriaViews);
@@ -74,12 +74,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		add("observations", new JRBeanCollectionDataSource(createObservationViews));
 		
 		add("images", createEventImages());
-		add("ownerLogo", getOwnerLogo(getEvent().getAsset().getOwner()));
+		add("ownerLogo", getCustomerLogo(getEvent().getAsset().getOwner()));
 		
-	}
-	
-	private File getOwnerLogo(BaseOrg owner) {
-		return owner != null ? PathHandler.getOrgLogo(owner) : null;
 	}
 
 	private List<InspectionImage> createEventImages() {

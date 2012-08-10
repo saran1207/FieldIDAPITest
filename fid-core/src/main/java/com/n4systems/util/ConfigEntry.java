@@ -77,7 +77,10 @@ public enum ConfigEntry {
 	RSS_FEED                                    (   "http://feeds.feedburner.com/FieldIdCustomerBlog" ),
     GOOGLE_ANALYTICS_ENABLED                    (   "false" ),
     APPTEGIC_ENABLED                            (   "false" ),
-    APPTEGIC_DATASET                            (   "test" );
+    APPTEGIC_DATASET                            (   "test" ),
+    AMAZON_S3_BUCKET                            (   "fieldid_prod"),
+    AMAZON_ACCESS_KEY_ID                        (   "AKIAJYAZBOFFRZAZSIGA"),
+    AMAZON_SECRET_ACCESS_KEY                    (   "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");
 	
 	private String defaultValue;
 	
