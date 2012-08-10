@@ -1,0 +1,47 @@
+.agenda {
+    overflow-y: auto;
+    height:370px;
+}
+
+
+.agenda .datepicker {
+    font-size: 12px;
+}
+
+.agenda .datepicker .ui-datepicker-inline {
+    width:100%;
+    border:none;
+    padding:0;
+}
+
+.agenda-list .overdue img {
+    border: 1px solid #8b0000;
+    border-radius: 5px;
+    padding:2px;
+}
+
+.agenda .agenda-title {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 16px;
+    color: #1166cc;
+}
+
+.agenda-day-to-day ul li {
+    list-style: disc outside none;
+}
+
+.agenda-icon {
+    float:left;
+    padding-right:5px;
+}
+
+.agenda-asset {
+    float:left;
+    width: 60%;
+}
+
+.agenda-event {
+    float:right;
+    padding-right:10px;
+}

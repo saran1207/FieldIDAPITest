@@ -1,0 +1,37 @@
+<wicket:panel>
+
+    <input type="checkbox" wicket:id="mode"><wicket:message key="label.show_calendar"/></input>
+
+    <div class="agenda">
+
+        <div wicket:id="dayByDayView" class="agenda-day-to-day">
+            <div wicket:id="days">
+                <span wicket:id="day"/>
+            </div>
+        </div>
+
+        <div wicket:id="calendarView" class="agenda-calendar">
+            <div wicket:id="date"/>
+            <table width="100%">
+                <tr wicket:id="list">
+                    <td><img wicket:id="icon"/></td>
+                    <td><span wicket:id="asset"/></td>
+                    <td><a wicket:id="startEvent"><span wicket:id="eventType"/></a></td>
+                </tr>
+            </table>
+        </div>
+
+        <wicket:fragment wicket:id="dayPanel">
+            <div class="agenda-title" wicket:id="date"/>
+            <ul>
+                <li wicket:id="list" class="agenda-row">
+                    <img wicket:id="icon"  class="agenda-icon"/>
+                    <span wicket:id="asset"  class="agenda-asset"/>
+                    <a wicket:id="startEvent"><span wicket:id="eventType"  class="agenda-event"/></a>
+                </li>
+            </ul>
+        </wicket:fragment>
+
+    </div>
+
+</wicket:panel>

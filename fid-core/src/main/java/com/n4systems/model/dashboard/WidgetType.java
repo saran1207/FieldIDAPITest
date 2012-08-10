@@ -20,6 +20,7 @@ public enum WidgetType implements Listable<String> {
     UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", UpcomingEventsWidgetConfiguration.class),
     ASSETS_IDENTIFIED("Assets Identified", AssetsIdentifiedWidgetConfiguration.class),
     EVENT_COMPLETENESS("Event Completeness", EventCompletenessWidgetConfiguration.class),
+    WORK("Work", WidgetConfiguration.class),
     EVENT_KPI("Event KPIs", EventKPIWidgetConfiguration.class);
 
     private String description;

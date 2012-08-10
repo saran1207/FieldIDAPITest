@@ -532,7 +532,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     public boolean isPastDue() {
         return (getEventState() == EventState.OPEN && isPastDue(nextDate));
     }
-/**
+
+    public boolean isCompleted() {
+        return EventState.COMPLETED.equals(getEventState());
+    }
+
+    /**
      * A static method consolidating the logic for checking if a next inspection
      * date is past due.
      *

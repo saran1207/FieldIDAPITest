@@ -3,6 +3,8 @@ package com.n4systems.util.time;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
 
@@ -52,5 +54,20 @@ public class DateUtil {
     public static boolean isMidnight(Date date) {
         DateTime dateTime = new DateTime(date);
         return dateTime.equals(new DateMidnight(date));
+    }
+
+    // TODO : change this to return StringResource model with parameters.
+    public static String getDayString(LocalDate date) {
+        LocalDate today = LocalDate.now();
+        if (date.equals(today)) {
+            return "Today";
+        } else if (today.plusDays(1).equals(date)) {
+            return "Tomorrow";
+        } else if (today.minusDays(1).equals(date)) {
+            return "Yesterday";
+        } else {
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("MMMMM dd");
+            return formatter.print(date);
+        }
     }
 }

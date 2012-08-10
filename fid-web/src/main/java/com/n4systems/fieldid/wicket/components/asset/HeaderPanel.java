@@ -47,6 +47,7 @@ public class HeaderPanel extends Panel {
 
         final Asset asset = assetModel.getObject();
 
+        // TODO : refactored out into AssetLabel.....................
         add(new Label("assetType", asset.getType().getName()));
         add(new Label("assetIdentifier", asset.getIdentifier()));
         Label assetStatus;
@@ -56,6 +57,7 @@ public class HeaderPanel extends Panel {
             add(assetStatus = new Label("assetStatus"));
             assetStatus.setVisible(false);
         }
+        // ...........................................................
 
         BaseOrg owner = asset.getOwner();
 

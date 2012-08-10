@@ -374,5 +374,26 @@ public class EventService extends FieldIdPersistenceService {
         return event;
     }
 
+    public List<Event> getWork(Date from, Date to, int pageNumber, int pageSize) {
+        return persistenceService.findAll(createWorkQueryBuilder(from,to), pageNumber, pageSize);
+    }
+
+    public Long countWork(Date from, Date to) {
+        return persistenceService.count(createWorkQueryBuilder(from, to));
+    }
+
+
+    private QueryBuilder<Event> createWorkQueryBuilder(Date from, Date to) {
+        QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
+
+        // TODO : temp. replace this with proper query when backend ticket is done.
+        builder.addWhere(Comparator.GE, "from", "nextDate", from);
+        builder.addWhere(Comparator.LT, "to", "nextDate", to);
+        builder.addOrder("nextDate");
+
+        return builder;
+    }
+
+
 
 }
