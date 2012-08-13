@@ -93,7 +93,7 @@ public class HeaderPanel extends Panel {
         scheduleToAdd = createNewSchedule(asset);
 
         SchedulePicker schedulePicker;
-        add(schedulePicker = new SchedulePicker("schedulePicker", new FIDLabelModel("label.schedule_event"), new PropertyModel<Event>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel(), -217, 28) {
+        add(schedulePicker = new SchedulePicker("schedulePicker", new FIDLabelModel("label.schedule_event"), new PropertyModel<Event>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel(), -242, 29) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 scheduleToAdd.setTenant(FieldIDSession.get().getSessionUser().getTenant());

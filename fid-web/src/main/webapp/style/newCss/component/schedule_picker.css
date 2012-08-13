@@ -1,10 +1,9 @@
 .newScheduleForm {
-	overflow:hidden;
-	width:600px;
-	border:solid 1px #DDD;
-	background-color:#fff;
-	z-index: 1;
-    position:absolute;
+    background-color:#FFFFFF;
+    box-shadow: 4px 4px 5px #CCCCCC;
+    -webkit-box-shadow: 4px 4px 5px #CCCCCC;
+    -moz-box-shadow: 4px 4px 5px #CCCCCC;
+    padding:24px;
 }
 
 .pageContent .newScheduleForm h2 {
