@@ -196,7 +196,6 @@ public class EventScheduleService extends FieldIdPersistenceService {
         Long id = persistenceService.save(openEvent);
         openEvent.getAsset().touch();
         persistenceService.update(openEvent.getAsset());
-        notifyEventAssigneeService.notifyEventAssignee(openEvent);
         return id;
     }
 

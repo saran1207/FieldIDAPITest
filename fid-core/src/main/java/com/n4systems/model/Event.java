@@ -4,6 +4,7 @@ import com.n4systems.model.api.*;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
+import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
@@ -67,6 +68,9 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     }
 
 	private Location advancedLocation = new Location();
+
+    @OneToOne(mappedBy = "event", cascade = CascadeType.PERSIST)
+    private AssigneeNotification assigneeNotification;
 
 	@Column(nullable=false)
 	private boolean printable;
@@ -137,7 +141,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	
 	public Event() {
 	}
-	
+
 	public Event(Tenant tenant) {
 		super(tenant);
 	}
@@ -403,6 +407,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	@Override
 	protected void onCreate() {
 		super.onCreate();
+        assigneeNotification = new AssigneeNotification();
+        assigneeNotification.setEvent(this);
 		normalizeAssignmentForPersistence();
         fillInPlaceholderScheduleIfAbsent();
 	}
@@ -599,4 +605,11 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         this.assignee = assignee;
     }
 
+    public AssigneeNotification getAssigneeNotification() {
+        return assigneeNotification;
+    }
+
+    public void setAssigneeNotification(AssigneeNotification assigneeNotification) {
+        this.assigneeNotification = assigneeNotification;
+    }
 }

@@ -35,7 +35,6 @@ public class FieldIdPersistenceService extends FieldIdService {
         return entity.getId();
     }
 
-    @Deprecated
     // Needed to get legacy savers into service layer
     // We need to remove the savers completely by refactoring them into services themselves
     protected EntityManager getEntityManager() {

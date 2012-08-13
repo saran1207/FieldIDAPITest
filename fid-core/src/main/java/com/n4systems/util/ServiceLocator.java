@@ -8,6 +8,7 @@ import com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer;
 import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
 import com.n4systems.ejb.wrapper.EventManagerEJBContainer;
+import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.mail.MailManager;
@@ -104,7 +105,11 @@ public class ServiceLocator implements ApplicationContextAware {
 		return getBean(OrderManager.class);
 	}
 
-	public static Notifier getDefaultNotifier() {
+    public static final NotifyEventAssigneeService getEventAssigneeService() {
+        return getBean(NotifyEventAssigneeService.class);
+    }
+
+    public static Notifier getDefaultNotifier() {
 		return new EmailNotifier(getMailManager());
 	}
 
