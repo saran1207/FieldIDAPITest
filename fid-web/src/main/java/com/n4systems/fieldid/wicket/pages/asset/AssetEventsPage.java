@@ -139,15 +139,9 @@ public class AssetEventsPage extends AssetPage{
         super.renderHead(response);
         response.renderCSSReference("style/newCss/asset/events.css");
         response.renderCSSReference("style/newCss/asset/actions-menu.css");
-        response.renderCSSReference("style/tipsy/tipsy.css");
 
         response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");
-
-        response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
-        // CAVEAT : https://github.com/jaz303/tipsy/issues/19
-        // after ajax call, tipsy tooltips will remain around so need to remove them explicitly.
-        response.renderOnDomReadyJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
 
         //Needs to be included because the map panel is initially hidden.
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);

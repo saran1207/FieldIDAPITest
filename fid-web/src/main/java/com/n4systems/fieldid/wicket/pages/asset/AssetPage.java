@@ -49,6 +49,11 @@ public abstract class AssetPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/tipsy/tipsy.css");
+        response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
+        // CAVEAT : https://github.com/jaz303/tipsy/issues/19
+        // after ajax call, tipsy tooltips will remain around so need to remove them explicitly.
+        response.renderOnDomReadyJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
     }
 
     public Long getAssetId() {

@@ -29,8 +29,13 @@ public class ResultIconCell extends Panel {
                 image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", status.getDisplayName()).getObject()));
             }
         } else if(state.equals(Event.EventState.OPEN)) {
-            add(image = new ContextImage("resultIcon", "images/event-open.png"));
-            image.add(new AttributeAppender("title", new FIDLabelModel("label.event_open").getObject()));
+            if(event.getAssignee() != null) {
+                add(image = new ContextImage("resultIcon", "images/event-open-assigned.png"));
+                image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee", event.getAssignee().getDisplayName())));
+            }else {
+                add(image = new ContextImage("resultIcon", "images/event-open.png"));
+                image.add(new AttributeAppender("title", new FIDLabelModel("label.event_open").getObject()));
+            }
         }else /*if(state.equals(Event.EventState.CLOSED)) */ {
             add(image = new ContextImage("resultIcon", "images/event-closed.png"));
             image.add(new AttributeAppender("title", new FIDLabelModel("label.event_closed").getObject()));

@@ -8,6 +8,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -22,6 +23,15 @@ public class UpcomingEventsPanel extends Panel {
             @Override
             protected void populateItem(ListItem<Event> item) {
                 Event schedule = item.getModelObject();
+
+                ContextImage scheduleIcon;
+                if(schedule.getAssignee() != null) {
+                    item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-assigned.png"));
+                    scheduleIcon.add(new AttributeAppender("title",  new FIDLabelModel("label.assignee", schedule.getAssignee().getDisplayName())));
+                    scheduleIcon.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
+                } else {
+                    item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open.png"));
+                }
 
                 item.add(new Label("upcomingEventType", schedule.getType().getName()));
 
