@@ -35,7 +35,9 @@ public class SecurityContextInitializer implements ApplicationContextAware {
 		
 		if (user == null) {
 			throw new SecurityException("No user for authKey [" + userAuthKey + "]");
-		}
+		} else if (user.getTenant().isDisabled()) {
+            throw new SecurityException("Tenant [" + user.getTenant().getName() + "] is disabled");
+        }
 		
 		SecurityContext securityContext = getSecurityContext();
 		securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(user.getTenant().getId()));
