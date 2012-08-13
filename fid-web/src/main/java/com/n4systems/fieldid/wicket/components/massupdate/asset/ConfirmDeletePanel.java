@@ -3,13 +3,11 @@ package com.n4systems.fieldid.wicket.components.massupdate.asset;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.model.search.AssetSearchCriteria;
-import com.n4systems.model.user.User;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -78,11 +76,7 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
     private boolean isDeletedEntered() {
         return "delete".equalsIgnoreCase(confirmation);
     }
-	
-	private User getCurrentUser() {
-		return userService.getUser( FieldIDSession.get().getSessionUser().getId());
-	}
-	
+
 	@Override
 	public boolean isConfirmPanel() {
 		return true;

@@ -1,21 +1,15 @@
 package com.n4systems.fieldid.wicket.components.massupdate.event;
 
-import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.Asset;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.util.AssetRemovalSummary;
 import com.n4systems.util.EventRemovalSummary;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import java.util.List;
 
 public class DeleteDetailsPanel extends AbstractMassUpdatePanel {
 	
@@ -32,8 +26,8 @@ public class DeleteDetailsPanel extends AbstractMassUpdatePanel {
 		add(new Label("deleteDetailsMessage", new FIDLabelModel("message.mass_delete_details", 
 				                                                eventSearchCriteria.getObject().getSelection().getNumSelectedIds(),
                                                                 new FIDLabelModel("label.events.lc").getObject())));
-		add(new Label("masterEventsToDelete", removalSummary.getMasterEventsToDelete().toString()));
-		add(new Label("standardEventsToDelete", removalSummary.getStandardEventsToDelete().toString()));
+        Integer eventsToDelete = removalSummary.getMasterEventsToDelete() + removalSummary.getStandardEventsToDelete();
+		add(new Label("eventsToDelete", eventsToDelete.toString()));
 		add(new Label("schedulesToDelete", removalSummary.getEventSchedulesToDelete().toString()));
 
 		

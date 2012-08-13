@@ -12,6 +12,7 @@ import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.*;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.LargeInListQueryExecutor;
@@ -22,7 +23,6 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.*;
 
 public class MassUpdateManagerImpl implements MassUpdateManager {
@@ -181,10 +181,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			throw new UpdateFailureException(e);
 		} catch (EntityExistsException cve) {
 			throw new UpdateConatraintViolationException(cve);
-		} catch (Exception e) {
-            System.out.println("hmm...wha' happen?");
-        }
-
+		}
 		return result;
 	}
 
@@ -334,6 +331,11 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
                     changeTarget.setEventStatus(eventChanges.getEventStatus());
                 }
 
+                if (updateKey.equals("nextEventDate")) {
+                    audit.setNextDate(eventChanges.getNextDate());
+                    changeTarget.setNextDate(eventChanges.getNextDate());
+                }
+
 			}
 
 			persistenceManager.update(changeTarget, user);
@@ -402,5 +404,33 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		}
 		return result;
 	}
+
+    public Long closeEvents(List<Long> ids, Event eventChanges, User modifiedBy) throws UpdateFailureException{
+
+        if (ids.isEmpty()) {
+            return 0L;
+        }
+
+        Event changeTarget;
+
+        for (Long id : ids) {
+            changeTarget = persistenceManager.find(Event.class, id);
+
+            Asset asset = changeTarget.getAsset();
+            changeTarget.setStatus(Status.VOID);
+            changeTarget.setEventState(Event.EventState.CLOSED);
+            changeTarget.setDate(new Date());
+            changeTarget.setPerformedBy(eventChanges.getPerformedBy());
+            changeTarget.setEventStatus(eventChanges.getEventStatus());
+            changeTarget.setComments(eventChanges.getComments());
+            changeTarget.setOwner(asset.getOwner());
+            changeTarget.setAdvancedLocation(asset.getAdvancedLocation());
+            changeTarget.setAssignedTo(AssignedToUpdate.assignAssetToUser(asset.getAssignedUser()));
+            changeTarget.setModifiedBy(modifiedBy);
+            persistenceManager.update(changeTarget);
+        }
+
+        return new Long(ids.size());
+    }
 
 }

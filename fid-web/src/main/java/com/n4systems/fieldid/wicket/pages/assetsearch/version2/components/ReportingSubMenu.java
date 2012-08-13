@@ -2,9 +2,9 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionLink;
-import com.n4systems.fieldid.wicket.components.reporting.results.ScheduleMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
+import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
 import com.n4systems.fieldid.wicket.pages.print.ExportReportToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
@@ -30,7 +30,6 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
     private WebMarkupContainer print;
     private Link summaryReportLink;
 
-
     public ReportingSubMenu(String id, final Model<EventReportCriteria> model) {
 		super(id, model);
 
@@ -38,13 +37,19 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
         actions = new WebMarkupContainer("actions");
         // note that only one of these mass update links will be shown at a time - depends on the context.
-        actions.add(updateSchedulesLink = new ScheduleMassActionLink("massScheduleUpdateLink", "/massUpdateEventSchedule.action?searchId=%s", model));
         actions.add(assignJobLink = new ReportingMassActionLink("assignJobLink", "/selectJobToAssignEventsTo.action?searchId=%s&reportType=OBSERVATION_CERT", model));
 
         actions.add(updateLink = new Link("massUpdateLink") {
             @Override
             public void onClick() {
                 setResponsePage(new MassUpdateEventsPage(model));
+            }
+        });
+
+        actions.add(updateSchedulesLink = new Link("massScheduleUpdateLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new MassUpdateOpenEventsPage(model));
             }
         });
         
@@ -91,6 +96,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         
         updateLink.setVisible(state == EventState.COMPLETE && sessionUser.hasAccess("editevent"));
         updateSchedulesLink.setVisible(state == EventState.OPEN && sessionUser.hasAccess("editevent"));
+
         assignJobLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork);
 
         actions.setVisible(selected > 0 && selected < maxUpdate && (updateLink.isVisible() || updateSchedulesLink.isVisible() || assignJobLink.isVisible()));

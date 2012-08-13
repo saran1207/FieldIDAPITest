@@ -62,6 +62,10 @@ public class EventAudit extends BaseEntity {
     @Column(name="assigned_to", nullable = true)
     private String assignedTo;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="nextDate", nullable = true)
+    private Date nextDate;
+
     public EventAudit() {
     }
 
@@ -188,5 +192,14 @@ public class EventAudit extends BaseEntity {
     public void setAssignedUser(String assignedTo) {
         this.assignedTo = assignedTo;
     }
+
+    public Date getNextDate() {
+        return nextDate;
+    }
+
+    public void setNextDate(Date nextDate) {
+        this.nextDate = nextDate;
+    }
+
 }
 

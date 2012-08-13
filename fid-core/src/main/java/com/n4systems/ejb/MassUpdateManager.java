@@ -1,9 +1,5 @@
 package com.n4systems.ejb;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Asset;
@@ -11,6 +7,10 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.User;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface MassUpdateManager {
 
@@ -36,5 +36,5 @@ public interface MassUpdateManager {
 	
 	public Long assignToJob(List<Long> scheduleIds, Project project, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
 
-
+    public Long closeEvents(List<Long> ids, Event eventChanges, User modifiedBy) throws UpdateFailureException;
 }

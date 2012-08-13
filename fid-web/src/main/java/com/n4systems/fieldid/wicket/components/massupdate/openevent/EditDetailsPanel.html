@@ -1,0 +1,27 @@
+<wicket:panel>
+
+	<div class="feedback" wicket:id="feedbackPanel"></div>
+
+	<h1><wicket:message key="label.mass_update_step3"/></h1>
+	<div class="stepDetails">
+		<label><span wicket:id="editDetailsMessage"></span></label>
+	</div>
+	
+	<form class="editForm" wicket:id="form">
+
+	   	<div class="infoSet">
+	    	<input type="checkbox" wicket:id="nextEventDateCheck" />
+	        <label for="massEventUpdate.nextEventDate"><wicket:message key="label.nexteventdate"/></label>
+             <span class="fieldHolder">
+             	<div wicket:id="nextEventDate"></div>
+             </span>
+	    </div>
+
+		<div class="formActions">
+			<input type="submit" wicket:message="value:label.pagenavigation.next" />
+			<wicket:message key="label.or"/>    
+			<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+		</div>    
+    </form>
+
+</wicket:panel>

@@ -1,29 +1,22 @@
 package com.n4systems.fieldid.wicket.components.massupdate.event;
 
-import java.util.List;
-
+import com.n4systems.ejb.MassUpdateManager;
+import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.MassUpdateEventsTask;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.n4systems.ejb.MassUpdateManager;
-import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
-import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.user.User;
-import com.n4systems.taskscheduling.TaskExecutor;
-import com.n4systems.taskscheduling.task.MassUpdateEventsTask;
+import java.util.List;
 
 public class ConfirmEditPanel extends AbstractMassUpdatePanel {
-	
-	@SpringBean
-	private UserService userService;
 	
 	@SpringBean
 	private MassUpdateManager massUpdateManager;
@@ -59,11 +52,7 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 		
 		add(confirmEditForm);
 	}
-	
-	private User getCurrentUser() {
-		return userService.getUser( FieldIDSession.get().getSessionUser().getId());
-	}
-	
+
 	@Override
 	public boolean isConfirmPanel() {
 		return true;

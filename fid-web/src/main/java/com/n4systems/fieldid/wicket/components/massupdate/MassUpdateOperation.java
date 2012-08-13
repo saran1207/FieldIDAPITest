@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.massupdate;
 
 public enum MassUpdateOperation {
 	EDIT   ("label.edit", "message.select_edit"),
+    CLOSE  ("label.close", "message.select_close"),
 	DELETE ("label.delete", "message.select_delete");
 	
 	private final String label;
@@ -19,5 +20,4 @@ public enum MassUpdateOperation {
 	public String getMessage() {
 		return message;
 	}
-	
 }

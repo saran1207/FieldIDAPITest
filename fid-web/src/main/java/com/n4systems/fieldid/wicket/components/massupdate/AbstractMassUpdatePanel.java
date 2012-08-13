@@ -1,13 +1,20 @@
 package com.n4systems.fieldid.wicket.components.massupdate;
 
+import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public abstract class AbstractMassUpdatePanel extends Panel {
 
 	protected AbstractMassUpdatePanel previousPanel;
 
-	public AbstractMassUpdatePanel(String id) {
+    @SpringBean
+    private UserService userService;
+
+    public AbstractMassUpdatePanel(String id) {
 		super(id);
 	}
 
@@ -29,4 +36,7 @@ public abstract class AbstractMassUpdatePanel extends Panel {
 		return false;
 	}
 
+    protected User getCurrentUser() {
+        return userService.getUser( FieldIDSession.get().getSessionUser().getId());
+    }
 }

@@ -1,11 +1,5 @@
 package com.n4systems.ejb.wrapper;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.impl.MassUpdateManagerImpl;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
@@ -18,6 +12,11 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MassUpdateManagerEJBContainer extends EJBTransactionEmulator<MassUpdateManager> implements MassUpdateManager {
 
@@ -40,7 +39,23 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long deleteEventSchedules(Set<Long> scheduleIds) throws UpdateFailureException {
+    @Override
+    public Long closeEvents(List<Long> ids, Event eventChanges, User modifiedBy) throws UpdateFailureException {
+        TransactionManager transactionManager = new FieldIdTransactionManager();
+        Transaction transaction = transactionManager.startTransaction();
+        try {
+            return createManager(transaction.getEntityManager()).closeEvents(ids, eventChanges, modifiedBy);
+
+        } catch (RuntimeException e) {
+            transactionManager.rollbackTransaction(transaction);
+
+            throw e;
+        } finally {
+            transactionManager.finishTransaction(transaction);
+        }
+    }
+
+    public Long deleteEventSchedules(Set<Long> scheduleIds) throws UpdateFailureException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

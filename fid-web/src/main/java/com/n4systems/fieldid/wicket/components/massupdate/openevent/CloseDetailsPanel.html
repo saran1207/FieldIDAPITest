@@ -1,0 +1,33 @@
+<wicket:panel>
+    <div class="feedback" wicket:id="feedbackPanel"></div>
+
+    <h1><wicket:message key="label.mass_update_step3"/></h1>
+
+    <form wicket:id="form" class="form">
+        <div class="grey-message">
+            <wicket:message key="message.close_event"/>
+        </div>
+
+        <div class="field">
+            <label class="label"><wicket:message key="label.status"/></label>
+            <select wicket:id="status" style="width:200px;"/>
+        </div>
+
+        <div class="field">
+            <label class="label"><wicket:message key="label.closed_by"/></label>
+            <select wicket:id="resolver" style="width:200px;"/>
+        </div>
+
+        <div class="field">
+            <label class="label"><wicket:message key="label.comment"/></label>
+            <textarea wicket:id="comment"/>
+        </div>
+
+        <div class="formAction">
+            <input type="submit" wicket:id="closeButton" wicket:message="value:label.close_event"/> or <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+
+
+
+</wicket:panel>

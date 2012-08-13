@@ -1,11 +1,7 @@
 package com.n4systems.fieldid.wicket.components.massupdate.event;
 
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-
-import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateNavigationPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
+import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateNavigationPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateOperation;
 import com.n4systems.fieldid.wicket.components.massupdate.SelectOperationPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -13,6 +9,12 @@ import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.SearchCriteria;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MassUpdateEventsPanel extends Panel {
 
@@ -21,7 +23,10 @@ public class MassUpdateEventsPanel extends Panel {
 
     public MassUpdateEventsPanel(String id, final IModel<EventReportCriteria> eventSearchCriteria) {
         super(id);
-        currentPanel = new SelectOperationPanel("massUpdatePanel", (SearchCriteria) eventSearchCriteria.getObject(), new FIDLabelModel("label.events.lc").getObject())  {
+
+        List<MassUpdateOperation> operationList = Arrays.asList(MassUpdateOperation.EDIT, MassUpdateOperation.DELETE);
+
+        currentPanel = new SelectOperationPanel("massUpdatePanel", (SearchCriteria) eventSearchCriteria.getObject(), operationList, new FIDLabelModel("label.events.lc").getObject())  {
             @Override
             protected void onOperationSelected(MassUpdateOperation operation) {
                 if(operation == MassUpdateOperation.DELETE) {
@@ -121,6 +126,5 @@ public class MassUpdateEventsPanel extends Panel {
 
 	public void setCurrentPanel(AbstractMassUpdatePanel panel) {
 		this.currentPanel = panel;
-		
 	}
 }

@@ -4,14 +4,12 @@ import com.n4systems.ejb.EventManager;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.Button;
@@ -91,11 +89,7 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
 		
 		add(new FIDFeedbackPanel("feedbackPanel"));
 	}
-	
-	private User getCurrentUser() {
-		return userService.getUser( FieldIDSession.get().getSessionUser().getId());
-	}
-	
+
 	@Override
 	public boolean isConfirmPanel() {
 		return true;
