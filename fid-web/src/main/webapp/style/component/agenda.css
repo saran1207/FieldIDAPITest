@@ -35,6 +35,7 @@
 .agenda .agenda-title {
     padding-top: 5px;
     padding-bottom: 5px;
+    padding-left: 5px;
     background:#efeff5;
     font-size: 13px;
     color: #1166cc;
@@ -58,4 +59,9 @@
 .agenda-event {
     float:right;
     padding-right:10px;
+}
+
+.eventful {
+    display:inline;
+    margin-right:5px;
 }
