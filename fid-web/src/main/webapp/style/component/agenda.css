@@ -1,8 +1,11 @@
-.agenda {
-    overflow-y: auto;
-    height:370px;
+.agenda .meta-data {
+    display:none;
 }
 
+.agenda .agenda-days {
+    overflow-y:auto;
+    height:300px;
+}
 
 .agenda .datepicker {
     font-size: 12px;
@@ -20,12 +23,23 @@
     padding:2px;
 }
 
+.agenda .ui-datepicker-calendar .ui-state-default {
+    background:#EFEFF5;
+}
+
+.agenda .ui-datepicker-calendar .ui-state-highlight {
+    background:#CCDDFF;
+    border: 1px solid #a0a0f7;
+}
+
 .agenda .agenda-title {
     padding-top: 5px;
     padding-bottom: 5px;
-    font-size: 16px;
+    background:#efeff5;
+    font-size: 13px;
     color: #1166cc;
 }
+
 
 .agenda-day-to-day ul li {
     list-style: disc outside none;

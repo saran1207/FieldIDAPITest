@@ -3,6 +3,8 @@ package com.n4systems.services.date;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
 import java.util.Date;
@@ -49,6 +51,14 @@ public class DateService extends FieldIdService {
 
     public DateRange getDateRange(RangeType rangeType) {
         return new DateRange(rangeType, getUserTimeZone());
+    }
+
+    public LocalDate now() {
+        return new LocalDate(new DateMidnight(DateTimeZone.forTimeZone(getUserTimeZone())));
+    }
+
+    public Date nowAsDate() {
+        return new LocalDate(new DateMidnight(DateTimeZone.forTimeZone(getUserTimeZone()))).toDate();
     }
 
 }
