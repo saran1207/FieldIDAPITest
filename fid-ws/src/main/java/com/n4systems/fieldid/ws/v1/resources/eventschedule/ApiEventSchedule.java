@@ -9,6 +9,7 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 	private Long eventTypeId;
 	private String eventTypeName;
 	private Date nextDate;
+	private Long assigneeUserId;
 
 	public String getAssetId() {
 		return assetId;
@@ -41,5 +42,12 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 	public void setNextDate(Date nextDate) {
 		this.nextDate = nextDate;
 	}
+	
+	public Long getAssigneeUserId() {
+		return assigneeUserId;
+	}
 
+	public void setAssigneeUserId(Long assigneeUserId) {
+		this.assigneeUserId = assigneeUserId;
+	}	
 }

@@ -10,7 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
-import com.n4systems.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,13 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 
 @Component
 @Path("eventSchedule")
@@ -57,9 +62,9 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 
 			eventSchedule.setNextDate(apiEventSchedule.getNextDate());
             eventSchedule.setEventType(eventType);
-
             eventSchedule.getEvent().setNextDate(apiEventSchedule.getNextDate());
-            eventSchedule.getEvent().setType(eventType);
+            eventSchedule.getEvent().setType(eventType);            
+            eventSchedule.getEvent().setAssignee(getAssigneeUser(apiEventSchedule));
 
             persistenceService.update(eventSchedule.getEvent());
 			persistenceService.update(eventSchedule);
@@ -93,6 +98,10 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		apiSchedule.setEventTypeId(event.getEventType().getId());
 		apiSchedule.setEventTypeName(event.getEventType().getName());
 		apiSchedule.setNextDate(event.getNextDate());
+		if(event.getAssignee() != null) {
+			apiSchedule.setAssigneeUserId(event.getAssignee().getId());
+		}
+		
 		return apiSchedule;
 	}
 	
@@ -112,16 +121,26 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
         event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
         event.setGroup(eventGroup);
         event.setOwner(asset.getOwner());
+        event.setAssignee(getAssigneeUser(apiEventSchedule));
 
 		eventSchedule.setMobileGUID(apiEventSchedule.getSid());
 		eventSchedule.setNextDate(apiEventSchedule.getNextDate());
 		eventSchedule.setTenant(owner.getTenant());
 		eventSchedule.setAsset(asset);
 		eventSchedule.setEventType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
-        eventSchedule.setOwner(asset.getOwner());
+        eventSchedule.setOwner(asset.getOwner());        
 
         event.setSchedule(eventSchedule);
 		
 		return event;
+	}
+	
+	private User getAssigneeUser(ApiEventSchedule apiEventSchedule) {
+		if(apiEventSchedule.getAssigneeUserId() != null && apiEventSchedule.getAssigneeUserId() > 0) {
+        	User assigneeUser = persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEventSchedule.getAssigneeUserId());
+        	return assigneeUser;
+        }
+		
+		return null;
 	}
 }
