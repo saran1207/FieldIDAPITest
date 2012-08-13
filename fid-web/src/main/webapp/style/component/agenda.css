@@ -2,6 +2,10 @@
     display:none;
 }
 
+.agenda .on {
+    background:#d0e5f5;
+}
+
 .agenda .agenda-days {
     overflow-y:auto;
     height:300px;
@@ -64,4 +68,9 @@
 .eventful {
     display:inline;
     margin-right:5px;
+}
+
+
+.agenda .toggle-button {
+    padding:2px;
 }
