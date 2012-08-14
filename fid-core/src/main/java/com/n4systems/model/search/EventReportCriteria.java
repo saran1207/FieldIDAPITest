@@ -33,6 +33,10 @@ public class EventReportCriteria extends SearchCriteria {
     private User assignedTo;
 
     @ManyToOne
+    @JoinColumn(name="assignee")
+    private User assignee;
+
+    @ManyToOne
     @JoinColumn(name="eventTypeId")
     private EventType eventType;
 
@@ -312,4 +316,11 @@ public class EventReportCriteria extends SearchCriteria {
         this.eventStatus = eventStatus;
     }
 
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
+    }
 }

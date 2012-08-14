@@ -62,7 +62,10 @@ public class EventDetailsCriteriaPanel extends Panel {
         add(new DropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
         add(new DropDownChoice<Status>("result", Status.getValidEventStates(), new StatusChoiceRenderer()).setNullValid(true));
         add(new DropDownChoice<EventStatus>("eventStatus", new EventStatusesForTenantModel(), new PropertyRenderer<EventStatus>("displayName", "id")).setNullValid(true));
-        add(new DropDownChoice<User>("performedBy", new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true));
+
+        UsersForTenantModel usersForTenantModel = new UsersForTenantModel();
+        add(new DropDownChoice<User>("assignee", usersForTenantModel, new ListableChoiceRenderer<User>()).setNullValid(true));
+        add(new DropDownChoice<User>("performedBy", usersForTenantModel, new ListableChoiceRenderer<User>()).setNullValid(true));
         jobContainer.add(new DropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 
         includeNetworkResultsContainer.add(new CheckBox("includeSafetyNetwork"));

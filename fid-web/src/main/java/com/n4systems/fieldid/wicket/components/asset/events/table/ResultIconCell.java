@@ -31,7 +31,7 @@ public class ResultIconCell extends Panel {
         } else if(state.equals(Event.EventState.OPEN)) {
             if(event.getAssignee() != null) {
                 add(image = new ContextImage("resultIcon", "images/event-open-assigned.png"));
-                image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee", event.getAssignee().getDisplayName())));
+                image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", event.getAssignee().getDisplayName())));
             }else {
                 add(image = new ContextImage("resultIcon", "images/event-open.png"));
                 image.add(new AttributeAppender("title", new FIDLabelModel("label.event_open").getObject()));

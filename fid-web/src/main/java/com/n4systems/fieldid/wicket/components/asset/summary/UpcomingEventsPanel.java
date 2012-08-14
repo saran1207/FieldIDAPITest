@@ -27,7 +27,7 @@ public class UpcomingEventsPanel extends Panel {
                 ContextImage scheduleIcon;
                 if(schedule.getAssignee() != null) {
                     item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-assigned.png"));
-                    scheduleIcon.add(new AttributeAppender("title",  new FIDLabelModel("label.assignee", schedule.getAssignee().getDisplayName())));
+                    scheduleIcon.add(new AttributeAppender("title",  new FIDLabelModel("label.assignee_is", schedule.getAssignee().getDisplayName())));
                     scheduleIcon.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
                 } else {
                     item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open.png"));
