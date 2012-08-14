@@ -18,7 +18,7 @@ class AddAssigneeColumnToReporting < ActiveRecord::Migration
     assignee_column.name="event_search_assignee"
     assignee_column.label="label.assignee"
     assignee_column.sortable = 1
-    assignee_column.path_expression = "assignee"
+    assignee_column.path_expression = "assignee.fullName"
     assignee_column.join_expression = "assignee,assignee"
     assignee_column.sort_expression = "assignee.firstName,assignee.lastName"
     assignee_column.save
