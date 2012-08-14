@@ -12,7 +12,7 @@ public abstract class AbstractMassUpdatePanel extends Panel {
 	protected AbstractMassUpdatePanel previousPanel;
 
     @SpringBean
-    private UserService userService;
+    protected UserService userService;
 
     public AbstractMassUpdatePanel(String id) {
 		super(id);

@@ -34,6 +34,8 @@ public class MassUpdateOpenEventsPanel extends Panel {
                     this.replaceWith(currentPanel = getDeleteDetailsPanel(criteriaModel, currentPanel));
                 }else if (operation == MassUpdateOperation.CLOSE) {
                     this.replaceWith(currentPanel = getCloseDetailsPanel(criteriaModel, currentPanel));
+                } else if (operation == MassUpdateOperation.ASSIGN) {
+                    this.replaceWith(currentPanel = getAssignDetailsPanel(criteriaModel, currentPanel));
                 } else {
                     this.replaceWith(currentPanel = getEditDetailsPanel(criteriaModel, currentPanel));
                 }
@@ -120,6 +122,21 @@ public class MassUpdateOpenEventsPanel extends Panel {
             @Override
             protected void onCancel() {
                 setResponsePage(new ReportPage((EventReportCriteria)criteriaModel.getObject()));
+            }
+        };
+    }
+    
+    private AssignDetailsPanel getAssignDetailsPanel(final IModel<EventReportCriteria> criteriaModel, AbstractMassUpdatePanel previousPanel) {
+        return new AssignDetailsPanel("massUpdatePanel", criteriaModel, previousPanel) {
+            @Override
+            protected void onCancel() {
+                setResponsePage(new ReportPage((EventReportCriteria)criteriaModel.getObject()));
+            }
+
+            @Override
+            protected void onNext(MassUpdateEventModel massUpdateEventModel) {
+                this.replaceWith( currentPanel = getConfirmEditPanel(criteriaModel, currentPanel, massUpdateEventModel));
+                updateNavigationPanel(criteriaModel, currentPanel);
             }
         };
     }

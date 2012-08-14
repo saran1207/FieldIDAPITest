@@ -66,6 +66,9 @@ public class EventAudit extends BaseEntity {
     @Column(name="nextDate", nullable = true)
     private Date nextDate;
 
+    @Column(name="assignee", nullable = true)
+    private String assignee;
+
     public EventAudit() {
     }
 
@@ -201,5 +204,12 @@ public class EventAudit extends BaseEntity {
         this.nextDate = nextDate;
     }
 
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
 }
 

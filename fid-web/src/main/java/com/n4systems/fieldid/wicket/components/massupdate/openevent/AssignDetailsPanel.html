@@ -1,0 +1,20 @@
+<wicket:panel>
+    <div class="feedback" wicket:id="feedbackPanel"></div>
+
+    <h1><wicket:message key="label.mass_update_step3"/></h1>
+
+    <form wicket:id="form" class="form">
+
+        <div class="field">
+            <label class="label"><wicket:message key="label.assignto"/></label>
+            <select wicket:id="assignee" style="width:200px;"/>
+        </div>
+
+        <div class="formAction">
+            <input type="submit" wicket:id="assignButton" wicket:message="value:label.assign"/> or <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+
+
+
+</wicket:panel>

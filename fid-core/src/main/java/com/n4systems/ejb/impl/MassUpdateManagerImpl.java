@@ -336,6 +336,10 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
                     changeTarget.setNextDate(eventChanges.getNextDate());
                 }
 
+                if(updateKey.equals("assignee")) {
+                    audit.setAssignee(eventChanges.getAssignee().getUserID());
+                    changeTarget.setAssignee(eventChanges.getAssignee());
+                }
 			}
 
 			persistenceManager.update(changeTarget, user);
