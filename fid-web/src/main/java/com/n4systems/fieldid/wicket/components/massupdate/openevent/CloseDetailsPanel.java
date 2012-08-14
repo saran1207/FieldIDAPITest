@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.components.massupdate.openevent;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventStatusService;
-import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -28,9 +27,6 @@ public class CloseDetailsPanel extends AbstractMassUpdatePanel {
     private EventStatusService eventStatusService;
 
     @SpringBean
-    private UserService userService;
-
-    @SpringBean
     private PersistenceService persistenceService;
 
     public CloseDetailsPanel(String id, final IModel<EventReportCriteria> criteriaModel, AbstractMassUpdatePanel previousPanel) {
@@ -38,21 +34,19 @@ public class CloseDetailsPanel extends AbstractMassUpdatePanel {
 
         this.previousPanel = previousPanel;
         add(new FIDFeedbackPanel("feedbackPanel"));
-        add(new ResolveForm("form", new MassUpdateEventModel()));
+        add(new CloseEventForm("form", new MassUpdateEventModel()));
 
     }
 
-    class ResolveForm extends Form<MassUpdateEventModel> {
+    class CloseEventForm extends Form<MassUpdateEventModel> {
 
         private User resolvedBy = getCurrentUser();
 
-        public ResolveForm(String id, MassUpdateEventModel massUpdateEventModel) {
+        public CloseEventForm(String id, MassUpdateEventModel massUpdateEventModel) {
             super(id, new CompoundPropertyModel<MassUpdateEventModel>(massUpdateEventModel));
             Event event = massUpdateEventModel.getEvent();
             event.setPerformedBy(getCurrentUser());
             event.setEventStatus(getActiveStatuses().get(0));
-
-            massUpdateEventModel.setEvent(event);
 
             List<EventStatus> activeStatuses = getActiveStatuses();
             add( new DropDownChoice<EventStatus>("status",
