@@ -236,6 +236,16 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
         }
     }
 
+    protected <T> void addSimpleTermOrBlank(List<SearchTermDefiner> terms, String field, Long value) {
+        if (value != null) {
+            if (value.equals(0L)) {
+                terms.add(new NullTerm(field));
+            } else {
+                addSimpleTerm(terms, field, value);
+            }
+        }
+    }
+
 	protected void addRequiredLeftJoin(List<JoinTerm> joinTerms, String path, String alias) {
 		joinTerms.add(new JoinTerm(JoinTerm.JoinTermType.LEFT, path, alias, true));
 	}

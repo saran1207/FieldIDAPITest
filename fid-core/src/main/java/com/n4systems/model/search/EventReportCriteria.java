@@ -32,9 +32,11 @@ public class EventReportCriteria extends SearchCriteria {
     @JoinColumn(name="assignedUser")
     private User assignedTo;
 
-    @ManyToOne
-    @JoinColumn(name="assignee")
+    @Transient
     private User assignee;
+
+    @Column(name="assignee")
+    private Long assigneeId;
 
     @ManyToOne
     @JoinColumn(name="eventTypeId")
@@ -316,11 +318,44 @@ public class EventReportCriteria extends SearchCriteria {
         this.eventStatus = eventStatus;
     }
 
+    public Long getAssigneeId() {
+        return assigneeId;
+    }
+
+    public void setAssigneeId(Long assigneeId) {
+        this.assigneeId = assigneeId;
+    }
+
     public User getAssignee() {
+        if (assigneeId != null && assigneeId.equals(0L)) {
+            assignee = new User();
+            assignee.setId(0L);
+        }
         return assignee;
     }
 
     public void setAssignee(User assignee) {
         this.assignee = assignee;
+        copyOverAssigneeId();
+    }
+
+    @Override
+    protected void onCreate() {
+        super.onCreate();
+        copyOverAssigneeId();
+    }
+
+    @Override
+    protected void onUpdate() {
+        super.onUpdate();
+        copyOverAssigneeId();
+    }
+
+    private void copyOverAssigneeId() {
+        if (assignee == null) {
+            setAssigneeId(null);
+        } else {
+            setAssigneeId(assignee.getId());
+        }
     }
 }

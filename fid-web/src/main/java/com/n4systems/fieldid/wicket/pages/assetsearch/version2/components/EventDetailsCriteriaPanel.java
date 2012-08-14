@@ -2,10 +2,9 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.renderer.PropertyRenderer;
-import com.n4systems.fieldid.wicket.components.renderer.StatusChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.*;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.ListWithBlankOptionModel;
 import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventstatus.EventStatusesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantModel;
@@ -19,6 +18,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -64,7 +64,10 @@ public class EventDetailsCriteriaPanel extends Panel {
         add(new DropDownChoice<EventStatus>("eventStatus", new EventStatusesForTenantModel(), new PropertyRenderer<EventStatus>("displayName", "id")).setNullValid(true));
 
         UsersForTenantModel usersForTenantModel = new UsersForTenantModel();
-        add(new DropDownChoice<User>("assignee", usersForTenantModel, new ListableChoiceRenderer<User>()).setNullValid(true));
+        ListWithBlankOptionModel<User> blankOptionUserList = new ListWithBlankOptionModel<User>(User.class, usersForTenantModel);
+        IChoiceRenderer<User> unassignedOrAssigneeRenderer = new BlankOptionChoiceRenderer<User>(new FIDLabelModel("label.unassigned"), new ListableChoiceRenderer<User>());
+
+        add(new DropDownChoice<User>("assignee", blankOptionUserList, unassignedOrAssigneeRenderer).setNullValid(true));
         add(new DropDownChoice<User>("performedBy", usersForTenantModel, new ListableChoiceRenderer<User>()).setNullValid(true));
         jobContainer.add(new DropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 
