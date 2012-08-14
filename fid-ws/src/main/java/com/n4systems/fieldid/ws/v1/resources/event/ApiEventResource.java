@@ -1,33 +1,50 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
+import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.service.event.EventCreationService;
-import com.n4systems.model.*;
-import com.n4systems.model.api.Archivable;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
+import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.certificate.CertificateService;
+import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
-import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
+import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
+import com.n4systems.model.EventForm;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventStatus;
+import com.n4systems.model.EventType;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.GpsLocation;
+import com.n4systems.model.Status;
+import com.n4systems.model.SubEvent;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
+import com.n4systems.reporting.EventReportType;
+import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
@@ -41,6 +58,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	@Autowired private ApiEventFormResultResource apiEventFormResultResource;
 	@Autowired private EventScheduleService eventScheduleService;
     @Autowired private EventCreationService eventCreationService;
+    @Autowired private CertificateService certificateService;
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -58,6 +76,46 @@ public class ApiEventResource extends FieldIdPersistenceService {
 
         eventCreationService.createEvent(event, 0L, null, uploadedFiles);
 		logger.info("Saved Event on Asset " + apiEvent.getAssetId());
+	}
+	
+	@GET
+	@Path("downloadReport")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Transactional(readOnly = true)
+	public Response downloadReport(@QueryParam("eventSid") String eventSid, @QueryParam("eventSid") String reportType) {
+		//Get the cert file like from https://n4.fieldid.com/fieldid/file/downloadEventCert.action?uniqueID=725135&reportType=INSPECTION_CERT
+		Response response = null;
+		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class);
+		query.addWhere(WhereClauseFactory.create("mobileGUID", eventSid)); 
+		Event event = persistenceService.find(query);
+		
+		EventReportType eventReportType = EventReportType.valueOf(reportType);
+		
+		String fileName = null;
+		byte[] pdf = null;
+		
+		try {
+			pdf = certificateService.generateEventCertificatePdf(eventReportType, event.getId());	
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+			fileName = eventReportType.getReportNamePrefix() + "-" + dateFormatter.format(event.getDate()) + ".pdf";			
+			String mediaType = ContentTypeUtil.getContentType(fileName);
+			
+			response = Response
+			.ok(new ByteArrayInputStream(pdf), mediaType)
+			.header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+			.build();
+
+		} catch(NonPrintableEventType npe) {
+			logger.warn("Cert was non-printable", npe);
+		} catch(Exception e) {
+			logger.error("Unable to download event cert", e);
+		}
+		
+		if(response == null) {
+			response = Response.serverError().build();
+		}
+		
+		return response;
 	}
 
 	private Event convertApiEvent(ApiEvent apiEvent) {

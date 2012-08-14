@@ -34,8 +34,10 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, Event>
 		apiEventHistory.setEventTypeName(event.getType().getName());
 		apiEventHistory.setEventDate(event.getDate());
 		apiEventHistory.setEventId(event.getMobileGUID());
+		apiEventHistory.setEventTypeId(event.getType().getId());
 		apiEventHistory.setPerformedBy(event.getPerformedBy().getDisplayName());
 		apiEventHistory.setStatus(event.getStatus().getDisplayName());
+		apiEventHistory.setPrintable(event.isPrintable());
 		return apiEventHistory;
 	}
 }

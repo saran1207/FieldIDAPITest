@@ -5,11 +5,13 @@ import java.util.Date;
 public class ApiEventHistory {
 	private String assetId;
 	private String eventId;
+	private Long eventTypeId;
 	private String eventTypeName;
 	private Long assetTypeId;
 	private Date eventDate;
 	private String performedBy;
 	private String status;
+	private boolean printable;
 
 	public String getAssetId() {
 		return assetId;
@@ -25,6 +27,14 @@ public class ApiEventHistory {
 
 	public void setEventId(String eventId) {
 		this.eventId = eventId;
+	}
+	
+	public Long getEventTypeId() {
+		return eventTypeId;
+	}
+
+	public void setEventTypeId(Long eventTypeId) {
+		this.eventTypeId = eventTypeId;
 	}
 
 	public String getEventTypeName() {
@@ -66,5 +76,12 @@ public class ApiEventHistory {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public boolean isPrintable() {
+		return printable;
+	}
 
+	public void setPrintable(boolean printable) {
+		this.printable = printable;
+	}
 }

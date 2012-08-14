@@ -58,6 +58,8 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		apiEventType.setMaster(eventType.isMaster());
 		apiEventType.setName(eventType.getName());
 		apiEventType.setPrintable(eventType.isPrintable());
+		apiEventType.setHasPrintOut(eventType.getGroup().hasPrintOut());
+		apiEventType.setHasObservationPrintOut(eventType.getGroup().hasObservationPrintOut());
 		apiEventType.getAttributes().addAll(eventType.getInfoFieldNames());
 
 		if (eventType.getGroup() != null) {

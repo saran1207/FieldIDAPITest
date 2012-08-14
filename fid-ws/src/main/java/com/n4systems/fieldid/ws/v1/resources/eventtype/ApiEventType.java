@@ -10,6 +10,8 @@ public class ApiEventType extends ApiReadonlyModel {
 	private String groupName;
 	private String description;
 	private boolean printable;
+	private boolean hasPrintOut;
+	private boolean hasObservationPrintOut;
 	private boolean master;
 	private boolean assignedToAvailable;
 	private List<String> attributes = new ArrayList<String>();
@@ -78,5 +80,20 @@ public class ApiEventType extends ApiReadonlyModel {
 	public void setForm(ApiEventForm form) {
 		this.form = form;
 	}
+	
+	public boolean isHasPrintOut() {
+		return hasPrintOut;
+	}
 
+	public void setHasPrintOut(boolean hasPrintOut) {
+		this.hasPrintOut = hasPrintOut;
+	}
+	
+	public boolean isHasObservationPrintOut() {
+		return hasObservationPrintOut;
+	}
+
+	public void setHasObservationPrintOut(boolean hasObservationPrintOut) {
+		this.hasObservationPrintOut = hasObservationPrintOut;
+	}
 }
