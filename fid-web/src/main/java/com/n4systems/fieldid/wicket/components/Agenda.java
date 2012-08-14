@@ -8,6 +8,7 @@ import com.n4systems.model.Event;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.time.DateUtil;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -21,7 +22,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.odlabs.wiquery.core.events.MouseEvent;
 import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
@@ -34,37 +37,38 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Collections.sort;
-
 public class Agenda extends Panel  {
 
     private @SpringBean DateService dateService;
     private @SpringBean EventService eventService;
 
-    private static final String INIT_CALENDAR_JS = "calendar.init('%s', %s);";
-//    private static final String CALL_WICKET_JS = "function updateAgenda(month, year) { " +
-//            " var wcall = wicketAjaxGet(getUrl('%s',month,year),function(){},function(){});" +
-//            " }";
+    private static final String INIT_CALENDAR_JS = "calendar.init('%s', %s, '%s');";
     private static final String TOGGLE_CALENDAR_JS = "$('#%s').slideToggle(140); $('#%s').toggleClass('on'); ";
 
     private WebMarkupContainer calendar;
-    private Date from = dateService.nowAsDate();
-    private Date to = null;
+    private LocalDate from;
 
     private WebMarkupContainer dayByDayView;
-    private boolean showCalendar = true;
     private AbstractDefaultAjaxBehavior behavior;
     private ListView<EventDay> listView;
 
 
     public Agenda(String id) {
         super(id);
+        setOutputMarkupId(true);
 
-//        behavior = new AbstractDefaultAjaxBehavior() {
-//            protected void respond(final AjaxRequestTarget target) {
-//                target.add(dayByDayView);
-//            }
-//        };
+        from = dateService.now().withDayOfMonth(1);
+
+        behavior = new AbstractDefaultAjaxBehavior() {
+            protected void respond(final AjaxRequestTarget target) {
+                int month = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("month").toInt();
+                int year = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("year").toInt();
+                from = new LocalDate().withMonthOfYear(month).withYear(year).withDayOfMonth(1);
+                listView.detachModels();
+                target.add(Agenda.this);
+            }
+
+        };
 
         add(dayByDayView = createDayByDayView());
 
@@ -73,6 +77,7 @@ public class Agenda extends Panel  {
         toggleButton.add(new ContextImage("icon", "images/calendar-icon.png"));
         add(toggleButton);
 
+        calendar.add(behavior);
     }
 
     private Behavior toggleBehavior(final String elementToHide, final String elementToHighlight) {
@@ -104,9 +109,7 @@ public class Agenda extends Panel  {
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/component/agenda.css");
 
-//        List<WorkSummaryRecord> workData = eventService.getMontlyWorkSummary(dateService.now());
-        String workJson = "{year:2012, month:3, events:[0,1,0,3,4,5,6,7,8,0,1,2,0,4,5,6,7,8,0,0,2,3,0,5,0,7,0,0,1,2,3,4]}";
-        response.renderOnLoadJavaScript(String.format(INIT_CALENDAR_JS, calendar.getMarkupId(), workJson));
+        response.renderOnLoadJavaScript(String.format(INIT_CALENDAR_JS, calendar.getMarkupId(), from.toDate().getTime(), behavior.getCallbackUrl()));
 
         // CAVEAT : the reason a special (datepicker only) version of jquery ui was brought in
         //  is because if you referenced the entire ui library it would conflict the use of some
@@ -114,7 +117,6 @@ public class Agenda extends Panel  {
         // the best situation would be just to have all components use the predefined wiquery js references
         //  i.e. renderJavaScriptReference(CoreUIJavaScriptResourceReference.get());
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
-//        response.renderJavaScript(String.format(CALL_WICKET_JS, behavior.getCallbackUrl()), "updateAgenda");
 
         response.renderCSSReference("style/jquery-redmond/jquery-ui-1.8.13.custom.css");
         response.renderJavaScriptReference("javascript/jquery-ui-timepicker-addon.js");
@@ -125,19 +127,13 @@ public class Agenda extends Panel  {
 
     class EventDayModel extends LoadableDetachableModel<List<EventDay>> {
 
-        private int size = 0;
-        @Override
-        public void detach() {
-            size = 0;
-        }
-
         @Override
         protected List<EventDay> load() {
-            to = null;
-            from = dateService.nowAsDate();
+            // TODO : make dates dynamic.
 
-            List<Event> events = eventService.getWork(from, to, 0, 25);
-            Map<LocalDate,EventDay> map = Maps.newHashMap();
+            LocalDate adjustedFrom = getAdjustedMonthStartingDay();
+            List<Event> events = eventService.getWork(adjustedFrom.toDate(), adjustedFrom.plusMonths(1).toDate(),  0, 500);
+            Map<LocalDate,EventDay> map = Maps.newTreeMap();
 
             for (Event event:events) {
                 LocalDate date = new LocalDate(event.getNextDate().getTime());
@@ -149,14 +145,13 @@ public class Agenda extends Panel  {
                 eventDay.add(event);
             }
             ArrayList<EventDay> list = new ArrayList<EventDay>(map.values());
-            sort(list);
-            size  = list.size();
             return list;
         }
 
-        public int getSize() {
-            return size;
-        }
+    }
+
+    private LocalDate getAdjustedMonthStartingDay() {
+        return from.dayOfWeek().withMinimumValue().minusDays(1);
     }
 
     class EventDayPanel extends Fragment {
@@ -180,7 +175,11 @@ public class Agenda extends Panel  {
         }
 
         private Model<String> getMetaData(EventDay eventDay) {
-            return Model.of(eventDay.getDate().getDayOfMonth()+"");
+            LocalDate startDate = getAdjustedMonthStartingDay();
+            Days days = Days.daysBetween(startDate, eventDay.getDate());
+            // second part is the index  i.e. 0 for first day rendered etc...
+            // TODO : maybe put event count data here???
+            return Model.of(eventDay.getDate().toDate().getTime()+" " + days.getDays());
         }
     }
 

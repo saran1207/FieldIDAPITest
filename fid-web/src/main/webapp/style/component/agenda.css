@@ -47,12 +47,13 @@
 
 
 .agenda-day-to-day ul li {
-    list-style: disc outside none;
+    list-style: none outside none;
 }
 
 .agenda-icon {
-    float:left;
+    /*float:left;*/
     padding-right:5px;
+    padding-top:5px;
 }
 
 .agenda-asset {
@@ -63,14 +64,26 @@
 .agenda-event {
     float:right;
     padding-right:10px;
+    width:25%;
+    overflow:hidden;
+    height:20px;
 }
 
 .eventful {
-    display:inline;
-    margin-right:5px;
+    outline: 1px solid #B5BACC;
+    /*display:inline;*/
+    /*margin-right:5px;*/
+}
+
+.agenda-row {
+    line-height: 30px;
 }
 
 
 .agenda .toggle-button {
     padding:2px;
+}
+
+.agenda .toggle-button img {
+    float: right;
 }
