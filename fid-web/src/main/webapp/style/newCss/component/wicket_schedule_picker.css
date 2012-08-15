@@ -31,14 +31,14 @@
 }
 
 .newScheduleForm .assignmentSection .assignmentSectionTitle {
-    font-size:1.2em;
+    font-size:13px;
     color:#555;
     width:300px;
     display:block;
 }
 
 .newScheduleForm .schedulePickerTitle {
-    font-size:1.8em;
+    font-size:20px;
     display:block;
     padding-bottom:15px;
     color:#888;
@@ -59,7 +59,7 @@
 }
 
 .newScheduleForm .formActions {
-	font-size: 1.1em;
+	font-size: 12px;
 	padding: 15px 5px;
     display:block;
     float:left;
@@ -82,7 +82,7 @@
     display:block;
 	clear: both;
     padding-top:7px;
-    font-size:0.9em;
+    font-size:10px;
 }
 
 .newScheduleButton{
@@ -94,7 +94,7 @@
     font-weight:normal;
     display:block;
     float:left;
-    font-size:1.1em;
+    font-size:12px;
     color:#555;
     padding-bottom:2px;
 }
