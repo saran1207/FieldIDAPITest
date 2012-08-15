@@ -34,6 +34,7 @@ public class UserView extends ExternalModelView {
 	public static final String EMAIL_ADDRESS_FIELD = "Email Address";
 	public static final String ORGANIZATION_FIELD = "Organization";
 	public static final String CUSTOMER_FIELD = "Customer/Job Site";
+    public static final String IDENTIFIER ="ID";
 	
 	public static UserView newUser() {
 		UserView view = new UserView();		
@@ -72,7 +73,10 @@ public class UserView extends ExternalModelView {
 
 	@SerializableField(title=INITIALS_FIELD, order = 310, validators = {})
 	private String initials;
-	
+
+    @SerializableField(title=IDENTIFIER, order = 320, validators = {})
+    private String identifier;
+
 	@SerializableField(title=POSTITION_FIELD, order = 350, validators = {})
 	private String position;
 
@@ -214,7 +218,15 @@ public class UserView extends ExternalModelView {
 		this.initials = initials;
 	}
 
-	public String getPosition() {
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getPosition() {
 		return position;
 	}
 

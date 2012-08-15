@@ -1,18 +1,5 @@
 package com.n4systems.fieldid.actions.users;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import com.n4systems.model.saveditem.SavedItem;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.web.helper.Constants;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
@@ -28,6 +15,7 @@ import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserPaginatedLoader;
@@ -45,13 +33,13 @@ import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
 import com.n4systems.utils.email.WelcomeNotifier;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.EmailValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import com.opensymphony.xwork2.validator.annotations.*;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.web.helper.Constants;
+
+import java.io.File;
+import java.util.*;
 
 abstract public class UserCrud extends AbstractCrud implements HasDuplicateValueValidator, HasDuplicateRfidValidator {
 	private static final long serialVersionUID = 1L;
@@ -367,6 +355,15 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public void setInitials(String initials) {
 		user.setInitials(initials);
 	}
+
+    @StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "errors.idlength", maxLength = "20")
+    public String getIdentifier() {
+        return user.getIdentifier();
+    }
+    
+    public void setIdentifier(String identifier) {
+        user.setIdentifier(identifier);
+    }
 
 	public String getTimeZoneID() {
 		return region.getId();

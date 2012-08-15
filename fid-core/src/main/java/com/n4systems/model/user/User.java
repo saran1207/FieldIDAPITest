@@ -1,17 +1,5 @@
 package com.n4systems.model.user;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.UUID;
-
-import javax.persistence.*;
-
-import com.n4systems.util.DateTimeDefinition;
-import org.hibernate.annotations.IndexColumn;
-
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
@@ -20,18 +8,20 @@ import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.security.SecurityLevel;
-import com.n4systems.model.security.UserSecurityFilter;
+import com.n4systems.model.security.*;
 import com.n4systems.model.utils.GlobalID;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import com.n4systems.tools.EncryptionUtility;
+import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.RandomString;
 import com.n4systems.util.timezone.CountryList;
+import org.hibernate.annotations.IndexColumn;
+
+import javax.persistence.*;
+import java.io.File;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -94,6 +84,9 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private int permissions = Permissions.NO_PERMISSIONS;
 	
 	private Long externalId;
+
+    @Column(length=20)
+    private String identifier;
 	
 	@Override
 	protected void onCreate() {
@@ -519,5 +512,13 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
     @Transient
     public String getDateTimeFormat() {
         return getDateFormat() + " h:mm a";
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

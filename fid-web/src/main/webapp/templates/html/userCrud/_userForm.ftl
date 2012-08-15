@@ -43,6 +43,11 @@
 				<label class="label" for="initials"><@s.text name="label.initials"/></label>
 				<@s.textfield id="initials" name="initials"   />
 			</div>
+
+            <div class="infoSet">
+                <label class="label" for="identifier"><@s.text name="label.id"/></label>
+                <@s.textfield id="identifier" name="identifier"   />
+            </div>
 			
 			<div class="infoSet">
 				<label class="label" for="position"><@s.text name="label.position"/></label>

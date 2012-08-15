@@ -59,6 +59,11 @@ ${action.setPageType('user','view')!}
 			<span class="fieldValue">${initials!}
 			</span>
 		</p>
+        <p>
+            <label for="identifier"><@s.text name="label.id"/></label>
+			<span class="fieldValue">${identifier!}
+            </span>
+        </p>
 		<p>
 			<label for="position"><@s.text name="label.position"/></label>
 			<span class="fieldValue">${position!}</span>

@@ -28,6 +28,7 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 		view.setFirstName(model.getFirstName());
 		view.setLastName(model.getLastName());
 		view.setInitials(model.getInitials());
+        view.setIdentifier(model.getIdentifier());
 		view.setPosition(model.getPosition());
 		view.setUserID(model.getUserID());
 		view.setGlobalId(model.getGlobalId());
