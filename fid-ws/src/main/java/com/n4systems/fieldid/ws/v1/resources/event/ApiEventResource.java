@@ -82,40 +82,32 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	@Path("downloadReport")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Transactional(readOnly = true)
-	public Response downloadReport(@QueryParam("eventSid") String eventSid, @QueryParam("eventSid") String reportType) {
-		//Get the cert file like from https://n4.fieldid.com/fieldid/file/downloadEventCert.action?uniqueID=725135&reportType=INSPECTION_CERT
-		Response response = null;
+	public Response downloadReport(@QueryParam("eventSid") String eventSid, @QueryParam("reportType") String reportType) throws Exception {
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class);
 		query.addWhere(WhereClauseFactory.create("mobileGUID", eventSid)); 
-		Event event = persistenceService.find(query);
-		
+		Event event = persistenceService.find(query);		
 		EventReportType eventReportType = EventReportType.valueOf(reportType);
 		
-		String fileName = null;
-		byte[] pdf = null;
-		
 		try {
-			pdf = certificateService.generateEventCertificatePdf(eventReportType, event.getId());	
+			byte[] pdf = certificateService.generateEventCertificatePdf(eventReportType, event.getId());	
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-			fileName = eventReportType.getReportNamePrefix() + "-" + dateFormatter.format(event.getDate()) + ".pdf";			
+			String fileName = eventReportType.getReportNamePrefix() + "-" + dateFormatter.format(event.getDate()) + ".pdf";			
 			String mediaType = ContentTypeUtil.getContentType(fileName);
 			
-			response = Response
+			Response response = Response
 			.ok(new ByteArrayInputStream(pdf), mediaType)
 			.header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
 			.build();
+			
+			return response;
 
 		} catch(NonPrintableEventType npe) {
-			logger.warn("Cert was non-printable", npe);
+			logger.warn("Cert was non-printable for event: " + event.getId());
+			throw npe;
 		} catch(Exception e) {
-			logger.error("Unable to download event cert", e);
+			logger.error("Unable to download event cert for event: " + event.getId());
+			throw e;
 		}
-		
-		if(response == null) {
-			response = Response.serverError().build();
-		}
-		
-		return response;
 	}
 
 	private Event convertApiEvent(ApiEvent apiEvent) {
