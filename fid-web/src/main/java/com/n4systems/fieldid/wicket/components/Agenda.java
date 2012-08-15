@@ -2,9 +2,11 @@ package com.n4systems.fieldid.wicket.components;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.time.DateUtil;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -19,11 +21,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.Days;
+import org.apache.wicket.util.string.StringValue;
 import org.joda.time.LocalDate;
 
 import java.io.Serializable;
@@ -40,9 +42,9 @@ public class Agenda extends Panel  {
     private static final String INIT_CALENDAR_JS = "%s = agendaFactory.create('%s', %s, '%s');";
 
     private WebMarkupContainer calendar;
-    private LocalDate from;
+    private LocalDate firstDayOfMonth;
+    private int selectedDay = 0;
 
-    private WebMarkupContainer dayByDayView;
     private AbstractDefaultAjaxBehavior behavior;
     private ListView<EventDay> listView;
     private WebMarkupContainer listContainer;
@@ -52,20 +54,26 @@ public class Agenda extends Panel  {
         super(id);
         setOutputMarkupId(true);
 
-        from = dateService.now().withDayOfMonth(1);
+        firstDayOfMonth = dateService.now().withDayOfMonth(1);
 
         behavior = new AbstractDefaultAjaxBehavior() {
             protected void respond(final AjaxRequestTarget target) {
-                int month = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("month").toInt();
-                int year = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("year").toInt();
-                from = new LocalDate().withMonthOfYear(month).withYear(year).withDayOfMonth(1);
+                listView.setVisible(true);
+                IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
+                int month = params.getParameterValue("month").toInt();
+                int year = params.getParameterValue("year").toInt();
+                StringValue dayParam = params.getParameterValue("day");
+                selectedDay = 0;
+                if (!dayParam.isEmpty()) {
+                    selectedDay = dayParam.toInt();
+                }
+                withFirstDayOfMonth(new LocalDate().withMonthOfYear(month).withYear(year).withDayOfMonth(1));
                 listView.detachModels();
                 target.add(listContainer);
             }
-
         };
 
-        add(dayByDayView = createDayByDayView());
+        add(createWorkListView());
 
         WebMarkupContainer toggleButton = new WebMarkupContainer("showCalendar");
         toggleButton.add(new ContextImage("icon", "images/calendar-icon.png"));
@@ -74,10 +82,9 @@ public class Agenda extends Panel  {
         calendar.add(behavior);
     }
 
-
-    private WebMarkupContainer createDayByDayView() {
+    private WebMarkupContainer createWorkListView() {
         final WebMarkupContainer container = new WebMarkupContainer("dayByDayView");
-        calendar = new WebMarkupContainer("calendar", new PropertyModel<Date>(this, "from"));
+        calendar = new WebMarkupContainer("calendar", new PropertyModel<Date>(this, "firstDayOfMonth"));
         calendar.setOutputMarkupPlaceholderTag(true).setVisible(true);
 
         listContainer = new WebMarkupContainer("listContainer");
@@ -87,6 +94,7 @@ public class Agenda extends Panel  {
                 item.add(new EventDayPanel("day", item.getModelObject()));
             }
         };
+        listView.setOutputMarkupPlaceholderTag(true);
         listContainer.add(listView).setOutputMarkupId(true);
 
         container.add(listContainer);
@@ -98,7 +106,7 @@ public class Agenda extends Panel  {
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/component/agenda.css");
 
-        response.renderOnDomReadyJavaScript(String.format(INIT_CALENDAR_JS, getJsVariableName(), getMarkupId(), from.toDate().getTime(), behavior.getCallbackUrl()));
+        response.renderOnDomReadyJavaScript(String.format(INIT_CALENDAR_JS, getJsVariableName(), getMarkupId(), getJsonMonthlyWorkSummary(), behavior.getCallbackUrl()));
 
         // CAVEAT : the reason a special (datepicker only) version of jquery ui was brought in
         //  is because if you referenced the entire ui library it would conflict the use of some
@@ -110,22 +118,47 @@ public class Agenda extends Panel  {
         response.renderCSSReference("style/jquery-redmond/jquery-ui-1.8.13.custom.css");
         response.renderJavaScriptReference("javascript/jquery-ui-timepicker-addon.js");
         response.renderJavaScriptReference("javascript/component/agenda.js");
+    }
 
+    private String getJsonMonthlyWorkSummary() {
+        AgendaData data = new AgendaData();
+
+        data.selectedDay = selectedDay;
+        Map<LocalDate, Long> events = eventService.getMontlyWorkSummary(firstDayOfMonth);
+        for (Long value:events.values()) {
+            data.eventMap.add(value);
+        }
+        return new Gson().toJson(data);
     }
 
     private String getJsVariableName() {
         return "agenda_"+getMarkupId();
     }
 
+    public Agenda withFirstDayOfMonth(LocalDate date) {
+        firstDayOfMonth = date.withDayOfMonth(1);
+        return this;
+    }
+
+    public Agenda withFirstDayOfMonth(int month) {
+        firstDayOfMonth = new LocalDate().withMonthOfYear(month).withDayOfMonth(1);
+        return this;
+    }
+
+    public Agenda withSelectedDay(LocalDate date) {
+        selectedDay = date.dayOfWeek().get();
+        withFirstDayOfMonth(date);
+        return this;
+    }
+
+
+    // ------------------ INNER CLASSES -------------------------
 
     class EventDayModel extends LoadableDetachableModel<List<EventDay>> {
 
         @Override
         protected List<EventDay> load() {
-            // TODO : make dates dynamic.
-
-            LocalDate adjustedFrom = getAdjustedMonthStartingDay();
-            List<Event> events = eventService.getWork(adjustedFrom.toDate(), adjustedFrom.plusMonths(1).toDate(),  0, 500);
+            List<Event> events = eventService.getWork(getDateRange(), 25);
             Map<LocalDate,EventDay> map = Maps.newTreeMap();
 
             for (Event event:events) {
@@ -143,15 +176,21 @@ public class Agenda extends Panel  {
 
     }
 
-    private LocalDate getAdjustedMonthStartingDay() {
-        return from.dayOfWeek().withMinimumValue().minusDays(1);
+    private DateRange getDateRange() {
+        if (selectedDay==0) {  // are we searching for a particular day??  if not, just return entire month.
+            LocalDate a = firstDayOfMonth.dayOfWeek().withMinimumValue().minusDays(1);
+            LocalDate b = firstDayOfMonth.plusMonths(1).withDayOfMonth(1);
+            return new DateRange(a,b);
+        } else {
+            LocalDate date = firstDayOfMonth.withDayOfMonth(selectedDay);
+            return new DateRange(date,date.plusDays(1));
+        }
     }
 
     class EventDayPanel extends Fragment {
         public EventDayPanel(String id, EventDay eventDay) {
             super(id, "dayPanel", Agenda.this);
             add(new Label("date", DateUtil.getDayString(eventDay.getDate())));
-            add(new Label("meta", getMetaData(eventDay)));
             ListView<Event> eventDayList = new ListView<Event>("list", eventDay.events) {
                 @Override protected void populateItem(ListItem<Event> item) {
                     Event event = item.getModelObject();
@@ -167,15 +206,7 @@ public class Agenda extends Panel  {
             add(eventDayList);
         }
 
-        private Model<String> getMetaData(EventDay eventDay) {
-            LocalDate startDate = getAdjustedMonthStartingDay();
-            Days days = Days.daysBetween(startDate, eventDay.getDate());
-            // second part is the index  i.e. 0 for first day rendered etc...
-            // TODO : maybe put event count data here???
-            return Model.of(eventDay.getDate().toDate().getTime()+" " + days.getDays());
-        }
     }
-
 
     class EventDay implements Serializable, Comparable<EventDay> {
         LocalDate date;
@@ -206,7 +237,10 @@ public class Agenda extends Panel  {
         }
     }
 
-
+    class AgendaData {
+        int selectedDay;
+        List<Long> eventMap = Lists.newArrayList();
+    }
 
 
 }

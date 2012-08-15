@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.asset.AssetService;
@@ -14,6 +15,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.*;
 import com.n4systems.util.DateHelper;
@@ -24,13 +26,11 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import org.apache.commons.lang.time.DateUtils;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -394,26 +394,54 @@ public class EventService extends FieldIdPersistenceService {
         return event;
     }
 
-    public List<Event> getWork(Date from, Date to, int pageNumber, int pageSize) {
-        return persistenceService.findAll(createWorkQueryBuilder(from,to), pageNumber, pageSize);
-    }
-
-    public Long countWork(Date from, Date to) {
-        return persistenceService.count(createWorkQueryBuilder(from, to));
-    }
-
-
-    private QueryBuilder<Event> createWorkQueryBuilder(Date from, Date to) {
+    public List<Event> getWork(DateRange dateRange, int limit) {
         QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
 
-        // TODO : temp. replace this with proper query when backend ticket is done.
-        builder.addWhere(Comparator.GE, "from", "nextDate", from);
-        builder.addWhere(Comparator.LT, "to", "nextDate", to);
+        // TODO : temp. add assignee/org/assetType/eventType/location to query.
+        builder.addWhere(Comparator.GE, "from", "nextDate", dateRange.getFrom().toDate());
+        builder.addWhere(Comparator.LT, "to", "nextDate", dateRange.getTo().toDate());
         builder.addOrder("nextDate");
+        builder.setLimit(limit+1);
 
-        return builder;
+        List<Event> result = persistenceService.findAll(builder);
+
+        return result;
     }
 
+      /**
+     * @return map of date --> # of events on that date.   results will be sorted and padded so 0 entries will be populated.
+     */
+    public Map<LocalDate,Long> getMontlyWorkSummary(LocalDate dayInMonth) {
+        QueryBuilder<WorkSummaryRecord> builder = new QueryBuilder<WorkSummaryRecord>(Event.class, securityContext.getUserSecurityFilter());
+
+        // NOTE : from is defined as the Sunday of the first week including the first day of the month.
+        //   there it will typically include the last few days of previous month.
+        LocalDate from = dayInMonth.dayOfWeek().withMinimumValue().minusDays(1);   // -1 because JODA defines Monday, not Sunday as first day in month.
+        LocalDate to = dayInMonth.plusMonths(1).dayOfWeek().withMaximumValue().minusDays(1);
+
+        NewObjectSelect select = new NewObjectSelect(WorkSummaryRecord.class);
+        select.setConstructorArgs(Lists.newArrayList("COUNT(*),nextDate"));
+        builder.setSelectArgument(select);
+
+        builder.addWhere(Comparator.GE, "from", "nextDate", from.toDate());
+        builder.addWhere(Comparator.LT, "to", "nextDate", to.toDate());
+        builder.addOrder("nextDate");
+        builder.addGroupBy("nextDate");
+
+        List<WorkSummaryRecord> data = persistenceService.findAll(builder);
+
+        Map<LocalDate,Long> result = Maps.newTreeMap();
+
+        LocalDate date = from;
+        while (date.isBefore(to)) {
+            result.put(date,new Long(0));
+            date = date.plusDays(1);
+        }
+        for (WorkSummaryRecord record:data) {
+            result.put(new LocalDate(record.getDate()), record.getCount());
+        }
+        return result;
+    }
 
 
 }
