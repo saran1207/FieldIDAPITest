@@ -2,13 +2,7 @@ package com.n4systems.model.dashboard;
 
 import com.google.common.base.CaseFormat;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.AssetsStatusWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import com.n4systems.model.dashboard.widget.*;
 
 public enum WidgetType implements Listable<String> {
 
@@ -20,7 +14,7 @@ public enum WidgetType implements Listable<String> {
     UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", UpcomingEventsWidgetConfiguration.class),
     ASSETS_IDENTIFIED("Assets Identified", AssetsIdentifiedWidgetConfiguration.class),
     EVENT_COMPLETENESS("Event Completeness", EventCompletenessWidgetConfiguration.class),
-    WORK("Work", WidgetConfiguration.class),
+    WORK("Work", WorkWidgetConfiguration.class),
     EVENT_KPI("Event KPIs", EventKPIWidgetConfiguration.class);
 
     private String description;
