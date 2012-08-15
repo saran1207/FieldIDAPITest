@@ -10,7 +10,6 @@ import com.n4systems.util.time.DateUtil;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,10 +25,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
-import org.odlabs.wiquery.core.events.MouseEvent;
-import org.odlabs.wiquery.core.events.WiQueryEventBehavior;
-import org.odlabs.wiquery.core.javascript.JsScope;
-import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,8 +37,7 @@ public class Agenda extends Panel  {
     private @SpringBean DateService dateService;
     private @SpringBean EventService eventService;
 
-    private static final String INIT_CALENDAR_JS = "calendar.init('%s', %s, '%s');";
-    private static final String TOGGLE_CALENDAR_JS = "$('#%s').slideToggle(140); $('#%s').toggleClass('on'); ";
+    private static final String INIT_CALENDAR_JS = "%s = agendaFactory.create('%s', %s, '%s');";
 
     private WebMarkupContainer calendar;
     private LocalDate from;
@@ -51,6 +45,7 @@ public class Agenda extends Panel  {
     private WebMarkupContainer dayByDayView;
     private AbstractDefaultAjaxBehavior behavior;
     private ListView<EventDay> listView;
+    private WebMarkupContainer listContainer;
 
 
     public Agenda(String id) {
@@ -65,7 +60,7 @@ public class Agenda extends Panel  {
                 int year = RequestCycle.get().getRequest().getRequestParameters().getParameterValue("year").toInt();
                 from = new LocalDate().withMonthOfYear(month).withYear(year).withDayOfMonth(1);
                 listView.detachModels();
-                target.add(Agenda.this);
+                target.add(listContainer);
             }
 
         };
@@ -73,35 +68,29 @@ public class Agenda extends Panel  {
         add(dayByDayView = createDayByDayView());
 
         WebMarkupContainer toggleButton = new WebMarkupContainer("showCalendar");
-        toggleButton.add(toggleBehavior(calendar.getMarkupId(), toggleButton.getMarkupId()));
         toggleButton.add(new ContextImage("icon", "images/calendar-icon.png"));
         add(toggleButton);
 
         calendar.add(behavior);
     }
 
-    private Behavior toggleBehavior(final String elementToHide, final String elementToHighlight) {
-        return new WiQueryEventBehavior(new org.odlabs.wiquery.core.events.Event(MouseEvent.CLICK) {
-            @Override public JsScope callback() {
-                return JsScopeUiEvent.quickScope(String.format(TOGGLE_CALENDAR_JS,elementToHide, elementToHighlight));
-            }
-        });
-    }
 
     private WebMarkupContainer createDayByDayView() {
         final WebMarkupContainer container = new WebMarkupContainer("dayByDayView");
         calendar = new WebMarkupContainer("calendar", new PropertyModel<Date>(this, "from"));
         calendar.setOutputMarkupPlaceholderTag(true).setVisible(true);
 
+        listContainer = new WebMarkupContainer("listContainer");
+
         listView = new ListView<EventDay>("days", new EventDayModel()) {
             @Override protected void populateItem(ListItem<EventDay> item) {
                 item.add(new EventDayPanel("day", item.getModelObject()));
             }
         };
+        listContainer.add(listView).setOutputMarkupId(true);
 
-        container.add(listView);
-        container.add(calendar.setOutputMarkupId(true));
-        container.setOutputMarkupId(true);
+        container.add(listContainer);
+        container.add(calendar);
         return container;
     }
 
@@ -109,7 +98,7 @@ public class Agenda extends Panel  {
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/component/agenda.css");
 
-        response.renderOnLoadJavaScript(String.format(INIT_CALENDAR_JS, calendar.getMarkupId(), from.toDate().getTime(), behavior.getCallbackUrl()));
+        response.renderOnDomReadyJavaScript(String.format(INIT_CALENDAR_JS, getJsVariableName(), getMarkupId(), from.toDate().getTime(), behavior.getCallbackUrl()));
 
         // CAVEAT : the reason a special (datepicker only) version of jquery ui was brought in
         //  is because if you referenced the entire ui library it would conflict the use of some
@@ -122,6 +111,10 @@ public class Agenda extends Panel  {
         response.renderJavaScriptReference("javascript/jquery-ui-timepicker-addon.js");
         response.renderJavaScriptReference("javascript/component/agenda.js");
 
+    }
+
+    private String getJsVariableName() {
+        return "agenda_"+getMarkupId();
     }
 
 
@@ -159,7 +152,7 @@ public class Agenda extends Panel  {
             super(id, "dayPanel", Agenda.this);
             add(new Label("date", DateUtil.getDayString(eventDay.getDate())));
             add(new Label("meta", getMetaData(eventDay)));
-            ListView<Event> listView = new ListView<Event>("list", eventDay.events) {
+            ListView<Event> eventDayList = new ListView<Event>("list", eventDay.events) {
                 @Override protected void populateItem(ListItem<Event> item) {
                     Event event = item.getModelObject();
                     String image = event.isCompleted() ? "images/gps-icon-small.png" : "images/gps-recorded.png";
@@ -171,7 +164,7 @@ public class Agenda extends Panel  {
                     item.add(new AttributeAppender("class", css));
                 }
             };
-            add(listView);
+            add(eventDayList);
         }
 
         private Model<String> getMetaData(EventDay eventDay) {

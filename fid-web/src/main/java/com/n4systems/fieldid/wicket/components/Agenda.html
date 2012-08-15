@@ -1,17 +1,22 @@
 <wicket:panel>
 
+    <!-- CAVEAT : the corresponding .js file relies on the structure and classes of this file.
+        e.g. the javascript code to toggle calendar visibility relies on classes applied to the toggleButton.
+        don't change it without checking first!
+    -->
+
     <div class="agenda">
 
         <a wicket:id="showCalendar" class="toggle-button"><img wicket:id="icon"/></a>
 
         <div wicket:id="dayByDayView" class="agenda-day-to-day">
             <div wicket:id="calendar" class="datepicker"/>
-            <div class="agenda-days">
+            <div wicket:id="listContainer" class="agenda-days">
                 <div wicket:id="days" class="agenda-day">
                     <span wicket:id="day"/>
                 </div>
             </div>
-        </div>
+    </div>
 
 
 

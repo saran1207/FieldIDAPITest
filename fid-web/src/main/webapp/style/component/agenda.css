@@ -69,10 +69,8 @@
     height:20px;
 }
 
-.eventful {
-    outline: 1px solid #B5BACC;
-    /*display:inline;*/
-    /*margin-right:5px;*/
+.agenda .ui-datepicker-calendar .ui-state-default.eventful {
+    background: #C7E1F3;
 }
 
 .agenda-row {
