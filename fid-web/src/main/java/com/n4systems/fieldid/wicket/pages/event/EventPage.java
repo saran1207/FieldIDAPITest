@@ -207,13 +207,6 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         }
     }
 
-    @Override
-    protected void addNavBar(String navBarId) {
-        add(new NavigationBar(navBarId,
-                NavigationItemBuilder.aNavItem().label("nav.asset_information").page(AssetSummaryPage.class).params(PageParametersBuilder.uniqueId(event.getAsset().getId())).build(),
-                NavigationItemBuilder.aNavItem().label("label.add").page(EventPage.class).params(getPageParameters()).onRight().build()));
-    }
-
     private List<EventScheduleBundle> createEventScheduleBundles() {
         List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
 
