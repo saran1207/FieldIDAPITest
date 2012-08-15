@@ -21,6 +21,8 @@ import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.SortTerm;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -309,11 +311,29 @@ public class EventService extends FieldIdPersistenceService {
         QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId, states);
 
         builder.addOrder("eventState", false);
+        boolean needsSortJoin = false;
 
         if (order != null) {
-            builder.addOrder(order, ascending);
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("performedBy")) {
+                    subOrder = subOrder.replaceAll("performedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    builder.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+                } else {
+                    builder.addOrder(subOrder, ascending);
+                }
+
+            }
         } else {
             builder.addOrder("completedDate", false);
+        }
+
+        if (needsSortJoin) {
+            builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "performedBy", "sortJoin", true));
         }
 
         return persistenceService.findAll(builder);

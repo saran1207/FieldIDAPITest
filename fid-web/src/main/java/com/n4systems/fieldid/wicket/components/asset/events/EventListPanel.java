@@ -66,7 +66,7 @@ public class EventListPanel extends Panel {
         columns.add(new EventCompletedColumn(new FIDLabelModel("label.completed"), "completedDate", "date"));
         columns.add(new EventDueColumn(new FIDLabelModel("label.due"), "nextDate", "date"));
         columns.add(new PropertyColumn<Event>(new FIDLabelModel("title.viewevent"), "type.name", "type.name"));
-        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.completed_by"), "performedBy", "performedBy.fullName"));
+        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.completed_by"), "performedBy.firstName", "performedBy.fullName"));
         columns.add(new ResultColumn(new FIDLabelModel("label.result"), "status", "status.displayName"));
         columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.event_status"), "eventStatus", "eventStatus.displayName"));
         columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName"));

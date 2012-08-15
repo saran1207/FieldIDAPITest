@@ -29,7 +29,9 @@ public class EventByNetworkIdProvider extends FieldIDDataProvider<Event> {
 
     @Override
     public Iterator<? extends Event> iterator(int first, int count) {
-        return eventService.getEventsByNetworkId(networkId, getSort().getProperty(), getSort().isAscending(), states).subList(first, first + count).iterator();
+        List<Event> events = eventService.getEventsByNetworkId(networkId, getSort().getProperty(), getSort().isAscending(), states);
+        events = events.subList(first, first + count);
+        return events.iterator();
     }
 
     @Override
