@@ -307,6 +307,13 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	public String getDisplayName() {
 		return getUserLabel();
 	}
+    
+    public String getAssignToDisplayName() {
+        if(getIdentifier() != null && !getIdentifier().isEmpty())
+            return getUserLabel() + " - " +  getIdentifier();
+        else
+            return getDisplayName();
+    }
 
 	@Override
     public String toString() {

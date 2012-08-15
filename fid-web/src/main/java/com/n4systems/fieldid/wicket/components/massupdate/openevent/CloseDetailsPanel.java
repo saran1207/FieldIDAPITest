@@ -57,7 +57,7 @@ public class CloseDetailsPanel extends AbstractMassUpdatePanel {
             add( new DropDownChoice<User>("resolver",
                     new PropertyModel<User>(massUpdateEventModel, "event.performedBy"),
                     getUsers(),
-                    new ChoiceRenderer<User>("displayName")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
+                    new ChoiceRenderer<User>("assignToDisplayName")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
 
             add(new TextArea<String>("comment", new PropertyModel<String>(massUpdateEventModel, "event.comments")));
 

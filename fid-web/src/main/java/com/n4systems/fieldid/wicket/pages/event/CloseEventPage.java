@@ -83,7 +83,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
             add( new DropDownChoice<User>("resolver",
                     new PropertyModel<User>(this, "resolvedBy"),
                     getUsers(),
-                    new ChoiceRenderer<User>("displayName")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
+                    new ChoiceRenderer<User>("assignToDisplayName")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
 
             add(new TextArea<String>("comment", new PropertyModel<String>(this, "comment")));
 

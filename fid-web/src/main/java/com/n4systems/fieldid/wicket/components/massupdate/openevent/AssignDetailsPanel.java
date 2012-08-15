@@ -37,7 +37,7 @@ public class AssignDetailsPanel extends AbstractMassUpdatePanel {
             add( new DropDownChoice<User>("assignee",
                     new PropertyModel<User>(massUpdateEventModel, "event.assignee"),
                     getUsers(),
-                    new ChoiceRenderer<User>("displayName")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
+                    new ChoiceRenderer<User>("assignToDisplayName")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
 
             add(new Button("assignButton"));
 
