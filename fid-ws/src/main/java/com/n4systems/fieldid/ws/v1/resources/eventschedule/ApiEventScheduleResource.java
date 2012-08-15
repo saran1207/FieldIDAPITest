@@ -1,13 +1,17 @@
 package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
@@ -26,6 +30,9 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Component
 @Path("eventSchedule")
@@ -142,5 +149,39 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
         }
 		
 		return null;
+	}
+	
+	@GET
+	@Path("assignedList")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public List<ApiEventSchedule> findAssignedOpenEvents(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
+		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
+		.addOrder("nextDate")
+        .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
+        .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
+		.addWhere(WhereClauseFactory.create(Comparator.GE, "nextDate", startDate))
+		.addWhere(WhereClauseFactory.create(Comparator.LE, "nextDate", endDate));
+		
+		List<Event> events = persistenceService.findAll(query);		
+		return convertAllEntitiesToApiModels(events);
+	}
+	
+	@GET
+	@Path("unassignedList")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public List<ApiEventSchedule> findUnassignedOpenEvents(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
+		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
+		.addOrder("nextDate")
+        .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
+        .addWhere(WhereClauseFactory.create(Comparator.NULL, "assignee", null))
+		.addWhere(WhereClauseFactory.create(Comparator.GE, "nextDate", startDate))
+		.addWhere(WhereClauseFactory.create(Comparator.LE, "nextDate", endDate));
+		
+		List<Event> events = persistenceService.findAll(query);		
+		return convertAllEntitiesToApiModels(events);
 	}
 }
