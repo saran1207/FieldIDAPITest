@@ -4,6 +4,7 @@ import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
@@ -182,8 +183,10 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             add(new EventFormEditPanel("eventFormPanel", new PropertyModel<List<AbstractEvent.SectionResults>>(event, "sectionResults")).setVisible(event.getEventForm() != null));
             add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(event, "attachments")));
-            
-            add(new Button("saveButton"));
+
+            Button saveButton = new Button("saveButton");
+            saveButton.add(new DisableButtonBeforeSubmit());
+            add(saveButton);
             add(new BookmarkablePageLink<Void>("cancelLink", DashboardPage.class));
         }
 
