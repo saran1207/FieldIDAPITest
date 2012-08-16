@@ -16,20 +16,20 @@ import com.n4systems.fieldid.wicket.components.event.prooftest.ProofTestEditPane
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.fileupload.AttachmentsPanel;
 import com.n4systems.fieldid.wicket.components.location.LocationPicker;
-import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
+import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
-import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
+import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
@@ -92,6 +92,12 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             add(new Label("rfidNumber", new PropertyModel<String>(event, "asset.rfidNumber")));
             add(new Label("referenceNumber", new PropertyModel<String>(event, "asset.customerRefNumber")));
+
+            GroupedUserPicker groupedUserPicker;
+            add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(event, "assignedTo"), new GroupedUsersForTenantModel()));
+            groupedUserPicker.setNullValid(true);
+            groupedUserPicker.setVisible(event.getType().isAssignedToAvailable());
+
 
             add(new OrgPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
                 @Override

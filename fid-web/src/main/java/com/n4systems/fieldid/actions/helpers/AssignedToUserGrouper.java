@@ -1,19 +1,14 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserFilteredLoader;
+import com.n4systems.util.persistence.SimpleListable;
+import rfid.web.helper.SessionUser;
+
+import java.util.*;
 
 public class AssignedToUserGrouper {
 
@@ -35,10 +30,14 @@ public class AssignedToUserGrouper {
 		for (Listable<Long> user : employees) {
 			
 			userLoader.setId(user.getId());
-			
-			if (user.getId() != 0 && userLoader.load() != null) {
+
+            User userEntity = userLoader.load();
+            if (user.getId() != 0 && userEntity != null) {
+                
+                if(userEntity.getIdentifier() != null)
+                    ((SimpleListable)user).setDisplayName(user.getDisplayName() + " - " + userEntity.getIdentifier());
 		
-				baseOrg = userLoader.load().getOwner();
+				baseOrg = userEntity.getOwner();
 
 				// If user is read-only customer, check that this baseOrg is the customer org
 				if (sessionUser.isReadOnlyCustomerUser() && baseOrg.isExternal()) {

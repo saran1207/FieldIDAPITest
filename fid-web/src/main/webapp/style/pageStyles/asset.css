@@ -347,3 +347,7 @@
 .assetTypeLabel {
 	padding-left : 50px;
 }
+
+.assetFormGroup .showOverflow {
+    overflow: visible;
+}

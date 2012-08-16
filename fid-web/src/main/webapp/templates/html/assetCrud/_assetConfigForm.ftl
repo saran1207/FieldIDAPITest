@@ -6,9 +6,9 @@
 <div class="assetFormGroup">
 	<h2><@s.text name="label.owner"/></h2>
 	<#if securityGuard.assignedToEnabled >
-		<div class="infoSet reducedPaddingInfoSet">
+		<div class="infoSet reducedPaddingInfoSet showOverflow">
 			<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
-				<@s.select id="assignedToSelectBox" name="assignedUser" headerKey="0" headerValue="${action.getText('label.unassigned')}" >
+				<@s.select cssClass="chzn-select" id="assignedToSelectBox" name="assignedUser" headerKey="0" headerValue="${action.getText('label.unassigned')}" >
 					<#include "/templates/html/common/_assignedToDropDown.ftl"/>
 				</@s.select>
 				<a href="#" class="assignToMeLink" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>

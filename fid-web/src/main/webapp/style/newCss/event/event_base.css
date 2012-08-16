@@ -510,3 +510,11 @@ a.w_close {
 .observationsActions .mattButton {
     margin-right:8px;
 }
+
+.pageContent .assignedTo, .pageContent .assignedTo .fieldHolder {
+    overflow: visible;
+}
+
+.pageContent .assignedTo .fieldHolder {
+    padding: 0;
+}

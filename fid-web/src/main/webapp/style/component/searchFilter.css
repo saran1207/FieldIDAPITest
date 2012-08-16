@@ -14,9 +14,20 @@
 	  text-align:right;
 }
 
-.location label, .owner label {
-	vertical-align:top; 
-} 
+.assignTo label, .assignee label{
+    position: relative;
+    top: -12px;
+}
+
+.owner label {
+	vertical-align: super;
+}
+
+.location label {
+    position: relative;
+    top: -20px;
+}
+
 
 .field label, .field input, .field select, .field .popup {
   display:inline-block;

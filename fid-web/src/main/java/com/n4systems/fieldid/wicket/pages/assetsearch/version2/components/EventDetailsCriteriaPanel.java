@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.renderer.*;
+import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.ListWithBlankOptionModel;
 import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
@@ -10,6 +11,7 @@ import com.n4systems.fieldid.wicket.model.eventstatus.EventStatusesForTenantMode
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.model.*;
 import com.n4systems.model.user.User;
@@ -66,7 +68,8 @@ public class EventDetailsCriteriaPanel extends Panel {
         ListWithBlankOptionModel<User> blankOptionUserList = new ListWithBlankOptionModel<User>(User.class, usersForTenantModel);
         IChoiceRenderer<User> unassignedOrAssigneeRenderer = new BlankOptionChoiceRenderer<User>(new FIDLabelModel("label.unassigned"), new ListableChoiceRenderer<User>());
 
-        add(new DropDownChoice<User>("assignee", blankOptionUserList, unassignedOrAssigneeRenderer).setNullValid(true));
+        add(new GroupedUserPicker("assignee", new PropertyModel<User>(getDefaultModel(), "assignee"), new GroupedUsersForTenantModel()).setNullValid(true));
+
         add(new DropDownChoice<User>("performedBy", usersForTenantModel, new ListableChoiceRenderer<User>()).setNullValid(true));
         jobContainer.add(new DropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 
