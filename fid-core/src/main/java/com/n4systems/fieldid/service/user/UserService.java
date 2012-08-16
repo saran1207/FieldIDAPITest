@@ -12,9 +12,9 @@ import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import com.n4systems.util.StringUtils;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.collections.DefaultPrioritizer;
+import com.n4systems.util.collections.PrioritizedList;
+import com.n4systems.util.persistence.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
@@ -144,4 +144,23 @@ public class UserService extends FieldIdPersistenceService {
         return Permissions.filterHasOneOf((List<User>) query.getResultList(), Permissions.ALLEVENT);
     }
 
+    public List<User> search(String term, int threshold) {
+        QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
+
+        if (org.apache.commons.lang.StringUtils.isNotBlank(term)) {
+            WhereParameterGroup group = new WhereParameterGroup("smartsearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "firstName", "firstName", term, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "lastName", "lastName", term, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "userID", "userID", term, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            builder.addWhere(group);
+        }
+
+        builder.setLimit(threshold*4);
+        List<User> results = persistenceService.findAll(builder);
+        return new PrioritizedList<User>(results, new DefaultPrioritizer<User>(),threshold);
+    }
+
+    public List<User> search(int threshold) {
+        return search("",threshold);
+    }
 }

@@ -30,7 +30,6 @@ public class EventDetailsCriteriaPanel extends Panel {
 
     private DropDownChoice<EventType> eventTypeSelect;
     private EventTypesForTenantModel availableEventTypesModel;
-    private EventStatus foo;
 
     public EventDetailsCriteriaPanel(String id, IModel<?> model) {
         super(id, model);

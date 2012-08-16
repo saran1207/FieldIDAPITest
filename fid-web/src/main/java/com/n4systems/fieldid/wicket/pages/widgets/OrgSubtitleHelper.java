@@ -13,19 +13,19 @@ public abstract class OrgSubtitleHelper {
 	// e.g. if you rename ChartDateRange.FOREVER to ALL_OF_TIME then the FIeldIDWicketApp.properties file will have to 
 	//    be updated to include dateRange.all_of_time.subTitle=...
 	
-	private String fromKey;
-	private String toKey;
+	private String key1;
+	private String key2;
 	
 	public OrgSubtitleHelper(String fromKey, String toKey) {
-		this.fromKey = fromKey;
-		this.toKey = toKey;
+		this.key1 = fromKey;
+		this.key2 = toKey;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public SubTitleModelInfo getSubTitleModel(Object model, BaseOrg org, String keyBase) {
 		List<PropertyModel<String>> models = Lists.newArrayList(
-				new PropertyModel<String>(model, fromKey),
-				new PropertyModel<String>(model, toKey) );				
+				new PropertyModel<String>(model, key1),
+				new PropertyModel<String>(model, key2) );
 		StringBuffer key = new StringBuffer(keyBase);
 		if (org!=null) {
 			models.add(new PropertyModel<String>(model, "config.org.hierarchicalDisplayName"));

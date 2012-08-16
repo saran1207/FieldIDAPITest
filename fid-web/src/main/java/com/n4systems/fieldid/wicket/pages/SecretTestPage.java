@@ -3,7 +3,9 @@ package com.n4systems.fieldid.wicket.pages;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.model.Asset;
+import com.n4systems.model.dashboard.widget.WorkWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -11,6 +13,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import java.util.Date;
@@ -23,6 +26,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     private String text2;
     private Date date;
     private String password;
+    private User user;
 
     private int id=0;
     
@@ -34,7 +38,8 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         form.add(new TextField("watermark", new PropertyModel<String>(this,"text")).add(new Watermark("enter a value")));
         form.add(new TextField("watermark2", new PropertyModel<String>(this, "text2")).add(new Watermark("enter another value")));
         form.add(new PasswordTextField("password", new PropertyModel<String>(this, "password")).add(new Watermark("enter password")));
-        form.add(new Agenda("agenda"));
+        form.add(new Agenda("agenda", Model.of(new WorkWidgetConfiguration())));
+        form.add(new AutoCompleteUser("user", new PropertyModel<User>(this, "user")));
 //        form.add(new GoogleMap("map").addLocation(43.65, -79.34).addLocation(42.00, -80.00).addLocation(44.0,-79.7));
         form.add(new GoogleMap("map"));
         form.add(new DateTimePicker("dateTimePicker", new PropertyModel<Date>(this,"date"), true));

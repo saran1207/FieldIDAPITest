@@ -342,6 +342,9 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	}
 	
 	public boolean equals(User user) {
+        if (user==null) {
+            return false;
+        }
 		if (getId() == null && user.getId() == null) {
 			return super.equals(user);
 		} else {

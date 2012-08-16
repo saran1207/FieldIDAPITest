@@ -15,6 +15,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.*;
@@ -394,24 +395,21 @@ public class EventService extends FieldIdPersistenceService {
         return event;
     }
 
-    public List<Event> getWork(DateRange dateRange, int limit) {
+    public List<Event> getWork(DateRange dateRange, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {
         QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
 
-        // TODO : temp. add assignee/org/assetType/eventType/location to query.
-        builder.addWhere(Comparator.GE, "from", "nextDate", dateRange.getFrom().toDate());
-        builder.addWhere(Comparator.LT, "to", "nextDate", dateRange.getTo().toDate());
-        builder.addOrder("nextDate");
-        builder.setLimit(limit+1);
+        addToWorkQuery(builder, user, org, assetType, eventType, dateRange);
+        builder.setLimit(limit + 1);
 
         List<Event> result = persistenceService.findAll(builder);
 
         return result;
     }
 
-      /**
+    /**
      * @return map of date --> # of events on that date.   results will be sorted and padded so 0 entries will be populated.
      */
-    public Map<LocalDate,Long> getMontlyWorkSummary(LocalDate dayInMonth) {
+    public Map<LocalDate,Long> getMontlyWorkSummary(LocalDate dayInMonth, User user, BaseOrg org, AssetType assetType, EventType eventType) {
         QueryBuilder<WorkSummaryRecord> builder = new QueryBuilder<WorkSummaryRecord>(Event.class, securityContext.getUserSecurityFilter());
 
         // NOTE : from is defined as the Sunday of the first week including the first day of the month.
@@ -423,9 +421,7 @@ public class EventService extends FieldIdPersistenceService {
         select.setConstructorArgs(Lists.newArrayList("COUNT(*),nextDate"));
         builder.setSelectArgument(select);
 
-        builder.addWhere(Comparator.GE, "from", "nextDate", from.toDate());
-        builder.addWhere(Comparator.LT, "to", "nextDate", to.toDate());
-        builder.addOrder("nextDate");
+        addToWorkQuery(builder, user, org, assetType, eventType, new DateRange(from,to));
         builder.addGroupBy("nextDate");
 
         List<WorkSummaryRecord> data = persistenceService.findAll(builder);
@@ -441,6 +437,16 @@ public class EventService extends FieldIdPersistenceService {
             result.put(new LocalDate(record.getDate()), record.getCount());
         }
         return result;
+    }
+
+    private void addToWorkQuery(QueryBuilder<?> builder, User user, BaseOrg org, AssetType assetType, EventType eventType, DateRange dateRange) {
+        builder.addNullSafeWhere(Comparator.EQ, "owner", "owner", org);
+        builder.addNullSafeWhere(Comparator.EQ, "asset_type", "asset.type", assetType);
+        builder.addNullSafeWhere(Comparator.EQ, "type", "type", eventType);
+        builder.addNullSafeWhere(Comparator.EQ, "assignee", "assignee", user);
+        builder.addWhere(Comparator.GE, "from", "nextDate", dateRange.getFrom().toDate());
+        builder.addWhere(Comparator.LT, "to", "nextDate", dateRange.getTo().toDate());
+        builder.addOrder("nextDate");
     }
 
 

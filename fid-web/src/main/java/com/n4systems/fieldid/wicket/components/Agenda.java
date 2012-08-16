@@ -5,7 +5,12 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationForAgenda;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.time.DateUtil;
@@ -20,6 +25,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestParameters;
@@ -48,10 +54,12 @@ public class Agenda extends Panel  {
     private AbstractDefaultAjaxBehavior behavior;
     private ListView<EventDay> listView;
     private WebMarkupContainer listContainer;
+    private IModel<? extends ConfigurationForAgenda> agendaModel;
 
 
-    public Agenda(String id) {
-        super(id);
+    public Agenda(String id, IModel<? extends ConfigurationForAgenda> model) {
+        super(id, model);
+        this.agendaModel = model;
         setOutputMarkupId(true);
 
         firstDayOfMonth = dateService.now().withDayOfMonth(1);
@@ -124,7 +132,7 @@ public class Agenda extends Panel  {
         AgendaData data = new AgendaData();
 
         data.selectedDay = selectedDay;
-        Map<LocalDate, Long> events = eventService.getMontlyWorkSummary(firstDayOfMonth);
+        Map<LocalDate, Long> events = eventService.getMontlyWorkSummary(firstDayOfMonth,getUser(), getOrg(), getAssetType(), getEventType());
         for (Long value:events.values()) {
             data.eventMap.add(value);
         }
@@ -151,6 +159,21 @@ public class Agenda extends Panel  {
         return this;
     }
 
+    private AssetType getAssetType() {
+        return agendaModel.getObject().getAssetType();
+    }
+
+    private BaseOrg getOrg() {
+        return agendaModel.getObject().getOrg();
+    }
+
+    private User getUser() {
+        return agendaModel.getObject().getUser();
+    }
+
+    private EventType getEventType() {
+        return agendaModel.getObject().getEventType();
+    }
 
     // ------------------ INNER CLASSES -------------------------
 
@@ -158,7 +181,7 @@ public class Agenda extends Panel  {
 
         @Override
         protected List<EventDay> load() {
-            List<Event> events = eventService.getWork(getDateRange(), 25);
+            List<Event> events = eventService.getWork(getDateRange(), getUser(), getOrg(), getAssetType(), getEventType(),  25);
             Map<LocalDate,EventDay> map = Maps.newTreeMap();
 
             for (Event event:events) {
@@ -174,7 +197,11 @@ public class Agenda extends Panel  {
             return list;
         }
 
+
+
+
     }
+
 
     private DateRange getDateRange() {
         if (selectedDay==0) {  // are we searching for a particular day??  if not, just return entire month.

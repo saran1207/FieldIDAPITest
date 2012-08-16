@@ -16,7 +16,7 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
     
     private @SpringBean AssetService assetService;
     
-    private HashSet<AssetType> categories;
+    private HashSet<AssetType> categories = new HashSet<AssetType>();
     
     public AutoCompleteSearch(String id, final IModel<Asset> model) {
         super(id, model);

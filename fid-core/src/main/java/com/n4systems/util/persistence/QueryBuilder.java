@@ -317,12 +317,19 @@ public class QueryBuilder<E> {
 	}
 	
 	/* XXX: These should be removed and classes should use the WhereClauseFactory instead.  I'd depreacte it but then there'd be a bazillion deprecation warnings :( */
-	public <T> QueryBuilder<E> addWhere(Comparator comparator, String name, String param, T value) {
-		addWhere(comparator, name, param, value, null);
-		return this;
-	}
+    public <T> QueryBuilder<E> addWhere(Comparator comparator, String name, String param, T value) {
+        addWhere(comparator, name, param, value, null);
+        return this;
+    }
 
-	public WhereClause<?> getWhereParameter(String name) {
+    public <T> QueryBuilder<E> addNullSafeWhere(Comparator comparator, String name, String param, T value) {
+        if (value!=null) {
+            addWhere(comparator, name, param, value, null);
+        }
+        return this;
+    }
+
+    public WhereClause<?> getWhereParameter(String name) {
 		return whereParameters.get(name);
 	}
 	
