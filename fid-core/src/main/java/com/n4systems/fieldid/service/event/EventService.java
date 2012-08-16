@@ -423,7 +423,6 @@ public class EventService extends FieldIdPersistenceService {
 
         addToWorkQuery(builder, user, org, assetType, eventType, new DateRange(from,to));
 
-
         builder.addGroupByClauses(	Lists.newArrayList(new GroupByClause("DATE(nextDate)", true)) );
 
         List<WorkSummaryRecord> data = persistenceService.findAll(builder);

@@ -51,6 +51,8 @@ public class Agenda extends Panel  {
     private static final Logger logger= Logger.getLogger(Agenda.class);
 
     private static final String INIT_CALENDAR_JS = "%s = agendaFactory.create('%s', %s, '%s');";
+    public static final String UPDATE_CALENDAR_JS = "%s.updateCalendarEventMarkers(%s)";
+
     private static final int WORK_EVENT_LIMIT = 15;
 
     private WebMarkupContainer calendar;
@@ -71,6 +73,7 @@ public class Agenda extends Panel  {
         firstDayOfMonth = dateService.now().withDayOfMonth(1);
 
         behavior = new AbstractDefaultAjaxBehavior() {
+
             protected void respond(final AjaxRequestTarget target) {
                 listView.setVisible(true);
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
@@ -84,6 +87,9 @@ public class Agenda extends Panel  {
                 withFirstDayOfMonth(new LocalDate().withMonthOfYear(month).withYear(year).withDayOfMonth(1));
                 listView.detachModels();
                 target.add(listContainer);
+                if (isEntireMonthSelected()) {
+                    target.appendJavaScript(String.format(UPDATE_CALENDAR_JS, getJsVariableName(), getJsonMonthlyWorkSummary()));
+                }
             }
         };
 
@@ -96,6 +102,10 @@ public class Agenda extends Panel  {
         calendar.add(behavior);
 
         add(new TipsyBehavior("#" + getMarkupId() + " .ui-state-default", TipsyBehavior.Gravity.W));
+    }
+
+    private boolean isEntireMonthSelected() {
+        return selectedDay==0;  // 0 for showing entire month otherwise it specifies a day.
     }
 
     private WebMarkupContainer createWorkListView() {
@@ -185,7 +195,7 @@ public class Agenda extends Panel  {
     }
 
     private DateRange getDateRange() {
-        if (selectedDay==0) {  // are we searching for a particular day??  if not, just return entire month.
+        if (isEntireMonthSelected()) {  // are we searching for a particular day??  if not, just return entire month.
             LocalDate a = firstDayOfMonth.dayOfWeek().withMinimumValue().minusDays(1);
             LocalDate b = firstDayOfMonth.plusMonths(1).withDayOfMonth(1);
             return new DateRange(a,b);

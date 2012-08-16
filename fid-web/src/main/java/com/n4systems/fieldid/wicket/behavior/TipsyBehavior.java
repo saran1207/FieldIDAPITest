@@ -6,7 +6,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 
 public class TipsyBehavior extends Behavior {
 
-    private static final String TIPSY_JS  = "$('%s').tipsy({gravity: '%s', fade:true, delayIn:50})";
+    private static final String TIPSY_JS  = "$('%s').tipsy({gravity: '%s', fade:true, delayIn:500})";
     private String selector;
     private Gravity gravity;
 

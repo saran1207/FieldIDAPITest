@@ -22,6 +22,11 @@ var agendaFactory = (function() {
 			drawCalendarEventMarkers();
 		};
 
+		var updateCalendarEventMarkers = function(d) {
+			data = d;
+			drawCalendarEventMarkers();
+		}
+
 		function init() {
 			if (!initialized) {
 				calendar().datepicker(
@@ -68,7 +73,7 @@ var agendaFactory = (function() {
 				if (day>0) {
 					url = url + '&day=' + day;
 				}
-				var wcall = wicketAjaxGet(url, function() {drawCalendarEventMarkers();}, function() {});
+				var wcall = wicketAjaxGet(url, function() {}, function() {});
 			}
 		}
 
@@ -87,6 +92,7 @@ var agendaFactory = (function() {
 
 		return {
 			show: show,
+			updateCalendarEventMarkers:updateCalendarEventMarkers,
 			updateViaAjax:updateViaAjax
 		}
 

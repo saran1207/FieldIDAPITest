@@ -80,10 +80,8 @@
 
 .agenda .toggle-button {
     padding:2px;
-    height:0px;
 }
 
 .agenda .toggle-button img {
     float: right;
-    margin-top:-32px;
 }
