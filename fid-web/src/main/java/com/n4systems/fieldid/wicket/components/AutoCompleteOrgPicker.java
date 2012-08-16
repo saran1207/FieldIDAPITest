@@ -1,10 +1,11 @@
 package com.n4systems.fieldid.wicket.components;
 
-import com.n4systems.util.collections.OrgList;
 import com.n4systems.fieldid.service.org.OrgQueryParser;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgEnum;
+import com.n4systems.util.collections.OrgList;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -45,7 +46,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
         OrgEnum category = OrgEnum.fromClass(org.getClass());
         if (!categories.contains(category)) {
             categories.add(category);
-            return category.toString();
+            return new FIDLabelModel(category.getLabel()).getObject().toUpperCase();
         }
         return "";
     }

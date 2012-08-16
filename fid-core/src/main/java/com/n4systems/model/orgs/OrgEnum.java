@@ -1,11 +1,11 @@
 package com.n4systems.model.orgs;
 
 public enum OrgEnum {
-    PRIMARY("primary", PrimaryOrg.class),
-    SECONDARY("secondary", SecondaryOrg.class),
-    CUSTOMER("customer", CustomerOrg.class),
-    DIVISION("division", DivisionOrg.class),
-    UNDEFINED( "undefined" ,BaseOrg.class);
+    PRIMARY("label.primary", PrimaryOrg.class),
+    SECONDARY("label.secondary", SecondaryOrg.class),
+    CUSTOMER("label.customer", CustomerOrg.class),
+    DIVISION("label.division", DivisionOrg.class),
+    UNDEFINED( "label.undefined" ,BaseOrg.class);
 
     private String label;
     private Class<? extends BaseOrg> clazz;
@@ -26,5 +26,9 @@ public enum OrgEnum {
             }
         }
         return UNDEFINED;
+    }
+
+    public String getLabel() {
+        return label;
     }
 }
