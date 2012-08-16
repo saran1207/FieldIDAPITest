@@ -78,4 +78,9 @@ public class AssignDetailsPanel extends AbstractMassUpdatePanel {
     }
 
     protected void onNext(MassUpdateEventModel massUpdateEventModel) {};
+
+    @Override
+    public boolean isDetailsPanel() {
+        return true;
+    }
 }
