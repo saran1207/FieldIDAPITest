@@ -82,3 +82,11 @@
 .fieldHolder input {
 	width:150px;
 }
+
+.chzn-container .chzn-results li {
+    line-height:200%;
+}
+
+.chzn-container {
+    font-size:10px;
+}
