@@ -22,7 +22,7 @@ public class UserView extends ExternalModelView {
 	public static final String MANAGE_SYSTEM_CONFIGURATION_FIELD = "Manage System Configuration (Y/N)";
 	public static final String IDENTIFY_ASSETS_FIELD = "Identify Assets";
 	public static final String SEND_WELCOME_EMAIL_FIELD = "Send Welcome Email (Y/N)";
-	public static final String SECURITY_RFID_NUMBER_FIELD = "Security RFID Number";
+	public static final String MOBILE_PASSCODE_FIELD = "Mobile Passcode";
 	public static final String POSTITION_FIELD = "Postition";
 	public static final String INITIALS_FIELD = "Initials";
 	public static final String DIVISION_FIELD = "Division";
@@ -114,10 +114,10 @@ public class UserView extends ExternalModelView {
 	
 	@SerializableField(title=ACCESS_WEB_STORE_FIELD, order = 640, validators = {PermissionValidator.class})
 	private String accessWebStore;
-	
-	@SerializableField(title=SECURITY_RFID_NUMBER_FIELD, order = 680, validators = {}, handler=MaskedSerializationHandler.class)
+
+    @SerializableField(title= MOBILE_PASSCODE_FIELD, order = 680, validators = {}, handler=MaskedSerializationHandler.class)
 	private String securityRfidNumber;
-	
+
 	@SerializableField(title=ASSIGN_PASSWORD_FIELD, order = 700, validators = {YNValidator.class})
 	private String assignPassword = "N";
 	
