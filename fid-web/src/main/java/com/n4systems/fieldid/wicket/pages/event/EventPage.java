@@ -69,14 +69,21 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     protected AbstractEvent event;
 
     private List<Event> schedules = new ArrayList<Event>();
-    private Event scheduleToAdd = new Event();
+    private Event scheduleToAdd;
     private Event selectedSchedule;
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
+        scheduleToAdd = createNewOpenEvent();
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new OuterEventForm("outerEventForm"));
+    }
+
+    private Event createNewOpenEvent() {
+        Event openEvent = new Event();
+        openEvent.setAsset(event.getAsset());
+        return openEvent;
     }
 
     class OuterEventForm extends Form {
@@ -130,7 +137,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                 @Override
                 protected void onPickComplete(AjaxRequestTarget target) {
                     schedules.add(scheduleToAdd);
-                    scheduleToAdd = new Event();
+                    scheduleToAdd = createNewOpenEvent();
                     target.add(schedulesContainer);
                 }
             });
