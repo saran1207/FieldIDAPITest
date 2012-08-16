@@ -17,7 +17,7 @@ public class WorkWidget extends Widget<WorkWidgetConfiguration> {
 
     public WorkWidget(String id, WidgetDefinition<WorkWidgetConfiguration> widgetDefinition) {
 		super(id, new Model<WidgetDefinition<WorkWidgetConfiguration>>(widgetDefinition));
-        add(new Agenda("agenda", new PropertyModel<WorkWidgetConfiguration>(widgetDefinition, "config")));
+        add(new Agenda("agenda", new PropertyModel<WorkWidgetConfiguration>(widgetDefinition, "config")).withSelectedDay(dateService.now()));
 	}
 
 	@Override

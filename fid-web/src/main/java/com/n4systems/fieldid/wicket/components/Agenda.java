@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
@@ -14,6 +15,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.time.DateUtil;
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -28,6 +30,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -45,7 +48,10 @@ public class Agenda extends Panel  {
     private @SpringBean DateService dateService;
     private @SpringBean EventService eventService;
 
+    private static final Logger logger= Logger.getLogger(Agenda.class);
+
     private static final String INIT_CALENDAR_JS = "%s = agendaFactory.create('%s', %s, '%s');";
+    private static final int WORK_EVENT_LIMIT = 15;
 
     private WebMarkupContainer calendar;
     private LocalDate firstDayOfMonth;
@@ -88,6 +94,8 @@ public class Agenda extends Panel  {
         add(toggleButton);
 
         calendar.add(behavior);
+
+        add(new TipsyBehavior("#" + getMarkupId() + " .ui-state-default", TipsyBehavior.Gravity.W));
     }
 
     private WebMarkupContainer createWorkListView() {
@@ -129,15 +137,16 @@ public class Agenda extends Panel  {
     }
 
     private String getJsonMonthlyWorkSummary() {
-        AgendaData data = new AgendaData();
+        AgendaJsonData data = new AgendaJsonData(selectedDay, firstDayOfMonth);
 
-        data.selectedDay = selectedDay;
         Map<LocalDate, Long> events = eventService.getMontlyWorkSummary(firstDayOfMonth,getUser(), getOrg(), getAssetType(), getEventType());
         for (Long value:events.values()) {
             data.eventMap.add(value);
         }
         return new Gson().toJson(data);
     }
+
+
 
     private String getJsVariableName() {
         return "agenda_"+getMarkupId();
@@ -154,7 +163,7 @@ public class Agenda extends Panel  {
     }
 
     public Agenda withSelectedDay(LocalDate date) {
-        selectedDay = date.dayOfWeek().get();
+        selectedDay = date.getDayOfMonth();
         withFirstDayOfMonth(date);
         return this;
     }
@@ -175,13 +184,26 @@ public class Agenda extends Panel  {
         return agendaModel.getObject().getEventType();
     }
 
+    private DateRange getDateRange() {
+        if (selectedDay==0) {  // are we searching for a particular day??  if not, just return entire month.
+            LocalDate a = firstDayOfMonth.dayOfWeek().withMinimumValue().minusDays(1);
+            LocalDate b = firstDayOfMonth.plusMonths(1).withDayOfMonth(1);
+            return new DateRange(a,b);
+        } else {
+            LocalDate date = firstDayOfMonth.withDayOfMonth(selectedDay);
+            return new DateRange(date,date.plusDays(1));
+        }
+    }
+
+
+
     // ------------------ INNER CLASSES -------------------------
 
     class EventDayModel extends LoadableDetachableModel<List<EventDay>> {
 
         @Override
         protected List<EventDay> load() {
-            List<Event> events = eventService.getWork(getDateRange(), getUser(), getOrg(), getAssetType(), getEventType(),  25);
+            List<Event> events = eventService.getWork(getDateRange(), getUser(), getOrg(), getAssetType(), getEventType(), WORK_EVENT_LIMIT);
             Map<LocalDate,EventDay> map = Maps.newTreeMap();
 
             for (Event event:events) {
@@ -196,23 +218,8 @@ public class Agenda extends Panel  {
             ArrayList<EventDay> list = new ArrayList<EventDay>(map.values());
             return list;
         }
-
-
-
-
     }
 
-
-    private DateRange getDateRange() {
-        if (selectedDay==0) {  // are we searching for a particular day??  if not, just return entire month.
-            LocalDate a = firstDayOfMonth.dayOfWeek().withMinimumValue().minusDays(1);
-            LocalDate b = firstDayOfMonth.plusMonths(1).withDayOfMonth(1);
-            return new DateRange(a,b);
-        } else {
-            LocalDate date = firstDayOfMonth.withDayOfMonth(selectedDay);
-            return new DateRange(date,date.plusDays(1));
-        }
-    }
 
     class EventDayPanel extends Fragment {
         public EventDayPanel(String id, EventDay eventDay) {
@@ -220,17 +227,36 @@ public class Agenda extends Panel  {
             add(new Label("date", DateUtil.getDayString(eventDay.getDate())));
             ListView<Event> eventDayList = new ListView<Event>("list", eventDay.events) {
                 @Override protected void populateItem(ListItem<Event> item) {
+                    int index = item.getIndex();
                     Event event = item.getModelObject();
-                    String image = event.isCompleted() ? "images/gps-icon-small.png" : "images/gps-recorded.png";
-                    item.add(new ContextImage("icon", image));
-                    item.add(new AssetLabel("asset", new PropertyModel<Asset>(item.getModelObject(), "asset")));
-                    item.add(new NonWicketLink("startEvent", "eventEdit.action?uniqueID=" + event.getId())
-                                .add(new Label("eventType", new PropertyModel(item.getModelObject(), "type.name"))));
-                    String css = dateService.nowAsDate().after(event.getNextDate()) ? "overdue" : "";
-                    item.add(new AttributeAppender("class", css));
+                    if (index==WORK_EVENT_LIMIT) {
+                        addLimitReached(item);
+                    } else if (index>WORK_EVENT_LIMIT) {
+                        ; // do nothing...ignore everything over limit.  should never occur.
+                        logger.warn("list of events is longer than threshold of " + WORK_EVENT_LIMIT);
+                    } else {
+                        addEvent(item, event);
+                    }
                 }
             };
             add(eventDayList);
+        }
+
+        private void addLimitReached(ListItem<Event> item) {
+            String image = "images/search-limit-reached.png";
+            item.add(new ContextImage("icon", image));
+            item.add(new Label("asset", new StringResourceModel("label.search-limit-reached", Agenda.this, null)));
+            item.add(new WebMarkupContainer("startEvent").add(new WebMarkupContainer("eventType")).setVisible(false));
+        }
+
+        private void addEvent(ListItem<Event> item, Event event) {
+            String image = event.isCompleted() ? "images/gps-icon-small.png" : "images/gps-recorded.png";
+            item.add(new ContextImage("icon", image));
+            item.add(new AssetLabel("asset", new PropertyModel<Asset>(item.getModelObject(), "asset")));
+            item.add(new NonWicketLink("startEvent", "eventEdit.action?uniqueID=" + event.getId())
+                        .add(new Label("eventType", new PropertyModel(item.getModelObject(), "type.name"))));
+            String css = dateService.nowAsDate().after(event.getNextDate()) ? "overdue" : "";
+            item.add(new AttributeAppender("class", css));
         }
 
     }
@@ -264,9 +290,17 @@ public class Agenda extends Panel  {
         }
     }
 
-    class AgendaData {
-        int selectedDay;
+    class AgendaJsonData {
+        int day;
+        int month;
+        int year;
         List<Long> eventMap = Lists.newArrayList();
+
+        public AgendaJsonData(int day, LocalDate date) {
+            this.day = day;
+            month = date.getMonthOfYear();
+            year = date.getYear();
+        }
     }
 
 

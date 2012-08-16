@@ -59,15 +59,16 @@ public class DateUtil {
     // TODO : change this to return StringResource model with parameters.
     public static String getDayString(LocalDate date) {
         LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("MMMMM dd");
+        String dateString = formatter.print(date);
         if (date.equals(today)) {
-            return "Today";
+            return String.format("Today (%s)", dateString);
         } else if (today.plusDays(1).equals(date)) {
-            return "Tomorrow";
+            return String.format("Tomorrow (%s)", dateString);
         } else if (today.minusDays(1).equals(date)) {
-            return "Yesterday";
+            return String.format("Yesterday (%s)", dateString);
         } else {
-            DateTimeFormatter formatter = DateTimeFormat.forPattern("MMMMM dd");
-            return formatter.print(date);
+            return dateString;
         }
     }
 }

@@ -87,9 +87,6 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
                 Date from = dateService.calculateFromDateWithTimeZone(criteriaModel.getDateRange(), timeZone);
                 Date to = dateService.calculateInclusiveToDateWithTimeZone(criteriaModel.getDateRange(), timeZone);
                 addDateRangeTerm(searchTerms, "completedDate", DateHelper.convertToUTC(from, timeZone), DateHelper.convertToUTC(to, timeZone));
-// original=    addDateRangeTerm(searchTerms, "completedDate",
-//      FROM            DateHelper.convertToUTC(criteriaModel.getDateRange().calculateFromDate(), timeZone),
-//      TO              DateHelper.convertToUTC(nextDay(criteriaModel.getDateRange().calculateToDate()), timeZone));
             } else if (criteriaModel.getEventState() == EventState.ALL) {
                 searchTerms.add(new CompletedOrDueDateRange(timeZone, criteriaModel.getDateRange()));
             }

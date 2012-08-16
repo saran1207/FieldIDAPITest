@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.services.date.DateService;
 import com.n4systems.util.chart.RangeType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
@@ -15,11 +16,14 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.TimeZone;
 
 @SuppressWarnings("serial")
 public abstract class Widget<W extends WidgetConfiguration> extends Panel {
+
+    protected @SpringBean DateService dateService;
 
 	private IModel<WidgetDefinition<W>> widgetDefinition;
 

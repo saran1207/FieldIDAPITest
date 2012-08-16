@@ -13,7 +13,7 @@ var agendaFactory = (function() {
 		var callback = url;
 		var data = eventData;
 		var initialized = false;
-		var day;
+		var day = -1;
 		var month;
 		var year;
 
@@ -40,8 +40,7 @@ var agendaFactory = (function() {
 
 				initialized = true;
 
-					// TODO : include the starting day in json data.
-				updateViaAjax(2012, 08, 15);
+				updateViaAjax(data.year, data.month, data.day);
 			}
 		}
 
@@ -54,6 +53,8 @@ var agendaFactory = (function() {
 				$(this).removeClass('eventful');
 				if (data.eventMap[index]>0) {
 					$(this).addClass('eventful');
+					var suffix = data.eventMap[index]>1 ? ' events' : ' event';
+					$(this).attr('title', data.eventMap[index]+suffix);
 				}
 			});
 		}
@@ -64,7 +65,7 @@ var agendaFactory = (function() {
 				month = m;
 				year = y;
 				var url = new String(callback)+'&year='+year+'&month='+month;
-				if (day) {
+				if (day>0) {
 					url = url + '&day=' + day;
 				}
 				var wcall = wicketAjaxGet(url, function() {drawCalendarEventMarkers();}, function() {});

@@ -36,7 +36,7 @@ import java.util.*;
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class EventService extends FieldIdPersistenceService {
-	
+
     @Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private AssetService assetService;
 
@@ -418,11 +418,13 @@ public class EventService extends FieldIdPersistenceService {
         LocalDate to = dayInMonth.plusMonths(1).dayOfWeek().withMaximumValue().minusDays(1);
 
         NewObjectSelect select = new NewObjectSelect(WorkSummaryRecord.class);
-        select.setConstructorArgs(Lists.newArrayList("COUNT(*),nextDate"));
+        select.setConstructorArgs(Lists.newArrayList("COUNT(*)","DATE(nextDate)"));
         builder.setSelectArgument(select);
 
         addToWorkQuery(builder, user, org, assetType, eventType, new DateRange(from,to));
-        builder.addGroupBy("nextDate");
+
+
+        builder.addGroupByClauses(	Lists.newArrayList(new GroupByClause("DATE(nextDate)", true)) );
 
         List<WorkSummaryRecord> data = persistenceService.findAll(builder);
 
@@ -440,6 +442,7 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     private void addToWorkQuery(QueryBuilder<?> builder, User user, BaseOrg org, AssetType assetType, EventType eventType, DateRange dateRange) {
+        builder.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
         builder.addNullSafeWhere(Comparator.EQ, "owner", "owner", org);
         builder.addNullSafeWhere(Comparator.EQ, "asset_type", "asset.type", assetType);
         builder.addNullSafeWhere(Comparator.EQ, "type", "type", eventType);
