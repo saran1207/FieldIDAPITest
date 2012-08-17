@@ -1,5 +1,6 @@
 package com.n4systems.model.offlineprofile;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +13,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.joda.time.DateTime;
 
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -78,5 +81,18 @@ public class OfflineProfile extends EntityWithTenant implements HasUser {
 	
 	public void setSyncDuration(SyncDuration syncDuration) {
 		this.syncDuration = syncDuration;
-	}	
+	}
+	
+	public Date getSyncEndDate(Date startDate) {
+		DateTime dateTime = new DateTime(startDate);
+		
+		switch(getSyncDuration()) {
+			case WEEK: return dateTime.plusWeeks(1).toDate();
+			case MONTH: return dateTime.plusMonths(1).toDate();
+			case SIX_MONTHS: return dateTime.plusMonths(6).toDate();
+			case YEAR: return dateTime.plusYears(1).toDate();
+		}
+		
+		return null;
+	}
 }
