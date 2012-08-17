@@ -167,21 +167,4 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		List<Event> events = persistenceService.findAll(query);		
 		return convertAllEntitiesToApiModels(events);
 	}
-	
-	@GET
-	@Path("unassignedList")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public List<ApiEventSchedule> findUnassignedOpenEvents(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
-		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
-		.addOrder("nextDate")
-        .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
-        .addWhere(WhereClauseFactory.create(Comparator.NULL, "assignee", null))
-		.addWhere(WhereClauseFactory.create(Comparator.GE, "nextDate", startDate))
-		.addWhere(WhereClauseFactory.create(Comparator.LE, "nextDate", endDate));
-		
-		List<Event> events = persistenceService.findAll(query);		
-		return convertAllEntitiesToApiModels(events);
-	}
 }
