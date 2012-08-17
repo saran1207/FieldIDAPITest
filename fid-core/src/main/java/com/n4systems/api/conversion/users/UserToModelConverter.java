@@ -1,7 +1,5 @@
 package com.n4systems.api.conversion.users;
 
-import java.util.Date;
-
 import com.n4systems.api.conversion.AbstractViewToModelConverter;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.UserView;
@@ -11,6 +9,8 @@ import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.GlobalIdLoader;
 import com.n4systems.security.UserType;
+
+import java.util.Date;
 
 public class UserToModelConverter extends AbstractViewToModelConverter<User, UserView> {
 	private final OrgByNameLoader orgLoader;
@@ -39,6 +39,7 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		to.setOwner(baseOrg);
 		to.setRegistered(true);
 		to.setCreated(new Date());
+        to.setIdentifier(from.getIdentifier());
 		
 		if(from.getSecurityRfidNumber()!=null) { 
 			to.assignSecruityCardNumber(from.getSecurityRfidNumber());
