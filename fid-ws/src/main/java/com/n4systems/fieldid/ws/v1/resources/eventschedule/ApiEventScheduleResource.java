@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -176,5 +178,33 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		ListResponse<ApiEventSchedule> response = new ListResponse<ApiEventSchedule>(apiSchedules, page, pageSize, total);
 		
 		return response;
+	}
+	
+	@GET
+	@Path("assignedListCounts")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public List<Long> findAssignedOpenEventCounts(
+			@QueryParam("year") int year,
+			@QueryParam("month") int month) {
+		List<Long> counts = new ArrayList<Long>();		
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, 1);
+		int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		for(int i = 1; i <= days; i++) {
+			Date startDate = new DateTime(year, month + 1, i, 0, 0).toDate();
+			Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();
+			
+			QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
+			.addOrder("nextDate")
+	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
+	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
+			.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "nextDate", startDate))
+			.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "nextDate", endDate));
+			Long count = persistenceService.count(query);
+			counts.add(count);
+		}		
+		return counts;
 	}
 }
