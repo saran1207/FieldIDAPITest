@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -23,6 +24,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
@@ -156,15 +158,23 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiEventSchedule> findAssignedOpenEvents(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
+	public ListResponse<ApiEventSchedule> findAssignedOpenEvents(
+			@QueryParam("startDate") Date startDate, 
+			@QueryParam("endDate") Date endDate,
+			@DefaultValue("0") @QueryParam("page") int page,
+			@DefaultValue("25") @QueryParam("pageSize") int pageSize) {
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 		.addOrder("nextDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "nextDate", startDate))
-		.addWhere(WhereClauseFactory.create(Comparator.LE, "endDate", "nextDate", endDate));
+		.addWhere(WhereClauseFactory.create(Comparator.LE, "endDate", "nextDate", endDate));		
 		
-		List<Event> events = persistenceService.findAll(query);		
-		return convertAllEntitiesToApiModels(events);
+		List<Event> events = persistenceService.findAll(query, page, pageSize);
+		Long total = persistenceService.count(query);
+		List<ApiEventSchedule> apiSchedules = convertAllEntitiesToApiModels(events);
+		ListResponse<ApiEventSchedule> response = new ListResponse<ApiEventSchedule>(apiSchedules, page, pageSize, total);
+		
+		return response;
 	}
 }
