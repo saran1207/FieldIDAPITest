@@ -1,29 +1,28 @@
 package com.n4systems.fieldid.wicket.model;
 
-import com.n4systems.model.BaseEntity;
+import com.n4systems.util.GroupedListingPair;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListWithBlankOptionModel<T extends BaseEntity> extends LoadableDetachableModel<List<T>> {
+public class ListWithBlankOptionModel extends LoadableDetachableModel<List<GroupedListingPair>> {
 
-    private Class<T> clazz;
-    private IModel<List<T>> wrappedModel;
+    private IModel<List<GroupedListingPair>> wrappedModel;
 
-    public ListWithBlankOptionModel(Class<T> clazz, IModel<List<T>> wrappedModel) {
-        this.clazz = clazz;
+    public ListWithBlankOptionModel(IModel<List<GroupedListingPair>> wrappedModel) {
         this.wrappedModel = wrappedModel;
     }
 
     @Override
-    protected List<T> load() {
+    protected List<GroupedListingPair> load() {
         try {
-            T blankOption = clazz.newInstance();
+            GroupedListingPair blankOption = new GroupedListingPair();
             blankOption.setId(0L);
+            blankOption.setGroup("");
 
-            List<T> list = new ArrayList<T>(wrappedModel.getObject());
+            List<GroupedListingPair> list = new ArrayList<GroupedListingPair>(wrappedModel.getObject());
             list.add(0, blankOption);
 
             return list;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.n4systems.model.api.Listable;
 
-public class ListingPair implements Serializable, Comparable<ListingPair> {
+public class ListingPair implements Serializable, Comparable<ListingPair>, Listable<Long> {
 
 	private static final long serialVersionUID = -7840736279333715725L;
 
@@ -31,7 +31,12 @@ public class ListingPair implements Serializable, Comparable<ListingPair> {
 		return id;
 	}
 
-	public void setId(Long id) {
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
+
+    public void setId(Long id) {
 		this.id = id;
 	}
 

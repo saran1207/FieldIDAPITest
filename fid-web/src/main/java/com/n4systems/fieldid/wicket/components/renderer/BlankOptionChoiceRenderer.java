@@ -1,10 +1,11 @@
 package com.n4systems.fieldid.wicket.components.renderer;
 
-import com.n4systems.model.BaseEntity;
+import com.n4systems.model.api.Listable;
+import com.n4systems.util.GroupedListingPair;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
-public class BlankOptionChoiceRenderer<T extends BaseEntity> implements IChoiceRenderer<T> {
+public class BlankOptionChoiceRenderer<T extends GroupedListingPair> implements IChoiceRenderer<T> {
 
     private IModel<String> blankLabel;
     private IChoiceRenderer<T> wrappedRenderer;

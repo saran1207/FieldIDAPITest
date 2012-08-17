@@ -26,4 +26,8 @@ public class GroupedUserPicker extends GroupedDropDownChoice<User, BaseOrg> {
         return group.getDisplayName();
     }
 
+    @Override
+    protected User convertChoiceIdToChoice(String id) {
+        return super.convertChoiceIdToChoice(id);
+    }
 }

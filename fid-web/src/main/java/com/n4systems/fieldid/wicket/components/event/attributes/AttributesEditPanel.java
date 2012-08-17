@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AttributesEditPanel extends Panel {
 
-    public AttributesEditPanel(String id, final IModel<AbstractEvent> eventModel) {
+    public AttributesEditPanel(String id, final IModel<? extends AbstractEvent> eventModel) {
         super(id);
         
         add(new ListView<String>("attributes", new PropertyModel<List<? extends String>>(eventModel, "type.infoFieldNames")) {
