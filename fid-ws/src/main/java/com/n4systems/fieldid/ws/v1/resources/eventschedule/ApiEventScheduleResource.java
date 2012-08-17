@@ -161,8 +161,8 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		.addOrder("nextDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
-		.addWhere(WhereClauseFactory.create(Comparator.GE, "nextDate", startDate))
-		.addWhere(WhereClauseFactory.create(Comparator.LE, "nextDate", endDate));
+		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "nextDate", startDate))
+		.addWhere(WhereClauseFactory.create(Comparator.LE, "endDate", "nextDate", endDate));
 		
 		List<Event> events = persistenceService.findAll(query);		
 		return convertAllEntitiesToApiModels(events);
