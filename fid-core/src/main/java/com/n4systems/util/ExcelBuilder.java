@@ -1,5 +1,11 @@
 package com.n4systems.util;
 
+import com.n4systems.model.utils.NonConvertingDateTime;
+import com.n4systems.model.utils.PlainDate;
+import com.n4systems.util.views.TableView;
+import org.apache.commons.io.IOUtils;
+import org.apache.poi.hssf.usermodel.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,19 +13,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
-import com.n4systems.model.utils.PlainDate;
-import com.n4systems.util.views.TableView;
 
 public class ExcelBuilder {
 	private static final String EXCEL_DATE_FORMAT  = "m/d/yy";
@@ -220,9 +213,13 @@ public class ExcelBuilder {
 			// override the default style for dates
 			cell.setCellStyle(getCellStyle(styleOptions|DATE));
 		} else if(value instanceof Date) {
-			
-			cell.setCellValue(DateHelper.convertToUserTimeZone((Date)value, dateTimeDefinition.getTimeZone()));
-			
+
+            if (value instanceof NonConvertingDateTime) {
+                cell.setCellValue((Date)value);
+            } else {
+                cell.setCellValue(DateHelper.convertToUserTimeZone((Date)value, dateTimeDefinition.getTimeZone()));
+            }
+
 			// override the default style for dates
 			cell.setCellStyle(getCellStyle(styleOptions|DATE_TIME));
 		    
