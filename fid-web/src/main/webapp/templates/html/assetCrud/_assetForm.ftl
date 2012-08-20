@@ -12,6 +12,8 @@
 	<@n4.includeScript src="safetyNetworkSmartSearch.js" />
 	<@n4.includeStyle href="safetyNetworkSmartSearch.css" type="feature"/>
 	<@n4.includeStyle href="newCss/event/event_schedule"/>
+    <@n4.includeScript src="chosen/chosen.jquery.js" />
+
 	<script type="text/javascript">
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
 		identifierUrl = '<@s.url action="generateIdentifier" namespace="/ajax"/>';
@@ -24,8 +26,6 @@
 	    checkIdentifierUrl = '<@s.url action="checkIdentifier" namespace="/ajax"/>';
 	</script>
 </head>
-
-
 
 <#include "../common/_formErrors.ftl"/>
 <@s.hidden name="uniqueID" id="uniqueID"/>
@@ -42,7 +42,10 @@
 	</#if>
 </div>
 
-<script src="javascript/chosen/chosen.jquery.js" type="text/javascript"></script>
-<script type="text/javascript"> jQuery(document).ready( function() { jQuery(".chzn-select").chosen(); } );</script>
+<script type="text/javascript">
+    jQuery(document).ready( function() {
+        jQuery(".chzn-select").chosen({ disable_search_threshold: 15 }); }
+    );
+</script>
 
 

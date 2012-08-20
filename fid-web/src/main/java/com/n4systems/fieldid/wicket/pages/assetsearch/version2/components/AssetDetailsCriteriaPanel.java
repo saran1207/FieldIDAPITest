@@ -1,14 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
-import java.util.List;
-
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
-
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
@@ -17,6 +9,14 @@ import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantMo
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+
+import java.util.List;
 
 public class AssetDetailsCriteriaPanel extends Panel {
 
@@ -27,7 +27,7 @@ public class AssetDetailsCriteriaPanel extends Panel {
         super(id, model);
 
         
-        add(new DropDownChoice<AssetStatus>("assetStatus", new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));       
+        add(new FidDropDownChoice<AssetStatus>("assetStatus", new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));
         final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getDefaultModel(), "assetTypeGroup");
         final IModel<AssetType> assetTypeModel = new PropertyModel<AssetType>(getDefaultModel(), "assetType");
         availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
@@ -40,11 +40,12 @@ public class AssetDetailsCriteriaPanel extends Panel {
             }
         });
         groupedAssetTypePicker.setNullValid(true);
+        groupedAssetTypePicker.add(new AttributeAppender("data-placeholder", " "));
 
     }
 
-    private DropDownChoice<AssetTypeGroup> createAssetTypeGroupChoice(IModel<AssetTypeGroup> assetTypeGroupModel, final IModel<AssetType> assetTypeModel, final GroupedAssetTypesForTenantModel availableAssetTypesModel) {
-        DropDownChoice<AssetTypeGroup> assetTypeGroupDropDownChoice = new DropDownChoice<AssetTypeGroup>("assetTypeGroup",
+    private FidDropDownChoice<AssetTypeGroup> createAssetTypeGroupChoice(IModel<AssetTypeGroup> assetTypeGroupModel, final IModel<AssetType> assetTypeModel, final GroupedAssetTypesForTenantModel availableAssetTypesModel) {
+        FidDropDownChoice<AssetTypeGroup> assetTypeGroupDropDownChoice = new FidDropDownChoice<AssetTypeGroup>("assetTypeGroup",
                 assetTypeGroupModel, new AssetTypeGroupsForTenantModel(), new ListableChoiceRenderer<AssetTypeGroup>());
         assetTypeGroupDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override

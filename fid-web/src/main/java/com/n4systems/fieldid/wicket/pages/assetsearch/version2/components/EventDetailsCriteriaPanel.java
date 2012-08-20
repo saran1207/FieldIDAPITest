@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.*;
 import com.n4systems.fieldid.wicket.components.select.GroupedListableDropDownChoice;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -20,9 +21,9 @@ import com.n4systems.model.user.User;
 import com.n4systems.util.GroupedListingPair;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -33,7 +34,7 @@ import java.util.List;
 
 public class EventDetailsCriteriaPanel extends Panel {
 
-    private DropDownChoice<EventType> eventTypeSelect;
+    private FidDropDownChoice<EventType> eventTypeSelect;
     private EventTypesForTenantModel availableEventTypesModel;
 
     public EventDetailsCriteriaPanel(String id, IModel<?> model) {
@@ -51,7 +52,7 @@ public class EventDetailsCriteriaPanel extends Panel {
         final IModel<EventTypeGroup> eventTypeGroupModel = new PropertyModel<EventTypeGroup>(getDefaultModel(), "eventTypeGroup");
         final IModel<EventType> eventTypeModel = new PropertyModel<EventType>(getDefaultModel(), "eventType");
         availableEventTypesModel = new EventTypesForTenantModel(eventTypeGroupModel);
-        add(eventTypeSelect = new DropDownChoice<EventType>("eventType", availableEventTypesModel, new EventTypeChoiceRenderer()));
+        add(eventTypeSelect = new FidDropDownChoice<EventType>("eventType", availableEventTypesModel, new EventTypeChoiceRenderer()));
         eventTypeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override protected void onUpdate(AjaxRequestTarget target) {
                 onEventTypeOrGroupUpdated(target, eventTypeModel.getObject(), availableEventTypesModel.getObject());
@@ -63,9 +64,11 @@ public class EventDetailsCriteriaPanel extends Panel {
 
         add(createEventTypeGroupChoice(eventTypeGroupModel, eventTypeModel, availableEventTypesModel));
 
-        add(new DropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
-        add(new DropDownChoice<Status>("result", Status.getValidEventStates(), new StatusChoiceRenderer()).setNullValid(true));
-        add(new DropDownChoice<EventStatus>("eventStatus", new EventStatusesForTenantModel(), new PropertyRenderer<EventStatus>("displayName", "id")).setNullValid(true));
+        add(new FidDropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
+
+        add(new FidDropDownChoice<Status>("result", Status.getValidEventStates(), new StatusChoiceRenderer()).setNullValid(true));
+
+        add(new FidDropDownChoice<EventStatus>("eventStatus", new EventStatusesForTenantModel(), new PropertyRenderer<EventStatus>("displayName", "id")).setNullValid(true));
 
         UsersForTenantModel usersForTenantModel = new UsersForTenantModel();
 
@@ -74,16 +77,16 @@ public class EventDetailsCriteriaPanel extends Panel {
         ListingPairToIdModel listingPairToIdModel = new ListingPairToIdModel(assigneeId);
         GroupedListableUsersModel groupedUsers = new GroupedListableUsersModel(new GroupedUsersForTenantModel());
         ListWithBlankOptionModel blankOptionUserList = new ListWithBlankOptionModel(groupedUsers);
-        add(new GroupedListableDropDownChoice("assigneeId", listingPairToIdModel, blankOptionUserList, unassignedOrAssigneeRenderer).setNullValid(true));
+        add(new GroupedListableDropDownChoice("assigneeId", listingPairToIdModel, blankOptionUserList, unassignedOrAssigneeRenderer).setNullValid(true).add(new AttributeAppender("data-placeholder", " ")));
 
-        add(new DropDownChoice<User>("performedBy", usersForTenantModel, new ListableChoiceRenderer<User>()).setNullValid(true));
-        jobContainer.add(new DropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
+        add(new FidDropDownChoice<User>("performedBy", usersForTenantModel, new ListableChoiceRenderer<User>()).setNullValid(true));
+        jobContainer.add(new FidDropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 
         includeNetworkResultsContainer.add(new CheckBox("includeSafetyNetwork"));
     }
 
-    private DropDownChoice<EventTypeGroup> createEventTypeGroupChoice(IModel<EventTypeGroup> eventTypeGroupModel, final IModel<EventType> eventTypeModel, final IModel<List<EventType>> availableEventTypesModel) {
-        DropDownChoice<EventTypeGroup> eventTypeGroupDropDownChoice = new DropDownChoice<EventTypeGroup>("eventTypeGroup",
+    private FidDropDownChoice<EventTypeGroup> createEventTypeGroupChoice(IModel<EventTypeGroup> eventTypeGroupModel, final IModel<EventType> eventTypeModel, final IModel<List<EventType>> availableEventTypesModel) {
+        FidDropDownChoice<EventTypeGroup> eventTypeGroupDropDownChoice = new FidDropDownChoice<EventTypeGroup>("eventTypeGroup",
                 eventTypeGroupModel, new EventTypeGroupsForTenantModel(), new ListableChoiceRenderer<EventTypeGroup>());
         eventTypeGroupDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override

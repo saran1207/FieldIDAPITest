@@ -11,7 +11,9 @@
 }
 
 .field label {
-	  text-align:right;
+	text-align:right;
+    position: relative;
+    top: -10px;
 }
 
 .assignTo label, .assignee label{

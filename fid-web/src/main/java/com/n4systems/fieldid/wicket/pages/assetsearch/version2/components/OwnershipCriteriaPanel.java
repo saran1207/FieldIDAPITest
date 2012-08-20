@@ -1,17 +1,17 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
-import com.n4systems.fieldid.wicket.components.AutoCompleteOrgPicker;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
-
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
 import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 
 public class OwnershipCriteriaPanel extends Panel {
 
@@ -22,7 +22,8 @@ public class OwnershipCriteriaPanel extends Panel {
         
         WebMarkupContainer assignedUserContainer = new WebMarkupContainer("assignedToContainer");
         GroupedUserPicker groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(getDefaultModel(), "assignedTo"), new GroupedUsersForTenantModel());
-        groupedUserPicker.setNullValid(true);        
+        groupedUserPicker.setNullValid(true);
+        groupedUserPicker.add(new AttributeAppender("data-placeholder", " "));
         assignedUserContainer.add(groupedUserPicker);
         assignedUserContainer.setVisible(FieldIDSession.get().getSecurityGuard().isAssignedToEnabled());
         

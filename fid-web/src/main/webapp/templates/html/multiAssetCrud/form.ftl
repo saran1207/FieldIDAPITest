@@ -43,7 +43,7 @@
 			<#include "_step1.ftl" />
 		</@s.form>
 		<script src="javascript/chosen/chosen.jquery.js" type="text/javascript"></script>
-		<script type="text/javascript"> jQuery(document).ready( function() { jQuery(".chzn-select").chosen(); } );</script>
+		<script type="text/javascript"> jQuery(document).ready( function() { jQuery(".chzn-select").chosen({ disable_search_threshold: 15 }); } );</script>
 	</div>
 	
 	<@s.form action="generateIdentifiers" id="step23Form" namespace="/ajax" theme="fieldidSimple">

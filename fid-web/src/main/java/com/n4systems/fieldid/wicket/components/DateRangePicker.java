@@ -8,7 +8,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -22,7 +21,7 @@ public class DateRangePicker extends Panel {
 
     private static final EnumSet<RangeType> DEFAULT_RANGE_TYPES = RangeType.allFloatingButFutureTypes();
 
-    private DropDownChoice<RangeType> dropDownChoice;
+    private FidDropDownChoice<RangeType> dropDownChoice;
 	private DateTimePicker fromDatePicker;
 	private DateTimePicker toDatePicker;
     private EnumSet<RangeType> rangeTypes;
@@ -42,7 +41,7 @@ public class DateRangePicker extends Panel {
         setOutputMarkupPlaceholderTag(true);
         add(new Label("dateRangeLabel", rangeLabel));
 
-		dropDownChoice = new DropDownChoice<RangeType>("dateRange",
+		dropDownChoice = new FidDropDownChoice<RangeType>("dateRange",
 				new PropertyModel<RangeType>(model, "rangeType"),
 				getDateRanges(),
 				new EnumDropDownChoiceRenderer<RangeType>());

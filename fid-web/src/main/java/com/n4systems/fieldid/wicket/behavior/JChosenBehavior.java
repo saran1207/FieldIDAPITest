@@ -25,7 +25,8 @@ public class JChosenBehavior extends Behavior {
     public void renderHead(Component component, IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/chosen/chosen.jquery.js");
         response.renderCSSReference("style/chosen/chosen.css");
-        response.renderOnDomReadyJavaScript("$('#"+component.getMarkupId()+"').chosen({allow_single_deselect:"+isNullValidFor(component)+"});");
+        response.renderOnDomReadyJavaScript("$('#"+component.getMarkupId()+"_chzn').remove();");
+        response.renderOnDomReadyJavaScript("$('#"+component.getMarkupId()+"').chosen({ disable_search_threshold: 15, allow_single_deselect:"+isNullValidFor(component)+"});");
     }
 
     private boolean isNullValidFor(Component component) {

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.wicket.components.DateRangePicker;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.search.EventState;
@@ -11,7 +12,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -31,7 +31,7 @@ public class EventStatusAndDateRangePanel extends Panel {
 
         useDueDate = includeDueRangeModel.getObject() != null;
 
-        DropDownChoice<EventState> eventStateSelect = new DropDownChoice<EventState>("eventStateSelect", eventStateModel, Arrays.asList(EventState.values()), new ListableLabelChoiceRenderer<EventState>());
+        FidDropDownChoice<EventState> eventStateSelect = new FidDropDownChoice<EventState>("eventStateSelect", eventStateModel, Arrays.asList(EventState.values()), new ListableLabelChoiceRenderer<EventState>());
         eventStateSelect.setNullValid(false);
         add(eventStateSelect);
 
@@ -52,7 +52,7 @@ public class EventStatusAndDateRangePanel extends Panel {
         };
         includeDueDateRangeContainer.setOutputMarkupPlaceholderTag(true);
 
-        final DropDownChoice<IncludeDueDateRange> includeDueDateRange = new DropDownChoice<IncludeDueDateRange>("includeDueDateRangeSelect", includeDueRangeModel, Arrays.asList(IncludeDueDateRange.values()), new ListableLabelChoiceRenderer<IncludeDueDateRange>()) {
+        final FidDropDownChoice<IncludeDueDateRange> includeDueDateRange = new FidDropDownChoice<IncludeDueDateRange>("includeDueDateRangeSelect", includeDueRangeModel, Arrays.asList(IncludeDueDateRange.values()), new ListableLabelChoiceRenderer<IncludeDueDateRange>()) {
             @Override
             public boolean isEnabled() {
                 return useDueDate || includeDueRangeModel.getObject() != null;

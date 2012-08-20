@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.wicket.components.assettype;
 
 import com.n4systems.fieldid.wicket.FieldIDWicketApp;
+import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.renderer.AssetTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.select.GroupedDropDownChoice;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 
 import java.util.List;
@@ -15,6 +15,7 @@ public class GroupedAssetTypePicker extends GroupedDropDownChoice<AssetType, Ass
     public GroupedAssetTypePicker(String id, IModel<AssetType> assetTypeModel, IModel<List<AssetType>> assetTypesModel) {
         super(id, assetTypeModel, assetTypesModel, new AssetTypeChoiceRenderer());
         setOutputMarkupId(true);
+        add(new JChosenBehavior());
     }
 
     @Override
