@@ -21,7 +21,11 @@ public class ListingPairToIdModel implements IModel<GroupedListingPair> {
 
     @Override
     public void setObject(GroupedListingPair object) {
-        idModel.setObject(object.getId());
+        if (object == null) {
+            idModel.setObject(null);
+        } else {
+            idModel.setObject(object.getId());
+        }
     }
 
     @Override
