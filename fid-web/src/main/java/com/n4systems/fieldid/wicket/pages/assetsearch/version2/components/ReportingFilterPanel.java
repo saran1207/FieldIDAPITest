@@ -43,8 +43,7 @@ public class ReportingFilterPanel extends Panel {
             }
         });
 
-
-        add( new CollapsiblePanel("eventStatusAndDateRangePanel", new StringResourceModel("label.event_state_and_date",this,null)) {
+        add( new CollapsiblePanel("eventStatusAndDateRangePanel", new StringResourceModel("label.dates_and_times",this,null)) {
             @Override protected Panel createContainedPanel(String id) {
                 PropertyModel<EventState> eventStateModel = new PropertyModel<EventState>(model, "eventState");
                 PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(model, "includeDueDateRange");
@@ -77,6 +76,20 @@ public class ReportingFilterPanel extends Panel {
             }
         });
         orderDetailsPanel.setHideWhenContainedPanelInvisible(true);
+        
+        add( new CollapsiblePanel("peopleDetailsCriteriaPanel", new StringResourceModel("label.people", this, null)) {
+            @Override
+            protected Panel createContainedPanel(String id) {
+                return new PeopleDetailsCriteriaPanel(id, model);
+            }
+        });
+        
+        add( new CollapsiblePanel("resolutionDetailsCriteriaPanel", new StringResourceModel("label.resolution", this, null)) {
+            @Override
+            protected Panel createContainedPanel(String id) {
+                return new ResolutionDetailsCriteriaPanel(id, model);
+            }
+        });
 	}
 
     protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {}
