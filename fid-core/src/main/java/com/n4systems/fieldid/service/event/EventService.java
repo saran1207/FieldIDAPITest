@@ -233,8 +233,6 @@ public class EventService extends FieldIdPersistenceService {
 			Date fromDate, Date toDate, BaseOrg org) {
 		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 
-        TimeZone timeZone = getCurrentUser().getTimeZone();
-
         NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
 		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity(granularity, "nextDate"));
@@ -243,7 +241,7 @@ public class EventService extends FieldIdPersistenceService {
 		
 		builder.addWhere(whereFromTo(fromDate,toDate,"nextDate"));
         Date sampleDate = fromDate;
-        builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"nextDate", getCurrentUser().getTimeZone(), sampleDate));
+        builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"nextDate", null, sampleDate));
 		builder.applyFilter(new OwnerAndDownFilter(org));
 		if (excludedState != null) {
             builder.addWhere(Comparator.NE, "excludedEventState", "eventState", excludedState);
