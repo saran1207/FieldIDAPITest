@@ -75,6 +75,7 @@
 
 .dateFrom, .dateTo {
 	padding-top:8px;
+    min-height:0;
 }
 
 .dateRange select, .field select, .popup  { 
@@ -91,4 +92,10 @@
 
 .chzn-container {
     font-size:10px;
+}
+
+.eventState {
+    margin-bottom: 8px;
+    margin-left: 22px;
+    margin-top: 15px;
 }

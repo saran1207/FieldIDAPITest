@@ -31,18 +31,6 @@ public class EventStatusAndDateRangePanel extends Panel {
 
         useDueDate = includeDueRangeModel.getObject() != null;
 
-        FidDropDownChoice<EventState> eventStateSelect = new FidDropDownChoice<EventState>("eventStateSelect", eventStateModel, Arrays.asList(EventState.values()), new ListableLabelChoiceRenderer<EventState>());
-        eventStateSelect.setNullValid(false);
-        add(eventStateSelect);
-
-        eventStateSelect.add(new OnChangeAjaxBehavior() {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                repaintComponents(target);
-                onEventStateChanged(target);
-            }
-        });
-
         includeDueDateRangeContainer = new WebMarkupContainer("includeDueDateRangeContainer") {
             @Override
             public boolean isVisible() {
@@ -105,7 +93,7 @@ public class EventStatusAndDateRangePanel extends Panel {
         });
     }
 
-    private void repaintComponents(AjaxRequestTarget target) {
+    protected void repaintComponents(AjaxRequestTarget target) {
         target.add(completedRangePicker);
         target.add(dueRangePicker);
         target.add(allRangePicker);

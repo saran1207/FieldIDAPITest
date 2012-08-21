@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.search.EventReportCriteria;
@@ -7,16 +9,20 @@ import com.n4systems.model.search.EventState;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
+import java.util.Arrays;
 import java.util.List;
 
 
 public class ReportingFilterPanel extends Panel {
+
+    private EventStatusAndDateRangePanel eventStatusAndDateRangePanel;
 
 	public ReportingFilterPanel(final String id, final IModel<EventReportCriteria> model) {
 		super(id,model);
@@ -43,17 +49,23 @@ public class ReportingFilterPanel extends Panel {
             }
         });
 
+        final PropertyModel<EventState> eventStateModel = new PropertyModel<EventState>(model, "eventState");
+
         add( new CollapsiblePanel("eventStatusAndDateRangePanel", new StringResourceModel("label.dates_and_times",this,null)) {
             @Override protected Panel createContainedPanel(String id) {
-                PropertyModel<EventState> eventStateModel = new PropertyModel<EventState>(model, "eventState");
-                PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(model, "includeDueDateRange");
-                PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(model, "dateRange");
-                PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(model, "dueDateRange");
-                return new EventStatusAndDateRangePanel(id, eventStateModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
-                    @Override protected void onEventStateChanged(AjaxRequestTarget target) {
-                        model.getObject().clearDateRanges();
-                    }
-                };
+                return eventStatusAndDateRangePanel = getEventStatusAndDateRangePanel(id, model, eventStateModel);
+            }
+        });
+
+        FidDropDownChoice<EventState> eventStateSelect = new FidDropDownChoice<EventState>("eventStateSelect", eventStateModel, Arrays.asList(EventState.values()), new ListableLabelChoiceRenderer<EventState>());
+        eventStateSelect.setNullValid(false);
+        add(eventStateSelect);
+
+        eventStateSelect.add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                eventStatusAndDateRangePanel.repaintComponents(target);
+                eventStatusAndDateRangePanel.onEventStateChanged(target);
             }
         });
 
@@ -91,6 +103,17 @@ public class ReportingFilterPanel extends Panel {
             }
         });
 	}
+
+    private EventStatusAndDateRangePanel getEventStatusAndDateRangePanel(String id, final IModel<EventReportCriteria> model, PropertyModel<EventState> eventStateModel) {
+        PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(model, "includeDueDateRange");
+        PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(model, "dateRange");
+        PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(model, "dueDateRange");
+        return new EventStatusAndDateRangePanel(id, eventStateModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
+            @Override protected void onEventStateChanged(AjaxRequestTarget target) {
+                model.getObject().clearDateRanges();
+            }
+        };
+    }
 
     protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {}
 
