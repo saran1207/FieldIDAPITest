@@ -1,27 +1,21 @@
 package com.n4systems.model.location;
 
+import com.n4systems.model.Tenant;
+import com.n4systems.model.api.HasOwner;
+import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.ArchivableEntityWithOwner;
+import com.n4systems.persistence.PersistenceManager;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-
-import com.n4systems.model.Tenant;
-import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.parents.ArchivableEntityWithTenant;
-import com.n4systems.persistence.PersistenceManager;
-
 @SuppressWarnings("serial")
 @Entity(name = "predefinedlocations")
-public class PredefinedLocation extends ArchivableEntityWithTenant implements NamedEntity, TreeNode  {
+public class PredefinedLocation extends ArchivableEntityWithOwner implements NamedEntity, TreeNode, HasOwner  {
 
-	@Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 255)
 	private String name;
 
 	@ManyToOne
@@ -36,8 +30,8 @@ public class PredefinedLocation extends ArchivableEntityWithTenant implements Na
 		super();
 	}
 
-	public PredefinedLocation(Tenant tenant, PredefinedLocation parent) {
-		super(tenant);
+	public PredefinedLocation(Tenant tenant, PredefinedLocation parent, BaseOrg org) {
+		super(tenant, org);
 		this.parent = parent;
 	}
 	

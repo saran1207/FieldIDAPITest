@@ -1,22 +1,22 @@
 package com.n4systems.model.location;
 
-import static com.n4systems.model.builders.TenantBuilder.*;
-import static com.n4systems.model.location.EmptyPredefinedLocationTreeMatcher.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-
+import com.google.common.collect.ImmutableList;
+import com.n4systems.model.builders.OrgBuilder;
+import com.n4systems.persistence.Transaction;
+import com.n4systems.util.persistence.TestingTransaction;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.junit.internal.matchers.TypeSafeMatcher;
 
-import com.google.common.collect.ImmutableList;
-import com.n4systems.persistence.Transaction;
-import com.n4systems.util.persistence.TestingTransaction;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
+
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
+import static com.n4systems.model.location.EmptyPredefinedLocationTreeMatcher.anEmptyLocationTree;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertThat;
 
 
 public class PredefinedLocationTreeLoaderTest {
@@ -153,7 +153,7 @@ public class PredefinedLocationTreeLoaderTest {
 
 
 	private PredefinedLocation aLocationWithParent(PredefinedLocation parent) {
-		PredefinedLocation predefinedLocation = new PredefinedLocation(aTenant().build(), parent);
+		PredefinedLocation predefinedLocation = new PredefinedLocation(aTenant().build(), parent, OrgBuilder.aPrimaryOrg().build());
 		return predefinedLocation;
 	}
 

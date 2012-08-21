@@ -1,11 +1,10 @@
 package com.n4systems.model.location;
 
-import java.util.HashMap;
-import java.util.List;
-
+import com.n4systems.persistence.Transaction;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.n4systems.persistence.Transaction;
+import java.util.HashMap;
+import java.util.List;
 
 public class PredefinedLocationTreeLoader {
 

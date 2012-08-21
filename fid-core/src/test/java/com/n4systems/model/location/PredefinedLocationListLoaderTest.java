@@ -1,19 +1,18 @@
 package com.n4systems.model.location;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.junit.Test;
-import org.junit.internal.matchers.TypeSafeMatcher;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.persistence.OrderClause;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.TestingQueryBuilder;
 import com.n4systems.util.persistence.TestingTransaction;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.junit.Test;
+import org.junit.internal.matchers.TypeSafeMatcher;
+
+import static org.hamcrest.Matchers.hasItem;
+import static org.junit.Assert.assertThat;
 
 
 public class PredefinedLocationListLoaderTest {
@@ -26,14 +25,12 @@ public class PredefinedLocationListLoaderTest {
 			super(filter);
 		}
 
-		@Override
-		protected QueryBuilder<PredefinedLocation> createQueryBuilder(TenantOnlySecurityFilter filter) {
+        @Override
+        protected QueryBuilder<PredefinedLocation> createQueryBuilder(SecurityFilter filter) {
 			queryBuilder = new TestingQueryBuilder<PredefinedLocation>(PredefinedLocation.class);
 			return queryBuilder;
-		}
-		
-		
-	}
+        }
+    }
 
 	@Test
 	public void should_create_query_builder_with_order_by_id_when_parent_first_order_is_required() throws Exception {
