@@ -1,84 +1,72 @@
 package com.n4systems.util.collections;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
+import com.n4systems.util.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.TreeSet;
 
-public class PrioritizedList<T> extends ArrayList<T> {
+public class PrioritizedList<T> extends ArrayList<T> implements Comparator<T> {
     
     private static final Logger logger = Logger.getLogger(PrioritizedList.class);
     
-    private TreeMap<Object,List<T>> priorities = new TreeMap<Object,List<T>>();
     private int threshold;
-    private Prioritizer<T> prioritizer;
+    private boolean atThreshold;
+    private Comparator<T> comparator;
 
-    public PrioritizedList(List<? extends T> values, Prioritizer<T> prioritizer, int threshold) {
+    public PrioritizedList(List<? extends T> values, int threshold) {
         this.threshold = threshold;
-        this.prioritizer = prioritizer;
-        populate(values);
+        this.atThreshold = values.size() > threshold;
+        this.comparator = this;
+
+        init(values, threshold);
     }
-    
-    private void populate(List<? extends T> unprioritizedValues) {
-        for (T value:unprioritizedValues) {
-            prioritize(value, getPriority(value));
+
+    public PrioritizedList(List<? extends T> values, int threshold, Comparator<T> comparator) {
+        this.threshold = threshold;
+        this.atThreshold = values.size() > threshold;
+        this.comparator = comparator;
+
+        init(values, threshold);
+    }
+
+    private void init(List<? extends T> values, int threshold) {
+        TreeSet<T> priorities = new TreeSet<T>((Comparator<T>)this);
+
+        if (values.size()<threshold) {
+            addAll(values);     //simple case.   we keep them all 'cause we've got room for everybody.
+            return;
         }
-        // now they're prioritized, lets add them and drop off ones after threshold.
-        // note that we do descending order because TreeMaps are low...high.  we want the reverse.
+
+        for (T value : values) {
+            priorities.add(value);
+        }
+
         int count = 0;
-        for (Object key:priorities.descendingKeySet()) {
-            List<T> values = priorities.get(key);
-            if (count+values.size()>threshold && isHardLimit()) { 
-                addAll(values.subList(0, threshold-count));
-            } else {
-                addAll(values);
-            }
-            count+=values.size();
+        for (T value : priorities) {
+            add(value);
+            count++;
             if (count>=threshold) {
                 break;
             }
         }
     }
 
-    private Object getPriority(T value) {
-        if (prioritizer!=null) {
-            return prioritizer.getPriority(value);
-        }
-        return 0;  // otherwise give them all the same value.
+    protected Comparator<T> getComparator() {
+        return comparator==null ? this : comparator;    // by default, just use this
     }
-
-    private void prioritize(T value, Object priority) {
-        List<T> values = priorities.get(priority);
-        if (values == null) {
-            priorities.put(priority, Lists.newArrayList(value));
-        } else {
-            values.add(getCollisionIndex(values.size(), value), value);
-        }
-    }
-
-    protected int getCollisionIndex(int size, T value) {
-        int index = 0;
-        if (prioritizer!=null) {
-            index = prioritizer.getCollisionIndex(size,value);
-        } else {         
-            // note : we want to get some sort to randomness in our population of values so if they are truncated
-            // we'll get a non-chronological distribution of nodes.
-            index = value.hashCode() % size;
-        }
-        Preconditions.checkState(index < size && index >= 0, "collision index must be 0.." + size);
-        return index;
-    }
-
-    protected boolean isHardLimit() {
-        return true;
-    }
-
+    
     public boolean isAtThreshold() {
-        return size()>=threshold;
+        return atThreshold;
     }
+    
+    @Override
+    public int compare(T o1, T o2) {
+        return StringUtils.compareAsString(o1, o2);
+    }
+
 
 }
 

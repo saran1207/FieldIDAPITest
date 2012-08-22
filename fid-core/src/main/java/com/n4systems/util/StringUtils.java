@@ -133,4 +133,13 @@ public class StringUtils {
         // simply append prefix
         return copyFilePrefix + name;
     }
+
+    public static <T> int compareAsString(T o1, T o2) {
+        return o1==null || o1.toString()==null ? 1 :
+                o2==null || o2.toString()==null ? -1 :
+                        o1.toString().compareTo(o2.toString());
+    }
+
+
+
 }

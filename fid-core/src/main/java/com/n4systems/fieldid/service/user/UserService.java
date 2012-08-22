@@ -12,7 +12,6 @@ import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import com.n4systems.util.StringUtils;
-import com.n4systems.util.collections.DefaultPrioritizer;
 import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -140,14 +139,21 @@ public class UserService extends FieldIdPersistenceService {
         justTenantFilter.applyParameters(query, User.class);
 
         // get the userlist and filter out users not having the create/edit
-        // inspect
         return Permissions.filterHasOneOf((List<User>) query.getResultList(), Permissions.ALLEVENT);
     }
 
     public List<User> search(String term, int threshold) {
         QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
 
-        if (org.apache.commons.lang.StringUtils.isNotBlank(term)) {
+        String[] tokens = term.split("\\s+");
+
+        if (tokens.length>1) {
+            WhereParameterGroup group = new WhereParameterGroup("firstLastNameSearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "firstName", "firstName", tokens[0], WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "lastName", "lastName", tokens[1], WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "userID", "userID", term, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            builder.addWhere(group);
+        } else if (org.apache.commons.lang.StringUtils.isNotBlank(term)) {
             WhereParameterGroup group = new WhereParameterGroup("smartsearch");
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "firstName", "firstName", term, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "lastName", "lastName", term, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
@@ -157,7 +163,7 @@ public class UserService extends FieldIdPersistenceService {
 
         builder.setLimit(threshold*4);
         List<User> results = persistenceService.findAll(builder);
-        return new PrioritizedList<User>(results, new DefaultPrioritizer<User>(),threshold);
+        return new PrioritizedList<User>(results, threshold);
     }
 
     public List<User> search(int threshold) {

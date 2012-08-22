@@ -114,7 +114,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                 validate();
                 if (isValid()) {
                     updateModel();
-                    onUpdate(target);
+                    onUpdate(target, hiddenInput, fieldInput);
                 }
             }
         };
@@ -133,7 +133,11 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
             return getChoicesForEmptyTerm();
         }        
         return getChoices(term);
-        
+    }
+
+    public AutoComplete<T> withAutoUpdate(boolean update) {
+        this.autoUpdate = update;
+        return this;
     }
 
     protected List<T> getChoicesForEmptyTerm() {
@@ -177,9 +181,10 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         return object==null ? "" : object.toString();
     }
 
-    public boolean isAutoUpdate() {
+    protected boolean isAutoUpdate() {
         return autoUpdate;
     }
+
 
     protected void onBeforeRenderAutocomplete(Autocomplete<?> autocomplete) {
         T defaultValue = AutoComplete.this.getModelObject();
@@ -216,113 +221,8 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         return term;
     }
 
-    private class InnerAutocompleteBehavior extends AbstractAjaxBehavior {
 
-        public void onRequest() {
-            startRequest(getComponent().getRequest());
-            term = this.getComponent().getRequest().getQueryParameters().getParameterValue("term").toString();
-            
-                
-                StringWriter sw = new StringWriter();
-                try {
-                    JsonGenerator gen = new JsonFactory().createJsonGenerator(sw);
-
-                    Serializable value = null;
-                    Integer index = 0;
-                    List<Object> json = new ArrayList<Object>();
-                                        
-                    String search = normalizeSearchTerm(term);
-                    List<T> choices = getChoices();
-                    
-                    if (choices.size()==0) {
-                        json.add(createNoResultsJson(search));
-                    } else { 
-                        for (T obj : choices) {
-                            value = createAutocompleteJson(obj, search);
-                            json.add(value);
-                        }
-                    }
-                    if (choices.size()>=threshold) {
-                        json.add(createMaxResultsJson(term));
-                    }
-                    
-                    new ObjectMapper().writeValue(gen, json);
-                    
-                } catch (IOException e) {
-                    throw new WicketRuntimeException(e);
-                }
-
-                RequestCycle.get().scheduleRequestHandlerAfterCurrent(
-                        new TextRequestHandler("application/json", "utf-8", sw.toString()));
-
-                endRequest(getComponent().getRequest());
-            }
-
-    }
-
-    private class InnerAutocomplete<E> extends Autocomplete<E> {
-        public InnerAutocomplete(String id, IModel<E> model) {
-            super(id, model);
-            setOutputMarkupId(true);
-        }
-
-        public Options getOptions() {
-            return super.getOptions();
-        }
-
-        @Override
-        public void renderHead(IHeaderResponse response) {
-            response.renderJavaScriptReference(WicketEventReference.INSTANCE);
-            response.renderJavaScriptReference(WicketAjaxReference.INSTANCE);
-            response.renderJavaScriptReference(WiQueryAutocompleteJavaScriptResourceReference.get());
-        }
-
-        @Override
-        protected void onBeforeRender() {
-            onBeforeRenderAutocomplete(this);
-            super.onBeforeRender();
-        }
-
-        @Override
-        public Autocomplete<E> setCloseEvent(JsScopeUiEvent close) {
-            throw new WicketRuntimeException("You can't define the close event");
-        }
-
-        @Override
-        public Autocomplete<E> setSelectEvent(JsScopeUiEvent select) {
-            throw new WicketRuntimeException("You can't define the select event");
-        }
-
-        @Override
-        public Autocomplete<E> setChangeEvent(JsScopeUiEvent select) {
-            throw new WicketRuntimeException("You can't define the change event");
-        }
-
-        @Override
-        public Autocomplete<E> setSource(AutocompleteSource source) {
-            throw new WicketRuntimeException("You can't define the source");
-        }
-
-        @Override
-        public JsStatement statement() {
-            StringBuilder js = new StringBuilder();
-            js.append("$.ui.autocomplete.wiquery.changeEvent(event, ui,").append(
-                    JsUtils.quotes(autocompleteHidden.getMarkupId()));
-            if (isAutoUpdate()) {
-                js.append(",'").append(updateAjax.getCallbackUrl()).append("'");
-            }
-            js.append(");");
-            super.setMinLength(1);
-            super.setChangeEvent(JsScopeUiEvent.quickScope(js.toString()));
-            super.setSelectEvent(JsScopeUiEvent.quickScope(js.append("$(event.target).blur();")
-                    .toString()));
-            JsStatement jsStatement = super.statement();
-            jsStatement.append(".data('autocomplete')._renderItem = autoCompleter.render");
-            return jsStatement;
-        }
-    }
-    
-    protected void onUpdate(AjaxRequestTarget target) {
+    protected void onUpdate(AjaxRequestTarget target, String hiddenInput, String fieldInput) {
     }
 
     @Override
@@ -388,6 +288,117 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     protected abstract List<T> getChoices(String term);
 
     protected abstract AutoCompleteResult createAutocompleteJson(T asset, String term);
+
+
+    // ----------------INNER CLASSES------------------
+
+
+    private class InnerAutocompleteBehavior extends AbstractAjaxBehavior {
+
+        public void onRequest() {
+            startRequest(getComponent().getRequest());
+            term = this.getComponent().getRequest().getQueryParameters().getParameterValue("term").toString();
+
+
+            StringWriter sw = new StringWriter();
+            try {
+                JsonGenerator gen = new JsonFactory().createJsonGenerator(sw);
+
+                Serializable value = null;
+                Integer index = 0;
+                List<Object> json = new ArrayList<Object>();
+
+                String search = normalizeSearchTerm(term);
+                List<T> choices = getChoices();
+
+                if (choices.size()==0) {
+                    json.add(createNoResultsJson(search));
+                } else {
+                    for (T obj : choices) {
+                        value = createAutocompleteJson(obj, search);
+                        json.add(value);
+                    }
+                }
+                if (choices.size()>=threshold) {
+                    json.add(createMaxResultsJson(term));
+                }
+
+                new ObjectMapper().writeValue(gen, json);
+
+            } catch (IOException e) {
+                throw new WicketRuntimeException(e);
+            }
+
+            RequestCycle.get().scheduleRequestHandlerAfterCurrent(
+                    new TextRequestHandler("application/json", "utf-8", sw.toString()));
+
+            endRequest(getComponent().getRequest());
+        }
+
+    }
+
+    private class InnerAutocomplete<E> extends Autocomplete<E> {
+        public InnerAutocomplete(String id, IModel<E> model) {
+            super(id, model);
+            setOutputMarkupId(true);
+        }
+
+        public Options getOptions() {
+            return super.getOptions();
+        }
+
+        @Override
+        public void renderHead(IHeaderResponse response) {
+            response.renderJavaScriptReference(WicketEventReference.INSTANCE);
+            response.renderJavaScriptReference(WicketAjaxReference.INSTANCE);
+            response.renderJavaScriptReference(WiQueryAutocompleteJavaScriptResourceReference.get());
+        }
+
+        @Override
+        protected void onBeforeRender() {
+            onBeforeRenderAutocomplete(this);
+            super.onBeforeRender();
+        }
+
+        @Override
+        public Autocomplete<E> setCloseEvent(JsScopeUiEvent close) {
+            throw new WicketRuntimeException("You can't define the close event");
+        }
+
+        @Override
+        public Autocomplete<E> setSelectEvent(JsScopeUiEvent select) {
+            throw new WicketRuntimeException("You can't define the select event");
+        }
+
+        @Override
+        public Autocomplete<E> setChangeEvent(JsScopeUiEvent select) {
+            throw new WicketRuntimeException("You can't define the change event");
+        }
+
+        @Override
+        public Autocomplete<E> setSource(AutocompleteSource source) {
+            throw new WicketRuntimeException("You can't define the source");
+        }
+
+        @Override
+        public JsStatement statement() {
+            StringBuilder js = new StringBuilder();
+            js.append("$.ui.autocomplete.wiquery.changeEvent(event, ui,").append(
+                    JsUtils.quotes(autocompleteHidden.getMarkupId()));
+            if (isAutoUpdate()) {
+                js.append(",'").append(updateAjax.getCallbackUrl()).append("'");
+            }
+            js.append(");");
+            super.setMinLength(1);
+            super.setChangeEvent(JsScopeUiEvent.quickScope(js.toString()));
+            super.setSelectEvent(JsScopeUiEvent.quickScope(js.append("$(event.target).blur();")
+                    .toString()));
+            JsStatement jsStatement = super.statement();
+            jsStatement.append(".data('autocomplete')._renderItem = autoCompleter.render");
+            return jsStatement;
+        }
+    }
+
 
 }
 

@@ -2,9 +2,10 @@ package com.n4systems.fieldid.wicket.components;
 
 import com.n4systems.fieldid.service.org.OrgQueryParser;
 import com.n4systems.fieldid.service.org.OrgService;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.components.location.OrgLocationModel;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.OrgEnum;
+import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.util.collections.OrgList;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Request;
@@ -13,23 +14,32 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.HashSet;
 import java.util.List;
 
-public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
+public class AutoCompleteOrgPicker extends AutoComplete<EntityWithTenant> {
     
     private @SpringBean OrgService orgService;
     
-    private HashSet<OrgEnum> categories = new HashSet<OrgEnum>();
+    private HashSet<String> categories = new HashSet<String>();
+    private boolean includeLocations = false;
 
+
+    @Deprecated //transitioning over to dual model verion.
     public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> model) {
-        super(id, model);
+        this(id, model,null);
     }
 
-    protected AutoCompleteResult createAutocompleteJson(BaseOrg org, String term) {
-        boolean thisOneSelected = org.equals(getModelObject());
-        final String idValue = org.getId() + "";
+    public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> orgModel, final IModel<PredefinedLocation> locationModel) {
+        super(id, new OrgLocationModel(orgModel,locationModel));
+        includeLocations = locationModel!=null;
+        withAutoUpdate(true);
+    }
+
+    protected AutoCompleteResult createAutocompleteJson(EntityWithTenant entity, String term) {
+        boolean thisOneSelected = entity.equals(getModelObject());
+        final String idValue = entity.getId() + "";
         if (thisOneSelected) {
             getAutocompleteHidden().setModelObject(idValue);
         }
-        return new AutoCompleteResult(org.getId()+"", org.getName(), getCategory(org), term, org.getHierarchicalDisplayName());
+        return new AutoCompleteResult(entity.getId()+"", getDisplayValue(entity), getCategory(entity), term, getDisplayValue(entity));
    }
 
     @Override
@@ -42,11 +52,11 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
         return new OrgQueryParser(term).getSearchTerm();
     }
 
-    private String getCategory(BaseOrg org) {
-        OrgEnum category = OrgEnum.fromClass(org.getClass());
+    private String getCategory(EntityWithTenant org) {
+        String category = org.getClass().getSimpleName();
         if (!categories.contains(category)) {
             categories.add(category);
-            return new FIDLabelModel(category.getLabel()).getObject().toUpperCase();
+            return category;
         }
         return "";
     }
@@ -58,12 +68,12 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
 
     @Override
     public OrgList getChoices(String term) {
-        return orgService.search(term, threshold);
+        return orgService.search(term, includeLocations, threshold);
     }
 
     @Override
-    protected List<BaseOrg> getChoicesForEmptyTerm() {
-        return orgService.search(threshold);
+    protected List<EntityWithTenant> getChoicesForEmptyTerm() {
+        return orgService.search(includeLocations, threshold);
     }
 
     @Override
@@ -72,8 +82,15 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
     }
 
     @Override
-    protected String getDisplayValue(BaseOrg org) {
-        return org.getName();
+    protected String getDisplayValue(EntityWithTenant entity) {
+        if (entity instanceof BaseOrg) {
+            BaseOrg org = (BaseOrg) entity;
+            return org.getName();
+        } else if (entity instanceof PredefinedLocation) {
+            PredefinedLocation location = (PredefinedLocation) entity;
+            return location.getName();
+        }
+        return entity.getId()+"";
     }
 
 }

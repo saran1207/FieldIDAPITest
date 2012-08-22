@@ -23,7 +23,6 @@ import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.collections.PrioritizedList;
-import com.n4systems.util.collections.UniquePrioritizer;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -534,7 +533,7 @@ public class AssetService extends FieldIdPersistenceService {
 
         builder.setLimit(threshold*4);
         List<Asset> results = persistenceService.findAll(builder);
-        return new PrioritizedList<Asset>(results, new UniquePrioritizer("type"),threshold);
+        return new PrioritizedList<Asset>(results, threshold);
     }
 
     private String getAssetTypeTerm(String search) {
@@ -569,7 +568,7 @@ public class AssetService extends FieldIdPersistenceService {
         builder.setLimit(threshold*4);
         builder.getOrderArguments().add(new OrderClause("modified", false));
         List<Asset> results = persistenceService.findAll(builder);
-        return new PrioritizedList<Asset>(results, new UniquePrioritizer("type"),threshold);
+        return new PrioritizedList<Asset>(results, threshold);
     }
 
     public boolean hasLinkedAssets(Asset asset) {

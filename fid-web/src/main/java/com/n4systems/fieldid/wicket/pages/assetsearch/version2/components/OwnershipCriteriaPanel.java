@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
 import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -17,7 +18,7 @@ public class OwnershipCriteriaPanel extends Panel {
 
 	public OwnershipCriteriaPanel(String id, IModel<?> model) {
         super(id, model);
-        add(new AutoCompleteOrgPicker("owner",  new PropertyModel<BaseOrg>(getDefaultModel(), "owner")).inScrollableContainers("#left-panel .form"));
+        add(new AutoCompleteOrgPicker("owner",  new PropertyModel<BaseOrg>(getDefaultModel(), "owner"), new PropertyModel<PredefinedLocation>(getDefaultModel(), "location.predefinedLocation")).inScrollableContainers("#left-panel .form"));
         add(new ModalLocationPicker("location", new PropertyModel<Location>(getDefaultModel(), "location")));
         
         WebMarkupContainer assignedUserContainer = new WebMarkupContainer("assignedToContainer");

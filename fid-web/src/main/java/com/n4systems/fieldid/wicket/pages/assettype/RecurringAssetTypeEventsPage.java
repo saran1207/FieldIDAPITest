@@ -17,6 +17,7 @@ import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
 import com.n4systems.fieldid.wicket.util.NullCoverterModel;
 import com.n4systems.model.*;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -133,6 +134,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         private EventType eventType = null;
         private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
         private BaseOrg owner;
+        private PredefinedLocation location;
         private Date dateTime = LocalDate.now().toDate();
         Component timePicker;
         Component dateTimepicker;

@@ -1,18 +1,21 @@
 package com.n4systems.util.collections;
 
 import com.n4systems.fieldid.service.org.OrgQueryParser;
-import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.EntityWithTenant;
 
 import java.util.List;
 
-public class OrgList extends PrioritizedList<BaseOrg> {
+public class OrgList extends PrioritizedList<EntityWithTenant> {
 
-    public OrgList(List<? extends BaseOrg> orgs, OrgQueryParser orgQueryParser, int threshold) {
-        super(orgs, new OrgPrioritizer(orgQueryParser), threshold);
+    private String term;
+
+    public OrgList(List<EntityWithTenant> orgs, OrgQueryParser orgQueryParser, int threshold) {
+        super(orgs, threshold, new OrgComparator(orgQueryParser.getSearchTerm()));
+        this.term = orgQueryParser.getSearchTerm();
     }
 
-    public OrgList(List<? extends BaseOrg> orgs, int threshold) {
-        super(orgs, new OrgPrioritizer(), threshold);
+    public OrgList(List<EntityWithTenant> orgs, int threshold) {
+        super(orgs, threshold);
     }
 
 }
