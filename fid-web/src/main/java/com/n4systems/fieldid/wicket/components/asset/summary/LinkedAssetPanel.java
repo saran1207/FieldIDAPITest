@@ -6,7 +6,7 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
-import com.n4systems.fieldid.wicket.components.AutoCompleteSearch;
+import com.n4systems.fieldid.wicket.components.asset.AutoCompleteSearch;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;

@@ -5,12 +5,12 @@
 	        <select wicket:id="assignedTo" class="popup"></select>
 	    </div>
     </div>
-    <div class="field location">
-        <label for="location" ><wicket:message key="label.location"/></label>
-        <div wicket:id="location" class="popup"></div>
-    </div>
     <div class="field owner">
         <label for="owner"><wicket:message key="label.owner"/></label>
         <div wicket:id="owner" class="popup"></div>
+    </div>
+    <div class="field location">
+        <label for="location" ><wicket:message key="label.freeform_location"/></label>
+        <input type="text" wicket:id="location"/>
     </div>
 </wicket:panel>

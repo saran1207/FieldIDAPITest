@@ -1,8 +1,9 @@
-package com.n4systems.fieldid.wicket.components;
+package com.n4systems.fieldid.wicket.components.org;
 
 import com.n4systems.fieldid.service.org.OrgQueryParser;
 import com.n4systems.fieldid.service.org.OrgService;
-import com.n4systems.fieldid.wicket.components.location.OrgLocationModel;
+import com.n4systems.fieldid.wicket.components.autocomplete.AutoComplete;
+import com.n4systems.fieldid.wicket.components.autocomplete.AutoCompleteResult;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -40,7 +41,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<EntityWithTenant> {
             getAutocompleteHidden().setModelObject(idValue);
         }
         return new AutoCompleteResult(entity.getId()+"", getDisplayValue(entity), getCategory(entity), term, getDisplayValue(entity));
-   }
+    }
 
     @Override
     protected String getWatermarkText() {

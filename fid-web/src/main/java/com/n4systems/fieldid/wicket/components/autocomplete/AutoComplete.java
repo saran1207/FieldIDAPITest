@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components;
+package com.n4systems.fieldid.wicket.components.autocomplete;
 
 import com.google.gson.Gson;
 import com.n4systems.fieldid.wicket.behavior.Watermark;

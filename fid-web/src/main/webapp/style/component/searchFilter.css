@@ -4,7 +4,7 @@
 
 .field label, .collapsible .dateRange label, .collapsible .dateFrom label, .collapsible .dateTo label { 
 	width : 105px;
-	vertical-align:middle;
+	vertical-align:top;
 	margin-right:5px;
 	display:inline-block;
 	text-align:right;
@@ -13,31 +13,17 @@
 .field label {
 	text-align:right;
     position: relative;
-    top: -10px;
 }
 
 .assignTo label, .assignee label{
     position: relative;
-    top: -12px;
-}
-
-.owner label {
-	vertical-align: super;
-}
-
-.location label {
-    position: relative;
-    top: -20px;
 }
 
 
 .field label, .field input, .field select, .field .popup {
   display:inline-block;
   *display:inline;
-}
-
-.field input.ui-autocomplete-input {
-    width: 144px;
+    vertical-align: top;
 }
 
 .field input, .field select, .field .component, .collapsible select {
@@ -65,6 +51,9 @@
 	min-height:30px;
 }
 
+.due-date-range label {
+    margin-right:0px;
+}
 
 /** hack to make width consistent in new search page. 
 */
@@ -79,7 +68,7 @@
 }
 
 .dateRange select, .field select, .popup  { 
-	width:148px;
+	width:160px;
 }
 
 .fieldHolder input {

@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
-import com.n4systems.fieldid.wicket.components.AutoCompleteOrgPicker;
-import com.n4systems.fieldid.wicket.components.AutoCompleteUser;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
+import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.user.AutoCompleteUser;
 import com.n4systems.fieldid.wicket.model.AssetTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.model.AssetType;

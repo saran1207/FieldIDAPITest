@@ -1,7 +1,9 @@
-package com.n4systems.fieldid.wicket.components;
+package com.n4systems.fieldid.wicket.components.asset;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.wicket.components.autocomplete.AutoComplete;
+import com.n4systems.fieldid.wicket.components.autocomplete.AutoCompleteResult;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import org.apache.commons.lang.StringUtils;

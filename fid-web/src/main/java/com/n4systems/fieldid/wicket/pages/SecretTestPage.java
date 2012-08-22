@@ -2,7 +2,12 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
-import com.n4systems.fieldid.wicket.components.*;
+import com.n4systems.fieldid.wicket.components.Agenda;
+import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.asset.AutoCompleteSearch;
+import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
+import com.n4systems.fieldid.wicket.components.user.AutoCompleteUser;
 import com.n4systems.model.Asset;
 import com.n4systems.model.dashboard.widget.WorkWidgetConfiguration;
 import com.n4systems.model.location.PredefinedLocation;

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components;
+package com.n4systems.fieldid.wicket.components.autocomplete;
 
 import org.apache.commons.lang.StringUtils;
 

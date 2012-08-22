@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.location;
+package com.n4systems.fieldid.wicket.components.org;
 
 
 import com.google.common.base.Preconditions;
@@ -17,13 +17,13 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
     public OrgLocationModel(IModel<BaseOrg> orgModel, IModel<PredefinedLocation> locationModel) {
         Preconditions.checkNotNull(orgModel,"you must supply valid BaseOrg model");
         this.orgModel = orgModel;
-        this.locationModel = locationModel;
+        this.setLocationModel(locationModel);
         setInitialValue();
     }
 
     private void setInitialValue() {
-        if (locationModel!=null && locationModel.getObject()!=null) {
-            setObject(locationModel.getObject());
+        if (getLocationModel() !=null && getLocationModel().getObject()!=null) {
+            setObject(getLocationModel().getObject());
         } else if (orgModel!=null && orgModel.getObject()!=null) {
             setObject(orgModel.getObject());
         } else {
@@ -31,13 +31,22 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
         }
     }
 
+    @Override
+    public void detach() {
+        orgModel.detach();
+        if (locationModel!=null) {
+            getLocationModel().detach();
+        }
+        super.detach();
+    }
+
     private void setOrg(BaseOrg org) {
         orgModel.setObject(org);
     }
 
     private void setLocation(PredefinedLocation location) {
-        if (locationModel!=null) {
-            locationModel.setObject(location);
+        if (getLocationModel() !=null) {
+            getLocationModel().setObject(location);
         }
     }
 
@@ -66,9 +75,16 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
 
     @Override
     protected void onDetach() {
-        locationModel.detach();
+        getLocationModel().detach();
         orgModel.detach();
         super.onDetach();
     }
 
+    public IModel<PredefinedLocation> getLocationModel() {
+        return locationModel;
+    }
+
+    public void setLocationModel(IModel<PredefinedLocation> locationModel) {
+        this.locationModel = locationModel;
+    }
 }

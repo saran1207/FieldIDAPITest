@@ -1,6 +1,8 @@
-package com.n4systems.fieldid.wicket.components;
+package com.n4systems.fieldid.wicket.components.user;
 
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.components.autocomplete.AutoComplete;
+import com.n4systems.fieldid.wicket.components.autocomplete.AutoCompleteResult;
 import com.n4systems.model.user.User;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Request;
