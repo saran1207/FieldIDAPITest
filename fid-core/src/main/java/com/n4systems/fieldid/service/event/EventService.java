@@ -26,6 +26,7 @@ import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
+import com.n4systems.util.time.DateUtil;
 import org.apache.commons.lang.time.DateUtils;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -394,10 +395,6 @@ public class EventService extends FieldIdPersistenceService {
     }
 
 
-
-
-    // TODO DD : by end of iteration, make sure these take into account "Corrective Actions" as well as timezones, etc...
-
     public List<Event> getWork(DateRange dateRange, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {
         QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
 
@@ -411,14 +408,18 @@ public class EventService extends FieldIdPersistenceService {
 
     /**
      * @return map of date --> # of events on that date.   results will be sorted and padded so 0 entries will be populated.
+     * CAVEAT : in almost all other code we use the standard definition of a week which is Monday-->Sunday.
+     *  because the calendar widget which uses this service call is more "kitchen datebook" style and shows sunday as the first day of the week we can't use standard
+     *  joda day of week calculations.  i.e. make sure you are clear when using .weekOfYear() or .dayOfWeek() etc...
      */
     public Map<LocalDate,Long> getMontlyWorkSummary(LocalDate dayInMonth, User user, BaseOrg org, AssetType assetType, EventType eventType) {
         QueryBuilder<WorkSummaryRecord> builder = new QueryBuilder<WorkSummaryRecord>(Event.class, securityContext.getUserSecurityFilter());
 
-        // NOTE : from is defined as the Sunday of the first week including the first day of the month.
-        //   there it will typically include the last few days of previous month.
-        LocalDate from = dayInMonth.dayOfWeek().withMinimumValue().minusDays(1);   // -1 because JODA defines Monday, not Sunday as first day in month.
-        LocalDate to = dayInMonth.plusMonths(1).dayOfWeek().withMaximumValue().minusDays(1);
+        // NOTE : From is defined as the Sunday of the first week including the first day of the month.
+        //   there it will typically include the last few days of previous month.  the reverse applies for To.
+
+        LocalDate from = DateUtil.getSundayOfWeek(dayInMonth);
+        LocalDate to = DateUtil.getSundayAfterWeek(dayInMonth.plusMonths(1).withDayOfMonth(1));
 
         NewObjectSelect select = new NewObjectSelect(WorkSummaryRecord.class);
         select.setConstructorArgs(Lists.newArrayList("COUNT(*)","DATE(nextDate)"));

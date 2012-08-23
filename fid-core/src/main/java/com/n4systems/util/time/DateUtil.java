@@ -2,6 +2,7 @@ package com.n4systems.util.time;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -71,4 +72,26 @@ public class DateUtil {
             return dateString;
         }
     }
+
+
+    /**
+     * methods useful for non-joda standard definitions of week.
+     * all joda code uses a "Monday-is-first-day-of-week" rule, but sometimes you might want sunday based weeks...
+     */
+    public static LocalDate getSundayAfterWeek(LocalDate date) {
+        int dayOfWeek = date.getDayOfWeek();
+        if (dayOfWeek!= DateTimeConstants.SUNDAY) {
+            return date.plusDays(DateTimeConstants.DAYS_PER_WEEK-dayOfWeek);
+        }
+        return date;
+    }
+
+    public static LocalDate getSundayOfWeek(LocalDate date) {
+        int dayOfWeek = date.getDayOfWeek();
+        if (dayOfWeek!= DateTimeConstants.SUNDAY) {
+            return date.minusDays(dayOfWeek);   // if monday, subtract one day.  tuesday = -2. etc..    note that DateTimeConstants.MONDAY,TUES,...SUNDAY = {1,2,3,4,5,6,7}
+        }
+        return date;
+    }
+
 }
