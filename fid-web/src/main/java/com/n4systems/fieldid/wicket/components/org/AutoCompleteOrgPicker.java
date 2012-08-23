@@ -15,6 +15,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.HashSet;
 import java.util.List;
 
+
+/**
+ * note that the Org hierarchy is now linked, as far as the user is concerned, to the PredefinedLocations hierarchy.
+ *  in other words, the user only sees one global hierarchy even though it represents different entities.
+ *  in order to accomplish this, the compoent cannot be genericized to BaseOrg, but rather it must use EntityWithTenant
+ *  as that's the only thing they have in common.   (it might be possible to create an interface for both of them??).
+ */
 public class AutoCompleteOrgPicker extends AutoComplete<EntityWithTenant> {
     
     private @SpringBean OrgService orgService;
@@ -23,7 +30,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<EntityWithTenant> {
     private boolean includeLocations = false;
 
 
-    @Deprecated //transitioning over to dual model verion.
+    @Deprecated //transitioning over to dual model version.
     public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> model) {
         this(id, model,null);
     }
@@ -31,7 +38,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<EntityWithTenant> {
     public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> orgModel, final IModel<PredefinedLocation> locationModel) {
         super(id, new OrgLocationModel(orgModel,locationModel));
         includeLocations = locationModel!=null;
-        //withAutoUpdate(true);
+        withAutoUpdate(true);
     }
 
     protected AutoCompleteResult createAutocompleteJson(EntityWithTenant entity, String term) {
