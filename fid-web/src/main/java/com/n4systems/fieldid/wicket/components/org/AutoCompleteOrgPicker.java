@@ -31,7 +31,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<EntityWithTenant> {
     public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> orgModel, final IModel<PredefinedLocation> locationModel) {
         super(id, new OrgLocationModel(orgModel,locationModel));
         includeLocations = locationModel!=null;
-        withAutoUpdate(true);
+        //withAutoUpdate(true);
     }
 
     protected AutoCompleteResult createAutocompleteJson(EntityWithTenant entity, String term) {
@@ -60,6 +60,16 @@ public class AutoCompleteOrgPicker extends AutoComplete<EntityWithTenant> {
             return category;
         }
         return "";
+    }
+
+    public AutoCompleteOrgPicker withLocation() {
+        this.includeLocations = true;
+        return this;
+    }
+
+    public AutoCompleteOrgPicker withoutLocation() {
+        this.includeLocations = false;
+        return this;
     }
 
     @Override

@@ -1,0 +1,11 @@
+
+.org-location .org-location-tree {
+    display: block;
+    height:200px;
+    overflow-y: auto;
+    width:300px;
+    position:absolute;
+    z-index:1234;
+    border: 1px solid #aaa;
+    border-radius:4px;
+}

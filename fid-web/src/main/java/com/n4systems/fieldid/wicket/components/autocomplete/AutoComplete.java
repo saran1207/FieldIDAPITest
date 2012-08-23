@@ -53,9 +53,9 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     protected String term = "";
     private InnerAutocompleteBehavior autocompleteBehavior;
     private final Autocomplete<String> autocompleteField;
-    private final HiddenField<String> autocompleteHidden;
+    protected final HiddenField<String> autocompleteHidden;
     private IChoiceRenderer<? super T> choiceRenderer;
-    private AbstractDefaultAjaxBehavior updateAjax;
+    protected AbstractDefaultAjaxBehavior updateAjax;
     protected int threshold = 15;
     private String[] containers;
 
@@ -288,6 +288,14 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     protected abstract List<T> getChoices(String term);
 
     protected abstract AutoCompleteResult createAutocompleteJson(T asset, String term);
+
+    public String getHiddenMarkupId() {
+        return autocompleteHidden.getMarkupId();
+    }
+
+    public String getTextMarkupId() {
+        return autocompleteField.getMarkupId();
+    }
 
 
     // ----------------INNER CLASSES------------------

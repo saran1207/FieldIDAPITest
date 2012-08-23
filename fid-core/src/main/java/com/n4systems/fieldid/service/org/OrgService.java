@@ -165,6 +165,19 @@ public class OrgService extends FieldIdPersistenceService {
         }
     }
 
+    public OrgLocationTree getOrgLocationTree() {
+        OrgLocationTree result = new OrgLocationTree();
+        QueryBuilder<BaseOrg> orgQuery = createTenantSecurityBuilder(BaseOrg.class);
+        result.addOrgs(persistenceService.findAll(orgQuery));
+
+        QueryBuilder locQuery = createTenantSecurityBuilder(PredefinedLocation.class);
+        result.addPredefinedLocations(persistenceService.findAll(locQuery));
+
+        return result;
+    }
+
+
+
 }
 
 

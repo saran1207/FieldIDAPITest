@@ -393,6 +393,11 @@ public class EventService extends FieldIdPersistenceService {
         return event;
     }
 
+
+
+
+    // TODO DD : by end of iteration, make sure these take into account "Corrective Actions" as well as timezones, etc...
+
     public List<Event> getWork(DateRange dateRange, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {
         QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
 
