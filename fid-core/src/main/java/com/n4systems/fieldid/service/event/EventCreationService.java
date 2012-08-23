@@ -64,19 +64,6 @@ public class EventCreationService extends FieldIdPersistenceService {
             event.setStatus(calculatedStatus);
         }
 
-        // HACK for grafting struts event creation onto new Open Events instead of schedules.
-        // Remove after struts front end event creation is destroyed.
-        // Test with mobile event creation.
-        if (event.getId() != null) {
-            for (CriteriaResult criteriaResult : event.getResults()) {
-                // Because of update shenanigans for reattachment to session, duplicate criteria results were being saved.
-                // This prevents that issue.
-                persistenceService.save(criteriaResult);
-            }
-            persistenceService.update(event);
-        }
-        // end HACK
-
         User user = getCurrentUser();
         Tenant tenant = getCurrentTenant();
 
@@ -370,7 +357,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     private void writeSignatureImagesFor(SignatureService sigService, Set<CriteriaResult> results) {
         for (CriteriaResult result : results) {
-            if (result.getCriteria().getCriteriaType() == CriteriaType.SIGNATURE && ((SignatureCriteriaResult)result).getImage() != null) {
+            if (result.getCriteria().getCriteriaType() == CriteriaType.SIGNATURE && ((SignatureCriteriaResult)result).hasImageInMemoryOrTemporaryFile()) {
                 try {
                     sigService.storeSignatureFileFor((SignatureCriteriaResult)result);
                 } catch (IOException e) {

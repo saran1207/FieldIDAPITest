@@ -19,7 +19,7 @@ import java.util.List;
 public class EventFormEditPanel extends Panel {
     
     private AbstractEvent.SectionResults currentSection;
-    private int currentSectionNumber = 1;
+    private int currentSectionIndex = 0;
     private int totalSections;
     private IModel<List<AbstractEvent.SectionResults>> results;
 
@@ -96,9 +96,14 @@ public class EventFormEditPanel extends Panel {
     }
 
     private void changeSection(AjaxRequestTarget target, int delta) {
-        currentSectionNumber = ((currentSectionNumber + delta - 1) % totalSections) + 1;
-        currentSection = results.getObject().get(currentSectionNumber - 1);
+        currentSectionIndex = (currentSectionIndex + delta ) % totalSections;
+        if (currentSectionIndex < 0) currentSectionIndex = totalSections - 1;
+        currentSection = results.getObject().get(currentSectionIndex);
         target.add(EventFormEditPanel.this);
+    }
+
+    public int getCurrentSectionNumber() {
+        return currentSectionIndex + 1;
     }
 
 }

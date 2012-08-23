@@ -106,6 +106,7 @@ public class SignatureCriteriaResultEditPanel extends Panel {
         String previouslyStoredTempFileId = FieldIDSession.get().getPreviouslyStoredTempFileId();
         if (previouslyStoredTempFileId != null) {
             FieldIDSession.get().setPreviouslyStoredTempFileId(null);
+            criteriaResult.setSigned(true);
             criteriaResult.setTemporaryFileId(previouslyStoredTempFileId);
         }
     }

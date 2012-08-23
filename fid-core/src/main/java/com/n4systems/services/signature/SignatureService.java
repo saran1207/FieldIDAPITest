@@ -48,7 +48,12 @@ public class SignatureService {
     		}
     		
     		out = new FileOutputStream(sigFile);
-    		IOUtils.write(signatureResult.getImage(), out);
+            if (signatureResult.getImage() != null) {
+                IOUtils.write(signatureResult.getImage(), out);
+            } else if (signatureResult.getTemporaryFileId() != null) {
+                IOUtils.copy(new FileInputStream(getTemporarySignatureFile(signatureResult.getTenant().getId(), signatureResult.getTemporaryFileId())), out);
+            }
+
         } finally {
             IOUtils.closeQuietly(out);
         }

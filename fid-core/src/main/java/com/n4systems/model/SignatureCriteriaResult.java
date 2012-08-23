@@ -48,4 +48,8 @@ public class SignatureCriteriaResult extends CriteriaResult {
     public void setTemporaryFileId(String temporaryFileId) {
         this.temporaryFileId = temporaryFileId;
     }
+
+    public boolean hasImageInMemoryOrTemporaryFile() {
+        return image != null || temporaryFileId != null;
+    }
 }

@@ -258,6 +258,7 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
     }
 
     public void storeTransientCriteriaResults() {
+        results.clear();
         for (SectionResults sectionResult : getSectionResults()) {
             for (CriteriaResult result : sectionResult.results) {
                 result.setEvent(this);

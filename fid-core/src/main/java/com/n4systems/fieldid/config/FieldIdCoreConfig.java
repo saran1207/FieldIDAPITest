@@ -65,6 +65,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class FieldIdCoreConfig {
 
     @Bean
+    public EventCriteriaEditService eventCriteriaEditService() {
+        return new EventCriteriaEditService();
+    }
+
+    @Bean
     public NotifyEventAssigneeService notifyEventAssigneeService() {
         return new NotifyEventAssigneeService();
     }

@@ -51,30 +51,30 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 public abstract class EventPage extends FieldIDFrontEndPage {
     
-    @SpringBean private EventCreationService eventCreationService;
-    @SpringBean private PersistenceService persistenceService;
+    @SpringBean protected EventCreationService eventCreationService;
+    @SpringBean protected PersistenceService persistenceService;
 
-    protected AbstractEvent event;
+    protected IModel<? extends AbstractEvent> event;
 
     private List<Event> schedules = new ArrayList<Event>();
     private Event scheduleToAdd;
-    private Event selectedSchedule;
+    private List<AbstractEvent.SectionResults> sectionResults;
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
+        sectionResults = event.getObject().getSectionResults();
         scheduleToAdd = createNewOpenEvent();
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new OuterEventForm("outerEventForm"));
@@ -82,7 +82,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
     private Event createNewOpenEvent() {
         Event openEvent = new Event();
-        openEvent.setAsset(event.getAsset());
+        openEvent.setAsset(event.getObject().getAsset());
         return openEvent;
     }
 
@@ -94,7 +94,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             add(new Label("description", new PropertyModel<String>(event, "asset.description")));
             add(new IdentifierLabel("identifierLabel", new PropertyModel<AssetType>(event, "asset.type")));
-            BookmarkablePageLink<Void> assetLink = new BookmarkablePageLink<Void>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
+            BookmarkablePageLink<Void> assetLink = new BookmarkablePageLink<Void>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getObject().getAsset().getId()));
             assetLink.add(new Label("identifier", new PropertyModel<Object>(event, "asset.identifier")));
             add(assetLink);
 
@@ -104,8 +104,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             GroupedUserPicker groupedUserPicker;
             add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(event, "assignedTo"), new GroupedUsersForTenantModel()));
             groupedUserPicker.setNullValid(true);
-            groupedUserPicker.setVisible(event.getType().isAssignedToAvailable());
-
+            groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
             add(new OrgPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
                 @Override
@@ -154,7 +153,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "nextDate"), true).withNoAllDayCheckbox();
             NewOrExistingEventBook newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
 
-            AttributesEditPanel attributesEditPanel = new AttributesEditPanel("eventAttributes", new Model<AbstractEvent>(event));
+            AttributesEditPanel attributesEditPanel = new AttributesEditPanel("eventAttributes", event);
 
             add(newOrExistingEventBook);
             add(attributesEditPanel);
@@ -178,8 +177,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             assetStatus.setNullValid(true);
             add(assetStatus);
             
-            if (event instanceof Event) {
-                Event masterEvent = (Event) event;
+            if (event.getObject() instanceof Event) {
+                Event masterEvent = (Event) event.getObject();
                 DropDownChoice resultSelect = new DropDownChoice<Status>("result", new PropertyModel<Status>(event, "status"), Status.getValidEventStates(), new ListableLabelChoiceRenderer<Status>());
                 resultSelect.add(new UpdateComponentOnChange());
                 resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
@@ -188,7 +187,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             add(new CheckBox("printable", new PropertyModel<Boolean>(event, "printable")).add(new UpdateComponentOnChange()));
 
-            add(new EventFormEditPanel("eventFormPanel", new PropertyModel<List<AbstractEvent.SectionResults>>(event, "sectionResults")).setVisible(event.getEventForm() != null));
+            add(new EventFormEditPanel("eventFormPanel", new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(event.getObject().getEventForm() != null));
             add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(event, "attachments")));
 
             Button saveButton = new Button("saveButton");
@@ -199,31 +198,27 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
         @Override
         protected void onSubmit() {
+            event.getObject().setSectionResults(sectionResults);
             if (doPostSubmitValidation()) {
-                Long scheduleId = selectedSchedule == null ? 0L : selectedSchedule.getId();
-                event.storeTransientCriteriaResults();
-
-                // TODO: Needs a little refactoring to be able to deal with sub events (book is only for master)
-                saveEventBookIfNecessary();
-
-                Event savedEvent = eventCreationService.createEventWithSchedules((Event)event, scheduleId, null, Collections.<FileAttachment>emptyList(), createEventScheduleBundles());
-
+                AbstractEvent savedEvent = doSave();
                 FieldIDSession.get().storeInfoMessageForStruts(getString("message.eventsaved"));
                 throw new RedirectToUrlException("/event.action?uniqueID="+savedEvent.getId());
             }
         }
+    }
 
-        private void saveEventBookIfNecessary() {
-            EventBook book = ((Event) event).getBook();
-            if (book != null && book.getId() == null) {
-                book.setTenant(getCurrentUser().getTenant());
-                book.setOwner(getCurrentUser().getOwner());
-                persistenceService.save(book);
-            }
+    protected void saveEventBookIfNecessary() {
+        EventBook book = ((Event) event.getObject()).getBook();
+        if (book != null && book.getId() == null) {
+            book.setTenant(getCurrentUser().getTenant());
+            book.setOwner(getCurrentUser().getOwner());
+            persistenceService.save(book);
         }
     }
 
-    private List<EventScheduleBundle> createEventScheduleBundles() {
+    protected abstract AbstractEvent doSave();
+
+    protected List<EventScheduleBundle> createEventScheduleBundles() {
         List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
 
         for (Event sched : schedules) {
@@ -236,7 +231,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
     private boolean doPostSubmitValidation() {
         if (event instanceof Event) {
-            Event masterEvent = (Event) event;
+            Event masterEvent = (Event) event.getObject();
             if (masterEvent.getBook() != null && masterEvent.getBook().getId() == null && StringUtils.isBlank(masterEvent.getBook().getName())) {
                 error(new FIDLabelModel("error.event_book_title_required").getObject());
                 return false;
@@ -248,7 +243,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             }
         }
 
-        if (event.containsUnfilledScoreCriteria()) {
+        if (event.getObject().containsUnfilledScoreCriteria()) {
             error(new FIDLabelModel("error.scores.required").getObject());
             return false;
         }
@@ -270,13 +265,13 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     }
 
     protected void doAutoSchedule() {
-        AssetTypeSchedule schedule = event.getAsset().getType().getSchedule(event.getType(), ((Event) event).getOwner());
+        AssetTypeSchedule schedule = event.getObject().getAsset().getType().getSchedule(event.getObject().getType(), ((Event) event.getObject()).getOwner());
         schedules.clear();
         if (schedule != null) {
             Event eventSchedule = new Event();
-            eventSchedule.setAsset(event.getAsset());
-            eventSchedule.setType(event.getType());
-            eventSchedule.setNextDate(schedule.getNextDate(((Event) event).getDate()));
+            eventSchedule.setAsset(event.getObject().getAsset());
+            eventSchedule.setType(event.getObject().getType());
+            eventSchedule.setNextDate(schedule.getNextDate(((Event) event.getObject()).getDate()));
             schedules.add(eventSchedule);
         }
     }
@@ -287,7 +282,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     }
 
     public String getTitleText() {
-        return event.getType().getName() + " " + getString("label.on") + " " + event.getAsset().getIdentifier();
+        return event.getObject().getType().getName() + " " + getString("label.on") + " " + event.getObject().getAsset().getIdentifier();
     }
 
 }
