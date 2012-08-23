@@ -101,7 +101,7 @@ public class Agenda extends Panel  {
 
         calendar.add(behavior);
 
-        add(new TipsyBehavior("#" + getMarkupId() + " .ui-state-default", TipsyBehavior.Gravity.W));
+        add(new TipsyBehavior(TipsyBehavior.Gravity.W).withPervasiveSelector("#" + getMarkupId() + " .ui-state-default"));
     }
 
     private boolean isEntireMonthSelected() {
@@ -253,7 +253,7 @@ public class Agenda extends Panel  {
         }
 
         private void addLimitReached(ListItem<Event> item) {
-            String image = "images/search-limit-reached.png";
+            String image = "images/shared-icon.png";
             item.add(new ContextImage("icon", image));
             item.add(new Label("asset", new StringResourceModel("label.search-limit-reached", Agenda.this, null)));
             item.add(new WebMarkupContainer("startEvent").add(new WebMarkupContainer("eventType")).setVisible(false));
@@ -261,8 +261,10 @@ public class Agenda extends Panel  {
 
         private void addEvent(ListItem<Event> item, Event event) {
             String image = event.isCompleted() ? "images/gps-icon-small.png" : "images/gps-recorded.png";
+            Asset asset = event.getAsset();
+            AssetLabelModel model = new AssetLabelModel(asset);
             item.add(new ContextImage("icon", image));
-            item.add(new AssetLabel("asset", new PropertyModel<Asset>(item.getModelObject(), "asset")));
+            item.add(new Label("asset", new PropertyModel<Asset>(item.getModelObject(), "asset.displayName")).add(new TipsyBehavior(model.getObject())));
             item.add(new NonWicketLink("startEvent", "eventEdit.action?uniqueID=" + event.getId())
                         .add(new Label("eventType", new PropertyModel(item.getModelObject(), "type.name"))));
             String css = dateService.nowAsDate().after(event.getNextDate()) ? "overdue" : "";

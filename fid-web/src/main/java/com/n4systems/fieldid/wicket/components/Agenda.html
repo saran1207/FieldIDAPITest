@@ -9,9 +9,9 @@
 
         <a wicket:id="showCalendar" class="toggle-button"><img wicket:id="icon"/></a>
 
-        <div wicket:id="dayByDayView" class="agenda-day-to-day">
+        <div wicket:id="dayByDayView">
             <div wicket:id="calendar" class="datepicker"/>
-            <div wicket:id="listContainer" class="agenda-days">
+            <div wicket:id="listContainer" class="agenda-table">
                 <div wicket:id="days" class="agenda-day">
                     <span wicket:id="day"/>
                 </div>
@@ -23,13 +23,16 @@
         <!-- this fragment is injected wherever you see "day" wicket component above -->
         <wicket:fragment wicket:id="dayPanel">
             <div class="agenda-title" wicket:id="date"/>
-            <ul>
-                <li wicket:id="list" class="agenda-row">
-                    <img wicket:id="icon"  class="agenda-icon"/>
-                    <span wicket:id="asset"  class="agenda-asset"/>
-                    <a wicket:id="startEvent"><span wicket:id="eventType"  class="agenda-event"/></a>
-                </li>
-            </ul>
+            <table>
+                <col width="6%" />
+                <col width="40%" />
+                <col width="52%" />
+                <tr wicket:id="list" class="agenda-row">
+                    <td><img wicket:id="icon"  class="agenda-icon"/></td>
+                    <td><span wicket:id="asset"  class="agenda-asset"/></td>
+                    <td><a wicket:id="startEvent"><span wicket:id="eventType"  class="agenda-event"/></a></td>
+                </tr>
+            </table>
         </wicket:fragment>
 
     </div>

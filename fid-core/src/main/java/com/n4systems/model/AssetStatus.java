@@ -27,4 +27,8 @@ public class AssetStatus extends ArchivableEntityWithTenant implements Listable<
 		return name;
 	}
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -6,7 +6,7 @@
     background:#d0e5f5;
 }
 
-.agenda .agenda-days {
+.agenda .agenda-table {
     overflow-y:auto;
     height:300px;
 }
@@ -48,25 +48,21 @@
 
 .agenda-day-to-day ul li {
     list-style: none outside none;
+    height:30px;
 }
 
 .agenda-icon {
-    /*float:left;*/
+    float:left;
     padding-right:5px;
     padding-top:5px;
 }
 
 .agenda-asset {
-    float:left;
-    width: 60%;
+
 }
 
 .agenda-event {
-    float:right;
-    padding-right:10px;
-    width:25%;
-    overflow:hidden;
-    height:20px;
+
 }
 
 .agenda .ui-datepicker-calendar .ui-state-default.eventful {
@@ -84,4 +80,17 @@
 
 .agenda .toggle-button img {
     float: right;
+}
+
+.agenda table {
+    width:100%;
+    table-layout: fixed;
+}
+
+.agenda-table table td {
+    white-space:nowrap;
+    overflow:hidden;
+    width:100px;
+    height:30px;
+    text-overflow: ellipsis;
 }
