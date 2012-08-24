@@ -25,6 +25,12 @@ public class AssetSummaryPage extends AssetPage {
     private UpcomingEventsPanel upcomingEventsPanel;
     private Label upcomingEventsMessage;
 
+
+    public AssetSummaryPage(Asset asset) {
+        this(new PageParameters().add("uniqueID",asset.getId()).add("useContext","false"));
+    }
+
+
     public AssetSummaryPage(PageParameters params) {
         super(params);
            

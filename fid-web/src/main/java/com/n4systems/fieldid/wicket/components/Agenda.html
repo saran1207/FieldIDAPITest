@@ -5,22 +5,25 @@
         don't change it without checking first!
     -->
 
-    <div class="agenda">
-
-        <a wicket:id="showCalendar" class="toggle-button"><img wicket:id="icon"/></a>
-
-        <div wicket:id="dayByDayView">
-            <div wicket:id="calendar" class="datepicker"/>
-            <div wicket:id="listContainer" class="agenda-table">
-                <div wicket:id="days" class="agenda-day">
-                    <span wicket:id="day"/>
-                </div>
+        <div wicket:id="calendar" class="datepicker"/>
+        <span class="header">
+            <p><wicket:message key="label.scheduled_events"></wicket:message></p>
+            <a wicket:id="showCalendar" class="toggle-button"><img wicket:id="icon"/></a>
+        </span>
+        <div wicket:id="listContainer" class="agenda-table">
+            <div wicket:id="days" class="agenda-day">
+                <span wicket:id="day"/>
             </div>
-    </div>
+        </div>
 
 
 
-        <!-- this fragment is injected wherever you see "day" wicket component above -->
+
+
+
+        <!--                                                                            -->
+        <!-- this fragment is injected wherever you see "day" wicket component above    -->
+        <!--                                                                            -->
         <wicket:fragment wicket:id="dayPanel">
             <div class="agenda-title" wicket:id="date"/>
             <table>
@@ -35,6 +38,5 @@
             </table>
         </wicket:fragment>
 
-    </div>
 
 </wicket:panel>

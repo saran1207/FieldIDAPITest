@@ -394,6 +394,11 @@ public class EventService extends FieldIdPersistenceService {
         return event;
     }
 
+    public List<Event> getWork(LocalDate month, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {
+        LocalDate from = DateUtil.getSundayOfWeek(month);
+        LocalDate to = DateUtil.getSundayAfterWeek(month.plusMonths(1).withDayOfMonth(1));
+        return getWork(new DateRange(from,to), user, org, assetType, eventType, limit);
+    }
 
     public List<Event> getWork(DateRange dateRange, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {
         QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);

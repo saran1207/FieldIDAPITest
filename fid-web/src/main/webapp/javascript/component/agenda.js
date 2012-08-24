@@ -38,15 +38,20 @@ var agendaFactory = (function() {
 
 				// attach button to toggle calendar.
 				$('#'+id + ' .toggle-button').click(function() {
-					calendar().slideToggle(200);
-					calendar().toggleClass('on');
-					updateViaAjax(year, month, 0);
-				});
+						calendar().toggle();
+						$('#'+id + '.agenda').toggleClass('no-calendar');
+						refreshMonth();
+					}
+				);
 
 				initialized = true;
 
 				updateViaAjax(data.year, data.month, data.day);
 			}
+		}
+
+		function table() {
+			return $('#'+id + ' .agenda-table');
 		}
 
 		function calendar() {
@@ -64,16 +69,25 @@ var agendaFactory = (function() {
 			});
 		}
 
+		function refreshMonth() {
+			day = 0;
+			refresh(false);
+		}
+
+		function refresh(includeSummary) {
+			var url = new String(callback)+'&year='+year+'&month='+month + '&summary='+includeSummary;
+			if (day>0) {
+				url = url + '&day=' + day;
+			}
+			var wcall = wicketAjaxGet(url, function() {}, function() {});
+		}
+
 		var updateViaAjax = function (y, m, d) {
 			if (d!=day || m!=month || year!=y) {
 				day = d;
 				month = m;
 				year = y;
-				var url = new String(callback)+'&year='+year+'&month='+month;
-				if (day>0) {
-					url = url + '&day=' + day;
-				}
-				var wcall = wicketAjaxGet(url, function() {}, function() {});
+				refresh(!day || day<=0);
 			}
 		}
 

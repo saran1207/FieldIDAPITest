@@ -27,7 +27,7 @@ public class TipsyBehavior extends Behavior {
         this.title = title;
     }
 
-    public TipsyBehavior withPervasiveSelector(String selector) {
+    public TipsyBehavior withSelector(String selector) {
         this.selector = selector;
         return this;
     }

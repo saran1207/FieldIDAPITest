@@ -1,5 +1,6 @@
 package com.n4systems.util.time;
 
+import com.n4systems.model.utils.DateRange;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -94,4 +95,9 @@ public class DateUtil {
         return date;
     }
 
+    public static DateRange getSundayMonthDateRange(LocalDate date) {
+        LocalDate from = getSundayOfWeek(date.withDayOfMonth(1));
+        LocalDate to = getSundayAfterWeek(date.withDayOfMonth(1).plusMonths(1));
+        return new DateRange(from,to);
+    }
 }

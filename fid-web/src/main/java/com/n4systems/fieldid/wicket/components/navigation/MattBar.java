@@ -122,7 +122,7 @@ public class MattBar extends Panel {
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         // CAVEAT : https://github.com/jaz303/tipsy/issues/19
         // after ajax call, tipsy tooltips will remain around so need to remove them explicitly.
-        response.renderOnDomReadyJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
+        response.renderOnDomReadyJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150, live:true})");
     }
 
     protected void onEnterState(AjaxRequestTarget target, Object state) { }

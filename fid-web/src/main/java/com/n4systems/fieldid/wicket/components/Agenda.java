@@ -63,6 +63,8 @@ public class Agenda extends Panel  {
     private ListView<EventDay> listView;
     private WebMarkupContainer listContainer;
     private IModel<? extends ConfigurationForAgenda> agendaModel;
+    private boolean includeSummary;
+    private int eventsInMonth;
 
 
     public Agenda(String id, IModel<? extends ConfigurationForAgenda> model) {
@@ -72,13 +74,25 @@ public class Agenda extends Panel  {
 
         firstDayOfMonth = dateService.now().withDayOfMonth(1);
 
-        behavior = new AbstractDefaultAjaxBehavior() {
+        behavior = createAjaxHandler();
+
+        addWorkListView();
+
+        // this will look for all days in the jquery calendar and handle the tooltipping.
+        add(new TipsyBehavior(TipsyBehavior.Gravity.W).withSelector("#" + getMarkupId() + " .ui-state-default"));
+
+        add(new AttributeAppender("class", "agenda"));
+    }
+
+    private AbstractDefaultAjaxBehavior createAjaxHandler() {
+        return new AbstractDefaultAjaxBehavior() {
 
             protected void respond(final AjaxRequestTarget target) {
                 listView.setVisible(true);
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
                 int month = params.getParameterValue("month").toInt();
                 int year = params.getParameterValue("year").toInt();
+                includeSummary = params.getParameterValue("summary").toBoolean();
                 StringValue dayParam = params.getParameterValue("day");
                 selectedDay = 0;
                 if (!dayParam.isEmpty()) {
@@ -87,29 +101,14 @@ public class Agenda extends Panel  {
                 withFirstDayOfMonth(new LocalDate().withMonthOfYear(month).withYear(year).withDayOfMonth(1));
                 listView.detachModels();
                 target.add(listContainer);
-                if (isEntireMonthSelected()) {
+                if (includeSummary) {
                     target.appendJavaScript(String.format(UPDATE_CALENDAR_JS, getJsVariableName(), getJsonMonthlyWorkSummary()));
                 }
             }
         };
-
-        add(createWorkListView());
-
-        WebMarkupContainer toggleButton = new WebMarkupContainer("showCalendar");
-        toggleButton.add(new ContextImage("icon", "images/calendar-icon.png"));
-        add(toggleButton);
-
-        calendar.add(behavior);
-
-        add(new TipsyBehavior(TipsyBehavior.Gravity.W).withPervasiveSelector("#" + getMarkupId() + " .ui-state-default"));
     }
 
-    private boolean isEntireMonthSelected() {
-        return selectedDay==0;  // 0 for showing entire month otherwise it specifies a day.
-    }
-
-    private WebMarkupContainer createWorkListView() {
-        final WebMarkupContainer container = new WebMarkupContainer("dayByDayView");
+    private void addWorkListView() {
         calendar = new WebMarkupContainer("calendar", new PropertyModel<Date>(this, "firstDayOfMonth"));
         calendar.setOutputMarkupPlaceholderTag(true).setVisible(true);
 
@@ -123,9 +122,14 @@ public class Agenda extends Panel  {
         listView.setOutputMarkupPlaceholderTag(true);
         listContainer.add(listView).setOutputMarkupId(true);
 
-        container.add(listContainer);
-        container.add(calendar);
-        return container;
+        add(listContainer);
+        add(calendar);
+
+        WebMarkupContainer toggleButton = new WebMarkupContainer("showCalendar");
+        toggleButton.add(new ContextImage("icon", "images/calendar-icon.png"));
+        add(toggleButton);
+
+        calendar.add(behavior);
     }
 
     @Override
@@ -149,9 +153,12 @@ public class Agenda extends Panel  {
     private String getJsonMonthlyWorkSummary() {
         AgendaJsonData data = new AgendaJsonData(selectedDay, firstDayOfMonth);
 
+        eventsInMonth = 0;
         Map<LocalDate, Long> events = eventService.getMontlyWorkSummary(firstDayOfMonth,getUser(), getOrg(), getAssetType(), getEventType());
         for (Long value:events.values()) {
             data.eventMap.add(value);
+            eventsInMonth += value;
+
         }
         return new Gson().toJson(data);
     }
@@ -195,13 +202,11 @@ public class Agenda extends Panel  {
     }
 
     private DateRange getDateRange() {
-        if (isEntireMonthSelected()) {  // are we searching for a particular day??  if not, just return entire month.
-            LocalDate a = firstDayOfMonth.dayOfWeek().withMinimumValue().minusDays(1);
-            LocalDate b = firstDayOfMonth.plusMonths(1).withDayOfMonth(1);
-            return new DateRange(a,b);
-        } else {
+        if (selectedDay>0) {  // are we searching for a particular day??  if not, just return entire month.
             LocalDate date = firstDayOfMonth.withDayOfMonth(selectedDay);
             return new DateRange(date,date.plusDays(1));
+        } else {
+            return DateUtil.getSundayMonthDateRange(firstDayOfMonth);
         }
     }
 
@@ -253,14 +258,14 @@ public class Agenda extends Panel  {
         }
 
         private void addLimitReached(ListItem<Event> item) {
-            String image = "images/shared-icon.png";
+            String image = "images/gps-icon-small.png";
             item.add(new ContextImage("icon", image));
             item.add(new Label("asset", new StringResourceModel("label.search-limit-reached", Agenda.this, null)));
             item.add(new WebMarkupContainer("startEvent").add(new WebMarkupContainer("eventType")).setVisible(false));
         }
 
         private void addEvent(ListItem<Event> item, Event event) {
-            String image = event.isCompleted() ? "images/gps-icon-small.png" : "images/gps-recorded.png";
+            String image = event.isPastDue() ? "images/gps-icon-small.png" : "images/gps-recorded.png";
             Asset asset = event.getAsset();
             AssetLabelModel model = new AssetLabelModel(asset);
             item.add(new ContextImage("icon", image));

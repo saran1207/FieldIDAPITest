@@ -1,18 +1,35 @@
-.agenda .meta-data {
-    display:none;
+.agenda {
+    height:475px;
 }
 
-.agenda .on {
-    background:#d0e5f5;
-}
+/*.agenda .on {*/
+    /*background:#d0e5f5;*/
+/*}*/
 
 .agenda .agenda-table {
     overflow-y:auto;
-    height:300px;
+    height:50%;
+}
+
+.agenda.no-calendar .agenda-table {
+    height:93%;
 }
 
 .agenda .datepicker {
     font-size: 12px;
+}
+
+.agenda .header {
+    font-size: 14px;
+    line-height: 32px;
+}
+
+.agenda .header p {
+    display:inline;
+}
+
+.agenda .header {
+    line-height: 32px;
 }
 
 .agenda .datepicker .ui-datepicker-inline {
@@ -74,12 +91,9 @@
 }
 
 
-.agenda .toggle-button {
-    padding:2px;
-}
-
 .agenda .toggle-button img {
     float: right;
+    margin-top:8px;
 }
 
 .agenda table {
