@@ -40,7 +40,6 @@ var agendaFactory = (function() {
 				$('#'+id + ' .toggle-button').click(function() {
 						calendar().toggle();
 						$('#'+id + '.agenda').toggleClass('no-calendar');
-						refreshMonth();
 					}
 				);
 
@@ -60,11 +59,16 @@ var agendaFactory = (function() {
 
 		function drawCalendarEventMarkers() {
 			calendar().find('table a.ui-state-default').each(function(index) {
-				$(this).removeClass('eventful');
-				if (data.eventMap[index]>0) {
+				$(this).removeClass('eventful overdue');
+				if (data.eventMap[index]!=0) {
+					var value = data.eventMap[index];
 					$(this).addClass('eventful');
-					var suffix = data.eventMap[index]>1 ? ' events' : ' event';
-					$(this).attr('title', data.eventMap[index]+suffix);
+					if (value<0) {
+						$(this).addClass('overdue');
+						value = -value;
+					}
+					var suffix = value>1 ? ' events' : ' event';
+					$(this).attr('title', value +suffix);
 				}
 			});
 		}

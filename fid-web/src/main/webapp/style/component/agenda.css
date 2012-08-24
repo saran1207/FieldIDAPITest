@@ -1,19 +1,32 @@
 .agenda {
-    height:475px;
+    height:525px;
 }
-
-/*.agenda .on {*/
-    /*background:#d0e5f5;*/
-/*}*/
 
 .agenda .agenda-table {
     overflow-y:auto;
-    height:50%;
+    height:49%;
+}
+
+.agenda .agenda-table.limit-reached {
+    height:45%;
+}
+
+.agenda.no-calendar .agenda-table.limit-reached {
+    height:87%;
 }
 
 .agenda.no-calendar .agenda-table {
-    height:93%;
+    height:90%;
 }
+
+.limit-message {
+    display:none;
+}
+
+.agenda-table.limit-reached + .limit-message{
+    display:block;
+}
+
 
 .agenda .datepicker {
     font-size: 12px;
@@ -26,10 +39,6 @@
 
 .agenda .header p {
     display:inline;
-}
-
-.agenda .header {
-    line-height: 32px;
 }
 
 .agenda .datepicker .ui-datepicker-inline {
@@ -49,8 +58,7 @@
 }
 
 .agenda .ui-datepicker-calendar .ui-state-highlight {
-    background:#CCDDFF;
-    border: 1px solid #a0a0f7;
+    border: 1px dashed #abf;
 }
 
 .agenda .agenda-title {
@@ -74,16 +82,12 @@
     padding-top:5px;
 }
 
-.agenda-asset {
-
-}
-
-.agenda-event {
-
-}
-
 .agenda .ui-datepicker-calendar .ui-state-default.eventful {
     background: #D9EAF7;
+}
+
+.agenda .ui-datepicker-calendar .ui-state-default.eventful.overdue {
+    background: #e9eAe7;
 }
 
 .agenda-row {
@@ -107,4 +111,8 @@
     width:100px;
     height:30px;
     text-overflow: ellipsis;
+}
+
+.agenda .limit-message {
+    line-height:30px;
 }

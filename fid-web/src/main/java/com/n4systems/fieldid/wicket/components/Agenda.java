@@ -5,17 +5,23 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationForAgenda;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.search.EventState;
+import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.time.DateUtil;
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -23,6 +29,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -30,7 +37,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -53,7 +59,11 @@ public class Agenda extends Panel  {
     private static final String INIT_CALENDAR_JS = "%s = agendaFactory.create('%s', %s, '%s');";
     public static final String UPDATE_CALENDAR_JS = "%s.updateCalendarEventMarkers(%s)";
 
-    private static final int WORK_EVENT_LIMIT = 15;
+    private static final int WORK_EVENT_LIMIT = 25;
+
+    private static final String TABLE_CSS = "agenda-table";
+    private static final String LIMITED_TABLE_CSS = " limit-reached";
+
 
     private WebMarkupContainer calendar;
     private LocalDate firstDayOfMonth;
@@ -65,6 +75,9 @@ public class Agenda extends Panel  {
     private IModel<? extends ConfigurationForAgenda> agendaModel;
     private boolean includeSummary;
     private int eventsInMonth;
+    private Link limitReachedLink;
+    private boolean overLimit;
+    private String limitModel;
 
 
     public Agenda(String id, IModel<? extends ConfigurationForAgenda> model) {
@@ -78,10 +91,36 @@ public class Agenda extends Panel  {
 
         addWorkListView();
 
+        add(limitReachedLink = new Link("limit") {
+            @Override public void onClick() {
+                setResponsePage(new ReportPage(createCriteria()));
+            }
+        });
+        limitReachedLink.add(new Label("message", new FIDLabelModel("label.limit_reached")));
+
         // this will look for all days in the jquery calendar and handle the tooltipping.
         add(new TipsyBehavior(TipsyBehavior.Gravity.W).withSelector("#" + getMarkupId() + " .ui-state-default"));
 
         add(new AttributeAppender("class", "agenda"));
+    }
+
+    private EventReportCriteria createCriteria() {
+        EventReportCriteria criteria = new EventReportCriteria();
+        criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
+        criteria.setDueDateRange(getInclusiveDateRange());
+        criteria.setEventState(EventState.OPEN);
+        if (getUser()!=null) {
+            criteria.setAssigneeId(getUser().getId());
+        }
+        criteria.setOwner(getOrg());
+        criteria.setAssetType(getAssetType());
+        criteria.setEventType(getEventType());
+        return criteria;
+    }
+
+    private DateRange getInclusiveDateRange() {
+        DateRange dateRange = getDateRange();
+        return new DateRange(dateRange.getFrom(),dateRange.getTo().minusDays(1));
     }
 
     private AbstractDefaultAjaxBehavior createAjaxHandler() {
@@ -115,6 +154,11 @@ public class Agenda extends Panel  {
         listContainer = new WebMarkupContainer("listContainer");
 
         listView = new ListView<EventDay>("days", new EventDayModel()) {
+            @Override protected void onBeforeRender() {
+                super.onBeforeRender();
+                listContainer.add(new AttributeModifier("class", TABLE_CSS + (overLimit?LIMITED_TABLE_CSS:"")));
+            }
+
             @Override protected void populateItem(ListItem<EventDay> item) {
                 item.add(new EventDayPanel("day", item.getModelObject()));
             }
@@ -153,12 +197,19 @@ public class Agenda extends Panel  {
     private String getJsonMonthlyWorkSummary() {
         AgendaJsonData data = new AgendaJsonData(selectedDay, firstDayOfMonth);
 
+        LocalDate today = dateService.now();
+
         eventsInMonth = 0;
         Map<LocalDate, Long> events = eventService.getMontlyWorkSummary(firstDayOfMonth,getUser(), getOrg(), getAssetType(), getEventType());
-        for (Long value:events.values()) {
-            data.eventMap.add(value);
+        for (LocalDate date:events.keySet()) {
+            Long value = events.get(date);
+            // send a negative value if overdue.  Agenda JS needs this in order to handle rendering of overdue events.
+            if (date.isBefore(today)) {
+                data.eventMap.add(-value);
+            } else {
+                data.eventMap.add(value);
+            }
             eventsInMonth += value;
-
         }
         return new Gson().toJson(data);
     }
@@ -210,6 +261,12 @@ public class Agenda extends Panel  {
         }
     }
 
+    public boolean isEntireMonth() {
+        return selectedDay==0;
+    }
+    public boolean isSingleDay() {
+        return selectedDay>0;
+    }
 
 
     // ------------------ INNER CLASSES -------------------------
@@ -219,6 +276,7 @@ public class Agenda extends Panel  {
         @Override
         protected List<EventDay> load() {
             List<Event> events = eventService.getWork(getDateRange(), getUser(), getOrg(), getAssetType(), getEventType(), WORK_EVENT_LIMIT);
+            overLimit = events.size()>WORK_EVENT_LIMIT;
             Map<LocalDate,EventDay> map = Maps.newTreeMap();
 
             for (Event event:events) {
@@ -242,26 +300,10 @@ public class Agenda extends Panel  {
             add(new Label("date", DateUtil.getDayString(eventDay.getDate())));
             ListView<Event> eventDayList = new ListView<Event>("list", eventDay.events) {
                 @Override protected void populateItem(ListItem<Event> item) {
-                    int index = item.getIndex();
-                    Event event = item.getModelObject();
-                    if (index==WORK_EVENT_LIMIT) {
-                        addLimitReached(item);
-                    } else if (index>WORK_EVENT_LIMIT) {
-                        ; // do nothing...ignore everything over limit.  should never occur.
-                        logger.warn("list of events is longer than threshold of " + WORK_EVENT_LIMIT);
-                    } else {
-                        addEvent(item, event);
-                    }
+                    addEvent(item, item.getModelObject());
                 }
             };
             add(eventDayList);
-        }
-
-        private void addLimitReached(ListItem<Event> item) {
-            String image = "images/gps-icon-small.png";
-            item.add(new ContextImage("icon", image));
-            item.add(new Label("asset", new StringResourceModel("label.search-limit-reached", Agenda.this, null)));
-            item.add(new WebMarkupContainer("startEvent").add(new WebMarkupContainer("eventType")).setVisible(false));
         }
 
         private void addEvent(ListItem<Event> item, Event event) {
