@@ -4,8 +4,10 @@ import com.n4systems.fieldid.service.org.OrgQueryParser;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.components.autocomplete.AutoComplete;
 import com.n4systems.fieldid.wicket.components.autocomplete.AutoCompleteResult;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.OrgLocationEnum;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.util.collections.OrgList;
 import org.apache.wicket.model.IModel;
@@ -26,7 +28,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<EntityWithTenant> {
     
     private @SpringBean OrgService orgService;
     
-    private HashSet<String> categories = new HashSet<String>();
+    private HashSet<OrgLocationEnum> categories = new HashSet<OrgLocationEnum>();
     private boolean includeLocations = false;
 
 
@@ -60,11 +62,11 @@ public class AutoCompleteOrgPicker extends AutoComplete<EntityWithTenant> {
         return new OrgQueryParser(term).getSearchTerm();
     }
 
-    private String getCategory(EntityWithTenant org) {
-        String category = org.getClass().getSimpleName();
+    private String getCategory(EntityWithTenant entity) {
+        OrgLocationEnum category = OrgLocationEnum.fromClass(entity.getClass());
         if (!categories.contains(category)) {
             categories.add(category);
-            return category;
+            return new FIDLabelModel(category.getLabel()).getObject().toUpperCase();
         }
         return "";
     }

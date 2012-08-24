@@ -20,7 +20,7 @@ public class OrgQueryParser {
     private String searchTerm;   
     
     public OrgQueryParser(String term) {
-        this.term = term.toLowerCase();
+        this.term = term.toLowerCase().trim();
         int index = term.lastIndexOf(":");
         if (index!=-1) {
             searchTerm = term.substring(index+1).trim();

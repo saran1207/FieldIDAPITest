@@ -25,26 +25,25 @@ class OrgComparator implements Comparator<EntityWithTenant> {
     private int getOrgLevel(EntityWithTenant entity) {
         int index = 0;
         PredefinedLocation location;
-        BaseOrg org = (BaseOrg) entity;
+        BaseOrg org;
         if (entity instanceof BaseOrg) {
             org = (BaseOrg) entity;
             index = getLevelOffset(org.getName());
+            if (org.isPrimary()) {
+                return 100 + index;
+            } else if (org.isSecondary()) {
+                return 200 + index;
+            } else if (org.isCustomer()) {
+                return 300 + index;
+            } else if (org.isDivision()) {
+                return 500 + index;
+            }
         } else if (entity instanceof PredefinedLocation) {
             location = (PredefinedLocation) entity;
             index = getLevelOffset(location.getName());
-        }
-
-        if (org.isPrimary()) {
-            return 100 + index;
-        } else if (org.isSecondary()) {
-            return 200 + index;
-        } else if (org.isCustomer()) {
-            return 300 + index;
-        } else if (org.isDivision()) {
-            return 500 + index;
-        } else {
             return 1000 + index;
         }
+        return Integer.MAX_VALUE;
     }
 
     // this gives higher priority to entities that start with search term.
