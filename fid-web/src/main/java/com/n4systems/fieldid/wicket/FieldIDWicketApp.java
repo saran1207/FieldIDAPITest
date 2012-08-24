@@ -8,7 +8,6 @@ import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
@@ -71,8 +70,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/scoreResults", ScoreResultConfigurationPage.class);
 
         mountPage("dashboard", DashboardPage.class);
-        mountPage("reporting", ReportingPage.class);
-        mountPage("search", AssetSearchPage.class);
 
         //uggh: colorbox doesn't render absolute urls so we have to give it this url to make sense.  i.e. the "/wicket" prefix
         //  a preferred solution would be to put colorbox in iframe (which requires CSS love) or to force absolute urls to be rendered by wicket.
@@ -96,7 +93,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("savedReport", RunReportPage.class);
         mountPage("savedSearch", RunSearchPage.class);
         mountPage("massSchedule", MassSchedulePage.class);
-        mountPage("savedReportsDeprecated", SavedReportsDeprecatedPage.class);
 
         mountPage("savedItems", SavedItemsDropdownPage.class);
         mountPage("manageSavedItems", ManageSavedItemsPage.class);

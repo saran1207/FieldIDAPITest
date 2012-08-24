@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.components.search.IdentifiersCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.OrderDetailsCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.OwnershipCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.SRSCriteriaPanel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteria;
@@ -46,7 +46,7 @@ public class AssetSearchCriteriaPanel extends SRSCriteriaPanel<SavedSearchItem, 
 
     @Override
     protected WebPage createResultsPage(AssetSearchCriteria criteria, SavedSearchItem savedItem) {
-        return new AssetSearchResultsPage(criteriaModel.getObject(), savedItem);
+        return new SearchPage(criteriaModel.getObject(), savedItem);
     }
 
     @Override

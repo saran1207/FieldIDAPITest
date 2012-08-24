@@ -1,22 +1,21 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
+import com.n4systems.fieldid.wicket.pages.widgets.config.AssetsStatusConfigPanel;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.AssetsStatusWidgetConfiguration;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.AssetSearchResultsPage;
-import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
-import com.n4systems.fieldid.wicket.pages.widgets.config.AssetsStatusConfigPanel;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.widget.AssetsStatusWidgetConfiguration;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.services.reporting.DashboardReportingService;
 
 @SuppressWarnings("serial")
 public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetConfiguration>  implements HasDateRange {
@@ -40,7 +39,7 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 
     @Override
 	protected Class<? extends FieldIDFrontEndPage> getClickThroughPage() {
-		return AssetSearchResultsPage.class;
+		return SearchPage.class;
 	}
 
     

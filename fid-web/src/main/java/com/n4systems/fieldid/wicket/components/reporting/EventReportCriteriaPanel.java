@@ -7,7 +7,7 @@ import com.n4systems.fieldid.wicket.components.search.IdentifiersCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.OrderDetailsCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.OwnershipCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.search.SRSCriteriaPanel;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
@@ -78,7 +78,7 @@ public class EventReportCriteriaPanel extends SRSCriteriaPanel<SavedReportItem, 
     protected WebPage createResultsPage(EventReportCriteria criteria, SavedReportItem savedItem) {
         HttpSession session = ((ServletWebRequest) getRequest()).getContainerRequest().getSession();
         new LegacyReportCriteriaStorage().storeCriteria(criteria, session);
-        return new ReportingResultsPage(criteria, savedItem);
+        return new ReportPage(criteria, savedItem);
     }
 
     @Override
