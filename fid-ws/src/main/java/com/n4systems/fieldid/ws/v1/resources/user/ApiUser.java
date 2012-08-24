@@ -16,6 +16,7 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private boolean editEventEnabled;
 	private ApiOfflineProfile offlineProfile;
 	private ApiTenant tenant;
+	private String identifier;
 	
 	public String getUserId() {
 		return userId;
@@ -103,5 +104,13 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 
 	public void setTenant(ApiTenant tenant) {
 		this.tenant = tenant;
+	}
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 }
