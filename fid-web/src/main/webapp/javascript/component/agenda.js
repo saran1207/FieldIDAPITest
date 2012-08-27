@@ -36,13 +36,6 @@ var agendaFactory = (function() {
 					onChangeMonthYear: changeMonthYear
 				});
 
-				// attach button to toggle calendar.
-				$('#'+id + ' .toggle-button').click(function() {
-						calendar().toggle();
-						$('#'+id + '.agenda').toggleClass('no-calendar');
-					}
-				);
-
 				initialized = true;
 
 				updateViaAjax(data.year, data.month, data.day);

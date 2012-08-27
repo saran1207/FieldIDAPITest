@@ -612,4 +612,11 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     public void setAssigneeNotification(AssigneeNotification assigneeNotification) {
         this.assigneeNotification = assigneeNotification;
     }
+
+    public boolean isAssigned() {
+        return getAssignee()!=null;
+    }
+
+
+
 }

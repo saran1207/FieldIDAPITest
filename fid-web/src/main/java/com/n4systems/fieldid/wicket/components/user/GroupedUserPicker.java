@@ -11,9 +11,15 @@ import java.util.List;
 
 public class GroupedUserPicker extends GroupedDropDownChoice<User, BaseOrg> {
 
-    public GroupedUserPicker(String id, IModel<User> userModel, IModel<List<User>> usersModel) {
+    public GroupedUserPicker(String id, IModel<User> userModel, IModel<List<User>> usersModel, boolean useJChosen) {
         super(id, userModel, usersModel, new AssignToChoiceRenderer());
-        add(new JChosenBehavior());
+        if (useJChosen) {
+            add(new JChosenBehavior());
+        }
+
+    }
+    public GroupedUserPicker(String id, IModel<User> userModel, IModel<List<User>> usersModel) {
+        this(id, userModel, usersModel, true);
     }
 
     @Override

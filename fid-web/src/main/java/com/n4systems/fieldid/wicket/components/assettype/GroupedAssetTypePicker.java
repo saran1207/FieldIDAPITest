@@ -13,9 +13,15 @@ import java.util.List;
 public class GroupedAssetTypePicker extends GroupedDropDownChoice<AssetType, AssetTypeGroup> {
 
     public GroupedAssetTypePicker(String id, IModel<AssetType> assetTypeModel, IModel<List<AssetType>> assetTypesModel) {
+        this(id, assetTypeModel, assetTypesModel, true);
+    }
+
+    public GroupedAssetTypePicker(String id, IModel<AssetType> assetTypeModel, IModel<List<AssetType>> assetTypesModel, boolean useJChosen) {
         super(id, assetTypeModel, assetTypesModel, new AssetTypeChoiceRenderer());
         setOutputMarkupId(true);
-        add(new JChosenBehavior());
+        if (useJChosen) {
+            add(new JChosenBehavior());
+        }
     }
 
     @Override

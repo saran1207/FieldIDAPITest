@@ -1,5 +1,8 @@
 package com.n4systems.services.dashboard;
 
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.WidgetType;
+import com.n4systems.model.dashboard.widget.WorkWidgetConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
@@ -54,4 +57,14 @@ public class DashboardService extends FieldIdPersistenceService {
         return layout;
     }
 
+    public WidgetDefinition createWidgetDefinition(WidgetType type) {
+        WidgetDefinition def = new WidgetDefinition(type);
+        switch (type) {
+            case WORK:
+                WorkWidgetConfiguration config = (WorkWidgetConfiguration) def.getConfig();
+                config.setUser(getCurrentUser());
+                break;
+        }
+        return def;
+    }
 }

@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -19,9 +20,11 @@ import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
+import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.time.DateUtil;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -53,13 +56,14 @@ public class Agenda extends Panel  {
 
     private @SpringBean DateService dateService;
     private @SpringBean EventService eventService;
+    private @SpringBean DashboardReportingService dashboardReportingService;
 
     private static final Logger logger= Logger.getLogger(Agenda.class);
 
     private static final String INIT_CALENDAR_JS = "%s = agendaFactory.create('%s', %s, '%s');";
     public static final String UPDATE_CALENDAR_JS = "%s.updateCalendarEventMarkers(%s)";
 
-    private static final int WORK_EVENT_LIMIT = 25;
+    private static final int WORK_EVENT_LIMIT = 24;
 
     private static final String TABLE_CSS = "agenda-table";
     private static final String LIMITED_TABLE_CSS = " limit-reached";
@@ -74,10 +78,8 @@ public class Agenda extends Panel  {
     private WebMarkupContainer listContainer;
     private IModel<? extends ConfigurationForAgenda> agendaModel;
     private boolean includeSummary;
-    private int eventsInMonth;
-    private Link limitReachedLink;
-    private boolean overLimit;
-    private String limitModel;
+    private int eventsLoaded;
+    private Label limitMessage;
 
 
     public Agenda(String id, IModel<? extends ConfigurationForAgenda> model) {
@@ -85,37 +87,39 @@ public class Agenda extends Panel  {
         this.agendaModel = model;
         setOutputMarkupId(true);
 
-        firstDayOfMonth = dateService.now().withDayOfMonth(1);
-
-        behavior = createAjaxHandler();
+        firstDayOfMonth = dateService.now().withDayOfMonth(1);  // default to "TODAY"
 
         addWorkListView();
-
-        add(limitReachedLink = new Link("limit") {
-            @Override public void onClick() {
-                setResponsePage(new ReportPage(createCriteria()));
-            }
-        });
-        limitReachedLink.add(new Label("message", new FIDLabelModel("label.limit_reached")));
+        add(createLimitMessage());
 
         // this will look for all days in the jquery calendar and handle the tooltipping.
         add(new TipsyBehavior(TipsyBehavior.Gravity.W).withSelector("#" + getMarkupId() + " .ui-state-default"));
-
         add(new AttributeAppender("class", "agenda"));
     }
 
-    private EventReportCriteria createCriteria() {
-        EventReportCriteria criteria = new EventReportCriteria();
+    private Component createLimitMessage() {
+        WebMarkupContainer limit = new WebMarkupContainer("limitMessage");
+        limit.add(new Link("link") {
+            @Override
+            public void onClick() {
+                setResponsePage(new ReportPage(createWorkCriteria()));
+            }
+        });
+
+        limit.add(limitMessage = new Label("message", new FIDLabelModel("label.limit_reached", WORK_EVENT_LIMIT + 1)));
+        return limit;
+    }
+
+    private EventReportCriteria createWorkCriteria() {
+        EventReportCriteria criteria = createCriteria();
         criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
         criteria.setDueDateRange(getInclusiveDateRange());
         criteria.setEventState(EventState.OPEN);
-        if (getUser()!=null) {
-            criteria.setAssigneeId(getUser().getId());
-        }
-        criteria.setOwner(getOrg());
-        criteria.setAssetType(getAssetType());
-        criteria.setEventType(getEventType());
         return criteria;
+    }
+
+    protected EventReportCriteria createCriteria() {
+        return new EventReportCriteria();
     }
 
     private DateRange getInclusiveDateRange() {
@@ -156,7 +160,10 @@ public class Agenda extends Panel  {
         listView = new ListView<EventDay>("days", new EventDayModel()) {
             @Override protected void onBeforeRender() {
                 super.onBeforeRender();
-                listContainer.add(new AttributeModifier("class", TABLE_CSS + (overLimit?LIMITED_TABLE_CSS:"")));
+                listContainer.add(new AttributeModifier("class", TABLE_CSS));
+                if (isOverLimit()) {
+                    listContainer.add(new AttributeAppender("class", LIMITED_TABLE_CSS));
+                }
             }
 
             @Override protected void populateItem(ListItem<EventDay> item) {
@@ -169,11 +176,7 @@ public class Agenda extends Panel  {
         add(listContainer);
         add(calendar);
 
-        WebMarkupContainer toggleButton = new WebMarkupContainer("showCalendar");
-        toggleButton.add(new ContextImage("icon", "images/calendar-icon.png"));
-        add(toggleButton);
-
-        calendar.add(behavior);
+        calendar.add(behavior = createAjaxHandler());
     }
 
     @Override
@@ -199,7 +202,6 @@ public class Agenda extends Panel  {
 
         LocalDate today = dateService.now();
 
-        eventsInMonth = 0;
         Map<LocalDate, Long> events = eventService.getMontlyWorkSummary(firstDayOfMonth,getUser(), getOrg(), getAssetType(), getEventType());
         for (LocalDate date:events.keySet()) {
             Long value = events.get(date);
@@ -209,9 +211,12 @@ public class Agenda extends Panel  {
             } else {
                 data.eventMap.add(value);
             }
-            eventsInMonth += value;
         }
         return new Gson().toJson(data);
+    }
+
+    private boolean isOverLimit() {
+        return eventsLoaded>=WORK_EVENT_LIMIT;
     }
 
 
@@ -276,7 +281,7 @@ public class Agenda extends Panel  {
         @Override
         protected List<EventDay> load() {
             List<Event> events = eventService.getWork(getDateRange(), getUser(), getOrg(), getAssetType(), getEventType(), WORK_EVENT_LIMIT);
-            overLimit = events.size()>WORK_EVENT_LIMIT;
+            eventsLoaded = events.size();
             Map<LocalDate,EventDay> map = Maps.newTreeMap();
 
             for (Event event:events) {
@@ -307,13 +312,21 @@ public class Agenda extends Panel  {
         }
 
         private void addEvent(ListItem<Event> item, Event event) {
-            String image = event.isPastDue() ? "images/gps-icon-small.png" : "images/gps-recorded.png";
-            Asset asset = event.getAsset();
+            String image = event.isAssigned() ? "images/event-open-assigned.png" : "images/event-open.png";
+            final Asset asset = event.getAsset();
             AssetLabelModel model = new AssetLabelModel(asset);
             item.add(new ContextImage("icon", image));
-            item.add(new Label("asset", new PropertyModel<Asset>(item.getModelObject(), "asset.displayName")).add(new TipsyBehavior(model.getObject())));
-            item.add(new NonWicketLink("startEvent", "eventEdit.action?uniqueID=" + event.getId())
-                        .add(new Label("eventType", new PropertyModel(item.getModelObject(), "type.name"))));
+//            item.add(new Link("asset", new PropertyModel<Asset>(item.getModelObject(), "asset.displayName")).add(new TipsyBehavior(model.getObject())));
+            Link link;
+            item.add(link = new Link("asset") {
+                @Override public void onClick() {
+                    setResponsePage(new AssetSummaryPage(asset));
+                }
+            });
+            link.add(new Label("name",new PropertyModel<String>(item.getModelObject(),"asset.verboseDisplayName")));
+            item.add(new Label("org", new PropertyModel<String>(item.getModelObject(), "owner.hierarchicalDisplayName")));
+            item.add(new NonWicketLink("event", "eventEdit.action?uniqueID=" + event.getId())
+                        .add(new Label("type", new PropertyModel(item.getModelObject(), "type.name"))));
             String css = dateService.nowAsDate().after(event.getNextDate()) ? "overdue" : "";
             item.add(new AttributeAppender("class", css));
         }

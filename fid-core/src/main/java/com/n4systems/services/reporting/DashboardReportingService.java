@@ -126,9 +126,11 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 				return getCriteriaDefaults(((UpcomingEventsWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
             case EVENT_KPI:
                 return getCriteriaDefaults((EventKPIWidgetConfiguration) widgetDefinition.getConfig(), series, x.intValue()/*assumed to be org index*/);
+            case WORK:
+                return getCriteriaDefaults((WorkWidgetConfiguration)widgetDefinition.getConfig(), series, x.intValue());
             case COMMON_LINKS:
             	return getCriteriaDefaults();
-			default: 
+			default:
 				throw new IllegalArgumentException("Can't convert widget of type " + widgetDefinition.getWidgetType() + " into report criteria");
 		}
 	}
@@ -191,6 +193,15 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         }
 		return criteria;
 	}
+
+    private EventReportCriteria getCriteriaDefaults(WorkWidgetConfiguration config, String series, int i) {
+        EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
+        criteria.setAssetType(config.getAssetType());
+        criteria.setEventType(config.getEventType());
+        criteria.setAssigneeId(config.getUser()!=null ? config.getUser().getId() : null);
+        criteria.setEventState(EventState.OPEN);
+        return criteria;
+    }
 
     private EventReportCriteria getDefaultReportCriteria(BaseOrg org) {
 		EventReportCriteria criteria = new EventReportCriteria();

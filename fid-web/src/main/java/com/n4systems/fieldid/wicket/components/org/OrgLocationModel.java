@@ -22,20 +22,19 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
     }
 
     private void setInitialValue() {
-        if (getLocationModel() !=null && getLocationModel().getObject()!=null) {
-            setObject(getLocationModel().getObject());
+        if (locationModel !=null && locationModel.getObject()!=null) {
+            setObject(locationModel.getObject());
         } else if (orgModel!=null && orgModel.getObject()!=null) {
             setObject(orgModel.getObject());
         } else {
             setObject(null);
         }
     }
-
     @Override
     public void detach() {
         orgModel.detach();
         if (locationModel!=null) {
-            getLocationModel().detach();
+            locationModel.detach();
         }
         super.detach();
     }
@@ -45,8 +44,8 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
     }
 
     private void setLocation(PredefinedLocation location) {
-        if (getLocationModel() !=null) {
-            getLocationModel().setObject(location);
+        if (locationModel !=null) {
+            locationModel.setObject(location);
         }
     }
 
@@ -55,8 +54,7 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
         return obj;
     }
 
-    @Override
-    public void setObject(EntityWithTenant object) {
+    @Override    public void setObject(EntityWithTenant object) {
         this.obj = object;
         if (obj instanceof BaseOrg) {
             setOrg((BaseOrg) obj);
@@ -75,13 +73,11 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
 
     @Override
     protected void onDetach() {
-        getLocationModel().detach();
+        if (locationModel!=null) {
+            locationModel.detach();
+        }
         orgModel.detach();
         super.onDetach();
-    }
-
-    public IModel<PredefinedLocation> getLocationModel() {
-        return locationModel;
     }
 
     public void setLocationModel(IModel<PredefinedLocation> locationModel) {

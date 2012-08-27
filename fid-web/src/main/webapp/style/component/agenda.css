@@ -2,6 +2,10 @@
     height:525px;
 }
 
+.agenda .ui-datepicker-title {
+    font-size: 14px;
+}
+
 .agenda .agenda-table {
     overflow-y:auto;
     height:49%;
@@ -33,7 +37,7 @@
 }
 
 .agenda .header {
-    font-size: 14px;
+    font-size: 12px;
     line-height: 32px;
 }
 
@@ -58,7 +62,8 @@
 }
 
 .agenda .ui-datepicker-calendar .ui-state-highlight {
-    border: 1px dashed #abf;
+    font-weight:bold;
+    border: 1px solid #C0D6E7;
 }
 
 .agenda .agenda-title {
@@ -66,20 +71,13 @@
     padding-bottom: 5px;
     padding-left: 5px;
     background:#efeff5;
-    font-size: 13px;
+    font-size: 12px;
     color: #1166cc;
 }
-
 
 .agenda-day-to-day ul li {
     list-style: none outside none;
     height:30px;
-}
-
-.agenda-icon {
-    float:left;
-    padding-right:5px;
-    padding-top:5px;
 }
 
 .agenda .ui-datepicker-calendar .ui-state-default.eventful {
@@ -90,10 +88,20 @@
     background: #e9eAe7;
 }
 
-.agenda-row {
-    line-height: 30px;
+.agenda-row .org {
+    line-height: 15px;
 }
 
+.agenda-row .icon {
+    float:left;
+    padding-right:5px;
+    padding-top:0px;
+}
+
+.agenda-row .event {
+    line-height:9px;
+    height:15px;
+}
 
 .agenda .toggle-button img {
     float: right;
@@ -108,11 +116,14 @@
 .agenda-table table td {
     white-space:nowrap;
     overflow:hidden;
-    width:100px;
-    height:30px;
     text-overflow: ellipsis;
+    padding-top:10px;
 }
 
 .agenda .limit-message {
+    background:#ddd;
+    color:#777;
     line-height:30px;
+    padding-left:5px;
+    margin-top:10px;
 }

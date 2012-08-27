@@ -135,6 +135,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(4);  // have to add some expectations because our asserts actually trigger calls...yecccch. 
 		dashboardService.saveLayout(layout);
+        expect(dashboardService.createWidgetDefinition(WidgetType.NEWS)).andReturn(new WidgetDefinition(WidgetType.NEWS));
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(linksWidgetDefinition)).andReturn(commonLinksWidget);		
 		expectLastCall().times(2);
@@ -172,7 +173,8 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2);
-		dashboardService.saveLayout(layout);
+        expect(dashboardService.createWidgetDefinition(WidgetType.JOBS_ASSIGNED)).andReturn(new WidgetDefinition(WidgetType.JOBS_ASSIGNED));
+        dashboardService.saveLayout(layout);
 		replay(dashboardService);
 		
 		expect(jobService.countAssignedToMe(true)).andReturn(new Long(0));
@@ -234,7 +236,9 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2); 
 		dashboardService.saveLayout(layout);
-		replay(dashboardService);
+        expect(dashboardService.createWidgetDefinition(WidgetType.NEWS)).andReturn(new WidgetDefinition(WidgetType.NEWS));
+        replay(dashboardService);
+
 		expect(widgetFactory.createWidget(WidgetDefinitionMatcher.eq(WidgetType.NEWS))).andReturn(newsWidget);
 		replay(widgetFactory);	
 		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);

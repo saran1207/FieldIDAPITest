@@ -100,7 +100,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
         content.add(addWidgetPanel = new AddWidgetPanel("addWidgetPanel", currentLayoutModel) {
             @Override
             protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) {
-                WidgetDefinition definition = new WidgetDefinition(type);
+                WidgetDefinition definition = dashboardService.createWidgetDefinition(type);
                 currentLayoutModel.getObject().getColumns().get(0).getWidgets().add(0, definition);
                 saveAndRepaintDashboard(target);
             }

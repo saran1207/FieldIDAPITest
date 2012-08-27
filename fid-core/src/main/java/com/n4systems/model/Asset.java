@@ -1,17 +1,6 @@
 package com.n4systems.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.persistence.*;
-
-import rfid.ejb.entity.InfoOptionBean;
-
+import com.google.common.base.Joiner;
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NetworkEntity;
@@ -24,6 +13,10 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
+import rfid.ejb.entity.InfoOptionBean;
+
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table(name = "assets")
@@ -528,5 +521,10 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		} else
 			return "";
 	}
-	
+
+    public String getVerboseDisplayName() {
+        Joiner joiner = Joiner.on(" / ").skipNulls();
+        String result = joiner.join(getType().getName(), getIdentifier(), getAssetStatus());
+        return result;
+    }
 }
