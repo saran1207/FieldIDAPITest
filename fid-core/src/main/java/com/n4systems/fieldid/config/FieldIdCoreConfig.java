@@ -405,5 +405,10 @@ public class FieldIdCoreConfig {
     public DateService dateService() {
         return new DateService();
     }
+    
+    @Bean
+    public PriorityCodeService priorityCodeService() {
+        return new PriorityCodeService();
+    }
 }
 

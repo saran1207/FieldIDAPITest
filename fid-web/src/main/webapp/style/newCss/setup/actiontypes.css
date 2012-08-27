@@ -1,0 +1,63 @@
+.actionType {
+    font-size: 1.2em;
+    line-height: 2em;
+}
+
+a.mattButton {
+    float: none;
+    font-size: 10px;
+}
+
+.header {
+    float: left;
+    width: 100%;
+    border-bottom: solid 1px #000;
+    margin-bottom: 10px;
+}
+
+.header h2{
+    width: 75%;
+    position: relative;
+    top: 10px;
+    font-size: 1.3em;
+    padding: 0;
+}
+
+.form, .openForm {
+    float: right;
+    position: relative;
+}
+
+.openForm {
+    padding-right: 20px;
+    top: -10px;
+}
+
+.formContainer {
+    border: solid 1px #000;
+    background: none repeat scroll #F9F9F9;
+    width: 180px;
+    padding: 10px;
+}
+.formContainer input {
+    width: 170px;
+    margin-bottom: 10px;
+}
+.actionType label {
+    position: relative;
+    top: -4px;
+}
+
+.pageSection {
+    width: 965px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
+    padding: 15px;
+}
+
+#page {
+    background: none;
+    border: none;
+    box-shadow: none;
+}

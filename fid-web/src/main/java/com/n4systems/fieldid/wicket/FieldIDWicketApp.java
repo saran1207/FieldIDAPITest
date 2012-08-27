@@ -19,7 +19,10 @@ import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
-import com.n4systems.fieldid.wicket.pages.reporting.*;
+import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
+import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.EditSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
@@ -27,6 +30,7 @@ import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
+import com.n4systems.fieldid.wicket.pages.setup.actions.ActionsSetupPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusArchivedListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusFormPage;
@@ -68,6 +72,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/security", SecurityPage.class);
         mountPage("setup/scoreGroups", ScoreGroupsPage.class);
         mountPage("setup/scoreResults", ScoreResultConfigurationPage.class);
+        mountPage("setup/actionsSetup", ActionsSetupPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 
