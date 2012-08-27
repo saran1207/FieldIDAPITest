@@ -80,6 +80,8 @@ public class Agenda extends Panel  {
     private boolean includeSummary;
     private int eventsLoaded;
     private Label limitMessage;
+    private WebMarkupContainer noEventsHeader;
+    private WebMarkupContainer header;
 
 
     public Agenda(String id, IModel<? extends ConfigurationForAgenda> model) {
@@ -88,6 +90,19 @@ public class Agenda extends Panel  {
         setOutputMarkupId(true);
 
         firstDayOfMonth = dateService.now().withDayOfMonth(1);  // default to "TODAY"
+
+        add(header = new WebMarkupContainer("hasEventsLabel") {
+            @Override public boolean isVisible() {
+                return eventsLoaded>0;
+            }
+        });
+        add(noEventsHeader = new WebMarkupContainer("hasNoEventsLabel") {
+            @Override public boolean isVisible() {
+                return eventsLoaded==0;
+            }
+        });
+        header.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
+        noEventsHeader.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
 
         addWorkListView();
         add(createLimitMessage());
@@ -143,7 +158,7 @@ public class Agenda extends Panel  {
                 }
                 withFirstDayOfMonth(new LocalDate().withMonthOfYear(month).withYear(year).withDayOfMonth(1));
                 listView.detachModels();
-                target.add(listContainer);
+                target.add(listContainer, header, noEventsHeader);
                 if (includeSummary) {
                     target.appendJavaScript(String.format(UPDATE_CALENDAR_JS, getJsVariableName(), getJsonMonthlyWorkSummary()));
                 }

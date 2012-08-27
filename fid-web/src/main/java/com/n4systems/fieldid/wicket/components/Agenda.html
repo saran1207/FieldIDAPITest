@@ -1,50 +1,45 @@
 <wicket:panel>
 
-    <!-- CAVEAT : the corresponding .js file relies on the structure and classes of this file.
-        e.g. the javascript code to toggle calendar visibility relies on classes applied to the toggleButton.
-        don't change it without checking first!
-    -->
-
-        <div wicket:id="calendar" class="datepicker"/>
-        <span class="header">
-            <p><wicket:message key="label.scheduled_events"></wicket:message></p>
-        </span>
-        <span class="blank-slate">
-            <p><wicket:message key="label.no_scheduled_events"></wicket:message></p>
-        </span>
-        <div wicket:id="listContainer" class="agenda-table">
-            <div wicket:id="days" class="agenda-day">
-                <span wicket:id="day"/>
-            </div>
+    <div wicket:id="calendar" class="datepicker"/>
+    <span wicket:id="hasEventsLabel" class="header">
+        <p><wicket:message key="label.scheduled_events"></wicket:message></p>
+    </span>
+    <span wicket:id="hasNoEventsLabel" class="header">
+        <p><wicket:message key="label.no_scheduled_events"></wicket:message></p>
+    </span>
+    <div wicket:id="listContainer" class="agenda-table">
+        <div wicket:id="days" class="agenda-day">
+            <span wicket:id="day"/>
         </div>
-        <div wicket:id="limitMessage" class="limit-message">
-            <span wicket:id="message"/>
-            <a wicket:id="link"><wicket:message key="label.View_all_events"/></a>
-        </div>
+    </div>
+    <div wicket:id="limitMessage" class="limit-message">
+        <span wicket:id="message"/>
+        <a wicket:id="link"><wicket:message key="label.View_all_events"/></a>
+    </div>
 
 
 
 
 
-        <!--                                                                            -->
-        <!-- this fragment is injected wherever you see "day" wicket component above    -->
-        <!--                                                                            -->
-        <wicket:fragment wicket:id="dayPanel">
-            <div class="agenda-title" wicket:id="date"/>
-            <table>
-                <col width="6%" />
-                <col width="50%" />
-                <col width="42%"/>
-                <tr wicket:id="list" class="agenda-row">
-                    <td><img wicket:id="icon"  class="icon"/></td>
-                    <td>
-                        <a wicket:id="asset" class="asset"><div wicket:id="name"/></a>
-                        <div wicket:id="org" class="org"/>
-                    </td>
-                    <td><a wicket:id="event"><span wicket:id="type" class="event"/></a></td>
-                </tr>
-            </table>
-        </wicket:fragment>
+    <!--                                                                            -->
+    <!-- this fragment is injected wherever you see "day" wicket component above    -->
+    <!--                                                                            -->
+    <wicket:fragment wicket:id="dayPanel">
+        <div class="agenda-title" wicket:id="date"/>
+        <table>
+            <col width="6%" />
+            <col width="50%" />
+            <col width="42%"/>
+            <tr wicket:id="list" class="agenda-row">
+                <td><img wicket:id="icon"  class="icon"/></td>
+                <td>
+                    <a wicket:id="asset" class="asset"><div wicket:id="name"/></a>
+                    <div wicket:id="org" class="org"/>
+                </td>
+                <td><a wicket:id="event"><span wicket:id="type" class="event"/></a></td>
+            </tr>
+        </table>
+    </wicket:fragment>
 
 
 </wicket:panel>
