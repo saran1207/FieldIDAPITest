@@ -1,15 +1,11 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
 import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.model.location.PredefinedLocationTreeNode;
 import com.n4systems.uitags.views.HierarchicalNode;
+
+import java.util.*;
 
 public class LocationTreeToHierarchicalNodesConverter {
 	
@@ -23,7 +19,9 @@ public class LocationTreeToHierarchicalNodesConverter {
 		node.setName(location.getName());
 		node.setId(location.getId());
 		node.setLevelName(levels.getNameForLevel(location).getName());
-		
+        node.setLevelNumber(location.levelNumber());
+        node.setOwner(location.getOwner());
+
 		node.addChildren(childList(location.getChildren(), levels));
 		
 		return node;

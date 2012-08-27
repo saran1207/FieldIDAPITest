@@ -2,10 +2,11 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 
 <head>
 	<#include "/templates/html/common/_columnView.ftl"/>
+    <#include "/templates/html/common/_orgPicker.ftl"/>
 	<@n4.includeStyle type="page" href="location" />
 	<script type="text/javascript">
 	   onDocumentLoad(function() {
-	  	 
+
 	   		jQuery('#editLocation').click(function(){
 	   				var nodeId = jQuery('#nodeList').getSelectedNode().id;
 		       		if(nodeId!=-1){
@@ -36,6 +37,7 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 			<div id="addLocationFields" class="infoSet">
 				<label class='label'><@s.text name="label.location_name"/>	</label>
 				<@s.textfield id="nodeForm" name="name" />
+                <@n4.orgPicker name="owner" theme="fieldid" id="ownerId"/>
 				<@s.submit id="addLocation" key="hbutton.add_new_location" cssClass="saveButton save"/>
 			</div>
 		</div>

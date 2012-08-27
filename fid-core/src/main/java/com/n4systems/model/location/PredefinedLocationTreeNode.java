@@ -1,9 +1,10 @@
 package com.n4systems.model.location;
 
+import com.n4systems.model.orgs.BaseOrg;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class PredefinedLocationTreeNode implements TreeNode {
 
@@ -34,8 +35,12 @@ public class PredefinedLocationTreeNode implements TreeNode {
 	public int levelNumber() {
 		return nodeValue.levelNumber();
 	}
-	
-	
+
+    public BaseOrg getOwner() {
+        return nodeValue.getOwner();
+    }
+
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

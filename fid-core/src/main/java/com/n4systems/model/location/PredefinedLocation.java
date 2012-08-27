@@ -1,5 +1,6 @@
 package com.n4systems.model.location;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.NamedEntity;
@@ -65,9 +66,18 @@ public class PredefinedLocation extends ArchivableEntityWithOwner implements Nam
 	
 	public void setParent(PredefinedLocation parentNode) {
 		parent=parentNode;
+        if (parentNode!=null) {
+            setOwner(null);
+        }
 	}
 
-	public boolean hasParent() {
+    @Override
+    public void setOwner(BaseOrg owner) {
+        Preconditions.checkState(getParent()==null || owner==null, "can only set Org owner on top level location node.");
+        super.setOwner(owner);
+    }
+
+    public boolean hasParent() {
 		return parent != null;
 	}
 
