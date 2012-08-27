@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.offlineprofile.OfflineProfile;
+import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
@@ -44,15 +46,14 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	@Transactional(readOnly = true)
 	public ListResponse<ApiSynchronizationAsset> synchronize() {
 		OfflineProfile profile = offlineProfileService.find(getCurrentUser());
-		if (profile == null || profile.getAssets().size() + profile.getOrganizations().size() == 0) {
-			return new ListResponse<ApiSynchronizationAsset>();
-		}
 		
-		Set<ApiSynchronizationAsset> assets = new HashSet<ApiSynchronizationAsset>();
-		assets.addAll(getOfflineProfileAssets(profile));
-		assets.addAll(getOfflineProfileOrgs(profile));
+		Set<ApiSynchronizationAsset> assets = new HashSet<ApiSynchronizationAsset>();		
+		if (profile != null) {		
+			assets.addAll(getOfflineProfileAssets(profile));
+			assets.addAll(getOfflineProfileOrgs(profile));
+		}
 		assets.addAll(getAssignedOpenEventAssets(profile));
-		assets.addAll(getLinkedAssets(assets));		
+		assets.addAll(getLinkedAssets(assets));
 		
 		ListResponse<ApiSynchronizationAsset> response = new ListResponse<ApiSynchronizationAsset>();
 		response.getList().addAll(assets);
@@ -89,7 +90,9 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	private List<ApiSynchronizationAsset> getAssignedOpenEventAssets(OfflineProfile profile) {
 		List<ApiSynchronizationAsset> assets = new ArrayList<ApiSynchronizationAsset>();		
 		Date startDate = new Date();
-		Date endDate = profile.getSyncEndDate(startDate);
+		Date endDate = profile == null 
+			? getSyncEndDate(OfflineProfile.DEFAULT_SYNC_DURATION, startDate)
+			: getSyncEndDate(profile.getSyncDuration(), startDate);
 		
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 		.addOrder("nextDate")
@@ -141,5 +144,18 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 		apiAsset.setAssetId(asset.getMobileGUID());
 		apiAsset.setModified(asset.getModified());
 		return apiAsset;
+	}
+	
+	private Date getSyncEndDate(SyncDuration syncDuration, Date startDate) {
+		DateTime dateTime = new DateTime(startDate);
+		
+		switch(syncDuration) {
+			case WEEK: return dateTime.plusWeeks(1).toDate();
+			case MONTH: return dateTime.plusMonths(1).toDate();
+			case SIX_MONTHS: return dateTime.plusMonths(6).toDate();
+			case YEAR: return dateTime.plusYears(1).toDate();
+		}
+		
+		return null;
 	}
 }

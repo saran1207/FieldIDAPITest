@@ -1,6 +1,5 @@
 package com.n4systems.model.offlineprofile;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.joda.time.DateTime;
-
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
@@ -24,14 +21,14 @@ import com.n4systems.model.user.User;
 @Entity
 @Table(name = "offline_profiles")
 public class OfflineProfile extends EntityWithTenant implements HasUser {
-
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(OfflineProfile.class);
-	}
+	}	
 	
 	public enum SyncDuration {
 		WEEK, MONTH, SIX_MONTHS, YEAR, ALL;
 	}
+	public static final SyncDuration DEFAULT_SYNC_DURATION = SyncDuration.YEAR;	
 
 	@OneToOne(optional = false)
 	@JoinColumn(name = "user_id", updatable = false)
@@ -81,18 +78,5 @@ public class OfflineProfile extends EntityWithTenant implements HasUser {
 	
 	public void setSyncDuration(SyncDuration syncDuration) {
 		this.syncDuration = syncDuration;
-	}
-	
-	public Date getSyncEndDate(Date startDate) {
-		DateTime dateTime = new DateTime(startDate);
-		
-		switch(getSyncDuration()) {
-			case WEEK: return dateTime.plusWeeks(1).toDate();
-			case MONTH: return dateTime.plusMonths(1).toDate();
-			case SIX_MONTHS: return dateTime.plusMonths(6).toDate();
-			case YEAR: return dateTime.plusYears(1).toDate();
-		}
-		
-		return null;
 	}
 }
