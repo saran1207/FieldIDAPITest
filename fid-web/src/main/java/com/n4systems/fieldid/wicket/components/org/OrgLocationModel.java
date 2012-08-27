@@ -56,13 +56,15 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
 
     @Override    public void setObject(EntityWithTenant object) {
         this.obj = object;
+        PredefinedLocation location = null;
+        BaseOrg org = null;
         if (obj instanceof BaseOrg) {
-            setOrg((BaseOrg) obj);
-            setLocation(null);
+            org = (BaseOrg) obj;
         } else if (obj instanceof PredefinedLocation) {
-            setLocation((PredefinedLocation) obj);
-            setOrg(null);
+            location = (PredefinedLocation) obj;
         }
+        setOrg(org);
+        setLocation(location);
         super.setObject(object);
     }
 
