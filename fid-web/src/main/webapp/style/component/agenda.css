@@ -51,10 +51,7 @@
     padding:0;
 }
 
-.agenda-list .overdue img {
-    border: 1px solid #8b0000;
-    border-radius: 5px;
-    padding:2px;
+.agenda-row.overdue .icon{
 }
 
 .agenda .ui-datepicker-calendar .ui-state-default {
@@ -85,7 +82,7 @@
 }
 
 .agenda .ui-datepicker-calendar .ui-state-default.eventful.overdue {
-    background: #e9eAe7;
+    border:1px solid #B9BBCA;
 }
 
 .agenda-row .org {
