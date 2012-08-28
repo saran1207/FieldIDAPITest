@@ -93,7 +93,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		List<Asset> assets = persistenceService.findAll(builder, page, pageSize);
 		Long total = persistenceService.count(builder);
 		
-		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents);
+		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, false);
 		ListResponse<ApiAsset> response = new ListResponse<ApiAsset>(apiAssets, page, pageSize, total);
 		return response;
 	}
@@ -104,13 +104,14 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public ListResponse<ApiAsset> findAll(@QueryParam("id") List<String> assetIds, 
-			@DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents) {
+			@DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents,
+			@DefaultValue("false") @QueryParam("respectSyncDuration") boolean respectSyncDuration) {
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", assetIds));
 		
 		List<Asset> assets = persistenceService.findAll(builder);
 		
-		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents);
+		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, respectSyncDuration);
 		ListResponse<ApiAsset> response = new ListResponse<ApiAsset>(apiAssets, 0, assets.size(), assets.size());
 		return response;
 	}
@@ -127,7 +128,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			throw new NotFoundException("Asset", id);
 		}
 		
-		ApiAsset apiModel = convertToApiAsset(asset, downloadEvents);
+		ApiAsset apiModel = convertToApiAsset(asset, downloadEvents, false);
 		return apiModel;
 	}
 	
@@ -165,15 +166,15 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		return assetSaveService.update(asset, existingAttachments, uploadedAttachments, apiAsset.getImage());
 	}
 	
-	protected List<ApiAsset> convertAllAssetsToApiModels(List<Asset> assets, boolean downloadEvents) {
+	protected List<ApiAsset> convertAllAssetsToApiModels(List<Asset> assets, boolean downloadEvents, boolean respectSyncDuration) {
 		List<ApiAsset> apiAssets = new ArrayList<ApiAsset>();
 		for (Asset asset: assets) {
-			apiAssets.add(convertToApiAsset(asset, downloadEvents));
+			apiAssets.add(convertToApiAsset(asset, downloadEvents, respectSyncDuration));
 		}
 		return apiAssets;
 	}
 	
-	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents) {
+	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, boolean respectSyncDuration) {
 		ApiAsset apiAsset = convertEntityToApiModel(asset);		
 		if(downloadEvents) {
 			apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));
