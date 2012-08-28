@@ -100,6 +100,9 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 			predefinedLocation.setParent(getParentNode(getParentId()));
 			predefinedLocation.setName(getName());
 			predefinedLocation.setTenant(getTenant());
+            if (predefinedLocation.getParent()==null) {
+                predefinedLocation.setOwner(getPrimaryOrg());
+            }
 
 			saver.save(predefinedLocation);
 
@@ -192,7 +195,7 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 
         Long id = getPredefinedLocation().getId();
 		for (HierarchicalNode node : siblings) {
-			if (!id.equals(node.getId()) && name.equals(node.getName())) {
+			if (!node.getId().equals(id) && name.equals(node.getName())) {
 				return true;
 			}
 		}
