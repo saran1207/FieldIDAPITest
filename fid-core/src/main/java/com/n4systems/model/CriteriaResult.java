@@ -1,22 +1,11 @@
 package com.n4systems.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import com.n4systems.model.parents.EntityWithTenant;
 import org.hibernate.annotations.IndexColumn;
 
-import com.n4systems.model.parents.EntityWithTenant;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "criteriaresults")
@@ -35,11 +24,16 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	@JoinTable(name="criteriaresults_recommendations")
 	@IndexColumn(name="orderidx")
 	private List<Recommendation> recommendations = new ArrayList<Recommendation>();
-	
-	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinTable(name="criteriaresults_deficiencies")
-	@IndexColumn(name="orderidx")
-	private List<Deficiency> deficiencies = new ArrayList<Deficiency>();
+
+    @OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinTable(name="criteriaresults_deficiencies")
+    @IndexColumn(name="orderidx")
+    private List<Deficiency> deficiencies = new ArrayList<Deficiency>();
+
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinTable(name="criteriaresults_actions")
+    @IndexColumn(name="orderidx")
+    private List<Event> actions = new ArrayList<Event>();
 	
 	public CriteriaResult() {}
 	
@@ -93,4 +87,11 @@ public abstract class CriteriaResult extends EntityWithTenant {
 				+ recommendations + "]";
 	}
 
+    public List<Event> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<Event> actions) {
+        this.actions = actions;
+    }
 }
