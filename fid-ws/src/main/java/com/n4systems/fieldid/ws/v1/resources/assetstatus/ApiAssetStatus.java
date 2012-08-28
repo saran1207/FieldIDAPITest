@@ -1,16 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.assetstatus;
 
-import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModelWithName;
 
-public class ApiAssetStatus extends ApiReadonlyModel {
-	private String name;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+public class ApiAssetStatus extends ApiReadonlyModelWithName {
 
 }

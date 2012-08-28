@@ -14,6 +14,7 @@ import com.n4systems.fieldid.ws.v1.resources.authentication.AuthenticationResour
 import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventFormResultResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventResource;
+import com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode.ApiPriorityCodeResource;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
@@ -76,6 +77,11 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiCommentTemplateResource apiCommentTemplateResource() {
 		return new ApiCommentTemplateResource();
+	}
+	
+	@Bean
+	public ApiPriorityCodeResource apiPriorityCodeResource() {
+		return new ApiPriorityCodeResource();
 	}
 
 	@Bean
