@@ -39,6 +39,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -97,8 +98,9 @@ public class Agenda extends Panel  {
             }
         });
         add(noEventsHeader = new WebMarkupContainer("hasNoEventsLabel") {
-            @Override public boolean isVisible() {
-                return eventsLoaded==0;
+            @Override
+            public boolean isVisible() {
+                return eventsLoaded == 0;
             }
         });
         header.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
@@ -343,7 +345,7 @@ public class Agenda extends Panel  {
             item.add(new NonWicketLink("event", "eventEdit.action?uniqueID=" + event.getId())
                         .add(new Label("type", new PropertyModel(item.getModelObject(), "type.name"))));
             String css = dateService.nowAsDate().after(event.getNextDate()) ? "overdue" : "";
-            item.add(new AttributeAppender("class", css));
+            item.add(new AttributeAppender("class", Model.of(css), " "));
         }
 
     }

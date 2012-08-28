@@ -90,6 +90,11 @@
 
 .agenda-row .org {
     line-height: 15px;
+    text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    white-space: nowrap;
+    width:100%;
+    overflow: hidden;
 }
 
 .agenda-row .icon {
@@ -98,9 +103,18 @@
     padding-top:0px;
 }
 
+.agenda-row .asset div {
+    text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    white-space: nowrap;
+    width:100%;
+    overflow: hidden;
+}
+
 .agenda-row .event {
     line-height:9px;
     height:15px;
+    padding-left:5px;
 }
 
 .agenda .toggle-button img {
