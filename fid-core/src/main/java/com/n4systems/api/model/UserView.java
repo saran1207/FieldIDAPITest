@@ -74,7 +74,7 @@ public class UserView extends ExternalModelView {
 	@SerializableField(title=INITIALS_FIELD, order = 310, validators = {})
 	private String initials;
 
-    @SerializableField(title=IDENTIFIER, order = 320, validators = {})
+    @SerializableField(title=IDENTIFIER, order = 320, maxLength = 20, validators = {StringLengthValidator.class})
     private String identifier;
 
 	@SerializableField(title=POSTITION_FIELD, order = 350, validators = {})
