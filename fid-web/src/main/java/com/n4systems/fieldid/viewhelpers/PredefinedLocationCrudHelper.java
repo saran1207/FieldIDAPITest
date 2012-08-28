@@ -3,12 +3,12 @@
  */
 package com.n4systems.fieldid.viewhelpers;
 
-import java.util.List;
-
 import com.n4systems.model.location.Location;
 import com.n4systems.persistence.PersistenceManagerTransactor;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.uitags.views.HierarchicalNode;
+
+import java.util.List;
 
 public class PredefinedLocationCrudHelper extends BaseActionHelper {
 	private LocationHelper locationHelper;
@@ -29,7 +29,7 @@ public class PredefinedLocationCrudHelper extends BaseActionHelper {
 		return locationHelper.hasPredefinedLocationTree();
 	}
 
-	public List<HierarchicalNode> findSibblingsByParent(Long parentId) {
+	public List<HierarchicalNode> findSiblingsByParent(Long parentId) {
 		return locationHelper.findSiblingsByParent(parentId);
 	}
 }

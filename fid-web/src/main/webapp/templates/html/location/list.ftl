@@ -37,7 +37,6 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 			<div id="addLocationFields" class="infoSet">
 				<label class='label'><@s.text name="label.location_name"/>	</label>
 				<@s.textfield id="nodeForm" name="name" />
-                <@n4.orgPicker name="owner" theme="fieldid" id="ownerId"/>
 				<@s.submit id="addLocation" key="hbutton.add_new_location" cssClass="saveButton save"/>
 			</div>
 		</div>
