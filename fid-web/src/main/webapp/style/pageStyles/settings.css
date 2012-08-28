@@ -58,6 +58,10 @@
 	background-image: url(../../images/asset-statuses-icon.png);
 }
 
+.priorityCodeList{
+    background-image: url(../../images/asset-statuses-icon.png);
+}
+
 .autoAttributeCriteria{
 	background-image: url(../../images/templates-auto-attributes-icon.png);
 }

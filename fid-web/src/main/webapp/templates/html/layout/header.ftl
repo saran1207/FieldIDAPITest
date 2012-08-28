@@ -140,7 +140,8 @@
 												<li><a href="<@s.url action="eventBooks"/>" ><@s.text name="title.manage_event_books.plural"/></a></li>
 												<li><a href="<@s.url action="assetTypeGroups"/>" ><@s.text name="title.manage_asset_type_groups.plural"/></a></li>	
 												<li><a href="<@s.url action="assetTypes"/>" ><@s.text name="title.manage_asset_types.plural"/></a></li>	
-												<li><a href="<@s.url action="assetStatusList"/>" ><@s.text name="title.manage_asset_statuses.plural"/></a></li>	
+												<li><a href="<@s.url action="assetStatusList"/>" ><@s.text name="title.manage_asset_statuses.plural"/></a></li>
+                                                <li><a href="<@s.url value="/w/setup/priorityCodes"/>" ><@s.text name="title.manage_priority_code.plural"/></a></li>
 											</ul>
 										</#if>
 									</li>

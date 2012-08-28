@@ -1,0 +1,125 @@
+#contentHeader {
+    display: none;
+}
+
+.actionType {
+    font-size: 1.2em;
+    line-height: 2em;
+}
+
+a.mattButton,  a.mattButtonLeft, a.mattButtonRight{
+    padding: 10px;
+}
+
+.form a.mattButton {
+    font-size: 10px;
+    width: 278px;
+
+}
+
+.header {
+    float: left;
+    width: 100%;
+    border-bottom: solid 1px #CCCCCC;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.header h2{
+    width: 71%;
+    position: relative;
+    top: 10px;
+    font-size: 21px;
+    padding: 0;
+    font-weight: normal;
+    float:left;
+}
+
+.formContainer h2 {
+    top: 0;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+.form, .openForm {
+    float: right;
+    position: relative;
+}
+
+.openForm {
+    padding-right: 20px;
+}
+
+.formContainer {
+    border: solid 1px #CCCCCC;
+    background: none repeat scroll #F9F9F9;
+    width: 300px;
+    padding: 20px;
+}
+.formContainer input {
+    width: 290px;
+    margin: 5px 0 10px 0;
+    border: 1px solid #9C9C9C;
+    padding: 4px;
+}
+
+.formContainer label {
+    font-size: 12px;
+}
+
+.actionType label {
+    position: relative;
+    top: -4px;
+}
+
+.pageSection {
+    width: 965px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
+    padding: 15px;
+    float: left;
+}
+
+#page {
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.list td {
+    border-top: none;
+}
+
+.list {
+    border-bottom: none;
+}
+
+.cancelLink {
+    float:right;
+    position: relative;
+    top: -10px;
+    padding-right: 5px;
+}
+
+.formActions {
+    border-top: 1px solid #CCCCCC;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.form .blueButton, .openForm .blueButton {
+    background: -moz-linear-gradient(center top , #357AE8 0%, #4D90FE 100%) repeat scroll 0 0 transparent;
+    color: #FFFFFF;
+}
+
+.form .blueButton:hover, .openForm .blueButton:hover{
+    background: none repeat scroll 0 0 #4C8FFC;
+    border: 1px solid #6699FF;
+}
+.formErrors {
+    margin: 30px 0 10px;
+}
+.formErrors h2 {
+    display: none;
+}

@@ -10,9 +10,9 @@ import org.apache.wicket.validation.validator.AbstractValidator;
 public class EventStatusUniqueNameValidator extends AbstractValidator<String> {
 
     @SpringBean
-    EventStatusService eventStatusService;
+    private EventStatusService eventStatusService;
     
-    Long id;
+    private Long id;
 
     public EventStatusUniqueNameValidator(Long id) {
         this.id = id;

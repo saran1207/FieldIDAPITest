@@ -1,0 +1,34 @@
+<wicket:extend>
+
+    <div class="header">
+
+        <h2><wicket:message key="label.priority_codes"/></h2>
+        
+        <a class="mattButtonLeft" wicket:id="viewAll"><wicket:message key="nav.view_all"/></a>
+        <a class="mattButtonRight" wicket:id="viewArchived"><wicket:message key="label.archived"/></a>
+
+        <form class="openForm" wicket:id="openForm">
+            <a class="mattButton blueButton" wicket:id="openFormButton"><wicket:message key="label.add_priority_code"/></a>
+        </form>
+
+        <form class="form" wicket:id="form">
+            <div wicket:id="formContainer" class="formContainer">
+                <h2>
+                    <wicket:message key="label.add_priority_code"/>
+                    <a wicket:id="cancelLink" class="cancelLink"><img src="/fieldid/images/modal-close.png"/></a>
+                </h2>
+                <div wicket:id="feedbackPanel"/>
+                <label><wicket:message key="label.name"/></label>
+                <input type="text" wicket:id="name">
+                <div class="formActions">
+                    <a class="mattButton blueButton" wicket:id="addActionTypeButton"><wicket:message key="label.save"/></a>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <div class="pageSection" wicket:id="priorityCodeList"/>
+    <div class="pageSection" wicket:id="priorityCodeArchivedList"/>
+
+</wicket:extend>
