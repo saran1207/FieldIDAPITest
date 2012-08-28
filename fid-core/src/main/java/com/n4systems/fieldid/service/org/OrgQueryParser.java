@@ -26,7 +26,7 @@ public class OrgQueryParser {
             searchTerm = term.substring(index+1).trim();
             parentTerms = Arrays.asList(term.substring(0,index).split(":"));
         } else {
-            searchTerm = term;
+            searchTerm = term.trim();
             parentTerms = Lists.newArrayList();
         }
     }

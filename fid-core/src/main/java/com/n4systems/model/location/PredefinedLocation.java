@@ -95,4 +95,15 @@ public class PredefinedLocation extends ArchivableEntityWithOwner implements Nam
 	public String getFullName() {
 		return hasParent() ? parent.getFullName() + " > " + name : name;
 	}
+
+    public BaseOrg getBaseOrg() {
+        PredefinedLocation node = this;
+        while (node!=null) {
+            if (node.getOwner()!=null) {
+                return node.getOwner();
+            }
+            node = node.getParent();
+        }
+        return null;
+    }
 }
