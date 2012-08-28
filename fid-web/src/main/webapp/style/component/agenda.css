@@ -61,6 +61,7 @@
 .agenda .ui-datepicker-calendar .ui-state-highlight {
     font-weight:bold;
     border: 1px solid #C0D6E7;
+    color : #345Cd1;
 }
 
 .agenda .agenda-title {
