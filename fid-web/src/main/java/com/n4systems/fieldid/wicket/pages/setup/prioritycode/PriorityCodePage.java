@@ -28,7 +28,7 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
     @SpringBean
     private PriorityCodeService priorityCodeService;
 
-    private AddActionTypeForm addActionTypeForm;
+    private AddPriorityCodeForm addPriorityCodeForm;
     private AjaxSubmitLink openFormButton;
 
     private AjaxLink viewAll;
@@ -49,6 +49,8 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
                 target.add(viewArchived);
                 target.add(priorityCodeListPanel);
                 target.add(priorityCodeArchivedListPanel);
+                target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
+
             }
         });
         viewAll.add(new AttributeAppender("class", "mattButtonPressed").setSeparator(" "));
@@ -64,17 +66,18 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
                 target.add(viewArchived);
                 target.add(priorityCodeListPanel);
                 target.add(priorityCodeArchivedListPanel);
+                target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
             }
         });
 
-        addActionTypeForm = new AddActionTypeForm("form", Model.of(new PriorityCode()));
-        add(addActionTypeForm);
+        addPriorityCodeForm = new AddPriorityCodeForm("form", Model.of(new PriorityCode()));
+        add(addPriorityCodeForm);
         Form openForm = new Form("openForm");
         openForm.add(openFormButton = new AjaxSubmitLink("openFormButton") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                addActionTypeForm.setFormVisible(target, true);
-                target.appendJavaScript("translateWithin($('#" + addActionTypeForm.formContainer.getMarkupId() + "'), $('#" + openFormButton.getMarkupId() + "'), $('#pageContent'), " + 40 + ", " + -1063 + ");");
+                addPriorityCodeForm.setFormVisible(target, true);
+                target.appendJavaScript("translateWithin($('#" + addPriorityCodeForm.formContainer.getMarkupId() + "'), $('#" + openFormButton.getMarkupId() + "'), $('#pageContent'), " + 40 + ", " + -1063 + ");");
             }
 
             @Override
@@ -92,13 +95,13 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
         priorityCodeArchivedListPanel.setVisible(false);
     }
 
-    class AddActionTypeForm extends Form<PriorityCode> {
+    class AddPriorityCodeForm extends Form<PriorityCode> {
 
         FIDFeedbackPanel feedbackPanel;
         String name;
         public WebMarkupContainer formContainer;
 
-        public AddActionTypeForm(String id, IModel<PriorityCode> model) {
+        public AddPriorityCodeForm(String id, IModel<PriorityCode> model) {
             super(id, model);
             add(formContainer = new WebMarkupContainer("formContainer"));
             formContainer.add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
@@ -106,7 +109,7 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
             formContainer.add(nameField = new RequiredTextField("name", new PropertyModel(this, "name")));
             nameField.add(new PriorityCodeUniqueNameValidator());
 
-            formContainer.add(new AjaxSubmitLink("addActionTypeButton"){
+            formContainer.add(new AjaxSubmitLink("saveButton"){
 
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -119,6 +122,7 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
                     name = null;
                     target.add(priorityCodeListPanel);
                     setFormVisible(target, false);
+                    target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
                 }
 
                 @Override
@@ -153,6 +157,12 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
 
         response.renderCSSReference("style/newCss/setup/prioritycodes.css");
+
+        response.renderCSSReference("style/tipsy/tipsy.css");
+        response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
+        // CAVEAT : https://github.com/jaz303/tipsy/issues/19
+        // after ajax call, tipsy tooltips will remain around so need to remove them explicitly.
+        response.renderOnDomReadyJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
     }
 
     @Override

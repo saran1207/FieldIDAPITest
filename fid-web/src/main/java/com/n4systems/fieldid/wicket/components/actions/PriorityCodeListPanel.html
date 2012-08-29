@@ -8,13 +8,19 @@
             <th>&nbsp;</th>
         </tr>
         <tr wicket:id="priorityCode">
-            <td><span wicket:id="name"/></td>
+            <td>
+                <span wicket:id="name"/>
+                <form wicket:id="editForm">
+                    <div wicket:id="feedbackPanel"/>
+                    <input type="text" wicket:id="nameField">
+                    <a class="mattButton" wicket:id="saveButton"><wicket:message key="label.save"/></a>
+                </form>
+            </td>
             <td><span wicket:enclosure="createdBy"><span wicket:id="createdBy"/>, </span><span wicket:id="created"/></td>
             <td><span wicket:enclosure="modifiedBy"><span wicket:id="modifiedBy"/>, </span><span wicket:id="lastModified"/></td>
             <td>
-                <a wicket:id="edit"><wicket:message key="label.edit" /></a>
-                |
-                <a wicket:id="archive"><wicket:message key="label.archive" /></a>
+                <a class="mattButton tipsy-tooltip" wicket:id="archive"><img src="/fieldid/images/archive.png"/></a>
+                <a class="mattButton tipsy-tooltip" wicket:id="edit"><img src="/fieldid/images/edit.png"/></a>
             </td>
         </tr>
     </table>

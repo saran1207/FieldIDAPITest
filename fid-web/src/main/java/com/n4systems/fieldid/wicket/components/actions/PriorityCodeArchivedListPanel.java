@@ -2,9 +2,11 @@ package com.n4systems.fieldid.wicket.components.actions;
 
 import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.PriorityCode;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -44,13 +46,15 @@ public class PriorityCodeArchivedListPanel extends Panel {
                 modifiedBy.setVisible(priorityCode.getModifiedBy() != null);
                 item.add(new DateTimeLabel("lastModified", new PropertyModel<Date>(priorityCode, "modified")));
 
-                item.add(new AjaxLink("unarchive") {
+                AjaxLink unarchive;
+                item.add(unarchive = new AjaxLink("unarchive") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         priorityCodeService.unarchive(priorityCode);
                         target.add(PriorityCodeArchivedListPanel.this);
                     }
                 });
+                unarchive.add(new AttributeAppender("title", new FIDLabelModel("label.unarchive")));
             }
         };
         add(priorityCodes);

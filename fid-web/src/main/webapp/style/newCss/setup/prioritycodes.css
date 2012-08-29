@@ -2,12 +2,16 @@
     display: none;
 }
 
+#pageContent {
+    overflow: visible;
+}
+
 .actionType {
     font-size: 1.2em;
     line-height: 2em;
 }
 
-a.mattButton,  a.mattButtonLeft, a.mattButtonRight{
+.header a.mattButton, .header a.mattButtonLeft, .header a.mattButtonRight{
     padding: 10px;
 }
 
@@ -56,6 +60,7 @@ a.mattButton,  a.mattButtonLeft, a.mattButtonRight{
     width: 300px;
     padding: 20px;
 }
+
 .formContainer input {
     width: 290px;
     margin: 5px 0 10px 0;
@@ -122,4 +127,37 @@ a.mattButton,  a.mattButtonLeft, a.mattButtonRight{
 }
 .formErrors h2 {
     display: none;
+}
+
+.list a.mattButton {
+    margin-right: 10px;
+    float: right;
+}
+
+.list form a.mattButton {
+    margin-left: 10px;
+    margin-top: 2px;
+    float: left;
+}
+
+.list th {
+    background-color: #525252;
+    font-weight: normal;
+    color: #FFF;
+}
+
+.list th, .list td {
+    padding: 13px 5px 13px 10px;
+}
+
+.list input {
+    width: 200px;
+    margin: 5px 0 10px 0;
+    border: 1px solid #9C9C9C;
+    padding: 4px;
+    float: left;
+}
+
+.list .formErrors {
+    width: 250px;
 }
