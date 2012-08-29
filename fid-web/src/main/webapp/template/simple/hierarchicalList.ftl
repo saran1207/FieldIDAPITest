@@ -1,9 +1,10 @@
 <#macro createTree entry>
 	  <#if !entry.leaf >
-          <#if entry.owner?exists>
-          <li class="expanded"><a class="node has-owner" href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}"><span class="name" >${(entry.name?html)!}</span> <span class="org"> ${(entry.owner.displayName?html)!}</span></a><br/>
+
+          <#if !entry.parent??>
+            <li class="expanded"><a class="node has-owner" href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}"><span class="name" >${(entry.name?html)!}</span> <span class="org"> ${(entry.owner.displayName?html)!}</span></a><br/>
           <#else>
-          <li class="expanded"><a class="node no-owner" href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}"><span class="name">${(entry.name?html)!}</span> </a><br/>
+            <li class="expanded"><a class="node no-owner" href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}"><span class="name">${(entry.name?html)!}</span> </a><br/>
           </#if>
           <ul class="menu">
 	  	  	<li class="leaf"><p class="treeHeading">${(entry.children?first.levelName?html)!}</p></li>
@@ -13,7 +14,7 @@
 	 	   </ul> 
 	 	</li>
 	 <#else>
-         <#if entry.owner?exists>
+         <#if !entry.parent??>
             <li class="leaf"><a class="node has-owner"  href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}"><span class="name" >${(entry.name?html)!}</span><span class="org">  ${(entry.owner.displayName?html)!} </span></a></li>
          <#else>
              <li class="leaf"><a class="node no-owner"  href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}"><span class="name" >${(entry.name?html)!}</span> </a></li>

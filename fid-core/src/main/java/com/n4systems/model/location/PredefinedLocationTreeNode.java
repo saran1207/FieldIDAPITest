@@ -40,11 +40,13 @@ public class PredefinedLocationTreeNode implements TreeNode {
         return nodeValue.getOwner();
     }
 
+    public PredefinedLocation getNodeValue() {
+        return nodeValue;
+    }
 
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-	
-	
+
 }

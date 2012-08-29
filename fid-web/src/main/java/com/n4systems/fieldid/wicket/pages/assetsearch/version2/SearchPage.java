@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
-import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.assetsearch.results.AssetSearchResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -107,11 +106,6 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
                 return new SearchPage(newSavedItem.getSearchCriteria(), newSavedItem);
             }
         };
-    }
-
-    @Override
-    protected Component createCriteriaPanel(String id, Model<AssetSearchCriteria> criteriaModel, SavedItem<AssetSearchCriteria> savedItem) {
-        return new AssetSearchCriteriaPanel(id, criteriaModel, (SavedSearchItem) savedItem);
     }
 
     @Override

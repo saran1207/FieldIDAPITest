@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import java.util.List;
-
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocationLevels;
@@ -11,6 +9,8 @@ import com.n4systems.persistence.Transactor;
 import com.n4systems.persistence.UnitOfWork;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.uitags.views.HierarchicalNode;
+
+import java.util.List;
 
 public class LocationHelper {
 
@@ -50,7 +50,6 @@ public class LocationHelper {
 				return new LocationTreeToHierarchicalNodesConverter().convert(locationTree, levels);
 			}
 		});
-
 	}
 
 	public boolean hasPredefinedLocationTree() {

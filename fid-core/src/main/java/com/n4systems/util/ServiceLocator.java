@@ -8,8 +8,9 @@ import com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer;
 import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
 import com.n4systems.ejb.wrapper.EventManagerEJBContainer;
-import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
+import com.n4systems.ejb.wrapper.PredefinedLocationManagerEJBContainer;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.mail.MailManager;
 import com.n4systems.mail.MailManagerFactory;
@@ -113,29 +114,9 @@ public class ServiceLocator implements ApplicationContextAware {
 		return new EmailNotifier(getMailManager());
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T getBean(String name, Class<T> type) {
-		return (T) applicationContext.getBean(name);
-	}
-
-	public static SecurityContext getSecurityContext() {
-		return getBean(SecurityContext.class);
-	}
-
-	private static <T> T getBean(Class<T> clazz) {
-		Map<String, T> beans = applicationContext.getBeansOfType(clazz);		
-		if (beans.size()==1)  { 
-			T bean = beans.values().iterator().next();			
-			return bean;
-		} else { 						
-			throw new NoSuchBeanDefinitionException(clazz, "can't find bean instance of " + clazz.getSimpleName() + "  ("+beans.size()+")");			 
-		}
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		ServiceLocator.applicationContext = applicationContext; 
-	}
+    public static PredefinedLocationManager getPredefinedLocationManager() {
+        return new PredefinedLocationManagerEJBContainer();
+    }
 
     public static EventScheduleService getEventScheduleService() {
         return new EventScheduleServiceImpl(getPersistenceManager());
@@ -145,5 +126,29 @@ public class ServiceLocator implements ApplicationContextAware {
         S3Service s3Service = getBean(S3Service.class);
         return s3Service;
     }
+
+	public static SecurityContext getSecurityContext() {
+		return getBean(SecurityContext.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getBean(String name, Class<T> type) {
+		return (T) applicationContext.getBean(name);
+	}
+
+	private static <T> T getBean(Class<T> clazz) {
+		Map<String, T> beans = applicationContext.getBeansOfType(clazz);
+		if (beans.size()==1)  {
+			T bean = beans.values().iterator().next();
+			return bean;
+		} else {
+			throw new NoSuchBeanDefinitionException(clazz, "can't find bean instance of " + clazz.getSimpleName() + "  ("+beans.size()+")");
+		}
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		ServiceLocator.applicationContext = applicationContext;
+	}
 
 }

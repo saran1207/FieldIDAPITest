@@ -1,6 +1,5 @@
 package com.n4systems.model.location;
 
-import com.google.common.base.Preconditions;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.NamedEntity;
@@ -26,8 +25,9 @@ public class PredefinedLocation extends ArchivableEntityWithOwner implements Nam
 	@JoinTable(name="predefinedlocations_searchids", joinColumns = {@JoinColumn(name="predefinedlocation_id")})
 	@Column(name="search_id")
 	private List<Long> searchIds = new ArrayList<Long>();
-	
-	public PredefinedLocation() {
+
+
+    public PredefinedLocation() {
 		super();
 	}
 
@@ -66,14 +66,10 @@ public class PredefinedLocation extends ArchivableEntityWithOwner implements Nam
 	
 	public void setParent(PredefinedLocation parentNode) {
 		parent=parentNode;
-        if (parentNode!=null) {
-            setOwner(null);
-        }
 	}
 
     @Override
     public void setOwner(BaseOrg owner) {
-        Preconditions.checkState(getParent()==null || owner==null, "can only set Org owner on top level location node.");
         super.setOwner(owner);
     }
 
@@ -97,6 +93,17 @@ public class PredefinedLocation extends ArchivableEntityWithOwner implements Nam
 	}
 
     public BaseOrg getBaseOrg() {
+        PredefinedLocation node = this;
+        while (node!=null) {
+            if (node.getOwner()!=null) {
+                return node.getOwner();
+            }
+            node = node.getParent();
+        }
+        return null;
+    }
+
+    public BaseOrg getTopLevelOwner() {
         PredefinedLocation node = this;
         while (node!=null) {
             if (node.getOwner()!=null) {

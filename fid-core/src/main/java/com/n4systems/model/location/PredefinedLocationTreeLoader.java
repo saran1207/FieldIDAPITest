@@ -3,6 +3,7 @@ package com.n4systems.model.location;
 import com.n4systems.persistence.Transaction;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,23 +15,27 @@ public class PredefinedLocationTreeLoader {
 		this.loader = loader;
 	}
 
-	public PredefinedLocationTree load(Transaction transaction) {
-		PredefinedLocationTree root = new PredefinedLocationTree();
-		HashMap<PredefinedLocation, PredefinedLocationTreeNode> locationParents = new HashMap<PredefinedLocation, PredefinedLocationTreeNode>();
+    public PredefinedLocationTree load(Transaction transaction) {
+        return load(transaction.getEntityManager());
+    }
 
-		List<PredefinedLocation> locations = loader.load(transaction);
-		for (PredefinedLocation location : locations) {
-				PredefinedLocationTreeNode node = new PredefinedLocationTreeNode(location);
-				if (location.getParent() == null) {
-					root.addNode(node);
-				} else {
-					locationParents.get(location.getParent()).addChild(node);
-				}
-				locationParents.put(location, node);
-		}
+    public PredefinedLocationTree load(EntityManager em) {
+        PredefinedLocationTree root = new PredefinedLocationTree();
+        HashMap<PredefinedLocation, PredefinedLocationTreeNode> locationParents = new HashMap<PredefinedLocation, PredefinedLocationTreeNode>();
 
-		return root;
-	}
+        List<PredefinedLocation> locations = loader.load(em);
+        for (PredefinedLocation location : locations) {
+            PredefinedLocationTreeNode node = new PredefinedLocationTreeNode(location);
+            if (location.getParent() == null) {
+                root.addNode(node);
+            } else {
+                locationParents.get(location.getParent()).addChild(node);
+            }
+            locationParents.put(location, node);
+        }
+
+        return root;
+    }
 
 	@Override
 	public String toString() {

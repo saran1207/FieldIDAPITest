@@ -3,7 +3,7 @@ package com.n4systems.model.location;
 import com.google.common.collect.ImmutableList;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.util.persistence.TestingTransaction;
+import com.n4systems.testutils.DummyTransaction;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Test;
@@ -26,10 +26,10 @@ public class PredefinedLocationTreeLoaderTest {
 	
 	@Test
 	public void should_create_just_a_root_node_when_there_are_no_predefined_locations() throws Exception {
-		Transaction transaction = new TestingTransaction();
-		
-		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load(transaction)).andReturn(EMPTY_LIST);
+        Transaction transaction = new DummyTransaction();
+
+        PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
+		expect(loader.load(transaction.getEntityManager())).andReturn(EMPTY_LIST);
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -42,10 +42,10 @@ public class PredefinedLocationTreeLoaderTest {
 	
 	@Test
 	public void should_create_just_a_root_node_with_a_set_of_nodes_when_all_locations_are_in_the_first_level() throws Exception {
-		Transaction transaction = new TestingTransaction();
-		
-		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load(transaction)).andReturn(ImmutableList.of(aLevelOneLocation(), aLevelOneLocation()));
+        Transaction transaction = new DummyTransaction();
+
+        PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
+		expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation(), aLevelOneLocation()));
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -58,15 +58,16 @@ public class PredefinedLocationTreeLoaderTest {
 	
 	@Test
 	public void should_create_a_tree_with_all_multiple_levels_of_nodes() throws Exception {
-		Transaction transaction = new TestingTransaction();
-		
-		PredefinedLocation aLevelOneLocation = aLevelOneLocation();
+        Transaction transaction = new DummyTransaction();
+
+
+        PredefinedLocation aLevelOneLocation = aLevelOneLocation();
 		PredefinedLocation aLevelTwoLocation = aLocationWithParent(aLevelOneLocation);
 		PredefinedLocation aLevelThreeLocation = aLocationWithParent(aLevelTwoLocation);
 		
 		
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load(transaction)).andReturn(ImmutableList.of(aLevelOneLocation, aLevelTwoLocation, aLevelThreeLocation));
+		expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation, aLevelTwoLocation, aLevelThreeLocation));
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -79,9 +80,9 @@ public class PredefinedLocationTreeLoaderTest {
 	
 	@Test
 	public void should_create_a_tree_with_all_multiple_nodes_per_level() throws Exception {
-		Transaction transaction = new TestingTransaction();
-		
-		PredefinedLocation aLevelOneLocation = aLevelOneLocation();
+        Transaction transaction = new DummyTransaction();
+
+        PredefinedLocation aLevelOneLocation = aLevelOneLocation();
 		PredefinedLocation aSecondeLevelOneLocation = aLevelOneLocation();
 		PredefinedLocation aLevelTwoLocation = aLocationWithParent(aLevelOneLocation);
 		PredefinedLocation aSecondLevelTwoLocation = aLocationWithParent(aLevelOneLocation);
@@ -89,7 +90,7 @@ public class PredefinedLocationTreeLoaderTest {
 		PredefinedLocation aForthLevelTwoLocation = aLocationWithParent(aSecondeLevelOneLocation);
 		
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load(transaction)).andReturn(ImmutableList.of(aLevelOneLocation, aSecondeLevelOneLocation,  aLevelTwoLocation, aSecondLevelTwoLocation, aThirdLevelTwoLocation, aForthLevelTwoLocation));
+		expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation, aSecondeLevelOneLocation,  aLevelTwoLocation, aSecondLevelTwoLocation, aThirdLevelTwoLocation, aForthLevelTwoLocation));
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -102,9 +103,9 @@ public class PredefinedLocationTreeLoaderTest {
 
 	@Test
 	public void should_use_loader_to_get_list_of_predefined_locations_in_parent_first_order() throws Exception {
-		Transaction transaction = new TestingTransaction();
-		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load(transaction)).andReturn(EMPTY_LIST);
+        Transaction transaction = new DummyTransaction();
+        PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
+		expect(loader.load(transaction.getEntityManager())).andReturn(EMPTY_LIST);
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);

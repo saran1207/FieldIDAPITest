@@ -12,6 +12,7 @@ import com.n4systems.model.location.PredefinedLocationSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.Permissions;
 import com.n4systems.uitags.views.HierarchicalNode;
+import com.n4systems.util.ServiceLocator;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
@@ -43,7 +44,7 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 
 	@Override
 	protected void initMemberFields() {
-		predefinedLocation = new PredefinedLocation();
+		predefinedLocation = new PredefinedLocation(getTenant(), null, null );
 	}
 
 	@Override
@@ -101,7 +102,9 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 			predefinedLocation.setName(getName());
 			predefinedLocation.setTenant(getTenant());
             if (predefinedLocation.getParent()==null) {
-                predefinedLocation.setOwner(getPrimaryOrg());
+                predefinedLocation.setOwner(getUser().getOwner());
+            } else {
+                predefinedLocation.setOwner(predefinedLocation.getTopLevelOwner());
             }
 
 			saver.save(predefinedLocation);
@@ -120,6 +123,8 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 		try {
 			predefinedLocation.setName(getName());
 			predefinedLocation = saver.update(predefinedLocation);
+
+            ServiceLocator.getPredefinedLocationManager().updateChildrenOwner(getSecurityFilter(), predefinedLocation);
 
 			addFlashMessageText("message.location_updated");
 		} catch (Exception e) {

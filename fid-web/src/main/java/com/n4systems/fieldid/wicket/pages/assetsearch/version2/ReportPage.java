@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2;
 
 import com.n4systems.fieldid.service.search.SavedReportService;
-import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -117,11 +116,6 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
                 return new ReportPage(newSavedItem.getSearchCriteria(), newSavedItem);
             }
         };
-    }
-
-    @Override
-    protected Component createCriteriaPanel(String id, Model<EventReportCriteria> criteriaModel, SavedItem<EventReportCriteria> savedItem) {
-        return new EventReportCriteriaPanel("criteriaPanel", criteriaModel, (SavedReportItem) savedItem);
     }
 
     @Override
