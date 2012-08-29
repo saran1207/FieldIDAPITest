@@ -37,9 +37,10 @@
 	<label for="name"><@s.text name="indicator.required"/> <@s.text name="label.name"/></label>
 	<span><@s.textfield name="name" required="true"/></span>
 </div>
-<div class="infoSet">
-        <label for="action"><@s.text name="label.action"/></label>
+<div class="infoSet actionCheck">
+        <label for="action"></label>
         <span><@s.checkbox name="action"/></span>
+        <p><@s.text name="msg.used_for_actions"/></p>
 </div>
 <div class="certFormTitle">
 	<h2><@s.text name="label.report_title"/></h2>

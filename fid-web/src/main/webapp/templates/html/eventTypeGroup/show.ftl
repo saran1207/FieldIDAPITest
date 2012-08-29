@@ -7,7 +7,7 @@ ${action.setPageType('event_type_group', 'show')!}
 			<span>${(group.name?html) !}</span>
 		</div>
         <div class="infoSet">
-            <label for="action"><@s.text name="label.action"/></label>
+            <label for="action"><@s.text name="label.used_for_actions"/></label>
             <span>${(group.action?string('Yes', 'No')) !}</span>
         </div>
 
