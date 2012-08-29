@@ -1,17 +1,13 @@
 package com.n4systems.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.reporting.EventReportType;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="eventtypegroups")
@@ -21,10 +17,13 @@ public class EventTypeGroup extends EntityWithTenant implements NamedEntity, Lis
 	@Column(nullable=false)
 	private String name;
 
+    @Column(nullable=false)
+    private boolean action;
+
 	@Column(nullable=false)
 	private String reportTitle;
 
-	@ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.EAGER)
 	private PrintOut printOut;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -124,4 +123,12 @@ public class EventTypeGroup extends EntityWithTenant implements NamedEntity, Lis
 	public String toString() {
 		return name;
 	}
+
+    public boolean isAction() {
+        return action;
+    }
+
+    public void setAction(boolean action) {
+        this.action = action;
+    }
 }

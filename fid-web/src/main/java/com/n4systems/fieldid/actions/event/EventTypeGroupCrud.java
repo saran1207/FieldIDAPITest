@@ -1,19 +1,12 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.util.List;
-
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.web.helper.Constants;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -22,6 +15,11 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.web.helper.Constants;
+
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> implements HasDuplicateValueValidator{
@@ -157,6 +155,10 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 	public String getName() {
 		return eventTypeGroup.getName();
 	}
+    
+    public boolean isAction() {
+        return eventTypeGroup.isAction();
+    }
 
 	public String getReportTitle() {
 		return eventTypeGroup.getReportTitle();
@@ -167,6 +169,10 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 	public void setName(String name) {
 		eventTypeGroup.setName(name);
 	}
+
+    public void setAction(boolean action) {
+        eventTypeGroup.setAction(action);
+    }
 	
 	@RequiredStringValidator(message="", key="error.reporttitlerequired")
 	public void setReportTitle(String reportTitle) {
