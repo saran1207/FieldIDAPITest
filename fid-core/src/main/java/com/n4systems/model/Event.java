@@ -72,6 +72,10 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     @OneToOne(mappedBy = "event", cascade = CascadeType.PERSIST)
     private AssigneeNotification assigneeNotification;
 
+    @OneToOne
+    @JoinColumn(name="trigger_event_id")
+    private Event triggerEvent;
+
 	@Column(nullable=false)
 	private boolean printable;
 
@@ -411,6 +415,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         assigneeNotification.setEvent(this);
 		normalizeAssignmentForPersistence();
         fillInPlaceholderScheduleIfAbsent();
+        setTriggersIntoResultingActions();
 	}
 
     private void fillInPlaceholderScheduleIfAbsent() {
@@ -429,9 +434,20 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	protected void onUpdate() {
 		super.onUpdate();
 		normalizeAssignmentForPersistence();
+        setTriggersIntoResultingActions();
 	}
 
-	@Override
+    public void setTriggersIntoResultingActions() {
+        for (CriteriaResult result : getResults()) {
+            for (Event event : result.getActions()) {
+                event.setAsset(getAsset());
+                event.setOwner(getOwner());
+                event.setTriggerEvent(this);
+            }
+        }
+    }
+
+    @Override
 	@AllowSafetyNetworkAccess
 	public Location getAdvancedLocation() {
 		return advancedLocation;
@@ -617,6 +633,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         return getAssignee()!=null;
     }
 
+    public Event getTriggerEvent() {
+        return triggerEvent;
+    }
 
+    public void setTriggerEvent(Event triggerEvent) {
+        this.triggerEvent = triggerEvent;
+    }
 
 }

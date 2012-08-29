@@ -31,7 +31,7 @@ public abstract class CriteriaResult extends EntityWithTenant {
     private List<Deficiency> deficiencies = new ArrayList<Deficiency>();
 
     @OneToMany(cascade=CascadeType.ALL)
-    @JoinTable(name="criteriaresults_actions")
+    @JoinTable(name="criteriaresults_actions", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "criteriaresult_id"))
     @IndexColumn(name="orderidx")
     private List<Event> actions = new ArrayList<Event>();
 	
