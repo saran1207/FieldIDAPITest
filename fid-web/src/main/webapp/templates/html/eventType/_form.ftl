@@ -46,20 +46,23 @@
 		<@s.checkbox name="printable"/>
 	</span>
 </div>
-<div class="infoSet">
-	<@s.label cssClass="label" value="${action.getText('label.masterevent')}:" />
-	<span class="fieldHolder">
-		<@s.checkbox name="master"/>
-	</span>
-</div>
 
-<#if securityGuard.assignedToEnabled>
-	<div class="infoSet">
-		<@s.label cssClass="label" value="${action.getText('label.assigned_to_can_be_updated')}:" />
-		<span class="fieldHolder">
-			<@s.checkbox name="assignedToAvailable"/>
-		</span>
-	</div>
+<#if !action.isAction()>
+    <div class="infoSet">
+        <@s.label cssClass="label" value="${action.getText('label.masterevent')}:" />
+        <span class="fieldHolder">
+            <@s.checkbox name="master"/>
+        </span>
+    </div>
+
+    <#if securityGuard.assignedToEnabled>
+        <div class="infoSet">
+            <@s.label cssClass="label" value="${action.getText('label.assigned_to_can_be_updated')}:" />
+            <span class="fieldHolder">
+                <@s.checkbox name="assignedToAvailable"/>
+            </span>
+        </div>
+    </#if>
 </#if>
 <#if securityGuard.proofTestIntegrationEnabled>
 	<table class="list">

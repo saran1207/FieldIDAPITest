@@ -23,13 +23,7 @@
  import org.apache.log4j.Logger;
  import org.apache.struts2.interceptor.validation.SkipValidation;
 
- import java.util.ArrayList;
- import java.util.Arrays;
- import java.util.Date;
- import java.util.HashMap;
- import java.util.List;
- import java.util.Map;
- import java.util.Set;
+ import java.util.*;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class EventTypeCrud extends AbstractCrud {
@@ -365,5 +359,8 @@ public class EventTypeCrud extends AbstractCrud {
 	public void setNameFilter(String nameFilter) {
 		this.nameFilter = nameFilter;
 	}
-	
+
+    public boolean isAction() {
+        return eventType.getGroup().isAction();
+    }
 }

@@ -37,18 +37,21 @@ ${action.setPageType('event_type', 'show')!}
 			<a href="<@s.url action="eventTypeGroup" uniqueID="${eventType.group.id}"/>">${eventType.group.name?html}</a>
 		</span>
 	</p>
-	<p>
-		<label><@s.text name="label.type"/></label>
-		<span class="fieldValue">
-			<#if eventType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
-		</span>
-	</p>		
-	<#if securityGuard.assignedToEnabled>
-		<p>
-			<label><@s.text name="label.assigned_to_can_be_updated"/></label>
-			<span class="fieldValue">${eventType.assignedToAvailable?string(action.getText('label.yes'), action.getText('label.no'))}</span>
-		</p>	
-	</#if>
+
+    <#if !action.isAction()>
+        <p>
+            <label><@s.text name="label.type"/></label>
+            <span class="fieldValue">
+                <#if eventType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
+            </span>
+        </p>
+        <#if securityGuard.assignedToEnabled>
+            <p>
+                <label><@s.text name="label.assigned_to_can_be_updated"/></label>
+                <span class="fieldValue">${eventType.assignedToAvailable?string(action.getText('label.yes'), action.getText('label.no'))}</span>
+            </p>
+        </#if>
+    </#if>
 	
 	<#if securityGuard.proofTestIntegrationEnabled>
 		<h2><@s.text name="label.supportedprooftesttypes"/></h2>
