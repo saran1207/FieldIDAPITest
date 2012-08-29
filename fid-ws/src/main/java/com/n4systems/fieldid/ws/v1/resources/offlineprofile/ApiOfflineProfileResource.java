@@ -94,6 +94,7 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 	public ApiOfflineProfile convertEntityToApiModel(OfflineProfile profile) {
 		ApiOfflineProfile apiProfile = new ApiOfflineProfile();
 		apiProfile.setUserId(profile.getUser().getId());
+		apiProfile.setSyncDuration(profile.getSyncDuration());
 		apiProfile.getAssets().addAll(profile.getAssets());
 		apiProfile.getOrganizations().addAll(profile.getOrganizations());
 		return apiProfile;

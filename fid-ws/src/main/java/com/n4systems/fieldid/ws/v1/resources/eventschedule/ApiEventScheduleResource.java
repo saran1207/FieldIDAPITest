@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,11 +28,13 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
+import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -47,9 +50,25 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Autowired private PersistenceService persistenceService;
 	@Autowired private AssetService assetService;
 	
-	public List<ApiEventSchedule>  findAllSchedules(Long assetId) {
-		List<ApiEventSchedule> apiEventSchedules = new ArrayList<ApiEventSchedule>();		
-		List<Event> schedules = eventScheduleService.getIncompleteSchedules(assetId);
+	public List<ApiEventSchedule>  findAllSchedules(Long assetId, SyncDuration syncDuration) {
+		List<ApiEventSchedule> apiEventSchedules = new ArrayList<ApiEventSchedule>();
+		
+		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
+		.addOrder("nextDate")
+        .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
+		.addWhere(WhereClauseFactory.create("asset.id", assetId));
+		
+		if(syncDuration != SyncDuration.ALL) {
+			// If we have a specific syncduration, we should filter schedules that is bounded by start and end dates.
+			// This is currently only used for taking assets offline.
+			Date startDate = new LocalDate().toDate();
+			Date endDate = ApiSynchronizationResource.getSyncEndDate(syncDuration, startDate);
+			query.addWhere(WhereClauseFactory.create(Comparator.GE, "nextDate", startDate));
+			query.addWhere(WhereClauseFactory.create(Comparator.LE, "nextDate", endDate));
+		}
+		
+		List<Event> schedules = persistenceService.findAll(query);
+		
 		for (Event schedule: schedules) {
 			apiEventSchedules.add(convertEntityToApiModel(schedule));
 		}

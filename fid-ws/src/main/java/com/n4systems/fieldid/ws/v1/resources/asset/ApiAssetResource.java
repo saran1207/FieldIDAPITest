@@ -44,6 +44,7 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.user.User;
@@ -93,7 +94,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		List<Asset> assets = persistenceService.findAll(builder, page, pageSize);
 		Long total = persistenceService.count(builder);
 		
-		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, false);
+		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, SyncDuration.ALL);
 		ListResponse<ApiAsset> response = new ListResponse<ApiAsset>(apiAssets, page, pageSize, total);
 		return response;
 	}
@@ -105,13 +106,13 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Transactional(readOnly = true)
 	public ListResponse<ApiAsset> findAll(@QueryParam("id") List<String> assetIds, 
 			@DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents,
-			@DefaultValue("false") @QueryParam("respectSyncDuration") boolean respectSyncDuration) {
+			@DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", assetIds));
 		
 		List<Asset> assets = persistenceService.findAll(builder);
 		
-		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, respectSyncDuration);
+		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, syncDuration);
 		ListResponse<ApiAsset> response = new ListResponse<ApiAsset>(apiAssets, 0, assets.size(), assets.size());
 		return response;
 	}
@@ -128,7 +129,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			throw new NotFoundException("Asset", id);
 		}
 		
-		ApiAsset apiModel = convertToApiAsset(asset, downloadEvents, false);
+		ApiAsset apiModel = convertToApiAsset(asset, downloadEvents, SyncDuration.ALL);
 		return apiModel;
 	}
 	
@@ -166,19 +167,20 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		return assetSaveService.update(asset, existingAttachments, uploadedAttachments, apiAsset.getImage());
 	}
 	
-	protected List<ApiAsset> convertAllAssetsToApiModels(List<Asset> assets, boolean downloadEvents, boolean respectSyncDuration) {
+	protected List<ApiAsset> convertAllAssetsToApiModels(List<Asset> assets, boolean downloadEvents, SyncDuration syncDuration) {
 		List<ApiAsset> apiAssets = new ArrayList<ApiAsset>();
 		for (Asset asset: assets) {
-			apiAssets.add(convertToApiAsset(asset, downloadEvents, respectSyncDuration));
+			apiAssets.add(convertToApiAsset(asset, downloadEvents, syncDuration));
 		}
 		return apiAssets;
 	}
 	
-	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, boolean respectSyncDuration) {
+	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, SyncDuration syncDuration) {
 		ApiAsset apiAsset = convertEntityToApiModel(asset);		
+		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId(), syncDuration));
 		if(downloadEvents) {
 			apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));
-		}
+		}		
 		return apiAsset;
 	}
 
@@ -232,8 +234,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			}
 		}		
 		
-		apiAsset.setAttributeValues(findAllAttributeValues(asset));
-		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId()));
+		apiAsset.setAttributeValues(findAllAttributeValues(asset));		
 		apiAsset.setEventHistory(apiEventHistoryResource.findAllEventHistory(asset.getMobileGUID()));
 		apiAsset.setAttachments(apiAttachmentResource.findAllAttachments(asset.getMobileGUID()));			
 		

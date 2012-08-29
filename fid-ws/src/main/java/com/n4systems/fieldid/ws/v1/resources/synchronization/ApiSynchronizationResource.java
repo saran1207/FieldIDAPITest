@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,7 +90,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	
 	private List<ApiSynchronizationAsset> getAssignedOpenEventAssets(OfflineProfile profile) {
 		List<ApiSynchronizationAsset> assets = new ArrayList<ApiSynchronizationAsset>();		
-		Date startDate = new Date();
+		Date startDate = new LocalDate().toDate();
 		Date endDate = profile == null 
 			? getSyncEndDate(OfflineProfile.DEFAULT_SYNC_DURATION, startDate)
 			: getSyncEndDate(profile.getSyncDuration(), startDate);
@@ -146,7 +147,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 		return apiAsset;
 	}
 	
-	private Date getSyncEndDate(SyncDuration syncDuration, Date startDate) {
+	public static Date getSyncEndDate(SyncDuration syncDuration, Date startDate) {
 		DateTime dateTime = new DateTime(startDate);
 		
 		switch(syncDuration) {
