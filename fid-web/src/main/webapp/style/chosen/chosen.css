@@ -65,14 +65,17 @@
   display: block;
   position: absolute;
   right: 26px;
-  top: 6px;
+    /*background-position changed from -11*/
+  top: 8px;
   width: 12px;
-  height: 13px;
+  /* height: changed from 13px;*/
+  height: 9px;
   font-size: 1px;
   background: url('chosen-sprite.png') right top no-repeat;
 }
 .chzn-container-single .chzn-single abbr:hover {
-  background-position: right -11px;
+  /*background-position changed from -11px*/
+  background-position: right -9px;
 }
 .chzn-container-single.chzn-disabled .chzn-single abbr:hover {
   background-position: right top;

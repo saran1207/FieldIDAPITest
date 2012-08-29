@@ -8,5 +8,6 @@ VERSION 0.9.8
 this version does not work with the new jquery 1.8.0 due to changes in the outerwidth
 see https://github.com/harvesthq/chosen/issues/763
 
+css was also modified to fix positioning of clear selection button
 
 
