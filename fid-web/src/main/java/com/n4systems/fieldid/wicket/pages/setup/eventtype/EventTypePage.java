@@ -36,7 +36,7 @@ public class EventTypePage extends FieldIDFrontEndPage {
                 aNavItem().label("nav.edit").page("eventTypeEdit.action").params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.event_form").page(EventFormEditPage.class).params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.scoring").page(ScoreResultConfigurationPage.class).params(uniqueId(eventTypeId)).build(),
-                aNavItem().label("nav.asset_type_associations").page("selectAssetTypes.action").params(param("eventTypeId", eventTypeId)).build(),
+                aNavItem().label("nav.asset_type_associations").page("selectAssetTypes.action").params(param("eventTypeId", eventTypeId)).cond(!eventTypeModel.getObject().getGroup().isAction()).build(),
                 aNavItem().label("nav.add").page("eventTypeAdd.action").onRight().build(),
                 aNavItem().label("nav.import").page("eventImportExport.action").params(uniqueId(eventTypeId)).onRight().build()));
     }
