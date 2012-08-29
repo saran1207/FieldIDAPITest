@@ -1,7 +1,7 @@
 <#macro createTree entry>
 	  <#if !entry.leaf >
 
-          <#if !entry.parent??>
+          <#if entry.levelNumber==1>
             <li class="expanded"><a class="node has-owner" href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}"><span class="name" >${(entry.name?html)!}</span> <span class="org"> ${(entry.owner.displayName?html)!}</span></a><br/>
           <#else>
             <li class="expanded"><a class="node no-owner" href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}"><span class="name">${(entry.name?html)!}</span> </a><br/>
@@ -14,7 +14,7 @@
 	 	   </ul> 
 	 	</li>
 	 <#else>
-         <#if !entry.parent??>
+         <#if entry.levelNumber==1>
             <li class="leaf"><a class="node has-owner"  href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}"><span class="name" >${(entry.name?html)!}</span><span class="org">  ${(entry.owner.displayName?html)!} </span></a></li>
          <#else>
              <li class="leaf"><a class="node no-owner"  href="#" nodeId="${entry.id!}" nodeDisplayName="${(entry.name?html)!}"><span class="name" >${(entry.name?html)!}</span> </a></li>
@@ -33,34 +33,34 @@
         color:#888;
     }
 
-    #nodeList .org {
+    .containerobj .org {
         color:#666;
         font-weight: normal;
         font-size:11px;
     }
 
-    #nodeList .active.org {
+    .containerobj .active.org {
         color:#444;
     }
 
-    #nodeList .node {
+    .containerobj .node {
         padding-left:5px;
         padding-bottom:2px;
         font-size:13px;
-        color:#227;
+        color:#669;
         height:34px;
     }
 
-    #nodeList .active.node {
+    .containerobj .active.node {
         color:#44a;
     }
 
-    #nodeList .node .name {
+    .containerobj .node .name {
         font-weight:normal;
         display:block;
     }
 
-    #nodeList .node.no-owner .name{
+    .containerobj .node.no-owner .name{
         padding-top:8px;
     }
 
@@ -68,11 +68,13 @@
         background-color: #C8CFE3;
     }
 
-    .containerobj {
-        height:300px;
-    }
     .containerobj div {
         height:100%;
+    }
+
+    /*make it bigger on PredefinedLocations edit screen.*/
+    #nodeList {
+        height:600px;
     }
 </style>
   
