@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -86,6 +87,10 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
         });
         add(openForm);
 
+        ContextImage tooltip;
+        
+        add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
+        tooltip.add(new AttributeAppender("title", new FIDLabelModel("msg.priority_codes")));
 
         add(priorityCodeListPanel = new PriorityCodeListPanel("priorityCodeList"));
         priorityCodeListPanel.setOutputMarkupPlaceholderTag(true);

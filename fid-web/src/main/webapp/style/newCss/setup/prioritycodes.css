@@ -161,3 +161,8 @@
 .list .formErrors {
     width: 250px;
 }
+
+.tooltip {
+   vertical-align: middle;
+   margin-left: 10px;
+}
