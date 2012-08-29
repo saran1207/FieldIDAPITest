@@ -5,6 +5,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.Asset;
 import com.n4systems.model.offlineprofile.OfflineProfile;
+import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 
 @Path("/offlineProfile")
@@ -88,6 +90,16 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 		if (profile.getOrganizations().remove(orgId)) {
 			offlineProfileService.update(profile);
 		}
+	}
+	
+	@PUT
+	@Path("syncDuration/{newDuration}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Transactional
+	public void updateSyncDuration(@PathParam("newDuration") SyncDuration newDuration) {
+		OfflineProfile profile = offlineProfileService.findOrCreate(getCurrentUser());
+		profile.setSyncDuration(newDuration);
+		offlineProfileService.update(profile);
 	}
 
 	@Override
