@@ -70,8 +70,11 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
     public void deleteAssociatedEvents(AssetType assetType, EventType eventType) {
         List<Long> ids = eventIds(assetType, eventType);
 
-        String archiveQuery = String.format(DELETE_IDS_QUERY, Event.class.getName());
+        String archiveQuery = String.format(ARCHIVE_IDS_QUERY, Event.class.getName());
         final HashMap<String, Object> queryParams = new HashMap<String, Object>();
+        queryParams.put("archivedState", Archivable.EntityState.ARCHIVED);
+        queryParams.put("now", new Date());
+
         Query query = persistenceService.createQuery(archiveQuery, queryParams);
 
         new LargeInListQueryExecutor().executeUpdate(query, ids);

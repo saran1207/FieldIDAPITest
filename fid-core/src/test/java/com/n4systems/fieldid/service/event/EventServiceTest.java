@@ -59,7 +59,6 @@ public class EventServiceTest extends FieldIdServicesUnitTest {
         List<WorkSummaryRecord> data = Lists.newArrayList(day3, day5, day17, day29);
 
         expect(securityContext.getUserSecurityFilter()).andReturn(securityFilter);
-//        expectLastCall().times(2);
         replay(securityContext);
         expect(persistenceService.findAll(anyObject(QueryBuilder.class))).andReturn(data);
         replay(persistenceService);
@@ -75,12 +74,6 @@ public class EventServiceTest extends FieldIdServicesUnitTest {
         }
     }
 
-    @Test
-    public void test_Work() {
-        //getWork(DateRange dateRange, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {
-
-    }
-
     private Long getExpectedValueForDate(LocalDate date, List<WorkSummaryRecord> data) {
         for (WorkSummaryRecord record:data) {
             if (record.getDate().equals(date.toDate())) {
@@ -89,8 +82,5 @@ public class EventServiceTest extends FieldIdServicesUnitTest {
         }
         return 0L;
     }
-
-
-
 
 }
