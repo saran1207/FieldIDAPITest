@@ -230,6 +230,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 		if (eventTypes == null) {
             QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
 			queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
+            queryBuilder.addSimpleWhere("group.action", false);
 			queryBuilder.addOrder("name");
 			eventTypes = persistenceManager.findAll(queryBuilder);
         }
