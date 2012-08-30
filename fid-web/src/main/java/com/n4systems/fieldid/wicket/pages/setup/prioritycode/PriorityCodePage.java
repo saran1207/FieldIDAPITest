@@ -78,7 +78,6 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 addPriorityCodeForm.setFormVisible(target, true);
-                target.appendJavaScript("translateWithin($('#" + addPriorityCodeForm.formContainer.getMarkupId() + "'), $('#" + openFormButton.getMarkupId() + "'), $('#pageContent'), " + 40 + ", " + -1085 + ");");
             }
 
             @Override

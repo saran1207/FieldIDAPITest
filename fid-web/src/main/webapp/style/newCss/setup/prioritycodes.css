@@ -114,12 +114,15 @@
 }
 
 .form .blueButton, .openForm .blueButton {
-    background: -moz-linear-gradient(center top , #357AE8 0%, #4D90FE 100%) repeat scroll 0 0 transparent;
+    background: #4C8FFC;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4C8FFC', endColorstr='#357AE8',GradientType=0 );
+    background: -moz-linear-gradient(center top , #4C8FFC 0%, #4787ED 100%) repeat scroll 0 0 transparent;
     color: #FFFFFF;
 }
 
 .form .blueButton:hover, .openForm .blueButton:hover{
-    background: none repeat scroll 0 0 #4C8FFC;
+    background: #4D90FE;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4D90FE', endColorstr='#357AE8',GradientType=0 );
     border: 1px solid #6699FF;
 }
 .formErrors {
