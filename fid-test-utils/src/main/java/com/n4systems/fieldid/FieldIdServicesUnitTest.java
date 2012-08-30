@@ -5,6 +5,7 @@ import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTimeConstants;
+import org.joda.time.DateTimeUtils;
 import org.joda.time.LocalDate;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ReflectionUtils;
@@ -46,12 +47,18 @@ public class FieldIdServicesUnitTest extends FieldIdUnitTest {
 			Object sut = createSut(sutField);
 			ReflectionTestUtils.setField(this, sutField.getName(), sut);						
 			autoWireSut(sut);
+            setTestTime();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	protected Object createSut(Field sutField) throws Exception {
+
+    private final void setTestTime() {
+        // by default, we'll reset all tests to a fixed time. over
+        DateTimeUtils.setCurrentMillisFixed(getTestTime());
+    }
+
+    protected Object createSut(Field sutField) throws Exception {
 		return sutField.getType().newInstance();
 	}
 
@@ -114,4 +121,7 @@ public class FieldIdServicesUnitTest extends FieldIdUnitTest {
 		}
 	}
 
+    protected long getTestTime() {
+        return jan1_2011.toDate().getTime();
+    }
 }
