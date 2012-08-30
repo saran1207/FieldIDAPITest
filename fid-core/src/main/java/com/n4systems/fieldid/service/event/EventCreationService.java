@@ -73,11 +73,10 @@ public class EventCreationService extends FieldIdPersistenceService {
         // TODO: Remove when mobile can also remove this.
         if (event.getGroup() == null) {
             event.setGroup(new EventGroup());
-            event.getGroup().setTenant(tenant);
-            persistenceService.save(event.getGroup());
-        } else if (event.getGroup().getId() == null) {
-            persistenceService.save(event.getGroup());
         }
+        
+        event.getGroup().setTenant(tenant);
+        persistenceService.save(event.getGroup());
 
         setProofTestData(event, fileData);
 
