@@ -2,14 +2,13 @@ package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.string.StringValue;
 
 import java.util.Collections;
 
@@ -18,22 +17,24 @@ public class PerformEventPage extends EventPage {
     @SpringBean private EventService eventService;
     @SpringBean private PersistenceService persistenceService;
 
-    public PerformEventPage(PageParameters parameters) {
-        Long assetId = parameters.get("assetId").toLongObject();
-        Long type = parameters.get("type").toLongObject();
-
-        StringValue scheduleIdString = parameters.get("scheduleId");
-        if (!scheduleIdString.isEmpty()) {
-            Long openEventId = scheduleIdString.toLongObject();
-            event = new EventFromOpenEventModel(openEventId);
+    private PerformEventPage(Long scheduleId, Long assetId, Long typeId) {
+        if (scheduleId!=null) {
+            event = new EventFromOpenEventModel(scheduleId);
         } else {
-            event = new NewMasterEventModel(assetId, type);
+            event = new NewMasterEventModel(assetId, typeId);
         }
 
-        NonWicketLink backToStrutsLink = new NonWicketLink("backToStrutsLink", "eventAdd.action?assetId=" + assetId + "&type=" + type);
-        add(backToStrutsLink);
-
         doAutoSchedule();
+    }
+
+    public PerformEventPage(Event event, Asset asset) {
+        this(event.getId(), asset.getId(), event.getType().getId());
+    }
+
+    public PerformEventPage(PageParameters parameters) {
+        this(parameters.get("scheduleId").isEmpty()?null:parameters.get("scheduleId").toLongObject(),
+                parameters.get("type").toLongObject(),
+                parameters.get("assetId").toLongObject());
     }
 
     class NewMasterEventModel extends LoadableDetachableModel<Event> {

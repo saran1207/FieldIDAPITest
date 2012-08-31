@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
@@ -37,10 +38,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.*;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -111,14 +109,14 @@ public class Agenda extends Panel  {
 
         // this will look for all days in the jquery calendar and handle the tooltipping.
         add(new TipsyBehavior(TipsyBehavior.Gravity.W).withSelector("#" + getMarkupId() + " .ui-state-default"));
+        add(new TipsyBehavior(TipsyBehavior.Gravity.E).withSelector(".agenda-row .icon"));
         add(new AttributeAppender("class", "agenda"));
     }
 
     private Component createLimitMessage() {
         WebMarkupContainer limit = new WebMarkupContainer("limitMessage");
         limit.add(new Link("link") {
-            @Override
-            public void onClick() {
+            @Override public void onClick() {
                 setResponsePage(new ReportPage(createWorkCriteria()));
             }
         });
@@ -328,12 +326,16 @@ public class Agenda extends Panel  {
             add(eventDayList);
         }
 
-        private void addEvent(ListItem<Event> item, Event event) {
+        private void addEvent(ListItem<Event> item, final Event event) {
             String image = event.isAssigned() ? "images/event-open-assigned.png" : "images/event-open.png";
             final Asset asset = event.getAsset();
             AssetLabelModel model = new AssetLabelModel(asset);
-            item.add(new ContextImage("icon", image));
-//            item.add(new Link("asset", new PropertyModel<Asset>(item.getModelObject(), "asset.displayName")).add(new TipsyBehavior(model.getObject())));
+            ContextImage icon;
+            item.add(icon = new ContextImage("icon", image));
+            if (event.isAssigned()) {
+                icon.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", event.getAssignee().getDisplayName()).getObject()));
+            }
+
             Link link;
             item.add(link = new Link("asset") {
                 @Override public void onClick() {
@@ -341,9 +343,14 @@ public class Agenda extends Panel  {
                 }
             });
             link.add(new Label("name",new PropertyModel<String>(item.getModelObject(),"asset.verboseDisplayName")));
+
             item.add(new Label("org", new PropertyModel<String>(item.getModelObject(), "owner.hierarchicalDisplayName")));
-            item.add(new NonWicketLink("event", "eventEdit.action?uniqueID=" + event.getId())
-                        .add(new Label("type", new PropertyModel(item.getModelObject(), "type.name"))));
+
+            item.add(new Link("event") {
+                @Override public void onClick() {
+                    setResponsePage(new PerformEventPage(event, asset));
+                }
+            }.add(new Label("type", new PropertyModel(item.getModelObject(), "type.name"))));
             String css = dateService.nowAsDate().after(event.getNextDate()) ? "overdue" : "";
             item.add(new AttributeAppender("class", Model.of(css), " "));
         }
