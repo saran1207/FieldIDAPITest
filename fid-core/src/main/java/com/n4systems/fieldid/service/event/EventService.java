@@ -451,12 +451,14 @@ public class EventService extends FieldIdPersistenceService {
 
     private void addToWorkQuery(QueryBuilder<?> builder, User user, BaseOrg org, AssetType assetType, EventType eventType, DateRange dateRange) {
         builder.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
-        builder.addNullSafeWhere(Comparator.EQ, "owner", "owner", org);
         builder.addNullSafeWhere(Comparator.EQ, "asset_type", "asset.type", assetType);
         builder.addNullSafeWhere(Comparator.EQ, "type", "type", eventType);
         builder.addNullSafeWhere(Comparator.EQ, "assignee", "assignee", user);
         builder.addWhere(Comparator.GE, "from", "nextDate", dateRange.getFrom().toDate());
         builder.addWhere(Comparator.LT, "to", "nextDate", dateRange.getTo().toDate());
+        if (org!=null) {
+            builder.applyFilter(new OwnerAndDownFilter(org));
+        }
         builder.addOrder("nextDate");
     }
 

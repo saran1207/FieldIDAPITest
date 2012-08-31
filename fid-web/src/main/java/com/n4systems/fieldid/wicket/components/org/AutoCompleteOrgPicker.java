@@ -40,7 +40,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<EntityWithTenant> {
     public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> orgModel, final IModel<PredefinedLocation> locationModel) {
         super(id, new OrgLocationModel(orgModel,locationModel));
         includeLocations = locationModel!=null;
-        withAutoUpdate(true);
+        withAutoUpdate(false);
     }
 
     protected AutoCompleteResult createAutocompleteJson(EntityWithTenant entity, String term) {
