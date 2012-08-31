@@ -3,8 +3,8 @@ function startFileUpload() {
 	hasUploadForm = false;
 }
 
-function completedFileUpload() {
-	addUploadFile('${uploadFileType!}', false);
+function completedFileUpload(uploadType) {
+	addUploadFile(uploadType, false);
 	activeFileUploads--;
 }
 var uploadWarning = "";

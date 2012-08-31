@@ -18,7 +18,7 @@
 	<div class="uploadFileForm">
 	<@s.form method="POST" action="uploadFile" namespace="/aHtml/fileUploads" theme="simple"  enctype="multipart/form-data">
 		<p class="uploadMessage"><@s.text name="message.attachment"/><p>
-		<@s.file name="upload" onchange="$('progress').show(); parent.startFileUpload(); this.form.submit(); parent.completedFileUpload();" />
+		<@s.file name="upload" onchange="$('progress').show(); parent.startFileUpload(); this.form.submit(); parent.completedFileUpload('assetAttachment');" />
 		<@s.hidden name="frameId"/>
 		<@s.hidden name="frameCount"/>
 		<@s.hidden name="typeOfUpload"/>
