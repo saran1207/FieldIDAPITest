@@ -102,7 +102,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             add(new Label("referenceNumber", new PropertyModel<String>(event, "asset.customerRefNumber")));
 
             GroupedUserPicker groupedUserPicker;
-            add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(event, "assignedTo"), new GroupedUsersForTenantModel()));
+            add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(event, "assignee"), new GroupedUsersForTenantModel()));
             groupedUserPicker.setNullValid(true);
             groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
