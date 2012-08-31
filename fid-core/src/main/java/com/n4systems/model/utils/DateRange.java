@@ -321,5 +321,39 @@ public class DateRange implements Serializable, Cloneable {
         return rangeType == RangeType.CUSTOM && fromDate == null && toDate == null;
     }
 
+    @Override
+    public String toString() {
+        if (RangeType.CUSTOM.equals(rangeType)) {
+            return "DateRange{" +
+                    "fromDate=" + fromDate +
+                    ", toDate=" + toDate +
+                    '}';
+        } else {
+            return "DateRange{" +
+                    rangeType.toString() +
+                    '}';
+        }
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DateRange)) return false;
+
+        DateRange dateRange = (DateRange) o;
+
+        if (fromDate != null ? !fromDate.equals(dateRange.fromDate) : dateRange.fromDate != null) return false;
+        if (rangeType != dateRange.rangeType) return false;
+        if (toDate != null ? !toDate.equals(dateRange.toDate) : dateRange.toDate != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = rangeType != null ? rangeType.hashCode() : 0;
+        result = 31 * result + (fromDate != null ? fromDate.hashCode() : 0);
+        result = 31 * result + (toDate != null ? toDate.hashCode() : 0);
+        return result;
+    }
 }

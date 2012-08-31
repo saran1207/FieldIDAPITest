@@ -49,10 +49,6 @@ public class DateUtil {
 		return (date.getMonthOfYear()-1)/3 * 3 + 1;
 	}
 
-	public static Date createLocalDate(LocalDate date) {
-		return date==null ? null : date.toDate();
-	}
-
     public static boolean isMidnight(Date date) {
         DateTime dateTime = new DateTime(date);
         return dateTime.equals(new DateMidnight(date));
