@@ -265,6 +265,7 @@
 }
 
 .actionButtons .blueButton {
+    border:1px solid #4c8ffc;
     background: #4C8FFC;
     background: -moz-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #357AE8), color-stop(100%, #4D90FE));
