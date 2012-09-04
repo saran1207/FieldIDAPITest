@@ -7,8 +7,10 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.*;
+import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.signature.SignatureService;
@@ -21,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class EventCreationService extends FieldIdPersistenceService {
     
@@ -38,6 +37,9 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     @Autowired
     private NextEventScheduleService nextEventScheduleService;
+
+	@Autowired
+	private S3Service s3Service;
 
     @Transactional
     public Event createEventWithSchedules(Event event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
@@ -101,7 +103,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         // writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an 
         // event id is required to build the save path
         writeSignatureImagesToDisk(event);
-
+		saveCriteriaResultImages(event);
         saveProofTestFiles(event, fileData);
 
         processUploadedFiles(event, uploadedFiles);
@@ -372,5 +374,20 @@ public class EventCreationService extends FieldIdPersistenceService {
             asset.setGpsLocation(event.getGpsLocation());
         }
     }
+
+	private void saveCriteriaResultImages(Event event) {
+		saveCriteriaResultImages(event.getResults());
+		for (SubEvent subEvent: event.getSubEvents()) {
+			saveCriteriaResultImages(subEvent.getResults());
+		}
+	}
+
+	private void saveCriteriaResultImages(Collection<CriteriaResult> results) {
+		for (CriteriaResult result: results) {
+			for (CriteriaResultImage criteriaResultImage: result.getCriteriaImages()) {
+				s3Service.uploadCriteriaResultImage(criteriaResultImage);
+			}
+		}
+	}
 
 }

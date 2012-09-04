@@ -1,11 +1,13 @@
 package com.n4systems.model;
 
+import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "criteriaresults")
@@ -25,21 +27,46 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	@IndexColumn(name="orderidx")
 	private List<Recommendation> recommendations = new ArrayList<Recommendation>();
 
-    @OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinTable(name="criteriaresults_deficiencies")
-    @IndexColumn(name="orderidx")
-    private List<Deficiency> deficiencies = new ArrayList<Deficiency>();
-
     @OneToMany(cascade=CascadeType.ALL)
     @JoinTable(name="criteriaresults_actions", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "criteriaresult_id"))
     @IndexColumn(name="orderidx")
     private List<Event> actions = new ArrayList<Event>();
 	
+	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinTable(name="criteriaresults_deficiencies")
+	@IndexColumn(name="orderidx")
+	private List<Deficiency> deficiencies = new ArrayList<Deficiency>();
+
+	@OneToMany(mappedBy = "criteriaResult", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OrderBy // Ordered by primary key
+	private List<CriteriaResultImage> criteriaImages = new ArrayList<CriteriaResultImage>();
+
+	@Column(nullable=false)
+	private String mobileId;
+
 	public CriteriaResult() {}
 	
 	public CriteriaResult(Tenant tenant, Criteria criteria) {
 		super(tenant);
 		this.criteria = criteria;
+	}
+
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		ensureMobileId();
+	}
+
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		ensureMobileId();
+	}
+
+	private void ensureMobileId() {
+		if (mobileId == null) {
+			mobileId = UUID.randomUUID().toString();
+		}
 	}
 
 	public Criteria getCriteria() {
@@ -77,8 +104,24 @@ public abstract class CriteriaResult extends EntityWithTenant {
     public Status getResult() {
         return null;
     }
-    
-    public abstract String getResultString();
+
+	public List<CriteriaResultImage> getCriteriaImages() {
+		return criteriaImages;
+	}
+
+	public void setCriteriaImages(List<CriteriaResultImage> criteriaImages) {
+		this.criteriaImages = criteriaImages;
+	}
+
+	public String getMobileId() {
+		return mobileId;
+	}
+
+	public void setMobileId(String mobileId) {
+		this.mobileId = mobileId;
+	}
+
+	public abstract String getResultString();
 
 	@Override
 	public String toString() {

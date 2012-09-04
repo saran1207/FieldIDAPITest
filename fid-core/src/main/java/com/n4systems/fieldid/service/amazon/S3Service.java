@@ -8,6 +8,8 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.images.ImageService;
+import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
@@ -15,10 +17,10 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -31,8 +33,12 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String CUSTOMER_LOGO_PATH = "/logos/customer_logo_%d.gif";
     public static final String PRIMARY_CERTIFICATE_LOGO_PATH = "/logos/primary_certificate_logo.gif";
     public static final String SECONDARY_CERTIFICATE_LOGO_PATH = "/logos/secondary_certificate_logo_%d.gif";
+	public static final String CRITERIA_RESULT_IMAGE_PATH_ORIG = "/events/%d/criteria_results/%d/criteria_images/%s";
+	public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
+	public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
 
     @Autowired private ConfigService configService;
+	@Autowired private ImageService imageService;
 
     public URL getBrandingLogoURL() {
         return getBrandingLogoURL(null);
@@ -129,6 +135,42 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
+	public void uploadCriteriaResultImage(CriteriaResultImage criteriaResultImage) {
+		byte[] thumbnailImage = imageService.generateThumbnail(criteriaResultImage.getImageData());
+		byte[] mediumImage = imageService.generateMedium(criteriaResultImage.getImageData());
+
+		uploadResource(
+				thumbnailImage,
+				criteriaResultImage.getContentType(),
+				criteriaResultImage.getCriteriaResult().getTenant().getId(),
+				CRITERIA_RESULT_IMAGE_PATH_THUMB,
+				criteriaResultImage.getCriteriaResult().getEvent().getId(),
+				criteriaResultImage.getCriteriaResult().getId(),
+				criteriaResultImage.getFileName());
+
+		uploadResource(
+				mediumImage,
+				criteriaResultImage.getContentType(),
+				criteriaResultImage.getCriteriaResult().getTenant().getId(),
+				CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+				criteriaResultImage.getCriteriaResult().getEvent().getId(),
+				criteriaResultImage.getCriteriaResult().getId(),
+				criteriaResultImage.getFileName());
+
+		uploadResource(
+				criteriaResultImage.getImageData(),
+				criteriaResultImage.getContentType(),
+				criteriaResultImage.getCriteriaResult().getTenant().getId(),
+				CRITERIA_RESULT_IMAGE_PATH_ORIG,
+				criteriaResultImage.getCriteriaResult().getEvent().getId(),
+				criteriaResultImage.getCriteriaResult().getId(),
+				criteriaResultImage.getFileName());
+	}
+
+	private void uploadResource(byte[] data, String contentType, Long tenantId, String path, Object...pathArgs) {
+		putObject(createResourcePath(tenantId, path, pathArgs), data, contentType);
+	}
+
     private void uploadResource(File file, Long tenantId, String path, Object...pathArgs) {
         putObject(createResourcePath(tenantId, path, pathArgs), file);
     }
@@ -194,6 +236,15 @@ public class S3Service extends FieldIdPersistenceService {
         PutObjectResult result = getClient().putObject(getBucket(), path, file);
         return result;
     }
+
+	private PutObjectResult putObject(String path, byte[] data, String contentType) {
+		ObjectMetadata objectMeta = new ObjectMetadata();
+		objectMeta.setContentLength(data.length);
+		objectMeta.setContentType(contentType);
+
+		PutObjectResult result = getClient().putObject(new PutObjectRequest(getBucket(), path, new ByteArrayInputStream(data), objectMeta));
+		return result;
+	}
 
     private void deleteObject(String path) {
         getClient().deleteObject(getBucket(), path);

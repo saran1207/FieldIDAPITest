@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.config;
 
+import com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode.ApiPriorityCodeResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -14,7 +15,7 @@ import com.n4systems.fieldid.ws.v1.resources.authentication.AuthenticationResour
 import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventFormResultResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventResource;
-import com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode.ApiPriorityCodeResource;
+import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiCriteriaImagesResource;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
@@ -26,14 +27,17 @@ import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResou
 import com.n4systems.fieldid.ws.v1.resources.logging.ApiLoggingResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
+import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventFormResource;
+import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventResource;
 import com.n4systems.fieldid.ws.v1.resources.search.ApiSearchResource;
 import com.n4systems.fieldid.ws.v1.resources.smartsearch.ApiSmartSearchResource;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
 import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenantResource;
 import com.n4systems.fieldid.ws.v1.resources.unit.ApiUnitResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
-import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventResource;
-import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventFormResource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class FieldIdWsConfig {
@@ -192,5 +196,10 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiSubAssetResource apiSubAssetResource() {
 		return new ApiSubAssetResource();
+	}
+
+	@Bean
+	public ApiCriteriaImagesResource apiCriteriaImagesResource() {
+		return new ApiCriteriaImagesResource();
 	}
 }

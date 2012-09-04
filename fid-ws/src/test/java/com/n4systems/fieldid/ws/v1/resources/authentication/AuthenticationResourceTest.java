@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.authentication;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUser;
@@ -13,6 +7,11 @@ import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertSame;
 
 public class AuthenticationResourceTest {
 	

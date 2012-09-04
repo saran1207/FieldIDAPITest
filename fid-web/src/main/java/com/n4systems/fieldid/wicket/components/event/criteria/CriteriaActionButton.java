@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.event.observations;
+package com.n4systems.fieldid.wicket.components.event.criteria;
 
 import com.n4systems.model.Observation;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -10,17 +10,13 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
 
-public class ObservationsButton extends Panel {
-
-    protected IModel<List<? extends Observation>> observations;
-
+public abstract class CriteriaActionButton extends Panel {
     private String emptyListImage;
     private String nonEmptyListImage;
 
-    public ObservationsButton(String id, IModel<List<? extends Observation>> observations, String emptyListImage, String nonEmptyListImage) {
-        super(id, observations);
+    public CriteriaActionButton(String id, String emptyListImage, String nonEmptyListImage) {
+		super(id);
         setRenderBodyOnly(true);
-        this.observations = observations;
         this.emptyListImage = emptyListImage;
         this.nonEmptyListImage = nonEmptyListImage;
 
@@ -34,10 +30,11 @@ public class ObservationsButton extends Panel {
         });
     }
 
-    protected void onClick(AjaxRequestTarget target) { }
-    
+    protected abstract void onClick(AjaxRequestTarget target);
+	protected abstract boolean isEmpty();
+
     public String getPathForImage() {
-        if (observations.getObject().isEmpty()) {
+        if (isEmpty()) {
             return emptyListImage;
         } else {
             return nonEmptyListImage;

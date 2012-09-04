@@ -23,6 +23,7 @@ import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.event.*;
 import com.n4systems.fieldid.service.export.EventTypeExportService;
+import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
@@ -400,6 +401,11 @@ public class FieldIdCoreConfig {
     public S3Service s3Service() {
         return new S3Service();
     }
+
+	@Bean
+	public ImageService imageService() {
+		return new ImageService();
+	}
 
     @Bean
     public DateService dateService() {
