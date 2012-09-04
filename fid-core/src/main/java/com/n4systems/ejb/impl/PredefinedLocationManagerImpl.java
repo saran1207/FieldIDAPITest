@@ -14,18 +14,30 @@ public class PredefinedLocationManagerImpl implements PredefinedLocationManager 
 
     public PredefinedLocationManagerImpl(EntityManager em) {
         this.em = em;
-        this.saver = new PredefinedLocationSaver();
+        this.saver = createSaver();
+    }
+
+    protected PredefinedLocationSaver createSaver() {
+        return new PredefinedLocationSaver();
     }
 
     @Override
     public void updateChildrenOwner(SecurityFilter securityFilter, PredefinedLocation parentNode) {
         BaseOrg owner = parentNode.getOwner();
-        PredefinedLocationTree locationTree = new PredefinedLocationTreeLoader(new PredefinedLocationListLoader(securityFilter).withParentFirstOrder()).load(em);
+        PredefinedLocationTree locationTree = createPredefinedLocationTreeLoader(securityFilter).load(em);
         for (PredefinedLocationTreeNode node:locationTree.getNodes()) {
             if (parentNode.getId().equals(node.getId())) {
                 updateOwnerForChildren(node,owner);
             }
         }
+    }
+
+    protected PredefinedLocationTreeLoader createPredefinedLocationTreeLoader(SecurityFilter securityFilter) {
+        return new PredefinedLocationTreeLoader(createPredefinedLocationListLoader(securityFilter).withParentFirstOrder());
+    }
+
+    protected PredefinedLocationListLoader createPredefinedLocationListLoader(SecurityFilter securityFilter) {
+        return new PredefinedLocationListLoader(securityFilter);
     }
 
     private void updateOwnerForChildren(PredefinedLocationTreeNode node, BaseOrg owner) {

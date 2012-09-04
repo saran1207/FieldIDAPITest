@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.service.schedule;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.FieldIdServicesUnitTest;
+import com.n4systems.fieldid.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.easymock.EasyMock.*;
 
-public class MassScheduleServiceTest extends FieldIdServicesUnitTest {
+public class MassScheduleServiceTest extends FieldIdServiceTest {
 
 
     private @TestTarget MassScheduleService massScheduleService;

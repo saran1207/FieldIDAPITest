@@ -1,6 +1,6 @@
 package com.n4systems.services.dashboard;
 
-import com.n4systems.fieldid.FieldIdServicesUnitTest;
+import com.n4systems.fieldid.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.dashboard.DashboardColumn;
@@ -20,7 +20,7 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 
-public class DashboardServiceTest extends FieldIdServicesUnitTest {
+public class DashboardServiceTest extends FieldIdServiceTest {
 	
 	@TestTarget private DashboardService dashboardService;
 	

@@ -28,16 +28,16 @@ import static org.easymock.EasyMock.verify;
  *    fixture.setServiceD(createMock(ServiceD.class));
  *  the autoWire method does all this stuff for you. 
  */
-public class FieldIdServicesUnitTest extends FieldIdUnitTest {
+public class FieldIdServiceTest extends FieldIdUnitTest {
 
-	private static final Logger logger = Logger.getLogger(FieldIdServicesUnitTest.class);
+	private static final Logger logger = Logger.getLogger(FieldIdServiceTest.class);
 
     protected LocalDate jan1_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
     protected LocalDate jan1_2015 = new LocalDate().withYear(2015).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
     protected LocalDate feb29_2012 = new LocalDate().withYear(2012).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(29);
     protected LocalDate dec27_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.DECEMBER).withDayOfMonth(27);
 
-    public FieldIdServicesUnitTest() {
+    public FieldIdServiceTest() {
 		super();
 	}
 

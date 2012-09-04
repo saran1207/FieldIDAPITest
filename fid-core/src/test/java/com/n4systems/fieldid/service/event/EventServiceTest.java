@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.FieldIdServicesUnitTest;
+import com.n4systems.fieldid.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
@@ -27,7 +27,7 @@ import java.util.Map;
 import static junit.framework.Assert.assertEquals;
 import static org.easymock.EasyMock.*;
 
-public class EventServiceTest extends FieldIdServicesUnitTest {
+public class EventServiceTest extends FieldIdServiceTest {
 
     private @TestTarget EventService eventService;
     private @TestMock PersistenceService persistenceService;
