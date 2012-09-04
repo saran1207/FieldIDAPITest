@@ -167,6 +167,27 @@ public class S3Service extends FieldIdPersistenceService {
 				criteriaResultImage.getFileName());
 	}
 
+	public URL getCriteriaResultImageOriginalURL(CriteriaResultImage criteriaResultImage) {
+		return generateResourceUrl(null, CRITERIA_RESULT_IMAGE_PATH_ORIG,
+				criteriaResultImage.getCriteriaResult().getEvent().getId(),
+				criteriaResultImage.getCriteriaResult().getId(),
+				criteriaResultImage.getFileName());
+	}
+
+	public URL getCriteriaResultImageMediumURL(CriteriaResultImage criteriaResultImage) {
+		return generateResourceUrl(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+				criteriaResultImage.getCriteriaResult().getEvent().getId(),
+				criteriaResultImage.getCriteriaResult().getId(),
+				criteriaResultImage.getFileName());
+	}
+
+	public URL getCriteriaResultImageThumbnailURL(CriteriaResultImage criteriaResultImage) {
+		return generateResourceUrl(null, CRITERIA_RESULT_IMAGE_PATH_THUMB,
+				criteriaResultImage.getCriteriaResult().getEvent().getId(),
+				criteriaResultImage.getCriteriaResult().getId(),
+				criteriaResultImage.getFileName());
+	}
+
 	private void uploadResource(byte[] data, String contentType, Long tenantId, String path, Object...pathArgs) {
 		putObject(createResourcePath(tenantId, path, pathArgs), data, contentType);
 	}
