@@ -135,7 +135,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		return apiSchedule;
 	}
 	
-	private Event converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
+	public Event converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
 		EventSchedule eventSchedule = new EventSchedule();
 		BaseOrg owner = persistenceService.find(BaseOrg.class, apiEventSchedule.getOwnerId());
 
@@ -158,7 +158,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		eventSchedule.setTenant(owner.getTenant());
 		eventSchedule.setAsset(asset);
 		eventSchedule.setEventType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
-        eventSchedule.setOwner(asset.getOwner());        
+        eventSchedule.setOwner(asset.getOwner());
 
         event.setSchedule(eventSchedule);
 		

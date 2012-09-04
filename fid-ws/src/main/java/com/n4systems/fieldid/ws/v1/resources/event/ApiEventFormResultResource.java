@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.NullArgumentException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
+import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
+import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
@@ -30,6 +33,8 @@ import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
 
 public class ApiEventFormResultResource extends FieldIdPersistenceService{
+	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
+	
 	public List<CriteriaResult> convertApiEventFormResults(ApiEventFormResult eventFormResult, EventForm form, AbstractEvent event) {
 		List<CriteriaResult> results = new ArrayList<CriteriaResult>();
 		
@@ -133,6 +138,10 @@ public class ApiEventFormResultResource extends FieldIdPersistenceService{
 		for (ApiObservation def: apiResult.getDeficiencies()) {
 			result.getDeficiencies().add(convertDeficiency(def, event.getTenant()));
 		}
+		
+		/*for(ApiEventSchedule action: apiResult.getActions()) {
+			result.getActions().add(apiEventScheduleResource.converApiEventSchedule(action));
+		}*/
 		
 		return result;
 	}

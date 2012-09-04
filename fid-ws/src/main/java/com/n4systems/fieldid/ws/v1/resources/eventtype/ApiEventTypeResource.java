@@ -25,6 +25,7 @@ import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.DateFieldCriteria;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.NumberFieldCriteria;
@@ -57,6 +58,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		apiEventType.setDescription(eventType.getDescription());
 		apiEventType.setMaster(eventType.isMaster());
 		apiEventType.setName(eventType.getName());
+		apiEventType.setAction(eventType.getGroup().isAction());
 		apiEventType.setPrintable(eventType.isPrintable());
 		apiEventType.setHasPrintOut(eventType.getGroup().hasPrintOut());
 		apiEventType.setHasObservationPrintOut(eventType.getGroup().hasObservationPrintOut());

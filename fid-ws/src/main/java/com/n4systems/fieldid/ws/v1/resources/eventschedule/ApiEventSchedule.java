@@ -5,11 +5,15 @@ import java.util.Date;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
 
 public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
-	private String assetId;
-	private Long eventTypeId;
+	private String assetId;	
+	private Long eventTypeId;	
 	private String eventTypeName;
 	private Date nextDate;
 	private Long assigneeUserId;
+	private boolean action;
+	private Long priorityId;	
+	private String notes;
+	private String triggerEventSummary;
 
 	public String getAssetId() {
 		return assetId;
@@ -49,5 +53,37 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 
 	public void setAssigneeUserId(Long assigneeUserId) {
 		this.assigneeUserId = assigneeUserId;
-	}	
+	}
+	
+	public boolean isAction() {
+		return action;
+	}
+
+	public void setAction(boolean action) {
+		this.action = action;
+	}
+	
+	public Long getPriorityId() {
+		return priorityId;
+	}
+
+	public void setPriorityId(Long priorityId) {
+		this.priorityId = priorityId;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+	
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+	
+	public String getTriggerEventSummary() {
+		return triggerEventSummary;
+	}
+
+	public void setTriggerEventSummary(String triggerEventSummary) {
+		this.triggerEventSummary = triggerEventSummary;
+	}
 }

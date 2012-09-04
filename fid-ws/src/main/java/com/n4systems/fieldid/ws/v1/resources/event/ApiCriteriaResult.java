@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModel;
 
 public class ApiCriteriaResult extends ApiReadWriteModel {
@@ -20,6 +21,7 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 	private Date dateValue;
 	private Double numberValue;
 	private Long scoreValue;
+	private List<ApiEventSchedule> actions;
 
 	public Long getCriteriaId() {
 		return criteriaId;
@@ -125,4 +127,11 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 		this.scoreValue = scoreValue;
 	}
 
+	public void setActions(List<ApiEventSchedule> actions) {
+		this.actions = actions;
+	}
+
+	public List<ApiEventSchedule> getActions() {
+		return actions;
+	}
 }

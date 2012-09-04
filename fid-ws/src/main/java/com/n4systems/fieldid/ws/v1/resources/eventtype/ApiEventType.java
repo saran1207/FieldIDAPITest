@@ -16,6 +16,7 @@ public class ApiEventType extends ApiReadonlyModel {
 	private boolean assignedToAvailable;
 	private List<String> attributes = new ArrayList<String>();
 	private ApiEventForm form;
+	private boolean action;
 
 	public String getName() {
 		return name;
@@ -23,6 +24,14 @@ public class ApiEventType extends ApiReadonlyModel {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public boolean isAction() {
+		return action;
+	}
+
+	public void setAction(boolean action) {
+		this.action = action;
 	}
 
 	public String getGroupName() {
@@ -95,5 +104,5 @@ public class ApiEventType extends ApiReadonlyModel {
 
 	public void setHasObservationPrintOut(boolean hasObservationPrintOut) {
 		this.hasObservationPrintOut = hasObservationPrintOut;
-	}
+	}	
 }
