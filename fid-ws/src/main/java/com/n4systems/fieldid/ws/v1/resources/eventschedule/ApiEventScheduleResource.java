@@ -196,6 +196,15 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		List<ApiEventSchedule> apiSchedules = convertAllEntitiesToApiModels(events);
 		ListResponse<ApiEventSchedule> response = new ListResponse<ApiEventSchedule>(apiSchedules, page, pageSize, total);
 		
+		//Debug log for testing on dev, stage etc.
+		logger.debug("findAssignedOpenEvents");
+		logger.debug("startDate: " + startDate);
+		logger.debug("endDate: " + endDate);
+		logger.debug("page: " + page);
+		logger.debug("pageSize: " + pageSize);
+		logger.debug("Total: " + total);
+		logger.debug("Total for current page: " + apiSchedules.size());
+		
 		return response;
 	}
 	
