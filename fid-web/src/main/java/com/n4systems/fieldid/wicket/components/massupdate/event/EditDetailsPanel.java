@@ -131,23 +131,9 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			assignedUserContainer.setVisible(FieldIDSession.get().getSecurityGuard().isAssignedToEnabled());
 			assignedUserContainer.add(groupedUserPicker);
 			
-			final CheckBox ownerCheck = new CheckBox("ownerCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[owner]"));
-			ownerCheck.setOutputMarkupId(true);
-			OrgPicker ownerPicker = new OrgPicker("owner", new PropertyModel<BaseOrg>(massUpdateEventModel, "event.owner")) {
-				@Override
-				protected void onPickerClosed(AjaxRequestTarget target) {
-					IModel<Boolean> model = (IModel<Boolean>) ownerCheck.getDefaultModel();
-					clearAllCheckboxes();
-					model.setObject(true);
-					target.add(ownerCheck);				
-				}
-			};
-			add(ownerCheck);
-			add(ownerPicker);
-
 			final CheckBox locationCheck = new CheckBox("locationCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[location]"));
 			locationCheck.setOutputMarkupId(true);
-			LocationPicker location = new LocationPicker("location", new PropertyModel<Location>(massUpdateEventModel, "event.advancedLocation")){
+			final LocationPicker location = new LocationPicker("location", new PropertyModel<Location>(massUpdateEventModel, "event.advancedLocation")){
 				@SuppressWarnings("unchecked")
 				@Override
 				protected void onLocationPicked(AjaxRequestTarget target) {
@@ -157,10 +143,26 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 					target.add(locationCheck);
 				}
 			}.withRelativePosition();
-			location.getFreeformLocationField().add(createCheckOnChangeEvent(locationCheck));			
+			location.getFreeformLocationField().add(createCheckOnChangeEvent(locationCheck));
 			add(locationCheck);
 			add(location);
-            
+
+			final CheckBox ownerCheck = new CheckBox("ownerCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[owner]"));
+			ownerCheck.setOutputMarkupId(true);
+            final PropertyModel<BaseOrg> orgModel = new PropertyModel<BaseOrg>(massUpdateEventModel, "event.owner");
+            OrgPicker ownerPicker = new OrgPicker("owner", orgModel) {
+				@Override
+				protected void onPickerClosed(AjaxRequestTarget target) {
+					IModel<Boolean> model = (IModel<Boolean>) ownerCheck.getDefaultModel();
+					clearAllCheckboxes();
+					model.setObject(true);
+                    location.setOwner(orgModel.getObject());
+					target.add(ownerCheck, locationCheck, location);
+				}
+			};
+			add(ownerCheck);
+			add(ownerPicker);
+
             final CheckBox performedByCheck = new CheckBox("performedByCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[performedBy]"));
             performedByCheck.setOutputMarkupId(true);
             FormComponent<User> performedBy = new DropDownChoice<User>("performedBy",new PropertyModel<User>(massUpdateEventModel, "event.performedBy"), new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true);

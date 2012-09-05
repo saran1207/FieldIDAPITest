@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.location;
 
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -83,6 +84,10 @@ public class LocationPicker extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/featureStyles/locationPicker.css");
+    }
+
+    public void setOwner(BaseOrg owner) {
+        predefinedLocationsPanel.setOwner(owner);
     }
 
     class LocationForm extends Form {
