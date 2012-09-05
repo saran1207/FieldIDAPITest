@@ -127,6 +127,7 @@ public class ApiEventFormResultResource extends FieldIdPersistenceService{
 			default:
 				throw new InternalErrorException("Unhandled Criteria type: " + criteria.getCriteriaType().name());
 		}
+		result.setMobileId(apiResult.getSid());
 		result.setEvent(event);
 		result.setCriteria(criteria);
 		result.setTenant(event.getTenant());

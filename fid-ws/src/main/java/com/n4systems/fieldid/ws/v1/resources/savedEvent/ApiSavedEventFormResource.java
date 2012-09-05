@@ -95,7 +95,8 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 	
 	private ApiCriteriaResult convertCriteriaResult(CriteriaResult criteriaResult, Long eventId) {
 		ApiCriteriaResult apiResult = new ApiCriteriaResult();
-		
+
+		apiResult.setSid(criteriaResult.getMobileId());
 		apiResult.setCriteriaId(criteriaResult.getCriteria().getId());
 		apiResult.setRecommendations(convertRecommendations(criteriaResult.getRecommendations()));
 		apiResult.setDeficiencies(convertDeficiencies(criteriaResult.getDeficiencies()));
