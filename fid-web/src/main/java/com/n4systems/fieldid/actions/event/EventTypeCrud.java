@@ -361,6 +361,6 @@ public class EventTypeCrud extends AbstractCrud {
 	}
 
     public boolean isAction() {
-        return eventType.getGroup().isAction();
+        return eventType.getGroup() != null ? eventType.getGroup().isAction() : false;
     }
 }
