@@ -33,8 +33,8 @@ public class PerformEventPage extends EventPage {
 
     public PerformEventPage(PageParameters parameters) {
         this(parameters.get("scheduleId").isEmpty()?null:parameters.get("scheduleId").toLongObject(),
-                parameters.get("type").toLongObject(),
-                parameters.get("assetId").toLongObject());
+				parameters.get("assetId").toLongObject(),
+				parameters.get("type").toLongObject());
     }
 
     class NewMasterEventModel extends LoadableDetachableModel<Event> {
