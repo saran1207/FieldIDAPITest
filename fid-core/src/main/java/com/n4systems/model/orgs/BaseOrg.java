@@ -266,5 +266,18 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
-	
+
+    public boolean isParentOf(BaseOrg org) {
+        if (org==null) {
+            return false;
+        }
+        BaseOrg parent = org;
+        while (parent!=null) {
+            if (parent.equals(this)) {
+                return true;
+            }
+            parent = parent.getParent();
+        }
+        return false;
+    }
 }

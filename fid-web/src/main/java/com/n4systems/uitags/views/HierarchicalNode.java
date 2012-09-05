@@ -1,7 +1,6 @@
 package com.n4systems.uitags.views;
 
 import com.n4systems.model.orgs.BaseOrg;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,11 +47,6 @@ public class HierarchicalNode implements Serializable {
 		return children.isEmpty();
 	}
 
-	@Override
-	public String toString() {
-		return "BasicNode [" + ToStringBuilder.reflectionToString(this) + "]";
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -94,5 +88,14 @@ public class HierarchicalNode implements Serializable {
 
     public BaseOrg getOwner() {
         return owner;
+    }
+
+
+    @Override
+    public String toString() {
+        return "HierarchicalNode{" +
+                "name='" + name + "'\'" +
+                ", levelNumber=" + levelNumber +
+                "}";
     }
 }

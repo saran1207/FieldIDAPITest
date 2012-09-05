@@ -1,5 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.location.PredefinedLocationsPanel;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.PredefinedLocationByIdLoader;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -9,12 +15,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.location.PredefinedLocationsPanel;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.location.PredefinedLocationByIdLoader;
 
 public class LocationPanel extends Panel {
 
@@ -38,6 +38,10 @@ public class LocationPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/featureStyles/locationPicker.css");
+    }
+
+    public void setOwner(BaseOrg owner) {
+        predefinedLocationsPanel.setOwner(owner);
     }
 
 
@@ -87,5 +91,5 @@ public class LocationPanel extends Panel {
 
     
     protected void onLocationPicked(AjaxRequestTarget target) {}
-    
+
 }

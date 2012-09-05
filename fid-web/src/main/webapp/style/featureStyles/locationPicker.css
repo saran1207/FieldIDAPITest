@@ -88,3 +88,8 @@ label.freeFormLabel {
     color:#333;
     font-size:14px;
 }
+
+.containerobj .filter-org {
+        display:none;
+    /*background:#dbb;*/
+}

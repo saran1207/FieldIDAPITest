@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.location;
 import com.n4systems.fieldid.viewhelpers.LocationHelper;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.persistence.PersistenceManagerTransactor;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.uitags.views.HierarchicalNode;
@@ -27,6 +28,9 @@ public class PredefinedLocationsPanel extends Panel {
 
     private List<HierarchicalNode> expandedLevels = new ArrayList<HierarchicalNode>();
     private List<HierarchicalNode> selectedLevels = new ArrayList<HierarchicalNode>();
+    private BaseOrg owner = null;
+    private HierarchicalNode artificialRootNode;
+    private ListView<HierarchicalNode> levelList;
 
     public PredefinedLocationsPanel(String id) {
         super(id);
@@ -34,13 +38,13 @@ public class PredefinedLocationsPanel extends Panel {
 
         List<HierarchicalNode> predefinedLocationTree = new LocationHelper(new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()), new PersistenceManagerTransactor()).getPredefinedLocationTree();
 
-        HierarchicalNode artificialRootNode = new HierarchicalNode();
+        artificialRootNode = new HierarchicalNode();
         artificialRootNode.addChild(createNoneChoice(predefinedLocationTree));
         artificialRootNode.addChildren(predefinedLocationTree);
 
         expandedLevels.add(artificialRootNode);
         
-        ListView<HierarchicalNode> levelList = new ListView<HierarchicalNode>("levelList", new PropertyModel<List<HierarchicalNode>>(this, "expandedLevels")) {
+        levelList = new ListView<HierarchicalNode>("levelList", new PropertyModel<List<HierarchicalNode>>(this, "expandedLevels")) {
             @Override
             protected void populateItem(ListItem item) {
                 int levelIndex = item.getIndex();
@@ -99,6 +103,7 @@ public class PredefinedLocationsPanel extends Panel {
                 };
                 clickLink.add(createHighlightSelectedModifier(item, levelIndex));
                 clickLink.add(createArrowIfHasChildrenModifier(item));
+                clickLink.add(createHideFilteredChildrenModifer(item));
                 clickLink.add(new FlatLabel("nodeLinkLabel", new PropertyModel<String>(item.getModel(), "name")));
                 clickLink.add(createArrowImage(item));
 
@@ -114,6 +119,15 @@ public class PredefinedLocationsPanel extends Panel {
             @Override
             public boolean isVisible() {
                 return !item.getModelObject().isLeaf();
+            }
+        };
+    }
+
+    private AttributeAppender createHideFilteredChildrenModifer(final ListItem<HierarchicalNode> item) {
+        return new AttributeAppender("class", new Model<String>("filter-org"), " ") {
+            @Override public boolean isEnabled(Component component) {
+                BaseOrg itemOwner = item.getModelObject().getOwner();
+                return owner!=null && itemOwner!=null && !owner.isParentOf(itemOwner);
             }
         };
     }
@@ -136,7 +150,7 @@ public class PredefinedLocationsPanel extends Panel {
                     return false;
                 }
                 return selectedLevels.get(levelIndex).getId().equals(item.getModelObject().getId());
-            }
+                }
         };
     }
 
@@ -162,4 +176,10 @@ public class PredefinedLocationsPanel extends Panel {
     }
 
 
+    public void setOwner(BaseOrg owner) {
+        this.owner = owner;
+        expandedLevels.clear();
+        expandedLevels.add(artificialRootNode);
+        selectedLevels.clear();
+    }
 }

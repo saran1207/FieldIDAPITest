@@ -1,5 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -12,10 +16,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
-import com.n4systems.model.location.Location;
-
 @Deprecated // to be replaced by AutoCompleteLocationPicker.
 @SuppressWarnings("serial")
 public class ModalLocationPicker extends Panel {
@@ -23,24 +23,28 @@ public class ModalLocationPicker extends Panel {
     private FIDModalWindow modal;
 	private AjaxLink chooseLink;
 	private WebMarkupContainer locationText;
+    private LocationPanel locationPanel;
+    private IModel<Location> locationModel;
 
     public ModalLocationPicker(String id, IModel<Location> locationModel) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
+        this.locationModel = locationModel;
 
         add(modal=new FIDModalWindow("choose",locationModel,500,275));
         modal.setMaskType(MaskType.TRANSPARENT);
         modal.setTitle(new StringResourceModel("label.location",this,null));
-        
-        modal.setContent(new LocationPanel(FIDModalWindow.CONTENT_ID,locationModel) {
-        	@Override protected void onClosePicker(AjaxRequestTarget target) {
-        		modal.close(target);   
-        		target.add(locationText);
-        	}
-        	@Override protected void onLocationPicked(AjaxRequestTarget target) {
-        		modal.close(target);
-        	}
+
+        modal.setContent(locationPanel = new LocationPanel(FIDModalWindow.CONTENT_ID,locationModel) {
+            @Override protected void onClosePicker(AjaxRequestTarget target) {
+                modal.close(target);
+                target.add(locationText);
+            }
+            @Override protected void onLocationPicked(AjaxRequestTarget target) {
+                modal.close(target);
+            }
         });
+        locationPanel.setOutputMarkupId(true);
 
         boolean advancedLocationEnabled = FieldIDSession.get().getSecurityGuard().isAdvancedLocationEnabled();
 
@@ -76,6 +80,10 @@ public class ModalLocationPicker extends Panel {
         });
         chooseLink.setOutputMarkupPlaceholderTag(true);
         return locationNameDisplay;
+    }
+
+    public void setOwner(BaseOrg owner) {
+        locationPanel.setOwner(owner);
     }
 
 }
