@@ -67,18 +67,8 @@ public class EventCreationService extends FieldIdPersistenceService {
         }
 
         User user = getCurrentUser();
-        Tenant tenant = getCurrentTenant();
 
         event.setEventState(Event.EventState.COMPLETED);
-
-        // if the event has no group, lets create a new one now
-        // TODO: Remove when mobile can also remove this.
-        if (event.getGroup() == null) {
-            event.setGroup(new EventGroup());
-        }
-        
-        event.getGroup().setTenant(tenant);
-        persistenceService.save(event.getGroup());
 
         setProofTestData(event, fileData);
 

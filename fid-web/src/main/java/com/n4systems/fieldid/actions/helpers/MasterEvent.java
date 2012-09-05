@@ -20,7 +20,6 @@ public class MasterEvent {
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
     private Map<Long, Map<Long, String>> subEventTemporarySignatureFileIdMap = new HashMap<Long, Map<Long,String>>();
 	private Long currentId = -1L;
-	private Long eventGroupId;
 	private Map<SubEvent, List<FileAttachment>> subEventUploadedFiles;
 	private List<FileAttachment> uploadedFiles;
 	private EventSchedule schedule;
@@ -40,7 +39,6 @@ public class MasterEvent {
 		this();
 
 		currentId = event.getId();
-		eventGroupId = event.getGroup().getId();
 		masterAsset = event.getAsset();
 		subEvents = new ArrayList<SubEvent>(event.getSubEvents());
 		this.event = event;
@@ -231,14 +229,6 @@ public class MasterEvent {
 
 	public boolean isMainEventStored() {
 		return (event.getDate() != null);
-	}
-
-	public Long getEventGroupId() {
-		return eventGroupId;
-	}
-
-	public void setEventGroupId(Long eventGroupId) {
-		this.eventGroupId = eventGroupId;
 	}
 
 	public List<SubEvent> getSubEventFor(Asset asset) {

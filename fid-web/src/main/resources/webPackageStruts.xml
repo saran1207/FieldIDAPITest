@@ -1104,20 +1104,6 @@
 		<action name="startEvent" class="com.n4systems.fieldid.actions.event.StartEvent">
 			<result name="success" type="freemarker">/templates/html/events/select.ftl</result>
 		</action>
-	
-		<action name="selectEventAsset" method="list" class="com.n4systems.fieldid.actions.event.EventGroupCrud">
-			<result name="error" type="freemarker">/templates/html/eventGroup/list.ftl</result>
-			<result name="success" type="freemarker">/templates/html/eventGroup/list.ftl</result>
-			<result name="oneFound" type="redirectAction">
-				<param name="actionName">quickEvent</param>
-				<param name="assetId">${uniqueID}</param>
-			</result>
-		</action>
-
-		<action name="eventGroups" method="show" class="com.n4systems.fieldid.actions.event.EventGroupCrud">
-
-			<result name="success" type="freemarker">/templates/html/eventGroup/show.ftl</result>
-		</action>
 
 		<action name="quickEvent" method="quickEvent" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="success" type="freemarker">/templates/html/eventCrud/quickEvent.ftl</result>

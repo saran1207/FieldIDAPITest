@@ -70,7 +70,6 @@ public class MassScheduleServiceTest extends FieldIdServiceTest {
         expect(persistenceService.find(Asset.class, 1L)).andReturn(asset1);
         expect(persistenceService.find(Asset.class, 2L)).andReturn(asset2);
         expect(persistenceService.find(Asset.class, 3L)).andReturn(asset3);
-        expect(persistenceService.save(anyObject(EventGroup.class))).andReturn(null).times(3);
         expect(persistenceService.save(anyObject(EventSchedule.class))).andReturn(null).times(3);
 
         replay(persistenceService);

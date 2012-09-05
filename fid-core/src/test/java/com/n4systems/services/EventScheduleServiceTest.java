@@ -1,18 +1,14 @@
 package com.n4systems.services;
 
-import static com.n4systems.model.builders.EventBuilder.anOpenEvent;
-import static org.junit.Assert.*;
-import static org.easymock.EasyMock.*;
-import static com.n4systems.model.builders.EventScheduleBuilder.*;
-import static com.n4systems.model.builders.AssetBuilder.*;
-
+import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.n4systems.ejb.PersistenceManager;
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.builders.EventBuilder.anOpenEvent;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class EventScheduleServiceTest {
 
@@ -23,7 +19,6 @@ public class EventScheduleServiceTest {
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.save(openEvent)).andReturn(3L);
 		expect(mockPersistenceManager.update(openEvent.getAsset())).andReturn(openEvent.getAsset());
-        expect(mockPersistenceManager.save(new EventGroup())).andReturn(7L);
 		replay(mockPersistenceManager);
 		
 		EventScheduleService sut = new EventScheduleServiceImpl(mockPersistenceManager);

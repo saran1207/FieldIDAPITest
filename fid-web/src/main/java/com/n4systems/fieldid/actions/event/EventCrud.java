@@ -73,10 +73,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	protected final EventHelper eventHelper;
 	protected final EventFormHelper eventFormHelper;
     private final EventCreationService eventCreationService;
-
-
-	
-	private EventGroup eventGroup;
 	protected Asset asset;
 	protected Event event;
 
@@ -143,7 +139,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
             event = persistenceManager.find(Event.class, openEventId, getTenant(), "asset", "eventForm.sections", "results", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
             event.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
             event.setEventForm(event.getType().getEventForm());
-            eventGroup = event.getGroup();
         } else {
             event = new Event();
         }
@@ -165,10 +160,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			
 			if (event != null && !event.isActive()) {
 				event = null;
-			}
-	
-			if (event != null) {
-				eventGroup = event.getGroup();
 			}
 		} catch(RuntimeException e) {
 			logger.error("Failed to load event", e);
@@ -292,8 +283,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	public String doShow() {
 		asset = event != null ? event.getAsset() : null;
 		testDependencies();
-
-		eventGroup = event.getGroup();
 		return SUCCESS;
 	}
 	
@@ -595,18 +584,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
             if (event.getEventForm() == null) {
                 event.setEventForm(eventType.getEventForm());
             }
-		}
-	}
-
-	public Long getEventGroupId() {
-		return (eventGroup != null) ? eventGroup.getId() : null;
-	}
-
-	public void setEventGroupId(Long eventGroupId) {
-		if (eventGroupId == null && eventGroup == null) {
-			eventGroup = new EventGroup();
-		} else if (eventGroupId != null) {
-			eventGroup = persistenceManager.find(EventGroup.class, eventGroupId, getTenant());
 		}
 	}
 

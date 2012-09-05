@@ -1,29 +1,5 @@
 package com.n4systems.ejb.legacy.impl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.persistence.EntityManager;
-
-import com.n4systems.model.api.Archivable;
-import com.n4systems.persistence.utils.PostFetcher;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.EventScheduleManagerImpl;
@@ -32,55 +8,16 @@ import com.n4systems.ejb.legacy.IdentifierCounter;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.NotImplementedException;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.DateFieldCriteriaResult;
-import com.n4systems.model.Deficiency;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventStatus;
-import com.n4systems.model.EventType;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.GpsLocation;
-import com.n4systems.model.NumberFieldCriteriaResult;
-import com.n4systems.model.Observation;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.Project;
-import com.n4systems.model.Recommendation;
-import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.State;
-import com.n4systems.model.Status;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.eventbook.EventBookByMobileIdLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubAssets;
@@ -91,36 +28,21 @@ import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.BitField;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.webservice.dto.AbstractBaseOrgServiceDTO;
-import com.n4systems.webservice.dto.AbstractExternalOrgServiceDTO;
-import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
-import com.n4systems.webservice.dto.CriteriaResultServiceDTO;
-import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
-import com.n4systems.webservice.dto.DTOHasOwners;
-import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
-import com.n4systems.webservice.dto.ImageServiceDTO;
-import com.n4systems.webservice.dto.InfoFieldServiceDTO;
-import com.n4systems.webservice.dto.InspectionBookServiceDTO;
-import com.n4systems.webservice.dto.InspectionInfoOptionServiceDTO;
-import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
-import com.n4systems.webservice.dto.InspectionServiceDTO;
-import com.n4systems.webservice.dto.InternalOrgServiceDTO;
-import com.n4systems.webservice.dto.JobServiceDTO;
-import com.n4systems.webservice.dto.LocationServiceDTO;
-import com.n4systems.webservice.dto.ObservationResultServiceDTO;
+import com.n4systems.webservice.dto.*;
 import com.n4systems.webservice.dto.ObservationResultServiceDTO.ObservationState;
 import com.n4systems.webservice.dto.ObservationResultServiceDTO.ObservationType;
-import com.n4systems.webservice.dto.ProductServiceDTO;
-import com.n4systems.webservice.dto.ProductTypeGroupServiceDTO;
-import com.n4systems.webservice.dto.ProductTypeScheduleServiceDTO;
-import com.n4systems.webservice.dto.ProductTypeServiceDTO;
-import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
-import com.n4systems.webservice.dto.SubInspectionServiceDTO;
-import com.n4systems.webservice.dto.SubProductMapServiceDTO;
-import com.n4systems.webservice.dto.TenantServiceDTO;
-import com.n4systems.webservice.dto.VendorServiceDTO;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import javax.persistence.EntityManager;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * This class converts from ServiceDTOs to beans and from beans back to
@@ -229,11 +151,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		populateAbstractInspectionInfo(inspectionDTO, event);
 		inspectionDTO.setOwnerId(retrieveOwnerId(event.getOwner()));
-		inspectionDTO.setPerformedById( event.getPerformedBy().getId() );
-		inspectionDTO.setStatus( event.getStatus().name() );
+		inspectionDTO.setPerformedById(event.getPerformedBy().getId());
+		inspectionDTO.setStatus(event.getStatus().name());
 		inspectionDTO.setEventBookId((event.getBook() != null) ? event.getBook().getMobileId() : null);
 		inspectionDTO.setUtcDate(event.getDate());
-		inspectionDTO.setEventGroupId(event.getGroup().getMobileGuid());
 		inspectionDTO.setPrintable(event.isPrintable());
 		
 		if (event.getAssetStatus() != null) {
@@ -271,17 +192,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		subInspectionDTO.setName(subEvent.getName());
 
 		return subInspectionDTO;
-	}
-
-	public List<com.n4systems.webservice.dto.InspectionServiceDTO> convert(EventGroup eventGroup) {
-		persistenceManager.reattach(eventGroup, false);
-
-		List<com.n4systems.webservice.dto.InspectionServiceDTO> inspectionDTOs = new ArrayList<com.n4systems.webservice.dto.InspectionServiceDTO>();
-		for (Event event : eventGroup.getAvailableEvents()) {
-			inspectionDTOs.add(convert(event));
-		}
-
-		return inspectionDTOs;
 	}
 
 	public ProductServiceDTO convert(Asset asset) {
@@ -549,12 +459,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		findOrCreateEventBook(inspectionServiceDTO, event);
 
-		if (inspectionServiceDTO.getEventGroupId() != null) {
-			event.setGroup(findOrCreateEventGroup(inspectionServiceDTO.getEventGroupId(), performedBy));
-		} else if (inspectionServiceDTO.inspectionGroupExists()) {
-			event.setGroup(persistenceManager.find(EventGroup.class, inspectionServiceDTO.getInspectionGroupId()));
-		}
-
 		Status status = null;
 		if (StringUtils.isNotBlank(inspectionServiceDTO.getStatus())) {
 			try {
@@ -612,22 +516,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 		
 		event.setBook(book);
-	}
-	
-	private EventGroup findOrCreateEventGroup(String mobileGuid, User createdBy) {
-		QueryBuilder<EventGroup> builder = new QueryBuilder<EventGroup>(EventGroup.class, new UserSecurityFilter(createdBy));
-		builder.addWhere(WhereClauseFactory.create("mobileGuid", mobileGuid));
-		
-		EventGroup group = persistenceManager.find(builder);
-		
-		if (group == null) {
-			group = new EventGroup();
-			group.setTenant(createdBy.getTenant());
-			group.setMobileGuid(mobileGuid);
-			persistenceManager.save(group, createdBy);
-		}
-		
-		return group;
 	}
 
 	public FileAttachment convert(AbstractEvent event, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException {

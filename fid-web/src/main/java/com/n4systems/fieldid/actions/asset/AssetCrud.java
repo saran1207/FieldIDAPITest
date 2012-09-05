@@ -1191,11 +1191,6 @@ public class AssetCrud extends UploadAttachmentSupport {
     public String getLongitude() {    	
     	return getAsset().getGpsLocation() != null ? formatBigDecimal(getAsset().getGpsLocation().getLongitude()) : "";
     }
-
-    public List<EventGroup> getEventGroups() {
-    	List<EventGroup> eventGroups = eventManager.findAllEventGroups(getSecurityFilter(), uniqueID, "events");
-    	return eventGroups;
-    }
     
     public void setMode(String mode) { 
     	this.mode = mode;

@@ -1,28 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
@@ -31,7 +8,6 @@ import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
@@ -40,6 +16,19 @@ import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Component
 @Path("eventSchedule")
@@ -139,9 +128,6 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		EventSchedule eventSchedule = new EventSchedule();
 		BaseOrg owner = persistenceService.find(BaseOrg.class, apiEventSchedule.getOwnerId());
 
-        EventGroup eventGroup = new EventGroup();
-        persistenceService.save(eventGroup);
-
         Asset asset = assetService.findByMobileId(apiEventSchedule.getAssetId());
 
         Event event = new Event();
@@ -149,7 +135,6 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
         event.setTenant(owner.getTenant());
         event.setAsset(asset);
         event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
-        event.setGroup(eventGroup);
         event.setOwner(asset.getOwner());
         event.setAssignee(getAssigneeUser(apiEventSchedule));
 

@@ -1,19 +1,10 @@
 package com.n4systems.ejb.legacy.wrapper;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.model.*;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.user.User;
@@ -21,6 +12,9 @@ import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.webservice.dto.*;
+
+import javax.persistence.EntityManager;
+import java.io.IOException;
 
 public class ServiceDTOBeanConverterEJBContainer extends EJBTransactionEmulator<ServiceDTOBeanConverter> implements ServiceDTOBeanConverter {
 
@@ -108,21 +102,6 @@ Transaction transaction = transactionManager.startTransaction();
 Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(eventBook);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public List<InspectionServiceDTO> convert(EventGroup eventGroup) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).convert(eventGroup);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

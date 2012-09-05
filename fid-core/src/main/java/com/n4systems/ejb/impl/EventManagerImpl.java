@@ -16,7 +16,9 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
+import com.n4systems.util.persistence.PassthruWhereClause;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.SubSelectInClause;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
@@ -48,33 +50,6 @@ public class EventManagerImpl implements EventManager {
 		this.eventScheduleManager = new EventScheduleManagerImpl(em);
 		this.eventSaver = new ManagerBackedEventSaver(new LegacyAssetManager(em),
 				persistenceManager, em, lastEventFinder);
-	}
-
-	/**
-	 * finds all the groups that you can view with the defined security filter.
-	 */
-	@SuppressWarnings("unchecked")
-	private List<EventGroup> findAllEventGroups(SecurityFilter userFilter, Long assetId) {
-		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
-		filter.setTargets("eg.tenant.id", "event.owner", null, null);
-
-		String queryString = "Select DISTINCT eg FROM "+ EventGroup.class.getName()+" as eg INNER JOIN eg.events as event LEFT JOIN event.asset as asset"
-				+ " WHERE asset.id = :id AND event.state = :activeState  AND " + filter.produceWhereClause() + " ORDER BY eg.created ";
-
-		Query query = em.createQuery(queryString);
-
-		filter.applyParameters(query);
-		query.setParameter("id", assetId);
-		query.setParameter("activeState", EntityState.ACTIVE);
-
-		return query.getResultList();
-	}
-
-	/**
-	 * finds all the groups that you can view with the defined security filter.
-	 */
-	public List<EventGroup> findAllEventGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
-		return (List<EventGroup>) persistenceManager.postFetchFields(findAllEventGroups(filter, assetId), postFetchFields);
 	}
 
 	
@@ -223,28 +198,17 @@ public class EventManagerImpl implements EventManager {
 		return new Page<Event>(query, countQuery, page, pageSize);
 	}
 
-	public Pager<Event> findNewestEvents(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
-
-		List<Long> jobIds = searchCriteria.getJobIds();
-
-		String selectStatement = " from "+Event.class.getName()+" i ";
-
-		String whereClause = "where ( ";
-		
-		whereClause += "i.asset.id in (select sch.asset.id from Project p, IN (p.schedules) sch where p.id in (:jobIds))";
-
-		whereClause += ") AND i.asset.lastEventDate = i.date and " + securityFilter.produceWhereClause(EventGroup.class, "i") + ")";
-
-		Query query = em.createQuery("select i " + selectStatement + whereClause + " ORDER BY i.id");
-		query.setParameter("jobIds", jobIds);
-		securityFilter.applyParameters(query, EventGroup.class);
-
-		Query countQuery = em.createQuery("select count( i.id ) " + selectStatement + whereClause);
-		countQuery.setParameter("jobIds", jobIds);
-		securityFilter.applyParameters(countQuery, EventGroup.class);
-
-		return new Page<Event>(query, countQuery, page, pageSize);
-	}
+//	public Pager<Event> findNewestEvents(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
+//		QueryBuilder<Event> qb = new QueryBuilder<Event>(Event.class, securityFilter, "e");
+//		qb.addWhere(new PassthruWhereClause("latestEventClause", "e.asset.lastEventDate = e.date"));
+//
+//		PassthruWhereClause jobClause = new PassthruWhereClause("jobClause", "e.asset.id IN (SELECT s.asset.id FROM Project p, IN (p.schedules) s WHERE p.id IN (:jobIds))");
+//		jobClause.getParams().put("jobIds", searchCriteria.getJobIds());
+//		qb.addWhere(jobClause);
+//
+//		Pager<Event> eventPage = qb.getPaginatedResults(em, page, pageSize);
+//		return eventPage;
+//	}
 	
 	public boolean isMasterEvent(Long id) {
 		Event event = em.find(Event.class, id);

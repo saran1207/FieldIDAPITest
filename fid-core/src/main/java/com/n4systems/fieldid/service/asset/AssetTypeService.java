@@ -88,10 +88,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
                 event.setNextDate(nextDate.toDate());
                 event.setEventState(Event.EventState.OPEN);
                 event.setAsset(asset);
-                EventGroup eventGroup = new EventGroup();
                 event.setStatus(Status.VOID);
-                persistenceService.save(eventGroup);
-                event.setGroup(eventGroup);
                 event.setOwner(asset.getOwner());
                 event.setTenant(asset.getTenant());
                 event.setType(recurringEvent.getEventType());

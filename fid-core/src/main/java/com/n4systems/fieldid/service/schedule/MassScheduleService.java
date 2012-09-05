@@ -3,7 +3,6 @@ package com.n4systems.fieldid.service.schedule;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventGroup;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,9 +40,6 @@ public class MassScheduleService extends FieldIdPersistenceService {
                 newSchedule.setAsset(asset);
                 newSchedule.setTenant(getCurrentTenant());
                 newSchedule.setOwner(asset.getOwner());
-                EventGroup eventGroup = new EventGroup();
-                newSchedule.setGroup(eventGroup);
-                persistenceService.save(eventGroup);
                 persistenceService.save(newSchedule);
             }
         }

@@ -1,41 +1,32 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.exceptions.UnknownSubAsset;
-import com.n4systems.fieldid.actions.helpers.MasterEvent;
-import com.n4systems.fieldid.actions.helpers.SubAssetHelper;
-import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToEventScheduleBundleConverter;
-import com.n4systems.fieldid.utils.CopyEventFactory;
-import com.n4systems.handlers.creator.EventPersistenceFactory;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.utils.FindSubAssets;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
+import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.helpers.EventScheduleSuggestion;
+import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToEventScheduleBundleConverter;
+import com.n4systems.fieldid.actions.helpers.MasterEvent;
+import com.n4systems.fieldid.actions.helpers.SubAssetHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.utils.StrutsListHelper;
+import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
+import com.n4systems.model.*;
+import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MasterEventCrud extends AbstractCrud {
@@ -48,7 +39,6 @@ public class MasterEventCrud extends AbstractCrud {
 	private final EventPersistenceFactory eventPersistenceFactory;
 
 	private Event event;
-	private EventGroup eventGroup;
 	private Asset asset;
 	private List<SubAssetHelper> subAssets;
 
@@ -77,10 +67,6 @@ public class MasterEventCrud extends AbstractCrud {
 		} else if (!MasterEvent.matchingMasterEvent(masterEvent, token)) {
 			masterEvent = null;
 			return;
-		}
-
-		if (eventGroup == null) {
-			setEventGroupId(masterEvent.getEventGroupId());
 		}
 		event = masterEvent.getEvent();
 	}
@@ -149,10 +135,6 @@ public class MasterEventCrud extends AbstractCrud {
 
 		event = masterEvent.getEvent();
 
-		if (eventGroup != null) {
-			masterEvent.setEventGroupId(eventGroup.getId());
-		}
-
 		if (masterEvent.getSchedule() != null) {
 			masterEvent.getSchedule().inProgress();
 			try {
@@ -210,9 +192,6 @@ public class MasterEventCrud extends AbstractCrud {
 		if (masterEvent == null) {
 			return ERROR;
 		}
-
-		setEventGroupId(masterEvent.getEventGroupId());
-		event.setGroup(eventGroup);
 
 		try {
 			if (uniqueID == null) {
@@ -340,18 +319,6 @@ public class MasterEventCrud extends AbstractCrud {
 		
 		if (masterEvent != null) {
 			masterEvent.setMasterAsset(asset);
-		}
-	}
-
-	public Long getEventGroupId() {
-		return (eventGroup != null) ? eventGroup.getId() : null;
-	}
-
-	public void setEventGroupId(Long eventGroupId) {
-		if (eventGroupId == null) {
-			eventGroup = null;
-		} else if (eventGroup == null || eventGroupId.equals(eventGroup.getId())) {
-			eventGroup = persistenceManager.find(EventGroup.class, eventGroupId, getTenantId());
 		}
 	}
 

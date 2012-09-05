@@ -1,20 +1,10 @@
 package com.n4systems.ejb.wrapper;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.impl.EventManagerImpl;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -25,6 +15,10 @@ import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Pager;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManager> implements EventManager {
 
@@ -66,23 +60,6 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 			transactionManager.finishTransaction(transaction);
 		}
 	}
-
-	public List<EventGroup> findAllEventGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findAllEventGroups(filter, assetId, postFetchFields);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	
 
 	public List<Event> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
@@ -148,20 +125,20 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 	
 	
 
-	public Pager<Event> findNewestEvents(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findNewestEvents(searchCriteria, securityFilter, page, pageSize);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+//	public Pager<Event> findNewestEvents(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
+//		TransactionManager transactionManager = new FieldIdTransactionManager();
+//		Transaction transaction = transactionManager.startTransaction();
+//		try {
+//			return createManager(transaction.getEntityManager()).findNewestEvents(searchCriteria, securityFilter, page, pageSize);
+//
+//		} catch (RuntimeException e) {
+//			transactionManager.rollbackTransaction(transaction);
+//
+//			throw e;
+//		} finally {
+//			transactionManager.finishTransaction(transaction);
+//		}
+//	}
 
 	public Pager<Event> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

@@ -43,13 +43,6 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 
 	public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
-		// if the event has no group, lets create a new one now
-		if (parameterObject.event.getGroup() == null) {
-			parameterObject.event.setGroup(new EventGroup());
-			parameterObject.event.getGroup().setTenant(parameterObject.event.getTenant());
-			persistenceManager.save(parameterObject.event.getGroup(), parameterObject.userId);
-		}
-
         Status calculatedStatus = calculateEventResultAndScore(parameterObject.event);
 		if (parameterObject.event.getStatus() == null) {
             parameterObject.event.setStatus(calculatedStatus);

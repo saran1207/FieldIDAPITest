@@ -88,9 +88,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date completedDate;
-
-	@ManyToOne(fetch=FetchType.EAGER, optional = false)
-	private EventGroup group;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private EventBook book;
@@ -181,16 +178,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
 	public void setPerformedBy(User performedBy) {
 		this.performedBy = performedBy;
-	}
-
-	@AllowSafetyNetworkAccess
-	public EventGroup getGroup() {
-		return group;
-	}
-	
-
-	public void setGroup(EventGroup group) {
-		this.group = group;
 	}
 
 	public EventBook getBook() {
@@ -369,7 +356,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		Event enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setBook(enhance(book, level));
 		enhanced.setPerformedBy(enhance(performedBy, level));
-		enhanced.setGroup(enhance(group, level));
 		enhanced.setType(enhance(getType(), level));
 		enhanced.setAsset(enhance(getAsset(), level));
 		enhanced.setOwner(enhance(getOwner(), level));

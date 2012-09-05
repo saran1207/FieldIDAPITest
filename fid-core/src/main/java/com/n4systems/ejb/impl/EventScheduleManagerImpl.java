@@ -76,7 +76,6 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
                     openEvent.setAsset(asset);
                     openEvent.setType(type.getEventType());
                     openEvent.setNextDate(assetType.getSuggestedNextEventDate(asset.getIdentified(), type.getEventType(), asset.getOwner()));
-                    openEvent.setGroup(new EventGroup());
 					schedules.add(openEvent);
 				}
 			}

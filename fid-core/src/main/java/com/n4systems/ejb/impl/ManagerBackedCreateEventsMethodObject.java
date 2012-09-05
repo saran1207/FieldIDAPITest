@@ -1,27 +1,13 @@
 package com.n4systems.ejb.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
-import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.exceptions.InvalidScheduleStateException;
-import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.exceptions.UnknownSubAsset;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.Tenant;
+import com.n4systems.exceptions.*;
+import com.n4systems.model.*;
 import com.n4systems.util.TransactionSupervisor;
 import org.apache.log4j.Logger;
+
+import java.util.*;
 
 public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethodObject {
 
@@ -52,18 +38,13 @@ public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethod
 		 */
 		Asset managedAsset = events.iterator().next().getAsset();
 		persistenceManager.reattach(managedAsset);
-		
-		EventGroup createdEventGroup = null;
+
 		Tenant tenant = null;
 		Event savedEvent = null;
 		for (Event event : events) {
 			if (tenant == null) {
 				tenant = event.getTenant();
 			}
-			if (createdEventGroup != null && event.getGroup() == null) {
-				event.setGroup(createdEventGroup);
-			}
-
 			// set the managed asset back onto the event.  See note above.
 			event.setAsset(managedAsset);
 			
@@ -96,14 +77,6 @@ public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethod
             for (SubEvent subEvent : new ArrayList<SubEvent>(event.getSubEvents())) {
                 savedEvent = eventSaver.attachFilesToSubEvent(savedEvent, subEvent, new ArrayList<FileAttachment>(subEventAttachments.get(subEvent.getAsset())));
             }
-
-			// If the event didn't have an event group before saving,
-			// and we haven't created an event group yet
-			// hang on to the now created event group to apply to other
-			// events
-			if (createdEventGroup == null && event.getGroup() != null) {
-				createdEventGroup = savedEvent.getGroup();
-			}
 
 			savedEvents.add(savedEvent);
 		}

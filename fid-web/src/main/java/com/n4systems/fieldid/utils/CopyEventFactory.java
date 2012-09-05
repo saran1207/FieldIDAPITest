@@ -15,7 +15,6 @@ public class CopyEventFactory {
 		newEvent.setAssignedTo(event.getAssignedTo());
 		newEvent.setOwner( event.getOwner() );
 		newEvent.setBook( event.getBook() );
-		newEvent.setGroup( event.getGroup() );
 		newEvent.setPerformedBy( event.getPerformedBy() );
 		newEvent.setAdvancedLocation(event.getAdvancedLocation());
 		newEvent.setPrintable( event.isPrintable() );
