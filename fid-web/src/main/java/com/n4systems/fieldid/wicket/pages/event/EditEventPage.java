@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.event.EventCriteriaEditService;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -19,9 +18,6 @@ public class EditEventPage extends EventPage {
     public EditEventPage(PageParameters parameters) {
         uniqueId = parameters.get("uniqueID").toLong();
         event = new ExistingEventModel();
-
-        NonWicketLink backToStrutsLink = new NonWicketLink("backToStrutsLink", "eventEdit.action?uniqueID=" + uniqueId);
-        add(backToStrutsLink);
     }
 
     class ExistingEventModel extends LoadableDetachableModel<Event> {
