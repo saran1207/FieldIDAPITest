@@ -3,21 +3,17 @@
       xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
       xml:lang="en"
       lang="en">
-
-<wicket:panel>
-    <div class="criteriaImageBox">
-        <form wicket:id="uploadForm">
-
-            <input wicket:id="criteriaFileUpload" type="file"/>
+<wicket:extend>
+    <div class="criteria-image-container">
+        <form wicket:id="editForm">
+            <img wicket:id="image"/>
             <textarea wicket:id="comments" class="comments"/>
             <div class="actions">
                 <a class="mattButton save blueButton" wicket:id="save"><wicket:message key="label.save"/></a>
                 <wicket:message key="label.or"/>
-                <a class="cancel" wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+                <a wicket:id="delete"><wicket:message key="label.delete"/></a>
             </div>
-
         </form>
     </div>
-</wicket:panel>
-
+</wicket:extend>
 </html>

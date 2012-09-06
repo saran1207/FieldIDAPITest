@@ -1,0 +1,89 @@
+.criteria-image-container {
+    padding: 20px 30px;
+}
+
+.criteria-image-container .comments {
+    width: 98%;
+    margin: 10px 0;
+}
+
+.criteria-image-container .actions {
+    border-top: 1px solid #DDDDDD;
+    padding-top: 20px;
+    float: left;
+    width: 100%;
+}
+
+.criteria-image-container .actions .save {
+    margin-left: 50px;
+    margin-right: 10px;
+    width: 40%;
+    position: relative;
+    top: -6px;
+}
+
+.criteria-image-container .actions .cancel {
+    margin-left: 3px;
+}
+
+.criteria-image-container .actions .blueButton {
+    border:1px solid #4c8ffc;
+    background: #4C8FFC;
+    background: -moz-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #357AE8), color-stop(100%, #4D90FE));
+    background: -webkit-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    background: -o-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    background: -ms-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#357AE8', endColorstr = '#4D90FE', GradientType = 0);
+    background: linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    color: #FFFFFF;
+}
+
+.criteria-image-container .actions .blueButton:hover {
+    background: #4C8FFC;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4D90FE', endColorstr='#357AE8',GradientType=0 );
+    border: 1px solid #6699FF;
+}
+
+.image-container {
+    float:left;
+    width: 160px;
+    height: 205px;
+    margin: 5px;
+
+}
+
+.thumbnail-container{
+    height: 150px;
+    width: 150px;
+}
+
+.thumbnail-container:hover {
+    background: url("../../../images/icon-edit-large.png") no-repeat top left;
+    cursor: pointer;
+}
+
+.thumbnail-container:hover img {
+    opacity:0.2;
+}
+
+.image-container .comments span {
+    margin: 5px 0;
+    width: 100%;
+    font-size: 12px;
+}
+
+.upload {
+    clear:both;
+}
+
+textarea.comments {
+    border: 1px solid #9C9C9C;
+    color: #555555;
+    display: block;
+    height: 80px;
+    margin-top: 5px;
+    padding: 4px;
+    width: 250px;
+}
+

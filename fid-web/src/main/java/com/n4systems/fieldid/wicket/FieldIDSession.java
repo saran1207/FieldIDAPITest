@@ -8,6 +8,7 @@ import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldidadmin.utils.Constants;
+import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.TenantBuilder;
@@ -33,6 +34,7 @@ public class FieldIDSession extends WebSession {
     private ConcurrentHashMap<String, String> localizationCache = new ConcurrentHashMap<String,String>();
     private String previouslyStoredTempFileId;
     private boolean concurrentSessionDetected;
+    private CriteriaResult previouslyStoredCriteriaResult;
 
     public FieldIDSession(Request request) {
         super(request);
@@ -144,4 +146,11 @@ public class FieldIDSession extends WebSession {
         return concurrentSessionDetected;
     }
 
+    public CriteriaResult getPreviouslyStoredCriteriaResult() {
+        return previouslyStoredCriteriaResult;
+    }
+
+    public void setPreviouslyStoredCriteriaResult(CriteriaResult previouslyStoredCriteriaResult) {
+        this.previouslyStoredCriteriaResult = previouslyStoredCriteriaResult;
+    }
 }

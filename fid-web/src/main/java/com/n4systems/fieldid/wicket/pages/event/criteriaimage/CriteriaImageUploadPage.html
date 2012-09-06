@@ -3,9 +3,8 @@
       xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
       xml:lang="en"
       lang="en">
-
-<wicket:panel>
-    <div class="criteriaImageBox">
+<wicket:extend>
+    <div class="criteria-image-container">
         <form wicket:id="uploadForm">
 
             <input wicket:id="criteriaFileUpload" type="file"/>
@@ -18,6 +17,5 @@
 
         </form>
     </div>
-</wicket:panel>
-
+</wicket:extend>
 </html>

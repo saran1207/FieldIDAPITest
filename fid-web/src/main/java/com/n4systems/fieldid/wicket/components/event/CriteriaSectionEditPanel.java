@@ -1,16 +1,17 @@
 package com.n4systems.fieldid.wicket.components.event;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.event.criteria.CriteriaActionButton;
 import com.n4systems.fieldid.wicket.components.event.criteria.factory.CriteriaEditorFactory;
-import com.n4systems.fieldid.wicket.components.event.criteriaimages.CriteriaImagesPanel;
 import com.n4systems.fieldid.wicket.components.event.observations.DeficienciesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.observations.RecommendationsEditPanel;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageListPage;
 import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Observation;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,12 +27,23 @@ import java.util.List;
 public class CriteriaSectionEditPanel extends Panel {
 
     private IModel<List<CriteriaResult>> results;
+    private FIDModalWindow criteriaImagesModalWindow;
     private FIDModalWindow criteriaModalWindow;
 
     public CriteriaSectionEditPanel(String id, IModel<List<CriteriaResult>> results) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
         add(new CriteriaEditForm("criteriaEditForm", results));
+
+        add(criteriaImagesModalWindow = new FIDModalWindow("imagesWindow"));
+        criteriaImagesModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
+            @Override
+            public boolean onCloseButtonClicked(AjaxRequestTarget target) {
+                target.add(CriteriaSectionEditPanel.this);
+                return true;
+            }
+        });
+
         add(criteriaModalWindow = new FIDModalWindow("modalWindow"));
         criteriaModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
 			@Override
@@ -92,28 +104,45 @@ public class CriteriaSectionEditPanel extends Panel {
 							return deficiencies.getObject().isEmpty();
 						}
 					});
-					item.add(new CriteriaActionButton("criteriaImageButton", "images/camera_icon.jpg", "images/camera_icon_plus.jpg") {
-						@Override
-						protected void onClick(AjaxRequestTarget target) {
-							criteriaModalWindow.setTitle(new FIDLabelModel("label.criteria_images"));
-							criteriaModalWindow.setContent(new CriteriaImagesPanel(criteriaModalWindow.getContentId(), item.getModel()) {
-								@Override
-								protected void onClose(AjaxRequestTarget target) {
-									target.add(CriteriaSectionEditPanel.this);
-									criteriaModalWindow.close(target);
-								}
-							});
 
-							criteriaModalWindow.show(target);
-						}
+                    item.add(new CriteriaActionButton("criteriaImageButton", "images/camera_icon.jpg", "images/camera_icon.jpg") {
+                        @Override
+                        protected void onClick(AjaxRequestTarget target) {
+                            criteriaImagesModalWindow.setTitle(new FIDLabelModel("label.criteria_images"));
+                            criteriaImagesModalWindow.setPageCreator(new ModalWindow.PageCreator() {
+                                @Override
+                                public Page createPage() {
+                                    return new CriteriaImageListPage(item.getModel(), criteriaImagesModalWindow);
+                                }
+                            });
+                            criteriaImagesModalWindow.setInitialWidth(600);
+                            criteriaImagesModalWindow.setInitialHeight(700);
 
-						@Override
-						protected boolean isEmpty() {
-							return item.getModel().getObject().getCriteriaImages().size() == 0;
-						}
+                            criteriaImagesModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
+                                public boolean onCloseButtonClicked(AjaxRequestTarget target) {
+                                    CriteriaResult tempCriteriaResult = FieldIDSession.get().getPreviouslyStoredCriteriaResult();
+                                    if(tempCriteriaResult != null) {
+                                        FieldIDSession.get().setPreviouslyStoredCriteriaResult(null);
+                                        for(CriteriaResultImage image: tempCriteriaResult.getCriteriaImages()) {
+                                            image.setCriteriaResult(item.getModelObject());
+                                            item.getModelObject().getCriteriaImages().add(image);
+                                        }
+                                    }
+                                    target.add(CriteriaSectionEditPanel.this);
+                                    return true;
+                                }
+                            });
+
+                            criteriaImagesModalWindow.show(target);
+                        }
+
+                        @Override
+                        protected boolean isEmpty() {
+                            return item.getModel().getObject().getCriteriaImages().size() == 0;
+                        }
 
 
-					});
+                    });
                 }
             });
         }
