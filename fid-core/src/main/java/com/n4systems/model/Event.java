@@ -72,11 +72,20 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     @OneToOne(mappedBy = "event", cascade = CascadeType.PERSIST)
     private AssigneeNotification assigneeNotification;
 
+    // Trigger and criteria result.
+    // Theoretically we can get the trigger event from the sourceCriteriaResult, but this will
+    // almost certainly present significant performance issues for reporting if we choose to ONLY
+    // have the link to criteria result (we'll have to join in criteriaresults with events to do reports)
+    // For now, let's have both the trigger event and source criteria result linked from events.
     @OneToOne
     @JoinColumn(name="trigger_event_id")
     private Event triggerEvent;
 
-	@Column(nullable=false)
+    @ManyToOne
+    @JoinColumn(name="source_criteria_result_id")
+    private CriteriaResult sourceCriteriaResult;
+
+    @Column(nullable=false)
 	private boolean printable;
 
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -139,7 +148,14 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     @ManyToOne()
     @JoinColumn(name="recurring_event_id")
     private RecurringAssetTypeEvent recurringEvent;
-	
+
+    @Column(name="notes", length = 500)
+    private String notes;
+
+    @ManyToOne
+    @JoinColumn(name="priority_id")
+    private PriorityCode priority;
+
 	public Event() {
 	}
 
@@ -627,4 +643,27 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         this.triggerEvent = triggerEvent;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public PriorityCode getPriority() {
+        return priority;
+    }
+
+    public void setPriority(PriorityCode priority) {
+        this.priority = priority;
+    }
+
+    public CriteriaResult getSourceCriteriaResult() {
+        return sourceCriteriaResult;
+    }
+
+    public void setSourceCriteriaResult(CriteriaResult sourceCriteriaResult) {
+        this.sourceCriteriaResult = sourceCriteriaResult;
+    }
 }
