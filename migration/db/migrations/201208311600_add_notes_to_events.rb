@@ -1,4 +1,4 @@
-class AddNotesAndPriorityToEvents < ActiveRecord::Migration
+class AddNotesToEvents < ActiveRecord::Migration
 
   def self.up
     add_column(:masterevents, :notes, :string, :limit => 500)
