@@ -88,6 +88,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
     class OuterEventForm extends Form {
 
+        private LocationPicker locationPicker;
+
         public OuterEventForm(String id) {
             super(id);
             add(new Label("assetTypeName", new PropertyModel<String>(event, "asset.type.name")));
@@ -110,6 +112,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                 @Override
                 protected void onOrgSelected(AjaxRequestTarget target) {
                     doAutoSchedule();
+                    locationPicker.setOwner((BaseOrg) getDefaultModel().getObject());
                 }
             });
 
@@ -168,7 +171,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             jobSelect.setNullValid(true);
             jobsContainer.add(jobSelect);
 
-            add(new LocationPicker("locationPicker", new PropertyModel<Location>(event, "advancedLocation")).withRelativePosition());
+            add(locationPicker = new LocationPicker("locationPicker", new PropertyModel<Location>(event, "advancedLocation")).withRelativePosition());
             
             add(new Comment("comments", new PropertyModel<String>(event, "comments")));
 
