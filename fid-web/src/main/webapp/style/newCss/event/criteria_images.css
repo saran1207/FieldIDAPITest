@@ -58,6 +58,14 @@
     width: 150px;
 }
 
+.thumbnail-container img {
+    width: 150px;
+}
+
+.edit-image {
+    width: 510px;
+}
+
 .thumbnail-container:hover {
     background: url("../../../images/icon-edit-large.png") no-repeat top left;
     cursor: pointer;

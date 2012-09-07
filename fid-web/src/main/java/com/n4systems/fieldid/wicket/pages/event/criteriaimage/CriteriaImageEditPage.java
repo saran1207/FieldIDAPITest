@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.event.criteriaimage;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.images.ImageService;
+import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
@@ -18,8 +20,13 @@ import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
+    
     @SpringBean
     ImageService imageService;
+    
+    @SpringBean
+    S3Service s3Service;
+    
     private FIDModalWindow modalWindow;
 
     public CriteriaImageEditPage(final IModel<CriteriaResult> model, int imageIndex, final FIDModalWindow actionsModalWindow) {
@@ -35,19 +42,24 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
             setOutputMarkupId(true);
 
             final CriteriaResultImage image = model.getObject().getCriteriaImages().get(imageIndex);
-            add(new NonCachingImage("image", new AbstractReadOnlyModel<DynamicImageResource>() {
-                @Override
-                public DynamicImageResource getObject() {
-                    DynamicImageResource imageResource = new DynamicImageResource() {
-                        @Override
-                        protected byte[] getImageData(Attributes attributes) {
-                            return imageService.scaleImage(image.getImageData(), 510, 510);
-                        }
-                    };
-                    imageResource.setFormat(image.getContentType());
-                    return imageResource;
-                }
-            }));
+            
+            if(image.getImageData() == null) {
+                add(new ExternalImage("image", s3Service.getCriteriaResultImageOriginalURL(image).toString()));
+            }else {
+                add(new NonCachingImage("image", new AbstractReadOnlyModel<DynamicImageResource>() {
+                    @Override
+                    public DynamicImageResource getObject() {
+                        DynamicImageResource imageResource = new DynamicImageResource() {
+                            @Override
+                            protected byte[] getImageData(Attributes attributes) {
+                                return imageService.scaleImage(image.getImageData(), 510, 510);
+                            }
+                        };
+                        imageResource.setFormat(image.getContentType());
+                        return imageResource;
+                    }
+                }));
+            }
             add(new TextArea("comments", new PropertyModel(image, "comments")));
 
             add(new AjaxSubmitLink("save") {

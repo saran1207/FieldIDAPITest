@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.event.criteriaimage;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.images.ImageService;
+import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
@@ -23,6 +25,9 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
     @SpringBean
     ImageService imageService;
 
+    @SpringBean
+    S3Service s3Service;
+
     public CriteriaImageListPage(final IModel<CriteriaResult> model, final FIDModalWindow actionsModalWindow) {
         super();
         
@@ -39,19 +44,23 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
                     }
                 });
 
-                editLink.add(new NonCachingImage("thumbnail", new AbstractReadOnlyModel<DynamicImageResource>() {
-                    @Override 
-                    public DynamicImageResource getObject() {
-                        DynamicImageResource imageResource = new DynamicImageResource() {
-                            @Override
-                            protected byte[] getImageData(Attributes attributes) {
-                                return imageService.scaleImage(image.getImageData(), 150, 150);
-                            }
-                        };
-                        imageResource.setFormat(image.getContentType());
-                        return imageResource;
-                    }
-                }));
+                if(image.getImageData() == null) {
+                    editLink.add(new ExternalImage("thumbnail", s3Service.getCriteriaResultImageOriginalURL(image).toString()));
+                } else {
+                    editLink.add(new NonCachingImage("thumbnail", new AbstractReadOnlyModel<DynamicImageResource>() {
+                        @Override 
+                        public DynamicImageResource getObject() {
+                            DynamicImageResource imageResource = new DynamicImageResource() {
+                                @Override
+                                protected byte[] getImageData(Attributes attributes) {
+                                    return imageService.scaleImage(image.getImageData(), 150, 150);
+                                }
+                            };
+                            imageResource.setFormat(image.getContentType());
+                            return imageResource;
+                        }
+                    }));
+                }
                 item.add(new Label("comments", new PropertyModel<String>(image, "comments")));
             }
         });
