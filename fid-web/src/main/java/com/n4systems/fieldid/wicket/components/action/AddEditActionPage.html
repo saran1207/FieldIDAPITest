@@ -1,0 +1,43 @@
+<wicket:extend>
+
+    <form wicket:id="addActionForm" class="addActionForm actionPage">
+
+        <div wicket:id="feedbackPanel"></div>
+
+        <select wicket:id="type"></select>
+
+        <select wicket:id="priority"></select>
+
+        <textarea wicket:id="notes"/>
+
+        <div class="dueDescription">
+            <wicket:message key="label.set_the_due_date"/>
+        </div>
+
+        <div wicket:id="nextDate"></div>
+
+        <div class="quickLinks">
+            <a wicket:id="todayLink"><wicket:message key="label.today"/></a> |
+            <a wicket:id="tomorrowLink"><wicket:message key="label.tomorrow"/></a> |
+            <a wicket:id="endOfWeekLink"><wicket:message key="label.end_of_the_week"/></a> |
+            <a wicket:id="in30DaysLink"><wicket:message key="label.in_30_days"/></a>
+        </div>
+
+        <div class="assigneeSection">
+
+            <div class="assigneeTitle">
+                <wicket:message key="label.assignee"/>
+            </div>
+
+            <wicket:message key="message.person_assigned_will_be_notified_by_email"/>
+
+            <select wicket:id="assignee"></select>
+
+        </div>
+
+        <a wicket:id="submitLink" class="mattButton blueButton">
+            <span wicket:id="saveLabel"></span>
+        </a>
+    </form>
+
+</wicket:extend>

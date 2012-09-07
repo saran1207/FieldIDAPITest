@@ -4,27 +4,20 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
+public class DialogModalWindow extends ModalWindow {
 
-public class FIDModalWindow extends ModalWindow {
-
-    public FIDModalWindow(String id) {
+    public DialogModalWindow(String id) {
         super(id);
-        initializeModalWindow();
     }
 
-    public FIDModalWindow(String id, IModel<?> model) {
+    public DialogModalWindow(String id, IModel<?> model) {
         super(id, model);
-        initializeModalWindow();
     }
 
-    public FIDModalWindow(String id, IModel<?> model, int width, int height) {
-    	this(id,model);
-    	setInitialWidth(width);    	
-    	setInitialHeight(height);
-	}
-
-	private void initializeModalWindow() {
-        setCssClassName("fid-modal");
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        setCssClassName("dialog-modal");
         setMaskType(MaskType.SEMI_TRANSPARENT);
         setResizable(false);
     }
@@ -32,6 +25,9 @@ public class FIDModalWindow extends ModalWindow {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        response.renderJavaScript("Wicket.Window.unloadConfirmation=false;", "DISABLE_UNLOAD_CONFIRM");
         response.renderCSSReference("style/modal/fid_modal.css");
+        response.renderCSSReference("style/modal/dialog_modal.css");
     }
+
 }

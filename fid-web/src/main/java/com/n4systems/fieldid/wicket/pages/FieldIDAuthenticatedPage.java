@@ -5,6 +5,7 @@ import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.user.User;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -55,4 +56,10 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
         return persistenceService.find(User.class, getSessionUser().getUniqueID());
     }
 
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+    }
 }

@@ -1,0 +1,15 @@
+.popupDialog {
+    overflow:hidden;
+    width:300px;
+    height:300px;
+    border:solid 1px #BBB;
+    background-color:#F9F9F9;
+    z-index: 1;
+    position:absolute;
+    top:-10000px;
+    left:-10000px;
+    padding: 11px;
+    -moz-box-shadow: 4px 4px 11px #AAAAAA
+    -webkit-box-shadow: 4px 4px 11px #AAAAAA
+    box-shadow: 4px 4px 11px #AAAAAA
+}

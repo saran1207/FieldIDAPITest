@@ -88,6 +88,14 @@ public class EventCreationService extends FieldIdPersistenceService {
             persistenceService.update(event);
         }
 
+        for (CriteriaResult criteriaResult : event.getResults()) {
+            for (Event action : criteriaResult.getActions()) {
+                action.getSchedule().copyDataFrom(action);
+                persistenceService.save(action);
+                persistenceService.update(criteriaResult);
+            }
+        }
+
         updateAsset(event, user.getId());
 
         // writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an 
@@ -363,6 +371,11 @@ public class EventCreationService extends FieldIdPersistenceService {
             logger.info("Valid GPS recieved during inspection. Updating Asset " + asset.getIdentifier());
             asset.setGpsLocation(event.getGpsLocation());
         }
+    }
+
+    @Transactional
+    public void updateEvent(Event event) {
+        persistenceService.update(event);
     }
 
 	private void saveCriteriaResultImages(Event event) {

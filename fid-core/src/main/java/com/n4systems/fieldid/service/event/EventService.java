@@ -41,7 +41,7 @@ public class EventService extends FieldIdPersistenceService {
     @Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private AssetService assetService;
 
-	@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
 	public List<Event> getEventsByType(Long eventTypeId) {
 		QueryBuilder<Event> builder = getEventsByTypeBuilder(eventTypeId);
         return persistenceService.findAll(builder);
@@ -461,6 +461,5 @@ public class EventService extends FieldIdPersistenceService {
         }
         builder.addOrder("nextDate");
     }
-
 
 }

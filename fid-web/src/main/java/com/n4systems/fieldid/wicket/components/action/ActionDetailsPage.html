@@ -1,0 +1,61 @@
+<wicket:extend>
+
+    <div class="actionsPage">
+
+        <div class="actionDetail">
+
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-priority.png">
+            </div>
+
+            <div class="actionMessage">
+                <span wicket:id="priority"></span>
+            </div>
+
+        </div>
+
+        <div class="actionDetail">
+
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-notes.png">
+            </div>
+
+            <div class="actionMessage">
+                <span wicket:id="notes"></span>
+            </div>
+
+        </div>
+
+        <div class="actionDetail">
+
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-due.png">
+            </div>
+
+            <div class="actionMessage">
+                <span wicket:id="dueDate"></span>
+            </div>
+
+        </div>
+
+        <div class="actionDetail">
+
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-assignee.png">
+            </div>
+
+            <div class="actionMessage">
+                <span wicket:id="assignee"></span>
+            </div>
+
+        </div>
+
+        <div class="linksSection">
+            <a wicket:id="startEventLink" class="mattButton blueButton"><wicket:message key="label.start_action"/></a>
+            <a wicket:id="editLink" class="mattButton"><wicket:message key="label.edit"/></a>
+            <a wicket:id="actionsListLink" class="mattButton"><wicket:message key="label.actions_list"/></a>
+        </div>
+
+    </div>
+
+</wicket:extend>

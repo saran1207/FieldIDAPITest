@@ -1,0 +1,71 @@
+div.dialog-modal {
+    border:solid 1px #BBB;
+    background-color:#F9F9F9;
+    padding: 11px;
+    -moz-box-shadow: 4px 4px 11px #AAAAAA;
+    -webkit-box-shadow: 4px 4px 11px #AAAAAA;
+    box-shadow: 4px 4px 11px #AAAAAA;
+}
+
+div.dialog-modal div.w_content_3 {
+    border:none;
+}
+
+div.dialog-modal div.w_silver a.w_close {
+    background-position:0;
+    width:11px;
+    height:11px;
+    background-image: url('../../images/modal-close.png');
+    margin-right:10px;
+    margin-top:3px;
+}
+
+div.dialog-modal h3.w_captionText {
+    line-height:1.5em;
+    font-size: 14px;
+    display:block;
+    margin-left:16px;
+}
+
+div.dialog-modal div.w_caption {
+    color:#000;
+    padding:0 0 12px 8px;
+}
+
+div.dialog-modal div.w_silver div.w_top {
+    background-image:none;
+    background-color:#f2f2f2;
+}
+
+div.dialog-modal div.w_silver div.w_bottom {
+    background-image:none;
+    background-color:#fff;
+}
+
+div.dialog-modal div.w_silver div.w_topLeft {
+    background-image:none;
+    background-color:#f2f2f2;
+}
+
+div.dialog-modal div.w_silver div.w_topRight {
+    background-image:none;
+    background-color:#f2f2f2;
+}
+
+div.dialog-modal div.w_silver div.w_bottomLeft {
+    background-image:none;
+    background-color:#fff;
+}
+
+div.dialog-modal div.w_silver div.w_bottomRight {
+    background-image:none;
+    background-color:#fff;
+}
+
+div.dialog-modal a.w_close, div.dialog-modal a.w_close:hover {
+    background-image: url('/fieldid/images/modal-close.png');
+    width:11px;
+    height:11px;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+}

@@ -9,6 +9,7 @@ import com.n4systems.fieldid.utils.FlashScopeMarshaller;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldidadmin.utils.Constants;
 import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.TenantBuilder;
@@ -24,6 +25,7 @@ import rfid.web.helper.SessionUser;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,6 +34,7 @@ public class FieldIDSession extends WebSession {
 
     private transient HttpSession session;
     private ConcurrentHashMap<String, String> localizationCache = new ConcurrentHashMap<String,String>();
+    private ConcurrentHashMap<Long, List<Event>> actionsList = new ConcurrentHashMap<Long, List<Event>>();
     private String previouslyStoredTempFileId;
     private boolean concurrentSessionDetected;
     private CriteriaResult previouslyStoredCriteriaResult;
@@ -144,6 +147,14 @@ public class FieldIDSession extends WebSession {
 
     public boolean isConcurrentSessionDetectedInRequestCycle() {
         return concurrentSessionDetected;
+    }
+
+    public void setActionsForCriteria(CriteriaResult criteriaResult, List<Event> actions) {
+        actionsList.put(criteriaResult.getCriteria().getId(), actions);
+    }
+
+    public List<Event> getActionsList(CriteriaResult criteriaResult) {
+        return actionsList.get(criteriaResult.getCriteria().getId());
     }
 
     public CriteriaResult getPreviouslyStoredCriteriaResult() {

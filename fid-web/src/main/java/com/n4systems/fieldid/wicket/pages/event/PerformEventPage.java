@@ -18,7 +18,7 @@ public class PerformEventPage extends EventPage {
     @SpringBean private PersistenceService persistenceService;
 
     private PerformEventPage(Long scheduleId, Long assetId, Long typeId) {
-        if (scheduleId!=null) {
+        if (scheduleId != null) {
             event = new EventFromOpenEventModel(scheduleId);
         } else {
             event = new NewMasterEventModel(assetId, typeId);

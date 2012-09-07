@@ -29,6 +29,7 @@ public class TimeAgoBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/jquery.timeago.js");
+        response.renderOnDomReadyJavaScript("jQuery.timeago.settings.allowFuture = true;");
         response.renderOnDomReadyJavaScript("jQuery('#" + component.getMarkupId() + "').timeago();");
     }
 

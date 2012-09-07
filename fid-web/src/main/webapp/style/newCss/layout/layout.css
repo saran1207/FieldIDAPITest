@@ -530,66 +530,6 @@ table.list tr.multiSelected {
 	height: auto;
 }
 
-#formErrors {
-	width: 100%;
-}
-
-.formErrors {
-	border:1px solid #FFC2C2;
-	background-color:#FFEBEB;
-	padding: 10px;
-	margin: 10px 0;
-}
-
-.formErrors ul li span {
-	width: auto;
-}
-
-.formErrors ul {
-	margin-left: 20px;
-}
-
-.formErrors ul li {
-	list-style-type: square;
-	padding: 5px;
-	vertical-align:middle;
-	margin-left:2em;
-}
-
-#formErrors h2 {
-	background-color: transparent;
-	padding: 0px;
-	margin: 0px;
-	border:none;
-}
-
-#formErrors * {
-	float: none;
-}
-
-#contentHeader #notifications span {
-	line-height: 30px;
-	padding: 0px 10px;
-}
-
-.message ul {
-	background-color: #EBF8CD;
-	border: 1px solid #CCCCCC;
-	font-weight: bold;
-	padding-top:10px;
-	padding-bottom:10px;
-}
-
-.error {
-	color: #F00;
-}
-
-.error ul {
-	border: 1px solid #FF3030;
-	background-color: #ffebeb;
-	font-weight: bold;
-}
-
 .simpleTable table {
 	border-collapse: separate;
 	border-spacing: 0 2px;

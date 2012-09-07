@@ -1,0 +1,136 @@
+body {
+    font-size:12px;
+    font-family:"lucida grande", tahoma, verdana, arial, sans-serif;
+}
+
+.addActionForm select {
+    width:100%;
+    padding:3px;
+    margin-bottom:8px;
+}
+
+.addActionForm textarea {
+    width:100%;
+    height:75px;
+    border:1px solid #9c9c9c;
+    color:#555;
+}
+
+.addActionForm .quickLinks {
+    font-size:10px;
+}
+
+.addActionForm .quickLinks a, .addActionForm .quickLinks a:visited {
+    color: #4686ec;
+}
+
+.addActionForm .assigneeSection {
+    border-top:1px solid #cccccc;
+    border-bottom:1px solid #cccccc;
+    color:#999999;
+
+    margin:15px 0 10px 0;
+    padding:5px 0 5px 0;
+}
+
+.addActionForm .assigneeSection .assigneeTitle {
+    color:#6b6b6b;
+    font-size:14px;
+    padding-bottom:4px;
+}
+
+.addActionForm .assigneeSection select {
+    margin-top:8px;
+}
+
+.addActionForm .assigneeSection .assigneeTitle {
+    color:#6b6b6b;
+    font-size:14px;
+}
+
+.addActionForm input[type="text"] {
+    width:220px;
+    padding:4px;
+    border:1px solid #9c9c9c;
+    color:#555;
+}
+
+.actionPage .blueButton, .actionPage .blueButton:hover, .actionPage .blueButton:active {
+    background:#4c8ffc;
+    border:1px solid #69f;
+    color:white;
+    margin-right:10px;
+}
+
+.addActionForm .dueDescription {
+    color:#6b6b6b;
+    font-size:12px;
+    padding: 10px 0 5px 0;
+}
+
+.actionDetail {
+    padding:5px 0 5px 0;
+    clear:both;
+}
+
+.actionDetail .detailSectionIcon {
+    float:left;
+    padding-right:5px;
+}
+
+.actionDetail .detailMessage {
+    float:left;
+    padding-right:5px;
+}
+
+.actionList .actionDescription {
+    display:block;
+    float:left;
+    width:80%;
+}
+
+.actionList .listItem {
+    clear:both;
+}
+
+.issueActionSection a {
+    padding-left:50px;
+    width:80%;
+}
+
+.linksSection {
+    clear:both;
+    border-top:1px solid #cccccc;
+    margin-top:15px;
+    padding-top:15px;
+    overflow:hidden;
+}
+
+.linksSection a {
+    margin:0 5px 0 5px;
+}
+
+.actionItem {
+    display:block;
+    overflow:hidden;
+    padding-bottom:15px;
+    clear:both;
+    cursor:pointer;
+}
+
+.eventIcon {
+    width:30px;
+    display:block;
+    float:left;
+}
+
+.actionDescription {
+    width:75%;
+    display:block;
+    float:left;
+}
+
+.expandIcon {
+    display:block;
+    float:left;
+}

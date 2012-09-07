@@ -1,12 +1,12 @@
-div.wicket-modal {
-    position:absolute;
+div.fid-modal {
+    /*position:absolute;*/
 }
 
-div.wicket-modal div.w_content_3 {
+div.fid-modal div.w_content_3 {
     border:none;
 }
 
-div.wicket-modal div.w_silver a.w_close {
+div.fid-modal div.w_silver a.w_close {
     background-position:0;
     width:11px;
     height:11px;
@@ -15,58 +15,58 @@ div.wicket-modal div.w_silver a.w_close {
     margin-top:3px;
 }
 
-div.wicket-modal h3.w_captionText {
+div.fid-modal h3.w_captionText {
 	line-height:1.5em;
     font-size: 14px;
     display:block;
     margin-left:16px;
 }
 
-div.wicket-modal div.w_caption {
+div.fid-modal div.w_caption {
     height:15px;
     background-color:#f2f2f2;
     color:#000;
     padding:0 0 12px 8px;
 }
 
-div.wicket-modal div.w_silver div.w_top {
+div.fid-modal div.w_silver div.w_top {
     background-image:none;
     background-color:#f2f2f2;
 }
 
-div.wicket-modal div.w_silver div.w_bottom {
+div.fid-modal div.w_silver div.w_bottom {
     background-image:none;
     background-color:#fff;
 }
 
-div.wicket-modal div.w_silver div.w_topLeft {
+div.fid-modal div.w_silver div.w_topLeft {
     background-image:none;
     background-color:#f2f2f2;
     border-top-left-radius:10px;
 }
 
-div.wicket-modal div.w_silver div.w_topRight {
+div.fid-modal div.w_silver div.w_topRight {
     background-image:none;
     background-color:#f2f2f2;
     border-top-right-radius:10px;
 }
 
-div.wicket-modal div.w_silver div.w_bottomLeft {
+div.fid-modal div.w_silver div.w_bottomLeft {
     background-image:none;
     background-color:#fff;
     border-bottom-left-radius:10px;
 }
 
-div.wicket-modal div.w_silver div.w_bottomRight {
+div.fid-modal div.w_silver div.w_bottomRight {
     background-image:none;
     background-color:#fff;
     border-bottom-right-radius:10px;
 }
 
-div.wicket-modal div.w_content_1 {
+div.fid-modal div.w_content_1 {
     margin-right:0;
 }
 
-div.wicket-modal div.w_right_1 {
+div.fid-modal div.w_right_1 {
     margin-left:0;
 }

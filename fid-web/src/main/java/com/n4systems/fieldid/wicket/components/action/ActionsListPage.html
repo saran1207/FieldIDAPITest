@@ -1,0 +1,33 @@
+<wicket:extend>
+
+    <div class="actionPage">
+
+        <div wicket:id="actionsList" class="actionItem">
+
+            <div class="eventIcon">
+                <img src="/fieldid/images/event-open.png">
+            </div>
+
+            <div class="actionDescription">
+
+                <span wicket:id="actionType"></span>
+                due <span wicket:id="dueDate"></span>
+                assigned to <span wicket:id="assignee"></span>
+
+            </div>
+
+            <div class="expandIcon">
+                <img src="/fieldid/images/action/expand-arrow.png">
+            </div>
+
+        </div>
+
+        <div class="linkSection issueActionSection" wicket:id="issueActionSection">
+
+            <a wicket:id="addActionLink" class="mattButton blueButton"><wicket:message key="label.add_an_action"/></a>
+
+        </div>
+
+    </div>
+
+</wicket:extend>

@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.SignPage;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.SignatureResourceReference;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.TemporarySignatureResourceReference;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
+import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.SignatureCriteriaResult;
 import org.apache.wicket.Page;
@@ -33,7 +33,7 @@ public class SignatureCriteriaResultEditPanel extends Panel {
         add(new WebMarkupContainer("temporarySignature"));
         add(new WebMarkupContainer("existingSignature"));
         
-        final ModalWindow modalWindow = new FIDModalWindow("signatureModalWindow");
+        final ModalWindow modalWindow = new DialogModalWindow("signatureModalWindow");
         modalWindow.setInitialWidth(800);
         modalWindow.setInitialHeight(320);
         modalWindow.setPageCreator(new ModalWindow.PageCreator() {
