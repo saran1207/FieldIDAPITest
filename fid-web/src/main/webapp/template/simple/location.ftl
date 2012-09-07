@@ -11,7 +11,7 @@
 	
 	<div id="${parameters.id}_locationSelection" class="locationSelection offScreen">
 		<label id="freeFormLabel" for="predefinedLocation" class="label freeFormLabel"><@s.text name="label.predefined_location"/></label><br/>
-	
+
 		<@n4.hierarchicalList id="${parameters.id}_predefinedLocationSelector" nodesList=helper.predefinedLocationTree name="assetWebModel.location.predefinedLocationId" />
 		<label id="freeFormLabel" for="freeformLocationInput" class="label freeFormLabel"><@s.text name="label.freeform_location"/></label><br/>
 		<@s.textfield id="${parameters.id}_freeformInput" name="freeformLocationInput" value="%{${parameters.name}.freeformLocation}" theme="simple"/>
@@ -23,7 +23,7 @@
 	</div>
 	
 	<@n4.includeScript>
-		
+		    var getLocationPickerUrl = '<@s.url namespace="ajax" action="updateLocation"/>';
 			$('${parameters.id}_locationSelection_select').observe('click', function(event) {
 				event.stop();
 				$('${parameters.id}_locationSelection').setStyle({left:'-10000px'});
@@ -38,7 +38,8 @@
 				
 				$('${parameters.id}_locationName').value = ((parentNameValue) ? parentNameValue + " > " + node.name: node.name) + ((freeFormValue) ? ": " + freeFormValue : "") 
 				$('${parameters.id}').fire("location:change");
-				
+
+
 			});
 			
 			$('${parameters.id}_locationSelection_cancel').observe('click', function(event) { event.stop(); 
@@ -50,12 +51,7 @@
 			});
 			
 			$('${parameters.id}_showLocationSelection').observe('click', function(event) {
-				event.stop();
-				var predefinedLocationId = $('${parameters.id}_predefinedLocationId').getValue(); 
-				jQuery("#${parameters.id}_predefinedLocationSelector").selectNode(predefinedLocationId);
-				$('${parameters.id}_locationSelection').removeClassName('offScreen');
-				translatePosition($('${parameters.id}_locationSelection'), $('${parameters.id}_showLocationSelection'), 0, 0);
-				moveInsideViewPort($('${parameters.id}_locationSelection'));
+                getResponse(getLocationPickerUrl, 'get', {ownerId:jQuery('#ownerId').val()});
 				});
 		
 	</@n4.includeScript>

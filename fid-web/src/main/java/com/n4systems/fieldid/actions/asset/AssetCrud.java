@@ -30,6 +30,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.tools.Pager;
+import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.AssetRemovalSummary;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -54,6 +55,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private AssetType assetType;
 	private Collection<AssetExtension> extentions;
 	private AutoAttributeCriteria autoAttributeCriteria;
+
 
 	private List<Listable<Long>> employees;
 	protected List<AssetAttachment> assetAttachments;
@@ -247,7 +249,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 					if (assets.size() == 1) {
 						asset = assets.get(0);
 						uniqueID = asset.getId();
-					
+
 						return "oneFound";
 					}
 				}
@@ -1215,6 +1217,17 @@ public class AssetCrud extends UploadAttachmentSupport {
     public String getEventDescription(Event event) {	
     	SimpleDateFormat dateFormatter = getPrimaryOrg().getDateFormatter();
     	String date = dateFormatter.format(event.getDate());    	
-    	return getText("asset.event_desc", new String[] {date, event.getStatus().toString() });
+    	return getText("asset.event_desc", new String[]{date, event.getStatus().toString()});
     }
+
+    @SkipValidation
+    public String doUpdateLocation() {
+        return SUCCESS;
+    }
+
+
+    public List<HierarchicalNode> getPredefinedLocationTree() {
+        return ((AssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner());
+    }
+
 }

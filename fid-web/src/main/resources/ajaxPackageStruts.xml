@@ -418,7 +418,6 @@
 			<result name="success" type="freemarker">/templates/ajax/safetyNetwork/exampleMessage.ftl</result>
 		</action>
 		
-		
 		<action name="sendWelcomeEmail" method="create" class="com.n4systems.fieldid.actions.users.WelcomeEmailAction">
 			<result name="success" type="freemarker">/templates/ajax/userCrud/sendWelcomeEmail.ftl</result>
 		</action>
@@ -426,12 +425,16 @@
 		<action name="eventImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.event.EventImportAction">
 			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
 		</action>
-		
-		<action name="addSchedule" method="add" class="com.n4systems.fieldid.actions.event.AddEventScheduleAjaxAction">
-			<result name="success" type="freemarker">/templates/ajax/eventCrud/eventSchedule.ftl</result>
-		</action>
-		
-		<action name="autoSuggestSchedule" method="autoSuggest" class="com.n4systems.fieldid.actions.event.AddEventScheduleAjaxAction">
+
+        <action name="addSchedule" method="add" class="com.n4systems.fieldid.actions.event.AddEventScheduleAjaxAction">
+            <result name="success" type="freemarker">/templates/ajax/eventCrud/eventSchedule.ftl</result>
+        </action>
+
+        <action name="updateLocation" method="updateLocation" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+            <result name="success" type="freemarker">/templates/ajax/orgList/ajaxOrgPicker.ftl</result>
+        </action>
+
+        <action name="autoSuggestSchedule" method="autoSuggest" class="com.n4systems.fieldid.actions.event.AddEventScheduleAjaxAction">
 			<result name="success" type="freemarker">/templates/ajax/eventCrud/eventSchedule.ftl</result>
 		</action>
 		

@@ -652,3 +652,19 @@ function setAssignedToAsCurrentUser(thisUserId){
 function closeLightbox() {
     jQuery.colorbox.close();
 }
+
+
+function updateLocation(loc) {
+	var html = '<span class="locationTree">'+loc+'</span>';
+	var stuff = jQuery(html);
+	if (jQuery(stuff).find('.locationSelection').length>0) {
+		jQuery('.locationTree').replaceWith(html);
+		var predefinedLocationId = $('location_predefinedLocationId').getValue();
+		jQuery('#location_predefinedLocationSelector').selectNode(predefinedLocationId);
+		jQuery('#location_locationSelection').removeClass('offScreen');
+		translatePosition($('location_locationSelection'), $('location_showLocationSelection'), 0, 0);
+		moveInsideViewPort($('location_locationSelection'));
+	} else {
+		alert('no predefined locations available.');
+	}
+}
