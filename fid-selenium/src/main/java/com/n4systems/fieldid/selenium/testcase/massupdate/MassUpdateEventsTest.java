@@ -41,10 +41,6 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 	        .named("Test Event Type")
 	        .build();
 			
-		EventGroup group = scenario.anEventGroup()
-			.forTenant(scenario.defaultTenant())
-	        .build();
-		
 		for (int i=0; i< 5; i++){
 			
 			Event event1 = scenario.anEvent().on(asset)
@@ -52,7 +48,6 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 		        .withPerformedBy(scenario.defaultUser())
 		        .withOwner(scenario.defaultPrimaryOrg())
 		        .withTenant(scenario.defaultTenant())
-		        .withGroup(group)
 		        .build();
 
 			Event event2 = scenario.anEvent().on(asset2)
@@ -60,7 +55,6 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 		        .withPerformedBy(scenario.defaultUser())
 		        .withOwner(scenario.defaultPrimaryOrg())
 		        .withTenant(scenario.defaultTenant())
-		        .withGroup(group)
 		        .build();
 		}
      }

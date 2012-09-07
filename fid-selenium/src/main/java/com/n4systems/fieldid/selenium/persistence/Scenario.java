@@ -162,7 +162,7 @@ public class Scenario {
     }
     
     public EventBuilder anEvent() {
-        EventBuilder builder = EventBuilder.anEvent(anEventType(), anEventGroup());
+        EventBuilder builder = EventBuilder.anEvent(anEventType());
         return createPersistentBuilder(builder);
     }
 
@@ -171,11 +171,6 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
     
-
-    public EventGroupBuilder anEventGroup() {
-        EventGroupBuilder builder = EventGroupBuilder.anEventGroup();
-        return createPersistentBuilder(builder);
-    }
 
     public EventFormBuilder anEventForm() {
         EventFormBuilder builder = EventFormBuilder.anEventForm();

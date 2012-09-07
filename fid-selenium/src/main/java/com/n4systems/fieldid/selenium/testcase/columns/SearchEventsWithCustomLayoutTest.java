@@ -6,7 +6,6 @@ import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventForm;
-import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.columns.ColumnLayout;
@@ -40,12 +39,8 @@ public class SearchEventsWithCustomLayoutTest extends FieldIDTestCase {
                 .named("Test Event Type")
                 .build();
 
-		EventGroup group = scenario.anEventGroup()
-				.forTenant(scenario.defaultTenant())
-		        .build();
-
-        createEvent(scenario, asset1, eventType, group);
-        createEvent(scenario, asset2, eventType, group);
+        createEvent(scenario, asset1, eventType);
+        createEvent(scenario, asset2, eventType);
 
         ColumnLayout layout = scenario.aColumnLayout()
                 .reportType(ReportType.EVENT)
@@ -58,13 +53,12 @@ public class SearchEventsWithCustomLayoutTest extends FieldIDTestCase {
         scenario.anActiveColumnMapping().order(2).columnLayout(layout).columnMapping(rfidNumberColumn).build();
     }
 
-    private void createEvent(Scenario scenario, Asset asset1, EventType eventType, EventGroup group) {
+    private void createEvent(Scenario scenario, Asset asset1, EventType eventType) {
         scenario.anEvent().on(asset1)
                 .ofType(eventType)
                 .withPerformedBy(scenario.defaultUser())
                 .withOwner(scenario.defaultPrimaryOrg())
                 .withTenant(scenario.defaultTenant())
-                .withGroup(group)
                 .build();
     }
 

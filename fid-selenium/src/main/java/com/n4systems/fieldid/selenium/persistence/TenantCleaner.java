@@ -95,7 +95,6 @@ public class TenantCleaner {
         removeAllActiveSessionsForTenant(tenantIds);
         cleanUpOrgConnections(tenantIds);
         cleanUpSignUpReferrals(tenantIds);
-        removeAllForTenants(EventGroup.class, tenantIds);
         removeAllForTenants(EventBook.class, tenantIds);
         removeAllForTenants(AutoAttributeCriteria.class, tenantIds);
         removeAllForTenants(AutoAttributeDefinition.class, tenantIds);
@@ -115,7 +114,6 @@ public class TenantCleaner {
         removeAllForTenants(StateSet.class, tenantIds);
         removeAllForTenants(NotificationSetting.class, tenantIds);
         removeAllExternalOrgsPointingToTenants(tenantIds);
-        removeAllForTenants(EventGroup.class, tenantIds);
         removeAllForTenants(EventTypeGroup.class, tenantIds);
         removeAllSeenItStorageItems(tenantIds);
         removeAllForTenants(CommentTemplate.class, tenantIds);

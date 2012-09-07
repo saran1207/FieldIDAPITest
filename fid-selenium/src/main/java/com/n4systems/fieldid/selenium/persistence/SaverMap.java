@@ -17,7 +17,6 @@ import com.n4systems.model.criteria.CriteriaSectionSaver;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.model.event.EventFormSaver;
-import com.n4systems.model.event.EventGroupSaver;
 import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventbook.EventBookSaver;
 import com.n4systems.model.eventschedule.EventScheduleSaver;
@@ -53,7 +52,6 @@ public class SaverMap {
         classToSaverMap.put(SubEvent.class, new SimpleEventSaver());
         classToSaverMap.put(User.class, new UserSaver());
         classToSaverMap.put(EventType.class, new EventTypeSaver());
-        classToSaverMap.put(EventGroup.class, new EventGroupSaver());
         classToSaverMap.put(EventBook.class, new EventBookSaver());
         classToSaverMap.put(EventTypeGroup.class, new EventTypeGroupSaver());
         classToSaverMap.put(EventForm.class, new EventFormSaver());

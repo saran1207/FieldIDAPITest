@@ -1,32 +1,23 @@
 package com.n4systems.fieldid.selenium.testcase.reporting;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.pages.ReportingPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.*;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.user.User;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
-import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
-import com.n4systems.fieldid.selenium.pages.ReportingPage;
-import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Status;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.user.User;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class FilterByResultTest extends PageNavigatingTestCase<ReportingPage> {
@@ -83,17 +74,12 @@ public class FilterByResultTest extends PageNavigatingTestCase<ReportingPage> {
 				                       .named(TEST_EVENT_TYPE1)
 				                       .build();
 
-		EventGroup group = scenario.anEventGroup()
-		                           .forTenant(tenant)
-		                           .build();
-
 		Event event1 = scenario.anEvent()
 		                      .on(asset1)
 		                      .ofType(eventType1)
 		                      .withPerformedBy(user)
 		                      .withOwner(primaryOrg)
 		                      .withTenant(tenant)
-		                      .withGroup(group)		                      
 		                      .withResult(Status.PASS)
 		                      .withAssetStatus(assetStatus)
 		                      .build();
@@ -104,7 +90,6 @@ public class FilterByResultTest extends PageNavigatingTestCase<ReportingPage> {
 					           .withPerformedBy(user)
 					           .withOwner(primaryOrg)
 					           .withTenant(tenant)
-					           .withGroup(group)		                      
 					           .withResult(Status.FAIL)
 		                       .withAssetStatus(assetStatus)
 					           .build();
@@ -115,7 +100,6 @@ public class FilterByResultTest extends PageNavigatingTestCase<ReportingPage> {
 					           .withPerformedBy(user)
 					           .withOwner(primaryOrg)
 					           .withTenant(tenant)
-					           .withGroup(group)		                      
 					           .withResult(Status.NA)
 		                       .withAssetStatus(assetStatus)
 					           .build();
@@ -124,9 +108,7 @@ public class FilterByResultTest extends PageNavigatingTestCase<ReportingPage> {
 		events.add(event1);
 		events.add(event2);
 		events.add(event3);
-		group.setEvents(events);
 
-		scenario.save(group);
 	}
 
 	

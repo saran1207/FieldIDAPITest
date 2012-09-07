@@ -80,9 +80,7 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 				                       .named(TEST_EVENT_TYPE3)
 				                       .build();
 
-		EventGroup group = scenario.anEventGroup()
-		                           .forTenant(tenant)
-		                           .build();
+
 
 		Event event1 = scenario.anEvent()
 		                      .on(asset1)
@@ -91,7 +89,6 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 		                      .performedOn(DateUtil.addDays(new Date(), -2))
 		                      .withOwner(primaryOrg)
 		                      .withTenant(tenant)
-		                      .withGroup(group)		                      
 		                      .withResult(Status.PASS)
 		                      .withAssetStatus(assetStatus1)
                               .withEventStatus(eventStatus1)
@@ -105,7 +102,6 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
     		                   .performedOn(DateUtil.addDays(new Date(), -1))
 					           .withOwner(primaryOrg)
 					           .withTenant(tenant)
-					           .withGroup(group)		                      
 					           .withResult(Status.FAIL)
 		                       .withAssetStatus(assetStatus2)
                                .withEventStatus(eventStatus2)
@@ -118,7 +114,6 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 					           .withPerformedBy(user3)
 					           .withOwner(primaryOrg)
 					           .withTenant(tenant)
-					           .withGroup(group)		                      
 					           .withResult(Status.NA)
 		                       .withAssetStatus(assetStatus3)
                                .withEventStatus(eventStatus3)
@@ -129,9 +124,8 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 		events.add(event1);
 		events.add(event2);
 		events.add(event3);
-		group.setEvents(events);
 
-		scenario.save(group);
+		//scenario.save(group);
 	}
 
 	@Override
