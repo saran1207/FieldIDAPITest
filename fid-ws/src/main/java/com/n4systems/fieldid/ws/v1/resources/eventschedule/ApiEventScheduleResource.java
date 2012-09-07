@@ -45,7 +45,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Autowired private EventScheduleService eventScheduleService;
 	@Autowired private PersistenceService persistenceService;
 	@Autowired private AssetService assetService;
-	@Autowired private S3Service s3Service;
+	@Autowired private ApiTriggerEventResource apiTriggerEventResource;	
 	
 	public List<ApiEventSchedule>  findAllSchedules(Long assetId, SyncDuration syncDuration) {
 		List<ApiEventSchedule> apiEventSchedules = new ArrayList<ApiEventSchedule>();
@@ -133,19 +133,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			apiSchedule.setAction(true);
 			apiSchedule.setPriorityId(event.getPriority().getId());
 			apiSchedule.setNotes(event.getNotes());
-			
-			List<byte[]> images = new ArrayList<byte[]>();
-			List<CriteriaResultImage> criteriaResultImages = event.getSourceCriteriaResult().getCriteriaImages();
-			for(CriteriaResultImage criteriaResultImage: criteriaResultImages) {
-				try {
-					byte[] image = s3Service.downloadCriteriaResultImageMedium(criteriaResultImage);
-					images.add(image);
-				} catch (IOException e) {
-					logger.error("Error Fetching EventSchedule.images data for criteriaResultImage" 
-							+ criteriaResultImage.getId(), e);
-				}
-			}
-			apiSchedule.setImages(images);
+			apiSchedule.setTriggerEventInfo(apiTriggerEventResource.convertEntityToApiModel(event.getTriggerEvent()));
 		}
 		
 		return apiSchedule;

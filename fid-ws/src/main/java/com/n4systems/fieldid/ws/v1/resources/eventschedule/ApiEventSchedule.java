@@ -14,8 +14,7 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 	private boolean action;
 	private Long priorityId;	
 	private String notes;
-	private String triggerEventSummary;
-	private List<byte[]> images;
+	private ApiTriggerEvent triggerEventInfo;	
 
 	public String getAssetId() {
 		return assetId;
@@ -81,19 +80,11 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 		this.notes = notes;
 	}
 	
-	public String getTriggerEventSummary() {
-		return triggerEventSummary;
+	public ApiTriggerEvent getTriggerEventInfo() {
+		return triggerEventInfo;
 	}
-
-	public void setTriggerEventSummary(String triggerEventSummary) {
-		this.triggerEventSummary = triggerEventSummary;
-	}
-
-	public void setImages(List<byte[]> images) {
-		this.images = images;
-	}
-
-	public List<byte[]> getImages() {
-		return images;
-	}
+	
+	public void setTriggerEventInfo(ApiTriggerEvent triggerEventInfo) {
+		this.triggerEventInfo = triggerEventInfo;
+	}	
 }
