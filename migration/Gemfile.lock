@@ -7,10 +7,12 @@ GEM
     composite_primary_keys (2.2.2)
       activerecord (>= 2.2.0)
     mysql (2.8.1)
+    mysql (2.8.1-x86-mingw32)
     tzinfo (0.3.33)
 
 PLATFORMS
   ruby
+  x86-mingw32
 
 DEPENDENCIES
   activerecord

@@ -187,6 +187,13 @@ public class S3Service extends FieldIdPersistenceService {
 				criteriaResultImage.getCriteriaResult().getId(),
 				criteriaResultImage.getFileName());
 	}
+	
+	public byte[] downloadCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
+		return downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+				criteriaResultImage.getCriteriaResult().getEvent().getId(),
+				criteriaResultImage.getCriteriaResult().getId(),
+				criteriaResultImage.getFileName());
+	}
 
 	private void uploadResource(byte[] data, String contentType, Long tenantId, String path, Object...pathArgs) {
 		putObject(createResourcePath(tenantId, path, pathArgs), data, contentType);

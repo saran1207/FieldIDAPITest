@@ -34,7 +34,7 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 		apiEvent.setPerformedById(event.getPerformedBy().getId());
 		apiEvent.setPrintable(event.isPrintable());
 		
-		if(event.getAssignedTo() != null) {
+		if(event.getAssignedTo() != null && event.getAssignedTo().getAssignedUser() != null) {
 			apiEvent.setAssignedUserId(event.getAssignedTo().getAssignedUser().getId());
 		}
 		

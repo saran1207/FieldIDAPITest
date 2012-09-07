@@ -1,15 +1,18 @@
 package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiCriteriaImage;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -17,6 +20,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.log4j.Logger;
+import org.hibernate.impl.CriteriaImpl;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +45,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Autowired private EventScheduleService eventScheduleService;
 	@Autowired private PersistenceService persistenceService;
 	@Autowired private AssetService assetService;
+	@Autowired private S3Service s3Service;
 	
 	public List<ApiEventSchedule>  findAllSchedules(Long assetId, SyncDuration syncDuration) {
 		List<ApiEventSchedule> apiEventSchedules = new ArrayList<ApiEventSchedule>();
@@ -119,6 +127,25 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		apiSchedule.setNextDate(event.getNextDate());
 		if(event.getAssignee() != null) {
 			apiSchedule.setAssigneeUserId(event.getAssignee().getId());
+		}
+		
+		if(event.getEventType().getGroup().isAction()) {
+			apiSchedule.setAction(true);
+			apiSchedule.setPriorityId(event.getPriority().getId());
+			apiSchedule.setNotes(event.getNotes());
+			
+			List<byte[]> images = new ArrayList<byte[]>();
+			List<CriteriaResultImage> criteriaResultImages = event.getSourceCriteriaResult().getCriteriaImages();
+			for(CriteriaResultImage criteriaResultImage: criteriaResultImages) {
+				try {
+					byte[] image = s3Service.downloadCriteriaResultImageMedium(criteriaResultImage);
+					images.add(image);
+				} catch (IOException e) {
+					logger.error("Error Fetching EventSchedule.images data for criteriaResultImage" 
+							+ criteriaResultImage.getId(), e);
+				}
+			}
+			apiSchedule.setImages(images);
 		}
 		
 		return apiSchedule;

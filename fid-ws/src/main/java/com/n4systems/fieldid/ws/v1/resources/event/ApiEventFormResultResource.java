@@ -140,9 +140,9 @@ public class ApiEventFormResultResource extends FieldIdPersistenceService{
 			result.getDeficiencies().add(convertDeficiency(def, event.getTenant()));
 		}
 		
-		/*for(ApiEventSchedule action: apiResult.getActions()) {
-			result.getActions().add(apiEventScheduleResource.converApiEventSchedule(action));
-		}*/
+		for(ApiEventSchedule action: apiResult.getActions()) {
+			//result.getActions().add(apiEventScheduleResource.converApiEventSchedule(action));
+		}
 		
 		return result;
 	}

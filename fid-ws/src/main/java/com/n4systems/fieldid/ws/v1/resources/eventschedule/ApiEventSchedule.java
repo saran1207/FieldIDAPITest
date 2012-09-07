@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 
 import java.util.Date;
+import java.util.List;
 
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
 
@@ -14,6 +15,7 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 	private Long priorityId;	
 	private String notes;
 	private String triggerEventSummary;
+	private List<byte[]> images;
 
 	public String getAssetId() {
 		return assetId;
@@ -85,5 +87,13 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 
 	public void setTriggerEventSummary(String triggerEventSummary) {
 		this.triggerEventSummary = triggerEventSummary;
+	}
+
+	public void setImages(List<byte[]> images) {
+		this.images = images;
+	}
+
+	public List<byte[]> getImages() {
+		return images;
 	}
 }
