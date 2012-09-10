@@ -21,7 +21,7 @@ public class CommonEventTypesModel extends FieldIDSpringModel<List<EventType>> {
 
     @Override
     protected List<EventType> load() {
-        return eventTypeService.getCommonEventTypes(assetTypes);
+        return eventTypeService.getCommonEventTypesExcludingActions(assetTypes);
     }
 
 }

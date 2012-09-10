@@ -211,7 +211,7 @@ public class EventTypeCrud extends AbstractCrud {
 
 	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
-            eventTypes = eventTypeService.getEventTypes(groupFilter, nameFilter);
+            eventTypes = eventTypeService.getEventTypesIncludingActions(groupFilter, nameFilter);
 		}
 
 		return eventTypes;

@@ -445,6 +445,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
                 event.setAsset(getAsset());
                 event.setOwner(getOwner());
                 event.setTriggerEvent(this);
+                event.setSourceCriteriaResult(result);
             }
         }
     }

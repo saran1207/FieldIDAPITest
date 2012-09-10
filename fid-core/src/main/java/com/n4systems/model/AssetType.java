@@ -533,10 +533,13 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
     }
 
     @Transient
-    public List<EventType> getAllEventTypes() {
+    public List<EventType> getAllEventTypesExcludingActions() {
         List<EventType> allEventTypes = new ArrayList<EventType>();
-        for (AssociatedEventType eventType : eventTypes) {
-            allEventTypes.add(eventType.getEventType());
+        for (AssociatedEventType assocEventType : eventTypes) {
+            EventType type = assocEventType.getEventType();
+            if (!type.getGroup().isAction()) {
+                allEventTypes.add(type);
+            }
         }
         return allEventTypes;
     }

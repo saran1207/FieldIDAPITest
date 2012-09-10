@@ -12,21 +12,23 @@ public abstract class TransientCriteriaResultPopulator {
 
         List<AbstractEvent.SectionResults> transientResults = new ArrayList<AbstractEvent.SectionResults>();
 
-        for (CriteriaSection section : eventForm.getAvailableSections()) {
-            List<CriteriaResult> transientSectionResults = new ArrayList<CriteriaResult>();
-            AbstractEvent.SectionResults sectionResults = new AbstractEvent.SectionResults();
+        if (eventForm != null) {
+            for (CriteriaSection section : eventForm.getAvailableSections()) {
+                List<CriteriaResult> transientSectionResults = new ArrayList<CriteriaResult>();
+                AbstractEvent.SectionResults sectionResults = new AbstractEvent.SectionResults();
 
-            for (Criteria criteria : section.getCriteria()) {
+                for (Criteria criteria : section.getCriteria()) {
 
-                CriteriaResult transientResult = getCriteriaResultFor(event, criteria);
+                    CriteriaResult transientResult = getCriteriaResultFor(event, criteria);
 
-                transientResult.setCriteria(criteria);
-                transientResult.setTenant(event.getTenant());
-                transientSectionResults.add(transientResult);
+                    transientResult.setCriteria(criteria);
+                    transientResult.setTenant(event.getTenant());
+                    transientSectionResults.add(transientResult);
+                }
+                sectionResults.results = transientSectionResults;
+                sectionResults.section = section;
+                transientResults.add(sectionResults);
             }
-            sectionResults.results = transientSectionResults;
-            sectionResults.section = section;
-            transientResults.add(sectionResults);
         }
 
         event.setSectionResults(transientResults);

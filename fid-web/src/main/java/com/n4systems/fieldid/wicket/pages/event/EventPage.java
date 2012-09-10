@@ -210,13 +210,6 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         }
     }
 
-    private void setTriggerEvenInAllActions() {
-        AbstractEvent event = this.event.getObject();
-        if (event instanceof Event) {
-            ((Event) event).setTriggersIntoResultingActions();
-        }
-    }
-
     protected void saveEventBookIfNecessary() {
         EventBook book = ((Event) event.getObject()).getBook();
         if (book != null && book.getId() == null) {

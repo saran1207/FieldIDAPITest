@@ -1,24 +1,37 @@
 package com.n4systems.fieldid.service.event;
 
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.n4systems.model.AssetType;
-import org.apache.commons.lang.StringUtils;
-
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.EventType;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereParameter;
-
+@Transactional
 public class EventTypeService extends FieldIdPersistenceService {
 
-    public List<EventType> getEventTypes(Long eventTypeGroupId) {
-        return getEventTypes(eventTypeGroupId, null);
+    public List<EventType> getEventTypesIncludingActions(Long eventTypeGroupId) {
+        return getEventTypesIncludingActions(eventTypeGroupId, null);
     }
 
-    public List<EventType> getEventTypes(Long eventTypeGroupId, String nameFilter) {
+    public List<EventType> getEventTypesExcludingActions(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<EventType> query = createEventTypeQuery(eventTypeGroupId, nameFilter);
+        query.addSimpleWhere("group.action", false);
+        return persistenceService.findAll(query);
+    }
+
+    public List<EventType> getEventTypesIncludingActions(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<EventType> builder = createEventTypeQuery(eventTypeGroupId, nameFilter);
+        return persistenceService.findAll(builder);
+    }
+
+    private QueryBuilder<EventType> createEventTypeQuery(Long eventTypeGroupId, String nameFilter) {
         QueryBuilder<EventType> builder = createUserSecurityBuilder(EventType.class);
 
         if (eventTypeGroupId != null) {
@@ -30,18 +43,17 @@ public class EventTypeService extends FieldIdPersistenceService {
         }
 
         builder.addOrder("name");
-
-        return persistenceService.findAll(builder);
+        return builder;
     }
 
-    public List<EventType> getCommonEventTypes(List<AssetType> assetTypes) {
+    public List<EventType> getCommonEventTypesExcludingActions(List<AssetType> assetTypes) {
         List<EventType> commonTypes = new ArrayList<EventType>();
         Iterator<AssetType> iterator = assetTypes.iterator();
         if (iterator.hasNext()) {
-            commonTypes.addAll(iterator.next().getAllEventTypes());
+            commonTypes.addAll(iterator.next().getAllEventTypesExcludingActions());
         }
         while (iterator.hasNext()) {
-            List<EventType> currentEventTypes = iterator.next().getAllEventTypes();
+            List<EventType> currentEventTypes = iterator.next().getAllEventTypesExcludingActions();
             for (Iterator<EventType> commonTypesIterator = commonTypes.iterator(); commonTypesIterator.hasNext(); ) {
                 EventType commonType = commonTypesIterator.next();
                 if (!currentEventTypes.contains(commonType))
