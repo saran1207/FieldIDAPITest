@@ -134,7 +134,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			apiSchedule.setAction(true);
 			apiSchedule.setPriorityId(event.getPriority().getId());
 			apiSchedule.setNotes(event.getNotes());
-			apiSchedule.setTriggerEventInfo(apiTriggerEventResource.convertEntityToApiModel(event.getTriggerEvent()));
+			apiSchedule.setTriggerEventInfo(apiTriggerEventResource.convertEntityToApiModel(event));
 		}
 		
 		return apiSchedule;

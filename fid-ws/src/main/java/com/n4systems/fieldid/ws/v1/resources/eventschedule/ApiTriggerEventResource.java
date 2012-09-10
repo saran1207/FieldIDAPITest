@@ -18,12 +18,12 @@ public class ApiTriggerEventResource extends ApiResource<ApiTriggerEvent, Event>
 	@Autowired private S3Service s3Service;
 	
 	@Override
-	protected ApiTriggerEvent convertEntityToApiModel(Event event) {
+	protected ApiTriggerEvent convertEntityToApiModel(Event actionEvent) {
 		ApiTriggerEvent triggerEvent = new ApiTriggerEvent();
-		triggerEvent.setName(event.getTriggerEvent().getType().getName());
-		triggerEvent.setDate(event.getTriggerEvent().getDate());
-		triggerEvent.setPerformedBy(event.getTriggerEvent().getPerformedBy().getFullName());
-		triggerEvent.setImages(getImages(event));
+		triggerEvent.setName(actionEvent.getTriggerEvent().getType().getName());
+		triggerEvent.setDate(actionEvent.getTriggerEvent().getDate());
+		triggerEvent.setPerformedBy(actionEvent.getTriggerEvent().getPerformedBy().getFullName());
+		triggerEvent.setImages(getImages(actionEvent));
 		triggerEvent.setCriteria("Test"); // TODO Criteria
 		
 		return triggerEvent;
