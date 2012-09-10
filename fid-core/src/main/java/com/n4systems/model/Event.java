@@ -11,6 +11,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
+import com.n4systems.model.utils.ActionDescriptionUtil;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
@@ -666,5 +667,9 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
     public void setSourceCriteriaResult(CriteriaResult sourceCriteriaResult) {
         this.sourceCriteriaResult = sourceCriteriaResult;
+    }
+
+    public String getActionDescription() {
+        return ActionDescriptionUtil.getDescription(triggerEvent, sourceCriteriaResult);
     }
 }

@@ -1,6 +1,7 @@
 div.dialog-modal {
     border:solid 1px #BBB;
-    background-color:#F9F9F9;
+    background-color: #ffffff;
+    /*background-color:#F9F9F9;*/
     padding: 11px;
     -moz-box-shadow: 4px 4px 11px #AAAAAA;
     -webkit-box-shadow: 4px 4px 11px #AAAAAA;
