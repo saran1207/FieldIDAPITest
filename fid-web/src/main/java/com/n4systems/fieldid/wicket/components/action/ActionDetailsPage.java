@@ -22,12 +22,13 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         add(new Label("notes", new PropertyModel<String>(actionModel, "notes")));
         add(new Label("assignee", new PropertyModel<String>(actionModel, "assignee.fullName")));
         add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(actionModel, "nextDate")));
-        add(new Link("actionsListLink") {
+        Link actionsListLink = new Link("actionsListLink") {
             @Override
             public void onClick() {
                 setResponsePage(new ActionsListPage(criteriaResultModel));
             }
-        });
+        };
+        add(actionsListLink);
 
         AjaxLink startEventLink = new AjaxLink("startEventLink") {
             @Override

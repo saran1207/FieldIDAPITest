@@ -672,4 +672,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     public String getActionDescription() {
         return ActionDescriptionUtil.getDescription(triggerEvent, sourceCriteriaResult);
     }
+
+    public boolean isAction() {
+        return getTriggerEvent() != null;
+    }
 }

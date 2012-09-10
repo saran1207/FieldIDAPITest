@@ -7,6 +7,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -19,9 +20,9 @@ public class PerformEventPage extends EventPage {
 
     private PerformEventPage(Long scheduleId, Long assetId, Long typeId) {
         if (scheduleId != null) {
-            event = new EventFromOpenEventModel(scheduleId);
+            event = Model.of(eventService.createEventFromOpenEvent(scheduleId));
         } else {
-            event = new NewMasterEventModel(assetId, typeId);
+            event = Model.of(eventService.createNewMasterEvent(assetId, typeId));
         }
 
         doAutoSchedule();

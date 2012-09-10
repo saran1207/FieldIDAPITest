@@ -27,7 +27,7 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	@IndexColumn(name="orderidx")
 	private List<Recommendation> recommendations = new ArrayList<Recommendation>();
 
-    @OneToMany(cascade=CascadeType.MERGE)
+    @OneToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name="criteriaresults_actions", joinColumns = @JoinColumn(name = "criteriaresult_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
     @IndexColumn(name="orderidx")
     private List<Event> actions = new ArrayList<Event>();
@@ -37,7 +37,7 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	@IndexColumn(name="orderidx")
 	private List<Deficiency> deficiencies = new ArrayList<Deficiency>();
 
-	@OneToMany(mappedBy = "criteriaResult", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "criteriaResult", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy // Ordered by primary key
 	private List<CriteriaResultImage> criteriaImages = new ArrayList<CriteriaResultImage>();
 
