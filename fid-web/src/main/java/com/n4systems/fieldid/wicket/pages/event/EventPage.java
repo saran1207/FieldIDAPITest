@@ -118,6 +118,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             final WebMarkupContainer schedulesContainer = new WebMarkupContainer("schedulesContainer");
             schedulesContainer.setOutputMarkupId(true);
+            schedulesContainer.setVisible(event.getObject().isNew());
             schedulesContainer.add(new ListView<EventSchedule>("schedules", new PropertyModel<List<EventSchedule>>(EventPage.this, "schedules")) {
                 @Override
                 protected void populateItem(final ListItem<EventSchedule> item) {
@@ -135,14 +136,16 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             });
             add(schedulesContainer);
 
-            add(new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), new PropertyModel<Event>(EventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel(), 0, 0) {
+            SchedulePicker schedulePicker = new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), new PropertyModel<Event>(EventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel(), 0, 0) {
                 @Override
                 protected void onPickComplete(AjaxRequestTarget target) {
                     schedules.add(scheduleToAdd);
                     scheduleToAdd = createNewOpenEvent();
                     target.add(schedulesContainer);
                 }
-            });
+            };
+            schedulePicker.setVisible(event.getObject().isNew());
+            add(schedulePicker);
 
             add(new Label("eventTypeName", new PropertyModel<String>(event, "type.name")));
             
