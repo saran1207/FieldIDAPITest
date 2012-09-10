@@ -66,6 +66,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class FieldIdCoreConfig {
 
     @Bean
+    public ActionService actionService() {
+        return new ActionService();
+    }
+
+    @Bean
     public EventCriteriaEditService eventCriteriaEditService() {
         return new EventCriteriaEditService();
     }

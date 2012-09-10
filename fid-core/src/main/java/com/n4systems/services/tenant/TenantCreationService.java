@@ -3,10 +3,7 @@ package com.n4systems.services.tenant;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.mail.MailManagerFactory;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.BaseSetupDataFactory;
-import com.n4systems.model.EventStatus;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
@@ -44,10 +41,25 @@ public class TenantCreationService extends FieldIdPersistenceService {
 		createAdminUser(primaryOrg, adminUser);
 		createDefaultSetupData(tenant);
 		createFieldIDCatalogConnection(primaryOrg);
+        createBasicAction(tenant);
         s3Service.uploadDefaultBrandingLogo(tenant.getId());
 
 		sendWelcomeMessage(adminUser);
 	}
+
+    private void createBasicAction(Tenant tenant) {
+        EventTypeGroup actionGroup = new EventTypeGroup();
+        actionGroup.setTenant(tenant);
+        actionGroup.setName("Actions");
+        actionGroup.setAction(true);
+        persistenceService.save(actionGroup);
+
+        EventType correctiveAction = new EventType();
+        correctiveAction.setGroup(actionGroup);
+        correctiveAction.setTenant(tenant);
+        correctiveAction.setName("Corrective Action");
+        persistenceService.save(correctiveAction);
+    }
 
     private void checkNameUniqueness(Tenant tenant) {
         QueryBuilder<Tenant> tenantBuilder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
