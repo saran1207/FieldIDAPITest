@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.reporting.results;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
@@ -90,7 +89,8 @@ public class EventActionsCell extends Panel {
         WebMarkupContainer completeEventActionsList = new WebMarkupContainer("completeEventActionsList");
         completeEventActionsList.setOutputMarkupId(true);
 
-        NonWicketLink viewLink = new NonWicketIframeLink("viewLink", "aHtml/iframe/event.action?uniqueID="+eventId, true, 650, 600);
+        NonWicketLink viewLink = new NonWicketLink("viewLink", "event.action?uniqueID="+eventId);
+
         NonWicketLink editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID="+eventId);
         NonWicketLink printReportLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID="+eventId + "&reportType=INSPECTION_CERT");
 

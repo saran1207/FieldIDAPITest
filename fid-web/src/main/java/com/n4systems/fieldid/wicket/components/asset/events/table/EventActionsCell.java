@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.asset.events.table;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.Event;
 import org.apache.wicket.AttributeModifier;
@@ -34,7 +33,9 @@ public class EventActionsCell extends Panel {
         }
 
         add(menu);
-        add(new NonWicketIframeLink("viewLink", "aHtml/iframe/event.action?uniqueID=" + event.getID(), true, 650, 600, new AttributeModifier("class", viewButtonStyle)));
+
+        add(new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getID(), new AttributeModifier("class", viewButtonStyle)));
+
 
         
     }
