@@ -1,14 +1,11 @@
 package com.n4systems.reporting;
 
+import com.n4systems.model.*;
+
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.Deficiency;
-import com.n4systems.model.Recommendation;
-import com.n4systems.model.State;
 
 public class CriteriaStateView implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,6 +20,7 @@ public class CriteriaStateView implements Serializable {
 	private String compressedRecommendations;
 	private String compressedDeficiencies;
     private String type;
+	private List<CriteriaResultImageView> criteriaImages = new ArrayList<CriteriaResultImageView>();
 	
 	public CriteriaStateView() {}
 	
@@ -126,4 +124,12 @@ public class CriteriaStateView implements Serializable {
     public void setSectionScoreTotal(Double sectionScoreTotal) {
         this.sectionScoreTotal = sectionScoreTotal;
     }
+
+	public List<CriteriaResultImageView> getCriteriaImages() {
+		return criteriaImages;
+	}
+
+	public void setCriteriaImages(List<CriteriaResultImageView> criteriaImages) {
+		this.criteriaImages = criteriaImages;
+	}
 }

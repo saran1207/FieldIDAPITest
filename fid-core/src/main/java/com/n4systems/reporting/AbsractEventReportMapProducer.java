@@ -1,41 +1,22 @@
 package com.n4systems.reporting;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.n4systems.fieldid.certificate.model.InspectionImage;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.util.EventFormHelper;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-import com.n4systems.fieldid.certificate.model.InspectionImage;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.DateFieldCriteriaResult;
-import com.n4systems.model.Deficiency;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.NumberFieldCriteria;
-import com.n4systems.model.NumberFieldCriteriaResult;
-import com.n4systems.model.Observation;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.Recommendation;
-import com.n4systems.model.ScoreCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteria;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.*;
+import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.DoubleFormatter;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
@@ -219,6 +200,13 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             stateView.setState(getScoreStringValue((ScoreCriteriaResult) result));
                         }
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
+						for (CriteriaResultImage resultImage: result.getCriteriaImages()) {
+							try {
+								stateView.getCriteriaImages().add(new CriteriaResultImageView(resultImage.getComments(), s3Service.downloadCriteriaResultImageMedium(resultImage)));
+							} catch (IOException e) {
+								throw new RuntimeException("Failed attaching criteria result image", e);
+							}
+						}
                         criteriaViews.add(stateView);
                     }
                 }
