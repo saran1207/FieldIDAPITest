@@ -12,6 +12,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.model.PriorityCode;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
@@ -152,6 +153,11 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
         event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
         event.setOwner(asset.getOwner());
         event.setAssignee(getAssigneeUser(apiEventSchedule));
+        
+        if(event.getEventType().getGroup().isAction()) {
+        	event.setPriority(persistenceService.find(PriorityCode.class, apiEventSchedule.getPriorityId()));
+        	event.setNotes(apiEventSchedule.getNotes());
+        }
 
 		eventSchedule.setMobileGUID(apiEventSchedule.getSid());
 		eventSchedule.setNextDate(apiEventSchedule.getNextDate());

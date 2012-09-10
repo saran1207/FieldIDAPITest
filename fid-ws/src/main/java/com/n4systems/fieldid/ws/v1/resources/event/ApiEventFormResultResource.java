@@ -18,6 +18,7 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Deficiency;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.Observation;
@@ -141,7 +142,8 @@ public class ApiEventFormResultResource extends FieldIdPersistenceService{
 		}
 		
 		for(ApiEventSchedule action: apiResult.getActions()) {
-			//result.getActions().add(apiEventScheduleResource.converApiEventSchedule(action));
+			Event actionEvent = apiEventScheduleResource.converApiEventSchedule(action);
+			result.getActions().add(actionEvent);
 		}
 		
 		return result;
