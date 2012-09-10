@@ -78,7 +78,7 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
         response.renderCSSReference("style/newCss/event/criteria_images.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
         response.renderJavaScriptReference("javascript/jquery.ThreeDots.min.js");
-        response.renderOnDomReadyJavaScript("$('.comments').ThreeDots({ allow_dangle: true })");
+        response.renderOnDomReadyJavaScript("$('.comments').ThreeDots({ whole_word:false })");
     }
 
 }

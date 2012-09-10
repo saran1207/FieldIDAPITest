@@ -133,6 +133,7 @@ public class CriteriaSectionEditPanel extends Panel {
                                     CriteriaResult tempCriteriaResult = FieldIDSession.get().getPreviouslyStoredCriteriaResult();
                                     if(tempCriteriaResult != null) {
                                         FieldIDSession.get().setPreviouslyStoredCriteriaResult(null);
+                                        item.getModelObject().getCriteriaImages().clear();
                                         for(CriteriaResultImage image: tempCriteriaResult.getCriteriaImages()) {
                                             image.setCriteriaResult(item.getModelObject());
                                             item.getModelObject().getCriteriaImages().add(image);

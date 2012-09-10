@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.event.criteriaimage;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.images.ImageService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
@@ -61,7 +62,7 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
             add(new AjaxSubmitLink("save") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-
+                    FieldIDSession.get().setPreviouslyStoredCriteriaResult(model.getObject());
                     setResponsePage(new CriteriaImageListPage(model));
                 }
 

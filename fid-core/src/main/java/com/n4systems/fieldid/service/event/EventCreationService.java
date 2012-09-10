@@ -376,11 +376,16 @@ public class EventCreationService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public void updateEvent(Event event) {
-        persistenceService.update(event);
+    public AbstractEvent updateEvent(AbstractEvent event) {
+        saveCriteriaResultImages(event);
+        return persistenceService.update(event);
     }
 
-	private void saveCriteriaResultImages(Event event) {
+    private void saveCriteriaResultImages(AbstractEvent event) {
+        saveCriteriaResultImages(event.getResults());
+    }
+
+    private void saveCriteriaResultImages(Event event) {
 		saveCriteriaResultImages(event.getResults());
 		for (SubEvent subEvent: event.getSubEvents()) {
 			saveCriteriaResultImages(subEvent.getResults());
@@ -390,7 +395,9 @@ public class EventCreationService extends FieldIdPersistenceService {
 	private void saveCriteriaResultImages(Collection<CriteriaResult> results) {
 		for (CriteriaResult result: results) {
 			for (CriteriaResultImage criteriaResultImage: result.getCriteriaImages()) {
-				s3Service.uploadCriteriaResultImage(criteriaResultImage);
+                if(criteriaResultImage.isNew()) {
+				    s3Service.uploadCriteriaResultImage(criteriaResultImage);
+                }
 			}
 		}
 	}

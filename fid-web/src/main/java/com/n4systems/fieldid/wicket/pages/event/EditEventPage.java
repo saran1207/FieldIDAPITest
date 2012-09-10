@@ -31,6 +31,7 @@ public class EditEventPage extends EventPage {
     protected AbstractEvent doSave() {
         AbstractEvent editedEvent = event.getObject();
         criteriaEditService.storeCriteriaChanges(editedEvent);
-        return persistenceService.update(editedEvent);
+        editedEvent.storeTransientCriteriaResults();
+        return eventCreationService.updateEvent(editedEvent);
     }
 }
