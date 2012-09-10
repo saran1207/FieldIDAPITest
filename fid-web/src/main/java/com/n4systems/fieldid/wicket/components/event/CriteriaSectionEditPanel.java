@@ -118,7 +118,7 @@ public class CriteriaSectionEditPanel extends Panel {
                     item.add(new CriteriaActionButton("criteriaImageButton", "images/camera_icon.jpg", "images/camera_icon.jpg") {
                         @Override
                         protected void onClick(AjaxRequestTarget target) {
-                            criteriaImagesModalWindow.setTitle(new FIDLabelModel("label.criteria_images"));
+                            criteriaImagesModalWindow.setTitle(new FIDLabelModel("label.images"));
                             criteriaImagesModalWindow.setPageCreator(new ModalWindow.PageCreator() {
                                 @Override
                                 public Page createPage() {

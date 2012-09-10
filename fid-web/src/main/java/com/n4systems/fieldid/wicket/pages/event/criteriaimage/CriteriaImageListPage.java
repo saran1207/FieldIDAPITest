@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -29,7 +30,9 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
 
     public CriteriaImageListPage(final IModel<CriteriaResult> model) {
         super();
-        
+        ContextImage addPhotoSlate;
+        add(addPhotoSlate = new ContextImage("addPhotoSlate", "images/add-photo-slate.png"));
+        addPhotoSlate.setVisible(model.getObject().getCriteriaImages().isEmpty());
         add(new ListView<CriteriaResultImage>("images", model.getObject().getCriteriaImages()) {
             @Override
             protected void populateItem(ListItem<CriteriaResultImage> item) {

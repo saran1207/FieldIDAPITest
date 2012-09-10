@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
@@ -76,11 +77,19 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     CriteriaResult criteriaResult = getModelObject();
                     criteriaResult.getCriteriaImages().remove(imageIndex);
+                    FieldIDSession.get().setPreviouslyStoredCriteriaResult(criteriaResult);
                     setResponsePage(new CriteriaImageListPage(model));
                 }
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
+                }
+            });
+            
+            add(new AjaxLink<Void>("cancel") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    setResponsePage(new CriteriaImageListPage(model));
                 }
             });
 

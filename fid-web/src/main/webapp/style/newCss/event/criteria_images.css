@@ -1,17 +1,27 @@
 .criteria-image-container {
-    padding: 20px 30px;
+    padding: 27px 37px;
 }
 
 .criteria-image-container .comments {
-    width: 98%;
     margin: 10px 0;
 }
 
+.criteria-image-container textarea.comments {
+    width: 500px;
+}
+
+
 .criteria-image-container .actions {
-    border-top: 1px solid #DDDDDD;
     padding-top: 20px;
     float: left;
     width: 100%;
+    font-family:Tahoma;
+    font-size: 12px;
+}
+
+.criteria-image-container .actions .upload {
+    padding: 5px 125px;
+    margin-left: 90px;
 }
 
 .criteria-image-container .actions .save {
@@ -91,16 +101,28 @@
 }
 
 textarea.comments {
-    border: 1px solid #9C9C9C;
     color: #555555;
     display: block;
-    height: 80px;
     margin-top: 5px;
     padding: 4px;
     width: 250px;
+    font-family:Tahoma;
+    font-size:12px;
+    line-height:17px;
+    height:88px;
+    border:1px solid #CCCCCC;
+    display:block;
+    color:#555555;
+    padding:4px;
+    resize:none;
 }
 
 div.comments {
-    width: 250px;
+    font-family:Tahoma;
     font-size: 12px;
+    line-height:17px;
+}
+
+.photo-slate {
+    margin: 90px;
 }
