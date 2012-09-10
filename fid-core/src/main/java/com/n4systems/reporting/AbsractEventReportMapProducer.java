@@ -1,5 +1,6 @@
 package com.n4systems.reporting;
 
+import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.certificate.model.InspectionImage;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.util.EventFormHelper;
@@ -56,7 +57,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		
 		add("images", createEventImages());
 		add("ownerLogo", getCustomerLogo(getEvent().getAsset().getOwner()));
-		
+
 	}
 
 	private List<InspectionImage> createEventImages() {
@@ -204,7 +205,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 							try {
 								stateView.getCriteriaImages().add(new CriteriaResultImageView(resultImage.getComments(), s3Service.downloadCriteriaResultImageMedium(resultImage)));
 							} catch (IOException e) {
-								throw new RuntimeException("Failed attaching criteria result image", e);
+								throw new RuntimeException(e);
 							}
 						}
                         criteriaViews.add(stateView);

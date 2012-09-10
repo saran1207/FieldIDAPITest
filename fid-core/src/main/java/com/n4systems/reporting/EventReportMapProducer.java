@@ -35,6 +35,9 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 
 		add("assignedUserName", assignedUserName());
 
+		add("priority", event.getPriority() != null ? event.getPriority().getName() : "");
+		add("assignee", event.getAssignee() != null ? event.getAssignee().getFullName() : "");
+
 		fillInDate(event);
 	}
 
