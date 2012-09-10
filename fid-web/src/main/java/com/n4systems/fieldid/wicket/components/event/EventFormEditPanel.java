@@ -29,7 +29,6 @@ public class EventFormEditPanel extends Panel {
         setOutputMarkupId(true);
 
         totalSections = results.getObject().size();
-
         if (!results.getObject().isEmpty()) {
             currentSection = results.getObject().get(0);
         }
@@ -65,8 +64,9 @@ public class EventFormEditPanel extends Panel {
 
         add(createCriteriaSectionPager("topSectionPager", currentSectionModel, totalSectionsModel));
         add(createCriteriaSectionPager("bottomSectionPager", currentSectionModel, totalSectionsModel));
+
     }
-    
+
     private IChoiceRenderer<AbstractEvent.SectionResults> sectionChoiceRenderer() {
         return new IChoiceRenderer<AbstractEvent.SectionResults>() {
             @Override
@@ -81,7 +81,7 @@ public class EventFormEditPanel extends Panel {
         };
     }
 
-    private CriteriaSectionPager createCriteriaSectionPager(String pagerId, IModel<Integer> currentPageModel, IModel<Integer> totalPagesModel) {
+    private CriteriaSectionPager createCriteriaSectionPager(String pagerId, IModel<Integer> currentPageModel, final IModel<Integer> totalPagesModel) {
         return new CriteriaSectionPager(pagerId, currentPageModel, totalPagesModel) {
             @Override
             protected void onBack(AjaxRequestTarget target) {

@@ -193,7 +193,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             add(new CheckBox("printable", new PropertyModel<Boolean>(event, "printable")).add(new UpdateComponentOnChange()));
 
-            add(new EventFormEditPanel("eventFormPanel", new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(event.getObject().getEventForm() != null));
+            EventForm form = event.getObject().getEventForm();
+            add(new EventFormEditPanel("eventFormPanel", new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(form!=null && form.getAvailableSections().size()>0));
             add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(event, "attachments")));
 
             Button saveButton = new Button("saveButton");
