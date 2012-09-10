@@ -66,6 +66,8 @@ public class EventCreationService extends FieldIdPersistenceService {
             event.setStatus(calculatedStatus);
         }
 
+		defaultOneClickResultsWithNullState(event.getResults());
+
         User user = getCurrentUser();
 
         event.setEventState(Event.EventState.COMPLETED);
@@ -393,4 +395,15 @@ public class EventCreationService extends FieldIdPersistenceService {
 		}
 	}
 
+	private void defaultOneClickResultsWithNullState(Collection<CriteriaResult> results) {
+		for (CriteriaResult result: results) {
+			OneClickCriteriaResult oneClickResult;
+			if (result instanceof OneClickCriteriaResult) {
+				oneClickResult = (OneClickCriteriaResult)result;
+				if (oneClickResult.getState() == null) {
+					oneClickResult.setState(((OneClickCriteria) oneClickResult.getCriteria()).getStates().getStates().get(0));
+				}
+			}
+		}
+	}
 }
