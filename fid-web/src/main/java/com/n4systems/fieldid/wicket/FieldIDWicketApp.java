@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.pages.assettype.RecurringAssetTypeEventsPage
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.fieldid.wicket.pages.event.EditEventPage;
 import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
+import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
@@ -117,6 +118,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("eventStatusArchivedList", EventStatusArchivedListPage.class);
         mountPage("eventStatusForm", EventStatusFormPage.class);
 
+        mountPage("criteriaImageList", CriteriaImageViewListPage.class);
+        
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
 

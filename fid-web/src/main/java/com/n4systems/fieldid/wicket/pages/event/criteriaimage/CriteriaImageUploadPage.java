@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.event.criteriaimage;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -18,11 +17,9 @@ import org.apache.wicket.model.PropertyModel;
 
 public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
 
-    private FIDModalWindow modalWindow;
 
-    public CriteriaImageUploadPage(IModel<CriteriaResult> model, FIDModalWindow actionsModalWindow) {
+    public CriteriaImageUploadPage(IModel<CriteriaResult> model) {
         super();
-        this.modalWindow = actionsModalWindow;
         add(new UploadForm("uploadForm", model));
     }
 
@@ -57,7 +54,7 @@ public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
                     }
 
 
-                    setResponsePage(new CriteriaImageListPage(model, modalWindow));
+                    setResponsePage(new CriteriaImageListPage(model));
                 }
 
                 @Override
@@ -68,7 +65,7 @@ public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
             add(new AjaxLink<Void>("cancel") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    setResponsePage(new CriteriaImageListPage(model, modalWindow));
+                    setResponsePage(new CriteriaImageListPage(model));
                 }
             });
         }

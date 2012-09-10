@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.event.criteriaimage;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -27,11 +26,8 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
     @SpringBean
     S3Service s3Service;
     
-    private FIDModalWindow modalWindow;
-
-    public CriteriaImageEditPage(final IModel<CriteriaResult> model, int imageIndex, final FIDModalWindow actionsModalWindow) {
+    public CriteriaImageEditPage(final IModel<CriteriaResult> model, int imageIndex) {
        super();
-       this.modalWindow = actionsModalWindow;
        add(new EditForm("editForm", model, imageIndex));
     }
 
@@ -66,7 +62,7 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-                    setResponsePage(new CriteriaImageListPage(model, modalWindow));
+                    setResponsePage(new CriteriaImageListPage(model));
                 }
 
                 @Override
@@ -79,7 +75,7 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     CriteriaResult criteriaResult = getModelObject();
                     criteriaResult.getCriteriaImages().remove(imageIndex);
-                    setResponsePage(new CriteriaImageListPage(model, modalWindow));
+                    setResponsePage(new CriteriaImageListPage(model));
                 }
 
                 @Override

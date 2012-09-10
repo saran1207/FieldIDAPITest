@@ -21,4 +21,19 @@
 		<#assign observationList=criteriaResult.deficiencies>
 		<#include "../observationsCrud/_observationShow.ftl"/>
 	</#if>
+
+    <#if (criteriaResult.criteriaImages.size() > 0) >
+        <a id='img_${criteriaResult.id}_button' href='javascript:void(0);'>
+            <img src="<@s.url value="/images/camera_icon.jpg"/>" id='img_${criteriaResult.id}_img' class='criteriaImageLightbox'/>
+        </a>
+
+        <script type="text/javascript">
+
+            jQuery(document).ready(function(){
+                jQuery('.criteriaImageLightbox').colorbox({iframe: true, href: '<@s.url value="w/criteriaImageList?uniqueID=${criteriaResult.id}"/>', width: '620px', height:'700px'});
+            });
+
+        </script>
+    </#if>
+
 </div>

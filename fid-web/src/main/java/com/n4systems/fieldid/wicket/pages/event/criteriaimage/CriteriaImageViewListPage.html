@@ -3,12 +3,13 @@
       xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
       xml:lang="en"
       lang="en">
-<wicket:extend>
-    <div class="criteria-image-container">
 
+<wicket:extend>
+    <h2><wicket:message key="label.images"/></h2>
+    <div class="criteria-image-container">
         <div class="image-container" wicket:id="images">
-            <div class="edit-thumbnail-container">
-                <a wicket:id="edit">
+            <div class="view-thumbnail-container">
+                <a wicket:id="view">
                     <img class="thumbnail" wicket:id="thumbnail"/>
                 </a>
             </div>
@@ -16,9 +17,7 @@
                 <span class="ellipsis_text" wicket:id="comments"/>
             </div>
         </div>
-        <div class="actions">
-            <a class="upload mattButton blueButton" wicket:id="upload"><wicket:message key="label.upload"/></a>
-        </div>
     </div>
 </wicket:extend>
+
 </html>

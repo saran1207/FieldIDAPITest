@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.event.criteriaimage;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -28,7 +27,7 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
     @SpringBean
     S3Service s3Service;
 
-    public CriteriaImageListPage(final IModel<CriteriaResult> model, final FIDModalWindow actionsModalWindow) {
+    public CriteriaImageListPage(final IModel<CriteriaResult> model) {
         super();
         
         add(new ListView<CriteriaResultImage>("images", model.getObject().getCriteriaImages()) {
@@ -40,7 +39,7 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
                 item.add(editLink = new AjaxLink<Void>("edit") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        setResponsePage(new CriteriaImageEditPage(model, index, actionsModalWindow));
+                        setResponsePage(new CriteriaImageEditPage(model, index));
                     }
                 });
 
@@ -68,7 +67,7 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
         add(new AjaxLink<Void>("upload") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                setResponsePage(new CriteriaImageUploadPage(model, actionsModalWindow));
+                setResponsePage(new CriteriaImageUploadPage(model));
             }
         });
     }

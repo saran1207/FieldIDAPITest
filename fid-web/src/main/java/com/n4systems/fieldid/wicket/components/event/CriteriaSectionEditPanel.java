@@ -122,7 +122,7 @@ public class CriteriaSectionEditPanel extends Panel {
                             criteriaImagesModalWindow.setPageCreator(new ModalWindow.PageCreator() {
                                 @Override
                                 public Page createPage() {
-                                    return new CriteriaImageListPage(item.getModel(), criteriaImagesModalWindow);
+                                    return new CriteriaImageListPage(item.getModel());
                                 }
                             });
                             criteriaImagesModalWindow.setInitialWidth(600);

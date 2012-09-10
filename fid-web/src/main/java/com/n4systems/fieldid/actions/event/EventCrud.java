@@ -136,7 +136,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	@Override
 	protected void initMemberFields() {
         if (openEventId != null && !openEventId.equals(0L)) {
-            event = persistenceManager.find(Event.class, openEventId, getTenant(), "asset", "eventForm.sections", "results", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
+            event = persistenceManager.find(Event.class, openEventId, getTenant(), "asset", "eventForm.sections", "results", "results.criteriaImages", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
             event.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
             event.setEventForm(event.getType().getEventForm());
         } else {

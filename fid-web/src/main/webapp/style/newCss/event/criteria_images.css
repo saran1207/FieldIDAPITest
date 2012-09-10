@@ -53,12 +53,12 @@
 
 }
 
-.thumbnail-container{
+.edit-thumbnail-container, .view-thumbnail-container{
     height: 150px;
     width: 150px;
 }
 
-.thumbnail-container img {
+.edit-thumbnail-container img , .view-thumbnail-container img{
     width: 150px;
 }
 
@@ -66,12 +66,17 @@
     width: 510px;
 }
 
-.thumbnail-container:hover {
+.edit-thumbnail-container:hover {
     background: url("../../../images/icon-edit-large.png") no-repeat top left;
     cursor: pointer;
 }
 
-.thumbnail-container:hover img {
+.view-thumbnail-container:hover {
+    background: url("../../../images/icon-view-large.png") no-repeat top left;
+    cursor: pointer;
+}
+
+.edit-thumbnail-container:hover img, .view-thumbnail-container:hover img {
     opacity:0.2;
 }
 
@@ -95,3 +100,7 @@ textarea.comments {
     width: 250px;
 }
 
+div.comments {
+    width: 250px;
+    font-size: 12px;
+}
