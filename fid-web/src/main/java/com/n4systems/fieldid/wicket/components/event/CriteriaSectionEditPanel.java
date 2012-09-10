@@ -16,7 +16,7 @@ import com.n4systems.model.Observation;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -63,61 +63,53 @@ public class CriteriaSectionEditPanel extends Panel {
         actionsWindow.setInitialWidth(350);
         actionsWindow.setInitialHeight(500);
     }
-    
+
+
     class CriteriaEditForm extends Form<List<CriteriaResult>> {
 
         public CriteriaEditForm(String id, IModel<List<CriteriaResult>> results) {
             super(id, results);
-            
+
             add(new ListView<CriteriaResult>("criteria", results) {
                 @Override
                 protected void populateItem(final ListItem<CriteriaResult> item) {
+                    final CriteriaResult criteriaResult = item.getModel().getObject();
                     item.add(new Label("criteriaName", new PropertyModel<String>(item.getModel(), "criteria.displayText")));
                     item.add(CriteriaEditorFactory.createEditorFor("criteriaEditor", item.getModel()));
                     final PropertyModel<List<? extends Observation>> recommendations = new PropertyModel<List<? extends Observation>>(item.getModel(), "recommendations");
-                    item.add(new CriteriaActionButton("recommendationsButton", "images/rec.png", "images/rec-plus.png") {
+                    item.add(new CriteriaActionButton("recommendationsButton", "images/rec-icon.png", criteriaResult.getRecommendations().size(), "label.recommendations", "mattButtonLeft") {
                         @Override
-                        protected void onClick(AjaxRequestTarget target) {
+                        public void onClick(AjaxRequestTarget target) {
                             criteriaModalWindow.setTitle(new FIDLabelModel("label.recommendations"));
                             criteriaModalWindow.setContent(new RecommendationsEditPanel(criteriaModalWindow.getContentId(), item.getModel()) {
-								@Override
-								protected void onClose(AjaxRequestTarget target) {
-									target.add(CriteriaSectionEditPanel.this);
-									criteriaModalWindow.close(target);
-								}
-							});
+                                @Override
+                                protected void onClose(AjaxRequestTarget target) {
+                                    target.add(CriteriaSectionEditPanel.this);
+                                    criteriaModalWindow.close(target);
+                                }
+                            });
                             criteriaModalWindow.show(target);
                         }
-
-						@Override
-						protected boolean isEmpty() {
-							return recommendations.getObject().isEmpty();
-						}
-					});
+                    });
                     final PropertyModel<List<? extends Observation>> deficiencies = new PropertyModel<List<? extends Observation>>(item.getModel(), "deficiencies");
-                    item.add(new CriteriaActionButton("deficienciesButton", "images/def.png", "images/def-plus.png") {
+                    item.add(new CriteriaActionButton("deficienciesButton", "images/def-icon.png", criteriaResult.getDeficiencies().size(), "label.deficiencies","mattButtonMiddle") {
                         @Override
-                        protected void onClick(AjaxRequestTarget target) {
+                        public void onClick(AjaxRequestTarget target) {
                             criteriaModalWindow.setTitle(new FIDLabelModel("label.deficiencies"));
                             criteriaModalWindow.setContent(new DeficienciesEditPanel(criteriaModalWindow.getContentId(), item.getModel()) {
-								@Override
-								protected void onClose(AjaxRequestTarget target) {
-									target.add(CriteriaSectionEditPanel.this);
-									criteriaModalWindow.close(target);
-								}
-							});
+                                @Override
+                                protected void onClose(AjaxRequestTarget target) {
+                                    target.add(CriteriaSectionEditPanel.this);
+                                    criteriaModalWindow.close(target);
+                                }
+                            });
                             criteriaModalWindow.show(target);
                         }
+                    });
 
-						@Override
-						protected boolean isEmpty() {
-							return deficiencies.getObject().isEmpty();
-						}
-					});
-
-                    item.add(new CriteriaActionButton("criteriaImageButton", "images/camera_icon.jpg", "images/camera_icon.jpg") {
+                    item.add(new CriteriaActionButton("criteriaImageButton", "images/camera-icon.png", criteriaResult.getCriteriaImages().size(),"label.images", "mattButtonMiddle") {
                         @Override
-                        protected void onClick(AjaxRequestTarget target) {
+                        public void onClick(AjaxRequestTarget target) {
                             criteriaImagesModalWindow.setTitle(new FIDLabelModel("label.images"));
                             criteriaImagesModalWindow.setPageCreator(new ModalWindow.PageCreator() {
                                 @Override
@@ -131,7 +123,7 @@ public class CriteriaSectionEditPanel extends Panel {
                             criteriaImagesModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
                                 public boolean onCloseButtonClicked(AjaxRequestTarget target) {
                                     CriteriaResult tempCriteriaResult = FieldIDSession.get().getPreviouslyStoredCriteriaResult();
-                                    if(tempCriteriaResult != null) {
+                                    if (tempCriteriaResult != null) {
                                         FieldIDSession.get().setPreviouslyStoredCriteriaResult(null);
                                         item.getModelObject().getCriteriaImages().clear();
                                         for(CriteriaResultImage image: tempCriteriaResult.getCriteriaImages()) {
@@ -146,16 +138,9 @@ public class CriteriaSectionEditPanel extends Panel {
 
                             criteriaImagesModalWindow.show(target);
                         }
-
-                        @Override
-                        protected boolean isEmpty() {
-                            return item.getModel().getObject().getCriteriaImages().size() == 0;
-                        }
-
-
                     });
 
-                    item.add(new AjaxLink("actionsLink") {
+                    item.add(new CriteriaActionButton("actionsLink", "images/action-icon.png", criteriaResult.getActions().size(), "label.actions", "mattButtonRight") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             actionsWindow.setTitle(new Model<String>("Actions"));
@@ -169,9 +154,34 @@ public class CriteriaSectionEditPanel extends Panel {
                             actionsWindow.setCloseButtonCallback(createActionsCloseButtonCallback(item));
                             actionsWindow.show(target);
                         }
-
                     });
+
+                    item.add(new CriteriaActionButton("showActionsButton", "images/icon-expand.png", null, "label.add_action", "mattButton") {
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            showActions(item);
+                            target.add(item);
+                            target.appendJavaScript("$('.tipsy').remove();");  // tipsy tooltips hang around after ajax. must manually clean them up.
+                        }
+                    });
+
+                    showActionsIfAvailable(item);
                 }
+
+                private void showActionsIfAvailable(ListItem<CriteriaResult> item) {
+                    item.setOutputMarkupId(true);
+                    CriteriaResult result = item.getModel().getObject();
+                    if (result.getDeficiencies().isEmpty() && result.getCriteriaImages().isEmpty() && result.getActions().isEmpty() && result.getRecommendations().isEmpty()) {
+                        return;
+                    }
+                    showActions(item);
+                }
+
+
+                private void showActions(ListItem<CriteriaResult> item) {
+                    item.add(new AttributeAppender("class", Model.of("expand-actions"), " "));
+                }
+
 
                 private ModalWindow.CloseButtonCallback createActionsCloseButtonCallback(final ListItem<CriteriaResult> item) {
                     return new ModalWindow.CloseButtonCallback() {
@@ -185,6 +195,7 @@ public class CriteriaSectionEditPanel extends Panel {
                 }
             });
         }
+
 
     }
     

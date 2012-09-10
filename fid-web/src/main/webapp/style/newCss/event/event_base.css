@@ -57,7 +57,8 @@ label.eventFormLabel {
 .recDefButtons {
     display: block;
     float: right;
-    width : 14%;
+    margin-right:22px;
+    margin-top:4px;
 }
 
 .criteriaEditContainer {
@@ -514,3 +515,38 @@ span.fieldHolder img {
 .pageContent .assignedTo .fieldHolder {
     padding: 0;
 }
+
+.event-actions {
+    display:none;
+}
+
+.event-actions p {
+    display:inline-block;
+    margin-top: 6px;
+    vertical-align: top;
+    font-size: 10px;
+    font-weight: bold;
+    color:#666;
+}
+
+.expand-actions .event-actions {
+    display:inline;
+}
+
+.expand-button {
+    float:right;
+    margin-right:22px;
+    margin-top:4px;
+}
+
+.expand-actions .expand-button {
+    display:none;
+ }
+
+.eventForm .mattButton {
+    padding-top:2px;
+    padding-bottom:0px;
+    padding-left:6px;
+    padding-right:4px;
+}
+

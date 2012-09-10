@@ -1,44 +1,60 @@
 package com.n4systems.fieldid.wicket.components.event.criteria;
 
-import com.n4systems.model.Observation;
-import org.apache.wicket.ajax.AjaxEventBehavior;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.List;
-
 public abstract class CriteriaActionButton extends Panel {
-    private String emptyListImage;
-    private String nonEmptyListImage;
+    private String image;
 
-    public CriteriaActionButton(String id, String emptyListImage, String nonEmptyListImage) {
+    public CriteriaActionButton(String id, String image, Integer count, String label, String style) {
 		super(id);
         setRenderBodyOnly(true);
-        this.emptyListImage = emptyListImage;
-        this.nonEmptyListImage = nonEmptyListImage;
+        this.image = image;
+        setOutputMarkupId(true);
 
-        ContextImage observationImage;
-        add(observationImage = new ContextImage("observationImage", new PropertyModel<String>(this, "pathForImage")));
-        observationImage.add(new AjaxEventBehavior("onclick") {
+        AjaxLink link;
+        add(link = new AjaxLink("link") {
             @Override
-            protected void onEvent(AjaxRequestTarget target) {
-                onClick(target);
+            public void onClick(AjaxRequestTarget target) {
+                CriteriaActionButton.this.onClick(target);
             }
         });
+        link.add(new AttributeAppender("class", Model.of(style), " "));
+        link.add(new ContextImage("icon", new PropertyModel<String>(this, "image")));
+        if (count!=null && count>0) {
+            link.add(new Label("count",Model.of(count+"")));
+        } else {
+            link.add(new WebMarkupContainer("count").setVisible(false));
+        }
+        String tooltip = getTooltip(label, count);
+        if (tooltip!=null) {
+            link.add(new TipsyBehavior(tooltip, TipsyBehavior.Gravity.N));
+        }
+
     }
 
-    protected abstract void onClick(AjaxRequestTarget target);
-	protected abstract boolean isEmpty();
-
-    public String getPathForImage() {
-        if (isEmpty()) {
-            return emptyListImage;
+    protected String getTooltip(String label, Integer count) {
+        if (count==null) {
+            return new FIDLabelModel(label).getObject() ;
         } else {
-            return nonEmptyListImage;
+            return count + " " + new FIDLabelModel(label).getObject();
         }
     }
 
+    protected abstract void onClick(AjaxRequestTarget target);
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+    }
 }
