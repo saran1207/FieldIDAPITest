@@ -21,7 +21,14 @@ import java.util.List;
 
 public class ActionsListPage extends FieldIDAuthenticatedPage {
 
+    protected boolean readOnly = false;
+
     public ActionsListPage(final IModel<CriteriaResult> criteriaResultModel) {
+        this(criteriaResultModel, false);
+    }
+
+    public ActionsListPage(final IModel<CriteriaResult> criteriaResultModel, boolean readOnly) {
+        this.readOnly = readOnly;
         add(new ListView<Event>("actionsList", new PropertyModel<List<? extends Event>>(criteriaResultModel, "actions")) {
             @Override
             protected void populateItem(final ListItem<Event> item) {
@@ -31,23 +38,41 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
                 item.add(new AjaxEventBehavior("onclick") {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
-                        setResponsePage(new ActionDetailsPage(criteriaResultModel, item.getModel()));
+                        setResponsePage(new ActionDetailsPage(criteriaResultModel, item.getModel()) {
+                            @Override protected boolean isEditable() {
+                                return !isReadOnly();
+                            }
+                            @Override protected boolean isStartable(IModel<CriteriaResult> criteriaResultModel) {
+                                return !isReadOnly();
+                            }
+                            @Override protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
+                                ActionsListPage.this.setActionsListResponsePage(criteriaResultModel);
+                            }
+                        });
                     }
                 });
             }
         });
 
         WebMarkupContainer issueActionSection = new WebMarkupContainer("issueActionSection");
-        issueActionSection.setVisible(Permissions.hasAllOf(getCurrentUser(), Permissions.CreateEvent));
+        issueActionSection.setVisible(!isReadOnly());
 
         add(issueActionSection);
         issueActionSection.add(new Link<Void>("addActionLink") {
-            @Override
-            public void onClick() {
+            @Override public void onClick() {
                 setResponsePage(new AddEditActionPage(criteriaResultModel));
             }
         });
     }
+
+    protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
+        setResponsePage(new ActionsListPage(criteriaResultModel));
+    }
+
+    protected boolean isReadOnly() {
+        return readOnly || !Permissions.hasAllOf(getCurrentUser(), Permissions.CreateEvent);
+    }
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);

@@ -35,9 +35,8 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         add(new Label("assignee", new PropertyModel<String>(actionModel, "assignee.fullName")));
         add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(actionModel, "nextDate")));
         Link actionsListLink = new Link("actionsListLink") {
-            @Override
-            public void onClick() {
-                setResponsePage(new ActionsListPage(criteriaResultModel));
+            @Override public void onClick() {
+                setActionsListResponsePage(criteriaResultModel);
             }
         };
         add(actionsListLink);
@@ -53,14 +52,27 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
             }
         };
         add(startEventLink);
-        startEventLink.setVisible(criteriaResultModel.getObject().getId() != null);
+        startEventLink.setVisible(isStartable(criteriaResultModel));
 
-        add(new Link("editLink") {
-            @Override
-            public void onClick() {
+        Link editLink = new Link("editLink") {
+            @Override public void onClick() {
                 setResponsePage(new AddEditActionPage(criteriaResultModel, actionModel));
             }
-        });
+        };
+        add(editLink);
+        editLink.setVisible(isEditable());
+    }
+
+    protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
+        setResponsePage(new ActionsListPage(criteriaResultModel));
+    }
+
+    protected boolean isStartable(IModel<CriteriaResult> criteriaResultModel) {
+        return criteriaResultModel.getObject().getId() != null;
+    }
+
+    protected boolean isEditable() {
+        return true;
         add(createIssuingEventSection(criteriaResultModel, actionModel));
     }
 

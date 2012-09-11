@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.components.action.ViewActionsListPage;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.SignatureResourceReference;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.TemporarySignatureResourceReference;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
@@ -119,7 +120,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("eventStatusForm", EventStatusFormPage.class);
 
         mountPage("criteriaImageList", CriteriaImageViewListPage.class);
-        
+
+        mountPage("viewActionsList", ViewActionsListPage.class);
+
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
 
