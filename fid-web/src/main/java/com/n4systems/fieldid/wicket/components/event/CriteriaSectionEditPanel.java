@@ -32,7 +32,7 @@ import java.util.List;
 public class CriteriaSectionEditPanel extends Panel {
 
     private IModel<List<CriteriaResult>> results;
-    private FIDModalWindow criteriaImagesModalWindow;
+    private DialogModalWindow criteriaImagesModalWindow;
     private FIDModalWindow criteriaModalWindow;
     private DialogModalWindow actionsWindow;
 
@@ -41,7 +41,7 @@ public class CriteriaSectionEditPanel extends Panel {
         setOutputMarkupPlaceholderTag(true);
         add(new CriteriaEditForm("criteriaEditForm", results));
 
-        add(criteriaImagesModalWindow = new FIDModalWindow("imagesWindow"));
+        add(criteriaImagesModalWindow = new DialogModalWindow("imagesWindow"));
         criteriaImagesModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
             @Override
             public boolean onCloseButtonClicked(AjaxRequestTarget target) {
