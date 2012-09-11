@@ -282,7 +282,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
     private InputStream getCertificateLogo(InternalOrg organization) {
         try {
             byte[] image = s3service.downloadInternalOrgCertificateLogo(organization);
-            return new ByteArrayInputStream(image);
+            return image != null ? new ByteArrayInputStream(image) : null;
         } catch (IOException e) {
             logger.warn("Failed downloading internal org certificate logo", e);
             return null;

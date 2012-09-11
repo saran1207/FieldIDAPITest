@@ -249,7 +249,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
     private InputStream resolveCertificateMainLogo(InternalOrg organization) throws ReportException {
         try {
             byte[] image = s3service.downloadInternalOrgCertificateLogo(organization);
-            return new ByteArrayInputStream(image);
+            return image != null ? new ByteArrayInputStream(image) : null;
         } catch (IOException e) {
             logger.warn("Failed downloading internal org certificate logo", e);
             return null;

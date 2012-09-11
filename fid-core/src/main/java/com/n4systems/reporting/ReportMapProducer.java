@@ -56,7 +56,7 @@ public abstract class ReportMapProducer {
         if (owner == null || owner.isInternal()) return null;
         try {
             byte[] logo = s3Service.downloadCustomerLogo(owner.getCustomerOrg().getId());
-            return new ByteArrayInputStream(logo);
+            return logo != null ? new ByteArrayInputStream(logo) : null;
         } catch (IOException e) {
             logger.warn("Unable to download customer logo for report", e);
             return null;
