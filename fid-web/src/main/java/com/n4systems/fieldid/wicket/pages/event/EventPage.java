@@ -151,6 +151,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
             proofTestContainer.add(new ProofTestEditPanel("proofTest", new PropertyModel<ProofTestInfo>(event, "proofTestInfo")));
+            proofTestContainer.setVisible(!event.getObject().getType().getSupportedProofTests().isEmpty());
             add(proofTestContainer);
 
             PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
