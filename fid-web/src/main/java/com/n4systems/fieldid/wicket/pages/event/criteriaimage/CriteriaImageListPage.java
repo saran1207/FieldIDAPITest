@@ -47,7 +47,7 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
                 });
 
                 if(image.getImageData() == null) {
-                    editLink.add(new ExternalImage("thumbnail", s3Service.getCriteriaResultImageOriginalURL(image).toString()));
+                    editLink.add(new ExternalImage("thumbnail", s3Service.getCriteriaResultImageThumbnailURL(image).toString()));
                 } else {
                     editLink.add(new NonCachingImage("thumbnail", new AbstractReadOnlyModel<DynamicImageResource>() {
                         @Override 
@@ -55,7 +55,7 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
                             DynamicImageResource imageResource = new DynamicImageResource() {
                                 @Override
                                 protected byte[] getImageData(Attributes attributes) {
-                                    return imageService.scaleImage(image.getImageData(), 150, 150);
+                                    return imageService.generateThumbnail(image.getImageData());
                                 }
                             };
                             imageResource.setFormat(image.getContentType());
