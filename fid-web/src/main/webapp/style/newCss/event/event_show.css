@@ -40,3 +40,73 @@
 	float: left;
 	display: block;
 }
+
+#contentHeader {
+    display:none;
+}
+
+.event-summary {
+    font-size: 21px;
+    font-weight: normal;
+    text-shadow: 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.greyText {
+    color: #888888;
+}
+
+.owner-summary {
+    font-size: 1.1em;
+    padding-top: 5px;
+}
+
+.owner-summary img {
+    vertical-align: middle;
+}
+
+.actions {
+    padding: 15px 0;
+    float:left;
+    width: 100%
+}
+
+.actions .summary {
+    margin-right: 785px;
+}
+
+.actions .edit {
+    margin-right: 15px;
+}
+
+.actions .print-certs {
+    width: 55px;
+    float: left;
+}
+.eventView {
+    clear: both;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
+    padding: 12px;
+}
+
+.actions .print-certs ul {
+    width: 150px;
+}
+
+.print-certs .menu-items {
+    left: -98px;
+}
+
+#page {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.event-header {
+    border-bottom: 1px solid #CCCCCC;
+    float: left;
+    margin-bottom: 10px;
+}

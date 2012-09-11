@@ -7,7 +7,8 @@
 </head>
 
 <#assign form_action="SHOW" /> 
-${action.setPageType('event', 'show')!}
+<#include "_showHeader.ftl" />
+
 <div class="eventView">
 	<#include "_show.ftl" />
 </div>
