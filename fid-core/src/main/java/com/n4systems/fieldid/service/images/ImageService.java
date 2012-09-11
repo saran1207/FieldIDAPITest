@@ -12,7 +12,7 @@ import java.io.IOException;
 public class ImageService {
 
 	public byte[] generateThumbnail(byte[] imageData) throws ImageProcessingException {
-		return scaleImage(imageData, 125, 125);
+		return scaleImage(imageData, 150, 150);
 	}
 
 	public byte[] generateMedium(byte[] imageData) throws ImageProcessingException {
