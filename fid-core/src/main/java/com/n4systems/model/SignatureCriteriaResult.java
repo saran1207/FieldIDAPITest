@@ -38,7 +38,7 @@ public class SignatureCriteriaResult extends CriteriaResult {
 
 	@Override
 	public String getResultString() {
-		return "";
+		return signed ? "Signed" : "Not signed";
 	}
 
     public String getTemporaryFileId() {

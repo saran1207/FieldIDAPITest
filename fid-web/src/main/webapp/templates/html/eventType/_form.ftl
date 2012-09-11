@@ -37,7 +37,10 @@
 <div class="infoSet">
 	<@s.label cssClass="label" value="${action.getText('label.group')}:" />
 	<span class="fieldHolder">
-		<@s.select name="group" list="eventTypeGroups" listKey="id" listValue="name" />
+		<@s.select emptyOption="true" name="group">
+            <@s.optgroup label="Event Groups" list="eventGroups" listKey="id" listValue="name"/>
+		    <@s.optgroup label="Action Groups" list="actionGroups" listKey="id" listValue="name" />
+        </@s.select>
 	</span>
 </div>
 <div class="infoSet">

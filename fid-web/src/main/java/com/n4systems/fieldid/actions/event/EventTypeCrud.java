@@ -4,6 +4,7 @@
  import com.n4systems.exceptions.MissingEntityException;
  import com.n4systems.fieldid.actions.api.AbstractCrud;
  import com.n4systems.fieldid.permissions.UserPermissionFilter;
+ import com.n4systems.fieldid.service.event.EventTypeGroupService;
  import com.n4systems.fieldid.service.event.EventTypeService;
  import com.n4systems.fieldid.service.remover.EventTypeRemovalService;
  import com.n4systems.fieldid.utils.StrutsListHelper;
@@ -31,6 +32,8 @@ public class EventTypeCrud extends AbstractCrud {
 	private Logger logger = Logger.getLogger(EventTypeCrud.class);
 
 	private List<ListingPair> eventTypeGroups;
+    private List<EventTypeGroup> eventGroups;
+    private List<EventTypeGroup> actionGroups;
 	private List<EventType> eventTypes;
 	private EventType eventType;
 	private List<TrimmedString> infoFieldNames;
@@ -43,12 +46,14 @@ public class EventTypeCrud extends AbstractCrud {
 	private String nameFilter;
 	private Long groupFilter;
     private EventTypeService eventTypeService;
+    private EventTypeGroupService eventTypeGroupService;
     private EventTypeRemovalService eventTypeRemovalService;
 
-    public EventTypeCrud(PersistenceManager persistenceManager, EventTypeService eventTypeService, EventTypeRemovalService eventTypeRemovalService) {
+    public EventTypeCrud(PersistenceManager persistenceManager, EventTypeService eventTypeService, EventTypeGroupService eventTypeGroupService, EventTypeRemovalService eventTypeRemovalService) {
 		super(persistenceManager);
 
         this.eventTypeService = eventTypeService;
+        this.eventTypeGroupService = eventTypeGroupService;
         this.eventTypeRemovalService = eventTypeRemovalService;
     }
 
@@ -228,7 +233,21 @@ public class EventTypeCrud extends AbstractCrud {
 		return eventTypeGroups;
 	}
 
-	public void setEventType(EventType eventType) {
+    public List<EventTypeGroup> getEventGroups() {
+        if (eventGroups == null) {
+            eventGroups = eventTypeGroupService.getEventTypeGroupsExcludingActions();
+        }
+        return eventGroups;
+    }
+
+    public List<EventTypeGroup> getActionGroups() {
+        if (actionGroups == null) {
+            actionGroups = eventTypeGroupService.getEventTypeGroupsActionsOnly();
+        }
+        return actionGroups;
+    }
+
+    public void setEventType(EventType eventType) {
 		this.eventType = eventType;
 	}
 
@@ -253,7 +272,7 @@ public class EventTypeCrud extends AbstractCrud {
 	public void setGroup(Long group) {
 		if (group == null) {
 			eventType.setGroup(null);
-		} else if (!group.equals(eventType.getGroup())) {
+		} else {
 			eventType.setGroup(persistenceManager.find(EventTypeGroup.class, group, getTenantId()));
 		}
 	}

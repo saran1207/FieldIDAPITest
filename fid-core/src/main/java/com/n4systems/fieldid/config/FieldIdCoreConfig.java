@@ -66,6 +66,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class FieldIdCoreConfig {
 
     @Bean
+    public EventTypeGroupService eventTypeGroupService() {
+        return new EventTypeGroupService();
+    }
+
+    @Bean
     public ActionService actionService() {
         return new ActionService();
     }
