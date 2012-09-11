@@ -10,13 +10,17 @@
     width: 500px;
 }
 
+.criteria-image-container .uploadForm textarea.comments {
+    width: 400px;
+}
 
 .criteria-image-container .actions {
     padding-top: 20px;
     float: left;
     width: 100%;
-    font-family:Tahoma;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
     font-size: 12px;
+
 }
 
 .criteria-image-container .actions .upload {
@@ -25,7 +29,7 @@
 }
 
 .criteria-image-container .actions .save {
-    margin-left: 50px;
+    margin-left: 85px;
     margin-right: 10px;
     width: 40%;
     position: relative;
@@ -125,4 +129,22 @@ div.comments {
 
 .photo-slate {
     margin-left: 90px;
+}
+
+label.label {
+    color: #555555;
+    display: block;
+    float: left;
+    font-weight: bold;
+    line-height: 17px;
+    overflow: hidden;
+    padding: 5px;
+    width: 75px;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+
+}
+
+.formErrors h2 {
+    display:none;
 }

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.event.criteriaimage;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -14,9 +15,15 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.AbstractValidator;
+
+import java.util.List;
 
 public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
 
+    private FIDFeedbackPanel feedbackPanel;
 
     public CriteriaImageUploadPage(IModel<CriteriaResult> model) {
         super();
@@ -31,6 +38,22 @@ public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
             super(id, model);
             setOutputMarkupId(true);
             add(uploadField = new FileUploadField("criteriaFileUpload"));
+            uploadField.setRequired(true);
+            uploadField.add( new AbstractValidator<FileUpload>() {
+                public boolean validateOnNullValue(){
+                    return true;
+                }
+                @Override
+                protected void onValidate(IValidatable validatable) {
+                    FileUpload fileUpload = (FileUpload) ((List) validatable.getValue()).get(0);
+                    if(!fileUpload.getContentType().toLowerCase().contains("image")) {
+                        ValidationError error = new ValidationError();
+                        error.addMessageKey("error.file_image_type_only");
+                        validatable.error(error);
+                    }
+                }
+
+            });
             add(new TextArea("comments", new PropertyModel(this, "comments")));
             add(new AjaxSubmitLink("save") {
                 @Override
@@ -51,14 +74,14 @@ public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
                         criteriaResult.getCriteriaImages().add(criteriaResultImage);
 
                         FieldIDSession.get().setPreviouslyStoredCriteriaResult(criteriaResult);
+
+                        setResponsePage(new CriteriaImageListPage(model));
                     }
-
-
-                    setResponsePage(new CriteriaImageListPage(model));
                 }
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    target.add(feedbackPanel);
                 }
             });
 
@@ -68,6 +91,9 @@ public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
                     setResponsePage(new CriteriaImageListPage(model));
                 }
             });
+
+            add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
+
         }
 
     }

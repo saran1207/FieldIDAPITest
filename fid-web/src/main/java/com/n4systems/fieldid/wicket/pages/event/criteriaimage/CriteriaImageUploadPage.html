@@ -5,10 +5,16 @@
       lang="en">
 <wicket:extend>
     <div class="criteria-image-container">
-        <form wicket:id="uploadForm">
-
-            <input wicket:id="criteriaFileUpload" type="file"/>
-            <textarea wicket:id="comments" class="comments"/>
+        <form wicket:id="uploadForm" class="uploadForm">
+            <div id="formErrors" wicket:id="feedbackPanel"></div>
+            <div>
+                <label class="label"><wicket:message key="label.select_image"/></label>
+                <input wicket:id="criteriaFileUpload" type="file"/>
+            </div>
+            <div>
+                <label class="label"><wicket:message key="label.comments"/></label>
+                <textarea wicket:id="comments" class="comments"/>
+            </div>
             <div class="actions">
                 <a class="mattButton save blueButton" wicket:id="save"><wicket:message key="label.save"/></a>
                 <wicket:message key="label.or"/>
