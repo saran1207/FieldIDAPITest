@@ -99,12 +99,12 @@ public class S3Service extends FieldIdPersistenceService {
         return logo;
     }
 
-    public byte[] downloadPrimaryOrgCertificateLogo() throws IOException {
+    private byte[] downloadPrimaryOrgCertificateLogo() throws IOException {
         byte[] logoData = downloadResource(null, PRIMARY_CERTIFICATE_LOGO_PATH);
         return logoData;
     }
 
-    public byte[] downloadSecondaryOrgCertificateLogo(Long secondaryOrgId) throws IOException {
+	private byte[] downloadSecondaryOrgCertificateLogo(Long secondaryOrgId) throws IOException {
         byte[] logoData = downloadResource(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
         return logoData;
     }

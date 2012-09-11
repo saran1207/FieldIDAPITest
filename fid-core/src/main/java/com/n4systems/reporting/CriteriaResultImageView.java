@@ -1,13 +1,10 @@
 package com.n4systems.reporting;
 
+import java.io.InputStream;
+
 public class CriteriaResultImageView {
 	private String comments;
-	private byte[] image;
-
-	public CriteriaResultImageView(String comments, byte[] image) {
-		this.comments = comments;
-		this.image = image;
-	}
+	private InputStream image;
 
 	public String getComments() {
 		return comments;
@@ -17,11 +14,11 @@ public class CriteriaResultImageView {
 		this.comments = comments;
 	}
 
-	public byte[] getImage() {
+	public InputStream getImage() {
 		return image;
 	}
 
-	public void setImage(byte[] image) {
+	public void setImage(InputStream image) {
 		this.image = image;
 	}
 }

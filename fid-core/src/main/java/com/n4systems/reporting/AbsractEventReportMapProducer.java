@@ -1,6 +1,5 @@
 package com.n4systems.reporting;
 
-import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.certificate.model.InspectionImage;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.util.EventFormHelper;
@@ -12,6 +11,7 @@ import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.DoubleFormatter;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -201,9 +201,13 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             stateView.setState(getScoreStringValue((ScoreCriteriaResult) result));
                         }
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
+						CriteriaResultImageView criteriaResultImageView;
 						for (CriteriaResultImage resultImage: result.getCriteriaImages()) {
 							try {
-								stateView.getCriteriaImages().add(new CriteriaResultImageView(resultImage.getComments(), s3Service.downloadCriteriaResultImageMedium(resultImage)));
+								criteriaResultImageView = new CriteriaResultImageView();
+								criteriaResultImageView.setComments(resultImage.getComments());
+								criteriaResultImageView.setImage(new ByteArrayInputStream(s3Service.downloadCriteriaResultImageMedium(resultImage)));
+								stateView.getCriteriaImages().add(criteriaResultImageView);
 							} catch (IOException e) {
 								throw new RuntimeException(e);
 							}
