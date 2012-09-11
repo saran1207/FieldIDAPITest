@@ -11,6 +11,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.Event;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import com.n4systems.model.utils.ActionDescriptionUtil;
 
 public class ApiTriggerEventResource extends ApiResource<ApiTriggerEvent, Event> {
 	private static Logger logger = Logger.getLogger(ApiTriggerEventResource.class);
@@ -24,7 +25,7 @@ public class ApiTriggerEventResource extends ApiResource<ApiTriggerEvent, Event>
 		triggerEvent.setDate(actionEvent.getTriggerEvent().getDate());
 		triggerEvent.setPerformedBy(actionEvent.getTriggerEvent().getPerformedBy().getFullName());
 		triggerEvent.setImages(getImages(actionEvent));
-		triggerEvent.setCriteria("Test"); // TODO Criteria
+		triggerEvent.setCriteria(ActionDescriptionUtil.getDescription(actionEvent.getTriggerEvent(), actionEvent.getSourceCriteriaResult()));
 		
 		return triggerEvent;
 	}
