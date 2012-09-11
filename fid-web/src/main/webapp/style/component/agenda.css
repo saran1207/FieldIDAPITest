@@ -70,7 +70,7 @@
     padding-bottom: 5px;
     padding-left: 5px;
     background:#efeff5;
-    font-size: 12px;
+    font-size: 11px;
     color: #1166cc;
 }
 
@@ -110,6 +110,10 @@
     overflow: hidden;
 }
 
+.agenda-table {
+    font-size:11px;
+}
+
 .agenda-row .event {
     line-height:9px;
     height:15px;
@@ -134,8 +138,9 @@
 }
 
 .agenda .limit-message {
-    background:#ddd;
+    background:#e4e4e4;
     color:#777;
     line-height:30px;
     padding-left:5px;
+    font-size:11px;
 }
