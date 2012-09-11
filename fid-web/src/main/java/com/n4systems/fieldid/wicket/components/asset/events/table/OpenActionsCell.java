@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.action.ActionDetailsPage;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
+import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -80,7 +81,8 @@ public class OpenActionsCell extends Panel {
         dialogWindow.setPageCreator(new ModalWindow.PageCreator() {
             @Override
             public Page createPage() {
-                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(eventModel, "sourceCriteriaResult"), eventModel);
+                IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
+                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), entityModel);
             }
         });
         dialogWindow.setInitialWidth(350);

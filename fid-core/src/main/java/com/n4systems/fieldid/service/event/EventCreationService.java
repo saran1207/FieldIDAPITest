@@ -90,13 +90,7 @@ public class EventCreationService extends FieldIdPersistenceService {
             persistenceService.update(event);
         }
 
-        for (CriteriaResult criteriaResult : event.getResults()) {
-            for (Event action : criteriaResult.getActions()) {
-                action.getSchedule().copyDataFrom(action);
-                persistenceService.save(action);
-                persistenceService.update(criteriaResult);
-            }
-        }
+        copyDataToActionSchedules(event);
 
         updateAsset(event, user.getId());
 
@@ -113,6 +107,21 @@ public class EventCreationService extends FieldIdPersistenceService {
         persistenceService.update(event.getSchedule());
 
         return event;
+    }
+
+    // TODO: Remove when WEB-3258 is done
+    private void copyDataToActionSchedules(AbstractEvent event) {
+        for (CriteriaResult criteriaResult : event.getResults()) {
+            for (Event action : criteriaResult.getActions()) {
+                action.getSchedule().copyDataFrom(action);
+                if (action.isNew()) {
+                    persistenceService.save(action);
+                } else {
+                    persistenceService.update(action);
+                }
+                persistenceService.update(criteriaResult);
+            }
+        }
     }
 
     private void processUploadedFiles(Event event, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
@@ -378,6 +387,10 @@ public class EventCreationService extends FieldIdPersistenceService {
     @Transactional
     public AbstractEvent updateEvent(AbstractEvent event) {
         saveCriteriaResultImages(event);
+        if (event instanceof Event) {
+            ((Event) event).setTriggersIntoResultingActions();
+        }
+        copyDataToActionSchedules(event);
         return persistenceService.update(event);
     }
 
