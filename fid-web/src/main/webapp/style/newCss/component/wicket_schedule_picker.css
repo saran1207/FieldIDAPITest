@@ -1,5 +1,5 @@
 .newScheduleForm {
-	overflow:hidden;
+	overflow:visible;
 	width:300px;
 	border:solid 1px #BBB;
 	background-color:#F9F9F9;
@@ -26,8 +26,9 @@
     padding-bottom:8px;
 }
 
-.newScheduleForm .assignmentSection select{
-    margin-top: 12px;
+.newScheduleForm .assignmentSection chzn-container {   /* these replace the "select"s */
+    padding-top:5px;
+    height:33px;
 }
 
 .newScheduleForm .assignmentSection .assignmentSectionTitle {
@@ -102,7 +103,7 @@
 
 .newScheduleForm .scheduleRow {
     padding: 12px 0 15px 0;
-    overflow:hidden;
+    overflow:visible;
 }
 
 .openSchedulePickerButton {

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.schedule;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
@@ -88,9 +89,11 @@ public class SchedulePicker extends Panel {
             DropDownChoice<EventType> eventTypeSelect = new DropDownChoice<EventType>("eventTypeSelect", new PropertyModel<EventType>(eventScheduleModel, "type"), eventTypeOptions, new ListableChoiceRenderer<EventType>());
             DropDownChoice<Project> jobSelect = new DropDownChoice<Project>("jobSelect", new PropertyModel<Project>(eventScheduleModel, "project"), jobsOptions, new ListableChoiceRenderer<Project>());
             jobSelect.setNullValid(true);
+            jobSelect.add(new JChosenBehavior());
 
             eventTypeSelect.setNullValid(false);
             eventTypeSelect.setRequired(true);
+            eventTypeSelect.add(new JChosenBehavior());
 
             editorContainer.add(eventTypeSelect);
             WebMarkupContainer jobSelectContainer = new WebMarkupContainer("jobSelectContainer");
@@ -101,6 +104,7 @@ public class SchedulePicker extends Panel {
 
             DropDownChoice<User> assigneeChoice = new DropDownChoice<User>("assignee", new PropertyModel<User>(eventScheduleModel, "assignee"), new ExaminersModel(), new ListableChoiceRenderer<User>());
             assigneeChoice.setNullValid(true);
+            assigneeChoice.add(new JChosenBehavior());
             editorContainer.add(assigneeChoice);
 
             editorContainer.add(new AjaxSubmitLink("addScheduleButton") {
