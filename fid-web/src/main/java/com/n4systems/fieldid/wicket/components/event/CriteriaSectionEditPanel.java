@@ -189,6 +189,7 @@ public class CriteriaSectionEditPanel extends Panel {
                         public boolean onCloseButtonClicked(AjaxRequestTarget target) {
                             List<Event> actionsList = FieldIDSession.get().getActionsList(item.getModelObject());
                             item.getModelObject().setActions(actionsList);
+                            target.add(CriteriaSectionEditPanel.this);
                             return true;
                         }
                     };

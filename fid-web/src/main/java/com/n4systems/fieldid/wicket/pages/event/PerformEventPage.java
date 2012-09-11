@@ -6,7 +6,6 @@ import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -38,36 +37,6 @@ public class PerformEventPage extends EventPage {
 				parameters.get("type").toLongObject());
     }
 
-    class NewMasterEventModel extends LoadableDetachableModel<Event> {
-
-        private Long assetId;
-        private Long type;
-
-        public NewMasterEventModel(Long assetId, Long type) {
-            this.assetId = assetId;
-            this.type = type;
-        }
-
-
-        @Override
-        protected Event load() {
-            return eventService.createNewMasterEvent(assetId, type);
-        }
-    }
-
-    class EventFromOpenEventModel extends LoadableDetachableModel<Event> {
-
-        private Long openEventId;
-
-        public EventFromOpenEventModel(Long openEventId) {
-            this.openEventId = openEventId;
-        }
-
-        @Override
-        protected Event load() {
-            return eventService.createEventFromOpenEvent(openEventId);
-        }
-    }
 
     @Override
     protected AbstractEvent doSave() {
