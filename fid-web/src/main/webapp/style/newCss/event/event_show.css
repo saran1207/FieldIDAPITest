@@ -70,17 +70,26 @@
     width: 100%
 }
 
+.event-header .actions .mattButton {
+    font-size: 12px;
+}
+
 .actions .summary {
-    margin-right: 785px;
+    margin-right: 779px;
+}
+
+.actions .summary-wide {
+    margin-right: 840px;
 }
 
 .actions .edit {
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
 .actions .print-certs {
-    width: 55px;
+    width: 60px;
     float: left;
+    font-size: 12px;
 }
 .eventView {
     clear: both;
@@ -91,11 +100,11 @@
 }
 
 .actions .print-certs ul {
-    width: 150px;
+    width: 200px;
 }
 
 .print-certs .menu-items {
-    left: -98px;
+    left: -142px;
 }
 
 #page {
@@ -109,4 +118,5 @@
     border-bottom: 1px solid #CCCCCC;
     float: left;
     margin-bottom: 10px;
+    width: 100%;
 }

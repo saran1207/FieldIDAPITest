@@ -48,30 +48,42 @@
     </p>
 
     <div class="actions">
-        <a class="mattButton summary" href="<@s.url namespace="/" value="w/assetSummary?uniqueID=${asset.id}"/>">
+        <a class="mattButton <#if event.anyCertPrintable && userSecurityGuard.allowedEditEvent>summary<#else>summary-wide</#if>" href="<@s.url namespace="/" value="w/assetSummary?uniqueID=${asset.id}"/>">
             <@s.text name="label.assetsummary"/>
         </a>
-        <a class="mattButton edit" href="<@s.url action="selectEventEdit" uniqueID="${event.id}"/>">
-            <@s.text name="label.edit"/>
-        </a>
+        <#if userSecurityGuard.allowedEditEvent>
+            <a class="mattButton edit" href="<@s.url action="selectEventEdit" uniqueID="${event.id}"/>">
+                <@s.text name="label.edit"/>
+            </a>
+        </#if>
 
         <#if event.anyCertPrintable>
             <@s.url id="eventCertUrl" action="downloadEventCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
             <@s.url id="observationCertUrl" action="downloadEventCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
 
-            <ul class="print-certs">
-                <li class="menu">
-                    <a class="mattButton" href="javascript:void(0);" ><@s.text name="label.print"/> <img src="/fieldid/images/menu-down.png"></a>
-                    <ul class="menu-items">
-                        <#if event.eventCertPrintable>
-                            <li><a href="${eventCertUrl}" target="_blank" >${event.type.group.reportTitle?html} (<@s.text name="label.pdfreport"/>)</a></li>
-                        </#if>
-                        <#if event.observationCertPrintable>
-                            <li><a href="${observationCertUrl}" target="_blank" ><@s.text name="label.printobservationcertificate"/></a></li>
-                        </#if>
-                    <ul class="menu-items">
-                </li>
-            </ul>
+            <#if event.eventCertPrintable && event.observationCertPrintable>
+                <ul class="print-certs">
+                    <li class="menu">
+                        <a class="mattButton" href="javascript:void(0);" ><@s.text name="label.print"/>&nbsp;&nbsp;<img src="/fieldid/images/menu-down.png"></a>
+                        <ul class="menu-items">
+                            <#if event.eventCertPrintable>
+                                <li>
+                                    <a href="${eventCertUrl}" target="_blank" >${event.type.group.reportTitle?html} (<@s.text name="label.pdfreport"/>)</a>
+                                </li>
+                            </#if>
+                            <#if event.observationCertPrintable>
+                                <li>
+                                    <a href="${observationCertUrl}" target="_blank" ><@s.text name="label.printobservationcertificate"/></a>
+                                </li>
+                            </#if>
+                        <ul class="menu-items">
+                    </li>
+                </ul>
+            <#elseif event.eventCertPrintable>
+                <a class="mattButton" href="${eventCertUrl}" target="_blank" ><@s.text name="label.print"/></a>
+            <#elseif event.observationCertPrintable>
+                <a class="mattButton" href="${observationCertUrl}" target="_blank" ><@s.text name="label.print"/></a>
+            </#if>
         </#if>
 
     </div>
