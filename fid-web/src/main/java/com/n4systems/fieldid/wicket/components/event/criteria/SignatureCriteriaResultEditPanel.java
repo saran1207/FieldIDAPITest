@@ -34,7 +34,7 @@ public class SignatureCriteriaResultEditPanel extends Panel {
         add(new WebMarkupContainer("existingSignature"));
         
         final ModalWindow modalWindow = new DialogModalWindow("signatureModalWindow");
-        modalWindow.setInitialWidth(800);
+        modalWindow.setInitialWidth(820);
         modalWindow.setInitialHeight(320);
         modalWindow.setPageCreator(new ModalWindow.PageCreator() {
             @Override

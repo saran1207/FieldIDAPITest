@@ -87,7 +87,13 @@ public class EventCreationService extends FieldIdPersistenceService {
         if (event.getId() == null) {
             persistenceService.save(event);
         } else {
+            // Because the update drops the transient data on the signature criteria result, we
+            // must remember the file names in a map before we call update. We must call update before saving
+            // the file, because we have to get IDs for our signature criteria results so we know the path to save them at.
+            // Perhaps it would be better to pass transient signature data in a separate parameter
+            Map<Long, String> rememberedSignatureMap = rememberTemporarySignatureFiles(event);
             event = persistenceService.update(event);
+            restoreTemporarySignatureFiles(event, rememberedSignatureMap);
         }
 
         copyDataToActionSchedules(event);
@@ -107,6 +113,24 @@ public class EventCreationService extends FieldIdPersistenceService {
         persistenceService.update(event.getSchedule());
 
         return event;
+    }
+
+    private void restoreTemporarySignatureFiles(Event event, Map<Long, String> rememberedSignatureFiles) {
+        for (CriteriaResult criteriaResult : event.getResults()) {
+            if (criteriaResult instanceof SignatureCriteriaResult && rememberedSignatureFiles.containsKey(criteriaResult.getCriteria().getId())) {
+                ((SignatureCriteriaResult) criteriaResult).setTemporaryFileId(rememberedSignatureFiles.get(criteriaResult.getCriteria().getId()));
+            }
+        }
+    }
+
+    private Map<Long, String> rememberTemporarySignatureFiles(Event event) {
+        Map<Long,String> rememberedSignatureFiles = new HashMap<Long, String>();
+        for (CriteriaResult criteriaResult : event.getResults()) {
+            if (criteriaResult instanceof  SignatureCriteriaResult) {
+                rememberedSignatureFiles.put(criteriaResult.getCriteria().getId(), ((SignatureCriteriaResult) criteriaResult).getTemporaryFileId());
+            }
+        }
+        return rememberedSignatureFiles;
     }
 
     // TODO: Remove when WEB-3258 is done
