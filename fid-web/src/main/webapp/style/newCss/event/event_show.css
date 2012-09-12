@@ -41,7 +41,7 @@
 	display: block;
 }
 
-#contentHeader {
+#contentTitle, #contentHeader .options {
     display:none;
 }
 
