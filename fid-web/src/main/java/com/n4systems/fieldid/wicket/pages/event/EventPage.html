@@ -109,10 +109,18 @@
         <div style="clear:both; overflow:hidden">
             <h2><wicket:message key="label.result"/></h2>
 
-            <label class="label"><wicket:message key="label.result"/></label>
-            <span class="fieldHolder">
-                <select wicket:id="result"/>
-            </span>
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.result"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="result"/>
+                </span>
+            </div>
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.event_status"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="eventStatus"/>
+                </span>
+            </div>
         </div>
 
         <div style="clear:both;overflow:hidden" wicket:id="proofTestContainer">

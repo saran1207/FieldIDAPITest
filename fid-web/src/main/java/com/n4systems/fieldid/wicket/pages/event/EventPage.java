@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.event;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
@@ -64,6 +65,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     
     @SpringBean protected EventCreationService eventCreationService;
     @SpringBean protected PersistenceService persistenceService;
+    @SpringBean protected EventStatusService eventStatusService;
 
     protected IModel<? extends AbstractEvent> event;
 
@@ -183,7 +185,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             assetStatus.add(new UpdateComponentOnChange());
             assetStatus.setNullValid(true);
             add(assetStatus);
-            
+
             if (event.getObject() instanceof Event) {
                 Event masterEvent = (Event) event.getObject();
                 DropDownChoice resultSelect = new DropDownChoice<Status>("result", new PropertyModel<Status>(event, "status"), Status.getValidEventStates(), new ListableLabelChoiceRenderer<Status>());
@@ -191,6 +193,12 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                 resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
                 add(resultSelect);
             }
+
+            List<EventStatus> eventStatuses = eventStatusService.getActiveStatuses();
+            DropDownChoice eventStateSelect = new DropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
+            eventStateSelect.add(new UpdateComponentOnChange());
+            eventStateSelect.setNullValid(true);
+            add(eventStateSelect);
 
             add(new CheckBox("printable", new PropertyModel<Boolean>(event, "printable")).add(new UpdateComponentOnChange()));
 
