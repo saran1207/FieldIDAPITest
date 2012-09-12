@@ -87,7 +87,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         if (event.getId() == null) {
             persistenceService.save(event);
         } else {
-            persistenceService.update(event);
+            event = persistenceService.update(event);
         }
 
         copyDataToActionSchedules(event);

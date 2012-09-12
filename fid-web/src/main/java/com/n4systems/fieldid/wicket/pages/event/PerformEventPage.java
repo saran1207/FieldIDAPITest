@@ -6,6 +6,7 @@ import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
+import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -19,7 +20,9 @@ public class PerformEventPage extends EventPage {
 
     private PerformEventPage(Long scheduleId, Long assetId, Long typeId) {
         if (scheduleId != null) {
-            event = Model.of(eventService.createEventFromOpenEvent(scheduleId));
+            Event openEvent = eventService.createEventFromOpenEvent(scheduleId);
+            PostFetcher.postFetchFields(openEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
+            event = Model.of(openEvent);
         } else {
             event = Model.of(eventService.createNewMasterEvent(assetId, typeId));
         }
