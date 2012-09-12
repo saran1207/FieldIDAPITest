@@ -65,8 +65,17 @@
 }
 
 .assetFormGroup .infoSet select{
-	width: 260px;
+    width: 260px;
 	padding: 4px;
+}
+
+.assetFormGroup .assignedTo {
+    height:50px;
+}
+
+.assetFormGroup .infoSet chzn-container {
+    height:50px;
+
 }
 
 .fluidSets .assetFormGroup .infoSet label{

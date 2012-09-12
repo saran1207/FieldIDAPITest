@@ -6,7 +6,7 @@
 <div class="assetFormGroup">
 	<h2><@s.text name="label.owner"/></h2>
 	<#if securityGuard.assignedToEnabled >
-		<div class="infoSet reducedPaddingInfoSet showOverflow">
+		<div class="infoSet reducedPaddingInfoSet showOverflow assignedTo">
 			<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
 				<@s.select cssClass="chzn-select" id="assignedToSelectBox" name="assignedUser" headerKey="0" headerValue="${action.getText('label.unassigned')}" >
 					<#include "/templates/html/common/_assignedToDropDown.ftl"/>
