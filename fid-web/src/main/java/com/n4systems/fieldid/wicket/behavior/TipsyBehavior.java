@@ -44,9 +44,7 @@ public class TipsyBehavior extends Behavior {
     public void renderHead(Component component, IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         response.renderCSSReference("style/tipsy/tipsy.css");
-        if (title!=null) {
-            response.renderOnDomReadyJavaScript(String.format(TIPSY_JS, getSelector(component), gravity.toString().toLowerCase()));
-        }
+        response.renderOnDomReadyJavaScript(String.format(TIPSY_JS, getSelector(component), gravity.toString().toLowerCase()));
     }
 
     private String getSelector(Component component) {
