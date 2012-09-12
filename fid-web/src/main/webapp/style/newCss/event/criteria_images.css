@@ -150,7 +150,7 @@ label.label {
     width: 75px;
     font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
     font-size: 11px;
-
+    text-align: right;
 }
 
 .formErrors h2 {

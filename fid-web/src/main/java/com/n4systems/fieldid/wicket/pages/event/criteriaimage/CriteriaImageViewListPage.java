@@ -55,6 +55,7 @@ public class CriteriaImageViewListPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        response.renderCSSReference("style/newCss/layout/layout.css");
         response.renderCSSReference("style/newCss/event/criteria_images.css");
         response.renderJavaScriptReference("javascript/jquery.ThreeDots.min.js");
         response.renderOnDomReadyJavaScript("$('.comments').ThreeDots({ allow_dangle: true })");

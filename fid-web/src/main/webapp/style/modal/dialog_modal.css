@@ -23,9 +23,11 @@ div.dialog-modal div.w_silver a.w_close {
 
 div.dialog-modal h3.w_captionText {
     line-height:1.5em;
-    font-size: 14px;
+    font-size: 18px;
     display:block;
     margin-left:16px;
+    font-weight: normal;
+    color: #666666
 }
 
 div.dialog-modal div.w_caption {
