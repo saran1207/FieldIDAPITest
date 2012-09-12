@@ -449,15 +449,19 @@ function addSchedule() {
 	var types = $('nextEventTypeSelection');
 	var jobs = $('jobSelection');
 	var nextDate = $('nextDate');
+	var assignee = $('assignee');
 	
 	
 	var params = new Object();
 	params.date =  nextDate.getValue();
 	params.eventTypeId = types.options[types.selectedIndex].value;
 	params.index = index;
-	
+
 	if (jobs != null) {
 		params.jobId = jobs.options[jobs.selectedIndex].value;
+	}
+	if (assignee!=null) {
+		params.assigneeId = assignee[assignee.selectedIndex].value;
 	}
 	
 	getResponse(addScheduleUrl, "post", params);

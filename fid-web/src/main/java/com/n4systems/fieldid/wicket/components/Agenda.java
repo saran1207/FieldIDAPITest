@@ -108,7 +108,7 @@ public class Agenda extends Panel  {
         add(createLimitMessage());
 
         // this will look for all days in the jquery calendar and handle the tooltipping.
-        add(new TipsyBehavior(TipsyBehavior.Gravity.W).withSelector("#" + getMarkupId() + " .ui-state-default"));
+        add(new TipsyBehavior(TipsyBehavior.Gravity.S).withSelector("#" + getMarkupId() + " .ui-state-default"));
         add(new TipsyBehavior(TipsyBehavior.Gravity.E).withSelector(".agenda-row .icon"));
         add(new AttributeAppender("class", "agenda"));
     }

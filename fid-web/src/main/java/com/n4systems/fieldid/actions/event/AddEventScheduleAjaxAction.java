@@ -1,18 +1,18 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.util.Date;
-
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.EventType;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.Project;
+import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.Date;
 
 public class AddEventScheduleAjaxAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
@@ -22,6 +22,7 @@ public class AddEventScheduleAjaxAction extends AbstractAction {
 	private String date;
 	private Long index;
 	private String datePerformed;
+    private User assignee;
 	
 	private WebEventSchedule nextSchedule = new WebEventSchedule();
 	
@@ -119,5 +120,19 @@ public class AddEventScheduleAjaxAction extends AbstractAction {
 	public void setDatePerformed(String datePerformed) {
 		this.datePerformed = datePerformed;
 	}
-	
+
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public void setAssigneeId(Long assigneeId) {
+        if (assigneeId==null) {
+            return;
+        }
+        assignee = getLoaderFactory().createFilteredIdLoader(User.class).setId(assigneeId).load();
+        if (assignee!=null) {
+            nextSchedule.setAssignee(assignee.getId());
+            nextSchedule.setAssigneeName(assignee.getDisplayName());
+        }
+    }
 }

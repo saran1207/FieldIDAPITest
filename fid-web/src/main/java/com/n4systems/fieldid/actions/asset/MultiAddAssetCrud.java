@@ -1,20 +1,5 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
-import com.n4systems.model.*;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetCodeMapping;
-import rfid.ejb.entity.AssetExtension;
-import rfid.ejb.entity.InfoFieldBean;
-
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -23,14 +8,12 @@ import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.fieldid.actions.event.viewmodel.ScheduleToWebEventScheduleConverter;
 import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToScheduleConverter;
-import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
-import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
-import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
-import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
-import com.n4systems.fieldid.actions.helpers.MultiAddAssetCrudHelper;
-import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
+import com.n4systems.fieldid.actions.helpers.*;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Note;
@@ -41,20 +24,31 @@ import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
 import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.asset.AssetSaveService;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.DateHelper;
-import com.n4systems.util.ListHelper;
-import com.n4systems.util.ListingPair;
-import com.n4systems.util.StringListingPair;
+import com.n4systems.util.*;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
+import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.AssetCodeMapping;
+import rfid.ejb.entity.AssetExtension;
+import rfid.ejb.entity.InfoFieldBean;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiAddAssetCrud.class);
-	
+
+    @Autowired private UserService userService;
+
 	protected final LegacyAsset legacyAssetManager;
 	protected final OrderManager orderManager;
 	private AssetCodeMappingService assetCodeMappingServiceManager;
@@ -222,7 +216,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 				
 				scheduleEvents(savedAsset);
 				saver.clear();
-			
+
 				// make sure all persistence fields have been wiped
 				cleaner.clean(asset);
 				
@@ -516,4 +510,9 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		}
 		return jobs;
 	}
+
+    public List<User> getAssignees() {
+        return userService.getExaminers();
+    }
+
 }

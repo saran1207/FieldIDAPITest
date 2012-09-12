@@ -13,6 +13,7 @@ import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToScheduleC
 import com.n4systems.fieldid.actions.helpers.*;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
 import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
@@ -40,6 +41,7 @@ import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.validator.annotations.*;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.*;
 
 import java.io.File;
@@ -50,7 +52,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AssetCrud.class);
 
-	// drop down lists
+    @Autowired
+    protected UserService userService;
+
+    // drop down lists
 	private List<CommentTemplate> commentTemplates;
 	private AssetType assetType;
 	private Collection<AssetExtension> extentions;
@@ -990,7 +995,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public List<EventType> getEventTypes() {
 		return new ArrayList<EventType>(assetType.getEventTypes());
 	}
-	
+
 	 public Event getLastEvent() {
 		return getAllEventHelper().getLastEvent();
 	}
@@ -1093,6 +1098,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 		}
 		return userGrouper;
 	}
+
+    public List<User> getAssignees() {
+        return userService.getExaminers();
+    }
 
 	public boolean isUseAjaxPagination() {
 		return useAjaxPagination;

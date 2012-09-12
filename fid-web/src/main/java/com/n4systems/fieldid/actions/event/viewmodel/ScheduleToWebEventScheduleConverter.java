@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.actions.event.viewmodel;
 
-import java.util.Date;
-
-import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 import com.n4systems.fieldid.actions.event.WebEventSchedule;
+import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
+
+import java.util.Date;
 
 public class ScheduleToWebEventScheduleConverter {
 	
@@ -26,7 +25,7 @@ public class ScheduleToWebEventScheduleConverter {
 		
 		webEventSchedule.setType(schedule.getEventType().getId());
 		webEventSchedule.setTypeName(schedule.getEventType().getName());
-		
+
 		
 		webEventSchedule.setDate(dateConverter.convertDate(schedule.getNextDate(currentDatePerformed)));
 		
@@ -40,7 +39,7 @@ public class ScheduleToWebEventScheduleConverter {
 		
 		webEventSchedule.setType(openEvent.getType().getId());
 		webEventSchedule.setTypeName(openEvent.getType().getName());
-		
+		webEventSchedule.setAssignee(openEvent.getAssignee()!=null ? openEvent.getAssignee().getId() : null);
 		webEventSchedule.setDate(dateConverter.convertDate(openEvent.getNextDate()));
 		
 		return webEventSchedule;

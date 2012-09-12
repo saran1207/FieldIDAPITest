@@ -3,20 +3,22 @@ package com.n4systems.fieldid.actions.event;
 import com.n4systems.model.EventSchedule;
 
 public class WebEventSchedule {
-	public static WebEventSchedule createAutoScheduled(EventSchedule schedule) {
+
+    public static WebEventSchedule createAutoScheduled(EventSchedule schedule) {
 		WebEventSchedule webEventSchedule = new WebEventSchedule();
 		webEventSchedule.setAutoScheduled(true);
 		return webEventSchedule;
 	}
-	
 
-	private Long type;
+    private Long type;
 	private Long job;
-	
+
 	private String date;
-	
+
 	private String typeName;
 	private String jobName;
+    private Long assignee;
+    private String assigneeName;
 
 	private boolean autoScheduled;
 	
@@ -69,9 +71,19 @@ public class WebEventSchedule {
 		this.autoScheduled = autoScheduled;
 	}
 
+    public Long getAssignee() {
+        return assignee;
+    }
 
-	
-	
-	
-	
+    public void setAssignee(Long assignee) {
+        this.assignee = assignee;
+    }
+
+    public void setAssigneeName(String displayName) {
+        assigneeName = displayName;
+    }
+
+    public String getAssigneeName() {
+        return assigneeName;
+    }
 }
