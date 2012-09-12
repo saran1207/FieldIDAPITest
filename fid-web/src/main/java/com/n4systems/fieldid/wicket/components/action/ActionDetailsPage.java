@@ -61,6 +61,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         };
         add(editLink);
         editLink.setVisible(isEditable());
+        add(createIssuingEventSection(criteriaResultModel, actionModel));
     }
 
     protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
@@ -73,7 +74,6 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
 
     protected boolean isEditable() {
         return true;
-        add(createIssuingEventSection(criteriaResultModel, actionModel));
     }
 
     private WebMarkupContainer createIssuingEventSection(IModel<CriteriaResult> criteriaResultModel, final IModel<Event> actionModel) {
