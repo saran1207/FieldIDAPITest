@@ -1,20 +1,21 @@
 package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 
 import java.util.Date;
-import java.util.List;
 
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
 
 public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
-	private String assetId;	
+	private String assetId;
+	private String assetIdentifier;	
 	private Long eventTypeId;	
 	private String eventTypeName;
+	private String owner;
 	private Date nextDate;
 	private Long assigneeUserId;
 	private boolean action;
 	private Long priorityId;	
 	private String notes;
-	private ApiTriggerEvent triggerEventInfo;	
+	private ApiTriggerEvent triggerEventInfo;
 
 	public String getAssetId() {
 		return assetId;
@@ -22,6 +23,14 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 
 	public void setAssetId(String assetId) {
 		this.assetId = assetId;
+	}
+	
+	public String getAssetIdentifier() {
+		return assetIdentifier;
+	}
+
+	public void setAssetIdentifier(String assetIdentifier) {
+		this.assetIdentifier = assetIdentifier;
 	}
 
 	public Long getEventTypeId() {
@@ -38,6 +47,14 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 
 	public void setEventTypeName(String eventTypeName) {
 		this.eventTypeName = eventTypeName;
+	}
+	
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 
 	public Date getNextDate() {
@@ -86,5 +103,5 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 	
 	public void setTriggerEventInfo(ApiTriggerEvent triggerEventInfo) {
 		this.triggerEventInfo = triggerEventInfo;
-	}	
+	}		
 }
