@@ -47,7 +47,7 @@ public class EventService extends FieldIdPersistenceService {
         return persistenceService.findAll(builder);
 	}
 
-    @Transactional(readOnly = true)	
+    @Transactional(readOnly = true)
     public List<Event> getEventsByType(Long eventTypeId, Date from, Date to) {
 		QueryBuilder<Event> builder = getEventsByTypeBuilder(eventTypeId);
 		builder.addWhere(Comparator.GE, "fromDate", "completedDate", from).addWhere(Comparator.LE, "toDate", "completedDate", to);
@@ -272,6 +272,7 @@ public class EventService extends FieldIdPersistenceService {
     private void populateNewEvent(Event masterEvent) {
         masterEvent.setOwner(masterEvent.getAsset().getOwner());
         masterEvent.setDate(new Date());
+        masterEvent.setPrintable(masterEvent.getEventType().isPrintable());
         masterEvent.setAdvancedLocation(masterEvent.getAsset().getAdvancedLocation());
         masterEvent.setPerformedBy(getCurrentUser());
         masterEvent.setProofTestInfo(new ProofTestInfo());
