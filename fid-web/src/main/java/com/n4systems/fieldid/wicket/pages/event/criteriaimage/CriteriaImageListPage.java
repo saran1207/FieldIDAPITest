@@ -28,10 +28,11 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
     @SpringBean
     S3Service s3Service;
 
+    private ContextImage addPhotoSlate;
     public CriteriaImageListPage(final IModel<CriteriaResult> model) {
-        super();
-        ContextImage addPhotoSlate;
+
         add(addPhotoSlate = new ContextImage("addPhotoSlate", "images/add-photo-slate.png"));
+        addPhotoSlate.setOutputMarkupPlaceholderTag(true);
         addPhotoSlate.setVisible(model.getObject().getCriteriaImages().isEmpty());
         add(new ListView<CriteriaResultImage>("images", model.getObject().getCriteriaImages()) {
             @Override
@@ -42,7 +43,7 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
                 item.add(editLink = new AjaxLink<Void>("edit") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        setResponsePage(new CriteriaImageEditPage(model, index));
+                        setResponsePage(new CriteriaImageEditPage(model, index, CriteriaImageListPage.this));
                     }
                 });
 
@@ -70,11 +71,24 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
         add(new AjaxLink<Void>("upload") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                setResponsePage(new CriteriaImageUploadPage(model));
+                setResponsePage(new CriteriaImageUploadPage(model, CriteriaImageListPage.this));
+            }
+        });
+
+        add(new AjaxLink<Void>("finished") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onClose(target);
             }
         });
     }
 
+    protected void onClose(AjaxRequestTarget target) {}
+
+    protected void showBlankSlate(AjaxRequestTarget target, boolean show) {
+        addPhotoSlate.setVisible(show);
+        target.add(addPhotoSlate);
+    }
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -84,5 +98,7 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
         response.renderJavaScriptReference("javascript/jquery.ThreeDots.min.js");
         response.renderOnDomReadyJavaScript("$('.comments').ThreeDots({ whole_word:false })");
     }
+
+
 
 }

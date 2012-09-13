@@ -24,8 +24,12 @@
 }
 
 .criteria-image-container .actions .upload {
-    padding: 5px 125px;
-    margin-left: 90px;
+    margin:0 15px 0 90px;
+    width: 135px;
+}
+
+.criteria-image-container .actions .finished {
+    width: 135px;
 }
 
 .criteria-image-container .actions .save {

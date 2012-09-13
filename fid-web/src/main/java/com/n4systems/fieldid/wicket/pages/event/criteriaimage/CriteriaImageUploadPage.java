@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -24,9 +25,12 @@ import java.util.List;
 public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
 
     private FIDFeedbackPanel feedbackPanel;
+    
+    private Page listPage;
 
-    public CriteriaImageUploadPage(IModel<CriteriaResult> model) {
+    public CriteriaImageUploadPage(IModel<CriteriaResult> model, Page listPage) {
         super();
+        this.listPage = listPage;
         add(new UploadForm("uploadForm", model));
     }
 
@@ -75,7 +79,8 @@ public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
 
                         FieldIDSession.get().setPreviouslyStoredCriteriaResult(criteriaResult);
 
-                        setResponsePage(new CriteriaImageListPage(model));
+                        ((CriteriaImageListPage)listPage).showBlankSlate(target, criteriaResult.getCriteriaImages().isEmpty());
+                        setResponsePage(listPage);
                     }
                 }
 
@@ -88,7 +93,7 @@ public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
             add(new AjaxLink<Void>("cancel") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    setResponsePage(new CriteriaImageListPage(model));
+                    setResponsePage(listPage);
                 }
             });
 

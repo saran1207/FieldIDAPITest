@@ -114,30 +114,36 @@ public class CriteriaSectionEditPanel extends Panel {
                             criteriaImagesModalWindow.setPageCreator(new ModalWindow.PageCreator() {
                                 @Override
                                 public Page createPage() {
-                                    return new CriteriaImageListPage(item.getModel());
+                                    return new CriteriaImageListPage(item.getModel()) {
+
+                                        @Override
+                                        protected void onClose(AjaxRequestTarget target) {
+                                            criteriaImagesModalWindow.close(target);
+                                        }
+                                    };
                                 }
                             });
                             criteriaImagesModalWindow.setInitialWidth(600);
                             criteriaImagesModalWindow.setInitialHeight(700);
 
-                            criteriaImagesModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
-                                public boolean onCloseButtonClicked(AjaxRequestTarget target) {
+                            criteriaImagesModalWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
+                                @Override
+                                public void onClose(AjaxRequestTarget target) {
                                     CriteriaResult tempCriteriaResult = FieldIDSession.get().getPreviouslyStoredCriteriaResult();
                                     if (tempCriteriaResult != null) {
-                                        FieldIDSession.get().setPreviouslyStoredCriteriaResult(null);
                                         item.getModelObject().getCriteriaImages().clear();
                                         for(CriteriaResultImage image: tempCriteriaResult.getCriteriaImages()) {
                                             image.setCriteriaResult(item.getModelObject());
                                             item.getModelObject().getCriteriaImages().add(image);
                                         }
+                                        FieldIDSession.get().setPreviouslyStoredCriteriaResult(null);
                                     }
                                     target.add(CriteriaSectionEditPanel.this);
-                                    return true;
                                 }
                             });
-
                             criteriaImagesModalWindow.show(target);
                         }
+
                     });
 
                     item.add(new CriteriaActionButton("actionsLink", "images/action-icon.png", criteriaResult.getActions().size(), "label.actions", "mattButtonRight") {

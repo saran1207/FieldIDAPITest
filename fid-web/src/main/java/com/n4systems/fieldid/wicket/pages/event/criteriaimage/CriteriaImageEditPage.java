@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -28,8 +29,11 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
     @SpringBean
     S3Service s3Service;
     
-    public CriteriaImageEditPage(final IModel<CriteriaResult> model, int imageIndex) {
+    private Page listPage;
+
+    public CriteriaImageEditPage(final IModel<CriteriaResult> model, int imageIndex, Page listPage) {
        super();
+       this.listPage = listPage;
        add(new EditForm("editForm", model, imageIndex));
     }
 
@@ -64,7 +68,7 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     FieldIDSession.get().setPreviouslyStoredCriteriaResult(model.getObject());
-                    setResponsePage(new CriteriaImageListPage(model));
+                    setResponsePage(listPage);
                 }
 
                 @Override
@@ -78,7 +82,8 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
                     CriteriaResult criteriaResult = getModelObject();
                     criteriaResult.getCriteriaImages().remove(imageIndex);
                     FieldIDSession.get().setPreviouslyStoredCriteriaResult(criteriaResult);
-                    setResponsePage(new CriteriaImageListPage(model));
+                    ((CriteriaImageListPage)listPage).showBlankSlate(target, criteriaResult.getCriteriaImages().isEmpty());
+                    setResponsePage(listPage);
                 }
 
                 @Override
@@ -89,10 +94,9 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
             add(new AjaxLink<Void>("cancel") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    setResponsePage(new CriteriaImageListPage(model));
+                    setResponsePage(listPage);
                 }
             });
-
 
         }
     }
