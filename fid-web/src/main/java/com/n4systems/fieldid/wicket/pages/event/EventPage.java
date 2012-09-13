@@ -7,10 +7,7 @@ import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.components.Comment;
-import com.n4systems.fieldid.wicket.components.DateTimePicker;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.IdentifierLabel;
+import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.event.attributes.AttributesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook;
@@ -32,7 +29,6 @@ import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
-import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.*;
@@ -209,7 +205,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             Button saveButton = new Button("saveButton");
             saveButton.add(new DisableButtonBeforeSubmit());
             add(saveButton);
-            add(new BookmarkablePageLink<Void>("cancelLink", DashboardPage.class));
+            add(new NonWicketLink("cancelLink", "event.action?uniqueID="+event.getObject().getId()));
         }
 
         @Override
