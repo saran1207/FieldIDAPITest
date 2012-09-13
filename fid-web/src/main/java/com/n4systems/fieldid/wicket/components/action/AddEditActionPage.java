@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.action;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
@@ -27,6 +28,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.Calendar;
@@ -34,7 +36,11 @@ import java.util.Date;
 
 public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
+    @SpringBean
+    private PersistenceService persistenceService;
+
     private boolean editMode = false;
+    private boolean immediateSaveMode = false;
 
     public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel) {
         add(new AddActionForm("addActionForm", new Model<Event>(new Event()), criteriaResultModel));
@@ -75,15 +81,22 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             AjaxSubmitLink submitLink = new AjaxSubmitLink("submitLink") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    Event addedAction = getModelObject();
+                    if (immediateSaveMode) {
+                        getModelObject();
+                        persistenceService.update(getModelObject());
+                        setResponsePage(new ActionDetailsPage(criteriaResultModel, eventModel));
 
-                    if (!editMode) {
-                        addedAction.setTenant(FieldIDSession.get().getTenant());
-                        criteriaResultModel.getObject().getActions().add(addedAction);
+                    } else {
+                        Event addedAction = getModelObject();
+
+                        if (!editMode) {
+                            addedAction.setTenant(FieldIDSession.get().getTenant());
+                            criteriaResultModel.getObject().getActions().add(addedAction);
+                        }
+
+                        FieldIDSession.get().setActionsForCriteria(criteriaResultModel.getObject(), criteriaResultModel.getObject().getActions());
+                        setResponsePage(new ActionsListPage(criteriaResultModel));
                     }
-
-                    FieldIDSession.get().setActionsForCriteria(criteriaResultModel.getObject(), criteriaResultModel.getObject().getActions());
-                    setResponsePage(new ActionsListPage(criteriaResultModel));
                 }
 
                 @Override
@@ -140,6 +153,10 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/event_actions.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
+    }
+
+    public void setImmediateSaveMode(boolean immediateSaveMode) {
+        this.immediateSaveMode = immediateSaveMode;
     }
 
 }

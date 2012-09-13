@@ -60,9 +60,11 @@
 
     <div class="issuingEventDetailsSection" wicket:id="issuingEventSection">
 
-        <wicket:message key="label.issuing_event"/>
+        <div class="issuingEventTitle">
+            <wicket:message key="label.issuing_event"/>
+        </div>
 
-        <div wicket:id="issuingEventDate"></div> <wicket:message key="label.from"/> <div wicket:id="issuingEventTypeName"></div>
+        <span wicket:id="issuingEventDate"></span> <wicket:message key="label.from"/> <span wicket:id="issuingEventTypeName"></span>
 
         <div wicket:id="criteriaDescription"></div>
 

@@ -13,6 +13,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -28,6 +29,8 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
 
     @SpringBean
     private S3Service s3Service;
+
+    private boolean assetSummaryContext = false;
 
     public ActionDetailsPage(final IModel<CriteriaResult> criteriaResultModel, final IModel<Event> actionModel) {
         add(new Label("priority", new PropertyModel<String>(actionModel, "priority.name")));
@@ -56,7 +59,9 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
 
         Link editLink = new Link("editLink") {
             @Override public void onClick() {
-                setResponsePage(new AddEditActionPage(criteriaResultModel, actionModel));
+                AddEditActionPage page = new AddEditActionPage(criteriaResultModel, actionModel);
+                page.setImmediateSaveMode(assetSummaryContext);
+                setResponsePage(page);
             }
         };
         add(editLink);
@@ -77,7 +82,12 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
     }
 
     private WebMarkupContainer createIssuingEventSection(IModel<CriteriaResult> criteriaResultModel, final IModel<Event> actionModel) {
-        WebMarkupContainer issuingEventSection = new WebMarkupContainer("issuingEventSection");
+        WebMarkupContainer issuingEventSection = new WebMarkupContainer("issuingEventSection") {
+            @Override
+            public boolean isVisible() {
+                return assetSummaryContext;
+            }
+        };
 
         issuingEventSection.add(new DateTimeLabel("issuingEventDate", new UserToUTCDateModel(new PropertyModel<Date>(actionModel, "triggerEvent.date"))));
         issuingEventSection.add(new Label("issuingEventTypeName", new PropertyModel<String>(actionModel, "triggerEvent.type.name")));
@@ -98,6 +108,11 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/event_actions.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
+    }
+
+    public WebPage setAssetSummaryContext(boolean assetSummaryContext) {
+        this.assetSummaryContext = assetSummaryContext;
+        return this;
     }
 
 }

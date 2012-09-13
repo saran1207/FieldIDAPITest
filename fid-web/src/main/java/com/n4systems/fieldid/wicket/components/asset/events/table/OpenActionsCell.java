@@ -34,7 +34,7 @@ public class OpenActionsCell extends Panel {
     public OpenActionsCell(String id, final IModel<Event> eventModel, final Panel eventDisplayPanel) {
         super(id);
 
-        add(modalWindow = createModalWindow(eventModel));
+        add(modalWindow = createModalWindow(eventModel, eventDisplayPanel));
 
         setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && FieldIDSession.get().getSessionUser().hasAccess("editevent"));
         
@@ -76,15 +76,24 @@ public class OpenActionsCell extends Panel {
         add(viewLink);
     }
 
-    private DialogModalWindow createModalWindow(final IModel<Event> eventModel) {
+    private DialogModalWindow createModalWindow(final IModel<Event> eventModel, final Panel eventDisplayPanel) {
         DialogModalWindow dialogWindow = new DialogModalWindow("modalWindow");
         dialogWindow.setPageCreator(new ModalWindow.PageCreator() {
             @Override
             public Page createPage() {
                 IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
-                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), entityModel);
+                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), entityModel)
+                        .setAssetSummaryContext(true);
             }
         });
+
+        dialogWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
+            @Override
+            public void onClose(AjaxRequestTarget target) {
+                target.add(eventDisplayPanel);
+            }
+        });
+
         dialogWindow.setInitialWidth(350);
         dialogWindow.setInitialHeight(500);
         dialogWindow.setTitle(new FIDLabelModel("label.action"));
