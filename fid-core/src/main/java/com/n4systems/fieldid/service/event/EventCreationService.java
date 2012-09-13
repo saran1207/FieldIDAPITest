@@ -92,7 +92,7 @@ public class EventCreationService extends FieldIdPersistenceService {
             // the file, because we have to get IDs for our signature criteria results so we know the path to save them at.
             // Perhaps it would be better to pass transient signature data in a separate parameter
             Map<Long, String> rememberedSignatureMap = rememberTemporarySignatureFiles(event);
-            event = persistenceService.update(event);
+            event = updateEvent(event);
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
         }
 
@@ -409,11 +409,9 @@ public class EventCreationService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public AbstractEvent updateEvent(AbstractEvent event) {
+    public Event updateEvent(Event event) {
         saveCriteriaResultImages(event);
-        if (event instanceof Event) {
-            ((Event) event).setTriggersIntoResultingActions();
-        }
+        event.setTriggersIntoResultingActions();
         copyDataToActionSchedules(event);
         return persistenceService.update(event);
     }

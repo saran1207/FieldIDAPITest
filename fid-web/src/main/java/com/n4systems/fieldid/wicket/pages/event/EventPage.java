@@ -63,7 +63,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     @SpringBean protected PersistenceService persistenceService;
     @SpringBean protected EventStatusService eventStatusService;
 
-    protected IModel<? extends AbstractEvent> event;
+    protected IModel<Event> event;
 
     private List<Event> schedules = new ArrayList<Event>();
     private Event scheduleToAdd;

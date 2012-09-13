@@ -29,7 +29,7 @@ public class EditEventPage extends EventPage {
 
     @Override
     protected AbstractEvent doSave() {
-        AbstractEvent editedEvent = event.getObject();
+        Event editedEvent = event.getObject();
         criteriaEditService.storeCriteriaChanges(editedEvent);
         editedEvent.storeTransientCriteriaResults();
         return eventCreationService.updateEvent(editedEvent);

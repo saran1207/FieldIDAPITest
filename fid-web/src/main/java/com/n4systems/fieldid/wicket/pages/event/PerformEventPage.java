@@ -47,7 +47,7 @@ public class PerformEventPage extends EventPage {
 
         saveEventBookIfNecessary();
 
-        Event savedEvent = eventCreationService.createEventWithSchedules((Event)event.getObject(), 0L, null, Collections.<FileAttachment>emptyList(), createEventScheduleBundles());
+        Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, null, Collections.<FileAttachment>emptyList(), createEventScheduleBundles());
 
         return savedEvent;
     }
