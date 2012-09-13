@@ -55,6 +55,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
             PropertyModel<Date> scheduledDateModel = new PropertyModel<Date>(getModel(), "nextDate");
             DateTimePicker scheduledDatePicker = new DateTimePicker("nextDate", scheduledDateModel).withMonthsDisplayed(1).withNoAllDayCheckbox();
+            scheduledDatePicker.getDateTextField().setRequired(true);
 
             add(scheduledDatePicker);
             add(new DropDownChoice<User>("assignee", new PropertyModel<User>(getModel(), "assignee"), new ExaminersModel(), new ListableChoiceRenderer<User>()).setNullValid(true).setRequired(true));
