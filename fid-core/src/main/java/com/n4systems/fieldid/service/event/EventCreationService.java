@@ -432,7 +432,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 	private void saveCriteriaResultImages(Collection<CriteriaResult> results) {
 		for (CriteriaResult result: results) {
 			for (CriteriaResultImage criteriaResultImage: result.getCriteriaImages()) {
-                if(criteriaResultImage.isNew()) {
+                if (criteriaResultImage.getImageData() != null) {
 				    s3Service.uploadCriteriaResultImage(criteriaResultImage);
                 }
 			}
