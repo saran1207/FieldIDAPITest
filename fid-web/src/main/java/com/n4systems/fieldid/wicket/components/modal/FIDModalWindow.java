@@ -9,12 +9,10 @@ public class FIDModalWindow extends ModalWindow {
 
     public FIDModalWindow(String id) {
         super(id);
-        initializeModalWindow();
     }
 
     public FIDModalWindow(String id, IModel<?> model) {
         super(id, model);
-        initializeModalWindow();
     }
 
     public FIDModalWindow(String id, IModel<?> model, int width, int height) {
@@ -23,8 +21,10 @@ public class FIDModalWindow extends ModalWindow {
     	setInitialHeight(height);
 	}
 
-	private void initializeModalWindow() {
-        setCssClassName("fid-modal");
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        setCssClassName(CSS_CLASS_GRAY);
         setMaskType(MaskType.SEMI_TRANSPARENT);
         setResizable(false);
     }

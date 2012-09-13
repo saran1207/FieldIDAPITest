@@ -26,7 +26,6 @@ public class DialogModalWindow extends ModalWindow {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScript("Wicket.Window.unloadConfirmation=false;", "DISABLE_UNLOAD_CONFIRM");
-        response.renderCSSReference("style/modal/fid_modal.css");
         response.renderCSSReference("style/modal/dialog_modal.css");
     }
 

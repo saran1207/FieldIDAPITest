@@ -72,3 +72,7 @@ div.dialog-modal a.w_close, div.dialog-modal a.w_close:hover {
     background-position: 0 0;
     background-repeat: no-repeat;
 }
+
+div.wicket-modal .dialog-modal div.w_caption {
+    background:#fff;
+}
