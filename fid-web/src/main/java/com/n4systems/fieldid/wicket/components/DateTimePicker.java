@@ -62,7 +62,6 @@ public class DateTimePicker extends Panel {
                             locale = Locale.getDefault();
                         }
                         SimpleDateFormat format = new SimpleDateFormat(DateTimePicker.this.getDateFormat(), locale);
-//                        format.setTimeZone(FieldIDSession.get().getSessionUser().getTimeZone());
                         return format;
                     }
                     // strip off hours if "allDay"
@@ -169,8 +168,8 @@ public class DateTimePicker extends Panel {
         if (allDay && includeTime) {
             jsBuffer.append(String.format(UPDATE_JS,
                     "_disableTimepickerDatepicker", dateTextField.getMarkupId()));
-            jsBuffer.append(String.format(CLEAR_DATE_JS, dateTextField.getMarkupId(), getModelDateForJS()));
         }
+        jsBuffer.append(String.format(CLEAR_DATE_JS, dateTextField.getMarkupId(), getModelDateForJS()));
 
         return jsBuffer.toString();
     }
@@ -229,7 +228,7 @@ public class DateTimePicker extends Panel {
         Boolean changeMonth = true;
         Boolean changeYear = true;
         Boolean ampm = null;
-        String timeFormat = null;//"hh:mm TT";
+        String timeFormat = null;
 
         public DateTimePickerOptions() {
             if (!allDay && includeTime) {
