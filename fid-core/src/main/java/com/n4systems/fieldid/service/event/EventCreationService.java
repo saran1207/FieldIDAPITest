@@ -143,8 +143,8 @@ public class EventCreationService extends FieldIdPersistenceService {
                 } else {
                     persistenceService.update(action);
                 }
-                persistenceService.update(criteriaResult);
             }
+            persistenceService.update(criteriaResult);
         }
     }
 
