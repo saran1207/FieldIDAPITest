@@ -17,11 +17,11 @@ public class NavOption {
 	private String type;
 	private String conditionalView;
 	private Integer order;
-	private boolean useEntityTitle;
 	private Map<String,String> urlParams;
     private boolean wicket;
+	private String title;
 		
-	public NavOption(String label, String name, String action, int order, String permissionRequired, String extendedFeatureRequired, String type, Map<String, String> urlParams, String conditionalView, boolean useEntityTitle, boolean wicket) {
+	public NavOption(String label, String name, String action, int order, String permissionRequired, String extendedFeatureRequired, String type, Map<String, String> urlParams, String conditionalView, boolean wicket, String title) {
 		this.label = label;
 		this.name = name;
 		this.order = order;
@@ -31,8 +31,8 @@ public class NavOption {
 		this.type = type;
 		this.conditionalView = conditionalView;
 		this.urlParams = urlParams;
-		this.useEntityTitle = useEntityTitle;
         this.wicket = wicket;
+		this.title = title;
 	}
 	
 	public String getLabel() {
@@ -83,10 +83,6 @@ public class NavOption {
 	public String getConditionalView() {
 		return (conditionalView != null) ? conditionalView : "true";
 	}
-
-	public boolean isUseEntityTitle() {
-		return useEntityTitle;
-	}
 	
 	public boolean isEntity() {
 		return type.equals(TYPE_ENTITY) || type.equals(TYPE_ENTITYRIGHT);
@@ -103,4 +99,12 @@ public class NavOption {
     public void setWicket(boolean wicket) {
         this.wicket = wicket;
     }
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 }

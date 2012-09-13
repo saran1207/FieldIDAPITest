@@ -1,5 +1,6 @@
 ${action.setPageType('asset', 'edit')!}
 <head>
+    <title><@s.text name="title.merge_assets"/></title>
 	<@n4.includeStyle href="steps" />
     <style>
         .emptyList h2 {

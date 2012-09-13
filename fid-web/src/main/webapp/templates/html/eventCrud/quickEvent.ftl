@@ -1,8 +1,6 @@
 ${action.setPageType('event', 'quickEvent')!}
 <title>
-	<@s.text name="label.perform_an_event_on">
-		<@s.param>${asset.identifier}</@s.param>
-	</@s.text>
+	<@s.text name="title.quick_event"/>
 </title>
 <head>
 	<@n4.includeStyle href="quick_event" type="page"/>

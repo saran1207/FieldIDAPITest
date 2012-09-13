@@ -40,7 +40,7 @@ public class EventFormEditPage extends EventTypePage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.manage_event_type_id", eventTypeModel.getObject().getName()));
+        return new Label(labelId, new FIDLabelModel("title.manage_event_type"));
     }
 
     public EventFormEditPage(PageParameters params) {

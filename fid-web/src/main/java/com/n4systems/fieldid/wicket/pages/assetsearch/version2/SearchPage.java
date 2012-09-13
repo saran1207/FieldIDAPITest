@@ -41,7 +41,8 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new PropertyModel<String>(this, "pageLabel"));
+		IModel<String> pageLabelModel = (searchCriteria.getSavedReportName() != null) ? new FIDLabelModel("title.view_saved_report") : new FIDLabelModel("title.asset_search");
+        return new Label(labelId, pageLabelModel);
     }
 
     @Override
@@ -111,14 +112,6 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     @Override
     protected AssetSearchCriteria createCriteria() {
         return new AssetSearchCriteria();
-    }
-
-    public String getPageLabel() {
-        IModel<String> pageLabelModel = new FIDLabelModel("title.asset_search_results");
-        if (searchCriteria.getSavedReportName() != null) {
-            pageLabelModel = new Model<String>(pageLabelModel.getObject() + " for - " + searchCriteria.getSavedReportName());
-        }
-        return pageLabelModel.getObject();
     }
     
 }

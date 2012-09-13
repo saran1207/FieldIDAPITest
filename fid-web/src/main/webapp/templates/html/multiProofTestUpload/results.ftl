@@ -1,6 +1,7 @@
 ${action.setPageType('event', 'multi_proof_test')!}
 
 <head>
+    <title><@s.text name="title.multi_proof_test_upload"/></title>
     jQuery(document).ready(function(){
         jQuery('#exportLink').colorbox( { title : '<@s.text name="title.viewevent"/>, iframe: true, scrolling: true, width: '520px', height: '420px'});
     });

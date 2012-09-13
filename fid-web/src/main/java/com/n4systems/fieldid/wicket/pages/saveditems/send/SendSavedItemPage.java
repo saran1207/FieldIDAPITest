@@ -295,7 +295,7 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, createTitleModel());
+        return new Label(labelId, new FIDLabelModel("label.email"));
     }
     
     public IModel<String> createCurrentSubmitLabelModel() {
@@ -306,26 +306,6 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                     return new FIDLabelModel("label.schedule_now").getObject();
                 }
                 return new FIDLabelModel("label.send_now").getObject();
-            }
-
-            @Override
-            public void setObject(String object) {
-            }
-            @Override
-            public void detach() {
-            }
-        };
-    }
-
-    public IModel<String> createTitleModel() {
-        return new IModel<String>() {
-            @Override
-            public String getObject() {
-                if (savedItem == null) {
-                    return new FIDLabelModel("label.email").getObject();
-                } else {
-                    return new StringAppendModel(" / ", new FIDLabelModel("label.email"), new PropertyModel<String>(savedItem, "name")).getObject();
-                }
             }
 
             @Override

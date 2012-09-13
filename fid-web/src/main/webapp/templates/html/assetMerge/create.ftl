@@ -1,4 +1,4 @@
-<title><@s.text name="title.merge_assets"/> - ${losingAsset.identifier?html} <@s.text name="label.into"/> ${winningAsset.identifier?html}</title>
+<title><@s.text name="title.merge_assets"/></title>
 <head>
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
 </head>

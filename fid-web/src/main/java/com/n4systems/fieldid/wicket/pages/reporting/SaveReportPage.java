@@ -36,7 +36,7 @@ public class SaveReportPage extends SaveSearchPage<SavedReportItem> {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.reporting"));
+        return new Label(labelId, new FIDLabelModel("title.save_report"));
     }
 
     @Override

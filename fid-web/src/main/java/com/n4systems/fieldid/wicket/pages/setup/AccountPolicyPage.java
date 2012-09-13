@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -82,5 +84,10 @@ public class AccountPolicyPage extends SetupPage {
 		}
 
     }
+
+	@Override
+	protected Label createTitleLabel(String labelId) {
+		return new Label(labelId, new FIDLabelModel("title.account_policy_page"));
+	}
 
 }

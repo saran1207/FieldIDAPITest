@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.saveditems;
 
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -51,6 +52,6 @@ public class EditSavedItemPage extends FieldIDFrontEndPage {
 	
 	@Override
 	protected Label createTitleLabel(String labelId) {
-		return new Label(labelId, "Edit Saved Item");
+		return new Label(labelId, new FIDLabelModel("title.edit_saved_item"));
 	}
 }

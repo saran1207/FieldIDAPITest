@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.reporting.summary;
 import com.n4systems.fieldid.service.search.EventResolutionService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.AssetType;
@@ -195,7 +196,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new EventResolutionTitleModel(new PropertyModel<EventReportCriteria>(this,"criteria")));
+        return new Label(labelId, new FIDLabelModel("label.event_resolution"));
     }
 
     @Override

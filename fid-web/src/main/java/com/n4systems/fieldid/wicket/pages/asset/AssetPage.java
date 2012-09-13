@@ -39,11 +39,6 @@ public abstract class AssetPage extends FieldIDFrontEndPage {
         useContext = params.get("useContext").toBoolean();
         assetService.fillInSubAssetsOnAsset(assetModel.getObject());
     }
-    
-    @Override
-    protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.asset"));
-    }
 
     @Override
     public void renderHead(IHeaderResponse response) {

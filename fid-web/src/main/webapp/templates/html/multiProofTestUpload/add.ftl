@@ -1,6 +1,7 @@
 
 ${action.setPageType('event', 'multi_proof_test')!}
 <head>
+    <title><@s.text name="title.multi_proof_test_upload"/></title>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<@n4.includeScript src="eventBook" />
 	<script type="text/javascript" >

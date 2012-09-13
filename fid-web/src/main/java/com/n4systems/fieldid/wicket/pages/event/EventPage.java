@@ -294,11 +294,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new PropertyModel<String>(this, "titleText"));
-    }
-
-    public String getTitleText() {
-        return event.getObject().getType().getName() + " " + getString("label.on") + " " + event.getObject().getAsset().getIdentifier();
+        return new Label(labelId, new FIDLabelModel("title.perform_event"));
     }
 
 }

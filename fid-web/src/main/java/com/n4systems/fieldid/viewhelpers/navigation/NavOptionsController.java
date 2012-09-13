@@ -25,8 +25,6 @@ public class NavOptionsController {
 	private SystemSecurityGuard securityGuard;
 	private boolean onSetup = false;
 	private boolean returnToReport = false;
-	
-	private String title = "";
 	private String entityIdentifier;
 	private boolean onSafetyNetwork = false;
 
@@ -73,9 +71,9 @@ public class NavOptionsController {
 			onSetupTemplate = commonProps.getBoolean("onSetupTemplate");
 			onSafetyNetwork = commonProps.getBoolean("onSafetyNetwork");
 			returnToReport = commonProps.getBoolean("returnToReport");
-			title =  commonProps.getString("title");
 			entityIdentifier =  commonProps.getString("title.entity_identifier");
-			
+			String commonTitle =  commonProps.getString("title");
+
 			for (HierarchicalProperties props : p.getPropertiesList("option")) {
 				Map<String, String> urlParams = new HashMap<String, String>();
 
@@ -84,6 +82,7 @@ public class NavOptionsController {
 					urlParams.put((String) key, urlProps.getString((String) key));
 				}
 
+				String navTitle = props.getString("title");
 				navOptions.add(new NavOption(
 											props.getString("label"), 
 											props.getString("name"), 
@@ -93,9 +92,9 @@ public class NavOptionsController {
 											props.getString("extendedFeatureRequired"), 
 											props.getString("type"), 
 											urlParams, 
-											props.getString("conditionalView"), 
-											props.getBoolean("useEntityTitle"),
-                                            props.getBoolean("wicket")));
+											props.getString("conditionalView"),
+                                            props.getBoolean("wicket"),
+											(navTitle != null) ? navTitle : commonTitle));
 			}
 
 			Collections.sort(navOptions, new Comparator<NavOption>() {
@@ -162,10 +161,6 @@ public class NavOptionsController {
 		}
 		return false;
 	}
-	
-	public boolean useEntityTitle() {
-		return (entityLoaded() || (currentActionOption != null && currentActionOption.isUseEntityTitle()));
-	}
 
 	public boolean isOnSetup() {
 		return onSetup;
@@ -176,7 +171,7 @@ public class NavOptionsController {
 	}
 
 	public String getTitle() {
-		return title;
+		return currentActionOption != null ? currentActionOption.getTitle() : null;
 	}
 
 	public String getEntityIdentifier() {

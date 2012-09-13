@@ -114,6 +114,11 @@ public class AssetSummaryPage extends AssetPage {
 
     }
 
+	@Override
+	protected Label createTitleLabel(String labelId) {
+		return new Label(labelId, new FIDLabelModel("title.asset_summary_page"));
+	}
+
     private void updateUpcomingEventsPanel(AjaxRequestTarget target) {
         upcomingEventsPanel.getDefaultModel().detach();
         if(!upcomingEventsPanel.isVisible()) {

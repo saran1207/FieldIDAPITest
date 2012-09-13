@@ -2,7 +2,7 @@
 <!-- this is put in basically to get the Lightview.js component to work on struts pages.  without it, it won't work in IE --> 
 <!-- see WEB-2743 for details.  -->
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<title><@s.text name="app.title" /> - <#include "_title.ftl"/></title>
+<title><@s.text name="app.title" />: <#include "_title.ftl"/></title>
 <@n4.includeStyle href="reset" /> 
 <#include "layoutCss.ftl">
 <!--[if IE 6]>
