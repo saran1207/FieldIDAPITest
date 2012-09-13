@@ -78,7 +78,7 @@ public enum ConfigEntry {
     GOOGLE_ANALYTICS_ENABLED                    (   "false" ),
     APPTEGIC_ENABLED                            (   "false" ),
     APPTEGIC_DATASET                            (   "test" ),
-    AMAZON_S3_BUCKET                            (   "fieldid_prod"),
+    AMAZON_S3_BUCKET                            (   "fieldid_dev"),
     AMAZON_ACCESS_KEY_ID                        (   "AKIAJYAZBOFFRZAZSIGA"),
     AMAZON_SECRET_ACCESS_KEY                    (   "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");
 	
