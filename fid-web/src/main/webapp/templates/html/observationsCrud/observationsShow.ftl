@@ -24,12 +24,12 @@
 
     <#if (criteriaResult.criteriaImages.size() > 0) >
         <a id='img_${criteriaResult.id}_button' href='javascript:void(0);'>
-            <img src="<@s.url value="/images/camera-icon.png"/>" id='img_${criteriaResult.id}_img' class='image-lightbox'/></a>
+            <img id="${criteriaResult.id}-image" src="<@s.url value="/images/camera-icon.png"/>" id='img_${criteriaResult.id}_img' class='image-lightbox'/></a>
 
         <script type="text/javascript">
 
             jQuery(document).ready(function(){
-                jQuery('.image-lightbox').colorbox({iframe: true, href: '<@s.url value="w/criteriaImageList?uniqueID=${criteriaResult.id}" />', width: '620px', height:'700px'});
+                jQuery("#${criteriaResult.id}-image").colorbox({iframe: true, href: '<@s.url value="w/criteriaImageList?uniqueID=${criteriaResult.id}" />', width: '620px', height:'700px'});
             });
 
         </script>
@@ -37,13 +37,13 @@
 
     <#if (criteriaResult.actions.size() > 0) >
         <a id='img_${criteriaResult.id}_button' href='javascript:void(0);'>
-            <img src="<@s.url  value="/images/action-icon.png"/>" id='img_${criteriaResult.id}_img' class='action-lightbox'/>
+            <img id="${criteriaResult.id}-action" src="<@s.url  value="/images/action-icon.png"/>" id='img_${criteriaResult.id}_img' class='action-lightbox'/>
         </a>
 
         <script type="text/javascript">
 
             jQuery(document).ready(function(){
-                jQuery('.action-lightbox').colorbox({iframe: true, href: '<@s.url escapeAmp="false" value="w/viewActionsList?uniqueID=${criteriaResult.id}&readOnly"/>', width: '450px', height:'500px'});
+                jQuery('#${criteriaResult.id}-action').colorbox({iframe: true, href: '<@s.url escapeAmp="false" value="w/viewActionsList?uniqueID=${criteriaResult.id}&readOnly"/>', width: '450px', height:'500px'});
             });
 
         </script>
