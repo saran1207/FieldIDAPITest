@@ -42,6 +42,8 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 		addAssignedUserTerm(search, criteriaModel);
     }
 
+
+
 	private void addPredefinedLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
         if (predefLocationId != null) {

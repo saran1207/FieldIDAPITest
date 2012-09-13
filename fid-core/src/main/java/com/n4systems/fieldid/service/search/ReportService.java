@@ -5,6 +5,7 @@ import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventState;
 import com.n4systems.model.search.IncludeDueDateRange;
+import com.n4systems.model.security.NetworkIdSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.DateHelper;
@@ -220,4 +221,11 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
         }
     }
 
+    @Override
+    protected <E> QueryBuilder<E> createAppropriateQueryBuilder(EventReportCriteria criteria, Class<E> searchClass) {
+        if (criteria.isIncludeSafetyNetwork()) {
+            return new QueryBuilder<E>(searchClass, new NetworkIdSecurityFilter(securityContext.getUserSecurityFilter(), "asset.networkId"));
+        }
+        return super.createAppropriateQueryBuilder(criteria, searchClass);
+    }
 }

@@ -102,7 +102,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
 
     public QueryBuilder<M> createBaseSearchQueryBuilder(T criteriaModel) {
 		// create our QueryBuilder, note the type will be the same as our selectClass
-		QueryBuilder<M> searchBuilder = createUserSecurityBuilder(searchClass);
+		QueryBuilder<M> searchBuilder = createAppropriateQueryBuilder(criteriaModel, searchClass);
 
         ColumnMappingView sortColumn = criteriaModel.getSortColumn();
 
@@ -147,6 +147,10 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
         for (QueryFilter filter : searchFilters) {
             filter.applyFilter(searchBuilder);
         }
+    }
+
+    protected <E> QueryBuilder<E> createAppropriateQueryBuilder(T criteria, Class<E> searchClass) {
+        return createUserSecurityBuilder(searchClass);
     }
 
     protected void addJoinTerms(T criteriaModel, List<JoinTerm> joinTerms) { }
