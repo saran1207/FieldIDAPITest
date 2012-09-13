@@ -1,4 +1,4 @@
-<title>${(securityGuard.primaryOrg.displayName?html)!} <@s.text name="title.sign_in"/></title>
+<title><@s.text name="title.sign_in"/></title>
 <head>
     <@n4.includeStyle href="pageStyles/login" />
     <@n4.includeScript src="jquery/watermark/jquery.watermark.js"/>
