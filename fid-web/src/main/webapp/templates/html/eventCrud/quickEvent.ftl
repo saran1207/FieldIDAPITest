@@ -4,6 +4,7 @@ ${action.setPageType('event', 'quickEvent')!}
 </title>
 <head>
 	<@n4.includeStyle href="quick_event" type="page"/>
+    <@n4.includeStyle href="newCss/layout/feedback_errors" />
 </head>
 <fieldset class="leftColumn">
 	<legend class="schedule">
