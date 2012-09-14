@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.action;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -25,6 +26,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -64,7 +66,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             scheduledDatePicker.getDateTextField().setRequired(true);
 
             add(scheduledDatePicker);
-            add(new DropDownChoice<User>("assignee", new PropertyModel<User>(getModel(), "assignee"), new ExaminersModel(), new ListableChoiceRenderer<User>()).setNullValid(true).setRequired(true));
+            add(new DropDownChoice<User>("assignee", new PropertyModel<User>(getModel(), "assignee"), new ExaminersModel(), new ListableChoiceRenderer<User>()).setNullValid(true).setRequired(true).add(new JChosenBehavior()));
             add(new DropDownChoice<EventType>("type", new PropertyModel<EventType>(getModel(), "type"), new ActionTypesForTenantModel(), new ListableChoiceRenderer<EventType>()).setNullValid(true).setRequired(true));
 
             addQuickDateLinks(scheduledDatePicker, scheduledDateModel);
@@ -112,6 +114,12 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 submitLink.add(new FlatLabel("saveLabel", new FIDLabelModel("label.create")));
             }
 
+            Link cancelLink = new Link("cancelLink") {
+                @Override public void onClick() {
+                    setResponsePage(new ActionsListPage(criteriaResultModel));
+                }
+            };
+            add(cancelLink);
         }
 
         private void addQuickDateLinks(DateTimePicker scheduledDatePicker, PropertyModel<Date> scheduledDateModel) {

@@ -61,7 +61,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
         add(actionsWindow = new DialogModalWindow("actionsWindow"));
         actionsWindow.setInitialWidth(350);
-        actionsWindow.setInitialHeight(500);
+        actionsWindow.setInitialHeight(600);
     }
 
 
@@ -132,7 +132,7 @@ public class CriteriaSectionEditPanel extends Panel {
                                     CriteriaResult tempCriteriaResult = FieldIDSession.get().getPreviouslyStoredCriteriaResult();
                                     if (tempCriteriaResult != null) {
                                         item.getModelObject().getCriteriaImages().clear();
-                                        for(CriteriaResultImage image: tempCriteriaResult.getCriteriaImages()) {
+                                        for (CriteriaResultImage image : tempCriteriaResult.getCriteriaImages()) {
                                             image.setCriteriaResult(item.getModelObject());
                                             item.getModelObject().getCriteriaImages().add(image);
                                         }
@@ -152,10 +152,7 @@ public class CriteriaSectionEditPanel extends Panel {
                             actionsWindow.setTitle(new Model<String>("Actions"));
                             FieldIDSession.get().setActionsForCriteria(item.getModelObject(), item.getModelObject().getActions());
                             actionsWindow.setPageCreator(new ModalWindow.PageCreator() {
-                                @Override
-                                public Page createPage() {
-                                    return new ActionsListPage(item.getModel());
-                                }
+                                @Override public Page createPage() {return new ActionsListPage(item.getModel()); };
                             });
                             actionsWindow.setCloseButtonCallback(createActionsCloseButtonCallback(item));
                             actionsWindow.show(target);
@@ -200,6 +197,7 @@ public class CriteriaSectionEditPanel extends Panel {
                         }
                     };
                 }
+
             });
         }
 

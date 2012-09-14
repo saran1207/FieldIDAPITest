@@ -2,10 +2,11 @@
 
     <div class="actionPage">
 
+        <img wicket:id="blankSlate" class="blank-slate"/>
         <div wicket:id="actionsList" class="actionItem">
 
             <div class="eventIcon">
-                <img src="/fieldid/images/event-open.png">
+                <img src="/fieldid/images/event-open-assigned.png">
             </div>
 
             <div class="actionDescription">
@@ -25,6 +26,7 @@
         <div class="linkSection issueActionSection" wicket:id="issueActionSection">
 
             <a wicket:id="addActionLink" class="mattButton blueButton"><wicket:message key="label.add_an_action"/></a>
+            <a wicket:id="finishedLink" class="mattButton "><wicket:message key="label.finished"/></a>
 
         </div>
 

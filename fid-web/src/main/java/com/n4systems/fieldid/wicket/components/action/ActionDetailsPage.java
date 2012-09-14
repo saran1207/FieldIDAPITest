@@ -66,6 +66,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         };
         add(editLink);
         editLink.setVisible(isEditable());
+
         add(createIssuingEventSection(criteriaResultModel, actionModel));
     }
 
