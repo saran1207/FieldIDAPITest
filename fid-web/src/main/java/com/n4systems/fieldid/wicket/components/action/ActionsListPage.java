@@ -34,7 +34,7 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
             protected void populateItem(final ListItem<Event> item) {
                 item.add(new Label("actionType", new PropertyModel<String>(item.getModel(), "type.name")));
                 item.add(new Label("assignee", new PropertyModel<String>(item.getModel(), "assignee.fullName")));
-                item.add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(item.getModel(), "nextDate")));
+                item.add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(item.getModel(), "nextDate"),getCurrentUser().getTimeZone()));
                 item.add(new AjaxEventBehavior("onclick") {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {

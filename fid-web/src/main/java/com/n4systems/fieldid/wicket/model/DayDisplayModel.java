@@ -32,7 +32,7 @@ public class DayDisplayModel extends LoadableDetachableModel<String> {
 
     @Override
     protected String load() {
-        Date date = dayModel.getObject();
+        Date date = new Date(dayModel.getObject().getTime());
         boolean convertTimeZone = timeZone != null;
         boolean showTime = !DateUtil.isMidnight(date) && includeTime;
         return new FieldIdDateFormatter(date, FieldIDSession.get().getSessionUser(), convertTimeZone, showTime).format();
