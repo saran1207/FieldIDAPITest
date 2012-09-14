@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.event.EventCriteriaEditService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
+import com.n4systems.model.ProofTestInfo;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -23,7 +24,11 @@ public class EditEventPage extends EventPage {
     class ExistingEventModel extends LoadableDetachableModel<Event> {
         @Override
         protected Event load() {
-            return eventService.lookupExistingEvent(Event.class, uniqueId);
+            Event existingEvent = eventService.lookupExistingEvent(Event.class, uniqueId);
+            if (existingEvent.getProofTestInfo() == null) {
+                existingEvent.setProofTestInfo(new ProofTestInfo());
+            }
+            return existingEvent;
         }
     }
 
@@ -32,6 +37,6 @@ public class EditEventPage extends EventPage {
         Event editedEvent = event.getObject();
         criteriaEditService.storeCriteriaChanges(editedEvent);
         editedEvent.storeTransientCriteriaResults();
-        return eventCreationService.updateEvent(editedEvent);
+        return eventCreationService.updateEvent(editedEvent, proofTestEditPanel.getFileDataContainer());
     }
 }

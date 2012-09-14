@@ -1,8 +1,11 @@
 package com.n4systems.fieldid.wicket.components.event.prooftest;
 
+import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fileprocessing.ProofTestType;
+import com.n4systems.model.Event;
 import com.n4systems.model.ProofTestInfo;
+import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -14,7 +17,7 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
@@ -22,20 +25,16 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
     WebMarkupContainer otherTypeContainer;
     WebMarkupContainer uploadedProofTestContainer;
     FileUploadField fileUploadField;
-    
-    public ProofTestEditPanel(String id, IModel<ProofTestInfo> proofTestInfo) {
-        super(id, proofTestInfo);
+    private IModel<Event> event;
+
+    public ProofTestEditPanel(String id, IModel<Event> event) {
+        super(id, new PropertyModel<ProofTestInfo>(event, "proofTestInfo"));
+
+        this.event = event;
+
         setOutputMarkupId(true);
 
-        if (proofTestInfo.getObject() == null) {
-            setVisible(false);
-            return;
-        }
-
-        if (proofTestInfo.getObject().getProofTestType() == null) {
-            proofTestInfo.getObject().setProofTestType(ProofTestType.NATIONALAUTOMATION);
-        }
-
+        IModel<ProofTestInfo> proofTestInfo = getModel();
 
         otherTypeContainer = new WebMarkupContainer("otherProofTestContainer");
         otherTypeContainer.setOutputMarkupPlaceholderTag(true);
@@ -51,7 +50,8 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
 
         updateVisiblityOfComponents();
 
-        List<ProofTestType> proofTestTypes = Arrays.asList(ProofTestType.values());
+        List<ProofTestType> proofTestTypes = new ArrayList<ProofTestType>(event.getObject().getType().getSupportedProofTests());
+
         DropDownChoice<ProofTestType> typeSelect = new DropDownChoice<ProofTestType>("proofTestType", new PropertyModel<ProofTestType>(proofTestInfo, "proofTestType"), proofTestTypes, new ListableLabelChoiceRenderer<ProofTestType>());
         typeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
@@ -70,7 +70,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
     }
 
     public boolean isOtherState() {
-        return getModelObject().getProofTestType() == ProofTestType.OTHER;
+        return getModelObject() != null && getModelObject().getProofTestType() == ProofTestType.OTHER;
     }
 
     public FileUpload getFileUpload() {
@@ -78,6 +78,43 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
             return null;
         }
         return fileUploadField.getFileUpload();
+    }
+
+    @Override
+    protected void convertInput() {
+        setConvertedInput(getModelObject());
+    }
+
+    public FileDataContainer getFileDataContainer() {
+        FileDataContainer fileData = null;
+
+        if (getFileUpload() == null) {
+            return null;
+        }
+
+        if (getModelObject() != null && getModelObject().getProofTestType() != ProofTestType.OTHER) {
+            byte[] fileContents = fileUploadField.getFileUpload().getBytes();
+            String clientFileName = fileUploadField.getFileUpload().getClientFileName();
+
+            fileData = createFileDataContainer(fileContents, clientFileName);
+        } else if (getModelObject() != null && getModelObject().getProofTestType() == ProofTestType.OTHER) {
+            fileData = new FileDataContainer();
+            fileData.setPeakLoad(getModelObject().getPeakLoad());
+            fileData.setTestDuration(getModelObject().getDuration());
+            fileData.setPeakLoadDuration(getModelObject().getPeakLoadDuration());
+        }
+
+        return fileData;
+    }
+
+    private FileDataContainer createFileDataContainer(byte[] fileContents, String clientFileName) {
+        FileDataContainer fileData;
+        try {
+            fileData = getModelObject().getProofTestType().getFileProcessorInstance().processFile(fileContents, clientFileName);
+        } catch (Exception e) {
+            throw new ProcessingProofTestException(e);
+        }
+        return fileData;
     }
 
 }

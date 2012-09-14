@@ -9,6 +9,7 @@ import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.user.User;
@@ -99,7 +100,10 @@ public class EventCreationService extends FieldIdPersistenceService {
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
             restoreCriteriaImages(event, rememberedCriteriaImages);
 
-            event = updateEvent(event);
+            event.setTriggersIntoResultingActions();
+            copyDataToActionSchedules(event);
+
+            event = persistenceService.update(event);
         }
 
         copyDataToActionSchedules(event);
@@ -174,9 +178,6 @@ public class EventCreationService extends FieldIdPersistenceService {
                     persistenceService.update(action);
                 }
             }
-//            if (!criteriaResult.isNew()) {
-//                persistenceService.update(criteriaResult);
-//            }
         }
     }
 
@@ -311,6 +312,9 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     private void setProofTestData(Event event, FileDataContainer fileData) {
         if (fileData == null) {
+            if (event.getProofTestInfo() != null && event.getProofTestInfo().getProofTestType() != ProofTestType.OTHER) {
+                event.getProofTestInfo().setProofTestType(null);
+            }
             return;
         }
 
@@ -441,7 +445,11 @@ public class EventCreationService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public Event updateEvent(Event event) {
+    public Event updateEvent(Event event, FileDataContainer fileData) {
+        setProofTestData(event, fileData);
+        saveProofTestFiles(event, fileData);
+
+        writeSignatureImagesToDisk(event);
         saveCriteriaResultImages(event);
         event.setTriggersIntoResultingActions();
         copyDataToActionSchedules(event);

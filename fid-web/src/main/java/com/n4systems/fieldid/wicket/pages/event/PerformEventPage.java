@@ -7,6 +7,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.persistence.utils.PostFetcher;
+import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -47,7 +48,9 @@ public class PerformEventPage extends EventPage {
 
         saveEventBookIfNecessary();
 
-        Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, null, Collections.<FileAttachment>emptyList(), createEventScheduleBundles());
+        FileDataContainer fileDataContainer = proofTestEditPanel.getFileDataContainer();
+
+        Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, Collections.<FileAttachment>emptyList(), createEventScheduleBundles());
 
         return savedEvent;
     }

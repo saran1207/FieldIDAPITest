@@ -68,6 +68,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     private List<Event> schedules = new ArrayList<Event>();
     private Event scheduleToAdd;
     private List<AbstractEvent.SectionResults> sectionResults;
+    protected ProofTestEditPanel proofTestEditPanel;
 
     @Override
     protected void onInitialize() {
@@ -148,8 +149,9 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             add(new Label("eventTypeName", new PropertyModel<String>(event, "type.name")));
             
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
-            proofTestContainer.add(new ProofTestEditPanel("proofTest", new PropertyModel<ProofTestInfo>(event, "proofTestInfo")));
+            proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event));
             proofTestContainer.setVisible(!event.getObject().getType().getSupportedProofTests().isEmpty());
+
             add(proofTestContainer);
 
             PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
@@ -220,7 +222,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     }
 
     protected void saveEventBookIfNecessary() {
-        EventBook book = ((Event) event.getObject()).getBook();
+        EventBook book = event.getObject().getBook();
         if (book != null && book.getId() == null) {
             book.setTenant(getCurrentUser().getTenant());
             book.setOwner(getCurrentUser().getOwner());

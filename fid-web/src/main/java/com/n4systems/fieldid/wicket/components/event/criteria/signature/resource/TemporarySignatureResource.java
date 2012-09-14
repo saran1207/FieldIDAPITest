@@ -30,4 +30,11 @@ public class TemporarySignatureResource extends DynamicImageResource {
         }
     }
 
+    @Override
+    protected ResourceResponse newResourceResponse(Attributes attributes) {
+        ResourceResponse resourceResponse = super.newResourceResponse(attributes);
+        resourceResponse.disableCaching();
+        return resourceResponse;
+    }
+
 }
