@@ -44,7 +44,7 @@ public class CriteriaImageViewListPage extends FieldIDAuthenticatedPage {
                     }
                 });
 
-                viewLink.add(new ExternalImage("thumbnail", s3Service.getCriteriaResultImageOriginalURL(image).toString()));
+                viewLink.add(new ExternalImage("thumbnail", s3Service.getCriteriaResultImageThumbnailURL(image).toString()));
                 item.add(new Label("comments", new PropertyModel<String>(image, "comments")));
             }
         });

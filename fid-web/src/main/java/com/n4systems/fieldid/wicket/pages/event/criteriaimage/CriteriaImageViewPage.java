@@ -21,7 +21,7 @@ public class CriteriaImageViewPage extends FieldIDAuthenticatedPage {
     public CriteriaImageViewPage(final IModel<CriteriaResult> model, int imageIndex) {
         
         final CriteriaResultImage image = model.getObject().getCriteriaImages().get(imageIndex);
-        add(new ExternalImage("image", s3Service.getCriteriaResultImageThumbnailURL(image).toString()));
+        add(new ExternalImage("image", s3Service.getCriteriaResultImageMediumURL(image).toString()));
         add(new Label("comments", new PropertyModel<String>(image, "comments")));
         
         add(new Link<Void>("back") {

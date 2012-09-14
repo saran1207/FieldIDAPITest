@@ -46,7 +46,7 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
             final CriteriaResultImage image = model.getObject().getCriteriaImages().get(imageIndex);
             
             if(image.getImageData() == null) {
-                add(new ExternalImage("image", s3Service.getCriteriaResultImageOriginalURL(image).toString()));
+                add(new ExternalImage("image", s3Service.getCriteriaResultImageMediumURL(image).toString()));
             }else {
                 add(new NonCachingImage("image", new AbstractReadOnlyModel<DynamicImageResource>() {
                     @Override
