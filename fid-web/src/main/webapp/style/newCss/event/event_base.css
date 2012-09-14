@@ -216,6 +216,13 @@ textarea.comments {
 	padding: 10px;
 }
 
+
+.observationsActionsText {
+    font-size: 12px;
+    margin-left: 50px;
+    padding: 7px;
+}
+
 .observationsShow p.defRepairedOnSite, .defRepairedOnSite {
 	border-color: #9fe8b7;
 	background-image: url(../../../images/repairedOnSite.gif);
