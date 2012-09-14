@@ -92,8 +92,14 @@ public class EventCreationService extends FieldIdPersistenceService {
             // the file, because we have to get IDs for our signature criteria results so we know the path to save them at.
             // Perhaps it would be better to pass transient signature data in a separate parameter
             Map<Long, String> rememberedSignatureMap = rememberTemporarySignatureFiles(event);
-            event = updateEvent(event);
+            Map<Long, List<byte[]>> rememberedCriteriaImages = rememberCriteriaImages(event);
+
+            event = persistenceService.update(event);
+
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
+            restoreCriteriaImages(event, rememberedCriteriaImages);
+
+            event = updateEvent(event);
         }
 
         copyDataToActionSchedules(event);
@@ -113,6 +119,30 @@ public class EventCreationService extends FieldIdPersistenceService {
         persistenceService.update(event.getSchedule());
 
         return event;
+    }
+
+    private void restoreCriteriaImages(Event event, Map<Long, List<byte[]>> rememberedCriteriaImages) {
+        for (CriteriaResult criteriaResult : event.getResults()) {
+            int index = 0;
+            for (CriteriaResultImage criteriaResultImage : criteriaResult.getCriteriaImages()) {
+                byte[] imageData = rememberedCriteriaImages.get(criteriaResult.getCriteria().getId()).get(index);
+                criteriaResultImage.setImageData(imageData);
+                index++;
+            }
+        }
+    }
+
+    private Map<Long, List<byte[]>> rememberCriteriaImages(Event event) {
+        Map<Long, List<byte[]>> criteriaImageFiles = new HashMap<Long, List<byte[]>>();
+        for (CriteriaResult criteriaResult : event.getResults()) {
+            if (!criteriaResult.getCriteriaImages().isEmpty()) {
+                criteriaImageFiles.put(criteriaResult.getCriteria().getId(), new ArrayList<byte[]>());
+            }
+            for (CriteriaResultImage criteriaResultImage : criteriaResult.getCriteriaImages()) {
+                criteriaImageFiles.get(criteriaResult.getCriteria().getId()).add(criteriaResultImage.getImageData());
+            }
+        }
+        return criteriaImageFiles;
     }
 
     private void restoreTemporarySignatureFiles(Event event, Map<Long, String> rememberedSignatureFiles) {
@@ -144,7 +174,9 @@ public class EventCreationService extends FieldIdPersistenceService {
                     persistenceService.update(action);
                 }
             }
-            persistenceService.update(criteriaResult);
+//            if (!criteriaResult.isNew()) {
+//                persistenceService.update(criteriaResult);
+//            }
         }
     }
 
@@ -413,6 +445,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         saveCriteriaResultImages(event);
         event.setTriggersIntoResultingActions();
         copyDataToActionSchedules(event);
+
         return persistenceService.update(event);
     }
 
