@@ -1,19 +1,10 @@
 package com.n4systems.api.conversion.asset;
 
-import java.util.Date;
-import java.util.TreeSet;
-
-import com.n4systems.model.AssetType;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
 import com.n4systems.api.model.AssetView;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.LineItem;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
+import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.location.Location;
@@ -21,9 +12,12 @@ import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.util.Date;
+import java.util.TreeSet;
 
 public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetView> {
 	private final OrgByNameLoader orgLoader;
@@ -66,13 +60,17 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		model.setCustomerRefNumber(view.getCustomerRefNumber());
 		model.setAdvancedLocation(Location.onlyFreeformLocation(view.getLocation()));
 		model.setPurchaseOrder(view.getPurchaseOrder());
-		model.setComments(view.getComments());		
+		model.setComments(view.getComments());
 		model.setAssetStatus(resolveAssetStatus(view.getStatus(), transaction));
 		model.setInfoOptions(new TreeSet<InfoOptionBean>());
 		model.setPublished(primaryOrg.isAutoPublish());
-		
-		// the order number field is ignored for integration customers
-		if (!primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {
+
+        boolean integrationEnabled = primaryOrg.hasExtendedFeature(ExtendedFeature.Integration);
+        boolean orderDetailsEnabled = primaryOrg.hasExtendedFeature(ExtendedFeature.OrderDetails);
+
+        if(orderDetailsEnabled && !integrationEnabled) {
+            model.setNonIntergrationOrderNumber(view.getShopOrder());
+        } else if (!integrationEnabled) {
 			model.setShopOrder(createShopOrder(view.getShopOrder(), model.getOwner().getTenant(), transaction));
 		}
 		
