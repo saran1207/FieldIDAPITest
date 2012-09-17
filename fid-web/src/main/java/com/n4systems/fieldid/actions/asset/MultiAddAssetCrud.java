@@ -27,6 +27,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.asset.AssetSaveService;
+import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.*;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import org.apache.log4j.Logger;
@@ -513,6 +514,10 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 
     public List<User> getAssignees() {
         return userService.getExaminers();
+    }
+
+    public List<HierarchicalNode> getPredefinedLocationTree() {
+        return ((MultiAddAssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner());
     }
 
 }
