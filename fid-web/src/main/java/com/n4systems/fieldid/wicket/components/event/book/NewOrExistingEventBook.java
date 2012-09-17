@@ -27,6 +27,7 @@ public class NewOrExistingEventBook extends FormComponentPanel<EventBook> {
 
         setOutputMarkupPlaceholderTag(true);
 
+        existingEventBook = eventBook.getObject();
         existingBookSelect = new DropDownChoice<EventBook>("existingEventBook", new PropertyModel<EventBook>(this, "existingEventBook"), new EventBooksForTenantModel(), new ListableChoiceRenderer<EventBook>());
         existingBookSelect.setNullValid(true);
         existingBookSelect.add(new UpdateComponentOnChange());

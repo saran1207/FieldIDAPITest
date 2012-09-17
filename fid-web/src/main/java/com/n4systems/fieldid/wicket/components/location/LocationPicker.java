@@ -86,8 +86,9 @@ public class LocationPicker extends Panel {
         response.renderCSSReference("style/featureStyles/locationPicker.css");
     }
 
-    public void setOwner(BaseOrg owner) {
+    public LocationPicker setOwner(BaseOrg owner) {
         predefinedLocationsPanel.setOwner(owner);
+        return this;
     }
 
     class LocationForm extends Form {

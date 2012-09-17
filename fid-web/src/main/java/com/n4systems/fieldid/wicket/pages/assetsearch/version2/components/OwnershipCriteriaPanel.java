@@ -21,13 +21,14 @@ public class OwnershipCriteriaPanel extends Panel {
 
     public OwnershipCriteriaPanel(String id, IModel<?> model) {
         super(id, model);
-        add(new AutoCompleteOrgPicker("owner",  new PropertyModel<BaseOrg>(getDefaultModel(), "owner")) {
+        PropertyModel<BaseOrg> ownerModel = new PropertyModel<BaseOrg>(getDefaultModel(), "owner");
+        add(new AutoCompleteOrgPicker("owner", ownerModel) {
             @Override protected void onUpdate(AjaxRequestTarget target, String hiddenInput, String fieldInput) {
                 updateOwner(target, (BaseOrg) getDefaultModelObject());
             }
         }.withAutoUpdate(true).inScrollableContainers("#left-panel .form"));
         locationModel = new PropertyModel<Location>(getDefaultModel(), "location");
-        add(locationPicker = new ModalLocationPicker("location", locationModel));
+        add(locationPicker = new ModalLocationPicker("location", locationModel).setOwner(ownerModel.getObject()));
 
         WebMarkupContainer assignedUserContainer = new WebMarkupContainer("assignedToContainer");
         GroupedUserPicker groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(getDefaultModel(), "assignedTo"), new GroupedUsersForTenantModel());

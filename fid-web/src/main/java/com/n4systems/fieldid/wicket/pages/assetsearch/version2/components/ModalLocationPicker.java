@@ -82,8 +82,9 @@ public class ModalLocationPicker extends Panel {
         return locationNameDisplay;
     }
 
-    public void setOwner(BaseOrg owner) {
+    public ModalLocationPicker setOwner(BaseOrg owner) {
         locationPanel.setOwner(owner);
+        return this;
     }
 
 }

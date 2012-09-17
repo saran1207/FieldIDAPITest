@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.ProofTestInfo;
-import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -18,18 +18,15 @@ public class EditEventPage extends EventPage {
 
     public EditEventPage(PageParameters parameters) {
         uniqueId = parameters.get("uniqueID").toLong();
-        event = new ExistingEventModel();
+        event = Model.of(loadExistingEvent());
     }
 
-    class ExistingEventModel extends LoadableDetachableModel<Event> {
-        @Override
-        protected Event load() {
-            Event existingEvent = eventService.lookupExistingEvent(Event.class, uniqueId);
-            if (existingEvent.getProofTestInfo() == null) {
-                existingEvent.setProofTestInfo(new ProofTestInfo());
-            }
-            return existingEvent;
+    protected Event loadExistingEvent() {
+        Event existingEvent = eventService.lookupExistingEvent(Event.class, uniqueId);
+        if (existingEvent.getProofTestInfo() == null) {
+            existingEvent.setProofTestInfo(new ProofTestInfo());
         }
+        return existingEvent;
     }
 
     @Override
