@@ -489,7 +489,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
             } else {
                 for (CriteriaSection criteriaSection : getType().getEventForm().getAvailableSections()) {
                     for (Criteria criteria : criteriaSection.getAvailableCriteria()) {
-                        if (criteria.getCriteriaType() == CriteriaType.ONE_CLICK) {
+                        if (criteria.getCriteriaType() == CriteriaType.ONE_CLICK && ((OneClickCriteria)criteria).isPrincipal()) {
                             resultFromCriteriaAvailable = true;
                             break;
                         }
