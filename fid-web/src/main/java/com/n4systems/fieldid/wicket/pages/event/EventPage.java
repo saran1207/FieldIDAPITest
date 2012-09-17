@@ -117,7 +117,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             final WebMarkupContainer schedulesContainer = new WebMarkupContainer("schedulesContainer");
             schedulesContainer.setOutputMarkupId(true);
-            schedulesContainer.setVisible(event.getObject().isNew());
+            schedulesContainer.setVisible(event.getObject().isNew() || !event.getObject().isCompleted());
             schedulesContainer.add(new ListView<EventSchedule>("schedules", new PropertyModel<List<EventSchedule>>(EventPage.this, "schedules")) {
                 @Override
                 protected void populateItem(final ListItem<EventSchedule> item) {
@@ -143,7 +143,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                     target.add(schedulesContainer);
                 }
             };
-            schedulePicker.setVisible(event.getObject().isNew());
+            schedulePicker.setVisible(event.getObject().isNew() || !event.getObject().isCompleted());
             add(schedulePicker);
 
             add(new Label("eventTypeName", new PropertyModel<String>(event, "type.name")));
