@@ -61,13 +61,13 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     @Transactional
     public Event createEvent(Event event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
+        defaultOneClickResultsWithNullState(event.getResults());
+
         Status calculatedStatus = calculateEventResultAndScore(event);
 
         if (event.getStatus() == null) {
             event.setStatus(calculatedStatus);
         }
-
-		defaultOneClickResultsWithNullState(event.getResults());
 
         User user = getCurrentUser();
 
