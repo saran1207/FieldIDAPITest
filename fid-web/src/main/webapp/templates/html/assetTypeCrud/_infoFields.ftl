@@ -41,11 +41,8 @@
 				
 				
 				<div class="infoFieldCol linkCol">
-					<#if ! undeletableInfoFields.contains( infoFields[stat.index].uniqueID ) ><a href="#" onclick="destroyField(this); return false;" ><@s.text name="hbutton.delete" /></a>
-					<#else>
-						<a href="#" onclick="retire( this ); return false;"><#if infoField.retired ><@s.text name="label.unretire" /><#else><@s.text name="label.retire" /></#if></a>
-					</#if>
-					
+                    <a href="#" onclick="retire( this ); return false;"><#if infoField.retired ><@s.text name="label.unretire" /><#else><@s.text name="label.retire" /></#if></a>
+
 					<a href="#" onclick="openCloseOptions( 'infoOptionContainer_${stat.index}'); return false;" class="editInfoOptions" ><@s.text name="label.editinfooptions" /></a>
 					
 				</div>

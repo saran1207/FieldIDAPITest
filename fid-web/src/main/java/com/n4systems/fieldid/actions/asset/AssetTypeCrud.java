@@ -50,7 +50,6 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	private Collection<InfoFieldBean.InfoFieldType> infoFieldTypes;
 	private List<InfoOptionInput> editInfoOptions;
 	private List<InfoFieldInput> infoFields;
-	private Collection<Long> undeletableInfoFields;
 	private List<Long> retiredInfoFields;
 	private List<UnitOfMeasure> unitOfMeasures;
 	private List<AssetTypeGroup> assetTypeGroups;
@@ -432,18 +431,6 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 
 	public Collection<InfoFieldBean.InfoFieldType> getInfoFieldTypes() {
 		return infoFieldTypes;
-	}
-
-	public Collection<Long> getUndeletableInfoFields() {
-		if (undeletableInfoFields == null) {
-			if (assetType != null) {
-				undeletableInfoFields = assetTypeManager.infoFieldsInUse(assetType.getInfoFields());
-			}
-			if (undeletableInfoFields == null) {
-				undeletableInfoFields = new ArrayList<Long>();
-			}
-		}
-		return undeletableInfoFields;
 	}
 
 	@CustomValidator(type = "infoOptions", message = "", key = "errors.infooptionnamenotblank")
