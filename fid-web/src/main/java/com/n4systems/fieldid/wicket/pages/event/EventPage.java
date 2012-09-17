@@ -7,7 +7,10 @@ import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.components.*;
+import com.n4systems.fieldid.wicket.components.Comment;
+import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.IdentifierLabel;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.event.attributes.AttributesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook;
@@ -36,6 +39,7 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -208,7 +212,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             Button saveButton = new Button("saveButton");
             saveButton.add(new DisableButtonBeforeSubmit());
             add(saveButton);
-            add(new NonWicketLink("cancelLink", "event.action?uniqueID="+event.getObject().getId()));
+            add(createCancelLink("cancelLink"));
         }
 
         @Override
@@ -221,6 +225,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             }
         }
     }
+
+    protected abstract Component createCancelLink(String cancelLink);
 
     protected void saveEventBookIfNecessary() {
         EventBook book = event.getObject().getBook();

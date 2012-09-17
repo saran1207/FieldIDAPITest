@@ -2,12 +2,15 @@ package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.FileDataContainer;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -41,6 +44,15 @@ public class PerformEventPage extends EventPage {
 				parameters.get("type").toLongObject());
     }
 
+
+    @Override
+    protected Component createCancelLink(String id) {
+        return new Link(id) {
+            @Override public void onClick() {
+                setResponsePage(new AssetSummaryPage(event.getObject().getAsset()));
+            }
+        };
+    }
 
     @Override
     protected AbstractEvent doSave() {
