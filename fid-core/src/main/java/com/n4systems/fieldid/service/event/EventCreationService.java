@@ -210,6 +210,10 @@ public class EventCreationService extends FieldIdPersistenceService {
             for (FileAttachment uploadedFile : uploadedFiles) {
 
                 try {
+                    if (!uploadedFile.isNew()) {
+                        continue;
+                    }
+
                     // move the file to it's new location, note that it's
                     // location is currently relative to the tmpDirectory
                     tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
@@ -250,12 +254,13 @@ public class EventCreationService extends FieldIdPersistenceService {
             /*
                 * This lists all files in the attachment directory
                 */
-            for (File detachedFile : attachmentDirectory.listFiles(new FilenameFilter() {
+            File[] filesInDirectoryThatAreNoLongerAttached = attachmentDirectory.listFiles(new FilenameFilter() {
                 public boolean accept(File dir, String name) {
                     // accept only files that are not in our attachedFiles list
                     return !attachedFiles.contains(name);
                 }
-            })) {
+            });
+            for (File detachedFile : filesInDirectoryThatAreNoLongerAttached) {
                 /*
                      * any file returned from our fileNotAttachedFilter, is not in
                      * our attached file list and should be removed
@@ -445,7 +450,7 @@ public class EventCreationService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public Event updateEvent(Event event, FileDataContainer fileData) {
+    public Event updateEvent(Event event, FileDataContainer fileData, List<FileAttachment> attachments) {
         setProofTestData(event, fileData);
         saveProofTestFiles(event, fileData);
 
@@ -453,6 +458,10 @@ public class EventCreationService extends FieldIdPersistenceService {
         saveCriteriaResultImages(event);
         event.setTriggersIntoResultingActions();
         copyDataToActionSchedules(event);
+
+        event.getAttachments().clear();
+        event.getAttachments().addAll(attachments);
+        processUploadedFiles(event, attachments);
 
         return persistenceService.update(event);
     }

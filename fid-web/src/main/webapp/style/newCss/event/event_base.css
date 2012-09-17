@@ -557,3 +557,35 @@ span.fieldHolder img {
     padding-right:4px;
 }
 
+.attachedFile textarea {
+    width:270px;
+    height:50px;
+    display:block;
+    clear:left;
+    margin-left:20px;
+    color:#555;
+    border:1px solid #9c9c9c;
+}
+
+.attachedFile img {
+    padding:5px;
+    display:block;
+    float:left;
+}
+
+.attachedFile .fileName {
+    width:200px;
+    padding:5px;
+    display:block;
+    float:left;
+}
+
+.attachedFile .removeLink {
+    display:block;
+    float:left;
+    padding:5px;
+}
+
+.attachmentsForm {
+    padding: 10px 0 10px 0;
+}

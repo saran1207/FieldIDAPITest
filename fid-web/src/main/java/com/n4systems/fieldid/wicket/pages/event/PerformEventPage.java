@@ -15,7 +15,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.Collections;
+import java.util.ArrayList;
 
 public class PerformEventPage extends EventPage {
 
@@ -30,6 +30,8 @@ public class PerformEventPage extends EventPage {
         } else {
             event = Model.of(eventService.createNewMasterEvent(assetId, typeId));
         }
+
+        fileAttachments = new ArrayList<FileAttachment>();
 
         doAutoSchedule();
     }
@@ -62,7 +64,7 @@ public class PerformEventPage extends EventPage {
 
         FileDataContainer fileDataContainer = proofTestEditPanel.getFileDataContainer();
 
-        Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, Collections.<FileAttachment>emptyList(), createEventScheduleBundles());
+        Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, fileAttachments, createEventScheduleBundles());
 
         return savedEvent;
     }

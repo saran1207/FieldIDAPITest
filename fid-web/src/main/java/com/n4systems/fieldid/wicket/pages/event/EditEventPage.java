@@ -5,11 +5,14 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ProofTestInfo;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.ArrayList;
 
 public class EditEventPage extends EventPage {
 
@@ -21,6 +24,8 @@ public class EditEventPage extends EventPage {
     public EditEventPage(PageParameters parameters) {
         uniqueId = parameters.get("uniqueID").toLong();
         event = Model.of(loadExistingEvent());
+
+        fileAttachments = new ArrayList<FileAttachment>(event.getObject().getAttachments());
     }
 
     protected Event loadExistingEvent() {
@@ -41,6 +46,6 @@ public class EditEventPage extends EventPage {
         Event editedEvent = event.getObject();
         criteriaEditService.storeCriteriaChanges(editedEvent);
         editedEvent.storeTransientCriteriaResults();
-        return eventCreationService.updateEvent(editedEvent, proofTestEditPanel.getFileDataContainer());
+        return eventCreationService.updateEvent(editedEvent, proofTestEditPanel.getFileDataContainer(), fileAttachments);
     }
 }

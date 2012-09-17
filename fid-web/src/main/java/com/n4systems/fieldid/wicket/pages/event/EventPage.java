@@ -72,6 +72,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     private List<Event> schedules = new ArrayList<Event>();
     private Event scheduleToAdd;
     private List<AbstractEvent.SectionResults> sectionResults;
+    protected List<FileAttachment> fileAttachments;
     protected ProofTestEditPanel proofTestEditPanel;
 
     @Override
@@ -207,7 +208,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             EventForm form = event.getObject().getEventForm();
             add(new EventFormEditPanel("eventFormPanel", new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(form!=null && form.getAvailableSections().size()>0));
-            add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(event, "attachments")));
+            add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(EventPage.this, "fileAttachments")));
 
             Button saveButton = new Button("saveButton");
             saveButton.add(new DisableButtonBeforeSubmit());

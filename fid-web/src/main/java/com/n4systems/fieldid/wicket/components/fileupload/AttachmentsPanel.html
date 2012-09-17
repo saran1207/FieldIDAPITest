@@ -4,8 +4,9 @@
 
         <div wicket:id="attachedFilesContainer">
 
-            <div wicket:id="attachedFiles">
-                <span wicket:id="fileName"></span>
+            <div wicket:id="attachedFiles" class="attachedFile">
+                <img src="/fieldid/images/attachment-icon.png" class="attachmentImage"> <div wicket:id="fileName" class="fileName"></div> <a wicket:id="removeLink" class="removeLink"><wicket:message key="label.remove"/></a>
+                <br/>
                 <textarea wicket:id="comments"/>
                 <br/>
             </div>

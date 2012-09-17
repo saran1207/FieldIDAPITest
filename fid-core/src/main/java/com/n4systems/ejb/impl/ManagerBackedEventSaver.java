@@ -158,7 +158,9 @@ public class ManagerBackedEventSaver implements EventSaver {
             byte[] rememberedSignatureImage = rememberedSignatureImages.get(result.getCriteria().getId());
             if (result.getCriteria().getCriteriaType() == CriteriaType.SIGNATURE && rememberedSignatureImage != null) {
                 try {
-					sigService.storeSignatureFileFor((SignatureCriteriaResult)result);
+                    SignatureCriteriaResult signatureResult = (SignatureCriteriaResult) result;
+                    signatureResult.setImage(rememberedSignatureImage);
+                    sigService.storeSignatureFileFor(signatureResult);
 				} catch (IOException e) {
 					throw new FileAttachmentException("Unable to store signature image for result [" + result + "]", e);
 				}
