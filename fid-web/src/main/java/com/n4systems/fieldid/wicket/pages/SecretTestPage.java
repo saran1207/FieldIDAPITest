@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.Agenda;
+import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.AutoCompleteSearch;
@@ -42,12 +43,14 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     private String password = "password";
     private User user;
     private PredefinedLocation location;
+    private String comment;
 
     private int id=0;
     
     public SecretTestPage() {
         Form form = new Form("form", new CompoundPropertyModel(this));
 
+        form.add(new Comment("comment", new PropertyModel<String>(this, "comment")));
         form.add(new AutoCompleteOrgPicker("autocompleteorg", new PropertyModel<BaseOrg>(this, "org"), new DebugPropertyModel<PredefinedLocation>(this,"location")));
         form.add(new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "asset")));
         form.add(new TextField("watermark", new PropertyModel<String>(this,"text")).add(new Watermark("enter a value")));

@@ -155,20 +155,21 @@ public class DashboardReportingService extends FieldIdPersistenceService {
     private EventReportCriteria getCriteriaDefaults(EventKPIWidgetConfiguration config, String series, int orgIndex) {
         Preconditions.checkArgument(orgIndex >= 0 && orgIndex <=config.getOrgs().size());
         EventReportCriteria criteria = getDefaultReportCriteria(config.getOrgs().get(orgIndex));
+
+        DateRange dateRange = config.getDateRange();
+        criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
+        if (dateRange!=null && RangeType.FOREVER.equals(dateRange.getRangeType())) {
+            criteria.setIncludeDueDateRange(IncludeDueDateRange.HAS_A_DUE_DATE);
+        }
+        criteria.setDueDateRange(dateRange);
+        criteria.setDateRange(new DateRange(RangeType.FOREVER));
+
         if (KpiType.INCOMPLETE.getLabel().equals(series)) {
             criteria.setEventState(EventState.OPEN);
-            criteria.setDueDateRange(config.getDateRange());
-            criteria.setDateRange(new DateRange(RangeType.FOREVER));
         } else if (KpiType.FAILED.getLabel().equals(series)) {
-            criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
-            criteria.setDueDateRange(config.getDateRange());
             criteria.setResult(Status.FAIL);
-            criteria.setDateRange(new DateRange(RangeType.FOREVER));
         } else if (KpiType.COMPLETED.getLabel().equals(series)) {
-            criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
-            criteria.setDueDateRange(config.getDateRange());
             criteria.setEventState(EventState.COMPLETE);
-            criteria.setDateRange(new DateRange(RangeType.FOREVER));
         }
         return criteria;
     }
