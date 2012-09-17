@@ -36,7 +36,8 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 		criteriaResultImage.setFileName(apiCriteriaImage.getFileName());
 		criteriaResultImage.setImageData(apiCriteriaImage.getImage());
 		criteriaResultImage.setContentType(FileTypeMap.getDefaultFileTypeMap().getContentType(apiCriteriaImage.getFileName()));
-		criteriaResult.getCriteriaImages().add(criteriaResultImage);
+		criteriaResultImage.setComments(apiCriteriaImage.getComments());
+		criteriaResult.getCriteriaImages().add(criteriaResultImage);		
 
 		persistenceService.update(criteriaResult);
 		s3Service.uploadCriteriaResultImage(criteriaResultImage);
