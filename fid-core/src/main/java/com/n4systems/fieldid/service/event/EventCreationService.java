@@ -87,6 +87,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         if (event.getId() == null) {
             persistenceService.save(event);
+            copyDataToActionSchedules(event);
         } else {
             // Because the update drops the transient data on the signature criteria result, we
             // must remember the file names in a map before we call update. We must call update before saving
@@ -95,6 +96,8 @@ public class EventCreationService extends FieldIdPersistenceService {
             Map<Long, String> rememberedSignatureMap = rememberTemporarySignatureFiles(event);
             Map<Long, List<byte[]>> rememberedCriteriaImages = rememberCriteriaImages(event);
 
+            event.setTriggersIntoResultingActions();
+            copyDataToActionSchedules(event);
             event = persistenceService.update(event);
 
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
@@ -106,7 +109,7 @@ public class EventCreationService extends FieldIdPersistenceService {
             event = persistenceService.update(event);
         }
 
-        copyDataToActionSchedules(event);
+
 
         updateAsset(event, user.getId());
 
