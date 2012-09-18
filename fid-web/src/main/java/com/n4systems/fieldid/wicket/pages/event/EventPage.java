@@ -82,7 +82,9 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         super.onInitialize();
         sectionResults = event.getObject().getSectionResults();
         scheduleToAdd = createNewOpenEvent();
-        assignedTo = event.getObject().getAssignedTo().getAssignedUser();
+        if(event.getObject().hasAssignToUpdate()) {
+            assignedTo = event.getObject().getAssignedTo().getAssignedUser();
+        }
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new OuterEventForm("outerEventForm"));
     }
