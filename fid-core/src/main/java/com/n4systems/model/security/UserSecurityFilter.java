@@ -8,6 +8,11 @@ import com.n4systems.util.persistence.QueryBuilder;
 import javax.persistence.Query;
 import java.util.TimeZone;
 
+/**
+ * CAVEAT : this filter behaves differently if the owner is a primary org.
+ * it doesn't really do anything and you will need to make sure you add tenant security as well.
+ * i.e. if you use    new OwnerAndDownFilter(aPrimaryOrg),   you might get results from another tenant! yikes.
+ */
 public class UserSecurityFilter extends AbstractSecurityFilter {
 	
 	private final BaseOrg filterOrg;

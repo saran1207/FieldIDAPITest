@@ -5,6 +5,7 @@ import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.persistence.PersistenceManager;
 
 import javax.persistence.*;
@@ -14,6 +15,12 @@ import java.util.List;
 @SuppressWarnings("serial")
 @Entity(name = "predefinedlocations")
 public class PredefinedLocation extends ArchivableEntityWithOwner implements NamedEntity, TreeNode, HasOwner  {
+
+
+    public static final SecurityDefiner createSecurityDefiner() {
+        return new SecurityDefiner("tenant.id", "owner", null, "state");
+    }
+
 
     @Column(nullable = false, length = 255)
 	private String name;

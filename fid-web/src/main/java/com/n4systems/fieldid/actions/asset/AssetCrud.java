@@ -72,6 +72,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private String search;
 	private LineItem lineItem;
 	private OwnerPicker ownerPicker;
+
 	
 	private String imageDirectory;
 	private boolean removeImage = false;
@@ -1234,9 +1235,25 @@ public class AssetCrud extends UploadAttachmentSupport {
         return SUCCESS;
     }
 
-
     public List<HierarchicalNode> getPredefinedLocationTree() {
-        return ((AssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner());
+        return ((AssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
     }
+
+    public void setFreeFormLocation(String freeFormLocation) {
+        assetWebModel.getLocation().setFreeformLocation(freeFormLocation);
+    }
+
+    public String getFreeFormLocation() {
+        return assetWebModel.getLocation().getFreeformLocation();
+    }
+
+    public void setPredefinedLocationId(Long id) {
+        assetWebModel.getLocation().setPredefinedLocationId(id);
+    }
+
+    public Long getPredefinedLocationId() {
+        return assetWebModel.getLocation().getPredefinedLocationId();
+    }
+
 
 }

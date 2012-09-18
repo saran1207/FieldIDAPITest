@@ -6,12 +6,21 @@
 	
 	<persistence-unit name="fieldid" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<non-jta-data-source>java:/comp/env/jdbc/fieldid</non-jta-data-source>
-		<properties>
+		<!--<non-jta-data-source>java:/comp/env/jdbc/fieldid</non-jta-data-source>-->
+
+        <properties>
 			<property name="hibernate.archive.autodetection" value="class" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
 			<property name="hibernate.max_fetch_depth" value="1" />
-			
+
+            <property name="hibernate.archive.autodetection" value="class" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+            <property name="hibernate.max_fetch_depth" value="1" />
+
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+            <property name="hibernate.connection.url" value="jdbc:mysql://dev.n4systems.net/fieldid" />
+            <property name="hibernate.connection.username" value="fieldid" />
+            <property name="hibernate.connection.password" value="makemore$" />
 			<!--property name="hibernate.cache.use_second_level_cache" value="true"/>
 			<property name="hibernate.cache.use_query_cache" value="true"/>
 			<property name="javax.persistence.sharedCache.mode" value="DISABLE_SELECTIVE"/>

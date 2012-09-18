@@ -1,13 +1,12 @@
 <@s.hidden name="${parameters.name}.predefinedLocationId" id="${parameters.id}_predefinedLocationId"/>
 
-<#if !locationHeirarchyFeatureEnabled || !nodesList?exists || nodesList.empty>
+<#if !locationHeirarchyFeatureEnabled>
 	<@s.textfield id="${parameters.id}_freeformLocation" name="${parameters.name}.freeformLocation" theme="fieldidSimple"/>
 <#else>
 	<@s.hidden id="${parameters.id}" name="${parameters.name}.freeformLocation" />
 	
 	<@s.textfield id="${parameters.id}_locationName" name="locate" theme="fieldidSimple" value="${parameters.fullName!}" readonly="true"/>
 	<a href="#" id="${parameters.id}_showLocationSelection"><@s.text name="label.choose"/></a>
-	
 	
 	<div id="${parameters.id}_locationSelection" class="locationSelection offScreen">
 		<label id="freeFormLabel" for="predefinedLocation" class="label freeFormLabel"><@s.text name="label.predefined_location"/></label><br/>
@@ -31,28 +30,29 @@
 				var node = jQuery('#${parameters.id}_predefinedLocationSelector').getSelectedNode();
 				$('${parameters.id}_predefinedLocationId').value = node.id;
 				$('${parameters.id}').value = $('${parameters.id}_freeformInput').getValue();
-				
-				
+
+
 				var parentNameValue = node.parentNames.join(" > ");
 				var freeFormValue = $('${parameters.id}_freeformInput').getValue();
 				
 				$('${parameters.id}_locationName').value = ((parentNameValue) ? parentNameValue + " > " + node.name: node.name) + ((freeFormValue) ? ": " + freeFormValue : "") 
 				$('${parameters.id}').fire("location:change");
 
-
 			});
 			
-			$('${parameters.id}_locationSelection_cancel').observe('click', function(event) { event.stop(); 
+			$('${parameters.id}_locationSelection_cancel').observe('click', function(event) { event.stop();
 				$('${parameters.id}_locationSelection').setStyle({left:'-10000px'});
 				$('${parameters.id}_freeformInput').value = $('${parameters.id}').getValue();
 				var predefinedLocationId = $('${parameters.id}_predefinedLocationId').getValue(); 
 				jQuery("#${parameters.id}_predefinedLocationSelector").selectNode(predefinedLocationId);
-				
 			});
 			
 			$('${parameters.id}_showLocationSelection').observe('click', function(event) {
-                getResponse(getLocationPickerUrl, 'get', {ownerId:jQuery('#ownerId').val()});
-				});
+                getResponse(getLocationPickerUrl, 'get',
+                    {ownerId:jQuery('#ownerId').val(),
+                    freeFormLocation:$('${parameters.id}').getValue(),
+                    predefinedLocationId:$('${parameters.id}_predefinedLocationId').getValue()});
+            });
 		
 	</@n4.includeScript>
 </#if>
