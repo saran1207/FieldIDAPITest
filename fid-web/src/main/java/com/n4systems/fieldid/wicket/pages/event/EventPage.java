@@ -155,7 +155,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
             proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event));
-            proofTestContainer.setVisible(!event.getObject().getType().getSupportedProofTests().isEmpty());
+            proofTestContainer.setVisible(supportsProofTests());
 
             add(proofTestContainer);
 
@@ -225,6 +225,11 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                 throw new RedirectToUrlException("/event.action?uniqueID="+savedEvent.getId());
             }
         }
+    }
+
+    private boolean supportsProofTests() {
+        Event event = this.event.getObject();
+        return event.getType().getSupportedProofTests().size()>0 && event.getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
     }
 
     protected abstract Component createCancelLink(String cancelLink);
