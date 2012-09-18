@@ -184,14 +184,14 @@ public class EventCreationService extends FieldIdPersistenceService {
         }
     }
 
-    private void processUploadedFiles(Event event, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+    private Event processUploadedFiles(Event event, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
         attachUploadedFiles(event, null, uploadedFiles);
 
         for (SubEvent subEvent : event.getSubEvents()) {
             attachUploadedFiles(event, subEvent, null);
         }
 
-        persistenceService.update(event);
+        return null;
     }
 
     private Event attachUploadedFiles(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
@@ -213,6 +213,9 @@ public class EventCreationService extends FieldIdPersistenceService {
             for (FileAttachment uploadedFile : uploadedFiles) {
 
                 try {
+                    // attach the attachment
+                    targetEvent.getAttachments().add(uploadedFile);
+
                     if (!uploadedFile.isNew()) {
                         continue;
                     }
@@ -230,9 +233,6 @@ public class EventCreationService extends FieldIdPersistenceService {
                     uploadedFile.setFileName(tmpFile.getName());
                     uploadedFile.setTenant(targetEvent.getTenant());
                     uploadedFile.setModifiedBy(targetEvent.getModifiedBy());
-
-                    // attach the attachment
-                    targetEvent.getAttachments().add(uploadedFile);
                 } catch (IOException e) {
                     logger.error("failed to copy uploaded file ", e);
                     throw new FileAttachmentException(e);
@@ -463,10 +463,10 @@ public class EventCreationService extends FieldIdPersistenceService {
         copyDataToActionSchedules(event);
 
         event.getAttachments().clear();
-        event.getAttachments().addAll(attachments);
-        processUploadedFiles(event, attachments);
 
-        return persistenceService.update(event);
+        processUploadedFiles(event, attachments);
+        event = persistenceService.update(event);
+        return event;
     }
 
     private void saveCriteriaResultImages(AbstractEvent event) {
