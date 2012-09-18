@@ -27,9 +27,9 @@ value="${(parameters.nameValue.displayName)?default('')?html}"<#rt/>
  title="${parameters.title?html}"<#rt/>
 </#if>
 />
-<a href="#" class="searchOwner" orgFilter="${orgType}" orgId="${parameters.id?html}"><@s.text name="label.choose"/></a>
+<a href="javascript:void(0);" class="searchOwner" orgFilter="${orgType}" orgId="${parameters.id?html}"><@s.text name="label.choose"/></a>
 &nbsp;<@s.text name="label.or"/>&nbsp;
-<a href="#" class="clearSearchOwner"><@s.text name="label.clear"/></a>
+<a href="javascript:void(0);" class="clearSearchOwner"><@s.text name="label.clear"/></a>
 
 	
 </span>

@@ -6,7 +6,7 @@
 	<@s.hidden id="${parameters.id}" name="${parameters.name}.freeformLocation" />
 	
 	<@s.textfield id="${parameters.id}_locationName" name="locate" theme="fieldidSimple" value="${parameters.fullName!}" readonly="true"/>
-	<a href="#" id="${parameters.id}_showLocationSelection"><@s.text name="label.choose"/></a>
+	<a href="javascript:void(0);" id="${parameters.id}_showLocationSelection"><@s.text name="label.choose"/></a>
 	
 	<div id="${parameters.id}_locationSelection" class="locationSelection offScreen">
 		<label id="freeFormLabel" for="predefinedLocation" class="label freeFormLabel"><@s.text name="label.predefined_location"/></label><br/>
