@@ -35,6 +35,7 @@ import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.*;
+import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -73,6 +74,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     private Event scheduleToAdd;
     private List<AbstractEvent.SectionResults> sectionResults;
     protected List<FileAttachment> fileAttachments;
+    private User assignedTo;
     protected ProofTestEditPanel proofTestEditPanel;
 
     @Override
@@ -80,6 +82,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         super.onInitialize();
         sectionResults = event.getObject().getSectionResults();
         scheduleToAdd = createNewOpenEvent();
+        assignedTo = event.getObject().getAssignedTo().getAssignedUser();
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new OuterEventForm("outerEventForm"));
     }
@@ -108,7 +111,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             add(new Label("referenceNumber", new PropertyModel<String>(event, "asset.customerRefNumber")));
 
             GroupedUserPicker groupedUserPicker;
-            add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(event, "assignee"), new GroupedUsersForTenantModel()));
+            add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(EventPage.this, "assignedTo"), new GroupedUsersForTenantModel()));
             groupedUserPicker.setNullValid(true);
             groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
@@ -240,6 +243,12 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             book.setTenant(getCurrentUser().getTenant());
             book.setOwner(getCurrentUser().getOwner());
             persistenceService.save(book);
+        }
+    }
+    
+    protected void saveAssignedToIfNecessary() {
+        if (assignedTo != null) {
+            event.getObject().setAssignedTo(AssignedToUpdate.assignAssetToUser(assignedTo));
         }
     }
 

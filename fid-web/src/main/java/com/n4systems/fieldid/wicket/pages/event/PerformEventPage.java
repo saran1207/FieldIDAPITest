@@ -62,6 +62,8 @@ public class PerformEventPage extends EventPage {
 
         saveEventBookIfNecessary();
 
+        saveAssignedToIfNecessary();
+
         FileDataContainer fileDataContainer = proofTestEditPanel.getFileDataContainer();
 
         Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, fileAttachments, createEventScheduleBundles());
