@@ -197,12 +197,21 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "nextDate", startDate))
-		.addWhere(WhereClauseFactory.create(Comparator.LE, "endDate", "nextDate", endDate));		
+		.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "nextDate", endDate));	//excludes end date.
 		
 		List<Event> events = persistenceService.findAll(query, page, pageSize);
 		Long total = persistenceService.count(query);
 		List<ApiEventSchedule> apiSchedules = convertAllEntitiesToApiModels(events);
 		ListResponse<ApiEventSchedule> response = new ListResponse<ApiEventSchedule>(apiSchedules, page, pageSize, total);
+		
+		//Debug log for testing on dev, stage etc.
+		logger.info("findAssignedOpenEvents");
+		logger.info(">= startDate: " + startDate);
+		logger.info("< endDate: " + endDate);
+		logger.info("page: " + page);
+		logger.info("pageSize: " + pageSize);
+		logger.info("Total: " + total);
+		logger.info("Total for current page: " + apiSchedules.size());
 		
 		return response;
 	}
