@@ -11,7 +11,8 @@ public class PredefinedLocationServiceDTO extends AbstractBaseServiceDTO {
 	private Long parentId;
 	private List<Long> searchIds = new ArrayList<Long>();
 	private boolean deleted;
-	
+    private Long ownerId;
+
 	public String getName() {
 		return name;
 	}
@@ -52,4 +53,11 @@ public class PredefinedLocationServiceDTO extends AbstractBaseServiceDTO {
 		this.deleted = deleted;
 	}
 
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
 }
