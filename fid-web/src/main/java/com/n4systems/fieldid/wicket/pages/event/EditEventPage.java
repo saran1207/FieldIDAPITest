@@ -7,6 +7,7 @@ import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ProofTestInfo;
+import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -30,6 +31,7 @@ public class EditEventPage extends EventPage {
 
     protected Event loadExistingEvent() {
         Event existingEvent = eventService.lookupExistingEvent(Event.class, uniqueId);
+        PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
         if (existingEvent.getProofTestInfo() == null) {
             existingEvent.setProofTestInfo(new ProofTestInfo());
         }
