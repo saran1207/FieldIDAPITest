@@ -66,11 +66,24 @@ body {
     float:right;
 }
 
-.actionPage .blueButton, .actionPage .blueButton:hover, .actionPage .blueButton:active {
-    background:#4c8ffc;
-    border:1px solid #69f;
-    color:white;
+.actionPage .blueButton {
+    border:1px solid #4c8ffc;
+    background: #4C8FFC;
+    background: -moz-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #357AE8), color-stop(100%, #4D90FE));
+    background: -webkit-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    background: -o-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    background: -ms-linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#357AE8', endColorstr = '#4D90FE', GradientType = 0);
+    background: linear-gradient(top, #357AE8 0%, #4D90FE 100%);
+    color: #FFFFFF;
     float:left;
+}
+
+.actionPage .blueButton:hover, .actionPage .blueButton:active {
+    background: #4C8FFC;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4D90FE', endColorstr='#357AE8',GradientType=0 );
+    border: 1px solid #6699FF;
 }
 
 .addActionForm .dueDescription {
