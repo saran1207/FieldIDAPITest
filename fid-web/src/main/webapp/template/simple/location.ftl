@@ -31,7 +31,6 @@
 				$('${parameters.id}_predefinedLocationId').value = node.id;
 				$('${parameters.id}').value = $('${parameters.id}_freeformInput').getValue();
 
-
 				var parentNameValue = node.parentNames.join(" > ");
 				var freeFormValue = $('${parameters.id}_freeformInput').getValue();
 				

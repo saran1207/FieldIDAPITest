@@ -10,6 +10,7 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.ProcessingProofTestException;
+import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.EventWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.ScheduleToWebEventScheduleConverter;
@@ -39,12 +40,15 @@ import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.eventbook.EventBookSaver;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
+import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
@@ -890,38 +894,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
 	public void setScheduleId(Long eventScheduleId) {
         openEventId = eventScheduleId;
-//		if (eventScheduleId == null) {
-//			openEvent = null;
-//		} else {
-//			openEvent = persistenceManager.find(Event.class, eventScheduleId, getTenantId());
-//		}
-//		this.eventScheduleId = eventScheduleId;
 	}
 
-//	public List<EventSchedule> getAvailableSchedules() {
-//		if (availableSchedules == null) {
-//			availableSchedules = getLoaderFactory().createIncompleteEventSchedulesListLoader()
-//					.setAsset(asset)
-//					.setEventType(event.getType())
-//					.load();
-//			if (openEvent != null && !availableSchedules.contains(openEvent)) {
-//				availableSchedules.add(0, openEvent);
-//			}
-//		}
-//		return availableSchedules;
-//	}
-//
-//	public List<ListingPair> getSchedules() {
-//		List<ListingPair> scheduleOptions = new ArrayList<ListingPair>();
-//		scheduleOptions.add(new ListingPair(EventScheduleSuggestion.NO_SCHEDULE, getText("label.notscheduled")));
-//		scheduleOptions.add(new ListingPair(EventScheduleSuggestion.NEW_SCHEDULE, getText("label.createanewscheduled")));
-//		for (EventSchedule schedule : getAvailableSchedules()) {
-//			scheduleOptions.add(new ListingPair(schedule.getId(), convertDate(schedule.getNextDate())));
-//		}
-//
-//		return scheduleOptions;
-//	}
-	
 	public List<ListingPair> getJobs() {
 		if (eventJobs == null) {
 			List<Listable<Long>> eventJobListables = getLoaderFactory().createEventJobListableLoader().load();

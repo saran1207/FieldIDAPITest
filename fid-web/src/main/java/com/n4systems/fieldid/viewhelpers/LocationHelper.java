@@ -50,7 +50,8 @@ public class LocationHelper {
                 UserSecurityFilter filter = new UserSecurityFilter(owner, user.getId(), TimeZone.getDefault());
                 PredefinedLocationTree locationTree = new PredefinedLocationTreeLoader(new PredefinedLocationListLoader(filter)).load(transaction);
                 PredefinedLocationLevels levels = factory.createPredefinedLocationLevelsLoader().load(transaction);
-                return new LocationTreeToHierarchicalNodesConverter().convert(locationTree, levels);
+                List<HierarchicalNode> tree = new LocationTreeToHierarchicalNodesConverter().convert(locationTree, levels);
+                return tree;
             }
         });
     }

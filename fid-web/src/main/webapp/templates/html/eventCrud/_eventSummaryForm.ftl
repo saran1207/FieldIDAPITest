@@ -63,8 +63,17 @@
 	
 	<div class="infoSet">
 		<label class="label" for="asset.location"><@s.text name="label.location"/></label>
-		<span class="fieldHolder locationFieldHolder"><@n4.location name="modifiableEvent.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableEvent.location)}" theme="simple"/></span>
+
+		<span class="fieldHolder locationFieldHolder">
+            <span class="locationTree">
+                <@n4.location name="modifiableEvent.location" id="location" nodesList=predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableEvent.location)}" theme="simple"/>
+            </span>
+        </span>
 	</div>
+
+<script type="text/javascript">
+    getLocationPickerUrl = '<@s.url namespace="ajax" action="updateEventLocation"/>';
+</script>
 
 </#if>
 

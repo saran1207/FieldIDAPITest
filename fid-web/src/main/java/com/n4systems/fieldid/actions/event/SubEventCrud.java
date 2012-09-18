@@ -12,14 +12,18 @@ import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModelConverter;
 import com.n4systems.fieldid.actions.exceptions.PersistenceException;
 import com.n4systems.fieldid.actions.exceptions.ValidationException;
+import com.n4systems.fieldid.actions.helpers.EventCrudHelper;
 import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.model.*;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.n4systems.uitags.views.HierarchicalNode;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import java.util.ArrayList;
@@ -383,4 +387,30 @@ public class SubEventCrud extends EventCrud {
     public String getTemporarySignatureFileId(Long criteriaId) {
         return masterEventHelper.getTemporarySignatureFileId(uniqueID, criteriaId);
     }
+
+    @SkipValidation
+    public String doUpdateLocation() {
+        return SUCCESS;
+    }
+
+    public List<HierarchicalNode> getPredefinedLocationTree() {
+        return ((EventCrudHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
+    }
+
+    public void setFreeFormLocation(String freeFormLocation) {
+        event.getAdvancedLocation().setFreeformLocation(freeFormLocation);
+    }
+
+    public String getFreeFormLocation() {
+        return event.getAdvancedLocation().getFreeformLocation();
+    }
+
+    public void setPredefinedLocationId(Long id) {
+        event.getAdvancedLocation().setPredefinedLocation(new PredefinedLocationByIdLoader(getSecurityFilter()).setId(id).load());
+    }
+
+    public PredefinedLocation getPredefinedLocationId() {
+        return event.getAdvancedLocation().getPredefinedLocation();
+    }
+
 }
