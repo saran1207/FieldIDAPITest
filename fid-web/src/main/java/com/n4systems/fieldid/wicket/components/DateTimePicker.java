@@ -20,6 +20,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DateConverter;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import rfid.web.helper.SessionUser;
 
 import java.io.Serializable;
@@ -34,6 +35,7 @@ public class DateTimePicker extends Panel {
     private static final String UPDATE_JS = "$.datepicker.%s($('#%s')[0]);";
     private static final String CLEAR_DATE_JS = "$('#%s').datepicker('setDate',%s);";
     private static final String JS_DATE = "new Date(%d,%d,%d)";
+    private static final String JS_DATE_WITH_TIME = "new Date(%d,%d,%d,%d,%d,%d)";
 
     private DateTextField dateTextField;
     private CheckBox allDayCheckbox;
@@ -169,6 +171,7 @@ public class DateTimePicker extends Panel {
             jsBuffer.append(String.format(UPDATE_JS,
                     "_disableTimepickerDatepicker", dateTextField.getMarkupId()));
         }
+
         jsBuffer.append(String.format(CLEAR_DATE_JS, dateTextField.getMarkupId(), getModelDateForJS()));
 
         return jsBuffer.toString();
@@ -183,8 +186,13 @@ public class DateTimePicker extends Panel {
         if (date==null) {
             return "null";
         } else {
-            LocalDate ld = new LocalDate(date);
-            return String.format(JS_DATE,ld.getYear(), ld.getMonthOfYear()-1, ld.getDayOfMonth());
+            if (includeTime) {
+                LocalDateTime ld = new LocalDateTime(date);
+                return String.format(JS_DATE_WITH_TIME, ld.getYear(), ld.getMonthOfYear() - 1, ld.getDayOfMonth(), ld.getHourOfDay(), ld.getMinuteOfHour(), ld.getSecondOfMinute() );
+            } else {
+                LocalDate ld = new LocalDate(date);
+                return String.format(JS_DATE,ld.getYear(), ld.getMonthOfYear()-1, ld.getDayOfMonth());
+            }
         }
     }
 
