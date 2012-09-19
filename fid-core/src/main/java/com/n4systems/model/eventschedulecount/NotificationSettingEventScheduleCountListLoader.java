@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.security.OwnerAndDownFilter;
@@ -19,8 +20,6 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 	public NotificationSettingEventScheduleCountListLoader(SecurityFilter filter) {
 		super(filter);
 	}
-	
-	
 	
 	@Override
 	protected List<EventScheduleCount> load(EntityManager em, SecurityFilter filter) {
@@ -45,7 +44,7 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 		// the aggregate queries are grouped: next_event_date, (customer, division) or (jobsite),  asset_type, event_type
 		builder.addGroupBy("nextDate");
 		builder.addGroupBy("owner");
-		builder.addGroupBy("asset.type.name", "eventType.name");
+		builder.addGroupBy("asset.type.name", "type.name");
 	}
 
 	protected void applyNotificationFilters(QueryBuilder<EventScheduleCount> builder) {
@@ -62,7 +61,7 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 		}
 		
 		if(notification.getEventTypes().isEmpty() && notification.getEventTypeGroup() != null){
-			builder.addSimpleWhere("eventType.group.id", notification.getEventTypeGroup());
+			builder.addSimpleWhere("type.group.id", notification.getEventTypeGroup());
 		}
 
 		if (notification.getAssetStatus() != null) {
@@ -70,7 +69,7 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 		}
 		
 		if (!notification.getEventTypes().isEmpty()) {
-			builder.addSimpleWhere("eventType.id", notification.getEventTypes().get(0));
+			builder.addSimpleWhere("type.id", notification.getEventTypes().get(0));
 		}
 		
 		builder.applyFilter(new OwnerAndDownFilter(notification.getOwner()));
@@ -79,11 +78,12 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 	protected void prepareSelect(QueryBuilder<EventScheduleCount> builder) {
 		// we have to set the alias here and prefix our select clause arguments, otherwise hibernate generates a bad query
 		builder.setTableAlias("isc");
-		builder.setSelectArgument(new NewObjectSelect(EventScheduleCount.class, "isc.nextDate", "isc.owner", "isc.asset.type.name", "isc.eventType.name", "count(*)"));
+		builder.setSelectArgument(new NewObjectSelect(EventScheduleCount.class, "isc.nextDate", "isc.owner", "isc.asset.type.name", "isc.type.name", "count(*)"));
 	}
 
 	protected QueryBuilder<EventScheduleCount> getQueryBuilder(SecurityFilter filter) {
-		return new QueryBuilder<EventScheduleCount>(EventSchedule.class, filter);
+        QueryBuilder<EventScheduleCount> openEventQueryBuilder = new QueryBuilder<EventScheduleCount>(Event.class, filter);
+        return openEventQueryBuilder;
 	}
 
 	public void setNotificationSetting(NotificationSetting notification) {

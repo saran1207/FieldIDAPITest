@@ -131,7 +131,7 @@ body {
 		<#if upcomingEvents.empty>
 			<h4>There are no scheduled events for this period.<h4>
 		<#else>
-			<h4>To view the details about these events login to your Field ID account and click on Schedules</h4>
+			<h4>To view the details about these events, log in to your Field ID account and click on Reporting</h4>
 			<table class="message" cellpadding=2 cellspacing=2 border>
 				<tr>
 					<th>Scheduled Date</th>
@@ -170,7 +170,7 @@ body {
 		<#if overdueEvents.empty>
 			<h4>Great news. There are no overdue scheduled events for this period.</h4>
 		<#else>
-			<h4>To view the details about these events login to your Field ID account and click on Schedules</h4>
+			<h4>To view the details about these events, log in to your Field ID account and click on Reporting</h4>
 			<table class="message" cellpadding=2 cellspacing=2 border>
 				<tr>
 					<th>Scheduled Date</th>

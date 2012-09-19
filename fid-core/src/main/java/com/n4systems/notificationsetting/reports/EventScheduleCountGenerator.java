@@ -1,21 +1,5 @@
 package com.n4systems.notificationsetting.reports;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.naming.NamingException;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.mail.MailManager;
 import com.n4systems.model.Event;
 import com.n4systems.model.common.SimpleFrequency;
@@ -30,6 +14,16 @@ import com.n4systems.util.LogUtils;
 import com.n4systems.util.Range;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.time.Clock;
+import org.apache.commons.lang.time.DateUtils;
+import org.apache.log4j.Logger;
+
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.naming.NamingException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class EventScheduleCountGenerator {
 	private static Logger logger = Logger.getLogger(EventScheduleCountGenerator.class);
@@ -145,7 +139,7 @@ public class EventScheduleCountGenerator {
 		message.getTemplateMap().put("failedReportStart", getReportStartDate(setting.getFrequency(), new PlainDate()));
 		message.getTemplateMap().put("failedReportEnd", new PlainDate());
 		message.getTemplateMap().put("upcomingReportStart", start);
-		message.getTemplateMap().put("upcomingReportEnd", end);
+		message.getTemplateMap().put("upcomingReportEnd", DateUtils.addDays(end, -1));
 		message.setToAddresses(getAddressList(setting));
 		
 		logger.info(LogUtils.prepare("Sending Notification Message to [$0] recipients", setting.getAddresses().size()));
