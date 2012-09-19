@@ -1,3 +1,10 @@
+<head>
+    <script type="text/javascript">
+        var getLocationPickerUrl = '<@s.url namespace="/ajax" action="updateRegAssetLocation"/>';
+        var locationPickerId = '${uniqueID}';
+    </script>
+</head>
+
 <div id="basicDetails" class="basicForm">
 	<div class="formTitle">
 		<h3><@s.text name="nav.asset_information" /></h3>
@@ -28,8 +35,10 @@
 	<div class="infoSet">
 		<label class="label" for="asset.location"><@s.text name="label.location"/></label>
         <div class="fieldHolder">
-            <@n4.location name="assetWebModel.location" id="location" nodesList=predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="simple"/>
+            <span class="locationTree">
+                <@n4.location name="assetWebModel.location" id="location" nodesList=predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="simple"/>
+            </span>
         </div>
-	</div>
+    </div>
 	<@s.hidden name="linkedAssetId" value="${linkedAsset.id}"/>
 </div>

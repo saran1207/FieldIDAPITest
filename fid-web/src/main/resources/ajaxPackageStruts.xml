@@ -369,9 +369,6 @@
 			<result name="success" type="freemarker">/templates/ajax/multiAssetCrud/otherIdentifiersForm.ftl</result>
 		</action>
 		
-
-
-
 		<action name="orgs" method="list" class="com.n4systems.fieldid.actions.BaseOrgCrud" >
 			<result name="success" type="freemarker">/templates/ajax/baseOrg/list.ftl</result>
 		</action>
@@ -431,6 +428,10 @@
         </action>
 
         <action name="updateLocation" method="updateLocation" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+            <result name="success" type="freemarker">/templates/ajax/orgList/ajaxOrgPicker.ftl</result>
+        </action>
+
+        <action name="updateRegAssetLocation" method="updateLocation" class="com.n4systems.fieldid.actions.safetyNetwork.RegisterAsset">
             <result name="success" type="freemarker">/templates/ajax/orgList/ajaxOrgPicker.ftl</result>
         </action>
 

@@ -4,7 +4,7 @@
     <@n4.includeScript src="autoschedule.js" />
 	<@n4.includeScript src="commentTemplates.js" />
 	<@n4.includeScript src="updateAttributes.js"/>
-	
+
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<#include "/templates/html/common/_datetimepicker.ftl"/>
@@ -13,8 +13,10 @@
 	    updateAutoScheduleUrl = '<@s.url action="updateAutoSchedule" namespace="/ajax"/>';
 	    changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>'; 
 	    autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
-	    
-	    function showSuggestedAttributes() {
+        var updateOwnerParams = {uniqueID:${uniqueID}};
+
+
+        function showSuggestedAttributes() {
 	    	var suggestedAttributes = $('suggestedAttributes');
 	    	
 	    	if(suggestedAttributes != null) {	    	

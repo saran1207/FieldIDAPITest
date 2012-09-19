@@ -49,10 +49,13 @@
 			});
 			
 			$('${parameters.id}_showLocationSelection').observe('click', function(event) {
-                getResponse(getLocationPickerUrl, 'get',
-                    {ownerId:jQuery('#ownerId').val(),
+                var params = {ownerId:jQuery('#ownerId').val(),
                     freeFormLocation:$('${parameters.id}').getValue(),
-                    predefinedLocationId:$('${parameters.id}_predefinedLocationId').getValue()});
+                    predefinedLocationId:$('${parameters.id}_predefinedLocationId').getValue()};
+                if (typeof locationPickerId!='undefined') {
+                    params.uniqueID=locationPickerId;
+                }
+                getResponse(getLocationPickerUrl, 'get', params);
             });
 		
 	</@n4.includeScript>

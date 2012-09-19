@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -29,12 +23,14 @@ import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.asset.AssetSaveService;
+import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.DateHelper;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import com.opensymphony.xwork2.validator.annotations.*;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.Collection;
+import java.util.List;
 
 public class RegisterAsset extends AbstractCrud{
 	
@@ -298,4 +294,23 @@ public class RegisterAsset extends AbstractCrud{
 		}
 		return userGrouper;
 	}
+
+    public List<HierarchicalNode> getPredefinedLocationTree() {
+        return ((AssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
+    }
+
+    @SkipValidation
+    public String doUpdateLocation() {
+        return SUCCESS;
+    }
+
+    @SkipValidation
+    public String doUpdateOwner() {
+        return SUCCESS;
+    }
+
+
+
+
+
 }
