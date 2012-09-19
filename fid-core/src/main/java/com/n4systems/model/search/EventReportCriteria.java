@@ -29,6 +29,10 @@ public class EventReportCriteria extends SearchCriteria {
     private AssetType assetType;
 
     @ManyToOne
+    @JoinColumn(name="priority")
+    private PriorityCode priority;
+
+    @ManyToOne
     @JoinColumn(name="assignedUser")
     private User assignedTo;
 
@@ -323,4 +327,11 @@ public class EventReportCriteria extends SearchCriteria {
         this.assigneeId = assigneeId;
     }
 
+    public PriorityCode getPriority() {
+        return priority;
+    }
+
+    public void setPriority(PriorityCode priority) {
+        this.priority = priority;
+    }
 }

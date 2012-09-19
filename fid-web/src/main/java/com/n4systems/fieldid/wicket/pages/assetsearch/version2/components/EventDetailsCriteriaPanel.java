@@ -5,14 +5,12 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -53,6 +51,8 @@ public class EventDetailsCriteriaPanel extends Panel {
         eventTypeSelect.setNullValid(true);
         // Initially, update the dynamic columns causing an empty list to be put into our model
         eventTypeSelect.setOutputMarkupId(true);
+
+        add(new FidDropDownChoice<PriorityCode>("priority", new PropertyModel<PriorityCode>(getDefaultModel(), "priority"), new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>()).setNullValid(true));
 
         add(createEventTypeGroupChoice(eventTypeGroupModel, eventTypeModel, availableEventTypesModel));
 
