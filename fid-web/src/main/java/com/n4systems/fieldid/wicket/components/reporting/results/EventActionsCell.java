@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.views.RowView;
@@ -40,12 +41,15 @@ public class EventActionsCell extends Panel {
 
         WebMarkupContainer completeEventActionsList = createCompleteEventActionsList(event, eventId, localEvent, localEndUser, printable, hasCreateEvent, hasEditEvent, hasTag);
         WebMarkupContainer incompleteEventActionsList = createIncompleteEventActionsList(event, isReadOnly, hasCreateEvent, hasTag);
+        WebMarkupContainer safetyNetworkActionsList = createSafetyNetworkActionsList(event);
 
-        completeEventActionsList.setVisible(event.getEventState() == Event.EventState.COMPLETED);
-        incompleteEventActionsList.setVisible(event.getEventState() != Event.EventState.COMPLETED);
+        completeEventActionsList.setVisible(localEvent && event.getEventState() == Event.EventState.COMPLETED);
+        incompleteEventActionsList.setVisible(localEvent && event.getEventState() != Event.EventState.COMPLETED);
+        safetyNetworkActionsList.setVisible(!localEvent);
 
         add(completeEventActionsList);
         add(incompleteEventActionsList);
+        add(safetyNetworkActionsList);
     }
 
     private WebMarkupContainer createIncompleteEventActionsList(final Event event, boolean isReadOnly, boolean hasCreateEvent, boolean hasTag) {
@@ -98,12 +102,12 @@ public class EventActionsCell extends Panel {
         BookmarkablePageLink viewAssetLink = new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
         NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+event.getAsset().getId());
 
-        viewLink.setVisible(localEvent || localEndUser);
-        editLink.setVisible(hasEditEvent && localEvent);
+        viewLink.setVisible(localEndUser);
+        editLink.setVisible(hasEditEvent);
         printReportLink.setVisible(printable);
 
-        startEventLink.setVisible(hasCreateEvent && localEvent);
-        editAssetLink.setVisible(hasTag && localEvent);
+        startEventLink.setVisible(hasCreateEvent);
+        editAssetLink.setVisible(hasTag);
 
         completeEventActionsList.add(viewLink);
         completeEventActionsList.add(editLink);
@@ -114,6 +118,23 @@ public class EventActionsCell extends Panel {
         completeEventActionsList.add(editAssetLink);
 
         return completeEventActionsList;
+    }
+
+    private WebMarkupContainer createSafetyNetworkActionsList(Event event) {
+        WebMarkupContainer safetyNetworkActionsList = new WebMarkupContainer("safetyNetworkActionsList");
+
+        Asset linkedAsset = event.getAsset().getLinkedAsset();
+
+        NonWicketLink viewLink = new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getId());
+        viewLink.setVisible(event.getEventState() == Event.EventState.COMPLETED);
+        safetyNetworkActionsList.add(viewLink);
+
+        if (linkedAsset != null) {
+            Long linkedAssetId = linkedAsset.getId();
+            safetyNetworkActionsList.add(new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(linkedAssetId)));
+        }
+
+        return safetyNetworkActionsList;
     }
 
 }

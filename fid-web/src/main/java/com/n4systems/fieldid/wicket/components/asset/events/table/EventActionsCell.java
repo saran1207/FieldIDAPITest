@@ -35,8 +35,6 @@ public class EventActionsCell extends Panel {
         add(menu);
 
         add(new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getID(), new AttributeModifier("class", viewButtonStyle)));
-
-
-        
     }
+
 }
