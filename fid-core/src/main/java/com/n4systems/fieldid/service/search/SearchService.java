@@ -174,7 +174,10 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
 
     protected void addSortTerms(T criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
         if (sortColumn.getJoinExpression() == null) {
-            searchBuilder.getOrderArguments().add(new SortTerm(sortColumn.getSortExpression().replaceAll("\\{.*\\}", ""), sortDirection).toSortField());
+            String[] sortExpressions = sortColumn.getSortExpression().split(",");
+            for (String sortExpression : sortExpressions) {
+                searchBuilder.getOrderArguments().add(new SortTerm(sortExpression.replaceAll("\\{.*\\}", ""), sortDirection).toSortField());
+            }
         } else {
             String[] sortExpressions = sortColumn.getSortExpression().split(",");
             String[] joinExpressions = sortColumn.getJoinExpression().split(",");
