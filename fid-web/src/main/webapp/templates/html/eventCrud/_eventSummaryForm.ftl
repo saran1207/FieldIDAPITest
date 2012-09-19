@@ -2,6 +2,9 @@
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<#include "/templates/html/common/_datetimepicker.ftl"/>
+    <script type="text/javascript">
+        getLocationPickerUrl = '<@s.url namespace="ajax" action="updateEventLocation"/>';
+    </script>
 </head>
 <@s.hidden name="uniqueID" id="uniqueID"/>
 <@s.hidden name="assetId"/>
@@ -70,10 +73,6 @@
             </span>
         </span>
 	</div>
-
-<script type="text/javascript">
-    getLocationPickerUrl = '<@s.url namespace="ajax" action="updateEventLocation"/>';
-</script>
 
 </#if>
 

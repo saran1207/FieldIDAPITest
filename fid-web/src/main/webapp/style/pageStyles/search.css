@@ -91,3 +91,7 @@
 .enlargedInput .centerContents input{
 	 font-size: 16px;
 }
+
+.crudForm .owners .infoSet span {
+    width: 300px;
+}

@@ -1,8 +1,5 @@
 package com.n4systems.fieldid.actions.search;
 
-import com.n4systems.model.Event;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
@@ -10,11 +7,17 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.search.columns.EventToJobColumnsService;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.fieldid.viewhelpers.SearchHelper;
+import com.n4systems.model.Event;
 import com.n4systems.model.Project;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.security.Permissions;
+import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
 public class EventScheduleJobAssignment extends EventScheduleAction {
@@ -55,14 +58,18 @@ public class EventScheduleJobAssignment extends EventScheduleAction {
 		return super.doCreateSearch();
 	}
 	
-
 	@Override
 	public String doSearch() {
 		testRequiredEntities();
 		setJobId(getContainer().getJobAndNullId());
 		return super.doSearch();
 	}
-	
+
+    @SkipValidation
+    public String doUpdateLocation() {
+        return SUCCESS;
+    }
+
 	public Long getJobId() {
 		return (job != null) ? job.getId() : null;
 	}
@@ -94,5 +101,9 @@ public class EventScheduleJobAssignment extends EventScheduleAction {
 		jobId.setSimpleSelect("project.id").addLeftJoin("project", "project").addSimpleWhere("id", Long.valueOf(scheduleId));
 		return persistenceManager.find(jobId);
 	}
+
+    public List<HierarchicalNode> getPredefinedLocationTree() {
+        return ((SearchHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
+    }
 
 }

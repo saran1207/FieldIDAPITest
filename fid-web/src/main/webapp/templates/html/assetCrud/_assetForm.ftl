@@ -24,6 +24,7 @@
 	    updateAssetTypeUrl = '<@s.url action="assetTypeChange" namespace="/ajax"/>';
 	    updateAutoScheduleUrl = '<@s.url action="updateAutoSchedule" namespace="/ajax"/>';
 	    checkIdentifierUrl = '<@s.url action="checkIdentifier" namespace="/ajax"/>';
+        getLocationPickerUrl = '<@s.url namespace="ajax" action="updateLocation"/>';
 	</script>
 </head>
 

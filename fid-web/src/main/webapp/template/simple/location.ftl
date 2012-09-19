@@ -22,7 +22,9 @@
 	</div>
 	
 	<@n4.includeScript>
-		    var getLocationPickerUrl = '<@s.url namespace="ajax" action="updateLocation"/>';
+            if(!getLocationPickerUrl) {
+		        getLocationPickerUrl = '<@s.url namespace="ajax" action="updateLocation"/>';
+            }
 			$('${parameters.id}_locationSelection_select').observe('click', function(event) {
 				event.stop();
 				$('${parameters.id}_locationSelection').setStyle({left:'-10000px'});

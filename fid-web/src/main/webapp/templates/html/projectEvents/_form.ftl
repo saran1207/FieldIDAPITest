@@ -7,6 +7,7 @@
 		function assetTypeChanged(assetType) {
 			return null;
 		}
+        getLocationPickerUrl = '<@s.url namespace="ajax" action="updateJobEventLocation"/>';
 	</script>
 </head>
 
@@ -41,13 +42,15 @@
 				</div>
 			</div>
 			
-			<div class="fieldGroup">
+			<div class="fieldGroup owners">
 				<h2><@s.text name="label.ownership"/></h2>
 				<div class="infoSet">
 					<label for="criteria.location"><@s.text name="label.location"/></label>
-					<@n4.location name="criteria.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(criteria.location)}"/>
-				</div>	
-				
+                    <span class="locationTree">
+					    <@n4.location name="criteria.location" id="location" nodesList=predefinedLocationTree fullName="${helper.getFullNameOfLocation(criteria.location)}" theme="fieldid"/>
+                    </span>
+				</div>
+
 				<#include "../schedule/_ownershipFilters.ftl"/>
 			</div>
 		
