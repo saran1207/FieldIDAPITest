@@ -21,7 +21,7 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 	private Date dateValue;
 	private Double numberValue;
 	private Long scoreValue;
-	private List<ApiEventSchedule> actions;
+	private List<ApiEventSchedule> actions = new ArrayList<ApiEventSchedule>();
 
 	public Long getCriteriaId() {
 		return criteriaId;
