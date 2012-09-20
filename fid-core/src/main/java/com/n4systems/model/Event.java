@@ -521,6 +521,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         this.completedDate = completedDate;
     }
 
+    @AllowSafetyNetworkAccess
     public EventState getEventState() {
         return eventState;
     }
