@@ -18,7 +18,7 @@ function updateAttributes(attribute) {
 	for (i=0; i < theForm.elements.length; i++) {		
 		if (Element.extend(theForm.elements[i]).hasClassName('attribute')) {
 			if (theForm.elements[i].type == 'select-one') {
-				url += "&lookUpInputs[" + lookUpIndex +"].id="+theForm.elements[i].id+"&lookUpInputs[" + lookUpIndex + "].name="+theForm.elements[i].value;
+				url += "&lookUpInputs[" + lookUpIndex +"].Id="+theForm.elements[i].id+"&lookUpInputs[" + lookUpIndex + "].name="+theForm.elements[i].value;
 				lookUpIndex++;
 			}
 		}
