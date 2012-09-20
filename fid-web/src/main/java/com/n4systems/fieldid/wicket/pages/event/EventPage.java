@@ -104,7 +104,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             add(new Label("assetTypeName", new PropertyModel<String>(event, "asset.type.name")));
 
             add(new Label("description", new PropertyModel<String>(event, "asset.description")));
-            add(new IdentifierLabel("identifierLabel", new PropertyModel<AssetType>(event, "asset.type")));
+            add(new IdentifierLabel("identifierLabel", new PropertyModel<AssetType>(event, "asset.type.identifierLabel")));
             BookmarkablePageLink<Void> assetLink = new BookmarkablePageLink<Void>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getObject().getAsset().getId()));
             assetLink.add(new Label("identifier", new PropertyModel<Object>(event, "asset.identifier")));
             add(assetLink);
