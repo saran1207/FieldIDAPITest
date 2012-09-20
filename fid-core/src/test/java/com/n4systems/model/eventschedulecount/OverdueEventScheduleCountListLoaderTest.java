@@ -1,8 +1,8 @@
 package com.n4systems.model.eventschedulecount;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -37,9 +37,9 @@ public class OverdueEventScheduleCountListLoaderTest {
 		
 		sut.load(new TestingTransaction());
 		
-		WhereParameter<?> whereParameter = (WhereParameter<?>)sut.queryBuilder.getWhereParameter("status");
-		assertEquals(Comparator.NE, whereParameter.getComparator());
-		assertEquals(ScheduleStatus.COMPLETED, whereParameter.getValue());
+		WhereParameter<?> whereParameter = (WhereParameter<?>)sut.queryBuilder.getWhereParameter("eventState");
+		assertEquals(Comparator.EQ, whereParameter.getComparator());
+		assertEquals(Event.EventState.OPEN, whereParameter.getValue());
 	}
 	
 	@Test
