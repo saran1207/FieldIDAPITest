@@ -41,6 +41,7 @@ public class EventActionsCell extends Panel {
 
         WebMarkupContainer completeEventActionsList = createCompleteEventActionsList(event, eventId, localEvent, localUser, printable, hasCreateEvent, hasEditEvent, hasTag);
         WebMarkupContainer incompleteEventActionsList = createIncompleteEventActionsList(event, isReadOnly, hasCreateEvent, hasTag);
+
         WebMarkupContainer safetyNetworkActionsList = createSafetyNetworkActionsList(event);
 
         completeEventActionsList.setVisible(localEvent && event.getEventState() == Event.EventState.COMPLETED);
@@ -123,18 +124,12 @@ public class EventActionsCell extends Panel {
     private WebMarkupContainer createSafetyNetworkActionsList(Event event) {
         WebMarkupContainer safetyNetworkActionsList = new WebMarkupContainer("safetyNetworkActionsList");
 
-        Asset linkedAsset = event.getAsset().getLinkedAsset();
+        Asset networkAsset = event.getAsset();
 
         NonWicketLink viewLink = new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getId());
         viewLink.setVisible(event.getEventState() == Event.EventState.COMPLETED);
         safetyNetworkActionsList.add(viewLink);
-
-        if (linkedAsset != null) {
-            Long linkedAssetId = linkedAsset.getId();
-            safetyNetworkActionsList.add(new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(linkedAssetId)));
-        } else {
-            safetyNetworkActionsList.add(new WebMarkupContainer("viewAssetLink").setVisible(false));
-        }
+        safetyNetworkActionsList.add(new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(networkAsset.getId())));
 
         return safetyNetworkActionsList;
     }
