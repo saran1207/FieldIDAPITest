@@ -461,7 +461,7 @@ function addSchedule() {
 		params.jobId = jobs.options[jobs.selectedIndex].value;
 	}
 	if (assignee!=null) {
-		params.assigneeId = assignee[assignee.selectedIndex].value;
+		params.assigneeId = assignee.options[assignee.selectedIndex].value;
 	}
 	
 	getResponse(addScheduleUrl, "post", params);

@@ -17,6 +17,7 @@ import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.model.*;
 import com.n4systems.model.location.PredefinedLocation;
@@ -25,6 +26,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.uitags.views.HierarchicalNode;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,9 @@ import static com.n4systems.fieldid.utils.CopyEventFactory.copyEvent;
 
 public class SubEventCrud extends EventCrud {
 	private static final long serialVersionUID = 1L;
+
+    @Autowired
+    protected UserService userService;
 
 	private String token;
 	private Asset parentAsset;
@@ -412,5 +417,10 @@ public class SubEventCrud extends EventCrud {
     public PredefinedLocation getPredefinedLocationId() {
         return event.getAdvancedLocation().getPredefinedLocation();
     }
+
+    public List<User> getAssignees() {
+        return userService.getExaminers();
+    }
+
 
 }

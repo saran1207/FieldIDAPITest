@@ -69,7 +69,7 @@
 
         <div class="infoSet">
             <label class="label"><@s.text name="label.assignee"/></label>
-            <@s.select name="assignee" id="assignee" list="assignees" listKey="id" listValue="displayName" theme="fieldid"/>
+            <@s.select name="assignee" id="assignee" list="assignees" listKey="id" listValue="displayName" emptyOption="true" theme="fieldid"/>
         </div>
 
         <div class="blockSeparated">
