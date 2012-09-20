@@ -52,7 +52,7 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
 		}
     }
 
-    protected User getCurrentUser() {
+    public User getCurrentUser() {
         return persistenceService.find(User.class, getSessionUser().getUniqueID());
     }
 

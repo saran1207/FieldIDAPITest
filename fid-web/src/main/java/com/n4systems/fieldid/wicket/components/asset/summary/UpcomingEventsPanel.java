@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.services.date.DateService;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -14,8 +15,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class UpcomingEventsPanel extends Panel {
+
+    private @SpringBean DateService dateService;
 
     public UpcomingEventsPanel(String id, UpcomingEventsListModel model, final Asset asset) {
         super(id, model);
@@ -35,11 +39,11 @@ public class UpcomingEventsPanel extends Panel {
                 }
 
                 item.add(new Label("upcomingEventType", schedule.getType().getName()));
-
+                
                 DayDisplayModel upcomingEventDate = new DayDisplayModel(Model.of(schedule.getNextDate())).includeTime();
-
+                
                 if (schedule.isPastDue()) {
-                    TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingEventDate",Model.of(schedule.getNextDate()));
+                    TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingEventDate",Model.of(schedule.getNextDate()),dateService.getUsersTimeZone());
                     item.add(timeAgoField);
                     item.add(new AttributeAppender("class", "overdue").setSeparator(" "));
                 } else if(schedule.getDaysToDue().equals(0L)) {
@@ -49,12 +53,12 @@ public class UpcomingEventsPanel extends Panel {
                     item.add(new Label("upcomingEventDate", new FIDLabelModel("label.in_x_days", schedule.getDaysToDue(), upcomingEventDate.getObject())));
                     item.add(new AttributeAppender("class", "due").setSeparator(" "));
                 }
-
+                
                 item.add(new Label("onDate", new FIDLabelModel("label.on_date", upcomingEventDate.getObject())));
-
+                
                 item.add(new OpenActionsCell("openActions", Model.of(schedule), UpcomingEventsPanel.this));
             }
         });
-        
     }
+    
 }

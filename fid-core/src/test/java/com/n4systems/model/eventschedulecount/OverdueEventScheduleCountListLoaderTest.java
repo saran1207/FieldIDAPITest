@@ -1,13 +1,7 @@
 package com.n4systems.model.eventschedulecount;
 
-import static com.n4systems.model.builders.NotificationSettingBuilder.*;
-import static org.junit.Assert.*;
-
-import com.n4systems.model.EventSchedule;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -19,6 +13,11 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.time.Clock;
 import com.n4systems.util.time.StoppedClock;
+import org.junit.Before;
+import org.junit.Test;
+
+import static com.n4systems.model.builders.NotificationSettingBuilder.aNotificationSetting;
+import static org.junit.Assert.assertEquals;
 
 
 public class OverdueEventScheduleCountListLoaderTest {

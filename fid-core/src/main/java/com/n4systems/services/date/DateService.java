@@ -61,4 +61,8 @@ public class DateService extends FieldIdService {
         return new LocalDate(new DateMidnight(DateTimeZone.forTimeZone(getUserTimeZone()))).toDate();
     }
 
+    public TimeZone getUsersTimeZone() {
+        return super.getUserTimeZone();
+    }
+
 }
