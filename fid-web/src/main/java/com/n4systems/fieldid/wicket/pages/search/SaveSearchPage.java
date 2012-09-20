@@ -36,12 +36,20 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
         this.overwrite = overwrite;
         Long savedItemId = null;
         name = getName();
+        description = getDescription();
         if (overwrite && savedItem != null) {
             savedItemId = savedItem.getId();
         }
         add(new SaveReportForm("saveReportForm", savedItemId));
     }
-    
+
+    private String getDescription() {
+        if (savedItem!=null) {
+            return savedItem.getDescription();
+        }
+        return "";
+    }
+
     private String getName() { 
         if (savedItem!=null && StringUtils.isNotEmpty(savedItem.getName())) {
             return overwrite ? savedItem.getName() : StringUtils.getFileCopyName(savedItem.getName());
@@ -79,7 +87,7 @@ public abstract class SaveSearchPage<T extends SavedItem> extends FieldIDFrontEn
         @Override
         protected void onSubmit() {
             T newSavedItem = saveSearch(savedItem, overwrite, name, description);
-            newSavedItem.getSearchCriteria().setSavedReportName(name); //?? why i don't think this is needed anymore?  confirm with neil.
+            newSavedItem.getSearchCriteria().setSavedReportName(name);
             FieldIDSession.get().info(createSavedConfirmationModel().getObject());
             setResponsePage(createSaveResponsePage(newSavedItem));
         }
