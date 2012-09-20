@@ -32,14 +32,14 @@ public class EventActionsCell extends Panel {
         Long eventId = event.getId();
 
         boolean localEvent = event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()).isLocal();
-        boolean localEndUser = event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()) == SecurityLevel.LOCAL_ENDUSER;
+        boolean localUser = event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()) == SecurityLevel.LOCAL;
         boolean printable = event.isEventCertPrintable();
         boolean isReadOnly = FieldIDSession.get().getSessionUser().isReadOnlyUser();
         boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
         boolean hasEditEvent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
         boolean hasTag = FieldIDSession.get().getSessionUser().hasAccess("tag");
 
-        WebMarkupContainer completeEventActionsList = createCompleteEventActionsList(event, eventId, localEvent, localEndUser, printable, hasCreateEvent, hasEditEvent, hasTag);
+        WebMarkupContainer completeEventActionsList = createCompleteEventActionsList(event, eventId, localEvent, localUser, printable, hasCreateEvent, hasEditEvent, hasTag);
         WebMarkupContainer incompleteEventActionsList = createIncompleteEventActionsList(event, isReadOnly, hasCreateEvent, hasTag);
         WebMarkupContainer safetyNetworkActionsList = createSafetyNetworkActionsList(event);
 
@@ -63,7 +63,7 @@ public class EventActionsCell extends Panel {
         };
 
         NonWicketLink startEventLink = new NonWicketLink("startEventLink", "selectEventAdd.action?scheduleId="+event.getId()+"&type="+event.getType().getId()+"&assetId="+event.getAsset().getId());
-        BookmarkablePageLink viewSchedulesLink = new BookmarkablePageLink("viewSchedulesLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
+        BookmarkablePageLink viewSchedulesLink = new BookmarkablePageLink("viewLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
 
         NonWicketLink deleteScheduleLink = new NonWicketLink("deleteScheduleLink", "eventScheduleDelete.action?uniqueID="+event.getId() +"&assetId="+event.getAsset().getId());
 
@@ -132,6 +132,8 @@ public class EventActionsCell extends Panel {
         if (linkedAsset != null) {
             Long linkedAssetId = linkedAsset.getId();
             safetyNetworkActionsList.add(new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(linkedAssetId)));
+        } else {
+            safetyNetworkActionsList.add(new WebMarkupContainer("viewAssetLink").setVisible(false));
         }
 
         return safetyNetworkActionsList;
