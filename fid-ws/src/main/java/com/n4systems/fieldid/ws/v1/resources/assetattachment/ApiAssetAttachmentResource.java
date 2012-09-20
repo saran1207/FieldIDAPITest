@@ -103,8 +103,12 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		List<AssetAttachment> attachments = new ArrayList<AssetAttachment>();
 		
 		for(ApiAssetAttachment apiAttachment : apiAttachments) {
-			AssetAttachment attachment = convertApiModelToEntity(apiAttachment, asset);
-			attachments.add(attachment);
+			if(apiAttachment.getData() != null) {
+				AssetAttachment attachment = convertApiModelToEntity(apiAttachment, asset);
+				attachments.add(attachment);
+			} else {
+				logger.warn("Discarding recieved ApiAssetAttachment with null data for asset: " + asset.getIdentifier());
+			}
 		}
 		
 		return attachments;

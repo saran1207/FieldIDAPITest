@@ -7,6 +7,8 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 @Component
 @Path("criteriaImage")
 public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
-
+	private static Logger logger = Logger.getLogger(ApiCriteriaImagesResource.class);
 	@Autowired private S3Service s3Service;
 
 	@PUT
@@ -41,6 +43,7 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 
 		persistenceService.update(criteriaResult);
 		s3Service.uploadCriteriaResultImage(criteriaResultImage);
+		
+		logger.info("Saved Criteria Image for CriteriaResult: " + apiCriteriaImage.getCriteriaResultSid());
 	}
-
 }
