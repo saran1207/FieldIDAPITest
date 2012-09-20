@@ -51,7 +51,6 @@ public class ReportResultsPanelTest extends FieldIdPanelTest<ReportResultsPanelH
 	}
 
 	@Test
-    @Ignore // TODO: need to fix this later...
 	public void testRender() throws ParseException {
 		results = makeResults();
 		
