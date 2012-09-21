@@ -94,7 +94,6 @@
     min-height: 40px;
     clear:left;
     padding: 5px 0;
-    overflow:hidden;
 }
 
 .mainPanel .fieldHolder {
@@ -103,7 +102,6 @@
     padding: 5px 0;
     width: 305px;
     line-height: 18px;
-    overflow:hidden;
 }
 
 .mainPanel .comment textarea {
