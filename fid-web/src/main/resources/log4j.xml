@@ -170,7 +170,16 @@
         <appender-ref ref="REQUESTS" />
     </category>
 
-	<root>
+    <category name="org.apache.wicket.resource.PropertiesFactory" additivity="false">
+        <priority value="ERROR" />
+    </category>
+
+    <!-- WEB-3324 - Remove when fixed -->
+    <category name="org.apache.wicket.Localizer" additivity="false">
+        <priority value="ERROR" />
+    </category>
+
+    <root>
 		<priority value="info" />
 		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="FIELDID_LOG" />
