@@ -10,6 +10,7 @@ class AddBasicActionsToTenants < ActiveRecord::Migration
       group = EventTypeGroup.new
       group.tenant_id = tenant.id
       group.name = "Actions"
+      group.reporttitle = "Action"
       group.action = 1
       group.created = Time.now
       group.modified = Time.now
