@@ -13,10 +13,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.Permissions;
 import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.ServiceLocator;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.Validation;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import com.opensymphony.xwork2.validator.annotations.*;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -212,6 +209,7 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 	}
 
 
+    @RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.owner.required")
     public Long getOwnerId() {
         return ownerPicker.getOwnerId();
     }
