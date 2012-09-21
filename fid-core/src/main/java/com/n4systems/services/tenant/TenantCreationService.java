@@ -52,7 +52,7 @@ public class TenantCreationService extends FieldIdPersistenceService {
         actionGroup.setTenant(tenant);
         actionGroup.setName("Actions");
         actionGroup.setAction(true);
-        actionGroup.setReportTitle("Actions");
+        actionGroup.setReportTitle("Action");
         persistenceService.save(actionGroup);
 
         EventType correctiveAction = new EventType();
