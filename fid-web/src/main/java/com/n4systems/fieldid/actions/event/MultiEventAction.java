@@ -21,9 +21,12 @@ import com.n4systems.model.*;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.eventtype.CommonAssetTypeDatabaseLoader;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
+import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
@@ -47,6 +50,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 
 	private EventType eventType;
 	private Event event;
+    private OwnerPicker ownerPicker;
 	
 	private final EventFormHelper eventFormHelper;
 	private List<Asset> assets;
@@ -96,7 +100,8 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 		super.postInit();
 		commonEventTypeHandler = createCommonEventTypeHandler();
 		modifiableEvent = new EventWebModel(new OwnerPicker(getLoaderFactory().createEntityByIdLoader(BaseOrg.class), event), getSessionUser().createUserDateConverter(), this);
-		overrideHelper(new MultiEventActionHelper(getLoaderFactory()));
+        ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), event);
+        overrideHelper(new MultiEventActionHelper(getLoaderFactory()));
 	}
 	
 	public void testDependencies() {
@@ -378,6 +383,43 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
         } else {
             event.setEventStatus(null);
         }
+    }
+
+    @SkipValidation
+    public String doUpdateLocation() {
+        return SUCCESS;
+    }
+
+    public List<HierarchicalNode> getPredefinedLocationTree() {
+        return ((MultiEventActionHelper)getHelper()).getPredefinedLocationTree(event.getOwner(), getCurrentUser());
+    }
+
+    public void setFreeFormLocation(String freeFormLocation) {
+        event.getAdvancedLocation().setFreeformLocation(freeFormLocation);
+    }
+
+    public String getFreeFormLocation() {
+        return event.getAdvancedLocation().getFreeformLocation();
+    }
+
+    public void setPredefinedLocationId(Long id) {
+        event.getAdvancedLocation().setPredefinedLocation(new PredefinedLocationByIdLoader(getSecurityFilter()).setId(id).load());
+    }
+
+    public PredefinedLocation getPredefinedLocationId() {
+        return event.getAdvancedLocation().getPredefinedLocation();
+    }
+
+    public void setOwnerId(Long ownerId) {
+        ownerPicker.setOwnerId(ownerId);
+    }
+
+    public Long getOwnerId() {
+        return ownerPicker.getOwnerId();
+    }
+
+    public BaseOrg getOwner() {
+        return ownerPicker.getOwner();
     }
 
 }

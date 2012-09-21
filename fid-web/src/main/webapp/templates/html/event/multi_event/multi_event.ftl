@@ -36,8 +36,10 @@
 		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>';
 		var loading_holder = '${loaderDiv?js_string}';
 		var resultRow = '${row?js_string}';
-		
-		onDocumentLoad(function(){ toStep(1); });
+        var getLocationPickerUrl = '<@s.url namespace="/ajax" action="updateMultiEventLocation"/>';
+
+
+    onDocumentLoad(function(){ toStep(1); });
 		
 		var asset = null;
 		<#list assets as asset>

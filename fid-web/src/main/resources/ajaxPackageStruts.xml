@@ -439,6 +439,10 @@
             <result name="success" type="freemarker">/templates/ajax/orgList/ajaxEventOrgPicker.ftl</result>
         </action>
 
+        <action name="updateMultiEventLocation" method="updateLocation" class="com.n4systems.fieldid.actions.event.MultiEventAction">
+            <result name="success" type="freemarker">/templates/ajax/orgList/ajaxEventOrgPicker.ftl</result>
+        </action>
+
         <action name="updateJobEventLocation" method="updateLocation" class="com.n4systems.fieldid.actions.search.EventScheduleJobAssignment">
             <result name="success" type="freemarker">/templates/ajax/orgList/ajaxJobEventOrgPicker.ftl</result>
         </action>
