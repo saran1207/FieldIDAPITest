@@ -47,8 +47,13 @@ public class LocationHelper {
     public List<HierarchicalNode> getPredefinedLocationTree(final BaseOrg owner, final User user) {
         return transactor.execute(new UnitOfWork<List<HierarchicalNode>>() {
             public List<HierarchicalNode> run(Transaction transaction) {
-                UserSecurityFilter filter = new UserSecurityFilter(owner, user.getId(), TimeZone.getDefault());
-                PredefinedLocationTree locationTree = new PredefinedLocationTreeLoader(new PredefinedLocationListLoader(filter)).load(transaction);
+                PredefinedLocationTree locationTree;
+                if (owner==null) {
+                    locationTree = new PredefinedLocationTree();
+                } else {
+                    UserSecurityFilter filter = new UserSecurityFilter(owner, user.getId(), TimeZone.getDefault());
+                    locationTree = new PredefinedLocationTreeLoader(new PredefinedLocationListLoader(filter)).load(transaction);
+                }
                 PredefinedLocationLevels levels = factory.createPredefinedLocationLevelsLoader().load(transaction);
                 List<HierarchicalNode> tree = new LocationTreeToHierarchicalNodesConverter().convert(locationTree, levels);
                 return tree;
