@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.AssetType;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -28,7 +29,7 @@ public class IdentifierLabel extends Label {
 
         @Override
         protected String load() {
-            if (assetTypeModel.getObject() != null) {
+            if (assetTypeModel.getObject() != null && !StringUtils.isBlank(assetTypeModel.getObject().getIdentifierLabel())) {
                 return assetTypeModel.getObject().getIdentifierLabel();
             }
             return FieldIDSession.get().getPrimaryOrg().getIdentifierLabel();
