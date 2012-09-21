@@ -91,9 +91,13 @@
 
 .mainPanel .infoSet {
     display: block;
-    min-height: 40px;
+    min-height: 49px;
     clear:left;
     padding: 5px 0;
+}
+
+.mainPanel .infoSet.comments {
+    height:90px;
 }
 
 .mainPanel .fieldHolder {

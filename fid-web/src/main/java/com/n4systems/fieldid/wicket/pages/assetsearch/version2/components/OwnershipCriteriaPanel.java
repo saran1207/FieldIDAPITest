@@ -42,7 +42,6 @@ public class OwnershipCriteriaPanel extends Panel {
 
     private void updateOwner(AjaxRequestTarget target, BaseOrg owner) {
         locationPicker.setOwner(owner);
-        // TODO DD : validate location owner and set to null if it isn't under given owner hierarchy.
     }
 
 }
