@@ -31,6 +31,8 @@ public class EventWebModel implements UserDateFormatValidator {
 	private boolean locationSetFromAsset = false;
 	private boolean ownerSetFromAsset = false;
 	private boolean assetStatusSetFromAsset = false;
+
+    private boolean dontModifyNextDate = false;
 	
 	public EventWebModel(OwnerPicker ownerPicker, SessionUserDateConverter dateConverter, LoaderFactoryProvider loaderFactoryProvider) {
 		this.ownerPicker = ownerPicker;
@@ -79,7 +81,9 @@ public class EventWebModel implements UserDateFormatValidator {
 		}
 		
 		event.setDate(datePerformed != null ? dateConverter.convertDateTime(datePerformed) : null);
-        event.setNextDate(nextDate != null ? dateConverter.convertDateTimeWithNoTimeZone(nextDate) : null);
+        if (!dontModifyNextDate) {
+            event.setNextDate(nextDate != null ? dateConverter.convertDateTimeWithNoTimeZone(nextDate) : null);
+        }
 	}
 	
 	public String getDatePerformed() {
@@ -137,4 +141,11 @@ public class EventWebModel implements UserDateFormatValidator {
 		this.assetStatusSetFromAsset  = isStatusSetFromAsset;
 	}
 
+    public boolean isDontModifyNextDate() {
+        return dontModifyNextDate;
+    }
+
+    public void setDontModifyNextDate(boolean dontModifyNextDate) {
+        this.dontModifyNextDate = dontModifyNextDate;
+    }
 }
