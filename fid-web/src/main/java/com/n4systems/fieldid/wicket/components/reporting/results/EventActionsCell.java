@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.reporting.results;
 
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -16,8 +17,12 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class EventActionsCell extends Panel {
+
+    @SpringBean
+    private AssetService assetService;
 
     public EventActionsCell(String id, IModel<RowView> rowModel) {
         super(id);
@@ -42,7 +47,9 @@ public class EventActionsCell extends Panel {
         WebMarkupContainer completeEventActionsList = createCompleteEventActionsList(event, eventId, localEvent, localUser, printable, hasCreateEvent, hasEditEvent, hasTag);
         WebMarkupContainer incompleteEventActionsList = createIncompleteEventActionsList(event, isReadOnly, hasCreateEvent, hasTag);
 
-        WebMarkupContainer safetyNetworkActionsList = createSafetyNetworkActionsList(event);
+
+        WebMarkupContainer safetyNetworkActionsList;
+        safetyNetworkActionsList = createSafetyNetworkActionsList(event, localEvent);
 
         completeEventActionsList.setVisible(localEvent && event.getEventState() == Event.EventState.COMPLETED);
         incompleteEventActionsList.setVisible(localEvent && event.getEventState() != Event.EventState.COMPLETED);
@@ -121,15 +128,26 @@ public class EventActionsCell extends Panel {
         return completeEventActionsList;
     }
 
-    private WebMarkupContainer createSafetyNetworkActionsList(Event event) {
+    private WebMarkupContainer createSafetyNetworkActionsList(Event event, boolean localEvent) {
         WebMarkupContainer safetyNetworkActionsList = new WebMarkupContainer("safetyNetworkActionsList");
+
+        if (localEvent) {
+            safetyNetworkActionsList.setVisible(false);
+            return safetyNetworkActionsList;
+        }
 
         Asset networkAsset = event.getAsset();
 
         NonWicketLink viewLink = new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getId());
         viewLink.setVisible(event.getEventState() == Event.EventState.COMPLETED);
         safetyNetworkActionsList.add(viewLink);
-        safetyNetworkActionsList.add(new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(networkAsset.getId())));
+
+        Asset localAsset = assetService.findLocalAssetFor(networkAsset);
+        if (localAsset != null) {
+            safetyNetworkActionsList.add(new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(localAsset.getId())));
+        } else {
+            safetyNetworkActionsList.add(new WebMarkupContainer("viewAssetLink").setVisible(false));
+        }
 
         return safetyNetworkActionsList;
     }

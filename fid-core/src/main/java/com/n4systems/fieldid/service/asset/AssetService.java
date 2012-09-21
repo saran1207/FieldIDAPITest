@@ -511,6 +511,14 @@ public class AssetService extends FieldIdPersistenceService {
         return asset;
     }
 
+    public Asset findLocalAssetFor(Asset asset) {
+        QueryBuilder<Asset> queryBuilder = createUserSecurityBuilder(Asset.class);
+
+        queryBuilder.addSimpleWhere("networkId", asset.getNetworkId());
+
+        return persistenceService.find(queryBuilder);
+    }
+
     public List<Asset> search(String search, int threshold) {
         QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
         String assetTypeTerm = getAssetTypeTerm(search);
