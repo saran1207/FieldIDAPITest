@@ -1,29 +1,35 @@
 package com.n4systems.ejb.impl;
 
-import java.util.Date;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventType;
+import com.n4systems.model.Project;
+import com.n4systems.model.user.User;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.n4systems.model.Project;
+import java.util.Date;
 
 public class EventScheduleBundle {	
 	private final Asset asset;
 	private final EventType type;
 	private final Project job;
 	private final Date scheduledDate;
+    private final User assginee;
 	
 	public EventScheduleBundle(Asset asset, EventType type, Project job, Date scheduledDate) {
-		this.asset = asset;
-		this.type = type;
-		this.job = job;
-		this.scheduledDate = scheduledDate;
-		
-		guard();
-	}
+        this(asset, type, job, scheduledDate, null);
+    }
+
+    public EventScheduleBundle(Asset asset, EventType type, Project job, Date scheduledDate, User assignee) {
+        this.asset = asset;
+        this.type = type;
+        this.job = job;
+        this.scheduledDate = scheduledDate;
+        this.assginee = assignee;
+
+        guard();
+    }
 
 	private void guard() {
 		if (asset == null) {
@@ -55,7 +61,11 @@ public class EventScheduleBundle {
 		return scheduledDate;
 	}
 
-	@Override
+    public User getAssginee() {
+        return assginee;
+    }
+
+    @Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}

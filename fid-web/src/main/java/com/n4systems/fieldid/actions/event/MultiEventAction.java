@@ -13,6 +13,7 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValues;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValuesFinder;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.CommonEventTypeHandler;
@@ -25,6 +26,7 @@ import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.ConfigContext;
@@ -37,6 +39,7 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
@@ -72,6 +75,9 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
     
     private EventScheduleManager eventScheduleManager;
     private AssignedToUserGrouper userGrouper;
+
+    @Autowired
+    protected UserService userService;
 
     public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
@@ -421,5 +427,10 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
     public BaseOrg getOwner() {
         return ownerPicker.getOwner();
     }
+
+    public List<User> getAssignees() {
+        return userService.getExaminers();
+    }
+
 
 }
