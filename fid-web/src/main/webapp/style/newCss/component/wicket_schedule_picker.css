@@ -71,6 +71,7 @@
     border:1px solid #69f;
     color:white;
     margin-right:10px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#357AE8', endColorstr = '#4D90FE', GradientType = 0);
 }
 
 .newScheduleForm .scheduleRow .datetimepicker {

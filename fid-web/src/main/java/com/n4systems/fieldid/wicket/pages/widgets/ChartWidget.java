@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -13,7 +12,10 @@ import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranular
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.EnumUtils;
-import com.n4systems.util.chart.*;
+import com.n4systems.util.chart.ChartData;
+import com.n4systems.util.chart.ChartGranularity;
+import com.n4systems.util.chart.FlotOptions;
+import com.n4systems.util.chart.LineGraphOptions;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,9 +31,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.Duration;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Set;
-import java.util.TimeZone;
 
 /**
  * used to render a Flot Chart based widget.     
@@ -90,12 +90,12 @@ public abstract class ChartWidget<X extends Comparable,T extends WidgetConfigura
 			@Override
 			public Component getLazyLoadComponent(String markupId) {
 				Component chart = createFlotChartImpl(markupId);
-            	logger.warn("WIDGET_SOURCE end " + className + " @ " + dateFormat.format(new Date()));
+//            	logger.warn("WIDGET_SOURCE end " + className + " @ " + dateFormat.format(new Date()));
 				return chart;
 			}
             @Override
 			public Component getLoadingComponent(final String markupId) {
-            	logger.warn("WIDGET_SOURCE start " + className + " @ " + dateFormat.format(new Date()));
+//            	logger.warn("WIDGET_SOURCE start " + className + " @ " + dateFormat.format(new Date()));
                 return new Label(markupId, "<div class='loadingText'>" + new FIDLabelModel("label.loading_ellipsis").getObject() +
                     "</div>").setEscapeModelStrings(false).add(new SimpleAttributeModifier("class", "chart-loading"));
             }
