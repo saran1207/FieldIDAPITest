@@ -53,9 +53,13 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
                 String url = String.format("/fieldid/w/performEvent?type=%d&assetId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getId(), actionModel.getObject().getId());
                 target.appendJavaScript("parent.window.location='"+url+"';");
             }
+
+            @Override
+            public boolean isVisible() {
+                return assetSummaryContext || ( actionModel.getObject().isActive() && isStartable(criteriaResultModel));
+            }
         };
         add(startEventLink);
-        startEventLink.setVisible(isStartable(criteriaResultModel));
 
         Link editLink = new Link("editLink") {
             @Override public void onClick() {

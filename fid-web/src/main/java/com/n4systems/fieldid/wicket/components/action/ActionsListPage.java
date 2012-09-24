@@ -51,7 +51,7 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
                                 return !isReadOnly();
                             }
                             @Override protected boolean isStartable(IModel<CriteriaResult> criteriaResultModel) {
-                                return super.isStartable(criteriaResultModel) && !isReadOnly();
+                                return super.isStartable(criteriaResultModel) && isReadOnly();
                             }
                             @Override protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
                                 ActionsListPage.this.setActionsListResponsePage(criteriaResultModel);
