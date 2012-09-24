@@ -17,9 +17,13 @@ public abstract class TransientCriteriaResultPopulator {
                 List<CriteriaResult> transientSectionResults = new ArrayList<CriteriaResult>();
                 AbstractEvent.SectionResults sectionResults = new AbstractEvent.SectionResults();
 
-                for (Criteria criteria : section.getCriteria()) {
+                for (Criteria criteria : section.getAvailableCriteria()) {
 
                     CriteriaResult transientResult = getCriteriaResultFor(event, criteria);
+
+                    if (transientResult == null) {
+                        continue;
+                    }
 
                     transientResult.setCriteria(criteria);
                     transientResult.setTenant(event.getTenant());
