@@ -1,4 +1,12 @@
 ${action.setPageType('asset', 'customer_edit')!}
+
+<head>
+    <script type="text/javascript">
+        getLocationPickerUrl = '<@s.url namespace="ajax" action="updateCustomerInformationLocation" uniqueID="${asset.id}"/>';
+    </script>
+
+</head>
+
 <@s.form action="customerInformationUpdate" cssClass="crudForm" theme="fieldid">
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
@@ -16,12 +24,14 @@ ${action.setPageType('asset', 'customer_edit')!}
 	<#if !subAsset>
 		<div class="infoSet">
 			<label><#include "../common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
-			<@n4.orgPicker name="owner"/>
+			<@n4.orgPicker id="ownerId" name="owner"/>
 		</div>
 		<div class="infoSet">
 			<label><@s.text name="label.location"/></label>
 			<div class="fieldHolder">
-				<@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="fieldidSimple"/>
+                <span class="locationTree">
+				    <@n4.location name="assetWebModel.location" id="location" nodesList=predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="fieldidSimple"/>
+                </span>
 			</div>
 	
 		</div>
