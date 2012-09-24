@@ -438,5 +438,10 @@ public class MasterEventCrud extends AbstractCrud {
 	public Long getEventId() {
 		return masterEvent.getEvent().getId();
 	}
-	
+
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE7";
+    }
+
 }
