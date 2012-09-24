@@ -140,4 +140,9 @@ public class AssetMergeAction extends AbstractCrud {
 	public boolean isLinked() {
 		return AssetLinkedHelper.isLinked(losingAsset, getLoaderFactory());
 	}
+
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE8";
+    }
 }
