@@ -92,7 +92,7 @@ public class AllEventsOfTypeRemovalService extends FieldIdPersistenceService {
 		EventArchiveSummary summary = new EventArchiveSummary();
 
 		summary.setDeleteEvents(eventToBeDeleted(eventType));
-		summary.setDeleteSchedules(scheduleListRemovalService.summary(null, eventType, Event.EventStateGrouping.COMPLETE).getSchedulesToRemove());
+		summary.setDeleteSchedules(scheduleListRemovalService.summary(null, eventType, Event.EventStateGrouping.NON_COMPLETE).getSchedulesToRemove());
 
 		return summary;
 	}
