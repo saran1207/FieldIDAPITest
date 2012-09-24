@@ -195,6 +195,13 @@ public class S3Service extends FieldIdPersistenceService {
 				criteriaResultImage.getFileName());
 	}
 
+    public InputStream openCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
+        return openResourceStream(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
+    }
+
 	private void uploadResource(byte[] data, String contentType, Long tenantId, String path, Object...pathArgs) {
 		putObject(createResourcePath(tenantId, path, pathArgs), data, contentType);
 	}
@@ -227,6 +234,16 @@ public class S3Service extends FieldIdPersistenceService {
             return handleAmazonS3Exception(e, (byte[]) null);
         } finally {
             IOUtils.closeQuietly(resourceInput);
+        }
+    }
+
+    private InputStream openResourceStream(Long tenantId, String path, Object...pathArgs) throws IOException {
+        try {
+            S3Object resource = getObject(createResourcePath(tenantId, path, pathArgs));
+            InputStream resourceInput = resource.getObjectContent();
+            return resourceInput;
+        } catch (AmazonS3Exception e) {
+            return handleAmazonS3Exception(e, (InputStream) null);
         }
     }
 

@@ -11,7 +11,6 @@ import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.DoubleFormatter;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -206,8 +205,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 							try {
 								criteriaResultImageView = new CriteriaResultImageView();
 								criteriaResultImageView.setComments(resultImage.getComments());
-								byte[] image = s3Service.downloadCriteriaResultImageMedium(resultImage);
-								criteriaResultImageView.setImage(image != null ? new ByteArrayInputStream(image) : null);
+								criteriaResultImageView.setImage(s3Service.openCriteriaResultImageMedium(resultImage));
 								stateView.getCriteriaImages().add(criteriaResultImageView);
 							} catch (IOException e) {
 								throw new RuntimeException(e);
