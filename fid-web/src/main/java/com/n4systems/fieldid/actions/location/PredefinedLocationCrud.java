@@ -56,6 +56,8 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
         ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), predefinedLocation);
         if (predefinedLocation!=null && predefinedLocation.getOwner()!=null) {
             ownerPicker.updateOwner(predefinedLocation.getOwner());
+        } else {
+            ownerPicker.updateOwner(getCurrentUser().getOwner());
         }
 		overrideHelper(new PredefinedLocationCrudHelper(getLoaderFactory()));
 	}

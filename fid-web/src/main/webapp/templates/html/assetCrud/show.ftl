@@ -6,7 +6,7 @@
 
 	<script language="Javascript" src="javascript/marryOrder.js"></script>
 	<script type="text/javascript">
-	
+
 		ordersUrl = "<@s.url action="orders" namespace="/aHtml"  />";
 		marryOrderUrl = "<@s.url action="marryOrder" namespace="/ajax"  />";
 		marryOrderTitle = '<@s.text name="label.connectorder" />';
