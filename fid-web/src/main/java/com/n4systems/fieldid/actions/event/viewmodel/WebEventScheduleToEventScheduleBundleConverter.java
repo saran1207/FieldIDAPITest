@@ -29,8 +29,13 @@ public class WebEventScheduleToEventScheduleBundleConverter {
         
 		scheduleDate = dateConverter.convertDate(nextSchedule.getDate());
 		scheduleType = loaderFactory.createFilteredIdLoader(EventType.class).setId(nextSchedule.getType()).load();
-        assignee = loaderFactory.createFilteredIdLoader(User.class).setId(nextSchedule.getAssignee()).load();
-		
+
+        if (nextSchedule.getAssignee() != null) {
+            assignee = loaderFactory.createFilteredIdLoader(User.class).setId(nextSchedule.getAssignee()).load();
+        } else {
+            assignee = null;
+        }
+
 		if (nextSchedule.getJob() != null) {
 			scheduleJob = loaderFactory.createFilteredIdLoader(Project.class).setId(nextSchedule.getJob()).load();
 		} else {
