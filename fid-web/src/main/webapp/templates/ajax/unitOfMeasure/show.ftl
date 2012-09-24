@@ -36,7 +36,7 @@
 		$( 'unitOfMeasureForm_${infoFieldId}' ).stopObserving( 'submit', submitUnitOfMeasure );
 	} 
 	
-	$('unitSelectorDiv_${infoFieldId}').replace( new Element( 'div', { 'id': 'unitSelectorDiv_${infoFieldId}', 'class': 'unitMeasureDiv'} ).insert( '${html}' ) );
+	$('unitSelectorDiv_${infoFieldId}').replace( new Element( 'div', { 'id': 'unitSelectorDiv_${infoFieldId}'} ).addClassName('unitMeasureDiv').insert( '${html}' ) );
 
 	$( 'unitOfMeasureForm_${infoFieldId}' ).observe( 'submit', submitUnitOfMeasure ); 
 
