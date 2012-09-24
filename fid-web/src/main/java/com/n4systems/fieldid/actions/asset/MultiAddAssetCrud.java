@@ -520,4 +520,8 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
         return ((MultiAddAssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
     }
 
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE8";
+    }
 }

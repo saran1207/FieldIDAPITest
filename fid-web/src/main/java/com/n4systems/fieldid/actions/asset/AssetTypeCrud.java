@@ -566,4 +566,9 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	public void setGroupFilter(Long groupFilter) {
 		this.groupFilter = groupFilter;
 	}
+
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE8";
+    }
 }

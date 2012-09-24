@@ -648,4 +648,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
     public String getMainLogoUrl(Long tenantId) {
         return s3Service.getBrandingLogoURL(tenantId).toString();
     }
+
+    public String getIEHeader() {
+        return "Edge";
+    }
 }

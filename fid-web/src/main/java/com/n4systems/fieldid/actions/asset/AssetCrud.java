@@ -1255,5 +1255,8 @@ public class AssetCrud extends UploadAttachmentSupport {
         return assetWebModel.getLocation().getPredefinedLocationId();
     }
 
-
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE8";
+    }
 }
