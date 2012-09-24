@@ -3,12 +3,14 @@ package com.n4systems.fieldid.wicket.pages.event;
 import com.n4systems.fieldid.service.event.EventCriteriaEditService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -49,5 +51,10 @@ public class EditEventPage extends EventPage {
         criteriaEditService.storeCriteriaChanges(editedEvent);
         editedEvent.storeTransientCriteriaResults();
         return eventCreationService.updateEvent(editedEvent, proofTestEditPanel.getFileDataContainer(), fileAttachments);
+    }
+
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.edit_event"));
     }
 }

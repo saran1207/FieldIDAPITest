@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
@@ -10,6 +11,7 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -69,6 +71,11 @@ public class PerformEventPage extends EventPage {
         Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, fileAttachments, createEventScheduleBundles());
 
         return savedEvent;
+    }
+
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.perform_event"));
     }
 
 }

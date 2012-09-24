@@ -314,9 +314,6 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         }
     }
 
-    @Override
-    protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.perform_event"));
-    }
+
 
 }

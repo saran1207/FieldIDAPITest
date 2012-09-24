@@ -1,4 +1,5 @@
 <head>
+    <title><@s.text name="title.event_show"/></title>
     <@n4.includeStyle href="newCss/component/matt_buttons" />
     <@n4.includeStyle href="newCss/asset/actions-menu.css" />
     <script type="text/javascript">
