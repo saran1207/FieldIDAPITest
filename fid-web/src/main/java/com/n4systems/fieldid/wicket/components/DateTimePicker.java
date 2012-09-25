@@ -33,7 +33,7 @@ import java.util.Locale;
 public class DateTimePicker extends Panel {
 
     private static final String UPDATE_JS = "$.datepicker.%s($('#%s')[0]);";
-    private static final String CLEAR_DATE_JS = "$('#%s').datepicker('setDate',%s);";
+    private static final String SET_DATE_JS = "$('#%s').datepicker('setDate',%s);";
     private static final String JS_DATE = "new Date(%d,%d,%d)";
     private static final String JS_DATE_WITH_TIME = "new Date(%d,%d,%d,%d,%d,%d)";
 
@@ -42,6 +42,7 @@ public class DateTimePicker extends Panel {
     private boolean includeTime;
     private boolean allDay = true;
     private Integer monthsDisplayed = 3;
+    private boolean performSetDateOnInitialization = true;
 
     public DateTimePicker(String id, IModel<Date> dateModel) {
         this(id, dateModel, false);
@@ -172,7 +173,9 @@ public class DateTimePicker extends Panel {
                     "_disableTimepickerDatepicker", dateTextField.getMarkupId()));
         }
 
-        jsBuffer.append(String.format(CLEAR_DATE_JS, dateTextField.getMarkupId(), getModelDateForJS()));
+        if (performSetDateOnInitialization) {
+            jsBuffer.append(String.format(SET_DATE_JS, dateTextField.getMarkupId(), getModelDateForJS()));
+        }
 
         return jsBuffer.toString();
     }
@@ -246,9 +249,9 @@ public class DateTimePicker extends Panel {
         }
     }
 
+    public DateTimePicker withoutPerformSetDateOnInitialization() {
+        performSetDateOnInitialization = false;
+        return this;
+    }
 
 }
-
-
-
-

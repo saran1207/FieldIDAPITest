@@ -16,7 +16,9 @@ public class DateCriteriaEditPanel extends Panel {
         super(id);
         
         DateFieldCriteria dateField = (DateFieldCriteria)result.getObject().getCriteria();
-        DateTimePicker dateTimePicker = new DateTimePicker("dateField", new PropertyModel<Date>(result, "value"), dateField.isIncludeTime()).withNoAllDayCheckbox();
+        DateTimePicker dateTimePicker = new DateTimePicker("dateField", new PropertyModel<Date>(result, "value"), dateField.isIncludeTime());
+
+        dateTimePicker.withNoAllDayCheckbox().withoutPerformSetDateOnInitialization();
         
         dateTimePicker.addToDateField(new UpdateComponentOnChange());
         add(dateTimePicker);
