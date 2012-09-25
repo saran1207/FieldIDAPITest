@@ -98,6 +98,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     class OuterEventForm extends Form {
 
         private LocationPicker locationPicker;
+		private NewOrExistingEventBook newOrExistingEventBook;
 
         public OuterEventForm(String id) {
             super(id);
@@ -121,7 +122,10 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                 @Override
                 protected void onOrgSelected(AjaxRequestTarget target) {
                     doAutoSchedule();
-                    locationPicker.setOwner((BaseOrg) getDefaultModel().getObject());
+					BaseOrg selectedOrg = (BaseOrg) getDefaultModel().getObject();
+                    locationPicker.setOwner(selectedOrg);
+					newOrExistingEventBook.setOwner(selectedOrg);
+					target.add(newOrExistingEventBook);
                 }
             });
 
@@ -168,7 +172,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             DropDownChoice<User> performedBy = new DropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
             DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
             DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "nextDate"), true).withNoAllDayCheckbox();
-            NewOrExistingEventBook newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
+			newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
+			newOrExistingEventBook.setOwner(new PropertyModel<BaseOrg>(event, "owner").getObject());
 
             AttributesEditPanel attributesEditPanel = new AttributesEditPanel("eventAttributes", event);
 

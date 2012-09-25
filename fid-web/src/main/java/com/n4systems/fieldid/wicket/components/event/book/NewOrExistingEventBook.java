@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
 import com.n4systems.model.EventBook;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -21,14 +22,16 @@ public class NewOrExistingEventBook extends FormComponentPanel<EventBook> {
 
     DropDownChoice<EventBook> existingBookSelect;
     TextField<String> newEventBookName;
+	EventBooksForTenantModel eventBooksForTenantModel;
 
     public NewOrExistingEventBook(String id, IModel<EventBook> eventBook) {
         super(id, eventBook);
 
         setOutputMarkupPlaceholderTag(true);
 
+		eventBooksForTenantModel = new EventBooksForTenantModel().setOpenBooksOnly(true);
         existingEventBook = eventBook.getObject();
-        existingBookSelect = new DropDownChoice<EventBook>("existingEventBook", new PropertyModel<EventBook>(this, "existingEventBook"), new EventBooksForTenantModel().setOpenBooksOnly(true), new ListableChoiceRenderer<EventBook>());
+        existingBookSelect = new DropDownChoice<EventBook>("existingEventBook", new PropertyModel<EventBook>(this, "existingEventBook"), eventBooksForTenantModel, new ListableChoiceRenderer<EventBook>());
         existingBookSelect.setNullValid(true);
         existingBookSelect.add(new UpdateComponentOnChange());
         add(existingBookSelect);
@@ -68,6 +71,11 @@ public class NewOrExistingEventBook extends FormComponentPanel<EventBook> {
         } else {
             setConvertedInput(newEventBook);
         }
+    }
+
+    public NewOrExistingEventBook setOwner(BaseOrg owner) {
+		eventBooksForTenantModel.setOwner(owner);
+		return this;
     }
 
 }
