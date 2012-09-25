@@ -1,23 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
-import java.io.ByteArrayInputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
@@ -25,19 +7,7 @@ import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventStatus;
-import com.n4systems.model.EventType;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.GpsLocation;
-import com.n4systems.model.Status;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.PredefinedLocation;
@@ -47,6 +17,18 @@ import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Path("event")
@@ -138,6 +120,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		if (apiEvent.getStatus() != null) {
 			event.setStatus(Status.valueOf(apiEvent.getStatus()));
 		} else {
+            // NOTE : this could be related to WEB-3362.  (ed note : delete comment if this has been confirmed one way or other).
 			event.setStatus(null);
 		}
 		

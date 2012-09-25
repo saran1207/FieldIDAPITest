@@ -1,20 +1,17 @@
 package com.n4systems.api.conversion.event;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.model.EventView;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.Event;
+import com.n4systems.model.*;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
 import com.n4systems.model.orgs.BaseOrg;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class EventToViewConverter implements ModelToViewConverter<Event, EventView> {
 	private final NextEventDateByEventLoader nextDateLoader;
@@ -86,7 +83,11 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 	}
 
 	protected void convertEventStatus(Event model, EventView view) {
-		view.setStatus(model.getStatus().getDisplayName());
+        Status status = model.getStatus();
+        if (status==null) {
+            status = Status.VOID;
+        }
+		view.setStatus(status.getDisplayName());
 	}
 
 	protected void convertAssetIdentifier(Event model, EventView view) {
