@@ -82,6 +82,7 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
             @Override
             public void onClick(AjaxRequestTarget target) {
                 getTransientObservations().clear();
+                comments = null;
                 target.add(ObservationsEditPanel.this);
             }
         });
