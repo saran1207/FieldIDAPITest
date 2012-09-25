@@ -3,9 +3,11 @@ package com.n4systems.fieldid.wicket.pages.event;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
+import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
@@ -51,6 +53,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -63,7 +66,8 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class EventPage extends FieldIDFrontEndPage {
-    
+
+    @SpringBean protected EventService eventService;
     @SpringBean protected EventCreationService eventCreationService;
     @SpringBean protected PersistenceService persistenceService;
     @SpringBean protected EventStatusService eventStatusService;
@@ -224,6 +228,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             saveButton.add(new DisableButtonBeforeSubmit());
             add(saveButton);
             add(createCancelLink("cancelLink"));
+            add(createDeleteLink("deleteLink"));
         }
 
         @Override
@@ -243,6 +248,18 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     }
 
     protected abstract Component createCancelLink(String cancelLink);
+
+    private Link createDeleteLink(String linkId) {
+        return new Link(linkId) {
+            { add(new JavaScriptAlertConfirmBehavior(new FIDLabelModel("label.confirm_event_delete"))); }
+            @Override
+            public void onClick() {
+                eventService.retireEvent(event.getObject());
+                FieldIDSession.get().info(getString("message.eventdeleted"));
+                setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getObject().getAsset().getId()));
+            }
+        };
+    }
 
     protected void saveEventBookIfNecessary() {
         EventBook book = event.getObject().getBook();
@@ -318,7 +335,5 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             schedules.add(eventSchedule);
         }
     }
-
-
 
 }
