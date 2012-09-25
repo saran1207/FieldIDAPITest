@@ -647,6 +647,8 @@ function setAssignedToAsCurrentUser(thisUserId){
 			option.selected=true;
 		}
 	});
+
+    jQuery("#assignedToSelectBox").trigger("liszt:updated");
 }
 
 function closeLightbox() {
