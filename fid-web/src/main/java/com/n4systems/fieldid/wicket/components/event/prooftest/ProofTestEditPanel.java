@@ -67,7 +67,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
         });
 
         add(new Label("proofTestTypeLabel", new FIDLabelModel(new PropertyModel<String>(proofTestInfo, "proofTestType.displayName"))).setVisible(!multipleProofTypes));
-        if (!multipleProofTypes) {
+        if (proofTestTypes.size()==1) {
             ProofTestInfo info = new ProofTestInfo();
             info.setProofTestType(proofTestTypes.get(0));
             proofTestInfo.setObject(info);
