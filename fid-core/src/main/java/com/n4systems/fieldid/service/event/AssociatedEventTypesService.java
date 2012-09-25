@@ -6,7 +6,6 @@ import com.n4systems.fieldid.service.remover.EventFrequenciesRemovalService;
 import com.n4systems.fieldid.service.remover.ScheduleListRemovalService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +77,11 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
 
         for (AssociatedEventType associatedEventType : toBeRemoved) {
             eventFrequenciesRemovalService.remove(associatedEventType);
-            scheduleListRemovalService.remove(associatedEventType.getAssetType(), associatedEventType.getEventType(), Event.EventStateGrouping.NON_COMPLETE);
+
+            assetTypeService.deleteRecurringEvent(associatedEventType.getAssetType(), associatedEventType.getEventType());
+            scheduleListRemovalService.archiveLegacySchedules(associatedEventType.getAssetType(), associatedEventType.getEventType());
+            scheduleListRemovalService.deleteAssociatedEvents(associatedEventType.getAssetType(), associatedEventType.getEventType());
+
             persistenceService.remove(associatedEventType);
 
 
