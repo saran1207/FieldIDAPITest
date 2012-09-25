@@ -429,9 +429,8 @@ h2 span.formTitle {
 }
 
 .pageContent .proofTestManual{
-	padding: 0 0 0 180px;
-    float:left;
     display:block;
+    padding-left:150px;
     overflow:hidden;
     width:305px;
 }
@@ -588,4 +587,8 @@ span.fieldHolder img {
 
 .attachmentsForm {
     padding: 10px 0 10px 0;
+}
+
+.label.proof-test-label {
+    text-align:left;
 }

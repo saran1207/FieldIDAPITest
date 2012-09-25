@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.event.prooftest;
 
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Event;
 import com.n4systems.model.ProofTestInfo;
@@ -9,6 +10,7 @@ import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.TextField;
@@ -48,11 +50,14 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
 
         uploadedProofTestContainer.add(fileUploadField = new FileUploadField("fileUpload"));
 
-        updateVisiblityOfComponents();
+        final List<ProofTestType> proofTestTypes = new ArrayList<ProofTestType>(event.getObject().getType().getSupportedProofTests());
 
-        List<ProofTestType> proofTestTypes = new ArrayList<ProofTestType>(event.getObject().getType().getSupportedProofTests());
-
-        DropDownChoice<ProofTestType> typeSelect = new DropDownChoice<ProofTestType>("proofTestType", new PropertyModel<ProofTestType>(proofTestInfo, "proofTestType"), proofTestTypes, new ListableLabelChoiceRenderer<ProofTestType>());
+        final boolean multipleProofTypes = proofTestTypes.size()>1;
+        DropDownChoice<ProofTestType> typeSelect = new DropDownChoice<ProofTestType>("proofTestType", new PropertyModel<ProofTestType>(proofTestInfo, "proofTestType"), proofTestTypes, new ListableLabelChoiceRenderer<ProofTestType>()) {
+            @Override public boolean isVisible() {
+                return multipleProofTypes;
+            }
+        };
         typeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -61,7 +66,16 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
             }
         });
 
+        add(new Label("proofTestTypeLabel", new FIDLabelModel(new PropertyModel<String>(proofTestInfo, "proofTestType.displayName"))).setVisible(!multipleProofTypes));
+        if (!multipleProofTypes) {
+            ProofTestInfo info = new ProofTestInfo();
+            info.setProofTestType(proofTestTypes.get(0));
+            proofTestInfo.setObject(info);
+        }
+
         add(otherTypeContainer, uploadedProofTestContainer, typeSelect);
+
+        updateVisiblityOfComponents();
     }
 
     private void updateVisiblityOfComponents() {
