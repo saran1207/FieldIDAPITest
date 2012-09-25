@@ -32,7 +32,13 @@
 		<@n4.includeStyle href="newCss/event/event_base" />
 		<@n4.includeStyle href="newCss/event/event_schedule" />
 	</head>
-	<title>${(eventType.name)!} <@s.text name="label.on"/> ${asset.identifier}</title>
+	<title>
+        <#if action.isParentAsset()>
+            <@s.text name="title.masterevent_add"/>
+        <#else>
+            <@s.text name="title.subevent_add"/>
+        </#if>
+    </title>
     <input type="hidden" name="assetType" id="assetType" value="${asset.type.id}">
 	
 	<#include "/templates/html/common/_formErrors.ftl" />
