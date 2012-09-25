@@ -501,7 +501,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         if (resultFromCriteriaAvailable) {
             status = null;
         } else {
-            status = Status.NA;
+            status = Status.PASS;
         }
     }
 
