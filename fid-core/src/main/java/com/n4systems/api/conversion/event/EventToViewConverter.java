@@ -78,7 +78,7 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 	protected void convertDirectFields(Event model, EventView view) {
 		view.setComments(model.getComments());
 		view.setDatePerformed(model.getDate());
-		view.setLocation(model.getAdvancedLocation().getFreeformLocation());
+		view.setLocation(model.getAdvancedLocation().getFullName());
 		view.setPrintable(model.isPrintable());
 	}
 

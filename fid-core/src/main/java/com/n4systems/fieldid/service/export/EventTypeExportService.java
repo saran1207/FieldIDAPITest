@@ -1,17 +1,5 @@
 package com.n4systems.fieldid.service.export;
 
-import static com.google.common.base.Preconditions.*;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.conversion.event.EventToViewConverter;
@@ -32,6 +20,17 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.StreamUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class EventTypeExportService extends FieldIdPersistenceService {
 	
