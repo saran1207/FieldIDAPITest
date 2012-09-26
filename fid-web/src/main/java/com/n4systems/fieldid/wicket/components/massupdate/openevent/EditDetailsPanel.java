@@ -87,7 +87,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			super(id, new CompoundPropertyModel<MassUpdateEventModel>(massUpdateEventModel));
 
             CheckBox nextEventDateCheck = new CheckBox("nextEventDateCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[nextEventDate]"));
-            DateTimePicker nextEventDate = new DateTimePicker("nextEventDate", new PropertyModel<Date>(massUpdateEventModel, "event.nextDate"), true).withNoAllDayCheckbox();
+            DateTimePicker nextEventDate = new DateTimePicker("nextEventDate", new PropertyModel<Date>(massUpdateEventModel, "event.nextDate"), true).withNoAllDayCheckbox().withoutPerformSetDateOnInitialization();
             nextEventDate.getDateTextField().add(createCheckOnChangeEvent(nextEventDateCheck));
             add(nextEventDateCheck);
             add(nextEventDate);
