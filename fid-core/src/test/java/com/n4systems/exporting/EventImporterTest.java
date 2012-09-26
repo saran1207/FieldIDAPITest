@@ -1,22 +1,4 @@
 package com.n4systems.exporting;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.event.EventToModelConverter;
 import com.n4systems.api.model.EventView;
@@ -40,12 +22,21 @@ import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.*;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class EventImporterTest {
 	
 	@Test
 	public void test_constructor_sets_event_type_into_validator() {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, EventTypeBuilder.anEventType().build());
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, EventTypeBuilder.anEventType().build());
 		
 		Validator<ExternalModelView> validator = new ViewValidator(null);
 		

@@ -1,30 +1,14 @@
 package com.n4systems.api.conversion.event;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
-
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.model.EventView;
 import com.n4systems.model.*;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
-import com.n4systems.model.builders.AssetBuilder;
-import com.n4systems.model.builders.CriteriaSectionBuilder;
-import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.model.builders.OneClickCriteriaBuilder;
-import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.StateSetBuilder;
-import com.n4systems.model.builders.TenantBuilder;
-import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.builders.*;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
+import com.n4systems.model.location.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.safetynetwork.AssetsByIdOwnerTypeLoader;
@@ -32,34 +16,30 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 public class EventToModelConverterTest {
 	private final class EventToModelConverterWithAllButConvertPerformedByEmptied extends EventToModelConverter {
 		private EventToModelConverterWithAllButConvertPerformedByEmptied(UserByFullNameLoader userLoader) {
-			super(null, null, null, null, userLoader, null);
+			super(null, null, null, null, userLoader, null, null);
 		}
-
-		@Override
-		protected void resolveType(Event model) {}
-
-		@Override
-		protected void resolveStatus(String statusName, Event model) {}
-
-		@Override
-		protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-
-		@Override
-		protected void resolvePrintable(EventView view, Event model) {}
-
-		@Override
-		protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
-
-		@Override
-		protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
-
-		@Override
-		protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
-	}
+		@Override protected void resolveType(Event model) {}
+		@Override protected void resolveStatus(String statusName, Event model) {}
+		@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+		@Override protected void resolvePrintable(EventView view, Event model) {}
+		@Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+		@Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
+		@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+        @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+    }
 
 	private static final String PERSONS_NAME = "Full Name";
 	private Transaction transaction = new DummyTransaction();
@@ -69,22 +49,16 @@ public class EventToModelConverterTest {
 		EventType type = EventTypeBuilder.anEventType().build();
 		type.setTenant(TenantBuilder.aTenant().build());
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, type) {
-			@Override
-			protected void resolveStatus(String statusName, Event model) {}
-			@Override
-			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePrintable(EventView view, Event model) {}
-			@Override
-			protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
-		};
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, type) {
+			@Override protected void resolveStatus(String statusName, Event model) {}
+			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePrintable(EventView view, Event model) {}
+			@Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 		
 	
 		
@@ -110,45 +84,70 @@ public class EventToModelConverterTest {
 		expect(orgLoader.load(transaction)).andReturn(org);
 		replay(orgLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(orgLoader, null, null, null, null, null) {
-			@Override
-			protected void resolveType(Event model) {}
-			@Override
-			protected void resolveStatus(String statusName, Event model) {}
-			@Override
-			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePrintable(EventView view, Event model) {}
-			@Override
-			protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
-		};
+		EventToModelConverter converter = new EventToModelConverter(orgLoader, null, null, null, null, null, null) {
+			@Override protected void resolveType(Event model) {}
+			@Override protected void resolveStatus(String statusName, Event model) {}
+			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePrintable(EventView view, Event model) {}
+			@Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 		
 		assertEquals(org, converter.toModel(view, transaction).getOwner());
 		verify(orgLoader);
 	}
-	
-	@Test
+
+    @Test
+    public void to_model_resolves_location() throws ConversionException {
+        EventView view = new EventView();
+        view.setLocation("hello > world : freeForm");
+
+        PredefinedLocation hello = PredefinedLocationBuilder.aPredefinedLocation().withName("hello").build();
+        PredefinedLocation world = PredefinedLocationBuilder.aPredefinedLocation().withName("world").withParent(hello).build();
+        PredefinedLocationTree tree = new PredefinedLocationTree();
+
+        PredefinedLocationTreeNode node = new PredefinedLocationTreeNode(hello);
+        PredefinedLocationTreeNode child = new PredefinedLocationTreeNode(world);
+        node.addChild(child);
+        tree.addNode(node);
+
+        PredefinedLocationTreeLoader predefinedLocationTreeLoader = createMock(PredefinedLocationTreeLoader.class);
+        expect(predefinedLocationTreeLoader.load(transaction)).andReturn(tree);
+        replay(predefinedLocationTreeLoader);
+
+        EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, predefinedLocationTreeLoader, null) {
+            @Override protected void resolveType(Event model) {}
+            @Override protected void resolveStatus(String statusName, Event model) {}
+            @Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolvePrintable(EventView view, Event model) {}
+            @Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+        };
+
+        Location result = converter.toModel(view, transaction).getAdvancedLocation();
+        assertEquals(world, result.getPredefinedLocation());
+        assertEquals("freeForm", result.getFreeformLocation());
+        verify(predefinedLocationTreeLoader);
+    }
+
+
+
+    @Test
 	public void to_model_resolves_status_ignoring_case() throws ConversionException {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null) {
-			@Override
-			protected void resolveType(Event model) {}
-			@Override
-			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePrintable(EventView view, Event model) {}
-			@Override
-			protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
-		};
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, null) {
+			@Override protected void resolveType(Event model) {}
+			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePrintable(EventView view, Event model) {}
+			@Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 		
 		EventView view = new EventView();
 		
@@ -164,22 +163,16 @@ public class EventToModelConverterTest {
 	
 	@Test
 	public void to_model_resolves_status_defaulting_to_na() throws ConversionException {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null) {
-			@Override
-			protected void resolveType(Event model) {}
-			@Override
-			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePrintable(EventView view, Event model) {}
-			@Override
-			protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
-		};
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, null) {
+			@Override protected void resolveType(Event model) {}
+			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePrintable(EventView view, Event model) {}
+			@Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 		
 		EventView view = new EventView();
 		
@@ -200,22 +193,16 @@ public class EventToModelConverterTest {
 		expect(loader.load(transaction)).andReturn(Arrays.asList(asset));
 		replay(loader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, loader, null, null, null, null) {
-			@Override
-			protected void resolveType(Event model) {}
-			@Override
-			protected void resolveStatus(String statusName, Event model) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePrintable(EventView view, Event model) {}
-			@Override
-			protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
-		};
+		EventToModelConverter converter = new EventToModelConverter(null, loader, null, null, null, null, null) {
+			@Override protected void resolveType(Event model) {}
+			@Override protected void resolveStatus(String statusName, Event model) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePrintable(EventView view, Event model) {}
+			@Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 		
 		assertEquals(asset, converter.toModel(view, transaction).getAsset());
 		verify(loader);
@@ -241,22 +228,16 @@ public class EventToModelConverterTest {
 	
 	@Test
 	public void to_model_resolves_printable() throws ConversionException {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null) {
-			@Override
-			protected void resolveType(Event model) {}
-			@Override
-			protected void resolveStatus(String statusName, Event model) {}
-			@Override
-			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
-		};
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, null) {
+			@Override protected void resolveType(Event model) {}
+			@Override protected void resolveStatus(String statusName, Event model) {}
+			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 		
 		EventView view = new EventView();
 		
@@ -281,24 +262,18 @@ public class EventToModelConverterTest {
 		expect(bookLoader.load(transaction)).andReturn(book);
 		replay(bookLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null, null) {
-			@Override
-			protected void resolveType(Event model) {}
-			@Override
-			protected void resolveStatus(String statusName, Event model) {}
-			@Override
-			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePrintable(EventView view, Event model) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveOwner(EventView view, Event model, Transaction transaction) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null, null, null) {
+			@Override protected void resolveType(Event model) {}
+			@Override protected void resolveStatus(String statusName, Event model) {}
+			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePrintable(EventView view, Event model) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {
 				model.setOwner(owner);
 			}
-		};
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 		
 		assertSame(book, converter.toModel(view, transaction).getBook());
 		verify(bookLoader);
@@ -309,22 +284,16 @@ public class EventToModelConverterTest {
 		EventBookFindOrCreateLoader bookLoader = createMock(EventBookFindOrCreateLoader.class);
 		replay(bookLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null, null) {
-			@Override
-			protected void resolveType(Event model) {}
-			@Override
-			protected void resolveStatus(String statusName, Event model) {}
-			@Override
-			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePrintable(EventView view, Event model) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
-		};
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null, null, null) {
+			@Override protected void resolveType(Event model) {}
+			@Override protected void resolveStatus(String statusName, Event model) {}
+			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePrintable(EventView view, Event model) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 		
 		assertNull(converter.toModel(new EventView(), transaction).getBook());
 		verify(bookLoader);
@@ -342,22 +311,16 @@ public class EventToModelConverterTest {
 		expect(psLoader.load(transaction)).andReturn(ps);
 		replay(psLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null) {
-			@Override
-			protected void resolveType(Event model) {}
-			@Override
-			protected void resolveStatus(String statusName, Event model) {}
-			@Override
-			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePrintable(EventView view, Event model) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
-		};
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null, null) {
+			@Override protected void resolveType(Event model) {}
+			@Override protected void resolveStatus(String statusName, Event model) {}
+			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePrintable(EventView view, Event model) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 		
 		assertSame(ps, converter.toModel(view, transaction).getAssetStatus());
 		verify(psLoader);
@@ -368,22 +331,16 @@ public class EventToModelConverterTest {
 		AssetStatusByNameLoader psLoader = createMock(AssetStatusByNameLoader.class);
 		replay(psLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null) {
-			@Override
-			protected void resolveType(Event model) {}
-			@Override
-			protected void resolveStatus(String statusName, Event model) {}
-			@Override  
-			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePrintable(EventView view, Event model) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
-		};
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null, null) {
+			@Override protected void resolveType(Event model) {}
+			@Override protected void resolveStatus(String statusName, Event model) {}
+			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePrintable(EventView view, Event model) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 		
 		assertNull(converter.toModel(new EventView(), transaction).getAssetStatus());
 		verify(psLoader);
@@ -413,22 +370,16 @@ public class EventToModelConverterTest {
 		EventType type = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
 		type.setTenant(TenantBuilder.aTenant().build());
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, type) {
-			@Override
-			protected void resolveType(Event model) {}
-			@Override
-			protected void resolveStatus(String statusName, Event model) {}
-			@Override
-			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolvePrintable(EventView view, Event model) {}
-			@Override
-			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
-			@Override
-			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
-		};
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null, type) {
+			@Override protected void resolveType(Event model) {}
+			@Override protected void resolveStatus(String statusName, Event model) {}
+			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolvePrintable(EventView view, Event model) {}
+			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
+			@Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveLocation(EventView view, Event model, Transaction transaction) {}
+        };
 
 	
 		Set<CriteriaResult> results = converter.toModel(eventView, transaction).getResults();

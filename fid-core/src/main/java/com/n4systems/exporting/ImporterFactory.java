@@ -93,7 +93,8 @@ public class ImporterFactory {
 				loaderFactory.createAssetByIdOwnerTypeLoader(), 
 				loaderFactory.createAssetStatusByNameLoader(), 
 				loaderFactory.createEventBookFindOrCreateLoader(),
-				loaderFactory.createUserByFullNameLoader(), 
+				loaderFactory.createUserByFullNameLoader(),
+                loaderFactory.createPredefinedLocationTreeLoader(),
 				type);
 		
 		return converter;

@@ -1,14 +1,13 @@
 package com.n4systems.model.location;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
-
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
@@ -29,6 +28,10 @@ public class Location implements Serializable {
 	public Location() {
 		this(null, null);
 	}
+
+    public Location(String freeformLocation) {
+        this(null, freeformLocation);
+    }
 
 	public Location(PredefinedLocation predefinedLocation, String freeformLocation) {
 		super();

@@ -1,15 +1,5 @@
 package com.n4systems.api.conversion.event;
 
-import static com.google.common.base.Preconditions.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.n4systems.api.conversion.ConversionException;
@@ -19,13 +9,19 @@ import com.n4systems.api.model.EventView;
 import com.n4systems.model.*;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
-import com.n4systems.model.location.Location;
+import com.n4systems.model.location.*;
+
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.safetynetwork.AssetsByIdOwnerTypeLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.*;
+
+import static com.google.common.base.Preconditions.*;
 
 public class EventToModelConverter implements ViewToModelConverter<Event, EventView> {
 	public static final String UNIT_OF_MEASURE_SEPARATOR = "|";
@@ -36,15 +32,17 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	private final AssetStatusByNameLoader assetStatusLoader;
 	private final EventBookFindOrCreateLoader eventBookLoader;
 	private final UserByFullNameLoader userLoader;
+    private final PredefinedLocationTreeLoader predefinedLocationTreeLoader;
 	
 	private EventType type;
 	
-	public EventToModelConverter(OrgByNameLoader orgLoader, AssetsByIdOwnerTypeLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, EventType type) {
+	public EventToModelConverter(OrgByNameLoader orgLoader, AssetsByIdOwnerTypeLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, PredefinedLocationTreeLoader predefinedLocationTreeLoader, EventType type) {
 		this.orgLoader = orgLoader;
 		this.assetLoader = assetLoader;
 		this.assetStatusLoader = assetStatusLoader;
 		this.eventBookLoader = eventBookLoader;
 		this.userLoader = userLoader;
+        this.predefinedLocationTreeLoader = predefinedLocationTreeLoader;
 		this.type = type;
 	}
 
@@ -54,8 +52,8 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		
 		resolveType(model);
 		resolveOwner(view, model, transaction);
-		
-		model.setAdvancedLocation(Location.onlyFreeformLocation(view.getLocation()));
+
+		resolveLocation(view, model, transaction);
 		model.setDate(view.getDatePerformedAsDate());
 		model.setComments(view.getComments());
 		
@@ -79,8 +77,43 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		
 		return model;
 	}
-	
-	private void resolveCriteriaResults(EventView view, Event event) {
+
+    protected void resolveLocation(EventView view, Event model, Transaction transaction) {
+        LocationSpecification locationSpecification = new LocationSpecification(view.getLocation());
+        if (!locationSpecification.getHierarchy().isEmpty()) {
+            PredefinedLocation predefinedLocation = getNode(locationSpecification, transaction, predefinedLocationTreeLoader);
+            model.setAdvancedLocation(new Location(predefinedLocation, locationSpecification.getFreeForm()));
+        } else {
+            model.setAdvancedLocation(new Location(locationSpecification.getFreeForm()));
+        }
+    }
+
+    private PredefinedLocation getNode(LocationSpecification locationSpecification, Transaction transaction, PredefinedLocationTreeLoader loader) {
+        PredefinedLocationTree predefinedLocationTree = loader.load(transaction);
+
+        Iterator<String> i = locationSpecification.getHierarchy().iterator();
+        Set<PredefinedLocationTreeNode> nodes = predefinedLocationTree.getNodes();
+        PredefinedLocationTreeNode node = null;
+        while (i.hasNext()) {
+            node = findNodeWithChildren(nodes, i.next(), locationSpecification);
+            if (node==null) {
+                return null;
+            }
+            nodes = node.getChildren();
+        }
+        return node.getNodeValue();
+    }
+
+    private PredefinedLocationTreeNode findNodeWithChildren(Set<PredefinedLocationTreeNode> nodes, String name, LocationSpecification locationSpecification) {
+        for (PredefinedLocationTreeNode node:nodes) {
+            if (name!=null && name.equals(node.getName())) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    private void resolveCriteriaResults(EventView view, Event event) {
 		Set<CriteriaResult> results  = new HashSet<CriteriaResult>();
 		if (type.getEventForm()==null || type.getEventForm().getAvailableSections()==null) {
 			return;		// nothing to resolve because there are no criteria. 
@@ -305,5 +338,7 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	public EventType getType() {
 		return type;
 	}
+
+
 
 }
