@@ -12,6 +12,7 @@
 		<module>fid-web</module>
 		<module>fid-exporter</module>
 		<module>fid-ws</module>
+        <module>fid-migrations</module>
 	</modules>
 	<repositories>
 		<repository>
@@ -104,11 +105,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.fieldid</groupId>
-				<artifactId>fid-admin-web</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fieldid</groupId>
 				<artifactId>fid-web</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
@@ -118,6 +114,11 @@
 				<version>${pom.version}</version>
 				<type>test-jar</type>
 			</dependency>
+			<dependency>
+                <groupId>com.fieldid</groupId>
+                <artifactId>fid-migrations</artifactId>
+                <version>${pom.version}</version>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 	<scm>

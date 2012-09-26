@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        >
 	<!-- Struts 2.0 -->
     <filter>
         <filter-name>session-in-view</filter-name>
@@ -64,6 +64,9 @@
        <filter-name>wicket.fieldid</filter-name>
 	   <url-pattern>/w/*</url-pattern>
     </filter-mapping>
+    <listener>
+        <listener-class>com.n4systems.fieldid.servlets.ApplicationBootstrap</listener-class>
+    </listener>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -73,20 +76,6 @@
 	<listener>
 		<listener-class>com.n4systems.fieldid.servlets.UnexportRMIOnShutdownListener</listener-class>
 	</listener>
-
-	<!-- end:Struts 2.0 -->
-
-	<!-- end:Log4J -->
-	<servlet>
-		<servlet-name>ApplicationBootstrap</servlet-name>
-		<servlet-class>com.n4systems.fieldid.servlets.ApplicationBootstrap
-		</servlet-class>
-		<init-param>
-			<param-name>debug</param-name>
-			<param-value>2</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
 
 	<servlet>
 		<servlet-name>XFireServlet</servlet-name>

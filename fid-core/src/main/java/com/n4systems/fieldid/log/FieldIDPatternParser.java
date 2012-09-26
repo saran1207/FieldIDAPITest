@@ -2,14 +2,20 @@ package com.n4systems.fieldid.log;
 
 import com.n4systems.fieldid.context.ThreadLocalUserContext;
 import com.n4systems.model.user.User;
-import org.apache.log4j.helpers.PatternParser;
 import org.apache.log4j.helpers.PatternConverter;
+import org.apache.log4j.helpers.PatternParser;
 import org.apache.log4j.spi.LoggingEvent;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class FieldIDPatternParser extends PatternParser {
 
     private static final char TENANT_CHAR = 'T';
     private static final char USER_CHAR = 'U';
+	private static final char LOCAL_DATE_CHAR = 'D';
 
     public FieldIDPatternParser(String pattern) {
         super(pattern);
@@ -29,6 +35,11 @@ public class FieldIDPatternParser extends PatternParser {
                 currentLiteral.setLength(0);
                 addConverter(pc);
                 break;
+			case LOCAL_DATE_CHAR:
+				pc = new LocalDateFormatConverter();
+				currentLiteral.setLength(0);
+				addConverter(pc);
+				break;
             default:
                 super.finalizeConverter(formatChar);
         }
@@ -49,5 +60,19 @@ public class FieldIDPatternParser extends PatternParser {
             return currentUser == null ? "unknown tenant" : currentUser.getOwner().getTenant().getName();
         }
     }
+
+	static class LocalDateFormatConverter extends PatternConverter {
+		private final DateFormat format;
+
+		public LocalDateFormatConverter() {
+			format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+			format.setTimeZone(TimeZone.getTimeZone("America/Toronto"));
+		}
+
+		@Override
+		protected String convert(LoggingEvent event) {
+			return format.format(new Date(event.getTimeStamp()));
+		}
+	}
 
 }

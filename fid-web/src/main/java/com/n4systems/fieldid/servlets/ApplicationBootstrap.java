@@ -1,47 +1,32 @@
 package com.n4systems.fieldid.servlets;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.services.Initializer;
+import com.n4systems.services.MigrationInitializer;
 import com.n4systems.services.RemoteOrderManagerServiceInitializer;
 import com.n4systems.taskscheduling.TaskSchedulerBootstrapper;
+import org.apache.log4j.Logger;
 
-public class ApplicationBootstrap extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	
-	/** Array of startup services. Will be initialized in order.*/
-	
-	// note that this technique of initializing will not work in clustered environment because this servlet will be initialized > 1 times. 
-	//   an alternate approach might be to make a collection of initializing beans that do their stuff in afterPropertySet(). 
-	//
-	//   e.g. in @Config file....
-	//   @Bean public TaskSchedulerBootstraper foo()...
-	//
-	//   public class TaskSchedulerBootstraper implements Initializer, InitializingBean { 
-	//     void afterPropertiesSet() { initialize(); }
-	//	 }
-	
-	private static final Initializer[] initializers = {
-		new TaskSchedulerBootstrapper(),
-		//new SignUpPackageSyncTaskInitializer(),		
-		new RemoteOrderManagerServiceInitializer()
-	};
-	
-	private static Logger logger = Logger.getLogger(ApplicationBootstrap.class);
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-	
+public class ApplicationBootstrap implements ServletContextListener {
+
 	@Override
-	public void init() throws ServletException {
-		for (Initializer init: initializers) {
+	public void contextInitialized(ServletContextEvent servletContextEvent) {
+		for (Initializer init: new Initializer[] {
+				new MigrationInitializer(),
+				new TaskSchedulerBootstrapper(),
+				new RemoteOrderManagerServiceInitializer()
+		}) {
 			try {
 				init.initialize();
-			} catch(Throwable t) {
-				logger.error(init.getClass() + ": Failed initialization", t);
+			} catch(Exception e) {
+				Logger.getLogger(ApplicationBootstrap.class).fatal("Field ID Initialization Failed", e);
+				throw new Error("Field ID Initialization Failed", e);
 			}
 		}
 	}
 
+	@Override
+	public void contextDestroyed(ServletContextEvent servletContextEvent) {}
 }

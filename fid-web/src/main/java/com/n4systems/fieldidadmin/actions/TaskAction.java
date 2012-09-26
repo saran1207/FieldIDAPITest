@@ -1,9 +1,5 @@
 package com.n4systems.fieldidadmin.actions;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.model.taskconfig.TaskConfig;
 import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.taskconfig.TaskConfigSaver;
@@ -13,6 +9,9 @@ import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.taskscheduling.SchedulingException;
 import com.n4systems.taskscheduling.TaskScheduler;
 import com.n4systems.taskscheduling.TaskSchedulerBootstrapper;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class TaskAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
@@ -107,7 +106,7 @@ public class TaskAction extends AbstractAdminAction {
 		return SUCCESS;
 	}
 	
-	public String doReloadScheduler() {
+	public String doReloadScheduler() throws Exception {
 		Initializer taskInit = new TaskSchedulerBootstrapper();
 		taskInit.uninitialize();
 		taskInit.initialize();
