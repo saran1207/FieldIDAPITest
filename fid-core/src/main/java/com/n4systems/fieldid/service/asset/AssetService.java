@@ -18,6 +18,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
@@ -263,13 +264,13 @@ public class AssetService extends FieldIdPersistenceService {
     }
 
     private void updateSchedulesOwnership(Asset asset) {
-        QueryBuilder<Long> schedules = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter())
+        QueryBuilder<Long> schedules = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(asset.getTenant().getId()))
                 .setSimpleSelect("id")
                 .addSimpleWhere("asset", asset)
-                .addWhere(Comparator.NE, "status", "status", EventSchedule.ScheduleStatus.COMPLETED);
+                .addWhere(Comparator.NE, "eventState", "eventState", Event.EventState.OPEN);
 
         for (Long id : persistenceService.findAll(schedules)) {
-            EventSchedule schedule = persistenceService.find(EventSchedule.class, id);
+            Event schedule = persistenceService.find(Event.class, id);
 
             schedule.setOwner(asset.getOwner());
             schedule.setAdvancedLocation(asset.getAdvancedLocation());
