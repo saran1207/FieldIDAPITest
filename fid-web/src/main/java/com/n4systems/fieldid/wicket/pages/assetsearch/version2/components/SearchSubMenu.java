@@ -70,8 +70,10 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         return "label.select_assets";
     }
 
-    protected void updateMenuBeforeRender(int selected) {
-        super.updateMenuBeforeRender(selected);
+    protected void updateMenuBeforeRender(AssetSearchCriteria criteria) {
+        super.updateMenuBeforeRender(criteria);
+
+        int selected = criteria.getSelection().getNumSelectedIds();
         boolean rowsSelected = selected > 0;
         exportLink.setVisible(rowsSelected && (selected < maxExport));
 

@@ -98,13 +98,13 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
 
     @Override
     protected void onBeforeRender() {
-        int selected = model.getObject().getSelection().getNumSelectedIds();
-        updateMenuBeforeRender(selected);
+        updateMenuBeforeRender(model.getObject());
         super.onBeforeRender();
     }
 
-    protected void updateMenuBeforeRender(int selected) {
-        msg.setVisible(selected == 0);
+    protected void updateMenuBeforeRender(T criteria) {
+        int selected = criteria.getSelection().getNumSelectedIds();
+        msg.setVisible(selected==0);
     }
 
     @Override

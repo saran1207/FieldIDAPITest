@@ -85,10 +85,12 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
     }
 
     @Override
-    protected void updateMenuBeforeRender(int selected) {
-        super.updateMenuBeforeRender(selected);  // update
+    protected void updateMenuBeforeRender(EventReportCriteria criteria) {
+        super.updateMenuBeforeRender(criteria);
+        int selected = criteria.getSelection().getNumSelectedIds();
+
         exportLink.setVisible(selected > 0 && selected < maxExport);
-        print.setVisible(selected > 0 && selected < maxPrint);
+        print.setVisible(selected > 0 && selected < maxPrint && !isSearchForClosed(criteria));
         
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
         boolean searchIncludesSafetyNetwork = model.getObject().isIncludeSafetyNetwork();
@@ -100,6 +102,10 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         assignJobLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork);
 
         actions.setVisible(selected > 0 && selected < maxUpdate && (updateLink.isVisible() || updateSchedulesLink.isVisible() || assignJobLink.isVisible()));
+    }
+
+    private boolean isSearchForClosed(EventReportCriteria criteria) {
+        return EventState.CLOSED.equals(criteria.getEventState());
     }
 
     @Override
