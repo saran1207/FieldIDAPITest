@@ -27,12 +27,15 @@ public class AssetAttributeDetailsPanel extends Panel {
         Asset asset = model.getObject();
 
         Set<InfoOptionBean> infoOptions = asset.getInfoOptions();
-        
+
+        boolean assignToEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AssignedTo);
+        Label assignedTo;
         if(asset.getAssignedUser() != null) {
-            add(new Label("assignedTo", new PropertyModel(asset, "assignedUser.fullName")));
+            add(assignedTo = new Label("assignedTo", new PropertyModel(asset, "assignedUser.fullName")));
         } else {
-            add(new Label("assignedTo", new FIDLabelModel("label.unassigned")));
+            add(assignedTo = new Label("assignedTo", new FIDLabelModel("label.unassigned")));
         }
+        assignedTo.setVisible(assignToEnabled);
 
         boolean manufacturerCertificateEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
 
