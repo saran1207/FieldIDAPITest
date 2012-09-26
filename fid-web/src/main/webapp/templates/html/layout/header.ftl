@@ -163,7 +163,6 @@
 												<li><a href="<@s.url action="commentTemplateList"/>" ><@s.text name="title.manage_comment_templates.plural" /></a></li>
 												<li><a href="<@s.url value='/w/setup/columnsLayout' type='ASSET'/>" ><@s.text name="title.column_layout_asset" /></a></li>
 												<li><a href="<@s.url value='/w/setup/columnsLayout' type='EVENT'/>" ><@s.text name="title.column_layout_event" /></a></li>
-												<li><a href="<@s.url value='/w/setup/columnsLayout' type='SCHEDULE'/>" ><@s.text name="title.column_layout_schedule" /></a></li>
 												<#if securityGuard.integrationEnabled>
 													<li><a href="<@s.url action="assetCodeMappingList"/>" ><@s.text name="title.manage_asset_code_mappings.plural" /></a></li>
 												</#if>
