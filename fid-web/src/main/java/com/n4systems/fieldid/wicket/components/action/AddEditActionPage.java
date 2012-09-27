@@ -148,6 +148,11 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                     Date date = new Date();
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(date);
+
+                    if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        calendar.add(Calendar.WEEK_OF_YEAR, 1);
+                    }
+
                     calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
                     scheduledDateModel.setObject(new PlainDate(calendar.getTime()));
                     target.add(scheduledDatePicker);
