@@ -3,8 +3,10 @@ package com.n4systems.fieldid.wicket.components.asset.summary;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.InfoOptionBeanPropertyModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.services.date.DateService;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -12,6 +14,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.ArrayList;
@@ -19,11 +22,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+
 public class AssetAttributeDetailsPanel extends Panel {
+
+    private @SpringBean DateService dateService;
 
     public AssetAttributeDetailsPanel(String id, IModel<Asset> model) {
         super(id, model);
-        
+
         Asset asset = model.getObject();
 
         Set<InfoOptionBean> infoOptions = asset.getInfoOptions();
@@ -47,10 +53,11 @@ public class AssetAttributeDetailsPanel extends Panel {
         Collections.sort(infoOptionList);
 
         add(new ListView<InfoOptionBean>("attributeListView", infoOptionList) {
+
             @Override
             protected void populateItem(ListItem<InfoOptionBean> item) {
                 item.add(new Label("attributelabel", new PropertyModel<Object>(item.getModelObject(), "infoField.name")));
-                item.add(new Label("attribute", new PropertyModel<Object>(item.getModelObject(), "name")));
+                item.add(new Label("attribute", new InfoOptionBeanPropertyModel(item.getModelObject(), "name", dateService.getDateTimeDefinition())));
             }
         });
     }

@@ -1,7 +1,8 @@
 package com.n4systems.services.date;
 
-import com.n4systems.fieldid.service.FieldIdService;
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.chart.RangeType;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTimeZone;
@@ -12,8 +13,7 @@ import java.util.TimeZone;
 
 // NOTE : this is a timezone sensitive service.
 // all dates with be calculated with the users timezone in mind.
-public class DateService extends FieldIdService {
-
+public class DateService extends FieldIdPersistenceService {
 
     public Date calculateFromDate(DateRange dateRange) {
         return calculateFromDateWithTimeZone(dateRange, getUserTimeZone());
@@ -63,6 +63,10 @@ public class DateService extends FieldIdService {
 
     public TimeZone getUsersTimeZone() {
         return super.getUserTimeZone();
+    }
+
+    public DateTimeDefinition getDateTimeDefinition() {
+        return getCurrentUser();
     }
 
 }

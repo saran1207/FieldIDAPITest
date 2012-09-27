@@ -4,7 +4,6 @@ import com.n4systems.model.utils.DateRange;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -56,7 +55,6 @@ public class DateUtilTest {
 		assertEquals(4, DateUtil.getQuarter(oct1_2012));
 	}
 
-    @Ignore // TODO : currently broken. fix on next check in.
     @Test
     public void test_isMidnight() {
         DateTime nonMidnight = new DateTime().withHourOfDay(2).withDayOfYear(44).withYear(2012);
