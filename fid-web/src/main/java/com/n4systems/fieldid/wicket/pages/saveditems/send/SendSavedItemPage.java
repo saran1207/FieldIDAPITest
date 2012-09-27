@@ -13,9 +13,9 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRende
 import com.n4systems.fieldid.wicket.components.timezone.FrequencyDropDownChoice;
 import com.n4systems.fieldid.wicket.components.timezone.HourOfDaySelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.StringAppendModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.common.ReportFormat;
@@ -226,7 +226,11 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                             });
                             asyncService.run(task);
                             FieldIDSession.get().info("Email generation in progress");
-                            getRequestCycle().setResponsePage(RunLastSearchPage.class);
+                            if (criteria.getObject() instanceof AssetSearchCriteria) {
+                                getRequestCycle().setResponsePage(RunLastSearchPage.class);
+                            } else if (criteria.getObject() instanceof EventReportCriteria) {
+                                getRequestCycle().setResponsePage(RunLastReportPage.class);
+                            }
                         }
                     } else {
                         target.add(feedbackPanel);
