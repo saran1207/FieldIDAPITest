@@ -66,7 +66,7 @@
                 <#elseif event.status.displayName == "N/A"> class="naColor"
                 <#else> class="voidColor"
                 </#if>>
-                <p class="inline"><@s.text name="${(event.status.label?html)!}"/></p> 
+                <p class="inline"><@s.text name="${(event.status.label?html)!}"/></p>
             </div>
         <#else>
             <div><p>&nbsp;</p></div>
@@ -125,11 +125,10 @@
 		<span>
 			<#if event.modifiedBy?exists >
 				<#assign user=event.modifiedBy >
-			<#else>
-				<#assign user=event >
+                <#include "_userName.ftl"/>
+                <@s.text name="label.on"/>
 			</#if>
-			<#include "_userName.ftl"/> 
-			<@s.text name="label.on"/> ${action.formatDateTime(event.modified)}
+            ${action.formatDateTime(event.modified)}
 		</span>
 	</p>
 	<p>
