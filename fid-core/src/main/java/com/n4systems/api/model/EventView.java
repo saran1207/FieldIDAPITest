@@ -1,21 +1,13 @@
 package com.n4systems.api.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-
-import com.n4systems.api.validation.validators.AssetStatusExistsValidator;
-import com.n4systems.api.validation.validators.CriteriaResultValidator;
-import com.n4systems.api.validation.validators.DateValidator;
-import com.n4systems.api.validation.validators.EventAssetIdentifierValidator;
-import com.n4systems.api.validation.validators.EventStatusValidator;
-import com.n4systems.api.validation.validators.FullNameUserValidator;
-import com.n4systems.api.validation.validators.NotNullValidator;
-import com.n4systems.api.validation.validators.OwnerExistsValidator;
-import com.n4systems.api.validation.validators.YNValidator;
+import com.n4systems.api.validation.validators.*;
 import com.n4systems.exporting.beanutils.CriteriaResultSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 import com.n4systems.exporting.beanutils.SerializableField;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 
 public class EventView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
@@ -47,7 +39,7 @@ public class EventView extends ExternalModelView {
 	@SerializableField(title = "Next Event Date", order = 900, validators = { DateValidator.class })
 	private Object nextEventDate;
 
-	@SerializableField(title = "Location", order = 1000)
+	@SerializableField(title = "Location", order = 1000, validators = {LocationValidator.class})
 	private String location;	
 	
 	@SerializableField(title = "Comments", order = 1100)

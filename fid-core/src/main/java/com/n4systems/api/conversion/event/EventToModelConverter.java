@@ -6,6 +6,7 @@ import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
 import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.model.EventView;
+import com.n4systems.api.validation.validators.LocationValidator;
 import com.n4systems.model.*;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
@@ -79,38 +80,9 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	}
 
     protected void resolveLocation(EventView view, Event model, Transaction transaction) {
-        LocationSpecification locationSpecification = new LocationSpecification(view.getLocation());
-        if (!locationSpecification.getHierarchy().isEmpty()) {
-            PredefinedLocation predefinedLocation = getNode(locationSpecification, transaction, predefinedLocationTreeLoader);
-            model.setAdvancedLocation(new Location(predefinedLocation, locationSpecification.getFreeForm()));
-        } else {
-            model.setAdvancedLocation(new Location(locationSpecification.getFreeForm()));
-        }
-    }
-
-    private PredefinedLocation getNode(LocationSpecification locationSpecification, Transaction transaction, PredefinedLocationTreeLoader loader) {
-        PredefinedLocationTree predefinedLocationTree = loader.load(transaction);
-
-        Iterator<String> i = locationSpecification.getHierarchy().iterator();
-        Set<PredefinedLocationTreeNode> nodes = predefinedLocationTree.getNodes();
-        PredefinedLocationTreeNode node = null;
-        while (i.hasNext()) {
-            node = findNodeWithChildren(nodes, i.next(), locationSpecification);
-            if (node==null) {
-                return null;
-            }
-            nodes = node.getChildren();
-        }
-        return node.getNodeValue();
-    }
-
-    private PredefinedLocationTreeNode findNodeWithChildren(Set<PredefinedLocationTreeNode> nodes, String name, LocationSpecification locationSpecification) {
-        for (PredefinedLocationTreeNode node:nodes) {
-            if (name!=null && name.equals(node.getName())) {
-                return node;
-            }
-        }
-        return null;
+        PredefinedLocationTree predefinedLocationTree = predefinedLocationTreeLoader.load(transaction);
+        Location location = new LocationValidator().getLocation(new LocationSpecification(view.getLocation()), predefinedLocationTree);
+        model.setAdvancedLocation(location);
     }
 
     private void resolveCriteriaResults(EventView view, Event event) {

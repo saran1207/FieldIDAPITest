@@ -18,6 +18,9 @@ public class LocationSpecification {
         }
 
         private void initialize() throws IllegalArgumentException {
+            if (location==null) {
+                return;
+            }
             int colonIndex = location.indexOf(":");
             if (colonIndex!=-1) {
                 parseHierarchy(location.substring(0,colonIndex));
@@ -25,13 +28,13 @@ public class LocationSpecification {
             } else {
                 parseHierarchy(location);
             }
-            if (!StringUtils.isEmpty(location) && freeForm==null && nodes.isEmpty()) {
+            if (!StringUtils.isEmpty(location) && (freeForm==null && nodes.isEmpty())) {
                 throw new IllegalArgumentException("'" + location + "' does not follow the naming convention  (e.g.   apple > banana > pear : foobar");
             }
         }
 
         private void parseHierarchy(String hierarchy) {
-            if (hierarchy.trim().endsWith(">")) {
+            if (hierarchy.trim().endsWith(">") || hierarchy.trim().startsWith(">")) {
                 return;
             }
             for (StringTokenizer stringTokenizer = new StringTokenizer(hierarchy.trim(),">"); stringTokenizer.hasMoreTokens(); ) {

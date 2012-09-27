@@ -2,10 +2,13 @@ package com.n4systems.model.location;
 
 import com.google.common.collect.ImmutableList;
 import com.n4systems.model.builders.OrgBuilder;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.internal.matchers.TypeSafeMatcher;
 
@@ -23,13 +26,20 @@ public class PredefinedLocationTreeLoaderTest {
 
 	private static final ArrayList<PredefinedLocation> EMPTY_LIST = new ArrayList<PredefinedLocation>();
 
-	
+    private SecurityFilter filter;
+
+    @Before
+    public void setUp() {
+        filter = new TenantOnlySecurityFilter(1L);
+    }
+
 	@Test
 	public void should_create_just_a_root_node_when_there_are_no_predefined_locations() throws Exception {
         Transaction transaction = new DummyTransaction();
 
         PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load(transaction.getEntityManager())).andReturn(EMPTY_LIST);
+        expect(loader.getFilter()).andReturn(filter);
+        expect(loader.load(transaction.getEntityManager())).andReturn(EMPTY_LIST);
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -45,7 +55,8 @@ public class PredefinedLocationTreeLoaderTest {
         Transaction transaction = new DummyTransaction();
 
         PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation(), aLevelOneLocation()));
+        expect(loader.getFilter()).andReturn(filter);
+        expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation(), aLevelOneLocation()));
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -67,7 +78,8 @@ public class PredefinedLocationTreeLoaderTest {
 		
 		
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation, aLevelTwoLocation, aLevelThreeLocation));
+        expect(loader.getFilter()).andReturn(filter);
+        expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation, aLevelTwoLocation, aLevelThreeLocation));
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -90,7 +102,8 @@ public class PredefinedLocationTreeLoaderTest {
 		PredefinedLocation aForthLevelTwoLocation = aLocationWithParent(aSecondeLevelOneLocation);
 		
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation, aSecondeLevelOneLocation,  aLevelTwoLocation, aSecondLevelTwoLocation, aThirdLevelTwoLocation, aForthLevelTwoLocation));
+        expect(loader.getFilter()).andReturn(filter);
+        expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation, aSecondeLevelOneLocation,  aLevelTwoLocation, aSecondLevelTwoLocation, aThirdLevelTwoLocation, aForthLevelTwoLocation));
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -105,7 +118,8 @@ public class PredefinedLocationTreeLoaderTest {
 	public void should_use_loader_to_get_list_of_predefined_locations_in_parent_first_order() throws Exception {
         Transaction transaction = new DummyTransaction();
         PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load(transaction.getEntityManager())).andReturn(EMPTY_LIST);
+        expect(loader.getFilter()).andReturn(filter);
+        expect(loader.load(transaction.getEntityManager())).andReturn(EMPTY_LIST);
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);

@@ -1,11 +1,11 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.Map;
-
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.security.SecurityFilter;
+
+import java.util.Map;
 
 public interface FieldValidator {
 	/*
@@ -28,9 +28,11 @@ public interface FieldValidator {
 	public static final String StaticOptionNotFoundValidatorFail = "The option '%s' could not be found for the field '%s'.";
 	public static final String BlankInputOptionValidatorFail = "The input field '%s' must not be blank.";
 	public static final String MissingRequiredAssetAttributeValidatorFail = "The attribute '%s' is required.";
-	public static final String ConversionValidatorFail = "The data '%s' is not valid for the field '%s.'";	
-	public static final String InvalidDateValidatorFail = "The date '%s' in field '%s' is not valid.  Please ensure the date is in the correct format.";
-	public static final String OwnerResolutionValidatorFail = "Could not find an owner for organization '%s', customer '%s' and division '%s'.";
+	public static final String ConversionValidatorFail = "The data '%s' is not valid for the field '%s.'";
+    public static final String InvalidDateValidatorFail = "The date '%s' in field '%s' is not valid.  Please ensure the date is in the correct format.";
+    public static final String InvalidLocationValidatorFail = "The location '%s' in field '%s' can not be found. Make sure your location is in the format 'parent > child : freeform'";
+    public static final String InvalidLocationSpecificationValidatorFail = "The format for location '%s' in field '%s' is invalid. Make sure your location is in the format 'parent > child : freeform'";
+    public static final String OwnerResolutionValidatorFail = "Could not find an owner for organization '%s', customer '%s' and division '%s'.";
 	public static final String NonUniqueOwnerValidatorFail = "Found multiple owners for organization '%s', customer '%s' and division '%s'.";
 	public static final String EventStatusValidatorFail = "'%s' is not a valid result.  Results may be 'Pass', 'Fail', or 'N/A'";
 	public static final String YNValidatorFail = "'%s' is not allowed for the field '%s'.  Valid values are 'Y' or 'N'.";

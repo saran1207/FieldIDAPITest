@@ -1,18 +1,12 @@
 package com.n4systems.api.model;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import com.n4systems.api.validation.validators.AssetViewAttributesValidator;
-import com.n4systems.api.validation.validators.AssetViewToAssetIdentifierLengthValidator;
-import com.n4systems.api.validation.validators.DateValidator;
-import com.n4systems.api.validation.validators.NotNullValidator;
-import com.n4systems.api.validation.validators.OwnerExistsValidator;
-import com.n4systems.api.validation.validators.AssetStatusExistsValidator;
-import com.n4systems.api.validation.validators.AssetViewToAssetRfidLengthValidator;
-import com.n4systems.exporting.beanutils.SerializableField;
+import com.n4systems.api.validation.validators.*;
 import com.n4systems.exporting.beanutils.MapSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
+import com.n4systems.exporting.beanutils.SerializableField;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 public class AssetView extends ExternalModelView {
@@ -29,7 +23,7 @@ public class AssetView extends ExternalModelView {
 	@SerializableField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
 	private final String[] owners = new String[3];
 
-	@SerializableField(title = "Location", order = 600)
+	@SerializableField(title = "Location", order = 600, validators = {LocationValidator.class})
 	private String location;
 
 	@SerializableField(title = "Asset Status", order = 700, validators = { AssetStatusExistsValidator.class })

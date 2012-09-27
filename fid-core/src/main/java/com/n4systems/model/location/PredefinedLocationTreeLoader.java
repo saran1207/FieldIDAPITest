@@ -1,22 +1,30 @@
 package com.n4systems.model.location;
 
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
 
-public class PredefinedLocationTreeLoader {
+public class PredefinedLocationTreeLoader extends SecurityFilteredLoader<PredefinedLocationTree> {
 
 	private final PredefinedLocationListLoader loader;
 
 	public PredefinedLocationTreeLoader(PredefinedLocationListLoader loader) {
+        super(loader.getFilter());
 		this.loader = loader;
 	}
 
     public PredefinedLocationTree load(Transaction transaction) {
         return load(transaction.getEntityManager());
+    }
+
+    @Override
+    protected PredefinedLocationTree load(EntityManager em, SecurityFilter filter) {
+        return load(em);
     }
 
     public PredefinedLocationTree load(EntityManager em) {
@@ -36,8 +44,6 @@ public class PredefinedLocationTreeLoader {
 
         return root;
     }
-
-
 
 	@Override
 	public String toString() {

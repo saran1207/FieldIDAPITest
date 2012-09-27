@@ -1,5 +1,6 @@
 package com.n4systems.api.conversion.event;
 
+import junit.framework.Assert;
 import org.junit.Test;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public class LocationSpecificationTest {
         assertEquals("apple", result.get(0));
         assertEquals("orange", result.get(1));
         assertEquals("banana", result.get(2));
+
+        assertNull(new LocationSpecification(null).getFreeForm());
+        Assert.assertTrue(new LocationSpecification(null).getHierarchy().isEmpty());
 
         assertEquals("blargh", new LocationSpecification("apple>orange>banana:blargh").getFreeForm());
         result = new LocationSpecification("orange:blargh").getHierarchy();
@@ -59,6 +63,11 @@ public class LocationSpecificationTest {
 
     }
 
+
+    @Test(expected=IllegalArgumentException.class)
+    public void test_exception2() {
+        new LocationSpecification(">LeadingBracketNoGood").getHierarchy().isEmpty();
+    }
 
     @Test(expected=IllegalArgumentException.class)
     public void test_exception3() {

@@ -47,6 +47,8 @@ public class PredefinedLocationListLoader extends ListLoader<PredefinedLocation>
 		archivedState = true;
 		return this;
 	}
-	
 
+    public SecurityFilter getFilter() {
+        return filter;
+    }
 }
