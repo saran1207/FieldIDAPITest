@@ -8,7 +8,9 @@
             <param name="ConversionPattern" value="%d: %m%n" />
 		</layout>
 	</appender>
-
+    <category name="org.hibernate">
+        <priority value="WARN" />
+    </category>
 	<root>
 		<priority value="debug" />
 		<appender-ref ref="console" />

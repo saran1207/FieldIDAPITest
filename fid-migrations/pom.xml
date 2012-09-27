@@ -10,6 +10,10 @@
     <name>Migrations</name>
     <dependencies>
         <dependency>
+            <groupId>com.fieldid</groupId>
+            <artifactId>fid-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.16</version>
@@ -31,6 +35,11 @@
                     <groupId>mail</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>3.6.0.Final</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

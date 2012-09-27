@@ -37,10 +37,6 @@
 		</plugins>
 	</build>
 	<dependencies>
-        <dependency>
-            <groupId>com.fieldid</groupId>
-            <artifactId>fid-migrations</artifactId>
-        </dependency>
 		<dependency>
 			<groupId>com.fieldid</groupId>
 			<artifactId>fid-cert-data</artifactId>

@@ -1,6 +1,7 @@
-package com.n4systems.services;
+package com.n4systems.fieldid.servlets;
 
 import com.n4systems.fieldid.migrator.MigrationRunner;
+import com.n4systems.services.Initializer;
 
 public class MigrationInitializer implements Initializer {
     @Override

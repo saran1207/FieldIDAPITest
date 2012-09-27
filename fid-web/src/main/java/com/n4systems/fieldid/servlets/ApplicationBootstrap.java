@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.servlets;
 
 import com.n4systems.services.Initializer;
-import com.n4systems.services.MigrationInitializer;
 import com.n4systems.services.RemoteOrderManagerServiceInitializer;
 import com.n4systems.taskscheduling.TaskSchedulerBootstrapper;
 import org.apache.log4j.Logger;
