@@ -32,4 +32,8 @@ public class AssetSelectionAction extends AbstractAction {
         return openEvent==null ? null : openEvent.getNextDate();
     }
 
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE8";
+    }
 }
