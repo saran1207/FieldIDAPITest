@@ -119,8 +119,8 @@
 										<a href="<@s.url value="/w/setup/ownersUsersLocations" />" ><@s.text name="nav.owners_users_loc"/> » </a>
 										<ul class="sub_menu">
 											<#if sessionUser.hasAccess("manageendusers") >
-												<li><a href="<@s.url action='customerList' namespace='/' />" ><@s.text name="title.manage_customers"/></a></li>
-												<li><a href="<@s.url action='userList' namespace='/' />" ><@s.text name="title.manage_users.plural"/></a></li>
+												<li><a href="<@s.url action='customerList' namespace='/' />" ><@s.text name="label.customers"/></a></li>
+												<li><a href="<@s.url action='userList' namespace='/' />" ><@s.text name="label.users"/></a></li>
 												<#if sessionUser.tenant.settings.userLimits.maxReadOnlyUsers != 0>
 													<li><a href="<@s.url action='userRequestList' namespace='/' />" ><@s.text name="title.manage_user_registrations.plural"/></a></li>
 												</#if>
