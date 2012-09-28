@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
+@Deprecated  //R&D component to try out JS tree
 public class OrgLocationPicker extends Panel {
 
     private @SpringBean OrgService orgService;
@@ -38,9 +38,9 @@ public class OrgLocationPicker extends Panel {
     private AutoCompleteOrgPicker autoComplete;
     private WebMarkupContainer icon;
 
-    public OrgLocationPicker(String id, IModel<BaseOrg> orgModel, IModel<PredefinedLocation> locationModel) {
+    public OrgLocationPicker(String id, IModel<BaseOrg> orgModel) {
         super(id);
-        add(autoComplete = new AutoCompleteOrgPicker("autoComplete", orgModel, locationModel));
+        add(autoComplete = new AutoCompleteOrgPicker("autoComplete", orgModel));
         add(tree=new WebMarkupContainer("tree").setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
         add(icon = new WebMarkupContainer("icon"));
         icon.add(new WiQueryEventBehavior(new Event(MouseEvent.CLICK) {

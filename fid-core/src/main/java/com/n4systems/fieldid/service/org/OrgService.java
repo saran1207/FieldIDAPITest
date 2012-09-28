@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.*;
-import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.util.collections.OrgList;
 import com.n4systems.util.persistence.*;
 import org.apache.commons.lang.StringUtils;
@@ -56,24 +55,7 @@ public class OrgService extends FieldIdPersistenceService {
         return getPrimaryOrgForTenant(tenantId, true);
     }
     
-    public OrgList search(boolean includeLocations, int threshold) {
-        // default search impl if no search term is given.  just return all primary orgs and a random sampling of divisions.
-//        QueryBuilder<PrimaryOrg> query = createUserSecurityBuilder(PrimaryOrg.class);
-//        List<PrimaryOrg> primaryOrgs = persistenceService.findAll(query);
-//        QueryBuilder<SecondaryOrg> query2 = createUserSecurityBuilder(SecondaryOrg.class);
-//        List<SecondaryOrg> secondaryOrgs = persistenceService.findAll(query2);
-//        QueryBuilder<DivisionOrg> query3 = createUserSecurityBuilder(DivisionOrg.class);
-//        List<DivisionOrg> divisionOrgs = persistenceService.findAll(query3);
-//        query3.setLimit(threshold);
-//        List<BaseOrg> result = new ArrayList<BaseOrg>();
-//        result.addAll(secondaryOrgs);
-//        result.addAll(primaryOrgs);
-//        result.addAll(divisionOrgs);
-//        return new OrgList(result, threshold );
-        return search("",includeLocations, threshold);
-    }
-
-    public OrgList search(String term, boolean includeLocations, int threshold) {
+    public OrgList search(String term, int threshold) {
         OrgQueryParser orgQueryParser = new OrgQueryParser(term);
 
         QueryBuilder<BaseOrg> query = createUserSecurityBuilder(BaseOrg.class);
@@ -81,7 +63,7 @@ public class OrgService extends FieldIdPersistenceService {
         if(parents.isEmpty()) {
             // if we were intending to look for parents but found none, then abort search right now & return empty.
             if (orgQueryParser.getParentTerms().size()>0) {
-                return new OrgList(new ArrayList<EntityWithTenant>(), orgQueryParser, threshold);
+                return new OrgList(new ArrayList<BaseOrg>(), orgQueryParser, threshold);
             }
         } else {
             WhereParameterGroup group = new WhereParameterGroup("isParentCustomer");
@@ -102,7 +84,7 @@ public class OrgService extends FieldIdPersistenceService {
         }
 
         query.setLimit(Math.min(threshold*5,100));  // allow for more than threshold, so we can provide a quality sample.
-        List<EntityWithTenant> result = Lists.newArrayList();
+        List<BaseOrg> result = Lists.newArrayList();
         result.addAll(persistenceService.findAll(query));
 
         //add Parent To Results
@@ -110,13 +92,6 @@ public class OrgService extends FieldIdPersistenceService {
             if (!result.contains(org)) {
                 result.add(org);
             }
-        }
-
-        if (includeLocations) {
-            QueryBuilder<PredefinedLocation> locQuery = createUserSecurityBuilder(PredefinedLocation.class);
-            locQuery.addWhere(new WhereParameter<String>(WhereParameter.Comparator.LIKE, "name", "name", orgQueryParser.getSearchTerm(), WhereParameter.WILDCARD_BOTH, false));
-            List<PredefinedLocation> locations = persistenceService.findAll(locQuery);
-            result.addAll(locations);
         }
 
         return new OrgList(result, orgQueryParser, threshold);

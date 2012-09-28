@@ -7,8 +7,14 @@
 }
 
 .ui-autocomplete .matched {
-    color : #3344DD;
+    color : #435477;
+    text-decoration: underline;
 }
+
+.ui-state-hover .matched {
+    color : #1D4977;
+}
+
 
 .ui-menu.ui-autocomplete.ui-widget {
     opacity:0.96;
@@ -82,5 +88,5 @@ li .max-results {
     border: 1px solid #D2E5FF;
     border-left-color: #d6d6d6;
     border-radius:0;
-    margin-left:0;
+    margin-left:-1px;
 }

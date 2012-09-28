@@ -7,7 +7,7 @@ import com.n4systems.util.StringUtils;
 
 import java.util.Comparator;
 
-class OrgComparator implements Comparator<EntityWithTenant> {
+class OrgComparator implements Comparator<BaseOrg> {
 
     private String term;
 
@@ -16,7 +16,7 @@ class OrgComparator implements Comparator<EntityWithTenant> {
     }
 
     @Override
-    public int compare(EntityWithTenant o1, EntityWithTenant o2) {
+    public int compare(BaseOrg o1, BaseOrg o2) {
         int o1Level = getOrgLevel(o1);
         int o2Level = getOrgLevel(o2);
         return o1Level==o2Level ? StringUtils.compareAsString(o1, o2) : o1Level-o2Level;
@@ -28,7 +28,7 @@ class OrgComparator implements Comparator<EntityWithTenant> {
         BaseOrg org;
         if (entity instanceof BaseOrg) {
             org = (BaseOrg) entity;
-            index = getLevelOffset(org.getName());
+            index = getSearchOffset(org.getName());
             if (org.isPrimary()) {
                 return 100 + index;
             } else if (org.isSecondary()) {
@@ -38,10 +38,6 @@ class OrgComparator implements Comparator<EntityWithTenant> {
             } else if (org.isDivision()) {
                 return 500 + index;
             }
-        } else if (entity instanceof PredefinedLocation) {
-            location = (PredefinedLocation) entity;
-            index = getLevelOffset(location.getName());
-            return 1000 + index;
         }
         return Integer.MAX_VALUE;
     }
@@ -49,19 +45,16 @@ class OrgComparator implements Comparator<EntityWithTenant> {
     // this gives higher priority to entities that start with search term.
     //   e.g. PINEAPPLE and APPLE will both match string APP but
     //     this will assume APPLE is more relevant.
-    private int getLevelOffset(String value) {
-        int index = value.indexOf(term);
-        // arbitrary values...just as long as order:
-        // 1:strings starting with terms
-        // 2:strings containing term
-        // 3:not containing term
+    private int getSearchOffset(String value) {
+        int index = value.toLowerCase().indexOf(term);
+        // assign arbitrary values; just ensure order:
+        // 1:strings starting with terms        "APPle"
+        // 2:strings containing term            "pineAPPple"
+        // 3:not containing term                "foobar"
         if (index<0) {
             return 66;
-        } else if (index==0) {
-            return 0;
-        } else {
-            return 22;
         }
+        return index;
     }
 
 }

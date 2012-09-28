@@ -26,7 +26,7 @@ var autoCompleter = (function() {
                 menu.css('width',menu.width()+10); // add room because we've styled it with extra padding between description and result columns.
             }
             auto.initialized=true;
-            $('.ui-autocomplete .link').tipsy({gravity: 'e', fade:true, delayIn:150});
+            $('.ui-autocomplete .link').tipsy({gravity: 'n', fade:true, delayIn:355});
             // hack to remove jquery styling because rounded corners mucks up the border.
             $('.ui-autocomplete').removeClass('ui-corner-all');
         });

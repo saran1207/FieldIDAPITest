@@ -51,7 +51,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         Form form = new Form("form", new CompoundPropertyModel(this));
 
         form.add(new Comment("comment", new PropertyModel<String>(this, "comment")));
-        form.add(new AutoCompleteOrgPicker("autocompleteorg", new PropertyModel<BaseOrg>(this, "org"), new DebugPropertyModel<PredefinedLocation>(this,"location")));
+        form.add(new AutoCompleteOrgPicker("autocompleteorg", new PropertyModel<BaseOrg>(this, "org")));
         form.add(new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "asset")));
         form.add(new TextField("watermark", new PropertyModel<String>(this,"text")).add(new Watermark("enter a value")));
         form.add(new TextField("watermark2", new PropertyModel<String>(this, "text2")).add(new Watermark("enter another value")));
@@ -59,7 +59,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         form.add(new Agenda("agenda", Model.of(new WorkWidgetConfiguration())).setVisible(false));
         form.add(new AutoCompleteUser("user", new PropertyModel<User>(this, "user")));
         form.add(new GoogleMap("map").addLocation(43.65, -79.34).addLocation(42.00, -80.00).addLocation(44.0, -79.7));
-        form.add(new OrgLocationPicker("location", new PropertyModel<BaseOrg>(this,"org"), new PropertyModel<PredefinedLocation>(this,"location") ));
+        form.add(new OrgLocationPicker("location", new PropertyModel<BaseOrg>(this,"org")));
 //        form.add(new GoogleMap("map"));
         form.add(new DateTimePicker("dateTimePicker", new PropertyModel<Date>(this,"date"), true));
         form.add(new DateTimePicker("datePicker", new PropertyModel<Date>(this,"date"), false));
