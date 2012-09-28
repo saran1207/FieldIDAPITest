@@ -182,7 +182,7 @@
 }
 
 .lastEventTable .resultIcon {
-    padding: 5px 10px 5px 15px;
+    padding: 5px 11px 5px 9px;
 }
 
 .lastEventTable .eventDate, .lastEventTable .eventType {
@@ -211,7 +211,6 @@
 }
 
 .upcomingEvent {
-    margin: 5px 0;
     padding: 0 5px;
     float: left;
     width: 645px;
