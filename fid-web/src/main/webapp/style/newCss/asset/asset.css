@@ -212,18 +212,10 @@
 
 .upcomingEvent {
     margin: 5px 0;
-    background-color: #F7F7F7;
     padding: 0 5px;
     float: left;
     width: 645px;
-}
-
-.overdue {
-    border-left: 5px solid #DC7070;
-}
-
-.due {
-    border-left: 5px solid #999;
+    border-bottom: 1px dotted #DDDDDD;
 }
 
 .upcomingEventIcon {

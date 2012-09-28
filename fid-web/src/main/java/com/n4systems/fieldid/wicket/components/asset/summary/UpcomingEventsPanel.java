@@ -31,11 +31,20 @@ public class UpcomingEventsPanel extends Panel {
 
                 ContextImage scheduleIcon;
                 if(schedule.getAssignee() != null) {
-                    item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-assigned.png"));
+
+                    if (schedule.isPastDue()) {
+                        item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-assigned-overdue.png"));
+                    } else {
+                        item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-assigned.png"));
+                    }
                     scheduleIcon.add(new AttributeAppender("title",  new FIDLabelModel("label.assignee_is", schedule.getAssignee().getDisplayName())));
                     scheduleIcon.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
                 } else {
-                    item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open.png"));
+                    if (schedule.isPastDue()) {
+                        item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-overdue.png"));
+                    } else {
+                        item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open.png"));
+                    }
                 }
 
                 item.add(new Label("upcomingEventType", schedule.getType().getName()));
@@ -45,13 +54,10 @@ public class UpcomingEventsPanel extends Panel {
                 if (schedule.isPastDue()) {
                     TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingEventDate",Model.of(schedule.getNextDate()),dateService.getUsersTimeZone());
                     item.add(timeAgoField);
-                    item.add(new AttributeAppender("class", "overdue").setSeparator(" "));
                 } else if(schedule.getDaysToDue().equals(0L)) {
                     item.add(new Label("upcomingEventDate", new FIDLabelModel("label.today")));
-                    item.add(new AttributeAppender("class", "due").setSeparator(" "));
                 } else {
                     item.add(new Label("upcomingEventDate", new FIDLabelModel("label.in_x_days", schedule.getDaysToDue(), upcomingEventDate.getObject())));
-                    item.add(new AttributeAppender("class", "due").setSeparator(" "));
                 }
                 
                 item.add(new Label("onDate", new FIDLabelModel("label.on_date", upcomingEventDate.getObject())));
