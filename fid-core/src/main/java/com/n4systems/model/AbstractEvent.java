@@ -85,6 +85,17 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 		super.onUpdate();
 		ensureMobileGuidIsSet();
 	}
+
+    public void setTriggersIntoResultingActions(Event triggerEvent) {
+        for (CriteriaResult result : getResults()) {
+            for (Event action : result.getActions()) {
+                action.setAsset(getAsset());
+                action.setOwner(triggerEvent.getOwner());
+                action.setTriggerEvent(triggerEvent);
+                action.setSourceCriteriaResult(result);
+            }
+        }
+    }
 	
 	private void ensureMobileGuidIsSet() {
 		if (mobileGUID == null) {

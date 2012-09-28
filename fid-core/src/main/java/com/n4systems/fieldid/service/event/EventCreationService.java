@@ -97,20 +97,21 @@ public class EventCreationService extends FieldIdPersistenceService {
             Map<Long, String> rememberedSignatureMap = rememberTemporarySignatureFiles(event);
             Map<Long, List<byte[]>> rememberedCriteriaImages = rememberCriteriaImages(event);
 
-            event.setTriggersIntoResultingActions();
+            event.setTriggersIntoResultingActions(event);
             copyDataToActionSchedules(event);
             event = persistenceService.update(event);
 
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
             restoreCriteriaImages(event, rememberedCriteriaImages);
 
-            event.setTriggersIntoResultingActions();
+            event.setTriggersIntoResultingActions(event);
             copyDataToActionSchedules(event);
 
             event = persistenceService.update(event);
         }
 
 
+        setAllTriggersForActions(event);
 
         updateAsset(event, user.getId());
 
@@ -127,6 +128,13 @@ public class EventCreationService extends FieldIdPersistenceService {
         persistenceService.update(event.getSchedule());
 
         return event;
+    }
+
+    private void setAllTriggersForActions(Event event) {
+        event.setTriggersIntoResultingActions(event);
+        for (SubEvent subEvent : event.getSubEvents()) {
+            subEvent.setTriggersIntoResultingActions(event);
+        }
     }
 
     private void restoreCriteriaImages(Event event, Map<Long, List<byte[]>> rememberedCriteriaImages) {
@@ -460,7 +468,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         writeSignatureImagesToDisk(event);
         saveCriteriaResultImages(event);
-        event.setTriggersIntoResultingActions();
+        setAllTriggersForActions(event);
         copyDataToActionSchedules(event);
 
         event.getAttachments().clear();

@@ -418,7 +418,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         assigneeNotification.setEvent(this);
 		normalizeAssignmentForPersistence();
         fillInPlaceholderScheduleIfAbsent();
-        setTriggersIntoResultingActions();
+        setTriggersIntoResultingActions(this);
 	}
 
     private void fillInPlaceholderScheduleIfAbsent() {
@@ -437,19 +437,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	protected void onUpdate() {
 		super.onUpdate();
 		normalizeAssignmentForPersistence();
-        setTriggersIntoResultingActions();
+        setTriggersIntoResultingActions(this);
 	}
-
-    public void setTriggersIntoResultingActions() {
-        for (CriteriaResult result : getResults()) {
-            for (Event event : result.getActions()) {
-                event.setAsset(getAsset());
-                event.setOwner(getOwner());
-                event.setTriggerEvent(this);
-                event.setSourceCriteriaResult(result);
-            }
-        }
-    }
 
     @Override
 	@AllowSafetyNetworkAccess

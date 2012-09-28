@@ -1,19 +1,12 @@
 package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiCriteriaImage;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.PriorityCode;
-import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import com.n4systems.model.*;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -21,7 +14,6 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.log4j.Logger;
-import org.hibernate.impl.CriteriaImpl;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -128,11 +117,11 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		apiSchedule.setEventTypeName(event.getEventType().getName());
 		apiSchedule.setOwner(event.getOwner().getDisplayName());
 		apiSchedule.setNextDate(event.getNextDate());
-		if(event.getAssignee() != null) {
+		if (event.getAssignee() != null) {
 			apiSchedule.setAssigneeUserId(event.getAssignee().getId());
 		}
 		
-		if(event.getEventType().getGroup().isAction()) {
+		if (event.isAction()) {
 			apiSchedule.setAction(true);
 			apiSchedule.setPriorityId(event.getPriority().getId());
 			apiSchedule.setNotes(event.getNotes());
