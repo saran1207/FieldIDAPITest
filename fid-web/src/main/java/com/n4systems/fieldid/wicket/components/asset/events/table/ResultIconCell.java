@@ -29,12 +29,27 @@ public class ResultIconCell extends Panel {
                 image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", status.getDisplayName()).getObject()));
             }
         } else if(state.equals(Event.EventState.OPEN)) {
+
+
+            //label.open_assigned_overdue=This event is open, assigned to {0} and overdue
+            //label.open_overdue=This event is open and overdue
+
             if(event.getAssignee() != null) {
-                add(image = new ContextImage("resultIcon", "images/event-open-assigned.png"));
-                image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", event.getAssignee().getDisplayName())));
+                if(event.isPastDue()) {
+                    add(image = new ContextImage("resultIcon", "images/event-open-assigned-overdue.png"));
+                    image.add(new AttributeAppender("title", new FIDLabelModel("label.open_assigned_overdue", event.getAssignee().getDisplayName())));
+                } else {
+                    add(image = new ContextImage("resultIcon", "images/event-open-assigned.png"));
+                    image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", event.getAssignee().getDisplayName())));
+                }
             }else {
-                add(image = new ContextImage("resultIcon", "images/event-open.png"));
-                image.add(new AttributeAppender("title", new FIDLabelModel("label.event_open").getObject()));
+                if(event.isPastDue()) {
+                    add(image = new ContextImage("resultIcon", "images/event-open-overdue.png"));
+                    image.add(new AttributeAppender("title", new FIDLabelModel("label.open_overdue").getObject()));
+                } else {
+                    add(image = new ContextImage("resultIcon", "images/event-open.png"));
+                    image.add(new AttributeAppender("title", new FIDLabelModel("label.event_open").getObject()));
+                }
             }
         }else /*if(state.equals(Event.EventState.CLOSED)) */ {
             add(image = new ContextImage("resultIcon", "images/event-closed.png"));

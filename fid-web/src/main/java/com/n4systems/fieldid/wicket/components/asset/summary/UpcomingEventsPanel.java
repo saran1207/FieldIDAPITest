@@ -34,17 +34,21 @@ public class UpcomingEventsPanel extends Panel {
 
                     if (schedule.isPastDue()) {
                         item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-assigned-overdue.png"));
+                        scheduleIcon.add(new AttributeAppender("title",  new FIDLabelModel("label.open_assigned_overdue", schedule.getAssignee().getDisplayName())));
                     } else {
                         item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-assigned.png"));
+                        scheduleIcon.add(new AttributeAppender("title",  new FIDLabelModel("label.assignee_is", schedule.getAssignee().getDisplayName())));
                     }
-                    scheduleIcon.add(new AttributeAppender("title",  new FIDLabelModel("label.assignee_is", schedule.getAssignee().getDisplayName())));
                     scheduleIcon.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
                 } else {
                     if (schedule.isPastDue()) {
                         item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-overdue.png"));
+                        scheduleIcon.add(new AttributeAppender("title", new FIDLabelModel("label.open_overdue").getObject()));
                     } else {
                         item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open.png"));
+                        scheduleIcon.add(new AttributeAppender("title", new FIDLabelModel("label.event_open").getObject()));
                     }
+                    scheduleIcon.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
                 }
 
                 item.add(new Label("upcomingEventType", schedule.getType().getName()));
