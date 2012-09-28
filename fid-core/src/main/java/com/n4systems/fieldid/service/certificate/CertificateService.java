@@ -13,8 +13,9 @@ import com.n4systems.model.orgs.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.reporting.*;
-import com.n4systems.util.DateHelper;
+import com.n4systems.util.FieldIdDateFormatter;
 import com.n4systems.util.StreamHelper;
+import com.n4systems.util.time.DateUtil;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
@@ -27,10 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Transactional(readOnly = true)
 public class CertificateService extends FieldIdPersistenceService {
@@ -186,8 +184,10 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 	private void addNextEventScheduleParams(Map<String, Object> reportMap, Event event, DateTimeDefiner dateDefiner) {
 		Event openEvent = eventScheduleService.getNextEventSchedule(event.getAsset().getId(), event.getType().getId());
 		if (openEvent != null) {
-			reportMap.put("nextDate_date", openEvent.getNextDate());
-			reportMap.put("nextDate", DateHelper.format(openEvent.getNextDate(), dateDefiner));
+            Date nextDate = openEvent.getNextDate();
+            String formattedNextDate = new FieldIdDateFormatter(nextDate, dateDefiner, false, !DateUtil.isMidnight(nextDate)).format();
+            reportMap.put("nextDate_date", nextDate);
+            reportMap.put("nextDate", formattedNextDate);
 		}
 	}
 
