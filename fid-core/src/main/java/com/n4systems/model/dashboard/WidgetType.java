@@ -8,7 +8,6 @@ public enum WidgetType implements Listable<String> {
 
 	NEWS("Field ID News & Updates", WidgetConfiguration.class),
     JOBS_ASSIGNED("Assigned Jobs", WidgetConfiguration.class),
-    COMMON_LINKS("Common Links", WidgetConfiguration.class),
     COMPLETED_EVENTS("Completed Events", CompletedEventsWidgetConfiguration.class),
     ASSETS_STATUS("Assets By Status", AssetsStatusWidgetConfiguration.class),
     UPCOMING_SCHEDULED_EVENTS("Upcoming Scheduled Events", UpcomingEventsWidgetConfiguration.class),

@@ -56,7 +56,7 @@ public class DashboardServiceTest extends FieldIdServiceTest {
 	@SuppressWarnings("unchecked")
 	@Test 
 	public void test_findLayout_existing() {
-		DashboardLayout existingLayout = createNewDashboardLayout(new WidgetDefinition(WidgetType.COMMON_LINKS), new WidgetDefinition(WidgetType.ASSETS_STATUS));
+		DashboardLayout existingLayout = createNewDashboardLayout(new WidgetDefinition(WidgetType.NEWS), new WidgetDefinition(WidgetType.ASSETS_STATUS));
 		expect(persistenceService.find(anyObject(QueryBuilder.class))).andReturn(existingLayout);
 		replay(persistenceService);
 		expect(securityContext.getUserSecurityFilter()).andReturn(securityFilter);

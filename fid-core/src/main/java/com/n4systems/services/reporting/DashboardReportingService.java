@@ -128,8 +128,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
                 return getCriteriaDefaults((EventKPIWidgetConfiguration) widgetDefinition.getConfig(), series, x.intValue()/*assumed to be org index*/);
             case WORK:
                 return getCriteriaDefaults((WorkWidgetConfiguration)widgetDefinition.getConfig(), series, x.intValue());
-            case COMMON_LINKS:
-            	return getCriteriaDefaults();
 			default:
 				throw new IllegalArgumentException("Can't convert widget of type " + widgetDefinition.getWidgetType() + " into report criteria");
 		}
