@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.components.massupdate.openevent;
 
-import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -10,7 +10,6 @@ import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -34,10 +33,10 @@ public class AssignDetailsPanel extends AbstractMassUpdatePanel {
         public AssignEventForm(String id, MassUpdateEventModel massUpdateEventModel) {
             super(id, new CompoundPropertyModel<MassUpdateEventModel>(massUpdateEventModel));
 
-            add( new DropDownChoice<User>("assignee",
+            add( new FidDropDownChoice<User>("assignee",
                     new PropertyModel<User>(massUpdateEventModel, "event.assignee"),
                     getUsers(),
-                    new ChoiceRenderer<User>("assignToDisplayName")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
+                    new ChoiceRenderer<User>("assignToDisplayName")).setNullValid(false).setRequired(true));
 
             add(new Button("assignButton"));
 

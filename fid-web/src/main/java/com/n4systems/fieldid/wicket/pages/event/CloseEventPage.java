@@ -4,7 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -18,7 +18,10 @@ import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -75,15 +78,15 @@ public class CloseEventPage extends FieldIDFrontEndPage {
             List<EventStatus> activeStatuses = getActiveStatuses();
             add(new Label("due", new PropertyModel<String>(openEventModel, "nextDate")));
             add(new Label("state", new PropertyModel<String>(openEventModel, "eventState")));
-            add( new DropDownChoice<EventStatus>("status",
+            add( new FidDropDownChoice<EventStatus>("status",
                     new PropertyModel<EventStatus>(this, "status"),
                     activeStatuses,
-                    new ChoiceRenderer<EventStatus>("name")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
+                    new ChoiceRenderer<EventStatus>("name")).setNullValid(false).setRequired(true));
 
-            add( new DropDownChoice<User>("resolver",
+            add( new FidDropDownChoice<User>("resolver",
                     new PropertyModel<User>(this, "resolvedBy"),
                     getUsers(),
-                    new ChoiceRenderer<User>("assignToDisplayName")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
+                    new ChoiceRenderer<User>("assignToDisplayName")).setNullValid(false).setRequired(true));
 
             add(new TextArea<String>("comment", new PropertyModel<String>(this, "comment")));
 

@@ -182,11 +182,6 @@
         <priority value="ERROR" />
     </category>
 
-    <!-- WEB-3324 - Remove when fixed -->
-    <category name="org.apache.wicket.Localizer" additivity="false">
-        <priority value="ERROR" />
-    </category>
-
     <category name="com.n4systems.fieldid.migrator">
         <priority value="DEBUG" />
         <appender-ref ref="FIELDID_MIGRATIONS" />

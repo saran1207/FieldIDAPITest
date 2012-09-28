@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.components.massupdate.openevent;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -12,7 +12,10 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventStatus;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.user.User;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -49,15 +52,15 @@ public class CloseDetailsPanel extends AbstractMassUpdatePanel {
             event.setEventStatus(getActiveStatuses().get(0));
 
             List<EventStatus> activeStatuses = getActiveStatuses();
-            add( new DropDownChoice<EventStatus>("status",
+            add( new FidDropDownChoice<EventStatus>("status",
                     new PropertyModel<EventStatus>(massUpdateEventModel, "event.eventStatus"),
                     activeStatuses,
-                    new ChoiceRenderer<EventStatus>("name")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
+                    new ChoiceRenderer<EventStatus>("name")).setNullValid(false).setRequired(true));
 
-            add( new DropDownChoice<User>("resolver",
+            add( new FidDropDownChoice<User>("resolver",
                     new PropertyModel<User>(massUpdateEventModel, "event.performedBy"),
                     getUsers(),
-                    new ChoiceRenderer<User>("assignToDisplayName")).setNullValid(false).setRequired(true).add(new JChosenBehavior()));
+                    new ChoiceRenderer<User>("assignToDisplayName")).setNullValid(false).setRequired(true));
 
             add(new TextArea<String>("comment", new PropertyModel<String>(massUpdateEventModel, "event.comments")));
 

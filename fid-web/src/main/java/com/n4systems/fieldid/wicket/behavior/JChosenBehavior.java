@@ -12,6 +12,9 @@ public class JChosenBehavior extends Behavior {
 
     @Override
     public void bind(Component component) {
+        // NOTE : WEB-3324 most of the calls generating the error message come from here.
+        // .: it is important that if you use this behavior you do it in onIntialize().
+        // even better would be to refactor this "nullValid" feature out of this method.
         String nullString = component.getString("nullValid");
         if (StringUtils.isBlank(nullString)) {
             nullString = " ";

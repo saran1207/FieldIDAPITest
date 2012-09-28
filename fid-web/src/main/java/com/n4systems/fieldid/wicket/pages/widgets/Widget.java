@@ -29,20 +29,26 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
 
     protected ContextImage removeButton;
     protected ContextImage configureButton;
-    
+    private Label subTitleLabel;
+
 
     public Widget(String id, IModel<WidgetDefinition<W>> widgetDefinition) {
         super(id, widgetDefinition);
         this.widgetDefinition = widgetDefinition;
         setOutputMarkupId(true);
-        Label subTitleLabel = new Label("subTitleLabel", getSubTitleModel()); 
+        subTitleLabel = new Label("subTitleLabel", getSubTitleModel());
         add(new Label("titleLabel", new PropertyModel<String>(widgetDefinition, "config.name")));
         add(subTitleLabel);
         add(new ContextImage("dragImage", "images/dashboard/drag.png"));        
-        if (StringUtils.isBlank(subTitleLabel.getDefaultModelObjectAsString())) {
-        	subTitleLabel.setVisible(false);
-        }
         addButtons();
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        if (StringUtils.isBlank(subTitleLabel.getDefaultModelObjectAsString())) {
+            subTitleLabel.setVisible(false);
+        }
     }
 
     @Override

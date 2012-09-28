@@ -14,55 +14,51 @@ public class FidDropDownChoice<T> extends DropDownChoice<T>{
 
     public FidDropDownChoice(String id) {
         super(id);
-        addJChosenBehavior();
     }
 
     public FidDropDownChoice(String id, List<? extends T> choices) {
         super(id, choices);
-        addJChosenBehavior();
     }
 
     public FidDropDownChoice(String id, List<? extends T> choices, IChoiceRenderer<? super T> iChoiceRenderer) {
         super(id, choices, iChoiceRenderer);
-        addJChosenBehavior();
     }
 
     public FidDropDownChoice(String id, IModel<T> tiModel, List<? extends T> choices) {
         super(id, tiModel, choices);
-        addJChosenBehavior();
     }
 
     public FidDropDownChoice(String id, IModel<T> tiModel, List<? extends T> choices, IChoiceRenderer<? super T> iChoiceRenderer) {
         super(id, tiModel, choices, iChoiceRenderer);
-        addJChosenBehavior();
     }
 
     public FidDropDownChoice(String id, IModel<? extends List<? extends T>> choices) {
         super(id, choices);
-        addJChosenBehavior();
     }
 
     public FidDropDownChoice(String id, IModel<T> tiModel, IModel<? extends List<? extends T>> choices) {
         super(id, tiModel, choices);
-        addJChosenBehavior();
     }
 
     public FidDropDownChoice(String id, IModel<? extends List<? extends T>> choices, IChoiceRenderer<? super T> iChoiceRenderer) {
         super(id, choices, iChoiceRenderer);
-        addJChosenBehavior();
     }
 
     public FidDropDownChoice(String id, IModel<T> tiModel, IModel<? extends List<? extends T>> choices, IChoiceRenderer<? super T> iChoiceRenderer) {
         super(id, tiModel, choices, iChoiceRenderer);
-        addJChosenBehavior();
     }
 
     private void addJChosenBehavior() {
         add(new AttributeAppender("data-placeholder", placeholder));
         add(new JChosenBehavior());
-
     }
-    
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        addJChosenBehavior();
+    }
+
     public FidDropDownChoice<T> withPlaceholder(String placeholder) {
         this.placeholder = placeholder;
         return this;

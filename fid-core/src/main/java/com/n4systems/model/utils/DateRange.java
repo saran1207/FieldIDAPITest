@@ -171,7 +171,7 @@ public class DateRange implements Serializable, Cloneable {
 
         protected DateMidnight today() {
             if (timeZone==null) {
-                logger.error("calling date range without using timezone!  using default timezone instead.");
+                //logger.info("calling date range without using timezone!  using default timezone instead.");
                 return new DateMidnight(DateTimeZone.forTimeZone(TimeZone.getDefault()));
             }
             return new DateMidnight(DateTimeZone.forTimeZone(timeZone));

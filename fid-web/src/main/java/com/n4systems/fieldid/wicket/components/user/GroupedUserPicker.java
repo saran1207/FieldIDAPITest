@@ -11,13 +11,13 @@ import java.util.List;
 
 public class GroupedUserPicker extends GroupedDropDownChoice<User, BaseOrg> {
 
+    private boolean useJChosen;
+
     public GroupedUserPicker(String id, IModel<User> userModel, IModel<List<User>> usersModel, boolean useJChosen) {
         super(id, userModel, usersModel, new AssignToChoiceRenderer());
-        if (useJChosen) {
-            add(new JChosenBehavior());
-        }
-
+        this.useJChosen = useJChosen;
     }
+
     public GroupedUserPicker(String id, IModel<User> userModel, IModel<List<User>> usersModel) {
         this(id, userModel, usersModel, true);
     }
@@ -35,5 +35,13 @@ public class GroupedUserPicker extends GroupedDropDownChoice<User, BaseOrg> {
     @Override
     protected User convertChoiceIdToChoice(String id) {
         return super.convertChoiceIdToChoice(id);
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        if (useJChosen) {
+            add(new JChosenBehavior());
+        }
     }
 }
