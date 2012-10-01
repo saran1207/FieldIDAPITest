@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.internal.matchers.TypeSafeMatcher;
 
 import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.assertThat;
 
 
 public class PredefinedLocationListLoaderTest {
@@ -33,22 +32,11 @@ public class PredefinedLocationListLoaderTest {
     }
 
 	@Test
-	public void should_create_query_builder_with_order_by_id_when_parent_first_order_is_required() throws Exception {
-		
-		PredefinedLocationListLoaderTestExtension sut = new PredefinedLocationListLoaderTestExtension(new TenantOnlySecurityFilter(1L));
-		
-		sut.withParentFirstOrder().load(new TestingTransaction());
-		
-		
-		assertThat(sut.queryBuilder, hasOrderByClause("id", true));
-	}
-	
-	@Test
 	public void should_create_query_builder_with_no_state_filter_archived_locations_are_required() throws Exception {
 		
 		PredefinedLocationListLoaderTestExtension sut = new PredefinedLocationListLoaderTestExtension(new TenantOnlySecurityFilter(1L));
 		
-		sut.withParentFirstOrder().load(new TestingTransaction());
+		sut.load(new TestingTransaction());
 		
 		
 		//assertThat(sut.queryBuilder, hasOrderByClause("id", true));

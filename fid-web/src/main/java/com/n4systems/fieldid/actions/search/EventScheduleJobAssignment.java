@@ -103,7 +103,7 @@ public class EventScheduleJobAssignment extends EventScheduleAction {
 	}
 
     public List<HierarchicalNode> getPredefinedLocationTree() {
-        return ((SearchHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
+        return ((SearchHelper)getHelper()).getPredefinedLocationTree(getOwner());
     }
 
 }

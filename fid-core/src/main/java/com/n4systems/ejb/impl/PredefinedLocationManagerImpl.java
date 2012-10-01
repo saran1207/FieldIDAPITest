@@ -33,7 +33,7 @@ public class PredefinedLocationManagerImpl implements PredefinedLocationManager 
     }
 
     protected PredefinedLocationTreeLoader createPredefinedLocationTreeLoader(SecurityFilter securityFilter) {
-        return new PredefinedLocationTreeLoader(createPredefinedLocationListLoader(securityFilter).withParentFirstOrder());
+        return new PredefinedLocationTreeLoader(createPredefinedLocationListLoader(securityFilter));
     }
 
     protected PredefinedLocationListLoader createPredefinedLocationListLoader(SecurityFilter securityFilter) {

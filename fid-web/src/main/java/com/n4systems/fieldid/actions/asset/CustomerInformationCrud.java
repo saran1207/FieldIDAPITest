@@ -147,7 +147,7 @@ public class CustomerInformationCrud extends AbstractCrud {
     }
 
     public List<HierarchicalNode> getPredefinedLocationTree() {
-        return ((CustomerInformationCrudHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
+        return ((CustomerInformationCrudHelper)getHelper()).getPredefinedLocationTree(getOwner());
     }
 
 	

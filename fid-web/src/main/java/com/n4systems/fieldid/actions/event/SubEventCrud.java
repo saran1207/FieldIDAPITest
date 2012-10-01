@@ -243,7 +243,7 @@ public class SubEventCrud extends EventCrud {
 		}
 
 		masterEventHelper.getSubEventUploadedFiles().put(subEvent, getUploadedFiles());
-
+        
 		addFlashMessageText("message.eventstored");
 		return SUCCESS;
 	}
@@ -399,7 +399,7 @@ public class SubEventCrud extends EventCrud {
     }
 
     public List<HierarchicalNode> getPredefinedLocationTree() {
-        return ((EventCrudHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
+        return ((EventCrudHelper)getHelper()).getPredefinedLocationTree(getOwner());
     }
 
     public void setFreeFormLocation(String freeFormLocation) {

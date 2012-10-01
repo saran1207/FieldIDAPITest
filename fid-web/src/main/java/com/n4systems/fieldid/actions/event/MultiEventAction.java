@@ -397,7 +397,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
     }
 
     public List<HierarchicalNode> getPredefinedLocationTree() {
-        return ((MultiEventActionHelper)getHelper()).getPredefinedLocationTree(event.getOwner(), getCurrentUser());
+        return ((MultiEventActionHelper)getHelper()).getPredefinedLocationTree(event.getOwner());
     }
 
     public void setFreeFormLocation(String freeFormLocation) {

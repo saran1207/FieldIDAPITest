@@ -36,14 +36,14 @@ public class PredefinedLocationsPanel extends Panel {
         super(id);
         setOutputMarkupPlaceholderTag(true);
 
-        List<HierarchicalNode> predefinedLocationTree = new LocationHelper(new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()), new PersistenceManagerTransactor()).getPredefinedLocationTree();
+        List<HierarchicalNode> predefinedLocationTree = new LocationHelper(new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()), new PersistenceManagerTransactor()).getPredefinedLocationWithPrimaryOrgFilteringTree();
 
         artificialRootNode = new HierarchicalNode();
         artificialRootNode.addChild(createNoneChoice(predefinedLocationTree));
         artificialRootNode.addChildren(predefinedLocationTree);
 
         expandedLevels.add(artificialRootNode);
-        
+
         levelList = new ListView<HierarchicalNode>("levelList", new PropertyModel<List<HierarchicalNode>>(this, "expandedLevels")) {
             @Override
             protected void populateItem(ListItem item) {
@@ -127,7 +127,14 @@ public class PredefinedLocationsPanel extends Panel {
         return new AttributeAppender("class", new Model<String>("filter-org"), " ") {
             @Override public boolean isEnabled(Component component) {
                 BaseOrg itemOwner = item.getModelObject().getOwner();
-                return owner!=null && itemOwner!=null && !owner.isParentOf(itemOwner);
+                if (itemOwner!=null && itemOwner.isPrimary()) {
+                    return false;
+                }
+                if (owner!=null && !owner.isParentOf(itemOwner)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         };
     }

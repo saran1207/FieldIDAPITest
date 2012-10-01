@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 public class LocationWebModel implements Serializable {
 
-	
 	private String freeformLocation;
 	private PredefinedLocation predefinedLocation;
 
@@ -16,7 +15,6 @@ public class LocationWebModel implements Serializable {
 
 	public LocationWebModel(LoaderFactoryProvider factoryProvider) {
 		this.factoryProvider = factoryProvider;
-		
 	}
 	
 	
@@ -25,8 +23,6 @@ public class LocationWebModel implements Serializable {
 		this.freeformLocation = location.getFreeformLocation();
 		return this;
 	}
-	
-	
 
 	public Long getPredefinedLocationId() {
 		return predefinedLocation != null ? predefinedLocation.getId() : null;
@@ -35,8 +31,8 @@ public class LocationWebModel implements Serializable {
 	public void setPredefinedLocationId(Long predefinedLocationId) {
 		if (predefinedLocationId == null) {
 			predefinedLocation = null;
-		} else if (!predefinedLocationId.equals(getPredefinedLocationId())){
-			predefinedLocation =  factoryProvider.getLoaderFactory().createFilteredIdLoader(PredefinedLocation.class).setId(predefinedLocationId).load();
+		} else if (!predefinedLocationId.equals(getPredefinedLocationId())) {
+			predefinedLocation =  factoryProvider.getLoaderFactory().createOwnerAndDownWithPrimaryFilteredIdLoader(PredefinedLocation.class).setId(predefinedLocationId).load();
 		}
 		
 	}

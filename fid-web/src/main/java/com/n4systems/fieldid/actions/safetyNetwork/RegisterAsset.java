@@ -296,7 +296,7 @@ public class RegisterAsset extends AbstractCrud{
 	}
 
     public List<HierarchicalNode> getPredefinedLocationTree() {
-        return ((AssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
+        return ((AssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner());
     }
 
     @SkipValidation

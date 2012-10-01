@@ -1,19 +1,11 @@
 package com.n4systems.fieldid.actions.search;
 
-import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.n4systems.fieldid.actions.utils.WebSessionMap;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.dynamic.AssetManagerBackedCommonAssetAttributeFinder;
@@ -30,6 +22,13 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.Preparable;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.UNASSIGNED_USER;
 
 public class AssetSearchAction extends CustomizableSearchAction<AssetSearchContainer> implements Preparable {
 	public static final String SEARCH_CRITERIA = "searchCriteria";

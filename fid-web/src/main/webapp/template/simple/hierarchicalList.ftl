@@ -33,6 +33,11 @@
         color:#888;
     }
 
+    .containerobj .node .org, .containerobj .node .name {
+        padding-top:0px;
+        padding-bottom:0px;
+    }
+
     .containerobj .org {
         color:#666;
         font-weight: normal;

@@ -517,7 +517,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
     }
 
     public List<HierarchicalNode> getPredefinedLocationTree() {
-        return ((MultiAddAssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
+        return ((MultiAddAssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner());
     }
 
     @Override

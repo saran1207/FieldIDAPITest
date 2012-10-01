@@ -10,7 +10,7 @@ import javax.persistence.Query;
 
 public class OwnerAndDownFilter extends AbstractSecurityFilter {
 
-	private final BaseOrg filterOrg;
+	protected final BaseOrg filterOrg;
 	
 	public OwnerAndDownFilter(BaseOrg filterOrg) {
 		this.filterOrg = filterOrg;
@@ -33,7 +33,7 @@ public class OwnerAndDownFilter extends AbstractSecurityFilter {
         builder.addWhere(createAppropriateParameter(definer));
 	}
 
-    public WhereParameter<?> createAppropriateParameter(SecurityDefiner definer) {
+    protected WhereClause<?> createAppropriateParameter(SecurityDefiner definer) {
         if (filterOrg.isPrimary()) {
             return createFilterParameter(prepareFullOwnerPathWithFilterPath(definer, SecondaryOrg.SECONDARY_ID_FILTER_PATH), null, WhereParameter.Comparator.EQ_OR_NULL);
         } else {

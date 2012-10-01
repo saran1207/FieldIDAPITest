@@ -4,7 +4,6 @@ import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.model.location.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.UserSecurityFilter;
-import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.Transactor;
 import com.n4systems.persistence.UnitOfWork;
@@ -44,15 +43,15 @@ public class LocationHelper {
 		return findNode;
 	}
 
-    public List<HierarchicalNode> getPredefinedLocationTree(final BaseOrg owner, final User user) {
+    public List<HierarchicalNode> getPredefinedLocationTree(final BaseOrg owner) {
         return transactor.execute(new UnitOfWork<List<HierarchicalNode>>() {
             public List<HierarchicalNode> run(Transaction transaction) {
                 PredefinedLocationTree locationTree;
                 if (owner==null) {
                     locationTree = new PredefinedLocationTree();
                 } else {
-                    UserSecurityFilter filter = new UserSecurityFilter(owner, user.getId(), TimeZone.getDefault());
-                    locationTree = new PredefinedLocationTreeLoader(new PredefinedLocationListLoader(filter)).load(transaction);
+                    UserSecurityFilter filter = new UserSecurityFilter(owner, null, TimeZone.getDefault());
+                    locationTree = new PredefinedLocationTreeLoader(new PredefinedLocationListLoader(filter).withPrimaryOrgFiltering()).load(transaction);
                 }
                 PredefinedLocationLevels levels = factory.createPredefinedLocationLevelsLoader().load(transaction);
                 List<HierarchicalNode> tree = new LocationTreeToHierarchicalNodesConverter().convert(locationTree, levels);
@@ -71,7 +70,17 @@ public class LocationHelper {
         });
     }
 
-	public boolean hasPredefinedLocationTree() {
+    public List<HierarchicalNode> getPredefinedLocationWithPrimaryOrgFilteringTree() {
+        return transactor.execute(new UnitOfWork<List<HierarchicalNode>>() {
+            public List<HierarchicalNode> run(Transaction transaction) {
+                PredefinedLocationTree locationTree = factory.createPredefinedLocationTreeLoader().withPrimaryOrgFiltering().load(transaction);
+                PredefinedLocationLevels levels = factory.createPredefinedLocationLevelsLoader().load(transaction);
+                return new LocationTreeToHierarchicalNodesConverter().convert(locationTree, levels);
+            }
+        });
+    }
+
+    public boolean hasPredefinedLocationTree() {
 		return transactor.execute(new UnitOfWork<Boolean>() {
 			public Boolean run(Transaction transaction) {
 				return !factory.createPredefinedLocationListLoader().load(transaction).isEmpty();

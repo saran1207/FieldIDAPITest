@@ -1,27 +1,13 @@
 package com.n4systems.persistence.loaders;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.asset.AssetAttachmentListLoader;
-import com.n4systems.model.asset.AssetExtensionListLoader;
-import com.n4systems.model.asset.SmartSearchLoader;
-import com.n4systems.model.asset.SmartSearchPagedLoader;
-import com.n4systems.model.asset.SyncAssetListLoader;
+import com.n4systems.model.asset.*;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.assetstatus.AssetStatusFilteredLoader;
 import com.n4systems.model.assetstatus.AssetStatusForNameExistsLoader;
 import com.n4systems.model.assetstatus.AssetStatusListLoader;
-import com.n4systems.model.assettype.AssetTypeByAttachmentLoader;
-import com.n4systems.model.assettype.AssetTypeGroupsLoader;
-import com.n4systems.model.assettype.AssetTypeListLoader;
-import com.n4systems.model.assettype.AssetTypeListableLoader;
-import com.n4systems.model.assettype.AssetTypeLoader;
-import com.n4systems.model.assettype.AssetTypesByAssetGroupIdLoader;
-import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
-import com.n4systems.model.assettype.EventFrequencyListLoader;
+import com.n4systems.model.assettype.*;
 import com.n4systems.model.autoattribute.AutoAttributeCriteriaListLoader;
 import com.n4systems.model.autoattribute.AutoAttributeDefinitionListLoader;
 import com.n4systems.model.catalog.CatalogLoader;
@@ -51,55 +37,14 @@ import com.n4systems.model.location.PredefinedLocationTreeLoader;
 import com.n4systems.model.messages.PaginatedMessageLoader;
 import com.n4systems.model.messages.UnreadMessageCountLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
-import com.n4systems.model.orgs.AllOrgsWithArchivedListLoader;
-import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
-import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
-import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
-import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
-import com.n4systems.model.orgs.EntityByIdIncludingArchivedLoader;
-import com.n4systems.model.orgs.InternalOrgListableLoader;
-import com.n4systems.model.orgs.OrgByNameLoader;
-import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
-import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
-import com.n4systems.model.orgs.SecondaryOrgListableLoader;
-import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.orgs.customer.CustomerOrgsWithNameLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.model.safetynetwork.AllPreAssignedAssetsLoader;
-import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
-import com.n4systems.model.safetynetwork.AssetsByIdOwnerTypeLoader;
-import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
-import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
-import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
-import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
-import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
-import com.n4systems.model.safetynetwork.EventsByAssetIdLoader;
-import com.n4systems.model.safetynetwork.HasLinkedAssetsLoader;
-import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentListLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkAssetLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkAssetTypeLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkAssignedAssetEventLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkAttachmentLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkEventLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkPreAssignedAssetLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetCountLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetEventLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredOrAssignedEventLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkUnregisteredAssetCountLoader;
-import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
-import com.n4systems.model.safetynetwork.TypedOrgConnection;
-import com.n4systems.model.safetynetwork.TypedOrgConnectionListLoader;
-import com.n4systems.model.safetynetwork.VendorLinkedOrgListLoader;
-import com.n4systems.model.safetynetwork.VendorLinkedOrgLoader;
-import com.n4systems.model.safetynetwork.VendorOrgConnectionLoader;
-import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
+import com.n4systems.model.safetynetwork.*;
+import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.signup.SignupReferralListLoader;
@@ -108,6 +53,9 @@ import com.n4systems.model.tenant.PrimaryOrgsWithNameLikeLoader;
 import com.n4systems.model.tenant.SetupDataLastModDatesLoader;
 import com.n4systems.model.user.*;
 import com.n4systems.tools.Pager;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Provides simple access to creation of loaders.
@@ -349,11 +297,15 @@ public class LoaderFactory implements Serializable {
 		return new DownloadsByDownloadIdLoader(filter);
 	}
 
-	public <T extends AbstractEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
-		return new FilteredIdLoader<T>(filter, clazz);
-	}
+    public <T extends AbstractEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
+        return new FilteredIdLoader<T>(filter, clazz);
+    }
 
-	public <T> FilteredInListLoader<T> createFilteredInListLoader(Class<T> clazz) {
+    public <T extends AbstractEntity> FilteredIdLoader<T> createOwnerAndDownWithPrimaryFilteredIdLoader(Class<T> clazz) {
+        return new FilteredIdLoader<T>(new OwnerAndDownWithPrimaryFilter(filter.getOwner()), clazz);
+    }
+
+    public <T> FilteredInListLoader<T> createFilteredInListLoader(Class<T> clazz) {
 		return new FilteredInListLoader<T>(filter, clazz);
 	}
 
@@ -596,4 +548,5 @@ public class LoaderFactory implements Serializable {
 	public AssetsByIdOwnerTypeLoader createAssetByIdOwnerTypeLoader() { 
 		return new AssetsByIdOwnerTypeLoader(filter);
 	}
+
 }

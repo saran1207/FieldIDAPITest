@@ -6,7 +6,6 @@ package com.n4systems.fieldid.viewhelpers;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.user.User;
 import com.n4systems.persistence.PersistenceManagerTransactor;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.uitags.views.HierarchicalNode;
@@ -33,8 +32,8 @@ public final class SearchHelper extends BaseActionHelper {
 		return locationHelper.getPredefinedLocationTree();
 	}
 
-    public List<HierarchicalNode> getPredefinedLocationTree(BaseOrg owner, User user) {
-        return locationHelper.getPredefinedLocationTree(owner, user);
+    public List<HierarchicalNode> getPredefinedLocationTree(BaseOrg owner) {
+        return locationHelper.getPredefinedLocationTree(owner);
     }
 
 	public boolean hasPredefinedLocationTree() {

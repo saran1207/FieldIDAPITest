@@ -5,7 +5,6 @@ import com.n4systems.fieldid.viewhelpers.BaseActionHelper;
 import com.n4systems.fieldid.viewhelpers.LocationHelper;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.user.User;
 import com.n4systems.persistence.PersistenceManagerTransactor;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.uitags.views.HierarchicalNode;
@@ -35,7 +34,7 @@ public class MultiEventActionHelper extends BaseActionHelper {
 		return locationHelper.hasPredefinedLocationTree();
 	}
 
-    public List<HierarchicalNode> getPredefinedLocationTree(BaseOrg owner, User user) {
-        return locationHelper.getPredefinedLocationTree(owner,user);
+    public List<HierarchicalNode> getPredefinedLocationTree(BaseOrg owner) {
+        return locationHelper.getPredefinedLocationTree(owner);
     }
 }

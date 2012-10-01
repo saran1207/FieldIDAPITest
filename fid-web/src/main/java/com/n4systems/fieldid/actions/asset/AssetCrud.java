@@ -1236,7 +1236,7 @@ public class AssetCrud extends UploadAttachmentSupport {
     }
 
     public List<HierarchicalNode> getPredefinedLocationTree() {
-        return ((AssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner(), getCurrentUser());
+        return ((AssetCrudHelper)getHelper()).getPredefinedLocationTree(getOwner());
     }
 
     public void setFreeFormLocation(String freeFormLocation) {
