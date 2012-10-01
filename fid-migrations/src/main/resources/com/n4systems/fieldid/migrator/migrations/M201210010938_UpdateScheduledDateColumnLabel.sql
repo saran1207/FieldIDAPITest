@@ -1,0 +1,1 @@
+UPDATE column_mappings SET label='label.due_date' WHERE name='event_search_scheduled_date';
