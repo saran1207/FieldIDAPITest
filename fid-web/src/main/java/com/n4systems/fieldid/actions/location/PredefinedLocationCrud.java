@@ -144,8 +144,8 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.titlerequired")
-	@CustomValidator(type = "uniqueValue", message = "", key = "error.titleunique")
-	public void setName(String name) {
+    @CustomValidator(type = "uniqueValue", message = "", key = "error.titleunique")
+    public void setName(String name) {
 		this.name = name;
 	}
 
@@ -200,7 +200,7 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
         Long id = getPredefinedLocation().getId();
 		for (HierarchicalNode node : siblings) {
 			if (!node.getId().equals(id) && name.equals(node.getName())) {
-				return true;
+				return node.getOwner().equals(getPredefinedLocation().getOwner());
 			}
 		}
 		return false;
