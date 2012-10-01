@@ -33,13 +33,19 @@ public class PredefinedLocationTreeLoader extends SecurityFilteredLoader<Predefi
 
         List<PredefinedLocation> locations = loader.load(em);
         for (PredefinedLocation location : locations) {
-            PredefinedLocationTreeNode node = new PredefinedLocationTreeNode(location);
             if (location.getParent() == null) {
+                PredefinedLocationTreeNode node = new PredefinedLocationTreeNode(location);
                 root.addNode(node);
-            } else {
-                locationParents.get(location.getParent()).addChild(node);
+                locationParents.put(location, node);
             }
-            locationParents.put(location, node);
+        }
+
+        for (PredefinedLocation location : locations) {
+            if (location.getParent() != null) {
+                PredefinedLocationTreeNode node = new PredefinedLocationTreeNode(location);
+                locationParents.get(location.getParent()).addChild(node);
+                locationParents.put(location, node);
+            }
         }
 
         return root;
@@ -49,4 +55,9 @@ public class PredefinedLocationTreeLoader extends SecurityFilteredLoader<Predefi
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
+
+    public PredefinedLocationTreeLoader withPrimaryOrgFiltering() {
+        loader.withPrimaryOrgFiltering();
+        return this;
+    }
 }
