@@ -121,10 +121,7 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
 		testDependencies();
 		try {
 			predefinedLocation.setName(getName());
-			predefinedLocation = saver.update(predefinedLocation);
-
             ServiceLocator.getPredefinedLocationManager().updateChildrenOwner(getSecurityFilter(), predefinedLocation);
-
 			addFlashMessageText("message.location_updated");
 		} catch (Exception e) {
 			logger.error("could not update predefined location", e);

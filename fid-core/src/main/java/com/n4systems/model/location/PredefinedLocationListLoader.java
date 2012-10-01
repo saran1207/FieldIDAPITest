@@ -26,7 +26,7 @@ public class PredefinedLocationListLoader extends ListLoader<PredefinedLocation>
         // Caveat : you don't want to load primary org locations when editing.
         if (isPrimaryOrgFiltering()) {
             builder.applyFilter(new OwnerAndDownWithPrimaryFilter(filter.getOwner()));
-        } else {
+        } else if (filter.getOwner()!=null && !filter.getOwner().isPrimary()) {  // for primary orgs, we'll leave it filtered by tenant otherwise it won't include secondary org associated entities.
             builder.applyFilter(new OwnerAndDownFilter(filter.getOwner()));
         }
         builder.addOrder("id");

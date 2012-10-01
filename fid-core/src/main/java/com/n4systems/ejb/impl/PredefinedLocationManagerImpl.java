@@ -23,6 +23,7 @@ public class PredefinedLocationManagerImpl implements PredefinedLocationManager 
 
     @Override
     public void updateChildrenOwner(SecurityFilter securityFilter, PredefinedLocation parentNode) {
+        parentNode = saver.update(parentNode);
         BaseOrg owner = parentNode.getOwner();
         PredefinedLocationTree locationTree = createPredefinedLocationTreeLoader(securityFilter).load(em);
         for (PredefinedLocationTreeNode node:locationTree.getNodes()) {
