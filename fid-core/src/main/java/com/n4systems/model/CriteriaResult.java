@@ -27,7 +27,7 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	@IndexColumn(name="orderidx")
 	private List<Recommendation> recommendations = new ArrayList<Recommendation>();
 
-    @OneToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name="criteriaresults_actions", joinColumns = @JoinColumn(name = "criteriaresult_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
     @IndexColumn(name="orderidx")
     private List<Event> actions = new ArrayList<Event>();
