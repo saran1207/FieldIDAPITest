@@ -1,4 +1,4 @@
-${action.setPageType('event_type_group', 'list')!}
+${action.setPageType('event_type_group', 'listArchived')!}
 <#if  page.hasResults() && page.validPage() >
 	<#assign currentAction="eventTypeGroups.action" />
 	<#include '../common/_pagination.ftl' />
@@ -12,23 +12,13 @@ ${action.setPageType('event_type_group', 'list')!}
 		</tr>
 		<#list page.getList() as group > 
 			<tr id="group_${group.id}" >
-				<td><a href="<@s.url action="eventTypeGroup" uniqueID="${group.id}"/>" >${group.name?html}</a></td>
+				<td>${group.name?html}</td>
 				<td>${(group.reportTitle)!}</td>			
 				<td><#if group.createdBy?exists>${group.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(group.created)}</td>
 				<td><#if group.modifiedBy?exists>${group.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(group.modified)}</td>
 				
 				<td>
-					<a id="edit_${group.id}" href="<@s.url action="eventTypeGroupEdit" uniqueID="${group.id}"/>"><@s.text name="label.edit"/></a>
-                    <#if action.canBeArchived(group)>
-                        | <a id="archive_${group.id}" href="<@s.url action="eventTypeGroupArchive" uniqueID="${group.id}"/>"><@s.text name="label.archive"/></a>
-                    <#else>
-                        | <a href="/fieldid/w/setup/reassignEventTypeGroups?uniqueID=${group.id}"/><@s.text name="label.archive"/></a>
-                    </#if>
-<#--
-					<#if action.canBeDeleted(group)>
-						| <a id="delete_${group.id}" href="<@s.url action="eventTypeGroupDelete" uniqueID="${group.id}"/>"><@s.text name="label.delete"/></a>
-					</#if>
--->
+                    <a id="unarchive_${group.id}" href="<@s.url action="eventTypeGroupUnarchive" uniqueID="${group.id}"/>"><@s.text name="label.unarchive"/></a>
 				</td>
 			</tr>	
 			

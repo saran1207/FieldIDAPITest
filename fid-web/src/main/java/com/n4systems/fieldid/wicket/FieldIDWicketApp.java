@@ -33,10 +33,11 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedule
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusArchivedListPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusFormPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.ReassignEventTypeGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
@@ -75,6 +76,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/scoreGroups", ScoreGroupsPage.class);
         mountPage("setup/scoreResults", ScoreResultConfigurationPage.class);
         mountPage("setup/priorityCodes", PriorityCodePage.class);
+        mountPage("setup/reassignEventTypeGroups", ReassignEventTypeGroupPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 

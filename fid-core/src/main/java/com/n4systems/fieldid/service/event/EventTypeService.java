@@ -3,13 +3,14 @@ package com.n4systems.fieldid.service.event;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -61,6 +62,12 @@ public class EventTypeService extends FieldIdPersistenceService {
             }
         }
         return commonTypes;
+    }
+
+    public void update(EventType type, User user) {
+        type.setModified(new Date());
+        type.setModifiedBy(user);
+        persistenceService.update(type);
     }
 
 }

@@ -1713,6 +1713,12 @@
 			<result name="input" type="freemarker">/templates/html/eventTypeGroup/list.ftl</result>
 		</action>
 
+        <action name="archivedEventTypeGroups" method="listArchived" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+            <result name="success" type="freemarker">/templates/html/eventTypeGroup/listArchived.ftl</result>
+            <result name="error" type="freemarker">/templates/html/eventTypeGroup/listArchived.ftl</result>
+            <result name="input" type="freemarker">/templates/html/eventTypeGroup/listArchived.ftl</result>
+        </action>
+
 		<action name="eventTypeGroup" method="show" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/eventTypeGroup/show.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventTypeGroup/show.ftl</result>
@@ -1751,6 +1757,16 @@
 			<result name="error" type="freemarker">/templates/html/eventTypeGroup/delete.ftl</result>
 			<result name="success" type="redirectAction">eventTypeGroups</result>
 		</action>
+
+        <action name="eventTypeGroupArchive" method="archive" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+            <result name="error" type="redirectAction">eventTypeGroups</result>
+            <result name="success" type="redirectAction">eventTypeGroups</result>
+        </action>
+
+        <action name="eventTypeGroupUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+            <result name="error" type="redirectAction">archivedEventTypeGroups</result>
+            <result name="success" type="redirectAction">eventTypeGroups</result>
+        </action>
 
 		<action name="assetTypeGroups" method="list" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeGroup/list.ftl</result>

@@ -9,10 +9,12 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import org.apache.log4j.Logger;
@@ -66,10 +68,11 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 	}
 
 	@SkipValidation
-	public String doList() {
+	public String doListArchived() {
 		try {
-			QueryBuilder<EventTypeGroup> query = new QueryBuilder<EventTypeGroup>(EventTypeGroup.class, getSecurityFilter());
-			query.addOrder("name");
+			QueryBuilder<EventTypeGroup> query = new QueryBuilder<EventTypeGroup>(EventTypeGroup.class, new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true));
+			query.addWhere(WhereClauseFactory.create("state", Archivable.EntityState.ARCHIVED));
+            query.addOrder("name");
 			query.addPostFetchPaths("modifiedBy", "createdBy");
 			page = persistenceManager.findAllPaged(query, getCurrentPage(), Constants.PAGE_SIZE);
 		} catch (Exception e) {
@@ -79,6 +82,21 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 		}
 		return SUCCESS;
 	}
+
+    @SkipValidation
+    public String doList() {
+        try {
+            QueryBuilder<EventTypeGroup> query = new QueryBuilder<EventTypeGroup>(EventTypeGroup.class, getSecurityFilter());
+            query.addOrder("name");
+            query.addPostFetchPaths("modifiedBy", "createdBy");
+            page = persistenceManager.findAllPaged(query, getCurrentPage(), Constants.PAGE_SIZE);
+        } catch (Exception e) {
+            logger.error("Could not load the list of event types", e);
+            addActionErrorText("error.noeventtypegrouplist");
+            return ERROR;
+        }
+        return SUCCESS;
+    }
 
 	@SkipValidation
 	public String doAdd() {
@@ -136,8 +154,34 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 		}
 		
 	}
-	
-	public boolean canBeDeleted(EventTypeGroup group) {
+    
+    @SkipValidation
+    public String doArchive() {
+        if (canBeArchived(eventTypeGroup)) {
+            eventTypeGroup.archiveEntity();
+            try {
+            persistenceManager.update(eventTypeGroup, getSessionUser().getId());
+            } catch (Exception e) {
+                addActionErrorText("error.cantarchiveeventtypegroup");
+                return ERROR;
+            }
+        }
+        return SUCCESS;
+    }
+
+    @SkipValidation
+    public String doUnarchive() {
+        eventTypeGroup.activateEntity();
+        try {
+            persistenceManager.update(eventTypeGroup, getSessionUser().getId());
+        } catch (Exception e) {
+            addActionErrorText("error.cantunarchiveeventtypegroup");
+            return ERROR;
+        }
+        return SUCCESS;
+    }
+
+    public boolean canBeDeleted(EventTypeGroup group) {
 		QueryBuilder<Long> eventTypeCountQuery = new QueryBuilder<Long>(EventType.class, new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true));
 		eventTypeCountQuery.setCountSelect().addSimpleWhere("group", group);
 		
@@ -147,6 +191,12 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 			return (  persistenceManager.findCount(eventTypeCountQuery) == 0);
 		}
 	}
+
+    public boolean canBeArchived(EventTypeGroup group) {
+        QueryBuilder<Long> eventTypeCountQuery = new QueryBuilder<Long>(EventType.class, getSecurityFilter());
+        eventTypeCountQuery.setCountSelect().addSimpleWhere("group", group);
+        return persistenceManager.findCount(eventTypeCountQuery) == 0;
+    }
 	
 	public boolean duplicateValueExists(String formValue) {
 		return !persistenceManager.uniqueNameAvailable(EventTypeGroup.class, formValue.trim(), uniqueID, getTenantId());

@@ -3,7 +3,7 @@ package com.n4systems.model;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
-import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.reporting.EventReportType;
 
@@ -11,7 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="eventtypegroups")
-public class EventTypeGroup extends EntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
+public class EventTypeGroup extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false)

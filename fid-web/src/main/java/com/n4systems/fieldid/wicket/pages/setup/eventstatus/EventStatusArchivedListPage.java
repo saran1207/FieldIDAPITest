@@ -1,8 +1,7 @@
-package com.n4systems.fieldid.wicket.pages.setup.eventStatus;
+package com.n4systems.fieldid.wicket.pages.setup.eventstatus;
 
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
-import com.n4systems.fieldid.wicket.pages.EventStatusPage;
 import com.n4systems.model.EventStatus;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;

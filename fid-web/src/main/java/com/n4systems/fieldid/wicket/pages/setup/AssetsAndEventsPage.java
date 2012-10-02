@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
-import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;

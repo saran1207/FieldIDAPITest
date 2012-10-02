@@ -14,7 +14,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventStatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;

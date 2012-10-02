@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:extend>
+    <div class="feedback" wicket:id="feedbackPanel"></div>
+    <div><label wicket:id="message"/></div>
+    <form wicket:id="form" class="fullForm">
+        <div class="infoSet">
+            <label class="label"><wicket:message key="label.eventtypegroup"/>:</label>
+            <span class="fieldHolder">
+                <select wicket:id="groups"/>
+            </span>
+        </div>
+        <div class="formAction">
+            <input wicket:id="saveButton" type="submit" wicket:message="value:label.save"/>
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+</wicket:extend>
+</html>

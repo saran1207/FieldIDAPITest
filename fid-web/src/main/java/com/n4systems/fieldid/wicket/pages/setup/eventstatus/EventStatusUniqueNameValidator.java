@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.setup.eventStatus;
+package com.n4systems.fieldid.wicket.pages.setup.eventstatus;
 
 
 import com.n4systems.fieldid.service.event.EventStatusService;

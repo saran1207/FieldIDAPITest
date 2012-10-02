@@ -1,9 +1,8 @@
-package com.n4systems.fieldid.wicket.pages.setup.eventStatus;
+package com.n4systems.fieldid.wicket.pages.setup.eventstatus;
 
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.pages.EventStatusPage;
 import com.n4systems.model.EventStatus;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
