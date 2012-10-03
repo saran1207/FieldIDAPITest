@@ -39,7 +39,7 @@
 		<h2><@s.text name="label.invalidpage" /></h2>
 		<p>
 			<@s.text name="message.invalidpage" />
-			<a href="<@s.url  action="oragnizations" currentPage="1" includeParams="get"/>" ><@s.text name="message.backtopageone"/></a>
+			<a href="<@s.url  action="organizations" currentPage="1" includeParams="get"/>" ><@s.text name="message.backtopageone"/></a>
 		</p>
 	</div>
 </#if>
