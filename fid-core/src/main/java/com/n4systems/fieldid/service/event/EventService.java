@@ -289,6 +289,7 @@ public class EventService extends FieldIdPersistenceService {
         event.setAsset(asset);
         event.setType(eventType);
         event.setEventForm(eventType.getEventForm());
+        event.setAssetStatus(asset.getAssetStatus());
 
         new NewEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(event);
 
