@@ -127,7 +127,7 @@ public class PredefinedLocationsPanel extends Panel {
         return new AttributeAppender("class", new Model<String>("filter-org"), " ") {
             @Override public boolean isEnabled(Component component) {
                 BaseOrg itemOwner = item.getModelObject().getOwner();
-                if (itemOwner!=null && itemOwner.isPrimary()) {
+                if (itemOwner==null || itemOwner!=null && itemOwner.isPrimary()) {
                     return false;
                 }
                 if (owner!=null && !owner.isParentOf(itemOwner)) {

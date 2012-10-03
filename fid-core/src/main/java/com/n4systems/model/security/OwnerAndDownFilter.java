@@ -30,7 +30,10 @@ public class OwnerAndDownFilter extends AbstractSecurityFilter {
 			return;
 		}
 
-        builder.addWhere(createAppropriateParameter(definer));
+        WhereClause<?> where = createAppropriateParameter(definer);
+        if (where!=null) {
+            builder.addWhere(where);
+        }
 	}
 
     protected WhereClause<?> createAppropriateParameter(SecurityDefiner definer) {

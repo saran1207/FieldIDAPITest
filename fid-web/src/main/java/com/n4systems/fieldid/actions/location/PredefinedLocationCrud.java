@@ -103,7 +103,7 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
             if (predefinedLocation.getParent()==null) {
                 predefinedLocation.setOwner(getUser().getOwner());
             } else {
-                predefinedLocation.setOwner(predefinedLocation.getTopLevelOwner());
+                predefinedLocation.setOwner(predefinedLocation.getParent().getOwner());
             }
 
 			saver.save(predefinedLocation);
