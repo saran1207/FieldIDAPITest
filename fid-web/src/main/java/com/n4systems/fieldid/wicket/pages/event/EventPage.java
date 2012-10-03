@@ -45,6 +45,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -80,6 +81,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     protected List<FileAttachment> fileAttachments;
     private User assignedTo;
     protected ProofTestEditPanel proofTestEditPanel;
+
+    private WebMarkupContainer schedulesContainer;
 
     @Override
     protected void onInitialize() {
@@ -133,7 +136,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                 }
             });
 
-            final WebMarkupContainer schedulesContainer = new WebMarkupContainer("schedulesContainer");
+            schedulesContainer = new WebMarkupContainer("schedulesContainer");
             schedulesContainer.setOutputMarkupId(true);
             schedulesContainer.setVisible(event.getObject().isNew() || !event.getObject().isCompleted());
             schedulesContainer.add(new ListView<EventSchedule>("schedules", new PropertyModel<List<EventSchedule>>(EventPage.this, "schedules")) {
@@ -175,6 +178,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
             DropDownChoice<User> performedBy = new DropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
             DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
+            datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
             DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "nextDate"), true).withNoAllDayCheckbox();
 			newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
 			newOrExistingEventBook.setOwner(new PropertyModel<BaseOrg>(event, "owner").getObject());
@@ -240,6 +244,16 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                 throw new RedirectToUrlException("/event.action?uniqueID="+savedEvent.getId());
             }
         }
+    }
+
+    protected Behavior createUpdateAutoschedulesOnChangeBehavior() {
+        return new UpdateComponentOnChange() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                doAutoSchedule();
+                target.add(schedulesContainer);
+            }
+        };
     }
 
     private boolean supportsProofTests() {
@@ -331,7 +345,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             Event eventSchedule = new Event();
             eventSchedule.setAsset(event.getObject().getAsset());
             eventSchedule.setType(event.getObject().getType());
-            eventSchedule.setNextDate(schedule.getNextDate(((Event) event.getObject()).getDate()));
+            eventSchedule.setNextDate(schedule.getNextDate((event.getObject()).getDate()));
             schedules.add(eventSchedule);
         }
     }
