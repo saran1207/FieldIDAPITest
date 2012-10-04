@@ -1,6 +1,6 @@
 <head>
 	<@n4.includeStyle type="page" href="event" />
-	<script type="text/javascript" src="<@s.url value="/javascript/event.js"/>" ></script>
+    <@n4.includeScript src="event.js"/>
 </head>
 
 ${action.setPageType('event', 'list')!}

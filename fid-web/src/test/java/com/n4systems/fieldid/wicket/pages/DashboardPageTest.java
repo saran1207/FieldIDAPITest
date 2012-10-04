@@ -101,7 +101,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		assertVisible(getHarness().getSortableColumn(0));
 		assertVisible(getHarness().getSortableColumn(1));
 		
-		//getHarness().getSortableColumn(0).visitChildren(ListItem.class, new WidgetVisitor(CommonLinksWidget.class));
+		getHarness().getSortableColumn(0).visitChildren(ListItem.class, new WidgetVisitor(TestWidget.class));
 		assertEquals(0, getHarness().getSortableColumn(1).getList().size());
 		assertVisible(getHarness().getGoogleAnalytics());
 		assertInDocument("<script src=\"https://ssl.google-analytics.com/ga.js\" type=\"text/javascript\"></script>");

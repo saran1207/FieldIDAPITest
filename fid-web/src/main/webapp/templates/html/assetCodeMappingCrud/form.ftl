@@ -1,6 +1,6 @@
 <head>
-	<script language="javascript" src="<@s.url value="/javascript/unitOfMeasure.js"/>"> </script>
-	<script language="javascript" src="<@s.url value="/javascript/combobox.js"/>"> </script>
+    <@n4.includeScript src="unitOfMeasure.js"/>
+    <@n4.includeScript src="combobox.js"/>
 	<script type="text/javascript">
 		unitOfMeasureUrl = '<@s.url action="unitOfMeasure" namespace="/ajax" />';
 	</script>

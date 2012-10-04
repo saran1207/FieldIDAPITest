@@ -1,6 +1,6 @@
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/assetTypeConfiguration.css"/>" />
-	<script type="text/javascript" src="<@s.url value="/javascript/assets/assetTypeConfiguration.js" />" ></script>
+    <@n4.includeScript src="assets/assetTypeConfiguration.js"/>
+    <@n4.includeStyle type="page" href="pageStyles/assetTypeConfiguration.css"/>
 	<script type="text/javascript">
 		numberOfSubTypes = ${subAssetIds?size};
 		removeString = '<@s.text name="label.remove"/>';

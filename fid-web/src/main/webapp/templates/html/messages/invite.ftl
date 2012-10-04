@@ -1,6 +1,6 @@
 <head>
 	<@n4.includeStyle href="safetyNetwork" type="page"/>
-	<script language="javascript" src="javascript/invite.js"> </script>
+    <@n4.includeScript src="invite.js"/>
 </head>
 
 <#include '../safetyNetwork/_safetyNetworkLayout.ftl'>

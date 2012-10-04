@@ -1,18 +1,20 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/asset.js"/>" ></script>
-	<script type='text/javascript' src='<@s.url value="/javascript/assetRfidHandler.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/generateIdentifier.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/unitOfMeasure.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/combobox.js"/>"></script>
-	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/generateIdentifier.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/subAsset.js"/>"></script>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/asset.css"/>" />
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/subAsset.css"/>" />
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/masterEvent.css"/>" />
-	
+    <@n4.includeScript src="asset.js"/>
+    <@n4.includeScript src="assetRfidHandler.js"/>
+    <@n4.includeScript src="generateIdentifier.js"/>
+    <@n4.includeScript src="lockSubmitButtons.js"/>
+    <@n4.includeScript src="unitOfMeasure.js"/>
+    <@n4.includeScript src="combobox.js"/>
+    <@n4.includeScript src="updateAttributes.js"/>
+    <@n4.includeScript src="generateIdentifier.js"/>
+    <@n4.includeScript src="lockSubmitButtons.js"/>
+    <@n4.includeScript src="subAsset.js"/>
+
+    <@n4.includeStyle type="page" href="pageStyles/asset.css"/>
+    <@n4.includeStyle type="page" href="pageStyles/subAsset.css"/>
+    <@n4.includeStyle type="page" href="pageStyles/masterEvent.css"/>
+
+
 	<script type="text/javascript">
 		lookupAssetUrl = "<@s.url action="assets" namespace="/aHtml"/>";
 		assetLookupTitle = "<@s.text name="title.assetlookup"/>";

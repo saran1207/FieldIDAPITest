@@ -1,7 +1,7 @@
 <head>
 
-	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projectAssets.css"/>"/>
-	<script type="text/javascript" src="<@s.url value="/javascript/projects.js"/>"></script>
+    <@n4.includeStyle href="pageStyles/projectAssets.css"/>
+    <@n4.includeScript src="projects.js"/>
 	<script type="text/javascript">
 		function findAssets() {
 			var assetLinks = $$( '.assetLink' );
@@ -23,7 +23,7 @@
 			$('results').replace( results );
 			findAssets();
 		}
-	
+
 		attachAssetToProjectUrl = "<@s.url action="jobAssetCreate" />";
 	</script>
 	

@@ -1,5 +1,5 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/pagination.js"/>"></script>
+    <@n4.includeScript src="pagination.js"/>
 	<@n4.includeStyle href="featureStyles/pagination.css"/>
 	<script type="text/javascript">
 		goToPageURL = '<@s.url action="${currentAction}" currentPage="${currentPage}" includeParams="get"/>';

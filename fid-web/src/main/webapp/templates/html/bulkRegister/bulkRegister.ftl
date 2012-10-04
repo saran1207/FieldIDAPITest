@@ -1,4 +1,3 @@
-
 <#include '../vendor/_vendorinfo.ftl'/>
 
 <#assign loaderDiv>
@@ -7,13 +6,14 @@
 <head>
 	<@n4.includeStyle href="steps" />
     <title><@s.text name="title.safety_network"/></title>
-	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/asset.js" />" ></script>
-    <script type="text/javascript" src="<@s.url value="/javascript/autoschedule.js" />" ></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/event.js" />" ></script>
-	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/multiAddAsset.js" />"></script>
+
+    <@n4.includeScript src="steps.js"/>
+    <@n4.includeScript src="commentTemplates.js"/>
+    <@n4.includeScript src="asset.js"/>
+    <@n4.includeScript src="autoschedule.js"/>
+    <@n4.includeScript src="event.js"/>
+    <@n4.includeScript src="updateAttributes.js"/>
+    <@n4.includeScript src="multiAddAsset.js"/>
 	<@n4.includeStyle type="page" href="asset"/>
 	<@n4.includeStyle type="page" href="multiadd"/>
 	<@n4.includeStyle type="page" href="../newCss/event/event_schedule"/>

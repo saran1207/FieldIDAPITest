@@ -7,8 +7,9 @@ ${action.setPageType('asset', 'edit')!}
             color: #333;
         }
     </style>
-	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/pagination.js"/>"></script>
+    <@n4.includeScript src="steps.js"/>
+    <@n4.includeScript src="pagination.js"/>
+
 	<script type="text/javascript">
 		function findAssets() {
 			$$('.assetLink').each( function(element) { 

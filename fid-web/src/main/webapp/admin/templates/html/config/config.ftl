@@ -1,6 +1,6 @@
 ${action.setPageName('config')!}
 <head>
-	<script src="javascripts/json2.js" type="text/javascript"></script>
+    <@n4.includeScript src="json2.js"/>
 	<script type="text/javascript">
 	function selectConfig() {
 		var configKey = $("keySelect").getValue();

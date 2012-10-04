@@ -1,12 +1,14 @@
-
 <head>
-	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projectEvents.css"/>"/>
-	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projectAssets.css"/>"/>
-	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projectNotes.css"/>"/>
-	<script type="text/javascript" src="<@s.url value="/javascript/fileUpload.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/projects.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/pagination.js"/>"></script>
-	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projects.css"/>"/>
+
+    <@n4.includeStyle type="page" src="pageStyles/projectEvents"/>
+	<@n4.includeStyle type="page" src="pageStyles/projectAssets"/>
+	<@n4.includeStyle type="page" src="pageStyles/projectNotes"/>
+    <@n4.includeScript src="fileUpload.js"/>
+    <@n4.includeScript src="projects.js"/>
+    <@n4.includeScript src="pagination.js"/>
+	<@n4.includeStyle type="page" src="projects"/>
+
+
 	<script type="text/javascript">
 		attachAssetToProjectUrl = "<@s.url action="jobAssetCreate" namespace="/ajax"/>";
 		removeAssetUrl = "<@s.url action="jobAssetDelete" namespace="/ajax"/>";

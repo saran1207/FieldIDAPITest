@@ -1,5 +1,5 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/myaccount.js"/>"></script>
+    <@n4.includeScript src="myaccount.js"/>
 	<@n4.includeStyle href="viewTree"/>
 </head>
 

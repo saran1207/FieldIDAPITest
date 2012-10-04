@@ -5,8 +5,8 @@
         <@n4.includeStyle href="dropdown/ie"/>
     <![endif]-->
 
-	<script type="text/javascript" language="javascript" src="/fieldid/javascript/jquery.dropdown.js"></script>
-	
+    <@n4.includeScript src="jquery.dropdown.js"/>
+
 	<script type="text/javascript">
 		document.observe("dom:loaded", function() {
 			$('searchText').observe('focus', clearDescription);

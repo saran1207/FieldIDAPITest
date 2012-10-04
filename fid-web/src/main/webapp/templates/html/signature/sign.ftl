@@ -13,17 +13,20 @@
 -->
 
 </head><body>
-<script type="text/javascript" src="/fieldid/javascript/prototype.js"></script>
-<script type="text/javascript" src="/fieldid/javascript/common.js"></script>
-<script type="text/javascript" src="/fieldid/javascript/canvas/cp_depends.js"></script>
+<@n4.includeScript src="prototype.js"/>
+<@n4.includeScript src="common.js"/>
+<@n4.includeScript src="canvas/cp_depends.js"/>
+
 <!--[if IE]>
-<script type="text/javascript" src="/fieldid/javascript/canvas/flashcanvas.js"></script>
+<@n4.includeScript src="canvas/flashcanvas.js"/>
 <![endif]-->
-<script src="/fieldid/javascript/canvas/CanvasWidget.js" type="text/javascript"></script>
-<script src="/fieldid/javascript/canvas/CanvasPainter.js" type="text/javascript"></script>
-<script src="/fieldid/javascript/canvas/CPWidgets.js" type="text/javascript"></script>
-<script src="/fieldid/javascript/canvas/CPAnimator.js" type="text/javascript"></script>
-<script src="/fieldid/javascript/canvas/CPDrawing.js" type="text/javascript"></script>
+<@n4.includeScript src="canvas/CanvasWidget.js"/>
+<@n4.includeScript src="canvas/CanvasPainter.js"/>
+<@n4.includeScript src="canvas/CPWidgets.js"/>
+<@n4.includeScript src="canvas/CPAnimator.js"/>
+<@n4.includeScript src="canvas/CPDrawing.js"/>
+<@n4.includeScript src=""/>
+
 <@n4.includeStyle href="fieldid"/>
 
 <style type="text/css">

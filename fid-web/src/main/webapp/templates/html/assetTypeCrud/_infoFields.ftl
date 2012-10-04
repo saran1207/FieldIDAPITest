@@ -1,5 +1,5 @@
 <head>
-	<script language="javascript" src="javascript/assetTypeCrud.js"> </script>
+    <@n4.includeScript src="assetTypeCrud.js"/>
 </head>
 
 <div id="infoFieldEditing">

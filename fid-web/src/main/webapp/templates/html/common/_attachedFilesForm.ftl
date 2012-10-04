@@ -1,5 +1,5 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/fileUpload.js"/>" ></script>
+    <@n4.includeScript src="fileUpload.js"/>
 	<@n4.includeStyle href="featureStyles/fileUpload" />
 	<script type="text/javascript">
 		removeText = '<@s.text name="label.remove"/>';

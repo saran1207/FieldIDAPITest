@@ -1,11 +1,12 @@
-
 <#assign loaderDiv>
 	<div class="loading"><img src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/></div>
 </#assign>
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/publishedCatalog.css"/>" />
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
-	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
+    <@n4.includeStyle type="page"  src="pageStyles/publishedCatalog.css"/>
+	<@n4.includeStyle type="page"  src="steps"/>
+
+	<@n4.includeScript src="steps.js"/>
+
 	<script type="text/javascript">
 		var loading_holder = '${loaderDiv?js_string}';
 	</script>

@@ -1,5 +1,5 @@
 <head>
-	<script language="javascript" src="<@s.url value="/javascript/combobox.js"/>"> </script>
+    <@n4.includeScript src="combobox.js"/>
 </head>
 
 <div class="criteriaEditContainer">

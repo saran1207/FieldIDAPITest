@@ -1,5 +1,5 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/event.js" />" ></script>
+    <@n4.includeScript src="event.js"/>
 	<@n4.includeStyle href="newCss/event/event_base" />
     <@n4.includeStyle href="newCss/event/event_show" />
     <@n4.includeStyle href="newCss/layout/feedback_errors" />

@@ -81,7 +81,8 @@
 
 <head>
 	<@n4.includeStyle type="page" href="multi_event"/>
-	<script type="text/javascript" src="<@s.url value="/javascript/pagination.js"/>"></script>
+
+    <@n4.includeScript src="pagination.js"/>
 	<@n4.includeScript>
 		function selectAsset(event) {
 			event.stop();

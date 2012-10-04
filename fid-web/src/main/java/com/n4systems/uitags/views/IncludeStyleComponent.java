@@ -1,12 +1,11 @@
 package com.n4systems.uitags.views;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.opensymphony.xwork2.util.ValueStack;
 import org.apache.struts2.components.UIBean;
 import org.apache.struts2.views.util.UrlHelper;
 
-import com.opensymphony.xwork2.util.ValueStack;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class IncludeStyleComponent extends UIBean {
 	public static final String TEMPLATE = "includeStyle";
@@ -44,13 +43,13 @@ public class IncludeStyleComponent extends UIBean {
 
 	private void buildCssSource() {
 		if (href != null) {
-        	formateSrc();
+        	formatSrc();
 			String result = UrlHelper.buildUrl(href, request, response, null);
             addParameter("href", result);
         }
 	}
 	
-	private void formateSrc() {
+	private void formatSrc() {
 		if (href.startsWith("/") || href.toLowerCase().startsWith("http")) {
 			return;
 		}
@@ -63,6 +62,9 @@ public class IncludeStyleComponent extends UIBean {
 		if (!href.toLowerCase().endsWith("." + STYLE_EXTENSION)) {
 			href += "." + STYLE_EXTENSION;
 		}
+
+        Object version = stack.findString("version");
+        href += "?" + version;   // e.g. src="myStyle.css?version2012.6"
 	}
 
 

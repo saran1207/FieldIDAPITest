@@ -3,8 +3,8 @@
 	<#include "/templates/html/common/_datetimepicker.ftl"/>
 	<@n4.includeStyle type="page" href="search" />
 	<@n4.includeStyle type="page" href="downloads" />
-	
-	<script type="text/javascript" src="<@s.url value="/javascript/search.js"/>"></script>
+
+        <@n4.includeScript src="search.js"/>
 	<script type="text/javascript">
 		updatingColumnText = '<@s.text name="label.availablecolumnsupdating"/>'; 
 		dynamicColumnUrl = '<@s.url action="reportDynamicColumns" namespace="/ajax" />';

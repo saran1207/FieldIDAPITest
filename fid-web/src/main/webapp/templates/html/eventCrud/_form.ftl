@@ -1,8 +1,9 @@
 	<head>
-		<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
-		<script type="text/javascript" src="<@s.url value="/javascript/event.js" />" ></script>
-        <script type="text/javascript" src="<@s.url value="/javascript/autoschedule.js" />" ></script>
-		<script type="text/javascript" src="<@s.url value="/javascript/eventBook.js"/>" ></script>
+        <@n4.includeScript src="commentTemplates.js"/>
+        <@n4.includeScript src="event.js"/>
+        <@n4.includeScript src="autoschedule.js"/>
+        <@n4.includeScript src="eventBook.js"/>
+
 		<script type="text/javascript">
 			changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="ajax"   />';
 			updateEventBooksUrl = '<@s.url action="eventBooks" namespace="ajax"   />';

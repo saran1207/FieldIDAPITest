@@ -1,6 +1,6 @@
 <title><@s.text name="title.merge_customers"/> - ${losingCustomer.name?html} <@s.text name="label.into"/> ${winningCustomer.name?html}</title>
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
+    <@n4.includeStyle type="page" href="steps.css"/>
 </head>
 
 <div class="step">

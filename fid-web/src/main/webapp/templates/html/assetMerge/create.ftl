@@ -1,6 +1,8 @@
 <title><@s.text name="title.merge_assets"/></title>
+
+
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
+    <@n4.includeStyle href="steps.css"/>
 </head>
 
 <div class="step">

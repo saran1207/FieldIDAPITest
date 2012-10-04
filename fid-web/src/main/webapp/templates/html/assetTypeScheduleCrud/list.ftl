@@ -1,11 +1,11 @@
 <head>
-	<script language="javascript" src="javascript/assetTypeSchedule.js"> </script>
-		<style>
-			.actions {
-				margin:0;
-				padding-left:3px;
-			}
-		</style>
+    <@n4.includeScript src="assetTypeSchedule.js"/>
+    <style>
+        .actions {
+            margin:0;
+            padding-left:3px;
+        }
+    </style>
 	<script type="text/javascript">
 		function setId(newId, newName){
 			$('eventTypeIdToUpdate').value=newId;

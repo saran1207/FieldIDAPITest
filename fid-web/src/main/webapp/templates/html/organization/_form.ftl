@@ -35,7 +35,7 @@
 		
 	</script>
 
-	<script type="text/javascript" src="<@s.url value="javascript/timezone.js" />"></script>
+    <@n4.includeScript src="timezone.js"/>
 </head>
 
 <#include "/templates/html/common/_formErrors.ftl" />

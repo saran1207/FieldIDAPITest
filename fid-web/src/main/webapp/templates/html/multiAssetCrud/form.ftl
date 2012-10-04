@@ -42,7 +42,7 @@
 		<@s.form id="step1form" theme="fieldid" cssClass="fullForm fluidSets">
 			<#include "_step1.ftl" />
 		</@s.form>
-		<script src="javascript/chosen/chosen.jquery.js" type="text/javascript"></script>
+        <@n4.includeScript src="chosen/chosen.jquery.js"/>
 		<script type="text/javascript"> jQuery(document).ready( function() { jQuery(".chzn-select").chosen({ disable_search_threshold: 15 }); } );</script>
 	</div>
 	

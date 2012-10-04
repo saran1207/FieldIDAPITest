@@ -1,5 +1,5 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/eventType.js"/>"></script>
+    <@n4.includeScript src="eventType.js"/>
 	<script type="text/javascript">
 		eventAttributeIndex = ${(infoFields?size)!0};
 		addEventAttributeUrl = '<@s.url action="eventAttributeAdd" namespace="/ajax"/>';

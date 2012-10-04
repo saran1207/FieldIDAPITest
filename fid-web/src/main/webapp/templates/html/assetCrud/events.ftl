@@ -1,6 +1,6 @@
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/event.css"/>" />
-	
+    <@n4.includeStyle href="pageStyles/event.css"/>
+
 	<#include "/templates/html/common/_tooltip.ftl"/>
 	<style>
 		.textContainer {

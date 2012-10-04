@@ -7,7 +7,8 @@ ${action.setPageType('event_type', 'button_groups')!}
 		.formErrors { width:190px; }
 		.message ul li, .error ul li { padding-left: 5px; }
 	</style>
-	<script type="text/javascript" src="<@s.url value="/javascript/buttonGroup.js"/>" ></script>
+    <@n4.includeScript src="buttonGroup.js"/>
+
 	<script type="text/javascript">
 		undoButtonGroupUrl = '<@s.url action="buttonGroupEdit" namespace="/ajax"/>';
 		changesWarning = "<@s.text name="warning.buttongroupsnotsave"/>"; 

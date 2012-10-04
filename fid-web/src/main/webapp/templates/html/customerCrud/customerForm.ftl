@@ -7,7 +7,7 @@
 		</#if>
 	</title>
 	<@n4.includeStyle href="user" type="page"/>
-    <script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
+    <@n4.includeScript src="lockSubmitButtons.js"/>
 
 	<#if customer.linkedOrg?exists>
 		<@n4.includeScript>

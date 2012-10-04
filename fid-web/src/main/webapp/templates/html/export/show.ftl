@@ -1,5 +1,5 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/myaccount.js"/>"></script>
+    <@n4.includeScript src="myaccount.js"/>
 	<@n4.includeStyle href="viewTree"/>
 	<@n4.includeStyle href="pageStyles/downloads"/>
 	<@n4.includeStyle href="chosen/chosen.css"/>
@@ -54,9 +54,10 @@ ${action.setPageType('my_account', 'exportEvent')!}
             return false;
         }
 		</script>
-		
-		<script src="javascript/chosen/chosen.jquery.js" type="text/javascript"></script>
-		<script type="text/javascript"> jQuery(document).ready( function() { jQuery(".chzn-select").chosen({ disable_search_threshold: 15 }); } );</script>
+
+    <@n4.includeScript src="chosen/chosen.jquery.js"/>
+
+    <script type="text/javascript"> jQuery(document).ready( function() { jQuery(".chzn-select").chosen({ disable_search_threshold: 15 }); } );</script>
 				
 </@s.form>
 

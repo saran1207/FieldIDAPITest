@@ -1,6 +1,6 @@
 <head>
 	<@n4.includeStyle type="page" href="importExport"/>
-	<script language="javascript" src="javascript/importExport.js"> </script>
+    <@n4.includeScript src="importExport.js"/>
 </head>
 <h2><@s.text name="label.import.${labelTarget}" /></h2>
 

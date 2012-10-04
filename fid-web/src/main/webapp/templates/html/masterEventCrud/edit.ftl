@@ -1,7 +1,7 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/subAsset.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/event.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/masterEvent.js"/>"></script>
+    <@n4.includeScript src="subAsset.js"/>
+    <@n4.includeScript src="event.js"/>
+    <@n4.includeScript src="masterEvent.js"/>
 	<@n4.includeStyle type="page" href="subAsset" />
 	<@n4.includeStyle type="page" href="masterEvent" />
 </head>
@@ -12,7 +12,7 @@ ${action.setPageType('event', 'edit')!}
 
 <div id="masterEvent" >
 	<#include "/templates/html/common/_formErrors.ftl" />
-	
+
 	<div class="masterAsset done">
 		<div class="definition"><div class="identifier"><span>${asset.type.name!}</span></div></div>
 		<div class="performedEvent">
@@ -24,8 +24,8 @@ ${action.setPageType('event', 'edit')!}
 			</span>
 		</div>
 	</div>
-	
-	
+
+
 	<div id="assetComponents">
 		<#list availableSubAssets as subAsset>
 			<#include "_subEvent.ftl" />

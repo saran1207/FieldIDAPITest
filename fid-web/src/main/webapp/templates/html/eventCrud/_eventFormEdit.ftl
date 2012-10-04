@@ -5,7 +5,8 @@
     defSelectImageUrl = '<@s.url value="/images/def-plus.png"/>';
 </script>
 
-<script src="/fieldid/javascript/signatures.js" type="text/javascript"></script>
+<@n4.includeScript src="signatures.js"/>
+
 <script type="text/javascript">
     signatureClearUrl = '<@s.url action="clearSignature.action" namespace="/ajax"/>';
     submitSignatureUrl = '<@s.url action="storeSignature.action" namespace="/ajax"/>';

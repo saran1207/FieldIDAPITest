@@ -2,9 +2,10 @@
 <head>
 
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-	<@n4.includeScript src="googleMaps.js"/>
+    <@n4.includeScript src="googleMaps.js"/>
 
-	<script language="Javascript" src="javascript/marryOrder.js"></script>
+    <@n4.includeScript src="marryOrder.js"/>
+
 	<script type="text/javascript">
 
 		ordersUrl = "<@s.url action="orders" namespace="/aHtml"  />";

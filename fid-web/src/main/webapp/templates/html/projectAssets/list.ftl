@@ -1,5 +1,5 @@
 <head>
-	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projectAssets.css"/>"/>
+    <@n4.includeStyle type="page" href="pageStyles/projectAssets.css"/>
 </head>
 ${action.setPageType('job','assets')!}
 

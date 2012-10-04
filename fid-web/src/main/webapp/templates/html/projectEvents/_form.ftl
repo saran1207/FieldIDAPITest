@@ -2,7 +2,7 @@
 	<#include "/templates/html/common/_datetimepicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<@n4.includeStyle type="page" href="search" />
-	<script type="text/javascript" src="<@s.url value="/javascript/search.js"/>"></script>
+    <@n4.includeScript src="search.js"/>
 	<script type="text/javascript">
 		function assetTypeChanged(assetType) {
 			return null;

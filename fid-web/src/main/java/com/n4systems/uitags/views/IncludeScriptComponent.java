@@ -1,12 +1,11 @@
 package com.n4systems.uitags.views;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.opensymphony.xwork2.util.ValueStack;
 import org.apache.struts2.components.ClosingUIBean;
 import org.apache.struts2.views.util.UrlHelper;
 
-import com.opensymphony.xwork2.util.ValueStack;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class IncludeScriptComponent extends ClosingUIBean {
 	public static final String TEMPLATE = "script-close";
@@ -46,7 +45,11 @@ public class IncludeScriptComponent extends ClosingUIBean {
 		if (!src.toLowerCase().endsWith("." + JAVASCRIPT_EXTENSION)) {
 			src += "." + JAVASCRIPT_EXTENSION;
 		}
-	}
+
+        Object version = stack.findValue("version");
+        src += "?"+version;   //e.g. src="javascript/foo.js?ver=e.g. 2012.6"
+
+    }
 
 	public String getDefaultOpenTemplate() {
 		return OPEN_TEMPLATE;

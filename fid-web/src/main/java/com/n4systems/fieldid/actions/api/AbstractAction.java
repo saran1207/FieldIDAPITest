@@ -13,6 +13,7 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.utils.CookieFactory;
 import com.n4systems.fieldid.utils.SessionUserInUse;
+import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.viewhelpers.BaseActionHelper;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
@@ -651,5 +652,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
     public String getIEHeader() {
         return "Edge";
+    }
+
+    public String getVersion() {
+        return FieldIdVersion.getVersion();
     }
 }

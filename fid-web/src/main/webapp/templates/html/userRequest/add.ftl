@@ -1,7 +1,7 @@
 <title><@s.text name="title.register" /></title>
 
 <head>
-	<script type="text/javascript" src="<@s.url value="javascript/timezone.js" />"></script>
+    <@n4.includeScript src="timezone.js"/>
 	<script type="text/javascript">
 		countryChangeUrl = "<@s.url action="getRegions" namespace="/public/ajax" />";
 	</script>

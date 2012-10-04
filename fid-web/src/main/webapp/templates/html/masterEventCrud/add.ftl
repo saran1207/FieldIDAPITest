@@ -1,16 +1,17 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/asset.js"/>" ></script>
-	<script type='text/javascript' src='<@s.url value="/javascript/assetRfidHandler.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/generateIdentifier.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/unitOfMeasure.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/combobox.js"/>"></script>
-	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/generateIdentifier.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/subAsset.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/event.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/masterEvent.js"/>"></script>
+    <@n4.includeScript src="asset.js"/>
+    <@n4.includeScript src="assetRfidHandler.js"/>
+    <@n4.includeScript src="generateIdentifier.js"/>
+    <@n4.includeScript src="lockSubmitButtons.js"/>
+    <@n4.includeScript src="unitOfMeasure.js"/>
+    <@n4.includeScript src="combobox.js"/>
+    <@n4.includeScript src="updateAttributes.js"/>
+    <@n4.includeScript src="generateIdentifier.js"/>
+    <@n4.includeScript src="lockSubmitButtons.js"/>
+    <@n4.includeScript src="subAsset.js"/>
+    <@n4.includeScript src="event.js"/>
+    <@n4.includeScript src="masterEvent.js"/>
+
 	<@n4.includeStyle type="page" href="asset" />
 	<@n4.includeStyle type="page" href="subAsset" />
     <@n4.includeStyle href="newCss/event/event_master" />

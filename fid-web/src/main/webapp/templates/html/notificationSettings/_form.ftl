@@ -1,8 +1,6 @@
 <head>
-	<script type="text/javascript" src="javascript/notificationSettings.js"> </script>
-	
+    <@n4.includeScript src="notificationSettings.js"/>
 	<@n4.includeStyle type="page" href="notifications"/>
-	
 </head>
 ${action.setPageType('my_account', 'notification_settings')!}
 
