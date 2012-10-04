@@ -45,6 +45,9 @@ public class EventView extends ExternalModelView {
 	@SerializableField(title = "Comments", order = 1100)
 	private String comments;
 
+    @SerializableField(title = "Action Notes", order = 1100)
+    private String notes;
+
 	@SerializableField(title = "Criteria", order = 1100, handler=CriteriaResultSerializationHandler.class, validators = {CriteriaResultValidator.class})
 	private Collection<CriteriaResultView> criteriaResults = new ArrayList<CriteriaResultView>();
 
@@ -204,5 +207,12 @@ public class EventView extends ExternalModelView {
 		return criteriaResults;
 	}
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 
 }

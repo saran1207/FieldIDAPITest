@@ -80,6 +80,7 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 		view.setDatePerformed(model.getDate());
 		view.setLocation(model.getAdvancedLocation().getFullName());
 		view.setPrintable(model.isPrintable());
+        view.setNotes(model.getNotes());
 	}
 
 	protected void convertEventStatus(Event model, EventView view) {
