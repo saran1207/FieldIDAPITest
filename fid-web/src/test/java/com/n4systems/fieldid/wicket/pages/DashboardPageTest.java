@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.collect.Sets;
-import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.job.JobService;
-import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.wicket.*;
 import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner.WithUsers;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
@@ -39,7 +37,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
@@ -52,9 +49,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	private DashboardService dashboardService;
 	private WidgetFactory widgetFactory;
 	private JobService jobService;
-	private UserLimitService userLimitService;
-    private S3Service s3Service;
-    
+
 	private DashboardLayout layout;
 	private WidgetDefinition testWidgetDefinition;
 	private TestWidget testWidget;
@@ -66,16 +61,16 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
     public void setUp() throws Exception {
     	super.setUp();
     	init();
+        expectingUserService();
+        expectingS3Service();
     }
-    
+
 	protected void init() {
 		dashboardService = wire(DashboardService.class);
     	widgetFactory = wire(WidgetFactory.class);
 		testWidgetDefinition = new WidgetDefinition(WidgetType.COMPLETED_EVENTS);  // use arbitrary bogus widget type for testWidget.
 		testWidgetDefinition.setId(0L);
 		jobService = wire(JobService.class);
-		userLimitService = wire(UserLimitService.class);
-        s3Service = wire(S3Service.class);
     	layout = createNewDashboardLayout(testWidgetDefinition);
     	testWidget = new TestWidget(WidgetFactory.WIDGET_ID, new WidgetDefinition<WidgetConfiguration>(WidgetType.COMPLETED_EVENTS));
 		newsWidget = new NewsWidget(WidgetFactory.WIDGET_ID, new WidgetDefinition(WidgetType.NEWS));
@@ -84,16 +79,12 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	@Test
 	@WithUsers({TestUser.ALL_PERMISSIONS_USER, TestUser.NO_PERMISSIONS_USER, TestUser.JOBS_USER})
 	public void testRender() throws MalformedURLException {
-		expectingConfig();
-		expect(dashboardService.findLayout()).andReturn(layout);
+        expectingConfig();
+        expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2);	//extra invocation for assertion using getList().
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(testWidgetDefinition)).andReturn(testWidget);
 		replay(widgetFactory);
-		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
-		replay(userLimitService);
-        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
-        replay(s3Service);
 
 		renderFixture(this);
 		
@@ -104,37 +95,14 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		getHarness().getSortableColumn(0).visitChildren(ListItem.class, new WidgetVisitor(TestWidget.class));
 		assertEquals(0, getHarness().getSortableColumn(1).getList().size());
 		assertVisible(getHarness().getGoogleAnalytics());
-		assertInDocument("<script src=\"https://ssl.google-analytics.com/ga.js\" type=\"text/javascript\"></script>");
-	
+
 		verifyMocks(dashboardService, widgetFactory);
 	}	
 	
 
 	@Test
-	public void testRender_noGoogleAnalytics() throws MalformedURLException {
-		expectingConfig(false);
-		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(2);	//extra invocation for assertion using getList().
-		replay(dashboardService);
-		expect(widgetFactory.createWidget(testWidgetDefinition)).andReturn(testWidget);
-		replay(widgetFactory);
-		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
-		replay(userLimitService);
-        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
-        replay(s3Service);
-
-		renderFixture(this);
-		
-		assertEquals(0, getHarness().getSortableColumn(1).getList().size());
-		assertInvisible(getHarness().getGoogleAnalytics());
-		
-		verifyMocks(dashboardService, widgetFactory, userLimitService);
-	}	
-	
-		
-	@Test
 	public void testAddWidget() throws MalformedURLException {
-		expectingConfig();
+        expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(4);  // have to add some expectations because our asserts actually trigger calls...yecccch. 
 		dashboardService.saveLayout(layout);
@@ -144,10 +112,6 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		expectLastCall().times(2);
 		expect(widgetFactory.createWidget(WidgetDefinitionMatcher.eq(WidgetType.NEWS))).andReturn(newsWidget);
 		replay(widgetFactory);	
-		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
-		replay(userLimitService);
-        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
-        replay(s3Service);
 
 		renderFixture(this);
 
@@ -172,8 +136,8 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		User user = UserBuilder.aFullUser().build();
 		user.getOwner().getPrimaryOrg().setExtendedFeatures(Sets.newHashSet(ExtendedFeature.Projects));
 		setSessionUser(user);
-				
-		expectingConfig();
+
+        expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2);
         expect(dashboardService.createWidgetDefinition(WidgetType.JOBS_ASSIGNED)).andReturn(new WidgetDefinition(WidgetType.JOBS_ASSIGNED));
@@ -190,10 +154,6 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		final JobsAssignedWidget jobsWidget = new JobsAssignedWidget(WidgetFactory.WIDGET_ID, new WidgetDefinition(WidgetType.JOBS_ASSIGNED));
 		expect(widgetFactory.createWidget(WidgetDefinitionMatcher.eq(WidgetType.JOBS_ASSIGNED))).andReturn(jobsWidget);
 		replay(widgetFactory);
-		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
-		replay(userLimitService);
-        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
-        replay(s3Service);
 
 		renderFixture(this);
 
@@ -206,17 +166,13 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	
 	@Test
 	public void testRemoveWidget() throws MalformedURLException {
-		expectingConfig();
+        expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(2);
 		dashboardService.saveLayout(layout);		
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(testWidgetDefinition)).andReturn(testWidget);
 		replay(widgetFactory);
-		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
-		replay(userLimitService);
-        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
-        replay(s3Service);
 
 		renderFixture(this);	
 
@@ -244,10 +200,6 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 
 		expect(widgetFactory.createWidget(WidgetDefinitionMatcher.eq(WidgetType.NEWS))).andReturn(newsWidget);
 		replay(widgetFactory);	
-		expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
-		replay(userLimitService);
-        expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
-        replay(s3Service);
 
 		renderFixture(this);
 		

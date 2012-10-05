@@ -51,6 +51,8 @@ import org.apache.wicket.*;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.resource.caching.QueryStringWithVersionResourceCachingStrategy;
+import org.apache.wicket.request.resource.caching.version.MessageDigestResourceVersion;
 import org.apache.wicket.settings.IRequestLoggerSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
@@ -150,6 +152,14 @@ public class FieldIDWicketApp extends WebApplication {
             reqLogger.setRequestsWindowSize(500);
         }
 
+        getResourceSettings().setCachingStrategy(new QueryStringWithVersionResourceCachingStrategy(new MessageDigestResourceVersion()));
+    }
+
+
+    @Override
+    protected void validateInit() {
+        super.validateInit();
+        setHeaderResponseDecorator(CachingStrategyDecoratingHeaderResponse.createHeaderResponseDecorator());
     }
 
     @Override

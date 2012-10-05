@@ -1,18 +1,17 @@
 package com.n4systems.fieldid.wicket;
 
-import static com.google.common.base.Preconditions.*;
+import com.google.common.base.Predicate;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.util.tester.FormTester;
+import org.apache.wicket.util.tester.WicketTester;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.util.tester.FormTester;
-import org.apache.wicket.util.tester.WicketTester;
-
-import com.google.common.base.Predicate;
+import static com.google.common.base.Preconditions.checkArgument;
 
 public class WicketHarness {
 	
@@ -44,9 +43,10 @@ public class WicketHarness {
 		}
 	}
 
-	public String getLastRenderedPageAsHtml() {
-		return getWicketTester().getResponse().getDocument();
+	public String getLastResponseAsString() {
+		return getWicketTester().getLastResponseAsString();
 	}
+
 
 	protected void click(String... ids) {
 		getWicketTester().executeAjaxEvent(getPathFor(ids), "onclick");	
@@ -69,7 +69,7 @@ public class WicketHarness {
 	protected boolean isComponentVisible(String... ids) {
 		// CAVEAT: can be false positive if you give ids that don't exist. 
 		// you might think it's invisible when it really just never was created.
-		return getComponent(ids) != null;
+		return get(ids) != null;
 	}
 	
 	protected WicketTester getWicketTester() {

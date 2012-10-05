@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.CachingStrategyLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -148,28 +149,75 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 	}
 
 	private void addCssContainers() {
-        add(new WebMarkupContainer("legacyCss") {
-            { setRenderBodyOnly(true); }
-            @Override
-            public boolean isVisible() {
+        add(new CachingStrategyLink("resetCss"));
+
+        WebMarkupContainer legacyCss = new WebMarkupContainer("legacyCss") {
+            { setRenderBodyOnly(true);
+            }
+            @Override public boolean isVisible() {
                 return useLegacyCss();
             }
-        });
-        add(new WebMarkupContainer("newCss") {
+        };
+        legacyCss.add(new CachingStrategyLink("fieldIdCss"));
+        legacyCss.add(new CachingStrategyLink("fieldIdIE6Css"));
+        legacyCss.add(new CachingStrategyLink("fieldIdIE7Css"));
+        add(legacyCss);
+
+        WebMarkupContainer newCss = new WebMarkupContainer("newCss") {
             { setRenderBodyOnly(true); }
-            @Override
-            public boolean isVisible() {
+
+            @Override public boolean isVisible() {
                 return !useLegacyCss();
             }
-        });
-        add(new WebMarkupContainer("siteWideCss") {
+        };
+        newCss.add(new CachingStrategyLink("layoutCss"));
+        newCss.add(new CachingStrategyLink("feedbackErrorsCss"));
+        add(newCss);
+
+        WebMarkupContainer siteWideCss = new WebMarkupContainer("siteWideCss") {
             { setRenderBodyOnly(true); }
-            @Override
-            public boolean isVisible() {
+
+            @Override public boolean isVisible() {
                 return useSiteWideCss();
             }
-        });
+        };
+        siteWideCss.add(new CachingStrategyLink("siteWideCss"));
+        add(siteWideCss);
+
+        add(new CachingStrategyLink("defaultCss"));
+        add(new CachingStrategyLink("commonIEJs","src"));  ///FIX SO APPENDS TO SRC ATTRIBUTE!!!
+        add(new CachingStrategyLink("dropDownCss"));
+        add(new CachingStrategyLink("dropDownIECss"));
     }
+
+
+//    <link wicket:id="resetCss" type="text/css" href="/fieldid/style/reset.css" rel="stylesheet" media="all"/>
+//
+//X    <span wicket:id="legacyCss">
+// X   <link wicket:id="fieldIdCss" type="text/css" href="/fieldid/style/fieldid.css" rel="stylesheet" media="all"/><!--[if IE 6]>
+// X   <link wicket:id="fieldIdIE6Css" type="text/css" href="/fieldid/style/fieldid-ie6.css" rel="stylesheet" media="all"/><![endif]-->
+//    <!--[if IE 7]>
+//    <link wicket:id="fieldIdIE7Css" type="text/css" href="/fieldid/style/fieldid-ie7.css" rel="stylesheet" media="all"/><![endif]-->
+//    </span>
+//  X  <span wicket:id="newCss">
+//  X  <link wicket:id="layoutCss" type="text/css" href="/fieldid/style/newCss/layout/layout.css" rel="stylesheet" media="all"/>
+// X   <link wicket:id="feebackErrorsCss" type="text/css" href="/fieldid/style/newCss/layout/feedback_errors.css" rel="stylesheet" media="all"/>
+//    </span>
+//    <span wicket:id="siteWideCss">
+//  X  <link wicket:id="siteWideCss" type="text/css" href="/fieldid/style/site_wide.css" rel="stylesheet" media="all"/>
+//    </span>
+//    <link wicket:id="defaultCss" type="text/css" href="/fieldid/style/branding/default.css" rel="stylesheet" media="all"/>
+//
+//    <link rel="shortcut icon" href="/fieldid/images/favicon.ico" type="image/x-icon" />
+//    <!--[if IE 6]>
+//    <script wicket:id="commonIEJs" type="text/javascript" src="/fieldid/javascript/common-ie6-jquery.js"></script>
+//    <![endif]-->
+//
+//    <link wicket:id="dropDownCss" type="text/css" href="/fieldid/style/dropdown/style.css" rel="stylesheet" media="all"/>
+//    <!--[if lte IE 7]>
+//    <link wicket:id="dropDownIECss" type="text/css" href="/fieldid/style/dropdown/ie.css" rel="stylesheet" media="all"/>
+//    <![endif]-->
+
 
     private Component createRelogLink() {
         PageParameters pageParameters = new PageParameters();

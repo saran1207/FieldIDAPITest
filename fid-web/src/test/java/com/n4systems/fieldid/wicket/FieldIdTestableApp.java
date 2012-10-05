@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.pages.DashboardPage;
+import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
@@ -7,10 +10,6 @@ import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.mock.MockApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-
-import com.n4systems.fieldid.wicket.pages.DashboardPage;
-import com.n4systems.model.builders.UserBuilder;
-import com.n4systems.model.user.User;
 
 
 public class FieldIdTestableApp extends MockApplication {
@@ -24,7 +23,17 @@ public class FieldIdTestableApp extends MockApplication {
         injector.getInjector().bind(this);
 	}
 
-	@Override
+    /**
+     * CAVEAT : if you override this, the rendering of the pages won't be the same.
+     * for example, some TagTester related code won't work because wicket:ids aren't rendered.
+     *
+     */
+//    @Override
+//    public RuntimeConfigurationType getConfigurationType() {
+//        return RuntimeConfigurationType.DEPLOYMENT;
+//    }
+
+    @Override
 	protected void init() {
         getComponentInstantiationListeners().add(new IComponentInstantiationListener() {
             @Override
