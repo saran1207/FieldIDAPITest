@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.download.SystemUrlUtil;
 import com.n4systems.fieldid.service.mail.MailService;
+import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -21,10 +23,10 @@ import java.util.*;
 public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
     private static final Logger logger = Logger.getLogger(NotifyEventAssigneeService.class);
-    private static final String ASSIGNEE_TEMPLATE_SINGLE = "eventsAssignedSingle";
     private static final String ASSIGNEE_TEMPLATE_MULTI = "eventsAssignedMulti";
 
     @Autowired private MailService mailService;
+    @Autowired private S3Service s3Service;
 
     @Transactional
     public void sendNotifications() {
@@ -63,12 +65,8 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
     private void notifyEventAssignee(List<Event> events) {
         try {
-            TemplateMailMessage message;
-            if (events.size() == 1) {
-                message = createSingleNotification(events.get(0));
-            } else {
-                message = createMultiNotifications(events);
-            }
+
+            TemplateMailMessage message = createMultiNotifications(events);
 
             mailService.sendMessage(message);
 
@@ -80,6 +78,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private TemplateMailMessage createMultiNotifications(List<Event> events) {
         String subject = "Work Assigned: " + events.size() + " Events";
         Map<Long, String> dueDateStringMap = createDateStringMap(events);
+        Map<Long, String> criteriaImageMap = createCriteriaImageMap(events);
 
         TemplateMailMessage msg = new TemplateMailMessage(subject, ASSIGNEE_TEMPLATE_MULTI);
         msg.getToAddresses().add(events.get(0).getAssignee().getEmailAddress());
@@ -88,24 +87,25 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         msg.getTemplateMap().put("events", events);
         msg.getTemplateMap().put("subject", subject);
         msg.getTemplateMap().put("dueDateStringMap", dueDateStringMap);
+        msg.getTemplateMap().put("criteriaImageMap", criteriaImageMap);
 
         return msg;
     }
 
-    private TemplateMailMessage createSingleNotification(Event event) {
-        String subject = "Work Assigned: " + event.getEventType().getName();
-        Map<Long, String> dueDateStringMap = createDateStringMap(Arrays.asList(event));
-        TemplateMailMessage msg = new TemplateMailMessage(subject, ASSIGNEE_TEMPLATE_SINGLE);
-        msg.getToAddresses().add(event.getAssignee().getEmailAddress());
-
-        msg.getTemplateMap().put("systemUrl", SystemUrlUtil.getSystemUrl(event.getTenant()));
-        msg.getTemplateMap().put("event", event);
-        msg.getTemplateMap().put("subject", subject);
-        msg.getTemplateMap().put("dueDateStringMap", dueDateStringMap);
-
-        return msg;
+    private Map<Long, String> createCriteriaImageMap(List<Event> events) {
+        Map<Long, String> criteriaImageMap = new HashMap<Long,String>();
+        for (Event event : events) {
+            String query = "SELECT DISTINCT cr FROM " + CriteriaResult.class.getName() + " cr, IN(cr.actions) action WHERE action.id = :eventId";
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("eventId", event.getId());
+            List<CriteriaResult> criteriaResults = (List<CriteriaResult>) persistenceService.runQuery(query, params);
+            if(criteriaResults.size() > 0 && criteriaResults.get(0).getCriteriaImages().size() > 0) {
+                CriteriaResult criteriaResult = criteriaResults.get(0);
+                criteriaImageMap.put(event.getId(), s3Service.getCriteriaResultImageThumbnailURL(criteriaResult.getTenant().getId(), criteriaResult.getCriteriaImages().get(0)).toString());
+            }
+        }
+        return criteriaImageMap;
     }
-
 
     private Map<Long, String> createDateStringMap(List<Event> events) {
         Map<Long, String> dueDateStringMap = new HashMap<Long,String>();
