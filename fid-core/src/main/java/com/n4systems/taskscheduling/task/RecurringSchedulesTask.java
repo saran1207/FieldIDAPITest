@@ -67,6 +67,7 @@ public class RecurringSchedulesTask extends ScheduledTask{
                 schedule.setNextDate(futureDate.toDate());
                 schedule.setTenant(asset.getTenant());
                 schedule.setRecurringEvent(event);
+                schedule.setOwner(asset.getOwner());
                 eventScheduleService.createSchedule(schedule);
             }
         }
