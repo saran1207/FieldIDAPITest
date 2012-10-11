@@ -279,6 +279,7 @@ public class EventService extends FieldIdPersistenceService {
         masterEvent.setProofTestInfo(new ProofTestInfo());
         masterEvent.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
         masterEvent.setPerformedBy(getCurrentUser());
+        masterEvent.setAssetStatus(masterEvent.getAsset().getAssetStatus());
     }
 
     @Transactional
