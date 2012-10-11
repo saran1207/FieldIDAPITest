@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -28,8 +29,8 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
 
     public WidgetConfigPanel(String id, IModel<T> configModel) {
         super(id);
-        add(new AttributeAppender("class", new Model<String>("widgetConfiguration"), " "));
-        add(configForm = new ConfigForm("configForm", configModel));
+        super.add(new AttributeAppender("class", new Model<String>("widgetConfiguration"), " "));
+        super.add(configForm = new ConfigForm("configForm", configModel));
     }
 
     class ConfigForm extends Form {
@@ -66,7 +67,6 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
                 }
             });
         }
-
     }
 
     protected void addConfigElement(Component component) {
@@ -79,5 +79,9 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
     protected T getWidgetConfigurationToSave(final IModel<T> model) {
     	return model.getObject();
     }
-    
+
+    @Override
+    public MarkupContainer add(Component... childs) {
+        throw new UnsupportedOperationException("Use AddConfigElement instead of add().  Everything must be added to the contained form");
+    }
 }

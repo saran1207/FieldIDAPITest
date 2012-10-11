@@ -13,9 +13,10 @@ public class BarChartManager extends SimpleChartManager<String> {
 	public static final String OTHER_BAR_NAME = "Other";
 	
 	private boolean transpose;
-	private double otherThreshold = 0.02; 
+	private double otherThreshold = 0.02;
+    private boolean groupOther = true;
 
-	public BarChartManager() { 
+    public BarChartManager() {
 	}
 	
 	public BarChartManager(boolean transpose) { 
@@ -39,47 +40,68 @@ public class BarChartManager extends SimpleChartManager<String> {
 	
 	@Override
 	public ChartSeries<String> normalize(ChartSeries<String> series, String min, String max) {
-		long index = 0;
-		List<Chartable<String>> itemsClassifiedAsOther = new ArrayList<Chartable<String>>();
-		Double totalValueOfOtherItems = 0.0;		
-		Double total = series.sumY();
-		String otherFormat = "%1$s:%2$d";
-		List<String> otherTooltip = new ArrayList<String>();
-        
-        List<Chartable<String>> standardChartables = new ArrayList<Chartable<String>>();
-		
-		for (Entry<String, Chartable<String>> entry:series.getEntrySet()) {
-			Chartable<String> chartable = entry.getValue();
-			double pct = chartable.getY().doubleValue() / total;
-			if (pct < otherThreshold) {
-				otherTooltip.add(String.format(otherFormat, chartable.getX(), chartable.getY()));
-				itemsClassifiedAsOther.add(chartable);
-				totalValueOfOtherItems += chartable.getY().doubleValue();
-			} else {
-                standardChartables.add(chartable);
-			}
-		}
+        if (groupOther()) {
+            return normalizeOther(series, min, max);
+        }
+//        int index = 0;
+//        for (Entry<String, Chartable<String>> entry:series.getEntrySet()) {
+//            Chartable<String> chartable = entry.getValue();
+//            series.add(createChartable(chartable,index++));
+//        }
+        return series;
+	}
 
-		series.removeAll(itemsClassifiedAsOther);
-		Joiner joiner = Joiner.on(", ").skipNulls();
+    private boolean groupOther() {
+        return groupOther;
+    }
+
+    public BarChartManager withoutGroupOther() {
+        groupOther = false;
+        return this;
+    }
+
+    private ChartSeries<String> normalizeOther(ChartSeries<String> series, String min, String max) {
+        long index = 0;
+        List<Chartable<String>> itemsClassifiedAsOther = new ArrayList<Chartable<String>>();
+        Double totalValueOfOtherItems = 0.0;
+        Double total = series.sumY();
+        String otherFormat = "%1$s:%2$d";
+        List<String> otherTooltip = new ArrayList<String>();
+
+        List<Chartable<String>> standardChartables = new ArrayList<Chartable<String>>();
+
+        for (Entry<String, Chartable<String>> entry:series.getEntrySet()) {
+            Chartable<String> chartable = entry.getValue();
+            double pct = chartable.getY().doubleValue() / total;
+            if (pct < otherThreshold) {
+                otherTooltip.add(String.format(otherFormat, chartable.getX(), chartable.getY()));
+                itemsClassifiedAsOther.add(chartable);
+                totalValueOfOtherItems += chartable.getY().doubleValue();
+            } else {
+                standardChartables.add(chartable);
+            }
+        }
+
+        series.removeAll(itemsClassifiedAsOther);
+        Joiner joiner = Joiner.on(", ").skipNulls();
 
         // WEB-2718 If we want "other" at the bottom, it has to be 0
         // If there are no "Others" and the first item has index 1, there's a gap rendered
         // we have to wait until we know that there are no "others" in order to add to the series.
 
-		if (itemsClassifiedAsOther.size() > 0) {
-			series.add(createChartable(OTHER_BAR_NAME, totalValueOfOtherItems, 0, joiner.join(otherTooltip)));
+        if (itemsClassifiedAsOther.size() > 0) {
+            series.add(createChartable(OTHER_BAR_NAME, totalValueOfOtherItems, 0, joiner.join(otherTooltip)));
             index++;
-		}
+        }
 
         for (Chartable<String> chartable : standardChartables) {
             series.add(createChartable(chartable,index++));
         }
 
-		return series;
-	}
+        return series;
+    }
 
-	@Override
+    @Override
 	public void updateOptions(ChartSeries<String> chartSeries, FlotOptions<String> options, int index) {
 		// CAVEAT : this only works for a single chartSeries...if you are plotting more than one code will need to be refactored to handle that.
 		options.yaxis.ticks = new String[chartSeries.size()][3];
@@ -87,6 +109,7 @@ public class BarChartManager extends SimpleChartManager<String> {
 
         ArrayList<Chartable<String>> chartables = new ArrayList<Chartable<String>>(chartSeries.values());
 
+        options.bars.horizontal = transpose ? true : false;
 
         // Sort: WEB-2718 Flot is super sensitive about the order of the options -- which include the tooltip..
         // Since we stick the "Other" option at one end, but the chartable data sits in a TreeMap sorted by string

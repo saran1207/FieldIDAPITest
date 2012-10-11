@@ -8,7 +8,6 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.AssetsIdentifiedWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
-import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -18,9 +17,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
 public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifiedWidgetConfiguration> implements HasDateRange {
-	
-	@SpringBean
-	private DashboardReportingService reportingService;
 
 	@SpringBean 
 	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
@@ -37,7 +33,7 @@ public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifi
     
 	@Override
     protected ChartData<LocalDate> getChartData() {
-        ChartSeries<LocalDate> results = reportingService.getAssetsIdentified(getDateRange(), granularity, getOrg());
+        ChartSeries<LocalDate> results = dashboardReportingService.getAssetsIdentified(getDateRange(), granularity, getOrg());
         DateChartManager chartManager = new DateChartManager(granularity, getDateRange());
         return new ChartData<LocalDate>(chartManager, results);
     }

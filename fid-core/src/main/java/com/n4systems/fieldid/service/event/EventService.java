@@ -21,6 +21,7 @@ import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.*;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.chart.ChartGranularity;
+import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -396,10 +397,17 @@ public class EventService extends FieldIdPersistenceService {
         return event;
     }
 
-    public List<Event> getWork(LocalDate month, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {
-        LocalDate from = DateUtil.getSundayOfWeek(month);
-        LocalDate to = DateUtil.getSundayAfterWeek(month.plusMonths(1).withDayOfMonth(1));
-        return getWork(new DateRange(from,to), user, org, assetType, eventType, limit);
+    public ChartSeries<String> getActions(Date from, Date to, BaseOrg owner, User assignee, EventType actionType) {
+        QueryBuilder<ActionsReportRecord> query = new QueryBuilder<ActionsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
+        NewObjectSelect select = new NewObjectSelect(ActionsReportRecord.class);
+        select.setConstructorArgs(Lists.newArrayList("priority.name", "COUNT(*)"));
+        query.setSelectArgument(select);
+
+        query.addWhere(Comparator.NOTNULL, "triggeredEvent", "triggeredEvent", null);
+        query.addGroupBy("priority");
+        //query.addWhere(Comparator.NOTNULL, "eventState", "eventState", Event.EventState.OPEN);
+        // TODO WEB-3294 : add filtering for org, assignee, actionType, dateRange.
+        return new ChartSeries<String>(persistenceService.findAll(query));
     }
 
     public List<Event> getWork(DateRange dateRange, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {

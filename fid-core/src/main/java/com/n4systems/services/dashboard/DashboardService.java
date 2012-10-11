@@ -64,6 +64,7 @@ public class DashboardService extends FieldIdPersistenceService {
                 WorkWidgetConfiguration config = (WorkWidgetConfiguration) def.getConfig();
                 config.setUser(getCurrentUser());
                 break;
+            // TODO WEB-3294 : set user if config instanceof ConfigurationWithUser
         }
         return def;
     }

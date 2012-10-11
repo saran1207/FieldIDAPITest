@@ -11,6 +11,7 @@ import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithPeriod;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.EnumUtils;
 import com.n4systems.util.chart.ChartData;
 import com.n4systems.util.chart.ChartGranularity;
@@ -56,7 +57,7 @@ import java.util.Set;
  *  - create WidgetConfigurationPanel & HTML to make above object. 
  *  - implement your service call in DashboardReportingService.  it should return ChartData<X>.   this result is returned in ChartWidget.getChartSeries()
  *
- * see {@link http://fieldid.jira.com/wiki/display/WEB/Dashboard+Chart+Widgets} 
+ * see {@link http://fieldid.jira.com/wiki/display/WEB/Dashboard+Chart+Widgets}
  * 
  */
 
@@ -75,8 +76,12 @@ public abstract class ChartWidget<X extends Comparable,T extends WidgetConfigura
 
 	@SpringBean
 	private PersistenceService persistenceService;
-	
-	public ChartWidget(String id, IModel<WidgetDefinition<T>> model) {
+
+    @SpringBean
+    protected DashboardReportingService dashboardReportingService;
+
+
+    public ChartWidget(String id, IModel<WidgetDefinition<T>> model) {
 		super(id, model);
 		setOutputMarkupId(true);
 		add(flotChart = createFlotChart());
@@ -175,7 +180,7 @@ public abstract class ChartWidget<X extends Comparable,T extends WidgetConfigura
         add(periodButton);
 	}
 
-	private Component createFlotChartImpl(String id) {
+	private FlotChart<X> createFlotChartImpl(String id) {
 		LoadableDetachableModel<ChartData<X>> model = new LoadableDetachableModel<ChartData<X>>() {
 			@Override protected ChartData<X> load() {
 				return getChartData();

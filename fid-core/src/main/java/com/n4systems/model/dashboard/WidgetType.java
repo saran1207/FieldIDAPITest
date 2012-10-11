@@ -14,6 +14,7 @@ public enum WidgetType implements Listable<String> {
     ASSETS_IDENTIFIED("Assets Identified", AssetsIdentifiedWidgetConfiguration.class),
     EVENT_COMPLETENESS("Event Completeness", EventCompletenessWidgetConfiguration.class),
     WORK("Work", WorkWidgetConfiguration.class),
+    ACTIONS("Open Actions by Priority", ActionsWidgetConfiguration.class),
     EVENT_KPI("Event KPIs", EventKPIWidgetConfiguration.class);
 
     private String description;

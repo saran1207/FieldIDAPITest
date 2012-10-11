@@ -1,5 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
+import com.n4systems.fieldid.wicket.pages.widgets.config.UpcomingEventsConfigPanel;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
@@ -9,18 +14,8 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
-import com.n4systems.fieldid.wicket.pages.widgets.config.UpcomingEventsConfigPanel;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.widget.UpcomingEventsWidgetConfiguration;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.services.reporting.DashboardReportingService;
-
 @SuppressWarnings("serial")
 public class UpcomingScheduledEventsWidget extends ChartWidget<LocalDate,UpcomingEventsWidgetConfiguration> {
-
-	@SpringBean
-	private DashboardReportingService reportingService;
 
 	@SpringBean 
 	private OrgPeriodSubtitleHelper orgPeriodSubtitleHelper;
@@ -37,7 +32,7 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<LocalDate,Upcomin
 	@Override
 	protected ChartData<LocalDate> getChartData() {
         DateChartManager chartManager = new DateChartManager(ChartGranularity.DAY, new DateRange(RangeType.forDays(period)));
-        ChartSeries<LocalDate> results = reportingService.getUpcomingScheduledEvents(period, getOrg());
+        ChartSeries<LocalDate> results = dashboardReportingService.getUpcomingScheduledEvents(period, getOrg());
 		return new ChartData<LocalDate>(chartManager, results);
 	}
 		

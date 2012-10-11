@@ -1,18 +1,23 @@
 package com.n4systems.services.reporting;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
+import com.n4systems.model.PriorityCode;
 import com.n4systems.model.Status;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.*;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.EnumUtils;
@@ -34,23 +39,30 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	private @Autowired EventService eventService;
 	private @Autowired AssetStatusService assetStatusService;
     private @Autowired DateService dateService;
-	
-	@Transactional(readOnly = true)
+    private @Autowired PriorityCodeService priorityCodeService;
+
+    @Transactional(readOnly = true)
     public ChartSeries<LocalDate> getAssetsIdentified(DateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
 		Preconditions.checkArgument(dateRange !=null);
 		List<AssetsIdentifiedReportRecord> results = assetService.getAssetsIdentified(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), owner);
         return new ChartSeries<LocalDate>(results);
     }
 
-	@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public ChartSeries<LocalDate> getUpcomingScheduledEvents(Integer period, BaseOrg owner) {
 		Preconditions.checkArgument(period!=null);
 		List<UpcomingScheduledEventsRecord> results = eventService.getUpcomingScheduledEvents(period, owner);
 		return new ChartSeries<LocalDate>(results);
 	}
 
+    @Transactional(readOnly = true)
+    public ChartSeries<String> getActions(DateRange dateRange, BaseOrg owner, User assignee, EventType actionType) {
+        Preconditions.checkArgument(dateRange!=null);
+        List<ChartSeries<String>> results = Lists.newArrayList();
+        List<PriorityCode> priorities = priorityCodeService.getActivePriorityCodes();
+        return eventService.getActions(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), owner, assignee, actionType);
+    }
 
-    // use DateService.
 	public ChartSeries<String> getAssetsStatus(DateRange dateRange, BaseOrg org) {
 		Preconditions.checkArgument(dateRange !=null);
         List<AssetsStatusReportRecord> results = assetService.getAssetsStatus(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), org);

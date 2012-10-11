@@ -1,5 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
+import com.n4systems.fieldid.wicket.pages.widgets.config.EventCompletenessConfigPanel;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
@@ -9,21 +14,11 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.time.LocalDate;
 
-import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
-import com.n4systems.fieldid.wicket.pages.widgets.config.EventCompletenessConfigPanel;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.widget.EventCompletenessWidgetConfiguration;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.services.reporting.DashboardReportingService;
-
 import java.util.List;
 
 public class EventCompletenessWidget extends ChartWidget<LocalDate,EventCompletenessWidgetConfiguration> implements HasDateRange {
 
 	@SpringBean
-	private DashboardReportingService reportingService;
-
-	@SpringBean 
 	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
 
 	public EventCompletenessWidget(String id, WidgetDefinition<EventCompletenessWidgetConfiguration> widgetDefinition) {
@@ -41,7 +36,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 	@Override
 	protected ChartData<LocalDate> getChartData() {
         ChartManager chartManager = new EventCompletenessChartManager(granularity, getDateRange());
-        List<ChartSeries<LocalDate>> results = reportingService.getEventCompletenessEvents(granularity, getDateRange(), getOrg());
+        List<ChartSeries<LocalDate>> results = dashboardReportingService.getEventCompletenessEvents(granularity, getDateRange(), getOrg());
         return new ChartData<LocalDate>(chartManager, results);
 	}
 	

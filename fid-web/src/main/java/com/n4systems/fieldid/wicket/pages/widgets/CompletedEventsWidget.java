@@ -6,7 +6,6 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.CompletedEventsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
-import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -19,10 +18,7 @@ import java.util.List;
 
 @SuppressWarnings("serial")
 public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEventsWidgetConfiguration> implements HasDateRange {
-	
-	@SpringBean
-	private DashboardReportingService reportingService;
-	
+
 	@SpringBean 
 	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
 	
@@ -45,7 +41,7 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
 	@Override
     protected ChartData<LocalDate> getChartData() {
         ChartManager chartManager = new CompletedEventsChartManager(granularity, getDateRange());
-        List<ChartSeries<LocalDate>> results = reportingService.getCompletedEvents(getDateRange(), granularity, getOrg());
+        List<ChartSeries<LocalDate>> results = dashboardReportingService.getCompletedEvents(getDateRange(), granularity, getOrg());
 		return new ChartData<LocalDate>(chartManager, results);
     }
 

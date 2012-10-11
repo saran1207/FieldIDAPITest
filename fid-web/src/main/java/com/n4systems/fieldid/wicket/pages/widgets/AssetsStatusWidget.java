@@ -9,7 +9,6 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.AssetsStatusWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
-import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -19,10 +18,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 @SuppressWarnings("serial")
 public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetConfiguration>  implements HasDateRange {
-	
-	@SpringBean
-	private DashboardReportingService reportingService;
-	
+
 	@SpringBean 
 	private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
 	
@@ -41,13 +37,11 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 	protected Class<? extends FieldIDFrontEndPage> getClickThroughPage() {
 		return SearchPage.class;
 	}
-
-    
     
 	@Override
     protected ChartData<String> getChartData() {
         BarChartManager chartManager = new BarChartManager(true);
-        ChartSeries<String> results = reportingService.getAssetsStatus(getDateRange(), getOrg());
+        ChartSeries<String> results = dashboardReportingService.getAssetsStatus(getDateRange(), getOrg());
         return new ChartData<String>(chartManager, results);
     }
 

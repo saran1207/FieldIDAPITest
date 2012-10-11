@@ -388,7 +388,7 @@ public class DateHelper {
 	 * </pre>
 	 * 
 	 * @param date
-	 * @param calendarField
+	 * @param field
 	 * @return
 	 */
 	public static Date truncate(Date date, int field) {
@@ -443,7 +443,7 @@ public class DateHelper {
 	 *            Date to start field calculation from
 	 * @param field
 	 *            Field to operate on
-	 * @param ammount
+	 * @param amount
 	 *            Amount to increment/decrement by
 	 * @return Date post field incrementation
 	 */
