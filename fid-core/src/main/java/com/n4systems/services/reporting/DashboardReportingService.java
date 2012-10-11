@@ -11,7 +11,6 @@ import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
-import com.n4systems.model.PriorityCode;
 import com.n4systems.model.Status;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.*;
@@ -56,11 +55,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	}
 
     @Transactional(readOnly = true)
-    public ChartSeries<String> getActions(DateRange dateRange, BaseOrg owner, User assignee, EventType actionType) {
+    public List<ChartSeries<String>> getActions(DateRange dateRange, BaseOrg owner, User assignee, EventType actionType) {
         Preconditions.checkArgument(dateRange!=null);
         List<ChartSeries<String>> results = Lists.newArrayList();
-        List<PriorityCode> priorities = priorityCodeService.getActivePriorityCodes();
-        return eventService.getActions(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), owner, assignee, actionType);
+        results.add( eventService.getOverdueActions(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), owner, assignee, actionType));
+        results.add( eventService.getUpcomingActions(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), owner, assignee, actionType));
+        return results;
     }
 
 	public ChartSeries<String> getAssetsStatus(DateRange dateRange, BaseOrg org) {

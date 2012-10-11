@@ -9,20 +9,21 @@ import com.n4systems.util.chart.RangeType;
 
 import javax.persistence.*;
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "widget_configurations_actions")
 @PrimaryKeyJoinColumn(name="id")
 public class ActionsWidgetConfiguration extends WidgetConfiguration  {
 
-	@ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "org_id")
 	private BaseOrg org;
 
-    @Column(name="user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id", nullable=true)
     private User user;
 
-    @Column(name="action_type")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="action_type", nullable=true)
     private EventType actionType;
 
 	@Enumerated(EnumType.STRING)

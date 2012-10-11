@@ -18,6 +18,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.*;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.chart.ChartGranularity;
@@ -41,6 +42,7 @@ public class EventService extends FieldIdPersistenceService {
 
     @Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private AssetService assetService;
+    @Autowired private DateService dateService;
 
     @Transactional(readOnly = true)
 	public List<Event> getEventsByType(Long eventTypeId) {
@@ -398,17 +400,31 @@ public class EventService extends FieldIdPersistenceService {
         return event;
     }
 
-    public ChartSeries<String> getActions(Date from, Date to, BaseOrg owner, User assignee, EventType actionType) {
+    public ChartSeries<String> getUpcomingActions(Date from, Date to, BaseOrg owner, User assignee, EventType actionType) {
+        QueryBuilder<ActionsReportRecord> query = createActionsQuery();
+        LocalDate today = dateService.todayUTC();
+        query.addWhere(Comparator.GE, "nextDate", "nextDate", today.toDate());
+        return new ChartSeries<String>(persistenceService.findAll(query));
+    }
+
+    public ChartSeries<String> getOverdueActions(Date from, Date to, BaseOrg owner, User assignee, EventType actionType) {
+        QueryBuilder<ActionsReportRecord> query = createActionsQuery();
+        LocalDate today = dateService.todayUTC();
+        query.addWhere(Comparator.LT, "nextDate", "nextDate", today.toDate());
+        return new ChartSeries<String>(persistenceService.findAll(query));
+    }
+
+    private QueryBuilder<ActionsReportRecord> createActionsQuery() {
         QueryBuilder<ActionsReportRecord> query = new QueryBuilder<ActionsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
         NewObjectSelect select = new NewObjectSelect(ActionsReportRecord.class);
         select.setConstructorArgs(Lists.newArrayList("priority.name", "COUNT(*)"));
         query.setSelectArgument(select);
 
+        // TODO WEB-3294 : add filtering for org, assignee, actionType, dateRange.
+        query.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
         query.addWhere(Comparator.NOTNULL, "triggeredEvent", "triggeredEvent", null);
         query.addGroupBy("priority");
-        //query.addWhere(Comparator.NOTNULL, "eventState", "eventState", Event.EventState.OPEN);
-        // TODO WEB-3294 : add filtering for org, assignee, actionType, dateRange.
-        return new ChartSeries<String>(persistenceService.findAll(query));
+        return query;
     }
 
     public List<Event> getWork(DateRange dateRange, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {

@@ -17,6 +17,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.List;
+
 public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration> implements HasDateRange {
 
 	@SpringBean
@@ -29,7 +31,7 @@ public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration
     
 	@Override
     protected ChartData<String> getChartData() {
-        ChartSeries<String> results = dashboardReportingService.getActions(getDateRange(), getOrg(), getUser(), getActionType());
+        List<ChartSeries<String>> results = dashboardReportingService.getActions(getDateRange(), getOrg(), getUser(), getActionType());
         return new ChartData<String>(new BarChartManager(true), results);
     }
 
@@ -78,6 +80,10 @@ public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration
 	@Override
 	protected FlotOptions<String> createOptions() {
         HorizBarChartOptions<String> options = new HorizBarChartOptions<String>();
+        options.colors = new String[] {FlotOptions.CHART_RED, FlotOptions.CHART_BLUE };
+        options.series = new FlotOptions.Series();
+        options.series.stack = true;
+        options.xaxis.tickDecimals = 0L;
         return options;
 	}
 	

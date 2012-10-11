@@ -198,3 +198,8 @@ div.buttonsLabel {
 .assetsStatusChart .tickLabel {
     margin-top:-8px;
 }
+
+/** same as above */
+.actionsChart .tickLabel {
+    margin-top:-11px;
+}

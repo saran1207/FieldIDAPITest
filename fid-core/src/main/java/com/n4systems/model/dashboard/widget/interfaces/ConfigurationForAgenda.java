@@ -9,6 +9,6 @@ public interface ConfigurationForAgenda {
 
     AssetType getAssetType();
     EventType getEventType();
-    User getUser();
     BaseOrg getOrg();
+    User getUser();
 }

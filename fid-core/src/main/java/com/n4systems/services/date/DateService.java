@@ -53,12 +53,16 @@ public class DateService extends FieldIdPersistenceService {
         return new DateRange(rangeType, getUserTimeZone());
     }
 
-    public LocalDate now() {
+    public LocalDate today() {
         return new LocalDate(new DateMidnight(DateTimeZone.forTimeZone(getUserTimeZone())));
     }
 
-    public Date nowAsDate() {
+    public Date todayAsDate() {
         return new LocalDate(new DateMidnight(DateTimeZone.forTimeZone(getUserTimeZone()))).toDate();
+    }
+
+    public LocalDate todayUTC() {
+        return new LocalDate(new DateMidnight(DateTimeZone.UTC));
     }
 
     public TimeZone getUsersTimeZone() {

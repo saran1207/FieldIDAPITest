@@ -3,6 +3,8 @@ package com.n4systems.model.dashboard.widget;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationForAgenda;
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithOwner;
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithUser;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 
@@ -12,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "widget_configurations_work")
 @PrimaryKeyJoinColumn(name="id")
-public class WorkWidgetConfiguration extends WidgetConfiguration implements ConfigurationForAgenda {
+public class WorkWidgetConfiguration extends WidgetConfiguration implements ConfigurationForAgenda, ConfigurationWithUser, ConfigurationWithOwner {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "org_id", nullable = true)

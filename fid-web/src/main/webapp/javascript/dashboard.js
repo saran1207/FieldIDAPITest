@@ -1,6 +1,7 @@
 /**
  * requires.... 
- *   jquery.flot.js 
+ *   jquery.flot.js
+ *   jquery.flot.stack.js
  *   jquery.flot.navigate.js
  * @see FlotChart for java class that uses this.   
  */

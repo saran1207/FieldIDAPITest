@@ -40,8 +40,10 @@ public class FlotOptions<X> implements Serializable {
     public static final String TOOLTIP_WITHOUT_DAY = "<p>{month} {year}: <b>{y}</b></p>";
     public static final String TOOLTIP_WEEK = "<p>{month} {day}-{weekEndDay}, {year}: <b>{y}</b></p>";
     public static final String TOOLTIP_YEAR = "<p>{year}: <b>{y}</b></p>";
+    public static final String CHART_BLUE = "#32578B";
+    public static final String CHART_RED = "#F20000";
 
-	public Series series = new Series();
+    public Series series = new Series();
 	public Lines lines = new Lines();
 	public Points points = new Points();
 	public Axis yaxis = new Axis();
@@ -100,7 +102,7 @@ public class FlotOptions<X> implements Serializable {
 	}
 	
 	public static class Series implements Serializable {
-		public Long stack;
+		public Boolean stack;
 		public Lines lines = new Lines();
 		public Bars bars = new Bars();
 		public Points points = new Points();
@@ -114,7 +116,8 @@ public class FlotOptions<X> implements Serializable {
 		public String align;
 		public Integer lineWidth;
 		public Boolean clickable;
-	}
+        public Double fill;
+    }
 	
 	public static class Legend implements Serializable { 
 		public Boolean show;
@@ -144,8 +147,8 @@ public class FlotOptions<X> implements Serializable {
 		yaxis.monthNames = null;
         yaxis.min = 0L;
         yaxis.tickDecimals = 0L;
-		colors = new String[] {"#32578B"};
-	}
+        colors = new String[] {CHART_BLUE};
+    }
 	
 	
 

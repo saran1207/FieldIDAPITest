@@ -88,7 +88,7 @@ public class Agenda extends Panel  {
         this.agendaModel = model;
         setOutputMarkupId(true);
 
-        firstDayOfMonth = dateService.now().withDayOfMonth(1);  // default to "TODAY"
+        firstDayOfMonth = dateService.today().withDayOfMonth(1);  // default to "TODAY"
 
         add(header = new WebMarkupContainer("hasEventsLabel") {
             @Override public boolean isVisible() {
@@ -215,7 +215,7 @@ public class Agenda extends Panel  {
     private String getJsonMonthlyWorkSummary() {
         AgendaJsonData data = new AgendaJsonData(selectedDay, firstDayOfMonth);
 
-        LocalDate today = dateService.now();
+        LocalDate today = dateService.today();
 
         Map<LocalDate, Long> events = eventService.getMontlyWorkSummary(firstDayOfMonth,getUser(), getOrg(), getAssetType(), getEventType());
         for (LocalDate date:events.keySet()) {
@@ -351,7 +351,7 @@ public class Agenda extends Panel  {
                     setResponsePage(new PerformEventPage(event, asset));
                 }
             }.add(new Label("type", new PropertyModel(item.getModelObject(), "type.name"))));
-            String css = dateService.nowAsDate().after(event.getNextDate()) ? "overdue" : "";
+            String css = dateService.todayAsDate().after(event.getNextDate()) ? "overdue" : "";
             item.add(new AttributeAppender("class", Model.of(css), " "));
         }
 

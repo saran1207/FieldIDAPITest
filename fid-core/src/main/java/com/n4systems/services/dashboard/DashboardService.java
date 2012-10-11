@@ -3,6 +3,7 @@ package com.n4systems.services.dashboard;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.model.dashboard.widget.WorkWidgetConfiguration;
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithUser;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
@@ -59,12 +60,9 @@ public class DashboardService extends FieldIdPersistenceService {
 
     public WidgetDefinition createWidgetDefinition(WidgetType type) {
         WidgetDefinition def = new WidgetDefinition(type);
-        switch (type) {
-            case WORK:
-                WorkWidgetConfiguration config = (WorkWidgetConfiguration) def.getConfig();
-                config.setUser(getCurrentUser());
-                break;
-            // TODO WEB-3294 : set user if config instanceof ConfigurationWithUser
+        if (def.getConfig() instanceof ConfigurationWithUser) {
+            ConfigurationWithUser config = (ConfigurationWithUser) def.getConfig();
+            config.setUser(getCurrentUser());
         }
         return def;
     }
