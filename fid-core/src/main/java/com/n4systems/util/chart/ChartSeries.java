@@ -27,21 +27,21 @@ public class ChartSeries<X extends Comparable> implements Serializable {
 		add(chartables);
 	}
 
+    public ChartSeries(List<? extends Chartable<X>> data) {
+		this(null, null, data);
+	}
+
+	public ChartSeries(String label, List<? extends Chartable<X>> data) {
+		this(null, label, data);
+	}
+
     protected ChartableMap<X> createChartableMap() {
         // override if you want to add comparator or different flavour of map.
         return new ChartableMap<X>();
     }
 
-    public ChartSeries(List<? extends Chartable<X>> data) {
-		this(null, null, data);
-	}
-	
-	public ChartSeries(String label, List<? extends Chartable<X>> data) {
-		this(null, label, data);
-	}
-	
 	/*pkg protected */ChartSeries<X> add(List<? extends Chartable<X>> data) {
-		for (Chartable<X> chartable:data) { 
+		for (Chartable<X> chartable:data) {
 			add(chartable);
 		}
 		return this;

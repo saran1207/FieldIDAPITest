@@ -36,7 +36,7 @@ public class RunReportPage extends SearchBridgePage<ReportPage, EventReportCrite
 
     @Override
     protected EventReportCriteria getCriteriaFromWidget(Long widgetDefinitionId, Long x, String y, String series) {
-        return dashboardReportingService.convertWidgetDefinitionToReportCriteria(widgetDefinitionId, x, series);
+        return dashboardReportingService.convertWidgetDefinitionToReportCriteria(widgetDefinitionId, x, y, series);
     }
 
 

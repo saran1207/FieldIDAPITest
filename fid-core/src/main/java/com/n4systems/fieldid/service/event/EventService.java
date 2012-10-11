@@ -23,6 +23,7 @@ import com.n4systems.services.reporting.*;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.Chartable;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -332,7 +333,6 @@ public class EventService extends FieldIdPersistenceService {
                 } else {
                     builder.addOrder(subOrder, ascending);
                 }
-
             }
         } else {
             builder.addOrder("completedDate", false);
@@ -386,9 +386,8 @@ public class EventService extends FieldIdPersistenceService {
 		latestClause.getParams().put("iSubAssetId", assetId);
 		latestClause.getParams().put("iSubState", EntityState.ACTIVE);
 		builder.addWhere(latestClause);
-		
-		List<Event> lastEvents = persistenceService.findAll(builder);
-		return lastEvents;
+
+        return persistenceService.findAll(builder);
 	}
 
     public Event retireEvent(Event event) {
@@ -401,26 +400,47 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     public ChartSeries<String> getUpcomingActions(Date from, Date to, BaseOrg owner, User assignee, EventType actionType) {
-        QueryBuilder<ActionsReportRecord> query = createActionsQuery();
-        LocalDate today = dateService.todayUTC();
-        query.addWhere(Comparator.GE, "nextDate", "nextDate", today.toDate());
-        return new ChartSeries<String>(persistenceService.findAll(query));
+        Date now = dateService.nowUTC().toDate();
+        /** if you specify a date range that is >=today there will, by definition be no overdue actions so skip this step. */
+        List<? extends Chartable<String>> upcomingActions = Lists.newArrayList();
+        if (to==null || !to.before(now)) {
+            QueryBuilder<ActionsReportRecord> query = createActionsQuery(owner, assignee, actionType);
+            if (from==null || from.before(now)) {
+                from = now;
+            }
+            query.addWhere(Comparator.GE, "from", "nextDate", from);
+            query.addNullSafeWhere(Comparator.LT, "to", "nextDate", to);
+            upcomingActions = persistenceService.findAll(query);
+        }
+        return new ChartSeries<String>(ActionBar.UPCOMING, "Upcoming", upcomingActions);
     }
 
     public ChartSeries<String> getOverdueActions(Date from, Date to, BaseOrg owner, User assignee, EventType actionType) {
-        QueryBuilder<ActionsReportRecord> query = createActionsQuery();
-        LocalDate today = dateService.todayUTC();
-        query.addWhere(Comparator.LT, "nextDate", "nextDate", today.toDate());
-        return new ChartSeries<String>(persistenceService.findAll(query));
+        Date now = dateService.nowUTC().toDate();
+        List<? extends Chartable<String>> overdueActions = Lists.newArrayList();
+        /** if you specify a date range that is >=today there will, by definition be no overdue actions so skip this step. */
+        if (from==null || from.before(now)) {
+            QueryBuilder<ActionsReportRecord> query = createActionsQuery(owner, assignee, actionType);
+            if (to==null || to.after(now)) {
+                to = now;
+            }
+            query.addWhere(Comparator.LT, "to", "nextDate", to);
+            query.addNullSafeWhere(Comparator.GE, "from", "nextDate", from);
+            overdueActions = persistenceService.findAll(query);
+        }
+        return new ChartSeries<String>(ActionBar.OVERDUE, "Overdue ", overdueActions);
     }
 
-    private QueryBuilder<ActionsReportRecord> createActionsQuery() {
+    private QueryBuilder<ActionsReportRecord> createActionsQuery(BaseOrg owner, User assignee, EventType actionType) {
+        //Preconditions.checkArgument(actionType==null || actionType.getGroup().isAction(), "given event type [ " + actionType + " ] is not a valid 'Action'.");
         QueryBuilder<ActionsReportRecord> query = new QueryBuilder<ActionsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
         NewObjectSelect select = new NewObjectSelect(ActionsReportRecord.class);
         select.setConstructorArgs(Lists.newArrayList("priority.name", "COUNT(*)"));
         query.setSelectArgument(select);
 
-        // TODO WEB-3294 : add filtering for org, assignee, actionType, dateRange.
+        query.addNullSafeWhere(Comparator.EQ, "owner", "owner", owner);
+        query.addNullSafeWhere(Comparator.EQ, "assignee", "assignee", assignee);
+        query.addNullSafeWhere(Comparator.EQ, "type", "type", actionType);
         query.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
         query.addWhere(Comparator.NOTNULL, "triggeredEvent", "triggeredEvent", null);
         query.addGroupBy("priority");
@@ -433,9 +453,7 @@ public class EventService extends FieldIdPersistenceService {
         addToWorkQuery(builder, user, org, assetType, eventType, dateRange);
         builder.setLimit(limit + 1);
 
-        List<Event> result = persistenceService.findAll(builder);
-
-        return result;
+        return persistenceService.findAll(builder);
     }
 
     /**
@@ -467,7 +485,7 @@ public class EventService extends FieldIdPersistenceService {
 
         LocalDate date = from;
         while (date.isBefore(to)) {
-            result.put(date,new Long(0));
+            result.put(date, (long) 0);
             date = date.plusDays(1);
         }
         for (WorkSummaryRecord record:data) {
@@ -487,6 +505,12 @@ public class EventService extends FieldIdPersistenceService {
             builder.applyFilter(new OwnerAndDownFilter(org));
         }
         builder.addOrder("nextDate");
+    }
+
+
+
+    public enum ActionBar {
+        OVERDUE,UPCOMING;
     }
 
 }

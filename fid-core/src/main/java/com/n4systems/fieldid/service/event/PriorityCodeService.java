@@ -55,4 +55,17 @@ public class PriorityCodeService extends FieldIdPersistenceService {
         }
         return persistenceService.exists(builder);
     }
+
+    public PriorityCode getPriorityCodeByName(String name) {
+        if (name==null) {
+            return null;
+        }
+        QueryBuilder<PriorityCode> builder = createUserSecurityBuilder(PriorityCode.class);
+
+        builder.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+        builder.addSimpleWhere("name", name);
+        builder.addOrder("name");
+
+        return persistenceService.find(builder);
+    }
 }

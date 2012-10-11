@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.service.event.EventTypeGroupService;
 import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
@@ -39,6 +40,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	private @Autowired AssetStatusService assetStatusService;
     private @Autowired DateService dateService;
     private @Autowired PriorityCodeService priorityCodeService;
+    private @Autowired EventTypeGroupService eventTypeGroupService;
 
     @Transactional(readOnly = true)
     public ChartSeries<LocalDate> getAssetsIdentified(DateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
@@ -58,7 +60,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
     public List<ChartSeries<String>> getActions(DateRange dateRange, BaseOrg owner, User assignee, EventType actionType) {
         Preconditions.checkArgument(dateRange!=null);
         List<ChartSeries<String>> results = Lists.newArrayList();
-        results.add( eventService.getOverdueActions(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), owner, assignee, actionType));
+        results.add(eventService.getOverdueActions(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), owner, assignee, actionType));
         results.add( eventService.getUpcomingActions(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), owner, assignee, actionType));
         return results;
     }
@@ -127,7 +129,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	// NOTE : methods used by widgets to convert configuration into criteria.
 	//
 	
-	public EventReportCriteria convertWidgetDefinitionToReportCriteria(Long widgetDefinitionId, Long x, String series) {
+	public EventReportCriteria convertWidgetDefinitionToReportCriteria(Long widgetDefinitionId, Long x, String y, String series) {
 		WidgetDefinition<?> widgetDefinition = getWidgetDefinition(widgetDefinitionId);
 		switch (widgetDefinition.getWidgetType()) {
 			case EVENT_COMPLETENESS:
@@ -140,6 +142,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
                 return getCriteriaDefaults((EventKPIWidgetConfiguration) widgetDefinition.getConfig(), series, x.intValue()/*assumed to be org index*/);
             case WORK:
                 return getCriteriaDefaults((WorkWidgetConfiguration)widgetDefinition.getConfig(), series, x.intValue());
+            case ACTIONS:
+                return getCriteriaDefaults((ActionsWidgetConfiguration)widgetDefinition.getConfig(), series, y, x.intValue());
 			default:
 				throw new IllegalArgumentException("Can't convert widget of type " + widgetDefinition.getWidgetType() + " into report criteria");
 		}
@@ -156,11 +160,28 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	}
 
 	private EventReportCriteria getCriteriaDefaults(UpcomingEventsWidgetConfiguration config, String series, LocalDate localDate) {
-		EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
+        EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
         criteria.setDueDateRange(new DateRange(localDate, localDate));// this widget displays day by day.  .: when you click on a pt the date range is always a single day.
         criteria.setEventState(EventState.OPEN);
-		return criteria;
+        return criteria;
 	}
+
+    private EventReportCriteria getCriteriaDefaults(ActionsWidgetConfiguration config, String series, String priorityName, int i) {
+        EventService.ActionBar bar = EventService.ActionBar.valueOf(series);
+        Preconditions.checkArgument(bar != null, "must pass in one of " + EventService.ActionBar.values());
+        EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
+        if (config.getUser()!=null) {
+            criteria.setAssigneeId(config.getUser().getId());
+        }
+
+        criteria.setDueDateRange(config.getDateRange());
+        criteria.setPriority(priorityCodeService.getPriorityCodeByName(priorityName));
+        // need to interrogate whether it was overdue or upcoming (or both) clicked here
+        criteria.setEventState(EventState.OPEN);
+        criteria.setEventType(config.getActionType());
+        criteria.setEventTypeGroup(eventTypeGroupService.getDefaultActionGroup());
+        return criteria;
+    }
 
     private EventReportCriteria getCriteriaDefaults(EventKPIWidgetConfiguration config, String series, int orgIndex) {
         Preconditions.checkArgument(orgIndex >= 0 && orgIndex <=config.getOrgs().size());

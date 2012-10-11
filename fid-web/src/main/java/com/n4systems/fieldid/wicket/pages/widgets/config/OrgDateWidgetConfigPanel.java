@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.util.EnumDropDownChoiceRenderer;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
@@ -12,7 +12,6 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.Arrays;
 
-@SuppressWarnings("serial")
 public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> extends WidgetConfigPanel<T> {
 
     private IModel<T> configModel;
@@ -27,9 +26,7 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
     }
 
 	protected Component createOrgPicker(String id, final IModel<T> configModel) {
-        OrgPicker picker = new OrgPicker(id, new PropertyModel<BaseOrg>(configModel, "org"));
-        picker.setTranslateContainerSelector(".w_content");
-        return picker;
+        return new AutoCompleteOrgPicker(id, new PropertyModel<BaseOrg>(configModel, "org"));
 	}
 
 	protected DropDownChoice<RangeType> createDateRangeSelect() {

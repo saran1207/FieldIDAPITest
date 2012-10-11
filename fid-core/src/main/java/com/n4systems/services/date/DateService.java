@@ -5,6 +5,7 @@ import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.chart.RangeType;
 import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
@@ -71,6 +72,14 @@ public class DateService extends FieldIdPersistenceService {
 
     public DateTimeDefinition getDateTimeDefinition() {
         return getCurrentUser();
+    }
+
+    public DateTime nowUTC() {
+        return new DateTime(DateTimeZone.UTC);
+    }
+
+    public DateTime now() {
+        return new DateTime(DateTimeZone.forTimeZone(getUserTimeZone()));
     }
 
 }

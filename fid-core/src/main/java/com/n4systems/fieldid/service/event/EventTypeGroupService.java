@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.user.User;
+import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.persistence.QueryBuilder;
 
 import java.util.Date;
@@ -40,5 +41,13 @@ public class EventTypeGroupService extends FieldIdPersistenceService {
     public void archive(EventTypeGroup group, User user) {
         group.archiveEntity();
         update(group, user);
+    }
+
+    public EventTypeGroup getDefaultActionGroup() {
+        QueryBuilder<EventTypeGroup> query = createUserSecurityBuilder(EventTypeGroup.class);
+        query.addSimpleWhere("action", true);
+        // CAVEAT : assumes tenant_id/name=Actions is unique.
+        query.addSimpleWhere("name", TenantCreationService.DEFAULT_ACTIONS_GROUP_NAME);
+        return persistenceService.find(query);
     }
 }

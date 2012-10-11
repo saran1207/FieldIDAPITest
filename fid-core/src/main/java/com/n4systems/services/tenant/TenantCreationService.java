@@ -32,6 +32,8 @@ public class TenantCreationService extends FieldIdPersistenceService {
 	private OrgSaver orgSaver = new OrgSaver();
 	private UserSaver userSaver = new UserSaver();
 
+    public static String DEFAULT_ACTIONS_GROUP_NAME = "Actions";
+
     @Transactional(rollbackFor = {MessagingException.class, RuntimeException.class })
 	public void createTenant(Tenant tenant, PrimaryOrg primaryOrg, User adminUser) throws MessagingException {
         checkNameUniqueness(tenant);
@@ -50,7 +52,7 @@ public class TenantCreationService extends FieldIdPersistenceService {
     private void createBasicAction(Tenant tenant) {
         EventTypeGroup actionGroup = new EventTypeGroup();
         actionGroup.setTenant(tenant);
-        actionGroup.setName("Actions");
+        actionGroup.setName(DEFAULT_ACTIONS_GROUP_NAME);
         actionGroup.setAction(true);
         actionGroup.setReportTitle("Action");
         persistenceService.save(actionGroup);

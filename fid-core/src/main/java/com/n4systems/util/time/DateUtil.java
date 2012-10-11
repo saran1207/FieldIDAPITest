@@ -1,10 +1,7 @@
 package com.n4systems.util.time;
 
 import com.n4systems.model.utils.DateRange;
-import org.joda.time.DateMidnight;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.LocalDate;
+import org.joda.time.*;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -96,4 +93,27 @@ public class DateUtil {
         LocalDate to = getSundayAfterWeek(date.withDayOfMonth(1).plusMonths(1));
         return new DateRange(from,to);
     }
+
+    public static <T extends Date> T max(T a,T b) {
+        Long result = aMinusB(a,b);
+        if (result==null) {
+            return null;
+        }
+        return result<0 ? b : a;
+    }
+
+    public static <T extends Date> T min(T a,T b) {
+        Long result = aMinusB(a,b);
+        if (result==null) {
+            return null;
+        }
+        return result<0 ? a : b;
+    }
+
+    private static <T extends Date> Long aMinusB(T a, T b) {
+        return (a==null) ? (b==null?null:b.getTime()) :
+                (b==null) ? a.getTime() :
+                        a.getTime()-b.getTime();
+    }
+
 }
