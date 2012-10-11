@@ -118,7 +118,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
 	
 	@Enumerated(EnumType.STRING)
-	@Column
+	@Column(nullable=false)
 	private Status status = Status.NA;
 
     @Enumerated(EnumType.STRING)
