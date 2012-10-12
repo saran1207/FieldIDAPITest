@@ -31,10 +31,15 @@
 }
 
 .widget-header .widget-subtitle {
-	font-size : 11px;
-	color : #585858;
-	font-style : italic;
-	font-weight : normal;
+    font-size : 11px;
+    color : #585858;
+    font-style : italic;
+    font-weight : normal;
+}
+
+.widget-header .widget-subtitle.additional {
+    margin-right:-30px;
+    float:right;
 }
 
 .widget-content {

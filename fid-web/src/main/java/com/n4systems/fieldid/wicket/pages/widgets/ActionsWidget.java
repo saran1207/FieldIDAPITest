@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
@@ -15,6 +16,7 @@ import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -99,10 +101,22 @@ public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration
 		return SearchPage.class;
 	}
 
-//    @Override
-//    protected IModel<String> getRightSubtitleModel() {
-//        return Model.of("hello");
-//    }
+    @Override
+    protected IModel<String> getRightSubtitleModel() {
+        ActionsWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
+        List<IModel<String>> models = Lists.newArrayList();
+        if (config.getUser()!=null) {
+            models.add(new PropertyModel<String>(getWidgetDefinition(), "config.user.displayName"));
+        } else {
+            models.add(Model.of(""));
+        }
+        if (config.getActionType()!=null) {
+            models.add(new PropertyModel<String>(getWidgetDefinition(), "config.actionType.displayName"));
+        } else {
+            models.add(Model.of(""));
+        }
+        return new StringResourceModel("subtitle.assignee.action", this, null,  models.toArray());
+    }
 }
 
 
