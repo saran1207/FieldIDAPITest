@@ -20,8 +20,8 @@ public class EventCompletenessChartManager extends DateChartManager {
     }
 
     @Override
-    public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index) {
-        super.updateOptions(chartSeries, options, index);
+    public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index, int size) {
+        super.updateOptions(chartSeries, options, index, size);
         if (chartSeries.getId().equals(EventState.COMPLETE)) {
             chartSeries.setColor("#60986B");    // completed = green.
         }

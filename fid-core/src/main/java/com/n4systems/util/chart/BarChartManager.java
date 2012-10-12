@@ -14,7 +14,6 @@ public class BarChartManager extends SimpleChartManager<String> {
 	
 	private boolean transpose;
 	private double otherThreshold = 0.02;
-    private boolean groupOther = true;
 
     public BarChartManager() {
 	}
@@ -29,10 +28,14 @@ public class BarChartManager extends SimpleChartManager<String> {
 	}
 	
 	private Chartable<String> createChartable(Chartable<String> chartable, long index) {
-		return createChartable(chartable.getX(), chartable.getY(), index, null);
+		return createChartable(chartable.getX(), chartable.getY(), index, getTooltip(chartable));
 	}
 
-	private Chartable<String> createChartable(String x, Number y, long index, String tooltip) {
+    protected String getTooltip(Chartable<String> chartable) {
+        return null;
+    }
+
+    private Chartable<String> createChartable(String x, Number y, long index, String tooltip) {
 		return !transpose ? 
 				new StringChartable(x, y, index, tooltip) : 
 				new StringChartable(x, index, y.longValue(), tooltip);		
@@ -40,23 +43,11 @@ public class BarChartManager extends SimpleChartManager<String> {
 	
 	@Override
 	public ChartSeries<String> normalize(ChartSeries<String> series, String min, String max) {
-        if (groupOther()) {
-            return normalizeOther(series, min, max);
-        }
-//        int index = 0;
-//        for (Entry<String, Chartable<String>> entry:series.getEntrySet()) {
-//            Chartable<String> chartable = entry.getValue();
-//            series.add(createChartable(chartable,index++));
-//        }
-        return series;
+        return normalizeOther(series, min, max);
 	}
 
-    private boolean groupOther() {
-        return groupOther;
-    }
-
-    public BarChartManager withoutGroupOther() {
-        groupOther = false;
+    public BarChartManager withNoThreshold() {
+        otherThreshold = 0.0;
         return this;
     }
 
@@ -102,10 +93,10 @@ public class BarChartManager extends SimpleChartManager<String> {
     }
 
     @Override
-	public void updateOptions(ChartSeries<String> chartSeries, FlotOptions<String> options, int index) {
-		// CAVEAT : this only works for a single chartSeries...if you are plotting more than one code will need to be refactored to handle that.
-		options.yaxis.ticks = new String[chartSeries.size()][3];
-		int i = 0;
+	public void updateOptions(ChartSeries<String> chartSeries, FlotOptions<String> options, int seriesIndex, int maxSeriesIndex) {
+        if (options.yaxis.ticks==null) {
+            options.yaxis.ticks = new String[chartSeries.size()][maxSeriesIndex+2];
+        }
 
         ArrayList<Chartable<String>> chartables = new ArrayList<Chartable<String>>(chartSeries.values());
 
@@ -121,13 +112,17 @@ public class BarChartManager extends SimpleChartManager<String> {
                 return new Integer(c1.getY().intValue()).compareTo(c2.getY().intValue());
             }
         });
-        
+
+		int i = 0;
         for (Chartable<String> value : chartables) {
-			options.yaxis.ticks[i][0] = value.getY()+"";
-			options.yaxis.ticks[i][1] = value.getX();
-			options.yaxis.ticks[i][2] = ((StringChartable)value).getTooltip();
+            if (seriesIndex==0) {  // only need to set the labels one time.
+			    options.yaxis.ticks[i][0] = value.getY()+"";
+			    options.yaxis.ticks[i][1] = value.getX();
+            }
+			options.yaxis.ticks[i][2+seriesIndex] = ((StringChartable)value).getTooltip();
 			i++;
 		}
+
 	}
 
 }

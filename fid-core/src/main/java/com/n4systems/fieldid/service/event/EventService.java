@@ -404,7 +404,7 @@ public class EventService extends FieldIdPersistenceService {
         /** if you specify a date range that is >=today there will, by definition be no overdue actions so skip this step. */
         List<? extends Chartable<String>> upcomingActions = Lists.newArrayList();
         if (to==null || !to.before(now)) {
-            QueryBuilder<ActionsReportRecord> query = createActionsQuery(owner, assignee, actionType);
+            QueryBuilder<ActionsReportRecord> query = createActionsQuery(owner, assignee, actionType,ActionBar.UPCOMING);
             if (from==null || from.before(now)) {
                 from = now;
             }
@@ -420,7 +420,7 @@ public class EventService extends FieldIdPersistenceService {
         List<? extends Chartable<String>> overdueActions = Lists.newArrayList();
         /** if you specify a date range that is >=today there will, by definition be no overdue actions so skip this step. */
         if (from==null || from.before(now)) {
-            QueryBuilder<ActionsReportRecord> query = createActionsQuery(owner, assignee, actionType);
+            QueryBuilder<ActionsReportRecord> query = createActionsQuery(owner, assignee, actionType,ActionBar.OVERDUE);
             if (to==null || to.after(now)) {
                 to = now;
             }
@@ -431,11 +431,11 @@ public class EventService extends FieldIdPersistenceService {
         return new ChartSeries<String>(ActionBar.OVERDUE, "Overdue ", overdueActions);
     }
 
-    private QueryBuilder<ActionsReportRecord> createActionsQuery(BaseOrg owner, User assignee, EventType actionType) {
+    private QueryBuilder<ActionsReportRecord> createActionsQuery(BaseOrg owner, User assignee, EventType actionType, ActionBar barType) {
         //Preconditions.checkArgument(actionType==null || actionType.getGroup().isAction(), "given event type [ " + actionType + " ] is not a valid 'Action'.");
         QueryBuilder<ActionsReportRecord> query = new QueryBuilder<ActionsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
         NewObjectSelect select = new NewObjectSelect(ActionsReportRecord.class);
-        select.setConstructorArgs(Lists.newArrayList("priority.name", "COUNT(*)"));
+        select.setConstructorArgs(Lists.newArrayList("priority.name", "COUNT(*)", "'"+barType.getDisplayName()+"'"));
         query.setSelectArgument(select);
 
         query.addNullSafeWhere(Comparator.EQ, "owner", "owner", owner);
@@ -510,7 +510,15 @@ public class EventService extends FieldIdPersistenceService {
 
 
     public enum ActionBar {
-        OVERDUE,UPCOMING;
+        OVERDUE("Overdue"),UPCOMING("Upcoming");
+        private String displayName;
+
+        ActionBar(String displayName) {
+            this.displayName = displayName;
+        }
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 
 }

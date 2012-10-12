@@ -71,8 +71,8 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 	}
 
 	@Override
-	public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index) {	
-		super.updateOptions(chartSeries, options, index);
+	public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index, int size) {
+		super.updateOptions(chartSeries, options, index, size);
 		updateTimeFormat(chartSeries, options);
 		if (dateRange.getRangeType().isDaily()) { 
 			updateForDaily(chartSeries, options);

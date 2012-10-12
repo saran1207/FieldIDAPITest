@@ -19,8 +19,8 @@ public class CompletedEventsChartManager extends DateChartManager {
     }
 
     @Override
-    public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index) {
-        super.updateOptions(chartSeries, options, index);
+    public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index, int size) {
+        super.updateOptions(chartSeries, options, index, size);
     	options.lines.fill = false;
                                         // All,   PASS,       FAIL,       N/A
     	options.colors = new String[]{"#999999", "#B35045", "#5B8C62",  "#32578B"  };

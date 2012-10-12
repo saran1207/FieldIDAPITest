@@ -161,7 +161,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 	private EventReportCriteria getCriteriaDefaults(UpcomingEventsWidgetConfiguration config, String series, LocalDate localDate) {
         EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
-        criteria.setDueDateRange(new DateRange(localDate, localDate));// this widget displays day by day.  .: when you click on a pt the date range is always a single day.
+        // this widget displays day by day.  .: when you click on a pt the date range is always a single day.
+        criteria.setDueDateRange(new DateRange(localDate, localDate));
         criteria.setEventState(EventState.OPEN);
         return criteria;
 	}
@@ -176,7 +177,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
         criteria.setDueDateRange(config.getDateRange());
         criteria.setPriority(priorityCodeService.getPriorityCodeByName(priorityName));
-        // need to interrogate whether it was overdue or upcoming (or both) clicked here
         criteria.setEventState(EventState.OPEN);
         criteria.setEventType(config.getActionType());
         criteria.setEventTypeGroup(eventTypeGroupService.getDefaultActionGroup());

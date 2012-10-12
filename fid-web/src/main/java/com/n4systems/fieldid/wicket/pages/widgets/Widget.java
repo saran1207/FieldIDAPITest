@@ -30,6 +30,7 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
     protected ContextImage removeButton;
     protected ContextImage configureButton;
     private Label subTitleLabel;
+    private Label rightSubTitleLabel;
 
 
     public Widget(String id, IModel<WidgetDefinition<W>> widgetDefinition) {
@@ -37,8 +38,11 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
         this.widgetDefinition = widgetDefinition;
         setOutputMarkupId(true);
         subTitleLabel = new Label("subTitleLabel", getSubTitleModel());
+        rightSubTitleLabel = new Label("rightSubTitleLabel", getRightSubtitleModel());
+        rightSubTitleLabel.setVisible(rightSubTitleLabel.getDefaultModel()!=null);
         add(new Label("titleLabel", new PropertyModel<String>(widgetDefinition, "config.name")));
         add(subTitleLabel);
+        add(rightSubTitleLabel);
         add(new ContextImage("dragImage", "images/dashboard/drag.png"));        
         addButtons();
     }
@@ -59,6 +63,10 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
     protected IModel<String> getSubTitleModel() {
 		return new Model<String>();
 	}
+
+    protected IModel<String> getRightSubtitleModel() {
+        return null;
+    }
 	
 	private void addButtons() {
         add(removeButton = new ContextImage("removeButton", "images/dashboard/x.png"));

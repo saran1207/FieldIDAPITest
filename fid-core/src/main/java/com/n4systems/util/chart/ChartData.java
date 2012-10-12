@@ -74,7 +74,7 @@ public class ChartData<X extends Comparable> extends ArrayList<ChartSeries<X>> {
 
 		int seriesIndex = 0;
 		for (ChartSeries<X> chartSeries:this) {
-			manager.updateOptions(chartSeries, options, seriesIndex++);
+			manager.updateOptions(chartSeries, options, seriesIndex++, size());
 		}
 		return options;
 	}

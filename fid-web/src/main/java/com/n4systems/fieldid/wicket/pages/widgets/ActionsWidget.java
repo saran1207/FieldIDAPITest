@@ -10,6 +10,7 @@ import com.n4systems.model.dashboard.widget.ActionsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.services.reporting.ActionsReportRecord;
 import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -32,7 +33,13 @@ public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration
 	@Override
     protected ChartData<String> getChartData() {
         List<ChartSeries<String>> results = dashboardReportingService.getActions(getDateRange(), getOrg(), getUser(), getActionType());
-        return new ChartData<String>(new BarChartManager(true), results);
+        BarChartManager barChartManager = new BarChartManager(true) {
+            @Override protected String getTooltip(Chartable<String> chartable) {
+                ActionsReportRecord actionsReportRecord = (ActionsReportRecord) chartable;
+                return actionsReportRecord.getTooltip();
+            }
+        }.withNoThreshold();
+        return new ChartData<String>(barChartManager, results);
     }
 
 	@Override
@@ -91,7 +98,11 @@ public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration
 	protected Class<? extends FieldIDFrontEndPage> getClickThroughPage() {
 		return SearchPage.class;
 	}
-		
+
+//    @Override
+//    protected IModel<String> getRightSubtitleModel() {
+//        return Model.of("hello");
+//    }
 }
 
 

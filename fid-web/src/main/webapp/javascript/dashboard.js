@@ -27,7 +27,7 @@ var chartWidgetFactory = (function() {
 			                
 			                $("#tooltip").remove();
 			                if (tooltipContent) {
-			                	showTooltip(item.pageX, item.pageY, tooltipContent(item.datapoint, options));
+			                	showTooltip(item.pageX, item.pageY, tooltipContent(item, options));
 			                }
 			            }
 			        }
@@ -67,19 +67,22 @@ var chartWidgetFactory = (function() {
 	 */
 	var MS_PER_DAY = 1000*60*60*24;
 		
-	var dateTooltipContent = function(datapoint, options) { 
-	    var y = datapoint[1].toFixed(options.yaxis.tickDecimals);
+	var dateTooltipContent = function(item, options) {
+		var datapoint = item.datapoint;
+		var y = datapoint[1].toFixed(options.yaxis.tickDecimals);
         var map = createTooltipVariablesMap(datapoint, options);
         var tooltip = formatTooltip(map, options.tooltipFormat);
 	    return tooltip;
 	};
 	
-	var horizLabelTooltipContent = function(datapoint, options) {
-	    var value = datapoint[0].toFixed(0);
+	var horizLabelTooltipContent = function(item, options) {
+		var datapoint = item.datapoint;
+		var value = datapoint[0].toFixed(0);
 	    var index = datapoint[1].toFixed(0);
+		var seriesIndex = item.seriesIndex;
 	    var label = options.yaxis.ticks[index][1];
-	    if (options.yaxis.ticks[index][2]) {
-	    	return options.yaxis.ticks[index][2]; 
+	    if (options.yaxis.ticks[index][2+seriesIndex]) {
+	    	return options.yaxis.ticks[index][2+seriesIndex];
 	    } else {
 	    	return "<p>"+label + ": <b>" +value+ "</b></p>";
 	    }
