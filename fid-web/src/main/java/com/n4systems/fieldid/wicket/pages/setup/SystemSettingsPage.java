@@ -1,22 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.validator.UrlValidator;
-
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
@@ -29,6 +12,18 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.tenant.SystemSettings;
 import com.n4systems.util.ConfigurationProvider;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.UrlValidator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class SystemSettingsPage extends FieldIDFrontEndPage {
@@ -84,6 +79,7 @@ public class SystemSettingsPage extends FieldIDFrontEndPage {
             add(new TextField<String>("identifierLabel").setRequired(true));
             add(new TextField<String>("identifierFormat")); 
             add(new TextField<String>("supportUrl").add(new UrlValidator()));
+            add(new TextField<String>("logoutUrl").add(new UrlValidator()));
             add(new BookmarkablePageLink<Void>("overrides", IdentifierOverridesPage.class));
             
             add(new Button("submitButton"));

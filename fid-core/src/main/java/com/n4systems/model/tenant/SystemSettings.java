@@ -14,7 +14,7 @@ public class SystemSettings implements Serializable {
 	public String identifierFormat;
 	public boolean gpsCapture;
 	public String supportUrl;
-
+    public String logoutUrl;
 
 	public void setSupportUrl(String supportUrl) {
 		this.supportUrl = supportUrl;
@@ -87,4 +87,12 @@ public class SystemSettings implements Serializable {
 	public void setOrderDetails(boolean orderDetails) {
 		this.orderDetails = orderDetails;
 	}
+
+    public String getLogoutUrl() {
+        return logoutUrl;
+    }
+
+    public void setLogoutUrl(String logoutUrl) {
+        this.logoutUrl = logoutUrl;
+    }
 }

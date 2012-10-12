@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import rfid.web.helper.SessionEulaAcceptance;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.LoginException;
@@ -23,6 +17,10 @@ import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.time.SystemClock;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
+import rfid.web.helper.SessionEulaAcceptance;
 
 public class LoginAction extends AbstractAction {
 
@@ -172,7 +170,10 @@ public class LoginAction extends AbstractAction {
 	public String doDelete() {
 		expireActiveSession();
 		clearSession();
-		return SUCCESS;
+        if(getLogoutUrl() != null)
+            return "redirect";
+        else
+		    return SUCCESS;
 	}
 
 	private void expireActiveSession() {
@@ -228,6 +229,10 @@ public class LoginAction extends AbstractAction {
 		return previousUrl;
 	}
 	
+    public String getLogoutUrl() {
+        return getTenantSettingsService().getTenantSettings().getLogoutUrl();
+    }
+
 	public String getKey() { 
 		return resetPasswordKey;
 	}

@@ -1,12 +1,12 @@
 package com.n4systems.model.tenant;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.PasswordPolicy;
+
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
@@ -26,8 +26,10 @@ public class TenantSettings extends EntityWithTenant {
 	private boolean gpsCapture;
 	
 	private String supportUrl;
+    
+    private String logoutUrl;
 
-	public boolean isSecondaryOrgsEnabled() {
+    public boolean isSecondaryOrgsEnabled() {
 		return secondaryOrgsEnabled;
 	}
 
@@ -74,5 +76,15 @@ public class TenantSettings extends EntityWithTenant {
 	public String getSupportUrl() {
 		return supportUrl;
 	}
+
+    public String getLogoutUrl() {
+        return logoutUrl;
+    }
+
+    public void setLogoutUrl(String logoutUrl) {
+        this.logoutUrl = logoutUrl;
+    }
+
+
 
 }

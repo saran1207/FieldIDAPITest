@@ -1364,6 +1364,9 @@
 
 		<action name="logout" method="delete" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
+            <result name="redirect" type="redirect">
+                <param name="location">${logoutUrl}</param>
+            </result>
 			<result name="success" type="redirectAction">login</result>
 		</action>
 

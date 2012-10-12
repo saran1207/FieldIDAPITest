@@ -1,0 +1,1 @@
+ALTER TABLE tenant_settings ADD COLUMN logoutUrl VARCHAR(255) DEFAULT NULL;

@@ -1,10 +1,5 @@
 package com.n4systems.fieldid.service.tenant;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.AssetType;
@@ -12,6 +7,10 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.SystemSettings;
 import com.n4systems.model.tenant.TenantSettings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public class SystemSettingsService extends FieldIdPersistenceService {
 
@@ -35,6 +34,7 @@ public class SystemSettingsService extends FieldIdPersistenceService {
         systemSettings.setIdentifierLabel(primaryOrg.getIdentifierLabel());
         systemSettings.setDateFormat(primaryOrg.getDateFormat());
         systemSettings.setSupportUrl(tenantSettings.getSupportUrl());
+        systemSettings.setLogoutUrl(tenantSettings.getLogoutUrl());
 
         return systemSettings;
     }
@@ -48,7 +48,7 @@ public class SystemSettingsService extends FieldIdPersistenceService {
     public void saveSystemSettings(SystemSettings settings) {
     	// note that some settings are really tenant settings and other are primary org settings. 
     	// (not sure why tho...but that's the way it is).
-        tenantSettingsService.updateGpsCaptureAndSupportUrl(settings.isGpsCapture(),settings.getSupportUrl());
+        tenantSettingsService.updateGpsCaptureAndUrls(settings.isGpsCapture(), settings.getSupportUrl(), settings.getLogoutUrl());
 
         PrimaryOrg primaryOrg = getPrimaryOrg();
 
