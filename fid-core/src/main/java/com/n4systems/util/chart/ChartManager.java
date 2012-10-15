@@ -15,7 +15,7 @@ public interface ChartManager<X extends Comparable> extends Serializable {
 	Long getPanMax(ChartSeries<X> series);
 	Long getLongX(X x);
 	ChartSeries<X> normalize(ChartSeries<X> series, X min, X max);
-	void updateOptions(ChartSeries<X> chartSeries, FlotOptions<X> options, int index, int size);
+	void updateOptions(ChartSeries<X> chartSeries, FlotOptions<X> options, int index, int size, int maxChartSeries);
     void updateOptions(ChartData<X> chartSeries, FlotOptions<X> options);
     void sortSeries(ChartData<X> chartSeries);
 }

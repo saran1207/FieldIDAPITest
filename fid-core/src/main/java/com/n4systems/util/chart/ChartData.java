@@ -72,11 +72,20 @@ public class ChartData<X extends Comparable> extends ArrayList<ChartSeries<X>> {
     public FlotOptions<X> updateOptions(FlotOptions<X> options) {
         manager.updateOptions(this, options);
 
+        int maxChartSeries = maxSeries();
 		int seriesIndex = 0;
-		for (ChartSeries<X> chartSeries:this) {
-			manager.updateOptions(chartSeries, options, seriesIndex++, size());
-		}
-		return options;
+        for (ChartSeries<X> chartSeries:this) {
+            manager.updateOptions(chartSeries, options, seriesIndex++, maxChartSeries, size());
+        }
+        return options;
 	}
+
+    private int maxSeries() {
+        int result = 0;
+        for (ChartSeries<X> chartSeries:this) {
+             result = Math.max(chartSeries.size(),result);
+        }
+        return result;
+    }
 
 }

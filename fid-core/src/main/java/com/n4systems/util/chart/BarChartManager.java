@@ -2,10 +2,7 @@ package com.n4systems.util.chart;
 
 import com.google.common.base.Joiner;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class BarChartManager extends SimpleChartManager<String> {
@@ -93,11 +90,10 @@ public class BarChartManager extends SimpleChartManager<String> {
     }
 
     @Override
-	public void updateOptions(ChartSeries<String> chartSeries, FlotOptions<String> options, int seriesIndex, int maxSeriesIndex) {
+	public void updateOptions(ChartSeries<String> chartSeries, FlotOptions<String> options, int seriesIndex, int maxChartSeries, int seriesCount) {
         if (options.yaxis.ticks==null) {
-            options.yaxis.ticks = new String[chartSeries.size()][maxSeriesIndex+2];
+            options.yaxis.ticks = new String[maxChartSeries][seriesCount+2];
         }
-
         ArrayList<Chartable<String>> chartables = new ArrayList<Chartable<String>>(chartSeries.values());
 
         options.bars.horizontal = transpose ? true : false;

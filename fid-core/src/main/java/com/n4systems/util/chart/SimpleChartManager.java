@@ -38,7 +38,7 @@ public class SimpleChartManager<X extends Comparable> implements ChartManager<X>
     }
 
 	@Override
-	public void updateOptions(ChartSeries<X> chartSeries, FlotOptions<X> options, int index, int size) {
+	public void updateOptions(ChartSeries<X> chartSeries, FlotOptions<X> options, int index, int size, int maxChartSeries) {
         ;   // override to do specific series-by-series updating of options. (less common - use #updateOptions(data,options)
             //   for more general options manipulation.
 	}
