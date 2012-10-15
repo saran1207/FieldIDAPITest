@@ -81,7 +81,7 @@
                     ${event.priority.name}
                     <br/>
                     <br/>
-                    ${event.notes}
+                    ${event.notes!}
                     <br/>
                     <br/>
                 </#if>
