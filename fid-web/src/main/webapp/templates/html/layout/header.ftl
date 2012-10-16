@@ -108,10 +108,10 @@
 									<li>
 										<a href="<@s.url value='/w/setup/settings'/>" ><@s.text name="nav.settings" /> » </a>
 										<ul class="sub_menu">
-											<li><a href="<@s.url action='organizations'/>"><@s.text name="title.manage_organizational_units.plural"/></a></li>
+											<li><a href="<@s.url action='organizations' namespace='/'/>"><@s.text name="title.manage_organizational_units.plural"/></a></li>
 											<li><a href="<@s.url value='/w/setup/systemSettings'/>"><@s.text name="nav.system_settings"/></a></li>
-											<li><a href="<@s.url action='quickSetupWizard/startWizard'/>"><@s.text name="label.quick_setup_wizard"/></a></li>
-											<li><a href="<@s.url action='branding'/>"><@s.text name="title.manage_branding.plural"/></a></li>
+											<li><a href="<@s.url action='quickSetupWizard/startWizard' namespace='/'/>"><@s.text name="label.quick_setup_wizard"/></a></li>
+											<li><a href="<@s.url action='branding' namespace='/'/>"><@s.text name="title.manage_branding.plural"/></a></li>
 											<li><a href="<@s.url value='/w/setup/yourPlan'/>"><@s.text name="title.manage_field_id_plan.plural"/></a></li>
 										</ul>
 									</li>
@@ -134,33 +134,33 @@
 										<a href="<@s.url value="/w/setup/assetsEvents" />" ><@s.text name="nav.assets_and_events"/> » </a>
 										<#if sessionUser.hasAccess("managesystemconfig") >
 											<ul class="sub_menu">
-												<li><a href="<@s.url action="eventTypeGroups"/>" ><@s.text name="title.manage_event_type_groups.plural"/></a></li>
-												<li><a href="<@s.url action="eventTypes"/>" ><@s.text name="title.manage_event_types.plural"/></a></li>
-                                                <li><a href="<@s.url value="/w/eventStatusList"/>" ><@s.text name="title.manage_event_status.plural"/></a></li>
-												<li><a href="<@s.url action="eventBooks"/>" ><@s.text name="title.manage_event_books.plural"/></a></li>
-												<li><a href="<@s.url action="assetTypeGroups"/>" ><@s.text name="title.manage_asset_type_groups.plural"/></a></li>	
-												<li><a href="<@s.url action="assetTypes"/>" ><@s.text name="title.manage_asset_types.plural"/></a></li>	
-												<li><a href="<@s.url action="assetStatusList"/>" ><@s.text name="title.manage_asset_statuses.plural"/></a></li>
-                                                <li><a href="<@s.url value="/w/setup/priorityCodes"/>" ><@s.text name="title.manage_priority_code.plural"/></a></li>
+												<li><a href="<@s.url action='eventTypeGroups' namespace='/'/>" ><@s.text name="title.manage_event_type_groups.plural"/></a></li>
+												<li><a href="<@s.url action='eventTypes' namespace='/'/>" ><@s.text name="title.manage_event_types.plural"/></a></li>
+                                                <li><a href="<@s.url value='/w/eventStatusList' namespace='/'/>" ><@s.text name="title.manage_event_status.plural"/></a></li>
+												<li><a href="<@s.url action='eventBooks' namespace='/'/>" ><@s.text name="title.manage_event_books.plural"/></a></li>
+												<li><a href="<@s.url action='assetTypeGroups' namespace='/'/>" ><@s.text name="title.manage_asset_type_groups.plural"/></a></li>
+												<li><a href="<@s.url action='assetTypes' namespace='/'/>" ><@s.text name="title.manage_asset_types.plural"/></a></li>
+												<li><a href="<@s.url action='assetStatusList' namespace='/'/>" ><@s.text name="title.manage_asset_statuses.plural"/></a></li>
+                                                <li><a href="<@s.url value='/w/setup/priorityCodes' namespace='/'/>" ><@s.text name="title.manage_priority_code.plural"/></a></li>
 											</ul>
 										</#if>
 									</li>
 									<li>
 										<a href="<@s.url value="/w/setup/import" />" ><@s.text name="nav.import"/> » </a>
 										<ul class="sub_menu">
-											<li><a href="<@s.url action='customerImportExport'/>"><@s.text name="label.import_owners"/></a></li>
-											<li><a href="<@s.url action='assetImportExport'/>"><@s.text name="label.import_assets"/></a></li>
-											<li><a href="<@s.url action='eventImportExport'/>"><@s.text name="label.import_events"/></a></li>
-											<li><a href="<@s.url action='autoAttributeImportExport'/>"><@s.text name="label.import_auto_attributes"/></a></li>
-											<li><a href="<@s.url action='userImportExport'/>"><@s.text name="label.import_users"/></a></li>
+											<li><a href="<@s.url action='customerImportExport' namespace='/'/>"><@s.text name="label.import_owners"/></a></li>
+											<li><a href="<@s.url action='assetImportExport' namespace='/'/>"><@s.text name="label.import_assets"/></a></li>
+											<li><a href="<@s.url action='eventImportExport' namespace='/'/>"><@s.text name="label.import_events"/></a></li>
+											<li><a href="<@s.url action='autoAttributeImportExport' namespace='/'/>"><@s.text name="label.import_auto_attributes"/></a></li>
+											<li><a href="<@s.url action='userImportExport' namespace='/'/>"><@s.text name="label.import_users"/></a></li>
 										</ul>
 									</li>
 									<li>
 										<a href="<@s.url value="/w/setup/templates" />" ><@s.text name="nav.templates"/> » </a>
 										<#if sessionUser.hasAccess("managesystemconfig") >
 											<ul class="sub_menu">
-												<li><a href="<@s.url action="autoAttributeCriteriaList"/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
-												<li><a href="<@s.url action="commentTemplateList"/>" ><@s.text name="title.manage_comment_templates.plural" /></a></li>
+												<li><a href="<@s.url action='autoAttributeCriteriaList' namespace='/'/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
+												<li><a href="<@s.url action='commentTemplateList' namespace='/'/>" ><@s.text name="title.manage_comment_templates.plural" /></a></li>
 												<li><a href="<@s.url value='/w/setup/columnsLayout' type='ASSET'/>" ><@s.text name="title.column_layout_asset" /></a></li>
 												<li><a href="<@s.url value='/w/setup/columnsLayout' type='EVENT'/>" ><@s.text name="title.column_layout_event" /></a></li>
 												<#if securityGuard.integrationEnabled>
