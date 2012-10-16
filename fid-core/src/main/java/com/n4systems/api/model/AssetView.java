@@ -1,6 +1,7 @@
 package com.n4systems.api.model;
 
 import com.n4systems.api.validation.validators.*;
+import com.n4systems.exporting.beanutils.DateSerializationHandler;
 import com.n4systems.exporting.beanutils.MapSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 import com.n4systems.exporting.beanutils.SerializableField;
@@ -41,7 +42,7 @@ public class AssetView extends ExternalModelView {
 	// this field is an object since it is hard to know exactly what is going to come back from excel
 	// if the date is formatted incorrectly, excel will return a String.  We let the date validator ensure we 
 	// actually have a date here.
-	@SerializableField(title = "Identified", order = 1100, validators = { DateValidator.class })
+	@SerializableField(title = "Identified", order = 1100, handler = DateSerializationHandler.class, validators = { DateValidator.class })
 	private Object identified;
 
 	@SerializableField(title = "A:", order = 1200, handler = MapSerializationHandler.class, validators = { NotNullValidator.class, AssetViewAttributesValidator.class })
