@@ -15,13 +15,18 @@ public class DateSerializationHandler extends SimpleSerializationHandler<Date>{
     //JXL doesn't take daylights savings into consideration, we need to shift the time offset by one hour to correct this for dates that are not timezone sensitive.
     @Override
     public void unmarshal(Object bean, String title, Object value) throws MarshalingException {
-        Date date = (Date) value;
+        Object cleanValue;
+        if(value instanceof Date) {
+            Date date = (Date) value;
 
-        if(timeZone.inDaylightTime(date)) {
-            date = new Date(date.getTime() + timeZone.getDSTSavings());
+            if(timeZone.inDaylightTime(date)) {
+                cleanValue = new Date(date.getTime() + timeZone.getDSTSavings());
+            } else
+                cleanValue = date;
+        } else {
+            cleanValue = cleanImportValue(value);
         }
-
-        setFieldValue(bean, date);
+        setFieldValue(bean, cleanValue);
     }
 
     public void setTimeZone(TimeZone timeZone) {
