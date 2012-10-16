@@ -36,7 +36,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         add(new Label("priority", new PropertyModel<String>(actionModel, "priority.name")));
         add(new Label("notes", new PropertyModel<String>(actionModel, "notes")));
         add(new Label("assignee", new PropertyModel<String>(actionModel, "assignee.fullName")));
-        add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(actionModel, "nextDate"),getCurrentUser().getTimeZone()));
+        add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(actionModel, "dueDate"),getCurrentUser().getTimeZone()));
         Link actionsListLink = new Link("actionsListLink") {
             @Override public void onClick() {
                 setActionsListResponsePage(criteriaResultModel);

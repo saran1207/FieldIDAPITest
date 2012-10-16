@@ -448,7 +448,7 @@ var assetId;
 function addSchedule() {
 	var types = $('nextEventTypeSelection');
 	var jobs = $('jobSelection');
-	var nextDate = $('nextDate');
+	var nextDate = $('dueDate');
 	var assignee = $('assignee');
 	
 	

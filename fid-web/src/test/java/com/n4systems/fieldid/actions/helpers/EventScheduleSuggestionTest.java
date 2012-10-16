@@ -1,19 +1,17 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import static org.junit.Assert.*;
+import com.n4systems.model.Event;
+import com.n4systems.util.DateHelper;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.n4systems.model.Event;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.model.EventSchedule;
-import com.n4systems.util.DateHelper;
+import static org.junit.Assert.assertEquals;
 
 
 public class EventScheduleSuggestionTest {
@@ -89,7 +87,7 @@ public class EventScheduleSuggestionTest {
 	private Event createOpenEvent(Date nextDate, Long id) {
         Event event = new Event();
         event.setId(id);
-        event.setNextDate(nextDate);
+        event.setDueDate(nextDate);
 		return event;
 	}
 	

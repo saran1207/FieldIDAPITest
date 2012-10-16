@@ -155,7 +155,7 @@ public class EventBuilder extends BaseBuilder<Event> {
         event.setAssetStatus(assetStatus);
         event.setCriteriaResults(results);
         event.setEventState(eventState);
-        event.setNextDate(nextDate);
+        event.setDueDate(nextDate);
         event.setEventStatus(eventStatus);
         
 		return event;

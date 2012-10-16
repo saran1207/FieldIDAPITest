@@ -1,45 +1,16 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.api.model.EventView;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.EventExporter;
 import com.n4systems.exporting.Importer;
-import com.n4systems.exporting.beanutils.CriteriaResultSerializationHandler;
-import com.n4systems.exporting.beanutils.ExportMapMarshaller;
-import com.n4systems.exporting.beanutils.FilteredCriteriaResultSerializationHandler;
-import com.n4systems.exporting.beanutils.SerializableField;
-import com.n4systems.exporting.beanutils.SerializationHandler;
-import com.n4systems.exporting.beanutils.SerializationHandlerFactory;
+import com.n4systems.exporting.beanutils.*;
 import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.CriteriaType;
-import com.n4systems.model.Deficiency;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Recommendation;
-import com.n4systems.model.Status;
+import com.n4systems.model.*;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
@@ -53,6 +24,13 @@ import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ArrayUtils;
 import com.n4systems.util.DateHelper;
+import org.apache.log4j.Logger;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @SuppressWarnings("serial")
 @UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
@@ -71,7 +49,7 @@ public class EventImportAction extends AbstractImportAction {
 
 	@Override
 	protected Importer createImporter(MapReader reader) {
-		return getImporterFactory().createEventImporter(reader, getSessionUserId(), type);
+		return getImporterFactory().createEventImporter(reader, getCurrentUser(), type);
 	}
 	
 	@Override

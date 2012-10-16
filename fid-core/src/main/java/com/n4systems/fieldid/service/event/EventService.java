@@ -104,16 +104,16 @@ public class EventService extends FieldIdPersistenceService {
 
 		QueryBuilder<UpcomingScheduledEventsRecord> builder = new QueryBuilder<UpcomingScheduledEventsRecord>(Event.class, securityContext.getUserSecurityFilter());
 		
-		builder.setSelectArgument(new NewObjectSelect(UpcomingScheduledEventsRecord.class, "date(nextDate)", "COUNT(*)"));
+		builder.setSelectArgument(new NewObjectSelect(UpcomingScheduledEventsRecord.class, "date(dueDate)", "COUNT(*)"));
 		
 		Date today = new PlainDate();
 		Date endDate = DateUtils.addDays(today, period);		
 		
-		builder.addWhere(whereFromTo(today, endDate, "nextDate"));
+		builder.addWhere(whereFromTo(today, endDate, "dueDate"));
 		builder.addSimpleWhere("eventState", Event.EventState.OPEN);
 
 		builder.applyFilter(new OwnerAndDownFilter(owner));
-		builder.addGroupByClauses(Arrays.asList(new GroupByClause("date(nextDate)", true)));
+		builder.addGroupByClauses(Arrays.asList(new GroupByClause("date(dueDate)", true)));
 		return persistenceService.findAll(builder);
 	}
 
@@ -203,7 +203,7 @@ public class EventService extends FieldIdPersistenceService {
 		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "eventState", "COUNT(*)"));
         builder1.applyFilter(new OwnerAndDownFilter(owner));
 
-		builder1.addWhere(whereFromTo(fromDate, toDate, "nextDate"));
+		builder1.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
 		builder1.addGroupBy("eventState");
 
 		List<EventScheduleStatusCount> statusCounts = persistenceService.findAll(builder1);
@@ -219,7 +219,7 @@ public class EventService extends FieldIdPersistenceService {
 		builder2.applyFilter(new OwnerAndDownFilter(owner));
 		builder2.addSimpleWhere("eventState", Event.EventState.COMPLETED);
 		builder2.addSimpleWhere("status", Status.FAIL);
-		builder2.addWhere(whereFromTo(fromDate, toDate, "nextDate"));
+		builder2.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
 		
 		Long failedCount = persistenceService.count(builder2);
 		
@@ -240,19 +240,19 @@ public class EventService extends FieldIdPersistenceService {
 
         NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
-		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity(granularity, "nextDate"));
+		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity(granularity, "dueDate"));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		builder.addWhere(whereFromTo(fromDate,toDate,"nextDate"));
+		builder.addWhere(whereFromTo(fromDate,toDate,"dueDate"));
         Date sampleDate = fromDate;
-        builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"nextDate", null, sampleDate));
+        builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"dueDate", null, sampleDate));
 		builder.applyFilter(new OwnerAndDownFilter(org));
 		if (excludedState != null) {
             builder.addWhere(Comparator.NE, "excludedEventState", "eventState", excludedState);
 		}
 
-		builder.addOrder("nextDate");
+		builder.addOrder("dueDate");
 		
 		return persistenceService.findAll(builder);	
 	}
@@ -408,8 +408,8 @@ public class EventService extends FieldIdPersistenceService {
             if (from==null || from.before(now)) {
                 from = now;
             }
-            query.addWhere(Comparator.GE, "from", "nextDate", from);
-            query.addNullSafeWhere(Comparator.LT, "to", "nextDate", to);
+            query.addWhere(Comparator.GE, "from", "dueDate", from);
+            query.addNullSafeWhere(Comparator.LT, "to", "dueDate", to);
             upcomingActions = persistenceService.findAll(query);
         }
         return new ChartSeries<String>(ActionBar.UPCOMING, "Upcoming", upcomingActions);
@@ -424,8 +424,8 @@ public class EventService extends FieldIdPersistenceService {
             if (to==null || to.after(now)) {
                 to = now;
             }
-            query.addWhere(Comparator.LT, "to", "nextDate", to);
-            query.addNullSafeWhere(Comparator.GE, "from", "nextDate", from);
+            query.addWhere(Comparator.LT, "to", "dueDate", to);
+            query.addNullSafeWhere(Comparator.GE, "from", "dueDate", from);
             overdueActions = persistenceService.findAll(query);
         }
         return new ChartSeries<String>(ActionBar.OVERDUE, "Overdue ", overdueActions);
@@ -472,12 +472,12 @@ public class EventService extends FieldIdPersistenceService {
         LocalDate to = DateUtil.getSundayAfterWeek(dayInMonth.plusMonths(1).withDayOfMonth(1));
 
         NewObjectSelect select = new NewObjectSelect(WorkSummaryRecord.class);
-        select.setConstructorArgs(Lists.newArrayList("COUNT(*)","DATE(nextDate)"));
+        select.setConstructorArgs(Lists.newArrayList("COUNT(*)","DATE(dueDate)"));
         builder.setSelectArgument(select);
 
         addToWorkQuery(builder, user, org, assetType, eventType, new DateRange(from,to));
 
-        builder.addGroupByClauses(	Lists.newArrayList(new GroupByClause("DATE(nextDate)", true)) );
+        builder.addGroupByClauses(	Lists.newArrayList(new GroupByClause("DATE(dueDate)", true)) );
 
         List<WorkSummaryRecord> data = persistenceService.findAll(builder);
 
@@ -499,12 +499,12 @@ public class EventService extends FieldIdPersistenceService {
         builder.addNullSafeWhere(Comparator.EQ, "asset_type", "asset.type", assetType);
         builder.addNullSafeWhere(Comparator.EQ, "type", "type", eventType);
         builder.addNullSafeWhere(Comparator.EQ, "assignee", "assignee", user);
-        builder.addWhere(Comparator.GE, "from", "nextDate", dateRange.getFrom().toDate());
-        builder.addWhere(Comparator.LT, "to", "nextDate", dateRange.getTo().toDate());
+        builder.addWhere(Comparator.GE, "from", "dueDate", dateRange.getFrom().toDate());
+        builder.addWhere(Comparator.LT, "to", "dueDate", dateRange.getTo().toDate());
         if (org!=null) {
             builder.applyFilter(new OwnerAndDownFilter(org));
         }
-        builder.addOrder("nextDate");
+        builder.addOrder("dueDate");
     }
 
 

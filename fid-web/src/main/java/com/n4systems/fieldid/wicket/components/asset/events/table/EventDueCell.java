@@ -15,10 +15,10 @@ public class EventDueCell extends Panel {
         
         Event schedule = eventModel.getObject();
         
-        if(schedule.getNextDate() == null) {
+        if(schedule.getDueDate() == null) {
             add(new Label("dueDate", new FIDLabelModel("label.no_due_date")));
         }else {
-            add(new Label("dueDate", new DayDisplayModel(Model.of(schedule.getNextDate())).includeTime()));
+            add(new Label("dueDate", new DayDisplayModel(Model.of(schedule.getDueDate())).includeTime()));//.withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
         }
     }
 }

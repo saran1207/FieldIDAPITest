@@ -1,18 +1,17 @@
 package com.n4systems.fieldid.viewhelpers;
 
 
-import java.util.Date;
-
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.persistence.search.SortDirection;
+
+import java.util.Date;
 
 public class EventScheduleSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
@@ -70,7 +69,7 @@ public class EventScheduleSearchContainer extends SearchContainer {
         // Exclude any 'dummy' schedule that wasn't actually scheduled -- nextDate will be null for these.
 //        addNotNullTerm("nextDate");
         addSimpleTerm("eventState", Event.EventState.OPEN);
-		addDateRangeTerm("nextDate", fromDate, toDate);
+		addDateRangeTerm("dueDate", fromDate, toDate);
 		addSimpleInTerm("eventState", status.getEventStates());
 		
 		addPredefinedLocationTerm();

@@ -85,7 +85,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
             Recurrence recurrence = recurringEvent.getRecurrence();
             for (LocalDateTime nextDate:recurrence.getScheduledTimes(LocalDate.now(), endDate)) {
                 Event event = new Event();
-                event.setNextDate(nextDate.toDate());
+                event.setDueDate(nextDate.toDate());
                 event.setEventState(Event.EventState.OPEN);
                 event.setAsset(asset);
                 event.setStatus(Status.VOID);
@@ -95,7 +95,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
                 event.setRecurringEvent(recurringEvent);
                 persistenceService.save(event);
                 updateAssetToNotifyMobileOfChange(asset);
-                logger.debug("saving recurring scheduled event " + event.getAsset().getIdentifier() + " on " + event.getNextDate());
+                logger.debug("saving recurring scheduled event " + event.getAsset().getIdentifier() + " on " + event.getDueDate());
             }
         }
     }
@@ -116,7 +116,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
         List<Event> events = persistenceService.findAll(builder);
         for (Event event:events) {
-            logger.debug("removing scheduled event for asset " + event.getAsset().getIdentifier() + " on " + event.getNextDate());
+            logger.debug("removing scheduled event for asset " + event.getAsset().getIdentifier() + " on " + event.getDueDate());
             persistenceService.delete(event);
         }
     }

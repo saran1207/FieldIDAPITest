@@ -69,7 +69,7 @@ public class CompletedScheduleCreatorTest {
         sut.create("SOME GUID", someDate, 1L);
 
         assertEquals(someDate, saver.updatedSchedule.getNextDate());
-        assertEquals(someDate, eventSaver.updatedEvent.getNextDate());
+        assertEquals(someDate, eventSaver.updatedEvent.getDueDate());
     }
 
     @Test

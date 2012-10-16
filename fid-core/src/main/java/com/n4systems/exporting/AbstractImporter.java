@@ -1,22 +1,22 @@
 package com.n4systems.exporting;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
+import com.n4systems.exporting.io.ExcelMapReader;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.persistence.Transaction;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 public abstract class AbstractImporter<V extends ExternalModelView> implements Importer {
@@ -109,7 +109,10 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 	}
 	
 	protected ExportMapUnmarshaler<V> createMapUnmarshaler() throws IOException, ParseException {
-		return new ExportMapUnmarshaler<V>(viewClass, mapReader.getTitles());
+        if(mapReader instanceof ExcelMapReader)
+            return new ExportMapUnmarshaler<V>(viewClass, mapReader.getTitles(), ((ExcelMapReader)mapReader).getTimeZone());
+        else
+        	return new ExportMapUnmarshaler<V>(viewClass, mapReader.getTitles(), null);
 	}
 	
 	@Override

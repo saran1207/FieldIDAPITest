@@ -19,7 +19,7 @@ public class OverdueEventScheduleCountListLoader extends NotificationSettingEven
 	protected void applyNotificationTypeFilters(QueryBuilder<EventScheduleCount> builder) {
 		guard();
 		builder.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
-		builder.addWhere(Comparator.LT, "toDate", "nextDate", clock.currentTime());
+		builder.addWhere(Comparator.LT, "toDate", "dueDate", clock.currentTime());
 	}
 
 	private void guard() {

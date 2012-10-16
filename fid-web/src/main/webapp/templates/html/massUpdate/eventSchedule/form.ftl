@@ -18,7 +18,7 @@
 			<th><@s.text name="label.new_value"/></th>
 		</tr>
 		<tr>
-			<td><@s.checkbox name="select['nextDate']" id="check_nextDate"/></td>
+			<td><@s.checkbox name="select['dueDate']" id="check_nextDate"/></td>
 			<td>
 				<div class="infoSet">
 					<label class="label"><@s.text name="label.nexteventdate"/>:</label>
@@ -26,13 +26,13 @@
 			</td>
 			<td>
 				<div class="infoSet">
-					<@s.textfield id="input_nextDate" key="label.tdate" name="nextDate" size="10" labelposition="left" onchange="selectField('nextDate');" title="${Session.sessionUser.displayDateFormat}" cssClass="datepicker"/>
+					<@s.textfield id="input_nextDate" key="label.tdate" name="dueDate" size="10" labelposition="left" onchange="selectField('dueDate');" title="${Session.sessionUser.displayDateFormat}" cssClass="datepicker"/>
 					<script type="text/javascript">
 						initDatePicker();
 					</script>
 					<p>
 						<@s.fielderror>
-							<@s.param>nextDate</@s.param>				
+							<@s.param>dueDate</@s.param>
 						</@s.fielderror>
 					</p>
 				</div>

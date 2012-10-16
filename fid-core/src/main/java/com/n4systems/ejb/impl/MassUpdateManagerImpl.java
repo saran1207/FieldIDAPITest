@@ -62,8 +62,8 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
                 Event event = persistenceManager.find(Event.class, id);
                 EventSchedule schedule = event.getSchedule();
 
-                if (values.containsKey("nextDate")) {
-                    event.setNextDate(updatedSchedule.getNextDate());
+                if (values.containsKey("dueDate")) {
+                    event.setDueDate(updatedSchedule.getNextDate());
                     schedule.setNextDate(updatedSchedule.getNextDate());
                 }
 
@@ -332,8 +332,8 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
                 }
 
                 if (updateKey.equals("nextEventDate")) {
-                    audit.setNextDate(eventChanges.getNextDate());
-                    changeTarget.setNextDate(eventChanges.getNextDate());
+                    audit.setNextDate(eventChanges.getDueDate());
+                    changeTarget.setDueDate(eventChanges.getDueDate());
                 }
 
                 if(updateKey.equals("assignee")) {

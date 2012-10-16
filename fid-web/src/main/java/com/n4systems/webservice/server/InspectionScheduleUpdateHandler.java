@@ -1,19 +1,16 @@
 package com.n4systems.webservice.server;
 
+import com.n4systems.exceptions.EntityStillReferencedException;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.event.SimpleEventSaver;
+import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
+import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
+import org.apache.log4j.Logger;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.n4systems.model.Event;
-import com.n4systems.model.event.SimpleEventSaver;
-import org.apache.log4j.Logger;
-
-import com.n4systems.exceptions.EntityStillReferencedException;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
-import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
-import com.n4systems.model.eventschedule.EventScheduleSaver;
-import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
 public class InspectionScheduleUpdateHandler {
 	
@@ -69,7 +66,7 @@ public class InspectionScheduleUpdateHandler {
 		
 		//update only when it is not completed
 		if (eventSchedule.getEvent().getEventState() == Event.EventState.OPEN) {
-            eventSchedule.getEvent().setNextDate(stringToDate(inspectionScheduleServiceDTO.getNextDate()));
+            eventSchedule.getEvent().setDueDate(stringToDate(inspectionScheduleServiceDTO.getNextDate()));
 			eventSchedule.setNextDate( stringToDate(inspectionScheduleServiceDTO.getNextDate()) );
 			saver.saveOrUpdate(eventSchedule.getEvent());
 		}

@@ -38,7 +38,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.*;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -300,7 +303,7 @@ public class Agenda extends Panel  {
             Map<LocalDate,EventDay> map = Maps.newTreeMap();
 
             for (Event event:events) {
-                LocalDate date = new LocalDate(event.getNextDate().getTime());
+                LocalDate date = new LocalDate(event.getDueDate().getTime());
                 EventDay eventDay = map.get(date);
                 if (eventDay==null) {
                     eventDay = new EventDay(date);
@@ -351,7 +354,7 @@ public class Agenda extends Panel  {
                     setResponsePage(new PerformEventPage(event, asset));
                 }
             }.add(new Label("type", new PropertyModel(item.getModelObject(), "type.name"))));
-            String css = dateService.todayAsDate().after(event.getNextDate()) ? "overdue" : "";
+            String css = dateService.todayAsDate().after(event.getDueDate()) ? "overdue" : "";
             item.add(new AttributeAppender("class", Model.of(css), " "));
         }
 

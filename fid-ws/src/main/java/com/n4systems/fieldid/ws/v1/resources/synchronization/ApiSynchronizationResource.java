@@ -1,23 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.synchronization;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
@@ -34,6 +16,18 @@ import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.*;
 
 @Path("/synchronize")
 @Component
@@ -96,12 +90,12 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 			: getSyncEndDate(profile.getSyncDuration(), startDate);
 		
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
-		.addOrder("nextDate")
+		.addOrder("dueDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
-		.addWhere(WhereClauseFactory.create(Comparator.GE, "nextDate", startDate));
+		.addWhere(WhereClauseFactory.create(Comparator.GE, "dueDate", startDate));
 		if(endDate != null) {
-			query.addWhere(WhereClauseFactory.create(Comparator.LE, "nextDate", endDate));
+			query.addWhere(WhereClauseFactory.create(Comparator.LE, "dueDate", endDate));
 		}
 		
 		List<Event> events = persistenceService.findAll(query);		

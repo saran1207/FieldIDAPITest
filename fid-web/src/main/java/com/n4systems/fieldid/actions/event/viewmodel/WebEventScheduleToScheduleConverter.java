@@ -33,7 +33,7 @@ public class WebEventScheduleToScheduleConverter {
         openEvent.setTenant(asset.getTenant());
         openEvent.setAsset(asset);
         openEvent.setType(eventType);
-        openEvent.setNextDate(scheduledDate);
+        openEvent.setDueDate(scheduledDate);
         openEvent.setOwner(asset.getOwner());
         openEvent.setStatus(Status.VOID);
         if (webSchedule.getAssignee()!=null) {

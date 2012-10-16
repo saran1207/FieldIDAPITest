@@ -1003,7 +1003,7 @@ public class AssetCrud extends UploadAttachmentSupport {
     
     public Date getNextScheduledEventDate(Long id) {
         Event schedule = new NextEventScheduleLoader().setAssetId(id).load();
-        return schedule==null ? null : schedule.getNextDate();
+        return schedule==null ? null : schedule.getDueDate();
     }
 	
 	public Event getNextEvent() {

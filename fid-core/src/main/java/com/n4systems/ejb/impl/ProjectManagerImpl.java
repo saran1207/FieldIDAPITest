@@ -1,11 +1,5 @@
 package com.n4systems.ejb.impl;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import com.n4systems.ejb.NoteManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
@@ -15,9 +9,13 @@ import com.n4systems.model.*;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class ProjectManagerImpl implements ProjectManager {
@@ -112,7 +110,7 @@ public class ProjectManagerImpl implements ProjectManager {
 			queryStr += " AND event.eventState IN (:statuses) ";
 		}
 		
-		queryStr += " ORDER BY event.nextDate";
+		queryStr += " ORDER BY event.dueDate";
 		
 		Query selectQuery = em.createQuery(queryStr).setParameter("project", project);
 		filter.applyParameters(selectQuery);

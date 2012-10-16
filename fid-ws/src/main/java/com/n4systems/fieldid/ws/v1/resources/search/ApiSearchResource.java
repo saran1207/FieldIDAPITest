@@ -1,25 +1,10 @@
 package com.n4systems.fieldid.ws.v1.resources.search;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import com.n4systems.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
+import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteria;
@@ -27,6 +12,14 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.Date;
+import java.util.List;
 
 @Component
 @Path("search")
@@ -142,7 +135,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		
 		Event openEvent = eventScheduleService.getNextEventSchedule(asset.getId(), null);
 		if (openEvent != null) {
-			apiResult.setNextEventDate(openEvent.getNextDate());
+			apiResult.setNextEventDate(openEvent.getDueDate());
 		}
 		
 		return apiResult;

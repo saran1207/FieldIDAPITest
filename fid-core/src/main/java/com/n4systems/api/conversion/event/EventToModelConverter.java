@@ -10,8 +10,9 @@ import com.n4systems.api.validation.validators.LocationValidator;
 import com.n4systems.model.*;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
-import com.n4systems.model.location.*;
-
+import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocationTree;
+import com.n4systems.model.location.PredefinedLocationTreeLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.safetynetwork.AssetsByIdOwnerTypeLoader;
@@ -34,10 +35,12 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	private final EventBookFindOrCreateLoader eventBookLoader;
 	private final UserByFullNameLoader userLoader;
     private final PredefinedLocationTreeLoader predefinedLocationTreeLoader;
+
+    private final TimeZone timeZone;
 	
 	private EventType type;
 	
-	public EventToModelConverter(OrgByNameLoader orgLoader, AssetsByIdOwnerTypeLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, PredefinedLocationTreeLoader predefinedLocationTreeLoader, EventType type) {
+	public EventToModelConverter(OrgByNameLoader orgLoader, AssetsByIdOwnerTypeLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, PredefinedLocationTreeLoader predefinedLocationTreeLoader, EventType type, TimeZone timeZone) {
 		this.orgLoader = orgLoader;
 		this.assetLoader = assetLoader;
 		this.assetStatusLoader = assetStatusLoader;
@@ -45,6 +48,7 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		this.userLoader = userLoader;
         this.predefinedLocationTreeLoader = predefinedLocationTreeLoader;
 		this.type = type;
+        this.timeZone = timeZone;
 	}
 
 	@Override
@@ -56,7 +60,8 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 
 		resolveLocation(view, model, transaction);
 		model.setDate(view.getDatePerformedAsDate());
-		model.setComments(view.getComments());
+        model.setDueDate(view.getDueDateAsDate());
+        model.setComments(view.getComments());
 		
 		resolveStatus(view.getStatus(), model);
 		resolveAsset(view, model, transaction);
@@ -311,6 +316,8 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		return type;
 	}
 
-
+    public TimeZone getTimeZone() {
+        return timeZone;
+    }
 
 }

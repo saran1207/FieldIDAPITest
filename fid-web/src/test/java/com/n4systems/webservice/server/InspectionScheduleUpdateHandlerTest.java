@@ -1,24 +1,22 @@
 package com.n4systems.webservice.server;
 
-import static com.n4systems.model.builders.EventBuilder.anEvent;
-import static com.n4systems.model.builders.EventBuilder.anOpenEvent;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.event.SimpleEventSaver;
+import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
+import com.n4systems.model.utils.PlainDate;
+import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.event.SimpleEventSaver;
-import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
-import com.n4systems.model.eventschedule.EventScheduleSaver;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.model.Event;
-import com.n4systems.model.utils.PlainDate;
-import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
+import static com.n4systems.model.builders.EventBuilder.anEvent;
+import static com.n4systems.model.builders.EventBuilder.anOpenEvent;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class InspectionScheduleUpdateHandlerTest {
@@ -101,7 +99,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		
 		verify(saver);
 		
-		assertEquals(new PlainDate(c1.getTime()), openEvent.getNextDate());
+		assertEquals(new PlainDate(c1.getTime()), openEvent.getDueDate());
 		
 	}
 	

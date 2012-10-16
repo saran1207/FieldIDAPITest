@@ -1,10 +1,9 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.util.List;
-
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.util.DateHelper;
+
+import java.util.List;
 
 public class EventScheduleSuggestion {
 	private static final Long SUGGESTED_SCHEDULE_DATE_LIMIT = 31L;
@@ -31,10 +30,10 @@ public class EventScheduleSuggestion {
 		Event suggestedSchedule = null;
 		Long currentDaysFromToday = SUGGESTED_SCHEDULE_DATE_LIMIT;
 		for (Event openEvent : schedules) {
-			Long currentDays = Math.abs(DateHelper.getDaysFromToday(openEvent.getNextDate()));
+			Long currentDays = Math.abs(DateHelper.getDaysFromToday(openEvent.getDueDate()));
 			if (currentDays < SUGGESTED_SCHEDULE_DATE_LIMIT) { 
 				if ((currentDays < currentDaysFromToday) || 
-						(currentDays.equals(currentDaysFromToday) && openEvent.getNextDate().before(suggestedSchedule.getNextDate()))){
+						(currentDays.equals(currentDaysFromToday) && openEvent.getDueDate().before(suggestedSchedule.getDueDate()))){
 					suggestedSchedule = openEvent;
 					currentDaysFromToday = currentDays;
 				} 

@@ -101,7 +101,7 @@
         <label class="label"><@s.text name="label.scheduledon"/></label>
 
         <span class="fieldHolder">
-            <@s.textfield theme="fieldid" name="modifiableEvent.nextDate" cssClass="datetimepicker"/>
+            <@s.textfield theme="fieldid" name="modifiableEvent.dueDate" cssClass="datetimepicker"/>
         </span>
     </div>
 

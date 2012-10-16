@@ -71,7 +71,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 	private String checkRequiredFields(MassUpdateEventModel model) {
 		String errorMessage = "";
 		
-		if(model.getSelect().get("nextEventDate") && model.getEvent().getNextDate() == null) {
+		if(model.getSelect().get("nextEventDate") && model.getEvent().getDueDate() == null) {
             return new FIDLabelModel("errors.required",new FIDLabelModel("label.nexteventdate").getObject()).getObject();
 		}
 
@@ -87,7 +87,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			super(id, new CompoundPropertyModel<MassUpdateEventModel>(massUpdateEventModel));
 
             CheckBox nextEventDateCheck = new CheckBox("nextEventDateCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[nextEventDate]"));
-            DateTimePicker nextEventDate = new DateTimePicker("nextEventDate", new PropertyModel<Date>(massUpdateEventModel, "event.nextDate"), true).withNoAllDayCheckbox().withoutPerformSetDateOnInitialization();
+            DateTimePicker nextEventDate = new DateTimePicker("nextEventDate", new PropertyModel<Date>(massUpdateEventModel, "event.dueDate"), true).withNoAllDayCheckbox().withoutPerformSetDateOnInitialization();
             nextEventDate.getDateTextField().add(createCheckOnChangeEvent(nextEventDateCheck));
             add(nextEventDateCheck);
             add(nextEventDate);

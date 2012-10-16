@@ -83,7 +83,7 @@ public class SchedulePicker extends Panel {
             editorContainer.setVisible(false);
             editorContainer.setOutputMarkupPlaceholderTag(true);
 
-            editorContainer.add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "nextDate"), true));
+            editorContainer.add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "dueDate"), true));
             dateTimePicker.getDateTextField().setRequired(true);
 
             DropDownChoice<EventType> eventTypeSelect = new FidDropDownChoice<EventType>("eventTypeSelect", new PropertyModel<EventType>(eventScheduleModel, "type"), eventTypeOptions, new ListableChoiceRenderer<EventType>());
@@ -164,7 +164,7 @@ public class SchedulePicker extends Panel {
                     Date dateToSchedule = DateUtils.addYears(new Date(), yearsFromNow);
                     dateToSchedule = DateUtils.addMonths(dateToSchedule, monthsFromNow);
                     dateToSchedule = DateUtils.addDays(dateToSchedule, daysFromNow);
-                    scheduleModel.getObject().setNextDate(dateToSchedule);
+                    scheduleModel.getObject().setDueDate(dateToSchedule);
                     // We must clear the input in case we have some raw input in the date field that had a validation error.
                     dateTimePicker.clearInput();
                     dateTimePicker.setAllDay(true);

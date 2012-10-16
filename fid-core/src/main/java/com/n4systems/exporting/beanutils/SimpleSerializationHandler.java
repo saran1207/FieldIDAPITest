@@ -19,7 +19,7 @@ public class SimpleSerializationHandler<T> extends SerializationHandler<T> {
 	
 	@Override
 	public void unmarshal(Object bean, String title, Object value) throws MarshalingException {
-		Object cleanValue = cleanImportValue(value);	
+		Object cleanValue = cleanImportValue(value);
 		setFieldValue(bean, cleanValue);
 	}
 

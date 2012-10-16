@@ -77,7 +77,7 @@ ${action.setPageType('asset', 'show')!}
 					</div>
 					<@s.text name="label.nexteventdate_pastdue">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
-						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
+						<@s.param>${action.formatDate(nextEvent.dueDate, false)}</@s.param>
 					</@s.text>
 				<#elseif nextEvent.daysToDue == 0>
 					<div class="passColor inline">
@@ -85,7 +85,7 @@ ${action.setPageType('asset', 'show')!}
 					</div>
 					<@s.text name="label.nexteventdate_due_today">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
-						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
+						<@s.param>${action.formatDate(nextEvent.dueDate, false)}</@s.param>
 					</@s.text>					
 				<#else>
 					<div class="passColor inline">
@@ -93,7 +93,7 @@ ${action.setPageType('asset', 'show')!}
 					</div>
 					<@s.text name="label.nexteventdate_msg">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
-						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
+						<@s.param>${action.formatDate(nextEvent.dueDate, false)}</@s.param>
 					</@s.text>
 				</#if>
 			</div>				

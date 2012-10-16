@@ -32,7 +32,7 @@ public class CopyEventFactory {
         newEvent.setSchedule(event.getSchedule());
         newEvent.setEventStatus(event.getEventStatus());
         newEvent.setEventState(event.getEventState());
-        newEvent.setNextDate(event.getNextDate());
+        newEvent.setDueDate(event.getDueDate());
         newEvent.setProject(event.getProject());
 
 		return newEvent;

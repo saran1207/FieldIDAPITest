@@ -98,7 +98,7 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
         QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
         schedulesToDelete.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("type", eventType);
         schedulesToDelete.addWhere(WhereParameter.Comparator.IN, "eventState", "eventState", Arrays.asList(eventStates.getMembers()));
-        schedulesToDelete.addWhere(WhereClauseFactory.createNotNull("nextDate"));
+        schedulesToDelete.addWhere(WhereClauseFactory.createNotNull("dueDate"));
 
         if (assetType != null) {
             schedulesToDelete.addSimpleWhere("asset.type", assetType);

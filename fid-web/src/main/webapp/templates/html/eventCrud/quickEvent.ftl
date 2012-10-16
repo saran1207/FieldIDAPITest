@@ -43,7 +43,7 @@ ${action.setPageType('event', 'quickEvent')!}
 				</td>
 				<td>
 			
-				<label>${schedule.nextDate?string("MM/dd/yy")}</label>  
+				<label>${schedule.dueDate?string("MM/dd/yy")}</label>
 				</td>
 				<td>
 					<@s.url id="performSchedule" action="selectEventAdd" assetId="${schedule.asset.id}" type="${schedule.eventType.id}" scheduleId="${schedule.id}"/>

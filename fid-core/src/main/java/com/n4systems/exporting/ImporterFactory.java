@@ -29,6 +29,8 @@ import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.utils.email.WelcomeNotifier;
 
+import java.util.TimeZone;
+
 public class ImporterFactory {
 	private final SecurityFilter filter;
 	private final SaverFactory saverFactory;
@@ -87,7 +89,7 @@ public class ImporterFactory {
 		return new ProductionEventPersistenceFactory();
 	}
 
-	protected EventToModelConverter createEventToModelConverter(EventType type) {
+	protected EventToModelConverter createEventToModelConverter(EventType type, TimeZone timeZone) {
 		EventToModelConverter converter = new EventToModelConverter(
 				loaderFactory.createOrgByNameLoader(), 
 				loaderFactory.createAssetByIdOwnerTypeLoader(), 
@@ -95,7 +97,7 @@ public class ImporterFactory {
 				loaderFactory.createEventBookFindOrCreateLoader(),
 				loaderFactory.createUserByFullNameLoader(),
                 loaderFactory.createPredefinedLocationTreeLoader(),
-				type);
+				type, timeZone);
 		
 		return converter;
 	}
@@ -118,9 +120,9 @@ public class ImporterFactory {
 		return new AssetImporter(reader, createViewValidator(), createAssetSaveService(identifiedBy), createAssetToModelConverter(identifiedBy, type));
 	}
 
-	public EventImporter createEventImporter(MapReader reader, Long modifiedBy, EventType type) {
-		EventImporter importer = new EventImporter(reader, createViewValidator(), createEventPersistenceFactory(), createEventToModelConverter(type));
-		importer.setModifiedBy(modifiedBy);
+	public EventImporter createEventImporter(MapReader reader, User modifiedBy, EventType type) {
+		EventImporter importer = new EventImporter(reader, createViewValidator(), createEventPersistenceFactory(), createEventToModelConverter(type, modifiedBy.getTimeZone()));
+		importer.setModifiedBy(modifiedBy.getId());
 		return importer;
 	}
 }

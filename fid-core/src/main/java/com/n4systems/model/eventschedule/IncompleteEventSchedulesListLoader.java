@@ -1,17 +1,16 @@
 package com.n4systems.model.eventschedule;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.EventType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class IncompleteEventSchedulesListLoader extends ListLoader<EventSchedule> {
 	
@@ -28,7 +27,7 @@ public class IncompleteEventSchedulesListLoader extends ListLoader<EventSchedule
 
 		query.addSimpleWhere("asset", asset).addSimpleWhere("eventType", eventType);
 		query.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
-		query.addOrder("nextDate");
+		query.addOrder("dueDate");
 		
 		return query.getResultList(em);
 	}

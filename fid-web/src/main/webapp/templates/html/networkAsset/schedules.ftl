@@ -40,7 +40,7 @@
                         <td class="name">${eventSchedule.eventType.name}</td>
                         
                         <td>
-                            <span >${action.formatDate(eventSchedule.nextDate, false)}</span>
+                            <span >${action.formatDate(eventSchedule.dueDate, false)}</span>
                         </td>
                     </tr>
                 </#list>

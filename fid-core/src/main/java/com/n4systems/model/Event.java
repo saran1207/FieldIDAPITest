@@ -93,8 +93,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	private User performedBy;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column
-    private Date nextDate;
+    private Date dueDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date completedDate;
@@ -494,12 +493,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         }
     }
 
-    public Date getNextDate() {
-        return nextDate;
+    public Date getDueDate() {
+        return dueDate;
     }
 
-    public void setNextDate(Date nextDate) {
-        this.nextDate = nextDate;
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
     }
 
     public Date getCompletedDate() {
@@ -523,14 +522,14 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         if (getEventState() == EventState.COMPLETED) {
             return getCompletedDate();
         }
-        return getNextDate();
+        return getDueDate();
     }
 
     @AllowSafetyNetworkAccess
     public Long getDaysPastDue() {
         Long daysPast = null;
         if (isPastDue()) {
-            daysPast = DateHelper.getDaysUntilToday(nextDate);
+            daysPast = DateHelper.getDaysUntilToday(dueDate);
         }
         return daysPast;
     }
@@ -539,14 +538,14 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     public Long getDaysToDue() {
         Long daysTo = null;
         if (!isPastDue()) {
-            daysTo = DateHelper.getDaysFromToday(nextDate);
+            daysTo = DateHelper.getDaysFromToday(dueDate);
         }
         return daysTo;
     }
 
     @AllowSafetyNetworkAccess
     public boolean isPastDue() {
-        return (getEventState() == EventState.OPEN && isPastDue(nextDate));
+        return (getEventState() == EventState.OPEN && isPastDue(dueDate));
     }
 
     public boolean isCompleted() {
@@ -576,7 +575,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     }
 
     public boolean wasScheduled() {
-        return nextDate != null;
+        return dueDate != null;
     }
 
     public EventType getEventType() {

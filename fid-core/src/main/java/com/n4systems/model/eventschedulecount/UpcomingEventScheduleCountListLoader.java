@@ -19,8 +19,8 @@ public class UpcomingEventScheduleCountListLoader extends NotificationSettingEve
 		builder.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
 		
 		// from dates are inclusive, to dates are exclusive.  See the RelativeTime class for why it works this way
-		builder.addWhere(Comparator.GE, "fromDate", "nextDate", fromDate);
-		builder.addWhere(Comparator.LT, "toDate", "nextDate", toDate);
+		builder.addWhere(Comparator.GE, "fromDate", "dueDate", fromDate);
+		builder.addWhere(Comparator.LT, "toDate", "dueDate", toDate);
 	}
 
 	public void setFromDate(Date fromDate) {

@@ -101,7 +101,7 @@ public class EventScheduleCrud extends AbstractCrud {
 			openEvent = new Event();
             openEvent.setAsset(asset);
             openEvent.setType(eventType);
-			openEvent.setNextDate(convertDateWithOptionalTime(nextDate));
+			openEvent.setDueDate(convertDateWithOptionalTime(nextDate));
 			openEvent.setProject(tmpProject);
             openEvent.setTenant(getTenant());
 			
@@ -128,7 +128,7 @@ public class EventScheduleCrud extends AbstractCrud {
 	public String doSave() {
 		testRequiredEntities(true);
 		try {
-			openEvent.setNextDate(convertDate(nextDate));
+			openEvent.setDueDate(convertDate(nextDate));
 			new EventScheduleServiceImpl(persistenceManager).updateSchedule(openEvent);
 			addActionMessageText("message.eventschedulesaved");
 		} catch (Exception e) {
@@ -229,7 +229,7 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	public String getNextDate() {
 		if (nextDate == null) {
-			nextDate = convertDateTime(openEvent.getNextDate());
+			nextDate = convertDateTime(openEvent.getDueDate());
 		}
 		return nextDate;
 	}

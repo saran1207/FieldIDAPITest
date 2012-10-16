@@ -40,7 +40,7 @@ public class ScheduleToWebEventScheduleConverter {
 		webEventSchedule.setType(openEvent.getType().getId());
 		webEventSchedule.setTypeName(openEvent.getType().getName());
 		webEventSchedule.setAssignee(openEvent.getAssignee()!=null ? openEvent.getAssignee().getId() : null);
-		webEventSchedule.setDate(dateConverter.convertDate(openEvent.getNextDate()));
+		webEventSchedule.setDate(dateConverter.convertDate(openEvent.getDueDate()));
 		
 		return webEventSchedule;
 	}	

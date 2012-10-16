@@ -2,25 +2,28 @@ package com.n4systems.exporting.beanutils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 
 public class ExportMapUnmarshaler<T> {
 	private final Class<T> beanClass;
 	private final SerializationHandlerFactory handlerFactory;
 	private final String[] titles;
+    private final TimeZone timeZone;
 	
 	// initialize the handlers lazily so we don't have to throw
 	// exceptions out of the constructor
 	private Map<String, SerializationHandler> titleHandlerMap;
 	
-	public ExportMapUnmarshaler(Class<T> beanClass, String[] titles) {
-		this(beanClass, titles, new SerializationHandlerFactory());
+	public ExportMapUnmarshaler(Class<T> beanClass, String[] titles, TimeZone timeZone) {
+		this(beanClass, titles, new SerializationHandlerFactory(), timeZone);
 	}
 	
-	public ExportMapUnmarshaler(Class<T> beanClass, String[] titles, SerializationHandlerFactory handlerFactory) {
+	public ExportMapUnmarshaler(Class<T> beanClass, String[] titles, SerializationHandlerFactory handlerFactory, TimeZone timeZone) {
 		this.beanClass = beanClass;
 		this.titles = titles;
 		this.handlerFactory = handlerFactory;
+        this.timeZone = timeZone;
 	}
 
 	private void buildTitleFieldMap() throws MarshalingException {
@@ -36,6 +39,9 @@ public class ExportMapUnmarshaler<T> {
 			// belongs to it.
 			for (String title: titles) {
 				for (SerializationHandler handler: handlers) {
+                    if(handler instanceof DateSerializationHandler && timeZone != null) {
+                        ((DateSerializationHandler)handler).setTimeZone(timeZone);
+                    }
 					if (handler.handlesField(title)) {
 						titleHandlerMap.put(title, handler);
 						break;

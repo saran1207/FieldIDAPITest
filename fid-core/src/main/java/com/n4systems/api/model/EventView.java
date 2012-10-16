@@ -2,6 +2,7 @@ package com.n4systems.api.model;
 
 import com.n4systems.api.validation.validators.*;
 import com.n4systems.exporting.beanutils.CriteriaResultSerializationHandler;
+import com.n4systems.exporting.beanutils.DateSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 import com.n4systems.exporting.beanutils.SerializableField;
 
@@ -14,6 +15,9 @@ public class EventView extends ExternalModelView {
 
 	@SerializableField(title = "Asset Identifier", order = 100, validators = { NotNullValidator.class, EventAssetIdentifierValidator.class })
 	private String identifier;
+
+    @SerializableField(title = "Due Date", order = 150, handler = DateSerializationHandler.class, validators = {DateValidator.class })
+    private Object dueDate;
 
 	@SerializableField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
 	private Object datePerformed;
@@ -36,7 +40,7 @@ public class EventView extends ExternalModelView {
 	@SerializableField(title = "Asset Status", order = 800, validators = { AssetStatusExistsValidator.class })
 	private String assetStatus;
 
-	@SerializableField(title = "Next Event Date", order = 900, validators = { DateValidator.class })
+	@SerializableField(title = "Next Event Date", order = 900, handler = DateSerializationHandler.class, validators = { DateValidator.class })
 	private Object nextEventDate;
 
 	@SerializableField(title = "Location", order = 1000, validators = {LocationValidator.class})
@@ -215,4 +219,20 @@ public class EventView extends ExternalModelView {
         this.notes = notes;
     }
 
+    public Object getDueDate() {
+        return dueDate;
+    }
+
+    public Date getDueDateAsDate() {
+        if (dueDate == null) {
+            return null;
+        } else if (!(dueDate instanceof Date)) {
+            throw new ClassCastException("dueDate should have been instance of java.lang.Date but was " + dueDate.getClass().getName());
+        }
+        return (Date) dueDate;
+    }
+
+    public void setDueDate(Object dueDate) {
+        this.dueDate = dueDate;
+    }
 }

@@ -3,7 +3,6 @@ package com.n4systems.services;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.test.helpers.DateHelper;
 import org.junit.Before;
@@ -15,7 +14,6 @@ import java.util.List;
 
 import static com.n4systems.model.builders.AssetBuilder.anAsset;
 import static com.n4systems.model.builders.EventBuilder.anOpenEvent;
-import static com.n4systems.model.builders.EventScheduleBuilder.aScheduledEventSchedule;
 import static com.n4systems.model.builders.EventTypeBuilder.anEventType;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
@@ -72,7 +70,7 @@ public class NextEventScheduleServiceTest {
         Event event = new Event();
         event.setAsset(asset);
         event.setType(eventType);
-        event.setNextDate(nextDate);
+        event.setDueDate(nextDate);
         return event;
     }
 }

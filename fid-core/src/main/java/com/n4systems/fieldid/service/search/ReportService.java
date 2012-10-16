@@ -72,15 +72,15 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
         }
 
         if (IncludeDueDateRange.HAS_NO_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
-            addNullTerm(searchTerms, "nextDate");
+            addNullTerm(searchTerms, "dueDate");
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
-            addNotNullTerm(searchTerms,  "nextDate");
+            addNotNullTerm(searchTerms,  "dueDate");
         } else if (criteriaModel.getEventState() == EventState.OPEN || IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange())) {
             if (criteriaModel.getDueDateRange() != null && !criteriaModel.getDueDateRange().isEmptyCustom()) {
                 // recall : due dates don't have timeZone.
                 Date from = dateService.calculateFromDate(criteriaModel.getDueDateRange());
                 Date to = dateService.calculateInclusiveToDate(criteriaModel.getDueDateRange());
-                addDateRangeTerm(searchTerms, "nextDate", from, to);
+                addDateRangeTerm(searchTerms, "dueDate", from, to);
             }
         }
 

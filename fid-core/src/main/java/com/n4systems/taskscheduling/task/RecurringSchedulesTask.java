@@ -64,7 +64,7 @@ public class RecurringSchedulesTask extends ScheduledTask{
                 Event schedule = new Event();
                 schedule.setAsset(asset);
                 schedule.setType(event.getEventType());
-                schedule.setNextDate(futureDate.toDate());
+                schedule.setDueDate(futureDate.toDate());
                 schedule.setTenant(asset.getTenant());
                 schedule.setRecurringEvent(event);
                 schedule.setOwner(asset.getOwner());
@@ -80,8 +80,8 @@ public class RecurringSchedulesTask extends ScheduledTask{
         query.addWhere(WhereClauseFactory.create("recurringEvent", event));
 
         //A simple equals does not work due to comparison problems comparing Timestamps and Date see java.sql.Timestamp
-        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "nextDate", futureDate.minusMillis(1).toDate()));
-        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LE, "to", "nextDate", futureDate.toDate()));
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "dueDate", futureDate.minusMillis(1).toDate()));
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LE, "to", "dueDate", futureDate.toDate()));
 
         return persistenceManager.findCount(query) > 0;
     }

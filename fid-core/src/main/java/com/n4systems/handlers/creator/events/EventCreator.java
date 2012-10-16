@@ -72,7 +72,7 @@ public class EventCreator extends BasicTransactionManagement {
             openEvent.setAsset(eventScheduleBundle.getAsset());
             openEvent.setType(eventScheduleBundle.getType());
             openEvent.setProject(eventScheduleBundle.getJob());
-            openEvent.setNextDate(eventScheduleBundle.getScheduledDate());
+            openEvent.setDueDate(eventScheduleBundle.getScheduledDate());
             openEvent.setTenant(eventScheduleBundle.getAsset().getTenant());
             openEvent.setOwner(eventScheduleBundle.getAsset().getOwner());
 			nextScheduleSerivce.createNextSchedule(openEvent);

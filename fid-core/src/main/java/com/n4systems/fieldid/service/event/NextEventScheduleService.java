@@ -34,7 +34,7 @@ public class NextEventScheduleService extends FieldIdPersistenceService {
         List<Event> openEvents = eventScheduleService.getAvailableSchedulesFor(newSchedule.getAsset());
 
         for (Event openEvent : openEvents) {
-            if (DateHelper.isEqualIgnoringTime(openEvent.getNextDate(), newSchedule.getNextDate())
+            if (DateHelper.isEqualIgnoringTime(openEvent.getDueDate(), newSchedule.getDueDate())
                     && openEvent.getEventType().equals(newSchedule.getEventType())
                     && !openEvent.getStatus().equals(EventSchedule.ScheduleStatus.IN_PROGRESS)) {
                 return openEvent;

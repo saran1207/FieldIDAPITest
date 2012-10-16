@@ -4,7 +4,7 @@
 		<@s.hidden name="assetId"  />
 		<@s.hidden name="uniqueID" />
 		
-		<@s.textfield name="nextDate" onkeypress="return doSubmit(event,  ${uniqueID});" cssClass="datepicker"/>
+		<@s.textfield name="dueDate" onkeypress="return doSubmit(event,  ${uniqueID});" cssClass="datepicker"/>
 		<script type="text/javascript">
 			initDatePicker();
 		</script>
@@ -17,7 +17,7 @@
 		</div>
 		
 		<@s.fielderror>
-			<@s.param>nextDate</@s.param>				
+			<@s.param>dueDate</@s.param>
 		</@s.fielderror>
 		
 	</@s.form>

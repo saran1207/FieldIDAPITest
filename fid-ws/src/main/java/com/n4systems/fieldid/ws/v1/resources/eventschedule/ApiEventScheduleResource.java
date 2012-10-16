@@ -41,7 +41,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		List<ApiEventSchedule> apiEventSchedules = new ArrayList<ApiEventSchedule>();
 		
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
-		.addOrder("nextDate")
+		.addOrder("dueDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
 		.addWhere(WhereClauseFactory.create("asset.id", assetId));
 		
@@ -50,8 +50,8 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			// This is currently only used for taking assets offline.
 			Date startDate = new LocalDate().toDate();
 			Date endDate = ApiSynchronizationResource.getSyncEndDate(syncDuration, startDate);
-			query.addWhere(WhereClauseFactory.create(Comparator.GE, "nextDate", startDate));
-			query.addWhere(WhereClauseFactory.create(Comparator.LE, "nextDate", endDate));
+			query.addWhere(WhereClauseFactory.create(Comparator.GE, "dueDate", startDate));
+			query.addWhere(WhereClauseFactory.create(Comparator.LE, "dueDate", endDate));
 		}
 		
 		List<Event> schedules = persistenceService.findAll(query);
@@ -79,7 +79,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 
 			eventSchedule.setNextDate(apiEventSchedule.getNextDate());
             eventSchedule.setEventType(eventType);
-            eventSchedule.getEvent().setNextDate(apiEventSchedule.getNextDate());
+            eventSchedule.getEvent().setDueDate(apiEventSchedule.getNextDate());
             eventSchedule.getEvent().setType(eventType);            
             eventSchedule.getEvent().setAssignee(getAssigneeUser(apiEventSchedule));
 
@@ -116,7 +116,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		apiSchedule.setEventTypeId(event.getEventType().getId());
 		apiSchedule.setEventTypeName(event.getEventType().getName());
 		apiSchedule.setOwner(event.getOwner().getDisplayName());
-		apiSchedule.setNextDate(event.getNextDate());
+		apiSchedule.setNextDate(event.getDueDate());
 		if (event.getAssignee() != null) {
 			apiSchedule.setAssigneeUserId(event.getAssignee().getId());
 		}
@@ -138,7 +138,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
         Asset asset = assetService.findByMobileId(apiEventSchedule.getAssetId());
 
         Event event = new Event();
-        event.setNextDate(apiEventSchedule.getNextDate());
+        event.setDueDate(apiEventSchedule.getNextDate());
         event.setTenant(owner.getTenant());
         event.setAsset(asset);
         event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
@@ -182,11 +182,11 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("25") @QueryParam("pageSize") int pageSize) {
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
-		.addOrder("nextDate")
+		.addOrder("dueDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
-		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "nextDate", startDate))
-		.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "nextDate", endDate));	//excludes end date.
+		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
+		.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
 		
 		List<Event> events = persistenceService.findAll(query, page, pageSize);
 		Long total = persistenceService.count(query);
@@ -215,11 +215,11 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();
 			
 			QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
-			.addOrder("nextDate")
+			.addOrder("dueDate")
 	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
 	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
-			.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "nextDate", startDate))
-			.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "nextDate", endDate));
+			.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
+			.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));
 			Long count = persistenceService.count(query);
 			counts.add(count);
 		}		

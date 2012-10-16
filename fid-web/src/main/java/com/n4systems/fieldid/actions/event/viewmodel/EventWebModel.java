@@ -60,7 +60,7 @@ public class EventWebModel implements UserDateFormatValidator {
 		location = location.matchLocation(event.getAdvancedLocation());
 		ownerPicker.updateOwner(event.getOwner());
 		utcDatePerformed = event.getDate();
-        utcNextDate = event.getNextDate();
+        utcNextDate = event.getDueDate();
 	}
 	
 	public void pushValuesTo(Event event) {
@@ -82,7 +82,7 @@ public class EventWebModel implements UserDateFormatValidator {
 		
 		event.setDate(datePerformed != null ? dateConverter.convertDateTime(datePerformed) : null);
         if (!dontModifyNextDate) {
-            event.setNextDate(nextDate != null ? dateConverter.convertDateTimeWithNoTimeZone(nextDate) : null);
+            event.setDueDate(nextDate != null ? dateConverter.convertDateTimeWithNoTimeZone(nextDate) : null);
         }
 	}
 	

@@ -35,7 +35,7 @@ public class MassScheduleService extends FieldIdPersistenceService {
                 // Copy and save the new schedule
                 Event newSchedule = new Event();
                 newSchedule.setType(eventSchedule.getEventType());
-                newSchedule.setNextDate(eventSchedule.getNextDate());
+                newSchedule.setDueDate(eventSchedule.getDueDate());
                 newSchedule.setProject(eventSchedule.getProject());
                 newSchedule.setAsset(asset);
                 newSchedule.setTenant(getCurrentTenant());
@@ -50,12 +50,12 @@ public class MassScheduleService extends FieldIdPersistenceService {
 
         for (Event existingSchedule : existingSchedules) {
             // CAVEAT :
-            //    existingSchedule.getNextDate().equals(eventSchedule.getNextDate()) will return false but         <---what code used to be
-            //    eventSchedule.getNextDate().equals(existingSchedule.getNextDate()) will return TRUE!
+            //    existingSchedule.getDueDate().equals(eventSchedule.getDueDate()) will return false but         <---what code used to be
+            //    eventSchedule.getDueDate().equals(existingSchedule.getDueDate()) will return TRUE!
             // this is because existingSchedule has a Timestamp (read in via hibernate, extends Date) and eventSchedule has a plain ole Date.
             // the moral of the story is don't count on our pal symmetry when using Timestamps & Dates equality checking.
             // @see http://blogs.sourceallies.com/2012/02/hibernate-date-vs-timestamp/ where he talks about "Timestamp does violate symmetry".
-            if (eventSchedule.getNextDate().equals(existingSchedule.getNextDate()) && existingSchedule.getEventType().equals(eventSchedule.getEventType())) {
+            if (eventSchedule.getDueDate().equals(existingSchedule.getDueDate()) && existingSchedule.getEventType().equals(eventSchedule.getEventType())) {
                 if (existingSchedule.getProject() == null) {
                     // Do not combine these two statements -- prevents null pointer in else if
                     if (eventSchedule.getProject() == null)

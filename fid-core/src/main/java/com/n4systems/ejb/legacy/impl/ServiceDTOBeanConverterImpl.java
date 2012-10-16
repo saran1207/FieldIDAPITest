@@ -983,7 +983,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		InspectionScheduleServiceDTO scheduleService = new InspectionScheduleServiceDTO();
 
 		scheduleService.setId(event.getSchedule().getId());
-		scheduleService.setNextDate(dateToString(event.getNextDate()));
+		scheduleService.setNextDate(dateToString(event.getDueDate()));
 		scheduleService.setProductId(event.getAsset().getId());
 		scheduleService.setInspectionTypeId(event.getType().getId());
 		scheduleService.setJobId(event.getProject() != null ? event.getProject().getId() : NULL_ID);
@@ -1005,7 +1005,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
         openEvent.setSchedule(eventSchedule);
 
-        openEvent.setNextDate(eventSchedule.getNextDate());
+        openEvent.setDueDate(eventSchedule.getNextDate());
         openEvent.setTenant(tenant);
 
 		return openEvent;

@@ -1,18 +1,17 @@
 package com.n4systems.api.validation;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.beanutils.PropertyUtilsBean;
-
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.validators.FieldValidator;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.reflection.Reflector;
+import org.apache.commons.beanutils.PropertyUtilsBean;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ViewValidator implements Validator<ExternalModelView> {
 	private final ValidatorFactory validatorFactory;
@@ -100,5 +99,5 @@ public class ViewValidator implements Validator<ExternalModelView> {
 			throw new ValidationException(msg, e);
 		}
 	}
-	
+
 }

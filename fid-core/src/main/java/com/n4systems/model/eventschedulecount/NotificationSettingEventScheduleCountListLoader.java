@@ -1,17 +1,15 @@
 package com.n4systems.model.eventschedulecount;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public abstract class NotificationSettingEventScheduleCountListLoader extends ListLoader<EventScheduleCount> {
 
@@ -37,12 +35,12 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 	protected abstract void applyNotificationTypeFilters(QueryBuilder<EventScheduleCount> builder);
 
 	protected void applyOrdering(QueryBuilder<EventScheduleCount> builder) {
-		builder.addOrder("nextDate");
+		builder.addOrder("dueDate");
 	}
 
 	protected void applyGroupings(QueryBuilder<EventScheduleCount> builder) {
 		// the aggregate queries are grouped: next_event_date, (customer, division) or (jobsite),  asset_type, event_type
-		builder.addGroupBy("nextDate");
+		builder.addGroupBy("dueDate");
 		builder.addGroupBy("owner");
 		builder.addGroupBy("asset.type.name", "type.name");
 	}
@@ -78,7 +76,7 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 	protected void prepareSelect(QueryBuilder<EventScheduleCount> builder) {
 		// we have to set the alias here and prefix our select clause arguments, otherwise hibernate generates a bad query
 		builder.setTableAlias("isc");
-		builder.setSelectArgument(new NewObjectSelect(EventScheduleCount.class, "isc.nextDate", "isc.owner", "isc.asset.type.name", "isc.type.name", "count(*)"));
+		builder.setSelectArgument(new NewObjectSelect(EventScheduleCount.class, "isc.dueDate", "isc.owner", "isc.asset.type.name", "isc.type.name", "count(*)"));
 	}
 
 	protected QueryBuilder<EventScheduleCount> getQueryBuilder(SecurityFilter filter) {

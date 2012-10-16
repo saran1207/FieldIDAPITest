@@ -110,7 +110,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private Map<Long, String> createDateStringMap(List<Event> events) {
         Map<Long, String> dueDateStringMap = new HashMap<Long,String>();
         for (Event event : events) {
-            Date dueDate = event.getNextDate();
+            Date dueDate = event.getDueDate();
             boolean showTime = !new PlainDate(dueDate).equals(dueDate);
             String dueDateString = new FieldIdDateFormatter(dueDate, event.getAssignee(), false, showTime).format();
             dueDateStringMap.put(event.getId(), dueDateString);

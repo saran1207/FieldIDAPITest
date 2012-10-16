@@ -36,7 +36,7 @@ public class EventImporterTest {
 	
 	@Test
 	public void test_constructor_sets_event_type_into_validator() {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, EventTypeBuilder.anEventType().build());
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, EventTypeBuilder.anEventType().build(), TimeZone.getDefault());
 		
 		Validator<ExternalModelView> validator = new ViewValidator(null);
 		

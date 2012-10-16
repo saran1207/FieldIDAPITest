@@ -1,12 +1,12 @@
 package com.n4systems.exporting.beanutils;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 public class ExportMapUnmarshalerTest {
 	private static final String[] titles = {"Type", "Name", "Age"};
 	
@@ -22,7 +22,7 @@ public class ExportMapUnmarshalerTest {
 
 		SerializationHandler[] serialHandler = {createMock(SerializationHandler.class)};  
 		
-		ExportMapUnmarshaler<TestExportBean> unmarshaler = new ExportMapUnmarshaler<TestExportBean>(TestExportBean.class, titles, handlerFactory);
+		ExportMapUnmarshaler<TestExportBean> unmarshaler = new ExportMapUnmarshaler<TestExportBean>(TestExportBean.class, titles, handlerFactory, null);
 		
 		expect(handlerFactory.createSortedSerializationHandlers(TestExportBean.class)).andReturn(serialHandler);
 		
@@ -47,7 +47,7 @@ public class ExportMapUnmarshalerTest {
 	
 	@Test
 	public void test_full_conversion() throws MarshalingException, InstantiationException {
-		ExportMapUnmarshaler<TestExportBean> marshaler = new ExportMapUnmarshaler<TestExportBean>(TestExportBean.class, titles);
+		ExportMapUnmarshaler<TestExportBean> marshaler = new ExportMapUnmarshaler<TestExportBean>(TestExportBean.class, titles, null);
 		
 		TestExportBean bean = marshaler.toBean(beanMap);
 		

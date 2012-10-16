@@ -47,7 +47,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
                     Event event = new Event();
                     event.setAsset(asset);
                     event.setType(type);
-					event.setNextDate(assetType.getSuggestedNextEventDate(new Date(), type, asset.getOwner()));
+					event.setDueDate(assetType.getSuggestedNextEventDate(new Date(), type, asset.getOwner()));
 					schedules.add(event);
 					update(event);
 				}
@@ -75,7 +75,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
                     openEvent.setTenant(asset.getTenant());
                     openEvent.setAsset(asset);
                     openEvent.setType(type.getEventType());
-                    openEvent.setNextDate(assetType.getSuggestedNextEventDate(asset.getIdentified(), type.getEventType(), asset.getOwner()));
+                    openEvent.setDueDate(assetType.getSuggestedNextEventDate(asset.getIdentified(), type.getEventType(), asset.getOwner()));
 					schedules.add(openEvent);
 				}
 			}
@@ -116,7 +116,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	public List<Event> getAvailableSchedulesFor(Asset asset) {
 		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 		query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
-		query.addOrder("nextDate");
+		query.addOrder("dueDate");
 		
 		return persistenceManager.findAll(query);
 	}
@@ -125,7 +125,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 		query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
 		query.addSimpleWhere("type.id", eventType.getId());
-		query.addOrder("nextDate");
+		query.addOrder("dueDate");
 		
 		return persistenceManager.findAll(query);
 	}
@@ -133,14 +133,14 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	public boolean schedulePastDue(Long scheduleId) {
 		// here we'll select the next date off the schedule and see if it's after today
 		QueryBuilder<Date> builder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter());
-		builder.setSimpleSelect("nextDate");
+		builder.setSimpleSelect("dueDate");
 		builder.addSimpleWhere("id", scheduleId);
         builder.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
 
-		Date nextDate = persistenceManager.find(builder);
+		Date dueDate = persistenceManager.find(builder);
 		
 		
-		return (nextDate != null) && DateHelper.getToday().after(nextDate);
+		return (dueDate != null) && DateHelper.getToday().after(dueDate);
 	}
 	
 	public Long getAssetIdForSchedule(Long scheduleId) {

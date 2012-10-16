@@ -24,8 +24,8 @@
 	<p> 
 		<label><@s.text name="label.scheduledon"/></label>
 		<span>
-			<#if event.nextDate?exists>
-				${action.formatDateWithTime(event.nextDate, false)}
+			<#if event.dueDate?exists>
+				${action.formatDateWithTime(event.dueDate, true)}
 			<#else>
 				<@s.text name="label.notscheduled"/>
 			</#if>

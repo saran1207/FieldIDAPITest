@@ -1,8 +1,5 @@
 package com.n4systems.webservice.server.handlers;
 
-import java.util.Date;
-
-import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
@@ -11,6 +8,8 @@ import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.server.InspectionNotFoundException;
+
+import java.util.Date;
 
 public class CompletedScheduleCreator {
 	
@@ -34,7 +33,7 @@ public class CompletedScheduleCreator {
         schedule.setNextDate(scheduledDate);
 
         event.setProject(findJob(jobId));
-        event.setNextDate(scheduledDate);
+        event.setDueDate(scheduledDate);
 
         eventScheduleSaver.update(schedule);
         eventSaver.update(event);

@@ -1,13 +1,11 @@
 package com.n4systems.services;
 
-import java.util.List;
-
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.util.DateHelper;
+
+import java.util.List;
 
 @CopiedToService(com.n4systems.fieldid.service.event.NextEventScheduleService.class)
 public class ManagerBackedNextEventScheduleService implements NextEventScheduleSerivce {
@@ -40,8 +38,8 @@ public class ManagerBackedNextEventScheduleService implements NextEventScheduleS
 		List<Event> upcomingSchedules = eventScheduleManager.getAvailableSchedulesFor(newSchedule.getAsset());
 		
 		for (Event upcomingSchedule : upcomingSchedules) {
-            if (upcomingSchedule.getNextDate() == null) continue;
-			if (DateHelper.isEqualIgnoringTime(upcomingSchedule.getNextDate(), newSchedule.getNextDate()) 
+            if (upcomingSchedule.getDueDate() == null) continue;
+			if (DateHelper.isEqualIgnoringTime(upcomingSchedule.getDueDate(), newSchedule.getDueDate())
 					&& upcomingSchedule.getType().equals(newSchedule.getType())) {
 				return upcomingSchedule;
 			}

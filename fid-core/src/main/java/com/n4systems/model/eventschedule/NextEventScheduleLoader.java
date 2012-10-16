@@ -25,7 +25,7 @@ public class NextEventScheduleLoader extends Loader<Event> {
 		query.addSimpleWhere("asset.id", assetId).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
 		if (typeId != null)
 			query.addSimpleWhere("type.id", typeId);
-		query.addOrder("nextDate");
+		query.addOrder("dueDate");
 		
 		List<Event> schedules = query.getResultList(em, 0, 1);
 			

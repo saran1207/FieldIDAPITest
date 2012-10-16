@@ -60,7 +60,7 @@ public class EventSchedulePicker extends FormComponentPanel<Event> {
                 if (object.getId() == null) {
                     return new FIDLabelModel("label.createanewscheduled").getObject();
                 }
-                return new DayDisplayModel(new Model<Date>(object.getNextDate())).getObject();
+                return new DayDisplayModel(new Model<Date>(object.getDueDate())).getObject();
             }
 
             @Override

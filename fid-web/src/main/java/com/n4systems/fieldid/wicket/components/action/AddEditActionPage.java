@@ -61,8 +61,8 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             final FIDFeedbackPanel feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
             add(feedbackPanel);
 
-            PropertyModel<Date> scheduledDateModel = new PropertyModel<Date>(getModel(), "nextDate");
-            DateTimePicker scheduledDatePicker = new DateTimePicker("nextDate", scheduledDateModel).withMonthsDisplayed(1).withNoAllDayCheckbox();
+            PropertyModel<Date> scheduledDateModel = new PropertyModel<Date>(getModel(), "dueDate");
+            DateTimePicker scheduledDatePicker = new DateTimePicker("dueDate", scheduledDateModel).withMonthsDisplayed(1).withNoAllDayCheckbox();
             scheduledDatePicker.getDateTextField().setRequired(true);
 
             add(scheduledDatePicker);

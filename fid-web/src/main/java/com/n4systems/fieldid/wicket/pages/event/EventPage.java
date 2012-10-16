@@ -142,7 +142,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             schedulesContainer.add(new ListView<EventSchedule>("schedules", new PropertyModel<List<EventSchedule>>(EventPage.this, "schedules")) {
                 @Override
                 protected void populateItem(final ListItem<EventSchedule> item) {
-                    item.add(new Label("addScheduleDate", new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "nextDate"))));
+                    item.add(new Label("addScheduleDate", new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "dueDate"))));
                     item.add(new Label("addScheduleLabel", new PropertyModel<Object>(item.getModel(), "eventType.name")));
                     item.add(new FlatLabel("addScheduleJob", new PropertyModel<Object>(item.getModel(), "project.name")));
                     item.add(new AjaxLink<Void>("removeLink") {
@@ -179,7 +179,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             DropDownChoice<User> performedBy = new DropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
             DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
             datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
-            DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "nextDate"), true).withNoAllDayCheckbox();
+            DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "dueDate"), true).withNoAllDayCheckbox();
 			newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
 			newOrExistingEventBook.setOwner(new PropertyModel<BaseOrg>(event, "owner").getObject());
 
@@ -296,7 +296,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
 
         for (Event sched : schedules) {
-            EventScheduleBundle bundle = new EventScheduleBundle(sched.getAsset(), sched.getEventType(), sched.getProject(), sched.getNextDate());
+            EventScheduleBundle bundle = new EventScheduleBundle(sched.getAsset(), sched.getEventType(), sched.getProject(), sched.getDueDate());
             scheduleBundles.add(bundle );
         }
 
@@ -345,7 +345,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             Event eventSchedule = new Event();
             eventSchedule.setAsset(event.getObject().getAsset());
             eventSchedule.setType(event.getObject().getType());
-            eventSchedule.setNextDate(schedule.getNextDate((event.getObject()).getDate()));
+            eventSchedule.setDueDate(schedule.getNextDate((event.getObject()).getDate()));
             schedules.add(eventSchedule);
         }
     }

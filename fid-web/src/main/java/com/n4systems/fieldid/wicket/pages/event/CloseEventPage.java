@@ -76,7 +76,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
             super(id);
             resolvedBy = getCurrentUser();
             List<EventStatus> activeStatuses = getActiveStatuses();
-            add(new Label("due", new PropertyModel<String>(openEventModel, "nextDate")));
+            add(new Label("due", new PropertyModel<String>(openEventModel, "dueDate")));
             add(new Label("state", new PropertyModel<String>(openEventModel, "eventState")));
             add( new FidDropDownChoice<EventStatus>("status",
                     new PropertyModel<EventStatus>(this, "status"),
