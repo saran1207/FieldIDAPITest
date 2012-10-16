@@ -47,6 +47,8 @@ public class EditEventPage extends EventPage {
 
     @Override
     protected AbstractEvent doSave() {
+        saveEventBookIfNecessary();
+
         Event editedEvent = event.getObject();
         criteriaEditService.storeCriteriaChanges(editedEvent);
         editedEvent.storeTransientCriteriaResults();
