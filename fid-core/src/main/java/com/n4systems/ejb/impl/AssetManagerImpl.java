@@ -1,36 +1,14 @@
 package com.n4systems.ejb.impl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.Query;
-
-import com.n4systems.fieldid.CopiedToService;
-import com.n4systems.fieldid.service.asset.AssetService;
-import org.apache.log4j.Logger;
-
-import rfid.ejb.entity.AssetCodeMapping;
-import rfid.ejb.entity.InfoFieldBean;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.NonUniqueAssetException;
 import com.n4systems.exceptions.UsedOnMasterEventException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.Project;
-import com.n4systems.model.SubAsset;
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -42,15 +20,20 @@ import com.n4systems.persistence.archivers.EventListArchiver;
 import com.n4systems.services.asset.AssetMerger;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.ArchiveAssetTypeTask;
-import com.n4systems.util.AssetRemovalSummary;
-import com.n4systems.util.AssetTypeGroupRemovalSummary;
-import com.n4systems.util.AssetTypeRemovalSummary;
-import com.n4systems.util.GUIDHelper;
-import com.n4systems.util.ListingPair;
+import com.n4systems.util.*;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.log4j.Logger;
+import rfid.ejb.entity.AssetCodeMapping;
+import rfid.ejb.entity.InfoFieldBean;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.Query;
+import java.util.*;
 
 @Deprecated
 @CopiedToService(AssetService.class)
@@ -492,8 +475,8 @@ public class AssetManagerImpl implements AssetManager {
 			eventCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setEventsToDelete(persistenceManager.findCount(eventCount));
 
-			QueryBuilder<EventSchedule> scheduleCount = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
-			scheduleCount.setCountSelect().addSimpleWhere("asset", asset);
+			QueryBuilder<Event> scheduleCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+			scheduleCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("eventState", Event.EventState.OPEN);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
 			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset = :asset AND event.state = :activeState ";
