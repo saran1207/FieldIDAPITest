@@ -54,6 +54,7 @@
     <Region name="Ontario - Ottawa" zone="America/Toronto"/>
     <Region name="Ontario - Toronto" zone="America/Toronto"/>
     <Region name="Quebec - Montreal" zone="America/Montreal"/>
+    <Region name="Saskatchewan - Regina" zone="America/Regina"/>
   </Country>
   <Country name="Cayman Islands" code="KY">
     <Region name="Cayman Islands" zone="America/Cayman"/>
