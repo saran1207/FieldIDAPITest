@@ -1,42 +1,19 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCriteriaResult;
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModelConverter;
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.DateFieldCriteriaResult;
-import com.n4systems.model.Event;
-import com.n4systems.model.NumberFieldCriteriaResult;
-import com.n4systems.model.Observation;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.State;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.services.signature.SignatureService;
+import rfid.web.helper.SessionUser;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * A helper class for the EventCrud and SubEventCrud.  Consolidates form processing, 
@@ -196,6 +173,7 @@ public class EventHelper {
                 
                 if (formResult.getSignatureFileId() != null) {
                 	((SignatureCriteriaResult)realResult).setImage(new SignatureService().loadSignatureImage(event.getTenant().getId(), formResult.getSignatureFileId()));
+                    ((SignatureCriteriaResult)realResult).setTemporaryFileId(formResult.getSignatureFileId());
                 }
             } else if (realResult instanceof DateFieldCriteriaResult) {
             	Date dateResult = dateConverter.convertDate(formResult.getTextValue(), ((DateFieldCriteria)realResult.getCriteria()).isIncludeTime());
@@ -222,7 +200,6 @@ public class EventHelper {
 	 * persisting an event.
 	 * 
 	 * @param result		A CriteriaResult
-	 * @param modifiedBy	A modifiedBy user to set on the result
 	 */
 	public void processObservations(CriteriaResultWebModel result) {
 		// these lists can have nulls in them

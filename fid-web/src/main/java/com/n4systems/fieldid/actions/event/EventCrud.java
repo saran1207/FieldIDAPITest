@@ -10,7 +10,6 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.EventWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.ScheduleToWebEventScheduleConverter;
@@ -40,15 +39,12 @@ import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.eventbook.EventBookSaver;
-import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
-import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
@@ -367,7 +363,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		
 			event.getInfoOptionMap().putAll(decodeMapKeys(encodedInfoOptionMap));
 
-//			event.setGroup(eventGroup);
 			event.setTenant(getTenant());
 			
 			if (assignToSomeone) {
