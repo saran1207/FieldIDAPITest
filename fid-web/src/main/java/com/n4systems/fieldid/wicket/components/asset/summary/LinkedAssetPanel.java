@@ -134,31 +134,38 @@ public class LinkedAssetPanel extends Panel {
         form.add(autoCompleteSearch = new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "assetForLinking")));
         autoCompleteSearch.getAutocompleteField().setRequired(true);
         ValidationBehavior.addValidationBehaviorToComponent(autoCompleteSearch.getAutocompleteField());
+        autoCompleteSearch.getAutocompleteField().setMarkupId("linkedAssetAutoComplete");
 
         form.add(new AjaxSubmitLink("saveLink", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                
-                Asset asset = assetModel.getObject();
-                assetService.fillInSubAssetsOnAsset(asset);
 
-                if(!asset.getId().equals(assetForLinking.getId())) {
-                    SubAsset subasset = new SubAsset(assetForLinking, asset);
-                    asset.getSubAssets().add(subasset);
-                    try {
-                        assetService.update(asset, getCurrentUser());
-                        form.setVisible(false);
-                        addLink.setVisible(true);
-                        assetForLinking = null;
-                        target.add(LinkedAssetPanel.this);
-                    } catch (SubAssetUniquenessException e) {
-                        asset.getSubAssets().remove(subasset);
-                        error(new FIDLabelModel("error.samesubasset").getObject());
+                if(assetForLinking != null) {
+                    Asset asset = assetModel.getObject();
+                    assetService.fillInSubAssetsOnAsset(asset);
+
+                    if(!asset.getId().equals(assetForLinking.getId())) {
+                        SubAsset subasset = new SubAsset(assetForLinking, asset);
+                        asset.getSubAssets().add(subasset);
+                        try {
+                            assetService.update(asset, getCurrentUser());
+                            form.setVisible(false);
+                            addLink.setVisible(true);
+                            assetForLinking = null;
+                            target.add(LinkedAssetPanel.this);
+                        } catch (SubAssetUniquenessException e) {
+                            asset.getSubAssets().remove(subasset);
+                            error(new FIDLabelModel("error.samesubasset").getObject());
+                            target.add(feedbackPanel);
+                        }
+                    }else {
+                        error(new FIDLabelModel("error.self_linking").getObject());
                         target.add(feedbackPanel);
                     }
-                }else {
-                    error(new FIDLabelModel("error.self_linking").getObject());
+                } else {
+                    error(new FIDLabelModel("error.selectsubasset").getObject());
                     target.add(feedbackPanel);
+                    target.appendJavaScript("$('#linkedAssetAutoComplete').val('')");
                 }
             }
             @Override
