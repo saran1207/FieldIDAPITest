@@ -463,6 +463,9 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     @Transactional
     public Event updateEvent(Event event, FileDataContainer fileData, List<FileAttachment> attachments) {
+
+        calculateEventResultAndScore(event);
+
         setProofTestData(event, fileData);
         saveProofTestFiles(event, fileData);
 
