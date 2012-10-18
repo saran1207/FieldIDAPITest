@@ -51,7 +51,6 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
         new LargeInListQueryExecutor().executeUpdate(query, ids);
     }
 
-
     @Transactional
     public void archiveLegacySchedules(AssetType assetType, EventType eventType) {
         List<Long> ids = scheduleIds(assetType, eventType, Event.EventStateGrouping.NON_COMPLETE);
@@ -65,21 +64,16 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
         new LargeInListQueryExecutor().executeUpdate(query, ids);
     }
 
-
     @Transactional
     public void deleteAssociatedEvents(AssetType assetType, EventType eventType) {
         List<Long> ids = eventIds(assetType, eventType);
-
-        String archiveQuery = String.format(ARCHIVE_IDS_QUERY, Event.class.getName());
-        final HashMap<String, Object> queryParams = new HashMap<String, Object>();
-        queryParams.put("archivedState", Archivable.EntityState.ARCHIVED);
-        queryParams.put("now", new Date());
-
-        Query query = persistenceService.createQuery(archiveQuery, queryParams);
-
-        new LargeInListQueryExecutor().executeUpdate(query, ids);
+        for(Long id: ids) {
+            Event schedule = persistenceService.find(Event.class, id);
+            schedule.setModified(new Date());
+            schedule.archiveEntity();
+            persistenceService.update(schedule);
+        }
     }
-
 
     private List<Long> eventIds(AssetType assetType, EventType eventType) {
         QueryBuilder<Long> query = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(assetType.getTenant()));
@@ -91,8 +85,6 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
 
         return persistenceService.findAll(query);
     }
-
-
 
     private List<Long> scheduleIds(AssetType assetType, EventType eventType, Event.EventStateGrouping eventStates) {
         QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());

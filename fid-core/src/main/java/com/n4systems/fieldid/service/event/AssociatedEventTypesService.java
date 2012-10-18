@@ -78,7 +78,7 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
         for (AssociatedEventType associatedEventType : toBeRemoved) {
             eventFrequenciesRemovalService.remove(associatedEventType);
 
-            assetTypeService.deleteRecurringEvent(associatedEventType.getAssetType(), associatedEventType.getEventType());
+            assetTypeService.deleteRecurringEvent(associatedEventType.getAssetType(), eventType);
             scheduleListRemovalService.archiveLegacySchedules(associatedEventType.getAssetType(), associatedEventType.getEventType());
             scheduleListRemovalService.deleteAssociatedEvents(associatedEventType.getAssetType(), associatedEventType.getEventType());
 
