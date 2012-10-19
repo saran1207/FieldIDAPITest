@@ -2,6 +2,9 @@ package com.n4systems.fieldid.actions.event;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
+import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -9,11 +12,19 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.EventForm;
+import com.n4systems.model.EventType;
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
@@ -23,6 +34,7 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 
 	
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(ButtonGroupCrud.class);
 	
 	private StateSet stateSet;
 	private Long eventTypeId;
@@ -105,6 +117,8 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 		
 		try {
 			stateSet = persistenceManager.update( stateSet );
+			logger.info("Updated StateSet (ButtonGroup): " + stateSet.getName());
+			touchEventTypes(stateSet);			
 		} catch (Exception e) {
 			addActionError( getText( "error.failedtosave" ) );
 			return ERROR;
@@ -190,5 +204,39 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 
 	public void setButtonIndex( Long buttonIndex ) {
 		this.buttonIndex = buttonIndex;
+	}
+	
+	// Touch affected EventTypes with criteria that use the modified stateSet.
+	private void touchEventTypes(StateSet stateSet) {
+		int updateCount = 0;
+		String sql;
+		Query query;
+		OpenSecurityFilter securityFilter = new OpenSecurityFilter();
+		QueryBuilder<OneClickCriteria> criteriaQuery = new QueryBuilder<OneClickCriteria>(OneClickCriteria.class, securityFilter);
+		criteriaQuery.addWhere(WhereClauseFactory.create("states.id", stateSet.getId()));
+		List<OneClickCriteria> criterias = persistenceManager.findAll(criteriaQuery);			
+		for(OneClickCriteria criteria : criterias) {
+			sql = "SELECT cs FROM " + CriteriaSection.class.getName() + " cs JOIN cs.criteria csc WHERE csc.id = :criteriaId";
+			query = persistenceManager.getEntityManager().createQuery(sql, CriteriaSection.class);
+			query.setParameter("criteriaId", criteria.getId());
+			List<CriteriaSection> sections = query.getResultList();
+			for(CriteriaSection section : sections) {
+				sql = "SELECT f FROM " + EventForm.class.getName() + " f JOIN f.sections s WHERE s.id = :sectionId";
+				query = persistenceManager.getEntityManager().createQuery(sql, EventForm.class);
+				query.setParameter("sectionId", section.getId());
+				List<EventForm> forms = query.getResultList();
+				for(EventForm form : forms) {
+					QueryBuilder<EventType> eventTypeQuery = new QueryBuilder<EventType>(EventType.class, securityFilter);
+					eventTypeQuery.addWhere(WhereClauseFactory.create(Comparator.EQ, "eventForm.id", form.getId()));
+					List<EventType> eventTypes = persistenceManager.findAll(eventTypeQuery);
+					for(EventType eventType : eventTypes) {
+						eventType.touch();
+						persistenceManager.update(eventType);
+						updateCount++;
+					}
+				}
+			}
+		}
+		logger.info("Touched " + updateCount + " EventTypes.");
 	}
 }
