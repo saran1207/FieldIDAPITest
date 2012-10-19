@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 
+// NOTE TO INTELLIJ USERS ...when running, make sure configuration has  -Duser.timezone=UTC or else tests will fail.
 public class DateChartManagerTest extends FieldIdUnitTest {
 	
 	private DateChartManager dateChartManager;

@@ -13,7 +13,7 @@ import java.util.EnumSet;
 
 import static org.junit.Assert.*;
 
-
+// NOTE TO INTELLIJ USERS ...when running, make sure configuration has  -Duser.timezone=UTC or else tests will fail.
 public class DateRangeTest extends FieldIdUnitTest {
 
 	private final LocalDate jan1_2011 = new LocalDate(2011, 1, 1);
