@@ -166,6 +166,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		Map<Criteria, List<Recommendation>> recommendations =  new HashMap<Criteria, List<Recommendation>>(getEvent().getResults().size());
 		Map<Criteria, List<Deficiency>> deficiencies = new HashMap<Criteria, List<Deficiency>>(getEvent().getResults().size());
         Map<String, Double> sectionScoreMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScoresForSections(getEvent()));
+        Map<String, Double> sectionScorePercentageMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScorePercentageForSections(getEvent()));
 
         flattenCriteriaResults(resultMap, recommendations, deficiencies);
 		//TODO : move criteria view to 
@@ -176,6 +177,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                     if (resultMap.containsKey(criteria)) {
                         CriteriaStateView stateView = new CriteriaStateView(section, criteria, recommendations.get(criteria), deficiencies.get(criteria));
                         stateView.setSectionScoreTotal(sectionScoreMap.get(stateView.getSection()));
+                        stateView.setSectionScorePercentage(sectionScorePercentageMap.get(stateView.getSection()));
                         CriteriaResult result = resultMap.get(criteria);
                         if (result instanceof OneClickCriteriaResult) {
                             stateView.setStateButtonGroup(((OneClickCriteriaResult)result).getState());

@@ -15,6 +15,7 @@ public class CriteriaStateView implements Serializable {
 	private String state;
 	private File stateImage;
     private Double sectionScoreTotal;
+    private Double sectionScorePercentage;
 	private Integer recommendations;
 	private Integer deficiencies;
 	private String compressedRecommendations;
@@ -132,4 +133,12 @@ public class CriteriaStateView implements Serializable {
 	public void setCriteriaImages(List<CriteriaResultImageView> criteriaImages) {
 		this.criteriaImages = criteriaImages;
 	}
+
+    public Double getSectionScorePercentage() {
+        return sectionScorePercentage;
+    }
+
+    public void setSectionScorePercentage(Double sectionScorePercentage) {
+        this.sectionScorePercentage = sectionScorePercentage;
+    }
 }
