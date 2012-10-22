@@ -1,0 +1,1 @@
+ALTER TABLE eventtypes ADD COLUMN display_score_percentage TINYINT(1) NOT NULL;

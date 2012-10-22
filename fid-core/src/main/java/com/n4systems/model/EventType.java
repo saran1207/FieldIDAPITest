@@ -1,35 +1,21 @@
 package com.n4systems.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import org.hibernate.annotations.IndexColumn;
-
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import org.hibernate.annotations.IndexColumn;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "eventtypes")
@@ -80,7 +66,10 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 
     @Column(nullable=false, name="display_section_totals")
     private boolean displaySectionTotals;
-	
+
+    @Column(nullable=false, name="display_score_percentage")
+    private boolean displayScorePercentage;
+
 	private Long legacyEventId;
 
 	public EventType() {
@@ -257,5 +246,13 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 
     public void setDisplaySectionTotals(boolean displaySectionTotals) {
         this.displaySectionTotals = displaySectionTotals;
+    }
+
+    public boolean isDisplayScorePercentage() {
+        return displayScorePercentage;
+    }
+
+    public void setDisplayScorePercentage(boolean displayScorePercentage) {
+        this.displayScorePercentage = displayScorePercentage;
     }
 }

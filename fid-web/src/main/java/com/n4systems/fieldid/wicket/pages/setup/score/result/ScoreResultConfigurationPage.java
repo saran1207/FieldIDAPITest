@@ -11,11 +11,7 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.ScoreCalculationType;
 import com.n4systems.model.ScoreResultRange;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -59,6 +55,7 @@ public class ScoreResultConfigurationPage extends EventTypePage {
             add(new FIDFeedbackPanel("feedbackPanel"));
 
             add(new CheckBox("displaySectionTotals", new PropertyModel<Boolean>(eventTypeModel, "displaySectionTotals")));
+            add(new CheckBox("displayScorePercentage", new PropertyModel<Boolean>(eventTypeModel, "displayScorePercentage")));
             add(new CheckBox("useScoreForResult"));
             add(new DropDownChoice<ScoreCalculationType>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
             add(new ScoreResultRangePanel("failRangePanel", new PropertyModel<ScoreResultRange>(eventForm, "failRange")));

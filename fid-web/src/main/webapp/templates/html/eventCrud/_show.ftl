@@ -53,7 +53,9 @@
     <#if event.score?exists>
         <p class="scoreContainer">
             <label><@s.text name="label.score"/></label>
-            <span>${event.score?string('0.####')}</span>
+            <span>
+                ${event.score?string('0.####')}<#if event.type.displayScorePercentage>, ${eventFormHelper.getEventFormScorePercentage( formEvent )?string.percent}</#if>
+            </span>
         </p>
     </#if>
 

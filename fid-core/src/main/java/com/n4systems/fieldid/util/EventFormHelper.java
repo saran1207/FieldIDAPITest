@@ -2,10 +2,7 @@ package com.n4systems.fieldid.util;
 
 import com.n4systems.model.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EventFormHelper {
 
@@ -14,7 +11,8 @@ public class EventFormHelper {
 	
 	private Map<AbstractEvent, Map<CriteriaSection, List<CriteriaResult>>> sections = new HashMap<AbstractEvent, Map<CriteriaSection, List<CriteriaResult>>>();
     private Map<AbstractEvent, Map<CriteriaSection, Double>> eventsSectionsScoresMap = new HashMap<AbstractEvent, Map<CriteriaSection, Double>>();
-	
+    private Map<AbstractEvent, Map<CriteriaSection, Double>> eventsSectionsScoresPercentageMap = new HashMap<AbstractEvent, Map<CriteriaSection, Double>>();
+
 	public List<CriteriaSection> getAvailableSections(AbstractEvent event) {
 		if (availableSections.get(event) == null) {
 			availableSections.put(event, new ArrayList<CriteriaSection>());
@@ -105,5 +103,71 @@ public class EventFormHelper {
         }
         return eventsSectionsScoresMap.get(event);
     }
+    
+    private Map<CriteriaSection, Double> calculateScorePercentageForSections(AbstractEvent event) {
+        Map<CriteriaSection, Double> sectionsScores = getScoresForSections(event);
+        Map<CriteriaSection, Double> sectionsScorePercentages = new HashMap<CriteriaSection, Double>();
 
+        List<CriteriaSection> criteriaSections = getAvailableSections(event);
+        for (CriteriaSection section : criteriaSections) {
+            double total = 0.0;
+            for(Criteria criteria: section.getAvailableCriteria()) {
+                if(criteria instanceof ScoreCriteria) {
+                    total += getMaxScoreValue(((ScoreCriteria)criteria).getScoreGroup());
+                }
+            }
+            if (total > 0.0) {
+                double percentage = sectionsScores.get(section) / total;
+                sectionsScorePercentages.put(section, percentage);
+            }
+        }
+        return sectionsScorePercentages;
+    }
+
+    public Map<CriteriaSection, Double> getScorePercentageForSections(AbstractEvent event) {
+        if (!eventsSectionsScoresPercentageMap.containsKey(event)) {
+            eventsSectionsScoresPercentageMap.put(event, calculateScorePercentageForSections(event));
+        }
+        return eventsSectionsScoresPercentageMap.get(event);
+    }
+
+    public Double getEventFormScorePercentage(AbstractEvent event) {
+
+        List<CriteriaSection> criteriaSections = getAvailableSections(event);
+        double total = 0.0;
+        for (CriteriaSection section : criteriaSections) {
+            for(Criteria criteria: section.getAvailableCriteria()) {
+                if(criteria instanceof ScoreCriteria) {
+                    total += getMaxScoreValue(((ScoreCriteria)criteria).getScoreGroup());
+                }
+            }
+        }
+
+        if(total < 1)
+            return 0.0;
+        else
+            return event.getScore() / total;
+    }
+
+    private Double getMaxScoreValue(ScoreGroup group) {
+
+        if(group.getScores() == null || group.getScores().isEmpty())
+            return 0.0;
+
+        List<Score> scores = group.getScores();
+
+        Collections.sort(scores, new Comparator<Score>() {
+            @Override
+            public int compare(Score o1, Score o2) {
+                if (o1.isNa())
+                    return 1;
+                else if (o2.isNa())
+                    return -1;
+                else
+                    return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+
+        return scores.get(0).getValue() > 0.0 ? scores.get(0).getValue() : 0.0;
+    }
 }

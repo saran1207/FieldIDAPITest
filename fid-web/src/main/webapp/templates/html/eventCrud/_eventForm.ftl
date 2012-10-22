@@ -35,7 +35,7 @@
                 <@s.text name="label.section_score"/>
             </label>
             <div class="criteriaText">
-                ${eventFormHelper.getScoresForSections( formEvent ).get( section )?string('0.####')}
+                ${eventFormHelper.getScoresForSections( formEvent ).get( section )?string('0.####')}<#if formEvent.type.displayScorePercentage && eventFormHelper.getScorePercentageForSections( formEvent ).get( section )?exists>, ${eventFormHelper.getScorePercentageForSections( formEvent ).get( section )?string.percent}</#if>
             </div>
         </div>
     </#if>
