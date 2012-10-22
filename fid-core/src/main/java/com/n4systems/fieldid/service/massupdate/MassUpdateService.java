@@ -1,26 +1,23 @@
 package com.n4systems.fieldid.service.massupdate;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.persistence.Query;
-
-import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.util.EventRemovalSummary;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.AssetRemovalSummary;
+import com.n4systems.util.EventRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.Query;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class MassUpdateService extends FieldIdPersistenceService {
 	
@@ -39,8 +36,8 @@ public class MassUpdateService extends FieldIdPersistenceService {
 			eventCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setEventsToDelete(persistenceService.count(eventCount));
 
-			QueryBuilder<EventSchedule> scheduleCount = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
-			scheduleCount.setCountSelect().addSimpleWhere("asset", asset);
+			QueryBuilder<Event> scheduleCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+			scheduleCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("eventState", Event.EventState.OPEN);
 			summary.setSchedulesToDelete(persistenceService.count(scheduleCount));
 
 			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset = :asset AND event.state = :activeState ";
@@ -76,7 +73,6 @@ public class MassUpdateService extends FieldIdPersistenceService {
                 } else {
                     removalSummary.addStandardEventsToDelete();
                 }
-                removalSummary.addEventSchedulesToDelete((event.getSchedule() == null) ? 0 : 1);
             }
         }
         return removalSummary;

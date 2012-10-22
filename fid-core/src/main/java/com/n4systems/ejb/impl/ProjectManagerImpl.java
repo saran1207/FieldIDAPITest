@@ -1,11 +1,15 @@
 package com.n4systems.ejb.impl;
 
+import com.google.common.collect.Lists;
 import com.n4systems.ejb.NoteManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.Project;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
@@ -76,7 +80,7 @@ public class ProjectManagerImpl implements ProjectManager {
 	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<Event.EventState> statuses) {
 		Query countQuery = scheduleCountQuery(project, filter, statuses);
 		Query selectQuery = scheduleSelectQuery(project, filter, statuses);
-		return new Page<Event>(selectQuery, countQuery, page, pageSize);
+		return new Page<Event>(selectQuery, countQuery, page, pageSize, Lists.newArrayList("asset"));
 	}
 	
 	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<Event.EventState> statuses) {
@@ -97,7 +101,7 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 
 	private ManualSecurityFilter createManualSecurityFilter(SecurityFilter userFilter, String scheduleTablePrefix) {
-		SecurityDefiner securityDefiner = EventSchedule.createSecurityDefiner();
+		SecurityDefiner securityDefiner = Event.createSecurityDefiner();
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
 		filter.setTargets(scheduleTablePrefix + "." + securityDefiner.getTenantPath(), scheduleTablePrefix + "." + securityDefiner.getOwnerPath(), null, scheduleTablePrefix + "." + securityDefiner.getStatePath());
 		return filter;

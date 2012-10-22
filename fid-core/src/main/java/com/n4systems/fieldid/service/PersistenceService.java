@@ -1,21 +1,5 @@
 package com.n4systems.fieldid.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import org.hibernate.LockMode;
-import org.hibernate.Session;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.base.Preconditions;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
@@ -31,6 +15,18 @@ import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.hibernate.LockMode;
+import org.hibernate.Session;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 public class PersistenceService extends FieldIdService {
 
     @PersistenceContext

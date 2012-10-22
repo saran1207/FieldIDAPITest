@@ -76,10 +76,14 @@ public class EventBuilder extends BaseBuilder<Event> {
         this.nextDate = nextDate;
         this.eventStatus = eventStatus;
 	}
-	
-	public EventBuilder ofType(EventType type) {
-		return makeBuilder(new EventBuilder(type, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
-	}
+
+    public EventBuilder withEventState(Event.EventState state) {
+        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, state, nextDate, eventStatus));
+    }
+
+    public EventBuilder ofType(EventType type) {
+        return makeBuilder(new EventBuilder(type, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+    }
 	
 	public EventBuilder on(Asset asset) {
 		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));

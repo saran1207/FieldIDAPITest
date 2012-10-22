@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components.table;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
+
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;

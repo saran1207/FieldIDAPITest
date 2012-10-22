@@ -1,30 +1,13 @@
 package com.n4systems.export;
 
+import com.n4systems.export.converters.*;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.Dom4JDriver;
+
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
-
-import com.n4systems.export.converters.AssetStatusConverter;
-import com.n4systems.export.converters.AssetTypeConverter;
-import com.n4systems.export.converters.AssignedToUpdateConverter;
-import com.n4systems.export.converters.BaseOrgConverter;
-import com.n4systems.export.converters.CriteriaResultConverter;
-import com.n4systems.export.converters.EntityStateConverter;
-import com.n4systems.export.converters.EventBookConverter;
-import com.n4systems.export.converters.EventScheduleConverter;
-import com.n4systems.export.converters.EventTypeConverter;
-import com.n4systems.export.converters.ISODateConverter;
-import com.n4systems.export.converters.IdWrapperConverter;
-import com.n4systems.export.converters.LineItemConverter;
-import com.n4systems.export.converters.LocationConverter;
-import com.n4systems.export.converters.OrderConverter;
-import com.n4systems.export.converters.ProjectConverter;
-import com.n4systems.export.converters.ProofTestInfoConverter;
-import com.n4systems.export.converters.StringTrimmingConverter;
-import com.n4systems.export.converters.UserConverter;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.Dom4JDriver;
 
 public class ExportTask {
 	private final long tenantId;
@@ -51,7 +34,6 @@ public class ExportTask {
 		xs.registerConverter(new EventTypeConverter());
 		xs.registerConverter(new EventBookConverter());
 		xs.registerConverter(new ProofTestInfoConverter());
-		xs.registerConverter(new EventScheduleConverter());
 		xs.registerConverter(new UserConverter());
 		xs.registerConverter(new AssignedToUpdateConverter());
 		xs.registerConverter(new BaseOrgConverter());

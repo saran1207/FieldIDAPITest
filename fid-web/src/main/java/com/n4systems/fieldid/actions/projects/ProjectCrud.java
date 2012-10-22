@@ -1,14 +1,5 @@
 package com.n4systems.fieldid.actions.projects;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.n4systems.model.*;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.web.helper.Constants;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.InvalidQueryException;
@@ -18,9 +9,9 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.JobListService;
 import com.n4systems.tools.Pager;
@@ -31,6 +22,12 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.web.helper.Constants;
+
+import java.util.Arrays;
+import java.util.List;
 
 @ExtendedFeatureFilter(requiredFeature = ExtendedFeature.Projects)
 @UserPermissionFilter(userRequiresOneOf = { Permissions.ManageJobs })

@@ -2,7 +2,6 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +34,7 @@ public class NextEventScheduleService extends FieldIdPersistenceService {
 
         for (Event openEvent : openEvents) {
             if (DateHelper.isEqualIgnoringTime(openEvent.getDueDate(), newSchedule.getDueDate())
-                    && openEvent.getEventType().equals(newSchedule.getEventType())
-                    && !openEvent.getStatus().equals(EventSchedule.ScheduleStatus.IN_PROGRESS)) {
+                    && openEvent.getEventType().equals(newSchedule.getEventType())) {
                 return openEvent;
             }
         }

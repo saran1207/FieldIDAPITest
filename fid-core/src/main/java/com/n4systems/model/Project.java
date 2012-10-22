@@ -1,33 +1,15 @@
 package com.n4systems.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.IndexColumn;
-
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.EntityWithOwner;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
+import org.hibernate.annotations.IndexColumn;
+
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table( name="projects" )
@@ -77,8 +59,8 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     private List<FileAttachment> notes = new ArrayList<FileAttachment>();
     
-    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
-    private Set<EventSchedule> schedules = new HashSet<EventSchedule>();
+    //@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
+    //private Set<EventSchedule> schedules = new HashSet<EventSchedule>();
 
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
     private Set<Event> events = new HashSet<Event>();
@@ -245,12 +227,12 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 	}
 
 	public Set<EventSchedule> getSchedules() {
-		return schedules;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist");
+    }
 
 	public void setSchedules(Set<EventSchedule> schedules) {
-		this.schedules = schedules;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist");
+    }
 
 	public Set<User> getResources() {
 		return resources;

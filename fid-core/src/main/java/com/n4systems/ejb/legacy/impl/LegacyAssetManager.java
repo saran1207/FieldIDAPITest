@@ -1,23 +1,5 @@
 package com.n4systems.ejb.legacy.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-
-import com.n4systems.fieldid.CopiedToService;
-import com.n4systems.fieldid.service.asset.AssetService;
-import org.apache.log4j.Logger;
-
-import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetExtension;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.AssetManagerImpl;
@@ -25,13 +7,9 @@ import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.Tenant;
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -41,7 +19,15 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.log4j.Logger;
+import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.AssetExtension;
+import rfid.ejb.entity.InfoOptionBean;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import java.util.*;
 
 @Deprecated
 @CopiedToService(AssetService.class)
@@ -151,28 +137,7 @@ public class LegacyAssetManager implements LegacyAsset {
 		saver.setModifiedBy(modifiedBy);
 		asset = saver.update(em, asset);
 		
-		updateSchedulesOwnership(asset);
 		return asset;
-	}
-
-	private void updateSchedulesOwnership(Asset asset) {
-		
-		QueryBuilder<Long> schedules = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter())
-					.setSimpleSelect("id")
-					.addSimpleWhere("asset", asset)
-					.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
-			
-		for (Long id : schedules.getResultList(em)) {
-			EventSchedule schedule = persistenceManager.find(EventSchedule.class, id);
-			
-			schedule.setOwner(asset.getOwner());
-			schedule.setAdvancedLocation(asset.getAdvancedLocation());
-			
-			persistenceManager.save(schedule);
-		}
-		
-			
-		
 	}
 
 	private void processSubAssets(Asset asset, User modifiedBy) throws SubAssetUniquenessException {

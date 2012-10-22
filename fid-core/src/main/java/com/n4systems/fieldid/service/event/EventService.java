@@ -441,6 +441,7 @@ public class EventService extends FieldIdPersistenceService {
         query.addNullSafeWhere(Comparator.EQ, "owner", "owner", owner);
         query.addNullSafeWhere(Comparator.EQ, "assignee", "assignee", assignee);
         query.addNullSafeWhere(Comparator.EQ, "type", "type", actionType);
+        // TODO query.addSimpleWhere("type.group.action", Boolean.TRUE);
         query.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
         query.addWhere(Comparator.NOTNULL, "triggeredEvent", "triggeredEvent", null);
         // make sure it's an action-able event type group.

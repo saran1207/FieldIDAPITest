@@ -60,10 +60,8 @@ public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethod
 				subEvent.setAttachments(new ArrayList<FileAttachment>());
 			}
 
-            long scheduleId = event.getSchedule() == null ? 0 : event.getSchedule().getId();
-
             final CreateEventParameter createEventParameter = new CreateEventParameterBuilder(event, event.getModifiedBy().getId())
-                    .withUploadedImages(fileAttachments).withScheduleId(scheduleId).build();
+                    .withUploadedImages(fileAttachments).build();
 
             try {
                 eventSaver.createEvent(createEventParameter);

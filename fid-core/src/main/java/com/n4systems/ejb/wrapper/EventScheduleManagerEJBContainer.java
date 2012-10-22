@@ -1,18 +1,16 @@
 package com.n4systems.ejb.wrapper;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class EventScheduleManagerEJBContainer extends EJBTransactionEmulator<EventScheduleManager> implements EventScheduleManager {
 
@@ -38,11 +36,11 @@ public class EventScheduleManagerEJBContainer extends EJBTransactionEmulator<Eve
 	}
 
 	@Override
-	public List<Event> getAvailableSchedulesFor(Asset asset) {
+	public List<Event> getAvailableSchedulesFor(Asset asset, String... postFetchFields) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getAvailableSchedulesFor(asset);
+			return createManager(transaction.getEntityManager()).getAvailableSchedulesFor(asset, postFetchFields);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -124,9 +122,9 @@ public class EventScheduleManagerEJBContainer extends EJBTransactionEmulator<Eve
 		}
 	}
 
-	
 
-	@Override
+
+    @Override
 	public void restoreScheduleForEvent(Event event) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();

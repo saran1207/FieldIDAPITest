@@ -1,15 +1,6 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
-import java.util.List;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.EventManager;
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.OrderManager;
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProjectManager;
+import com.n4systems.ejb.*;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.LegacyAssetType;
@@ -17,7 +8,6 @@ import com.n4systems.fieldid.actions.asset.AssetWebModel;
 import com.n4systems.fieldid.actions.asset.TraceabilityCrud;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -25,6 +15,9 @@ import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.List;
 
 public class SafetyNetworkAsset extends TraceabilityCrud{
 

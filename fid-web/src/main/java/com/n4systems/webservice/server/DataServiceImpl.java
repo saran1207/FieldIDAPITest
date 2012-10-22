@@ -1,18 +1,5 @@
 package com.n4systems.webservice.server;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.naming.NamingException;
-
-import com.n4systems.model.event.*;
-import org.apache.log4j.Logger;
-
-import rfid.util.PopulatorLogger;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -20,11 +7,7 @@ import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
-import com.n4systems.exceptions.FindAssetFailure;
-import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.exceptions.InvalidTransactionGUIDException;
-import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.exceptions.*;
 import com.n4systems.fieldid.context.ThreadLocalUserContext;
 import com.n4systems.fieldid.context.UserContext;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
@@ -32,34 +15,14 @@ import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.handlers.creator.EventsInAGroupCreator;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Project;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import com.n4systems.model.asset.AssetImageFileSaver;
 import com.n4systems.model.asset.AssetSubAssetsLoader;
 import com.n4systems.model.asset.SmartSearchLoader;
+import com.n4systems.model.event.*;
 import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
-import com.n4systems.model.eventschedule.EventScheduleSaver;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
-import com.n4systems.model.orgs.EntityByIdIncludingArchivedLoader;
-import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
-import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
@@ -72,21 +35,12 @@ import com.n4systems.model.user.EmployeePaginatedLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.servicedto.converts.DtoToModelConverterFactory;
-import com.n4systems.servicedto.converts.EmployeeServiceDTOConverter;
-import com.n4systems.servicedto.converts.InspectionServiceDTOConverter;
-import com.n4systems.servicedto.converts.LocationConverter;
-import com.n4systems.servicedto.converts.LocationServiceToContainerConverter;
-import com.n4systems.servicedto.converts.ProductServiceDTOConverter;
+import com.n4systems.servicedto.converts.*;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ServiceLocator;
-import com.n4systems.util.TransactionSupervisor;
-import com.n4systems.util.WsServiceLocator;
+import com.n4systems.util.*;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.ModelToServiceConverterFactory;
@@ -95,33 +49,7 @@ import com.n4systems.webservice.assetdownload.AssetIdListResponse;
 import com.n4systems.webservice.assetdownload.AssetListResponse;
 import com.n4systems.webservice.assetdownload.AssetRequest;
 import com.n4systems.webservice.assetdownload.AssetSearchRequest;
-import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
-import com.n4systems.webservice.dto.AssetImageServiceDTO;
-import com.n4systems.webservice.dto.AuthenticationRequest;
-import com.n4systems.webservice.dto.AuthenticationResponse;
-import com.n4systems.webservice.dto.CompletedJobScheduleRequest;
-import com.n4systems.webservice.dto.CustomerOrgListResponse;
-import com.n4systems.webservice.dto.DivisionOrgListResponse;
-import com.n4systems.webservice.dto.EmployeeListResponse;
-import com.n4systems.webservice.dto.InspectionBookListResponse;
-import com.n4systems.webservice.dto.InspectionImageServiceDTO;
-import com.n4systems.webservice.dto.InspectionServiceDTO;
-import com.n4systems.webservice.dto.InternalOrgListResponse;
-import com.n4systems.webservice.dto.JobListResponse;
-import com.n4systems.webservice.dto.MobileUpdateInfo;
-import com.n4systems.webservice.dto.PaginatedRequestInformation;
-import com.n4systems.webservice.dto.PaginatedUpdateRequestInfo;
-import com.n4systems.webservice.dto.ProductLookupable;
-import com.n4systems.webservice.dto.ProductServiceDTO;
-import com.n4systems.webservice.dto.ProductTypeGroupListResponse;
-import com.n4systems.webservice.dto.ProductTypeListResponse;
-import com.n4systems.webservice.dto.RequestInformation;
-import com.n4systems.webservice.dto.RequestResponse;
-import com.n4systems.webservice.dto.ResponseStatus;
-import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
-import com.n4systems.webservice.dto.SubInspectionServiceDTO;
-import com.n4systems.webservice.dto.SubProductMapServiceDTO;
-import com.n4systems.webservice.dto.VendorListResponse;
+import com.n4systems.webservice.dto.*;
 import com.n4systems.webservice.dto.AuthenticationRequest.LoginType;
 import com.n4systems.webservice.dto.findinspection.FindInspectionRequestInformation;
 import com.n4systems.webservice.dto.findinspection.FindInspectionResponse;
@@ -141,6 +69,11 @@ import com.n4systems.webservice.server.handlers.CompletedScheduleCreator;
 import com.n4systems.webservice.server.handlers.HelloHandler;
 import com.n4systems.webservice.server.handlers.RealTimeAssetLookupHandler;
 import com.n4systems.webservice.server.handlers.RealTimeInspectionLookupHandler;
+import org.apache.log4j.Logger;
+import rfid.util.PopulatorLogger;
+
+import javax.naming.NamingException;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class DataServiceImpl implements DataService {
@@ -827,7 +760,7 @@ public class DataServiceImpl implements DataService {
 				PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
 				InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
 				LegacyAsset productManager = WsServiceLocator.getLegacyAssetManager(tenantId);
-	
+
 				List<Event> events = new ArrayList<Event>();
 				Map<Event, Date> nextInspectionDates = new HashMap<Event, Date>();
 				Asset asset = null;
@@ -836,12 +769,12 @@ public class DataServiceImpl implements DataService {
 				for (InspectionServiceDTO inspectionServiceDTO : inspectionDTOs) {
 					asset = findOrCreateAsset(tenantId, inspectionServiceDTO);
 					inspectionServiceDTO.setProductId(asset.getId());
-	
+
 					// lets look up or create all newly attached sub products and
 					// attach to asset
 					List<SubAsset> subAssets = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), asset);
 					updateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets);
-	
+
 					// we also need to get the asset for any sub-inspections
 					if (inspectionServiceDTO.getSubInspections() != null) {
 						Asset subProduct = null;
@@ -851,11 +784,9 @@ public class DataServiceImpl implements DataService {
 						}
 					}
 
-                    EventSchedule schedule = loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO);
-	
-					Event event = converter.convert(inspectionServiceDTO, schedule);
+                    Event schedule = loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO);
 
-                    event.setSchedule(schedule);
+					Event event = converter.convert(inspectionServiceDTO, schedule);
 
 					events.add(event);
 					nextInspectionDates.put(event, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
@@ -875,7 +806,7 @@ public class DataServiceImpl implements DataService {
 					logger.error("failed to save inspections", e);
 					throw new InspectionException("Failed to save inspections");
 				}
-	
+
 				return response;
 			} finally {
 				userContext.setCurrentUser(null);
@@ -890,7 +821,7 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 
-	private EventSchedule loadScheduleFromInspectionDto(EventScheduleByGuidOrIdLoader scheduleLoader, InspectionServiceDTO inspectionServiceDTO) {
+	private Event loadScheduleFromInspectionDto(EventScheduleByGuidOrIdLoader scheduleLoader, InspectionServiceDTO inspectionServiceDTO) {
 		return scheduleLoader.setId(inspectionServiceDTO.getInspectionScheduleId()).setMobileGuid(inspectionServiceDTO.getInspectionScheduleMobileGuid())
 				.load();
 	}
@@ -1172,7 +1103,7 @@ public class DataServiceImpl implements DataService {
 			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(request.getTenantId());
 
 			CompletedScheduleCreator scheduleCreator = new CompletedScheduleCreator(new EventByMobileGuidLoader<Event>(filter, Event.class),
-					new EventScheduleSaver(), new SimpleEventSaver(), new FilteredIdLoader<Project>(filter, Project.class));
+                    new SimpleEventSaver(), new FilteredIdLoader<Project>(filter, Project.class));
 			scheduleCreator.create(request.getInspectionMobileGuid(), convertedNextDate, request.getJobId());
 		} catch (InspectionNotFoundException e) {
 			logger.error("could not find inspection for completed job schedule", e);

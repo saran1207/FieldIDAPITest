@@ -95,7 +95,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	private List<CommentTemplate> commentTemplates;
 	private List<Listable<Long>> employees;
 	private List<ListingPair> eventBooks;
-	private List<EventSchedule> availableSchedules;
+    // TODO : WEB-2358  remove this.
+//    private List<EventSchedule> availableSchedules;
 	private List<ListingPair> eventJobs;
 	private AssignedToUserGrouper userGrouper;
     private boolean refreshAutoSchedules = false;
@@ -595,7 +596,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 	
 	public List<Event> getEventSchedules() {
-		return eventScheduleManager.getAvailableSchedulesFor(asset);
+		return eventScheduleManager.getAvailableSchedulesFor(asset, "asset");
 	}
 
 	@RequiredFieldValidator(message="", key="error.noasset")

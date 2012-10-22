@@ -112,16 +112,17 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
     public void create(AssetTypeSchedule schedule) {
 		persistenceManager.save(schedule);
 	}
-	
-	public List<Event> getAvailableSchedulesFor(Asset asset) {
-		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-		query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
-		query.addOrder("dueDate");
-		
-		return persistenceManager.findAll(query);
-	}
 
-	public List<Event> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType) {
+    public List<Event> getAvailableSchedulesFor(Asset asset, String... postFetchFields) {
+        QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+        query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
+        query.addPostFetchPaths(postFetchFields);
+        query.addOrder("dueDate");
+
+        return persistenceManager.findAll(query);
+    }
+
+    public List<Event> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType) {
 		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 		query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
 		query.addSimpleWhere("type.id", eventType.getId());
@@ -146,6 +147,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	public Long getAssetIdForSchedule(Long scheduleId) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("asset.id");
+        builder.addSimpleWhere("eventState", Event.EventState.OPEN);
 		builder.addSimpleWhere("id", scheduleId);
 		
 		return persistenceManager.find(builder);
@@ -154,7 +156,8 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	public Long getEventTypeIdForSchedule(Long scheduleId) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("type.id");
-		builder.addSimpleWhere("id", scheduleId);
+        builder.addSimpleWhere("eventState", Event.EventState.OPEN);
+        builder.addSimpleWhere("id", scheduleId);
 		
 		return persistenceManager.find(builder);
 	}

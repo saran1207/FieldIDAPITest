@@ -67,23 +67,20 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
-		EventSchedule eventSchedule = eventScheduleService.findByMobileId(apiEventSchedule.getSid());
+		Event eventSchedule = eventScheduleService.findByMobileId(apiEventSchedule.getSid());
 
 		if (eventSchedule == null) {
             Event event = converApiEventSchedule(apiEventSchedule);
 			persistenceService.save(event);
 			logger.info("Saved EventSchedule for " + event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
-		} else if (eventSchedule.getEvent().getEventState() == Event.EventState.OPEN) {
+		} else if (eventSchedule.getEventState() == Event.EventState.OPEN) {
 
             EventType eventType = persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId());
 
-			eventSchedule.setNextDate(apiEventSchedule.getNextDate());
-            eventSchedule.setEventType(eventType);
-            eventSchedule.getEvent().setDueDate(apiEventSchedule.getNextDate());
-            eventSchedule.getEvent().setType(eventType);            
-            eventSchedule.getEvent().setAssignee(getAssigneeUser(apiEventSchedule));
+			eventSchedule.setDueDate(apiEventSchedule.getNextDate());
+            eventSchedule.setType(eventType);
+            eventSchedule.setAssignee(getAssigneeUser(apiEventSchedule));
 
-            persistenceService.update(eventSchedule.getEvent());
 			persistenceService.update(eventSchedule);
 			logger.info("Updated EventSchedule for " + eventSchedule.getEventType().getName() + " on Asset " + eventSchedule.getMobileGUID());
 		} else {
@@ -96,10 +93,11 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void DeleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
-		EventSchedule eventSchedule = eventScheduleService.findByMobileId(eventScheduleId);	
-		persistenceService.delete(eventSchedule.getEvent());
-        persistenceService.delete(eventSchedule);
-		logger.info("deleted schedule for " + eventSchedule.getEventType().getName() + " on asset " + eventSchedule.getMobileGUID());
+		Event eventSchedule = eventScheduleService.findByMobileId(eventScheduleId);
+        // NOTE : why isn't event ArchivableEntityWithTenant/Owner???
+        eventSchedule.archiveEntity();
+        persistenceService.update(eventSchedule);
+		logger.info("soft deleting open event for " + eventSchedule.getEventType().getName() + " on asset " + eventSchedule.getMobileGUID());
 	}
 
 	@Override
@@ -107,7 +105,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		ApiEventSchedule apiSchedule = new ApiEventSchedule();
         // For backward compatibility, we must still use the GUID of the Schedule, since all
         // existing schedules out there in mobile land will refer to schedule GUIDs.
-		apiSchedule.setSid(event.getSchedule().getMobileGUID());
+		apiSchedule.setSid(event.getMobileGUID());
 		apiSchedule.setActive(true);
 		apiSchedule.setModified(event.getModified());
 		apiSchedule.setOwnerId(event.getOwner().getId());
@@ -132,7 +130,6 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	}
 	
 	public Event converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
-		EventSchedule eventSchedule = new EventSchedule();
 		BaseOrg owner = persistenceService.find(BaseOrg.class, apiEventSchedule.getOwnerId());
 
         Asset asset = assetService.findByMobileId(apiEventSchedule.getAssetId());
@@ -150,15 +147,6 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
         	event.setNotes(apiEventSchedule.getNotes());
         }
 
-		eventSchedule.setMobileGUID(apiEventSchedule.getSid());
-		eventSchedule.setNextDate(apiEventSchedule.getNextDate());
-		eventSchedule.setTenant(owner.getTenant());
-		eventSchedule.setAsset(asset);
-		eventSchedule.setEventType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
-        eventSchedule.setOwner(asset.getOwner());
-
-        event.setSchedule(eventSchedule);
-		
 		return event;
 	}
 	

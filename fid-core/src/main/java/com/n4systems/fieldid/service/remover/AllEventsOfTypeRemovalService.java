@@ -35,7 +35,6 @@ public class AllEventsOfTypeRemovalService extends FieldIdPersistenceService {
     @Transactional
 	public void remove(EventType eventType) {
 		archiveEvents(eventType);
-        scheduleListRemovalService.remove(null, eventType, Event.EventStateGrouping.COMPLETE);
 	}
 
 	private void archiveEvents(EventType eventType) {

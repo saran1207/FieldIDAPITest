@@ -173,8 +173,8 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 	}
 
 	private void addEventScheduleParams(Map<String, Object> reportMap, Event event) {
-		if (event.getSchedule() != null) {
-			Project job = event.getSchedule().getProject();
+		if (event!=null) {
+			Project job = event.getProject();
 			if (job != null) {
 				reportMap.put("job", new Job(job.getProjectID(), job.getName()));
 			}

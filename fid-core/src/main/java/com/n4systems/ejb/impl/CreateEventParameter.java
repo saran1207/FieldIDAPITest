@@ -1,15 +1,14 @@
 package com.n4systems.ejb.impl;
 
-import java.util.Date;
-import java.util.List;
-
+import com.n4systems.model.Event;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.tools.FileDataContainer;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.tools.FileDataContainer;
+import java.util.Date;
+import java.util.List;
 
 public class CreateEventParameter {
 	public Event event;
@@ -20,17 +19,14 @@ public class CreateEventParameter {
 
 	public final List<EventScheduleBundle> schedules;
 
-    public final Long scheduleId;
 
-
-	public CreateEventParameter(Event event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules, Long scheduleId) {
+	public CreateEventParameter(Event event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
 		this.event = event;
 		this.nextEventDate = nextEventDate;
 		this.userId = userId;
 		this.fileData = fileData;
 		this.uploadedFiles = uploadedFiles;
 		this.schedules = schedules;
-        this.scheduleId = scheduleId;
     }
 
 	@Override

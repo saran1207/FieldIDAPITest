@@ -1,21 +1,19 @@
 package com.n4systems.persistence.utils;
 
-import java.util.Date;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.fieldid.context.ThreadLocalUserContext;
 import com.n4systems.fieldid.context.UserContext;
-import com.n4systems.model.EventSchedule;
+
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
 import com.n4systems.util.time.Clock;
 import com.n4systems.util.time.SystemClock;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
 
 public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreatedHandler {
     private static final Logger logger = Logger.getLogger(DefaultEntityModifiedCreatedHandler.class);
-    private static final Class<?>[] ignoreNullUserClasses = new Class<?>[] { EventSchedule.class };
-    
+
     private UserContext userContext;
     private Clock clock;
 
@@ -65,11 +63,6 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
     }
     
     private boolean shouldWarnOnNullUser(AbstractEntity entity) {
-    	for (Class<?> ignoreClass: ignoreNullUserClasses) {
-    		if (ignoreClass.isInstance(entity)){
-    			return false;
-    		}
-    	}
     	return true;
     }
 

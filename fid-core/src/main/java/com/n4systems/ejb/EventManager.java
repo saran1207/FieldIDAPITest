@@ -2,11 +2,13 @@ package com.n4systems.ejb;
 
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Pager;
-import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 
 import java.util.Date;
@@ -20,11 +22,12 @@ public interface EventManager {
 
 	public Event findAllFields(Long id, SecurityFilter filter);
 
-	public Date findLastEventDate(EventSchedule schedule);
+//	public Date findLastEventDate(EventSchedule schedule);
 
-	public Date findLastEventDate(Long scheduleId);
+//	public Date findLastEventDate(Long scheduleId);
+	public Date findLastEventDate(Long eventId);
 
-	public List<Event> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter);
+    public List<Event> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter);
 
 	public Pager<Event> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
 	

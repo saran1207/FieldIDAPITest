@@ -11,7 +11,6 @@ import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.*;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
@@ -47,79 +46,6 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.legacyAssetManager = new LegacyAssetManager(em);
 		this.assetManager = new AssetManagerImpl(em);
-	}
-
-	@Override
-	public Long updateEventSchedules(Set<Long> ids, EventSchedule updatedSchedule, Map<String, Boolean> values) throws UpdateFailureException {
-        if (ids.size() == 0) {
-            return 0L;
-        }
-
-        Long result = 0L;
-        try {
-
-            for (Long id : ids) {
-                Event event = persistenceManager.find(Event.class, id);
-                EventSchedule schedule = event.getSchedule();
-
-                if (values.containsKey("dueDate")) {
-                    event.setDueDate(updatedSchedule.getNextDate());
-                    schedule.setNextDate(updatedSchedule.getNextDate());
-                }
-
-                if (values.containsKey("location")) {
-                    event.setAdvancedLocation(updatedSchedule.getAdvancedLocation());
-                    schedule.setAdvancedLocation(updatedSchedule.getAdvancedLocation());
-                }
-
-                if (values.containsKey("owner")) {
-                    event.setOwner(updatedSchedule.getOwner());
-                    schedule.setOwner(updatedSchedule.getOwner());
-                }
-
-                persistenceManager.update(event);
-                persistenceManager.update(schedule);
-            }
-
-            modifyAssetsForSchedules(ids);
-
-        } catch (Exception e) {
-            throw new UpdateFailureException(e.getMessage(), e);
-        }
-
-        return result;
-    }
-
-    @Override
-	public Long deleteEventSchedules(Set<Long> ids) throws UpdateFailureException {
-		if (ids == null || ids.isEmpty()) {
-			return 0L;
-		}
-
-		Set<Long> openEventIds = getOpenEventIds(ids);
-        Set<Long> scheduleIds = getScheduleIds(ids);
-
-		if (openEventIds.isEmpty()) {
-			return 0L;
-		}
-
-        // we'll modify the assets first as we won't be able to find the asset
-		// ids
-		// after we delete.
-		modifyAssetsForSchedules(openEventIds);
-
-		String deleteScheduleStmt = String.format("DELETE from %s WHERE id IN (:ids)", EventSchedule.class.getName());
-        String deleteEventStmt = String.format("DELETE from %s WHERE id IN (:ids)", Event.class.getName());
-
-        for (Long openEventId : openEventIds) {
-            Event event = persistenceManager.find(Event.class, openEventId);
-            persistenceManager.delete(event);
-        }
-
-        LargeInListQueryExecutor deleteRunner = new LargeInListQueryExecutor();
-        int scheduleRemoveCount = deleteRunner.executeUpdate(em.createQuery(deleteScheduleStmt), ListHelper.toList(scheduleIds));
-
-		return new Long(openEventIds.size());
 	}
 
 	private Set<Long> getOpenEventIds(Set<Long> openEventIds) {
@@ -288,7 +214,6 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 					ownershipChanged = true;
                     audit.setLocation(eventChanges.getAdvancedLocation().getFullName());
 					changeTarget.setAdvancedLocation(eventChanges.getAdvancedLocation());
-					changeTarget.getSchedule().setAdvancedLocation(eventChanges.getAdvancedLocation());
 				}
 
 				if (updateKey.equals("printable")) {
@@ -351,19 +276,6 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return new Long(ids.size());
 	}
 
-	private void updateCompletedEventOwnership(List<Long> ids, Event event, Map<String, Boolean> fieldMap) throws UpdateFailureException {
-		QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "events", "event.id", ids).addSimpleWhere(
-				"status", ScheduleStatus.COMPLETED);
-
-		Map<String, Boolean> selectedAttributes = getOwnershipSelectedAttributes(fieldMap);
-
-		EventSchedule schedule = new EventSchedule();
-
-		schedule.completed(event);
-
-		updateEventSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
-	}
-
 	/** Extracts a set of keys, whose values are True */
 	private Set<String> getEnabledKeys(Map<String, Boolean> values) {
 		Set<String> keys = new HashSet<String>();
@@ -398,7 +310,6 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
                 Event event = persistenceManager.find(Event.class, openEventId);
 
                 event.setProject(project);
-                event.getSchedule().setProject(project);
 
                 persistenceManager.update(event);
             }

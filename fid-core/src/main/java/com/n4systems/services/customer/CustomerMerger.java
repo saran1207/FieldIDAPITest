@@ -1,9 +1,5 @@
 package com.n4systems.services.customer;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.exceptions.DuplicateCustomerException;
@@ -12,7 +8,6 @@ import com.n4systems.exceptions.TenantNotValidForActionException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.eventbook.EventBookSaver;
@@ -30,6 +25,9 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class CustomerMerger {
 	

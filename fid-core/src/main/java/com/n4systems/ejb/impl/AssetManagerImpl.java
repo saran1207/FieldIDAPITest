@@ -303,7 +303,6 @@ public class AssetManagerImpl implements AssetManager {
 		asset.archiveIdentifier();
 
 		archiveEvents(asset, archivedBy);
-		archiveSchedules(asset, archivedBy);
 		detatachFromProjects(asset, archivedBy);
 
 		return save(asset, archivedBy);
@@ -326,22 +325,6 @@ public class AssetManagerImpl implements AssetManager {
 		idBuilder.addWhere(WhereClauseFactory.create("asset.id", asset.getId()));
 		
 		return new TreeSet<Long>(persistenceManager.findAll(idBuilder));
-	}
-
-	private void archiveSchedules(Asset asset, User archivedBy) {
-		String updateQuery = "UPDATE " + EventSchedule.class.getName() + " SET state = :archiveState,  modifiedBy = :archivingUser , modified = :now "
-				+ " WHERE asset = :asset AND state = :activeState ";
-
-		Query update = em.createQuery(updateQuery);
-		update.setParameter("archiveState", EntityState.ARCHIVED);
-		update.setParameter("archivingUser", archivedBy);
-		update.setParameter("now", new Date());
-
-		update.setParameter("asset", asset);
-		update.setParameter("activeState", EntityState.ACTIVE);
-
-		update.executeUpdate();
-		logger.info("archived schedules for asset " + asset);
 	}
 
 	protected Asset save(Asset asset, User modifiedBy) {
@@ -392,8 +375,8 @@ public class AssetManagerImpl implements AssetManager {
 			eventCount.setCountSelect().addSimpleWhere("asset.type", assetType).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setEventsToDelete(persistenceManager.findCount(eventCount));
 
-			QueryBuilder<EventSchedule> scheduleCount = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
-			scheduleCount.setCountSelect().addSimpleWhere("asset.type", assetType);
+			QueryBuilder<Event> scheduleCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+			scheduleCount.setCountSelect().addSimpleWhere("asset.type", assetType).addSimpleWhere("eventState", Event.EventState.OPEN);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
 			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset.type = :assetType AND event.state = :activeState ";

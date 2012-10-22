@@ -6,7 +6,6 @@ import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
@@ -16,7 +15,6 @@ import com.n4systems.persistence.TransactionManager;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class MassUpdateManagerEJBContainer extends EJBTransactionEmulator<MassUpdateManager> implements MassUpdateManager {
 
@@ -55,21 +53,6 @@ Transaction transaction = transactionManager.startTransaction();
         }
     }
 
-    public Long deleteEventSchedules(Set<Long> scheduleIds) throws UpdateFailureException {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).deleteEventSchedules(scheduleIds);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
 	public Long updateAssetModifiedDate(List<Long> ids) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -90,23 +73,6 @@ Transaction transaction = transactionManager.startTransaction();
 Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).updateEvents(ids, event, values, userId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	
-
-	public Long updateEventSchedules(Set<Long> ids, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).updateEventSchedules(ids, eventSchedule, values);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

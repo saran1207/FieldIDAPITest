@@ -25,7 +25,6 @@ public class EventConverter extends AbstractEventConverter<Event> {
 		writeNode(writer, context, "Location", event.getAdvancedLocation());
 		writeNode(writer, context, "EventBook", event.getBook());
 		writeNode(writer, context, "ProofTestInfo", event.getProofTestInfo());
-		writeNode(writer, context, "Schedule", event.getSchedule());
 		writeIterable(writer, context, "SubEvents", event.getSubEvents(), new SubEventConverter());
 		writer.endNode();
 	}

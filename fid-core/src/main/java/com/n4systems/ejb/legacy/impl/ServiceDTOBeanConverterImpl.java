@@ -147,7 +147,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	public com.n4systems.webservice.dto.InspectionServiceDTO convert(Event event) {
 		InspectionServiceDTO inspectionDTO = new InspectionServiceDTO();
 		persistenceManager.reattach(event, false);
-        persistenceManager.reattach(event.getSchedule(), false);
 
 		populateAbstractInspectionInfo(inspectionDTO, event);
 		inspectionDTO.setOwnerId(retrieveOwnerId(event.getOwner()));
@@ -431,16 +430,16 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	 * @deprecated Use the InspectionServiceDTOConverter
 	 */
 	@Deprecated
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, EventSchedule schedule, Long tenantId) throws IOException {
+	public Event convert(InspectionServiceDTO inspectionServiceDTO, Event schedule, Long tenantId) throws IOException {
 
 		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 
         Event event = new Event();
 
-        if (schedule != null && schedule.getEvent() != null) {
+        if (schedule!=null) {
             // As long as this scheduled event's corresponding open event hasn't been completed or archived, we're going to use it
-            if (schedule.getEvent().getEventState() == Event.EventState.OPEN && schedule.getEvent().getState() == Archivable.EntityState.ACTIVE) {
-                event = persistenceManager.find(Event.class, schedule.getEvent().getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
+            if (schedule.getEventState()==Event.EventState.OPEN && schedule.getState() == Archivable.EntityState.ACTIVE) {
+                event = persistenceManager.find(Event.class, event.getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
             }
         }
 
@@ -982,7 +981,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	private InspectionScheduleServiceDTO convertOpenEvent(Event event) {
 		InspectionScheduleServiceDTO scheduleService = new InspectionScheduleServiceDTO();
 
-		scheduleService.setId(event.getSchedule().getId());
+		scheduleService.setId(event.getId());
 		scheduleService.setNextDate(dateToString(event.getDueDate()));
 		scheduleService.setProductId(event.getAsset().getId());
 		scheduleService.setInspectionTypeId(event.getType().getId());
@@ -996,16 +995,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 
-		EventSchedule eventSchedule = new EventSchedule();
         Event openEvent = new Event();
 
-		eventSchedule.setMobileGUID(inspectionScheduleServiceDTO.getMobileGuid());
-		eventSchedule.setNextDate(stringToDate(inspectionScheduleServiceDTO.getNextDate()));
-		eventSchedule.setTenant(tenant);
-
-        openEvent.setSchedule(eventSchedule);
-
-        openEvent.setDueDate(eventSchedule.getNextDate());
+        openEvent.setDueDate(stringToDate(inspectionScheduleServiceDTO.getNextDate()));
         openEvent.setTenant(tenant);
 
 		return openEvent;

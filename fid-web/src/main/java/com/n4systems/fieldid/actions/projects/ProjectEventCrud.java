@@ -12,7 +12,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.EventSchedule;
+
 import com.n4systems.model.Project;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.security.Permissions;

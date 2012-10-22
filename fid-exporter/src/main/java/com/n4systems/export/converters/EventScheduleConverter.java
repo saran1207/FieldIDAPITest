@@ -1,39 +1,20 @@
 package com.n4systems.export.converters;
 
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
+@Deprecated // TODO : WEB-2358  remove this.
 public class EventScheduleConverter extends ExportConverter {
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean canConvert(Class type) {
-		return type.equals(EventSchedule.class);
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist");
+    }
 	
 	@Override
 	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-		EventSchedule schedule = (EventSchedule) source;
-		writeNode(writer, context, "Status", toFriendlyName(schedule.getStatus()));
-		writeNode(writer, context, "ScheduleDate", schedule.getNextDate());
-		writeNode(writer, context, "CompletedDate", schedule.getCompletedDate());
-		writeNode(writer, context, "EventType", schedule.getEventType());
-		writeNode(writer, context, "Location", schedule.getAdvancedLocation());
-		writeNode(writer, context, "Job", schedule.getProject());
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist");
+    }
 
-	private String toFriendlyName(ScheduleStatus status) {
-		switch (status) {
-			case COMPLETED:
-				return "Completed";
-			case IN_PROGRESS:
-				return "In Progress";
-			case SCHEDULED:
-				return "Scheduled";
-			default:
-				return "";
-		}
-	}
 }

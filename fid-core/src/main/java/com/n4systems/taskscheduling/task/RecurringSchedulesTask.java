@@ -24,14 +24,16 @@ public class RecurringSchedulesTask extends ScheduledTask{
 
     public static final int RECURRING_EVENT_BUFFER_SIZE = 14;
 
-    private PersistenceManager persistenceManager;
-
-    private EventScheduleService eventScheduleService;
-
     public RecurringSchedulesTask() {
         super(60 * 30, TimeUnit.SECONDS);
-        persistenceManager = ServiceLocator.getPersistenceManager();
-        eventScheduleService = ServiceLocator.getEventScheduleService();
+    }
+
+    public EventScheduleService getEventScheduleService() {
+        return ServiceLocator.getEventScheduleService();
+    }
+
+    public PersistenceManager getPersistenceManager() {
+        return ServiceLocator.getPersistenceManager();
     }
 
     @Override
@@ -51,7 +53,7 @@ public class RecurringSchedulesTask extends ScheduledTask{
 
     private List<RecurringAssetTypeEvent> getRecurringAssetTypeEvents() {
         QueryBuilder<RecurringAssetTypeEvent> query = new QueryBuilder<RecurringAssetTypeEvent>(RecurringAssetTypeEvent.class, new OpenSecurityFilter());
-        return persistenceManager.findAll(query);
+        return getPersistenceManager().findAll(query);
 
     }
 
@@ -68,7 +70,7 @@ public class RecurringSchedulesTask extends ScheduledTask{
                 schedule.setTenant(asset.getTenant());
                 schedule.setRecurringEvent(event);
                 schedule.setOwner(asset.getOwner());
-                eventScheduleService.createSchedule(schedule);
+                getEventScheduleService().createSchedule(schedule);
             }
         }
          
@@ -83,7 +85,7 @@ public class RecurringSchedulesTask extends ScheduledTask{
         query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "dueDate", futureDate.minusMillis(1).toDate()));
         query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LE, "to", "dueDate", futureDate.toDate()));
 
-        return persistenceManager.findCount(query) > 0;
+        return getPersistenceManager().findCount(query) > 0;
     }
 
 
@@ -93,7 +95,7 @@ public class RecurringSchedulesTask extends ScheduledTask{
         if(event.getOwner() != null) {
             query.addWhere(WhereClauseFactory.create("owner", event.getOwner()));
         }
-        return persistenceManager.findAll(query);
+        return getPersistenceManager().findAll(query);
     }
     
 }

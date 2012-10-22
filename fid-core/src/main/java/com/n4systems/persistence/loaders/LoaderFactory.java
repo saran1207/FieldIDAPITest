@@ -22,7 +22,6 @@ import com.n4systems.model.eventbook.AllEventBookListLoader;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
-import com.n4systems.model.eventschedule.IncompleteEventSchedulesListLoader;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.eventtype.AssociatedEventTypesLoader;
 import com.n4systems.model.eventtype.EventTypeListLoader;
@@ -327,10 +326,6 @@ public class LoaderFactory implements Serializable {
 
 	public UserListableLoader createHistoricalEmployeesListableLoader() {
 		return createUserListableLoader().employeesOnly();
-	}
-
-	public IncompleteEventSchedulesListLoader createIncompleteEventSchedulesListLoader() {
-		return new IncompleteEventSchedulesListLoader(filter);
 	}
 
 	public InternalOrgByNameLoader createInternalOrgByNameLoader() {

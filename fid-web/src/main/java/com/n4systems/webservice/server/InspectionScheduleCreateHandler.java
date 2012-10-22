@@ -2,7 +2,6 @@ package com.n4systems.webservice.server;
 
 import com.n4systems.model.*;
 import com.n4systems.model.event.SimpleEventSaver;
-import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;

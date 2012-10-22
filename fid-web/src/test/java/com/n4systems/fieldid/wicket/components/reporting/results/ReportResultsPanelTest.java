@@ -1,36 +1,31 @@
 package com.n4systems.fieldid.wicket.components.reporting.results;
 
-import static org.easymock.EasyMock.*;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.builders.EventBuilder;
-import com.n4systems.model.builders.EventScheduleBuilder;
-import org.apache.wicket.model.Model;
-import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.fieldid.wicket.IWicketTester;
 import com.n4systems.fieldid.wicket.WicketHarness;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanelTest.ReportResultsPanelHarness;
+import com.n4systems.model.Event;
+import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.TableViewTransformer;
 import com.n4systems.util.views.TableView;
+import org.apache.wicket.model.Model;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
 
 public class ReportResultsPanelTest extends FieldIdPanelTest<ReportResultsPanelHarness, ReportResultsPanel> {
 

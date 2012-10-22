@@ -1,19 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.model.event.FailedEventListLoader;
 import com.n4systems.model.event.SmartFailedEventListLoader;
 import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
@@ -28,15 +14,16 @@ import com.n4systems.model.utils.PlainDate;
 import com.n4systems.notificationsetting.reports.EventScheduleCountGenerator;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.taskscheduling.ScheduledTask;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.DateHelper;
-import com.n4systems.util.LogUtils;
-import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.*;
 import com.n4systems.util.time.StoppedClock;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
+import org.apache.log4j.Logger;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class EventScheduleNotificationTask extends ScheduledTask {
 	private static Logger logger = Logger.getLogger(EventScheduleNotificationTask.class);

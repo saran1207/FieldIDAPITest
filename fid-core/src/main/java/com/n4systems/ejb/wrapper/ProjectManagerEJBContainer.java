@@ -1,20 +1,21 @@
 package com.n4systems.ejb.wrapper;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.impl.ProjectManagerImpl;
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.model.*;
-import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.Project;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.tools.Pager;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class ProjectManagerEJBContainer extends EJBTransactionEmulator<ProjectManager> implements ProjectManager {
 

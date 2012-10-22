@@ -26,7 +26,7 @@ public class CreateEventParameterBuilder {
 	}
 
 	public CreateEventParameter build() {
-		return new CreateEventParameter(event, nextEventDate, userId, proofTestData, uploadedImages, schedules, scheduleId);
+		return new CreateEventParameter(event, nextEventDate, userId, proofTestData, uploadedImages, schedules);
 	}
 	
 	public CreateEventParameterBuilder withANextEventDate(Date nextEventDate) {

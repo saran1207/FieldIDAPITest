@@ -1,5 +1,5 @@
 <head>
-    <@n4.includeStyle type="page" href="pageStyles/projectEvents.css"/>
+    <@n4.includeStyle type="page" href="projectEvents"/>
     <@n4.includeScript src="eventSchedule"/>
 </head>
 ${action.setPageType('job','events')!}

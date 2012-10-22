@@ -5,10 +5,10 @@ import com.n4systems.fieldid.FieldIdServiceTest;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Status;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.EventState;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
 import com.n4systems.test.TestMock;
@@ -26,9 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 
@@ -242,7 +240,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 		
 		assertEquals(2, results.size());
 		assertEquals(Event.EventState.COMPLETED.getLabel(), results.get(0).getLabel());
-		assertEquals(EventSchedule.ALL_STATUS.getLabel(), results.get(1).getLabel());
+		assertEquals(EventState.ALL_STATES.getLabel(), results.get(1).getLabel());
 
 		verifyTestMocks();		
 	}

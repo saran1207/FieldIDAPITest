@@ -1,17 +1,5 @@
 package com.n4systems.fieldid.actions.search;
 
-import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
@@ -27,7 +15,6 @@ import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGrou
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.AssetStatus;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
@@ -46,6 +33,16 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.Preparable;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.UNASSIGNED_USER;
 
 public class EventScheduleAction extends CustomizableSearchAction<EventScheduleSearchContainer> implements Preparable {
 	public static final String SCHEDULE_CRITERIA = "scheduleCriteria";
@@ -233,9 +230,6 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 		return employees;
 	}
 
-	public Date getLastEventDate(EventSchedule schedule) {
-		return eventManager.findLastEventDate(schedule);
-	}
 
 	public Long getAssetIdForEventScheduleId(String eventScheduleId) {
 		return eventScheduleManager.getAssetIdForSchedule(Long.valueOf(eventScheduleId));

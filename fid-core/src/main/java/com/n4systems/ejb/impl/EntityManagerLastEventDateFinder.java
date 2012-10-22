@@ -1,22 +1,19 @@
 package com.n4systems.ejb.impl;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
-import com.n4systems.fieldid.CopiedToService;
-import com.n4systems.fieldid.service.event.LastEventDateService;
-import com.n4systems.model.EventSchedule;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
-import com.n4systems.model.Asset;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
 
 @Deprecated
 @CopiedToService(LastEventDateService.class)
@@ -37,15 +34,11 @@ public class EntityManagerLastEventDateFinder implements LastEventDateFinder {
 		return findLastEventDate(asset, null);
 	}
 
-    @CopiedToService(LastEventDateService.class)
-	public Date findLastEventDate(Long scheduleId) {
-		return findLastEventDate(persistenceManager.find(EventSchedule.class, scheduleId));
-	}
-
-    @CopiedToService(LastEventDateService.class)
-	public Date findLastEventDate(EventSchedule schedule) {
-		return findLastEventDate(schedule.getAsset(), schedule.getEventType());
-	}
+    @Override
+    public Date findLastEventDate(Long eventId) {
+        Event event = persistenceManager.find(Event.class, eventId);
+        return findLastEventDate(event.getAsset(),event.getType());
+    }
 
     @CopiedToService(LastEventDateService.class)
 	public Date findLastEventDate(Asset asset, EventType eventType) {

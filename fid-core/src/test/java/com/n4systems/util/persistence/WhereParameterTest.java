@@ -1,16 +1,15 @@
 package com.n4systems.util.persistence;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import javax.persistence.Query;
-
+import com.n4systems.model.Event;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.EventSchedule;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
+import javax.persistence.Query;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class WhereParameterTest {
 
@@ -26,7 +25,7 @@ public class WhereParameterTest {
 	@Test public void test_equal_or_null_clause_production() {
 		WhereParameter<Long> parameter = new WhereParameter<Long>(Comparator.EQ_OR_NULL, "field.name", 1L);
 		
-		assertEquals("(schedule.field.name = :field_name OR schedule.field.name IS NULL)", parameter.getClause(new FromTable(EventSchedule.class, "schedule")));
+		assertEquals("(schedule.field.name = :field_name OR schedule.field.name IS NULL)", parameter.getClause(new FromTable(Event.class, "schedule")));
 	}
 
 	@Test public void test_trim() {	
@@ -36,7 +35,7 @@ public class WhereParameterTest {
 		expect(query.setParameter("foo", "untrimmedValue")).andReturn(query);
 		replay(query);
 
-		System.out.println( parameter.getClause(new FromTable(EventSchedule.class, "table")));
+		System.out.println( parameter.getClause(new FromTable(Event.class, "table")));
 		parameter.bind(query);
 		
 		verify(query);
@@ -49,7 +48,7 @@ public class WhereParameterTest {
 		expect(query.setParameter("foo", " mixedcasevalue ")).andReturn(query); // query should flatten value and selection to lowercase 
 		replay(query);
 
-		assertEquals("lower(table.column) = :foo", parameter.getClause(new FromTable(EventSchedule.class, "table")));
+		assertEquals("lower(table.column) = :foo", parameter.getClause(new FromTable(Event.class, "table")));
 		parameter.bind(query);
 		
 		verify(query);
@@ -62,7 +61,7 @@ public class WhereParameterTest {
 		expect(query.setParameter("foo", "%someValue%")).andReturn(query); 
 		replay(query);
 
-		assertEquals("table.column = :foo", parameter.getClause(new FromTable(EventSchedule.class, "table")));
+		assertEquals("table.column = :foo", parameter.getClause(new FromTable(Event.class, "table")));
 		parameter.bind(query);
 		
 		verify(query);
@@ -76,7 +75,7 @@ public class WhereParameterTest {
 		expect(query.setParameter("foo", "%somevalue%")).andReturn(query); 
 		replay(query);
 
-		assertEquals("lower(table.column) = :foo", parameter.getClause(new FromTable(EventSchedule.class, "table")));
+		assertEquals("lower(table.column) = :foo", parameter.getClause(new FromTable(Event.class, "table")));
 		parameter.bind(query);
 		
 		verify(query);
@@ -85,7 +84,7 @@ public class WhereParameterTest {
 	@Test public void test_drop_alias() {
 		WhereParameter<Long> parameter = new WhereParameter<Long>(Comparator.EQ_OR_NULL, "field", "field", 1L, 0, true);
 		
-		assertEquals("(field = :field OR field IS NULL)", parameter.getClause(new FromTable(EventSchedule.class, "schedule")));
+		assertEquals("(field = :field OR field IS NULL)", parameter.getClause(new FromTable(Event.class, "schedule")));
 	}
 	
 	

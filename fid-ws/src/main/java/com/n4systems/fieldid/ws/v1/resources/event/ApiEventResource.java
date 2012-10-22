@@ -97,9 +97,8 @@ public class ApiEventResource extends FieldIdPersistenceService {
 
         if (apiEvent.getEventScheduleId() != null) {
             // We find the open event, and use this event rather than the updated one. UNLESS it's archived
-            EventSchedule schedule = eventScheduleService.findByMobileId(apiEvent.getEventScheduleId());
-            if (schedule != null) {
-                Event loadedEvent = schedule.getEvent();
+            Event loadedEvent = eventScheduleService.findByMobileId(apiEvent.getEventScheduleId());
+            if (loadedEvent != null) {
                 if (loadedEvent.getState() == Archivable.EntityState.ACTIVE && loadedEvent.getEventState() == Event.EventState.OPEN) {
                     event = loadedEvent;
                 }

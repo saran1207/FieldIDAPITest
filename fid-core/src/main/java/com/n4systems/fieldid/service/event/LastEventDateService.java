@@ -4,7 +4,6 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -21,13 +20,6 @@ public class LastEventDateService extends FieldIdPersistenceService {
         return findLastEventDate(asset, null);
     }
 
-    public Date findLastEventDate(Long scheduleId) {
-        return findLastEventDate(persistenceService.find(EventSchedule.class, scheduleId));
-    }
-
-    public Date findLastEventDate(EventSchedule schedule) {
-        return findLastEventDate(schedule.getAsset(), schedule.getEventType());
-    }
 
     public Date findLastEventDate(Asset asset, EventType eventType) {
 

@@ -4,7 +4,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
+
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;

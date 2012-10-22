@@ -7,7 +7,6 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.DateHelper;
@@ -16,10 +15,9 @@ import com.n4systems.util.EnumUtils.LabelledEnumSet;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.UUID;
 
-@Entity
-@Table(name = "eventschedules")
+//@Entity
+//@Table(name = "eventschedules")
 public class EventSchedule extends ArchivableEntityWithOwner implements NetworkEntity<EventSchedule> {
 	private static final long serialVersionUID = 1L;
 
@@ -97,93 +95,64 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	}
 
 	public EventSchedule(Asset asset, EventType eventType) {
-		this(asset, eventType, null);
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	public EventSchedule(Asset asset, EventType eventType, Date scheduledDate) {
-		this.setTenant(asset.getTenant());
-		this.setAsset(asset);
-		this.eventType = eventType;
-		this.nextDate = scheduledDate;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	public EventSchedule(Event event) {
-		this(event.getAsset(), event.getType());
-		nextDate = event.getDate();
-		this.completed(event);
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	public EventSchedule(Asset asset, AssetTypeSchedule typeSchedule) {
-		this(asset, typeSchedule.getEventType());
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 	
 	@Override
 	protected void onCreate() {
-		super.onCreate();
-		ensureMobileGuidIsSet();
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 	
 	@Override
 	protected void onUpdate() {
-		super.onUpdate();
-		ensureMobileGuidIsSet();
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 	
-	private void ensureMobileGuidIsSet() {
-		if (mobileGUID == null) {
-			mobileGUID = UUID.randomUUID().toString();
-		}
-	}
-	
+
 	@AllowSafetyNetworkAccess
 	public Asset getAsset() {
 		return asset;
 	}
 
 	public void setAsset(Asset asset) {
-		this.asset = asset;
-		if (status != ScheduleStatus.COMPLETED) {
-			updateOwnershipToAsset();
-		}
-	}
-
-	private void updateOwnershipToAsset() {
-		setAdvancedLocation(asset.getAdvancedLocation());
-		setOwner(asset.getOwner());
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	@AllowSafetyNetworkAccess
 	public EventType getEventType() {
-		return eventType;
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
 	}
 
 	public void setEventType(EventType eventType) {
-		this.eventType = eventType;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	public void setNextDate(Date nextDate) {
-		this.nextDate = nextDate;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	@AllowSafetyNetworkAccess
 	public Date getNextDate() {
-		return (nextDate != null) ? nextDate : null;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	@AllowSafetyNetworkAccess
 	public boolean isPastDue() {
-		return (status != ScheduleStatus.COMPLETED && isPastDue(nextDate));
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
-	/**
-	 * A static method consolidating the logic for checking if a next inspection
-	 * date is past due.
-	 * 
-	 * @param nextEventDate
-	 *            The next event date
-	 * @return True if nextEventDate is after {@link DateHelper#getToday()
-	 *         today}
-	 */
 	@AllowSafetyNetworkAccess
 	public static boolean isPastDue(Date nextEventDate) {
 		return nextEventDate != null && DateHelper.getToday().after(nextEventDate);
@@ -191,130 +160,78 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 
 	@AllowSafetyNetworkAccess
 	public Long getDaysPastDue() {
-		Long daysPast = null;
-		if (isPastDue()) {
-			daysPast = DateHelper.getDaysUntilToday(nextDate);
-		}
-		return daysPast;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	@AllowSafetyNetworkAccess
 	public Long getDaysToDue() {
-		Long daysTo = null;
-		if (!isPastDue()) {
-			daysTo = DateHelper.getDaysFromToday(nextDate);
-		}
-		return daysTo;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj instanceof EventSchedule) {
-			return this.equals((EventSchedule) obj);
-		} else {
-			return super.equals(obj);
-		}
-
-	}
-
-	public boolean equals(EventSchedule schedule) {
-
-		if (schedule == null)
-			return false;
-		if (getId() == null) {
-			return false;
-		}
-			
-
-		return getId().equals(schedule.getId());
-
-	}
 
 	@AllowSafetyNetworkAccess
 	public Date getCompletedDate() {
-		return completedDate;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
     public void setCompletedDate(Date date) {
-        this.completedDate = date;
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
     }
 
 	@AllowSafetyNetworkAccess
 	public ScheduleStatus getStatus() {
-		return status;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	public void completed(Event event) throws InvalidScheduleStateException {
-		if (status == ScheduleStatus.COMPLETED) {
-			throw new InvalidScheduleStateException();
-		}
-		this.event = event;
-        event.setSchedule(this);
-		completedDate = event.getDate();
-		status = ScheduleStatus.COMPLETED;
-		advancedLocation = event.getAdvancedLocation();
-		setOwner(event.getOwner());
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	public void inProgress() {
-		if (status == ScheduleStatus.COMPLETED) {
-			throw new InvalidScheduleStateException();
-		}
-		status = ScheduleStatus.IN_PROGRESS;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	public void stopProgress() {
-		if (status == ScheduleStatus.COMPLETED) {
-			throw new InvalidScheduleStateException();
-		}
-		status = ScheduleStatus.SCHEDULED;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	@AllowSafetyNetworkAccess
 	public Event getEvent() {
-		return event;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
     public void setEvent(Event event) {
-        this.event = event;
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
     }
 
 	public void removeEvent() {
-		status = ScheduleStatus.SCHEDULED;
-		completedDate = null;
-		updateOwnershipToAsset();
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	@AllowSafetyNetworkAccess
 	public Project getProject() {
-		return project;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	public void setProject(Project project) {
-		this.project = project;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
-		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 	
 	public EventSchedule enhance(SecurityLevel level) {
-		EventSchedule enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
-		enhanced.setAsset(enhance(asset, level));
-		enhanced.setEventType(enhance(eventType, level));
-		enhanced.event = enhance(event, level);
-		return enhanced;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 	
 	public String getMobileGUID() {
-		return mobileGUID;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 	public void setMobileGUID(String mobileGUID) {
-		this.mobileGUID = mobileGUID;
-	}
+        throw new UnsupportedOperationException("EventSchedules no longer exist.  THis should NOT be called!");
+    }
 
 	
 	@AllowSafetyNetworkAccess

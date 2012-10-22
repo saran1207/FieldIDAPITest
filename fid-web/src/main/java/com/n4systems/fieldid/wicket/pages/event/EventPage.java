@@ -139,9 +139,9 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             schedulesContainer = new WebMarkupContainer("schedulesContainer");
             schedulesContainer.setOutputMarkupId(true);
             schedulesContainer.setVisible(event.getObject().isNew() || !event.getObject().isCompleted());
-            schedulesContainer.add(new ListView<EventSchedule>("schedules", new PropertyModel<List<EventSchedule>>(EventPage.this, "schedules")) {
+            schedulesContainer.add(new ListView<Event>("schedules", new PropertyModel<List<Event>>(EventPage.this, "schedules")) {
                 @Override
-                protected void populateItem(final ListItem<EventSchedule> item) {
+                protected void populateItem(final ListItem<Event> item) {
                     item.add(new Label("addScheduleDate", new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "dueDate"))));
                     item.add(new Label("addScheduleLabel", new PropertyModel<Object>(item.getModel(), "eventType.name")));
                     item.add(new FlatLabel("addScheduleJob", new PropertyModel<Object>(item.getModel(), "project.name")));
@@ -339,13 +339,14 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     }
 
     protected void doAutoSchedule() {
-        AssetTypeSchedule schedule = event.getObject().getAsset().getType().getSchedule(event.getObject().getType(), ((Event) event.getObject()).getOwner());
+        Event e = event.getObject();
+        AssetTypeSchedule schedule = e.getAsset().getType().getSchedule(e.getType(), e.getOwner());
         schedules.clear();
         if (schedule != null) {
             Event eventSchedule = new Event();
-            eventSchedule.setAsset(event.getObject().getAsset());
-            eventSchedule.setType(event.getObject().getType());
-            eventSchedule.setDueDate(schedule.getNextDate((event.getObject()).getDate()));
+            eventSchedule.setAsset(e.getAsset());
+            eventSchedule.setType(e.getType());
+            eventSchedule.setDueDate(schedule.getNextDate(e.getDate()));
             schedules.add(eventSchedule);
         }
     }

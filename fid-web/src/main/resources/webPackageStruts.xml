@@ -959,50 +959,7 @@
 			</result>
 		</action>
 
-		<action name="massUpdateEvents" method="edit" class="com.n4systems.fieldid.actions.EventMassUpdate">
-			<result name="error" type="redirectAction">report</result>
-			<result name="success" type="freemarker">/templates/html/massUpdate/event/form.ftl</result>
-		</action>
 
-		<action name="massUpdateEventsSave" method="save" class="com.n4systems.fieldid.actions.EventMassUpdate">
-			<result name="error" type="redirectAction">search</result>
-			<result name="input" type="freemarker">/templates/html/massUpdate/event/form.ftl</result>
-			<result name="success" type="redirect">
-				<param name="location">w/returnToReport</param>
-			</result>
-		</action>
-		
-		<action name="massUpdateEventsConfirmDelete" method="confirmDelete" class="com.n4systems.fieldid.actions.EventMassUpdate">
-			<result name="error" type="redirectAction">report</result>
-			<result name="success" type="freemarker">/templates/html/massUpdate/event/confirmDelete.ftl</result>
-		</action>
-		
-		<action name="massUpdateEventsDelete" method="delete" class="com.n4systems.fieldid.actions.EventMassUpdate">
-			<result name="error" type="redirectAction">search</result>
-			<result name="input" type="freemarker">/templates/html/massUpdate/event/form.ftl</result>
-			<result name="success" type="redirect">
-				<param name="location">w/returnToReport</param>
-			</result>
-		</action>
-
-		<action name="massUpdateEventSchedule" method="edit" class="com.n4systems.fieldid.actions.EventScheduleMassUpdate">
-			<result name="error" type="redirectAction">schedule</result>
-			<result name="success" type="freemarker">/templates/html/massUpdate/eventSchedule/form.ftl</result>
-		</action>
-
-		<action name="massUpdateEventScheduleSave" method="save"
-			class="com.n4systems.fieldid.actions.EventScheduleMassUpdate">
-			<result name="error" type="redirectAction">schedule</result>
-			<result name="input" type="freemarker">/templates/html/massUpdate/eventSchedule/form.ftl</result>
-
-            <!--Remove after schedules is gone-->
-            <result name="returntoreport" type="redirect">/w/runLastReport</result>
-
-			<result name="success" type="redirectAction">
-				<param name="actionName">scheduleResults</param>
-				<param name="searchId">${searchId}</param>
-			</result>
-		</action>
 		<action name="selectJobToAssignTo" method="edit" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
 			<result name="error" type="redirectAction">schedule</result>
 			<result name="success" type="freemarker">/templates/html/assignToJob/form.ftl</result>

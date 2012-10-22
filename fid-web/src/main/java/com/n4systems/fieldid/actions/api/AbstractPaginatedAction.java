@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.actions.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.viewhelpers.PaginatedDisplay;
 import com.n4systems.util.ConfigEntry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbstractPaginatedAction extends AbstractAction implements PaginatedDisplay {
 	private static final long serialVersionUID = 1L;

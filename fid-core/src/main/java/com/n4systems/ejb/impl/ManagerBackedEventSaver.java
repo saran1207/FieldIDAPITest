@@ -7,7 +7,6 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.*;
-import com.n4systems.model.api.Archivable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.reporting.PathHandler;
@@ -56,13 +55,13 @@ public class ManagerBackedEventSaver implements EventSaver {
 
         Date completedDate = parameterObject.event.getDate();
 
-        findOrCreateSchedule(parameterObject.event, parameterObject.scheduleId);
+        //findOrCreateSchedule(parameterObject.event, parameterObject.scheduleId);
 
-        if (parameterObject.event.getSchedule() == null) {
-            EventSchedule schedule = new EventSchedule();
-            schedule.copyDataFrom(parameterObject.event);
-            parameterObject.event.setSchedule(schedule);
-        }
+//        if (parameterObject.event.getSchedule() == null) {
+//            EventSchedule schedule = new EventSchedule();
+//            schedule.copyDataFrom(parameterObject.event);
+//            parameterObject.event.setSchedule(schedule);
+//        }
 
         parameterObject.event.setDate(completedDate);
 
@@ -88,8 +87,8 @@ public class ManagerBackedEventSaver implements EventSaver {
 
         // Remove after mobile doesn't care about schedules
         // Do this last, as it can throw an exception if the schedule is in an invalid state.
-        parameterObject.event.getSchedule().completed(parameterObject.event);
-        persistenceManager.update(parameterObject.event.getSchedule());
+//        parameterObject.event.getSchedule().completed(parameterObject.event);
+//        persistenceManager.update(parameterObject.event.getSchedule());
 
 		return parameterObject.event;
 	}
@@ -115,34 +114,34 @@ public class ManagerBackedEventSaver implements EventSaver {
         }
     }
 
-    private EventSchedule findOrCreateSchedule(Event event, Long scheduleId) {
-        EventSchedule eventSchedule = null;
-
-        if (scheduleId == null) {
-            scheduleId = 0L;
-        }
-
-        if (scheduleId == -1) {
-            // This means the user selected 'create new schedule'
-            // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
-            eventSchedule = new EventSchedule();
-            eventSchedule.copyDataFrom(event);
-            eventSchedule.setNextDate(event.getDate());
-            persistenceManager.save(eventSchedule);
-            event.setSchedule(eventSchedule);
-        } else if (scheduleId > 0) {
-            // There was an existing schedule selected.
-            eventSchedule = persistenceManager.find(EventSchedule.class, scheduleId, event.getTenant());
-            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED || eventSchedule.getEvent().getState() == null) {
-                event.setSchedule(null);
-            } else if (eventSchedule.getEvent() != null && (eventSchedule.getEvent().getState() != Archivable.EntityState.ACTIVE || eventSchedule.getEvent().getEventState() != Event.EventState.OPEN)) {
-                event.setSchedule(null);
-            } else{
-                event.setSchedule(eventSchedule);
-            }
-        }
-        return eventSchedule;
-    }
+//    private EventSchedule findOrCreateSchedule(Event event, Long scheduleId) {
+//        EventSchedule eventSchedule = null;
+//
+//        if (scheduleId == null) {
+//            scheduleId = 0L;
+//        }
+//
+//        if (scheduleId == -1) {
+//            // This means the user selected 'create new schedule'
+//            // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
+//            eventSchedule = new EventSchedule();
+//            eventSchedule.copyDataFrom(event);
+//            eventSchedule.setNextDate(event.getDate());
+//            persistenceManager.save(eventSchedule);
+//            event.setSchedule(eventSchedule);
+//        } else if (scheduleId > 0) {
+//            // There was an existing schedule selected.
+//            eventSchedule = persistenceManager.find(EventSchedule.class, scheduleId, event.getTenant());
+//            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED || eventSchedule.getEvent().getState() == null) {
+//                event.setSchedule(null);
+//            } else if (eventSchedule.getEvent() != null && (eventSchedule.getEvent().getState() != Archivable.EntityState.ACTIVE || eventSchedule.getEvent().getEventState() != Event.EventState.OPEN)) {
+//                event.setSchedule(null);
+//            } else{
+//                event.setSchedule(eventSchedule);
+//            }
+//        }
+//        return eventSchedule;
+//    }
 	
 	private void writeSignatureImagesToDisk(Event event, Map<Long, byte[]> rememberedSignatureImages) {
 		SignatureService sigService = new SignatureService();

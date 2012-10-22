@@ -1,27 +1,26 @@
 package com.n4systems.model.asset;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Event;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.customclauses.PredefinedLocationInClause;
 import com.n4systems.util.persistence.customclauses.SecondaryOrExternalOrgFilterClause;
 import com.n4systems.webservice.assetdownload.SyncAsset;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 	private final List<Long> ownerIds = new ArrayList<Long>();
@@ -49,10 +48,10 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 		if (jobIds.isEmpty()) {
 			return new ArrayList<SyncAsset>();
 		}
-		
+
 		List<SyncAsset> assetIds = findMasterAssetIdsByJob(em, filter);
 		List<SyncAsset> subAssetIds = findSubAssetIdsForMasters(em, assetIds);
-		
+
 		assetIds.addAll(subAssetIds);
 		return assetIds;
 	}
@@ -76,14 +75,14 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 	}
 	
 	private List<SyncAsset> findMasterAssetIdsByJob(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(EventSchedule.class, filter);
+		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(Event.class, filter);
 		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "asset.id", "asset.modified"));
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "project.id", jobIds));
-		
+
 		List<SyncAsset> masterAssetIds = builder.getResultList(em);
 		return masterAssetIds;
 	}
-	
+
 	private List<SyncAsset> findAssetIdsByOrgAndLocation(EntityManager em, SecurityFilter filter) {
 		if (ownerIds.isEmpty() && locationIds.isEmpty()) {
 			return new ArrayList<SyncAsset>();

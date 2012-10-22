@@ -4,7 +4,10 @@ import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.impl.EventManagerImpl;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -13,7 +16,6 @@ import com.n4systems.security.Log4JAuditLogger;
 import com.n4systems.security.UpdateEventAuditHandler;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Pager;
-import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 
 import javax.persistence.EntityManager;
@@ -41,12 +43,22 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-	
-	
+    public Date findLastEventDate(Long eventId) {
+        TransactionManager transactionManager = new FieldIdTransactionManager();
+        Transaction transaction = transactionManager.startTransaction();
+        try {
+            return createManager(transaction.getEntityManager()).findLastEventDate(eventId);
 
-	
+        } catch (RuntimeException e) {
+            transactionManager.rollbackTransaction(transaction);
 
-	public Event findAllFields(Long id, SecurityFilter filter) {
+            throw e;
+        } finally {
+            transactionManager.finishTransaction(transaction);
+        }
+    }
+
+    public Event findAllFields(Long id, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -61,7 +73,8 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-	public List<Event> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
+
+    public List<Event> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -91,54 +104,6 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-
-	public Date findLastEventDate(EventSchedule schedule) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findLastEventDate(schedule);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public Date findLastEventDate(Long scheduleId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findLastEventDate(scheduleId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	
-	
-
-//	public Pager<Event> findNewestEvents(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
-//		TransactionManager transactionManager = new FieldIdTransactionManager();
-//		Transaction transaction = transactionManager.startTransaction();
-//		try {
-//			return createManager(transaction.getEntityManager()).findNewestEvents(searchCriteria, securityFilter, page, pageSize);
-//
-//		} catch (RuntimeException e) {
-//			transactionManager.rollbackTransaction(transaction);
-//
-//			throw e;
-//		} finally {
-//			transactionManager.finishTransaction(transaction);
-//		}
-//	}
 
 	public Pager<Event> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

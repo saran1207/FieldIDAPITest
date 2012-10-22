@@ -3,7 +3,6 @@ package com.n4systems.fieldid.viewhelpers.handlers.completedordue;
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 
 public class ReportingLocationHandler extends WebOutputHandler {
 

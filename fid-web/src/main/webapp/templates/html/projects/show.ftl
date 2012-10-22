@@ -1,12 +1,13 @@
 <head>
 
-    <@n4.includeStyle type="page" src="pageStyles/projectEvents"/>
-	<@n4.includeStyle type="page" src="pageStyles/projectAssets"/>
-	<@n4.includeStyle type="page" src="pageStyles/projectNotes"/>
     <@n4.includeScript src="fileUpload.js"/>
     <@n4.includeScript src="projects.js"/>
     <@n4.includeScript src="pagination.js"/>
-	<@n4.includeStyle type="page" src="projects"/>
+
+    <@n4.includeStyle type="page" href="projectEvents"/>
+	<@n4.includeStyle type="page" href="projectAssets"/>
+	<@n4.includeStyle type="page" href="projectNotes"/>
+	<@n4.includeStyle type="page" href="projects"/>
 
 
 	<script type="text/javascript">

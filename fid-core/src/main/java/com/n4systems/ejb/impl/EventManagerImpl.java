@@ -11,16 +11,12 @@ import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.persistence.PassthruWhereClause;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.SubSelectInClause;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
-import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 import org.apache.log4j.Logger;
 
@@ -209,7 +205,7 @@ public class EventManagerImpl implements EventManager {
 //		Pager<Event> eventPage = qb.getPaginatedResults(em, page, pageSize);
 //		return eventPage;
 //	}
-	
+
 	public boolean isMasterEvent(Long id) {
 		Event event = em.find(Event.class, id);
 
@@ -217,13 +213,8 @@ public class EventManagerImpl implements EventManager {
 	}
 
     @CopiedToService(LastEventDateService.class)
-	public Date findLastEventDate(EventSchedule schedule) {
-		return lastEventFinder.findLastEventDate(schedule);
-	}
-
-    @CopiedToService(LastEventDateService.class)
-	public Date findLastEventDate(Long scheduleId) {
-		return lastEventFinder.findLastEventDate(scheduleId);
+	public Date findLastEventDate(Long eventId) {
+		return lastEventFinder.findLastEventDate(eventId);
 	}
 
 }

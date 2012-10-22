@@ -127,7 +127,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, EventSchedule schedule, Long tenantId) throws IOException {
+	public Event convert(InspectionServiceDTO inspectionServiceDTO, Event schedule, Long tenantId) throws IOException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

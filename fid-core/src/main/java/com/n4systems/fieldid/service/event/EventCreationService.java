@@ -53,7 +53,6 @@ public class EventCreationService extends FieldIdPersistenceService {
             openEvent.setOwner(eventScheduleBundle.getAsset().getOwner());
             openEvent.setProject(eventScheduleBundle.getJob());
             openEvent.setDueDate(eventScheduleBundle.getScheduledDate());
-            openEvent.getSchedule().copyDataFrom(event);
             openEvent.setAssignee(eventScheduleBundle.getAssginee());
             nextEventScheduleService.createNextSchedule(openEvent);
         }
@@ -82,13 +81,12 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         Date completedDate = event.getDate();
 
-        findOrCreateSchedule(event, scheduleId);
+//        findOrCreateSchedule(event, scheduleId);
 
         event.setDate(completedDate);
 
         if (event.getId() == null) {
             persistenceService.save(event);
-            copyDataToActionSchedules(event);
         } else {
             // Because the update drops the transient data on the signature criteria result, we
             // must remember the file names in a map before we call update. We must call update before saving
@@ -98,14 +96,12 @@ public class EventCreationService extends FieldIdPersistenceService {
             Map<Long, List<byte[]>> rememberedCriteriaImages = rememberCriteriaImages(event);
 
             event.setTriggersIntoResultingActions(event);
-            copyDataToActionSchedules(event);
             event = persistenceService.update(event);
 
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
             restoreCriteriaImages(event, rememberedCriteriaImages);
 
             event.setTriggersIntoResultingActions(event);
-            copyDataToActionSchedules(event);
 
             event = persistenceService.update(event);
         }
@@ -124,8 +120,8 @@ public class EventCreationService extends FieldIdPersistenceService {
         processUploadedFiles(event, uploadedFiles);
 
         // Do this last, as it can throw an exception if the schedule is in an invalid state.
-        event.getSchedule().completed(event);
-        persistenceService.update(event.getSchedule());
+//        event.getSchedule().completed(event);
+//        persistenceService.update(event.getSchedule());
 
         return event;
     }
@@ -177,20 +173,6 @@ public class EventCreationService extends FieldIdPersistenceService {
             }
         }
         return rememberedSignatureFiles;
-    }
-
-    // TODO: Remove when WEB-3258 is done
-    private void copyDataToActionSchedules(AbstractEvent event) {
-        for (CriteriaResult criteriaResult : event.getResults()) {
-            for (Event action : criteriaResult.getActions()) {
-                action.getSchedule().copyDataFrom(action);
-                if (action.isNew()) {
-                    persistenceService.save(action);
-                } else {
-                    persistenceService.update(action);
-                }
-            }
-        }
     }
 
     private Event processUploadedFiles(Event event, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
@@ -369,27 +351,27 @@ public class EventCreationService extends FieldIdPersistenceService {
         event.setSubEvents(reorderedSubEvents);
     }
 
-    private EventSchedule findOrCreateSchedule(Event event, Long scheduleId) {
-        EventSchedule eventSchedule = null;
-        if (scheduleId == -1) {
-            // This means the user selected 'create new schedule'
-            // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
-            eventSchedule = new EventSchedule();
-            eventSchedule.copyDataFrom(event);
-            eventSchedule.setNextDate(event.getDate());
-            persistenceService.save(eventSchedule);
-            event.setSchedule(eventSchedule);
-        } else if (scheduleId > 0) {
-            // There was an existing schedule selected.
-            eventSchedule = persistenceService.find(EventSchedule.class, scheduleId);
-            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED) {
-                event.setSchedule(null);
-            } else {
-                event.setSchedule(eventSchedule);
-            }
-        }
-        return eventSchedule;
-    }
+//    private EventSchedule findOrCreateSchedule(Event event, Long scheduleId) {
+//        EventSchedule eventSchedule = null;
+//        if (scheduleId == -1) {
+//            // This means the user selected 'create new schedule'
+//            // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
+//            eventSchedule = new EventSchedule();
+//            eventSchedule.copyDataFrom(event);
+//            eventSchedule.setNextDate(event.getDate());
+//            persistenceService.save(eventSchedule);
+//            event.setSchedule(eventSchedule);
+//        } else if (scheduleId > 0) {
+//            // There was an existing schedule selected.
+//            eventSchedule = persistenceService.find(EventSchedule.class, scheduleId);
+//            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED) {
+//                event.setSchedule(null);
+//            } else {
+//                event.setSchedule(eventSchedule);
+//            }
+//        }
+//        return eventSchedule;
+//    }
 
     private void updateAsset(Event event, Long modifiedById) {
         User modifiedBy = getCurrentUser();
@@ -472,7 +454,6 @@ public class EventCreationService extends FieldIdPersistenceService {
         writeSignatureImagesToDisk(event);
         saveCriteriaResultImages(event);
         setAllTriggersForActions(event);
-        copyDataToActionSchedules(event);
 
         event.getAttachments().clear();
 

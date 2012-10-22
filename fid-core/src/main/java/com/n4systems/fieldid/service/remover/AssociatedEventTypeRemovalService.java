@@ -29,7 +29,6 @@ public class AssociatedEventTypeRemovalService extends FieldIdPersistenceService
 			throw new InvalidArgumentException("you must give an associatedEventType");
 		}
 
-		deleteNonCompleteSchedules(associatedEventType);
 		deleteEventFrequencies(associatedEventType);
 		deleteAssociatedEventType(associatedEventType);
 	}
@@ -51,11 +50,6 @@ public class AssociatedEventTypeRemovalService extends FieldIdPersistenceService
 	private void deleteEventFrequencies(AssociatedEventType associatedEventType) {
 		eventFrequenciesRemovalService.remove(associatedEventType);
 	}
-
-	private void deleteNonCompleteSchedules(AssociatedEventType associatedEventType) {
-		scheduleListRemovalService.remove(associatedEventType.getAssetType(), associatedEventType.getEventType(), Event.EventStateGrouping.NON_COMPLETE);
-	}
-
 
     @Transactional
 	public void remove(EventType eventType) {

@@ -1,12 +1,6 @@
 package com.n4systems.model.eventschedule;
 
-import static org.junit.Assert.*;
-
-import javax.persistence.EntityManager;
-
-import com.n4systems.model.EventSchedule;
-import org.junit.Test;
-
+import com.n4systems.model.Event;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -14,6 +8,12 @@ import com.n4systems.util.persistence.TestingQueryBuilder;
 import com.n4systems.util.persistence.TestingTransaction;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.junit.Test;
+
+import javax.persistence.EntityManager;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class EventScheduleByGuidOrIdLoaderTest {
 	
@@ -28,35 +28,39 @@ public class EventScheduleByGuidOrIdLoaderTest {
 		assertEquals(Comparator.EQ, whereParameter.getComparator());
 		assertEquals(mobileGuid, whereParameter.getValue());
 	}
-	
-	@Test
-	public void should_try_by_id_if_mobile_guid_not_set() {
-		TestableEventScheduleByGuidOrIdLoader sut = new TestableEventScheduleByGuidOrIdLoader(new OpenSecurityFilter());
-		sut.setId(1L).load(new TestingTransaction());
-		
-		assertTrue(sut.findByIdCalled);
-	}
 
-	private class TestableEventScheduleByGuidOrIdLoader extends EventScheduleByGuidOrIdLoader {
+    @Test
+    public void should_be_null_if_mobile_guid_not_set() {
+        TestableEventScheduleByGuidOrIdLoader sut = new TestableEventScheduleByGuidOrIdLoader(new OpenSecurityFilter());
+        Event result = sut.setId(1L).setMobileGuid(null).load(new TestingTransaction());
+        assertNull(result);
+    }
 
-		private TestingQueryBuilder<EventSchedule> queryBuilder;
-		private boolean findByIdCalled = false;
-		
+    @Test
+    public void should_be_null_if_mobile_guid_not_found() {
+        TestableEventScheduleByGuidOrIdLoader sut = new TestableEventScheduleByGuidOrIdLoader(new OpenSecurityFilter()) {
+            @Override protected Event loadByGuid(EntityManager em, SecurityFilter filter) {
+                return null;
+            }
+        };
+        Event result = sut.setId(1L).setMobileGuid("willReturnNull").load(new TestingTransaction());
+        assertNull(result);
+    }
+
+    private class TestableEventScheduleByGuidOrIdLoader extends EventScheduleByGuidOrIdLoader {
+
+		private TestingQueryBuilder<Event> queryBuilder;
+
 		public TestableEventScheduleByGuidOrIdLoader(SecurityFilter filter) {
 			super(filter);
 		}
 
 		@Override
-		protected QueryBuilder<EventSchedule> getQueryBuilder(SecurityFilter filter) {
-			queryBuilder = new TestingQueryBuilder<EventSchedule>(EventSchedule.class);
-			queryBuilder.setSingleResult(new EventSchedule());
+		protected QueryBuilder<Event> getQueryBuilder(SecurityFilter filter) {
+			queryBuilder = new TestingQueryBuilder<Event>(Event.class);
+			queryBuilder.setSingleResult(new Event());
 			return queryBuilder;
 		}
 
-		@Override
-		protected EventSchedule findByIdUsingEntityManager(EntityManager em) {
-			findByIdCalled = true;
-			return new EventSchedule();
-		}
-	}
+    }
 }

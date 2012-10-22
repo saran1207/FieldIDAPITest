@@ -1,30 +1,29 @@
 package com.n4systems.handlers.creator;
 
-import static com.n4systems.model.builders.EventBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import com.google.common.collect.ImmutableMap;
+import com.n4systems.ejb.impl.CreateEventsMethodObject;
+import com.n4systems.exceptions.FileAttachmentException;
+import com.n4systems.exceptions.ProcessingProofTestException;
+import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.exceptions.UnknownSubAsset;
+import com.n4systems.model.Event;
+import com.n4systems.persistence.Transaction;
+import com.n4systems.security.AuditLogger;
+import com.n4systems.services.NextEventScheduleSerivce;
+import com.n4systems.test.helpers.FluentArrayList;
+import org.easymock.IAnswer;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.n4systems.ejb.impl.CreateEventsMethodObject;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.services.NextEventScheduleSerivce;
-import org.easymock.IAnswer;
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.google.common.collect.ImmutableMap;
-import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.exceptions.UnknownSubAsset;
-import com.n4systems.persistence.Transaction;
-import com.n4systems.security.AuditLogger;
-import com.n4systems.test.helpers.FluentArrayList;
+import static com.n4systems.model.builders.EventBuilder.anEvent;
+import static org.easymock.EasyMock.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertThat;
 
 
 public class WebServiceEventsCreatorTest {

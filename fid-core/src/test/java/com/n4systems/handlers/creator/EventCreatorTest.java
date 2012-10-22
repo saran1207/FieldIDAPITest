@@ -25,7 +25,7 @@ import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.EventSchedule;
+
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;

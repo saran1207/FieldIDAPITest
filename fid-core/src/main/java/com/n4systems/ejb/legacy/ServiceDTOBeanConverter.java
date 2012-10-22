@@ -45,7 +45,7 @@ public interface ServiceDTOBeanConverter {
 
 	public FileAttachment convert(AbstractEvent event, InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException;
 
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, EventSchedule schedule, Long tenantId) throws IOException;
+	public Event convert(InspectionServiceDTO inspectionServiceDTO, Event schedule, Long tenantId) throws IOException;
 
 	public User convert(UserServiceDTO user);
 

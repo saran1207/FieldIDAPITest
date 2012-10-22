@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.util.List;
-
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.fieldid.actions.helpers.EventScheduleSuggestion;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+
+import java.util.List;
 
 public class MultiEventScheduleListHelper {
 

@@ -1,54 +1,34 @@
 package rfid.ejb.session;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-import static com.n4systems.model.builders.TenantBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
+import com.n4systems.model.*;
+import com.n4systems.model.builders.CustomerOrgBuilder;
+import com.n4systems.model.builders.DivisionOrgBuilder;
+import com.n4systems.model.builders.PrimaryOrgBuilder;
+import com.n4systems.model.builders.SecondaryOrgBuilder;
+import com.n4systems.model.orgs.*;
+import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.model.user.User;
+import com.n4systems.model.utils.PlainDate;
+import com.n4systems.services.TenantFinder;
+import com.n4systems.webservice.dto.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
 
+import javax.persistence.EntityManager;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.EntityManager;
-
-import com.n4systems.model.Asset;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.SubAsset;
-import com.n4systems.services.TenantFinder;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
-import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
-import com.n4systems.model.LineItem;
-import com.n4systems.model.Order;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.builders.CustomerOrgBuilder;
-import com.n4systems.model.builders.DivisionOrgBuilder;
-import com.n4systems.model.builders.PrimaryOrgBuilder;
-import com.n4systems.model.builders.SecondaryOrgBuilder;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.model.tenant.SetupDataLastModDates;
-import com.n4systems.model.user.User;
-import com.n4systems.model.utils.PlainDate;
-import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
-import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
-import com.n4systems.webservice.dto.InfoOptionServiceDTO;
-import com.n4systems.webservice.dto.InternalOrgServiceDTO;
-import com.n4systems.webservice.dto.ProductServiceDTO;
-import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 
 public class ServiceDTOBeanConverterImplTest {
@@ -118,11 +98,7 @@ public class ServiceDTOBeanConverterImplTest {
 		
 		Order customerOrder = new Order();
 		customerOrder.setId( 2L );
-				
-		Set<EventSchedule> schedules = new HashSet<EventSchedule>();
-		schedules.add( new EventSchedule() );
-		
-				
+
 		User modifiedBy = new User();
 		modifiedBy.setId(4L);
 		

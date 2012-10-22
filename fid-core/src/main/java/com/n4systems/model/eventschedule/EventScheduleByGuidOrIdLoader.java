@@ -1,13 +1,15 @@
 package com.n4systems.model.eventschedule;
 
-import javax.persistence.EntityManager;
-
-import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Event;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
 
-public class EventScheduleByGuidOrIdLoader extends SecurityFilteredLoader<EventSchedule> {
+import javax.persistence.EntityManager;
+
+public class EventScheduleByGuidOrIdLoader extends SecurityFilteredLoader<Event> {
+    private static final Logger logger= Logger.getLogger(EventScheduleByGuidOrIdLoader.class);
 
 	private String mobileGuid;
 	private long id;
@@ -18,23 +20,24 @@ public class EventScheduleByGuidOrIdLoader extends SecurityFilteredLoader<EventS
 	}
 
 	@Override
-	protected EventSchedule load(EntityManager em, SecurityFilter filter) {
-		EventSchedule schedule = null;
+	protected Event load(EntityManager em, SecurityFilter filter) {
+		Event schedule = null;
 		
 		if (mobileGuid != null && mobileGuid.trim().length() > 0) {
 			schedule = loadByGuid(em, filter);
+            if (schedule==null) {
+                // CAVEAT : at this point we can't be sure whether it wasn't found because the scheduled event was created on mobile
+                // and hasn't been uploaded yet or something wrong with guid.   we'll log it for now even though this could be noisy.
+                // remove this after a couple of iterations when we can be sure schedule id is no longer used.
+                logger.warn("Trying to find schedule with mobile GUID " + mobileGuid + " and/or schedule id : " + id);
+            }
 		}
-		
-		if (schedule == null) {
-			schedule = findByIdUsingEntityManager(em);
-		}
-		
-		return schedule;
+        return schedule;
 	}
 
-	private EventSchedule loadByGuid(EntityManager em,
+	protected Event loadByGuid(EntityManager em,
 			SecurityFilter filter) {
-		QueryBuilder<EventSchedule> query = getQueryBuilder(filter);
+		QueryBuilder<Event> query = getQueryBuilder(filter);
 		query.addSimpleWhere("mobileGUID", mobileGuid);
 		
 		return query.getSingleResult(em);
@@ -51,12 +54,8 @@ public class EventScheduleByGuidOrIdLoader extends SecurityFilteredLoader<EventS
 		return this;
 	}
 	
-	protected QueryBuilder<EventSchedule> getQueryBuilder(SecurityFilter filter) {
-		return new QueryBuilder<EventSchedule>(EventSchedule.class, filter);
+	protected QueryBuilder<Event> getQueryBuilder(SecurityFilter filter) {
+		return new QueryBuilder<Event>(Event.class, filter);
 	}
-	
-	protected EventSchedule findByIdUsingEntityManager(EntityManager em) {
-		return em.find(EventSchedule.class, id);
-	}
-	
+
 }

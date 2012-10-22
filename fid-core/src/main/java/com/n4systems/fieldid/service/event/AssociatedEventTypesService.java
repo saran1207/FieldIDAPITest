@@ -52,7 +52,6 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
             // NOTE : EventSchedules are now deprecated (july 2012). so we'll just logically delete them to keep data integrity so mobile app won't complain.
             // the real work will be done on the Events table via deleteAssociatedEvents().
             assetTypeService.deleteRecurringEvent(assetType, associatedEventType.getEventType());
-            scheduleListRemovalService.archiveLegacySchedules(associatedEventType.getAssetType(), associatedEventType.getEventType());
             scheduleListRemovalService.deleteAssociatedEvents(associatedEventType.getAssetType(), associatedEventType.getEventType());
             persistenceService.remove(associatedEventType);
         }
@@ -78,8 +77,7 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
         for (AssociatedEventType associatedEventType : toBeRemoved) {
             eventFrequenciesRemovalService.remove(associatedEventType);
 
-            assetTypeService.deleteRecurringEvent(associatedEventType.getAssetType(), eventType);
-            scheduleListRemovalService.archiveLegacySchedules(associatedEventType.getAssetType(), associatedEventType.getEventType());
+            assetTypeService.deleteRecurringEvent(associatedEventType.getAssetType(), associatedEventType.getEventType());
             scheduleListRemovalService.deleteAssociatedEvents(associatedEventType.getAssetType(), associatedEventType.getEventType());
 
             persistenceService.remove(associatedEventType);

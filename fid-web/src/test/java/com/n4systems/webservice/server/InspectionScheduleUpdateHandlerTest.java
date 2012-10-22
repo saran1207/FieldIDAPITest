@@ -1,7 +1,6 @@
 package com.n4systems.webservice.server;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
 import com.n4systems.model.utils.PlainDate;
@@ -13,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.n4systems.model.builders.EventBuilder.anEvent;
 import static com.n4systems.model.builders.EventBuilder.anOpenEvent;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
@@ -25,7 +23,6 @@ public class InspectionScheduleUpdateHandlerTest {
 	private SimpleEventSaver saver;
 	private EventScheduleByGuidOrIdLoader eventScheduleByMobileGuidLoader;
 	private Event openEvent;
-    private EventSchedule eventSchedule;
 	private InspectionScheduleServiceDTO inspectionScheduleServiceDTO;
 	private Event event;
 	
@@ -33,15 +30,13 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void setup() {
 		
 		openEvent = anOpenEvent().build();
-        eventSchedule = new EventSchedule();
-        eventSchedule.setEvent(openEvent);
-		
-		event = anEvent().build();
+
+		event = anOpenEvent().build();
 	}
 
 	@Test
 	public void loading_inspection_schedule_by_shcedule_id() throws Exception {
-	
+
 		buildInspectionScheduleServiceDTO(1L, new Date());
 
 		createInspectionScheduleByMobileGuidLoaderMock();
@@ -84,7 +79,7 @@ public class InspectionScheduleUpdateHandlerTest {
 	
 	@Test
 	public void is_inspection_schedule_next_date_updated_correctly() throws Exception {
-	
+
 		Calendar c1 = Calendar.getInstance(); 
 		c1.set(2011, 11, 20, 0, 0, 0);
 		
@@ -166,7 +161,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		eventScheduleByMobileGuidLoader = createMock(EventScheduleByGuidOrIdLoader.class);
 		expect(eventScheduleByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid())).andReturn(eventScheduleByMobileGuidLoader);
 		expect(eventScheduleByMobileGuidLoader.setId(inspectionScheduleServiceDTO.getId())).andReturn(eventScheduleByMobileGuidLoader);
-		expect(eventScheduleByMobileGuidLoader.load()).andReturn(eventSchedule);
+		expect(eventScheduleByMobileGuidLoader.load()).andReturn(openEvent);
 		replay(eventScheduleByMobileGuidLoader);
 	}
 
@@ -198,7 +193,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		inspectionScheduleServiceDTO.setId(id);
 		inspectionScheduleServiceDTO.setMobileGuid("inspectionScheduleMobileGuid");
 		inspectionScheduleServiceDTO.setNextDate(strNextDate);
-		
+
 	
 	}
 	

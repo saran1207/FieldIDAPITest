@@ -2,7 +2,6 @@ package com.n4systems.ejb;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 
 import java.util.List;
@@ -15,12 +14,9 @@ public interface EventScheduleManager {
 	public Event update(Event event);
 	public void restoreScheduleForEvent(Event event);
 	
-
-	
 	public void removeAllSchedulesFor(Asset asset);
 	
-	
-	public List<Event> getAvailableSchedulesFor(Asset asset);
+	public List<Event> getAvailableSchedulesFor(Asset asset, String... postFetchFields);
 	
 	public List<Event> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType);
 	

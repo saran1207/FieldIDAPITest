@@ -1,14 +1,7 @@
 package com.n4systems.fieldid.actions.event;
 
-import com.n4systems.model.EventSchedule;
 
 public class WebEventSchedule {
-
-    public static WebEventSchedule createAutoScheduled(EventSchedule schedule) {
-		WebEventSchedule webEventSchedule = new WebEventSchedule();
-		webEventSchedule.setAutoScheduled(true);
-		return webEventSchedule;
-	}
 
     private Long type;
 	private Long job;

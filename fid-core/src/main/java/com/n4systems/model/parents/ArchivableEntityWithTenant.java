@@ -1,12 +1,12 @@
 package com.n4systems.model.parents;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.MappedSuperclass;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.SecurityDefiner;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.MappedSuperclass;
 
 @SuppressWarnings("serial")
 @MappedSuperclass

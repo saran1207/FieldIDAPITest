@@ -127,11 +127,11 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	@Enumerated(EnumType.STRING)
 	private EntityState state = EntityState.ACTIVE;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="schedule_id")
-    @Deprecated
+//	@OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name="schedule_id")
+//    @Deprecated
     // Pertinent information isn't stored in the schedule anymore, it lives in the event.
-	private EventSchedule schedule = new EventSchedule();
+//	private EventSchedule schedule = new EventSchedule();
 
     @ManyToOne
     @JoinColumn(name="project_id")
@@ -352,13 +352,14 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
 	@AllowSafetyNetworkAccess
     @Deprecated
-	public EventSchedule getSchedule() {
-		return schedule;
-	}
+    @Transient
+    public EventSchedule getSchedule() {
+        throw new UnsupportedOperationException("EventSchedules no longer exist");
+    }
 
     @Deprecated
     public void setSchedule(EventSchedule schedule) {
-        this.schedule = schedule;
+        throw new UnsupportedOperationException("EventSchedules no longer exist");
     }
 
 	@Override
@@ -416,15 +417,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         assigneeNotification = new AssigneeNotification();
         assigneeNotification.setEvent(this);
 		normalizeAssignmentForPersistence();
-        fillInPlaceholderScheduleIfAbsent();
         setTriggersIntoResultingActions(this);
 	}
-
-    private void fillInPlaceholderScheduleIfAbsent() {
-        if (schedule.getId() == null) {
-            schedule.copyDataFrom(this);
-        }
-    }
 
     private void normalizeAssignmentForPersistence() {
 		if (assignedTo == null)

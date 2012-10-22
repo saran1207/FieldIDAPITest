@@ -22,7 +22,7 @@ public class MasterEvent {
 	private Long currentId = -1L;
 	private Map<SubEvent, List<FileAttachment>> subEventUploadedFiles;
 	private List<FileAttachment> uploadedFiles;
-	private EventSchedule schedule;
+//	private EventSchedule schedule;
 	private Long scheduleId;
 	private List<WebEventSchedule> nextSchedules = new ArrayList<WebEventSchedule>();
 	private User assignedTo;
@@ -287,13 +287,13 @@ public class MasterEvent {
 		return subEvents;
 	}
 
-	public EventSchedule getSchedule() {
-		return schedule;
-	}
-
-	public void setSchedule(EventSchedule schedule) {
-		this.schedule = schedule;
-	}
+//	public EventSchedule getSchedule() {
+//		return schedule;
+//	}
+//
+//	public void setSchedule(EventSchedule schedule) {
+//		this.schedule = schedule;
+//	}
 
 	public Long getScheduleId() {
 		return scheduleId;

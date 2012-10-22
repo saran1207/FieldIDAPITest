@@ -135,16 +135,6 @@ public class MasterEventCrud extends AbstractCrud {
 
 		event = masterEvent.getEvent();
 
-		if (masterEvent.getSchedule() != null) {
-			masterEvent.getSchedule().inProgress();
-			try {
-				persistenceManager.update(masterEvent.getSchedule(), getSessionUser().getId());
-				addActionMessageText("message.scheduleinprogress");
-			} catch (Exception e) {
-				logger.warn("could not move schedule to in progress", e);
-			}
-		}
-
 		return SUCCESS;
 	}
 
@@ -212,11 +202,8 @@ public class MasterEventCrud extends AbstractCrud {
 				uniqueID = event.getId();
 			} else {
 				Event master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());
-                Long scheduleId = masterEvent.getScheduleId() != null ? masterEvent.getScheduleId() : master.getSchedule().getId();
 				event = eventManager.updateEvent(master, scheduleId, getSessionUser().getUniqueID(), masterEvent.getProofTestFile(), masterEvent.getUploadedFiles());
 			}
-
-//			completeSchedule(masterEvent.getScheduleId(), masterEvent.getSchedule());
 
 			for (int i = 0; i < masterEvent.getSubEvents().size(); i++) {
 				SubEvent subEvent = new SubEvent();
