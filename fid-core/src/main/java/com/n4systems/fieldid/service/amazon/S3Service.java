@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
-    private static final long TTL = TimeUnit.DAYS.toMillis(1);
+    private long TTL = TimeUnit.DAYS.toMillis(1);
     public static final String DEFAULT_BRANDING_LOGO_PATH = "common/default_branding_logo.gif";
     public static final String BRANDING_LOGO_PATH = "/logos/branding_logo.gif";
     public static final String CUSTOMER_LOGO_PATH = "/logos/customer_logo_%d.gif";
@@ -335,4 +335,7 @@ public class S3Service extends FieldIdPersistenceService {
         return bucket;
     }
 
+    public void setTTL(long TTL) {
+        this.TTL = TTL;
+    }
 }

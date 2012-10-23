@@ -80,9 +80,9 @@
                 <#if event.type.group.action>
                     ${event.priority.name}
                     <br/>
-                    <br/>
-                    ${event.notes!}
-                    <br/>
+                    <p>
+                    ${(event.notes?replace('\n', '<br/>'))!}
+                    </p>
                     <br/>
                 </#if>
                 Due
