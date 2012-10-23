@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.TextRequestHandler;
@@ -236,6 +237,11 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         response.renderCSSReference("style/component/autoComplete.css");
+
+        if (WebSession.get().getClientInfo().getProperties().isBrowserInternetExplorer()) {
+            response.renderCSSReference("style/component/autoComplete-ie.css");
+        }
+
         response.renderCSSReference("style/tipsy/tipsy.css");
         response.renderOnLoadJavaScript("autoCompleter.init('"+autocompleteField.getMarkupId()+"'" + args + ");");
    }
