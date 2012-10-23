@@ -143,7 +143,7 @@ public class EventFormHelper {
             }
         }
 
-        if(total < 1)
+        if(total <= 0.0)
             return 0.0;
         else
             return event.getScore() / total;
