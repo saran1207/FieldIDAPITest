@@ -163,6 +163,10 @@ public class EventView extends ExternalModelView {
 		return owners;
 	}
 
+    public String getOwnerString() {
+        return String.format("%s %s %s", getOrganization(), getCustomer(), getDivision());
+    }
+
 	public void setOrganization(String organization) {
 		owners[OwnerSerializationHandler.ORGANIZATION_INDEX] = organization;
 	}

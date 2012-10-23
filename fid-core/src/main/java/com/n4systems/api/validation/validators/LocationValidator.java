@@ -62,7 +62,7 @@ public class LocationValidator implements FieldValidator {
 
     private PredefinedLocationTreeNode findNode(Set<PredefinedLocationTreeNode> nodes, String name) {
         for (PredefinedLocationTreeNode node:nodes) {
-            if (name!=null && name.equals(node.getName())) {
+            if (name!=null && name.equalsIgnoreCase(node.getName())) {
                 return node;
             }
         }

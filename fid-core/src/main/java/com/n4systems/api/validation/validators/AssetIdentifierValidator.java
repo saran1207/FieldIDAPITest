@@ -1,9 +1,5 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.n4systems.api.model.ExternalModelView;
@@ -17,6 +13,10 @@ import com.n4systems.model.eventtype.AssociatedEventTypeExistsLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.loaders.Loader;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class AssetIdentifierValidator implements FieldValidator {
 	
