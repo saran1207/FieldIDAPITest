@@ -1,5 +1,7 @@
 package com.n4systems.exporting.beanutils;
 
+import com.n4systems.util.DateHelper;
+
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.TimeZone;
@@ -12,17 +14,11 @@ public class DateSerializationHandler extends SimpleSerializationHandler<Date>{
         super(field);
     }
 
-    //JXL doesn't take daylights savings into consideration, we need to shift the time offset by one hour to correct this for dates that are not timezone sensitive.
     @Override
     public void unmarshal(Object bean, String title, Object value) throws MarshalingException {
         Object cleanValue;
         if(value instanceof Date) {
-            Date date = (Date) value;
-
-            if(timeZone.inDaylightTime(date)) {
-                cleanValue = new Date(date.getTime() + timeZone.getDSTSavings());
-            } else
-                cleanValue = date;
+            cleanValue = DateHelper.convertToUserTimeZone((Date)value, timeZone);
         } else {
             cleanValue = cleanImportValue(value);
         }
