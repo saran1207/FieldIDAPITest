@@ -54,7 +54,7 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		openEvent = persistenceManager.find(Event.class, uniqueId, getTenantId());
+		openEvent = persistenceManager.find(Event.class, uniqueId, getTenantId(), "asset");
 	}
 
 	private void testRequiredEntities(boolean existing) {

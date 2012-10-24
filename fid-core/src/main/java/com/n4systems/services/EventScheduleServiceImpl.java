@@ -31,8 +31,8 @@ public class EventScheduleServiceImpl implements EventScheduleService {
             event = persistenceManager.update(schedule);
         }
 
-        event.getAsset().touch();
-		persistenceManager.update(event.getAsset());
+        schedule.getAsset().touch();
+		persistenceManager.update(schedule.getAsset());
 		return event;
 	}
 	
