@@ -67,7 +67,7 @@ public class ImporterFactory {
 	}
 
 	protected AssetToModelConverter createAssetToModelConverter(User identifiedBy, AssetType type) {
-		AssetToModelConverter converter = new AssetToModelConverter(loaderFactory.createOrgByNameLoader(), createNonIntegrationOrderManager(), loaderFactory.createAssetStatusByNameLoader(), new InfoOptionMapConverter());
+		AssetToModelConverter converter = new AssetToModelConverter(loaderFactory.createOrgByNameLoader(), createNonIntegrationOrderManager(), loaderFactory.createAssetStatusByNameLoader(), new InfoOptionMapConverter(), loaderFactory.createPredefinedLocationTreeLoader());
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		return converter;

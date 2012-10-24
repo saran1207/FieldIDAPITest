@@ -1,46 +1,16 @@
 package com.n4systems.api.asset;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.asset.AssetToModelConverter;
 import com.n4systems.api.model.AssetView;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.LineItem;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
-import com.n4systems.model.builders.AssetTypeBuilder;
-import com.n4systems.model.builders.InfoFieldBeanBuilder;
-import com.n4systems.model.builders.InfoOptionBeanBuilder;
-import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.builders.*;
 import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.infooption.MissingInfoOptionException;
 import com.n4systems.model.infooption.StaticOptionResolutionException;
+import com.n4systems.model.location.*;
 import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -51,6 +21,15 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.test.helpers.Asserts;
 import com.n4systems.testutils.DummyTransaction;
 import com.n4systems.util.persistence.TestingTransaction;
+import org.junit.Before;
+import org.junit.Test;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.util.*;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 public class AssetToModelConverterTest {
 
@@ -97,7 +76,11 @@ public class AssetToModelConverterTest {
 	
 	@Test
 	public void to_model_uses_now_when_date_is_null() throws ConversionException {
-		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
+            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+                return null;
+            }
+        };
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
@@ -108,15 +91,70 @@ public class AssetToModelConverterTest {
 		
 		assertEquals(new PlainDate(), model.getIdentified());
 	}
-	
-	@Test
+
+    @Test
+    public void to_model_uses_location_freeform() throws ConversionException {
+        String predefinedLocation = ":FreeFormText";
+
+        Transaction trans = new DummyTransaction();
+
+        PredefinedLocationTreeLoader treeLoader = createMock(PredefinedLocationTreeLoader.class);
+        AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, treeLoader);
+        converter.setType(type);
+        converter.setIdentifiedBy(createIdentifiedBy());
+
+        PredefinedLocationTree tree = new PredefinedLocationTree();
+        expect(treeLoader.load(trans)).andReturn(tree);
+        replay(treeLoader);
+
+        AssetView view = createView(null, null);
+        view.setLocation(predefinedLocation);
+        view.setIdentified(null);
+
+        Asset model =  converter.toModel(view, trans);
+        assertEquals("FreeFormText", model.getAdvancedLocation().getFreeformLocation());
+        verify(treeLoader);
+    }
+
+    @Test
+    public void to_model_uses_location_tree() throws ConversionException {
+        Transaction trans = new DummyTransaction();
+
+        PredefinedLocationTreeLoader treeLoader = createMock(PredefinedLocationTreeLoader.class);
+        AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, treeLoader);
+        converter.setType(type);
+        converter.setIdentifiedBy(createIdentifiedBy());
+
+        PredefinedLocationTree tree = new PredefinedLocationTree();
+        PredefinedLocation pdl = new PredefinedLocation();
+        pdl.setName("level1");
+        tree.addNode(new PredefinedLocationTreeNode(pdl));
+        expect(treeLoader.load(trans)).andReturn(tree);
+        replay(treeLoader);
+
+        AssetView view = createView(null, null);
+        view.setLocation("level1:moreFreeFormText");
+        view.setIdentified(null);
+
+        Asset model =  converter.toModel(view, trans);
+        assertEquals("moreFreeFormText", model.getAdvancedLocation().getFreeformLocation());
+        assertEquals("level1", model.getAdvancedLocation().getPredefinedLocation().getName());
+        verify(treeLoader);
+    }
+
+    @Test
 	public void to_model_resolves_owner_and_uses_tenant() throws ConversionException {
 		Transaction trans = new DummyTransaction();
 		CustomerOrg resolvedOrg = OrgBuilder.aCustomerOrg().buildCustomer();
 		AssetView view = createView(null, null);
 		
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
-		AssetToModelConverter converter = new AssetToModelConverter(orgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(orgLoader, null, null, dummyOptionConverter, null) {
+            @Override
+            protected Location resolveLocation(AssetView view, Transaction transaction) {
+                return null;
+            }
+        };
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
@@ -140,7 +178,11 @@ public class AssetToModelConverterTest {
 		Tenant tenant = dummyOrgLoader.load((Transaction)null).getTenant();
 
 		NonIntegrationOrderManager orgLoader = createMock(NonIntegrationOrderManager.class);
-		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, orgLoader, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, orgLoader, null, dummyOptionConverter, null) {
+            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+                return null;
+            }
+        };
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
@@ -157,7 +199,11 @@ public class AssetToModelConverterTest {
 		User identifiedBy = createIdentifiedBy();
 		identifiedBy.getOwner().getPrimaryOrg().getExtendedFeatures().add(ExtendedFeature.Integration);
 		
-		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
+            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+                return null;
+            }
+        };
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
@@ -174,7 +220,11 @@ public class AssetToModelConverterTest {
 		
 		Transaction trans = new DummyTransaction();
 		AssetStatusByNameLoader psLoader = createMock(AssetStatusByNameLoader.class);
-		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, psLoader, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, psLoader, dummyOptionConverter, null) {
+            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+                return null;
+            }
+        };
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
@@ -191,7 +241,11 @@ public class AssetToModelConverterTest {
 	public void to_model_sets_identified_by_and_type() throws ConversionException {
 		User identifiedBy = createIdentifiedBy();
 		
-		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
+            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+                return null;
+            }
+        };
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
@@ -206,7 +260,11 @@ public class AssetToModelConverterTest {
 		User identifiedBy = createIdentifiedBy();
 		identifiedBy.getOwner().getPrimaryOrg().setAutoPublish(true);
 		
-		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
+            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+                return null;
+            }
+        };
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
@@ -220,7 +278,11 @@ public class AssetToModelConverterTest {
 		User identifiedBy = createIdentifiedBy();
 		identifiedBy.getOwner().getPrimaryOrg().setAutoPublish(false);
 		
-		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
+            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+                return null;
+            }
+        };
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
@@ -231,7 +293,11 @@ public class AssetToModelConverterTest {
 	
 	@Test
 	public void to_model_copies_non_resolved_properties() throws ConversionException {
-		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
+            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+                return null;
+            }
+        };
 		converter.setIdentifiedBy(createIdentifiedBy());
 		converter.setType(type);
 		
@@ -248,7 +314,11 @@ public class AssetToModelConverterTest {
 		
 		List<InfoOptionBean> options = Arrays.asList(InfoOptionBeanBuilder.aDynamicInfoOption().withName("test").build());
 		
-		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, mapConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, mapConverter, null) {
+            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+                return null;
+            }
+        };
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
@@ -264,7 +334,7 @@ public class AssetToModelConverterTest {
 	
 	@Test(expected=ConversionException.class)
 	public void to_model_throws_exception_when_identified_is_not_a_date() throws ConversionException {
-		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		converter.setType(type);
 		

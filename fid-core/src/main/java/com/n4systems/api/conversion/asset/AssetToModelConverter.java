@@ -2,12 +2,16 @@ package com.n4systems.api.conversion.asset;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
+import com.n4systems.api.conversion.event.LocationSpecification;
 import com.n4systems.api.model.AssetView;
+import com.n4systems.api.validation.validators.LocationValidator;
 import com.n4systems.model.*;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocationTree;
+import com.n4systems.model.location.PredefinedLocationTreeLoader;
 import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
@@ -27,12 +31,14 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 	
 	private AssetType type;
 	private User identifiedBy;
-	
-	public AssetToModelConverter(OrgByNameLoader orgLoader, NonIntegrationOrderManager nonIntegrationOrderManager, AssetStatusByNameLoader assetStatusLoader, InfoOptionMapConverter optionConverter) {
+    private final PredefinedLocationTreeLoader predefinedLocationTreeLoader;
+
+    public AssetToModelConverter(OrgByNameLoader orgLoader, NonIntegrationOrderManager nonIntegrationOrderManager, AssetStatusByNameLoader assetStatusLoader, InfoOptionMapConverter optionConverter, PredefinedLocationTreeLoader predefinedLocationTreeLoader) {
 		this.orgLoader = orgLoader;
 		this.nonIntegrationOrderManager = nonIntegrationOrderManager;
 		this.assetStatusLoader = assetStatusLoader;
 		this.optionConverter = optionConverter;
+        this.predefinedLocationTreeLoader = predefinedLocationTreeLoader;
 	}
 	
 	@Override
@@ -58,7 +64,7 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		model.setIdentifier(view.getIdentifier());
 		model.setRfidNumber(view.getRfidNumber());
 		model.setCustomerRefNumber(view.getCustomerRefNumber());
-		model.setAdvancedLocation(Location.onlyFreeformLocation(view.getLocation()));
+		model.setAdvancedLocation(resolveLocation(view, transaction));
 		model.setPurchaseOrder(view.getPurchaseOrder());
 		model.setComments(view.getComments());
 		model.setAssetStatus(resolveAssetStatus(view.getStatus(), transaction));
@@ -85,7 +91,13 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		return model;
 	}
 
-	private LineItem createShopOrder(String orderNumber, Tenant tenant, Transaction transaction) {
+    protected Location resolveLocation(AssetView view, Transaction transaction) {
+        PredefinedLocationTree predefinedLocationTree = predefinedLocationTreeLoader.load(transaction);
+        Location location = new LocationValidator().getLocation(new LocationSpecification(view.getLocation()), predefinedLocationTree);
+        return location;
+    }
+
+    private LineItem createShopOrder(String orderNumber, Tenant tenant, Transaction transaction) {
 		/*
 		 * TODO: refactor to use the existing transaction once the legacy asset manager gets off ejb  and the asset saver in the importer is using the same transaction as the converter to do the work.
 		 * 
