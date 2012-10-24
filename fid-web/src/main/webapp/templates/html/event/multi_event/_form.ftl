@@ -56,7 +56,7 @@
 		</script>
 	</div>
 
-    <input type="hidden" name="modifiableEvent.dontModifyNextDate" value="true"/>
+    <input type="hidden" name="modifiableEvent.dontModifyDueDate" value="true"/>
 
 	<#setting url_escaping_charset='UTF-8'>	
 	<#list eventType.infoFieldNames as infoField >

@@ -23,7 +23,7 @@ public class EventWebModel implements UserDateFormatValidator {
 	private Date utcDatePerformed;
 	private String datePerformed;
 
-    private Date utcNextDate;
+    private Date utcDueDate;
     private String dueDate;
 	
 	private String overrideResult;
@@ -32,7 +32,7 @@ public class EventWebModel implements UserDateFormatValidator {
 	private boolean ownerSetFromAsset = false;
 	private boolean assetStatusSetFromAsset = false;
 
-    private boolean dontModifyNextDate = false;
+    private boolean dontModifyDueDate = false;
 	
 	public EventWebModel(OwnerPicker ownerPicker, SessionUserDateConverter dateConverter, LoaderFactoryProvider loaderFactoryProvider) {
 		this.ownerPicker = ownerPicker;
@@ -60,7 +60,7 @@ public class EventWebModel implements UserDateFormatValidator {
 		location = location.matchLocation(event.getAdvancedLocation());
 		ownerPicker.updateOwner(event.getOwner());
 		utcDatePerformed = event.getDate();
-        utcNextDate = event.getDueDate();
+        utcDueDate = event.getDueDate();
 	}
 	
 	public void pushValuesTo(Event event) {
@@ -81,7 +81,7 @@ public class EventWebModel implements UserDateFormatValidator {
 		}
 		
 		event.setDate(datePerformed != null ? dateConverter.convertDateTime(datePerformed) : null);
-        if (!dontModifyNextDate) {
+        if (!dontModifyDueDate) {
             event.setDueDate(dueDate != null ? dateConverter.convertDateTimeWithNoTimeZone(dueDate) : null);
         }
 	}
@@ -95,7 +95,7 @@ public class EventWebModel implements UserDateFormatValidator {
 
     public String getDueDate() {
         if (dueDate == null) {
-            dueDate = dateConverter.convertDateTimeWithNoTimeZone(utcNextDate);
+            dueDate = dateConverter.convertDateTimeWithNoTimeZone(utcDueDate);
         }
         return dueDate;
     }
@@ -141,11 +141,11 @@ public class EventWebModel implements UserDateFormatValidator {
 		this.assetStatusSetFromAsset  = isStatusSetFromAsset;
 	}
 
-    public boolean isDontModifyNextDate() {
-        return dontModifyNextDate;
+    public boolean isDontModifyDueDate() {
+        return dontModifyDueDate;
     }
 
-    public void setDontModifyNextDate(boolean dontModifyNextDate) {
-        this.dontModifyNextDate = dontModifyNextDate;
+    public void setDontModifyDueDate(boolean dontModifyDueDate) {
+        this.dontModifyDueDate = dontModifyDueDate;
     }
 }
