@@ -103,7 +103,7 @@ public class EventScheduleSearchContainer extends SearchContainer {
 	
 	@Override
 	public String defaultSortColumn() {
-		return "nextDate";
+		return "dueDate";
 	}
 	
 	@Override
