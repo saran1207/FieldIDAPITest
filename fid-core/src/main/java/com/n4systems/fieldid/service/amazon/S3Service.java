@@ -1,10 +1,6 @@
 package com.n4systems.fieldid.service.amazon;
 
-import com.amazonaws.ClientConfiguration;
 import com.amazonaws.HttpMethod;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
@@ -39,6 +35,7 @@ public class S3Service extends FieldIdPersistenceService {
 
     @Autowired private ConfigService configService;
 	@Autowired private ImageService imageService;
+    @Autowired private AmazonS3Client s3client;
 
     public URL getBrandingLogoURL() {
         return getBrandingLogoURL(null);
@@ -315,19 +312,7 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     private AmazonS3Client getClient() {
-        ClientConfiguration config = new ClientConfiguration();
-        if ("https".equals(configService.getString(ConfigEntry.SYSTEM_PROTOCOL))) {
-            config.setProtocol(Protocol.HTTPS);
-        }
-        AmazonS3Client client = new AmazonS3Client(getCredentials(), config);
-        return client;
-    }
-
-    private AWSCredentials getCredentials() {
-        String accessKeyId = configService.getString(ConfigEntry.AMAZON_ACCESS_KEY_ID);
-        String secretAccessKey = configService.getString(ConfigEntry.AMAZON_SECRET_ACCESS_KEY);
-        AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
-        return credentials;
+        return s3client;
     }
 
     private String getBucket() {

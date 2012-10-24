@@ -1,5 +1,10 @@
 package com.n4systems.fieldid.config;
 
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.Protocol;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.UserManager;
@@ -51,6 +56,7 @@ import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.tenant.TenantCreationService;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.json.JsonRenderer;
 import org.springframework.context.annotation.Bean;
@@ -64,6 +70,18 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 public class FieldIdCoreConfig {
+
+    @Bean
+    public AmazonS3Client amazonS3Client() {
+        String accessKeyId = configService().getString(ConfigEntry.AMAZON_ACCESS_KEY_ID);
+        String secretAccessKey = configService().getString(ConfigEntry.AMAZON_SECRET_ACCESS_KEY);
+        AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
+        ClientConfiguration config = new ClientConfiguration();
+        if ("https".equals(configService().getString(ConfigEntry.SYSTEM_PROTOCOL))) {
+            config.setProtocol(Protocol.HTTPS);
+        }
+        return new AmazonS3Client(credentials, config);
+    }
 
     @Bean
     public EventTypeGroupService eventTypeGroupService() {
