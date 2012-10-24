@@ -30,7 +30,7 @@ public class EventBuilder extends BaseBuilder<Event> {
 	private final Status status;
     private final AssetStatus assetStatus;
     private final Set<CriteriaResult> results;
-    private final Date nextDate;
+    private final Date dueDate;
     private final Event.EventState eventState;
     private final EventStatus eventStatus;
 
@@ -58,7 +58,7 @@ public class EventBuilder extends BaseBuilder<Event> {
 		return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), Status.FAIL, null, new HashSet<CriteriaResult>(), Event.EventState.COMPLETED, null, null);
 	}
 
-	protected EventBuilder(EventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, Status status, AssetStatus assetStatus, Set<CriteriaResult> results, Event.EventState eventState, Date nextDate, EventStatus eventStatus) {
+	protected EventBuilder(EventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, Status status, AssetStatus assetStatus, Set<CriteriaResult> results, Event.EventState eventState, Date dueDate, EventStatus eventStatus) {
 		this.eventType = type;
 		this.asset = asset;
 		this.subEvents = subEvents;
@@ -73,64 +73,64 @@ public class EventBuilder extends BaseBuilder<Event> {
         this.assetStatus=assetStatus;
         this.results = results;
         this.eventState = eventState;
-        this.nextDate = nextDate;
+        this.dueDate = dueDate;
         this.eventStatus = eventStatus;
 	}
 
     public EventBuilder withEventState(Event.EventState state) {
-        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, state, nextDate, eventStatus));
+        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, state, dueDate, eventStatus));
     }
 
     public EventBuilder ofType(EventType type) {
-        return makeBuilder(new EventBuilder(type, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+        return makeBuilder(new EventBuilder(type, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
     }
 	
 	public EventBuilder on(Asset asset) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 	
 	public EventBuilder withSubEvents(List<SubEvent> subEvents) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 
 	public EventBuilder performedOn(Date datePerformed) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 	
 	public EventBuilder withAttachment(List<FileAttachment> attachments) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 
 	public EventBuilder withNoAssignedToUpdate() {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, null, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, null, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 
 	public EventBuilder withAssignedToUpdate(AssignedToUpdate assignToUpdate) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignToUpdate, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignToUpdate, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 	
 	public EventBuilder withOwner(BaseOrg owner) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 	
 	public EventBuilder withPerformedBy(User performedBy) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 	
 	public EventBuilder withTenant(Tenant tenant) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 	
 	public EventBuilder withResult(Status status){
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 
 	public EventBuilder withAssetStatus(AssetStatus assetStatus){
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
 	}
 
 	public EventBuilder withCriteriaResults(CriteriaResult... results){
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, setOf(results), eventState, nextDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, setOf(results), eventState, dueDate, eventStatus));
 	}
 
     public EventBuilder scheduledFor(Date nextDate){
@@ -138,7 +138,7 @@ public class EventBuilder extends BaseBuilder<Event> {
     }
 
     public EventBuilder withEventStatus(EventStatus eventStatus) {
-        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, nextDate, eventStatus));
+        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, status, assetStatus, results, eventState, dueDate, eventStatus));
     }
 
     @Override
@@ -159,7 +159,7 @@ public class EventBuilder extends BaseBuilder<Event> {
         event.setAssetStatus(assetStatus);
         event.setCriteriaResults(results);
         event.setEventState(eventState);
-        event.setDueDate(nextDate);
+        event.setDueDate(dueDate);
         event.setEventStatus(eventStatus);
         
 		return event;
