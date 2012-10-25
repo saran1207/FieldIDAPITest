@@ -23,7 +23,7 @@ public class EventFormEditPanel extends Panel {
     private int totalSections;
     private IModel<List<AbstractEvent.SectionResults>> results;
 
-    public EventFormEditPanel(String id, IModel<List<AbstractEvent.SectionResults>> results) {
+    public EventFormEditPanel(String id, final IModel<List<AbstractEvent.SectionResults>> results) {
         super(id);
         this.results = results;
         setOutputMarkupId(true);
@@ -57,6 +57,7 @@ public class EventFormEditPanel extends Panel {
         jumpToSection.add(new UpdateComponentOnChange() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                currentSectionIndex = results.getObject().indexOf(currentSection);
                 target.add(EventFormEditPanel.this);
             }
         });
