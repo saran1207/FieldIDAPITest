@@ -43,7 +43,7 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 		}
 		
 		if(event.getStatus() != null) {
-			apiEvent.setStatus(event.getStatus().getDisplayName());
+			apiEvent.setStatus(event.getStatus().toString());
 		}
 		
 		if(event.getAdvancedLocation() != null) {
