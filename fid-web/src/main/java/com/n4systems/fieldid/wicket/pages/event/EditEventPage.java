@@ -34,9 +34,6 @@ public class EditEventPage extends EventPage {
     protected Event loadExistingEvent() {
         Event existingEvent = eventService.lookupExistingEvent(Event.class, uniqueId);
         PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
-        if (existingEvent.getProofTestInfo() == null) {
-            existingEvent.setProofTestInfo(new ProofTestInfo());
-        }
         return existingEvent;
     }
 

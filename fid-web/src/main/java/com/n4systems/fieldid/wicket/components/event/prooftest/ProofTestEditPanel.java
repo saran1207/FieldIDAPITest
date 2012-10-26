@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRende
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,16 +28,11 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
     WebMarkupContainer otherTypeContainer;
     WebMarkupContainer uploadedProofTestContainer;
     FileUploadField fileUploadField;
-    private IModel<Event> event;
 
-    public ProofTestEditPanel(String id, IModel<Event> event) {
-        super(id, new PropertyModel<ProofTestInfo>(event, "proofTestInfo"));
-
-        this.event = event;
+    public ProofTestEditPanel(String id, EventType eventType, IModel<ProofTestInfo> proofTestInfo) {
+        super(id, proofTestInfo);
 
         setOutputMarkupId(true);
-
-        IModel<ProofTestInfo> proofTestInfo = getModel();
 
         otherTypeContainer = new WebMarkupContainer("otherProofTestContainer");
         otherTypeContainer.setOutputMarkupPlaceholderTag(true);
@@ -50,7 +46,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
 
         uploadedProofTestContainer.add(fileUploadField = new FileUploadField("fileUpload"));
 
-        final List<ProofTestType> proofTestTypes = new ArrayList<ProofTestType>(event.getObject().getType().getSupportedProofTests());
+        final List<ProofTestType> proofTestTypes = new ArrayList<ProofTestType>(eventType.getSupportedProofTests());
 
         final boolean multipleProofTypes = proofTestTypes.size()>1;
         DropDownChoice<ProofTestType> typeSelect = new DropDownChoice<ProofTestType>("proofTestType", new PropertyModel<ProofTestType>(proofTestInfo, "proofTestType"), proofTestTypes, new ListableLabelChoiceRenderer<ProofTestType>()) {

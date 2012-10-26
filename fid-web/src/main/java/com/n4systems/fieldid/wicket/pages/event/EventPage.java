@@ -58,6 +58,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -81,6 +82,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     protected List<FileAttachment> fileAttachments;
     private User assignedTo;
     protected ProofTestEditPanel proofTestEditPanel;
+    private IModel<ProofTestInfo> proofTestInfo;
 
     private WebMarkupContainer schedulesContainer;
 
@@ -89,6 +91,10 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         super.onInitialize();
         sectionResults = event.getObject().getSectionResults();
         scheduleToAdd = createNewOpenEvent();
+        proofTestInfo = new PropertyModel<ProofTestInfo>(event, "proofTestInfo");
+        if (proofTestInfo.getObject() == null) {
+            proofTestInfo = new Model<ProofTestInfo>(new ProofTestInfo());
+        }
         if(event.getObject().hasAssignToUpdate()) {
             assignedTo = event.getObject().getAssignedTo().getAssignedUser();
         }
@@ -170,7 +176,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             add(new Label("eventTypeName", new PropertyModel<String>(event, "type.name")));
             
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
-            proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event));
+
+            proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event.getObject().getType(), proofTestInfo));
             proofTestContainer.setVisible(supportsProofTests());
 
             add(proofTestContainer);
@@ -238,6 +245,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         @Override
         protected void onSubmit() {
             event.getObject().setSectionResults(sectionResults);
+            event.getObject().setProofTestInfo(proofTestInfo.getObject());
             if (doPostSubmitValidation()) {
                 AbstractEvent savedEvent = doSave();
                 FieldIDSession.get().storeInfoMessageForStruts(getString("message.eventsaved"));
