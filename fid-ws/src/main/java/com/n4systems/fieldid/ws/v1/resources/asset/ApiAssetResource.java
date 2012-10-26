@@ -258,6 +258,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		
 		if(apiAsset.getAssetStatusId() > 0) {
 			asset.setAssetStatus(findEntity(AssetStatus.class, apiAsset.getAssetStatusId()));
+		} else {
+			asset.setAssetStatus(null);
 		}
 		
 		if(apiAsset.getIdentifiedById() > 0) {
