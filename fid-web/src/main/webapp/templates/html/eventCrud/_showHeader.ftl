@@ -49,9 +49,17 @@
     </p>
 
     <div class="actions">
-        <a class="mattButton <#if event.anyCertPrintable && userSecurityGuard.allowedEditEvent>summary<#else>summary-wide</#if>" href="<@s.url namespace="/" value="w/assetSummary?uniqueID=${asset.id}"/>">
+        <#if event.tenant.id == sessionUser.tenant.id>
+            <@s.url id="summaryLink" namespace="/" value="w/assetSummary?uniqueID=${asset.id}"/>
+
+        <#else>
+            <@s.url id="summaryLink" namespace="/" value="w/assetSummary?uniqueID=${linkedAsset.id}"/>
+        </#if>
+
+        <a class="mattButton <#if event.anyCertPrintable && userSecurityGuard.allowedEditEvent>summary<#else>summary-wide</#if>" href="${summaryLink}">
             <@s.text name="label.assetsummary"/>
         </a>
+
         <#if userSecurityGuard.allowedEditEvent>
             <a class="mattButton edit" href="<@s.url action="selectEventEdit" uniqueID="${event.id}"/>">
                 <@s.text name="label.edit"/>

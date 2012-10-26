@@ -48,6 +48,7 @@ import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
@@ -1102,6 +1103,12 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
     public Long getProjectId() {
         return getProject().getId();
+    }
+    
+    public Asset getLinkedAsset() {
+        QueryBuilder<Asset> query = new QueryBuilder<Asset>(Asset.class, getSecurityFilter());
+        query.addSimpleWhere("networkId", asset.getId());
+        return persistenceManager.find(query);
     }
 
 }
