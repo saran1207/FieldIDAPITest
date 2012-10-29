@@ -1,16 +1,14 @@
 package com.n4systems.tools;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.graphing.Chart;
 
+import java.util.*;
+
 public class FileDataContainer {
+
+    public static final FileDataContainer UNCHANGED = new FileDataContainer();
+
 	private byte[] fileData;
 	
 	private byte[] chart;

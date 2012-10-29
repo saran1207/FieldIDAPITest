@@ -1,24 +1,30 @@
 <wicket:panel>
 
-    <select wicket:id="proofTestType"/>
-    <label class="label proof-test-label" wicket:id="proofTestTypeLabel"/>
-
-
-    <div class="proofTestUpload" wicket:id="uploadedProofTestContainer" style="clear:both; padding-bottom:15px;">
-            <input type="file" wicket:id="fileUpload">
+    <div wicket:id="removeExistingProofTestPanel">
+        <a wicket:id="removeExistingProofTestLink"><wicket:message key="label.remove"/></a>
     </div>
 
-    <div class="proofTestManual" wicket:id="otherProofTestContainer" style="clear:both; padding-bottom:15px;">
+    <div wicket:id="proofTestDetailsPanel">
+        <select wicket:id="proofTestType"/>
+        <label class="label proof-test-label" wicket:id="proofTestTypeLabel"/>
 
-        <label class="label"><wicket:message key="label.peakload"/></label>
-        <input type="text" wicket:id="peakLoad" class="textbox">
 
-        <label class="label"><wicket:message key="label.duration"/></label>
-        <input type="text" wicket:id="duration" class="textbox">
+        <div class="proofTestUpload" wicket:id="uploadedProofTestContainer" style="clear:both; padding-bottom:15px;">
+            <input type="file" wicket:id="fileUpload">
+        </div>
 
-        <label class="label"><wicket:message key="label.peakloadduration"/></label>
-        <input type="text" wicket:id="peakLoadDuration" class="textbox">
+        <div class="proofTestManual" wicket:id="otherProofTestContainer" style="clear:both; padding-bottom:15px;">
 
+            <label class="label"><wicket:message key="label.peakload"/></label>
+            <input type="text" wicket:id="peakLoad" class="textbox">
+
+            <label class="label"><wicket:message key="label.duration"/></label>
+            <input type="text" wicket:id="duration" class="textbox">
+
+            <label class="label"><wicket:message key="label.peakloadduration"/></label>
+            <input type="text" wicket:id="peakLoadDuration" class="textbox">
+
+        </div>
     </div>
 
 </wicket:panel>

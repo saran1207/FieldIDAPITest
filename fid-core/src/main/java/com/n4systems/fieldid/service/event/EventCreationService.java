@@ -9,7 +9,6 @@ import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.user.User;
@@ -311,9 +310,6 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     private void setProofTestData(Event event, FileDataContainer fileData) {
         if (fileData == null) {
-            if (event.getProofTestInfo() != null && event.getProofTestInfo().getProofTestType() != ProofTestType.OTHER) {
-                event.getProofTestInfo().setProofTestType(null);
-            }
             return;
         }
 

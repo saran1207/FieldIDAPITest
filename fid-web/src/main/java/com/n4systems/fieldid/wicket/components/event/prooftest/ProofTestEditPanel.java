@@ -4,12 +4,12 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -24,97 +24,135 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
-    
-    WebMarkupContainer otherTypeContainer;
-    WebMarkupContainer uploadedProofTestContainer;
-    FileUploadField fileUploadField;
 
+    private RemoveExistingProofTestPanel removeExistingPanel;
+    private ProofTestDetailsPanel proofTestDetailsPanel;
+    
     public ProofTestEditPanel(String id, EventType eventType, IModel<ProofTestInfo> proofTestInfo) {
         super(id, proofTestInfo);
-
         setOutputMarkupId(true);
 
-        otherTypeContainer = new WebMarkupContainer("otherProofTestContainer");
-        otherTypeContainer.setOutputMarkupPlaceholderTag(true);
-        
-        otherTypeContainer.add(new TextField<String>("peakLoad", new PropertyModel<String>(proofTestInfo, "peakLoad")));
-        otherTypeContainer.add(new TextField<String>("duration", new PropertyModel<String>(proofTestInfo, "duration")));
-        otherTypeContainer.add(new TextField<String>("peakLoadDuration", new PropertyModel<String>(proofTestInfo, "peakLoadDuration")));
+        add(removeExistingPanel = new RemoveExistingProofTestPanel("removeExistingProofTestPanel", eventType, proofTestInfo));
+        eventType.getSupportedProofTests();
+        add(proofTestDetailsPanel = new ProofTestDetailsPanel("proofTestDetailsPanel", eventType, proofTestInfo));
+    }
 
-        uploadedProofTestContainer = new WebMarkupContainer("uploadedProofTestContainer");
-        uploadedProofTestContainer.setOutputMarkupPlaceholderTag(true);
+    class RemoveExistingProofTestPanel extends WebMarkupContainer {
 
-        uploadedProofTestContainer.add(fileUploadField = new FileUploadField("fileUpload"));
+        public RemoveExistingProofTestPanel(String id, final EventType eventType, final IModel<ProofTestInfo> proofTestInfo) {
+            super(id);
+            setOutputMarkupId(true);
 
-        final List<ProofTestType> proofTestTypes = new ArrayList<ProofTestType>(eventType.getSupportedProofTests());
+            setVisible(proofTestInfo.getObject() != null && proofTestInfo.getObject().getProofTestType() != null && proofTestInfo.getObject().getProofTestType() != ProofTestType.OTHER);
 
-        final boolean multipleProofTypes = proofTestTypes.size()>1;
-        DropDownChoice<ProofTestType> typeSelect = new DropDownChoice<ProofTestType>("proofTestType", new PropertyModel<ProofTestType>(proofTestInfo, "proofTestType"), proofTestTypes, new ListableLabelChoiceRenderer<ProofTestType>()) {
-            @Override public boolean isVisible() {
-                return multipleProofTypes;
+            add(new AjaxLink("removeExistingProofTestLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    proofTestInfo.setObject(createInitialProofTestObject(eventType));
+                    removeExistingPanel.setVisible(false);
+                    proofTestDetailsPanel.setVisible(true);
+                    target.add(ProofTestEditPanel.this);
+                }
+            });
+        }
+    }
+
+
+    class ProofTestDetailsPanel extends WebMarkupContainer {
+        WebMarkupContainer otherTypeContainer;
+        WebMarkupContainer uploadedProofTestContainer;
+        FileUploadField fileUploadField;
+
+
+        public ProofTestDetailsPanel(String id, EventType eventType, IModel<ProofTestInfo> proofTestInfo) {
+            super(id, proofTestInfo);
+
+            setOutputMarkupId(true);
+
+            setVisible(proofTestInfo.getObject() == null || proofTestInfo.getObject().getProofTestType() == null || proofTestInfo.getObject().getProofTestType() == ProofTestType.OTHER);
+
+            otherTypeContainer = new WebMarkupContainer("otherProofTestContainer");
+            otherTypeContainer.setOutputMarkupPlaceholderTag(true);
+
+            otherTypeContainer.add(new TextField<String>("peakLoad", new PropertyModel<String>(proofTestInfo, "peakLoad")));
+            otherTypeContainer.add(new TextField<String>("duration", new PropertyModel<String>(proofTestInfo, "duration")));
+            otherTypeContainer.add(new TextField<String>("peakLoadDuration", new PropertyModel<String>(proofTestInfo, "peakLoadDuration")));
+
+            uploadedProofTestContainer = new WebMarkupContainer("uploadedProofTestContainer");
+            uploadedProofTestContainer.setOutputMarkupPlaceholderTag(true);
+
+            uploadedProofTestContainer.add(fileUploadField = new FileUploadField("fileUpload"));
+
+            final List<ProofTestType> proofTestTypes = new ArrayList<ProofTestType>(eventType.getSupportedProofTests());
+
+            final boolean multipleProofTypes = proofTestTypes.size() > 1;
+            DropDownChoice<ProofTestType> typeSelect = new DropDownChoice<ProofTestType>("proofTestType", new PropertyModel<ProofTestType>(proofTestInfo, "proofTestType"), proofTestTypes, new ListableLabelChoiceRenderer<ProofTestType>()) {
+                @Override public boolean isVisible() {
+                    return multipleProofTypes;
+                }
+            };
+            typeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    updateVisiblityOfComponents();
+                    target.add(ProofTestEditPanel.this);
+                }
+            });
+
+            add(new Label("proofTestTypeLabel", new FIDLabelModel(new PropertyModel<String>(proofTestInfo, "proofTestType.displayName"))).setVisible(!multipleProofTypes));
+            if (proofTestInfo.getObject().getProofTestType() == null) {
+                ProofTestInfo info = createInitialProofTestObject(eventType);
+                proofTestInfo.setObject(info);
             }
-        };
-        typeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                updateVisiblityOfComponents();
-                target.add(ProofTestEditPanel.this);
-            }
-        });
 
-        add(new Label("proofTestTypeLabel", new FIDLabelModel(new PropertyModel<String>(proofTestInfo, "proofTestType.displayName"))).setVisible(!multipleProofTypes));
-        if (proofTestTypes.size()==1) {
-            ProofTestInfo info = new ProofTestInfo();
-            info.setProofTestType(proofTestTypes.get(0));
-            proofTestInfo.setObject(info);
+            add(otherTypeContainer, uploadedProofTestContainer, typeSelect);
+
+            updateVisiblityOfComponents();
         }
 
-        add(otherTypeContainer, uploadedProofTestContainer, typeSelect);
-
-        updateVisiblityOfComponents();
-    }
-
-    private void updateVisiblityOfComponents() {
-        otherTypeContainer.setVisible(isOtherState());
-        uploadedProofTestContainer.setVisible(!isOtherState());
-    }
-
-    public boolean isOtherState() {
-        return getModelObject() != null && getModelObject().getProofTestType() == ProofTestType.OTHER;
-    }
-
-    public FileUpload getFileUpload() {
-        if (isOtherState()) {
-            return null;
+        private void updateVisiblityOfComponents() {
+            otherTypeContainer.setVisible(isOtherState());
+            uploadedProofTestContainer.setVisible(!isOtherState());
         }
-        return fileUploadField.getFileUpload();
+
+        public boolean isOtherState() {
+            return getModelObject() != null && getModelObject().getProofTestType() == ProofTestType.OTHER;
+        }
+
+        public FileUpload getFileUpload() {
+            if (isOtherState()) {
+                return null;
+            }
+            return fileUploadField.getFileUpload();
+        }
+
+        public FileDataContainer getFileDataContainer() {
+
+            if (getModelObject().getProofTestType() == ProofTestType.OTHER) {
+                FileDataContainer fileData = new FileDataContainer();
+                fileData.setFileType(ProofTestType.OTHER);
+                fileData.setPeakLoad(getModelObject().getPeakLoad());
+                fileData.setTestDuration(getModelObject().getDuration());
+                fileData.setPeakLoadDuration(getModelObject().getPeakLoadDuration());
+                return fileData;
+            }
+
+            if (getFileUpload() == null) {
+                // Since it's not "Other", the lack of a file signifies we want to clear existing data.
+                // So we return a blank FileDataContainer
+                return new FileDataContainer();
+            }
+
+            byte[] fileContents = fileUploadField.getFileUpload().getBytes();
+            String clientFileName = fileUploadField.getFileUpload().getClientFileName();
+
+            return createFileDataContainer(fileContents, clientFileName);
+        }
     }
 
     @Override
     protected void convertInput() {
         setConvertedInput(getModelObject());
-    }
-
-    public FileDataContainer getFileDataContainer() {
-        FileDataContainer fileData = null;
-
-        if (getFileUpload() == null) {
-            return null;
-        }
-
-        if (getModelObject() != null && getModelObject().getProofTestType() != ProofTestType.OTHER) {
-            byte[] fileContents = fileUploadField.getFileUpload().getBytes();
-            String clientFileName = fileUploadField.getFileUpload().getClientFileName();
-
-            fileData = createFileDataContainer(fileContents, clientFileName);
-        } else if (getModelObject() != null && getModelObject().getProofTestType() == ProofTestType.OTHER) {
-            fileData = new FileDataContainer();
-            fileData.setPeakLoad(getModelObject().getPeakLoad());
-            fileData.setTestDuration(getModelObject().getDuration());
-            fileData.setPeakLoadDuration(getModelObject().getPeakLoadDuration());
-        }
-
-        return fileData;
     }
 
     private FileDataContainer createFileDataContainer(byte[] fileContents, String clientFileName) {
@@ -125,6 +163,21 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
             throw new ProcessingProofTestException(e);
         }
         return fileData;
+    }
+
+    public FileDataContainer getFileDataContainer() {
+        if (removeExistingPanel.isVisible()) {
+            return null;
+        }
+        return proofTestDetailsPanel.getFileDataContainer();
+    }
+
+    private ProofTestInfo createInitialProofTestObject(EventType eventType) {
+        ProofTestInfo info = new ProofTestInfo();
+        if (eventType.getSupportedProofTests().size() == 1) {
+            info.setProofTestType(eventType.getSupportedProofTests().iterator().next());
+        }
+        return info;
     }
 
 }
