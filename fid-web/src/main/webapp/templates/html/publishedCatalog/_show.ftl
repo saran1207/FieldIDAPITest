@@ -2,8 +2,8 @@
 	<div class="loading"><img src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/></div>
 </#assign>
 <head>
-    <@n4.includeStyle type="page"  src="pageStyles/publishedCatalog.css"/>
-	<@n4.includeStyle type="page"  src="steps"/>
+    <@n4.includeStyle type="page"  href="publishedCatalog"/>
+	<@n4.includeStyle type="page"  href="../steps"/>
 
 	<@n4.includeScript src="steps.js"/>
 
