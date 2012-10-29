@@ -28,7 +28,7 @@ public class ScriptMigration extends Migration {
 		Statement stmt = null;
 		for (String sql: statements) {
 			sql = sql.trim();
-			if (sql.length() > 0) {
+			if (sql.length() > 0 && !sql.startsWith("--")) {
 				try {
 					stmt = conn.createStatement();
 					logger.debug("Executing SQL: \n\t" + sql.replace("\n", "\n\t"));
