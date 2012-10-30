@@ -1,0 +1,1 @@
+update column_mappings set join_expression = null where name = 'event_score';
