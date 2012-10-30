@@ -1,0 +1,1 @@
+update masterevents me, events e, eventschedules es set e.mobileguid = es.mobileguid where me.event_id = e.id and me.schedule_id = es.id;
