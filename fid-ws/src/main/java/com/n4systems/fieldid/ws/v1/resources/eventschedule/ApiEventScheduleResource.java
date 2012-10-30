@@ -67,24 +67,20 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
-		Event eventSchedule = eventScheduleService.findByMobileId(apiEventSchedule.getSid());
+		Event event = eventScheduleService.findByMobileId(apiEventSchedule.getSid());
 
-		if (eventSchedule == null) {
-            Event event = converApiEventSchedule(apiEventSchedule);
+		if (event == null) {
+            event = converApiEventSchedule(apiEventSchedule);
 			persistenceService.save(event);
-			logger.info("Saved EventSchedule for " + event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
-		} else if (eventSchedule.getEventState() == Event.EventState.OPEN) {
-
-            EventType eventType = persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId());
-
-			eventSchedule.setDueDate(apiEventSchedule.getNextDate());
-            eventSchedule.setType(eventType);
-            eventSchedule.setAssignee(getAssigneeUser(apiEventSchedule));
-
-			persistenceService.update(eventSchedule);
-			logger.info("Updated EventSchedule for " + eventSchedule.getEventType().getName() + " on Asset " + eventSchedule.getMobileGUID());
+			logger.info("Saved New Scheduled Event for " + event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
+		} else if (event.getEventState() == Event.EventState.OPEN) {
+			event.setDueDate(apiEventSchedule.getNextDate());
+            event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
+            event.setAssignee(getAssigneeUser(apiEventSchedule));
+			persistenceService.update(event);
+			logger.warn("(Legacy Client Detected) Updated Scheduled Event for " + event.getEventType().getName() + " on Asset " + event.getMobileGUID());
 		} else {
-            logger.warn("Could not update EventSchedule due to event being already completed: " + eventSchedule.getId());
+            logger.warn("(Legacy Client Detected) Failed Updating Completed Scheduled Event" + event.getId());
         }
 	}
 	
@@ -93,11 +89,10 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void DeleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
-		Event eventSchedule = eventScheduleService.findByMobileId(eventScheduleId);
-        // NOTE : why isn't event ArchivableEntityWithTenant/Owner???
-        eventSchedule.archiveEntity();
-        persistenceService.update(eventSchedule);
-		logger.info("soft deleting open event for " + eventSchedule.getEventType().getName() + " on asset " + eventSchedule.getMobileGUID());
+		Event event = eventScheduleService.findByMobileId(eventScheduleId);
+        event.archiveEntity();
+        persistenceService.update(event);
+		logger.info("Archived Scheduled Event for " + event.getEventType().getName() + " on asset " + event.getMobileGUID());
 	}
 
 	@Override
