@@ -62,8 +62,16 @@ public class UserService extends FieldIdPersistenceService {
 	public User getUser(Long userId) {
 		QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
         builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "id", userId));
-        return persistenceService.find(builder);		
+        User user = persistenceService.find(builder);
+        return user;
 	}
+
+    public void moveSavedItem(Long userId, int fromIndex, int toIndex) {
+        User user = getUser(userId);
+        SavedItem savedItem = user.getSavedItems().get(fromIndex);
+        user.getSavedItems().remove(fromIndex);
+        user.getSavedItems().add(toIndex, savedItem);
+    }
 	
 	public User authenticateUserByPassword(String tenantName, String userId, String password) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());

@@ -30,4 +30,4 @@ ALTER TABLE select_criteria_options ADD PRIMARY KEY(select_criteria_id, orderidx
 ALTER TABLE setupdatalastmoddates ADD PRIMARY KEY(tenant_id);
 ALTER TABLE statesets_states ADD PRIMARY KEY(states_id);
 ALTER TABLE subevents ADD PRIMARY KEY(event_id);
-ALTER TABLE users_saved_items ADD PRIMARY KEY(item_id);
+ALTER TABLE users_saved_items ADD PRIMARY KEY(item_id, orderidx);

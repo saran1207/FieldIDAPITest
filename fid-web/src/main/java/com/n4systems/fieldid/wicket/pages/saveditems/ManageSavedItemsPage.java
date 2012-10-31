@@ -174,12 +174,7 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
                 SavedItem item = (SavedItem) component.getDefaultModelObject();
                 int oldIndex = savedItemsModel.getObject().indexOf(item);
                 
-                savedItemsModel.getObject().remove(oldIndex);
-                savedItemsModel.getObject().add(index, item);
-
-                final User user = userService.getUser(getUser().getId());
-                user.setSavedItems(savedItemsModel.getObject());
-                persistenceService.save(user);
+                userService.moveSavedItem(getSessionUser().getId(), oldIndex, index);
 
                 target.add(itemsListContainer);
             }
