@@ -1,0 +1,6 @@
+-- The situation is that we have a migration that left some gaps in a hibernate mapped list (eg orderIdx 0, 1, 3, 4), which causes hibernate to freak out.
+-- To correct the situation, we do a join, calculating the missing index by taking the difference of the sum of orderIndex with the expected sum (n*(n+1)/2)
+-- Then we subtract one from indexes that are higher than the missing indexes. This works because we know that since we removed
+-- exactly one widget definition type, there is at most one gap in every dashboard column, but this can't be used when there may be an arbitrary number of gaps.
+
+update dashboard_columns_widget_definitions defs join (select dashboard_column_id,max(orderIdx) as max_index, round((count(*)*(count(*)+1))/2) - sum(orderIdx) as missing_index from dashboard_columns_widget_definitions group by dashboard_column_id having max(orderIdx) + 1 <> count(*)) missings on defs.dashboard_column_id = missings.dashboard_column_id set defs.orderIdx = defs.orderIdx - 1 where defs.orderIdx > missing_index;
