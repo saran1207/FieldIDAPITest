@@ -12,7 +12,7 @@
 			<@s.text name="message.assets_being_merged"/>
 		</p>
 		<p>
-			<@s.text name="label.go_to_winning_asset_page"/> <a href="<@s.url action="asset" uniqueID="${winningAsset.id}"/>">${winningAsset.identifier?html}</a>
+			<@s.text name="label.go_to_winning_asset_page"/> <a href="/fieldid/w/assetSummary?uniqueID=${winningAsset.id}">${winningAsset.identifier?html}</a>
 		</p>	
 	</div>
 </div>
