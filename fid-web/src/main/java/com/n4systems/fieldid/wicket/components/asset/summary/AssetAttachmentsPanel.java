@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.model.Asset;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.asset.AssetAttachment;
+import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
@@ -18,9 +19,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 public class AssetAttachmentsPanel extends Panel {
+
+    private static final Logger logger = Logger.getLogger(AssetAttachmentsPanel.class);
 
     @SpringBean
     protected AssetService assetService;
@@ -35,8 +39,16 @@ public class AssetAttachmentsPanel extends Panel {
             @Override
             protected void populateItem(ListItem<AssetAttachment> item) {
                 AssetAttachment attachment = item.getModelObject();
+
+                String fileName;
+                try {
+                    fileName = URLEncoder.encode(attachment.getFileName(), "UTF-8");
+                } catch (Exception e) {
+                    logger.warn("Could not conver to UTF-8", e);
+                    fileName = attachment.getFileName().replace(" ", "+");
+                }
                 
-                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ attachment.getFileName().replace(" ", "+") + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
+                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ fileName + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
 
                 WebComponent image;
                 if(attachment.isImage()) {
