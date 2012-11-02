@@ -70,7 +70,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
 	private Location advancedLocation = new Location();
 
-    @OneToOne(mappedBy = "event", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "event", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private AssigneeNotification assigneeNotification;
 
     // Trigger and criteria result.
