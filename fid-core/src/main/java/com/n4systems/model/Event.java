@@ -133,6 +133,10 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     // Pertinent information isn't stored in the schedule anymore, it lives in the event.
 //	private EventSchedule schedule = new EventSchedule();
 
+    @Deprecated
+    @Column(name="schedule_id")
+    private Long scheduleId;
+
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;
@@ -659,4 +663,15 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     public boolean isAction() {
         return getTriggerEvent() != null;
     }
+
+    @Deprecated
+    public Long getScheduleId() {
+        return scheduleId;
+    }
+
+    @Deprecated
+    public void setScheduleId(Long scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
 }

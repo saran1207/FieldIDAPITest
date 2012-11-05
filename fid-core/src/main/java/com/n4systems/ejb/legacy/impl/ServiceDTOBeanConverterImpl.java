@@ -982,6 +982,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		InspectionScheduleServiceDTO scheduleService = new InspectionScheduleServiceDTO();
 
 		scheduleService.setId(event.getId());
+        scheduleService.setMobileGuid(event.getMobileGUID());
 		scheduleService.setNextDate(dateToString(event.getDueDate()));
 		scheduleService.setProductId(event.getAsset().getId());
 		scheduleService.setInspectionTypeId(event.getType().getId());

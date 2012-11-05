@@ -25,17 +25,30 @@ public class EventScheduleByGuidOrIdLoader extends SecurityFilteredLoader<Event>
 		
 		if (mobileGuid != null && mobileGuid.trim().length() > 0) {
 			schedule = loadByGuid(em, filter);
-            if (schedule==null) {
-                // CAVEAT : at this point we can't be sure whether it wasn't found because the scheduled event was created on mobile
-                // and hasn't been uploaded yet or something wrong with guid.   we'll log it for now even though this could be noisy.
-                // remove this after a couple of iterations when we can be sure schedule id is no longer used.
-                logger.warn("Trying to find schedule with mobile GUID " + mobileGuid + " and/or schedule id : " + id);
-            }
 		}
+
+        if (schedule == null && id > 0) {
+            logger.warn("Finding by legacy schedule mobile GUID "  + mobileGuid + " and/or schedule id : " + id);
+            schedule = loadByLegacyScheduleId(id, filter, em);
+        }
+
+        if (schedule == null) {
+            // CAVEAT : at this point we can't be sure whether it wasn't found because the scheduled event was created on mobile
+            // and hasn't been uploaded yet or something wrong with guid.   we'll log it for now even though this could be noisy.
+            // remove this after a couple of iterations when we can be sure schedule id is no longer used.
+            logger.warn("Failed to find schedule with mobile GUID " + mobileGuid + " and/or schedule id : " + id);
+        }
+
         return schedule;
 	}
 
-	protected Event loadByGuid(EntityManager em,
+    private Event loadByLegacyScheduleId(long id, SecurityFilter filter, EntityManager em) {
+        QueryBuilder<Event> queryBuilder = getQueryBuilder(filter);
+        queryBuilder.addSimpleWhere("scheduleId", id);
+        return queryBuilder.getSingleResult(em);
+    }
+
+    protected Event loadByGuid(EntityManager em,
 			SecurityFilter filter) {
 		QueryBuilder<Event> query = getQueryBuilder(filter);
 		query.addSimpleWhere("mobileGUID", mobileGuid);
