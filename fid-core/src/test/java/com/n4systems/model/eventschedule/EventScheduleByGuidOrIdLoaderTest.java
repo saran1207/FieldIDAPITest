@@ -29,23 +29,6 @@ public class EventScheduleByGuidOrIdLoaderTest {
 		assertEquals(mobileGuid, whereParameter.getValue());
 	}
 
-    @Test
-    public void should_be_null_if_mobile_guid_not_set() {
-        TestableEventScheduleByGuidOrIdLoader sut = new TestableEventScheduleByGuidOrIdLoader(new OpenSecurityFilter());
-        Event result = sut.setId(1L).setMobileGuid(null).load(new TestingTransaction());
-        assertNull(result);
-    }
-
-    @Test
-    public void should_be_null_if_mobile_guid_not_found() {
-        TestableEventScheduleByGuidOrIdLoader sut = new TestableEventScheduleByGuidOrIdLoader(new OpenSecurityFilter()) {
-            @Override protected Event loadByGuid(EntityManager em, SecurityFilter filter) {
-                return null;
-            }
-        };
-        Event result = sut.setId(1L).setMobileGuid("willReturnNull").load(new TestingTransaction());
-        assertNull(result);
-    }
 
     private class TestableEventScheduleByGuidOrIdLoader extends EventScheduleByGuidOrIdLoader {
 
