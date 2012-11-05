@@ -439,7 +439,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
         if (schedule!=null) {
             // As long as this scheduled event's corresponding open event hasn't been completed or archived, we're going to use it
             if (schedule.getEventState()==Event.EventState.OPEN && schedule.getState() == Archivable.EntityState.ACTIVE) {
-                event = persistenceManager.find(Event.class, event.getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
+                event = persistenceManager.find(Event.class, schedule.getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
             }
         }
 
@@ -458,7 +458,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		findOrCreateEventBook(inspectionServiceDTO, event);
 
-		Status status = null;
+		Status status = Status.VOID;
 		if (StringUtils.isNotBlank(inspectionServiceDTO.getStatus())) {
 			try {
 				status = Status.valueOf(inspectionServiceDTO.getStatus());

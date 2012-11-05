@@ -43,7 +43,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 
 	public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
         Status calculatedStatus = calculateEventResultAndScore(parameterObject.event);
-		if (parameterObject.event.getStatus() == null) {
+		if (parameterObject.event.getStatus() == null || parameterObject.event.getStatus() == Status.VOID) {
             parameterObject.event.setStatus(calculatedStatus);
 		}
 		
