@@ -230,7 +230,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 		return employees;
 	}
 
-
+    @Deprecated
 	public Long getAssetIdForEventScheduleId(String eventScheduleId) {
 		return eventScheduleManager.getAssetIdForSchedule(Long.valueOf(eventScheduleId));
 	}
@@ -310,7 +310,5 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	public String getY() {
 		return y;
 	}
-
-	
 	
 }

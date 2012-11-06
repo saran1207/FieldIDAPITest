@@ -147,9 +147,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	public Long getAssetIdForSchedule(Long scheduleId) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("asset.id");
-        builder.addSimpleWhere("eventState", Event.EventState.OPEN);
 		builder.addSimpleWhere("id", scheduleId);
-		
 		return persistenceManager.find(builder);
 	}
 	
