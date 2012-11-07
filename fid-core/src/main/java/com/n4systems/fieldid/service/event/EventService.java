@@ -375,6 +375,13 @@ public class EventService extends FieldIdPersistenceService {
         return builder;
     }
     
+    public Event findByMobileId(String mobileId) {
+    	QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
+    	builder.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));
+    	Event event = persistenceService.find(builder);
+    	return event;
+    }
+    
     public List<Event> getLastEventOfEachType(Long assetId) {
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
 		builder.addWhere(WhereClauseFactory.create("asset.id", assetId));

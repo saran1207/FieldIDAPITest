@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
@@ -40,25 +41,25 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	@Autowired private ApiEventFormResultResource apiEventFormResultResource;
 	@Autowired private EventScheduleService eventScheduleService;
     @Autowired private EventCreationService eventCreationService;
+    @Autowired private EventService eventService;
     @Autowired private CertificateService certificateService;
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEvent(ApiEvent apiEvent) {
+		if(apiEvent.getSid() == null) {
+			throw new NullPointerException("ApiEvent has null sid");
+		}
+		
+		Event existingEvent = eventService.findByMobileId(apiEvent.getSid());
 
-        if (apiEvent.getSid() != null && eventExists(apiEvent.getSid())) {
-            logger.warn("Event with SID [" + apiEvent.getSid() + "] already exists");
-            return;
-        }
-
-		Event event = convertApiEvent(apiEvent);
-
-        List<FileAttachment> uploadedFiles = apiAttachmentResource.convert(apiEvent.getAttachments(), event.getTenant(), event.getCreatedBy());
-
-        eventCreationService.createEvent(event, 0L, null, uploadedFiles);
-		logger.info("Saved Event on Asset " + apiEvent.getAssetId());
-	}
+        if (existingEvent == null) {
+        	createEvent(apiEvent);
+        } else {
+        	updateEvent(apiEvent, existingEvent);
+        }		
+	}	
 	
 	@GET
 	@Path("downloadReport")
@@ -91,10 +92,20 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			throw e;
 		}
 	}
-
-	private Event convertApiEvent(ApiEvent apiEvent) {
+	
+	private void createEvent(ApiEvent apiEvent) {
 		Event event = new Event();
+		convertApiEvent(apiEvent, event);
+        List<FileAttachment> uploadedFiles = apiAttachmentResource.convert(apiEvent.getAttachments(), event.getTenant(), event.getCreatedBy());
+        eventCreationService.createEvent(event, 0L, null, uploadedFiles);
+		logger.info("Created Event on Asset " + apiEvent.getAssetId());
+	}
+	
+	private void updateEvent(ApiEvent apiEvent, Event existingEvent) {
+		convertApiEvent(apiEvent, existingEvent);
+	}
 
+	private void convertApiEvent(ApiEvent apiEvent, Event event) {
         if (apiEvent.getEventScheduleId() != null) {
             // We find the open event, and use this event rather than the updated one. UNLESS it's archived
             Event loadedEvent = eventScheduleService.findByMobileId(apiEvent.getEventScheduleId());
@@ -161,8 +172,6 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			
 			logger.info("Added " + subEvents.size() + " SubEvents for Event on Asset " + apiEvent.getAssetId());
 		}
-		
-		return event;
 	}
 	
 	private SubEvent convertApiEventIntoSubEvent(ApiEvent apiEvent) {
@@ -203,14 +212,6 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			}
 		}
 	}
-
-    private boolean eventExists(String sid) {
-        QueryBuilder<Event> query = createTenantSecurityBuilder(Event.class, true);
-        query.addWhere(WhereClauseFactory.create("mobileGUID", sid));
-
-        boolean eventExists = persistenceService.exists(query);
-        return eventExists;
-    }
 
 	private EventBook findEventBook(String eventBookId) {
 		QueryBuilder<EventBook> query = createTenantSecurityBuilder(EventBook.class, true);
