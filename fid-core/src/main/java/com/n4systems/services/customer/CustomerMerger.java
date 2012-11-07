@@ -215,7 +215,7 @@ public class CustomerMerger {
 	}
 
 	private void moveSchedules(Asset asset, BaseOrg winningOrg) {
-		List<Event> openEvents = scheduleManager.getAvailableSchedulesFor(asset);
+		List<Event> openEvents = scheduleManager.getAvailableSchedulesFor(asset, "asset");
 		
 		for (Event event : openEvents) {
             event.setOwner(winningOrg);
