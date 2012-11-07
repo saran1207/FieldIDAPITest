@@ -44,18 +44,18 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 
 	public ApiEventForm convertToApiEventForm(AbstractEvent event) {
 		if(event.getEventForm() != null) {
-			List<CriteriaSection> sections = event.getEventForm().getAvailableSections();
-			
-			if(sections != null && sections.size() > 0) {
-				ApiEventForm apiEventForm = new ApiEventForm();
-				apiEventForm.setSid(event.getEventForm().getId());
+			ApiEventForm apiEventForm = new ApiEventForm();
+			apiEventForm.setSid(event.getEventForm().getId());			
+			List<CriteriaSection> sections = event.getEventForm().getAvailableSections();			
+			if(sections != null && sections.size() > 0) {				
+				
 				Set<CriteriaResult> results = event.getResults();				
 				for(CriteriaSection section : event.getEventForm().getAvailableSections()) {
 					apiEventForm.getSections().add(convertCriteriaSection(section, results, event.getId()));
 				}
-				
-				return apiEventForm;
 			}
+			
+			return apiEventForm;
 		}		
 		
 		return null;
