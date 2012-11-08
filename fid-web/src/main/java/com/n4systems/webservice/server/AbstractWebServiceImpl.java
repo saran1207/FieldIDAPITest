@@ -1,19 +1,25 @@
 package com.n4systems.webservice.server;
 
-import org.apache.log4j.Logger;
-
+import com.n4systems.exceptions.LoginException;
 import com.n4systems.model.user.User;
 import com.n4systems.util.WsServiceLocator;
 import com.n4systems.webservice.server.bundles.AuthBundle;
+import org.apache.log4j.Logger;
 
 public abstract class AbstractWebServiceImpl implements AbstractWebService {
 	private Logger logger = Logger.getLogger(AbstractWebServiceImpl.class);
 
 	protected User authenticateUser(AuthBundle authUser) throws WebserviceAuthenticationException {
-		User user = WsServiceLocator.getUser(null /*note : i don't know the tenantId so just passing in null.  not needed*/).
-						findUserByPw(authUser.getTenantName(), authUser.getUserName(), authUser.getPassword());
-				
-		if(user == null) {
+        User user = null;
+        try {
+            user = WsServiceLocator.getUser(null /*note : i don't know the tenantId so just passing in null.  not needed*/).
+                            findUserByPw(authUser.getTenantName(), authUser.getUserName(), authUser.getPassword());
+        } catch (LoginException e) {
+            logger.warn("User failed authentication to the webservice: tenant [" + authUser.getTenantName() + "] username [" + authUser.getUserName() + "]");
+            throw new WebserviceAuthenticationException("Bad Organization name, Username or Password");
+        }
+
+        if(user == null) {
 			logger.warn("User failed authentication to the webservice: tenant [" + authUser.getTenantName() + "] username [" + authUser.getUserName() + "]");
 			throw new WebserviceAuthenticationException("Bad Organization name, Username or Password");
 		}
