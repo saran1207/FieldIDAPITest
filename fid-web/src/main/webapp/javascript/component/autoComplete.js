@@ -2,9 +2,9 @@
  * usage notes : expects a json object= item {
  *    label : the text for the item it
  *    tooltip : the "title" html element.
- *    matchStart :
- *    matchCount :
- *    desc :
+ *    matchStart : index of first matching char.
+ *    matchCount : length of match.
+ *    desc : description.
  */
 
 var autoCompleter = (function() {

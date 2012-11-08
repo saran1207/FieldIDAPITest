@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.AutoCompleteSearch;
 import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
+import com.n4systems.fieldid.wicket.components.richText.RichText;
 import com.n4systems.fieldid.wicket.components.user.AutoCompleteUser;
 import com.n4systems.model.Asset;
 import com.n4systems.model.dashboard.widget.WorkWidgetConfiguration;
@@ -44,26 +45,28 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     private User user;
     private PredefinedLocation location;
     private String comment;
+    private String richText = "<b>asdfasdf</b>";
 
     private int id=0;
     
     public SecretTestPage() {
         Form form = new Form("form", new CompoundPropertyModel(this));
 
-        form.add(new Comment("comment", new PropertyModel<String>(this, "comment")));
-        form.add(new AutoCompleteOrgPicker("autocompleteorg", new PropertyModel<BaseOrg>(this, "org")));
-        form.add(new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "asset")));
-        form.add(new TextField("watermark", new PropertyModel<String>(this,"text")).add(new Watermark("enter a value")));
-        form.add(new TextField("watermark2", new PropertyModel<String>(this, "text2")).add(new Watermark("enter another value")));
-        form.add(new PasswordTextField("password", new PropertyModel<String>(this, "password")).add(new Watermark("enter password")).setVisible(false));
-        form.add(new Agenda("agenda", Model.of(new WorkWidgetConfiguration())).setVisible(false));
-        form.add(new AutoCompleteUser("user", new PropertyModel<User>(this, "user")));
-        form.add(new GoogleMap("map").addLocation(43.65, -79.34).addLocation(42.00, -80.00).addLocation(44.0, -79.7));
-        form.add(new OrgLocationPicker("location", new PropertyModel<BaseOrg>(this,"org")));
+        form.add(new Comment("comment", new PropertyModel<String>(this, "comment")).setVisible(true));
+        form.add(new AutoCompleteOrgPicker("autocompleteorg", new PropertyModel<BaseOrg>(this, "org")).setVisible(true));
+        form.add(new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "asset")).setVisible(true));
+        form.add(new TextField("watermark", new PropertyModel<String>(this,"text")).add(new Watermark("enter a value")).setVisible(true));
+        form.add(new TextField("watermark2", new PropertyModel<String>(this, "text2")).add(new Watermark("enter another value")).setVisible(true));
+        form.add(new PasswordTextField("password", new PropertyModel<String>(this, "password")).add(new Watermark("enter password")).setVisible(true).setVisible(true));
+        form.add(new Agenda("agenda", Model.of(new WorkWidgetConfiguration())).setVisible(true));
+        form.add(new AutoCompleteUser("user", new PropertyModel<User>(this, "user")).setVisible(true));
+        form.add(new GoogleMap("map").addLocation(43.65, -79.34).addLocation(42.00, -80.00).addLocation(44.0, -79.7).setVisible(true));
+        form.add(new OrgLocationPicker("location", new PropertyModel<BaseOrg>(this,"org")).setVisible(false));
 //        form.add(new GoogleMap("map"));
-        form.add(new DateTimePicker("dateTimePicker", new PropertyModel<Date>(this,"date"), true));
-        form.add(new DateTimePicker("datePicker", new PropertyModel<Date>(this,"date"), false));
-        
+        form.add(new DateTimePicker("dateTimePicker", new PropertyModel<Date>(this,"date"), true).setVisible(true));
+        form.add(new DateTimePicker("datePicker", new PropertyModel<Date>(this,"date"), false).setVisible(true));
+        form.add(new RichText("richText", new PropertyModel<String>(this,"richText")));
+
         form.add(new AjaxSubmitLink("submit") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 super.onSubmit();
