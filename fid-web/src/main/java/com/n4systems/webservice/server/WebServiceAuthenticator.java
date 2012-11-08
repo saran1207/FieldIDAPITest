@@ -58,7 +58,7 @@ public class WebServiceAuthenticator {
 		return authenticationResponse;		
 	}
 	
-	private User getUserIfValid(UserManager userManager) {
+	private User getUserIfValid(UserManager userManager) throws LoginException {
 		String tenantName = authenticationRequest.getTenantName();		
 		String userId = authenticationRequest.getUserId();
 		String password = authenticationRequest.getPassword();

@@ -11,6 +11,7 @@ import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.mail.MailManagerFactory;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.*;
@@ -61,29 +62,49 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 	
 	@Override	
-	public User findUserByPw(String tenantName, String userID, String plainTextPassword) {
+	public User findUserByPw(String tenantName, String userID, String plainTextPassword) throws LoginException {
 		QueryBuilder<User> builder = getQueryBuilder(User.class, new OpenSecurityFilter());
-		
-		UserQueryHelper.applyFullyActiveFilter(builder);
+        Tenant tenant = findTenant(tenantName);
+
+        UserQueryHelper.applyFullyActiveFilter(builder);
 
 		builder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE);
 		builder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE);
 			
 		User user = builder.getSingleResult(em);
 		
-		if (user==null) { 
-			throw new LoginException(new LoginFailureInfo(userID));
-		} else if (!passwordMatches(plainTextPassword,user) || isStillLocked(user)) {
-			AccountPolicy accountPolicy = getAccountPolicyForUser(user);			
-			throw new LoginException(new LoginFailureInfo(user, accountPolicy.getMaxAttempts(), accountPolicy.getLockoutDuration()));			
-		} else { 
-			return user;
-		}
+		if (user == null) {
+            AccountPolicy accountPolicy = getAccountPolicyForTenantId(tenant.getId());
+			throw new LoginException(new LoginFailureInfo(userID, accountPolicy.getMaxAttempts(), false, accountPolicy.getLockoutDuration(), false));
+		} else {
+            checkIfStillLockedAndUnlockIfNecessary(user);
+
+            if (!passwordMatches(plainTextPassword,user) || user.isLocked()) {
+                AccountPolicy accountPolicy = getAccountPolicyForUser(user);
+                if (user.getFailedLoginAttempts() < accountPolicy.getMaxAttempts()) {
+                    user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
+                }
+                throw new LoginException(new LoginFailureInfo(user, accountPolicy.getMaxAttempts(), accountPolicy.getLockoutDuration()));
+            }
+
+            user.setFailedLoginAttempts(0);
+            return user;
+        }
 	}
 
+    private Tenant findTenant(String tenantName) {
+        QueryBuilder<Tenant> builder = getQueryBuilder(Tenant.class, new OpenSecurityFilter());
+        builder.addWhere(Comparator.EQ, "tenantName", "name", tenantName);
+        return builder.getSingleResult(em);
+    }
+
 	private AccountPolicy getAccountPolicyForUser(User user) {
-		return user==null ? new AccountPolicy() : tenantSettingsService.getTenantSettings(user.getTenant().getID()).getAccountPolicy();
+		return user==null ? new AccountPolicy() : getAccountPolicyForTenantId(user.getTenant().getId());
 	}
+
+    private AccountPolicy getAccountPolicyForTenantId(Long tenantId) {
+        return tenantSettingsService.getTenantSettings(tenantId).getAccountPolicy();
+    }
 
 	protected <T> QueryBuilder<T> getQueryBuilder(Class<T> clazz, QueryFilter filter) {
 		return new QueryBuilder<T>(clazz, filter);
@@ -93,15 +114,10 @@ public class EntityManagerBackedUserManager implements UserManager {
 		return user != null && user.getHashPassword().equals(User.hashPassword(plainTextPassword));
 	}
 
-	public boolean isStillLocked(User user) {
-		if (user==null || !user.isLocked()) {
-			return false;
-		}		
+	public void checkIfStillLockedAndUnlockIfNecessary(User user) {
 		if (user.getLockedUntil()!=null && new Date().after(user.getLockedUntil())) {
 			user.unlock();
-			return false;
 		}
-		return true;
 	}
 
 	@Override

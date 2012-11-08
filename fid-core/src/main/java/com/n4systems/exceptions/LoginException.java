@@ -2,7 +2,7 @@ package com.n4systems.exceptions;
 
 
 @SuppressWarnings("serial")
-public class LoginException extends RuntimeException {
+public class LoginException extends Exception {
 	
 	private LoginFailureInfo failureInfo;
 

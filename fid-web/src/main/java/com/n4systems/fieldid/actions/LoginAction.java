@@ -71,8 +71,8 @@ public class LoginAction extends AbstractAction {
 		if (!signIn.isValid(this)) {
 			return INPUT;
 		}
-		
-		try { 
+
+		try {
 			loginUser = findUser();
 		} catch (LoginException e) {
 			handleFailedLoginAttempt(e);				
@@ -89,7 +89,7 @@ public class LoginAction extends AbstractAction {
 		getSession().setUserAuthHolder(loginUser.getId());
 	}
 
-	private User findUser() {
+	private User findUser() throws LoginException {
 		return signIn.isNormalLogin() ? findUserByPw() : findUserByRfid();
 	}
 
@@ -98,7 +98,7 @@ public class LoginAction extends AbstractAction {
 		return userManager.findUser(getSecurityGuard().getTenantName(), signIn.getSecureRfid().toUpperCase());
 	}
 
-	private User findUserByPw() {	
+	private User findUserByPw() throws LoginException {
 		return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
 	}
 
@@ -117,11 +117,25 @@ public class LoginAction extends AbstractAction {
 	}
 
 	private void handleFailedLoginAttempt(LoginException e) {
-		addActionError(getFailedLoginText(e.getLoginFailureInfo()));
-		//if we find out user has tried N of N times, then lets go back to DB and lock him out.
-		if (e.getLoginFailureInfo().requiresLocking()) { 
-			userManager.lockUser(getSecurityGuard().getTenantName(), e.getUserId(), e.getDuration(), e.getMaxAttempts());
-		}
+        LoginFailureInfo currentFailureInfo = e.getLoginFailureInfo();
+
+        if (currentFailureInfo.isExistingUser()) {
+            addActionError(getFailedLoginText(currentFailureInfo));
+            //if we find out user has tried N of N times, then lets go back to DB and lock him out.
+            if (currentFailureInfo.requiresLocking()) {
+                userManager.lockUser(getSecurityGuard().getTenantName(), e.getUserId(), e.getDuration(), e.getMaxAttempts());
+            }
+        } else {
+            LoginFailureInfo failureInfo = getSession().getLoginFailureInfo();
+            if (failureInfo == null) {
+                getSession().setLoginFailureInfo(currentFailureInfo);
+                failureInfo = currentFailureInfo;
+            } else {
+                failureInfo.unlockIfNecessary();
+                failureInfo.incrementAndLockIfNecessary();
+            }
+            addActionError(getFailedLoginText(failureInfo));
+        }
 	}
 
 	private boolean signInWillKickAnotherSessionOut(User loginUser) {

@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import com.n4systems.exceptions.LoginFailureInfo;
 import org.apache.struts2.ServletActionContext;
 
 import rfid.web.helper.SessionEulaAcceptance;
@@ -50,6 +51,8 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	public static final String SCHEDULE_CRITERIA = "scheduleCriteria";
 
     public static final String SEARCH_CRITERIA = "searchCriteria";
+
+    public static final String LOGIN_FAILURE_INFO = "loginFailureInfo";
 	
 	
 	public WebSessionMap() {
@@ -411,5 +414,13 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	public Long getUserAuthHolder() {
 		return (Long)get("userAthHolder");
 	}
+
+    public LoginFailureInfo getLoginFailureInfo() {
+        return get(LOGIN_FAILURE_INFO, LoginFailureInfo.class);
+    }
+
+    public void setLoginFailureInfo(LoginFailureInfo info) {
+        put(LOGIN_FAILURE_INFO, info);
+    }
 
 }

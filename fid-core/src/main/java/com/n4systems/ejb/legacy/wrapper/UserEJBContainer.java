@@ -1,13 +1,5 @@
 package com.n4systems.ejb.legacy.wrapper;
 
-import java.net.URI;
-import java.util.List;
-
-import javax.mail.MessagingException;
-import javax.persistence.EntityManager;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.impl.EntityManagerBackedUserManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
@@ -15,7 +7,6 @@ import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.exceptions.LoginException;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
-import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.PasswordPolicy;
@@ -27,22 +18,18 @@ import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.UserType;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.mail.MessagingException;
+import javax.persistence.EntityManager;
+import java.net.URI;
+import java.util.List;
 
 public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implements UserManager {
 
 	@Autowired
-	private LoginService loginService;
-	
-	@Autowired
 	private TenantSettingsService tenantSettingsService;
 	
-	public UserEJBContainer(LoginService loginService) {
-		this.loginService = loginService;
-	}
-
-	public UserEJBContainer() {
-	}
-
 	@Override
 	protected UserManager createManager(EntityManager em) {
 		return new EntityManagerBackedUserManager(em, tenantSettingsService);
@@ -109,7 +96,7 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			loginService.resetFailedLoginAttempts(userID);			
+//			loginService.resetFailedLoginAttempts(userID);
 			createManager(transaction.getEntityManager()).lockUser(tenantName, userID, duration, failedLoginAttempts);			
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -120,17 +107,17 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 	}
 
 	@Override
-	public User findUserByPw(final String tenantName, final String userID, final String plainTextPassword) {
+	public User findUserByPw(final String tenantName, final String userID, final String plainTextPassword) throws LoginException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
 			User user = createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword);
-			loginService.resetFailedLoginAttempts(userID);
+//			loginService.resetFailedLoginAttempts(userID);
 			return user;
 		} catch (RuntimeException e) {
-			if (e instanceof LoginException) { 
-				e = loginService.trackLoginFailure(((LoginException)e).getLoginFailureInfo());
-			}
+//			if (e instanceof LoginException) {
+//				e = loginService.trackLoginFailure(((LoginException)e).getLoginFailureInfo());
+//			}
 			transactionManager.rollbackTransaction(transaction);
 			throw e;
 		} finally {
