@@ -11,6 +11,7 @@ import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.location.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.AssetsByIdOwnerTypeLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
@@ -73,7 +74,7 @@ public class EventToModelConverterTest {
 		view.setOrganization("org_name");
 		
 		BaseOrg org = OrgBuilder.aDivisionOrg().build();
-		
+
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
 		expect(orgLoader.setOrganizationName(view.getOrganization())).andReturn(orgLoader);
 		expect(orgLoader.setCustomerName(view.getCustomer())).andReturn(orgLoader);
@@ -122,7 +123,11 @@ public class EventToModelConverterTest {
             @Override protected void resolvePrintable(EventView view, Event model) {}
             @Override protected void resolveEventBook(EventView view, Event model, Transaction transaction) {}
             @Override protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {}
-            @Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
+            @Override protected void resolveOwner(EventView view, Event model, Transaction transaction) {
+                PrimaryOrg owner = new PrimaryOrg();
+                owner.getExtendedFeatures().add(ExtendedFeature.AdvancedLocation);
+                model.setOwner(owner);
+            }
         };
 
         Location result = converter.toModel(view, transaction).getAdvancedLocation();

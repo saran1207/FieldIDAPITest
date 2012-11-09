@@ -15,7 +15,9 @@ public class Location implements Serializable {
 
 	private static final PredefinedLocation noPredefinedLocation = null;
 
-    @Deprecated  // should support use of full locations in all newer supported devices/platforms.
+//    @Deprecated  // should support use of full locations in all newer supported devices/platforms.
+    // We should support full locations, but sometimes we still need to make a location that doesn't include a predefined location (like for tenants who don't have it enabled).
+    // I don't feel that deprecation is appropriate here...
 	public static Location onlyFreeformLocation(String freeformLocation) {
 		return new Location(noPredefinedLocation, freeformLocation);
 	}

@@ -15,6 +15,7 @@ import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.model.location.PredefinedLocationTreeLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.AssetsByIdOwnerTypeLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
@@ -85,9 +86,14 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	}
 
     protected void resolveLocation(EventView view, Event model, Transaction transaction) {
-        PredefinedLocationTree predefinedLocationTree = predefinedLocationTreeLoader.load(transaction);
-        Location location = new LocationValidator().getLocation(new LocationSpecification(view.getLocation()), predefinedLocationTree);
-        model.setAdvancedLocation(location);
+        PrimaryOrg org = model.getOwner().getPrimaryOrg();
+        if (org.hasExtendedFeature(ExtendedFeature.AdvancedLocation)) {
+            PredefinedLocationTree predefinedLocationTree = predefinedLocationTreeLoader.load(transaction);
+            Location location = new LocationValidator().getLocation(new LocationSpecification(view.getLocation()), predefinedLocationTree);
+            model.setAdvancedLocation(location);
+        } else {
+            model.setAdvancedLocation(Location.onlyFreeformLocation(view.getLocation()));
+        }
     }
 
     private void resolveCriteriaResults(EventView view, Event event) {

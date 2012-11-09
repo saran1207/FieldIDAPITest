@@ -46,7 +46,7 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		Asset model = new Asset();
 		
 		PrimaryOrg primaryOrg = identifiedBy.getOwner().getPrimaryOrg();
-		
+
 		if (view.getIdentified() != null) {
 			// this problem should never occur, the date validator will ensure it is actually a date instance
 			if (!(view.getIdentified() instanceof Date)) {
@@ -64,7 +64,7 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		model.setIdentifier(view.getIdentifier());
 		model.setRfidNumber(view.getRfidNumber());
 		model.setCustomerRefNumber(view.getCustomerRefNumber());
-		model.setAdvancedLocation(resolveLocation(view, transaction));
+		model.setAdvancedLocation(resolveLocation(primaryOrg, view, transaction));
 		model.setPurchaseOrder(view.getPurchaseOrder());
 		model.setComments(view.getComments());
 		model.setAssetStatus(resolveAssetStatus(view.getStatus(), transaction));
@@ -91,10 +91,14 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		return model;
 	}
 
-    protected Location resolveLocation(AssetView view, Transaction transaction) {
-        PredefinedLocationTree predefinedLocationTree = predefinedLocationTreeLoader.load(transaction);
-        Location location = new LocationValidator().getLocation(new LocationSpecification(view.getLocation()), predefinedLocationTree);
-        return location;
+    protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
+        if (primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedLocation)) {
+            PredefinedLocationTree predefinedLocationTree = predefinedLocationTreeLoader.load(transaction);
+            Location location = new LocationValidator().getLocation(new LocationSpecification(view.getLocation()), predefinedLocationTree);
+            return location;
+        } else {
+            return Location.onlyFreeformLocation(view.getLocation());
+        }
     }
 
     private LineItem createShopOrder(String orderNumber, Tenant tenant, Transaction transaction) {

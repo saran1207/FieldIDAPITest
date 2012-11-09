@@ -15,6 +15,7 @@ import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.persistence.Transaction;
@@ -77,7 +78,7 @@ public class AssetToModelConverterTest {
 	@Test
 	public void to_model_uses_now_when_date_is_null() throws ConversionException {
 		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
-            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+            @Override protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
                 return null;
             }
         };
@@ -151,7 +152,7 @@ public class AssetToModelConverterTest {
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
 		AssetToModelConverter converter = new AssetToModelConverter(orgLoader, null, null, dummyOptionConverter, null) {
             @Override
-            protected Location resolveLocation(AssetView view, Transaction transaction) {
+            protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
                 return null;
             }
         };
@@ -179,7 +180,7 @@ public class AssetToModelConverterTest {
 
 		NonIntegrationOrderManager orgLoader = createMock(NonIntegrationOrderManager.class);
 		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, orgLoader, null, dummyOptionConverter, null) {
-            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+            @Override protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
                 return null;
             }
         };
@@ -200,7 +201,7 @@ public class AssetToModelConverterTest {
 		identifiedBy.getOwner().getPrimaryOrg().getExtendedFeatures().add(ExtendedFeature.Integration);
 		
 		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
-            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+            @Override protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
                 return null;
             }
         };
@@ -221,7 +222,7 @@ public class AssetToModelConverterTest {
 		Transaction trans = new DummyTransaction();
 		AssetStatusByNameLoader psLoader = createMock(AssetStatusByNameLoader.class);
 		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, psLoader, dummyOptionConverter, null) {
-            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+            @Override protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
                 return null;
             }
         };
@@ -242,7 +243,7 @@ public class AssetToModelConverterTest {
 		User identifiedBy = createIdentifiedBy();
 		
 		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
-            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+            @Override protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
                 return null;
             }
         };
@@ -261,7 +262,7 @@ public class AssetToModelConverterTest {
 		identifiedBy.getOwner().getPrimaryOrg().setAutoPublish(true);
 		
 		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
-            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+            @Override protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
                 return null;
             }
         };
@@ -279,7 +280,7 @@ public class AssetToModelConverterTest {
 		identifiedBy.getOwner().getPrimaryOrg().setAutoPublish(false);
 		
 		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
-            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+            @Override protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
                 return null;
             }
         };
@@ -294,7 +295,7 @@ public class AssetToModelConverterTest {
 	@Test
 	public void to_model_copies_non_resolved_properties() throws ConversionException {
 		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter, null) {
-            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+            @Override protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
                 return null;
             }
         };
@@ -315,7 +316,7 @@ public class AssetToModelConverterTest {
 		List<InfoOptionBean> options = Arrays.asList(InfoOptionBeanBuilder.aDynamicInfoOption().withName("test").build());
 		
 		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, mapConverter, null) {
-            @Override protected Location resolveLocation(AssetView view, Transaction transaction) {
+            @Override protected Location resolveLocation(PrimaryOrg primaryOrg, AssetView view, Transaction transaction) {
                 return null;
             }
         };
@@ -349,6 +350,7 @@ public class AssetToModelConverterTest {
 		
 		user.getOwner().getPrimaryOrg().setDateFormat("yyyy-MM-dd");
 		user.getOwner().getPrimaryOrg().getExtendedFeatures().remove(ExtendedFeature.Integration);
+        user.getOwner().getPrimaryOrg().getExtendedFeatures().add(ExtendedFeature.AdvancedLocation);
 		return user;
 	}
 	

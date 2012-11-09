@@ -4,7 +4,10 @@ import com.n4systems.api.conversion.event.LocationSpecification;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.location.*;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.security.SecurityFilter;
 
 import java.util.Iterator;
@@ -15,13 +18,20 @@ public class LocationValidator implements FieldValidator {
 
     @Override
     public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, SerializableField field, Map<String, Object> validationContext) {
+
+        PrimaryOrg primaryOrg = new PrimaryOrgByTenantLoader().setTenantId(filter.getTenantId()).load();
+        if (!primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedLocation)) {
+            // Any string is acceptable if we don't have predefined locations enabled. It's just interpreted as the freeform location.
+            return ValidationResult.pass();
+        }
+
         if (fieldValue == null) {
             return ValidationResult.pass();
         }
 
         try {
             Location location = getLocation(new LocationSpecification(String.valueOf(fieldValue)), createPredefinedLocationTreeLoader(filter).load());
-            if (location==null) {
+            if (location == null) {
                 return ValidationResult.fail(InvalidLocationValidatorFail, String.valueOf(fieldValue), fieldName);
             }
         } catch (IllegalArgumentException e) {
@@ -37,7 +47,7 @@ public class LocationValidator implements FieldValidator {
     public Location getLocation(LocationSpecification locationSpecification, PredefinedLocationTree predefinedLocationTree) {
         if (!locationSpecification.getHierarchy().isEmpty()) {
             PredefinedLocation predefinedLocation = getNode(locationSpecification, predefinedLocationTree);
-            if (predefinedLocation==null) {
+            if (predefinedLocation == null) {
                 return null;
             }
             return new Location(predefinedLocation, locationSpecification.getFreeForm());

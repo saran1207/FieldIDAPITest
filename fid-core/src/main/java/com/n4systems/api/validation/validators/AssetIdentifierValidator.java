@@ -11,6 +11,7 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.eventtype.AssociatedEventTypeExistsLoader;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.loaders.Loader;
 
@@ -58,7 +59,7 @@ public class AssetIdentifierValidator implements FieldValidator {
 	}	
 
     protected <V extends ExternalModelView> ListLoader<Asset> createLoader(SecurityFilter filter, V view, String identifier) {
-        SmartSearchLoader loader = new SmartSearchLoader(filter);
+        SmartSearchLoader loader = new SmartSearchLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
         loader.setMaxResults(2);
         loader.setSearchText(identifier);
         return loader;
