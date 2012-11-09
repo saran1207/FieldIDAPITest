@@ -64,7 +64,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         Status calculatedStatus = calculateEventResultAndScore(event);
 
-        if (event.getStatus() == null) {
+        if (event.getStatus() == null || event.getStatus() == Status.VOID) {
             event.setStatus(calculatedStatus);
         }
 

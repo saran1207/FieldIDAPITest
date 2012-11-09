@@ -72,7 +72,8 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		if (event == null) {
             event = converApiEventSchedule(apiEventSchedule);
 			persistenceService.save(event);
-			logger.info("Saved New Scheduled Event for " + event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
+			logger.info("Saved New Scheduled Event("  + event.getMobileGUID() + ") for " + 
+					event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
 		} else if (event.getEventState() == Event.EventState.OPEN) {
 			event.setDueDate(apiEventSchedule.getNextDate());
             event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
@@ -89,6 +90,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void DeleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
+		logger.info("Attempting to archive Scheduled Event with mobileId " + eventScheduleId);
 		Event event = eventScheduleService.findByMobileId(eventScheduleId);
         event.archiveEntity();
         persistenceService.update(event);
@@ -125,11 +127,12 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	}
 	
 	public Event converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
-		BaseOrg owner = persistenceService.find(BaseOrg.class, apiEventSchedule.getOwnerId());
+		BaseOrg owner = persistenceService.findUsingTenantOnlySecurityWithArchived(BaseOrg.class, apiEventSchedule.getOwnerId());
 
         Asset asset = assetService.findByMobileId(apiEventSchedule.getAssetId());
 
         Event event = new Event();
+        event.setMobileGUID(apiEventSchedule.getSid());
         event.setDueDate(apiEventSchedule.getNextDate());
         event.setTenant(owner.getTenant());
         event.setAsset(asset);

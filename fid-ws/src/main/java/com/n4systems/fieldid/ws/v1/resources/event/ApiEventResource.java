@@ -94,28 +94,36 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	}
 	
 	private void createEvent(ApiEvent apiEvent) {
-		Event event = new Event();
+		Event event = getScheduledEvent(apiEvent);
+		if(event == null) {
+			event = new Event();
+		}
 		convertApiEvent(apiEvent, event);
         List<FileAttachment> uploadedFiles = apiAttachmentResource.convert(apiEvent.getAttachments(), event.getTenant(), event.getCreatedBy());
         eventCreationService.createEvent(event, 0L, null, uploadedFiles);
 		logger.info("Created Event on Asset " + apiEvent.getAssetId());
+		logger.info("Event MobileGUID: " + event.getMobileGUID() + " with Status: " + event.getStatus());
 	}
 	
 	private void updateEvent(ApiEvent apiEvent, Event existingEvent) {
 		convertApiEvent(apiEvent, existingEvent);
 	}
-
-	private void convertApiEvent(ApiEvent apiEvent, Event event) {
-        if (apiEvent.getEventScheduleId() != null) {
+	
+	private Event getScheduledEvent(ApiEvent apiEvent) {
+		if (apiEvent.getEventScheduleId() != null) {
             // We find the open event, and use this event rather than the updated one. UNLESS it's archived
             Event loadedEvent = eventScheduleService.findByMobileId(apiEvent.getEventScheduleId());
             if (loadedEvent != null) {
                 if (loadedEvent.getState() == Archivable.EntityState.ACTIVE && loadedEvent.getEventState() == Event.EventState.OPEN) {
-                    event = loadedEvent;
+                    return loadedEvent;
                 }
             }
         }
+		
+		return null;
+	}
 
+	private void convertApiEvent(ApiEvent apiEvent, Event event) {
         event.setEventState(Event.EventState.COMPLETED);
 		
 		// Step 1: Convert abstract-event fields first.
@@ -127,11 +135,11 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		event.setOwner(persistenceService.findUsingTenantOnlySecurityWithArchived(BaseOrg.class, apiEvent.getOwnerId()));
 		event.setPerformedBy(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getPerformedById()));
 		
+		
 		if (apiEvent.getStatus() != null) {
 			event.setStatus(Status.valueOf(apiEvent.getStatus()));
 		} else {
-            // NOTE : this could be related to WEB-3362.  (ed note : delete comment if this has been confirmed one way or other).
-			event.setStatus(null);
+			event.setStatus(Status.VOID);
 		}
 		
 		if (apiEvent.getAssignedUserId() != null) {
