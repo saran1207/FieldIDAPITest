@@ -72,6 +72,19 @@ public class EventFormHelper {
 		return sections.get(event);
 	}
 
+    public Double calculateMaxScoreForEvent(AbstractEvent event) {
+        List<CriteriaSection> sections = getAvailableSections(event);
+        double maxPossibleScore = 0.0;
+        for (CriteriaSection section : sections) {
+            for (Criteria criteria : section.getAvailableCriteria()) {
+                if (criteria instanceof ScoreCriteria) {
+                    maxPossibleScore += getMaxScoreValue(((ScoreCriteria)criteria).getScoreGroup());
+                }
+            }
+        }
+        return maxPossibleScore;
+    }
+
     private Map<CriteriaSection, Double> calculateScoresForSections(AbstractEvent event) {
         Map<CriteriaSection, Double> sectionsScores = new HashMap<CriteriaSection, Double>();
         final Map<CriteriaSection, List<CriteriaResult>> visibleResults = getVisibleResults(event);
@@ -132,18 +145,9 @@ public class EventFormHelper {
     }
 
     public Double getEventFormScorePercentage(AbstractEvent event) {
+        double total = calculateMaxScoreForEvent(event);
 
-        List<CriteriaSection> criteriaSections = getAvailableSections(event);
-        double total = 0.0;
-        for (CriteriaSection section : criteriaSections) {
-            for(Criteria criteria: section.getAvailableCriteria()) {
-                if(criteria instanceof ScoreCriteria) {
-                    total += getMaxScoreValue(((ScoreCriteria)criteria).getScoreGroup());
-                }
-            }
-        }
-
-        if(total <= 0.0)
+        if (total <= 0.0)
             return 0.0;
         else
             return event.getScore() / total;
@@ -154,13 +158,15 @@ public class EventFormHelper {
         if(group.getScores() == null || group.getScores().isEmpty())
             return 0.0;
 
-        List<Score> scores = group.getScores();
+        return getMaxScoreValue(group.getScores());
+    }
 
+    private Double getMaxScoreValue(List<Score> scores) {
         Collections.sort(scores, new Comparator<Score>() {
             @Override
             public int compare(Score o1, Score o2) {
                 if (o1.isNa())
-                    return 1;
+                    return o2.isNa() ? 0 : 1;
                 else if (o2.isNa())
                     return -1;
                 else
@@ -168,6 +174,12 @@ public class EventFormHelper {
             }
         });
 
+        if (scores.get(0).isNa()) {
+            return 0.0;
+        }
+
         return scores.get(0).getValue() > 0.0 ? scores.get(0).getValue() : 0.0;
     }
+
+
 }

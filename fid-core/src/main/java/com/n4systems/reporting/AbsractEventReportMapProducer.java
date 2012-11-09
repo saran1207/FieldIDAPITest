@@ -47,6 +47,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		add("product", new AssetReportMapProducer(getEvent().getAsset(), dateTimeDefinition, s3Service).produceMap());
 		
 		List<CriteriaStateView> createCriteriaViews = createCriteriaViews();
+        populateTotalsAndPercentages();
 		add("resultsBeanList", createCriteriaViews);
 		add("results", new JRBeanCollectionDataSource(createCriteriaViews));
 		
@@ -56,10 +57,14 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		
 		add("images", createEventImages());
 		add("ownerLogo", getCustomerLogo(getEvent().getAsset().getOwner()));
-
 	}
 
-	private List<InspectionImage> createEventImages() {
+    private void populateTotalsAndPercentages() {
+        add("maximumPossibleScore", new EventFormHelper().calculateMaxScoreForEvent(getEvent()));
+        add("totalScorePercentage", new EventFormHelper().getEventFormScorePercentage(getEvent()));
+    }
+
+    private List<InspectionImage> createEventImages() {
 		List<InspectionImage> imageList = new ArrayList<InspectionImage>();
 		
 		for (FileAttachment imageAttachment : getEvent().getImageAttachments()) {
@@ -167,6 +172,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		Map<Criteria, List<Deficiency>> deficiencies = new HashMap<Criteria, List<Deficiency>>(getEvent().getResults().size());
         Map<String, Double> sectionScoreMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScoresForSections(getEvent()));
         Map<String, Double> sectionScorePercentageMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScorePercentageForSections(getEvent()));
+
 
         flattenCriteriaResults(resultMap, recommendations, deficiencies);
 		//TODO : move criteria view to 
