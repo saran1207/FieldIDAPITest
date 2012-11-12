@@ -1,8 +1,17 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.n4systems.fieldid.service.event.ScoreService;
+import com.n4systems.fieldid.utils.Predicate;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
+import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
+import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
+import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
+import com.n4systems.model.*;
+import com.n4systems.model.stateset.StateSetLoader;
+import com.n4systems.util.eventform.CriteriaCopyUtil;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -20,18 +29,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
-import com.n4systems.fieldid.service.event.ScoreService;
-import com.n4systems.fieldid.utils.Predicate;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
-import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
-import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
-import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
-import com.n4systems.model.*;
-import com.n4systems.model.stateset.StateSetLoader;
-import com.n4systems.util.eventform.CriteriaCopyUtil;
+import java.util.Arrays;
+import java.util.List;
 
 public class CriteriaPanel extends SortableListPanel {
 
@@ -128,6 +127,11 @@ public class CriteriaPanel extends SortableListPanel {
         sortableCriteriaContainer.add(sortableAjaxBehavior = makeSortableBehavior("#criteriaPanel"));
         add(sortableCriteriaContainer);
         feedbackPanel.setOutputMarkupId(true);
+    }
+
+    @Override
+    protected void onModelChanged() {
+        setSelectedIndex(0);
     }
 
     public CriteriaSection getCriteriaSection() {

@@ -4,9 +4,9 @@ import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
-import com.n4systems.util.eventform.CriteriaSectionCopyUtil;
 import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.util.eventform.CriteriaSectionCopyUtil;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -111,6 +111,10 @@ public class CriteriaSectionsPanel extends SortableListPanel {
         add(addFormContainer);
         add(feedbackPanel = new ContainerFeedbackPanel("feedbackPanel", this));
         feedbackPanel.setOutputMarkupId(true);
+
+        if (sectionsModel.getObject().size() > 0) {
+            setSelectedIndex(0);
+        }
     }
 
     @Override

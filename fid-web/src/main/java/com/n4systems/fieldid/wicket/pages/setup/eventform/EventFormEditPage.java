@@ -67,9 +67,7 @@ public class EventFormEditPage extends EventTypePage {
 
             @Override
             public void onCriteriaSectionSelected(AjaxRequestTarget target, int index) {
-                updateCriteriaPanel(new Model<CriteriaSection>(criteriaSections.get(index)));
-                criteriaPanel.clearSelection();
-                criteriaDetailsPanel.setVisible(false);
+                updateComponentStatesForSectionSelected(index);
                 refreshAllComponents(target);
             }
 
@@ -85,6 +83,8 @@ public class EventFormEditPage extends EventTypePage {
                 refreshAllComponents(target);
             }
         });
+
+
         add(criteriaPanel = new CriteriaPanel("criteriaPanel") {
             @Override
             public void onCriteriaAdded(AjaxRequestTarget target, Criteria criteria, int newIndex) {
@@ -96,8 +96,7 @@ public class EventFormEditPage extends EventTypePage {
 
             @Override
             protected void onCriteriaSelected(AjaxRequestTarget target, Criteria criteria) {
-                criteriaDetailsPanel.setDefaultModelObject(criteria);
-                criteriaDetailsPanel.setVisible(true);
+                updateComponentsForCriteriaSelected(criteria);
                 refreshAllComponents(target);
             }
 
@@ -131,6 +130,28 @@ public class EventFormEditPage extends EventTypePage {
             }
         });
         criteriaDetailsPanel.setVisible(false);
+
+        // Initialize the state to first section selected, first criteria of that section selected
+        if (criteriaSections.size() > 0) {
+            updateComponentStatesForSectionSelected(0);
+            if (criteriaSections.get(0).getAvailableCriteria().size() > 0) {
+                updateComponentsForCriteriaSelected(criteriaSections.get(0).getAvailableCriteria().get(0));
+            }
+        }
+    }
+
+    private void updateComponentsForCriteriaSelected(Criteria criteria) {
+        criteriaDetailsPanel.setDefaultModelObject(criteria);
+        criteriaDetailsPanel.setVisible(true);
+    }
+
+    private void updateComponentStatesForSectionSelected(int index) {
+        CriteriaSection criteriaSection = criteriaSections.get(index);
+        updateCriteriaPanel(new Model<CriteriaSection>(criteriaSection));
+        criteriaDetailsPanel.setVisible(false);
+        if (criteriaSection.getAvailableCriteria().size() > 0) {
+            updateComponentsForCriteriaSelected(criteriaSection.getAvailableCriteria().get(0));
+        }
     }
 
     @Override
