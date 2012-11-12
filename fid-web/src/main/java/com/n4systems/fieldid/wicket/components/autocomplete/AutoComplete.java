@@ -153,10 +153,6 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         return autocompleteField;
     }
 
-    public T getValueOnSearchFail(String input) {
-        return null;
-    }
-    
     private IChoiceRenderer<? super T> getChoiceRenderer() {
         if (choiceRenderer == null) {
             choiceRenderer = new ChoiceRenderer<T>() {
@@ -257,12 +253,8 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         if (NOT_ENTERED.equals(valueId))
             valueId = null;
         
-        if (valueId == null && Strings.isEmpty(input)) {
+        if (valueId == null || Strings.isEmpty(input)) {
             setConvertedInput(null);
-
-        } else if (valueId == null) {
-            setConvertedInput(getValueOnSearchFail(input));
-
         } else if (object == null || (selectedValueId!=null && !selectedValueId.equals(valueId))) {
             final List<T> choices = getChoices();
             boolean found = false;
@@ -282,7 +274,7 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                 if (valueId.equals(NOT_ENTERED)) {
                     setConvertedInput(getModelObject());
                 } else {
-                    setConvertedInput(getValueOnSearchFail(input));
+                    setConvertedInput(null);
                 }
             }
         } else {
