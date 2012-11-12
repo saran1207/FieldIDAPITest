@@ -1,19 +1,19 @@
 package com.n4systems.fieldid.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-
 import com.n4systems.fieldid.service.comment.CommentService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.fieldid.service.search.columns.ScheduleColumnsService;
+import com.n4systems.fieldid.servlets.ImageUploadHandler;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgDateRangeSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgPeriodSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 @Configuration
 @Import({FieldIdWsConfig.class, FieldIdCoreConfig.class, FieldIdDownloadConfig.class, FieldIdEntityRemovalConfig.class})
@@ -64,5 +64,12 @@ public class FieldIdAppConfig {
     public CommentService commentService() {
     	return new CommentService();
     }
+
+    @Bean
+    // CAVEAT : make sure the servlet name is exactly the same as this bean name...that's how spring stitches them together.
+    public ImageUploadHandler imageUploadHandler() {
+        return new ImageUploadHandler();
+    }
+
 
 }

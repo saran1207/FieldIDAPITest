@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.amazon;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
+import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -31,7 +32,9 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String SECONDARY_CERTIFICATE_LOGO_PATH = "/logos/secondary_certificate_logo_%d.gif";
 	public static final String CRITERIA_RESULT_IMAGE_PATH_ORIG = "/events/%d/criteria_results/%d/criteria_images/%s";
 	public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
-	public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
+    public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
+    public static final String THUMBNAIL_EXTENSION = ".thumbnail";
+    public static final String MEDIUM_EXTENSION = ".medium";
 
     @Autowired private ConfigService configService;
 	@Autowired private ImageService imageService;
@@ -206,9 +209,21 @@ public class S3Service extends FieldIdPersistenceService {
                 criteriaResultImage.getFileName());
     }
 
-	private void uploadResource(byte[] data, String contentType, Long tenantId, String path, Object...pathArgs) {
-		putObject(createResourcePath(tenantId, path, pathArgs), data, contentType);
-	}
+    public S3ImagePath uploadImage(byte[] data, String contentType, String path, Long tenantId) {
+        return uploadResource(data, contentType, new S3ImagePath(path, tenantId));
+    }
+
+    private void uploadResource(byte[] data, String contentType, Long tenantId, String path, Object...pathArgs) {
+        putObject(createResourcePath(tenantId, path, pathArgs), data, contentType);
+    }
+
+    private S3ImagePath uploadResource(byte[] data, String contentType, S3ImagePath s3Url) {
+        // note that every time we upload an image, there are 3 different versions of it.
+        putObject(s3Url.getOrigPath(), data, contentType);
+        putObject(s3Url.getMediumPath(), imageService.generateMedium(data), contentType);
+        putObject(s3Url.getThumbnailPath(), imageService.generateThumbnail(data), contentType);
+        return s3Url;
+    }
 
     private void uploadResource(File file, Long tenantId, String path, Object...pathArgs) {
         putObject(createResourcePath(tenantId, path, pathArgs), file);
@@ -253,8 +268,11 @@ public class S3Service extends FieldIdPersistenceService {
 
     private URL generateResourceUrl(Long tenantId, String path, Object...pathArgs) {
         String fullResourcePath = createResourcePath(tenantId, path, pathArgs);
-        Date expires = new Date(System.currentTimeMillis() + TTL);
+        return generateResourceUrl(fullResourcePath);
+    }
 
+    private URL generateResourceUrl(String fullResourcePath) {
+        Date expires = new Date(System.currentTimeMillis() + TTL);
         URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
         return url;
     }
@@ -323,4 +341,51 @@ public class S3Service extends FieldIdPersistenceService {
     public void setTTL(long TTL) {
         this.TTL = TTL;
     }
+
+
+
+
+    public class S3ImagePath {
+        private String origPath;
+        private String mediumPath;
+        private String thumbnailPath;
+        private Long tenantId;
+
+        public S3ImagePath(String path, Long tenantId) {
+            Preconditions.checkArgument(tenantId != null, "you must give a tenant when uploading images.");
+            this.tenantId = tenantId;
+            origPath = createResourcePath(tenantId, path);
+            mediumPath = createResourcePath(tenantId, path + MEDIUM_EXTENSION);
+            thumbnailPath = createResourcePath(tenantId, path + THUMBNAIL_EXTENSION);
+        }
+
+        public String getMediumPath() {
+            return mediumPath;
+        }
+
+        public String getOrigPath() {
+            return origPath;
+        }
+
+        public String getThumbnailPath() {
+            return thumbnailPath;
+        }
+
+        /** CAVEAT : these URLs are for convenience within return value.  they can/will go stale and it's up to caller to know when to regenerate
+         * fresh ones.
+        */
+
+        public URL getMediumUrl() {
+            return generateResourceUrl(getMediumPath());
+        }
+
+        public URL getOrigUrl() {
+            return generateResourceUrl(getOrigPath());
+        }
+
+        public URL getThumbnailUrl() {
+            return generateResourceUrl(getThumbnailPath());
+        }
+    }
+
 }

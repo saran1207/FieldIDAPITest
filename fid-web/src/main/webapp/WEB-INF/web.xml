@@ -77,15 +77,23 @@
 		<listener-class>com.n4systems.fieldid.servlets.UnexportRMIOnShutdownListener</listener-class>
 	</listener>
 
-	<servlet>
-		<servlet-name>XFireServlet</servlet-name>
-		<servlet-class>
-			org.codehaus.xfire.transport.http.XFireConfigurableServlet
-		</servlet-class>
-		<load-on-startup>0</load-on-startup>
-	</servlet>
+    <servlet>
+        <servlet-name>imageUploadHandler</servlet-name>
+        <servlet-class>
+            com.n4systems.fieldid.servlets.ImageUploadServlet
+        </servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
 
-	<servlet>
+    <servlet>
+        <servlet-name>XFireServlet</servlet-name>
+        <servlet-class>
+            org.codehaus.xfire.transport.http.XFireConfigurableServlet
+        </servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet>
 		<servlet-name>JspSupportServlet</servlet-name>
 		<servlet-class>org.apache.struts2.views.JspSupportServlet
 		</servlet-class>
@@ -128,12 +136,17 @@
 		<url-pattern>/api/v1/*</url-pattern>
 	</servlet-mapping>
 
-	<servlet-mapping>
-		<servlet-name>XFireServlet</servlet-name>
-		<url-pattern>/service/*</url-pattern>
-	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>XFireServlet</servlet-name>
+        <url-pattern>/service/*</url-pattern>
+    </servlet-mapping>
 
-	<session-config>
+    <servlet-mapping>
+        <servlet-name>imageUploadHandler</servlet-name>
+        <url-pattern>/imageUpload/*</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
 		<session-timeout>30</session-timeout>
 	</session-config>
 
