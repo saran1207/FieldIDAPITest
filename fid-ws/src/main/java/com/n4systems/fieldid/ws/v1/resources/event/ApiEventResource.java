@@ -39,6 +39,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	@Autowired private AssetService assetService;
 	@Autowired private ApiEventAttachmentResource apiAttachmentResource;
 	@Autowired private ApiEventFormResultResource apiEventFormResultResource;
+	@Autowired private ApiExistingEventFormResultResource apiExistingEventFormResultResource;
 	@Autowired private EventScheduleService eventScheduleService;
     @Autowired private EventCreationService eventCreationService;
     @Autowired private EventService eventService;
@@ -107,6 +108,9 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	
 	private void updateEvent(ApiEvent apiEvent, Event existingEvent) {
 		convertApiEvent(apiEvent, existingEvent);
+		eventCreationService.updateEvent(existingEvent, null, null);
+		logger.info("Update Event on Asset " + apiEvent.getAssetId());
+		logger.info("Event MobileGUID: " + existingEvent.getMobileGUID() + " with Status: " + existingEvent.getStatus());
 	}
 	
 	private Event getScheduledEvent(ApiEvent apiEvent) {
@@ -208,10 +212,14 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		
 		if (apiEvent.getForm() != null) {
 			EventForm form = persistenceService.findUsingTenantOnlySecurityWithArchived(EventForm.class, apiEvent.getForm().getFormId());
-			event.setEventForm(form);
+			event.setEventForm(form);			
 			
-			List<CriteriaResult> results = apiEventFormResultResource.convertApiEventFormResults(apiEvent.getForm(), form, event);
-			event.getResults().addAll(results);
+			if(event.isNew()) {
+				List<CriteriaResult> results = apiEventFormResultResource.convertApiEventFormResults(apiEvent.getForm(), form, event);
+				event.getResults().addAll(results);
+			} else {
+				apiExistingEventFormResultResource.convertApiEventFormResults(apiEvent.getForm(), event);
+			}
 		}
 		
 		if(apiEvent.getAttributes() != null) {
