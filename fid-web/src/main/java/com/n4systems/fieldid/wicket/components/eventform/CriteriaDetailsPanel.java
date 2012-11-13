@@ -1,44 +1,16 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.components.eventform.details.*;
+import com.n4systems.model.*;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-
-import com.n4systems.fieldid.wicket.components.eventform.details.ComboBoxDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.DateFieldDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.NumberFieldDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.OneClickDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.ScoreDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.SelectDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.SignatureDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.TextFieldDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.UnitOfMeasureDetailsPanel;
-import com.n4systems.model.ComboBoxCriteria;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.NumberFieldCriteria;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.ScoreCriteria;
-import com.n4systems.model.ScoreGroup;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.SignatureCriteria;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.TextFieldCriteria;
-import com.n4systems.model.UnitOfMeasureCriteria;
 
 public class CriteriaDetailsPanel extends Panel {
-
-    private StringListEditor recommendationsEditor;
-    private StringListEditor deficienciesEditor;
 
     public CriteriaDetailsPanel(String id, IModel<Criteria> criteriaModel) {
         super(id, criteriaModel);
         setOutputMarkupPlaceholderTag(true);
-        add(recommendationsEditor = new StringListEditor("recommendationsEditor", new PropertyModel<List<String>>(criteriaModel, "recommendations")));
-        add(deficienciesEditor = new StringListEditor("deficienciesEditor", new PropertyModel<List<String>>(criteriaModel, "deficiencies")));
     }
 
     @Override

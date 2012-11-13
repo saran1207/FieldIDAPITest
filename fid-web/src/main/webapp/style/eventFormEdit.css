@@ -382,3 +382,43 @@ div.verticalEditPanel * {
 .scoreGroupDetails .score {
     padding:2px;
 }
+
+
+.tab-buttons {
+    display:block;
+    padding: 8px 0 4px 12px;
+    background: #eee;
+}
+
+.tab-buttons span {
+    width:30px;
+    height:25px;
+    background-repeat: no-repeat;
+    display:inline-block;
+    padding:0px;
+}
+
+.tab-buttons .settings.active {
+    background: url(../images/eventForm/icon-criteria-settings-dark.png) no-repeat center;
+}
+
+.tab-buttons .settings {
+    background: url(../images/eventForm/icon-criteria-settings-light.png) no-repeat center;
+}
+
+.tab-buttons .instructs.active {
+    background: url(../images/eventForm/icon-criteria-instructions-dark.png) no-repeat center;
+}
+
+.tab-buttons .instructs {
+    background: url(../images/eventForm/icon-criteria-instructions-light.png) no-repeat center;
+}
+
+.tab-buttons .observations.active {
+    background: url(../images/eventForm/icon-observations-dark.png) no-repeat center;
+}
+
+.tab-buttons .observations {
+    background: url(../images/eventForm/icon-observations-light.png) no-repeat center;
+}
+

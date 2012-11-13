@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.eventform;
 
 import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.eventform.CriteriaDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.CriteriaConfigurationPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.save.SavePanel;
@@ -33,7 +33,7 @@ public class EventFormEditPage extends EventTypePage {
 
     private CriteriaSectionsPanel criteriaSectionsPanel;
     private CriteriaPanel criteriaPanel;
-    private CriteriaDetailsPanel criteriaDetailsPanel;
+    private CriteriaConfigurationPanel criteriaDetailsPanel;
 
     private SavePanel topSavePanel;
     private SavePanel bottomSavePanel;
@@ -113,20 +113,18 @@ public class EventFormEditPage extends EventTypePage {
         });
         criteriaPanel.setVisible(false);
 
-        add(criteriaDetailsPanel = new CriteriaDetailsPanel("criteriaDetailsPanel", new Model<Criteria>()) {
-            @Override
-            protected void onStateSetSelected(StateSet stateSet) {
+        add(criteriaDetailsPanel = new CriteriaConfigurationPanel("criteriaDetailsPanel",new Model<Criteria>()) {
+            @Override protected void setPreviouslySelectedScoreGroup(ScoreGroup scoreGroup) {
+                criteriaPanel.setPreviouslySelectedScoreGroup(scoreGroup);
+            }
+
+            @Override protected void setPreviouslySelectedStateSet(StateSet stateSet) {
                 criteriaPanel.setPreviouslySelectedStateSet(stateSet);
             }
 
             @Override
-            protected void onSetsResultSelected(boolean setsResult) {
+            protected void setPreviousSetsResultValue(boolean setsResult) {
                 criteriaPanel.setPreviousSetsResultValue(setsResult);
-            }
-            
-            @Override
-            protected void onScoreGroupSelected(ScoreGroup scoreGroup) {
-            	criteriaPanel.setPreviouslySelectedScoreGroup(scoreGroup);
             }
         });
         criteriaDetailsPanel.setVisible(false);
@@ -141,7 +139,7 @@ public class EventFormEditPage extends EventTypePage {
     }
 
     private void updateComponentsForCriteriaSelected(Criteria criteria) {
-        criteriaDetailsPanel.setDefaultModelObject(criteria);
+        criteriaDetailsPanel.setCriteria(criteria);
         criteriaDetailsPanel.setVisible(true);
     }
 
