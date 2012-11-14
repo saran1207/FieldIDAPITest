@@ -6,6 +6,7 @@ import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
@@ -41,6 +42,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 			@QueryParam("assignedTo") Long assignedTo,
 			@QueryParam("owner") Long owner,
 			@QueryParam("location") String location,
+			@QueryParam("predefinedLocationId") Long predefinedLocationId,
 			@QueryParam("orderNumber") String orderNumber,
 			@QueryParam("purchaseOrder") String purchaseOrder,
 			@QueryParam("assetStatus") Long assetStatus,
@@ -70,6 +72,11 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		
 		if (location != null) {
 			searchCriteria.setLocation(new Location(null, location));
+		} else if(predefinedLocationId != null && predefinedLocationId > 0) {
+			PredefinedLocation predefinedLocation = persistenceService.find(PredefinedLocation.class, predefinedLocationId);
+			if(predefinedLocation != null) {
+				searchCriteria.setLocation(new Location(predefinedLocation, null));
+			}
 		}
 		
 		if (assetStatus != null) {
