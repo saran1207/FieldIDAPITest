@@ -180,6 +180,7 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 	
 	private ApiObservation convertObservation(Observation observation) {
 		ApiObservation apiObservation = new ApiObservation();
+		apiObservation.setSid(observation.getMobileId());
 		apiObservation.setText(observation.getText());
 		apiObservation.setState(observation.getStateString());
 		return apiObservation;

@@ -151,6 +151,7 @@ public class ApiEventFormResultResource extends FieldIdPersistenceService{
 	
 	private Recommendation convertRecommenation(ApiObservation observation, Tenant tenant) {
 		Recommendation recommendation = new Recommendation();
+		recommendation.setMobileId(observation.getSid());
 		recommendation.setText(observation.getText());
 		recommendation.setTenant(tenant);
 		recommendation.setState(Observation.State.valueOf(observation.getState()));
@@ -159,6 +160,7 @@ public class ApiEventFormResultResource extends FieldIdPersistenceService{
 	
 	private Deficiency convertDeficiency(ApiObservation observation, Tenant tenant) {
 		Deficiency deficiency = new Deficiency();
+		deficiency.setMobileId(observation.getSid());
 		deficiency.setText(observation.getText());
 		deficiency.setTenant(tenant);
 		deficiency.setState(Observation.State.valueOf(observation.getState()));

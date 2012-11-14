@@ -1,5 +1,7 @@
 package com.n4systems.model;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -58,6 +60,9 @@ abstract public class Observation extends EntityWithTenant {
 	@Enumerated(EnumType.STRING)
 	private State state;
 	
+	@Column(nullable=false)
+	private String mobileId;
+	
 	public Observation(Type type) {
 		this( type, null );
 	}
@@ -65,12 +70,7 @@ abstract public class Observation extends EntityWithTenant {
 	public Observation(Type type, Tenant tenant) {
 		super( tenant );
 		this.type = type;
-	}
-
-	@Override
-    public String toString() {
-	    return getType() + "(" + getId() + "): " + getText() + " = " + getState();
-    }
+	}	
 
 	public Type getType() {
 		return type;
@@ -98,5 +98,36 @@ abstract public class Observation extends EntityWithTenant {
 	
 	public String getStateString() {
 		return getState().name();
+	}
+	
+	public String getMobileId() {
+		return mobileId;
+	}
+
+	public void setMobileId(String mobileId) {
+		this.mobileId = mobileId;
+	}
+	
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		ensureMobileId();
+	}
+
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		ensureMobileId();
+	}	
+	
+	@Override
+    public String toString() {
+	    return getType() + "(" + getId() + "): " + getText() + " = " + getState();
+    }
+	
+	private void ensureMobileId() {
+		if (mobileId == null) {
+			mobileId = UUID.randomUUID().toString();
+		}
 	}
 }

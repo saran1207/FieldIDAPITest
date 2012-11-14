@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
 public class ApiObservation {
+	private String sid;
 	private String text;
 	private String state;
 
@@ -20,4 +21,11 @@ public class ApiObservation {
 		this.state = state;
 	}
 
+	public String getSid() {
+		return sid;
+	}
+	
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
 }
