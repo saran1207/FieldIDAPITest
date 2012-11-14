@@ -4,16 +4,9 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.hibernate.annotations.IndexColumn;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "criteria")
@@ -26,6 +19,9 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	
 	@Column(nullable=false)
 	private boolean retired = false;
+
+    @Column(nullable = true)
+    private String instructions;
 	
 	@Column(name="text", nullable=false, length=511)
 	@ElementCollection(fetch= FetchType.EAGER)
@@ -75,7 +71,15 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 		this.deficiencies = deficiencies;
 	}
 
-	@Override
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    @Override
 	public int hashCode() {
 		/*
 		 * Since Critera is used as a Map Key in some places, we're using the id of the object 

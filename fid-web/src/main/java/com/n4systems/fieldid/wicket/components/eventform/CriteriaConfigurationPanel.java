@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.eventform;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.ScoreGroup;
 import com.n4systems.model.StateSet;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -14,8 +15,8 @@ import org.apache.wicket.model.Model;
 public class CriteriaConfigurationPanel extends Panel {
 
     private CriteriaDetailsPanel settings;
-    private WebMarkupContainer instructions;
-    private WebMarkupContainer observations;
+    private Component instructions;
+    private Component observations;
 
     private WebMarkupContainer settingsButton;
     private WebMarkupContainer instructionsButton;
@@ -28,7 +29,37 @@ public class CriteriaConfigurationPanel extends Panel {
         add(instructionsButton = new WebMarkupContainer("instructionsButton"));
         add(observationsButton = new WebMarkupContainer("observationsButton"));
 
-        add(settings = new CriteriaDetailsPanel("settings", criteriaModel) {
+        add(settings = createDetailsPanel(criteriaModel));
+        add(instructions = new InstructionsPanel("instructions", criteriaModel));
+        add(observations = new ObservationsPanel("observations", criteriaModel));
+
+        settings.setOutputMarkupPlaceholderTag(true);
+        instructions.setOutputMarkupPlaceholderTag(true);
+        observations.setOutputMarkupPlaceholderTag(true);
+
+        initializeButton(settingsButton, settings);
+        initializeButton(instructionsButton, instructions);
+        initializeButton(observationsButton, observations);
+
+        instructions.setVisible(false);
+        observations.setVisible(false);
+        pressedButton = settingsButton;
+
+        setOutputMarkupPlaceholderTag(true);
+        setOutputMarkupId(true);
+    }
+
+    private void initializeButton(final WebMarkupContainer button, final Component panel) {
+        button.add(new AjaxEventBehavior("onclick") {
+            @Override protected void onEvent(AjaxRequestTarget target) {
+                updateTabs(target, button, panel);
+            }
+        });
+        button.add(new AttributeAppender("class", getCssModel(button), " "));
+    }
+
+    private CriteriaDetailsPanel createDetailsPanel(final Model<Criteria> criteriaModel) {
+        return new CriteriaDetailsPanel("settings", criteriaModel) {
             @Override protected void onStateSetSelected(StateSet stateSet) {
                 setPreviouslySelectedStateSet(stateSet);
             }
@@ -38,43 +69,7 @@ public class CriteriaConfigurationPanel extends Panel {
             @Override protected void onScoreGroupSelected(ScoreGroup scoreGroup) {
                 setPreviouslySelectedScoreGroup(scoreGroup);
             }
-        });
-        add(instructions = new WebMarkupContainer("instructions"));
-        add(observations = new ObservationsPanel("observations", criteriaModel));
-
-        settings.setOutputMarkupPlaceholderTag(true);
-        instructions.setOutputMarkupPlaceholderTag(true);
-        observations.setOutputMarkupPlaceholderTag(true);
-
-        instructions.setVisible(false);
-        observations.setVisible(false);
-
-        settingsButton.add(new AjaxEventBehavior("onclick") {
-            @Override
-            protected void onEvent(AjaxRequestTarget target) {
-                updateTabs(target, settingsButton, settings);
-            }
-        });
-
-        instructionsButton.add(new AjaxEventBehavior("onclick") {
-            @Override protected void onEvent(AjaxRequestTarget target) {
-                updateTabs(target, instructionsButton, instructions);
-            }
-        });
-
-        observationsButton.add(new AjaxEventBehavior("onclick") {
-            @Override protected void onEvent(AjaxRequestTarget target) {
-                updateTabs(target, observationsButton, observations);
-            }
-        });
-
-        pressedButton = settingsButton;
-        settingsButton.add(new AttributeAppender("class", getCssModel(settingsButton), " "));
-        observationsButton.add(new AttributeAppender("class", getCssModel(observationsButton), "  "));
-        instructionsButton.add(new AttributeAppender("class", getCssModel(instructionsButton), " " ));
-
-        setOutputMarkupPlaceholderTag(true);
-        setOutputMarkupId(true);
+        };
     }
 
     protected void setPreviouslySelectedScoreGroup(ScoreGroup scoreGroup) { }
@@ -91,7 +86,7 @@ public class CriteriaConfigurationPanel extends Panel {
         };
     }
 
-    private void updateTabs(AjaxRequestTarget target, WebMarkupContainer button, WebMarkupContainer panel) {
+    private void updateTabs(AjaxRequestTarget target, WebMarkupContainer button, Component panel) {
         instructions.setVisible(false);
         observations.setVisible(false);
         settings.setVisible(false);
@@ -102,5 +97,6 @@ public class CriteriaConfigurationPanel extends Panel {
 
     public void setCriteria(Criteria criteria) {
         settings.setDefaultModelObject(criteria);
+        instructions.setDefaultModelObject(criteria);
     }
 }

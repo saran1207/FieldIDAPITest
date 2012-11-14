@@ -1,18 +1,9 @@
 package com.n4systems.util.eventform;
 
+import com.n4systems.model.*;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.model.ComboBoxCriteria;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.NumberFieldCriteria;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.ScoreCriteria;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.SignatureCriteria;
-import com.n4systems.model.TextFieldCriteria;
-import com.n4systems.model.UnitOfMeasureCriteria;
 
 public class CriteriaCopyUtil {
 
@@ -78,6 +69,7 @@ public class CriteriaCopyUtil {
     private void copyCommonFields(Criteria criteria, Criteria newCriteria, List<Criteria> existingCriteria) {
         newCriteria.setRetired(criteria.isRetired());
         newCriteria.setTenant(criteria.getTenant());
+        newCriteria.setInstructions(criteria.getInstructions());
         newCriteria.setRecommendations(copyList(criteria.getRecommendations()));
         newCriteria.setDeficiencies(copyList(criteria.getDeficiencies()));
         newCriteria.setModified(criteria.getModified());
