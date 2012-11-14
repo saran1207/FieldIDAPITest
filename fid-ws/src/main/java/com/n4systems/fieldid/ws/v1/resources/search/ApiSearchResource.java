@@ -70,13 +70,13 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 			searchCriteria.setOwner(persistenceService.find(BaseOrg.class, owner));
 		}
 		
-		if (location != null) {
-			searchCriteria.setLocation(new Location(null, location));
-		} else if(predefinedLocationId != null && predefinedLocationId > 0) {
-			PredefinedLocation predefinedLocation = persistenceService.find(PredefinedLocation.class, predefinedLocationId);
-			if(predefinedLocation != null) {
-				searchCriteria.setLocation(new Location(predefinedLocation, null));
-			}
+		PredefinedLocation predefinedLocation = null;
+		if(predefinedLocationId != null && predefinedLocationId > 0) {
+			predefinedLocation = persistenceService.find(PredefinedLocation.class, predefinedLocationId);
+		}
+		
+		if(location != null || predefinedLocation != null) {
+			searchCriteria.setLocation(new Location(predefinedLocation, location));
 		}
 		
 		if (assetStatus != null) {
