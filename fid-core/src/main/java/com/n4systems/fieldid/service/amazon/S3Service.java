@@ -203,10 +203,10 @@ public class S3Service extends FieldIdPersistenceService {
 	}
 
     public InputStream openCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
-        return openResourceStream(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+        return new ByteArrayInputStream(downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
                 criteriaResultImage.getCriteriaResult().getEvent().getId(),
                 criteriaResultImage.getCriteriaResult().getId(),
-                criteriaResultImage.getFileName());
+                criteriaResultImage.getFileName()));
     }
 
     public S3ImagePath uploadImage(byte[] data, String contentType, String path, Long tenantId) {
