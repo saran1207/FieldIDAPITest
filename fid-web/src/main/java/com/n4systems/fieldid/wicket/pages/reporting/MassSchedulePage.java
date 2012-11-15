@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateLabel;
+import com.n4systems.fieldid.wicket.components.SimpleAjaxButton;
 import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
@@ -69,6 +70,12 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         final EventJobsForTenantModel jobsOptions = new EventJobsForTenantModel();
 
         add(scheduleAllPicker = createScheduleAllPicker(commonEventTypesModel, jobsOptions));
+        add(new SimpleAjaxButton("openScheduleAllPickerButton", new FIDLabelModel("label.schedule_all")) {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                scheduleAllPicker.show(target);
+            }
+        });
         add(new WebMarkupContainer("noCommonEventTypesMessage").setVisible(commonEventTypesModel.getObject().isEmpty()));
 
         add(new FIDFeedbackPanel("feedbackPanel"));
@@ -83,7 +90,14 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
                 IModel<List<EventType>> eventTypesForAssetType = new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(item.getModel(), "assetType"));
 
-                item.add(createSchedulePicker(item, eventTypesForAssetType, jobsOptions));
+                final SchedulePicker schedulePicker = createSchedulePicker(item, eventTypesForAssetType, jobsOptions);
+                item.add(new SimpleAjaxButton("openSchedulePickerButton", new FIDLabelModel("label.add_a_schedule")) {
+                    @Override
+                    protected void onClick(AjaxRequestTarget target) {
+                        schedulePicker.show(target);
+                    }
+                });
+                item.add(schedulePicker);
                 item.add(new WebMarkupContainer("noEventTypesMessage").setVisible(eventTypesForAssetType.getObject().isEmpty()));
             }
         });
@@ -121,33 +135,18 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
     private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<EventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {
         final Model<Event> eventScheduleModel = new Model<Event>(new Event());
-        return new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), eventScheduleModel, eventTypesForAssetType, jobsOptions, -200, 0) {
+        return new SchedulePicker("schedulePicker", eventScheduleModel, eventTypesForAssetType, jobsOptions) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 item.getModelObject().getSchedules().add(eventScheduleModel.getObject());
                 eventScheduleModel.setObject(new Event());
                 target.add(assetTypesListContainer);
-                updateSchedulePickerButtonsForPickerOpened(target, false);
-            }
-            @Override
-            protected void onPickerOpened(AjaxRequestTarget target) {
-                updateSchedulePickerButtonsForPickerOpened(target, true);
-            }
-
-            @Override
-            protected void onPickerClosed(AjaxRequestTarget target) {
-                updateSchedulePickerButtonsForPickerOpened(target, false);
-            }
-
-            @Override
-            public boolean isOpenPickerButtonEnabled() {
-                return !aSchedulePickerIsOpen;
             }
         };
     }
 
     private SchedulePicker createScheduleAllPicker(final IModel<List<EventType>> commonEventTypesModel, final EventJobsForTenantModel jobsOptions) {
-        return new SchedulePicker("scheduleAllPicker", new FIDLabelModel("label.schedule_all"), new PropertyModel<Event>(this, "scheduleForAll"), commonEventTypesModel, jobsOptions, 0, 0) {
+        return new SchedulePicker("scheduleAllPicker", new PropertyModel<Event>(this, "scheduleForAll"), commonEventTypesModel, jobsOptions) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 for (ScheduleSummaryEntry scheduleSummaryEntry : scheduleSummary) {
@@ -156,21 +155,6 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
                 scheduleForAll = new Event();
                 target.add(assetTypesListContainer);
                 updateSchedulePickerButtonsForPickerOpened(target, false);
-            }
-
-            @Override
-            protected void onPickerOpened(AjaxRequestTarget target) {
-                updateSchedulePickerButtonsForPickerOpened(target, true);
-            }
-
-            @Override
-            protected void onPickerClosed(AjaxRequestTarget target) {
-                updateSchedulePickerButtonsForPickerOpened(target, false);
-            }
-
-            @Override
-            protected boolean isOpenPickerButtonEnabled() {
-                return !aSchedulePickerIsOpen;
             }
         };
     }

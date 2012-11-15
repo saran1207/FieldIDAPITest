@@ -505,9 +505,10 @@ span.fieldHolder img {
     padding-bottom:6px;
 }
 
-.openSchedulePickerButton {
+.simpleAjaxButton {
     margin:10px;
     font-size: 11px;
+    padding:2px;
 }
 
 .observationsActions .mattButton {

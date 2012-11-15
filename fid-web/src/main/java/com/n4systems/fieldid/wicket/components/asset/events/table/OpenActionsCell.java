@@ -1,18 +1,25 @@
 package com.n4systems.fieldid.wicket.components.asset.events.table;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.action.ActionDetailsPage;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
+import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
+import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
+import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -24,17 +31,29 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.List;
+
 public class OpenActionsCell extends Panel {
 
-    @SpringBean
-    private EventService eventService;
+    @SpringBean private EventService eventService;
+    @SpringBean private PersistenceService persistenceService;
 
     private ModalWindow modalWindow;
+    private SchedulePicker schedulePicker;
 
     public OpenActionsCell(String id, final IModel<Event> eventModel, final Panel eventDisplayPanel) {
         super(id);
 
         add(modalWindow = createModalWindow(eventModel, eventDisplayPanel));
+        IModel<List<EventType>> eventTypesModel = createEventTypesModelForEvent(eventModel);
+        add(schedulePicker = new SchedulePicker("schedulePickerWindow", eventModel, eventTypesModel, new EventJobsForTenantModel()) {
+            { setSaveButtonLabel(new FIDLabelModel("label.save")); }
+            @Override
+            protected void onPickComplete(AjaxRequestTarget target) {
+                persistenceService.update(eventModel.getObject());
+                target.add(eventDisplayPanel);
+            }
+        });
 
         setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && FieldIDSession.get().getSessionUser().hasAccess("editevent"));
         
@@ -74,6 +93,22 @@ public class OpenActionsCell extends Panel {
         };
         viewLink.setVisible(eventModel.getObject().isAction());
         add(viewLink);
+
+        AjaxLink<Void> editLink = new AjaxLink<Void>("editLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                schedulePicker.show(target);
+            }
+        };
+        add(editLink);
+    }
+
+    private IModel<List<EventType>> createEventTypesModelForEvent(IModel<Event> eventModel) {
+        if (eventModel.getObject().getType() == null || !eventModel.getObject().getType().getGroup().isAction()) {
+            return new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(eventModel, "asset.type"));
+        } else {
+            return new ActionTypesForTenantModel();
+        }
     }
 
     private DialogModalWindow createModalWindow(final IModel<Event> eventModel, final Panel eventDisplayPanel) {

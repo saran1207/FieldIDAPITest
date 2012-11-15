@@ -6,7 +6,6 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -20,6 +19,7 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
@@ -73,7 +73,7 @@ public class HeaderPanel extends Panel {
         
         add(eventHistoryLink = new BookmarkablePageLink("eventHistoryLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
-        if(isView) {
+        if (isView) {
             summaryLink.add(new AttributeAppender("class", " mattButtonPressed"));
         } else {
            eventHistoryLink.add(new AttributeAppender("class", " mattButtonPressed"));
@@ -90,8 +90,7 @@ public class HeaderPanel extends Panel {
 
         scheduleToAdd = createNewSchedule(asset);
 
-        SchedulePicker schedulePicker;
-        add(schedulePicker = new SchedulePicker("schedulePicker", new FIDLabelModel("label.schedule_event"), new PropertyModel<Event>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel(), -242, 29) {
+        final SchedulePicker schedulePicker = new SchedulePicker("schedulePicker", new PropertyModel<Event>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel()) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 scheduleToAdd.setTenant(FieldIDSession.get().getSessionUser().getTenant());
@@ -99,9 +98,16 @@ public class HeaderPanel extends Panel {
                 refreshContentPanel(target);
                 scheduleToAdd = createNewSchedule(asset);
             }
-        });
+        };
 
-        schedulePicker.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent"));
+        add(new AjaxLink("scheduleEventLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                schedulePicker.show(target);
+            }
+        }.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent")));
+
+        add(schedulePicker);
     }
 
     private Event createNewSchedule(Asset asset) {

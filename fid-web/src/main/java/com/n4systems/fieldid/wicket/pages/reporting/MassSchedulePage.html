@@ -3,7 +3,7 @@
     <div wicket:id="feedbackPanel"></div>
 
     <div class="scheduleAllContainer">
-        <div wicket:id="scheduleAllPicker"></div> <div class="noCommonEventTypesMessage" wicket:id="noCommonEventTypesMessage">(<wicket:message key="message.cant_schedule_all_no_common_event_types"/>)</div>
+        <div wicket:id="scheduleAllPicker"></div> <div wicket:id="openScheduleAllPickerButton"></div> <div class="noCommonEventTypesMessage" wicket:id="noCommonEventTypesMessage">(<wicket:message key="message.cant_schedule_all_no_common_event_types"/>)</div>
     </div>
 
     <div wicket:id="assetTypesListContainer">
@@ -12,6 +12,7 @@
             <div wicket:id="assetTypeName" class="assetTypeName"></div>
             <div class="assetTypeCount" wicket:id="count"></div>
             <div class="assetTypeSchedule" wicket:id="schedulePicker"></div>
+            <div wicket:id="openSchedulePickerButton" class="assetTypeSchedule"></div>
             <div class="noEventTypesMessage" wicket:id="noEventTypesMessage">(<wicket:message key="message.no_event_types_for_asset_type"/>)</div>
 
             <div class="schedulesList" wicket:id="schedulesContainer">

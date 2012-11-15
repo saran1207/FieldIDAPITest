@@ -9,10 +9,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.components.Comment;
-import com.n4systems.fieldid.wicket.components.DateTimePicker;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.IdentifierLabel;
+import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.event.attributes.AttributesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook;
@@ -83,6 +80,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     private User assignedTo;
     protected ProofTestEditPanel proofTestEditPanel;
     private IModel<ProofTestInfo> proofTestInfo;
+    private SchedulePicker schedulePicker;
 
     private WebMarkupContainer schedulesContainer;
 
@@ -98,8 +96,20 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         if(event.getObject().hasAssignToUpdate()) {
             assignedTo = event.getObject().getAssignedTo().getAssignedUser();
         }
+        add(schedulePicker = createSchedulePicker());
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new OuterEventForm("outerEventForm"));
+    }
+
+    private SchedulePicker createSchedulePicker() {
+        return new SchedulePicker("schedulePicker", new PropertyModel<Event>(EventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel()) {
+            @Override
+            protected void onPickComplete(AjaxRequestTarget target) {
+                schedules.add(scheduleToAdd);
+                scheduleToAdd = createNewOpenEvent();
+                target.add(schedulesContainer);
+            }
+        };
     }
 
     private Event createNewOpenEvent() {
@@ -162,16 +172,14 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             });
             add(schedulesContainer);
 
-            SchedulePicker schedulePicker = new SchedulePicker("schedulePicker", new FIDLabelModel("label.add_a_schedule"), new PropertyModel<Event>(EventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel(), 0, 0) {
+
+            add(new SimpleAjaxButton("openSchedulePickerButton", new FIDLabelModel("label.add_a_schedule")) {
+                { setVisible(event.getObject().isNew() || !event.getObject().isCompleted()); }
                 @Override
-                protected void onPickComplete(AjaxRequestTarget target) {
-                    schedules.add(scheduleToAdd);
-                    scheduleToAdd = createNewOpenEvent();
-                    target.add(schedulesContainer);
+                public void onClick(AjaxRequestTarget target) {
+                    schedulePicker.show(target);
                 }
-            };
-            schedulePicker.setVisible(event.getObject().isNew() || !event.getObject().isCompleted());
-            add(schedulePicker);
+            });
 
             add(new Label("eventTypeName", new PropertyModel<String>(event, "type.name")));
             

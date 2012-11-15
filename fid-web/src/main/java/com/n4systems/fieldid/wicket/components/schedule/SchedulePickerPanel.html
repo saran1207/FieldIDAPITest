@@ -1,9 +1,5 @@
 <wicket:panel>
 
-    <form wicket:id="openForm">
-        <input type="submit" wicket:id="openDialogButton" class="openSchedulePickerButton">
-    </form>
-
     <form wicket:id="scheduleForm">
 
         <div wicket:id="scheduleEditorContainer" class="newScheduleForm schedulesAdd">
@@ -12,7 +8,6 @@
 
             <div class="schedulePickerTitle">
                 <wicket:message key="label.schedule_event"/>
-                <img wicket:id="closeImage" class="closeImage" src="/fieldid/images/modal-close.png">
             </div>
 
             <select wicket:id="eventTypeSelect"></select>
@@ -39,7 +34,7 @@
 
                 <span class="assignmentSectionTitle"><wicket:message key="label.assignee"/></span>
 
-                <wicket:message key="message.person_assigned_will_be_notified_by_email"/>
+                <wicket:message key="message.person_assigned_will_be_notified_by_email"/><br/>
 
                 <select wicket:id="assignee"></select>
 
@@ -50,7 +45,7 @@
             </div>
 
             <div class="formActions blockSeparated">
-                <a wicket:id="addScheduleButton" class="mattButton blueButton"><wicket:message key="label.create_schedule"/></a>
+                <a wicket:id="addScheduleButton" class="mattButton blueButton"><span wicket:id="saveScheduleLabel"/></a>
                 <div style="display:block;float:left;padding-top:5px;">
                     <wicket:message key="label.or"/>
                     <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>

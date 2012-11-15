@@ -1,16 +1,11 @@
+div.wicket-modal div.w_caption {
+    height:inherit;
+}
+
 .newScheduleForm {
-	overflow:visible;
-	width:300px;
-	border:solid 1px #BBB;
-	background-color:#F9F9F9;
-	z-index: 1;
-    position:absolute;
-    top:-10000px;
-    left:-10000px;
-    padding: 11px;
-    -moz-box-shadow: 4px 4px 11px #AAAAAA
-    -webkit-box-shadow: 4px 4px 11px #AAAAAA
-    box-shadow: 4px 4px 11px #AAAAAA
+	overflow:hidden;
+    width:320px;
+    height:450px;
 }
 
 .newScheduleForm .assignmentSection {
@@ -107,12 +102,12 @@
     overflow:visible;
 }
 
-.openSchedulePickerButton {
-    padding:2px;
-    font-size:1.2em;
-}
-
 .pickScheduleButton {
     padding:4px;
     font-size:1.2em;
+}
+
+.newScheduleForm .chzn-container .chzn-results {
+    height:150px !important;
+    overflow-y: auto;
 }
