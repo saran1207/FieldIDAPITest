@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
+import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.richText.RichText;
 import com.n4systems.model.Criteria;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 
 public class InstructionsPanel extends Panel {
 
@@ -13,7 +15,8 @@ public class InstructionsPanel extends Panel {
 
     public InstructionsPanel(final String id, final Model<Criteria> criteriaModel) {
         super(id, criteriaModel);
-        add(new InstructionsForm("form", criteriaModel));
+        add(new InstructionsForm("form", (Model<Criteria>) getDefaultModel()));
+        add(new TooltipImage("tooltip", new StringResourceModel("label.tooltip.criteria_instructions",this,null)));
     }
 
     class InstructionsForm extends Form {

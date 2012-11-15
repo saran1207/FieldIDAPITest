@@ -136,6 +136,7 @@ div.criteria {
 
 .buttonImageDiv {
     padding-left: 15px;
+    padding-top:10px;
 }
 
 div.observationSectionTitle {
@@ -207,7 +208,6 @@ div.stringListItem div.editCopyLinks {
 
 div.buttonGroupDetails {
     padding-bottom: 10px;
-    border-bottom: 2px solid #ccc;
 }
 
 /*Reorder button form*/
@@ -292,6 +292,10 @@ div.criteriaDetailsEditor div.stringListItem input[type="text"] {
     margin-left: 10px;
 }
 
+div.criteriaDetailsEditor {
+    background: #eee;
+}
+
 div.criteriaDetailsEditor form {
     padding: 0 0 0 0;
     margin: 0 0 0 0;
@@ -300,6 +304,24 @@ div.criteriaDetailsEditor form {
 div.buttonGroupConfiguration {
     padding-left: 15px;
     padding-top: 5px;
+}
+
+div.buttonGroupConfiguration select {
+    padding: 4px 4px 4px 1px;
+    margin-top:6px;
+    margin-bottom:6px;
+    margin-right:10px;
+    float:left;
+    display:inline;
+}
+
+div.buttonGroupConfiguration label {
+    display:inline;
+    padding-left:6px;
+}
+
+div.buttonGroupConfiguration label input {
+    float: left;
 }
 
 div.addItemTitle {
@@ -386,20 +408,22 @@ div.verticalEditPanel * {
 
 .tab-buttons {
     display:block;
-    padding: 8px 0 4px 12px;
-    background: #eee;
+    background: #f8f8f8;
+    height:30px;
 }
 
 .tab-buttons span {
-    width:30px;
-    height:25px;
+    width:50px;
+    height:30px;
     background-repeat: no-repeat;
     display:inline-block;
     padding:0px;
+    border-right:1px solid #ccc;
+    margin-right: -3px;
 }
 
 .tab-buttons .settings.active {
-    background: url(../images/eventForm/icon-criteria-settings-dark.png) no-repeat center;
+    background: #eee url(../images/eventForm/icon-criteria-settings-dark.png) no-repeat center;
 }
 
 .tab-buttons .settings {
@@ -407,7 +431,7 @@ div.verticalEditPanel * {
 }
 
 .tab-buttons .instructs.active {
-    background: url(../images/eventForm/icon-criteria-instructions-dark.png) no-repeat center;
+    background: #eee url(../images/eventForm/icon-criteria-instructions-dark.png) no-repeat center;
 }
 
 .tab-buttons .instructs {
@@ -415,10 +439,45 @@ div.verticalEditPanel * {
 }
 
 .tab-buttons .observations.active {
-    background: url(../images/eventForm/icon-observations-dark.png) no-repeat center;
+    background: #eee url(../images/eventForm/icon-observations-dark.png) no-repeat center;
 }
 
 .tab-buttons .observations {
     background: url(../images/eventForm/icon-observations-light.png) no-repeat center;
 }
 
+.instructs.rich-text div:first-child + div {
+    background:#fff;
+}
+
+.instructs.rich-text textarea {
+    height:350px;
+}
+
+.criteriaDetailsEditor .addStringForm input[type=text] {
+    padding:4px;
+    border:1px solid #aaa;
+}
+
+.criteriaDetailsEditor .addStringForm button {
+    background: #ececec;
+    background: -moz-linear-gradient(top, #ececec 0%, #dadada 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ececec), color-stop(100%,#dadada));
+    background: -webkit-linear-gradient(top, #ececec 0%,#dadada 100%);
+    background: -o-linear-gradient(top, #ececec 0%,#dadada 100%);
+    background: -ms-linear-gradient(top, #ececec 0%,#dadada 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ececec', endColorstr='#dadada',GradientType=0 );
+    background: linear-gradient(top, #ececec 0%,#dadada 100%);
+    color:#333;
+    border:1px solid #aaa;
+    padding:3px 8px;
+}
+
+
+.criteria-header {
+    text-align:left;
+    padding:10px 5px 15px 5px;
+    font-size:14px;
+    color: #777;
+    background: #eee;
+}
