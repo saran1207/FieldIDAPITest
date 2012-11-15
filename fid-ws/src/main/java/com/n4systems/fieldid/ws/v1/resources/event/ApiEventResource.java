@@ -108,7 +108,8 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	
 	private void updateEvent(ApiEvent apiEvent, Event existingEvent) {
 		convertApiEvent(apiEvent, existingEvent);
-		eventCreationService.updateEvent(existingEvent, null, null);
+		List<FileAttachment> existingAttachmentsCopy = new ArrayList<FileAttachment>(existingEvent.getAttachments());
+		eventCreationService.updateEvent(existingEvent, null, existingAttachmentsCopy);
 		logger.info("Update Event on Asset " + apiEvent.getAssetId());
 		logger.info("Event MobileGUID: " + existingEvent.getMobileGUID() + " with Status: " + existingEvent.getStatus());
 	}
