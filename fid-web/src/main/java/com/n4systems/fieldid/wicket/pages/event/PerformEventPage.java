@@ -30,11 +30,12 @@ public class PerformEventPage extends EventPage {
                 Event openEvent = eventService.createEventFromOpenEvent(scheduleId);
                 PostFetcher.postFetchFields(openEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
                 Event clonedEvent = (Event) openEvent.clone();
-                clonedEvent.setEventForm(clonedEvent.getType().getEventForm());
                 eventService.populateNewEvent(clonedEvent);
                 event = Model.of(clonedEvent);
             } else {
-                event = Model.of(eventService.createNewMasterEvent(assetId, typeId));
+                Event newMasterEvent = eventService.createNewMasterEvent(assetId, typeId);
+                eventService.populateNewEvent(newMasterEvent);
+                event = Model.of(newMasterEvent);
             }
 
             fileAttachments = new ArrayList<FileAttachment>();

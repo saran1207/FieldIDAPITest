@@ -265,11 +265,11 @@ public class EventService extends FieldIdPersistenceService {
 
     public Event createEventFromOpenEvent(Long openEventId) {
         Event event = persistenceService.find(Event.class, openEventId);
-        new NewEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(event);
         return event;
     }
 
     public void populateNewEvent(Event masterEvent) {
+        masterEvent.setEventForm(masterEvent.getType().getEventForm());
         masterEvent.setOwner(masterEvent.getAsset().getOwner());
         masterEvent.setDate(new Date());
         masterEvent.setPerformedBy(getCurrentUser());
@@ -279,6 +279,7 @@ public class EventService extends FieldIdPersistenceService {
         masterEvent.setProofTestInfo(new ProofTestInfo());
         masterEvent.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
         masterEvent.setAssetStatus(masterEvent.getAsset().getAssetStatus());
+        new NewEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(masterEvent);
     }
 
     @Transactional
@@ -291,8 +292,6 @@ public class EventService extends FieldIdPersistenceService {
         event.setType(eventType);
         event.setEventForm(eventType.getEventForm());
         event.setAssetStatus(asset.getAssetStatus());
-
-        new NewEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(event);
 
         return event;
     }
