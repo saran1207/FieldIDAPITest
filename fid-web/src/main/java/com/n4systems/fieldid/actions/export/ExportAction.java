@@ -131,7 +131,7 @@ public class ExportAction extends AbstractAction {
 	
 	private Date getToDate() {
 		try {
-			return StringUtils.isBlank(null) ? new Date(Long.MAX_VALUE) : new SimpleDateFormat("MM/dd/yy").parse(to);
+			return StringUtils.isBlank(to) ? new Date(Long.MAX_VALUE) : new SimpleDateFormat(getSessionUser().getDateFormat()).parse(to);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return new Date(Long.MAX_VALUE);		
@@ -140,7 +140,7 @@ public class ExportAction extends AbstractAction {
 	
 	private Date getFromDate() {
 		try {
-			return StringUtils.isBlank(from) ? new Date(0) : new SimpleDateFormat("MM/dd/yy").parse(from);
+			return StringUtils.isBlank(from) ? new Date(0) : new SimpleDateFormat(getSessionUser().getDateFormat()).parse(from);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return new Date(0);		

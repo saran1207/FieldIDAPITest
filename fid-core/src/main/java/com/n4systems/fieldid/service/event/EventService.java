@@ -55,6 +55,7 @@ public class EventService extends FieldIdPersistenceService {
     public List<Event> getEventsByType(Long eventTypeId, Date from, Date to) {
 		QueryBuilder<Event> builder = getEventsByTypeBuilder(eventTypeId);
 		builder.addWhere(Comparator.GE, "fromDate", "completedDate", from).addWhere(Comparator.LE, "toDate", "completedDate", to);
+        builder.addSimpleWhere("eventState", Event.EventState.COMPLETED);
 		builder.setOrder("completedDate", false);
 		return persistenceService.findAll(builder);
 	}
@@ -257,31 +258,26 @@ public class EventService extends FieldIdPersistenceService {
 		return persistenceService.findAll(builder);	
 	}
 
-    @Transactional
     public Event createNewMasterEvent(Long assetId, Long eventTypeId) {
         Event masterEvent = createNewEvent(new Event(), assetId, eventTypeId);
-        populateNewEvent(masterEvent);
         return masterEvent;
     }
 
-    @Transactional
     public Event createEventFromOpenEvent(Long openEventId) {
         Event event = persistenceService.find(Event.class, openEventId);
-        event.setEventForm(event.getType().getEventForm());
-        populateNewEvent(event);
         new NewEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(event);
         return event;
     }
 
-    private void populateNewEvent(Event masterEvent) {
+    public void populateNewEvent(Event masterEvent) {
         masterEvent.setOwner(masterEvent.getAsset().getOwner());
         masterEvent.setDate(new Date());
+        masterEvent.setPerformedBy(getCurrentUser());
         masterEvent.setPrintable(masterEvent.getEventType().isPrintable());
         masterEvent.setAdvancedLocation(masterEvent.getAsset().getAdvancedLocation());
         masterEvent.setPerformedBy(getCurrentUser());
         masterEvent.setProofTestInfo(new ProofTestInfo());
         masterEvent.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
-        masterEvent.setPerformedBy(getCurrentUser());
         masterEvent.setAssetStatus(masterEvent.getAsset().getAssetStatus());
     }
 

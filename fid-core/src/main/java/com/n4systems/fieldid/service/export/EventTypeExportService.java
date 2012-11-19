@@ -20,6 +20,8 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.StreamUtils;
+import org.apache.commons.lang.time.DateUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,8 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 	@Autowired private AsyncService asyncService;	
 	@Autowired private EventService eventService;
 	@Autowired private PersistenceService persistenceService;
+
+    private static final Logger log = Logger.getLogger(EventTypeExportService.class);
 	
 	
 	/**
@@ -83,6 +87,7 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 			export(mapWriter, eventTypeId, from, to);
 			updateDownloadLinkState(downloadLinkId, DownloadState.COMPLETED);
 		} catch (Exception e) {
+            log.error(e);
 			updateDownloadLinkState(downloadLinkId, DownloadState.FAILED);
 		} finally {
 			StreamUtils.close(mapWriter);
@@ -92,7 +97,8 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 	private void export(MapWriter excelMapWriter, Long eventTypeId, Date from, Date to) throws ConversionException, IOException, MarshalingException  {	
 		ExportMapMarshaller<EventView> exportMapMarshaller = new ExportMapMarshaller<EventView>(EventView.class);
 		ModelToViewConverter<Event,EventView> converter = new EventToViewConverter();
-			
+
+        to = DateUtils.addDays(to, 1);
 		List<Event> events = eventService.getEventsByType(eventTypeId, from, to);
 		EventView view;				
 		for (Event event:events) {

@@ -25,17 +25,24 @@ public class PerformEventPage extends EventPage {
     @SpringBean private PersistenceService persistenceService;
 
     private PerformEventPage(Long scheduleId, Long assetId, Long typeId) {
-        if (scheduleId != null) {
-            Event openEvent = eventService.createEventFromOpenEvent(scheduleId);
-            PostFetcher.postFetchFields(openEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
-            event = Model.of(openEvent);
-        } else {
-            event = Model.of(eventService.createNewMasterEvent(assetId, typeId));
+        try {
+            if (scheduleId != null) {
+                Event openEvent = eventService.createEventFromOpenEvent(scheduleId);
+                PostFetcher.postFetchFields(openEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
+                Event clonedEvent = (Event) openEvent.clone();
+                clonedEvent.setEventForm(clonedEvent.getType().getEventForm());
+                eventService.populateNewEvent(clonedEvent);
+                event = Model.of(clonedEvent);
+            } else {
+                event = Model.of(eventService.createNewMasterEvent(assetId, typeId));
+            }
+
+            fileAttachments = new ArrayList<FileAttachment>();
+
+            doAutoSchedule();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        fileAttachments = new ArrayList<FileAttachment>();
-
-        doAutoSchedule();
     }
 
     public PerformEventPage(Event event, Asset asset) {
