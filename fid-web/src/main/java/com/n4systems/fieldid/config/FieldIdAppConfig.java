@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.fieldid.service.search.columns.ScheduleColumnsService;
+import com.n4systems.fieldid.servlets.ImageDownloadHandler;
 import com.n4systems.fieldid.servlets.ImageUploadHandler;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgDateRangeSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgPeriodSubtitleHelper;
@@ -69,6 +70,12 @@ public class FieldIdAppConfig {
     // CAVEAT : make sure the servlet name is exactly the same as this bean name...that's how spring stitches them together.
     public ImageUploadHandler imageUploadHandler() {
         return new ImageUploadHandler();
+    }
+
+    @Bean
+    // as above, make sure bean & servlet names match.
+    public ImageDownloadHandler imageDownloadHandler() {
+        return new ImageDownloadHandler();
     }
 
 

@@ -74,6 +74,7 @@ public class RichText extends Panel {
         // use this if you want your model updated via ajax after blur event
         area.add(behavior = new AjaxFormComponentUpdatingBehavior("onblur") {
             @Override protected void onUpdate(AjaxRequestTarget target) {
+                System.out.println("updating rich text.");
                 ; // nop...just here to inherit the model binding feature.
             }
         });

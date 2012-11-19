@@ -86,6 +86,14 @@
     </servlet>
 
     <servlet>
+        <servlet-name>imageDownloadHandler</servlet-name>
+        <servlet-class>
+            com.n4systems.fieldid.servlets.ImageDownloadServlet
+        </servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet>
         <servlet-name>XFireServlet</servlet-name>
         <servlet-class>
             org.codehaus.xfire.transport.http.XFireConfigurableServlet
@@ -144,6 +152,11 @@
     <servlet-mapping>
         <servlet-name>imageUploadHandler</servlet-name>
         <url-pattern>/imageUpload/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>imageDownloadHandler</servlet-name>
+        <url-pattern>/imageDownload/*</url-pattern>
     </servlet-mapping>
 
     <session-config>

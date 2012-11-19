@@ -20,6 +20,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 
 /**
@@ -78,7 +80,7 @@ public class ImageUploadHandler implements HttpRequestHandler {
         // (s3 service will just override  existing image).
         // if important, the path parameter should have some unique token inside it.   (e.g. foo-17899364901902367543.png instead of foo.png)
         S3Service.S3ImagePath imagePath = s3Service.uploadImage(baos.toByteArray(), item.getContentType(), createFilePath(path, item), tenantId);
-        return new JsonImage(imagePath, bufferedImage, baos.size(), request.getParameter("type"));
+        return new JsonImage(imagePath, bufferedImage, baos.size(), request);
     }
 
     private String getFormat(FileItemStream item) {
@@ -105,15 +107,29 @@ public class ImageUploadHandler implements HttpRequestHandler {
     class JsonImage implements Serializable {
         private Upload upload = new Upload();
 
-        JsonImage(S3Service.S3ImagePath imagePath, BufferedImage bufferedImage, int size, String type) {
-            upload.links.large_thumbnail = imagePath.getThumbnailUrl().toString();
-            upload.links.original = imagePath.getOrigUrl().toString();
+        JsonImage(S3Service.S3ImagePath imagePath, BufferedImage bufferedImage, int size, HttpServletRequest request) {
+            String type = request.getParameter("type");
+            upload.links.large_thumbnail = makeImageDownloadUrl(request, imagePath.getThumbnailPath());
+            upload.links.original = makeImageDownloadUrl(request, imagePath.getMediumPath());
             upload.image.hash = hashCode() + "";
             upload.image.width = bufferedImage.getWidth();
             upload.image.height = bufferedImage.getHeight();
             upload.image.size = size;
             upload.image.datetime = new Date().toString();
         }
+    }
+
+    private String makeImageDownloadUrl(HttpServletRequest request, String path) {
+        try {
+            URL url = new URL(request.getScheme(),
+                    request.getServerName(),
+                    request.getServerPort(),
+                    ImageDownloadHandler.urlFor(path));
+            return url.toExternalForm();
+        } catch (MalformedURLException e) {
+            logger.error("can't generate url for '" + path + "'");
+        }
+        return null;
     }
 
     class Upload implements Serializable {

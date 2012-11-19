@@ -217,12 +217,12 @@ public class S3Service extends FieldIdPersistenceService {
         putObject(createResourcePath(tenantId, path, pathArgs), data, contentType);
     }
 
-    private S3ImagePath uploadResource(byte[] data, String contentType, S3ImagePath s3Url) {
+    private S3ImagePath uploadResource(byte[] data, String contentType, S3ImagePath imagePath) {
         // note that every time we upload an image, there are 3 different versions of it.
-        putObject(s3Url.getOrigPath(), data, contentType);
-        putObject(s3Url.getMediumPath(), imageService.generateMedium(data), contentType);
-        putObject(s3Url.getThumbnailPath(), imageService.generateThumbnail(data), contentType);
-        return s3Url;
+        putObject(imagePath.getOrigPath(), data, contentType);
+        putObject(imagePath.getMediumPath(), imageService.generateMedium(data), contentType);
+        putObject(imagePath.getThumbnailPath(), imageService.generateThumbnail(data), contentType);
+        return imagePath;
     }
 
     private void uploadResource(File file, Long tenantId, String path, Object...pathArgs) {
@@ -271,7 +271,7 @@ public class S3Service extends FieldIdPersistenceService {
         return generateResourceUrl(fullResourcePath);
     }
 
-    private URL generateResourceUrl(String fullResourcePath) {
+    public URL generateResourceUrl(String fullResourcePath) {
         Date expires = new Date(System.currentTimeMillis() + TTL);
         URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
         return url;
@@ -349,11 +349,9 @@ public class S3Service extends FieldIdPersistenceService {
         private String origPath;
         private String mediumPath;
         private String thumbnailPath;
-        private Long tenantId;
 
         public S3ImagePath(String path, Long tenantId) {
             Preconditions.checkArgument(tenantId != null, "you must give a tenant when uploading images.");
-            this.tenantId = tenantId;
             origPath = createResourcePath(tenantId, path);
             mediumPath = createResourcePath(tenantId, path + MEDIUM_EXTENSION);
             thumbnailPath = createResourcePath(tenantId, path + THUMBNAIL_EXTENSION);
