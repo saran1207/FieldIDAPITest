@@ -173,17 +173,34 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			event.getGpsLocation().setLongitude(apiEvent.getGpsLongitude());
 		}
 		
-		if(apiEvent.getSubEvents() != null && apiEvent.getSubEvents().size() > 0) {
-			List<SubEvent> subEvents = new ArrayList<SubEvent>();
-			
-			for(ApiEvent apiSubEvent: apiEvent.getSubEvents()) {
-				SubEvent subEvent = convertApiEventIntoSubEvent(apiSubEvent);
-				subEvents.add(subEvent);
+		//TODO Need to refactor the block below once it is functional.
+		if(apiEvent.getSubEvents() != null && apiEvent.getSubEvents().size() > 0) {			
+			if(event.isNew()) {
+				List<SubEvent> subEvents = new ArrayList<SubEvent>();				
+				for(ApiEvent apiSubEvent: apiEvent.getSubEvents()) {
+					SubEvent subEvent = convertApiEventIntoSubEvent(apiSubEvent);
+					subEvents.add(subEvent);
+				}				
+				event.setSubEvents(subEvents);				
+				logger.info("Added " + subEvents.size() + " SubEvents for Event on Asset " + apiEvent.getAssetId());
+			} else {
+				for(ApiEvent apiSubEvent : apiEvent.getSubEvents()) {
+					SubEvent subEvent = null;
+					for(SubEvent existingSubEvent : event.getSubEvents()) {
+						if(existingSubEvent.getMobileGUID().equals(apiSubEvent.getSid())) {
+							subEvent = existingSubEvent;
+							break;
+						}
+					}
+					if(subEvent == null) {
+						subEvent = new SubEvent();
+					}
+					convertApiEventForAbstractEvent(apiSubEvent, subEvent);
+					if(subEvent.isNew()) {
+						event.getSubEvents().add(subEvent);
+					}
+				}
 			}
-			
-			event.setSubEvents(subEvents);
-			
-			logger.info("Added " + subEvents.size() + " SubEvents for Event on Asset " + apiEvent.getAssetId());
 		}
 	}
 	
