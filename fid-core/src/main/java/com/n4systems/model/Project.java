@@ -226,14 +226,6 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 		this.eventJob = eventJob;
 	}
 
-	public Set<EventSchedule> getSchedules() {
-        throw new UnsupportedOperationException("EventSchedules no longer exist");
-    }
-
-	public void setSchedules(Set<EventSchedule> schedules) {
-        throw new UnsupportedOperationException("EventSchedules no longer exist");
-    }
-
 	public Set<User> getResources() {
 		return resources;
 	}

@@ -354,18 +354,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	    		"\nSubEvents: " + StringUtils.indent(subEventString, 1);
     }
 
-	@AllowSafetyNetworkAccess
-    @Deprecated
-    @Transient
-    public EventSchedule getSchedule() {
-        throw new UnsupportedOperationException("EventSchedules no longer exist");
-    }
-
-    @Deprecated
-    public void setSchedule(EventSchedule schedule) {
-        throw new UnsupportedOperationException("EventSchedules no longer exist");
-    }
-
 	@Override
 	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {

@@ -3,16 +3,9 @@ package com.n4systems.fieldid.selenium.testcase.schedules;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.SchedulesSearchPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.*;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
@@ -47,7 +40,6 @@ public class ScheduleSearchResultsTest extends FieldIDTestCase {
                               .ofType(assetType)
                               .build();      
         
-        scenario.save(new EventSchedule(asset, eventType1, new Date()));
      }
 
 	@Before

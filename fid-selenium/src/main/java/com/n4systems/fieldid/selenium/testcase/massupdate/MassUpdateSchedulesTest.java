@@ -10,7 +10,6 @@ import com.n4systems.fieldid.selenium.util.Predicate;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import org.junit.Test;
@@ -56,8 +55,6 @@ public class MassUpdateSchedulesTest extends PageNavigatingTestCase<SchedulesSea
                               .ofType(assetType)
                               .build();      
         
-        scenario.save(new EventSchedule(asset, eventType1, new Date()));
-        scenario.save(new EventSchedule(asset, eventType2, new Date()));        
      }
 	
     @Override

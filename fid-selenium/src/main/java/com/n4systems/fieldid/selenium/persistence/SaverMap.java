@@ -19,7 +19,6 @@ import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventbook.EventBookSaver;
-import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.model.eventstatus.EventStatusSaver;
 import com.n4systems.model.eventtype.AssociatedEventTypeSaver;
 import com.n4systems.model.eventtype.EventTypeSaver;

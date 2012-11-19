@@ -1,23 +1,16 @@
 package com.n4systems.fieldid.selenium.testcase.schedules;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.SchedulesSearchPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.*;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class SchedulesSearchTest extends PageNavigatingTestCase<SchedulesSearchPage> {
@@ -49,7 +42,6 @@ public class SchedulesSearchTest extends PageNavigatingTestCase<SchedulesSearchP
                               .ofType(assetType)
                               .build();      
         
-        scenario.save(new EventSchedule(asset, eventType1, new Date()));
      }
 	
 	@Override

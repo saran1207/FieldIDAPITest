@@ -64,7 +64,6 @@ public class TenantCleaner {
         removeAllForTenants(AssetCodeMapping.class, tenantIds);
         removeAllForTenants(Catalog.class, tenantIds);
         removeAllForTenants(Event.class, tenantIds);
-        removeAllForTenants(EventSchedule.class, tenantIds);
         removeAllForTenants(AssociatedEventType.class, tenantIds);
         removeAllForTenants(AssetTypeSchedule.class, tenantIds);
         removeAllForTenants(EventType.class, tenantIds);
@@ -259,7 +258,6 @@ public class TenantCleaner {
         List<ExternalOrg> orgs = query.getResultList();
         for (ExternalOrg org : orgs) {
             cleanOwnedEntities(Event.class, org);
-            cleanOwnedEntities(EventSchedule.class, org);
             cleanOwnedEntities(AddAssetHistory.class, org);
             cleanOwnedEntities(User.class, org);
             Query divisionQuery = em.createQuery("from " + DivisionOrg.class.getName() + " where parent.id = " + org.getId());
@@ -345,12 +343,10 @@ public class TenantCleaner {
     private void safeRemoveAsset(Asset asset) {
     	TimeLogger timeLogger = new TimeLogger(logger, "safeRemoveAsset(%d)", asset.getId());
     	
-        Query scheduleQuery =  em.createQuery("from " + EventSchedule.class.getName() + " where asset.id = " + asset.getId());
         Query attachmentQuery = em.createQuery("from " + AssetAttachment.class.getName() + " where asset.id = " + asset.getId());
         Query inspQuery = em.createQuery("from " + Event.class.getName() + " where asset.id = " + asset.getId());
         Query subAssetQuery = em.createQuery("from " + SubAsset.class.getName() + " where masterAsset.id = " + asset.getId());
 
-        removeAllFromQuery(scheduleQuery);
         removeAllFromQuery(attachmentQuery);
         removeAllFromQuery(inspQuery);
         removeAllFromQuery(subAssetQuery);

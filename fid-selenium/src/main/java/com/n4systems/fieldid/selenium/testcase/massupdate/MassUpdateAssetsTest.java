@@ -1,18 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.pages.AssetPage;
-import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
-import com.n4systems.fieldid.selenium.pages.HomePage;
-import com.n4systems.fieldid.selenium.pages.ReportingPage;
-import com.n4systems.fieldid.selenium.pages.SchedulesSearchPage;
+import com.n4systems.fieldid.selenium.pages.*;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
@@ -21,9 +10,12 @@ import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.builders.AssetBuilder;
-import com.n4systems.model.builders.EventScheduleBuilder;
 import com.n4systems.model.builders.SubAssetBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class MassUpdateAssetsTest extends FieldIDTestCase {
 
@@ -49,7 +41,6 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
 		SimpleEventBuilder.aSimpleEvent(scenario).build();
 
-		EventScheduleBuilder.aScheduledEventSchedule().asset(anAsset.build());
 		anAsset.purchaseOrder("PO 3").build();
 		Asset masterAsset = anAsset.purchaseOrder("PO 4").build();
 		

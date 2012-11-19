@@ -156,11 +156,6 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
 
-    public EventScheduleBuilder anEventSchedule(){
-    	EventScheduleBuilder builder = EventScheduleBuilder.aScheduledEventSchedule();
-        return createPersistentBuilder(builder);
-    }
-    
     public EventBuilder anEvent() {
         EventBuilder builder = EventBuilder.anEvent(anEventType());
         return createPersistentBuilder(builder);
