@@ -40,11 +40,13 @@ public class RichText extends Panel {
     private String[] buttonList = {"bold","italic","underline","left", "center", "right", "justify", "ol", "ul", "upload", "fontSize", "fontFamily", "fontFormat"};
     private Integer maxHeight;
     private AbstractDefaultAjaxBehavior behavior;
+    private Boolean disabled;
 
     public RichText(String id, IModel<String> model) {
         super(id);
         add(new AttributeAppender("class", Model.of("rich-text"), " "));
         add(area = new TextArea<String>("text", model).setOutputMarkupId(true));
+        setOutputMarkupId(true);
     }
 
     @Override
@@ -57,9 +59,15 @@ public class RichText extends Panel {
     }
 
     protected Object /*CAVEAT : Must be Json Object*/ getOptions() {
-        NicEditOptions options = new NicEditOptions(buttonList, fullPanel, iconsPath, maxHeight, getImageUploadUrl());
-        options.setCallbackUrl(behavior.getCallbackUrl().toString());
+        NicEditOptions options = new NicEditOptions(buttonList, fullPanel, iconsPath, maxHeight, getImageUploadUrl(),disabled);
+        if (behavior!=null) {
+            options.callbackUrl = behavior.getCallbackUrl().toString();
+        }
         return options;
+    }
+
+    public String getTextAreaMarkupId() {
+        return area.getMarkupId();
     }
 
     public RichText withAutoUpdate() {
@@ -111,23 +119,30 @@ public class RichText extends Panel {
         return this;
     }
 
+    public RichText disabled() {
+        this.disabled = true;
+        return this;
+    }
+
 
     // java object converted to json & used by nicEdit javascript widget.
 
     public class NicEditOptions implements Serializable {
-        private Boolean fullPanel;
-        private String iconsPath;
-        private String[] buttonList;
-        private Integer maxHeight;
-        private String uploadURI;
-        private String callbackUrl;
+        Boolean fullPanel;
+        String iconsPath;
+        String[] buttonList;
+        Integer maxHeight;
+        String uploadURI;
+        String callbackUrl;
+        Boolean disabled;
 
-        public NicEditOptions(String[] buttonList, Boolean fullPanel, String iconsPath, Integer maxHeight, String uploadURI) {
+        public NicEditOptions(String[] buttonList, Boolean fullPanel, String iconsPath, Integer maxHeight, String uploadURI, Boolean disabled) {
             this.buttonList = buttonList;
             this.fullPanel = fullPanel;
             this.iconsPath = iconsPath;
             this.maxHeight = maxHeight;
             this.uploadURI = uploadURI;
+            this.disabled = disabled;
         }
 
         public String getCallbackUrl() {

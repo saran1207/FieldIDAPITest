@@ -3,6 +3,7 @@
     <form wicket:id="criteriaEditForm">
 
         <div class="infoSet" wicket:id="criteria">
+            <div class="tooltip"><img wicket:id="tooltip"/></div>
             <label class="label eventFormLabel" wicket:id="criteriaName"></label>
 
             <div wicket:id="criteriaEditor" class="criteriaEditContainer">
@@ -31,5 +32,8 @@
     <div wicket:id="observationWindow" class="observationWindow"/>
     <div wicket:id="actionsWindow" class="actionsWindow"/>
     <div wicket:id="imagesWindow" class="observationWindow"/>
+
+    <textarea wicket:id="instructionsContent" id="instructionsContent"/>
+    <div wicket:id="instructionsDialog" class="instructions-dialog" style="width:300px;visibility:hidden;"/>
 
 </wicket:panel>

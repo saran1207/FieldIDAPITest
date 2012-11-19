@@ -1,20 +1,15 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.util.eventform.CriteriaSectionCopyUtil;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventFormService extends FieldIdPersistenceService {
 

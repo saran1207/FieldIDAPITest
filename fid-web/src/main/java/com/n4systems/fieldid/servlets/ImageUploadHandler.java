@@ -100,6 +100,8 @@ public class ImageUploadHandler implements HttpRequestHandler {
         return path;
     }
 
+
+
     class JsonImage implements Serializable {
         private Upload upload = new Upload();
 

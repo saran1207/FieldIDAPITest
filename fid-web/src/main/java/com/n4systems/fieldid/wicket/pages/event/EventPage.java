@@ -107,6 +107,9 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             protected void onPickComplete(AjaxRequestTarget target) {
                 schedules.add(scheduleToAdd);
                 scheduleToAdd = createNewOpenEvent();
+                // CAVEAT : shouldn't use enclosures for ajax component - results in javascript noise if component not visible.
+                // see http://jawher.net/2009/09/17/wicket-enclosures-and-ajax-no-no/
+                // use InlineEnclosure instead.
                 target.add(schedulesContainer);
             }
         };
@@ -153,7 +156,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             });
 
             schedulesContainer = new WebMarkupContainer("schedulesContainer");
-            schedulesContainer.setOutputMarkupId(true);
+            schedulesContainer.setOutputMarkupPlaceholderTag(true);
             schedulesContainer.setVisible(event.getObject().isNew() || !event.getObject().isCompleted());
             schedulesContainer.add(new ListView<Event>("schedules", new PropertyModel<List<Event>>(EventPage.this, "schedules")) {
                 @Override

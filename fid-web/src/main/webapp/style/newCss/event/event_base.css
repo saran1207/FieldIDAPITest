@@ -593,3 +593,45 @@ span.fieldHolder img {
 .label.proof-test-label {
     text-align:left;
 }
+
+#instructionsContent {
+    display:none;
+}
+
+.instructions-dialog {
+    position:absolute;
+    margin-top:30px;
+    background:#fff;
+    border:1px solid #ccc;
+    -moz-box-shadow:    1px 1px 7px 2px #ccc;
+    -webkit-box-shadow: 1px 1px 7px 2px #ccc;
+    box-shadow:         1px 1px 7px 2px #ccc;
+}
+
+/*panel is first div in nicEdit...let's hide it*/
+.instructions-dialog .rich-text > div:first-child {
+    display:none;
+}
+
+.instructions-dialog .close-button {
+}
+
+.instructions-dialog .rich-text div {
+    border:0px solid none;
+}
+
+.instructions-dialog .nicEdit-main {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+
+.tooltip {
+    display:inline;
+    width:17px;
+    float:left;
+    padding-top:10px;
+}
+
+.criteriaEditForm .infoSet {
+    overflow-y:visible;
+}
