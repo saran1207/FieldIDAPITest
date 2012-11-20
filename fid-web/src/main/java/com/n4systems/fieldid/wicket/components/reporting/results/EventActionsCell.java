@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
@@ -66,7 +67,7 @@ public class EventActionsCell extends Panel {
 
         Link resolveEventLink = new Link("closeEventLink") {
             @Override public void onClick() {
-                setResponsePage(new CloseEventPage(PageParametersBuilder.uniqueId(event.getId())));
+                setResponsePage(new CloseEventPage(PageParametersBuilder.uniqueId(event.getId()), (FieldIDFrontEndPage) getPage()));
             }
         };
 
