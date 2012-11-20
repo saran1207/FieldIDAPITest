@@ -452,9 +452,9 @@ public class EventCreationService extends FieldIdPersistenceService {
         setAllTriggersForActions(event);
 
         event.getAttachments().clear();
-
-        processUploadedFiles(event, attachments);
+        
         event = persistenceService.update(event);
+        processUploadedFiles(event, attachments);
         return event;
     }
 

@@ -108,8 +108,10 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	
 	private void updateEvent(ApiEvent apiEvent, Event existingEvent) {
 		convertApiEvent(apiEvent, existingEvent);
-		List<FileAttachment> existingAttachmentsCopy = new ArrayList<FileAttachment>(existingEvent.getAttachments());
-		eventCreationService.updateEvent(existingEvent, null, existingAttachmentsCopy);
+		List<FileAttachment> existingAttachments = new ArrayList<FileAttachment>(existingEvent.getAttachments());
+		List<FileAttachment> uploadedFiles = apiAttachmentResource.convert(apiEvent.getAttachments(), existingEvent.getTenant(), existingEvent.getCreatedBy());
+		existingAttachments.addAll(uploadedFiles);
+		eventCreationService.updateEvent(existingEvent, null, existingAttachments);
 		logger.info("Update Event on Asset " + apiEvent.getAssetId());
 		logger.info("Event MobileGUID: " + existingEvent.getMobileGUID() + " with Status: " + existingEvent.getStatus());
 	}
@@ -178,11 +180,11 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			if(event.isNew()) {
 				List<SubEvent> subEvents = new ArrayList<SubEvent>();				
 				for(ApiEvent apiSubEvent: apiEvent.getSubEvents()) {
-					SubEvent subEvent = convertApiEventIntoSubEvent(apiSubEvent);
+					SubEvent subEvent = new SubEvent();
+					convertApiEventForAbstractEvent(apiSubEvent, subEvent);
 					subEvents.add(subEvent);
 				}				
-				event.setSubEvents(subEvents);				
-				logger.info("Added " + subEvents.size() + " SubEvents for Event on Asset " + apiEvent.getAssetId());
+				event.setSubEvents(subEvents);
 			} else {
 				for(ApiEvent apiSubEvent : apiEvent.getSubEvents()) {
 					SubEvent subEvent = null;
@@ -192,22 +194,18 @@ public class ApiEventResource extends FieldIdPersistenceService {
 							break;
 						}
 					}
+					
+					// If we did not find subevent, add a new one.
 					if(subEvent == null) {
 						subEvent = new SubEvent();
-					}
-					convertApiEventForAbstractEvent(apiSubEvent, subEvent);
-					if(subEvent.isNew()) {
+						convertApiEventForAbstractEvent(apiSubEvent, subEvent);
 						event.getSubEvents().add(subEvent);
+					} else {
+						convertApiEventForAbstractEvent(apiSubEvent, subEvent);
 					}
 				}
 			}
 		}
-	}
-	
-	private SubEvent convertApiEventIntoSubEvent(ApiEvent apiEvent) {
-		SubEvent subEvent = new SubEvent();
-		convertApiEventForAbstractEvent(apiEvent, subEvent);
-		return subEvent;
 	}
 	
 	private void convertApiEventForAbstractEvent(ApiEvent apiEvent, AbstractEvent event) {
