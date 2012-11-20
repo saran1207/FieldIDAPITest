@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.richText;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.n4systems.services.SecurityContext;
@@ -35,7 +36,7 @@ public class RichText extends Panel {
     private @SpringBean SecurityContext securityContext;
 
     private Component area;
-    private Boolean fullPanel;
+    private Boolean fullPanel = true;
     private String iconsPath = "../../images/nicEdit/nicEditorIcons.gif";
     private String[] buttonList = {"bold","italic","underline","left", "center", "right", "justify", "ol", "ul", "upload", "fontSize", "fontFamily", "fontFormat"};
     private Integer maxHeight;
@@ -70,11 +71,20 @@ public class RichText extends Panel {
         return area.getMarkupId();
     }
 
+    public RichText withWidth(String width) {
+        Preconditions.checkArgument(width!=null,"must specify a non null width");
+        String value = width;
+        if (!width.endsWith(";")) {
+            value = value+";";
+        }
+        area.add(new AttributeAppender("style",Model.of("width:"+value), " "));
+        return this;
+    }
+
     public RichText withAutoUpdate() {
         // use this if you want your model updated via ajax after blur event
         area.add(behavior = new AjaxFormComponentUpdatingBehavior("onblur") {
             @Override protected void onUpdate(AjaxRequestTarget target) {
-                System.out.println("updating rich text.");
                 ; // nop...just here to inherit the model binding feature.
             }
         });

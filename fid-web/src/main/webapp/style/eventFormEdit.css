@@ -208,6 +208,7 @@ div.stringListItem div.editCopyLinks {
 
 div.buttonGroupDetails {
     padding-bottom: 10px;
+    clear: both;
 }
 
 /*Reorder button form*/
@@ -481,3 +482,4 @@ div.verticalEditPanel * {
     color: #777;
     background: #eee;
 }
+

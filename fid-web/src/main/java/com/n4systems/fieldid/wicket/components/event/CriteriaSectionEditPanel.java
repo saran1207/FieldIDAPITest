@@ -84,7 +84,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
         add(popup = new Popup("instructionsDialog") {
             @Override protected WebMarkupContainer createContent(String id) {
-                return instructionsDialog = new RichText(id, Model.of("")).withButtonList(new String[0]).disabled();
+                return instructionsDialog = new RichText(id, Model.of("")).withButtonList(new String[0]).withWidth("310px").disabled();
             }
         });
     }

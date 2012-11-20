@@ -28,7 +28,7 @@ public class InstructionsPanel extends Panel {
                 protected String getImagePath() {
                     return String.format("/criteria/%s/instructions/images/", criteriaModel.getObject().getId());
                 }
-            }.withAutoUpdate());
+            }.withAutoUpdate().withWidth("310px"));
         }
     }
 

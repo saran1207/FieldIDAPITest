@@ -196,4 +196,8 @@ public class EventFormEditPage extends EventTypePage {
         eventFormService.saveNewEventForm(eventTypeId, criteriaSections);
     }
 
+    @Override
+    protected IModel<String> getMetaIE() {
+        return Model.of("IE=EmulateIE8");
+    }
 }
