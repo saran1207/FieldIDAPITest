@@ -174,15 +174,18 @@ public class PredefinedLocationsPanel extends Panel {
 
     public void clear() {
         this.selectedPredefinedLocationId = NO_PREDEFINED_LOCATION;
-        selectedLevels.clear();
-        expandedLevels.clear();
+        resetSelectedAndExpandedLevels();
     }
 
     public void setOwner(BaseOrg owner) {
         this.owner = owner;
+        resetSelectedAndExpandedLevels();
+    }
+
+    private void resetSelectedAndExpandedLevels() {
+        selectedLevels.clear();
         expandedLevels.clear();
         expandedLevels.add(artificialRootNode);
-        selectedLevels.clear();
     }
 
 }
