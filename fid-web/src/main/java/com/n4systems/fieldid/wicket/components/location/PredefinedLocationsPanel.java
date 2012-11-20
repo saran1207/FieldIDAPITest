@@ -24,7 +24,8 @@ import java.util.List;
 
 public class PredefinedLocationsPanel extends Panel {
 
-    private Long selectedPredefinedLocationId = -1L;
+    public static Long NO_PREDEFINED_LOCATION = -1L;
+    private Long selectedPredefinedLocationId = NO_PREDEFINED_LOCATION;
 
     private List<HierarchicalNode> expandedLevels = new ArrayList<HierarchicalNode>();
     private List<HierarchicalNode> selectedLevels = new ArrayList<HierarchicalNode>();
@@ -39,7 +40,6 @@ public class PredefinedLocationsPanel extends Panel {
         List<HierarchicalNode> predefinedLocationTree = new LocationHelper(new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()), new PersistenceManagerTransactor()).getPredefinedLocationWithPrimaryOrgFilteringTree();
 
         artificialRootNode = new HierarchicalNode();
-        artificialRootNode.addChild(createNoneChoice(predefinedLocationTree));
         artificialRootNode.addChildren(predefinedLocationTree);
 
         expandedLevels.add(artificialRootNode);
@@ -61,16 +61,6 @@ public class PredefinedLocationsPanel extends Panel {
         };
 
         add(levelList);
-    }
-
-    private HierarchicalNode createNoneChoice(List<HierarchicalNode> predefinedLocationTree) {
-        HierarchicalNode noneChoice = new HierarchicalNode();
-        noneChoice.setName("None");
-        noneChoice.setId(-1L);
-        if (!predefinedLocationTree.isEmpty()) {
-            noneChoice.setLevelName(predefinedLocationTree.get(0).getLevelName());
-        }
-        return noneChoice;
     }
 
     private ListView<HierarchicalNode> createNodeList(final IModel<List<HierarchicalNode>> locationsModel, final int levelIndex) {
@@ -182,6 +172,11 @@ public class PredefinedLocationsPanel extends Panel {
         return selectedPredefinedLocationId;
     }
 
+    public void clear() {
+        this.selectedPredefinedLocationId = NO_PREDEFINED_LOCATION;
+        selectedLevels.clear();
+        expandedLevels.clear();
+    }
 
     public void setOwner(BaseOrg owner) {
         this.owner = owner;
@@ -189,4 +184,5 @@ public class PredefinedLocationsPanel extends Panel {
         expandedLevels.add(artificialRootNode);
         selectedLevels.clear();
     }
+
 }

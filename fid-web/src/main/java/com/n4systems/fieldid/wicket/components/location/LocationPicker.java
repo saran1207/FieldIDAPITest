@@ -1,5 +1,9 @@
 package com.n4systems.fieldid.wicket.components.location;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -13,11 +17,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.location.PredefinedLocationByIdLoader;
-
 
 public class LocationPicker extends Panel {
 
@@ -27,12 +26,11 @@ public class LocationPicker extends Panel {
     TextField<String> freeformLocationField;
 
     private PredefinedLocationsPanel predefinedLocationsPanel;
-    private String freeformLocation;
     private int xOffset = 0;
     private int yOffset = 0;
 	private boolean relativePosition = false;
 
-    public LocationPicker(String id, IModel<Location> locationModel) {
+    public LocationPicker(String id, final IModel<Location> locationModel) {
         super(id);
         this.locationModel = locationModel;
         setOutputMarkupPlaceholderTag(true);
@@ -40,7 +38,7 @@ public class LocationPicker extends Panel {
         add(locationPickerContainer = new WebMarkupContainer("locationPickerContainer"));
         locationPickerContainer.setOutputMarkupPlaceholderTag(true);
 
-        LocationForm locationForm = new LocationForm("locationForm");
+        final LocationForm locationForm = new LocationForm("locationForm");
         locationPickerContainer.add(locationForm);
 
         WebMarkupContainer predefinedEnabledContainer = new WebMarkupContainer("predefinedEnabledContainer");
@@ -54,6 +52,16 @@ public class LocationPicker extends Panel {
         add(predefinedDisabledContainer);
 
         locationForm.add(predefinedLocationsPanel = new PredefinedLocationsPanel("predefinedLocationPanel"));
+
+        predefinedEnabledContainer.add(new AjaxLink("clearLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                locationModel.setObject(new Location());
+                locationForm.freeformLocation = null;
+                predefinedLocationsPanel.clear();
+                target.add(LocationPicker.this);
+            }
+        });
     }
     
     public LocationPicker withRelativePosition() { 
@@ -93,7 +101,7 @@ public class LocationPicker extends Panel {
 
     class LocationForm extends Form {
 
-        private String freeformLocation;
+        String freeformLocation;
 
         public LocationForm(String id) {
             super(id);
@@ -133,12 +141,12 @@ public class LocationPicker extends Panel {
 
     }
 
-    public LocationPicker withOffset(int xOffset,int yOffset) { 
+    public LocationPicker withOffset(int xOffset,int yOffset) {
     	this.yOffset = yOffset;
     	this.xOffset = xOffset;
     	return this;
     }
-    
+
     private void closePicker(AjaxRequestTarget target) {
         locationPickerContainer.setVisible(false);
         target.add(LocationPicker.this);

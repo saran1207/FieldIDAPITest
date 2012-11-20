@@ -20,6 +20,7 @@ public class LocationPanel extends Panel {
 
     private IModel<Location> locationModel;
     private TextField<String> freeformLocationField;
+    private LocationForm locationForm;
 
     private PredefinedLocationsPanel predefinedLocationsPanel;
 
@@ -28,7 +29,7 @@ public class LocationPanel extends Panel {
         this.locationModel = locationModel;
         setOutputMarkupPlaceholderTag(true);
 
-        LocationForm locationForm = new LocationForm("locationForm");
+        locationForm = new LocationForm("locationForm");
 
         locationForm.add(predefinedLocationsPanel = new PredefinedLocationsPanel("predefinedLocationPanel"));
         
@@ -77,7 +78,7 @@ public class LocationPanel extends Panel {
 
         private void setModelValueFromPicker() {
             PredefinedLocation predefLocation = null;
-            if (!predefinedLocationsPanel.getSelectedPredefinedLocationId().equals(-1L)) {
+            if (!predefinedLocationsPanel.getSelectedPredefinedLocationId().equals(PredefinedLocationsPanel.NO_PREDEFINED_LOCATION)) {
                 PredefinedLocationByIdLoader predefLoader = new PredefinedLocationByIdLoader(FieldIDSession.get().getSessionUser().getSecurityFilter());
                 predefLocation = predefLoader.setId(predefinedLocationsPanel.getSelectedPredefinedLocationId()).load();
             }
@@ -87,9 +88,13 @@ public class LocationPanel extends Panel {
 
     }
 
+    public void clear() {
+        locationForm.freeformLocation = null;
+        predefinedLocationsPanel.clear();
+    }
+
     protected void onClosePicker(AjaxRequestTarget target) { }
 
-    
     protected void onLocationPicked(AjaxRequestTarget target) {}
 
 }

@@ -7,8 +7,11 @@
 	
 	<@s.textfield id="${parameters.id}_locationName" name="locate" theme="fieldidSimple" value="${parameters.fullName!}" readonly="true"/>
 	<a href="javascript:void(0);" id="${parameters.id}_showLocationSelection"><@s.text name="label.choose"/></a>
-	
-	<div id="${parameters.id}_locationSelection" class="locationSelection offScreen">
+    <@s.text name="label.or"/>
+    <a href="javascript:void(0);" id="${parameters.id}_clearLocationSelection"><@s.text name="label.clear"/></a>
+
+
+<div id="${parameters.id}_locationSelection" class="locationSelection offScreen">
 		<label id="freeFormLabel" for="predefinedLocation" class="label freeFormLabel"><@s.text name="label.predefined_location"/></label><br/>
 
 		<@n4.hierarchicalList id="${parameters.id}_predefinedLocationSelector" nodesList=predefinedLocationTree name="assetWebModel.location.predefinedLocationId" />
@@ -56,6 +59,12 @@
                     params.uniqueID=locationPickerId;
                 }
                 getResponse(getLocationPickerUrl, 'get', params);
+            });
+
+            $('${parameters.id}_clearLocationSelection').observe('click', function(event) {
+                $('${parameters.id}_predefinedLocationId').value = -1;
+                $('${parameters.id}').value = "";
+                $('${parameters.id}_locationName').value = "";
             });
 		
 	</@n4.includeScript>

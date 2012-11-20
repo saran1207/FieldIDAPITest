@@ -26,12 +26,12 @@ public class ModalLocationPicker extends Panel {
     private LocationPanel locationPanel;
     private IModel<Location> locationModel;
 
-    public ModalLocationPicker(String id, IModel<Location> locationModel) {
+    public ModalLocationPicker(String id, final IModel<Location> locationModel) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
         this.locationModel = locationModel;
 
-        add(modal=new FIDModalWindow("choose",locationModel,500,275));
+        add(modal = new FIDModalWindow("choose", locationModel, 500, 275));
         modal.setMaskType(MaskType.TRANSPARENT);
         modal.setTitle(new StringResourceModel("label.location",this,null));
 
@@ -45,6 +45,7 @@ public class ModalLocationPicker extends Panel {
             }
         });
         locationPanel.setOutputMarkupId(true);
+
 
         boolean advancedLocationEnabled = FieldIDSession.get().getSecurityGuard().isAdvancedLocationEnabled();
 
@@ -64,7 +65,7 @@ public class ModalLocationPicker extends Panel {
         response.renderJavaScriptReference("javascript/modalWindow.js");
     }
 
-    private WebMarkupContainer addBaseControls(WebMarkupContainer predefinedEnabledContainer, IModel<Location> locationModel) {
+    private WebMarkupContainer addBaseControls(WebMarkupContainer predefinedEnabledContainer, final IModel<Location> locationModel) {
         WebMarkupContainer locationNameDisplay = new WebMarkupContainer("locationNameInput");
         locationNameDisplay.setOutputMarkupId(true);
         locationNameDisplay.add(new AttributeModifier("value", true, new PropertyModel<String>(locationModel, "fullName")));
@@ -79,6 +80,15 @@ public class ModalLocationPicker extends Panel {
             }
         });
         chooseLink.setOutputMarkupPlaceholderTag(true);
+
+        predefinedEnabledContainer.add(new AjaxLink("clearLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                locationPanel.clear();
+                locationModel.setObject(new Location());
+                target.add(locationText);
+            }
+        } );
         return locationNameDisplay;
     }
 
