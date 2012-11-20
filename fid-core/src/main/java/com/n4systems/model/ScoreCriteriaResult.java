@@ -1,5 +1,7 @@
 package com.n4systems.model;
 
+import com.n4systems.util.DoubleFormatter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,7 +29,10 @@ public class ScoreCriteriaResult extends CriteriaResult {
 
 	@Override
 	public String getResultString() {
-		return score!=null ? score.getName() : ""; 
+        if (score == null) {
+            return "";
+        }
+        return score.isNa() ? "N/A" : DoubleFormatter.simplifyDouble(score.getValue());
 	}
 
 }
