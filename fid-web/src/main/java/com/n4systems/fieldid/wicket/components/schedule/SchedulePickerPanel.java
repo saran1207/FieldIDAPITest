@@ -46,7 +46,6 @@ public class SchedulePickerPanel extends Panel {
     class ScheduleForm extends Form<Event> {
 
         FIDFeedbackPanel feedbackPanel;
-        public WebMarkupContainer editorContainer;
         DateTimePicker dateTimePicker;
 
         public ScheduleForm(String id, final IModel<Event> eventScheduleModel, final IModel<List<EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
@@ -54,11 +53,9 @@ public class SchedulePickerPanel extends Panel {
 
             setDefaultEventType(eventScheduleModel, eventTypeOptions);
 
-            add(editorContainer = new WebMarkupContainer("scheduleEditorContainer"));
-            editorContainer.add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
-            editorContainer.setOutputMarkupPlaceholderTag(true);
+            add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
-            editorContainer.add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "dueDate"), true));
+            add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "dueDate"), true));
             dateTimePicker.getDateTextField().setRequired(true);
 
             DropDownChoice<EventType> eventTypeSelect = new FidDropDownChoice<EventType>("eventTypeSelect", new PropertyModel<EventType>(eventScheduleModel, "type"), eventTypeOptions, new ListableChoiceRenderer<EventType>());
@@ -68,23 +65,22 @@ public class SchedulePickerPanel extends Panel {
             eventTypeSelect.setNullValid(false);
             eventTypeSelect.setRequired(true);
 
-            editorContainer.add(eventTypeSelect);
+            add(eventTypeSelect);
             WebMarkupContainer jobSelectContainer = new WebMarkupContainer("jobSelectContainer");
             jobSelectContainer.add(jobSelect);
             jobSelectContainer.setVisible(FieldIDSession.get().getSessionUser().getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Projects));
 
-            editorContainer.add(jobSelectContainer);
+            add(jobSelectContainer);
 
             DropDownChoice<User> assigneeChoice = new FidDropDownChoice<User>("assignee", new PropertyModel<User>(eventScheduleModel, "assignee"), new ExaminersModel(), new ListableChoiceRenderer<User>());
             assigneeChoice.setNullValid(true);
-            editorContainer.add(assigneeChoice);
+            add(assigneeChoice);
 
             AjaxSubmitLink addScheduleButton =  new AjaxSubmitLink("addScheduleButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     onPickComplete(target);
                     setDefaultEventType(eventScheduleModel, eventTypeOptions);
-                    setEditorVisible(target, false);
                     target.add(feedbackPanel);
                 }
 
@@ -95,15 +91,15 @@ public class SchedulePickerPanel extends Panel {
             };
             addScheduleButton.add(saveScheduleLabel = new Label("saveScheduleLabel", new FIDLabelModel("label.create_schedule")));
 
-            editorContainer.add(addScheduleButton);
+            add(addScheduleButton);
 
-            editorContainer.add(createQuickDateLink("quickLinkToday", 0, 0, 0));
-            editorContainer.add(createQuickDateLink("quickLinkTomorrow", 1, 0, 0));
-            editorContainer.add(createQuickDateLink("quickLinkNextMonth", 0, 1, 0));
-            editorContainer.add(createQuickDateLink("quickLinkSixMonths", 0, 6, 0));
-            editorContainer.add(createQuickDateLink("quickLinkNextYear", 0, 0, 1));
+            add(createQuickDateLink("quickLinkToday", 0, 0, 0));
+            add(createQuickDateLink("quickLinkTomorrow", 1, 0, 0));
+            add(createQuickDateLink("quickLinkNextMonth", 0, 1, 0));
+            add(createQuickDateLink("quickLinkSixMonths", 0, 6, 0));
+            add(createQuickDateLink("quickLinkNextYear", 0, 0, 1));
 
-            editorContainer.add(new AjaxLink("cancelLink") {
+            add(new AjaxLink("cancelLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     ModalWindow.closeCurrent(target);
@@ -117,15 +113,6 @@ public class SchedulePickerPanel extends Panel {
             if (eventSchedule.getType() == null && availableEventTypes.size() > 0) {
                 eventSchedule.setType(availableEventTypes.get(0));
             }
-        }
-
-        public void setEditorVisible(AjaxRequestTarget target, boolean visible) {
-            setEditorVisible(visible);
-            target.add(editorContainer);
-        }
-
-        public void setEditorVisible(boolean visible) {
-            editorContainer.setVisible(visible);
         }
 
         private AjaxLink createQuickDateLink(String id, final int daysFromNow, final int monthsFromNow, final int yearsFromNow) {
