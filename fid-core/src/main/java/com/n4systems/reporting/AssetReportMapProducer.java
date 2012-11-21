@@ -51,7 +51,8 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("certificateText", assetType.getManufactureCertificateText());
 		add("productInstructions", assetType.getInstructions());
 		
-		add("productImage", imagePath(assetType));
+		add("productImage", assetTypeImagePath(assetType));
+        add("assetProfileImage", assetProfileImagePath(asset));
 		add("ownerLogo", getCustomerLogo(asset.getOwner()));
         add("latitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLatitude() : "");
         add("longitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLongitude() : "");
@@ -61,9 +62,13 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		return asset.isAssigned() ? asset.getAssignedUser().getUserLabel() : UNASSIGNED_USER_NAME;
 	}
 
-	private File imagePath(AssetType assetType) {
+	private File assetTypeImagePath(AssetType assetType) {
 		return (assetType.hasImage()) ? new File(PathHandler.getAssetTypeImageFile(assetType), assetType.getImageName()) : null;
 	}
+
+    private File assetProfileImagePath(Asset asset) {
+        return (asset.getImageName() != null) ? new File(PathHandler.getAssetImageFile(asset), asset.getImageName()) : null;
+    }
 
 	private Map<String, Object> produceInfoOptionMap() {
 		Map<String, Object> infoOptions = new HashMap<String, Object>();
