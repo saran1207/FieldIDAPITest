@@ -51,7 +51,6 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     
     public SecretTestPage() {
         Form form = new Form("form", new CompoundPropertyModel(this));
-        form.setMultiPart(true);
 
         form.add(new Comment("comment", new PropertyModel<String>(this, "comment")).setVisible(true));
         form.add(new AutoCompleteOrgPicker("autocompleteorg", new PropertyModel<BaseOrg>(this, "org")).setVisible(true));
@@ -70,7 +69,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
             @Override protected String getImagePath() {
                 return "/test/page/images/";
             }
-        });
+        }.withRows(12).withWidth("300px;"));
 
         form.add(new AjaxSubmitLink("submit") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

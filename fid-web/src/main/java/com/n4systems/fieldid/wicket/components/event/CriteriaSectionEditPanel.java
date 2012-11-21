@@ -35,6 +35,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CriteriaSectionEditPanel extends Panel {
@@ -84,7 +85,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
         add(popup = new Popup("instructionsDialog") {
             @Override protected WebMarkupContainer createContent(String id) {
-                return instructionsDialog = new RichText(id, Model.of("")).withButtonList(new String[0]).withWidth("310px").disabled();
+                return instructionsDialog = new RichText(id, Model.of("")).withButtonList(new ArrayList<String>()).withWidth("310px").disabled();
             }
         });
     }

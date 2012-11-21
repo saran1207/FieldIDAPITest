@@ -57,7 +57,7 @@ public class ImageUploadHandler implements HttpRequestHandler {
                 FileItemStream item = iterator.next();
                 if(!item.isFormField()) {
                     JsonImage jsonObject = createJsonObjectForItem(request, item);
-                    response.setContentType("application/json");
+                    response.setContentType("text/html");
                     response.getWriter().write(gson.toJson(jsonObject));
                     break;
                 }
