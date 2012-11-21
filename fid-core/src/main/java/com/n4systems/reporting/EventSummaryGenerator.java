@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.event.EventService;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -46,16 +47,18 @@ public class EventSummaryGenerator {
 	private final EventManager eventManager;
 	private final DateTimeDefiner dateDefiner;
     private final S3Service s3service;
+    private EventService eventService;
 
-	public EventSummaryGenerator(DateTimeDefiner dateDefiner, PersistenceManager persistenceManager, EventManager eventManager, S3Service s3service) {
+    public EventSummaryGenerator(DateTimeDefiner dateDefiner, PersistenceManager persistenceManager, EventManager eventManager, S3Service s3service, EventService eventService) {
 		this.dateDefiner = dateDefiner;
 		this.persistenceManager = persistenceManager;
 		this.eventManager = eventManager;
         this.s3service = s3service;
-	}
+        this.eventService = eventService;
+    }
 	
 	public EventSummaryGenerator(DateTimeDefiner dateDefiner) {
-		this(dateDefiner, ServiceLocator.getPersistenceManager(), ServiceLocator.getEventManager(), ServiceLocator.getS3Service());
+		this(dateDefiner, ServiceLocator.getPersistenceManager(), ServiceLocator.getEventManager(), ServiceLocator.getS3Service(), ServiceLocator.getEventService());
 	}
 	
 	public JasperPrint generate(ReportDefiner reportDefiner, List<Long> eventIds, User user) throws ReportException {
@@ -122,7 +125,7 @@ public class EventSummaryGenerator {
 						? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 				
-				Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service).produceMap();
+				Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService).produceMap();
 				eventMap.put("mainInspection", eventReportMap);
 				eventMap.put("product", eventReportMap.get("product"));
 				

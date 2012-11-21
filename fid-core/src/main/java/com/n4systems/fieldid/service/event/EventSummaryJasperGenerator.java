@@ -40,6 +40,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
     private static final String n4LogoFileName = "n4_logo.gif";
     private Logger logger = Logger.getLogger(EventSummaryJasperGenerator.class);
 
+    private @Autowired EventService eventService;
     private @Autowired OrgService orgService;
     private @Autowired DateService dateService;
 
@@ -112,7 +113,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                         ? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 
-                Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service).produceMap();
+                Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService).produceMap();
                 eventMap.put("mainInspection", eventReportMap);
                 eventMap.put("product", eventReportMap.get("product"));
 

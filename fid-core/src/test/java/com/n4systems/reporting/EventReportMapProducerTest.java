@@ -7,12 +7,14 @@ import static com.n4systems.model.builders.UserBuilder.*;
 import static com.n4systems.model.event.AssignedToUpdate.*;
 import static com.n4systems.reporting.ReportMapEntryMatcher.*;
 import static com.n4systems.test.helpers.Asserts.*;
+import static org.easymock.EasyMock.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import com.n4systems.fieldid.service.event.EventService;
 import org.junit.Test;
 
 import com.n4systems.model.Asset;
@@ -54,7 +56,7 @@ public class EventReportMapProducerTest {
 		Map<String, Object> expectedReportMap = new HashMap<String, Object>();
 		expectedReportMap.put("productLabel", null);
 		expectedReportMap.put("type", "test");
-		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner(), null);
+		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner(), null, createMockEventService());
 		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertConatainsExpectedValues(expectedReportMap, actualReportMap);
@@ -76,7 +78,7 @@ public class EventReportMapProducerTest {
 		expectedReportMap.put("type", "test");
 		expectedReportMap.put("predefinedLocationFullName", advancedLocation.getFullName());
 
-		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner(), null);
+		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner(), null, createMockEventService());
 		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertConatainsExpectedValues(expectedReportMap, actualReportMap);
@@ -97,7 +99,7 @@ public class EventReportMapProducerTest {
 		expectedReportMap.put("type", "test");
 		expectedReportMap.put("predefinedLocationFullName", advancedLocation.getFullName());
 
-		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner(), null);
+		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner(), null, createMockEventService());
 		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertConatainsExpectedValues(expectedReportMap, actualReportMap);
@@ -122,7 +124,7 @@ public class EventReportMapProducerTest {
 		expectedReportMap.put("type", "test");
 		expectedReportMap.put("predefinedLocationFullName", advancedLocation.getFullName());
 
-		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner(), null);
+		ReportMapProducer sut = new EventReportMapProducer(targetEvent, new DefaultedDateTimeDefiner(), null, createMockEventService());
 		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertConatainsExpectedValues(expectedReportMap, actualReportMap);
@@ -132,7 +134,7 @@ public class EventReportMapProducerTest {
 	public void should_have_assigned_user_null_when_no_assignment_was_done_on_an_event() {
 		Event event = anEvent().withNoAssignedToUpdate().build();
 
-		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null);
+		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null, createMockEventService());
 		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertThat(actualReportMap, hasReportEntry(equalTo("assignedUserName"), nullValue()));
@@ -142,7 +144,7 @@ public class EventReportMapProducerTest {
 	public void should_have_assigned_user_unassigned_when_an_assignment_to_unassigned_was_done() {
 		Event event = anEvent().withAssignedToUpdate(unassignAsset()).build();
 
-		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null);
+		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null, createMockEventService());
 		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertThat(actualReportMap, hasReportEntry(equalTo("assignedUserName"), equalTo((Object) "Unassigned")));
@@ -153,10 +155,20 @@ public class EventReportMapProducerTest {
 		User namedEmployee = anEmployee().withFirstName("first").withLastName("last").build();
 		Event event = anEvent().withAssignedToUpdate(assignAssetToUser(namedEmployee)).build();
 
-		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null);
+		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null, createMockEventService());
 		Map<String, Object> actualReportMap = sut.produceMap();
 
 		assertThat(actualReportMap, hasReportEntry(equalTo("assignedUserName"), equalTo((Object) "first last")));
 	}
+
+    private EventService createMockEventService() {
+        Event event = new Event();
+        EventService mockEventService = createMock(EventService.class);
+        expect(mockEventService.findNextOpenEventOfSameType(anyObject(Event.class))).andReturn(event);
+        expect(mockEventService.findNextOpenOrCompletedEventOfSameType(anyObject(Event.class))).andReturn(event);
+        expect(mockEventService.findPreviousEventOfSameType(anyObject(Event.class))).andReturn(event);
+        replay(mockEventService);
+        return mockEventService;
+    }
 
 }

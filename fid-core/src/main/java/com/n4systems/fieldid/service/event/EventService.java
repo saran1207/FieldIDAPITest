@@ -8,6 +8,7 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.util.ExistingEventTransientCriteriaResultPopulator;
 import com.n4systems.fieldid.service.event.util.NewEventTransientCriteriaResultPopulator;
 import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
@@ -524,6 +525,62 @@ public class EventService extends FieldIdPersistenceService {
         public String getDisplayName() {
             return displayName;
         }
+    }
+
+    public Event findPreviousEventOfSameType(Event event) {
+        QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
+        builder.addWhere(WhereClauseFactory.create("eventState", Event.EventState.COMPLETED));
+        builder.addWhere(WhereClauseFactory.create("asset.id", event.getAsset().getId()));
+        builder.addWhere(WhereClauseFactory.create("type.id", event.getType().getId()));
+
+        PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
+        String maxDateSelect = String.format("SELECT MAX(iSub.completedDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.asset.id = :iSubAssetId AND iSub.type.id = :iSubTypeId AND iSub.completedDate < :iSubCompletedDate", Event.class.getName());
+        latestClause.setClause(String.format("i.completedDate = (%s)", maxDateSelect));
+        latestClause.getParams().put("iSubAssetId", event.getAsset().getId());
+        latestClause.getParams().put("iSubTypeId", event.getType().getId());
+        latestClause.getParams().put("iSubCompletedDate", event.getCompletedDate());
+        latestClause.getParams().put("iSubState", EntityState.ACTIVE);
+        builder.addWhere(latestClause);
+
+        return persistenceService.find(builder);
+    }
+
+    @Transactional
+    public Event findNextOpenEventOfSameType(Event event) {
+        return findNextEventOfSameType(event, true);
+    }
+
+    @Transactional
+    public Event findNextOpenOrCompletedEventOfSameType(Event event) {
+        return findNextEventOfSameType(event, false);
+    }
+
+    private Event findNextEventOfSameType(Event event, boolean openOnly) {
+        QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
+
+        if (openOnly) {
+            builder.addWhere(WhereClauseFactory.create("eventState", Event.EventState.OPEN));
+        }
+
+        builder.addWhere(WhereClauseFactory.create("asset.id", event.getAsset().getId()));
+        builder.addWhere(WhereClauseFactory.create("type.id", event.getType().getId()));
+
+        PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
+        String minDateSelect = String.format("SELECT MIN(iSub.dueDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.asset.id = :iSubAssetId AND iSub.type.id = :iSubTypeId AND iSub.dueDate > :iSubCompletedDate ", Event.class.getName());
+
+        if (openOnly) {
+            minDateSelect += " AND iSub.eventState = :iSubEventState";
+            latestClause.getParams().put("iSubEventState", Event.EventState.OPEN);
+        }
+
+        latestClause.setClause(String.format("i.dueDate = (%s)", minDateSelect));
+        latestClause.getParams().put("iSubAssetId", event.getAsset().getId());
+        latestClause.getParams().put("iSubTypeId", event.getType().getId());
+        latestClause.getParams().put("iSubCompletedDate", event.getCompletedDate());
+        latestClause.getParams().put("iSubState", EntityState.ACTIVE);
+        builder.addWhere(latestClause);
+
+        return persistenceService.find(builder);
     }
 
 }

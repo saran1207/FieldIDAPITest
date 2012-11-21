@@ -123,7 +123,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		addNextEventScheduleParams(reportMap, event, dateDefiner);
 		addEventScheduleParams(reportMap, event);
 
-		Map<String, Object> masterEventReportMap = new EventReportMapProducer(event, dateDefiner, s3service).produceMap();
+		Map<String, Object> masterEventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService).produceMap();
 		reportMap.put("mainInspection", masterEventReportMap);
 		reportMap.put("product", masterEventReportMap.get("product"));
 
@@ -159,7 +159,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 
 		reportMap.putAll(new AssetReportMapProducer(event.getAsset(), dateDefiner, s3service).produceMap());
 
-		Map<String, Object> eventMap = new EventReportMapProducer(event, dateDefiner, s3service).produceMap();
+		Map<String, Object> eventMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService).produceMap();
 		reportMap.putAll(eventMap);
 
 		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledPrintOutFile(printOut));

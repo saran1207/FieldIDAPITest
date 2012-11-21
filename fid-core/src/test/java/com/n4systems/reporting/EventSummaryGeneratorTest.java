@@ -62,7 +62,7 @@ public class EventSummaryGeneratorTest {
 		
 		setReportDefinerExpectations(printableEvent);
 		
-		EventSummaryGenerator generator = new EventSummaryGenerator(dateDefiner, persistenceManager, eventManager, null) {
+		EventSummaryGenerator generator = new EventSummaryGenerator(dateDefiner, persistenceManager, eventManager, null, null) {
 			@Override
 			protected PrimaryOrg getTenant(User user, Long tenantId) {
 				return (PrimaryOrg) aPrimaryOrg().build();

@@ -1,6 +1,7 @@
 package com.n4systems.reporting;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
@@ -14,15 +15,19 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 	private static final String UNASSIGNED_USER_NAME = "Unassigned";
 
 	private final Event event;
+    private EventService eventService;
 
-	public EventReportMapProducer(Event event, DateTimeDefinition dateTimeDefinition, S3Service s3Service) {
+    public EventReportMapProducer(Event event, DateTimeDefinition dateTimeDefinition, S3Service s3Service, EventService eventService) {
 		super(dateTimeDefinition, s3Service);
 		this.event = event;
-	}
+        this.eventService = eventService;
+    }
 
 	@Override
 	protected void eventParameter() {
 		Event event = (Event) this.getEvent();
+
+        addNextAndPreviousData(event);
 		add("productLabel", null);
 		add("location", event.getAdvancedLocation().getFreeformLocation());
 		add("predefinedLocationFullName", event.getAdvancedLocation().getFullName());
@@ -40,6 +45,20 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 
 		fillInDate(event);
 	}
+
+    private void addNextAndPreviousData(Event event) {
+        Event nextOpenEvent = eventService.findNextOpenEventOfSameType(event);
+        Event nextEvent = eventService.findNextOpenOrCompletedEventOfSameType(event);
+        Event previousEvent = eventService.findPreviousEventOfSameType(event);
+
+        add("nextOpenEventByTypeDueDate", nextOpenEvent == null ? null : DateHelper.convertToUserTimeZone(nextOpenEvent.getDueDate(), dateTimeDefinition.getTimeZone()));
+
+        add("nextEventByTypeDueDate", nextEvent == null ? null : DateHelper.convertToUserTimeZone(nextEvent.getDueDate(), dateTimeDefinition.getTimeZone()));
+        add("nextEventByTypeDate", nextEvent == null ? null : DateHelper.convertToUserTimeZone(nextEvent.getDate(), dateTimeDefinition.getTimeZone()));
+
+        add("lastEventByTypeDueDate", previousEvent == null ? null : DateHelper.convertToUserTimeZone(previousEvent.getDueDate(), dateTimeDefinition.getTimeZone()));
+        add("lastEventByTypeDate", previousEvent == null ? null : DateHelper.convertToUserTimeZone(previousEvent.getDate(), dateTimeDefinition.getTimeZone()));
+    }
 
 	private String assignedUserName() {
 		if (!event.hasAssignToUpdate()) {
