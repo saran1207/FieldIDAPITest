@@ -14,8 +14,6 @@ import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -234,8 +232,6 @@ public class EventScheduleCrud extends AbstractCrud {
 		return nextDate;
 	}
 
-	
-	@RequiredStringValidator(type = ValidatorType.SIMPLE, fieldName = "nextDate", message = "", key = "error.mustbeadate")
 	@CustomValidator(type = "n4systemsDateValidator", fieldName = "nextDate", message = "", key = "error.mustbeadate")
 	public void setNextDate(String nextDate) {
 		this.nextDate = nextDate;
