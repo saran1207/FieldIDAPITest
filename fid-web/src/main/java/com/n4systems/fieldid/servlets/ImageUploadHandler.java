@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.HttpRequestHandler;
@@ -58,11 +59,13 @@ public class ImageUploadHandler implements HttpRequestHandler {
                 if(!item.isFormField()) {
                     JsonImage jsonObject = createJsonObjectForItem(request, item);
                     response.setContentType("text/html");
+                    response.setStatus(HttpStatus.SC_OK);
                     response.getWriter().write(gson.toJson(jsonObject));
                     break;
                 }
             }
         } catch (Exception e) {
+            response.setStatus(HttpStatus.SC_BAD_REQUEST);
             logger.error(e.getMessage());
         }
 
@@ -86,11 +89,14 @@ public class ImageUploadHandler implements HttpRequestHandler {
     private String getFormat(FileItemStream item) {
         String contentType = item.getContentType();
         if (contentType.startsWith("image/")) {
-            return contentType.substring("image/".length());
+            contentType = contentType.substring("image/".length());
         } else {
             logger.warn("can't figure out proper file format for item " + item.getName() + " with type " + item.getContentType());
-            return contentType;
         }
+        if (contentType.startsWith("x-")) {
+            return contentType.substring(2);    // convert say, "x-png" to "png".
+        }
+        return contentType;
     }
 
     private String createFilePath(String path, FileItemStream item) {

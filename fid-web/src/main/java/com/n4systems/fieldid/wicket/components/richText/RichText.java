@@ -43,13 +43,8 @@ public class RichText extends Panel {
     private @SpringBean SecurityContext securityContext;
 
     private Component area;
-    private Boolean fullPanel;
-    private String iconsPath = "../../images/nicEdit/nicEditorIcons.gif";
-    private List<String> buttonList = Lists.newArrayList("bold","italic","underline","left", "center", "right", "justify", "ol", "ul", "fontSize", "fontFamily", "fontFormat");
-    private Integer maxHeight;
-    private AbstractDefaultAjaxBehavior behavior;
-    private Boolean disabled;
-    private boolean isIE;
+    private NicEditOptions options;
+    AbstractDefaultAjaxBehavior behavior;
 
     public RichText(String id, IModel<String> model) {
         super(id);
@@ -61,22 +56,28 @@ public class RichText extends Panel {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-
+        options = new NicEditOptions();
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/nicEdit/nicEdit-min.js");
 
-        // these are optionally loaded if IE
+        Gson gson = new GsonBuilder().create();
+        NicEditOptions o = getOptions();
+        // these are optionally loaded if IE 'cause it requires a custom file uploader
+
         if (isIE()) {
+            // IE specific non-HTML 5 custom upload plugin.
             response.renderJavaScriptReference("javascript/form/form.js");
             response.renderJavaScriptReference("javascript/nicEdit/uploadImage/uploadImage.js");
+            o.addButton("uploadImage");
+        } else {
+            //sexier out of the box nicEdit uploader.
+            o.addButton("upload");
         }
+        response.renderOnDomReadyJavaScript(String.format(INIT_NICEDIT_JS, area.getMarkupId(), gson.toJson(o)));
         response.renderJavaScriptReference("javascript/component/richText.js");
-        Gson gson = new GsonBuilder().create();
-        String optionsJson = gson.toJson(getOptions());
-        response.renderOnDomReadyJavaScript(String.format(INIT_NICEDIT_JS, area.getMarkupId(), optionsJson));
     }
 
     private boolean isIE() {
@@ -84,9 +85,7 @@ public class RichText extends Panel {
         return clientInfo.getProperties().isBrowserInternetExplorer();
     }
 
-    protected Object /*CAVEAT : Must be Json Object*/ getOptions() {
-        buttonList.add(isIE() ? "uploadImage" : "upload");  // first button is IE specific non-HTML 5 custom upload plugin. 2nd one is sexier out of the box nicEdit uploader.
-        NicEditOptions options = new NicEditOptions(buttonList.toArray(new String[buttonList.size()]), fullPanel, iconsPath, maxHeight, getImageUploadUrl(),disabled);
+    protected NicEditOptions getOptions() {
         if (behavior!=null) {
             options.callbackUrl = behavior.getCallbackUrl().toString();
         }
@@ -95,6 +94,40 @@ public class RichText extends Panel {
 
     public String getTextAreaMarkupId() {
         return area.getMarkupId();
+    }
+
+    /**
+     * @see com.n4systems.fieldid.servlets.ImageUploadHandler
+     * @see com.n4systems.fieldid.servlets.ImageUploadServlet
+     * specifies where the nicEdit text editor will go with uploaded images.
+     * the default value assumes that fieldId's imageUpload servlet is configured properly.  (see web.xml)
+     */
+    protected String getImageUploadUrl() {
+        return String.format("../../imageUpload/rtf?path=%s&tenantId=%s", getImagePath(), getTenantId());
+    }
+
+    protected String getImagePath() {
+        logger.warn("using default path '" + RTF_IMAGE_PATH + "'for RTF editor images...override to specify a custom path");
+        return RTF_IMAGE_PATH;
+    }
+
+    protected Long getTenantId() {
+        return securityContext.getTenantSecurityFilter().getTenantId();
+    }
+
+    public RichText withMaxHeight(Integer maxHeight) {
+        options.maxHeight = maxHeight;
+        return this;
+    }
+
+    public RichText withButtonList(List<String> buttonList) {
+        options.buttonList = buttonList;
+        return this;
+    }
+
+    public RichText disabled() {
+        options.disabled = true;
+        return this;
     }
 
     public RichText withWidth(String width) {
@@ -123,70 +156,21 @@ public class RichText extends Panel {
         return this;
     }
 
+
     /**
-     * @see com.n4systems.fieldid.servlets.ImageUploadHandler
-     * @see com.n4systems.fieldid.servlets.ImageUploadServlet
-     * specifies where the nicEdit text editor will go with uploaded images.
-     * the default value assumes that fieldId's imageUpload servlet is configured properly.  (see web.xml)
+     *  java object converted to json & used by nicEdit javascript widget.
      */
-    protected String getImageUploadUrl() {
-        return String.format("../../imageUpload/rtf?path=%s&tenantId=%s", getImagePath(), getTenantId());
-    }
-
-    protected String getImagePath() {
-        logger.warn("using default path '" + RTF_IMAGE_PATH + "'for RTF editor images...override to specify a custom path");
-        return RTF_IMAGE_PATH;
-    }
-
-    protected Long getTenantId() {
-        return securityContext.getTenantSecurityFilter().getTenantId();
-    }
-
-    public RichText withMaxHeight(Integer maxHeight) {
-        this.maxHeight = maxHeight;
-        return this;
-    }
-
-    public RichText withIconsPath(String path) {
-        this.iconsPath = path;
-        return this;
-    }
-
-    public RichText withButtonList(List<String> buttonList) {
-        this.buttonList = buttonList;
-        return this;
-    }
-
-    public RichText withFullPanel(Boolean fullPanel) {
-        this.fullPanel = fullPanel;
-        return this;
-    }
-
-    public RichText disabled() {
-        this.disabled = true;
-        return this;
-    }
-
-
-    // java object converted to json & used by nicEdit javascript widget.
-
     public class NicEditOptions implements Serializable {
+        List<String> buttonList = Lists.newArrayList("bold","italic","underline","left", "center", "right", "justify", "ol", "ul", "fontSize", "fontFamily", "fontFormat");
         Boolean fullPanel;
-        String iconsPath;
-        String[] buttonList;
-        Integer maxHeight = 200;
-        String uploadURI;
-        String callbackUrl;
+        String iconsPath = "../../images/nicEdit/nicEditorIcons.gif";
+        Integer maxHeight;
         Boolean disabled;
+        String uploadURI = getImageUploadUrl();
+        String callbackUrl;
 
-        public NicEditOptions(String[] buttonList, Boolean fullPanel, String iconsPath, Integer maxHeight, String uploadURI, Boolean disabled) {
-            this.buttonList = buttonList;
-            this.fullPanel = fullPanel;
-            this.iconsPath = iconsPath;
-            this.maxHeight = maxHeight;
-            this.uploadURI = uploadURI;
-            this.disabled = disabled;
+        public void addButton(String button) {
+            buttonList.add(button);
         }
-
     }
 }
