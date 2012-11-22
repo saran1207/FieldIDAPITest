@@ -51,12 +51,13 @@ public class RichText extends Panel {
         add(new AttributeAppender("class", Model.of("rich-text"), " "));
         add(area = new TextArea<String>("text", model).setOutputMarkupId(true));
         setOutputMarkupId(true);
+        options = new NicEditOptions();
     }
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        options = new NicEditOptions();
+        options.uploadURI = getImageUploadUrl();
     }
 
     @Override
@@ -166,7 +167,7 @@ public class RichText extends Panel {
         String iconsPath = "../../images/nicEdit/nicEditorIcons.gif";
         Integer maxHeight;
         Boolean disabled;
-        String uploadURI = getImageUploadUrl();
+        String uploadURI;
         String callbackUrl;
 
         public void addButton(String button) {

@@ -2444,14 +2444,3 @@ inputsWithLegend .legend span {
     word-wrap:break-word;
 }
 
-/** hack to get around the fact that the reset.css has turned off effect of strong & em styles
-    this leads to problems with rich text rendering on IE.
-     e.g.   <strong> this should be BOLD </strong>
-        will not be displayed correctly.
-    the preferred fix would be to change reset.css
-*/
-.rich-text strong { font-weight:bold }
-.rich-text em { font-style: italic; text-decoration: none; }
-
-.rich-text ul li {list-style-type: square; list-style-position: inside;}
-.rich-text ol li {list-style-type: decimal; list-style-position: inside;}
