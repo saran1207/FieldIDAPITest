@@ -84,24 +84,6 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 		setOwnerId(null);
 	}
 
-	public String doPrintAllCerts() {
-		if (!isSearchIdValid()) {
-			addFlashErrorText("error.searchexpired");
-			return INPUT;
-		}
-		reportName = String.format("Manufacturer Certificate Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
-
-		try {
-			downloadLink = printAllCertificateService.generateAssetCertificates(getSearchIds(), getDownloadLinkUrl(), reportName);
-		} catch (Exception e) {
-			logger.error("Failed to print all manufacturer certs", e);
-			addFlashErrorText("error.reportgeneration");
-			return ERROR;
-		}
-
-		return SUCCESS;
-	}
-
 	public List<Long> getSearchIds() {
 		if (searchIds == null) {
             searchIds = getContainer().getMultiIdSelection().getSelectedIds();

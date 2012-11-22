@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassAction
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.print.ExportSearchToExcelPage;
+import com.n4systems.fieldid.wicket.pages.print.PrintAllCertificatesPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.model.ExtendedFeature;
@@ -28,7 +29,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
     public SearchSubMenu(String id, final Model<AssetSearchCriteria> model) {
         super(id,model);
 
-        add(printLink = makeLinkLightBoxed(new AssetSearchMassActionLink("printAllCertsLink", "/aHtml/searchPrintAllCerts.action?searchId=%s", model)));
+        add(printLink = makeLinkLightBoxed(new MassActionLink<PrintAllCertificatesPage>("printAllCertsLink", PrintAllCertificatesPage.class, model)));
         add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportSearchToExcelPage>("exportToExcelLink", ExportSearchToExcelPage.class, model)));
 
         actions=new WebMarkupContainer("actions");

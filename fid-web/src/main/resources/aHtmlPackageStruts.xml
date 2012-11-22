@@ -51,11 +51,6 @@
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 		</action>
 		
-		<action name="searchPrintAllCerts" method="printAllCerts" class="com.n4systems.fieldid.actions.search.AssetSearchAction">
-			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
-			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
-		</action>
-
 		<action name="reportPrintAllCerts" method="printAllCerts" class="com.n4systems.fieldid.actions.search.EventReportAction">
 			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>

@@ -5,6 +5,7 @@ import com.n4systems.exceptions.NonPrintableManufacturerCert;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.mail.MailService;
+import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.service.task.AsyncService.AsyncTask;
@@ -13,6 +14,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
+import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.services.ConfigService;
@@ -39,7 +41,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 	private final Logger logger = Logger.getLogger(PrintAllCertificateService.class);
 	
 	private final CertificatePrinter printer = new CertificatePrinter();
-	
+
 	@Autowired private DownloadLinkService downloadLinkService;
 	@Autowired private CertificateService certificateService;
 	@Autowired private ConfigService configService;
@@ -47,9 +49,17 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 	@Autowired private AsyncService asyncService;
 
     @Autowired private ReportService reportService;
+    @Autowired private AssetSearchService assetSearchService;
 	
-	public DownloadLink generateAssetCertificates(final List<Long> assetIds, final String downloadUrl, String reportName) {
+	public DownloadLink generateAssetCertificates(AssetSearchCriteria criteria, final String downloadUrl, String reportName) {
 		final DownloadLink link = downloadLinkService.createDownloadLink(reportName, ContentType.ZIP);
+
+        final List<Long> assetIds = criteria.getSelection().getSelectedIds();
+
+        if (criteria.getSortColumn() != null) {
+            List<Long> resultOrder = assetSearchService.idSearch(criteria);
+            sortAssetIdsByResultOrder(assetIds,resultOrder);
+        }
 		
 		AsyncTask<?> task = asyncService.createTask(new Callable<Void>() {
 			@Override
@@ -63,7 +73,16 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 		return link;
 	}
 
-	public DownloadLink generateEventCertificates(EventReportCriteria criteriaModel, final EventReportType reportType, final String downloadUrl, String reportName) {
+    private void sortAssetIdsByResultOrder(List<Long> assetIds, final List<Long> resultOrder) {
+        Collections.sort(assetIds, new Comparator<Long>() {
+            @Override
+            public int compare(Long id1, Long id2) {
+                return new Integer(resultOrder.indexOf(id1)).compareTo(resultOrder.indexOf(id2));
+            }
+        });
+    }
+
+    public DownloadLink generateEventCertificates(EventReportCriteria criteriaModel, final EventReportType reportType, final String downloadUrl, String reportName) {
 		final DownloadLink link = downloadLinkService.createDownloadLink(reportName, ContentType.ZIP);
         final List<Long> sortedSearchResultsList = reportService.idSearch(criteriaModel);
         final List<Long> sortedSelectedList = sortSelectionBasedOnIndexIn(criteriaModel.getSelection(), sortedSearchResultsList);
