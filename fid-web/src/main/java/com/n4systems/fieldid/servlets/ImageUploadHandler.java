@@ -26,9 +26,12 @@ import java.net.URL;
 import java.util.Date;
 
 /**
+ * spring bean that is coupled with the servlet of the same name. it simply delegates to this class.
+ * @see ImageUploadServlet
+ *
  * usage  :
- * meant to be used with @RichText component. all image uploads hit this servlet because it's configured the upload url to point to here.
- * by default, returns a json object with a url to the medium sized image.
+ * originally written to be used with @RichText component. all image uploads hit this servlet because it's configured the upload url to point to here.
+ * by default, returns a json object with a url to the medium sized image that the RichText component knows how to handle.
  * @see com.n4systems.fieldid.wicket.components.richText.RichText
  *
  * request parameters =
