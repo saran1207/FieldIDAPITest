@@ -399,4 +399,9 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
+
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE8";
+    }
 }
