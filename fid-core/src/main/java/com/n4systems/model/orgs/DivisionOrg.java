@@ -25,7 +25,6 @@ public class DivisionOrg extends ExternalOrg {
 	public DivisionOrg() {}
 	
 	@Override
-    @DenyReadOnlyUsersAccess
 	public PrimaryOrg getPrimaryOrg() {
 		return parent.getPrimaryOrg();
 	}
@@ -86,6 +85,5 @@ public class DivisionOrg extends ExternalOrg {
 	public String getDisplayName() {
 		return getName() + ", " + getCustomerOrg().getDisplayName();		
 	}
-	
-	
+
 }

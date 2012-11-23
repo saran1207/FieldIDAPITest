@@ -48,7 +48,6 @@ public class SecondaryOrg extends InternalOrg {
 		return SECONDARY_ID_FILTER_PATH;
 	}
 
-    @DenyReadOnlyUsersAccess
 	public PrimaryOrg getPrimaryOrg() {
 		return primaryOrg;
 	}

@@ -31,7 +31,6 @@ public class CustomerOrg extends ExternalOrg {
 	public CustomerOrg() {}
 	
 	@Override
-    @DenyReadOnlyUsersAccess
     @AllowSafetyNetworkAccess
 	public PrimaryOrg getPrimaryOrg() {
 		return parent.getPrimaryOrg();
@@ -95,4 +94,5 @@ public class CustomerOrg extends ExternalOrg {
 	public String getDisplayName() {
 		return getCustomerOrg().getName() + " (" + getInternalOrg().getName() + ")";		
 	}
+
 }

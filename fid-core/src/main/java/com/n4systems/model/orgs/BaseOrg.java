@@ -229,12 +229,12 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		if (child == null) {
 			return false;
 		}
-		
+
 		// any org can see itself
 		if (child.equals(this)) {
 			return true;
 		}
-		
+
 		if (isPrimary()) {
 			return (child.getPrimaryOrg().equals(this));
 		} else if (isSecondary()) {

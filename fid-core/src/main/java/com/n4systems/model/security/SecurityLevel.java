@@ -13,6 +13,9 @@ public enum SecurityLevel {
 	public static SecurityLevel calculateSecurityLevel(BaseOrg from, BaseOrg to) {
 		if (from.getTenant().equals(to.getTenant())) {
             if (from.isExternal()) {
+                if (from.canAccess(to)) {
+                    return SecurityLevel.LOCAL;
+                }
 			    return SecurityLevel.LOCAL_ENDUSER;
             } else {
                 return SecurityLevel.LOCAL;
