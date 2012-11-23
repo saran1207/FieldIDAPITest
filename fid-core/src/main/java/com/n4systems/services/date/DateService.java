@@ -2,6 +2,7 @@ package com.n4systems.services.date;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.chart.RangeType;
 import org.joda.time.DateMidnight;
@@ -82,4 +83,7 @@ public class DateService extends FieldIdPersistenceService {
         return new DateTime(DateTimeZone.forTimeZone(getUserTimeZone()));
     }
 
+    public Long getDaysFromToday(Date date) {
+        return DateHelper.millisToDays(date.getTime() - todayAsDate().getTime());
+    }
 }

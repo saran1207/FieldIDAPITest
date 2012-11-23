@@ -512,6 +512,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     }
 
     @AllowSafetyNetworkAccess
+    @Deprecated //Use DateService to calculate
     public Long getDaysPastDue() {
         Long daysPast = null;
         if (isPastDue()) {
@@ -521,6 +522,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     }
 
     @AllowSafetyNetworkAccess
+    @Deprecated //Use DateService to calculate
     public Long getDaysToDue() {
         Long daysTo = null;
         if (!isPastDue()) {

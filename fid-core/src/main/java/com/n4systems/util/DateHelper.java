@@ -1,18 +1,13 @@
 package com.n4systems.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.TreeMap;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.PlainDate;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @SuppressWarnings("serial")
 public class DateHelper {
@@ -240,11 +235,12 @@ public class DateHelper {
 	public static Long getMinutesDelta(Date first, Date second) {
 		return millisToMinutes(millisecondDifference(first, second));
 	}
- 
+
+    //This doesn't take into account the user's timezone
 	public static Long getDaysFromToday(Date date) {
 		return getDaysDelta(getToday(), date);
 	}
-
+    //This doesn't take into account the user's timezone
 	public static Long getDaysUntilToday(Date date) {
 		return getDaysDelta(date, getToday());
 	}

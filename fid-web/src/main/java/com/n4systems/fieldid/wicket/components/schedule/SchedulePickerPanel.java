@@ -12,6 +12,7 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.User;
+import com.n4systems.services.date.DateService;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -25,6 +26,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
 import java.util.List;
@@ -34,6 +36,9 @@ public class SchedulePickerPanel extends Panel {
     private IModel<Event> scheduleModel;
     private ScheduleForm scheduleForm;
     private Label saveScheduleLabel;
+
+    @SpringBean
+    private DateService dateService;
 
     public SchedulePickerPanel(String id, IModel<Event> scheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
         super(id);
@@ -119,7 +124,7 @@ public class SchedulePickerPanel extends Panel {
             return new AjaxLink(id) {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    Date dateToSchedule = DateUtils.addYears(new Date(), yearsFromNow);
+                    Date dateToSchedule = DateUtils.addYears(dateService.todayAsDate(), yearsFromNow);
                     dateToSchedule = DateUtils.addMonths(dateToSchedule, monthsFromNow);
                     dateToSchedule = DateUtils.addDays(dateToSchedule, daysFromNow);
                     scheduleModel.getObject().setDueDate(dateToSchedule);
