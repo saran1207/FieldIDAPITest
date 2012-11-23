@@ -61,10 +61,7 @@ public class DateTimePicker extends Panel {
             @Override public <C> IConverter<C> getConverter(Class<C> type) {
                 return (IConverter<C>)new DateConverter() {
                     @Override public DateFormat getDateFormat(Locale locale) {
-                        if (locale == null) {
-                            locale = Locale.getDefault();
-                        }
-                        SimpleDateFormat format = new SimpleDateFormat(DateTimePicker.this.getDateFormat(), locale);
+                        SimpleDateFormat format = new SimpleDateFormat(DateTimePicker.this.getDateFormat());
                         return format;
                     }
                     // strip off hours if "allDay"
