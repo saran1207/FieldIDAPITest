@@ -43,7 +43,7 @@ public class SelectOperationPanel extends AbstractMassUpdatePanel {
                 onCancel();
 			}
 		});
-        optType.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        optType.add(new AjaxFormComponentUpdatingBehavior("onclick") {
             @Override protected void onUpdate(AjaxRequestTarget target) {
                 submit.setEnabled(true);
                 target.add(submit);
