@@ -1,5 +1,24 @@
 package com.n4systems.fieldid.ws.v1.resources.synchronization;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
@@ -16,22 +35,11 @@ import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import java.util.*;
 
 @Path("/synchronize")
 @Component
 public class ApiSynchronizationResource extends FieldIdPersistenceService {
+	private static Logger logger = Logger.getLogger(ApiSynchronizationResource.class);
 
 	@Autowired private OfflineProfileService offlineProfileService;
 	
@@ -73,11 +81,11 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 			
 			BaseOrg org = persistenceService.find(BaseOrg.class, orgId);
 			if (org == null) {
-				throw new NotFoundException("Organization", orgId);
+				logger.error("Organization (probably archived) not found for orgId: " + orgId);
+			} else {			
+				builder.applyFilter(new OwnerAndDownFilter(org));
+				assets.addAll(persistenceService.findAll(builder));
 			}
-			
-			builder.applyFilter(new OwnerAndDownFilter(org));
-			assets.addAll(persistenceService.findAll(builder));
 		}
 		return assets;
 	}
