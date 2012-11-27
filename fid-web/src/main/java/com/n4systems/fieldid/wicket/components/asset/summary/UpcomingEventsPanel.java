@@ -32,7 +32,7 @@ public class UpcomingEventsPanel extends Panel {
                 ContextImage scheduleIcon;
                 if(schedule.getAssignee() != null) {
 
-                    if (schedule.isPastDue()) {
+                    if (isPastDue(schedule)) {
                         item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-assigned-overdue.png"));
                         scheduleIcon.add(new AttributeAppender("title",  new FIDLabelModel("label.open_assigned_overdue", schedule.getAssignee().getDisplayName())));
                     } else {
@@ -41,7 +41,7 @@ public class UpcomingEventsPanel extends Panel {
                     }
                     scheduleIcon.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
                 } else {
-                    if (schedule.isPastDue()) {
+                    if (isPastDue(schedule)) {
                         item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-overdue.png"));
                         scheduleIcon.add(new AttributeAppender("title", new FIDLabelModel("label.open_overdue").getObject()));
                     } else {
@@ -55,7 +55,7 @@ public class UpcomingEventsPanel extends Panel {
                 
                 DayDisplayModel upcomingEventDate = new DayDisplayModel(Model.of(schedule.getDueDate())).includeTime();
                 
-                if (schedule.isPastDue()) {
+                if (isPastDue(schedule)) {
                     TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingEventDate",Model.of(schedule.getDueDate()),dateService.getUsersTimeZone());
                     item.add(timeAgoField);
                 } else if(dateService.getDaysFromToday(schedule.getDueDate()).equals(0L)) {
@@ -71,4 +71,8 @@ public class UpcomingEventsPanel extends Panel {
         });
     }
     
+    private boolean isPastDue(Event schedule) {
+        return schedule.getEventState() == Event.EventState.OPEN && dateService.isPastDue(schedule.getDueDate());
+    }
+
 }

@@ -3,12 +3,17 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.Status;
+import com.n4systems.services.date.DateService;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class ResultIconCell extends Panel {
+
+    private @SpringBean
+    DateService dateService;
 
     public ResultIconCell(String id, IModel<Event> eventModel) {
         super(id);
@@ -35,7 +40,7 @@ public class ResultIconCell extends Panel {
             //label.open_overdue=This event is open and overdue
 
             if(event.getAssignee() != null) {
-                if(event.isPastDue()) {
+                if(isPastDue(event)) {
                     add(image = new ContextImage("resultIcon", "images/event-open-assigned-overdue.png"));
                     image.add(new AttributeAppender("title", new FIDLabelModel("label.open_assigned_overdue", event.getAssignee().getDisplayName())));
                 } else {
@@ -43,7 +48,7 @@ public class ResultIconCell extends Panel {
                     image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", event.getAssignee().getDisplayName())));
                 }
             }else {
-                if(event.isPastDue()) {
+                if(isPastDue(event)) {
                     add(image = new ContextImage("resultIcon", "images/event-open-overdue.png"));
                     image.add(new AttributeAppender("title", new FIDLabelModel("label.open_overdue").getObject()));
                 } else {
@@ -55,5 +60,9 @@ public class ResultIconCell extends Panel {
             add(image = new ContextImage("resultIcon", "images/event-closed.png"));
             image.add(new AttributeAppender("title", new FIDLabelModel("label.event_closed").getObject()));
         }
+    }
+
+    private boolean isPastDue(Event event) {
+        return event.getEventState() == Event.EventState.OPEN && dateService.isPastDue(event.getDueDate());
     }
 }

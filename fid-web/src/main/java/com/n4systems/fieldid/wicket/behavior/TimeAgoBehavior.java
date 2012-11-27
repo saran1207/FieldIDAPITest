@@ -7,7 +7,6 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -37,7 +36,7 @@ public class TimeAgoBehavior extends Behavior {
         Date date = new Date(dateModel.getObject().getTime());
         DateTime dateTime = null;
         if (timeZone!=null) {
-            dateTime = new DateTime(DateHelper.convertToUTC(date, DateTimeZone.forOffsetHours(-4).toTimeZone()));
+            dateTime = new DateTime(DateHelper.convertToUTC(date, timeZone));
         } else {
             dateTime = new DateTime(date);
         }

@@ -86,4 +86,8 @@ public class DateService extends FieldIdPersistenceService {
     public Long getDaysFromToday(Date date) {
         return DateHelper.millisToDays(date.getTime() - todayAsDate().getTime());
     }
+
+    public boolean isPastDue(Date dueDate) {
+        return todayAsDate().after(dueDate);
+    }
 }

@@ -532,6 +532,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     }
 
     @AllowSafetyNetworkAccess
+    @Deprecated //DateHelper.getToday does not take into account the user timezone use DateService
     public boolean isPastDue() {
         return (getEventState() == EventState.OPEN && isPastDue(dueDate));
     }
@@ -550,7 +551,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
      *         today}
      */
     @AllowSafetyNetworkAccess
-    public static boolean isPastDue(Date nextEventDate) {
+    @Deprecated //DateHelper.getToday does not take into account the user timezone use DateService
+    private boolean isPastDue(Date nextEventDate) {
         return nextEventDate != null && DateHelper.getToday().after(nextEventDate);
     }
 
