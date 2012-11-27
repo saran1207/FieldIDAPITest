@@ -47,6 +47,9 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 		}
 		
 		if(event.getAdvancedLocation() != null) {
+			if(event.getAdvancedLocation().getPredefinedLocation() != null) {
+				apiEvent.setPredefinedLocationId(event.getAdvancedLocation().getPredefinedLocation().getId());
+			}
 			apiEvent.setFreeformLocation(event.getAdvancedLocation().getFreeformLocation());
 		}
 		
