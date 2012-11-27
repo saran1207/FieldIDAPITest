@@ -18,6 +18,7 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 	private final BaseOrg filterOrg;
 	private final Long filterUserId;
     private TimeZone timeZone;
+    private boolean showArchived = false; //TODO May be we should consider moving this up the class heirachery as it is also used by TenantOnlySecurityFilter - Kumana.
 
 
     public UserSecurityFilter(BaseOrg filterOrg, Long filterUserId, TimeZone timeZone) {
@@ -32,7 +33,7 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 
 	@Override
 	protected void applyFilter(QueryBuilder<?> builder, SecurityDefiner definer) throws SecurityException {
-		if (definer.isStateFiltered()) {
+		if (definer.isStateFiltered() && !showArchived) {
 			addFilterParameter(builder, definer.getStatePath(), EntityState.ACTIVE);
 		}
 		
@@ -57,7 +58,7 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 
 	@Override
 	protected void applyParameters(Query query, SecurityDefiner definer) throws SecurityException {
-		if (definer.isStateFiltered()) {
+		if (definer.isStateFiltered() && !showArchived) {
 			setParameter(query, definer.getStatePath(), EntityState.ACTIVE);
 		}
 		
@@ -129,4 +130,9 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
     public void setTimeZone(TimeZone timeZone) {
         this.timeZone = timeZone;
     }
+    
+    public UserSecurityFilter setShowArchived(boolean showArchived) {
+		this.showArchived = showArchived;
+		return this;
+	}
 }

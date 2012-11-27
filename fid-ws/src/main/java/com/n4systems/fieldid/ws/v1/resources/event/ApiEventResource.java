@@ -136,6 +136,10 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		// Step 1: Convert abstract-event fields first.
 		convertApiEventForAbstractEvent(apiEvent, event);
 		
+		//If asset is archived, Archive event also.
+		if(event.getAsset().isArchived())
+			event.archiveEntity();
+		
 		// Step 2: Convert the non-abstract-event fields
 		event.setDate(apiEvent.getDate());
 		event.setPrintable(apiEvent.isPrintable());
@@ -215,9 +219,9 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		event.setModified(apiEvent.getModified());		
 		event.setComments(apiEvent.getComments());		
 		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));
-		event.setAsset(assetService.findByMobileId(apiEvent.getAssetId()));
+		event.setAsset(assetService.findByMobileId(apiEvent.getAssetId(), true));
 		event.setModifiedBy(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getModifiedById()));
-		
+
 		if (apiEvent.getAssetStatusId() != null) {
 			event.setAssetStatus(persistenceService.findUsingTenantOnlySecurityWithArchived(AssetStatus.class, apiEvent.getAssetStatusId()));
 		}

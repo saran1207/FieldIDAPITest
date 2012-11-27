@@ -19,6 +19,10 @@ public class FieldIdService {
 	protected <T> QueryBuilder<T> createUserSecurityBuilder(Class<T> clazz) {
     	return new QueryBuilder<T>(clazz, securityContext.getUserSecurityFilter());
     }
+	
+	protected <T> QueryBuilder<T> createUserSecurityBuilder(Class<T> clazz, boolean withArchived) {
+		return new QueryBuilder<T>(clazz, securityContext.getUserSecurityFilter().setShowArchived(withArchived));
+    }
     
     protected <T> QueryBuilder<T> createTenantSecurityBuilder(Class<T> clazz) {
     	return createTenantSecurityBuilder(clazz, false);
