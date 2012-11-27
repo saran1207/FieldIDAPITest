@@ -9,6 +9,7 @@ import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 public class ApiCriteria extends ApiReadonlyModel {
 	private String criteriaType;
 	private String displayText;
+	private String instructions;
 	private List<String> recommendations = new ArrayList<String>();
 	private List<String> deficiencies = new ArrayList<String>();
 	private ApiCriteriaResult result;
@@ -31,6 +32,14 @@ public class ApiCriteria extends ApiReadonlyModel {
 
 	public void setDisplayText(String displayText) {
 		this.displayText = displayText;
+	}
+	
+	public String getInstructions() {
+		return instructions;
+	}
+
+	public void setInstructions(String instructions) {
+		this.instructions = instructions;
 	}
 
 	public List<String> getRecommendations() {

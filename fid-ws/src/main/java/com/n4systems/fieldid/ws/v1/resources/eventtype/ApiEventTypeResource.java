@@ -111,6 +111,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		apiCriteria.setDisplayText(criteria.getDisplayText());
 		apiCriteria.getRecommendations().addAll(criteria.getRecommendations());
 		apiCriteria.getDeficiencies().addAll(criteria.getDeficiencies());
+		apiCriteria.setInstructions(criteria.getInstructions());
 
 		return apiCriteria;
 	}
