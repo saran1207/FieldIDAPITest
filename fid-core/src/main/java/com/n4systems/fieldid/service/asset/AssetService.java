@@ -135,7 +135,7 @@ public class AssetService extends FieldIdPersistenceService {
     }
     
     public Asset findByMobileId(String mobileId, boolean withArchived) {
-    	QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class, true);
+    	QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class, withArchived);
     	builder.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));
     	Asset asset = persistenceService.find(builder);
     	return asset;
