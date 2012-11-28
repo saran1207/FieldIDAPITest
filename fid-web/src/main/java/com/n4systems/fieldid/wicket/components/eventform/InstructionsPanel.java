@@ -26,7 +26,8 @@ public class InstructionsPanel extends Panel {
             add(text = new RichText("text", new PropertyModel<String>(criteriaModel, "instructions")) {
                 @Override
                 protected String getImagePath() {
-                    return String.format("/criteria/%s/instructions/images/", criteriaModel.getObject().getId());
+                    String path = (criteriaModel.getObject()==null) ? "empty" : criteriaModel.getObject().getId().toString();
+                    return String.format("/criteria/%s/instructions/images/", path);
                 }
             }.withAutoUpdate().withWidth("310px"));
         }
