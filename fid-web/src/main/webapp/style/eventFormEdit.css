@@ -483,3 +483,8 @@ div.verticalEditPanel * {
     background: #eee;
 }
 
+.sub-heading {
+    padding:5px 5px 5px 15px;
+    color : #777;
+    font-size: 13px;
+}
