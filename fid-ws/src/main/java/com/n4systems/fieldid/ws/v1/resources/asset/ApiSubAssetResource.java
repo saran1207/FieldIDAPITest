@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -50,10 +51,11 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
 					persistenceService.save(subAsset);
 					logger.info("SubAsset created for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
 				} else {
-					logger.error("SubAsset already exists for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+					logger.warn("SubAsset already exists for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
 				}
 			} else {
 				logger.error("Failed to find Assets for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+				throw new NotFoundException("SubAsset", masterAssetSid);
 			}
 		}	
 	}
@@ -77,10 +79,11 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
 					persistenceService.delete(subAsset);
 					logger.info("SubAsset deleted for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
 				} else {
-					logger.error("Failed to find SubAset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+					logger.warn("Failed to find SubAset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
 				}
 			} else {
 				logger.error("Failed to find Assets for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+				throw new NotFoundException("SubAsset", masterAssetSid);
 			}
 		}
 	}
