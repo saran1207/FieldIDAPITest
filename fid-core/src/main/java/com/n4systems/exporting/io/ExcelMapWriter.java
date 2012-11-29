@@ -1,12 +1,5 @@
 package com.n4systems.exporting.io;
 
-import static com.google.common.base.Preconditions.*;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import jxl.CellView;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
@@ -14,15 +7,25 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TimeZone;
+
+import static com.google.common.base.Preconditions.checkArgument;
+
 public class ExcelMapWriter implements MapWriter {
 	private final String dateFormat;
+    private final TimeZone timeZone;
 	private WritableWorkbook workbook;
 	private ExcelSheetManager excelSheetManager;
 	private String[] titles;
 	private int currentRow = 0;
 	
-	public ExcelMapWriter(OutputStream out, String dateFormat) throws IOException {
+	public ExcelMapWriter(OutputStream out, String dateFormat, TimeZone timeZone) throws IOException {
 		this.dateFormat = dateFormat;
+        this.timeZone = timeZone;
 		workbook = Workbook.createWorkbook(out);		
 		excelSheetManager = new ExcelSheetManager();  // default..override if need be.
 	}
@@ -39,7 +42,8 @@ public class ExcelMapWriter implements MapWriter {
 	
 	private final void resetManagers() {
 		excelSheetManager.initialize(workbook);
-		excelSheetManager.setDateFormat(dateFormat);		
+		excelSheetManager.setDateFormat(dateFormat);
+        excelSheetManager.setTimeZone(timeZone);
 	}
 
 	@Override

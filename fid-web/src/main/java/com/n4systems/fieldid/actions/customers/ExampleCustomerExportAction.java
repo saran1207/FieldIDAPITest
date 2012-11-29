@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.customers;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.beanutils.ExportMapMarshaller;
@@ -15,6 +9,11 @@ import com.n4systems.fieldid.actions.downloaders.AbstractDownloadAction;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.reporting.PathHandler;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 @SuppressWarnings("serial")
 public class ExampleCustomerExportAction extends AbstractDownloadAction {
@@ -85,7 +84,7 @@ public class ExampleCustomerExportAction extends AbstractDownloadAction {
 		
 		MapWriter writer = null;
 		try {
-			writer = new ExcelMapWriter(new FileOutputStream(exampleFile), getPrimaryOrg().getDateFormat());
+			writer = new ExcelMapWriter(new FileOutputStream(exampleFile), getPrimaryOrg().getDateFormat(), getCurrentUser().getTimeZone());
 			writer.write(marshaler.toBeanMap(createExampleCustomer()));
 			writer.write(marshaler.toBeanMap(createExampleDivision()));
 		} catch (Exception e) {

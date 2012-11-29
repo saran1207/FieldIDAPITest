@@ -1,12 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-
 import com.n4systems.exporting.Exporter;
 import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapWriter;
@@ -15,6 +8,9 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.persistence.savers.Saver;
+
+import java.io.*;
+import java.util.TimeZone;
 
 public class AbstractExportTask extends DownloadTask {
 	protected final Exporter exporter;
@@ -40,11 +36,15 @@ public class AbstractExportTask extends DownloadTask {
 	}
 	
 	protected MapWriter createMapWriter(File downloadFile, User user) throws IOException {
-		return new ExcelMapWriter(getFileStream(downloadFile), getDateFormat(user));
+		return new ExcelMapWriter(getFileStream(downloadFile), getDateFormat(user), getTimeZone(user));
 	}
 	
 	protected String getDateFormat(User user) {
 		return user.getOwner().getPrimaryOrg().getDateFormat();
 	}
+    
+    protected TimeZone getTimeZone(User user) {
+        return user.getTimeZone();
+    }
 
 }

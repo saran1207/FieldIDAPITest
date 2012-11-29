@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.users;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.api.model.UserView;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.ejb.PersistenceManager;
@@ -18,6 +12,11 @@ import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.PasswordComplexityChecker;
 import com.n4systems.security.UserType;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 @SuppressWarnings("serial")
 public class ExampleUserExportAction extends AbstractDownloadAction {
@@ -63,7 +62,7 @@ public class ExampleUserExportAction extends AbstractDownloadAction {
 		
 		MapWriter writer = null;
 		try {
-			writer = new ExcelMapWriter(new FileOutputStream(exampleFile), getPrimaryOrg().getDateFormat());
+			writer = new ExcelMapWriter(new FileOutputStream(exampleFile), getPrimaryOrg().getDateFormat(), getCurrentUser().getTimeZone());
 			writer.write(marshaler.toBeanMap(createExampleUser()));
 		} catch (Exception e) {
 			logger.error("Failed generating example user export", e);

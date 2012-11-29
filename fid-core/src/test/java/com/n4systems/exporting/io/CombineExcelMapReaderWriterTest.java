@@ -1,6 +1,8 @@
 package com.n4systems.exporting.io;
 
-import static org.junit.Assert.*;
+import com.n4systems.model.utils.PlainDate;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -10,10 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.junit.Test;
-
-import com.n4systems.model.utils.PlainDate;
+import static org.junit.Assert.assertEquals;
 
 public class CombineExcelMapReaderWriterTest {
 
@@ -25,7 +24,7 @@ public class CombineExcelMapReaderWriterTest {
 	public void test_read_and_write() throws IOException, ParseException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
-		ExcelMapWriter writer = new ExcelMapWriter(out, "yyyy-MM-dd");
+		ExcelMapWriter writer = new ExcelMapWriter(out, "yyyy-MM-dd", TimeZone.getTimeZone("UTC"));
 		
 		// we loose milliseconds when going to excel so we'll use a date without them
 		Date testDate = new PlainDate();
@@ -49,7 +48,6 @@ public class CombineExcelMapReaderWriterTest {
 		assertEquals("42", outputMap.get("title2"));
 		assertEquals("hello \" world", outputMap.get("title3"));
 		assertEquals("asd,bleh", outputMap.get("title4"));
-		
 		assertEquals(testDate, outputMap.get("title5"));
 	}
 	

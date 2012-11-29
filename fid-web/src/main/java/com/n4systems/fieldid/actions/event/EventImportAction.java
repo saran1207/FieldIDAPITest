@@ -82,7 +82,7 @@ public class EventImportAction extends AbstractImportAction {
 			};
 			EventExporter exporter = new EventExporter(eventLoader, nextDateLoader, new ExportMapMarshaller<EventView>(EventView.class, handlerFactory));
 			
-			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat());
+			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat(), getCurrentUser().getTimeZone());
 			exporter.export(writer);
 			
 		} catch (Exception e) {

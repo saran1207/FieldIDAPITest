@@ -1,17 +1,5 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.AssetExporter;
 import com.n4systems.exporting.Importer;
@@ -32,6 +20,16 @@ import com.n4systems.notifiers.notifications.ImportFailureNotification;
 import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ArrayUtils;
+import org.apache.log4j.Logger;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("serial")
 @UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
@@ -68,7 +66,7 @@ public class AssetImportAction extends AbstractImportAction {
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		try {
-			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat());
+			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat(), getCurrentUser().getTimeZone());
 			exporter.export(writer);
 			
 		} catch (Exception e) {

@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.Callable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -56,12 +57,13 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 		final User user = userService.getUser(userId);
 		checkNotNull(user);		
 		final String dateFormat = user.getOwner().getPrimaryOrg().getDateFormat();
-
+        final TimeZone timeZone = user.getTimeZone();
+        
 		final DownloadLink link = persistenceService.find(DownloadLink.class,linkId);
 
 		LegacyAsyncTask<?> task = asyncService.createLegacyTask(new Callable<Void>() {
 			@Override public Void call() { 
-				generateEventByTypeExport(link.getFile(), link.getId(), eventTypeId, dateFormat, from, to); 
+				generateEventByTypeExport(link.getFile(), link.getId(), eventTypeId, dateFormat, timeZone, from, to);
 				return null;  // Void 
 			}
 
@@ -69,8 +71,8 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 		asyncService.run(task);				
 	}
 	
-	protected MapWriter createMapWriter(File downloadFile, String dateFormat) throws IOException {
-		return new ExcelMapWriter(new FileOutputStream(downloadFile), dateFormat).withExcelSheetManager(new EventExcelSheetManager());
+	protected MapWriter createMapWriter(File downloadFile, String dateFormat, TimeZone timeZone) throws IOException {
+		return new ExcelMapWriter(new FileOutputStream(downloadFile), dateFormat, timeZone).withExcelSheetManager(new EventExcelSheetManager());
 	}
 	
 	private void updateDownloadLinkState(Long linkId, DownloadState state) {
@@ -79,11 +81,11 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 		persistenceService.save(downloadLink);
 	}		
 
-	private void generateEventByTypeExport(File file, Long downloadLinkId, Long eventTypeId, String dateFormat, Date from, Date to) {
+	private void generateEventByTypeExport(File file, Long downloadLinkId, Long eventTypeId, String dateFormat, TimeZone timeZone, Date from, Date to) {
 		MapWriter mapWriter = null;
 		try {
 			updateDownloadLinkState(downloadLinkId, DownloadState.INPROGRESS);
-			mapWriter = createMapWriter(file, dateFormat);
+			mapWriter = createMapWriter(file, dateFormat, timeZone);
 			export(mapWriter, eventTypeId, from, to);
 			updateDownloadLinkState(downloadLinkId, DownloadState.COMPLETED);
 		} catch (Exception e) {

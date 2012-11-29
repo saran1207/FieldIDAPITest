@@ -1,5 +1,7 @@
 package com.n4systems.exporting.io;
 
+import com.n4systems.model.utils.PlainDate;
+import com.n4systems.util.DateHelper;
 import jxl.write.*;
 
 import java.lang.Boolean;
@@ -7,6 +9,7 @@ import java.lang.Number;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 class ExcelCellManager {
@@ -14,6 +17,7 @@ class ExcelCellManager {
 	private Map<String,AtomicInteger> sheetColumns = new HashMap<String,AtomicInteger>();
     private Map<String, WritableCellFormat> dateCellFormats = new HashMap<String, WritableCellFormat>();
 	private String dateFormat = "mm/dd/yy";
+    private TimeZone timeZone;
 
 	public ExcelCellManager() { 
 	}
@@ -37,7 +41,15 @@ class ExcelCellManager {
 		} else if (value instanceof Boolean) {
 			cell = new jxl.write.Boolean(col, row, (Boolean)value);
 		} else if (value instanceof Date) {
-			cell = new DateTime(col, row, (Date)value, getDateCellFormat(dateFormat), DateTime.GMT);
+
+            Date date;
+            if (value instanceof PlainDate) {
+                date = (Date)value;
+            } else {
+                date = DateHelper.convertToUserTimeZone((Date)value, timeZone);
+            }
+
+			cell = new DateTime(col, row, date, getDateCellFormat(dateFormat));
 		} else {
 			cell = new Label(col, row, value.toString());
 		}		
@@ -52,6 +64,10 @@ class ExcelCellManager {
 	public void setDateFormat(String dateFormat) { 
 		this.dateFormat = dateFormat;
 	}
+
+    public void setTimeZone(TimeZone timeZone) {
+        this.timeZone = timeZone;
+    }
 
     private WritableCellFormat getDateCellFormat(String dateFormat) {
         if (dateCellFormats.get(dateFormat) == null) {

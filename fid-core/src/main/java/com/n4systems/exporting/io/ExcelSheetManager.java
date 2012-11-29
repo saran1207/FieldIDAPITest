@@ -1,17 +1,17 @@
 package com.n4systems.exporting.io;
 
-import static com.google.common.base.Preconditions.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
-
 import org.apache.log4j.Logger;
 import org.springframework.util.CollectionUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 public class ExcelSheetManager {
 	private static final Logger logger = Logger.getLogger(ExcelSheetManager.class);
@@ -71,6 +71,10 @@ public class ExcelSheetManager {
 	public void setDateFormat(String dateFormat) {
 		getExcelCellManager().setDateFormat(dateFormat);
 	}
+
+    public void setTimeZone(TimeZone timeZone) {
+        getExcelCellManager().setTimeZone(timeZone);
+    }
 
 	protected void setExcelCellManager(ExcelCellManager excelCellManager) {
 		this.excelCellManager = excelCellManager;
