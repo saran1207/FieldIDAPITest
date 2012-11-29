@@ -63,7 +63,7 @@ public class AssetReportMapProducer extends ReportMapProducer {
 	}
 
 	private File assetTypeImagePath(AssetType assetType) {
-		return (assetType.hasImage()) ? new File(PathHandler.getAssetTypeImageFile(assetType), assetType.getImageName()) : null;
+		return (assetType.hasImage()) ? PathHandler.getAssetTypeImageFile(assetType) : null;
 	}
 
     private File assetProfileImagePath(Asset asset) {

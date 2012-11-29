@@ -45,7 +45,6 @@ public abstract class ReportMapProducer {
 			return new FieldIdDateFormatter(date, dateTimeDefinition, false, showTime).format();
 		}
 		return new FieldIdDateFormatter(date, dateTimeDefinition, true, showTime).format();
-		
 	}
 
 	protected void add(String key, Object value) {
