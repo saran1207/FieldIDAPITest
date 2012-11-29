@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Tenant;
@@ -33,7 +34,7 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceService {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public void saveEventAttachment(ApiEventAttachment apiAttachment) {
+	public void saveEventAttachment(ApiEventAttachment apiAttachment) throws IOException {
 		QueryBuilder<Event> query = createTenantSecurityBuilder(Event.class);
         query.addWhere(WhereClauseFactory.create("mobileGUID", apiAttachment.getEventSid()));
         Event event = persistenceService.find(query);
@@ -48,9 +49,9 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceService {
 			try {
 				FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
 			} catch (IOException e) {
-				logger.error("Failed Saving Event Attachment. Unable to find Event: " + apiAttachment.getEventSid());
+				logger.error("Failed Saving Event Attachment for Event: " + apiAttachment.getEventSid());
 				e.printStackTrace();
-				return;
+				throw e;
 			}
 
 			// clean up the temp file
@@ -66,6 +67,7 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceService {
         	logger.info("Saved Event Attachment for Event: " + apiAttachment.getEventSid());
         } else {
         	logger.error("Failed Saving Event Attachment. Unable to find Event: " + apiAttachment.getEventSid());
+        	throw new NotFoundException("Event", apiAttachment.getEventSid());
         }
 	}
 	
