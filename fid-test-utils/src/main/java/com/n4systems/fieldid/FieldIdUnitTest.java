@@ -1,16 +1,18 @@
 package com.n4systems.fieldid;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
+import org.joda.time.*;
 
-import java.util.Date;
+import java.util.TimeZone;
 
 public class FieldIdUnitTest {
 
+    protected LocalDate jan1_2011 = new LocalDate(getTimeZone()).withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
+    protected LocalDate jan1_2015 = new LocalDate(getTimeZone()).withYear(2015).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
+    protected LocalDate feb29_2012 = new LocalDate(getTimeZone()).withYear(2012).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(29);
+    protected LocalDate dec27_2011 = new LocalDate(getTimeZone()).withYear(2011).withMonthOfYear(DateTimeConstants.DECEMBER).withDayOfMonth(27);
+    protected DateTime jan1_2011_midnight = new DateTime(jan1_2011.toDate());
+
     protected void setCurrentMillisFixed(long time) {
-        LocalDate JAN1 = new LocalDate(new Date(), DateTimeZone.UTC);
         DateTimeUtils.setCurrentMillisFixed(time);
     }
 
@@ -22,4 +24,18 @@ public class FieldIdUnitTest {
         setCurrentMillisFixed(localDate.toDate().getTime());
     }
 
+    protected DateTimeZone getTimeZone() {
+        return DateTimeZone.UTC;
+    }
+
+    protected final void setTestTime() {
+        // by default, we'll reset all tests to a fixed time.
+        TimeZone.setDefault(DateTimeZone.UTC.toTimeZone());
+        DateTimeZone.setDefault(DateTimeZone.UTC);
+        DateTimeUtils.setCurrentMillisFixed(getTestTime());
+    }
+
+    protected long getTestTime() {
+        return jan1_2011.toDate().getTime();
+    }
 }
