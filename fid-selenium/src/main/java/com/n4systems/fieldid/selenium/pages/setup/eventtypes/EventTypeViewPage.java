@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.selenium.pages.setup.eventtypes;
 
-import static org.junit.Assert.*;
+import com.n4systems.fieldid.selenium.pages.FieldIDPage;
+import com.thoughtworks.selenium.Selenium;
 
 import java.util.List;
 
-import com.n4systems.fieldid.selenium.pages.FieldIDPage;
-import com.thoughtworks.selenium.Selenium;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class EventTypeViewPage extends FieldIDPage {
 
@@ -15,7 +16,7 @@ public class EventTypeViewPage extends FieldIDPage {
 	
 	public EventTypeViewPage(Selenium selenium, boolean waitForLoad) {
 		super(selenium, waitForLoad);
-		assertTitleAndTab("Manage Event Type", "View");
+		assertTitleAndTab("View Event Type", "View");
 	}
 	
 	public String getEventTypeName() {
