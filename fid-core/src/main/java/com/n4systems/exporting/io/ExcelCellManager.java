@@ -17,7 +17,7 @@ class ExcelCellManager {
 	private Map<String,AtomicInteger> sheetColumns = new HashMap<String,AtomicInteger>();
     private Map<String, WritableCellFormat> dateCellFormats = new HashMap<String, WritableCellFormat>();
 	private String dateFormat = "mm/dd/yy";
-    private TimeZone timeZone;
+    private TimeZone timeZone = TimeZone.getDefault();
 
 	public ExcelCellManager() { 
 	}
