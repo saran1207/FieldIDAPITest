@@ -84,14 +84,17 @@ public class AssetManagerImpl implements AssetManager {
 	@Override
 	public Asset findAssetAllFields(Long id, SecurityFilter filter) {
 		Asset asset =  findAsset(id, filter, "infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName");
-		asset = fillInSubAssetsOnAsset(asset);
-		
-		// load linked assets all the way up the chain
-		Asset linkedAsset = asset.getLinkedAsset();
-		while (linkedAsset != null) {
-			linkedAsset = linkedAsset.getLinkedAsset();
-		}
-		
+
+        if (asset != null) {
+            asset = fillInSubAssetsOnAsset(asset);
+
+            // load linked assets all the way up the chain
+            Asset linkedAsset = asset.getLinkedAsset();
+            while (linkedAsset != null) {
+                linkedAsset = linkedAsset.getLinkedAsset();
+            }
+        }
+
 		return asset;
 	}
 
