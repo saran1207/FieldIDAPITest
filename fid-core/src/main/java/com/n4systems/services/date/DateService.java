@@ -60,14 +60,14 @@ public class DateService extends FieldIdPersistenceService {
     }
 
     public Date todayAsDate() {
-        return new LocalDate(new DateMidnight(DateTimeZone.forTimeZone(getUserTimeZone()))).toDate();
+        return today().toDate();
     }
 
     public LocalDate todayUTC() {
         return new LocalDate(new DateMidnight(DateTimeZone.UTC));
     }
 
-    public TimeZone getUsersTimeZone() {
+    public TimeZone getUserTimeZone() {
         return super.getUserTimeZone();
     }
 

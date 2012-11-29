@@ -4,14 +4,14 @@ import com.google.common.collect.Maps;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.DateTimeUtils;
-import org.joda.time.LocalDate;
+import org.joda.time.*;
+import org.junit.Before;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.verify;
@@ -32,15 +32,17 @@ public class FieldIdServiceTest extends FieldIdUnitTest {
 
 	private static final Logger logger = Logger.getLogger(FieldIdServiceTest.class);
 
-    protected LocalDate jan1_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
-    protected LocalDate jan1_2015 = new LocalDate().withYear(2015).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
-    protected LocalDate feb29_2012 = new LocalDate().withYear(2012).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(29);
-    protected LocalDate dec27_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.DECEMBER).withDayOfMonth(27);
+    protected LocalDate jan1_2011 = new LocalDate(getTimeZone()).withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
+    protected LocalDate jan1_2015 = new LocalDate(getTimeZone()).withYear(2015).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
+    protected LocalDate feb29_2012 = new LocalDate(getTimeZone()).withYear(2012).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(29);
+    protected LocalDate dec27_2011 = new LocalDate(getTimeZone()).withYear(2011).withMonthOfYear(DateTimeConstants.DECEMBER).withDayOfMonth(27);
+    protected DateTime jan1_2011_midnight = new DateTime(jan1_2011.toDate());
 
     public FieldIdServiceTest() {
 		super();
 	}
 
+    @Before
 	public void setUp() {
 		try {
 			Field sutField = findSutField();
@@ -53,8 +55,14 @@ public class FieldIdServiceTest extends FieldIdUnitTest {
 		}
 	}
 
-    private final void setTestTime() {
+    protected DateTimeZone getTimeZone() {
+        return DateTimeZone.UTC;
+    }
+
+    protected final void setTestTime() {
         // by default, we'll reset all tests to a fixed time. over
+        TimeZone.setDefault(DateTimeZone.UTC.toTimeZone());
+        DateTimeZone.setDefault(DateTimeZone.UTC);
         DateTimeUtils.setCurrentMillisFixed(getTestTime());
     }
 
@@ -122,6 +130,6 @@ public class FieldIdServiceTest extends FieldIdUnitTest {
 	}
 
     protected long getTestTime() {
-        return jan1_2011.toDate().getTime();
+        return new LocalDate(getTimeZone()).withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1).toDate().getTime();
     }
 }

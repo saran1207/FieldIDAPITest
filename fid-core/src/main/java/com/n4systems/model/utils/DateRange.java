@@ -109,6 +109,10 @@ public class DateRange implements Serializable, Cloneable {
         return this;
     }
 
+    public TimeZone getTimeZone() {
+        return getHandler().getTimeZone();
+    }
+
     private DateRangeHandler getHandler() {
 		if (RangeType.CUSTOM.equals(rangeType)) {
 			return new IntervalHandler(fromDate,toDate);
@@ -206,6 +210,11 @@ public class DateRange implements Serializable, Cloneable {
         @Override
         public void setTimeZone(TimeZone timeZone) {
             this.timeZone = timeZone; // irrelevant...user is specifying dates like Jan1-Feb 23.  not TZ's needed.
+        }
+
+        @Override
+        public TimeZone getTimeZone() {
+            return timeZone;
         }
     }
 	

@@ -56,7 +56,7 @@ public class UpcomingEventsPanel extends Panel {
                 DayDisplayModel upcomingEventDate = new DayDisplayModel(Model.of(schedule.getDueDate())).includeTime();
                 
                 if (isPastDue(schedule)) {
-                    TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingEventDate",Model.of(schedule.getDueDate()),dateService.getUsersTimeZone());
+                    TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingEventDate",Model.of(schedule.getDueDate()),dateService.getUserTimeZone());
                     item.add(timeAgoField);
                 } else if(dateService.getDaysFromToday(schedule.getDueDate()).equals(0L)) {
                     item.add(new Label("upcomingEventDate", new FIDLabelModel("label.today")));

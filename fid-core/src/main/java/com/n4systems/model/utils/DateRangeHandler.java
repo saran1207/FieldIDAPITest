@@ -11,4 +11,5 @@ public interface DateRangeHandler extends Serializable {
 	LocalDate getNowTo();
 	Period getPeriod();
     void setTimeZone(TimeZone timeZone);
+    TimeZone getTimeZone();
 }
