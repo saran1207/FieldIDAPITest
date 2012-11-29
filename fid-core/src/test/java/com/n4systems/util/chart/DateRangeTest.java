@@ -4,12 +4,12 @@ import com.n4systems.fieldid.FieldIdUnitTest;
 import com.n4systems.model.utils.DateRange;
 import org.hamcrest.collection.IsIn;
 import org.joda.time.DateTimeConstants;
-import org.joda.time.DateTimeUtils;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import java.util.EnumSet;
+import java.util.TimeZone;
 
 import static org.junit.Assert.*;
 
@@ -20,8 +20,7 @@ public class DateRangeTest extends FieldIdUnitTest {
 	
 	@Test
 	public void testFromToDelta() {
-		// for testing purposes i will set the current time.
-		DateTimeUtils.setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		setCurrentMillisFixed(jan1_2011);
 		
 		assertFromToDelta(new DateRange(RangeType.THIS_WEEK), 7);
 		assertFromToDelta(new DateRange(RangeType.THIS_MONTH), 28, 29, 30, 31);
@@ -56,7 +55,7 @@ public class DateRangeTest extends FieldIdUnitTest {
 
 	@Test
 	public void test_FromDate() {
-		setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		setCurrentMillisFixed(jan1_2011);
 		
 		//year
         LocalDate lastYear = new DateRange(RangeType.LAST_YEAR).getFrom();
@@ -147,7 +146,7 @@ public class DateRangeTest extends FieldIdUnitTest {
 		// .: the from & to dates for last month are Dec 1-Jan 1.   (not Dec 1-Dec 31).
 		// this is done to facilitate querying and comparing.
 		
-		setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		setCurrentMillisFixed(jan1_2011);
 		
 		//year
         LocalDate lastYear = new DateRange(RangeType.LAST_YEAR).getTo();
@@ -241,7 +240,7 @@ public class DateRangeTest extends FieldIdUnitTest {
     // i.e. -Duser.timezone=UTC
 	@Test
 	public void test_display() {
-		setCurrentMillisFixed(jan1_2011.toDate().getTime());
+		setCurrentMillisFixed(jan1_2011);
 
 		assertEquals("All Time", new DateRange(RangeType.FOREVER).getFromDateDisplayString() );
 		
@@ -275,5 +274,180 @@ public class DateRangeTest extends FieldIdUnitTest {
 		assertEquals("Dec 31", new DateRange(RangeType.YESTERDAY).getFromDateDisplayString());
 				
 	}
-	
+
+
+    @Test
+    public void test_timeZones() {
+        setCurrentMillisFixed(jan1_2011_midnight.withHourOfDay(22));
+
+        //year
+        TimeZone timeZone = TimeZone.getTimeZone("Europe/Athens");
+        int offset = timeZone.getOffset(new LocalDate().toDate().getTime());
+        System.out.println("testing date ranges with GMT offset of " + offset);
+
+        LocalDate lastYear = new DateRange(RangeType.LAST_YEAR, timeZone).getFrom();
+        assertEquals(2010, lastYear.getYear());
+        assertEquals(1, lastYear.getDayOfYear());
+        assertEquals(1, lastYear.getMonthOfYear());
+
+        LocalDate thisYear = new DateRange(RangeType.THIS_YEAR,timeZone).getFrom();
+        assertEquals(2011, thisYear.getYear());
+        assertEquals(1, thisYear.getDayOfYear());
+        assertEquals(1, thisYear.getMonthOfYear());
+
+        LocalDate nextYear = new DateRange(RangeType.NEXT_YEAR,timeZone).getFrom();
+        assertEquals(2012, nextYear.getYear());
+        assertEquals(1, nextYear.getDayOfYear());
+        assertEquals(1, nextYear.getMonthOfYear());
+
+
+        //quarter
+        LocalDate lastQuarter = new DateRange(RangeType.LAST_QUARTER,timeZone).getFrom();
+        assertEquals(2010, lastQuarter.getYear());
+        assertEquals(DateTimeConstants.OCTOBER, lastQuarter.getMonthOfYear());
+        assertEquals(1, lastQuarter.getDayOfMonth());
+
+        LocalDate thisQuarter = new DateRange(RangeType.THIS_QUARTER,timeZone).getFrom();
+        assertEquals(2011, thisQuarter.getYear());
+        assertEquals(DateTimeConstants.JANUARY, thisQuarter.getMonthOfYear());
+        assertEquals(1, thisQuarter.getDayOfYear());
+
+        LocalDate nextQuarter = new DateRange(RangeType.NEXT_QUARTER,timeZone).getFrom();
+        assertEquals(2011, nextQuarter.getYear());
+        assertEquals(DateTimeConstants.APRIL, nextQuarter.getMonthOfYear());
+        assertEquals(1, nextQuarter.getDayOfMonth());
+
+
+        //month
+        LocalDate lastMonth = new DateRange(RangeType.LAST_MONTH).getFrom();
+        assertEquals(DateTimeConstants.DECEMBER, lastMonth.getMonthOfYear());
+        assertEquals(2010, lastMonth.getYear());
+        assertEquals(1, lastMonth.getDayOfMonth());
+
+        LocalDate thisMonth = new DateRange(RangeType.THIS_MONTH,timeZone).getFrom();
+        assertEquals(DateTimeConstants.JANUARY, thisMonth.getMonthOfYear());
+        assertEquals(2011, thisMonth.getYear());
+        assertEquals(1, thisMonth.getDayOfMonth());
+
+        LocalDate nextMonth = new DateRange(RangeType.NEXT_MONTH,timeZone).getFrom();
+        assertEquals(DateTimeConstants.FEBRUARY, nextMonth.getMonthOfYear());
+        assertEquals(2011, nextMonth.getYear());
+        assertEquals(1, nextMonth.getDayOfMonth());
+
+
+        //week
+        LocalDate lastWeek = new DateRange(RangeType.LAST_WEEK,timeZone).getFrom();
+        assertEquals(DateTimeConstants.DECEMBER, lastWeek.getMonthOfYear());
+        assertEquals(2010, lastWeek.getYear());
+        assertEquals(1, lastWeek.getDayOfWeek());
+
+        LocalDate thisWeek = new DateRange(RangeType.THIS_WEEK,timeZone).getFrom();
+        assertEquals(DateTimeConstants.DECEMBER, thisWeek.getMonthOfYear());
+        assertEquals(2010, thisWeek.getYear());
+        assertEquals(1, thisWeek.getDayOfWeek());
+
+        LocalDate nextWeek = new DateRange(RangeType.NEXT_WEEK,timeZone).getFrom();
+        assertEquals(DateTimeConstants.JANUARY, nextWeek.getMonthOfYear());
+        assertEquals(2011, nextWeek.getYear());
+        assertEquals(1, nextWeek.getDayOfWeek());
+
+        //day  NOTE how timezones affect these values.  because it's GMT+offset we hit a dateline so the days are off by one.
+        DateRange yesterday = new DateRange(RangeType.YESTERDAY,timeZone);
+        assertEquals(jan1_2011, yesterday.getFrom());
+        assertEquals(jan1_2011.plusDays(1), new DateRange(RangeType.TODAY,timeZone).getFrom());
+        assertEquals(jan1_2011.plusDays(2), new DateRange(RangeType.TOMORROW,timeZone).getFrom());
+
+        // CAVEAT : "this week" for jan 1,2011 actually starts in dec and ends in jan.
+        assertEquals(DateTimeConstants.DECEMBER, thisWeek.getMonthOfYear());
+        assertEquals(2010, thisWeek.getYear());
+        assertEquals(1, thisWeek.getDayOfWeek());
+
+        // all time...forever
+        assertNull(new DateRange(RangeType.FOREVER,timeZone).getFrom());
+        assertNull(new DateRange(RangeType.CUSTOM,timeZone).getFrom());
+
+        //year
+        lastYear = new DateRange(RangeType.LAST_YEAR,timeZone).getTo();
+        assertEquals(2011, lastYear.getYear());
+        assertEquals(1, lastYear.getDayOfYear());
+        assertEquals(1, lastYear.getMonthOfYear());
+
+        thisYear = new DateRange(RangeType.THIS_YEAR,timeZone).getTo();
+        assertEquals(2012, thisYear.getYear());
+        assertEquals(DateTimeConstants.JANUARY, thisYear.getMonthOfYear());
+        assertEquals(1, thisYear.getDayOfYear());
+
+        nextYear = new DateRange(RangeType.NEXT_YEAR,timeZone).getTo();
+        assertEquals(2013, nextYear.getYear());
+        assertEquals(DateTimeConstants.JANUARY, nextYear.getMonthOfYear());
+        assertEquals(1, nextYear.getDayOfYear());
+
+
+        //quarter
+        lastQuarter = new DateRange(RangeType.LAST_QUARTER,timeZone).getTo();
+        assertEquals(2011, lastQuarter.getYear());
+        assertEquals(DateTimeConstants.JANUARY, lastQuarter.getMonthOfYear());
+        assertEquals(1, lastQuarter.getDayOfMonth());
+
+        thisQuarter = new DateRange(RangeType.THIS_QUARTER,timeZone).getTo();
+        assertEquals(2011, thisQuarter.getYear());
+        assertEquals(DateTimeConstants.APRIL, thisQuarter.getMonthOfYear());
+        assertEquals(1, thisQuarter.getDayOfMonth());
+
+        nextQuarter = new DateRange(RangeType.NEXT_QUARTER,timeZone).getTo();
+        assertEquals(2011, nextQuarter.getYear());
+        assertEquals(DateTimeConstants.JULY, nextQuarter.getMonthOfYear());
+        assertEquals(1, nextQuarter.getDayOfMonth());
+
+
+        //month
+        lastMonth = new DateRange(RangeType.LAST_MONTH,timeZone).getTo();
+        assertEquals(DateTimeConstants.JANUARY, lastMonth.getMonthOfYear());
+        assertEquals(2011, lastMonth.getYear());
+        assertEquals(1, lastMonth.getDayOfMonth());
+
+         thisMonth = new DateRange(RangeType.THIS_MONTH,timeZone).getTo();
+        assertEquals(DateTimeConstants.FEBRUARY, thisMonth.getMonthOfYear());
+        assertEquals(2011, thisMonth.getYear());
+        assertEquals(1, thisMonth.getDayOfMonth());
+
+         nextMonth = new DateRange(RangeType.NEXT_MONTH,timeZone).getTo();
+        assertEquals(DateTimeConstants.MARCH, nextMonth.getMonthOfYear());
+        assertEquals(2011, nextMonth.getYear());
+        assertEquals(1, nextMonth.getDayOfMonth());
+
+        //week
+         lastWeek = new DateRange(RangeType.LAST_WEEK,timeZone).getTo();
+        assertEquals(DateTimeConstants.DECEMBER, lastWeek.getMonthOfYear());
+        assertEquals(2010, lastWeek.getYear());
+        assertEquals(1, lastWeek.getDayOfWeek());
+
+        // CAVEAT : "this week" for jan 1,2011 actually starts in dec and ends in jan 3.
+         thisWeek = new DateRange(RangeType.THIS_WEEK,timeZone).getTo();
+        assertEquals(DateTimeConstants.JANUARY, thisWeek.getMonthOfYear());
+        assertEquals(2011, thisWeek.getYear());
+        assertEquals(1,thisWeek.getWeekOfWeekyear());
+        assertEquals(3, thisWeek.getDayOfMonth());
+        assertEquals(1, thisWeek.getDayOfWeek());
+
+        // next = jan 3--jan 10
+         nextWeek = new DateRange(RangeType.NEXT_WEEK,timeZone).getTo();
+        assertEquals(DateTimeConstants.JANUARY, nextWeek.getMonthOfYear());
+        assertEquals(2011, nextWeek.getYear());
+        assertEquals(2,nextWeek.getWeekOfWeekyear());
+        assertEquals(10, nextWeek.getDayOfMonth());
+        assertEquals(1, nextWeek.getDayOfWeek());
+
+        // daily  NOTE how timezones push the dates up one.  (we're using a timezone that is GMT+offset so any values where hour > 24-offset will be pushed into next day.
+        assertEquals(jan1_2011.plusDays(1), new DateRange(RangeType.YESTERDAY,timeZone).getTo());
+        assertEquals(jan1_2011.plusDays(2), new DateRange(RangeType.TODAY,timeZone).getTo());
+        assertEquals(jan1_2011.plusDays(3), new DateRange(RangeType.TOMORROW,timeZone).getTo());
+
+        // all time...forever
+        assertNull(new DateRange(RangeType.FOREVER,timeZone).getTo());
+        assertNull(new DateRange(RangeType.CUSTOM,timeZone).getTo());
+
+    }
+
+
 }
