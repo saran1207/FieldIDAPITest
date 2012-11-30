@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import static org.junit.Assert.*;
-
 import com.thoughtworks.selenium.Selenium;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 public class WebPage extends WebEntity {
 
-    private static final String ERROR_MESSAGE_COUNT_XPATH = "//*[@class='errorMessage' and not(contains(@style,'display: none'))]";
+    private static final String ERROR_MESSAGE_COUNT_XPATH = "//ul/li/*[@class='errorMessage' and not(contains(@style,'display: none'))]";
     public static final String DEFAULT_TIMEOUT = "20000";
 
 	public WebPage(Selenium selenium, boolean waitForLoad) {
