@@ -18,6 +18,7 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.model.Event;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
+import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.StreamUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -86,7 +87,7 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 		try {
 			updateDownloadLinkState(downloadLinkId, DownloadState.INPROGRESS);
 			mapWriter = createMapWriter(file, dateFormat, timeZone);
-			export(mapWriter, eventTypeId, from, to);
+			export(mapWriter, eventTypeId, from, to, dateFormat, timeZone);
 			updateDownloadLinkState(downloadLinkId, DownloadState.COMPLETED);
 		} catch (Exception e) {
             log.error(e);
@@ -96,9 +97,9 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 		}
 	}
 								
-	private void export(MapWriter excelMapWriter, Long eventTypeId, Date from, Date to) throws ConversionException, IOException, MarshalingException  {	
+	private void export(MapWriter excelMapWriter, Long eventTypeId, Date from, Date to, String dateFormat, TimeZone timeZone) throws ConversionException, IOException, MarshalingException  {
 		ExportMapMarshaller<EventView> exportMapMarshaller = new ExportMapMarshaller<EventView>(EventView.class);
-		ModelToViewConverter<Event,EventView> converter = new EventToViewConverter();
+		ModelToViewConverter<Event,EventView> converter = new EventToViewConverter(new NextEventDateByEventPassthruLoader(), dateFormat, timeZone);
 
         to = DateUtils.addDays(to, 1);
 		List<Event> events = eventService.getEventsByType(eventTypeId, from, to);
