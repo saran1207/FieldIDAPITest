@@ -43,7 +43,7 @@ public class EventResolutionService extends FieldIdPersistenceService {
     private void addResultToSet(EventSetSummary eventSetSummary, Event event) {
         eventSetSummary.incrementEventsDue();
 
-        if (event.getEventState() == Event.EventState.COMPLETED) {
+        if (event.getEventState() == Event.EventState.COMPLETED || event.getEventState() == Event.EventState.CLOSED) {
             eventSetSummary.incrementEventsCompleted();
 
             if (event.getStatus() == Status.PASS) {
@@ -52,6 +52,8 @@ public class EventResolutionService extends FieldIdPersistenceService {
             if (event.getStatus() == Status.FAIL) {
                 eventSetSummary.incrementFailedEvents();
             }
+        } else if (event.getEventState() == Event.EventState.OPEN) {
+            eventSetSummary.incrementOutstandingEvents();
         }
     }
 

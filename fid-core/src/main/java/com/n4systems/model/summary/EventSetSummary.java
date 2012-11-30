@@ -11,6 +11,7 @@ public class EventSetSummary implements Serializable {
     private int eventsCompleted = 0;
     private int eventsPassed = 0;
     private int eventsFailed = 0;
+    private int eventsOutstanding = 0;
 
     public int getEventsDue() {
         return eventsDue;
@@ -45,7 +46,11 @@ public class EventSetSummary implements Serializable {
     }
 
     public int getEventsOutstanding() {
-        return eventsDue - eventsCompleted;
+        return eventsOutstanding;
+    }
+
+    public void incrementOutstandingEvents() {
+        this.eventsOutstanding++;
     }
 
     public String getName() {

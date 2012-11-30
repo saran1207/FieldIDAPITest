@@ -160,6 +160,9 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
     }
 
     private void populateOutstandingInto(EventReportCriteria criteriaModel) {
+        if (criteriaModel.getEventState() != EventState.OPEN) {
+            criteriaModel.setDueDateRange(criteria.getDateRange());
+        }
         criteriaModel.setEventState(EventState.OPEN);
     }
 
