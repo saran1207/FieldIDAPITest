@@ -182,9 +182,15 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
             String[] sortExpressions = sortColumn.getSortExpression().split(",");
             String[] joinExpressions = sortColumn.getJoinExpression().split(",");
 
+
             for (int i = 0; i < sortExpressions.length; i++) {
                 String sortAlias = JoinTerm.DEFAULT_SORT_JOIN_ALIAS + i;
 
+                // CAVEAT : if sortExpressions & joinExpressions are of different length, then you will be in trouble.
+                // this should NEVER happen but if it does look for the offending values in ColumnMappings table and make sure the lengths matchup.
+                // eg.   sort_expression                                join_expression
+                //         assignee.firstName,assignee.lastName          assignee                       WRONG - boo!   2 values for sort != 1 for join
+                //         assignee.firstName,assignee.lastName          assignee,assignee              RIGHT - yay   2 values for sort == 2 for join
                 String sortExpression = sortExpressions[i];
                 String joinExpression = joinExpressions[i];
 
@@ -201,6 +207,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
                     sortTerm.setFieldAfterAlias(sortExpression.substring(sortExpression.lastIndexOf(".") + 1));
                 }
 
+                searchBuilder.getOrderArguments().add(sortTerm.toSortField());
                 searchBuilder.getOrderArguments().add(sortTerm.toSortField());
 
             }

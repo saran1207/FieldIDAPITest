@@ -61,4 +61,12 @@ public class GroupedListableDropDownChoice extends GroupedDropDownChoice<Grouped
         super(id, groupedListingPairIModel, choices, iChoiceRenderer);
     }
 
+    @Override
+    public String getModelValue() {
+        GroupedListingPair listingPair = getModelObject();
+        if (listingPair==null || listingPair.getId()==null) {
+            return "";
+        }
+        return super.getModelValue();
+    }
 }
