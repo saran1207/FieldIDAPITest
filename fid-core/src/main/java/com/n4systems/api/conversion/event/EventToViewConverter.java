@@ -8,20 +8,33 @@ import com.n4systems.model.*;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.util.DateHelper;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class EventToViewConverter implements ModelToViewConverter<Event, EventView> {
 	private final NextEventDateByEventLoader nextDateLoader;
-	
-	public EventToViewConverter(NextEventDateByEventLoader nextDateLoader) {
+    private String dateFormat = "mm/dd/yy";
+    private TimeZone timeZone;
+
+	public EventToViewConverter(NextEventDateByEventLoader nextDateLoader, String dateFormat, TimeZone timeZone) {
 		this.nextDateLoader = nextDateLoader;
+        if(dateFormat != null)
+            this.dateFormat = dateFormat;
+        this.timeZone = timeZone;
 	}
 
+    public EventToViewConverter(NextEventDateByEventLoader nextDateLoader) {
+        this(nextDateLoader, null, TimeZone.getDefault());
+    }
+
 	public EventToViewConverter() {
-		this(new NextEventDateByEventPassthruLoader());
+		this(new NextEventDateByEventPassthruLoader(), null, TimeZone.getDefault());
 	}
 
 	@Override
@@ -63,11 +76,28 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 		resultView.setDisplayText(result.getCriteria().getDisplayText());
 		resultView.setRecommendation(getRecommendation(result));		
 		resultView.setDeficiencyString(getDeficiency(result));
-		resultView.setResultString(result.getResultString());
+        if(criteria instanceof DateFieldCriteria)
+            setDateFieldResultString(resultView, result);
+        else
+		    resultView.setResultString(result.getResultString());
 		return resultView;
 	}
 
-	private String getDeficiency(CriteriaResult result) {
+    private void setDateFieldResultString(CriteriaResultView resultView, CriteriaResult result) {
+        if(!result.getResultString().isEmpty()) {
+            Date date = DateHelper.convertToUserTimeZone( ((DateFieldCriteriaResult) result).getValue() , timeZone);
+            resultView.setResultString(getDateFormat((DateFieldCriteria)result.getCriteria()).format(date));
+        }
+    }
+
+    private DateFormat getDateFormat(DateFieldCriteria criteria) {
+        if(criteria.isIncludeTime())
+            return new SimpleDateFormat(dateFormat + " h:mm a");
+        else
+            return new SimpleDateFormat(dateFormat);
+    }
+
+    private String getDeficiency(CriteriaResult result) {
 		return result.getDeficiencies().size() > 0 ? result.getDeficiencies().get(0).getText() : "";
 	}
 
