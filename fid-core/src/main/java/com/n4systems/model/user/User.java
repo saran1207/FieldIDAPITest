@@ -49,7 +49,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private boolean locked;
 	private Date lockedUntil;
 	private Date passwordChanged;
-    private boolean displayLastRunSearches;
+    private boolean displayLastRunSearches = true;
 
     @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "lastRunReportId")
