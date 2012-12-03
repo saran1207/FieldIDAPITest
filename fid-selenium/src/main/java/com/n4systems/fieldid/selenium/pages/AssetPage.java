@@ -97,7 +97,7 @@ public class AssetPage extends WicketFieldIDPage {
 	}
 
 	public String getIdentifier() {
-		return selenium.getText("//label[.='Serial Number']/../span");
+		return selenium.getText("//div[@id='pageContent']/div[@class='header']/h1/span[2]");
 	}
 
 	public String getAssetType() {
@@ -237,7 +237,7 @@ public class AssetPage extends WicketFieldIDPage {
 	}
 
     public String getValueForAttribute(String attributeName) {
-        return selenium.getText("//span[@infofieldname='"+attributeName+"']");
+        return selenium.getText("//div[@class='assetDetails']/p/label[.='" + attributeName + "']/../span");
     }
 
 	public void clickMerge() {
@@ -264,7 +264,7 @@ public class AssetPage extends WicketFieldIDPage {
     }
 
     public boolean wasMergeSuccessful(String firstIdentifier, String mergeIdentifier) {
-        return selenium.isElementPresent("//h1[contains(.,'Merge Assets - " + firstIdentifier + " into " + mergeIdentifier + "')]");
+        return selenium.isElementPresent("//h1[contains(.,'Merge Assets')]");
     }
     
 	public void setOwner(Owner owner) {
