@@ -1,19 +1,17 @@
 package com.n4systems.fieldid.selenium.pages.setup;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
-
-import java.util.List;
-
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class MangageEventTypeGroupsPage extends FieldIDPage {
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class ManageEventTypeGroupsPage extends FieldIDPage {
 	
 	private static String FIRST_LIST_ITEM = "//table[@class='list']//tr[contains(@id, 'group_')][1]/td[1]/a";
 
-	public MangageEventTypeGroupsPage(Selenium selenium) {
+	public ManageEventTypeGroupsPage(Selenium selenium) {
 		super(selenium);
 		if(!checkOnManageEventTypeGroupsPage()){
 			fail("Expected to be on Manage Event Type Group page!");
@@ -22,7 +20,7 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 	
 	public boolean checkOnManageEventTypeGroupsPage() {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Event Type Groups & PDF Report Style')]");
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Manage Event Type Groups')]");
 	}
 	
 	public void clickViewAllTab() {
@@ -60,10 +58,6 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 	
-	public boolean checkPageHeaderText(String eventName) {
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + eventName + "')]");
-	}
-	
 	public void clickListItem(String eventName) {
 		selenium.click("//table[@class='list']//tr[contains(@id, 'group_')]/td[1]/a[contains(., '" + eventName + "')]");
 		waitForPageToLoad();		
@@ -95,9 +89,19 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 		selenium.check("//ul[@class='printOutSelection']//div[@class='printOutDetails' and contains(., '"+ observationReportStyle +"')]/input");
 	}
 	
-	public void deleteListItem(String name) {
-		selenium.click("//table[@class='list']//a[text()='" + name + "']/../..//a[contains(@id, 'delete_')]");
-		waitForPageToLoad();
+    public void editListItem(String name) {
+        selenium.click("//table[@class='list']/tbody//tr//td/a[contains(., '"+name+"')]/../../td/a[.='Edit']");
+        waitForPageToLoad();
+    }
+    
+	public void deleteListItem(String name, boolean confirm) {
+        editListItem(name);
+        confirmNextDialog(confirm);
+		selenium.click("//a[.='Delete']");
+        selenium.getConfirmation();
+        if (confirm) {
+            waitForPageToLoad();
+        }
 	}
 	
 	public boolean listItemExists(String name) {

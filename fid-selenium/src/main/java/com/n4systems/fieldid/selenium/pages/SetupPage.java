@@ -1,23 +1,10 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import static org.junit.Assert.*;
-
-import com.n4systems.fieldid.selenium.pages.setup.AutoAttributeWizardPage;
-import com.n4systems.fieldid.selenium.pages.setup.BrandingPage;
-import com.n4systems.fieldid.selenium.pages.setup.ColumnLayoutPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageAssetCodeMappingsPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageAssetStatusPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypeGroupsPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageCommentTemplatesPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageCustomersPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageEventBooksPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
-import com.n4systems.fieldid.selenium.pages.setup.MangageEventTypeGroupsPage;
-import com.n4systems.fieldid.selenium.pages.setup.SystemSettingsPage;
+import com.n4systems.fieldid.selenium.pages.setup.*;
 import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeViewAllPage;
 import com.thoughtworks.selenium.Selenium;
+
+import static org.junit.Assert.fail;
 
 public class SetupPage extends FieldIDPage {
 
@@ -70,10 +57,10 @@ public class SetupPage extends FieldIDPage {
 		return new AutoAttributeWizardPage(selenium);
 	}
 
-	public MangageEventTypeGroupsPage clickManageEventTypeGroups() {
+	public ManageEventTypeGroupsPage clickManageEventTypeGroups() {
         clickAssetsAndEventsTab();
 		selenium.click("//a[.='Event Type Groups & PDF Report Style']");
-		return new MangageEventTypeGroupsPage(selenium);
+		return new ManageEventTypeGroupsPage(selenium);
 	}
 	
 	public ManageCommentTemplatesPage clickManageCommentTemplates() {
