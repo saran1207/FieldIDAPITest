@@ -1,20 +1,15 @@
 package com.n4systems.fieldid.selenium.testcase.events;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
-import com.n4systems.fieldid.selenium.components.EventInfoPopup;
+import com.n4systems.fieldid.selenium.components.EventViewPage;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.EventsPerformedPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class PerformEventWithUnitOfMeasureCriteriaTest extends PageNavigatingTestCase<EventPage> {
 
@@ -64,13 +59,13 @@ public class PerformEventWithUnitOfMeasureCriteriaTest extends PageNavigatingTes
         page.enterPrimaryUnitOfMeasureValue("Unit Crit", "5");
 
         page.clickSaveNormalEvent();
-        AssetPage assetPage = page.clickAssetInformationTab();
+        AssetPage assetPage = page.clickAssetSummaryButton();
 
         EventsPerformedPage eventsPerformedPage = assetPage.clickEventHistoryTab();
-        EventInfoPopup popup = eventsPerformedPage.clickViewLatestEvent();
+        EventViewPage eventPage = eventsPerformedPage.clickViewLatestEvent();
 
-        assertEquals("My event value", popup.getTextValueForCriteria("Text Crit"));
-        assertEquals("5 ft", popup.getTextValueForCriteria("Unit Crit"));
+        assertEquals("My event value", eventPage.getTextValueForCriteria("Text Crit"));
+        assertEquals("5 ft", eventPage.getTextValueForCriteria("Unit Crit"));
     }
 
 }

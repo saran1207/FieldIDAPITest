@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import static org.junit.Assert.fail;
-
 import com.thoughtworks.selenium.Selenium;
+
+import static org.junit.Assert.fail;
 
 public class EventPage extends FieldIDPage {
 
@@ -20,7 +20,7 @@ public class EventPage extends FieldIDPage {
 	
 	public boolean checkOnQuickEventPage(){
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Perform an Event on ')]");
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Launch Event')]");
 	}
 
 	public boolean checkOnStartEventPage(){
@@ -30,13 +30,13 @@ public class EventPage extends FieldIDPage {
 	
 	public boolean checkOnEventPage() {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Event -')]") 
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Perform Event')]")
 			|| selenium.isElementPresent("//form[@id='eventCreate']") 
 			|| selenium.isElementPresent("//form[@id='eventUpdate']");
 	}
 
-	public AssetPage clickAssetInformationTab() {
-		clickNavOption("Asset Information", false);
+	public AssetPage clickAssetSummaryButton() {
+        selenium.click("//div[@class='actions']/a[contains(., 'Asset Summary')]");
         return new AssetPage(selenium);
 	}
 
@@ -75,16 +75,16 @@ public class EventPage extends FieldIDPage {
 	}
 
     public void enterTextCriteria(String criteriaName, String criteriaValue) {
-        selenium.type("//label[contains(@class,'eventFormLabel') and .='"+criteriaName+"']/..//input[@class='criteriaTextField']", criteriaValue);
+        selenium.type("//label[contains(@class,'eventFormLabel') and .='"+criteriaName+"']/..//input[contains(@name, 'criteriaEditor:textField')]", criteriaValue);
     }
 
     public void enterPrimaryUnitOfMeasureValue(String criteriaName, String value) {
-        selenium.type("//label[contains(@class,'eventFormLabel') and .='"+criteriaName+"']/..//input[contains(@id,'textValue')]", value);
+        selenium.type("//label[contains(@class,'eventFormLabel') and .='"+criteriaName+"']/..//input[contains(@name, 'criteriaEditor:primaryUnit')]", value);
     }
 
     public void enterSecondaryUnitOfMeasureValue(String criteriaName, String value) {
-        selenium.type("//label[contains(@class,'eventFormLabel') and .='"+criteriaName+"']/..//input[contains(@id,'secondaryTextValue')]", value);
+        selenium.type("//label[contains(@class,'eventFormLabel') and .='"+criteriaName+"']/..//input[contains(@id,'criteriaEditor:secondaryUnit')]", value);
     }
-    
+
   
 }

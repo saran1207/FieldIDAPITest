@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import com.n4systems.fieldid.selenium.components.EventInfoPopup;
+import com.n4systems.fieldid.selenium.components.EventViewPage;
 import com.thoughtworks.selenium.Selenium;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public class EventsPerformedPage extends FieldIDPage {
 	}
 	
 	public EventPage clickStartEventWithOnlyOneEventType() {
-		selenium.click("//a[@id='startEvent']");
+		selenium.click("//div[@class='actionButtons']/a[contains(., 'Start Event')]");
 		return new EventPage(selenium);
 	}
 	
@@ -26,17 +26,17 @@ public class EventsPerformedPage extends FieldIDPage {
 		return new ManageEventsPage(selenium);
 	}
 
-    public EventInfoPopup clickViewLatestEvent() {
+    public EventViewPage clickViewLatestEvent() {
         return clickViewEventNumber(getNumEvents());
     }
 
-    public EventInfoPopup clickViewEventNumber(int eventIndex) {
-        selenium.click("//table[@class='list']/tbody/tr["+(eventIndex+1)+"]//a[contains(.,'View')]");
-        return new EventInfoPopup(selenium);
+    public EventViewPage clickViewEventNumber(int eventIndex) {
+        selenium.click("//table[contains(@class, 'list')]/tbody/tr["+(eventIndex)+"]//a[contains(.,'View')]");
+        return new EventViewPage(selenium);
     }
 
     public int getNumEvents() {
-        return selenium.getXpathCount("//table[@class='list']/tbody/tr").intValue() - 1;
+        return selenium.getXpathCount("//table[contains(@class, 'list')]/tbody/tr").intValue();
     }
     
     public List<String> getEventTypes() {

@@ -84,7 +84,7 @@ public class AddScheduleTest extends PageNavigatingTestCase<AssetPage> {
 		page.clickSaveSchedule();
 		assertTrue(page.checkScheduleExists(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB));
 		EventPage eventPage = page.clickInpectNow(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
-		eventPage.clickAssetInformationTab();
+		eventPage.clickAssetSummaryButton();
 		page.clickSchedulesTab();
 		page.clickStopProgress(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
 		
