@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
@@ -94,7 +93,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     private Map<Long, String> createCriteriaImageMap(List<Event> events) {
-        s3Service.setTTL(TimeUnit.DAYS.toMillis(14));
+        s3Service.setExpiryInDays(14);
         Map<Long, String> criteriaImageMap = new HashMap<Long,String>();
         for (Event event : events) {
             String query = "SELECT DISTINCT cr FROM " + CriteriaResult.class.getName() + " cr, IN(cr.actions) action WHERE action.id = :eventId";
@@ -106,7 +105,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
                 criteriaImageMap.put(event.getId(), s3Service.getCriteriaResultImageThumbnailURL(criteriaResult.getTenant().getId(), criteriaResult.getCriteriaImages().get(0)).toString());
             }
         }
-        s3Service.setTTL(TimeUnit.DAYS.toMillis(1));
+        s3Service.resetExpiryInDays();
         return criteriaImageMap;
     }
 

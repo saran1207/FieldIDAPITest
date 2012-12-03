@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import org.apache.log4j.Logger;
+import org.easymock.internal.ClassExtensionHelper;
+import org.easymock.internal.ReplayState;
 import org.junit.Before;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ReflectionUtils;
@@ -18,7 +20,7 @@ import static org.easymock.EasyMock.verify;
 /**
  * class used for spring based tests where the fixture needs to be injected with mock beans
  * for example, most tests will be like this...
- *    fixture = ServiceA,    fixture collaborates with ServiceB, ServiceC, ServiceD      // i use the term fixture, others use SUT or system under test.
+ *    fixture = ServiceA,    fixture collaborates with ServiceB, ServiceC, ServiceD      // *i use the term fixture, others use SUT or system under test.
  *  so, in effect what you want to do for each test is...
  *    fixture = new ServiceA(). 
  *    fixture.setServiceB(createMock(ServiceB.class)); 
@@ -37,11 +39,11 @@ public class FieldIdServiceTest extends FieldIdUnitTest {
     @Before
 	public void setUp() {
 		try {
+            super.setUp();
 			Field sutField = findSutField();
 			Object sut = createSut(sutField);
 			ReflectionTestUtils.setField(this, sutField.getName(), sut);						
 			autoWireSut(sut);
-            setTestTime();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -102,12 +104,21 @@ public class FieldIdServiceTest extends FieldIdUnitTest {
 			for (Field field:getClass().getDeclaredFields()) {
 				if (field.getAnnotation(TestMock.class)!=null) {
 					field.setAccessible(true);
-					verify(field.get(this));
+                    Object mock = field.get(this);
+                    verifyIfApplicable(mock);
 				}
 			}		
 		} catch (Exception e) {
 			System.out.println("Can't verify mocks " + e.getLocalizedMessage());
 		}
 	}
+
+    private void verifyIfApplicable(Object mock) {
+        if (ClassExtensionHelper.getControl(mock).getState() instanceof ReplayState) {
+            verify(mock);
+            return;
+        }
+        logger.warn("not verifying mock " + mock.getClass().getSimpleName() + ". Either it's not used or you haven't called REPLAY() on it.");
+    }
 
 }

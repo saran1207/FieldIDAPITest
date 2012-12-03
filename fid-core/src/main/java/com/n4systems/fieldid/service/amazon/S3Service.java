@@ -11,6 +11,7 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.commons.io.IOUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
-    private long TTL = TimeUnit.DAYS.toMillis(1);
+    private static final int DEFAULT_EXPIRATION_DAYS = 1;
+
+    private Integer expirationDays = null;
+    public static final String TENANTS_PREFIX = "tenants/";
     public static final String DEFAULT_BRANDING_LOGO_PATH = "common/default_branding_logo.gif";
     public static final String BRANDING_LOGO_PATH = "/logos/branding_logo.gif";
     public static final String CUSTOMER_LOGO_PATH = "/logos/customer_logo_%d.gif";
@@ -272,7 +275,7 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public URL generateResourceUrl(String fullResourcePath) {
-        Date expires = new Date(System.currentTimeMillis() + TTL);
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
         URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
         return url;
     }
@@ -281,7 +284,8 @@ public class S3Service extends FieldIdPersistenceService {
         if (tenantId == null) {
             tenantId = securityContext.getTenantSecurityFilter().getTenantId();
         }
-        String path = "tenants/" + tenantId + String.format(resourcePath, pathArgs);
+        String path = TENANTS_PREFIX + tenantId + String.format(resourcePath, pathArgs);
+
         return path;
     }
 
@@ -338,11 +342,17 @@ public class S3Service extends FieldIdPersistenceService {
         return bucket;
     }
 
-    public void setTTL(long TTL) {
-        this.TTL = TTL;
+    protected int getExpiryInDays() {
+        return expirationDays==null ? DEFAULT_EXPIRATION_DAYS : expirationDays;
     }
 
+    public void setExpiryInDays(int days) {
+        expirationDays = days;
+    }
 
+    public void resetExpiryInDays() {
+        expirationDays = null;
+    }
 
 
     public class S3ImagePath {
@@ -369,21 +379,6 @@ public class S3Service extends FieldIdPersistenceService {
             return thumbnailPath;
         }
 
-        /** CAVEAT : these URLs are for convenience within return value.  they can/will go stale and it's up to caller to know when to regenerate
-         * fresh ones.
-        */
-
-        public URL getMediumUrl() {
-            return generateResourceUrl(getMediumPath());
-        }
-
-        public URL getOrigUrl() {
-            return generateResourceUrl(getOrigPath());
-        }
-
-        public URL getThumbnailUrl() {
-            return generateResourceUrl(getThumbnailPath());
-        }
     }
 
 }

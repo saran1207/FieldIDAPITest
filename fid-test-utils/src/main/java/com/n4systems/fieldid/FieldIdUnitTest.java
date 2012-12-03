@@ -1,6 +1,7 @@
 package com.n4systems.fieldid;
 
 import org.joda.time.*;
+import org.junit.Before;
 
 import java.util.TimeZone;
 
@@ -32,10 +33,15 @@ public class FieldIdUnitTest {
         // by default, we'll reset all tests to a fixed time.
         TimeZone.setDefault(DateTimeZone.UTC.toTimeZone());
         DateTimeZone.setDefault(DateTimeZone.UTC);
-        DateTimeUtils.setCurrentMillisFixed(getTestTime());
+        setCurrentMillisFixed(getTestTime());
     }
 
     protected long getTestTime() {
         return jan1_2011.toDate().getTime();
+    }
+
+    @Before
+    public void setUp() {
+        setTestTime();
     }
 }
