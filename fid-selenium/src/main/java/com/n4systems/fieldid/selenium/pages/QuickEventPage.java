@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import static org.junit.Assert.*;
-
 import com.thoughtworks.selenium.Selenium;
+
+import static org.junit.Assert.fail;
 
 public class QuickEventPage extends FieldIDPage {
 
@@ -13,7 +13,7 @@ public class QuickEventPage extends FieldIDPage {
 
     public void verifyOnQuickEventPage() {
         checkForErrorMessages(null);
-        if (!selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(.,'Perform an Event on ')]")) {
+        if (!selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(.,'Launch Event')]")) {
             fail("Expected to be on quick event page");
         }
     }

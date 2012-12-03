@@ -36,7 +36,7 @@ public class AssetPage extends WicketFieldIDPage {
 
 	public boolean checkHeader(String identifier) {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + identifier + "')]");
+		return selenium.isElementPresent("//div[@id='pageContent']/div[@class='header']/h1/span[contains(text(),'" + identifier + "')]");
 	}
 	
 	public boolean checkRfidNumber(String rfidNumber){

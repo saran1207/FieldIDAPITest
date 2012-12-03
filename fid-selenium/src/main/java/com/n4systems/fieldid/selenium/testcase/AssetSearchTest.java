@@ -1,14 +1,5 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.datatypes.AssetSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
@@ -17,6 +8,12 @@ import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 
@@ -86,7 +83,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 	public void search_with_no_display_columns_selected() throws Exception {
 		page.setDisplayColumns(new SearchDisplayColumns());
 		page.clickRunSearchButton();
-		assertEquals(1, page.getFormErrorMessagesUnder("//div[@id='left-panel']").size());
+		assertEquals(1, page.getResultColumnHeaders().size());
 	}
 	
 	@Test
