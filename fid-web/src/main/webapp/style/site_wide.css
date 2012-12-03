@@ -222,6 +222,7 @@ em {
 	text-align: center;
 }
 
+ /*TODO FIX THIS : this probably should be #ieOnlyMessage but i think it's not used and can be removed??  DD */
 #noPermissionMessage p, #planLimitExceeded p, ieOnlyMessage p {
 	margin: 5px 0;
 }
@@ -375,9 +376,7 @@ input:-moz-placeholder {
     background: linear-gradient(top, #357AE8 0%, #4D90FE 100%);
 }
 
-
 input.wavy-underline {
-    background-image: url("../images/wavy-underline.gif");
     background-position: bottom;
     background-repeat:  repeat-x;
     background-size: 3px 3px;
@@ -391,9 +390,7 @@ input.wavy-underline {
 .all-day-checkbox-label {
     margin-top: 10px;
     float: left;
-
 }
-
 
 
 /** hack to get around the fact that the reset.css has turned off effect of strong & em styles
@@ -408,3 +405,11 @@ input.wavy-underline {
 .rich-text ul li {list-style-type: square; list-style-position: inside;}
 .rich-text ol li {list-style-type: decimal; list-style-position: inside;}
 
+.rich-text .nicEdit-main h1 { font-size: 32px;border:none;font-weight:bold; }
+.rich-text .nicEdit-main h2 { font-size: 24px;border:none;font-weight:bold; }
+.rich-text .nicEdit-main h3 { font-size: 19px;border:none;font-weight:bold; }
+.rich-text .nicEdit-main h4 { font-size: 100%;border:none;font-weight:bold; }
+.rich-text .nicEdit-main h5 { font-size: 13px;border:none;font-weight:bold; }
+.rich-text .nicEdit-main h6 { font-size: 11px;border:none;font-weight:bold; }
+
+/** ------------------------------------- */
