@@ -17,7 +17,7 @@ public class SetupPage extends FieldIDPage {
 
 	public ManageCustomersPage clickManageCustomers() {
         clickOwnersUsersAndLocationsTab();
-		selenium.click("//a[.='Manage Customers']");
+		selenium.click("//a[.='Customers']");
 		return new ManageCustomersPage(selenium);
 	}
 	
@@ -41,13 +41,13 @@ public class SetupPage extends FieldIDPage {
 
 	public ManageUsersPage clickManageUsers() {
         clickOwnersUsersAndLocationsTab();
-		selenium.click("//a[.='Manage Users']");
+		selenium.click("//a[.='Users']");
 		return new ManageUsersPage(selenium);
 	}
 
 	public ManageOrganizationsPage clickManageOrganizations() {
         clickSettingsTab();
-		selenium.click("//a[.='Manage Organizations']");
+		selenium.click("//a[.='Organizations']");
 		return new ManageOrganizationsPage(selenium);
 	}
 
@@ -65,7 +65,7 @@ public class SetupPage extends FieldIDPage {
 	
 	public ManageCommentTemplatesPage clickManageCommentTemplates() {
         clickTemplatesTab();
-		selenium.click("//a[.='Manage Comment Templates']");
+		selenium.click("//a[.='Comment Templates']");
 		return new ManageCommentTemplatesPage(selenium);
 	}
 	
@@ -119,7 +119,7 @@ public class SetupPage extends FieldIDPage {
 
     public ManageAssetCodeMappingsPage clickManageAssetCodeMappings() {
         clickTemplatesTab();
-        selenium.click("//a[.='Manage Asset Code Mappings']");
+        selenium.click("//a[.='Asset Code Mappings']");
         return new ManageAssetCodeMappingsPage(selenium);
     }
     
