@@ -152,14 +152,14 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 	@Test
 	public void sort_by_performed_by() throws Exception {
         page.clickSortColumn("Completed By");
-        assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+        assertEquals(TEST_EVENT_TYPE2, page.getEventTypes().get(0));
         page.clickSortColumn("Completed By");
-		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
+		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
 	}
 	
 	@Test
 	public void sort_by_result() throws Exception {
-		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
 		page.clickSortColumn("Result");
 		assertEquals(TEST_EVENT_TYPE2, page.getEventTypes().get(0));
 		page.clickSortColumn("Result");
@@ -168,7 +168,7 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 
 	@Test
 	public void sort_by_asset_status() throws Exception {
-		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
 		page.clickSortColumn("Asset Status");
 		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
 		page.clickSortColumn("Asset Status");
@@ -177,7 +177,7 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 
     @Test
     public void sort_by_event_status() throws Exception {
-        assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+        assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
         page.clickSortColumn("Event Status");
         assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
         page.clickSortColumn("Event Status");
@@ -186,7 +186,7 @@ public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformed
 
     @Test
     public void sort_by_due_date() throws Exception {
-        assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
+        assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
         page.clickSortColumn("Due");
         assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
         page.clickSortColumn("Due");
