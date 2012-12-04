@@ -14,9 +14,12 @@ public class AdminOrgPage extends FieldIDPage {
 	}
 
 	public void enterShowPlansAndPricing(boolean showPlansAndPricing) {
-        String rowId = "plansAndPricingRow";
-        changeFeature(rowId, showPlansAndPricing);
+        changeFeature("plansAndPricingRow", showPlansAndPricing);
 	}
+
+    public void enterSecondaryOrgs(boolean secondaryOrgs) {
+        changeFeature("secondaryOrgsRow", secondaryOrgs);
+    }
 
     public void clickEditPlan() {
         selenium.click("//div[@id='orgLimits']//a[.='Edit']");

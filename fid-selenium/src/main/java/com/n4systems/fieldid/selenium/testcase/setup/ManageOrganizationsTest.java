@@ -1,16 +1,15 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class ManageOrganizationsTest extends PageNavigatingTestCase<ManageOrganizationsPage> {
 
@@ -27,7 +26,7 @@ public class ManageOrganizationsTest extends PageNavigatingTestCase<ManageOrgani
 	@Override
 	public void setupScenario(Scenario scenario) {     
 		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY);
-		
+
 		SecondaryOrg secondaryOrg = (SecondaryOrg) scenario.aSecondaryOrg()
 		  	    .withParent(primaryOrg)
 		        .withName(SECONDARY_ORG1)
@@ -60,9 +59,10 @@ public class ManageOrganizationsTest extends PageNavigatingTestCase<ManageOrgani
                 .build();
      }
 
-	
 	@Override
 	protected ManageOrganizationsPage navigateToPage() {
+        AdminOrgPage adminPage = startAdmin().login().filterByCompanyName(COMPANY).clickEditOrganization(COMPANY);
+        adminPage.enterSecondaryOrgs(true);
 		return startAsCompany(COMPANY).systemLogin().clickSetupLink().clickManageOrganizations();
 	}
 	
