@@ -14,7 +14,8 @@ public class ApiSearchResult extends ApiReadWriteModel {
 	private String customerOwnerName;
 	private String divisionOwnerName;
 	private String location;
-	private Date nextEventDate;
+	private Long predefinedLocationId;
+	private Date nextEventDate;	
 
 	public String getAssetTypeName() {
 		return assetTypeName;
@@ -87,6 +88,14 @@ public class ApiSearchResult extends ApiReadWriteModel {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+	
+	public Long getPredefinedLocationId() {
+		return predefinedLocationId;
+	}
+
+	public void setPredefinedLocationId(Long predefinedLocationId) {
+		this.predefinedLocationId = predefinedLocationId;
+	}
 
 	public Date getNextEventDate() {
 		return nextEventDate;
@@ -95,5 +104,4 @@ public class ApiSearchResult extends ApiReadWriteModel {
 	public void setNextEventDate(Date nextEventDate) {
 		this.nextEventDate = nextEventDate;
 	}
-
 }

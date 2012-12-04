@@ -138,7 +138,13 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		apiResult.setInternalOwnerName(asset.getOwner().getInternalOrg().getName());
 		apiResult.setCustomerOwnerName(asset.getOwner().getCustomerOrg() != null ? asset.getOwner().getCustomerOrg().getName() : null);
 		apiResult.setDivisionOwnerName(asset.getOwner().getDivisionOrg() != null ? asset.getOwner().getDivisionOrg().getName() : null);
-		apiResult.setLocation(asset.getAdvancedLocation() != null ? asset.getAdvancedLocation().getFreeformLocation() : null);
+		
+		if(asset.getAdvancedLocation() != null) {
+			apiResult.setLocation(asset.getAdvancedLocation().getFreeformLocation());
+			if (asset.getAdvancedLocation().getPredefinedLocation() != null) {
+				apiResult.setPredefinedLocationId(asset.getAdvancedLocation().getPredefinedLocation().getId());
+			}
+		}
 		
 		Event openEvent = eventScheduleService.getNextEventSchedule(asset.getId(), null);
 		if (openEvent != null) {
