@@ -37,7 +37,12 @@
 	    function moveToStep4() {
 
 	    }
-	</script>
+
+        Event.observe(window, 'load', function() {
+            updateAssetType($('assetType'));
+        });
+
+    </script>
 </head>
 
 <#assign bulkRegister = true>

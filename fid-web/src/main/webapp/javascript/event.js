@@ -450,9 +450,12 @@ function addSchedule() {
 	var jobs = $('jobSelection');
 	var nextDate = $('dueDate');
 	var assignee = $('assignee');
-	
-	
-	var params = new Object();
+
+    if (types.selectedIndex < 0) {
+        return false;
+    }
+
+    var params = new Object();
 	params.date =  nextDate.getValue();
 	params.eventTypeId = types.options[types.selectedIndex].value;
 	params.index = index;
