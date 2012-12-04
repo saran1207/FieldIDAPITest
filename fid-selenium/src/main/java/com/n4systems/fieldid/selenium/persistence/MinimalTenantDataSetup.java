@@ -1,25 +1,17 @@
 package com.n4systems.fieldid.selenium.persistence;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import rfid.ejb.entity.IdentifierCounterBean;
-
-import com.n4systems.model.AssetType;
-import com.n4systems.model.State;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Status;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
 import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
+import rfid.ejb.entity.IdentifierCounterBean;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.Date;
 
 public class MinimalTenantDataSetup {
 
@@ -88,7 +80,7 @@ public class MinimalTenantDataSetup {
 		user.setPermissions(Permissions.SYSTEM);
 		user.setUserType(UserType.SYSTEM);
 		user.setUserID("n4systems");
-		user.setHashPassword("6e900ce5b6400c175a30f9f75987c95c4161608a"); //f0rM@t!!
+		user.setHashPassword("223a7acbb5cc50fb97a38ff6043d3580ff672ae0"); //R2d2>C3p0
 		user.setEmailAddress("at@dot.com");
 		user.setFirstName("N4");
 		user.setLastName("Admin");
