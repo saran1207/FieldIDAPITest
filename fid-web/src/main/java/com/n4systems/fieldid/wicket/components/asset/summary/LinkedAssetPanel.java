@@ -109,6 +109,7 @@ public class LinkedAssetPanel extends Panel {
                     error("Unable to reorder Linked Assets");
                 }
 
+                target.add(linkedAssetsList);
             }
         };
 
