@@ -134,7 +134,7 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
                 });
                 item.add(firstColumn);
 
-                item.add(new Label("modifiedDate", new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "modified"), true)) {
+                item.add(new Label("modifiedDate", new DayDisplayModel(new PropertyModel<Date>(item.getModelObject(), "modified"), true, FieldIDSession.get().getSessionUser().getTimeZone())) {
                     @Override
                     public boolean isVisible() {
                         return !reorderState;
