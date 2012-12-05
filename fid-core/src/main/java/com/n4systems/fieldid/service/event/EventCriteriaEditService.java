@@ -40,7 +40,7 @@ public class EventCriteriaEditService extends FieldIdPersistenceService {
             ((SignatureCriteriaResult)realResult).setSigned(((SignatureCriteriaResult)result).isSigned());
             ((SignatureCriteriaResult)realResult).setImage(((SignatureCriteriaResult)result).getImage());
             ((SignatureCriteriaResult)realResult).setTemporaryFileId(((SignatureCriteriaResult)result).getTemporaryFileId());
-            if (((SignatureCriteriaResult) realResult).isSigned()) {
+            if (((SignatureCriteriaResult) realResult).isSigned() && (((SignatureCriteriaResult) realResult).getImage() != null || ((SignatureCriteriaResult) realResult).getTemporaryFileId() != null)) {
                 try {
                     new SignatureService().storeSignatureFileFor((SignatureCriteriaResult) realResult);
                 } catch (Exception e) {
