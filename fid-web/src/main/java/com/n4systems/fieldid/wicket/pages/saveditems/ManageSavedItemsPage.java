@@ -7,8 +7,8 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.behavior.TooltipBehavior;
-import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
+import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -133,13 +133,14 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
 	              }
                 });
                 item.add(firstColumn);
-                
-                item.add(new DateTimeLabel("modifiedDate", new PropertyModel<Date>(item.getModel(), "modified")) {
+
+                item.add(new Label("modifiedDate", new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "modified"), true)) {
                     @Override
                     public boolean isVisible() {
                         return !reorderState;
                     }
                 });
+                
                 BookmarkablePageLink<Void> manageSchedulesLink;
                 item.add(new Label("type", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "titleLabelKey"))));
                 item.add(new Label("description", item.getModel().getObject().getDescription()));
