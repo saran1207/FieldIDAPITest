@@ -405,11 +405,11 @@ input.wavy-underline {
 .rich-text ul li {list-style-type: square; list-style-position: inside;}
 .rich-text ol li {list-style-type: decimal; list-style-position: inside;}
 
-.rich-text .nicEdit-main h1 { font-size: 32px;border:none;font-weight:bold; }
-.rich-text .nicEdit-main h2 { font-size: 24px;border:none;font-weight:bold; }
-.rich-text .nicEdit-main h3 { font-size: 19px;border:none;font-weight:bold; }
-.rich-text .nicEdit-main h4 { font-size: 100%;border:none;font-weight:bold; }
-.rich-text .nicEdit-main h5 { font-size: 13px;border:none;font-weight:bold; }
-.rich-text .nicEdit-main h6 { font-size: 11px;border:none;font-weight:bold; }
+.rich-text .nicEdit-main h1 { font-size: 32px;border:none;font-weight:bold;background:none; }
+.rich-text .nicEdit-main h2 { font-size: 24px;border:none;font-weight:bold;background:none; }
+.rich-text .nicEdit-main h3 { font-size: 19px;border:none;font-weight:bold;background:none; }
+.rich-text .nicEdit-main h4 { font-size: 100%;border:none;font-weight:bold;background:none; }
+.rich-text .nicEdit-main h5 { font-size: 13px;border:none;font-weight:bold;background:none; }
+.rich-text .nicEdit-main h6 { font-size: 11px;border:none;font-weight:bold;background:none; }
 
 /** ------------------------------------- */
