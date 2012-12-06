@@ -548,6 +548,7 @@ public class EventService extends FieldIdPersistenceService {
         latestClause.getParams().put("iSubCompletedDate", event.getCompletedDate());
         latestClause.getParams().put("iSubState", EntityState.ACTIVE);
         builder.addWhere(latestClause);
+        builder.setLimit(1);
 
         return persistenceService.find(builder);
     }
@@ -586,6 +587,7 @@ public class EventService extends FieldIdPersistenceService {
         latestClause.getParams().put("iSubCompletedDate", event.getCompletedDate());
         latestClause.getParams().put("iSubState", EntityState.ACTIVE);
         builder.addWhere(latestClause);
+        builder.setLimit(1);
 
         return persistenceService.find(builder);
     }
