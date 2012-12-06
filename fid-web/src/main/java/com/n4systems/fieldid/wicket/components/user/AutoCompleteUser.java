@@ -22,11 +22,6 @@ public class AutoCompleteUser extends AutoComplete<User> {
     }
 
     @Override
-    protected List<User> getChoices() {
-        return getChoices(term);
-    }
-
-    @Override
     public List<User> getChoices(String term) {
         return userService.search(term, threshold);
     }

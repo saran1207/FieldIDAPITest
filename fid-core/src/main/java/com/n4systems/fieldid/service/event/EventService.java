@@ -8,7 +8,6 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.util.ExistingEventTransientCriteriaResultPopulator;
 import com.n4systems.fieldid.service.event.util.NewEventTransientCriteriaResultPopulator;
 import com.n4systems.model.*;
-import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
@@ -238,6 +237,14 @@ public class EventService extends FieldIdPersistenceService {
     @Transactional(readOnly = true)
 	public List<EventCompletenessReportRecord> getEventCompleteness(Event.EventState excludedState, ChartGranularity granularity,
 			Date fromDate, Date toDate, BaseOrg org) {
+
+        // CAVEAT : currently there is a discrepancy across the app w.r.t. COMPLETED events.   some places (like dashboard) consider a CLOSED event completed,
+        // while others (like reporting) consider CLOSED & COMPLETED as different.   for example, a dashboard widget might report that there are
+        //  100 COMPLETED events but when you click thru to reporting, it will only show 95 because 5 of them are CLOSED.
+        //
+        // imo, CLOSED should be an custom extension or child of COMPLETED.  (and other extensions like COMPLETED_WAITING_FOR_SIGNOFF could be added)
+        // and the code could then decide to include child nodes or not.  (i.e. do you want to see just COMPLETED or [COMPLETED/CLOSED/COMPLETED_WAITING_FOR_SIGNOFF] events)
+
 		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 
         NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);

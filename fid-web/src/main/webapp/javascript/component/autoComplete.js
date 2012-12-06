@@ -20,11 +20,10 @@ var autoCompleter = (function() {
     var init = function(id, containers) {
         var auto = $("#"+id);
         auto.initialized=false;
+
         auto.bind("autocompleteopen", function(event, ui) {
-            if (!auto.initialized) {
-                var menu = $('.ui-autocomplete:visible');
-                menu.css('width',menu.width()+10); // add room because we've styled it with extra padding between description and result columns.
-            }
+            var menu = $('.ui-autocomplete:visible');
+			menu.css('width',Math.max(menu.width()+10,100)); // add room because we've styled it with extra padding between description and result columns.
             auto.initialized=true;
             $('.ui-autocomplete .link').tipsy({gravity: 'n', fade:true, delayIn:355});
             // hack to remove jquery styling because rounded corners mucks up the border.

@@ -25,11 +25,6 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
     }
 
     @Override
-    protected List<Asset> getChoices() {
-        return getChoices(term);
-    }
-
-    @Override
     public List<Asset> getChoices(String term) {
         return assetService.search(term, threshold);
     }

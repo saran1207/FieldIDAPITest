@@ -108,15 +108,11 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         updateAjax = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
-                final String hiddenInput = autocompleteHidden.getInput();
-                final String fieldInput = autocompleteField.getInput();
-                autocompleteHidden.setConvertedInput(hiddenInput);
-                autocompleteField.setConvertedInput(fieldInput);
-                validate();
-                if (isValid()) {
-                    updateModel();
-                    onUpdate(target, hiddenInput, fieldInput);
-                }
+                autocompleteHidden.setConvertedInput(autocompleteHidden.getInput());
+                autocompleteField.setConvertedInput(term = autocompleteField.getInput());
+                convertInput();
+                updateModel();
+                onUpdate(target, autocompleteHidden.getInput(), autocompleteField.getInput());
             }
         };
         add(updateAjax);
@@ -240,10 +236,12 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
 
         response.renderCSSReference("style/tipsy/tipsy.css");
         response.renderOnLoadJavaScript("autoCompleter.init('"+autocompleteField.getMarkupId()+"'" + args + ");");
-   }
+    }
     
     @Override
     protected final void convertInput() {
+        //TODO : opportunity to cache here.  if id of the value you last converted = "valueId" then just return it.
+
         String valueId = autocompleteHidden.getConvertedInput();
         String input = autocompleteField.getConvertedInput();
         final T object = this.getModelObject();
@@ -259,7 +257,6 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
             final List<T> choices = getChoices();
             boolean found = false;
             for (int index = 0; index < choices.size(); index++) {
-                // Get next choice
                 final T choice = choices.get(index);
                 final String idValue = renderer.getIdValue(choice, index);
                 if (idValue.equals(valueId)) {

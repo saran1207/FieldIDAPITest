@@ -1,11 +1,16 @@
 package com.n4systems.fieldid.service.org;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.*;
 import com.n4systems.util.collections.OrgList;
-import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClause;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,71 +59,45 @@ public class OrgService extends FieldIdPersistenceService {
     public PrimaryOrg getPrimaryOrgForTenant(Long tenantId) {
         return getPrimaryOrgForTenant(tenantId, true);
     }
-    
+
     public OrgList search(String term, int threshold) {
         OrgQueryParser orgQueryParser = new OrgQueryParser(term);
 
         QueryBuilder<BaseOrg> query = createUserSecurityBuilder(BaseOrg.class);
-        List<? extends BaseOrg> parents = findParentsLike(orgQueryParser);
+        query.setLimit(Math.min(threshold*5,100));  // allow for more than threshold, so we can provide a quality sample.
+        if (StringUtils.isNotBlank(orgQueryParser.getSearchTerm())) {
+            query.addWhere(new WhereParameter<String>(WhereParameter.Comparator.LIKE, "name", "name", orgQueryParser.getSearchTerm(), WhereParameter.WILDCARD_BOTH, false));
+        }
+
+        final List<? extends BaseOrg> parents = findParentsLike(orgQueryParser);
         if(parents.isEmpty()) {
             // if we were intending to look for parents but found none, then abort search right now & return empty.
             if (orgQueryParser.getParentTerms().size()>0) {
                 return new OrgList(new ArrayList<BaseOrg>(), orgQueryParser, threshold);
             }
-        } else {
-            WhereParameterGroup group = new WhereParameterGroup("isParentCustomer");
-            group.setChainOperator(WhereClause.ChainOp.OR);
-            List<PrimaryOrg> primaryParentOrgs = getPrimaryParentOrgs(parents);
-            if (!primaryParentOrgs.isEmpty()) {
-                group.addClause(new WhereParameter(WhereParameter.Comparator.IN, "primaryOrg", "primaryOrg", primaryParentOrgs, null, false, WhereClause.ChainOp.OR));
-            }
-            List<CustomerOrg> customerParentOrgs = getCustomerParentOrgs(parents);
-            if (!customerParentOrgs.isEmpty()) {
-                group.addClause(new WhereParameter(WhereParameter.Comparator.IN,"customerOrg","customerOrg", customerParentOrgs,null, false, WhereClause.ChainOp.OR));
-            }
-            query.addWhere(group);
         }
 
-        if (StringUtils.isNotBlank(orgQueryParser.getSearchTerm())) {
-            query.addWhere(new WhereParameter<String>(WhereParameter.Comparator.LIKE, "name", "name", orgQueryParser.getSearchTerm(), WhereParameter.WILDCARD_BOTH, false));
-        }
+        List<BaseOrg> result = persistenceService.findAll(query);
 
-        query.setLimit(Math.min(threshold*5,100));  // allow for more than threshold, so we can provide a quality sample.
-        List<BaseOrg> result = Lists.newArrayList();
-        result.addAll(persistenceService.findAll(query));
+        if (parents.size()>0) {
+            result = new ArrayList<BaseOrg>(Collections2.filter(result, new Predicate<BaseOrg>() {
+                @Override public boolean apply(BaseOrg input) {
+                    return parents.contains(input.getParent());
+                }
+            }));
+        }
 
         //add Parent To Results
-        for (BaseOrg org:parents) {
-            if (!result.contains(org)) {
-                result.add(org);
+        if (parents.size()==1) {
+            if (!result.contains(parents.get(0))) {
+                result.add(parents.get(0));
             }
         }
 
         return new OrgList(result, orgQueryParser, threshold);
     }
 
-    private List<PrimaryOrg> getPrimaryParentOrgs(List<? extends BaseOrg> parents) {
-        List<PrimaryOrg> result = Lists.newArrayList();
-        for (BaseOrg org:parents) { 
-            if (org instanceof PrimaryOrg) {
-                result.add((PrimaryOrg)org);
-            }
-        }
-        return result;
-    }
-
-    private List<CustomerOrg> getCustomerParentOrgs(List<? extends BaseOrg> parents) {
-        List<CustomerOrg> result = Lists.newArrayList();
-        for (BaseOrg org:parents) {
-            if (org instanceof CustomerOrg) {
-                result.add((CustomerOrg)org);
-            }
-        }
-        return result;
-    }
-
     private List<? extends BaseOrg> findParentsLike(OrgQueryParser orgQueryParser) {
-        List<BaseOrg> result = Lists.newArrayList();
         switch (orgQueryParser.getParentTerms().size()) {
             case 0:
                 return Lists.newArrayList();
@@ -139,6 +118,7 @@ public class OrgService extends FieldIdPersistenceService {
                 throw new IllegalStateException("parser can only supports having 1 or 2 parents specified.");
         }
     }
+
 
     public OrgLocationTree getOrgLocationTree() {
         OrgLocationTree result = new OrgLocationTree();
