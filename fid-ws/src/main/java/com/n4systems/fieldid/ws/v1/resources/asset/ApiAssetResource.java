@@ -278,11 +278,11 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			}
 		}
 		
-		if(apiAsset.getFreeformLocation() != null || apiAsset.getPredefinedLocationId() > 0) {
+		if(apiAsset.getFreeformLocation() != null || (apiAsset.getPredefinedLocationId() != null &&  apiAsset.getPredefinedLocationId() > 0)) {
 			Location location = new Location();
 			location.setFreeformLocation(apiAsset.getFreeformLocation());
 			
-			if(apiAsset.getPredefinedLocationId()  > 0) {
+			if(apiAsset.getPredefinedLocationId() != null && apiAsset.getPredefinedLocationId()  > 0) {
 				location.setPredefinedLocation(findEntity(PredefinedLocation.class, apiAsset.getPredefinedLocationId()));
 			}
 			

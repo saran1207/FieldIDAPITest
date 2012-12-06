@@ -165,7 +165,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			event.setBook(findEventBook(apiEvent.getEventBookId()));
 		}
 		
-		if (apiEvent.getPredefinedLocationId() != null) {
+		if (apiEvent.getPredefinedLocationId() != null && apiEvent.getPredefinedLocationId() > 0) {
 			event.getAdvancedLocation().setPredefinedLocation(persistenceService.findUsingTenantOnlySecurityWithArchived(PredefinedLocation.class, apiEvent.getPredefinedLocationId()));
 		}
 		
