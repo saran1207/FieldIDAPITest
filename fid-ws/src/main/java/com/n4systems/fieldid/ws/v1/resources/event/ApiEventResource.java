@@ -54,9 +54,8 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		}
 		
 		Event existingEvent = eventService.findByMobileId(apiEvent.getSid());
-
-        if (existingEvent == null) {
-        	createEvent(apiEvent);
+        if (existingEvent == null || existingEvent.getEventState() == Event.EventState.OPEN) {
+        	createEvent(apiEvent, existingEvent);
         } else {
         	updateEvent(apiEvent, existingEvent);
         }		
@@ -94,12 +93,11 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		}
 	}
 	
-	private void createEvent(ApiEvent apiEvent) {
-		Event event = getScheduledEvent(apiEvent);
+	private void createEvent(ApiEvent apiEvent, Event event) { // event is either open event or null.
 		if(event == null) {
 			event = new Event();
 		}
-		convertApiEvent(apiEvent, event);
+		convertApiEvent(apiEvent, event, false);
         List<FileAttachment> uploadedFiles = apiAttachmentResource.convert(apiEvent.getAttachments(), event.getTenant(), event.getCreatedBy());
         eventCreationService.createEvent(event, 0L, null, uploadedFiles);
 		logger.info("Created Event on Asset " + apiEvent.getAssetId());
@@ -107,7 +105,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	}
 	
 	private void updateEvent(ApiEvent apiEvent, Event existingEvent) {
-		convertApiEvent(apiEvent, existingEvent);
+		convertApiEvent(apiEvent, existingEvent, true);
 		List<FileAttachment> existingAttachments = new ArrayList<FileAttachment>(existingEvent.getAttachments());
 		List<FileAttachment> uploadedFiles = apiAttachmentResource.convert(apiEvent.getAttachments(), existingEvent.getTenant(), existingEvent.getCreatedBy());
 		existingAttachments.addAll(uploadedFiles);
@@ -121,7 +119,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
             // We find the open event, and use this event rather than the updated one. UNLESS it's archived
             Event loadedEvent = eventScheduleService.findByMobileId(apiEvent.getEventScheduleId());
             if (loadedEvent != null) {
-                if (loadedEvent.getState() == Archivable.EntityState.ACTIVE && loadedEvent.getEventState() == Event.EventState.OPEN) {
+                if (loadedEvent.getEventState() == Event.EventState.OPEN) {
                     return loadedEvent;
                 }
             }
@@ -130,11 +128,11 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		return null;
 	}
 
-	private void convertApiEvent(ApiEvent apiEvent, Event event) {
+	private void convertApiEvent(ApiEvent apiEvent, Event event, boolean isUpdate) {
         event.setEventState(Event.EventState.COMPLETED);
 		
 		// Step 1: Convert abstract-event fields first.
-		convertApiEventForAbstractEvent(apiEvent, event);
+		convertApiEventForAbstractEvent(apiEvent, event, isUpdate);
 		
 		//If asset is archived, Archive event also.
 		if(event.getAsset().isArchived())
@@ -181,11 +179,11 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		
 		//TODO Need to refactor the block below once it is functional.
 		if(apiEvent.getSubEvents() != null && apiEvent.getSubEvents().size() > 0) {			
-			if(event.isNew()) {
+			if(!isUpdate) {
 				List<SubEvent> subEvents = new ArrayList<SubEvent>();				
 				for(ApiEvent apiSubEvent: apiEvent.getSubEvents()) {
 					SubEvent subEvent = new SubEvent();
-					convertApiEventForAbstractEvent(apiSubEvent, subEvent);
+					convertApiEventForAbstractEvent(apiSubEvent, subEvent, isUpdate);
 					subEvents.add(subEvent);
 				}				
 				event.setSubEvents(subEvents);
@@ -202,17 +200,17 @@ public class ApiEventResource extends FieldIdPersistenceService {
 					// If we did not find subevent, add a new one.
 					if(subEvent == null) {
 						subEvent = new SubEvent();
-						convertApiEventForAbstractEvent(apiSubEvent, subEvent);
+						convertApiEventForAbstractEvent(apiSubEvent, subEvent, isUpdate);
 						event.getSubEvents().add(subEvent);
 					} else {
-						convertApiEventForAbstractEvent(apiSubEvent, subEvent);
+						convertApiEventForAbstractEvent(apiSubEvent, subEvent, isUpdate);
 					}
 				}
 			}
 		}
 	}
 	
-	private void convertApiEventForAbstractEvent(ApiEvent apiEvent, AbstractEvent event) {
+	private void convertApiEventForAbstractEvent(ApiEvent apiEvent, AbstractEvent event, boolean isUpdate) {
 		event.setTenant(getCurrentTenant());
 		event.setMobileGUID(apiEvent.getSid());
 		event.setCreated(apiEvent.getModified());
@@ -234,7 +232,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			EventForm form = persistenceService.findUsingTenantOnlySecurityWithArchived(EventForm.class, apiEvent.getForm().getFormId());
 			event.setEventForm(form);			
 			
-			if(event.isNew()) {
+			if(!isUpdate) {
 				List<CriteriaResult> results = apiEventFormResultResource.convertApiEventFormResults(apiEvent.getForm(), form, event);
 				event.getResults().addAll(results);
 			} else {
