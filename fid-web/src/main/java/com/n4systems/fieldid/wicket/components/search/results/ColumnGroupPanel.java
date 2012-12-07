@@ -1,7 +1,8 @@
 package com.n4systems.fieldid.wicket.components.search.results;
 
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -12,14 +13,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.search.ColumnMappingView;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class ColumnGroupPanel extends Panel {
 
-	public ColumnGroupPanel(String id, IModel<ColumnMappingGroupView> model) {
+    public static final String COLUMN_CHECKBOX_ID = "column-checkbox";
+
+    public ColumnGroupPanel(String id, IModel<ColumnMappingGroupView> model) {
 		super(id, model);
 
 		PropertyModel<List<ColumnMappingView>> columnsModel = new PropertyModel<List<ColumnMappingView>>(model, "mappings");
@@ -30,7 +31,7 @@ public class ColumnGroupPanel extends Panel {
 	        @Override
 	        protected void populateItem(ListItem<ColumnMappingView> item) {
                 item.add(new Label("checkboxLabel", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "label"))));
-                item.add(new CheckBox("checkbox", new PropertyModel<Boolean>(item.getModel(), "enabled")));
+                item.add(new CheckBox(COLUMN_CHECKBOX_ID, new PropertyModel<Boolean>(item.getModel(), "enabled")).setOutputMarkupId(true));
 	        }	        
 	    }.setVisible(!noColumns));
 

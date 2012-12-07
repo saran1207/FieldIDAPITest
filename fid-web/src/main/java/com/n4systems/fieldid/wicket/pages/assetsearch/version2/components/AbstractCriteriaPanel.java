@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.LeftPanelController;
+import com.n4systems.fieldid.wicket.components.search.results.ColumnGroupPanel;
 import com.n4systems.fieldid.wicket.pages.HasLeftPanelController;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.Component;
@@ -111,7 +112,7 @@ public abstract class AbstractCriteriaPanel<T extends SearchCriteria> extends Pa
                 this.anySelected = false;
             }
             @Override public void component(CheckBox checkBox, IVisit<Void> visit) {
-                if (checkBox.getValue()!=null) {
+                if (ColumnGroupPanel.COLUMN_CHECKBOX_ID.equals(checkBox.getId()) && checkBox.getValue()!=null) {
                     anySelected = true;
                     visit.stop();
                 }
