@@ -294,4 +294,9 @@ private static final long serialVersionUID = 1L;
 	public List<StringListingPair> getComboBoxInfoOptions( InfoFieldBean field, InfoOptionInput inputOption ) {
 		return InfoFieldInput.getComboBoxInfoOptions( field, inputOption  );
 	}
+
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE8";
+    }
 }
