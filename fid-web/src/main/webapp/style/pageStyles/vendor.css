@@ -66,9 +66,10 @@ a.vendorLink {
 
 #registerAssets, #preAssignedAssets{
 	float: left;
-	width: 30em;
-	padding-left: 4em;
+	width: 565px;
+	padding-left: 70px;
 	margin-top: 1em;
+    clear:left;
 }
 
 #preAssignedAssets a{
