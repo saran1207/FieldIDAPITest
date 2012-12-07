@@ -1,8 +1,9 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
-import java.util.List;
-
+import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
+import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
+import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -17,9 +18,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
-import com.n4systems.fieldid.utils.Predicate;
-import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
-import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
+import java.util.List;
 
 public class SortableStringListEditor extends SortableListPanel {
 	
@@ -58,7 +57,7 @@ public class SortableStringListEditor extends SortableListPanel {
 
                     @Override
                     public String getReorderImage() {
-                        return "images/reorder-small.png";
+                        return "images/reorder-icon.png";
                     }
                     
                     @Override
