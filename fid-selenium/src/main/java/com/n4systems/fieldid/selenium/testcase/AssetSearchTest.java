@@ -83,7 +83,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 	public void search_with_no_display_columns_selected() throws Exception {
 		page.setDisplayColumns(new SearchDisplayColumns());
 		page.clickRunSearchButton();
-		assertEquals(1, page.getResultColumnHeaders().size());
+        assertEquals(1, page.getFormErrorMessagesUnder("//div[@id='left-panel']").size());
 	}
 	
 	@Test

@@ -93,7 +93,7 @@ public class AssetPage extends WicketFieldIDPage {
 	}
 
 	public String getAssetStatus() {
-		return selenium.getText("//label[.='Asset Status']/../span");
+		return selenium.getText("//span[@id='assetStatus']");
 	}
 
 	public String getIdentifier() {

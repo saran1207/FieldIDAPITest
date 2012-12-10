@@ -11,8 +11,9 @@ public class AssetsMassUpdatePage extends WicketFieldIDPage {
     }
     
     public void selectEdit() {
-    	selenium.check("//input[@value='Edit']");
-    	selenium.click("//input[@value='Next']"); 
+    	selenium.click("//input[@value='Edit']");
+        waitForWicketAjax();
+    	selenium.click("//input[@value='Next']");
     	waitForElementToBePresent("//form[@class='editForm']");
     }
     
