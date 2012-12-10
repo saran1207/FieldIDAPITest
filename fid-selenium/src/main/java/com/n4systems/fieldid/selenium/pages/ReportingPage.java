@@ -177,7 +177,7 @@ public class ReportingPage extends WicketEntitySearchPage {
     }
     
     public void selectResult(String result) {
-    	selenium.select("//select[@name='filters:eventDetailsCriteriaPanel:containedPanel:result']", result);
+    	selenium.select("//select[@name='filters:resolutionDetailsCriteriaPanel:containedPanel:result']", result);
     }
     
     public boolean isBlankSlate() {
