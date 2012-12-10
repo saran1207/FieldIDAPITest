@@ -867,7 +867,18 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
 	}
 
-	public Long getTagOptionId() {
+    public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field,  List<InfoOptionInput> inputOptions) {
+        // WEB-3518 CAVEAT : note that the list of InfoFieldBeans and InfoOptionInputs aren't treated the same.
+        // one filters out retired fields, the other doesn't so we need to account for this.
+        for (InfoOptionInput inputOption : inputOptions) {
+            if (field.getUniqueID().equals(inputOption.getInfoFieldId())) {
+                return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
+            }
+        }
+        throw new IllegalStateException("can't find input option for field " + field.getName());
+    }
+
+    public Long getTagOptionId() {
 		return tagOptionId;
 	}
 

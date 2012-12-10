@@ -1,16 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.web.helper.Constants;
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -24,6 +13,15 @@ import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.StringListingPair;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.web.helper.Constants;
+import rfid.web.helper.SessionUser;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AutoAttributeDefinitionCrud extends AbstractCrud {
@@ -294,6 +292,17 @@ private static final long serialVersionUID = 1L;
 	public List<StringListingPair> getComboBoxInfoOptions( InfoFieldBean field, InfoOptionInput inputOption ) {
 		return InfoFieldInput.getComboBoxInfoOptions( field, inputOption  );
 	}
+
+    public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field,  List<InfoOptionInput> inputOptions) {
+        // WEB-3518 CAVEAT : note that the list of InfoFieldBeans and InfoOptionInputs aren't treated the same.
+        // one filters out retired fields, the other doesn't so we need to account for this.
+        for (InfoOptionInput inputOption : inputOptions) {
+            if (field.getUniqueID().equals(inputOption.getInfoFieldId())) {
+                return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
+            }
+        }
+        throw new IllegalStateException("can't find input option for field " + field.getName());
+    }
 
     @Override
     public String getIEHeader() {

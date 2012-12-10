@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
+import com.n4systems.util.StringListingPair;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.web.helper.SessionUser;
 
-import com.n4systems.util.StringListingPair;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public class InfoOptionInput {
 	public static String COMBOBOX_DYNAMIC_VALUE_MARKER = "!";
@@ -25,7 +24,7 @@ public class InfoOptionInput {
 	
 	private Long infoFieldId;
 	
-	private String uniqueIDString;
+	private String uniqueIDString  = null;
 		
 	public InfoOptionInput() {
 		this( null, null );
@@ -64,11 +63,12 @@ public class InfoOptionInput {
 	}
 	
 	public InfoOptionBean convertToInfoOptionBean( InfoFieldBean field, SessionUser user ) {
-		// blank options arn't saved.
+		// blank options aren't saved.
+
 		if( isBlank() ) {
 			return null;
 		}
-		
+
 		if( field.hasStaticInfoOption() && !uniqueIDString.startsWith( COMBOBOX_DYNAMIC_VALUE_MARKER ) ) {
 			for (InfoOptionBean infoOptionBean : field.getUnfilteredInfoOptions() ) {
 				Long infoOptionId = Long.parseLong( uniqueIDString );
@@ -97,9 +97,10 @@ public class InfoOptionInput {
 			infoOption.setName( name );
 		}
 		infoOption.setInfoField( field );
-		
-		
+
+
 		return infoOption;
+
 	}
 	
 	public Long getUniqueID() {
@@ -176,10 +177,6 @@ public class InfoOptionInput {
 		if( fieldsToLookFor == null || inputs == null ){ return newInfoOptions; }
 		for( InfoOptionInput input : inputs ) {
 			if( input != null ) {  // some of the inputs can be null due to the retired info fields.
-
-				// TODO DD WEB-2157 : this method is very slow.  turn the largest collection into a set/map. 
-				//  and use contains(?)
-				
 				for( InfoFieldBean field : fieldsToLookFor ) {
 					if( field.getUniqueID().equals( input.getInfoFieldId() ) ) {
 						
@@ -187,6 +184,7 @@ public class InfoOptionInput {
 						if( option != null ) {
 							newInfoOptions.add( option );
 						}
+                        break;
 					}
 				}
 			}
@@ -201,7 +199,7 @@ public class InfoOptionInput {
             InfoOptionInput input = null;
             if( options != null && !field.isRetired()) {
                 for( InfoOptionBean option : options ) {
-                    if( option.getInfoField().getUniqueID().equals( field.getUniqueID() ) ) {
+                    if( option.getInfoField().getUniqueID().equals( field.getUniqueID() )) {
                         input = new InfoOptionInput( option, field );
 
                         if(option.getInfoField().getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {

@@ -356,15 +356,15 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	public List<InfoOptionInput> getAssetInfoOptions() {
 		return assetView.getAssetInfoOptions();
 	}
-	
-	public Collection<InfoFieldBean> getAssetInfoFields() {
-		if (getAssetTypeId() != null) {
-				return getAssetType(getAssetTypeId()).getAvailableInfoFields();
-		}
-		return null;
-	}
-	
-	public void setAssetInfoOptions(List<InfoOptionInput> infoOptions) {
+
+    public Collection<InfoFieldBean> getAssetInfoFields() {
+        if (getAssetTypeId() != null) {
+            return getAssetType(getAssetTypeId()).getAvailableInfoFields();
+        }
+        return null;
+    }
+
+    public void setAssetInfoOptions(List<InfoOptionInput> infoOptions) {
 		assetView.setAssetInfoOptions(infoOptions);
 	}
 	
@@ -408,12 +408,19 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	public AssetWebModel getAssetWebModel() {
 		return assetWebModel;
 	}
-	
-	public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field, InfoOptionInput inputOption) {
-		return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
-	}
 
-	public AssignedToUserGrouper getUserGrouper() {
+    public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field,  List<InfoOptionInput> inputOptions) {
+        // WEB-3518 CAVEAT : note that the list of InfoFieldBeans and InfoOptionInputs aren't treated the same.
+        // one filters out retired fields, the other doesn't so we need to account for this.
+        for (InfoOptionInput inputOption : inputOptions) {
+            if (field.getUniqueID().equals(inputOption.getInfoFieldId())) {
+                return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
+            }
+        }
+        throw new IllegalStateException("can't find input option for field " + field.getName());
+    }
+
+    public AssignedToUserGrouper getUserGrouper() {
 		if (userGrouper == null){
 			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
 		}

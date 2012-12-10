@@ -1,30 +1,28 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import com.n4systems.ejb.legacy.AssetCodeMappingService;
-import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
-import com.n4systems.model.AssetType;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.ejb.entity.AssetCodeMapping;
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.ejb.entity.AssetCodeMapping;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Integration)
@@ -217,5 +215,17 @@ public class AssetCodeMappingCrud extends AbstractCrud {
 	public List<StringListingPair> getComboBoxInfoOptions( InfoFieldBean field, InfoOptionInput inputOption ) {
 		return InfoFieldInput.getComboBoxInfoOptions( field, inputOption  );
 	}
-	
+
+    public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field,  List<InfoOptionInput> inputOptions) {
+        // WEB-3518 CAVEAT : note that the list of InfoFieldBeans and InfoOptionInputs aren't treated the same.
+        // one filters out retired fields, the other doesn't so we need to account for this.
+        for (InfoOptionInput inputOption : inputOptions) {
+            if (field.getUniqueID().equals(inputOption.getInfoFieldId())) {
+                return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
+            }
+        }
+        throw new IllegalStateException("can't find input option for field " + field.getName());
+    }
+
+
 }

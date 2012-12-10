@@ -33,7 +33,7 @@
 		<#if !infoField.retired || infoOptionIsNull == false>
 			<div style="overflow:visible;" class="infoSet  <#if infoField.fieldType == 'datefield'>increasedWidthFieldHolder</#if>" infoFieldName="${infoField.name?j_string}>		
 				<@s.hidden name="assetInfoOptions[${stat.index}].infoFieldId"  value="${infoField.uniqueID}"/>
-				
+
 				<#if infoField.retired >
 					<label class="label">${infoField.name?html} (<@s.text name="label.retired"/>)</label>
 					<span id="${infoField.uniqueID}" class="attribute fieldHolder" >
@@ -44,7 +44,7 @@
 				<#else>
 					<label class="label">${infoField.name?html} <#if  requires == true && infoField.required ><#include "/templates/html/common/_requiredMarker.ftl"/></#if> </label>	
 					<#if infoField.fieldType == "selectbox" || infoField.fieldType == "combobox" >
-						<@s.select cssClass="attribute ${requiredClass}"  list="%{ getComboBoxInfoOptions( assetInfoFields[${stat.index}], assetInfoOptions[${stat.index}] ) }" listKey="id" listValue="name" name="assetInfoOptions[${stat.index}].uniqueIDString" id="${infoField.uniqueID}" theme="fieldid" >
+						<@s.select cssClass="attribute ${requiredClass}"  list="%{ getComboBoxInfoOptions( assetInfoFields[${stat.index}], assetInfoOptions ) }" listKey="id" listValue="name" name="assetInfoOptions[${stat.index}].uniqueIDString" id="${infoField.uniqueID}" theme="fieldid" >
 							<#if autoAttributeInputFields?exists && autoAttributeInputFields.contains( infoField ) >
 							 	<@s.param name="onchange">${changeFunction}</@s.param>
 							</#if>  
