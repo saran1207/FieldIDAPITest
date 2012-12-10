@@ -14,7 +14,7 @@ public class AdminLoginPage extends FieldIDPage {
     }
 
     public AdminOrgsListPage login() {
-        return login("n4systems", "f0rM@t!!");
+        return login("n4systems", "R2d2>C3p0");
     }
 
     public AdminOrgsListPage login(String userName, String password) {
