@@ -2,7 +2,7 @@ package com.n4systems.fieldid.selenium.testcase.users;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
-import com.n4systems.fieldid.selenium.pages.ManageEventsPage;
+import com.n4systems.fieldid.selenium.pages.EventsPerformedPage;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
@@ -10,7 +10,8 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UserPermissionsTest extends FieldIDTestCase {
 
@@ -88,11 +89,11 @@ public class UserPermissionsTest extends FieldIDTestCase {
 
 		assertFalse("Shouldn't be able to see edit link next to view", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 
-		ManageEventsPage manageEventsPage = reportingPage.clickReportLinkForResult(1).clickEventHistoryTab().clickViewEventsByDateGroup();
+        EventsPerformedPage eventsPerformedPage = reportingPage.clickReportLinkForResult(1).clickEventHistoryTab();
 
-		assertFalse("Shouldn't be able to see edit link", selenium.isElementPresent("//a[contains(., 'Edit')]"));
+		assertFalse("Shouldn't be able to see edit link", selenium.isElementPresent("//span[@class='actions']//a[contains(., 'Edit')]"));
 
-		manageEventsPage.clickFirstEventLink();
+		eventsPerformedPage.clickViewEventNumber(1);
 
 		assertFalse("Shouldn't be able to see edit tab", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 
@@ -116,7 +117,7 @@ public class UserPermissionsTest extends FieldIDTestCase {
         assetsSearchPage.clickRunSearchButton();
         assetsSearchPage.clickAssetLinkForResult(1);
 	
-		assertFalse("Shouldn't be able to see edit tab on asset page", selenium.isElementPresent("//a[contains(., 'Edit')]"));
+		assertFalse("Shouldn't be able to see edit tab on asset page", selenium.isElementPresent("//span[@class='actions']//a[contains(., 'Edit')]"));
 	}
 
 }

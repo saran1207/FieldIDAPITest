@@ -21,11 +21,6 @@ public class EventsPerformedPage extends FieldIDPage {
 		return new QuickEventPage(selenium);
 	}
 
-	public ManageEventsPage clickViewEventsByDateGroup() {
-		selenium.click("//a[@id='groupByDateButton']");
-		return new ManageEventsPage(selenium);
-	}
-
     public EventViewPage clickViewLatestEvent() {
         return clickViewEventNumber(getNumEvents());
     }
