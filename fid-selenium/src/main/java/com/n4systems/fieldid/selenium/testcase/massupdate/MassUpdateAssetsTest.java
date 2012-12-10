@@ -99,7 +99,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		assetsSearchPage.enterIdentifier("123456");
 		assetsSearchPage.clickRunSearchButton();
 
-		assertEquals(3, assetsSearchPage.getTotalResultsCount());
+		assertEquals(2, assetsSearchPage.getTotalResultsCount());
 
 		assetsSearchPage.selectAllItemsOnPage();
 
