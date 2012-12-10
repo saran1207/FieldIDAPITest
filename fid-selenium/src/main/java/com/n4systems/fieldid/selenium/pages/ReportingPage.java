@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.selenium.pages;
 
+import com.n4systems.fieldid.selenium.components.EventViewPage;
 import com.n4systems.fieldid.selenium.components.LocationPicker;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.ReportSearchCriteria;
@@ -112,13 +113,13 @@ public class ReportingPage extends WicketEntitySearchPage {
 			setCheckBoxValue("//input[@name='filters:eventDetailsCriteriaPanel:containedPanel:includeNetworkResultsContainer:includeSafetyNetwork']", criteria.getSafetyNetworkResults());
 		}
 		if(criteria.getResult() != null) {
-			selenium.select("//select[@name='filters:eventDetailsCriteriaPanel:containedPanel:result']", criteria.getResult());
+			selenium.select("//select[@name='filters:resolutionDetailsCriteriaPanel:containedPanel:result']", criteria.getResult());
 		}
 	}
 	
-	public void clickViewEvent(String identifier){
-		selenium.click("//table[@class='list']//td//a[.='" +identifier+"']/../../..//a[.='View']");
-		waitForElementToBePresent("//iframe[@class='cboxIframe']");
+	public EventViewPage clickViewEvent(String identifier){
+		selenium.click("//table[@class='list']//td//a[.='" + identifier + "']/../../..//a[.='View']");
+        return new EventViewPage(selenium);
 	}
 	
 	public EventPage clickEditEvent(String identifier) {

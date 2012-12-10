@@ -78,7 +78,6 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 		String identifier = page.getResultIdentifiers().get(0);
 
 		EventPage eventPage = page.clickEditEvent(identifier);
-		assertEquals("Edit", eventPage.getCurrentTab());
 	}
 	
 	//Lightbox issues.
@@ -96,10 +95,9 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 		assertTrue(page.hasSearchResults());
 		String identifierToVerify = page.getResultIdentifiers().get(0);
 
-		
 		page.clickStartEventLink();
 		
-		assertEquals("Perform an Event on " + identifierToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+		assertEquals("Launch Event", selenium.getText("//div[@id='contentTitle']/h1"));
 	}
 	
 	
