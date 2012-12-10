@@ -12,11 +12,13 @@ public class EventMassUpdatePage extends WicketFieldIDPage {
 
     public void selectEdit() {
     	selenium.check("//input[@value='Edit']");
+        waitForWicketAjax();
     	selenium.click("//input[@value='Next']");
     	waitForElementToBePresent("//form[@class='editForm']");
     }
 	public void selectDelete() {
     	selenium.check("//input[@value='Delete']");
+        waitForWicketAjax();
     	selenium.click("//input[@value='Next']");
     	waitForElementToBePresent("//div[@class='deleteDetails']");
     }
