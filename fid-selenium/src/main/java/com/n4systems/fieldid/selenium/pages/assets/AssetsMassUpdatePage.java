@@ -18,7 +18,7 @@ public class AssetsMassUpdatePage extends WicketFieldIDPage {
     }
     
     public void selectDelete() {
-    	selenium.check("//input[@value='Delete']");
+    	selenium.click("//input[@value='Delete']");
         waitForWicketAjax();
     	selenium.click("//input[@value='Next']");
     	waitForElementToBePresent("//div[@class='deleteDetails']");

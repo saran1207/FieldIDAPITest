@@ -214,4 +214,9 @@ public class ReportingPage extends WicketEntitySearchPage {
 		return new EventMassUpdatePage(selenium);
 	}
 
+    public void selectOpenEvents() {
+        selenium.select("//select[@name='filters:eventStateSelect']", "Open");
+        waitForWicketAjax();
+    }
+
 }

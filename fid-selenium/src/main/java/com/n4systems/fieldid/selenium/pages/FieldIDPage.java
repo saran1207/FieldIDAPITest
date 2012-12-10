@@ -45,7 +45,7 @@ public class FieldIDPage extends WebPage {
 	}
 
 	public SchedulesSearchPage clickSchedulesLink() {
-		selenium.click("//div[@id='pageNavigation']//a[.='Schedules']");
+        selenium.click("//div[@id='pageNavigation']//a[contains(.,'Reporting')]");
 		return new SchedulesSearchPage(selenium);
 	}
 

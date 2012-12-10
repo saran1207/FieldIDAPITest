@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.pages.*;
+import com.n4systems.fieldid.selenium.pages.AssetPage;
+import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
+import com.n4systems.fieldid.selenium.pages.HomePage;
+import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
@@ -119,10 +122,11 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		
 		doDelete("123456");
 
-		assertTrue("Assets weren't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 3 assets removed.')]"));
+		assertTrue("Assets weren't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 2 assets removed.')]"));
 
-		SchedulesSearchPage scheduleSearch = page.clickSchedulesLink();
-		scheduleSearch.clickRunSearchButton();
+        ReportingPage reportingPage = page.clickReportingLink();
+        reportingPage.selectOpenEvents();
+        reportingPage.clickRunSearchButton();
 
 		assertTrue("Schedule wasn't successfully deleted", verifyAllSchedulesAreRemoved());
 	}
