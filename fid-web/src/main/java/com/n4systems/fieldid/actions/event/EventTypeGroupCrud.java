@@ -4,6 +4,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.event.EventTypeGroupService;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
@@ -33,10 +34,11 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 	private List<EventType> eventTypes;
 	private List<PrintOut> certPrintOuts;
 	private List<PrintOut> observationPrintOuts;
+	private EventTypeGroupService eventTypeGroupService;
 	
-	
-	public EventTypeGroupCrud(PersistenceManager persistenceManager) {
+	public EventTypeGroupCrud(PersistenceManager persistenceManager, EventTypeGroupService eventTypeGroupService) {
 		super(persistenceManager);
+		this.eventTypeGroupService = eventTypeGroupService;
 	}
 
 	@Override
@@ -126,7 +128,7 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 	public String doUpdate() {
 		testRequiredEntities(true);
 		try {
-			eventTypeGroup = persistenceManager.update(eventTypeGroup, getSessionUser().getId());
+			eventTypeGroup = eventTypeGroupService.update(eventTypeGroup, getCurrentUser());
 			addFlashMessageText("message.eventtypegroupsaved");
 			return SUCCESS;
 		} catch (Exception e) {

@@ -6,11 +6,14 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.user.User;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
 
 public class EventTypeGroupService extends FieldIdPersistenceService {
+
+	@Autowired private EventTypeService eventTypeService;
 
     public List<EventTypeGroup> getEventTypeGroupsExcludingActions() {
         QueryBuilder<EventTypeGroup> query = createUserSecurityBuilder(EventTypeGroup.class);
@@ -32,10 +35,11 @@ public class EventTypeGroupService extends FieldIdPersistenceService {
         return persistenceService.count(eventTypeCountQuery);
     }
 
-    public void update(EventTypeGroup group, User user) {
+    public EventTypeGroup update(EventTypeGroup group, User user) {
         group.setModified(new Date());
         group.setModifiedBy(user);
-        persistenceService.update(group);
+		eventTypeService.touchEventTypesForGroup(group.getId(), user);
+        return persistenceService.update(group);
     }
 
     public void archive(EventTypeGroup group, User user) {
