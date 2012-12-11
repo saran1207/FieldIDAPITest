@@ -4,6 +4,7 @@ import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.pages.schedules.EventSchedulePage;
+import com.n4systems.fieldid.selenium.pages.schedules.EventSchedulePicker;
 import com.thoughtworks.selenium.Selenium;
 
 import static org.junit.Assert.fail;
@@ -45,16 +46,22 @@ public class AssetPage extends WicketFieldIDPage {
 	}
 
 	public EventSchedulePage clickSchedulesTab() {
-		//clickNavOption("Schedules");
 		selenium.click("//div[@id='contentHeader']/ul//li/a[contains(.,'Schedules')]");
 		return new EventSchedulePage(selenium);
 	}
 
+    public EventSchedulePicker clickScheduleEvent() {
+        selenium.click("//div[@class='actionButtons']//a[contains(.,'Schedule Event')]");
+        waitForElementToBePresent("//div[@class='wicket-modal']");
+        return new EventSchedulePicker(selenium);
+    }
+
+    @Deprecated
 	public void clickSaveSchedule() {
-		selenium.click("//input[@id='newSchedule_label_addschedule']");
-		waitForAjax();
+		selenium.click("//div[@class='wicket-modal']//div[contains(@class,'formActions')]//span[contains(., 'Create Schedule')]/..");
 	}
 
+    @Deprecated
 	public void setSchedule(String date, String eventType, String job) {
 		if (date != null) {
 			selenium.type("//input[@id='nextDate']", date);
@@ -68,19 +75,18 @@ public class AssetPage extends WicketFieldIDPage {
 	}
 
 	public boolean checkScheduleExists(String date, String eventType, String job) {
-		return selenium.isElementPresent("//tbody[@id='schedules']//tr/td[text()='"+eventType+"']/..//div[text()='"+date+"']/../..//td[starts-with(@id,'jobName')]//a[.='"+ (job.isEmpty() ? "no job" : job)+"']");
+		return selenium.isElementPresent("//div[@class='upcomingEvent']//div[@class='eventType' and contains(., '" + eventType + "')]/../div[@class='eventDate']//span[contains(., '" + date + "')]");
 	}
 
 	public void clickRemoveSchdeule(String date, String eventType, String job) {
-		selenium.click("//tbody[@id='schedules']//tr/td[text()='" + eventType + "']/..//div[text()='" + date + "']/../..//td[starts-with(@id,'jobName')]//a[text()='" + (job.isEmpty() ? "no job" : job)
-				+ "']/../..//a[text()='Remove']");
+        selenium.click("//div[@class='upcomingEvent']//div[@class='eventType' and contains(., '"+eventType+"')]/../div[@class='eventDate']//span[contains(., '"+date+"')]/../../..//span[@class='actions']//a[contains(., 'Delete')]");
 		waitForAjax();
 	}
 
-	public void clickEditSchedule(String date, String eventType, String job) {
-		selenium.click("//tbody[@id='schedules']//tr/td[text()='" + eventType + "']/..//div[text()='" + date + "']/../..//td[starts-with(@id,'jobName')]//a[text()='" + (job.isEmpty() ? "no job" : job)
-				+ "']/../..//a[text()='Edit']");
-		waitForAjax();
+	public EventSchedulePicker clickEditSchedule(String date, String eventType, String job) {
+		selenium.click("//div[@class='upcomingEvent']//div[@class='eventType' and contains(., '" + eventType + "')]/../div[@class='eventDate']//span[contains(., '" + date + "')]/../../..//span[@class='actions']//a[contains(., 'Edit')]");
+        waitForElementToBePresent("//div[@class='wicket-modal']");
+        return new EventSchedulePicker(selenium);
 	}
 
 	public void editScheduleDate(String oldDate, String eventType, String newDate) {

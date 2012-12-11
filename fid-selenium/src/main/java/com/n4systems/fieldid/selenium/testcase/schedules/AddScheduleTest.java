@@ -2,7 +2,7 @@ package com.n4systems.fieldid.selenium.testcase.schedules;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
-import com.n4systems.fieldid.selenium.pages.EventPage;
+import com.n4systems.fieldid.selenium.pages.schedules.EventSchedulePicker;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
@@ -45,51 +45,31 @@ public class AddScheduleTest extends PageNavigatingTestCase<AssetPage> {
 
 	@Test
 	public void save_schedule_with_error() throws Exception {
-		page.clickSchedulesTab();
-		page.clickSaveSchedule();
-		assertFalse(page.getFormErrorMessages().isEmpty());
+        EventSchedulePicker eventSchedulePicker = page.clickScheduleEvent();
+        eventSchedulePicker.clickCreateSchedule();
+		assertFalse(eventSchedulePicker.getFormErrorMessages().isEmpty());
 	}
 	
 	@Test
-	public void save_and_remove_schedule() throws Exception {
-		page.clickSchedulesTab();
-		page.setSchedule(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
-		page.clickSaveSchedule();
+	public void save_schedule() throws Exception {
+        EventSchedulePicker eventSchedulePicker = page.clickScheduleEvent();
+        eventSchedulePicker.setSchedule(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
+        eventSchedulePicker.clickCreateSchedule();
 		assertTrue(page.checkScheduleExists(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB));
-		page.clickRemoveSchdeule(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
-		assertFalse(page.checkScheduleExists(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB));
 	}
 	
 	@Test
-	public void edit_and_remove_schedule() throws Exception {
-		page.clickSchedulesTab();
-		page.setSchedule(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
-		page.clickSaveSchedule();
-		assertTrue(page.checkScheduleExists(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB));
+	public void edit_schedule() throws Exception {
+        EventSchedulePicker eventSchedulePicker = page.clickScheduleEvent();
+        eventSchedulePicker.setSchedule(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
+        eventSchedulePicker.clickCreateSchedule();
+        assertTrue(page.checkScheduleExists(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB));
 		
 		String newDate = getNewDate();
-		page.clickEditSchedule(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
-		page.editScheduleDate(TEST_DATE, TEST_EVENT_TYPE, newDate);
-		page.clickEditSaveSchedule(TEST_EVENT_TYPE);
+        eventSchedulePicker = page.clickEditSchedule(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
+        eventSchedulePicker.setSchedule(newDate, TEST_EVENT_TYPE, TEST_JOB);
+        eventSchedulePicker.clickSaveSchedule();
 		assertTrue(page.checkScheduleExists(newDate, TEST_EVENT_TYPE, TEST_JOB));
-		
-		page.clickRemoveSchdeule(newDate, TEST_EVENT_TYPE, TEST_JOB);
-		assertFalse(page.checkScheduleExists(newDate, TEST_EVENT_TYPE, TEST_JOB));
-	}
-	
-	@Test
-	public void schedule_event_now_stop_progress_test() {
-		page.clickSchedulesTab();
-		page.setSchedule(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
-		page.clickSaveSchedule();
-		assertTrue(page.checkScheduleExists(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB));
-		EventPage eventPage = page.clickInpectNow(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
-		eventPage.clickAssetSummaryButton();
-		page.clickSchedulesTab();
-		page.clickStopProgress(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
-		
-		page.clickRemoveSchdeule(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB);
-		assertFalse(page.checkScheduleExists(TEST_DATE, TEST_EVENT_TYPE, TEST_JOB));
 	}
 
 	private String getNewDate() {
