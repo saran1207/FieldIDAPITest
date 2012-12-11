@@ -1,14 +1,5 @@
 package com.n4systems.fieldid.selenium.schedule;
 
-import static org.junit.Assert.*;
-
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.time.DateUtils;
-import org.junit.Test;
-
-import com.ibm.icu.text.SimpleDateFormat;
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.schedules.EventSchedulePage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
@@ -16,6 +7,15 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.BaseOrg;
+import org.apache.commons.lang.time.DateUtils;
+import org.junit.Test;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class EventScheduleTest extends PageNavigatingTestCase<EventSchedulePage> {
 
