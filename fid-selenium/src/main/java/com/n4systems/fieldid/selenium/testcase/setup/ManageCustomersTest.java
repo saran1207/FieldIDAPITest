@@ -1,24 +1,17 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCustomersPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersPage> {
 	
@@ -150,6 +143,7 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 	
 	@Test
 	public void add_customer_user_sucessfully() throws Exception {
+        page.clickSignOut();
 		
 		page = updateTenantLimits();
 		
@@ -167,7 +161,8 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 
 	@Test
 	public void add_customer_user_with_errors() throws Exception {
-		
+        page.clickSignOut();
+
 		page = updateTenantLimits();
 		
 		page.clickCustomer(TEST_CUSTOMER_ORG_2).clickUsersTab();

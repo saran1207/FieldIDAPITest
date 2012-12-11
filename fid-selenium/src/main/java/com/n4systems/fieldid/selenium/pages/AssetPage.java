@@ -41,7 +41,7 @@ public class AssetPage extends WicketFieldIDPage {
 	
 	public boolean checkRfidNumber(String rfidNumber){
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@class='columnCenter']/div[1]/p[2]/span[contains(text(),'" + rfidNumber + "')]");
+		return selenium.isElementPresent("//div[@class='assetDetails']//label[.='RFID Number']/../span[contains(text(),'" + rfidNumber + "')]");
 	}
 
 	public EventSchedulePage clickSchedulesTab() {

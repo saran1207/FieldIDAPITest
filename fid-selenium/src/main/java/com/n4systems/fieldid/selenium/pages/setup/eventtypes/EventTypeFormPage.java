@@ -1,10 +1,5 @@
 package com.n4systems.fieldid.selenium.pages.setup.eventtypes;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.fieldid.selenium.datatypes.EventForm;
 import com.n4systems.fieldid.selenium.datatypes.EventFormObservations;
 import com.n4systems.fieldid.selenium.datatypes.EventFormSection;
@@ -12,6 +7,12 @@ import com.n4systems.fieldid.selenium.datatypes.OneClickEventFormCriteria;
 import com.n4systems.fieldid.selenium.pages.ButtonGroupPage;
 import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
 import com.thoughtworks.selenium.Selenium;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class EventTypeFormPage extends WicketFieldIDPage {
 
@@ -104,6 +105,10 @@ public class EventTypeFormPage extends WicketFieldIDPage {
 		for (OneClickEventFormCriteria criteria : criterion) {
             addCriteriaNamed(criteria.getCriteriaLabel());
 			if(criteria.getButtonGroup() != null) {
+                if(selenium.isElementPresent("//span[@class='settings']")) {
+                    selenium.click("//span[@class='settings']");
+                    waitForWicketAjax();
+                }
 				selenium.select("//div[@id='criteriaEditor']//select[@name='stateSetSelect']", criteria.getButtonGroup());
 			}
 			if(criteria.isSetsResult()) {
@@ -129,17 +134,21 @@ public class EventTypeFormPage extends WicketFieldIDPage {
     }
 
     private void addObservations(EventFormObservations observations) {
+        if(selenium.isElementPresent("//span[@class='observations']")) {
+            selenium.click("//span[@class='observations']");
+            waitForWicketAjax();
+        }
 		if(!observations.getRecommendations().isEmpty()) {
 			for(String rec : observations.getRecommendations()) {
-                selenium.type("//div[.='Pre-Configured Recommendations']/following-sibling::div[1]//input[@name='string']", rec);
-                selenium.click("//div[.='Pre-Configured Recommendations']/following-sibling::div[1]//button");
+                selenium.type("//p[.='Recommendations']/following-sibling::span[1]//input[@name='string']", rec);
+                selenium.click("//p[.='Recommendations']/following-sibling::span[1]//button");
                 waitForWicketAjax();
 			}
 		}
 		if(!observations.getDeficiencies().isEmpty()) {
 			for(String def : observations.getRecommendations()) {
-                selenium.type("//div[.='Pre-Configured Deficiencies']/following-sibling::div[1]//input[@name='string']", def);
-                selenium.click("//div[.='Pre-Configured Deficiencies']/following-sibling::div[1]//button");
+                selenium.type("//p[.='Deficiencies']/following-sibling::span[1]//input[@name='string']", def);
+                selenium.click("//p[.='Deficiencies']/following-sibling::span[1]//button");
                 waitForWicketAjax();
 			}
 		}
