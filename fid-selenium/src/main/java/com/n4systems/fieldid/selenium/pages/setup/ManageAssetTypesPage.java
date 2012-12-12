@@ -309,7 +309,7 @@ public class ManageAssetTypesPage extends FieldIDPage {
 
     public void deleteAttributes(String... attrNames) {
         for (String attrName : attrNames) {
-            clickAttributeLink(attrName, "Delete");
+            clickAttributeLink(attrName, "Retire");
         }
     }
 

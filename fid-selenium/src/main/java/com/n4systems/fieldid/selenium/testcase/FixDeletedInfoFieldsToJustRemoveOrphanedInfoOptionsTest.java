@@ -3,19 +3,19 @@ package com.n4systems.fieldid.selenium.testcase;
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.components.UnitOfMeasurePicker;
 import com.n4systems.fieldid.selenium.pages.SetupPage;
+import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetCodeMappingsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.ExtendedFeature;
 import org.junit.Test;
 import rfid.ejb.entity.InfoFieldBean;
 
 public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends PageNavigatingTestCase<SetupPage> {
 
+    private static String COMPANY = "test1";
+
     @Override
     public void setupScenario(Scenario scenario) {
-        scenario.primaryOrgFor("test1").setExtendedFeatures(setOf(ExtendedFeature.Integration));
-
         InfoFieldBean textField = scenario.anInfoField()
                 .type(InfoFieldBean.TEXTFIELD_FIELD_TYPE)
                 .withName("text field")
@@ -48,14 +48,17 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Pag
 
     @Override
     protected SetupPage navigateToPage() {
-        return startAsCompany("test1").login().clickSetupLink();
+        AdminOrgPage adminPage = startAdmin().login().filterByCompanyName(COMPANY).clickEditOrganization(COMPANY);
+        adminPage.enableIntegration(true);
+
+        return startAsCompany(COMPANY).login().clickSetupLink();
     }
 
     @Test
 	public void attributesCanBeDeletedFromUnusedAssetType() throws Exception {
         ManageAssetTypesPage assetTypePage = page.clickAssetTypes().clickAssetType("test type");
         assetTypePage.clickEditTab();
-        assetTypePage.deleteAttributes("text field", "select field", "combo field", "uom field");
+        assetTypePage.retireAttributes("text field", "select field", "combo field", "uom field");
 	}
 
 	@Test

@@ -21,6 +21,10 @@ public class AdminOrgPage extends FieldIDPage {
         changeFeature("secondaryOrgsRow", secondaryOrgs);
     }
 
+    public void enableIntegration(boolean integration) {
+        changeExtendedFeature("Integration", integration);
+    }
+
     public void clickEditPlan() {
         selenium.click("//div[@id='orgLimits']//a[.='Edit']");
         waitForAjax();

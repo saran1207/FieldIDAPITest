@@ -119,7 +119,7 @@ public class SetupPage extends FieldIDPage {
 
     public ManageAssetCodeMappingsPage clickManageAssetCodeMappings() {
         clickTemplatesTab();
-        selenium.click("//a[.='Asset Code Mappings']");
+        selenium.click("//a[.='Manage Asset Code Mappings']");
         return new ManageAssetCodeMappingsPage(selenium);
     }
     
