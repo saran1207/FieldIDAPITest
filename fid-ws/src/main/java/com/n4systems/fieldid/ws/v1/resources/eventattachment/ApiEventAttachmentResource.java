@@ -35,7 +35,7 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEventAttachment(ApiEventAttachment apiAttachment) throws IOException {
-		QueryBuilder<Event> query = createTenantSecurityBuilder(Event.class);
+		QueryBuilder<Event> query = createTenantSecurityBuilder(Event.class, true);
         query.addWhere(WhereClauseFactory.create("mobileGUID", apiAttachment.getEventSid()));
         Event event = persistenceService.find(query);
         

@@ -29,7 +29,7 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveCriteriaImage(ApiCriteriaImage apiCriteriaImage) {
-		QueryBuilder<CriteriaResult> builder = createTenantSecurityBuilder(CriteriaResult.class);
+		QueryBuilder<CriteriaResult> builder = createTenantSecurityBuilder(CriteriaResult.class, true);
 		builder.addWhere(WhereClauseFactory.create("mobileId", apiCriteriaImage.getCriteriaResultSid()));
 
 		CriteriaResult criteriaResult = persistenceService.find(builder);

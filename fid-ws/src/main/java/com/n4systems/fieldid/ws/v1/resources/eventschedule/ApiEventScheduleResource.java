@@ -129,7 +129,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	public Event converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
 		BaseOrg owner = persistenceService.findUsingTenantOnlySecurityWithArchived(BaseOrg.class, apiEventSchedule.getOwnerId());
 
-        Asset asset = assetService.findByMobileId(apiEventSchedule.getAssetId());
+        Asset asset = assetService.findByMobileId(apiEventSchedule.getAssetId(), true);
 
         Event event = new Event();
         event.setMobileGUID(apiEventSchedule.getSid());
@@ -144,6 +144,9 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
         	event.setPriority(persistenceService.find(PriorityCode.class, apiEventSchedule.getPriorityId()));
         	event.setNotes(apiEventSchedule.getNotes());
         }
+        
+        if(asset.isArchived())
+        	event.archiveEntity();
 
 		return event;
 	}
