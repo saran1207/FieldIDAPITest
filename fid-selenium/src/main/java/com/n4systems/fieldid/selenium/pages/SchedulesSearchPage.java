@@ -15,10 +15,10 @@ public class SchedulesSearchPage extends EntitySearchPage {
 
 	@Override
 	public void setDisplayColumns(SearchDisplayColumns displayColumns) {
-		setCheckBoxValue("//input[@id='chk_event_schedule_customer']", displayColumns.isJobSiteName());
+		setCheckBoxValue("//input[@id='chk_event_schedule_customer']", displayColumns.isCustomer());
 		setCheckBoxValue("//input[@id='chk_event_schedule_division']", displayColumns.isDivision());
 		setCheckBoxValue("//input[@id='chk_event_schedule_location']", displayColumns.isLocation());
-		setCheckBoxValue("//input[@id='chk_event_schedule_nextdate']", displayColumns.isScheduledDate());
+		setCheckBoxValue("//input[@id='chk_event_schedule_nextdate']", displayColumns.isDueDate());
 		setCheckBoxValue("//input[@id='chk_event_schedule_organization']", displayColumns.isOrganization());
 		setCheckBoxValue("//input[@id='chk_event_schedule_status']", displayColumns.isStatus());
 		setCheckBoxValue("//input[@id='chk_event_schedule_dayspastdue']", displayColumns.isDaysPastDue());

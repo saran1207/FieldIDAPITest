@@ -16,38 +16,61 @@ public class ReportingPage extends WicketEntitySearchPage {
 	public ReportingPage(Selenium selenium) {
 		super(selenium);
 	}
-	
-	public void setDisplayColumns(SearchDisplayColumns displayColumns) {
-		setCheckBoxValue("//input[@id='chk_event_search_date_performed']", displayColumns.isDatePreformed());
-		setCheckBoxValue("//input[@id='chk_event_search_eventtype']", displayColumns.isEventType());
-		setCheckBoxValue("//input[@id='chk_event_search_customer']", displayColumns.isJobSiteName());
-		setCheckBoxValue("//input[@id='chk_event_search_eventresult']", displayColumns.isResult());
-		setCheckBoxValue("//input[@id='chk_event_search_eventbook']", displayColumns.isEventBook());
-		setCheckBoxValue("//input[@id='chk_event_search_performed_by']", displayColumns.isPerformedBy());
-		setCheckBoxValue("//input[@id='chk_event_search_division']", displayColumns.isDivision());
-		setCheckBoxValue("//input[@id='chk_event_search_organization']", displayColumns.isOrganization());
-		setCheckBoxValue("//input[@id='chk_event_search_comments']", displayColumns.isComments());
-		setCheckBoxValue("//input[@id='chk_event_search_assignedto']", displayColumns.isAssignedTo());
-		setCheckBoxValue("//input[@id='chk_event_search_location']", displayColumns.isLocation());
-		
-		setCheckBoxValue("//input[@id='chk_event_search_peakload']", displayColumns.isPeakLoad());
-		setCheckBoxValue("//input[@id='chk_event_search_testduration']", displayColumns.isTestDuration());
-		setCheckBoxValue("//input[@id='chk_event_search_peakloadduration']", displayColumns.isPeakLoadDuration());
-		
-		setCheckBoxValue("//input[@id='chk_event_search_identifier']", displayColumns.isIdentifier());
-		setCheckBoxValue("//input[@id='chk_event_search_rfidnumber']", displayColumns.isRfidNumber());
-		setCheckBoxValue("//input[@id='chk_event_search_referencenumber']", displayColumns.isReferenceNumber());
-		setCheckBoxValue("//input[@id='chk_event_search_assettypegroup']", displayColumns.isAssetTypeGroup());
-		setCheckBoxValue("//input[@id='chk_event_search_assettype']", displayColumns.isAssetType());
-		setCheckBoxValue("//input[@id='chk_event_search_assetstatus']", displayColumns.isAssetStatus());
-		setCheckBoxValue("//input[@id='chk_event_search_identified']", displayColumns.isDateIdentified());
-		setCheckBoxValue("//input[@id='chk_event_search_identifiedby']", displayColumns.isIdentifiedBy());
-		setCheckBoxValue("//input[@id='chk_event_search_description']", displayColumns.isDescription());
-		setCheckBoxValue("//input[@id='chk_event_search_partnumber']", displayColumns.isPartNumber());
-		
-		setCheckBoxValue("//input[@id='chk_event_search_order_description']", displayColumns.isOrderDescription());
-		setCheckBoxValue("//input[@id='chk_event_search_order_number']", displayColumns.isOrderNumber());
-		setCheckBoxValue("//input[@id='chk_event_search_purchaseorder']", displayColumns.isPurchaseOrder());
+
+    public void setDisplayColumns(SearchDisplayColumns searchDisplayColumns) {
+        setDisplayColumns(searchDisplayColumns, false, false, false, false);
+    }
+
+	public void setDisplayColumns(SearchDisplayColumns displayColumns, boolean isJobsEnabled, boolean isAssignedToEnabled,
+                                  boolean isIntegrationEnabled, boolean isProofTestIntegrationEnabled) {
+
+        setCheckBoxValue("//label[.='Event State']/../input", displayColumns.isEventState());
+        setCheckBoxValue("//label[.='Score']/../input", displayColumns.isScore());
+        setCheckBoxValue("//label[.='Due Date']/../input", displayColumns.isDueDate());
+        setCheckBoxValue("//label[.='Date Performed']/../input", displayColumns.isDatePreformed());
+        setCheckBoxValue("//label[.='Days Past Due']/../input", displayColumns.isDaysPastDue());
+        setCheckBoxValue("//label[.='Event Type Group']/../input", displayColumns.isEventTypeGroup());
+        setCheckBoxValue("//label[.='Event Type']/../input", displayColumns.isEventType());
+        setCheckBoxValue("//label[.='Priority']/../input", displayColumns.isPriority());
+        setCheckBoxValue("//label[.='Event Status']/../input", displayColumns.isStatus());
+        setCheckBoxValue("//label[.='Result']/../input", displayColumns.isResult());
+        setCheckBoxValue("//label[.='Event Book']/../input", displayColumns.isEventBook());
+        setCheckBoxValue("//label[.='Assignee']/../input", displayColumns.isAssignee());
+        setCheckBoxValue("//label[.='Performed By']/../input", displayColumns.isPerformedBy());
+        setCheckBoxValue("//label[.='Comments']/../input", displayColumns.isComments());
+        setCheckBoxValue("//label[.='Action Notes']/../input", displayColumns.isActionNotes());
+        if (isJobsEnabled) {
+            setCheckBoxValue("//label[.='Job ID']/../input", displayColumns.isJobId());
+            setCheckBoxValue("//label[.='Job Name']/../input", displayColumns.isJobName());
+        }
+        setCheckBoxValue("//label[.='ID Number']/../input", displayColumns.isIdentifier());
+        setCheckBoxValue("//label[.='RFID Number']/../input", displayColumns.isRfidNumber());
+        setCheckBoxValue("//label[.='Reference Number']/../input", displayColumns.isReferenceNumber());
+        setCheckBoxValue("//label[.='Date Identified']/../input", displayColumns.isDateIdentified());
+
+        if (isAssignedToEnabled)
+            setCheckBoxValue("//label[.='Assigned To']/../input", displayColumns.isAssignedTo());
+        setCheckBoxValue("//label[.='Customer Name']/../input", displayColumns.isCustomer());
+        setCheckBoxValue("//label[.='Division']/../input", displayColumns.isDivision());
+        setCheckBoxValue("//label[.='Location']/../input", displayColumns.isLocation());
+        setCheckBoxValue("//label[.='Organization']/../input", displayColumns.isOrganization());
+
+        if (isIntegrationEnabled) {
+            setCheckBoxValue("//label[.='Order Number']/../input", displayColumns.isOrderNumber());
+            setCheckBoxValue("//label[.='Purchase Order']/../input", displayColumns.isPurchaseOrder());
+        }
+
+        setCheckBoxValue("//label[.='Asset Type Group']/../input", displayColumns.isAssetTypeGroup());
+        setCheckBoxValue("//label[.='Asset Type']/../input", displayColumns.isAssetType());
+        setCheckBoxValue("//label[.='Asset Status']/../input", displayColumns.isAssetStatus());
+        setCheckBoxValue("//label[.='Identified By']/../input", displayColumns.isIdentifiedBy());
+        setCheckBoxValue("//label[.='Description']/../input", displayColumns.isDescription());
+
+        if (isProofTestIntegrationEnabled) {
+            setCheckBoxValue("//label[.='Peak Load']/../input", displayColumns.isPeakLoad());
+            setCheckBoxValue("//label[.='Test Duration']/../input", displayColumns.isTestDuration());
+            setCheckBoxValue("//label[.='Peak Load Duration']/../input", displayColumns.isPeakLoadDuration());
+        }
 	}
 	
 	public void setSearchCriteria(ReportSearchCriteria criteria) {
@@ -219,5 +242,10 @@ public class ReportingPage extends WicketEntitySearchPage {
         selenium.select("//select[@name='filters:eventStateSelect']", "Open");
         waitForWicketAjax();
     }
+
+    public String getScheduledDateForResult(int resultNumber) {
+        return selenium.getText("//table[@id='resultsTable']/tbody/tr["+resultNumber+"]/td[contains(@id, 'nextdate')]");
+    }
+
 
 }

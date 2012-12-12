@@ -22,7 +22,7 @@ public class AssetsSearchPage extends WicketEntitySearchPage {
 		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Reference Number']/../input", displayColumns.isReferenceNumber());
 		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='RFID Number']/../input", displayColumns.isRfidNumber());
 		if (isJobSitesEnabled) {
-			setCheckBoxValue("//div[contains(@class, 'columns')]//label[.='Job Site Name']/../input", displayColumns.isJobSiteName());
+			setCheckBoxValue("//div[contains(@class, 'columns')]//label[.='Job Site Name']/../input", displayColumns.isCustomer());
 		}
 		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Customer Name']/../input", displayColumns.isCustomer());
 		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Division']/../input", displayColumns.isDivision());
@@ -40,7 +40,7 @@ public class AssetsSearchPage extends WicketEntitySearchPage {
 		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Comments']/../input", displayColumns.isComments());
 		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Description']/../input", displayColumns.isDescription());
 		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Safety Network']/../input", displayColumns.isSafetyNetwork());
-		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Next Scheduled Date']/../input", displayColumns.isScheduledDate());
+		setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Next Scheduled Date']/../input", displayColumns.isDueDate());
 		if (isIntergationEnabled) {
 			setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Organization']/../input", displayColumns.isOrderDescription());
 			setCheckBoxValue("//div[contains(@class, 'columns')]/label[.='Organization']/../input", displayColumns.isOrderNumber());

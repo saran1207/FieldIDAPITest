@@ -80,13 +80,10 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
         massUpdatePage.selectDelete();
         massUpdatePage.saveDeleteDetails();
         massUpdatePage.clickConfirmDelete();
-        assertTrue("Not all Schedules were properly removed", verifyAllSchedulesAreRemoved());
+        assertTrue("Not all Schedules were properly removed", !page.getActionMessages().isEmpty());
+        assertTrue("Not all Schedules were properly removed", page.getActionMessages().get(0).startsWith("Mass Delete Successful"));
 	}
 	
-	private boolean verifyAllSchedulesAreRemoved() {
-		page.clickSchedulesLink();
-		return selenium.isElementPresent("//div[@class='initialMessage']");
-	}
 
 	private boolean verifyAllEventsAreRemoved(){
 		return selenium.isElementPresent("//div[@class='message']");

@@ -1,15 +1,49 @@
 package com.n4systems.fieldid.selenium.datatypes;
 
 public class SearchDisplayColumns {
+
+    private boolean eventState;
+
+    private boolean score;
+
+    private boolean dueDate;
+
+    private boolean datePreformed;
+
+    private boolean daysPastDue;
+
+    private boolean eventTypeGroup;
+
+    private boolean eventType;
+
+    private boolean priority;
+
+    private boolean status;
+
+    private boolean result;
+
+    private boolean eventBook;
+
+    private boolean assignee;
+
+    private boolean performedBy;
+
+    private boolean comments;
+
+    private boolean actionNotes;
+
+    private boolean jobId;
+
+    private boolean jobName;
 	
 	private boolean identifier;
 	
 	private boolean referenceNumber;
 	
 	private boolean rfidNumber;
-	
-	private boolean jobSiteName;
-	
+
+    private boolean dateIdentified;
+
 	private boolean customer;
 	
 	private boolean division;
@@ -24,8 +58,6 @@ public class SearchDisplayColumns {
 	
 	private boolean assetStatus;
 	
-	private boolean dateIdentified;
-	
 	private boolean lastEventDate;
 	
 	private boolean networkLastEventDate;
@@ -35,9 +67,7 @@ public class SearchDisplayColumns {
 	private boolean identifiedBy;
 	
 	private boolean modifiedBy;
-	
-	private boolean comments;
-	
+
 	private boolean description;
 	
 	private boolean safetyNetwork;
@@ -47,17 +77,7 @@ public class SearchDisplayColumns {
 	private boolean orderNumber;
 	
 	private boolean purchaseOrder;
-	
-	private boolean datePreformed;
-	
-	private boolean eventType;
-	
-	private boolean result;
-	
-	private boolean eventBook;
-	
-	private boolean performedBy;
-	
+
 	private boolean peakLoad;
 	
 	private boolean testDuration;
@@ -65,12 +85,8 @@ public class SearchDisplayColumns {
 	private boolean peakLoadDuration;
 	
 	private boolean partNumber;
-	
-	private boolean scheduledDate;
-	
-	private boolean status;
-	
-	private boolean daysPastDue;
+
+    private boolean nextScheduledDate;
 
 	public boolean isIdentifier() {
 		return identifier;
@@ -94,14 +110,6 @@ public class SearchDisplayColumns {
 
 	public void setRfidNumber(boolean rfidNumber) {
 		this.rfidNumber = rfidNumber;
-	}
-
-	public boolean isJobSiteName() {
-		return jobSiteName;
-	}
-
-	public void setJobSiteName(boolean jobSiteName) {
-		this.jobSiteName = jobSiteName;
 	}
 
 	public boolean isDivision() {
@@ -319,72 +327,171 @@ public class SearchDisplayColumns {
 	public void setPartNumber(boolean partNumber) {
 		this.partNumber = partNumber;
 	}
-	
-	public void selectAllColumns() {
-		identifier = true;
-		referenceNumber = true;	
-		rfidNumber = true;	
-		jobSiteName = true;	
-		customer = true;
-		division = true;	
-		location = true;	
-		organization = true;	
-		assetTypeGroup = true;
-		assetType = true;
-		assetStatus = true;
-		dateIdentified = true;	
-		lastEventDate = true;
-		networkLastEventDate = true;
-		assignedTo = true;	
-		identifiedBy = true;	
-		modifiedBy = true;	
-		comments = true;	
-		description = true;	
-		safetyNetwork = true;	
-		orderDescription = true;	
-		orderNumber = true;	
-		purchaseOrder = true;
-		datePreformed = true;		
-		eventType = true;
-		result = true;		
-		eventBook = true;
-		performedBy = true;		
-		peakLoad = true;		
-		testDuration = true;		
-		peakLoadDuration = true;
-		partNumber = true;
-        scheduledDate = true;
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public boolean isDaysPastDue() {
+        return daysPastDue;
+    }
+
+    public void setDaysPastDue(boolean daysPastDue) {
+        this.daysPastDue = daysPastDue;
+    }
+
+    public boolean isCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(boolean customer) {
+        this.customer = customer;
+    }
+
+    public boolean isEventState() {
+        return eventState;
+    }
+
+    public void setEventState(boolean eventState) {
+        this.eventState = eventState;
+    }
+
+    public boolean isScore() {
+        return score;
+    }
+
+    public void setScore(boolean score) {
+        this.score = score;
+    }
+
+    public boolean isDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(boolean dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public boolean isEventTypeGroup() {
+        return eventTypeGroup;
+    }
+
+    public void setEventTypeGroup(boolean eventTypeGroup) {
+        this.eventTypeGroup = eventTypeGroup;
+    }
+
+    public boolean isPriority() {
+        return priority;
+    }
+
+    public void setPriority(boolean priority) {
+        this.priority = priority;
+    }
+
+    public boolean isAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(boolean assignee) {
+        this.assignee = assignee;
+    }
+
+    public boolean isActionNotes() {
+        return actionNotes;
+    }
+
+    public void setActionNotes(boolean actionNotes) {
+        this.actionNotes = actionNotes;
+    }
+
+    public boolean isJobId() {
+        return jobId;
+    }
+
+    public void setJobId(boolean jobId) {
+        this.jobId = jobId;
+    }
+
+    public boolean isJobName() {
+        return jobName;
+    }
+
+    public void setJobName(boolean jobName) {
+        this.jobName = jobName;
+    }
+
+    public boolean isNextScheduledDate() {
+        return nextScheduledDate;
+    }
+
+    public void setNextScheduledDate(boolean nextScheduledDate) {
+        this.nextScheduledDate = nextScheduledDate;
+    }
+
+    public SearchDisplayColumns selectAllColumns() {
+        eventState = true;
+        score = true;
+        dueDate = true;
+        datePreformed = true;
+        daysPastDue = true;
+        eventTypeGroup = true;
+        eventType = true;
+        priority = true;
+        status = true;
+        result = true;
+        eventBook = true;
+        assignee = true;
+        performedBy = true;
+        comments = true;
+        actionNotes = true;
+        jobId = true;
+        jobName = true;
+        identifier = true;
+        referenceNumber = true;
+        rfidNumber = true;
+        dateIdentified = true;
+        customer = true;
+        division = true;
+        location = true;
+        organization = true;
+        assetTypeGroup = true;
+        assetType = true;
+        assetStatus = true;
+        lastEventDate = true;
+        networkLastEventDate = true;
+        assignedTo = true;
+        identifiedBy = true;
+        modifiedBy = true;
+        description = true;
+        safetyNetwork = true;
+        orderDescription = true;
+        orderNumber = true;
+        purchaseOrder = true;
+        peakLoad = true;
+        testDuration = true;
+        peakLoadDuration = true;
+        partNumber = true;
+        nextScheduledDate = true;
+        return this;
 	}
 
-	public boolean isScheduledDate() {
-		return scheduledDate;
-	}
+    public SearchDisplayColumns selectOpenEventColumns() {
+        eventState = true;
+        dueDate = true;
+        eventType = true;
+        priority = true;
+        status = true;
+        result = true;
+        assignee = true;
+        actionNotes = true;
+        identifier = true;
+        assetType = true;
+        assetStatus = true;
+        return this;
+    }
 
-	public void setScheduledDate(boolean scheduledDate) {
-		this.scheduledDate = scheduledDate;
-	}
-
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
-
-	public boolean isDaysPastDue() {
-		return daysPastDue;
-	}
-
-	public void setDaysPastDue(boolean daysPastDue) {
-		this.daysPastDue = daysPastDue;
-	}
-
-	public boolean isCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(boolean customer) {
-		this.customer = customer;
-	}
 }

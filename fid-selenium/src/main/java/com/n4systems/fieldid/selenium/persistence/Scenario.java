@@ -161,6 +161,11 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
 
+    public EventBuilder anOpenEvent() {
+        EventBuilder builder = EventBuilder.anOpenEvent(anEventType());
+        return createPersistentBuilder(builder);
+    }
+
     public SubEventBuilder aSubEvent() {
         SubEventBuilder builder = SubEventBuilder.aSubEvent("hurf");
         return createPersistentBuilder(builder);

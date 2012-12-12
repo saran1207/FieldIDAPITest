@@ -1,14 +1,15 @@
 package com.n4systems.fieldid.selenium.misc;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.commons.lang.time.DateUtils;
-
 public class DateUtil {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
+    private static final SimpleDateFormat sdtf = new SimpleDateFormat("MM/dd/yy HH:mm aa");
 
     public static Date parseDate(String date) {
         try {
@@ -20,6 +21,10 @@ public class DateUtil {
 
     public static String formatDate(Date date) {
         return sdf.format(date);
+    }
+
+    public static String formatDateTime(Date date) {
+        return sdtf.format(date);
     }
 
     public static Date theDayAfter(Date day) {
