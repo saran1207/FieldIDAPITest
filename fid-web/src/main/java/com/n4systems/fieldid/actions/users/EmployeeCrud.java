@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.users;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
@@ -18,6 +12,11 @@ import com.n4systems.util.BitField;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class EmployeeCrud extends UserCrud {
@@ -39,8 +38,14 @@ public class EmployeeCrud extends UserCrud {
 			userPermissions.put(permission.getId().toString(), permField.isSet(permission.getId().intValue()));
 		}
 	}
-	
-	@Override
+
+    @Override
+    protected void initMemberFields() {
+        super.initMemberFields();
+        user.setUserType(UserType.FULL);
+    }
+
+    @Override
 	protected void testRequiredEntities(boolean existing) {
 		super.testRequiredEntities(existing);
 		if (existing && !user.isFullUser() && !user.isAdmin()) {

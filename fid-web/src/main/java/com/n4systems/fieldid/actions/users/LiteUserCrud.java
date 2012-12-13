@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.users;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
@@ -15,6 +9,11 @@ import com.n4systems.security.UserType;
 import com.n4systems.util.BitField;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LiteUserCrud extends UserCrud {
 
@@ -26,6 +25,12 @@ public class LiteUserCrud extends UserCrud {
 	protected LiteUserCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
 	}
+
+    @Override
+    protected void initMemberFields() {
+        super.initMemberFields();
+        user.setUserType(UserType.LITE);
+    }
 
 	@Override
 	@SkipValidation
