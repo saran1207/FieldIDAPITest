@@ -7,13 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.EventTypeImportSummary;
@@ -28,6 +22,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 
 	private Map<Long, EventTypeGroup> importedGroupMapping;
 	private Map<Long, StateSet> importedStateSetMapping;
+    private Map<Long, ScoreGroup> importedScoreGroupMapping;
 	private Set<Long> originalEventTypeIds;
 	private EventTypeImportSummary summary = new EventTypeImportSummary();
 	private User importUser;
@@ -63,12 +58,12 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 		
 		produceUniqueName(importedEventType);
 		
-		mapStateSets(importedEventType);
-		
+		mapButtonAndScoreGroups(importedEventType);
+
 		save(importedEventType);
 	}
 
-	private void save(EventType importedEventType) {
+    private void save(EventType importedEventType) {
         persistenceManager.save(importedEventType.getEventForm());
 
 		importedEventType.setCreatedBy(importUser);
@@ -87,21 +82,23 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 		cleanerFor(tenant).clean(importedEventType);
 	}
 
-	private void mapStateSets(EventType importedEventType) {
+	private void mapButtonAndScoreGroups(EventType importedEventType) {
         if (importedEventType.getEventForm() != null) {
             for (CriteriaSection criteriaSection : importedEventType.getEventForm().getSections()) {
                 for (Criteria criteria : criteriaSection.getCriteria()) {
                     if (criteria instanceof OneClickCriteria) {
                         OneClickCriteria oneClickCriteria = (OneClickCriteria) criteria;
                         oneClickCriteria.setStates(importedStateSetMapping.get(oneClickCriteria.getStates().getId()));
+                    } else if (criteria instanceof ScoreCriteria) {
+                        ScoreCriteria scoreCriteria = (ScoreCriteria) criteria;
+                        scoreCriteria.setScoreGroup(importedScoreGroupMapping.get(scoreCriteria.getScoreGroup().getId()));
                     }
                 }
             }
         }
 	}
-	
-	
-	public EventTypeImportSummary getSummaryForImport(Set<Long> eventTypeIds) {
+
+    public EventTypeImportSummary getSummaryForImport(Set<Long> eventTypeIds) {
 		if (eventTypeIds == null) {
 			throw new RuntimeException();
 		}
@@ -154,8 +151,12 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 		return this;
 	}
 
+    public CatalogEventTypeImportHandler setImportedScoreGroups(Map<Long, ScoreGroup> importedScoreGroupMapping) {
+        this.importedScoreGroupMapping = importedScoreGroupMapping;
+        return this;
+    }
 
-	public CatalogEventTypeImportHandler setImportedGroupMapping(Map<Long, EventTypeGroup> importedGroupMapping) {
+    public CatalogEventTypeImportHandler setImportedGroupMapping(Map<Long, EventTypeGroup> importedGroupMapping) {
 		this.importedGroupMapping = importedGroupMapping;
 		return this;
 	}

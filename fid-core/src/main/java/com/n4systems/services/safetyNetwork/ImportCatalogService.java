@@ -8,12 +8,7 @@ import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.assettype.AssetTypeScheduleSaver;
-import com.n4systems.services.safetyNetwork.catalog.CatalogAssetTypeGroupImportHandler;
-import com.n4systems.services.safetyNetwork.catalog.CatalogEventTypeGroupHandler;
-import com.n4systems.services.safetyNetwork.catalog.CatalogEventTypeImportHandler;
-import com.n4systems.services.safetyNetwork.catalog.CatalogAssetTypeImportHandler;
-import com.n4systems.services.safetyNetwork.catalog.CatalogAssetTypeRelationshipsImportHandler;
-import com.n4systems.services.safetyNetwork.catalog.CatalogStateSetsImportHandler;
+import com.n4systems.services.safetyNetwork.catalog.*;
 import com.n4systems.services.safetyNetwork.catalog.summary.CatalogImportSummary;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import org.apache.log4j.Logger;
@@ -28,6 +23,7 @@ public class ImportCatalogService {
 	private final CatalogEventTypeImportHandler importEventType;
 	private final CatalogEventTypeGroupHandler importEventTypeGroup;
 	private final CatalogStateSetsImportHandler importStateSets;
+    private final CatalogScoreGroupImportHandler importScoreGroups;
 	private Set<Long> importAssetTypeIds;
 	private Set<Long> importEventTypeIds;
 	private boolean importAllRelations = false;
@@ -42,6 +38,7 @@ public class ImportCatalogService {
 		importStateSets = new CatalogStateSetsImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getStateSetImportSummary());
 		importAssetTypeGroup = new CatalogAssetTypeGroupImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getAssetTypeGroupImportSummary());
 		importAssetTypeEventTypeRelations = new CatalogAssetTypeRelationshipsImportHandler(persistenceManager, primaryOrg, importCatalog, new AssetTypeScheduleSaver(), summary.getAssetTypeRelationshipsImportSummary());
+        importScoreGroups = new CatalogScoreGroupImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog);
 	}
 	
 	
@@ -63,7 +60,9 @@ public class ImportCatalogService {
 		importAssetType.setAssetGroupMapping(importAssetTypeGroup.getImportMapping()).setImportAssetTypeIds(importAssetTypeIds).setImportUser(importUser).importCatalog();
 		importEventTypeGroup.setEventTypeIds(importEventTypeIds).setImportUser(importUser).importCatalog();
 		importStateSets.setEventTypeIds(importEventTypeIds).setImportUser(importUser).importCatalog();
-		importEventType.setOriginalEventTypeIds(importEventTypeIds).setImportedGroupMapping(importEventTypeGroup.getImportMapping()).setImportedStateSetMapping(importStateSets.getImportMapping()).setImportUser(importUser).importCatalog();
+        importScoreGroups.setEventTypIds(importEventTypeIds).setImportUser(importUser).importCatalog();
+		importEventType.setOriginalEventTypeIds(importEventTypeIds).setImportedGroupMapping(importEventTypeGroup.getImportMapping()).setImportedStateSetMapping(importStateSets.getImportMapping()).setImportedScoreGroups(importScoreGroups.getMappedScoreGroups()).setImportUser(importUser).importCatalog();
+
 
 		if (importAllRelations) {
 			importAssetTypeEventTypeRelations.setImportedAssetTypeMapping(importAssetType.getImportedMap()).setImportedEventTypeMapping(importEventType.getImportMapping()).importCatalog();
@@ -77,6 +76,7 @@ public class ImportCatalogService {
 		importEventTypeGroup.rollback();
 		importStateSets.rollback();
 		importAssetTypeGroup.rollback();
+        importScoreGroups.rollback();
 	}
 	
 	public CatalogImportSummary importSelectionSummary() {
