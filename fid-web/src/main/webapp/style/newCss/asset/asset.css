@@ -67,6 +67,7 @@
 
 .assetImage {
     overflow: hidden;
+    cursor: pointer;
 }
 
 .assetImage img {
@@ -298,4 +299,8 @@
 .linkedWithAsset {
     padding-top: 10px;
     margin-left: -5px;
+}
+
+div.wicket-mask-dark {
+    opacity: 0.8;
 }

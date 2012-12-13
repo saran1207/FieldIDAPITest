@@ -5,16 +5,20 @@ import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
 import com.n4systems.fieldid.wicket.components.asset.summary.*;
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.reporting.PathHandler;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -44,7 +48,7 @@ public class AssetSummaryPage extends AssetPage {
         });
         
         boolean imageExists;
-        String imageUrl;
+        final String imageUrl;
         if(asset.getImageName() == null) {
             imageUrl = "/file/downloadAssetTypeImage.action?uniqueID=" + asset.getType().getId();
             if(asset.getType().getImageName() != null)
@@ -55,9 +59,23 @@ public class AssetSummaryPage extends AssetPage {
             imageUrl = "/file/downloadAssetImage.action?uniqueID=" + assetId;
             imageExists = PathHandler.getAssetImageFile(asset).exists();
         }
+        
+        final ModalWindow modalWindow = new FIDModalWindow("assetImageModalWindow");
+        modalWindow.setInitialHeight(500);
+        modalWindow.setInitialWidth(540);
+        add(modalWindow);
+
         ExternalImage assetImage;
         add(assetImage = new ExternalImage("assetImage", ContextAbsolutizer.toContextAbsoluteUrl(imageUrl)));
         assetImage.setVisible(imageExists);
+        assetImage.add(new AjaxEventBehavior("onclick") {
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                modalWindow.setContent(new AssetImagePanel(modalWindow.getContentId(), Model.of(imageUrl)));
+                modalWindow.show(target);
+            }
+        });
+
 
         if(asset.getGpsLocation() != null) {
             add(new GoogleMap("map").addLocation(asset.getGpsLocation().getLatitude().doubleValue(), asset.getGpsLocation().getLongitude().doubleValue()));
