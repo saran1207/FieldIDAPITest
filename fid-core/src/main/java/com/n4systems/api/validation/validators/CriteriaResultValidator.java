@@ -1,13 +1,5 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.n4systems.api.conversion.event.EventToModelConverter;
@@ -17,6 +9,9 @@ import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.*;
 import com.n4systems.model.security.SecurityFilter;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.*;
 
 
 public class CriteriaResultValidator extends CollectionValidator<CriteriaResultView, Collection<CriteriaResultView>> {
@@ -73,7 +68,7 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 			}
 			scoreNames.add(score.getName());
 		}
-		return ValidationResult.fail(InvalidScoreFail, value.getResultString(),scoreNames);
+		return ValidationResult.fail(InvalidScoreFail, section.getDisplayName() + ":" + criteria.getDisplayName(), value.getResultString(), scoreNames);
 	}
 
 	private ValidationResult validateNumberField(NumberFieldCriteria criteria, CriteriaSection section, CriteriaResultView value) {
