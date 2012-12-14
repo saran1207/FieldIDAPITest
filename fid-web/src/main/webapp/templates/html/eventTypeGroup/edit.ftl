@@ -10,10 +10,6 @@ ${action.setPageType('event_type_group', 'edit')!}
 			<@s.submit key="label.save"/>
 			&nbsp;<@s.text name="label.or"/>
 			<a href="javascript:void(0);" onclick="return redirect('${cancelUrl}'); return false;"/><@s.text name="label.cancel"/></a>
-			<#if action.canBeDeleted(group)>
-				&nbsp;<@s.text name="label.or"/>&nbsp;
-				<a href="#" onclick="if( confirm( '${action.getText( 'warning.deleteeventtypegroup' )}' ) ) { redirect( '${deleteUrl}' ); } return false;" ><@s.text name="label.delete"/></a>
-			</#if>
 		</div>
 	</@s.form>
 </div>
