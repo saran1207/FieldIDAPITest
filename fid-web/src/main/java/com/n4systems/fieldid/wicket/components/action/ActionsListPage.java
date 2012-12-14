@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.action;
 
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
+import com.n4systems.fieldid.wicket.components.asset.events.table.EventStateIcon;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
@@ -40,6 +41,7 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
         add(new ListView<Event>("actionsList", new PropertyModel<List<? extends Event>>(criteriaResultModel, "actions")) {
             @Override
             protected void populateItem(final ListItem<Event> item) {
+                item.add(new EventStateIcon("eventStateIcon", item.getModel()));
                 item.add(new Label("actionType", new PropertyModel<String>(item.getModel(), "type.name")));
                 item.add(new Label("assignee", new PropertyModel<String>(item.getModel(), "assignee.fullName")));
                 item.add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(item.getModel(), "dueDate"), getCurrentUser().getTimeZone()));

@@ -15,6 +15,6 @@ public class ResultIconColumn extends PropertyColumn<Event> {
 
     @Override
     public void populateItem(Item<ICellPopulator<Event>> item, String id, IModel<Event> eventModel) {
-        item.add(new ResultIconCell(id, eventModel));
+        item.add(new EventStateIcon(id, eventModel));
     }
 }

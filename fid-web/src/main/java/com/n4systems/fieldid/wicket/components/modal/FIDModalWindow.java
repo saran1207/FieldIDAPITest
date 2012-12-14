@@ -34,4 +34,6 @@ public class FIDModalWindow extends ModalWindow {
         super.renderHead(response);
         response.renderCSSReference("style/modal/fid_modal.css");
     }
+
+
 }

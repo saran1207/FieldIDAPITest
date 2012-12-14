@@ -10,12 +10,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class ResultIconCell extends Panel {
+public class EventStateIcon extends Panel {
 
     private @SpringBean
     DateService dateService;
 
-    public ResultIconCell(String id, IModel<Event> eventModel) {
+    public EventStateIcon(String id, IModel<Event> eventModel) {
         super(id);
 
         Event event = eventModel.getObject();
@@ -34,11 +34,6 @@ public class ResultIconCell extends Panel {
                 image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", status.getDisplayName()).getObject()));
             }
         } else if(state.equals(Event.EventState.OPEN)) {
-
-
-            //label.open_assigned_overdue=This event is open, assigned to {0} and overdue
-            //label.open_overdue=This event is open and overdue
-
             if(event.getAssignee() != null) {
                 if(isPastDue(event)) {
                     add(image = new ContextImage("resultIcon", "images/event-open-assigned-overdue.png"));
@@ -56,7 +51,7 @@ public class ResultIconCell extends Panel {
                     image.add(new AttributeAppender("title", new FIDLabelModel("label.event_open").getObject()));
                 }
             }
-        }else /*if(state.equals(Event.EventState.CLOSED)) */ {
+        } else {
             add(image = new ContextImage("resultIcon", "images/event-closed.png"));
             image.add(new AttributeAppender("title", new FIDLabelModel("label.event_closed").getObject()));
         }

@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
@@ -11,6 +12,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -44,22 +46,32 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         };
         add(actionsListLink);
 
-        AjaxLink startEventLink = new AjaxLink("startEventLink") {
+        AjaxLink startOrViewEventLink = new AjaxLink("startOrViewEventLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 // TODO: This is awful, but we're in a modal window, so not sure how else we can navigate
                 // setting a response page just loads that page inside the window which is not the expected behavior
 
-                String url = String.format("/fieldid/w/performEvent?type=%d&assetId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getId(), actionModel.getObject().getId());
+                String url = null;
+                if (actionModel.getObject().getEventState() == Event.EventState.OPEN) {
+                    url = String.format("/fieldid/w/performEvent?type=%d&assetId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getId(), actionModel.getObject().getId());
+                } else {
+                    url = String.format("/fieldid/event.action?uniqueID=%d", actionModel.getObject().getId());
+                }
+
                 target.appendJavaScript("parent.window.location='"+url+"';");
             }
 
             @Override
             public boolean isVisible() {
-                return assetSummaryContext || ( actionModel.getObject().isActive() && isStartable(criteriaResultModel));
+                return actionModel.getObject().getEventState() != Event.EventState.CLOSED &&
+                        (assetSummaryContext || ( actionModel.getObject().isActive() && isStartable(criteriaResultModel)));
             }
         };
-        add(startEventLink);
+        add(startOrViewEventLink);
+        startOrViewEventLink.setVisible(actionModel.getObject().getEventState() == Event.EventState.COMPLETED || actionModel.getObject().getEventState() == Event.EventState.OPEN);
+        IModel<String> startOrViewLabel = actionModel.getObject().getEventState() ==  Event.EventState.OPEN ? new FIDLabelModel("label.start_action") : new FIDLabelModel("label.view_completed_action");
+        startOrViewEventLink.add(new Label("startOrViewEventLabel", startOrViewLabel));
 
         Link editLink = new Link("editLink") {
             @Override public void onClick() {
