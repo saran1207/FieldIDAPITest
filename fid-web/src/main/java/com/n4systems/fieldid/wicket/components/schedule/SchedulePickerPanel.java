@@ -13,6 +13,7 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.User;
 import com.n4systems.services.date.DateService;
+import com.n4systems.util.time.DateUtil;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -56,12 +57,15 @@ public class SchedulePickerPanel extends Panel {
         public ScheduleForm(String id, final IModel<Event> eventScheduleModel, final IModel<List<EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
             super(id, eventScheduleModel);
 
+            Date dueDate = eventScheduleModel.getObject().getDate();
+
             setDefaultEventType(eventScheduleModel, eventTypeOptions);
 
             add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
             add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "dueDate"), true));
             dateTimePicker.getDateTextField().setRequired(true);
+            dateTimePicker.setAllDay(dueDate == null || DateUtil.isMidnight(dueDate));
 
             DropDownChoice<EventType> eventTypeSelect = new FidDropDownChoice<EventType>("eventTypeSelect", new PropertyModel<EventType>(eventScheduleModel, "type"), eventTypeOptions, new ListableChoiceRenderer<EventType>());
             DropDownChoice<Project> jobSelect = new FidDropDownChoice<Project>("jobSelect", new PropertyModel<Project>(eventScheduleModel, "project"), jobsOptions, new ListableChoiceRenderer<Project>());
