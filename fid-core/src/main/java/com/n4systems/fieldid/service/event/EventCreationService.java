@@ -203,12 +203,18 @@ public class EventCreationService extends FieldIdPersistenceService {
             for (FileAttachment uploadedFile : uploadedFiles) {
 
                 try {
-                    // attach the attachment
-                    targetEvent.getAttachments().add(uploadedFile);
 
                     if (!uploadedFile.isNew()) {
+                        // File attachments are stored transiently, so we need to re find pre-existing ones and
+                        // set the comment to the value that was possibly edited in while the event was edited.
+                        FileAttachment editedFile = persistenceService.find(FileAttachment.class, uploadedFile.getId());
+                        editedFile.setComments(uploadedFile.getComments());
+                        targetEvent.getAttachments().add(editedFile);
                         continue;
                     }
+
+                    // attach the attachment
+                    targetEvent.getAttachments().add(uploadedFile);
 
                     // move the file to it's new location, note that it's
                     // location is currently relative to the tmpDirectory
