@@ -5,6 +5,7 @@ import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetAttachmentListLoader;
@@ -29,7 +30,9 @@ public class AssetSaveService {
 	private boolean removeAssetImage;
 	private String newAssetImageName;
 
-	public AssetSaveService(LegacyAsset assetManager, User user) {
+    private S3Service s3service;
+
+    public AssetSaveService(LegacyAsset assetManager, User user) {
 		super();
 		this.assetManager = assetManager;
 		this.user = user;
@@ -145,8 +148,8 @@ public class AssetSaveService {
 	}
 	
 	private void saveAssetImage() throws SubAssetUniquenessException {
-		AssetImageFileSaver saver = new AssetImageFileSaver(asset, newAssetImageName);
-		if(newAssetImage && newAssetImageName != null) {
+        AssetImageFileSaver saver = getAssetImageFileSaver();
+        if(newAssetImage && newAssetImageName != null) {
 			saver.save();
 		}
 		
@@ -155,7 +158,7 @@ public class AssetSaveService {
 		}
 	}
 
-	private void saveAssetImageName() {
+    private void saveAssetImageName() {
 		newAssetImageName = asset.getImageName();
 		if(newAssetImage && newAssetImageName != null) {
 			asset.setImageName(newAssetImageName.split("/")[1]);
@@ -209,5 +212,17 @@ public class AssetSaveService {
 	public void setRemoveAssetImage(boolean removeAssetImage) {
 		this.removeAssetImage = removeAssetImage;
 	}
+
+    private AssetImageFileSaver getAssetImageFileSaver() {
+        if(s3service == null)
+            return new AssetImageFileSaver(asset, newAssetImageName);
+        else
+            return new AssetImageFileSaver(asset, newAssetImageName, s3service);
+    }
+
+    public void setS3service(S3Service s3service) {
+        this.s3service = s3service;
+    }
+
 
 }

@@ -1,23 +1,22 @@
 package com.n4systems.services.asset;
 
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static com.n4systems.model.builders.TenantBuilder.*;
-import static com.n4systems.model.builders.UserBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
 import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Tenant;
-
-import org.junit.Before;
-import org.junit.Test;
-
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
+import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.model.Asset;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.user.User;
+import org.junit.Before;
+import org.junit.Test;
+
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.builders.TenantBuilder.n4;
+import static com.n4systems.model.builders.UserBuilder.anEmployee;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class AssetSaveServiceTest {
 
@@ -46,6 +45,7 @@ public class AssetSaveServiceTest {
 		Asset asset = anAsset().forTenant(tenant).generate();
 		
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
+        S3Service mockS3Service = createMock(S3Service.class);
 		try {
 			expect(mockAssetManager.createWithHistory(asset, user)).andReturn(asset);
 		} catch (Exception e) {
@@ -54,6 +54,7 @@ public class AssetSaveServiceTest {
 		replay(mockAssetManager);
 		AssetSaveService sut = new AssetSaveService(mockAssetManager, user);
 		sut.setAsset(asset);
+        sut.setS3service(mockS3Service);
 		
 		Asset actualAsset = sut.create();
 		
@@ -89,6 +90,8 @@ public class AssetSaveServiceTest {
 		Asset asset = anAsset().forTenant(tenant).generate();
 		
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
+        S3Service mockS3Service = createMock(S3Service.class);
+
 		try {
 			expect(mockAssetManager.update(asset, user)).andReturn(asset);
 		} catch (Exception e) {
@@ -97,6 +100,7 @@ public class AssetSaveServiceTest {
 		replay(mockAssetManager);
 		AssetSaveService sut = new AssetSaveService(mockAssetManager, user);
 		sut.setAsset(asset);
+        sut.setS3service(mockS3Service);
 		
 		Asset actualAsset = sut.update();
 		
@@ -131,12 +135,15 @@ public class AssetSaveServiceTest {
 		Asset asset = anAsset().forTenant(tenant).generate();
 		
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
+        S3Service mockS3Service = createMock(S3Service.class);
+
 		expect(mockAssetManager.create(asset, user)).andReturn(asset);
 		
 		replay(mockAssetManager);
 		
 		AssetSaveService sut = new AssetSaveService(mockAssetManager, user);
 		sut.setAsset(asset);
+        sut.setS3service(mockS3Service);
 		
 		sut.createWithoutHistory();
 		

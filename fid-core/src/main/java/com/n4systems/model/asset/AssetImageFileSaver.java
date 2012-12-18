@@ -21,11 +21,16 @@ public class AssetImageFileSaver extends FileSaver<Asset> {
 	private byte[] data;
 	private boolean dataSpecified; //Let's use this, just in case data was null.
 
-    private S3Service s3Service = ServiceLocator.getS3Service();
+    private S3Service s3Service;
 
-	public AssetImageFileSaver(Asset asset, String filePath) {
+    public AssetImageFileSaver(Asset asset, String filePath) {
+        this(asset, filePath, ServiceLocator.getS3Service());
+    }
+
+	public AssetImageFileSaver(Asset asset, String filePath, S3Service s3Service) {
 		this.asset = asset;
 		this.filePath = filePath;
+        this.s3Service = s3Service;
 	}
 	
 	@Override
