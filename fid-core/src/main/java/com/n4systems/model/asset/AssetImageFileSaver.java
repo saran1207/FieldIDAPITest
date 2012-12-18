@@ -1,15 +1,17 @@
 package com.n4systems.model.asset;
 
-import java.io.File;
-import java.io.IOException;
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Asset;
 import com.n4systems.persistence.savers.FileSaver;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.ServiceLocator;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
 
 public class AssetImageFileSaver extends FileSaver<Asset> {
 
@@ -18,24 +20,17 @@ public class AssetImageFileSaver extends FileSaver<Asset> {
 	private String filePath;
 	private byte[] data;
 	private boolean dataSpecified; //Let's use this, just in case data was null.
-	
+
+    private S3Service s3Service = ServiceLocator.getS3Service();
+
 	public AssetImageFileSaver(Asset asset, String filePath) {
 		this.asset = asset;
 		this.filePath = filePath;
-	}	
+	}
 	
 	@Override
 	public void remove() {
-		File attachmentDir = PathHandler.getAssetImageDir(asset);
-		
-		try {
-			if(attachmentDir.exists()) {
-				FileUtils.cleanDirectory(attachmentDir);
-			}
-		} catch (IOException e) {
-			logger.error("failed to remove image file ", e);
-			throw new FileAttachmentException(e);
-		}	
+        s3Service.removeAssetProfileImage(asset.getId(), filePath);
 	}
 
 	@Override
@@ -68,15 +63,10 @@ public class AssetImageFileSaver extends FileSaver<Asset> {
 	}
 
 	private File copyFile() throws IOException {
-		File attachmentDir = PathHandler.getAssetImageDir(asset);
-		File tmpDirectory = PathHandler.getTempRoot();
+		File tmpFile = new File(PathHandler.getTempRoot(), filePath);
 
-		File tmpFile = new File(tmpDirectory, filePath);
+        s3Service.uploadAssetProfileImage(tmpFile, asset.getId(), tmpFile.getName());
 		
-		if(attachmentDir.exists()) {
-			FileUtils.cleanDirectory(attachmentDir);
-		}
-		FileUtils.copyFileToDirectory(tmpFile, attachmentDir);
 		return tmpFile;
 	}
 	
@@ -84,16 +74,11 @@ public class AssetImageFileSaver extends FileSaver<Asset> {
 	private void writeFile() throws IOException {
 		if(data == null)
 			throw new FileAttachmentException("Data cannot be null.");
-		
-		File attachmentDir = PathHandler.getAssetImageDir(asset);
-		
-		if(attachmentDir.exists()) {
-			FileUtils.cleanDirectory(attachmentDir);
-		}
-		
-		File imageFile = new File(attachmentDir, filePath);
+				
+		File imageFile = new File(PathHandler.getTempRoot(), getImageFileName());
 		try {
 			FileUtils.writeByteArrayToFile(imageFile, data);
+            s3Service.uploadAssetProfileImage(imageFile, asset.getId(), imageFile.getName());
 		} catch(IOException e) {
 			throw new FileAttachmentException("Failed to write attachment data [" + imageFile + "]", e);
 		}

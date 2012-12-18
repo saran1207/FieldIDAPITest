@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.asset;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
@@ -21,6 +22,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.File;
 
@@ -29,6 +31,8 @@ public class AssetSummaryPage extends AssetPage {
     private UpcomingEventsPanel upcomingEventsPanel;
     private Label upcomingEventsMessage;
 
+    @SpringBean
+    private S3Service s3Service;
 
     public AssetSummaryPage(Asset asset) {
         this(new PageParameters().add("uniqueID",asset.getId()).add("useContext","false"));
@@ -50,14 +54,14 @@ public class AssetSummaryPage extends AssetPage {
         boolean imageExists;
         final String imageUrl;
         if(asset.getImageName() == null) {
-            imageUrl = "/file/downloadAssetTypeImage.action?uniqueID=" + asset.getType().getId();
+            imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("/file/downloadAssetTypeImage.action?uniqueID=" + asset.getType().getId());
             if(asset.getType().getImageName() != null)
                 imageExists = new File(PathHandler.getAssetTypeImageFile(asset.getType()), asset.getType().getImageName()).exists();
             else
                 imageExists = false;
         } else {
-            imageUrl = "/file/downloadAssetImage.action?uniqueID=" + assetId;
-            imageExists = PathHandler.getAssetImageFile(asset).exists();
+            imageExists = s3Service.assetProfileImageExists(asset.getId(), asset.getImageName());
+            imageUrl = s3Service.getAssetProfileImageMediumURL(asset.getId(), asset.getImageName()).toString();
         }
         
         final ModalWindow modalWindow = new FIDModalWindow("assetImageModalWindow");
@@ -66,7 +70,7 @@ public class AssetSummaryPage extends AssetPage {
         add(modalWindow);
 
         ExternalImage assetImage;
-        add(assetImage = new ExternalImage("assetImage", ContextAbsolutizer.toContextAbsoluteUrl(imageUrl)));
+        add(assetImage = new ExternalImage("assetImage", imageUrl));
         assetImage.setVisible(imageExists);
         assetImage.add(new AjaxEventBehavior("onclick") {
             @Override

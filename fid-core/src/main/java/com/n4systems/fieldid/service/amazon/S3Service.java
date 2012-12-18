@@ -10,17 +10,20 @@ import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
@@ -36,6 +39,12 @@ public class S3Service extends FieldIdPersistenceService {
 	public static final String CRITERIA_RESULT_IMAGE_PATH_ORIG = "/events/%d/criteria_results/%d/criteria_images/%s";
 	public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
+
+    public static final String ASSET_PROFILE_IMAGE_PATH = "/assets/%d/profile/";
+    public static final String ASSET_PROFILE_IMAGE_PATH_ORIG = "/assets/%d/profile/%s";
+    public static final String ASSET_PROFILE_IMAGE_PATH_THUMB = "/assets/%d/profile/%s.thumbnail";
+    public static final String ASSET_PROFILE_IMAGE_PATH_MEDIUM = "/assets/%d/profile/%s.medium";
+
     public static final String THUMBNAIL_EXTENSION = ".thumbnail";
     public static final String MEDIUM_EXTENSION = ".medium";
 
@@ -136,6 +145,69 @@ public class S3Service extends FieldIdPersistenceService {
     public boolean secondaryOrgCertificateLogoExists(Long secondaryOrgId) {
         boolean exists = resourceExists(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
         return exists;
+    }
+
+    public URL getAssetProfileImageOriginalURL(Long assetId, String imageName) {
+        URL assetProfileUrl = generateResourceUrl(null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
+        return assetProfileUrl;
+    }
+
+    public URL getAssetProfileImageMediumURL(Long assetId, String imageName) {
+        URL assetProfileUrl = generateResourceUrl(null, ASSET_PROFILE_IMAGE_PATH_MEDIUM, assetId, imageName);
+        return assetProfileUrl;
+    }
+
+    public URL getAssetProfileImageThumbnailURL(Long assetId, String imageName) {
+        URL assetProfileUrl = generateResourceUrl(null, ASSET_PROFILE_IMAGE_PATH_THUMB, assetId, imageName);
+        return assetProfileUrl;
+    }
+
+    public byte[] downloadAssetProfileOriginalImage(Long assetId, String imageName) throws IOException {
+        byte[] imageData = downloadResource(null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
+        return imageData;
+    }
+
+    public byte[] downloadAssetProfileMediumImage(Long assetId, String imageName) throws IOException {
+        byte[] imageData = downloadResource(null, ASSET_PROFILE_IMAGE_PATH_MEDIUM, assetId, imageName);
+        return imageData;
+    }
+
+    public byte[] downloadAssetProfileThumbnailImage(Long assetId, String imageName) throws IOException {
+        byte[] imageData = downloadResource(null, ASSET_PROFILE_IMAGE_PATH_THUMB, assetId, imageName);
+        return imageData;
+    }
+
+    public boolean assetProfileImageExists(Long assetId, String imageName) {
+        boolean exists = resourceExists(null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
+        return exists;
+    }
+
+    public void uploadAssetProfileImage(File file, Long assetId, String imageName) throws IOException {
+        removePreviousAssetProfileImage(assetId);
+        
+        byte[] imageData = FileUtils.readFileToByteArray(file);
+        String contentType = new MimetypesFileTypeMap().getContentType(file);
+        byte[] thumbnailImage = imageService.generateThumbnail(imageData);
+        byte[] mediumImage = imageService.generateMedium(imageData);
+
+        uploadResource(file, null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
+        uploadResource(thumbnailImage, contentType, null, ASSET_PROFILE_IMAGE_PATH_THUMB, assetId, imageName);
+        uploadResource(mediumImage, contentType, null, ASSET_PROFILE_IMAGE_PATH_MEDIUM, assetId, imageName);        
+    }
+
+    private void removePreviousAssetProfileImage(Long assetId) {
+        List<S3ObjectSummary> objectSummaryList = getClient().listObjects(getBucket(), createResourcePath(null, ASSET_PROFILE_IMAGE_PATH, assetId)).getObjectSummaries();
+        for(S3ObjectSummary summary: objectSummaryList) {
+            if(summary.getSize() > 0) {
+                deleteObject(summary.getKey());
+            }
+        }
+    }
+
+    public void removeAssetProfileImage(Long assetId, String imageName) {
+        removeResource(null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
+        removeResource(null, ASSET_PROFILE_IMAGE_PATH_MEDIUM, assetId, imageName);
+        removeResource(null, ASSET_PROFILE_IMAGE_PATH_THUMB, assetId, imageName);
     }
 
 	public void uploadCriteriaResultImage(CriteriaResultImage criteriaResultImage) {

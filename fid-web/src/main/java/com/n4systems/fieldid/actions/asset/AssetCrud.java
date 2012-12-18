@@ -1180,10 +1180,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	private void processUploadedImage() {
-		if (removeImage == true) {
-			asset.setImageName(null);
-		}
-
 		if (newImage == true && (imageDirectory != null  && !imageDirectory.isEmpty())) {
 			File tmpDirectory = PathHandler.getTempRoot();
 			new File(tmpDirectory.getAbsolutePath() + '/' + imageDirectory);
