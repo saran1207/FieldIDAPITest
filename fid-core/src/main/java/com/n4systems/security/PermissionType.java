@@ -16,7 +16,6 @@ public enum PermissionType {
 	EditEvent("label.editevent_permission",Permissions.EditEvent),           
 	ManageJobs("label.managejobs_permission",Permissions.ManageJobs),
 	ManageSafetyNetwork("label.managesafetynetwork_permission",Permissions.ManageSafetyNetwork), 
-	AccessWebStore("label.accesswebstore_permission", Permissions.AccessWebStore), 
 	// composite permissions....
 	ADMIN(Integer.MAX_VALUE-1),	// set all bits. 
 	SYSTEM(Integer.MAX_VALUE-1),// 

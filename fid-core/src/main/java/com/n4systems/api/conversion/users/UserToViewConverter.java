@@ -41,7 +41,6 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 		view.setEditEvents(getPermissionYNString(model, Permissions.EditEvent));
 		view.setManageJobs(getPermissionYNString(model, Permissions.ManageJobs));
 		view.setManageSafetyNetwork(getPermissionYNString(model, Permissions.ManageSafetyNetwork));
-		view.setAccessWebStore(getPermissionYNString(model, Permissions.AccessWebStore));
 
 		return view;
 	}

@@ -1,12 +1,12 @@
 package com.n4systems.security;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.user.User;
 import com.n4systems.util.BitField;
 import com.n4systems.util.persistence.SimpleListable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Permissions {
@@ -20,8 +20,7 @@ public class Permissions {
 	public static final int EditEvent           = 1<<5;
 	public static final int ManageJobs			= 1<<6;
 	public static final int ManageSafetyNetwork = 1<<7;
-	public static final int AccessWebStore		= 1<<8;
-	
+
 	// Composite permissions
 	public static final int NO_PERMISSIONS 		= 0;
 	public static final int ALL 				= Integer.MAX_VALUE;	// (2^31 - 1)
@@ -33,7 +32,7 @@ public class Permissions {
 	
 	
 	/** permissions visible for admins to select for system users */
-	private static final int[] visibleSytemUserPermissions = { Tag, ManageSystemConfig, ManageSystemUsers, ManageEndUsers, CreateEvent, EditEvent, ManageJobs, ManageSafetyNetwork, AccessWebStore };
+	private static final int[] visibleSytemUserPermissions = { Tag, ManageSystemConfig, ManageSystemUsers, ManageEndUsers, CreateEvent, EditEvent, ManageJobs, ManageSafetyNetwork };
 
 	private static final int[] visibleLiteUserPermissions = { CreateEvent, EditEvent };
 	
@@ -41,7 +40,7 @@ public class Permissions {
 
 	
 	/**
-	 * @param permission a Primary permission (ie not composite)
+	 * @param permissionValue a Primary permission (ie not composite)
 	 * @return The label for a primary permission
 	 */
 	public static String getLabel(int permissionValue) {
@@ -68,8 +67,6 @@ public class Permissions {
 			return EditEvent;
 		} else if (safeName.equals("managejobs")) {
 			return ManageJobs;
-		} else if (safeName.equals("accesswebstore")) {
-			return AccessWebStore;
 		} else if (safeName.equals("managesafetynetwork")) {
 			return ManageSafetyNetwork;
 		} else {

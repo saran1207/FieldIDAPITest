@@ -145,9 +145,6 @@
 			<result name="sessionBooted" type="freemarker">/templates/external/ajax/common/session_kicked.ftl</result>
 		</global-results>
 
-		<action name="externalAuthVerification" method="checkExternalAuthKey" class="com.n4systems.fieldid.actions.webStoreSSO.WebStoreSSOAction">
-			<result name="success" type="freemarker">/templates/ajax/webStoreSSO/externalCredentials.ftl</result>
-		</action>
 	</package>
 	<package name="files" extends="default" namespace="/file">
 		<global-results>

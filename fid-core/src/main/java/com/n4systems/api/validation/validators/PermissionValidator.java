@@ -1,8 +1,5 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.UserView;
 import com.n4systems.api.validation.ValidationResult;
@@ -11,6 +8,9 @@ import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.security.PermissionType;
 import com.n4systems.security.UserType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PermissionValidator implements FieldValidator {
 	
@@ -25,7 +25,6 @@ public class PermissionValidator implements FieldValidator {
 		permissionsMap.put(UserView.EDIT_EVENTS_FIELD, PermissionType.EditEvent);
 		permissionsMap.put(UserView.MANAGE_JOBS_FIELD, PermissionType.ManageJobs);
 		permissionsMap.put(UserView.MANAGE_SAFETY_NETWORK_FIELD, PermissionType.ManageSafetyNetwork);
-		permissionsMap.put(UserView.ACCESS_WEB_STORE_FIELD, PermissionType.AccessWebStore);
 	}
 		
 	@Override

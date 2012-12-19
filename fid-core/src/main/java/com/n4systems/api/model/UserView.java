@@ -112,9 +112,6 @@ public class UserView extends ExternalModelView {
 	@SerializableField(title=MANAGE_SAFETY_NETWORK_FIELD, order = 630, validators = {PermissionValidator.class})
 	private String manageSafetyNetwork;
 	
-	@SerializableField(title=ACCESS_WEB_STORE_FIELD, order = 640, validators = {PermissionValidator.class})
-	private String accessWebStore;
-
     @SerializableField(title= MOBILE_PASSCODE_FIELD, order = 680, validators = {}, handler=MaskedSerializationHandler.class)
 	private String securityRfidNumber;
 
@@ -306,14 +303,6 @@ public class UserView extends ExternalModelView {
 		this.manageSafetyNetwork = manageSafetyNetwork;
 	}
 
-	public String getAccessWebStore() {
-		return accessWebStore;
-	}
-
-	public void setAccessWebStore(String accessWebStore) {
-		this.accessWebStore = accessWebStore;
-	}
-
 	private boolean isPermission(String yOrN) {
 		return YNField.isYes(yOrN);
 	}
@@ -364,9 +353,6 @@ public class UserView extends ExternalModelView {
 		}
 		if (isPermission(getEditEvents())) {
 			permissions |= Permissions.EditEvent;		
-		}
-		if (isPermission(getAccessWebStore())) {
-			permissions |= Permissions.AccessWebStore;					
 		}
 		return permissions;
 	}
