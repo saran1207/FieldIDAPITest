@@ -7,6 +7,7 @@ import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.asset.AssetImageFileSaver;
 import com.n4systems.model.user.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,19 +43,23 @@ public class AssetSaveServiceTest {
 	@Test
 	public void should_create_asset_with_history_no_files() {
 		Tenant tenant = n4();
-		Asset asset = anAsset().forTenant(tenant).generate();
+		final Asset asset = anAsset().forTenant(tenant).generate();
 		
-		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
-        S3Service mockS3Service = createMock(S3Service.class);
+		final LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
+        final S3Service mockS3Service = createMock(S3Service.class);
 		try {
 			expect(mockAssetManager.createWithHistory(asset, user)).andReturn(asset);
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
 		replay(mockAssetManager);
-		AssetSaveService sut = new AssetSaveService(mockAssetManager, user);
+		AssetSaveService sut = new AssetSaveService(mockAssetManager, user) {
+            @Override
+            public AssetImageFileSaver getAssetImageFileSaver() {
+                return new AssetImageFileSaver(asset, asset.getImageName(), mockS3Service);
+            }
+        };
 		sut.setAsset(asset);
-        sut.setS3service(mockS3Service);
 		
 		Asset actualAsset = sut.create();
 		
@@ -87,10 +92,10 @@ public class AssetSaveServiceTest {
 	@Test
 	public void should_update_asset_no_files() {
 		Tenant tenant = n4();
-		Asset asset = anAsset().forTenant(tenant).generate();
+		final Asset asset = anAsset().forTenant(tenant).generate();
 		
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
-        S3Service mockS3Service = createMock(S3Service.class);
+        final S3Service mockS3Service = createMock(S3Service.class);
 
 		try {
 			expect(mockAssetManager.update(asset, user)).andReturn(asset);
@@ -98,10 +103,14 @@ public class AssetSaveServiceTest {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
 		replay(mockAssetManager);
-		AssetSaveService sut = new AssetSaveService(mockAssetManager, user);
+		AssetSaveService sut = new AssetSaveService(mockAssetManager, user){
+            @Override
+            public AssetImageFileSaver getAssetImageFileSaver() {
+                return new AssetImageFileSaver(asset, asset.getImageName(), mockS3Service);
+            }
+        };
 		sut.setAsset(asset);
-        sut.setS3service(mockS3Service);
-		
+
 		Asset actualAsset = sut.update();
 		
 		assertEquals(asset, actualAsset);
@@ -132,19 +141,23 @@ public class AssetSaveServiceTest {
 	public void save_without_history_does_not_create_history() throws SubAssetUniquenessException {
 	
 		Tenant tenant = n4();
-		Asset asset = anAsset().forTenant(tenant).generate();
+		final Asset asset = anAsset().forTenant(tenant).generate();
 		
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
-        S3Service mockS3Service = createMock(S3Service.class);
+        final S3Service mockS3Service = createMock(S3Service.class);
 
 		expect(mockAssetManager.create(asset, user)).andReturn(asset);
 		
 		replay(mockAssetManager);
 		
-		AssetSaveService sut = new AssetSaveService(mockAssetManager, user);
+		AssetSaveService sut = new AssetSaveService(mockAssetManager, user){
+            @Override
+            public AssetImageFileSaver getAssetImageFileSaver() {
+                return new AssetImageFileSaver(asset, asset.getImageName(), mockS3Service);
+            }
+        };
 		sut.setAsset(asset);
-        sut.setS3service(mockS3Service);
-		
+
 		sut.createWithoutHistory();
 		
 		verify(mockAssetManager);

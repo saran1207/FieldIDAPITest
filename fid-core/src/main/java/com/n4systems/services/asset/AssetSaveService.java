@@ -5,7 +5,6 @@ import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetAttachmentListLoader;
@@ -30,7 +29,7 @@ public class AssetSaveService {
 	private boolean removeAssetImage;
 	private String newAssetImageName;
 
-    private S3Service s3service;
+    private AssetImageFileSaver assetImageFileSaver;
 
     public AssetSaveService(LegacyAsset assetManager, User user) {
 		super();
@@ -213,16 +212,10 @@ public class AssetSaveService {
 		this.removeAssetImage = removeAssetImage;
 	}
 
-    private AssetImageFileSaver getAssetImageFileSaver() {
-        if(s3service == null)
-            return new AssetImageFileSaver(asset, newAssetImageName);
-        else
-            return new AssetImageFileSaver(asset, newAssetImageName, s3service);
+    public AssetImageFileSaver getAssetImageFileSaver() {
+        if(assetImageFileSaver == null) {
+            assetImageFileSaver=  new AssetImageFileSaver(asset, newAssetImageName);
+        }
+        return assetImageFileSaver;
     }
-
-    public void setS3service(S3Service s3service) {
-        this.s3service = s3service;
-    }
-
-
 }
