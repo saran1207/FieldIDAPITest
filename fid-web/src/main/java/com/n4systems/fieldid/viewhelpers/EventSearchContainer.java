@@ -5,7 +5,7 @@ import java.util.Date;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.Event;
-import com.n4systems.model.Status;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.NetworkIdSecurityFilter;
@@ -44,7 +44,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	
 	private Long performedBy;
 	
-	private Status status;
+	private EventResult eventResult;
 	
 	public EventSearchContainer(SecurityFilter filter, LoaderFactory loaderFactory, SystemSecurityGuard systemSecurityGuard) {
 		super(Event.class, "id", filter, loaderFactory, systemSecurityGuard);
@@ -74,7 +74,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		addSimpleTerm("type.group.id", eventTypeGroupId);
 		addSimpleTerm("performedBy.id", performedBy);
 		addSimpleTerm("schedule.project.id", jobId);
-		addSimpleTerm("status", status);
+		addSimpleTerm("eventResult", eventResult);
 		addDateRangeTerm("completedDate", fromDate, toDate);
 		
 		addEventBookTerm();
@@ -314,16 +314,16 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.includeNetworkResults = includeNetworkResults;
 	}
 
-	public void setStatus(String status) {
+	public void setEventResult(String eventResult) {
 		try {
-			this.status = Status.valueOf(status);
+			this.eventResult = EventResult.valueOf(eventResult);
 		} catch (Exception e) {
-			this.status = null;
+			this.eventResult = null;
 		}
 	}
 
-	public String getStatus() {
-		return status != null ? status.name() : null;
+	public String getEventResult() {
+		return eventResult != null ? eventResult.name() : null;
 	}
 
     public Long getEventType() {

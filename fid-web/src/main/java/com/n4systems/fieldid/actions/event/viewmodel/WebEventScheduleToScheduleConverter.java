@@ -35,7 +35,7 @@ public class WebEventScheduleToScheduleConverter {
         openEvent.setType(eventType);
         openEvent.setDueDate(scheduledDate);
         openEvent.setOwner(asset.getOwner());
-        openEvent.setStatus(Status.VOID);
+        openEvent.setEventResult(EventResult.VOID);
         if (webSchedule.getAssignee()!=null) {
             User user = loaderFactory.createFilteredIdLoader(User.class).setId(webSchedule.getAssignee()).load();
             openEvent.setAssignee(user);

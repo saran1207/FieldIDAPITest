@@ -68,9 +68,9 @@ public class EventScheduleSearchContainer extends SearchContainer {
 		addSimpleTermOrNull("project.id", jobAndNullId);
         // Exclude any 'dummy' schedule that wasn't actually scheduled -- nextDate will be null for these.
 //        addNotNullTerm("nextDate");
-        addSimpleTerm("eventState", Event.EventState.OPEN);
+        addSimpleTerm("workflowState", Event.WorkflowState.OPEN);
 		addDateRangeTerm("dueDate", fromDate, toDate);
-		addSimpleInTerm("eventState", status.getEventStates());
+		addSimpleInTerm("workflowState", status.getWorkflowStates());
 		
 		addPredefinedLocationTerm();
 		addAssigUserTerm();

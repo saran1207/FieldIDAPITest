@@ -1,18 +1,12 @@
 package com.n4systems.handlers.creator.signup;
 
-import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.*;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.State;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Status;
-import com.n4systems.model.TagOption;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
 import com.n4systems.persistence.Transaction;
@@ -124,7 +118,7 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		na.setTenant(tenant);
 		na.setButtonName("btn2");
 		na.setDisplayText("NA");
-		na.setStatus(Status.NA);
+		na.setEventResult(EventResult.NA);
 		return na;
 	}
 
@@ -133,7 +127,7 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		fail.setTenant(tenant);
 		fail.setButtonName("btn1");
 		fail.setDisplayText("Fail");
-		fail.setStatus(Status.FAIL);
+		fail.setEventResult(EventResult.FAIL);
 		return fail;
 	}
 
@@ -142,7 +136,7 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		pass.setTenant(tenant);
 		pass.setButtonName("btn0");
 		pass.setDisplayText("Pass");
-		pass.setStatus(Status.PASS);
+		pass.setEventResult(EventResult.PASS);
 		return pass;
 	}
 

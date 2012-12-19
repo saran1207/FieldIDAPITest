@@ -47,7 +47,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private Set<User> aggregateAssignees(List<AssigneeNotification> assigneeRecords) {
         Set<User> assignees = new HashSet<User>();
         for (AssigneeNotification assigneeRecord : assigneeRecords) {
-            if (assigneeRecord.getEvent().getEventState() == Event.EventState.OPEN && assigneeRecord.getEvent().getAssignee() != null) {
+            if (assigneeRecord.getEvent().getWorkflowState() == Event.WorkflowState.OPEN && assigneeRecord.getEvent().getAssignee() != null) {
                 assignees.add(assigneeRecord.getEvent().getAssignee());
             }
         }

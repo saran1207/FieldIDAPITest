@@ -43,8 +43,8 @@ ${action.setPageType('asset', 'show')!}
 			<#assign urlLabel="label.view_this_event" />
 			
 			<div id="lastEvent">
-				<div <#if lastEvent.status.displayName== "Pass" > class="passColor inline" <#elseif lastEvent.status.displayName == "Fail"> class="failColor inline" <#else> class="naColor inline" </#if>>
-					<p class="inline"><@s.text name="${(lastEvent.status.label?html)!}"/></p> 
+				<div <#if lastEvent.eventResult.displayName== "Pass" > class="passColor inline" <#elseif lastEvent.eventResult.displayName == "Fail"> class="failColor inline" <#else> class="naColor inline" </#if>>
+					<p class="inline"><@s.text name="${(lastEvent.eventResult.label?html)!}"/></p>
 				</div>
 	
 				<@s.text name="label.lasteventdate_msg">

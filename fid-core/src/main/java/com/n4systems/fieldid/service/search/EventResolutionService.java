@@ -2,7 +2,7 @@ package com.n4systems.fieldid.service.search;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Event;
-import com.n4systems.model.Status;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.summary.EventResolutionSummary;
 import com.n4systems.model.summary.EventSetSummary;
@@ -43,16 +43,16 @@ public class EventResolutionService extends FieldIdPersistenceService {
     private void addResultToSet(EventSetSummary eventSetSummary, Event event) {
         eventSetSummary.incrementEventsDue();
 
-        if (event.getEventState() == Event.EventState.COMPLETED || event.getEventState() == Event.EventState.CLOSED) {
+        if (event.getWorkflowState() == Event.WorkflowState.COMPLETED || event.getWorkflowState() == Event.WorkflowState.CLOSED) {
             eventSetSummary.incrementEventsCompleted();
 
-            if (event.getStatus() == Status.PASS) {
+            if (event.getEventResult() == EventResult.PASS) {
                 eventSetSummary.incrementPassedEvents();
             }
-            if (event.getStatus() == Status.FAIL) {
+            if (event.getEventResult() == EventResult.FAIL) {
                 eventSetSummary.incrementFailedEvents();
             }
-        } else if (event.getEventState() == Event.EventState.OPEN) {
+        } else if (event.getWorkflowState() == Event.WorkflowState.OPEN) {
             eventSetSummary.incrementOutstandingEvents();
         }
     }

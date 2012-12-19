@@ -1,7 +1,7 @@
 package com.n4systems.util.persistence.search.terms.completedordue;
 
 import com.n4systems.model.AssetStatus;
-import com.n4systems.model.search.EventState;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameterGroup;
@@ -10,7 +10,7 @@ public class AssetStatusTerm extends CompleteOrIncompleteTerm {
 
     private AssetStatus assetStatus;
 
-    public AssetStatusTerm(EventState state, AssetStatus assetStatus) {
+    public AssetStatusTerm(WorkflowState state, AssetStatus assetStatus) {
         super(state);
         this.assetStatus = assetStatus;
     }

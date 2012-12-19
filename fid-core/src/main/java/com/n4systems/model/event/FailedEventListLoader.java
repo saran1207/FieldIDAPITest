@@ -1,7 +1,7 @@
 package com.n4systems.model.event;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.Status;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.security.OwnerAndDownFilter;
@@ -33,7 +33,7 @@ public class FailedEventListLoader extends ListLoader<Event>{
 	protected List<Event> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, filter);
 		
-		builder.addWhere(WhereClauseFactory.create("status", Status.FAIL));
+		builder.addWhere(WhereClauseFactory.create("eventResult", EventResult.FAIL));
 		builder.addWhere(Comparator.GE, "date", "completedDate", getFromDate());  // this needs to be converted toUTC(timeZone)!!!
 
 		if(setting != null) {

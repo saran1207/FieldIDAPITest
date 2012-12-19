@@ -1,7 +1,7 @@
 package com.n4systems.util.persistence.search.terms.completedordue;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.search.EventState;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
@@ -13,13 +13,13 @@ import java.util.List;
 
 public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
 
-    private EventState state;
+    private WorkflowState state;
 
     public CompleteOrIncompleteTerm() {
-        this(EventState.ALL);
+        this(WorkflowState.ALL);
     }
 
-    public CompleteOrIncompleteTerm(EventState state) {
+    public CompleteOrIncompleteTerm(WorkflowState state) {
         this.state = state;
     }
 
@@ -29,11 +29,11 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
 
         WhereParameterGroup outerGroup = new WhereParameterGroup(getClass().getName()+".outer");
 
-        if (state == null || state == EventState.ALL) {
+        if (state == null || state == WorkflowState.ALL) {
             createAndPopulateCompleteAndIncompleteOuterGroup(outerGroup);
-        } else if (state == EventState.COMPLETE) {
+        } else if (state == WorkflowState.COMPLETE) {
             populateCompletedTerm(outerGroup);
-        } else if (state == EventState.OPEN) {
+        } else if (state == WorkflowState.OPEN) {
             populateIncompleteTerm(outerGroup);
         }
 
@@ -45,13 +45,13 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
     private void createAndPopulateCompleteAndIncompleteOuterGroup(WhereParameterGroup outerGroup) {
         WhereParameterGroup completedGroup = new WhereParameterGroup(getClass().getName()+".completed");
         completedGroup.setChainOperator(WhereClause.ChainOp.OR);
-        completedGroup.addClause(WhereClauseFactory.create("eventState", Event.EventState.COMPLETED, WhereClause.ChainOp.AND));
+        completedGroup.addClause(WhereClauseFactory.create("workflowState", Event.WorkflowState.COMPLETED, WhereClause.ChainOp.AND));
 
         populateCompletedTerm(completedGroup);
 
         WhereParameterGroup incompleteGroup = new WhereParameterGroup(getClass().getName()+".incomplete");
         incompleteGroup.setChainOperator(WhereClause.ChainOp.OR);
-        incompleteGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE, "eventState", Event.EventState.COMPLETED, WhereClause.ChainOp.AND));
+        incompleteGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE, "workflowState", Event.WorkflowState.COMPLETED, WhereClause.ChainOp.AND));
 
         populateIncompleteTerm(incompleteGroup);
 

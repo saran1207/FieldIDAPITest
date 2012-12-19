@@ -42,7 +42,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 		.addOrder("dueDate")
-        .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
+        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
 		.addWhere(WhereClauseFactory.create("asset.id", assetId));
 		
 		if(syncDuration != SyncDuration.ALL) {
@@ -74,7 +74,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			persistenceService.save(event);
 			logger.info("Saved New Scheduled Event("  + event.getMobileGUID() + ") for " + 
 					event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
-		} else if (event.getEventState() == Event.EventState.OPEN) {
+		} else if (event.getWorkflowState() == Event.WorkflowState.OPEN) {
 			event.setDueDate(apiEventSchedule.getNextDate());
             event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
             event.setAssignee(getAssigneeUser(apiEventSchedule));
@@ -172,7 +172,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			@DefaultValue("25") @QueryParam("pageSize") int pageSize) {
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 		.addOrder("dueDate")
-        .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
+        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
 		.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
@@ -205,7 +205,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			
 			QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 			.addOrder("dueDate")
-	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
+	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
 	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
 			.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
 			.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));

@@ -1234,7 +1234,7 @@ public class AssetCrud extends UploadAttachmentSupport {
     public String getEventDescription(Event event) {	
     	SimpleDateFormat dateFormatter = getPrimaryOrg().getDateFormatter();
     	String date = dateFormatter.format(event.getDate());    	
-    	return getText("asset.event_desc", new String[]{date, event.getStatus().toString()});
+    	return getText("asset.event_desc", new String[]{date, event.getEventResult().toString()});
     }
 
     @SkipValidation

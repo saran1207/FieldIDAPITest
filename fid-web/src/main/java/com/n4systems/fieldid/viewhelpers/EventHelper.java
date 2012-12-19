@@ -195,7 +195,7 @@ public class EventHelper {
     /**
 	 * Ensures nulls have been removed from the lists, sets security information
 	 * on the Observations, and ensures Recommendations/Deficiencies only
-	 * contain elements if they're allowed to by the results Status
+	 * contain elements if they're allowed to by the results EventResult
 	 * (NA/PASS/FAIL)<br/> This should be called on each result prior to
 	 * persisting an event.
 	 * 

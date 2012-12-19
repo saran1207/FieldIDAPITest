@@ -129,14 +129,14 @@ public class AssetEventsPage extends AssetPage{
 
     }
     
-    private List<Event.EventState> getEventStates() {
-        List<Event.EventState> states = new ArrayList<Event.EventState>();
+    private List<Event.WorkflowState> getEventStates() {
+        List<Event.WorkflowState> states = new ArrayList<Event.WorkflowState>();
         if(open)
-            states.add(Event.EventState.OPEN);
+            states.add(Event.WorkflowState.OPEN);
         if(completed)
-            states.add(Event.EventState.COMPLETED);
+            states.add(Event.WorkflowState.COMPLETED);
         if(closed)
-            states.add(Event.EventState.CLOSED);
+            states.add(Event.WorkflowState.CLOSED);
         return states;
     }
 

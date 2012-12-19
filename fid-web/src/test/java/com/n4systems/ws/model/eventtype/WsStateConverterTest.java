@@ -2,10 +2,10 @@ package com.n4systems.ws.model.eventtype;
 
 import static org.junit.Assert.*;
 
+import com.n4systems.model.EventResult;
 import org.junit.Test;
 
 import com.n4systems.model.State;
-import com.n4systems.model.Status;
 
 public class WsStateConverterTest {
 
@@ -15,7 +15,7 @@ public class WsStateConverterTest {
 		model.setId(10L);
 		model.setDisplayText("display text");
 		model.setButtonName("button name");
-		model.setStatus(Status.FAIL);
+		model.setEventResult(EventResult.FAIL);
 		model.setRetired(false);
 		
 		WsState wsModel = new WsStateConverter().fromModel(model);

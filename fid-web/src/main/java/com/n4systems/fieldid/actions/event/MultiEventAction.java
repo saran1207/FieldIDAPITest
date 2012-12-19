@@ -331,8 +331,8 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
     	return new MultiEventScheduleListHelper(eventScheduleManager, getEventType());
 	}
     
-	public List<Status> getResults() {
-		return Status.getValidEventStates();
+	public List<EventResult> getResults() {
+		return EventResult.getValidEventResults();
 	}
 
     public boolean isRefreshAutoSchedules() {

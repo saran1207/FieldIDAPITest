@@ -23,7 +23,7 @@ public class ReportingAssetStatusHandler extends WebOutputHandler {
     private String findAssetStatus(Object value) {
         Event event = (Event) value;
 
-        if (event.getEventState() == Event.EventState.COMPLETED) {
+        if (event.getWorkflowState() == Event.WorkflowState.COMPLETED) {
             if (event.getAssetStatus() != null) {
                 return event.getAssetStatus().getName();
             }

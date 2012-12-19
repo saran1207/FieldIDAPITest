@@ -169,7 +169,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<Event.EventState> statuses) {
+	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<Event.WorkflowState> statuses) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

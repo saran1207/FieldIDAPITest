@@ -1,6 +1,6 @@
 package com.n4systems.util.persistence.search.terms.completedordue;
 
-import com.n4systems.model.search.EventState;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameterGroup;
@@ -9,7 +9,7 @@ public class AssignedUserTerm extends CompleteOrIncompleteTerm {
 
     private Long assignedUserId;
 
-    public AssignedUserTerm(EventState state, Long assignedUserId) {
+    public AssignedUserTerm(WorkflowState state, Long assignedUserId) {
         super(state);
         this.assignedUserId = assignedUserId;
     }

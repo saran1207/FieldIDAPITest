@@ -59,7 +59,7 @@
 			<@s.text id="resultLabel" name="label.result"/>
 			<@s.text id="assetStatusLabel" name="label.assetstatus"/>
 		
-			<#assign columns = [ "schedule.completedDate", "type.name", "performedByFullName", "status", "assetStatus.name" ] >
+			<#assign columns = [ "schedule.completedDate", "type.name", "performedByFullName", "eventResult", "assetStatus.name" ] >
 			<#assign labels = [ "${dateLabel}", "${typeLabel}", "${performedByLabel}", "${resultLabel}", "${assetStatusLabel}"]>
 			<#assign x=0>
 			
@@ -89,7 +89,7 @@
 				</td>
 				
 				
-				<td <#if event.status.displayName== "Pass" >class="passColor"<#elseif event.status.displayName == "Fail">class="failColor"<#else>class="naColor"</#if>><p class="coloredBackground"><@s.text name="${(event.status.label?html)!}"/></p></td>
+				<td <#if event.eventResult.displayName== "Pass" >class="passColor"<#elseif event.eventResult.displayName == "Fail">class="failColor"<#else>class="naColor"</#if>><p class="coloredBackground"><@s.text name="${(event.eventResult.label?html)!}"/></p></td>
 				<td><@s.text name="${(event.assetStatus.name?html)!}"/>&nbsp;</td>
 				<td>
 					<#if useContext>
@@ -171,7 +171,7 @@
 		</#assign>
 
 		<script type="text/javascript">
-            map.addLocation(${event.gpsLocation}, "${url?j_string}"+"${content?j_string}", "${event.status}");
+            map.addLocation(${event.gpsLocation}, "${url?j_string}"+"${content?j_string}", "${event.eventResult}");
 		</script>
 	</#list>
 	

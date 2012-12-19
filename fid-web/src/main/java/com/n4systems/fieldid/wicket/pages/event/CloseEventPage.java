@@ -12,8 +12,8 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.EventStatus;
-import com.n4systems.model.Status;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -68,7 +68,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
 
     class ResolveForm extends Form {
 
-        private EventStatus status;
+        private EventStatus eventStatus;
         private String comment;
         private User resolvedBy = getCurrentUser();
 
@@ -77,9 +77,9 @@ public class CloseEventPage extends FieldIDFrontEndPage {
             resolvedBy = getCurrentUser();
             List<EventStatus> activeStatuses = getActiveStatuses();
             add(new Label("due", new PropertyModel<String>(openEventModel, "dueDate")));
-            add(new Label("state", new PropertyModel<String>(openEventModel, "eventState")));
+            add(new Label("state", new PropertyModel<String>(openEventModel, "workflowState")));
             add( new FidDropDownChoice<EventStatus>("status",
-                    new PropertyModel<EventStatus>(this, "status"),
+                    new PropertyModel<EventStatus>(this, "eventStatus"),
                     activeStatuses,
                     new ChoiceRenderer<EventStatus>("name")).setNullValid(false).setRequired(true));
 
@@ -103,8 +103,8 @@ public class CloseEventPage extends FieldIDFrontEndPage {
                 }
             });
 
-            if (activeStatuses.size()>0) {
-                status = activeStatuses.get(0);
+            if (activeStatuses.size() > 0) {
+                eventStatus = activeStatuses.get(0);
             }
         }
 
@@ -112,11 +112,11 @@ public class CloseEventPage extends FieldIDFrontEndPage {
         protected void onSubmit() {
             Event openEvent = openEventModel.getObject();
             Asset asset = openEvent.getAsset();
-            openEvent.setStatus(Status.VOID);
-            openEvent.setEventState(Event.EventState.CLOSED);
+            openEvent.setEventResult(EventResult.VOID);
+            openEvent.setWorkflowState(Event.WorkflowState.CLOSED);
             openEvent.setDate(new Date());
             openEvent.setPerformedBy(resolvedBy);
-            openEvent.setEventStatus(status);
+            openEvent.setEventStatus(eventStatus);
             openEvent.setComments(comment);
             openEvent.setOwner(asset.getOwner());
             openEvent.setAdvancedLocation(asset.getAdvancedLocation());

@@ -333,8 +333,8 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		return event.getAsset().getId();
 	}
 	
-	public List<Status> getStatuses() {
-		return Status.getValidEventStates();
+	public List<EventResult> getStatuses() {
+		return EventResult.getValidEventResults();
 	}
 	
 	public BaseOrg getOwner() {

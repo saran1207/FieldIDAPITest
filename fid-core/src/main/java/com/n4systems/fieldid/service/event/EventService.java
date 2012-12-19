@@ -55,14 +55,14 @@ public class EventService extends FieldIdPersistenceService {
     public List<Event> getEventsByType(Long eventTypeId, Date from, Date to) {
 		QueryBuilder<Event> builder = getEventsByTypeBuilder(eventTypeId);
 		builder.addWhere(Comparator.GE, "fromDate", "completedDate", from).addWhere(Comparator.LE, "toDate", "completedDate", to);
-        builder.addSimpleWhere("eventState", Event.EventState.COMPLETED);
+        builder.addSimpleWhere("workflowState", Event.WorkflowState.COMPLETED);
 		builder.setOrder("completedDate", false);
 		return persistenceService.findAll(builder);
 	}
     
     private QueryBuilder<Event> getEventsByTypeBuilder(Long eventTypeId) {
     	checkArgument(eventTypeId!=null, "you must specify an event type id to get a list of events.");
-    	QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);   
+    	QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
     	builder.addSimpleWhere("type.id", eventTypeId);
     	builder.addOrder("completedDate");
     	return builder;
@@ -111,7 +111,7 @@ public class EventService extends FieldIdPersistenceService {
 		Date endDate = DateUtils.addDays(today, period);		
 		
 		builder.addWhere(whereFromTo(today, endDate, "dueDate"));
-		builder.addSimpleWhere("eventState", Event.EventState.OPEN);
+		builder.addSimpleWhere("workflowState", Event.WorkflowState.OPEN);
 
 		builder.applyFilter(new OwnerAndDownFilter(owner));
 		builder.addGroupByClauses(Arrays.asList(new GroupByClause("date(dueDate)", true)));
@@ -167,7 +167,7 @@ public class EventService extends FieldIdPersistenceService {
 
 
     @Transactional(readOnly = true)
-	public List<CompletedEventsReportRecord> getCompletedEvents(Date fromDate, Date toDate, BaseOrg org, Status status, ChartGranularity granularity) {
+	public List<CompletedEventsReportRecord> getCompletedEvents(Date fromDate, Date toDate, BaseOrg org, EventResult eventResult, ChartGranularity granularity) {
         // UGGH : hack.   this is a small, focused approach to fixing yet another time zone bug.
         // this should be reverted when a complete, system wide approach to handling time zones is implemented.
         // see WEB-2836
@@ -182,13 +182,13 @@ public class EventService extends FieldIdPersistenceService {
 		builder.setSelectArgument(select);
 		
 		builder.addWhere(whereFromToForCompletedEvents(fromDate, toDate, "completedDate", timeZone));
-        builder.addSimpleWhere("eventState", Event.EventState.COMPLETED);
+        builder.addSimpleWhere("workflowState", Event.WorkflowState.COMPLETED);
 
         Date sampleDate = fromDate;
 		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity, "completedDate", timeZone, sampleDate));
 		builder.applyFilter(new OwnerAndDownFilter(org));
-		if (status != null) {
-			builder.addSimpleWhere("status", status);
+		if (eventResult != null) {
+			builder.addSimpleWhere("eventResult", eventResult);
 		}
 		builder.addOrder("completedDate");
 		
@@ -201,25 +201,25 @@ public class EventService extends FieldIdPersistenceService {
 		eventKpiRecord.setCustomer(owner);
 		
 		QueryBuilder<EventScheduleStatusCount> builder1 = new QueryBuilder<EventScheduleStatusCount>(Event.class, securityContext.getUserSecurityFilter());
-		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "eventState", "COUNT(*)"));
+		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "workflowState", "COUNT(*)"));
         builder1.applyFilter(new OwnerAndDownFilter(owner));
 
 		builder1.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
-		builder1.addGroupBy("eventState");
+		builder1.addGroupBy("workflowState");
 
 		List<EventScheduleStatusCount> statusCounts = persistenceService.findAll(builder1);
 		
 		for (EventScheduleStatusCount statusCount: statusCounts ) {
-			if(statusCount.state.equals(Event.EventState.COMPLETED))
+			if(statusCount.state.equals(Event.WorkflowState.COMPLETED))
 				eventKpiRecord.setCompleted(statusCount.count);
-			if(statusCount.state.equals(Event.EventState.OPEN))
+			if(statusCount.state.equals(Event.WorkflowState.OPEN))
 				eventKpiRecord.setScheduled(statusCount.count);
 		}
 
 		QueryBuilder<Event> builder2 = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter());
 		builder2.applyFilter(new OwnerAndDownFilter(owner));
-		builder2.addSimpleWhere("eventState", Event.EventState.COMPLETED);
-		builder2.addSimpleWhere("status", Status.FAIL);
+		builder2.addSimpleWhere("workflowState", Event.WorkflowState.COMPLETED);
+		builder2.addSimpleWhere("eventResult", EventResult.FAIL);
 		builder2.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
 		
 		Long failedCount = persistenceService.count(builder2);
@@ -235,7 +235,7 @@ public class EventService extends FieldIdPersistenceService {
 	}
 
     @Transactional(readOnly = true)
-	public List<EventCompletenessReportRecord> getEventCompleteness(Event.EventState excludedState, ChartGranularity granularity,
+	public List<EventCompletenessReportRecord> getEventCompleteness(Event.WorkflowState excludedState, ChartGranularity granularity,
 			Date fromDate, Date toDate, BaseOrg org) {
 
         // CAVEAT : currently there is a discrepancy across the app w.r.t. COMPLETED events.   some places (like dashboard) consider a CLOSED event completed,
@@ -258,7 +258,7 @@ public class EventService extends FieldIdPersistenceService {
         builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"dueDate", null, sampleDate));
 		builder.applyFilter(new OwnerAndDownFilter(org));
 		if (excludedState != null) {
-            builder.addWhere(Comparator.NE, "excludedEventState", "eventState", excludedState);
+            builder.addWhere(Comparator.NE, "excludedEventState", "workflowState", excludedState);
 		}
 
 		builder.addOrder("dueDate");
@@ -316,11 +316,11 @@ public class EventService extends FieldIdPersistenceService {
         return getEventsByNetworkId(networkId, null, null, null);
     }
 
-    public List<Event> getEventsByNetworkId(Long networkId, String order, Boolean ascending, List<Event.EventState> states) {
+    public List<Event> getEventsByNetworkId(Long networkId, String order, Boolean ascending, List<Event.WorkflowState> states) {
 
         QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId, states);
 
-        builder.addOrder("eventState", false);
+        builder.addOrder("workflowState", false);
         boolean needsSortJoin = false;
 
         if (order != null) {
@@ -348,12 +348,12 @@ public class EventService extends FieldIdPersistenceService {
         return persistenceService.findAll(builder);
     }
 
-    public Long countEventsByNetworkId(Long networkId, List<Event.EventState> states) {
+    public Long countEventsByNetworkId(Long networkId, List<Event.WorkflowState> states) {
         QueryBuilder<Event> builder = createEventsByNetworkIdQuery(networkId, states);
         return persistenceService.count(builder);
     }
 
-    private QueryBuilder<Event> createEventsByNetworkIdQuery(Long networkId, List<Event.EventState> states) {
+    private QueryBuilder<Event> createEventsByNetworkIdQuery(Long networkId, List<Event.WorkflowState> states) {
         SecurityFilter filter = securityContext.getUserSecurityFilter();
 
         QueryBuilder<Tenant> connectedTenantsQuery = new QueryBuilder<Tenant>(TypedOrgConnection.class, filter);
@@ -370,9 +370,9 @@ public class EventService extends FieldIdPersistenceService {
         builder.addWhere(wpg);
 
         if(states!= null && !states.isEmpty()) {
-            builder.addWhere(WhereClauseFactory.create(Comparator.IN, "eventState", states));
+            builder.addWhere(WhereClauseFactory.create(Comparator.IN, "workflowState", states));
         } else {
-            builder.addWhere(WhereClauseFactory.createIsNull("eventState"));
+            builder.addWhere(WhereClauseFactory.createIsNull("workflowState"));
         }
 
         return builder;
@@ -388,7 +388,7 @@ public class EventService extends FieldIdPersistenceService {
     public List<Event> getLastEventOfEachType(Long assetId) {
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
 		builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
-        builder.addWhere(WhereClauseFactory.create("eventState", Event.EventState.COMPLETED));
+        builder.addWhere(WhereClauseFactory.create("workflowState", Event.WorkflowState.COMPLETED));
 
 		PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
 		String maxDateSelect = String.format("SELECT MAX(iSub.completedDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId GROUP BY iSub.type", Event.class.getName());
@@ -452,7 +452,7 @@ public class EventService extends FieldIdPersistenceService {
         query.addNullSafeWhere(Comparator.EQ, "assignee", "assignee", assignee);
         query.addNullSafeWhere(Comparator.EQ, "type", "type", actionType);
         // TODO query.addSimpleWhere("type.group.action", Boolean.TRUE);
-        query.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
+        query.addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
         query.addWhere(Comparator.NOTNULL, "triggeredEvent", "triggeredEvent", null);
         // make sure it's an action-able event type group.
         query.addSimpleWhere("type.group.action", Boolean.TRUE);
@@ -508,7 +508,7 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     private void addToWorkQuery(QueryBuilder<?> builder, User user, BaseOrg org, AssetType assetType, EventType eventType, DateRange dateRange) {
-        builder.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
+        builder.addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
         builder.addNullSafeWhere(Comparator.EQ, "asset_type", "asset.type", assetType);
         builder.addNullSafeWhere(Comparator.EQ, "type", "type", eventType);
         builder.addNullSafeWhere(Comparator.EQ, "assignee", "assignee", user);
@@ -536,7 +536,7 @@ public class EventService extends FieldIdPersistenceService {
 
     public Event findPreviousEventOfSameType(Event event) {
         QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
-        builder.addWhere(WhereClauseFactory.create("eventState", Event.EventState.COMPLETED));
+        builder.addWhere(WhereClauseFactory.create("workflowState", Event.WorkflowState.COMPLETED));
         builder.addWhere(WhereClauseFactory.create("asset.id", event.getAsset().getId()));
         builder.addWhere(WhereClauseFactory.create("type.id", event.getType().getId()));
 
@@ -567,7 +567,7 @@ public class EventService extends FieldIdPersistenceService {
         QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
 
         if (openOnly) {
-            builder.addWhere(WhereClauseFactory.create("eventState", Event.EventState.OPEN));
+            builder.addWhere(WhereClauseFactory.create("workflowState", Event.WorkflowState.OPEN));
         }
 
         builder.addWhere(WhereClauseFactory.create("asset.id", event.getAsset().getId()));
@@ -577,8 +577,8 @@ public class EventService extends FieldIdPersistenceService {
         String minDateSelect = String.format("SELECT MIN(iSub.dueDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.asset.id = :iSubAssetId AND iSub.type.id = :iSubTypeId AND iSub.dueDate > :iSubCompletedDate ", Event.class.getName());
 
         if (openOnly) {
-            minDateSelect += " AND iSub.eventState = :iSubEventState";
-            latestClause.getParams().put("iSubEventState", Event.EventState.OPEN);
+            minDateSelect += " AND iSub.workflowState = :iSubEventState";
+            latestClause.getParams().put("iSubEventState", Event.WorkflowState.OPEN);
         }
 
         latestClause.setClause(String.format("i.dueDate = (%s)", minDateSelect));

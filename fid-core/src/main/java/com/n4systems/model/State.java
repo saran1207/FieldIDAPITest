@@ -19,9 +19,9 @@ public class State extends EntityWithTenant implements Listable<Long>, Retirable
 	@Column(nullable=false)
 	private String displayText;
 
-	@Column(nullable=false)
+	@Column(name="event_result", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private Status status;
+	private EventResult eventResult;
 	
 	@Column(nullable=false)
 	private String buttonName;
@@ -31,9 +31,9 @@ public class State extends EntityWithTenant implements Listable<Long>, Retirable
 	
 	public State() {}
 
-	public State(String displayText, Status status, String buttonName) {
+	public State(String displayText, EventResult eventResult, String buttonName) {
 		this.displayText = displayText;
-		this.status = status;
+		this.eventResult = eventResult;
 		this.buttonName = buttonName;
 	}
 	
@@ -62,20 +62,20 @@ public class State extends EntityWithTenant implements Listable<Long>, Retirable
 		this.displayText = displayText;
 	}
 
-	public Status getStatus() {
-		return status;
+	public EventResult getEventResult() {
+		return eventResult;
 	}
 
-	public void setStatus(Status status) {
-		this.status = status;
+	public void setEventResult(EventResult eventResult) {
+		this.eventResult = eventResult;
 	}
 	
 	public String getStatusName(){
-		return (status != null) ? status.name() : null;
+		return (eventResult != null) ? eventResult.name() : null;
 	}
 	
 	public void setStatusName(String statusName) {
-		this.status = Status.valueOf(statusName);
+		this.eventResult = EventResult.valueOf(statusName);
 	}
 
 	public String getButtonName() {
@@ -108,7 +108,7 @@ public class State extends EntityWithTenant implements Listable<Long>, Retirable
 
 	@Override
     public String toString() {
-	    return getDisplayText() + "/" + getStatus() + " (" + getId() + ")";
+	    return getDisplayText() + "/" + getEventResult() + " (" + getId() + ")";
     }
 	
 	public boolean equals(Object obj) {
@@ -125,7 +125,7 @@ public class State extends EntityWithTenant implements Listable<Long>, Retirable
 		} 
 		
 		return (getDisplayText().equalsIgnoreCase(state.getDisplayText()) && 
-				getStatus().equals(state.getStatus()) && 
+				getEventResult().equals(state.getEventResult()) &&
 				getButtonName().equals(state.getButtonName()));
 	}
 }

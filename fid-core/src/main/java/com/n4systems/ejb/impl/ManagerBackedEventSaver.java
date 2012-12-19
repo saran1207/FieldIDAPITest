@@ -42,9 +42,9 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 
 	public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
-        Status calculatedStatus = calculateEventResultAndScore(parameterObject.event);
-		if (parameterObject.event.getStatus() == null || parameterObject.event.getStatus() == Status.VOID) {
-            parameterObject.event.setStatus(calculatedStatus);
+        EventResult calculatedEventResult = calculateEventResultAndScore(parameterObject.event);
+		if (parameterObject.event.getEventResult() == null || parameterObject.event.getEventResult() == EventResult.VOID) {
+            parameterObject.event.setEventResult(calculatedEventResult);
 		}
 		
 		setProofTestData(parameterObject.event, parameterObject.fileData);
@@ -65,7 +65,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 
         parameterObject.event.setDate(completedDate);
 
-        parameterObject.event.setEventState(Event.EventState.COMPLETED);
+        parameterObject.event.setWorkflowState(Event.WorkflowState.COMPLETED);
 
         Map<Long, byte[]> rememberedSignatureImages = collectSignatureImageData(parameterObject.event);
 
@@ -134,7 +134,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 //            eventSchedule = persistenceManager.find(EventSchedule.class, scheduleId, event.getTenant());
 //            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED || eventSchedule.getEvent().getState() == null) {
 //                event.setSchedule(null);
-//            } else if (eventSchedule.getEvent() != null && (eventSchedule.getEvent().getState() != Archivable.EntityState.ACTIVE || eventSchedule.getEvent().getEventState() != Event.EventState.OPEN)) {
+//            } else if (eventSchedule.getEvent() != null && (eventSchedule.getEvent().getState() != Archivable.EntityState.ACTIVE || eventSchedule.getEvent().getWorkflowState() != Event.WorkflowState.OPEN)) {
 //                event.setSchedule(null);
 //            } else{
 //                event.setSchedule(eventSchedule);
@@ -255,12 +255,12 @@ public class ManagerBackedEventSaver implements EventSaver {
 		event.setSubEvents(reorderedSubEvents);
 	}
 
-	private Status calculateEventResultAndScore(Event event) {
+	private EventResult calculateEventResultAndScore(Event event) {
         EventResultCalculator resultCalculator = new EventResultCalculator();
-		Status eventResult = resultCalculator.findEventResult(event);
+		EventResult eventResult = resultCalculator.findEventResult(event);
 
 		for (SubEvent subEvent : event.getSubEvents()) {
-            Status currentResult = resultCalculator.findEventResult(subEvent);
+            EventResult currentResult = resultCalculator.findEventResult(subEvent);
             eventResult = resultCalculator.adjustStatus(eventResult, currentResult);
 		}
 

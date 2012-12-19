@@ -37,7 +37,7 @@ public class WidgetFactory implements Serializable {
 			return constructor.newInstance(id, widgetDefinition);
 		} catch (InvocationTargetException e) {
 			logger.error(e.getTargetException());
-			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " can not be created/instantiated. " + e.getTargetException().getMessage());				
+			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " can not be created/instantiated. " + e.getTargetException().getMessage(), e.getTargetException());
 		} catch (IllegalArgumentException e) {
 			logger.error(e);
 			throw new IllegalArgumentException("the panel class " + clazz.getSimpleName() + " failed because of illegal arguments " + e.getMessage());

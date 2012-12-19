@@ -23,7 +23,7 @@ public class ReportingLocationHandler extends WebOutputHandler {
     private String findLocation(Object value) {
         Event event = (Event) value;
 
-        if (event.getEventState() == Event.EventState.COMPLETED) {
+        if (event.getWorkflowState() == Event.WorkflowState.COMPLETED) {
             return event.getAdvancedLocation().getFullName();
         }
 

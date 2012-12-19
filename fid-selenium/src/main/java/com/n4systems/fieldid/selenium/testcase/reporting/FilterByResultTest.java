@@ -80,7 +80,7 @@ public class FilterByResultTest extends PageNavigatingTestCase<ReportingPage> {
 		                      .withPerformedBy(user)
 		                      .withOwner(primaryOrg)
 		                      .withTenant(tenant)
-		                      .withResult(Status.PASS)
+		                      .withResult(EventResult.PASS)
 		                      .withAssetStatus(assetStatus)
 		                      .build();
 
@@ -90,7 +90,7 @@ public class FilterByResultTest extends PageNavigatingTestCase<ReportingPage> {
 					           .withPerformedBy(user)
 					           .withOwner(primaryOrg)
 					           .withTenant(tenant)
-					           .withResult(Status.FAIL)
+					           .withResult(EventResult.FAIL)
 		                       .withAssetStatus(assetStatus)
 					           .build();
 		
@@ -100,7 +100,7 @@ public class FilterByResultTest extends PageNavigatingTestCase<ReportingPage> {
 					           .withPerformedBy(user)
 					           .withOwner(primaryOrg)
 					           .withTenant(tenant)
-					           .withResult(Status.NA)
+					           .withResult(EventResult.NA)
 		                       .withAssetStatus(assetStatus)
 					           .build();
 		

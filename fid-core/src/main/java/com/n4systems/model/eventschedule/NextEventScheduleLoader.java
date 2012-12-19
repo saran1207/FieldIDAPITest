@@ -22,7 +22,7 @@ public class NextEventScheduleLoader extends Loader<Event> {
 		Event schedule = null;
 		
 		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-		query.addSimpleWhere("asset.id", assetId).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
+		query.addSimpleWhere("asset.id", assetId).addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
 		if (typeId != null)
 			query.addSimpleWhere("type.id", typeId);
 		query.addOrder("dueDate");

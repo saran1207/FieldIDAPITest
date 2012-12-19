@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.components.DateRangePicker;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.search.EventState;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
@@ -26,7 +26,7 @@ public class EventStatusAndDateRangePanel extends Panel {
     private WebMarkupContainer includeDueDateRangeContainer;
     private boolean useDueDate;
 
-    public EventStatusAndDateRangePanel(String id, final IModel<EventState> eventStateModel, final IModel<IncludeDueDateRange> includeDueRangeModel, IModel<DateRange> completedRange, IModel<DateRange> dueRange) {
+    public EventStatusAndDateRangePanel(String id, final IModel<WorkflowState> workflowStateModel, final IModel<IncludeDueDateRange> includeDueRangeModel, IModel<DateRange> completedRange, IModel<DateRange> dueRange) {
         super(id);
 
         useDueDate = includeDueRangeModel.getObject() != null;
@@ -34,8 +34,8 @@ public class EventStatusAndDateRangePanel extends Panel {
         includeDueDateRangeContainer = new WebMarkupContainer("includeDueDateRangeContainer") {
             @Override
             public boolean isVisible() {
-                return EventState.COMPLETE.equals(eventStateModel.getObject()) ||
-                        EventState.CLOSED.equals(eventStateModel.getObject());
+                return WorkflowState.COMPLETE.equals(workflowStateModel.getObject()) ||
+                        WorkflowState.CLOSED.equals(workflowStateModel.getObject());
             }
         };
         includeDueDateRangeContainer.setOutputMarkupPlaceholderTag(true);
@@ -71,24 +71,24 @@ public class EventStatusAndDateRangePanel extends Panel {
         add(completedRangePicker = new DateRangePicker("completeRangePicker", new FIDLabelModel("label.completed_date"), completedRange) {
             @Override
             public boolean isVisible() {
-                return EventState.COMPLETE.equals(eventStateModel.getObject())
-                        || EventState.CLOSED.equals(eventStateModel.getObject());
+                return WorkflowState.COMPLETE.equals(workflowStateModel.getObject())
+                        || WorkflowState.CLOSED.equals(workflowStateModel.getObject());
             }
         });
         add(dueRangePicker = new DateRangePicker("dueRangePicker", new FIDLabelModel("label.due_date"), dueRange, RangeType.allFloatingTypes()) {
             @Override
             public boolean isVisible() {
-                EventState eventState = eventStateModel.getObject();
+                WorkflowState workflowState = workflowStateModel.getObject();
                 IncludeDueDateRange includeDate = includeDueRangeModel.getObject();
-                return EventState.OPEN.equals(eventState)
-                        || (EventState.COMPLETE.equals(eventState) && IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(includeDate)
-                        || (EventState.CLOSED.equals(eventState) && IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(includeDate)));
+                return WorkflowState.OPEN.equals(workflowState)
+                        || (WorkflowState.COMPLETE.equals(workflowState) && IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(includeDate)
+                        || (WorkflowState.CLOSED.equals(workflowState) && IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(includeDate)));
             }
         });
         add(allRangePicker = new DateRangePicker("allRangePicker", new FIDLabelModel("label.completed_or_due_date"), completedRange) {
             @Override
             public boolean isVisible() {
-                return EventState.ALL.equals(eventStateModel.getObject());
+                return WorkflowState.ALL.equals(workflowStateModel.getObject());
             }
         });
     }

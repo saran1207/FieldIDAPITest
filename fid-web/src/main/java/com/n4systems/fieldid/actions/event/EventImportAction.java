@@ -108,7 +108,7 @@ public class EventImportAction extends AbstractImportAction {
 		example.setOwner(getSessionUserOwner());
 		example.setPrintable(true);
 		example.setPerformedBy(getCurrentUser());
-		example.setStatus(Status.PASS);
+		example.setEventResult(EventResult.PASS);
 
 		example.setComments(getText("example.event.comments"));
 		example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.event.location")));

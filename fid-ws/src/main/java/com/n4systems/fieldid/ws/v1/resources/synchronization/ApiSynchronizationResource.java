@@ -99,7 +99,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 		
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 		.addOrder("dueDate")
-        .addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
+        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "dueDate", startDate));
 		if(endDate != null) {

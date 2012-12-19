@@ -1,20 +1,13 @@
 package com.n4systems.ejb.impl;
 
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaType;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.ScoreCalculationType;
-import com.n4systems.model.ScoreComparator;
-import com.n4systems.model.ScoreCriteriaResult;
-import com.n4systems.model.ScoreResultRange;
-import com.n4systems.model.Status;
+import com.n4systems.model.*;
+import com.n4systems.model.EventResult;
 
 public class EventResultCalculator {
 
-    public Status findEventResult(AbstractEvent event) {
+    public EventResult findEventResult(AbstractEvent event) {
         if (event.getEventForm() == null) {
-            return Status.NA;
+            return EventResult.NA;
         }
 
         Double score = calculateScore(event);
@@ -27,13 +20,13 @@ public class EventResultCalculator {
         }
 	}
 
-    private Status findResultFromScore(AbstractEvent event, Double score) {
+    private EventResult findResultFromScore(AbstractEvent event, Double score) {
         if (insideRange(event.getEventForm().getFailRange(), score)) {
-            return Status.FAIL;
+            return EventResult.FAIL;
         } else if (insideRange(event.getEventForm().getPassRange(), score)) {
-            return Status.PASS;
+            return EventResult.PASS;
         }
-        return Status.NA;
+        return EventResult.NA;
     }
 
     private Double calculateScore(AbstractEvent event) {
@@ -73,15 +66,15 @@ public class EventResultCalculator {
         }
     }
 
-    private Status findResultFromOneClicks(AbstractEvent event) {
-        Status eventResult = Status.NA;
+    private EventResult findResultFromOneClicks(AbstractEvent event) {
+        EventResult eventResult = EventResult.NA;
         for (CriteriaResult result : event.getResults()) {
             if (result instanceof OneClickCriteriaResult) {
                 OneClickCriteriaResult oneClickResult = (OneClickCriteriaResult) result;
 
                 eventResult = adjustStatus(eventResult, oneClickResult.getResult());
 
-                if (eventResult == Status.FAIL) {
+                if (eventResult == EventResult.FAIL) {
                     break;
                 }
             }
@@ -90,13 +83,13 @@ public class EventResultCalculator {
         return eventResult;
     }
 
-    public Status adjustStatus(Status currentStatus, Status newStatus) {
-        if (currentStatus == Status.FAIL || newStatus == Status.FAIL) {
-			currentStatus = Status.FAIL;
-		} else if (newStatus == Status.PASS) {
-			currentStatus = Status.PASS;
+    public EventResult adjustStatus(EventResult currentEventResult, EventResult newEventResult) {
+        if (currentEventResult == EventResult.FAIL || newEventResult == EventResult.FAIL) {
+			currentEventResult = EventResult.FAIL;
+		} else if (newEventResult == EventResult.PASS) {
+			currentEventResult = EventResult.PASS;
 		}
-		return currentStatus;
+		return currentEventResult;
     }
 
 }

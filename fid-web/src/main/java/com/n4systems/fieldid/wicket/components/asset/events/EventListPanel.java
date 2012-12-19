@@ -26,7 +26,7 @@ public class EventListPanel extends Panel {
 
     private EventByNetworkIdProvider dataProvider;
 
-    public EventListPanel(String id, IModel<Asset> assetModel, List<Event.EventState> states) {
+    public EventListPanel(String id, IModel<Asset> assetModel, List<Event.WorkflowState> states) {
         super(id, assetModel);
 
         Asset asset = assetModel.getObject();
@@ -41,7 +41,7 @@ public class EventListPanel extends Panel {
 
     }
 
-    private IModel<String> getTableStyle(final Asset asset, final List<Event.EventState> states, final SimpleDefaultDataTable table) {
+    private IModel<String> getTableStyle(final Asset asset, final List<Event.WorkflowState> states, final SimpleDefaultDataTable table) {
 
         return  new Model<String>() {
             @Override
@@ -62,12 +62,12 @@ public class EventListPanel extends Panel {
         List<IColumn<Event>> columns = new ArrayList<IColumn<Event>>();
 
         columns.add(new ResultIconColumn(new FIDLabelModel(""), "status"));
-        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.event.state"),"eventState", "eventState.label"));
+        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.event.state"),"workflowState", "eventState.label"));
         columns.add(new EventCompletedColumn(new FIDLabelModel("label.completed"), "completedDate", "date"));
         columns.add(new EventDueColumn(new FIDLabelModel("label.due"), "dueDate", "date"));
         columns.add(new PropertyColumn<Event>(new FIDLabelModel("title.viewevent"), "type.name", "type.name"));
         columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.completed_by"), "performedBy.firstName", "performedBy.fullName"));
-        columns.add(new ResultColumn(new FIDLabelModel("label.result"), "status", "status.displayName"));
+        columns.add(new ResultColumn(new FIDLabelModel("label.result"), "eventResult", "eventResult.displayName"));
         columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.event_status"), "eventStatus", "eventStatus.displayName"));
         columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName"));
 

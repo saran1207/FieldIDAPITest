@@ -7,16 +7,10 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.loaders.ListLoader;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.SubSelectInClause;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereParameterGroup;
-
-import java.util.List;
+import com.n4systems.util.persistence.*;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class EventsByNetworkIdLoader extends ListLoader<Event> {
 
@@ -54,7 +48,7 @@ public class EventsByNetworkIdLoader extends ListLoader<Event> {
         	}
         }
 
-        builder.addSimpleWhere("eventState", Event.EventState.COMPLETED);
+        builder.addSimpleWhere("workflowState", Event.WorkflowState.COMPLETED);
 
 		List<Event> unsecuredEvents = builder.getResultList(em);
 		

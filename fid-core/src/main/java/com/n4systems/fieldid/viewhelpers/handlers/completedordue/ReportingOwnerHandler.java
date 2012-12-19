@@ -26,7 +26,7 @@ public abstract class ReportingOwnerHandler extends WebOutputHandler {
         BaseOrg org;
         Event event = (Event) value;
 
-        if (event.getEventState() == Event.EventState.COMPLETED) {
+        if (event.getWorkflowState() == Event.WorkflowState.COMPLETED) {
             org = getOrg(event);
         } else {
             org = getOrg(event.getAsset());

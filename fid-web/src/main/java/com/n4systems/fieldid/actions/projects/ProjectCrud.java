@@ -325,7 +325,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		query.setCountSelect().addWhere(Comparator.EQ, "projectID", "projectID", assetId, WhereParameter.TRIM);
 		query.addSimpleWhere("tenant", getTenant());
 		if (uniqueID != null) {
-			query.addWhere(Comparator.NE, "id", "id", project.getId());
+            query.addWhere(Comparator.NE, "id", "id", project.getId());
 		}
 
 		try {
@@ -354,7 +354,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 
 	public List<Event> getSchedules() {
 		if (schedulesPaged == null) {
-			schedulesPaged = projectManager.getSchedulesPaged(project, getSecurityFilter(), 1, Constants.SUMMARY_SIZE, Arrays.asList(Event.EventState.OPEN, Event.EventState.COMPLETED));
+			schedulesPaged = projectManager.getSchedulesPaged(project, getSecurityFilter(), 1, Constants.SUMMARY_SIZE, Arrays.asList(Event.WorkflowState.OPEN, Event.WorkflowState.COMPLETED));
 		}
 		return schedulesPaged.getList();
 	}

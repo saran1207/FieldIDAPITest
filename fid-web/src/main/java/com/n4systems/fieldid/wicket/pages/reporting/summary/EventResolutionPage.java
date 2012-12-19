@@ -8,9 +8,9 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
-import com.n4systems.model.Status;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.EventState;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.model.summary.EventResolutionSummary;
 import com.n4systems.model.summary.EventSetSummary;
 import com.n4systems.util.chart.RangeType;
@@ -160,14 +160,14 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
     }
 
     private void populateOutstandingInto(EventReportCriteria criteriaModel) {
-        if (criteriaModel.getEventState() != EventState.OPEN) {
+        if (criteriaModel.getWorkflowState() != WorkflowState.OPEN) {
             criteriaModel.setDueDateRange(criteria.getDateRange());
         }
-        criteriaModel.setEventState(EventState.OPEN);
+        criteriaModel.setWorkflowState(WorkflowState.OPEN);
     }
 
     private void populateFailedInto(EventReportCriteria criteriaModel) {
-        criteriaModel.setResult(Status.FAIL);
+        criteriaModel.setEventResult(EventResult.FAIL);
     }
 
     private IModel<List<EventSetSummary>> createEventBreakdownSummaryModel() {

@@ -35,12 +35,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		return new SecurityDefiner("tenant.id", "asset.owner", null, "state");
 	}
 
-    public enum EventState implements DisplayEnum {
+    public enum WorkflowState implements DisplayEnum {
         OPEN("Open"), COMPLETED("Completed"), CLOSED("Closed");
 
         private String label;
 
-        private EventState(String label) {
+        private WorkflowState(String label) {
             this.label = label;
         }
 
@@ -53,16 +53,16 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         }
     }
 
-    public enum EventStateGrouping {
-        NON_COMPLETE(EventState.OPEN, EventState.CLOSED), COMPLETE(EventState.COMPLETED);
+    public enum WorkflowStateGrouping {
+        NON_COMPLETE(WorkflowState.OPEN, WorkflowState.CLOSED), COMPLETE(WorkflowState.COMPLETED);
 
-        private EventState[] members;
+        private WorkflowState[] members;
 
-        private EventStateGrouping(EventState... members) {
+        private WorkflowStateGrouping(WorkflowState... members) {
             this.members = members;
         }
 
-        public EventState[] getMembers() {
+        public WorkflowState[] getMembers() {
             return members;
         }
 
@@ -117,22 +117,16 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
 	
 	@Enumerated(EnumType.STRING)
-	@Column(nullable=false)
-	private Status status = Status.NA;
+	@Column(name="event_result", nullable = false)
+	private EventResult eventResult = EventResult.NA;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="event_state", nullable=false)
-    private EventState eventState = EventState.OPEN;
+    @Column(name="workflow_state", nullable=false)
+    private WorkflowState workflowState = WorkflowState.OPEN;
 		
 	@Enumerated(EnumType.STRING)
 	private EntityState state = EntityState.ACTIVE;
 	
-//	@OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name="schedule_id")
-//    @Deprecated
-    // Pertinent information isn't stored in the schedule anymore, it lives in the event.
-//	private EventSchedule schedule = new EventSchedule();
-
     @Deprecated
     @Column(name="schedule_id")
     private Long scheduleId;
@@ -229,12 +223,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	}
 
 	@AllowSafetyNetworkAccess
-	public Status getStatus() {
-		return status;
+	public EventResult getEventResult() {
+		return eventResult;
 	}
 
-	public void setStatus(Status status) {
-		this.status = status;
+	public void setEventResult(EventResult eventResult) {
+		this.eventResult = eventResult;
 	}
 	
 	@Override
@@ -350,7 +344,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	    		"\nOwner: " + getOwner() +
 	    		"\nBook: " + getBook() +
 	    		"\nPerformed By: " + getPerformedBy() + 
-	    		"\nStatus: " + getStatus() + 
+	    		"\nResult: " + getEventResult() +
 	    		"\nSubEvents: " + StringUtils.indent(subEventString, 1);
     }
 
@@ -473,9 +467,9 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         }
 
         if (resultFromCriteriaAvailable) {
-            status = Status.VOID;
+            eventResult = EventResult.VOID;
         } else {
-            status = Status.PASS;
+            eventResult = EventResult.PASS;
         }
     }
 
@@ -496,16 +490,16 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     }
 
     @AllowSafetyNetworkAccess
-    public EventState getEventState() {
-        return eventState;
+    public WorkflowState getWorkflowState() {
+        return workflowState;
     }
 
-    public void setEventState(EventState eventState) {
-        this.eventState = eventState;
+    public void setWorkflowState(WorkflowState workflowState) {
+        this.workflowState = workflowState;
     }
 
     public Date getRelevantDate() {
-        if (getEventState() == EventState.COMPLETED) {
+        if (getWorkflowState() == WorkflowState.COMPLETED) {
             return getCompletedDate();
         }
         return getDueDate();
@@ -534,11 +528,11 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     @AllowSafetyNetworkAccess
     @Deprecated //DateHelper.getToday does not take into account the user timezone use DateService
     public boolean isPastDue() {
-        return (getEventState() == EventState.OPEN && isPastDue(dueDate));
+        return (getWorkflowState() == WorkflowState.OPEN && isPastDue(dueDate));
     }
 
     public boolean isCompleted() {
-        return EventState.COMPLETED.equals(getEventState());
+        return WorkflowState.COMPLETED.equals(getWorkflowState());
     }
 
     /**

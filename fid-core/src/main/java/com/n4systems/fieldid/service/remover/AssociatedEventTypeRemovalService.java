@@ -38,7 +38,7 @@ public class AssociatedEventTypeRemovalService extends FieldIdPersistenceService
 		AssociatedEventTypeDeleteSummary summary = new AssociatedEventTypeDeleteSummary();
 
 		summary.setDeleteEventFrequencies(eventFrequenciesRemovalService.summary(associatedEventType).getElementsToRemove());
-		summary.setDeleteNonCompletedEvent(scheduleListRemovalService.summary(associatedEventType.getAssetType(), associatedEventType.getEventType(), Event.EventStateGrouping.NON_COMPLETE).getSchedulesToRemove());
+		summary.setDeleteNonCompletedEvent(scheduleListRemovalService.summary(associatedEventType.getAssetType(), associatedEventType.getEventType(), Event.WorkflowStateGrouping.NON_COMPLETE).getSchedulesToRemove());
 		return summary;
 	}
 

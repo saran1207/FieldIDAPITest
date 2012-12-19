@@ -106,7 +106,7 @@ public class ProjectEventCrud extends AbstractCrud {
 
 	public Pager<Event> getPage() {
 		if (page == null) {
-			page = projectManager.getSchedulesPaged(project, getSecurityFilter(), getCurrentPage(), Constants.PAGE_SIZE, searchStatuses.getEventStates());
+			page = projectManager.getSchedulesPaged(project, getSecurityFilter(), getCurrentPage(), Constants.PAGE_SIZE, searchStatuses.getWorkflowStates());
 		}
 
 		return page;

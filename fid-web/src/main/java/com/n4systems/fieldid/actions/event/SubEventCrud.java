@@ -212,7 +212,7 @@ public class SubEventCrud extends EventCrud {
 		event.setAsset(asset);
 		getModifiableEvent().pushValuesTo(event);
         if (overrideResult != null && !"auto".equals(overrideResult)) {
-            event.setStatus(Status.valueOf(overrideResult));
+            event.setEventResult(EventResult.valueOf(overrideResult));
         }
 
 		User modifiedBy = fetchCurrentUser();

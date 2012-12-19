@@ -11,7 +11,7 @@ public class SafetyNetworkActionsCell extends Panel {
     public SafetyNetworkActionsCell(String id, IModel<Event> model) {
         super(id, model);
 
-        if (model.getObject().getEventState() != Event.EventState.COMPLETED) {
+        if (model.getObject().getWorkflowState() != Event.WorkflowState.COMPLETED) {
             setVisible(false);
         }
 

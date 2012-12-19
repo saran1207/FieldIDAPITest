@@ -77,18 +77,18 @@ public class ProjectManagerImpl implements ProjectManager {
 		return new Page<Asset>(selectQuery, countQuery, page, pageSize);
 	}
 	
-	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<Event.EventState> statuses) {
+	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<Event.WorkflowState> statuses) {
 		Query countQuery = scheduleCountQuery(project, filter, statuses);
 		Query selectQuery = scheduleSelectQuery(project, filter, statuses);
 		return new Page<Event>(selectQuery, countQuery, page, pageSize, Lists.newArrayList("asset"));
 	}
 	
-	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<Event.EventState> statuses) {
+	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<Event.WorkflowState> statuses) {
 		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "event");
 		String countQueryStr = "SELECT count( event ) FROM " + Project.class.getName() + " p , IN( p.events ) event where p = :project and " + filter.produceWhereClause();
 		
 		if (statuses != null && !statuses.isEmpty()) {
-			countQueryStr += " AND event.eventState IN (:statuses) ";
+			countQueryStr += " AND event.workflowState IN (:statuses) ";
 		}
 		
 		Query countQuery = em.createQuery(countQueryStr).setParameter("project", project);
@@ -107,11 +107,11 @@ public class ProjectManagerImpl implements ProjectManager {
 		return filter;
 	}
 	
-	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<Event.EventState> statuses) {
+	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<Event.WorkflowState> statuses) {
 		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "event");
 		String queryStr = "SELECT event FROM " + Project.class.getName() + " p , IN( p.events ) event where p = :project AND " + filter.produceWhereClause();
 		if (statuses != null && !statuses.isEmpty()) {
-			queryStr += " AND event.eventState IN (:statuses) ";
+			queryStr += " AND event.workflowState IN (:statuses) ";
 		}
 		
 		queryStr += " ORDER BY event.dueDate";
@@ -125,12 +125,12 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 	
 	public Long getIncompleteSchedules(Project project, SecurityFilter filter) {
-		Query countQuery = scheduleCountQuery(project, filter, Arrays.asList(Event.EventState.OPEN));
+		Query countQuery = scheduleCountQuery(project, filter, Arrays.asList(Event.WorkflowState.OPEN));
 		return (Long)(countQuery.getSingleResult());
 	}
 	
 	public Long getCompleteSchedules(Project project, SecurityFilter filter) {
-        Query countQuery = scheduleCountQuery(project, filter, Arrays.asList(Event.EventState.COMPLETED));
+        Query countQuery = scheduleCountQuery(project, filter, Arrays.asList(Event.WorkflowState.COMPLETED));
 		return (Long)(countQuery.getSingleResult());
 	}
 

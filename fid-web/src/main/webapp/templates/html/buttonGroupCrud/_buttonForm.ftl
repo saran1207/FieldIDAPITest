@@ -11,7 +11,7 @@
 			<@s.hidden name="states[${state_index}].buttonName" value="${(states[state_index].buttonName)!'btn0'}" theme="simple"/>
 		</div> 
 		<div><@s.hidden name="states[${state_index}].displayText" />${states[state_index].displayText}</div>
-		<div><@s.hidden name="states[${state_index}].statusName" /> ${ action.getText( states[state_index].status.label ) }</div>
+		<div><@s.hidden name="states[${state_index}].statusName" /> ${ action.getText( states[state_index].eventResult.label ) }</div>
 	
 	<#else>
 		<@s.textfield id="buttonState__${buttonGroupIndex}_${state_index}_retired" name="states[${state_index}].retired" theme="simple" cssClass="disabledInput" disabled="${disableInput?string}"/>

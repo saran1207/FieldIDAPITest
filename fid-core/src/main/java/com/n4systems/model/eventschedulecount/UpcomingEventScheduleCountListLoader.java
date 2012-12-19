@@ -16,7 +16,7 @@ public class UpcomingEventScheduleCountListLoader extends NotificationSettingEve
 
 	protected void applyNotificationTypeFilters(QueryBuilder<EventScheduleCount> builder) {
 		// we only want schedules that have not been completed
-		builder.addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
+		builder.addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
 		
 		// from dates are inclusive, to dates are exclusive.  See the RelativeTime class for why it works this way
 		builder.addWhere(Comparator.GE, "fromDate", "dueDate", fromDate);

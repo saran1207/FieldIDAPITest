@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.model.*;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -23,13 +24,7 @@ import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.service.certificate.ReportCompiler;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Status;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -100,7 +95,7 @@ public class EventSummaryGenerator {
 				eventMap.put("inspectionType", event.getType().getName());
 				eventMap.put("dateFormat", new DateTimeDefiner(user).getDateFormat());
 				eventMap.put("performedBy", event.getPerformedBy().getUserLabel());
-				eventMap.put("result", event.getStatus().getDisplayName());
+				eventMap.put("result", event.getEventResult().getDisplayName());
 				eventMap.put("division", (event.getOwner().isDivision()) ? event.getOwner().getName() : null);
 				
 				Long tenantId = event.getTenant().getId();
@@ -145,13 +140,13 @@ public class EventSummaryGenerator {
 				collection.add(eventMap);
 				
 				totalNumEvents++;
-				if (event.getStatus().equals(Status.PASS)) {
+				if (event.getEventResult().equals(EventResult.PASS)) {
 					totalPassedEvents++;
 				}
-				if (event.getStatus().equals(Status.FAIL)) {
+				if (event.getEventResult().equals(EventResult.FAIL)) {
 					totalFailedEvents++;
 				}
-				if (event.getStatus().equals(Status.NA)) {
+				if (event.getEventResult().equals(EventResult.NA)) {
 					totalNAEvents++;
 				}
 			}

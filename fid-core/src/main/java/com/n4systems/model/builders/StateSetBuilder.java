@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
-import com.n4systems.model.Status;
 
 public class StateSetBuilder extends EntityWithTenantBuilder<StateSet> {
 
@@ -15,7 +15,7 @@ public class StateSetBuilder extends EntityWithTenantBuilder<StateSet> {
     private String name;
 
     public static StateSetBuilder aStateSet() {
-        return new StateSetBuilder(null, Lists.newArrayList(new State("Pass", Status.PASS, "pass")));
+        return new StateSetBuilder(null, Lists.newArrayList(new State("Pass", EventResult.PASS, "pass")));
     }
 
     public StateSetBuilder(String name, List<State> states) {

@@ -79,8 +79,8 @@ public class EventReportCriteria extends SearchCriteria {
     private String purchaseOrder;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="status")
-    private Status result;
+    @Column(name="event_result")
+    private EventResult eventResult;
 
     @ManyToOne
     @JoinColumn(name="performedBy")
@@ -95,9 +95,9 @@ public class EventReportCriteria extends SearchCriteria {
     @Column(name="column_id")
 	private List<String> columns = new ArrayList<String>();
 
-    @Column(name="eventState")
+    @Column(name="workflow_state")
     @Enumerated(EnumType.STRING)
-    private EventState eventState = EventState.COMPLETE;
+    private WorkflowState workflowState = WorkflowState.COMPLETE;
 
     @Column(name="includeDueDateRange")
     @Enumerated(EnumType.STRING)
@@ -219,12 +219,12 @@ public class EventReportCriteria extends SearchCriteria {
         this.purchaseOrder = purchaseOrder;
     }
 
-    public Status getResult() {
-        return result;
+    public EventResult getEventResult() {
+        return eventResult;
     }
 
-    public void setResult(Status result) {
-        this.result = result;
+    public void setEventResult(EventResult eventResult) {
+        this.eventResult = eventResult;
     }
 
     public boolean isIncludeSafetyNetwork() {
@@ -261,12 +261,12 @@ public class EventReportCriteria extends SearchCriteria {
         this.columns = columns;
     }
 
-    public EventState getEventState() {
-        return eventState;
+    public WorkflowState getWorkflowState() {
+        return workflowState;
     }
 
-    public void setEventState(EventState eventState) {
-        this.eventState = eventState;
+    public void setWorkflowState(WorkflowState workflowState) {
+        this.workflowState = workflowState;
     }
 
     public DateRange getDueDateRange() {

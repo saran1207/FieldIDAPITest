@@ -17,7 +17,7 @@ public class EventScheduleCountLoader extends Loader<Long> {
 	public Long load(EntityManager em) {
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(Event.class, filter);
-        builder.addSimpleWhere("eventState", Event.EventState.OPEN);
+        builder.addSimpleWhere("workflowState", Event.WorkflowState.OPEN);
 		return builder.getCount(em);
 	}
 	

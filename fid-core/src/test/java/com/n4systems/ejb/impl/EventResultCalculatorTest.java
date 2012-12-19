@@ -1,17 +1,7 @@
 package com.n4systems.ejb.impl;
 
-import com.n4systems.model.Event;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCalculationType;
-import com.n4systems.model.ScoreCriteriaResult;
-import com.n4systems.model.ScoreResultRange;
-import com.n4systems.model.State;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Status;
+import com.n4systems.model.*;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.EventFormBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
@@ -42,9 +32,9 @@ public class EventResultCalculatorTest {
     @Before
     public void setup() {
         eventResultCalculator = new EventResultCalculator();
-        passState = StateBuilder.aState().displayText("Pass").status(Status.PASS).build();
-        failState = StateBuilder.aState().displayText("Fail").status(Status.FAIL).build();
-        naState = StateBuilder.aState().displayText("NA").status(Status.NA).build();
+        passState = StateBuilder.aState().displayText("Pass").status(EventResult.PASS).build();
+        failState = StateBuilder.aState().displayText("Fail").status(EventResult.FAIL).build();
+        naState = StateBuilder.aState().displayText("NA").status(EventResult.NA).build();
         passFailNaStateSet = StateSetBuilder.aStateSet().states(passState, failState, naState).build();
 
         atLeastTen = ScoreResultRangeBuilder.aScoreResultRange().atLeast(10d).build();
@@ -59,7 +49,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(createEventType()).build();
         setEventForm(event);
 
-        assertEquals(Status.NA, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.NA, eventResultCalculator.findEventResult(event));
     }
 
     @Test
@@ -70,7 +60,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(createEventType()).build();
         setEventForm(event);
 
-        assertEquals(Status.PASS, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.PASS, eventResultCalculator.findEventResult(event));
     }
 
     @Test
@@ -87,7 +77,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result, result2, result3).ofType(createEventType()).build();
         setEventForm(event);
 
-        assertEquals(Status.PASS, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.PASS, eventResultCalculator.findEventResult(event));
     }
 
     @Test
@@ -104,7 +94,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result, result2, result3).ofType(createEventType()).build();
         setEventForm(event);
 
-        assertEquals(Status.FAIL, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.FAIL, eventResultCalculator.findEventResult(event));
     }
 
     @Test
@@ -116,7 +106,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(eventType).build();
         setEventForm(event);
 
-        assertEquals(Status.FAIL, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.FAIL, eventResultCalculator.findEventResult(event));
     }
 
     @Test
@@ -128,7 +118,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(eventType).build();
         setEventForm(event);
 
-        assertEquals(Status.PASS, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.PASS, eventResultCalculator.findEventResult(event));
     }
 
     @Test
@@ -140,7 +130,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(eventType).build();
         setEventForm(event);
 
-        assertEquals(Status.NA, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.NA, eventResultCalculator.findEventResult(event));
     }
 
     @Test
@@ -155,7 +145,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(eventType).build();
         setEventForm(event);
 
-        assertEquals(Status.PASS, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.PASS, eventResultCalculator.findEventResult(event));
     }
 
     @Test
@@ -170,7 +160,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result, result2).ofType(eventType).build();
         setEventForm(event);
 
-        assertEquals(Status.PASS, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.PASS, eventResultCalculator.findEventResult(event));
     }
 
     @Test
@@ -185,7 +175,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result, result2).ofType(eventType).build();
         setEventForm(event);
 
-        assertEquals(Status.FAIL, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.FAIL, eventResultCalculator.findEventResult(event));
     }
 
     @Test
@@ -206,7 +196,7 @@ public class EventResultCalculatorTest {
         Event event = EventBuilder.anEvent().withCriteriaResults(result, result2, result3, result4).ofType(eventType).build();
         setEventForm(event);
 
-        assertEquals(Status.PASS, eventResultCalculator.findEventResult(event));
+        assertEquals(EventResult.PASS, eventResultCalculator.findEventResult(event));
     }
 
     private EventType createEventType() {

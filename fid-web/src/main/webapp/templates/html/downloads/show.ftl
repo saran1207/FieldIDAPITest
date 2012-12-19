@@ -26,7 +26,7 @@ ${action.setPageType('my_account', 'downloads')!}
 		<tr>
 			<th><@s.text name="label.datecreated" /></th>
 			<th><@s.text name="label.name" /></th>
-			<th><@s.text name="label.status" /></th>
+			<th><@s.text name="label.eventResult" /></th>
 			<th><@s.text name="label.expires" /></th>
 			<th></th>
 		</tr>

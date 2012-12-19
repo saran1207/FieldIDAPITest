@@ -17,9 +17,9 @@ public class EventByNetworkIdProvider extends FieldIDDataProvider<Event> {
 
     private Long networkId;
     private String order;
-    private List<Event.EventState> states;
+    private List<Event.WorkflowState> states;
 
-    public EventByNetworkIdProvider(Long networkId, String order, SortOrder sortOrder, List<Event.EventState> states) {
+    public EventByNetworkIdProvider(Long networkId, String order, SortOrder sortOrder, List<Event.WorkflowState> states) {
         this.networkId = networkId;
         this.order = order;
         this.states = states;
@@ -49,7 +49,7 @@ public class EventByNetworkIdProvider extends FieldIDDataProvider<Event> {
         };
     }
 
-    public void setStates(List<Event.EventState> states) {
+    public void setStates(List<Event.WorkflowState> states) {
         this.states = states;
     }
 }

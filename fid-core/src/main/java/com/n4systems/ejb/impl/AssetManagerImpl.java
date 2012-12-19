@@ -379,7 +379,7 @@ public class AssetManagerImpl implements AssetManager {
 			summary.setEventsToDelete(persistenceManager.findCount(eventCount));
 
 			QueryBuilder<Event> scheduleCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-			scheduleCount.setCountSelect().addSimpleWhere("asset.type", assetType).addSimpleWhere("eventState", Event.EventState.OPEN);
+			scheduleCount.setCountSelect().addSimpleWhere("asset.type", assetType).addSimpleWhere("workflowState", Event.WorkflowState.OPEN);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
 			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset.type = :assetType AND event.state = :activeState ";
@@ -462,7 +462,7 @@ public class AssetManagerImpl implements AssetManager {
 			summary.setEventsToDelete(persistenceManager.findCount(eventCount));
 
 			QueryBuilder<Event> scheduleCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-			scheduleCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("eventState", Event.EventState.OPEN);
+			scheduleCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("workflowState", Event.WorkflowState.OPEN);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
 			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset = :asset AND event.state = :activeState ";

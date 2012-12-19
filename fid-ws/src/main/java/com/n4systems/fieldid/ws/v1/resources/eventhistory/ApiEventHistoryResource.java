@@ -1,15 +1,13 @@
 package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
-import java.util.List;
-
-import javax.ws.rs.Path;
-
-import org.springframework.stereotype.Component;
-
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.Event;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import org.springframework.stereotype.Component;
+
+import javax.ws.rs.Path;
+import java.util.List;
 
 @Component
 @Path("eventHistory")
@@ -17,7 +15,7 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, Event>
 	
 	public List<ApiEventHistory> findAllEventHistory(String assetId) {
 		QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
-        builder.addWhere(WhereClauseFactory.create("eventState", Event.EventState.COMPLETED));
+        builder.addWhere(WhereClauseFactory.create("workflowState", Event.WorkflowState.COMPLETED));
 		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
 		builder.addOrder("completedDate", false);
 
@@ -36,7 +34,7 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, Event>
 		apiEventHistory.setEventId(event.getMobileGUID());
 		apiEventHistory.setEventTypeId(event.getType().getId());
 		apiEventHistory.setPerformedBy(event.getPerformedBy().getDisplayName());
-		apiEventHistory.setStatus(event.getStatus().getDisplayName());
+		apiEventHistory.setStatus(event.getEventResult().getDisplayName());
 		apiEventHistory.setPrintable(event.isPrintable());
 		return apiEventHistory;
 	}

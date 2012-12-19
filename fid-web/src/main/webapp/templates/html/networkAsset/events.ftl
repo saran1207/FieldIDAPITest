@@ -49,7 +49,7 @@
                 <tr>
                     <td>${action.formatDateTime(event.date)}</td>
                     <td>${event.type.name}</td>
-                    <td><@s.text name="${(event.status.label?html)!}"/></td>
+                    <td><@s.text name="${(event.eventResult.label?html)!}"/></td>
                     <td>
                         <#assign tenant=event.tenant/>
                         <#include "../common/_displayTenantLogo.ftl"/>

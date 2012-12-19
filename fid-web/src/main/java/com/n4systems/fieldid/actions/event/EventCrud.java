@@ -375,7 +375,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			
 			processProofTestFile();
 
-			if (event.getEventState() == Event.EventState.OPEN) {
+			if (event.getWorkflowState() == Event.WorkflowState.OPEN) {
 				// the criteriaResults from the form must be processed before setting them on the event
 				eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy, getSessionUser());
 
@@ -384,8 +384,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
                     autoSchedule(modifiableEvent.isOwnerSetFromAsset() ? asset.getOwner() : modifiableEvent.getOwner());
                 }
 
-				Status eventStatus = (modifiableEvent.getOverrideResult() != null && !"auto".equals(modifiableEvent.getOverrideResult())) ? Status.valueOf(modifiableEvent.getOverrideResult()) : null;
-                event.setStatus(eventStatus);
+				EventResult eventEventResult = (modifiableEvent.getOverrideResult() != null && !"auto".equals(modifiableEvent.getOverrideResult())) ? EventResult.valueOf(modifiableEvent.getOverrideResult()) : null;
+                event.setEventResult(eventEventResult);
 
                 event = eventCreationService.createEventWithSchedules(event, 0L, fileData, getUploadedFiles(), createEventScheduleBundles());
 				uniqueID = event.getId();
@@ -737,15 +737,15 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	public String getResult() {
-		return (event.getStatus() != null) ? event.getStatus().name() : null;
+		return (event.getEventResult() != null) ? event.getEventResult().name() : null;
 	}
 
 	public void setResult(String result) {
-		event.setStatus((result != null && result.trim().length() > 0) ? Status.valueOf(result) : null);
+		event.setEventResult((result != null && result.trim().length() > 0) ? EventResult.valueOf(result) : null);
 	}
 
-	public List<Status> getResults() {
-		return Status.getValidEventStates();
+	public List<EventResult> getResults() {
+		return EventResult.getValidEventResults();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -994,7 +994,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
     public boolean isOpen() {
-        return event != null && Event.EventState.OPEN.equals(event.getEventState());
+        return event != null && Event.WorkflowState.OPEN.equals(event.getWorkflowState());
     }
 
 	public AssignedToUserGrouper getUserGrouper() {

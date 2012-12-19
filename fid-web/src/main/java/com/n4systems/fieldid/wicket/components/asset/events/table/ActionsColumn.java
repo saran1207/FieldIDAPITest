@@ -21,13 +21,13 @@ public class ActionsColumn extends PropertyColumn<Event> {
 
     @Override
     public void populateItem(Item<ICellPopulator<Event>> item, String id, IModel<Event> eventModel) {
-        Event.EventState state = eventModel.getObject().getEventState();
+        Event.WorkflowState state = eventModel.getObject().getWorkflowState();
 
         if (isFromSafetyNetwork(eventModel)) {
             item.add(new SafetyNetworkActionsCell(id, eventModel));
-        } else if (state.equals(Event.EventState.COMPLETED)) {
+        } else if (state.equals(Event.WorkflowState.COMPLETED)) {
             item.add(new EventActionsCell(id, eventModel));
-        } else if (state.equals(Event.EventState.OPEN)) {
+        } else if (state.equals(Event.WorkflowState.OPEN)) {
             item.add(new OpenActionsCell(id, eventModel, eventListPanel));
         } else {
             item.add(new ClosedActionsCell(id, eventModel, eventListPanel));

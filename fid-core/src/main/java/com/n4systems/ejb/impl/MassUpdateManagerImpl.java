@@ -59,7 +59,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
     private Set<Long> createOpenEventBuilder(String selectClause, Set<Long> openEventIds) {
         QueryBuilder<Long> openEventBuilder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
         openEventBuilder.setSimpleSelect(selectClause, true);
-        openEventBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "eventState", Event.EventState.OPEN));
+        openEventBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "workflowState", Event.WorkflowState.OPEN));
 
         // we will leave our id list empty for now as, the
         // LargeInListQueryExecutor will handle setting this
@@ -242,8 +242,8 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				}
 				
 				if (updateKey.equals("result")) {
-                    audit.setResult(eventChanges.getStatus().getDisplayName());
-					changeTarget.setStatus(eventChanges.getStatus());
+                    audit.setResult(eventChanges.getEventResult().getDisplayName());
+					changeTarget.setEventResult(eventChanges.getEventResult());
 				}
 				
 				if (updateKey.equals("comments")) {
@@ -332,8 +332,8 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
             changeTarget = persistenceManager.find(Event.class, id);
 
             Asset asset = changeTarget.getAsset();
-            changeTarget.setStatus(Status.VOID);
-            changeTarget.setEventState(Event.EventState.CLOSED);
+            changeTarget.setEventResult(EventResult.VOID);
+            changeTarget.setWorkflowState(Event.WorkflowState.CLOSED);
             changeTarget.setDate(new Date());
             changeTarget.setPerformedBy(eventChanges.getPerformedBy());
             changeTarget.setEventStatus(eventChanges.getEventStatus());

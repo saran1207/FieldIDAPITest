@@ -24,8 +24,8 @@ public class OneClickCriteriaResult extends CriteriaResult {
 	}
 
 	@Override
-	public Status getResult() {
-		return ((OneClickCriteria)criteria).isPrincipal() ? state.getStatus() : null;
+	public EventResult getResult() {
+		return ((OneClickCriteria)criteria).isPrincipal() ? state.getEventResult() : null;
 	}
 
 	@Override

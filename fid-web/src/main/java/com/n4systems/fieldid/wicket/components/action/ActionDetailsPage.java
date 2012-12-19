@@ -53,7 +53,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
                 // setting a response page just loads that page inside the window which is not the expected behavior
 
                 String url = null;
-                if (actionModel.getObject().getEventState() == Event.EventState.OPEN) {
+                if (actionModel.getObject().getWorkflowState() == Event.WorkflowState.OPEN) {
                     url = String.format("/fieldid/w/performEvent?type=%d&assetId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getId(), actionModel.getObject().getId());
                 } else {
                     url = String.format("/fieldid/event.action?uniqueID=%d", actionModel.getObject().getId());
@@ -64,13 +64,13 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
 
             @Override
             public boolean isVisible() {
-                return actionModel.getObject().getEventState() != Event.EventState.CLOSED &&
+                return actionModel.getObject().getWorkflowState() != Event.WorkflowState.CLOSED &&
                         (assetSummaryContext || ( actionModel.getObject().isActive() && isStartable(criteriaResultModel)));
             }
         };
         add(startOrViewEventLink);
-        startOrViewEventLink.setVisible(actionModel.getObject().getEventState() == Event.EventState.COMPLETED || actionModel.getObject().getEventState() == Event.EventState.OPEN);
-        IModel<String> startOrViewLabel = actionModel.getObject().getEventState() ==  Event.EventState.OPEN ? new FIDLabelModel("label.start_action") : new FIDLabelModel("label.view_completed_action");
+        startOrViewEventLink.setVisible(actionModel.getObject().getWorkflowState() == Event.WorkflowState.COMPLETED || actionModel.getObject().getWorkflowState() == Event.WorkflowState.OPEN);
+        IModel<String> startOrViewLabel = actionModel.getObject().getWorkflowState() ==  Event.WorkflowState.OPEN ? new FIDLabelModel("label.start_action") : new FIDLabelModel("label.view_completed_action");
         startOrViewEventLink.add(new Label("startOrViewEventLabel", startOrViewLabel));
 
         Link editLink = new Link("editLink") {

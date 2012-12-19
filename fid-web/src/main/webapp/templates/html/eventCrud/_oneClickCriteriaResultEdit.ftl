@@ -26,7 +26,7 @@
 				state.stateId = '${state.id}';
 				state.stateText = '${state.displayText}';
 				state.stateButton = '<@s.url value="/images/eventButtons/${state.buttonName}.png"/>';
-				state.status = '${state.status.name()}';
+				state.status = '${state.eventResult.name()}';
 				criteria.push( state );
 			</#list>
 			buttonStates['criteria_${criteria.id}'] =  criteria;

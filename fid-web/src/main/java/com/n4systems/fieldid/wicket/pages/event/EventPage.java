@@ -228,17 +228,17 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             if (event.getObject() instanceof Event) {
                 Event masterEvent = (Event) event.getObject();
-                DropDownChoice resultSelect = new DropDownChoice<Status>("result", new PropertyModel<Status>(event, "status"), Status.getValidEventStates(), new ListableLabelChoiceRenderer<Status>());
+                DropDownChoice resultSelect = new DropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(event, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
                 resultSelect.add(new UpdateComponentOnChange());
                 resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
                 add(resultSelect);
             }
 
             List<EventStatus> eventStatuses = eventStatusService.getActiveStatuses();
-            DropDownChoice eventStateSelect = new DropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
-            eventStateSelect.add(new UpdateComponentOnChange());
-            eventStateSelect.setNullValid(true);
-            add(eventStateSelect);
+            DropDownChoice workflowStateSelect = new DropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
+            workflowStateSelect.add(new UpdateComponentOnChange());
+            workflowStateSelect.setNullValid(true);
+            add(workflowStateSelect);
 
             add(new CheckBox("printable", new PropertyModel<Boolean>(event, "printable")).add(new UpdateComponentOnChange()));
 

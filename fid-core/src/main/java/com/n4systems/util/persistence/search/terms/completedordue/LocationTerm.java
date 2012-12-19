@@ -2,8 +2,8 @@ package com.n4systems.util.persistence.search.terms.completedordue;
 
 import com.n4systems.fieldid.service.search.SimpleOrWildcardTermFactory;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.model.search.EventState;
 import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
@@ -12,7 +12,7 @@ public class LocationTerm extends CompleteOrIncompleteTerm {
     private Long predefinedLocationId;
     private String freeformLocation;
 
-    public LocationTerm(EventState state, Long predefinedLocationId, String freeformLocation) {
+    public LocationTerm(WorkflowState state, Long predefinedLocationId, String freeformLocation) {
         super(state);
         this.predefinedLocationId = predefinedLocationId;
         this.freeformLocation = freeformLocation;

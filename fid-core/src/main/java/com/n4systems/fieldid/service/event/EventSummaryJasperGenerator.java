@@ -7,7 +7,7 @@ import com.n4systems.fieldid.service.certificate.ReportCompiler;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.Event;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Status;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -90,7 +90,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                 eventMap.put("inspectionType", event.getType().getName());
                 eventMap.put("dateFormat", new DateTimeDefiner(getCurrentUser()).getDateFormat());
                 eventMap.put("performedBy", event.getPerformedBy().getUserLabel());
-                eventMap.put("result", event.getStatus().getDisplayName());
+                eventMap.put("result", event.getEventResult().getDisplayName());
                 eventMap.put("division", (event.getOwner().isDivision()) ? event.getOwner().getName() : null);
 
                 PrimaryOrg tenant = orgService.getPrimaryOrgForTenant(getCurrentTenant().getId());
@@ -133,13 +133,13 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                 collection.add(eventMap);
 
                 totalNumEvents++;
-                if (event.getStatus().equals(Status.PASS)) {
+                if (event.getEventResult().equals(EventResult.PASS)) {
                     totalPassedEvents++;
                 }
-                if (event.getStatus().equals(Status.FAIL)) {
+                if (event.getEventResult().equals(EventResult.FAIL)) {
                     totalFailedEvents++;
                 }
-                if (event.getStatus().equals(Status.NA)) {
+                if (event.getEventResult().equals(EventResult.NA)) {
                     totalNAEvents++;
                 }
             }

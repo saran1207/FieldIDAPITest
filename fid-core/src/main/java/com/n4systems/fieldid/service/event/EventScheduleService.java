@@ -24,7 +24,7 @@ public class EventScheduleService extends FieldIdPersistenceService {
 	public Event getNextEventSchedule(Long assetId, Long eventTypeId) {
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 				.addOrder("dueDate")
-				.addWhere(WhereClauseFactory.create(Comparator.EQ, "eventState", Event.EventState.OPEN))
+				.addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
 				.addWhere(WhereClauseFactory.create("asset.id", assetId));
 
 		if (eventTypeId != null) {
@@ -75,7 +75,7 @@ public class EventScheduleService extends FieldIdPersistenceService {
     @Transactional
     public List<Event> getAvailableSchedulesFor(Asset asset) {
         QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-        query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "eventState", "eventState", Event.EventState.OPEN);
+        query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
         query.addOrder("dueDate");
 
         return persistenceService.findAll(query);

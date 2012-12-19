@@ -72,7 +72,7 @@ public class UpcomingEventsPanel extends Panel {
     }
     
     private boolean isPastDue(Event schedule) {
-        return schedule.getEventState() == Event.EventState.OPEN && dateService.isPastDue(schedule.getDueDate());
+        return schedule.getWorkflowState() == Event.WorkflowState.OPEN && dateService.isPastDue(schedule.getDueDate());
     }
 
 }

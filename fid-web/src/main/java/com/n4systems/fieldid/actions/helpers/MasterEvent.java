@@ -183,9 +183,9 @@ public class MasterEvent {
 		processSubEvents();
         if (overrideResult != null) {
             if ("auto".equals(overrideResult)) {
-                event.setStatus(null);
+                event.setEventResult(null);
             } else {
-                event.setStatus(Status.valueOf(overrideResult));
+                event.setEventResult(EventResult.valueOf(overrideResult));
             }
         }
 
@@ -382,6 +382,6 @@ public class MasterEvent {
         if (event==null) {
             return false;
         }
-        return Event.EventState.OPEN.equals(event.getEventState()) ||  event.isNew();
+        return Event.WorkflowState.OPEN.equals(event.getWorkflowState()) ||  event.isNew();
     }
 }

@@ -271,7 +271,7 @@ public class AssetService extends FieldIdPersistenceService {
         QueryBuilder<Long> schedules = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(asset.getTenant().getId()))
                 .setSimpleSelect("id")
                 .addSimpleWhere("asset", asset)
-                .addWhere(Comparator.NE, "eventState", "eventState", Event.EventState.OPEN);
+                .addWhere(Comparator.NE, "workflowState", "workflowState", Event.WorkflowState.OPEN);
 
         for (Long id : persistenceService.findAll(schedules)) {
             Event schedule = persistenceService.find(Event.class, id);
@@ -484,7 +484,7 @@ public class AssetService extends FieldIdPersistenceService {
     @LegacyMethod
     private Query createAllEventQuery(Asset asset, SecurityFilter securityFilter, boolean count, boolean lastEvent) {
         String query = "from "+Event.class.getName()+" event  left join event.asset " + "WHERE  " + securityFilter.produceWhereClause(Event.class, "event")
-                + " AND event.asset = :asset AND event.state= :activeState AND event.eventState= :completed";
+                + " AND event.asset = :asset AND event.state= :activeState AND event.workflowState= :completed";
         if (count) {
             query = "SELECT count(event.id) " + query;
         } else {
@@ -503,7 +503,7 @@ public class AssetService extends FieldIdPersistenceService {
         eventQuery.setParameter("asset", asset);
         securityFilter.applyParameters(eventQuery, Event.class);
         eventQuery.setParameter("activeState", Archivable.EntityState.ACTIVE);
-        eventQuery.setParameter("completed", Event.EventState.COMPLETED);
+        eventQuery.setParameter("completed", Event.WorkflowState.COMPLETED);
 
         return eventQuery;
     }

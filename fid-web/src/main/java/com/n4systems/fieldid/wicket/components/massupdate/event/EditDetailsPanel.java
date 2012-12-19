@@ -20,8 +20,8 @@ import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.EventBook;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.EventStatus;
-import com.n4systems.model.Status;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.EventReportCriteria;
@@ -105,7 +105,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			return new FIDLabelModel("errors.required",new FIDLabelModel("label.date_performed").getObject()).getObject();
 		}
 		
-		if(model.getSelect().get("result") && model.getEvent().getStatus() == null) {
+		if(model.getSelect().get("eventResult") && model.getEvent().getEventResult() == null) {
 			return new FIDLabelModel("errors.required",new FIDLabelModel("label.result").getObject()).getObject();
 		}
 		
@@ -185,10 +185,10 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
             add(eventBookCheck);
             add(eventBooks);
 
-            massUpdateEventModel.getEvent().setStatus(null);
+            massUpdateEventModel.getEvent().setEventResult(null);
             final CheckBox resultCheck = new CheckBox("resultCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[result]"));
             resultCheck.setOutputMarkupId(true);
-            FormComponent<Status> results = new DropDownChoice<Status>("result", new PropertyModel<Status>(massUpdateEventModel, "event.status"), Status.getValidEventStates(), new StatusChoiceRenderer()).setNullValid(true);
+            FormComponent<EventResult> results = new DropDownChoice<EventResult>("result", new PropertyModel<EventResult>(massUpdateEventModel, "event.eventResult"), EventResult.getValidEventResults(), new StatusChoiceRenderer()).setNullValid(true);
             results.add(createCheckOnChangeEvent(resultCheck));
             add(resultCheck);
             add(results);

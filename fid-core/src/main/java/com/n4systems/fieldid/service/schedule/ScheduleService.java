@@ -11,7 +11,7 @@ public class ScheduleService extends FieldIdPersistenceService {
 
     public List<Event> findIncompleteSchedulesForAsset(Asset asset) {
         QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter());
-        query.addSimpleWhere("eventState", Event.EventState.OPEN);
+        query.addSimpleWhere("workflowState", Event.WorkflowState.OPEN);
         query.addSimpleWhere("asset", asset);
         return persistenceService.findAll(query);
     }

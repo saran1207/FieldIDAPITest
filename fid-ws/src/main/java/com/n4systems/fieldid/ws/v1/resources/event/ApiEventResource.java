@@ -54,7 +54,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		}
 		
 		Event existingEvent = eventService.findByMobileId(apiEvent.getSid());
-        if (existingEvent == null || existingEvent.getEventState() == Event.EventState.OPEN) {
+        if (existingEvent == null || existingEvent.getWorkflowState() == Event.WorkflowState.OPEN) {
         	createEvent(apiEvent, existingEvent);
         } else {
         	updateEvent(apiEvent, existingEvent);
@@ -101,7 +101,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
         List<FileAttachment> uploadedFiles = apiAttachmentResource.convert(apiEvent.getAttachments(), event.getTenant(), event.getCreatedBy());
         eventCreationService.createEvent(event, 0L, null, uploadedFiles);
 		logger.info("Created Event on Asset " + apiEvent.getAssetId());
-		logger.info("Event MobileGUID: " + event.getMobileGUID() + " with Status: " + event.getStatus());
+		logger.info("Event MobileGUID: " + event.getMobileGUID() + " with EventResult: " + event.getEventResult());
 	}
 	
 	private void updateEvent(ApiEvent apiEvent, Event existingEvent) {
@@ -111,7 +111,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		existingAttachments.addAll(uploadedFiles);
 		eventCreationService.updateEvent(existingEvent, null, existingAttachments);
 		logger.info("Update Event on Asset " + apiEvent.getAssetId());
-		logger.info("Event MobileGUID: " + existingEvent.getMobileGUID() + " with Status: " + existingEvent.getStatus());
+		logger.info("Event MobileGUID: " + existingEvent.getMobileGUID() + " with EventResult: " + existingEvent.getEventResult());
 	}
 	
 	private Event getScheduledEvent(ApiEvent apiEvent) {
@@ -119,7 +119,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
             // We find the open event, and use this event rather than the updated one. UNLESS it's archived
             Event loadedEvent = eventScheduleService.findByMobileId(apiEvent.getEventScheduleId());
             if (loadedEvent != null) {
-                if (loadedEvent.getEventState() == Event.EventState.OPEN) {
+                if (loadedEvent.getState() == Archivable.EntityState.ACTIVE && loadedEvent.getWorkflowState() == Event.WorkflowState.OPEN) {
                     return loadedEvent;
                 }
             }
@@ -129,7 +129,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	}
 
 	private void convertApiEvent(ApiEvent apiEvent, Event event, boolean isUpdate) {
-        event.setEventState(Event.EventState.COMPLETED);
+        event.setWorkflowState(Event.WorkflowState.COMPLETED);
 		
 		// Step 1: Convert abstract-event fields first.
 		convertApiEventForAbstractEvent(apiEvent, event, isUpdate);
@@ -146,9 +146,9 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		
 		
 		if (apiEvent.getStatus() != null) {
-			event.setStatus(Status.valueOf(apiEvent.getStatus()));
+			event.setEventResult(EventResult.valueOf(apiEvent.getStatus()));
 		} else {
-			event.setStatus(Status.VOID);
+			event.setEventResult(EventResult.VOID);
 		}
 		
 		if (apiEvent.getAssignedUserId() != null) {

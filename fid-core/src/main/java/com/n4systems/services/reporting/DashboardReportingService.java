@@ -11,8 +11,8 @@ import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.EventType;
-import com.n4systems.model.Status;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.*;
 import com.n4systems.model.orgs.BaseOrg;
@@ -78,11 +78,11 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Date from = getFrom(granularity, dateRange);
 		Date to = getTo(granularity, dateRange);
 		List<CompletedEventsReportRecord> completedEvents = eventService.getCompletedEvents(from, to, org, null, granularity);
-        results.add(new ChartSeries<LocalDate>(Status.ALL, Status.ALL.getLabel(), completedEvents));
+        results.add(new ChartSeries<LocalDate>(EventResult.ALL, EventResult.ALL.getLabel(), completedEvents));
 
-		for (Status status:Status.getValidEventStates()) {
-			completedEvents = eventService.getCompletedEvents(from, to, org, status, granularity);
-			results.add(new ChartSeries<LocalDate>(status, status.getDisplayName(), completedEvents));
+		for (EventResult eventResult : EventResult.getValidEventResults()) {
+			completedEvents = eventService.getCompletedEvents(from, to, org, eventResult, granularity);
+			results.add(new ChartSeries<LocalDate>(eventResult, eventResult.getDisplayName(), completedEvents));
 		}
 
 		return results;
@@ -99,12 +99,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		Preconditions.checkArgument(dateRange !=null);
 
 		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange),  org);
-		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(Event.EventState.OPEN, granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
+		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(Event.WorkflowState.OPEN, granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
 
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
-		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>(EventState.COMPLETE, Event.EventState.COMPLETED.getLabel(), completedScheduledEvents);
+		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>(WorkflowState.COMPLETE, Event.WorkflowState.COMPLETED.getLabel(), completedScheduledEvents);
         results.add(completedChartSeries);
-		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>(EventState.ALL_STATES, EventState.ALL_STATES.getLabel(), allScheduledEvents);
+		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>(WorkflowState.ALL_STATES, WorkflowState.ALL_STATES.getLabel(), allScheduledEvents);
 		results.add(allChartSeries);
         // hack. because ALL isn't the exact same on reporting, we will just disable the click thru on it now.
         //  COMPLETED is still clickable though by default.
@@ -151,7 +151,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
     private EventReportCriteria getCriteriaDefaults() {
     	EventReportCriteria criteria = getDefaultReportCriteria();
-    	criteria.setEventState(EventState.OPEN);
+    	criteria.setWorkflowState(WorkflowState.OPEN);
 		return criteria;
 	}
 
@@ -163,7 +163,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
         // this widget displays day by day.  .: when you click on a pt the date range is always a single day.
         criteria.setDueDateRange(new DateRange(localDate, localDate));
-        criteria.setEventState(EventState.OPEN);
+        criteria.setWorkflowState(WorkflowState.OPEN);
         return criteria;
 	}
 
@@ -177,7 +177,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
         criteria.setDueDateRange(config.getDateRange());
         criteria.setPriority(priorityCodeService.getPriorityCodeByName(priorityName));
-        criteria.setEventState(EventState.OPEN);
+        criteria.setWorkflowState(WorkflowState.OPEN);
         criteria.setEventType(config.getActionType());
         criteria.setEventTypeGroup(eventTypeGroupService.getDefaultActionGroup());
         return criteria;
@@ -196,31 +196,31 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         criteria.setDateRange(new DateRange(RangeType.FOREVER));
 
         if (KpiType.INCOMPLETE.getLabel().equals(series)) {
-            criteria.setEventState(EventState.OPEN);
+            criteria.setWorkflowState(WorkflowState.OPEN);
         } else if (KpiType.FAILED.getLabel().equals(series)) {
-            criteria.setResult(Status.FAIL);
+            criteria.setEventResult(EventResult.FAIL);
         } else if (KpiType.COMPLETED.getLabel().equals(series)) {
-            criteria.setEventState(EventState.COMPLETE);
+            criteria.setWorkflowState(WorkflowState.COMPLETE);
         }
         return criteria;
     }
 
     private EventReportCriteria getCriteriaDefaults(CompletedEventsWidgetConfiguration config, String series, LocalDate localDate) {
         EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
-        criteria.setResult(EnumUtils.valueOf(Status.class, series));
+        criteria.setEventResult(EnumUtils.valueOf(EventResult.class, series));
         setDateRange(criteria, config.getGranularity(), localDate);
         return criteria;
     }
 
 	private EventReportCriteria getCriteriaDefaults(EventCompletenessWidgetConfiguration config, String series, LocalDate localDate) {
 		EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
-        EventState state = EnumUtils.valueOf(EventState.class, series);
-        if (EventState.COMPLETE.equals(state)) {
+        WorkflowState state = EnumUtils.valueOf(WorkflowState.class, series);
+        if (WorkflowState.COMPLETE.equals(state)) {
             criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
             criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
-            criteria.setEventState(EventState.COMPLETE);
+            criteria.setWorkflowState(WorkflowState.COMPLETE);
         } else {
-            criteria.setEventState(EventState.ALL);
+            criteria.setWorkflowState(WorkflowState.ALL);
             criteria.setDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
         }
 		return criteria;
@@ -231,7 +231,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         criteria.setAssetType(config.getAssetType());
         criteria.setEventType(config.getEventType());
         criteria.setAssigneeId(config.getUser()!=null ? config.getUser().getId() : null);
-        criteria.setEventState(EventState.OPEN);
+        criteria.setWorkflowState(WorkflowState.OPEN);
         return criteria;
     }
 

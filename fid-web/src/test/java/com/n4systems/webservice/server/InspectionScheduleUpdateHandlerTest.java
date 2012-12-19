@@ -118,7 +118,7 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void do_not_update_when_schedule_is_completed() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
-		openEvent.setEventState(Event.EventState.COMPLETED);
+		openEvent.setWorkflowState(Event.WorkflowState.COMPLETED);
 		
 		createInspectionScheduleByMobileGuidLoaderMock();
 		
@@ -147,7 +147,7 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void do_not_remove_when_schedule_is_completed() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
-		openEvent.setEventState(Event.EventState.COMPLETED);
+		openEvent.setWorkflowState(Event.WorkflowState.COMPLETED);
 
 		createInspectionScheduleByMobileGuidLoaderMock();
 		

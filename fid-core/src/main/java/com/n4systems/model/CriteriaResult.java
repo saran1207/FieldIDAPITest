@@ -101,7 +101,7 @@ public abstract class CriteriaResult extends EntityWithTenant {
 		this.deficiencies = deficiencies;
 	}
 
-    public Status getResult() {
+    public EventResult getResult() {
         return null;
     }
 

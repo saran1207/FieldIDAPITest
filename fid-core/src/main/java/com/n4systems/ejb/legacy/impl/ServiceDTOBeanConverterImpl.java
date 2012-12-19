@@ -154,7 +154,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		populateAbstractInspectionInfo(inspectionDTO, event);
 		inspectionDTO.setOwnerId(retrieveOwnerId(event.getOwner()));
 		inspectionDTO.setPerformedById(event.getPerformedBy().getId());
-		inspectionDTO.setStatus(event.getStatus().name());
+		inspectionDTO.setStatus(event.getEventResult().name());
 		inspectionDTO.setEventBookId((event.getBook() != null) ? event.getBook().getMobileId() : null);
 		inspectionDTO.setUtcDate(event.getDate());
 		inspectionDTO.setPrintable(event.isPrintable());
@@ -441,7 +441,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
         if (schedule!=null) {
             // As long as this scheduled event's corresponding open event hasn't been completed or archived, we're going to use it
-            if (schedule.getEventState()==Event.EventState.OPEN && schedule.getState() == Archivable.EntityState.ACTIVE) {
+            if (schedule.getWorkflowState()== Event.WorkflowState.OPEN && schedule.getState() == Archivable.EntityState.ACTIVE) {
                 event = persistenceManager.find(Event.class, schedule.getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
             }
         }
@@ -461,16 +461,16 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		findOrCreateEventBook(inspectionServiceDTO, event);
 
-		Status status = Status.VOID;
+		EventResult eventResult = EventResult.VOID;
 		if (StringUtils.isNotBlank(inspectionServiceDTO.getStatus())) {
 			try {
-				status = Status.valueOf(inspectionServiceDTO.getStatus());
+				eventResult = EventResult.valueOf(inspectionServiceDTO.getStatus());
 			} catch (Exception e) {
-				logger.error("Unable to convertOpenEvent Event Status value of [" + inspectionServiceDTO.getStatus() + "] defaulting to N/A", e);
-				status = Status.NA;
+				logger.error("Unable to convertOpenEvent Event EventResult value of [" + inspectionServiceDTO.getStatus() + "] defaulting to N/A", e);
+				eventResult = EventResult.NA;
 			}
 		}
-		event.setStatus(status);
+		event.setEventResult(eventResult);
 		
 		if (inspectionServiceDTO.getSubInspections() != null) {
 			for (SubInspectionServiceDTO subInspection : inspectionServiceDTO.getSubInspections()) {
@@ -990,7 +990,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		scheduleService.setProductId(event.getAsset().getId());
 		scheduleService.setInspectionTypeId(event.getType().getId());
 		scheduleService.setJobId(event.getProject() != null ? event.getProject().getId() : NULL_ID);
-		scheduleService.setCompleted(event.getEventState() == Event.EventState.COMPLETED);
+		scheduleService.setCompleted(event.getWorkflowState() == Event.WorkflowState.COMPLETED);
 
 		return scheduleService;
 	}

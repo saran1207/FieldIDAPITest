@@ -28,7 +28,7 @@ public class HighlightPastDueSchedulesBehavior extends AttributeAppender {
             return false;
         }
         Event event = (Event) ((RowView) object).getEntity();
-        return event.getEventState() == Event.EventState.OPEN && dateService.isPastDue(event.getDueDate());
+        return event.getWorkflowState() == Event.WorkflowState.OPEN && dateService.isPastDue(event.getDueDate());
     }
 
 }

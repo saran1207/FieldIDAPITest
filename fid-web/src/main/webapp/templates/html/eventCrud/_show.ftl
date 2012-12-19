@@ -61,14 +61,14 @@
 
     <div class="resultContainer">
         <label><@s.text name="label.result"/></label>
-        <#if event.status?exists>
+        <#if event.eventResult?exists>
             <div
-                <#if event.status.displayName== "Pass" > class="passColor"
-                <#elseif event.status.displayName == "Fail"> class="failColor"
-                <#elseif event.status.displayName == "N/A"> class="naColor"
+                <#if event.eventResult.displayName== "Pass" > class="passColor"
+                <#elseif event.eventResult.displayName == "Fail"> class="failColor"
+                <#elseif event.eventResult.displayName == "N/A"> class="naColor"
                 <#else> class="voidColor"
                 </#if>>
-                <p class="inline"><@s.text name="${(event.status.label?html)!}"/></p>
+                <p class="inline"><@s.text name="${(event.eventResult.label?html)!}"/></p>
             </div>
         <#else>
             <div><p>&nbsp;</p></div>
@@ -196,7 +196,7 @@
 			var map = googleMapFactory.create('mapCanvas');
 			map.makeMarker = googleMapFactory.makeMarkerForStatus;		
 			Event.observe(window, 'load', function() { 
-				map.addLocation(${action.latitude}, ${action.longitude}, '', "${event.status}", "../../");
+				map.addLocation(${action.latitude}, ${action.longitude}, '', "${event.eventResult}", "../../");
 				map.show();				
 			});		
 		</script>						

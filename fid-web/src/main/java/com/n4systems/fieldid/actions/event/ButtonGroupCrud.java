@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import com.n4systems.model.*;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -12,13 +13,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.State;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Status;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigEntry;
@@ -147,8 +142,8 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 		return stateSets;
 	}
 
-	public List<Status> getButtonStatuses() {
-		return Status.getValidEventStates();
+	public List<EventResult> getButtonStatuses() {
+		return EventResult.getValidEventResults();
 	}
 		
 	public String getName() {

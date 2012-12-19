@@ -1,4 +1,3 @@
-
 <h2><@s.text name="label.posteventinformation"/></h2>
 <div  class="infoSet">
 	<label class="label"><@s.text name="label.comments"/></label>
@@ -26,7 +25,7 @@
 		</span>
 	</div>
 	
-	<#if event.new || event.eventState = 'OPEN'>
+	<#if event.new || event.workflowState = 'OPEN'>
 		<#include "_schedules.ftl"/>
 	</#if>	
 	

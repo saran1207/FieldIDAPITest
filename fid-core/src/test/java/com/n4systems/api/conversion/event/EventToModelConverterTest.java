@@ -154,13 +154,13 @@ public class EventToModelConverterTest {
 		EventView view = new EventView();
 		
 		view.setStatus("PaSs");
-		assertEquals(Status.PASS, converter.toModel(view, transaction).getStatus());
+		assertEquals(EventResult.PASS, converter.toModel(view, transaction).getEventResult());
 		
 		view.setStatus("fail");
-		assertEquals(Status.FAIL, converter.toModel(view, transaction).getStatus());
+		assertEquals(EventResult.FAIL, converter.toModel(view, transaction).getEventResult());
 		
 		view.setStatus("N/A");
-		assertEquals(Status.NA, converter.toModel(view, transaction).getStatus());		
+		assertEquals(EventResult.NA, converter.toModel(view, transaction).getEventResult());
 	}
 	
 	@Test
@@ -179,7 +179,7 @@ public class EventToModelConverterTest {
 		EventView view = new EventView();
 		
 		view.setStatus("bleh");
-		assertEquals(Status.NA, converter.toModel(view, transaction).getStatus());		
+		assertEquals(EventResult.NA, converter.toModel(view, transaction).getEventResult());
 	}
 	
 	@Test
@@ -359,7 +359,7 @@ public class EventToModelConverterTest {
 		eventView.setCriteriaResults(criteriaResults);
 
 		EventForm eventForm = new EventForm();
-		StateSet stateSet = StateSetBuilder.aStateSet().states(new State("Pass", Status.PASS, "Pass")).build();
+		StateSet stateSet = StateSetBuilder.aStateSet().states(new State("Pass", EventResult.PASS, "Pass")).build();
 		OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withStateSet(stateSet).build();
 		
 		CriteriaSection section = CriteriaSectionBuilder.aCriteriaSection().
@@ -393,7 +393,7 @@ public class EventToModelConverterTest {
 		OneClickCriteriaResult oneClickCriteriaResult = (OneClickCriteriaResult)onlyMemberOfSet;
 
 		assertEquals(criteria, oneClickCriteriaResult.getCriteria());
-		assertEquals(Status.PASS, oneClickCriteriaResult.getState().getStatus());
+		assertEquals(EventResult.PASS, oneClickCriteriaResult.getState().getEventResult());
 		assertEquals(eventForm, oneClickCriteriaResult.getEvent().getEventForm() );
 		
 		verify(psLoader);

@@ -40,7 +40,7 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
 
     private List<Long> eventIds(AssetType assetType, EventType eventType) {
         QueryBuilder<Long> query = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(assetType.getTenant()));
-        query.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("eventState", Event.EventState.OPEN).addSimpleWhere("type", eventType);
+        query.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("workflowState", Event.WorkflowState.OPEN).addSimpleWhere("type", eventType);
 
         if (assetType != null) {
             query.addSimpleWhere("asset.type", assetType);
@@ -49,10 +49,10 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    private List<Long> scheduleIds(AssetType assetType, EventType eventType, Event.EventStateGrouping eventStates) {
+    private List<Long> scheduleIds(AssetType assetType, EventType eventType, Event.WorkflowStateGrouping workflowStates) {
         QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
         schedulesToDelete.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("type", eventType);
-        schedulesToDelete.addWhere(WhereParameter.Comparator.IN, "eventState", "eventState", Arrays.asList(eventStates.getMembers()));
+        schedulesToDelete.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(workflowStates.getMembers()));
         schedulesToDelete.addWhere(WhereClauseFactory.createNotNull("dueDate"));
 
         if (assetType != null) {
@@ -63,8 +63,8 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
     }
 
     @Transactional
-	public ScheduleListRemovalSummary summary(AssetType assetType, EventType eventType, Event.EventStateGrouping eventStates) {
-		return new ScheduleListRemovalSummary((long)scheduleIds(assetType,  eventType, eventStates).size());
+	public ScheduleListRemovalSummary summary(AssetType assetType, EventType eventType, Event.WorkflowStateGrouping workflowStates) {
+		return new ScheduleListRemovalSummary((long)scheduleIds(assetType,  eventType, workflowStates).size());
 	}
 
 }

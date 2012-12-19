@@ -64,7 +64,7 @@ public class InspectionScheduleUpdateHandler {
 			Event event) {
 		
 		//update only when it is not completed
-		if (event.getEventState() == Event.EventState.OPEN) {
+		if (event.getWorkflowState() == Event.WorkflowState.OPEN) {
             event.setDueDate(stringToDate(inspectionScheduleServiceDTO.getNextDate()));
 			saver.saveOrUpdate(event);
 		}
@@ -76,7 +76,7 @@ public class InspectionScheduleUpdateHandler {
 		try {
 			//remove only when it is still open
 
-			if (eventSchedule.getEventState() == Event.EventState.OPEN) {
+			if (eventSchedule.getWorkflowState() == Event.WorkflowState.OPEN) {
 				saver.remove(eventSchedule);
 			}
 		} catch (EntityStillReferencedException e) {

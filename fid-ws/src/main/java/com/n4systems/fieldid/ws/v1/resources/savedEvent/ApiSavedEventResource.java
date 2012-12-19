@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.fieldid.ws.v1.resources.event.ApiEvent;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventAttribute;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
@@ -42,8 +41,8 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 			apiEvent.setEventBookId(event.getBook().getMobileId());
 		}
 		
-		if(event.getStatus() != null) {
-			apiEvent.setStatus(event.getStatus().toString());
+		if(event.getEventResult() != null) {
+			apiEvent.setStatus(event.getEventResult().toString());
 		}
 		
 		if(event.getAdvancedLocation() != null) {

@@ -6,7 +6,7 @@ import com.n4systems.fieldid.wicket.components.asset.events.table.EventActionsCe
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.Status;
+import com.n4systems.model.EventResult;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -33,11 +33,11 @@ public class LastEventPanel extends Panel {
         Event lastEvent = assetService.findLastEvents(asset, FieldIDSession.get().getSessionUser().getSecurityFilter());
 
         if(lastEvent != null) {
-            Status status = lastEvent.getStatus();
+            EventResult eventResult = lastEvent.getEventResult();
 
-            if (status.equals(Status.PASS)) {
+            if (eventResult.equals(EventResult.PASS)) {
                 add(new ContextImage("resultIcon", "images/event-completed-pass.png"));
-            } else if (status.equals(Status.FAIL)) {
+            } else if (eventResult.equals(EventResult.FAIL)) {
                 add(new ContextImage("resultIcon", "images/event-completed-fail.png"));
             } else {
                 add(new ContextImage("resultIcon", "images/event-completed-na.png"));

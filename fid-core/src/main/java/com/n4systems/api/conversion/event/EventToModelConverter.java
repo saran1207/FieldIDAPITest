@@ -264,14 +264,14 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	protected void resolveStatus(String statusName, Event model) {
 		String cleanStatus = statusName.toUpperCase();
 		
-		Status status = Status.NA;
+		EventResult eventResult = EventResult.NA;
 		if (cleanStatus.equals("PASS")) {
-			status = Status.PASS;
+			eventResult = EventResult.PASS;
 		} else if (cleanStatus.equals("FAIL")) {
-			status = Status.FAIL;
+			eventResult = EventResult.FAIL;
 		}
 		
-		model.setStatus(status);
+		model.setEventResult(eventResult);
 	}
 
 	protected void resolveAsset(EventView view, Event model, Transaction transaction) {		

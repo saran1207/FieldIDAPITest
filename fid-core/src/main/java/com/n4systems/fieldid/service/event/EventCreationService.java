@@ -62,15 +62,15 @@ public class EventCreationService extends FieldIdPersistenceService {
     public Event createEvent(Event event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
         defaultOneClickResultsWithNullState(event.getResults());
 
-        Status calculatedStatus = calculateEventResultAndScore(event);
+        EventResult calculatedEventResult = calculateEventResultAndScore(event);
 
-        if (event.getStatus() == null || event.getStatus() == Status.VOID) {
-            event.setStatus(calculatedStatus);
+        if (event.getEventResult() == null || event.getEventResult() == EventResult.VOID) {
+            event.setEventResult(calculatedEventResult);
         }
 
         User user = getCurrentUser();
 
-        event.setEventState(Event.EventState.COMPLETED);
+        event.setWorkflowState(Event.WorkflowState.COMPLETED);
 
         setProofTestData(event, fileData);
 
@@ -302,12 +302,12 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     }
 
-    private Status calculateEventResultAndScore(Event event) {
+    private EventResult calculateEventResultAndScore(Event event) {
         EventResultCalculator resultCalculator = new EventResultCalculator();
-        Status eventResult = resultCalculator.findEventResult(event);
+        EventResult eventResult = resultCalculator.findEventResult(event);
 
         for (SubEvent subEvent : event.getSubEvents()) {
-            Status currentResult = resultCalculator.findEventResult(subEvent);
+            EventResult currentResult = resultCalculator.findEventResult(subEvent);
             eventResult = resultCalculator.adjustStatus(eventResult, currentResult);
         }
 

@@ -62,7 +62,7 @@ ${action.setPageType('report', 'show')!}
 			</#if>
 			<div class="infoSet">
 				<label for="criteria.status"><@s.text name="label.result"/></label>
-				<@s.select name="criteria.status" emptyOption="true" list="statuses" listKey="id" listValue="%{getText(label)}"/>
+				<@s.select name="criteria.eventResult" emptyOption="true" list="statuses" listKey="id" listValue="%{getText(label)}"/>
 			</div>
 			<#if sessionUser.employeeUser || sessionUser.systemUser>
 				<div class="infoSet">

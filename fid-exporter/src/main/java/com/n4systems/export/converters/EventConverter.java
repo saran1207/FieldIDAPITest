@@ -18,7 +18,7 @@ public class EventConverter extends AbstractEventConverter<Event> {
 		super.marshalEntity(event, writer, context);
 		writeNode(writer, context, "ActiveState", event.getEntityState());
 		writeNode(writer, context, "Date", event.getDate());
-		writeNode(writer, context, "EventResult", event.getStatus());
+		writeNode(writer, context, "EventResult", event.getEventResult());
 		writeUserNode(writer, context, "PerformedBy", event.getPerformedBy());
 		context.convertAnother(event.getOwner());
 		writeNode(writer, context, "AssignedTo", event.getAssignedTo());

@@ -50,12 +50,12 @@ public class BaseSetupDataFactory {
 		return eventTypeGroup;
 	}
 	
-	private State createState(String displayText, String buttonName, Status status) {
+	private State createState(String displayText, String buttonName, EventResult eventResult) {
 		State state = new State();
 		state.setTenant(tenant);
 		state.setButtonName(buttonName);
 		state.setDisplayText(displayText);
-		state.setStatus(status);
+		state.setEventResult(eventResult);
 		return state;
 	}
 	
@@ -63,8 +63,8 @@ public class BaseSetupDataFactory {
 		StateSet stateSet = new StateSet();
 		stateSet.setTenant(tenant);
 		stateSet.setName("Pass, Fail");
-		stateSet.getStates().add(createState("Pass", "btn0", Status.PASS));
-		stateSet.getStates().add(createState("Fail", "btn1", Status.FAIL));
+		stateSet.getStates().add(createState("Pass", "btn0", EventResult.PASS));
+		stateSet.getStates().add(createState("Fail", "btn1", EventResult.FAIL));
 		return stateSet;
 	}
 	
@@ -72,9 +72,9 @@ public class BaseSetupDataFactory {
 		StateSet stateSet = new StateSet();
 		stateSet.setTenant(tenant);
 		stateSet.setName("NA, Pass, Fail");
-		stateSet.getStates().add(createState("NA", "btn2", Status.NA));
-		stateSet.getStates().add(createState("Pass", "btn0", Status.PASS));
-		stateSet.getStates().add(createState("Fail", "btn1", Status.FAIL));
+		stateSet.getStates().add(createState("NA", "btn2", EventResult.NA));
+		stateSet.getStates().add(createState("Pass", "btn0", EventResult.PASS));
+		stateSet.getStates().add(createState("Fail", "btn1", EventResult.FAIL));
 		return stateSet;
 	}
 	

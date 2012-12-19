@@ -39,7 +39,7 @@
 				<h2><@s.text name="label.schedule_details"/></h2>
 				<div class="infoSet">
 					<label for="criteria.rfidNumber"><@s.text name="label.schedulestatus"/></label> 
-					<@s.select name="criteria.status" list="scheduleStatuses" listKey="name" listValue="%{getText(label)}"/>
+					<@s.select name="criteria.eventResult" list="scheduleStatuses" listKey="name" listValue="%{getText(label)}"/>
 				</div>
 
                 <div class="infoSet">

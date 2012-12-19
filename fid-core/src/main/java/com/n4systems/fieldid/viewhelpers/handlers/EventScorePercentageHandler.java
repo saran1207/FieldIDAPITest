@@ -29,7 +29,7 @@ public class EventScorePercentageHandler extends WebOutputHandler {
     private String getEventScorePercentage(Object value) {
         Event event = (Event) value;
 
-        if(event.getEventState() == Event.EventState.COMPLETED) {
+        if(event.getWorkflowState() == Event.WorkflowState.COMPLETED) {
             if(event.getScore() != null)
                 return percentFormat.format(new EventFormHelper().getEventFormScorePercentage(event));
             else

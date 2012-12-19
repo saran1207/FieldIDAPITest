@@ -75,7 +75,7 @@ public class ReportFormatConverter {
         container.setPurchaseOrder(criteriaModel.getPurchaseOrder());
         container.setReferenceNumber(criteriaModel.getReferenceNumber());
         container.setRfidNumber(criteriaModel.getRfidNumber());
-        container.setStatus(criteriaModel.getResult() == null ? null : criteriaModel.getResult().name());
+        container.setEventResult(criteriaModel.getEventResult() == null ? null : criteriaModel.getEventResult().name());
         container.getLocation().setFreeformLocation(criteriaModel.getLocation().getFreeformLocation());
         container.getLocation().setPredefinedLocation(criteriaModel.getLocation().getPredefinedLocation());
 

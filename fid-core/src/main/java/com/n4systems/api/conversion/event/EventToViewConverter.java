@@ -114,11 +114,11 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 	}
 
 	protected void convertEventStatus(Event model, EventView view) {
-        Status status = model.getStatus();
-        if (status==null) {
-            status = Status.VOID;
+        EventResult eventResult = model.getEventResult();
+        if (eventResult ==null) {
+            eventResult = EventResult.VOID;
         }
-		view.setStatus(status.getDisplayName());
+		view.setStatus(eventResult.getDisplayName());
 	}
 
 	protected void convertAssetIdentifier(Event model, EventView view) {

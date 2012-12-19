@@ -16,7 +16,7 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationForAgenda;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.EventState;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
@@ -132,7 +132,7 @@ public class Agenda extends Panel  {
         EventReportCriteria criteria = createCriteria();
         criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
         criteria.setDueDateRange(getInclusiveDateRange());
-        criteria.setEventState(EventState.OPEN);
+        criteria.setWorkflowState(WorkflowState.OPEN);
         return criteria;
     }
 

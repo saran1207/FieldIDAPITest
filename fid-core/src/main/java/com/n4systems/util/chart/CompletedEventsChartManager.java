@@ -1,6 +1,6 @@
 package com.n4systems.util.chart;
 
-import com.n4systems.model.Status;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.utils.DateRange;
 import org.joda.time.LocalDate;
 
@@ -38,11 +38,11 @@ public class CompletedEventsChartManager extends DateChartManager {
         }
         
         public int ordinal(Object id) {
-            if (Status.ALL.equals(id)) {
-                return Status.values().length;
-            } else if (id instanceof Status) { 
-                Status status = (Status)id;
-                return status.values().length-1-status.ordinal();
+            if (EventResult.ALL.equals(id)) {
+                return EventResult.values().length;
+            } else if (id instanceof EventResult) {
+                EventResult eventResult = (EventResult)id;
+                return eventResult.values().length-1- eventResult.ordinal();
             } else {
                 return 0;
             }

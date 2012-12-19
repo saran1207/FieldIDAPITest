@@ -5,15 +5,15 @@ import com.n4systems.util.EnumUtils;
 
 import java.util.EnumSet;
 
-public enum EventState implements Listable {
+public enum WorkflowState implements Listable {
 
     COMPLETE("label.complete"), OPEN("label.open"), CLOSED("label.closed"), ALL("label.all");
 
-    public static EnumUtils.LabelledEnumSet ALL_STATES = new EnumUtils.LabelledEnumSet<EventState>("All", EnumSet.allOf(EventState.class));
+    public static EnumUtils.LabelledEnumSet ALL_STATES = new EnumUtils.LabelledEnumSet<WorkflowState>("All", EnumSet.allOf(WorkflowState.class));
 
     private String labelKey;
 
-    EventState(String labelKey) {
+    WorkflowState(String labelKey) {
         this.labelKey = labelKey;
     }
 

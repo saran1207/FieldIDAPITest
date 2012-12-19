@@ -22,7 +22,7 @@ public class ReportingAssignedToHandler extends WebOutputHandler {
     }
 
     private String displayUserName(Event event) {
-        if (event.getEventState() == Event.EventState.COMPLETED  && event.getAssignedTo() != null) {
+        if (event.getWorkflowState() == Event.WorkflowState.COMPLETED  && event.getAssignedTo() != null) {
             return getDisplayUserName(event.getAssignedTo().getAssignedUser());
         }
 

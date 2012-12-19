@@ -3,7 +3,7 @@
 	<span class="projectEventType">${(event.asset.type.name?html)!}</span>
 	<span class="projectEventType">${(event.eventType.name?html)!}</span>
 	<span class="projectEventType">
-		<#if event.eventState.name() == "COMPLETED">
+		<#if event.workflowState.name() == "COMPLETED">
 			<@s.text name="label.completed"/> | <a href="<@s.url action="event" uniqueID="${event.id}"/>"><@s.text name="label.view"/></a>
 		<#else>
 			

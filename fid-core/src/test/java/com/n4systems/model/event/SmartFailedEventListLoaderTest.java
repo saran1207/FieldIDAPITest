@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.EventResult;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +17,6 @@ import com.google.common.collect.Lists;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
-import com.n4systems.model.Status;
 import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -61,8 +61,8 @@ public class SmartFailedEventListLoaderTest {
 	@Test
 	public void test_load_fail_then_pass() {
 		//setup
-		List<Event> results = createResults(new TestEvent(typeA, Status.FAIL, asset1),
-				new TestEvent(typeA, Status.PASS, asset1)
+		List<Event> results = createResults(new TestEvent(typeA, EventResult.FAIL, asset1),
+				new TestEvent(typeA, EventResult.PASS, asset1)
 		);
 		withExpectations(results);
 				
@@ -81,8 +81,8 @@ public class SmartFailedEventListLoaderTest {
 	@Test
 	public void test_load_pass_then_fail() {
 		//setup
-		List<Event> results = createResults(new TestEvent(typeA, Status.PASS, asset1),
-											new TestEvent(typeA, Status.FAIL, asset1)
+		List<Event> results = createResults(new TestEvent(typeA, EventResult.PASS, asset1),
+											new TestEvent(typeA, EventResult.FAIL, asset1)
 										);
 		withExpectations(results);
 				
@@ -101,9 +101,9 @@ public class SmartFailedEventListLoaderTest {
 	@Test
 	public void test_load_different_event_types() {
 		//setup
-		List<Event> results = createResults(new TestEvent(typeA, Status.FAIL, asset1),
-											new TestEvent(typeB, Status.FAIL, asset1),
-											new TestEvent(typeC, Status.FAIL, asset1)
+		List<Event> results = createResults(new TestEvent(typeA, EventResult.FAIL, asset1),
+											new TestEvent(typeB, EventResult.FAIL, asset1),
+											new TestEvent(typeC, EventResult.FAIL, asset1)
 										);
 		withExpectations(results);
 				
@@ -123,9 +123,9 @@ public class SmartFailedEventListLoaderTest {
 	@Test
 	public void test_load_different_event_types_pass_and_fail() {
 		//setup
-		List<Event> results = createResults(new TestEvent(typeA, Status.FAIL, asset1),
-											new TestEvent(typeB, Status.PASS, asset1),
-											new TestEvent(typeC, Status.FAIL, asset1)
+		List<Event> results = createResults(new TestEvent(typeA, EventResult.FAIL, asset1),
+											new TestEvent(typeB, EventResult.PASS, asset1),
+											new TestEvent(typeC, EventResult.FAIL, asset1)
 										);
 		withExpectations(results);
 				
@@ -144,9 +144,9 @@ public class SmartFailedEventListLoaderTest {
 	@Test
 	public void test_load_different_assets() {
 		//setup
-		List<Event> results = createResults(new TestEvent(typeA, Status.FAIL, asset1),
-											new TestEvent(typeA, Status.FAIL, asset2),
-											new TestEvent(typeA, Status.FAIL, asset3)
+		List<Event> results = createResults(new TestEvent(typeA, EventResult.FAIL, asset1),
+											new TestEvent(typeA, EventResult.FAIL, asset2),
+											new TestEvent(typeA, EventResult.FAIL, asset3)
 										);
 		withExpectations(results);
 				
@@ -164,11 +164,11 @@ public class SmartFailedEventListLoaderTest {
 	@Test
 	public void test_load_different_assets_pass_fail() {
 		//setup
-		List<Event> results = createResults(new TestEvent(typeA, Status.PASS, asset1),
-											new TestEvent(typeA, Status.FAIL, asset2),
-											new TestEvent(typeA, Status.PASS, asset2),
-											new TestEvent(typeA, Status.FAIL, asset3),
-											new TestEvent(typeA, Status.PASS, asset3)
+		List<Event> results = createResults(new TestEvent(typeA, EventResult.PASS, asset1),
+											new TestEvent(typeA, EventResult.FAIL, asset2),
+											new TestEvent(typeA, EventResult.PASS, asset2),
+											new TestEvent(typeA, EventResult.FAIL, asset3),
+											new TestEvent(typeA, EventResult.PASS, asset3)
 										);
 		withExpectations(results);
 				
@@ -187,8 +187,8 @@ public class SmartFailedEventListLoaderTest {
 	@Test
 	public void test_load_na_after_fail() {
 		//setup
-		List<Event> results = createResults(new TestEvent(typeA, Status.FAIL, asset1),
-											new TestEvent(typeA, Status.NA, asset1)
+		List<Event> results = createResults(new TestEvent(typeA, EventResult.FAIL, asset1),
+											new TestEvent(typeA, EventResult.NA, asset1)
 										);
 		withExpectations(results);
 				
@@ -207,8 +207,8 @@ public class SmartFailedEventListLoaderTest {
 	@Test
 	public void test_load_na_after_pass() {
 		//setup
-		List<Event> results = createResults(new TestEvent(typeA, Status.PASS, asset1),
-											new TestEvent(typeA, Status.NA, asset1)
+		List<Event> results = createResults(new TestEvent(typeA, EventResult.PASS, asset1),
+											new TestEvent(typeA, EventResult.NA, asset1)
 										);
 		withExpectations(results);
 				
@@ -252,7 +252,7 @@ public class SmartFailedEventListLoaderTest {
 	private List<Event> createResults(TestEvent... events) {
 		List<Event> results = new ArrayList<Event>();
 		for (TestEvent te:events) { 
-			results.add(EventBuilder.anEvent().on(te.asset).withResult(te.status).ofType(te.type).build());			
+			results.add(EventBuilder.anEvent().on(te.asset).withResult(te.eventResult).ofType(te.type).build());
 		}
 		return results;
 	}
@@ -261,12 +261,12 @@ public class SmartFailedEventListLoaderTest {
 	class TestEvent {
 		
 		EventType type;
-		Status status;
+		EventResult eventResult;
 		Asset asset;
 
-		public TestEvent(EventType type, Status status, Asset asset) {
+		public TestEvent(EventType type, EventResult eventResult, Asset asset) {
 			this.type = type;
-			this.status = status;
+			this.eventResult = eventResult;
 			this.asset = asset;
 		}
 	}

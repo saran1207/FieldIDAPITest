@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRende
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.EventState;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -49,19 +49,19 @@ public class ReportingFilterPanel extends Panel {
             }
         });
 
-        final PropertyModel<EventState> eventStateModel = new PropertyModel<EventState>(model, "eventState");
+        final PropertyModel<WorkflowState> workflowStateModel = new PropertyModel<WorkflowState>(model, "workflowState");
 
         add( new CollapsiblePanel("eventStatusAndDateRangePanel", new StringResourceModel("label.dates_and_times",this,null)) {
             @Override protected Panel createContainedPanel(String id) {
-                return eventStatusAndDateRangePanel = getEventStatusAndDateRangePanel(id, model, eventStateModel);
+                return eventStatusAndDateRangePanel = getEventStatusAndDateRangePanel(id, model, workflowStateModel);
             }
         });
 
-        FidDropDownChoice<EventState> eventStateSelect = new FidDropDownChoice<EventState>("eventStateSelect", eventStateModel, Arrays.asList(EventState.values()), new ListableLabelChoiceRenderer<EventState>());
-        eventStateSelect.setNullValid(false);
-        add(eventStateSelect);
+        FidDropDownChoice<WorkflowState> workflowStateSelect = new FidDropDownChoice<WorkflowState>("eventStateSelect", workflowStateModel, Arrays.asList(WorkflowState.values()), new ListableLabelChoiceRenderer<WorkflowState>());
+        workflowStateSelect.setNullValid(false);
+        add(workflowStateSelect);
 
-        eventStateSelect.add(new OnChangeAjaxBehavior() {
+        workflowStateSelect.add(new OnChangeAjaxBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 eventStatusAndDateRangePanel.repaintComponents(target);
@@ -104,11 +104,11 @@ public class ReportingFilterPanel extends Panel {
         });
 	}
 
-    private EventStatusAndDateRangePanel getEventStatusAndDateRangePanel(String id, final IModel<EventReportCriteria> model, PropertyModel<EventState> eventStateModel) {
+    private EventStatusAndDateRangePanel getEventStatusAndDateRangePanel(String id, final IModel<EventReportCriteria> model, PropertyModel<WorkflowState> workflowStateModel) {
         PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(model, "includeDueDateRange");
         PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(model, "dateRange");
         PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(model, "dueDateRange");
-        return new EventStatusAndDateRangePanel(id, eventStateModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
+        return new EventStatusAndDateRangePanel(id, workflowStateModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
             @Override protected void onEventStateChanged(AjaxRequestTarget target) {
                 model.getObject().clearDateRanges();
             }

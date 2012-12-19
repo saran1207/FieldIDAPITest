@@ -25,7 +25,6 @@ import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.Event;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.NumberFieldCriteria;
@@ -154,7 +153,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 			apiState.setActive(!state.isRetired());
 			apiState.setDisplayText(state.getDisplayText());
 			apiState.setButtonName(state.getButtonName());
-			apiState.setStatus(ApiEventStatus.convert(state.getStatus()));
+			apiState.setStatus(ApiEventStatus.convert(state.getEventResult()));
 			apiStates.add(apiState);
 		}
 		return apiStates;

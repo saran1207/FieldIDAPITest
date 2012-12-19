@@ -338,7 +338,7 @@ public class LegacyAssetManager implements LegacyAsset {
 			query = "SELECT event " + query;
 		}
 
-        query = query + " AND event_state = 'COMPLETED' ";
+        query = query + " AND workflow_state = 'COMPLETED' ";
 
 		if (!count)
 			query += " ORDER BY event.completedDate DESC, event.created ASC";

@@ -51,13 +51,13 @@ public class MinimalTenantDataSetup {
         State failState = new State();
         failState.setButtonName("btn1");
         failState.setDisplayText("Fail");
-        failState.setStatus(Status.FAIL);
+        failState.setEventResult(EventResult.FAIL);
         failState.setTenant(tenant);
 
         State passState = new State();
         passState.setButtonName("btn0");
         passState.setDisplayText("Pass");
-        passState.setStatus(Status.PASS);
+        passState.setEventResult(EventResult.PASS);
         passState.setTenant(tenant);
 
         passFailButtonGroup.setName("Pass, Fail");

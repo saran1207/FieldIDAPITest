@@ -5,10 +5,10 @@ import com.n4systems.fieldid.FieldIdServiceTest;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Event;
-import com.n4systems.model.Status;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.search.EventState;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
 import com.n4systems.test.TestMock;
@@ -194,28 +194,28 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 		int passCount = 7;
 		int naCount = 1;
 		int allCount = failedCount + naCount + passCount;
-		List<CompletedEventsReportRecord> failedEvents = createCompletedEventsResults(Status.FAIL, failedCount);
-		List<CompletedEventsReportRecord> passedEvents = createCompletedEventsResults(Status.PASS, passCount);
-		List<CompletedEventsReportRecord> naEvents = createCompletedEventsResults(Status.NA, naCount);
+		List<CompletedEventsReportRecord> failedEvents = createCompletedEventsResults(EventResult.FAIL, failedCount);
+		List<CompletedEventsReportRecord> passedEvents = createCompletedEventsResults(EventResult.PASS, passCount);
+		List<CompletedEventsReportRecord> naEvents = createCompletedEventsResults(EventResult.NA, naCount);
 		List<CompletedEventsReportRecord> allEvents = new ArrayList<CompletedEventsReportRecord>();
 		allEvents.addAll(failedEvents);
 		allEvents.addAll(naEvents);
 		allEvents.addAll(passedEvents);
 		
-		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, (Status)null, granularity)).andReturn(allEvents);
-		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, Status.FAIL, granularity)).andReturn(failedEvents);
-		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, Status.NA, granularity)).andReturn(naEvents);
-		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, Status.PASS, granularity)).andReturn(passedEvents);
+		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, (EventResult)null, granularity)).andReturn(allEvents);
+		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, EventResult.FAIL, granularity)).andReturn(failedEvents);
+		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, EventResult.NA, granularity)).andReturn(naEvents);
+		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, EventResult.PASS, granularity)).andReturn(passedEvents);
 		replay(eventService);
 		replay(assetService);
 		
 		List<ChartSeries<LocalDate>> results = dashboardService.getCompletedEvents(dateRange, granularity, owner);
 		
 		assertEquals("expect ChartSeries for All, Pass, NA, Fail", 4, results.size());
-		assertEquals(Status.ALL.getLabel(), results.get(0).getLabel());
-		assertEquals(Status.PASS.getDisplayName(), results.get(1).getLabel());
-		assertEquals(Status.FAIL.getDisplayName(), results.get(2).getLabel());
-		assertEquals(Status.NA.getDisplayName(), results.get(3).getLabel());
+		assertEquals(EventResult.ALL.getLabel(), results.get(0).getLabel());
+		assertEquals(EventResult.PASS.getDisplayName(), results.get(1).getLabel());
+		assertEquals(EventResult.FAIL.getDisplayName(), results.get(2).getLabel());
+		assertEquals(EventResult.NA.getDisplayName(), results.get(3).getLabel());
 
 		verify(eventService,assetService);
 	}
@@ -232,15 +232,15 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 		allEvents.addAll(completedEvents);
 		allEvents.addAll(createEventCompletenessResults(granularity, 888L, 574L, 924L));
 		expect(eventService.getEventCompleteness(granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(allEvents);
-		expect(eventService.getEventCompleteness(Event.EventState.OPEN, granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(completedEvents);
+		expect(eventService.getEventCompleteness(Event.WorkflowState.OPEN, granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(completedEvents);
 		replay(eventService);
 		replay(assetService);
 		
 		List<ChartSeries<LocalDate>> results = dashboardService.getEventCompletenessEvents(granularity, dateRange, org);
 		
 		assertEquals(2, results.size());
-		assertEquals(Event.EventState.COMPLETED.getLabel(), results.get(0).getLabel());
-		assertEquals(EventState.ALL_STATES.getLabel(), results.get(1).getLabel());
+		assertEquals(Event.WorkflowState.COMPLETED.getLabel(), results.get(0).getLabel());
+		assertEquals(WorkflowState.ALL_STATES.getLabel(), results.get(1).getLabel());
 
 		verifyTestMocks();		
 	}
@@ -264,7 +264,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 		List<ChartSeries<LocalDate>> results = dashboardService.getCompletedEvents(null, ChartGranularity.DAY, owner);		
 	}	
 
-	private List<CompletedEventsReportRecord> createCompletedEventsResults(Status fail, int count) {
+	private List<CompletedEventsReportRecord> createCompletedEventsResults(EventResult fail, int count) {
 		List<CompletedEventsReportRecord> results = Lists.newArrayList();
 		for (int i=0; i<count; i++) {
 			results.add(new CompletedEventsReportRecord(34L, ChartGranularity.MONTH.toString(), 2011, 1, 1+count));

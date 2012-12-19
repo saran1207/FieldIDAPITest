@@ -37,7 +37,7 @@ public class MassUpdateService extends FieldIdPersistenceService {
 			summary.setEventsToDelete(persistenceService.count(eventCount));
 
 			QueryBuilder<Event> scheduleCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-			scheduleCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("eventState", Event.EventState.OPEN);
+			scheduleCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("workflowState", Event.WorkflowState.OPEN);
 			summary.setSchedulesToDelete(persistenceService.count(scheduleCount));
 
 			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset = :asset AND event.state = :activeState ";

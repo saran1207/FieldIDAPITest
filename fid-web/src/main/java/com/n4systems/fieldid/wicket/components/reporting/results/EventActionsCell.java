@@ -52,8 +52,8 @@ public class EventActionsCell extends Panel {
         WebMarkupContainer safetyNetworkActionsList;
         safetyNetworkActionsList = createSafetyNetworkActionsList(event, localEvent);
 
-        completeEventActionsList.setVisible(localEvent && event.getEventState() == Event.EventState.COMPLETED);
-        incompleteEventActionsList.setVisible(localEvent && event.getEventState() != Event.EventState.COMPLETED);
+        completeEventActionsList.setVisible(localEvent && event.getWorkflowState() == Event.WorkflowState.COMPLETED);
+        incompleteEventActionsList.setVisible(localEvent && event.getWorkflowState() != Event.WorkflowState.COMPLETED);
         safetyNetworkActionsList.setVisible(!localEvent);
 
         add(completeEventActionsList);
@@ -80,9 +80,9 @@ public class EventActionsCell extends Panel {
 
         NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+event.getAsset().getId());
 
-        resolveEventLink.setVisible(!isReadOnly && Event.EventState.OPEN.equals(event.getEventState()));
+        resolveEventLink.setVisible(!isReadOnly && Event.WorkflowState.OPEN.equals(event.getWorkflowState()));
         deleteScheduleLink.setVisible(!isReadOnly);
-        startEventLink.setVisible(hasCreateEvent && Event.EventState.OPEN.equals(event.getEventState()));
+        startEventLink.setVisible(hasCreateEvent && Event.WorkflowState.OPEN.equals(event.getWorkflowState()));
         editAssetLink.setVisible(hasTag);
 
         incompleteEventActionsList.add(startEventLink);
@@ -140,7 +140,7 @@ public class EventActionsCell extends Panel {
         Asset networkAsset = event.getAsset();
 
         NonWicketLink viewLink = new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getId());
-        viewLink.setVisible(event.getEventState() == Event.EventState.COMPLETED);
+        viewLink.setVisible(event.getWorkflowState() == Event.WorkflowState.COMPLETED);
         safetyNetworkActionsList.add(viewLink);
 
         Asset localAsset = assetService.findLocalAssetFor(networkAsset);

@@ -39,7 +39,7 @@ public class EventFormHelper {
 
     private boolean isOpenEvent(AbstractEvent event) {
         if (event instanceof Event) {
-            return ((Event)event).getEventState() == Event.EventState.OPEN;
+            return ((Event)event).getWorkflowState() == Event.WorkflowState.OPEN;
         }
         return false;
     }

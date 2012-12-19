@@ -1,7 +1,7 @@
 package com.n4systems.util.chart;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.search.EventState;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.model.utils.DateRange;
 import org.joda.time.LocalDate;
 
@@ -22,7 +22,7 @@ public class EventCompletenessChartManager extends DateChartManager {
     @Override
     public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index, int size, int maxChartSeries) {
         super.updateOptions(chartSeries, options, index, size, maxChartSeries);
-        if (chartSeries.getId().equals(EventState.COMPLETE)) {
+        if (chartSeries.getId().equals(WorkflowState.COMPLETE)) {
             chartSeries.setColor("#60986B");    // completed = green.
         }
     }
@@ -37,10 +37,10 @@ public class EventCompletenessChartManager extends DateChartManager {
         }
 
         public int ordinal(Object id) {
-            if (EventState.ALL_STATES.equals(id)) {
-                return Event.EventState.values().length;
-            } else if (id instanceof EventState) {
-                EventState status = (EventState)id;
+            if (WorkflowState.ALL_STATES.equals(id)) {
+                return Event.WorkflowState.values().length;
+            } else if (id instanceof WorkflowState) {
+                WorkflowState status = (WorkflowState)id;
                 return status.ordinal();
             } else {
                 return 0;

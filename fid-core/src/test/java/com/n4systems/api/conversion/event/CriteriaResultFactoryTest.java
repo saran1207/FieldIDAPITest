@@ -4,19 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
+import com.n4systems.model.*;
 import org.junit.Test;
 
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaType;
-import com.n4systems.model.DateFieldCriteriaResult;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.State;
-import com.n4systems.model.Status;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.EventResult;
 
 
 public class CriteriaResultFactoryTest {
@@ -45,7 +36,7 @@ public class CriteriaResultFactoryTest {
 		assertEquals(TEST_TIMESTAMP, date.getValue().getTime());
 		
 		OneClickCriteriaResult oneClick = (OneClickCriteriaResult) fixture.createCriteriaResult(CriteriaType.ONE_CLICK);
-		assertEquals(Status.PASS, oneClick.getState().getStatus());
+		assertEquals(EventResult.PASS, oneClick.getState().getEventResult());
 		
 		UnitOfMeasureCriteriaResult um = (UnitOfMeasureCriteriaResult) fixture.createCriteriaResult(CriteriaType.UNIT_OF_MEASURE);
 		assertEquals("primary", um.getPrimaryValue());
@@ -94,7 +85,7 @@ public class CriteriaResultFactoryTest {
 			
 			@Override
 			public CriteriaResult populate(OneClickCriteriaResult result) {
-				result.setState(new State("Pass", Status.PASS, "pass"));
+				result.setState(new State("Pass", EventResult.PASS, "pass"));
 				return result;
 			}
 			

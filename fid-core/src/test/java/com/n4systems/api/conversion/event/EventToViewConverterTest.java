@@ -9,6 +9,7 @@ import java.util.Date;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import org.junit.Test;
@@ -16,7 +17,6 @@ import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.EventView;
-import com.n4systems.model.Status;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.location.Location;
@@ -63,11 +63,11 @@ public class EventToViewConverterTest {
 		};
 		
 		Event model = new Event();
-		model.setStatus(Status.PASS);
+		model.setEventResult(EventResult.PASS);
 		
 		EventView view = converter.toView(model);
 		
-		assertEquals(model.getStatus().toString(), view.getStatus().toUpperCase());
+		assertEquals(model.getEventResult().toString(), view.getStatus().toUpperCase());
 	}
 	
 	@Test

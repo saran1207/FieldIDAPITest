@@ -10,7 +10,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.Status;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
@@ -30,8 +30,8 @@ public class SmartFailedEventListLoader extends FailedEventListLoader {
 		QueryBuilder<Event> builder = createQueryBuilder(filter);
 		
 		WhereParameterGroup statusGroup = new WhereParameterGroup("statusgroup");		
-		statusGroup.addClause(WhereClauseFactory.create(Comparator.EQ, "failStatus", "status", Status.FAIL, null, ChainOp.OR));
-		statusGroup.addClause(WhereClauseFactory.create(Comparator.EQ, "passStatus", "status", Status.PASS, null, ChainOp.OR));		
+		statusGroup.addClause(WhereClauseFactory.create(Comparator.EQ, "failStatus", "eventResult", EventResult.FAIL, null, ChainOp.OR));
+		statusGroup.addClause(WhereClauseFactory.create(Comparator.EQ, "passStatus", "eventResult", EventResult.PASS, null, ChainOp.OR));
 		builder.addWhere(statusGroup);		
 		
 		builder.addWhere(Comparator.GE, "date", "completedDate", getFromDate());
@@ -64,9 +64,9 @@ public class SmartFailedEventListLoader extends FailedEventListLoader {
 		final Map<String, Event> events = new HashMap<String, Event>();		
 		for (Event event:results) {			
 			String key = makeEventAssetKey(event);     
-			if (Status.FAIL.equals(event.getStatus())) {
+			if (EventResult.FAIL.equals(event.getEventResult())) {
 				events.put(key, event);
-			} else if (Status.PASS.equals(event.getStatus())) {
+			} else if (EventResult.PASS.equals(event.getEventResult())) {
 				events.remove(key);
 			}
 		}

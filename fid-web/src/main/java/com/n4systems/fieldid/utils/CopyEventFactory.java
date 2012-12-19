@@ -23,14 +23,14 @@ public class CopyEventFactory {
 		} else {
 			newEvent.activateEntity();
 		}
-		newEvent.setStatus( event.getStatus() );
+		newEvent.setEventResult(event.getEventResult());
 		
 		newEvent.setDate( ( event.getDate() != null ) ? new Date( event.getDate().getTime() ) : null );
 		newEvent.setProofTestInfo( copyProofTestInfo( event.getProofTestInfo() ) );
 		newEvent.setSubEvents( copySubEvents( event.getSubEvents() ) );
         newEvent.setEventForm(event.getEventForm());
         newEvent.setEventStatus(event.getEventStatus());
-        newEvent.setEventState(event.getEventState());
+        newEvent.setWorkflowState(event.getWorkflowState());
         newEvent.setDueDate(event.getDueDate());
         newEvent.setProject(event.getProject());
 

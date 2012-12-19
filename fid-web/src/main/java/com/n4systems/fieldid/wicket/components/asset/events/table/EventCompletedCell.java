@@ -13,9 +13,9 @@ public class EventCompletedCell extends Panel {
         super(id);
 
         Event event = eventModel.getObject();
-        Event.EventState state = event.getEventState();
+        Event.WorkflowState state = event.getWorkflowState();
 
-        if(state.equals(Event.EventState.COMPLETED) || state.equals(Event.EventState.CLOSED) ) {
+        if(state.equals(Event.WorkflowState.COMPLETED) || state.equals(Event.WorkflowState.CLOSED) ) {
             add(new Label("completedDate", new DayDisplayModel(Model.of(event.getCompletedDate())).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
         }else {
             add(new Label("completedDate"));
