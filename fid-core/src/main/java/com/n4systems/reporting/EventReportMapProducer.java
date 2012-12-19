@@ -33,6 +33,7 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 		add("predefinedLocationFullName", event.getAdvancedLocation().getFullName());
 		add("inspectionBook", (event.getBook() != null) ? event.getBook().getName() : null);
 		add("inspectionResult", event.getStatus().getDisplayName());
+        add("eventStatus", event.getEventStatus().getDisplayName());
 		add("proofTestInfo", addProofTestInfoParams(event));
 
         add("latitude", event.getGpsLocation() != null ? event.getGpsLocation().getLatitude() : "");
