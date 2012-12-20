@@ -22,6 +22,7 @@ public class CriteriaStateView implements Serializable {
 	private String compressedDeficiencies;
     private String type;
 	private List<CriteriaResultImageView> criteriaImages = new ArrayList<CriteriaResultImageView>();
+    private String label;
 	
 	public CriteriaStateView() {}
 	
@@ -140,5 +141,13 @@ public class CriteriaStateView implements Serializable {
 
     public void setSectionScorePercentage(Double sectionScorePercentage) {
         this.sectionScorePercentage = sectionScorePercentage;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

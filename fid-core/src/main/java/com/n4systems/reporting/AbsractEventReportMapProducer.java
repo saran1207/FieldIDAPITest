@@ -206,6 +206,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                         	stateView.setState(getDateStringValue((DateFieldCriteriaResult)result));
                         } else if (result instanceof ScoreCriteriaResult) {
                             stateView.setState(getScoreStringValue((ScoreCriteriaResult) result));
+                            stateView.setLabel(((ScoreCriteria)criteria).getScoreGroup().getDisplayName());
                         }
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
 						CriteriaResultImageView criteriaResultImageView;
