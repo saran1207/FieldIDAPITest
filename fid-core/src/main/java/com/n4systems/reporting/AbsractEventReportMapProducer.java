@@ -1,5 +1,6 @@
 package com.n4systems.reporting;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.certificate.model.InspectionImage;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.util.EventFormHelper;
@@ -10,6 +11,8 @@ import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.DoubleFormatter;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,11 +53,11 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         populateTotalsAndPercentages();
 		add("resultsBeanList", createCriteriaViews);
 		add("results", new JRBeanCollectionDataSource(createCriteriaViews));
-		
-		List<ObservationView> createObservationViews = createObservationViews();
-		add("observationsBeanList", createObservationViews);
-		add("observations", new JRBeanCollectionDataSource(createObservationViews));
-		
+
+        List<ObservationView> createObservationViews = createObservationViews();
+        add("observationsBeanList", createObservationViews);
+        add("observations", new JRBeanCollectionDataSource(createObservationViews));
+
 		add("images", createEventImages());
 		add("ownerLogo", getCustomerLogo(getEvent().getAsset().getOwner()));
 	}
@@ -82,24 +85,34 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		return eventIOMap;
 	}
 
+    private List<String> getHelp() {
+        List<String> help = Lists.newArrayList();
+        // note that result help instructions are in HTML.  we just want the un-formatted text.
+        for (CriteriaResult result:getEvent().getResults()) {
+            Document doc = Jsoup.parseBodyFragment(result.getCriteria().getInstructions());
+            help.add(doc.text());
+        }
+        return help;
+    }
+
 	/**
 	 * Creates a list of ObservationViews to be used by the JasperEngine.
 	 * Includes all sub events if there are any
-	 * 
+	 *
 	 * @return A flattened view of observations
 	 */
 	private List<ObservationView> createObservationViews() {
 		// 100 is a rough guess
 		List<ObservationView> observationViews = new ArrayList<ObservationView>(100);
-	
+
 		// first we'll gather the deficiencies. We need to do this in two steps
 		// so that the ObservationView's type's are grouped (needed for iReports
 		// )
 		addDeficienciesToObservationView(observationViews);
-	
+
 		// now the recommendations
 		addRecommendationsToObservationView(observationViews);
-		
+
 		/*
 		 * Lame alert: Jasper requires that at least 1 element be in it's
 		 * collection datasource. Since it's not required that an eventtype
@@ -109,7 +122,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		if (observationViews.isEmpty()) {
 			observationViews.add(new ObservationView());
 		}
-	
+
 		return observationViews;
 	}
 
@@ -160,7 +173,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		return criteriaViews;
 	}
 
-	/**
+
+    /**
 	 * Creates CriteriaStateViews for an event and adds them to the
 	 * criteriaView list.
 	 * 
@@ -169,19 +183,20 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		List<CriteriaStateView> criteriaViews = new ArrayList<CriteriaStateView>(getEvent().getResults().size());
 		Map<Criteria, CriteriaResult> resultMap = new HashMap<Criteria, CriteriaResult>(getEvent().getResults().size());
 		Map<Criteria, List<Recommendation>> recommendations =  new HashMap<Criteria, List<Recommendation>>(getEvent().getResults().size());
-		Map<Criteria, List<Deficiency>> deficiencies = new HashMap<Criteria, List<Deficiency>>(getEvent().getResults().size());
+        Map<Criteria, List<Deficiency>> deficiencies = new HashMap<Criteria, List<Deficiency>>(getEvent().getResults().size());
+        Map<Criteria, String> help = new HashMap<Criteria, String>(getEvent().getResults().size());
         Map<String, Double> sectionScoreMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScoresForSections(getEvent()));
         Map<String, Double> sectionScorePercentageMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScorePercentageForSections(getEvent()));
 
 
-        flattenCriteriaResults(resultMap, recommendations, deficiencies);
+        flattenCriteriaResults(resultMap, recommendations, deficiencies, help);
 		//TODO : move criteria view to 
 		// walk the section, and criteria tree and construct report views
         if (getEvent().getEventForm() != null) {
             for (CriteriaSection section : getEvent().getEventForm().getSections()) {
                 for (Criteria criteria : section.getCriteria()) {
                     if (resultMap.containsKey(criteria)) {
-                        CriteriaStateView stateView = new CriteriaStateView(section, criteria, recommendations.get(criteria), deficiencies.get(criteria));
+                        CriteriaStateView stateView = new CriteriaStateView(section, criteria, recommendations.get(criteria), deficiencies.get(criteria), help.get(criteria));
                         stateView.setSectionScoreTotal(sectionScoreMap.get(stateView.getSection()));
                         stateView.setSectionScorePercentage(sectionScorePercentageMap.get(stateView.getSection()));
                         CriteriaResult result = resultMap.get(criteria);
@@ -277,11 +292,12 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	 *            The CriteriaResult list
 	 * @return The flattened map
 	 */
-	private void flattenCriteriaResults(Map<Criteria, CriteriaResult> stateMap, Map<Criteria, List<Recommendation>> recommendations, Map<Criteria, List<Deficiency>> deficiencies) {
+	private void flattenCriteriaResults(Map<Criteria, CriteriaResult> stateMap, Map<Criteria, List<Recommendation>> recommendations, Map<Criteria, List<Deficiency>> deficiencies, Map<Criteria,String> help) {
 		for (CriteriaResult result : getEvent().getResults()) {
             stateMap.put(result.getCriteria(), result);
 			deficiencies.put(result.getCriteria(), result.getDeficiencies());
 			recommendations.put(result.getCriteria(), result.getRecommendations());
+            help.put(result.getCriteria(), result.getCriteria().getInstructions());
 		}
 	}
 

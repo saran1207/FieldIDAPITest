@@ -1,32 +1,29 @@
 package com.n4systems.reporting;
 
-import static com.n4systems.model.builders.EventBuilder.*;
-import static com.n4systems.model.builders.EventTypeBuilder.*;
-import static com.n4systems.model.builders.SubEventBuilder.*;
-import static com.n4systems.model.builders.UserBuilder.*;
-import static com.n4systems.model.event.AssignedToUpdate.*;
-import static com.n4systems.reporting.ReportMapEntryMatcher.*;
-import static com.n4systems.test.helpers.Asserts.*;
-import static org.easymock.EasyMock.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import com.n4systems.fieldid.service.event.EventService;
-import org.junit.Test;
-
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.builders.AssetBuilder;
-import com.n4systems.model.builders.PredefinedLocationBuilder;
+import com.n4systems.model.*;
+import com.n4systems.model.builders.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.user.User;
 import com.n4systems.test.helpers.Asserts;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.n4systems.model.builders.EventBuilder.anEvent;
+import static com.n4systems.model.builders.EventTypeBuilder.anEventType;
+import static com.n4systems.model.builders.SubEventBuilder.aSubEvent;
+import static com.n4systems.model.builders.UserBuilder.anEmployee;
+import static com.n4systems.model.event.AssignedToUpdate.assignAssetToUser;
+import static com.n4systems.model.event.AssignedToUpdate.unassignAsset;
+import static com.n4systems.reporting.ReportMapEntryMatcher.hasReportEntry;
+import static com.n4systems.test.helpers.Asserts.assertConatainsExpectedValues;
+import static org.easymock.EasyMock.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class EventReportMapProducerTest {
 
@@ -160,6 +157,32 @@ public class EventReportMapProducerTest {
 
 		assertThat(actualReportMap, hasReportEntry(equalTo("assignedUserName"), equalTo((Object) "first last")));
 	}
+
+    @Test
+    public void test_criteria_help() {
+        OneClickCriteriaResult criteriaResult = OneClickCriteriaResultBuilder.aCriteriaResult().state(StateBuilder.aState().build()).build();
+        String instructionsHtml = "<body><p>invalidHtml<img src=\"http://www.foo.bar\">IMAGE</img></body>";
+        String expected = "invalidHtmlIMAGE";
+        OneClickCriteria oneClickCriteria = OneClickCriteriaBuilder.aCriteria().withDisplayText("hello").withStateSet(StateSetBuilder.aStateSet().build()).withDisplayText("").withInstructions(instructionsHtml).build();
+        criteriaResult.setCriteria(oneClickCriteria);
+
+        CriteriaSection[] sections = {
+                CriteriaSectionBuilder.aCriteriaSection().withTitle("section").
+                        withCriteria(oneClickCriteria).build(),
+        };
+        EventForm eventForm = EventFormBuilder.anEventForm().withSections(sections).build();
+        EventType eventType = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
+        Event event = anEvent().withCriteriaResults(criteriaResult).ofType(eventType).build();
+        event.setEventForm(event.getType().getEventForm());
+
+        ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null, createMockEventService());
+        Map<String, Object> actualReportMap = sut.produceMap();
+
+        //temporary hack...this is not a very testable architecture for now so i'm just going to look for expected results in map via toString() search.
+        //  a correct way would do proper deep map navigation and get specific result.  there are things to mock out, dependencies to fix, and constants to create
+        //  in order to do this correctly.
+        assert(actualReportMap.toString().contains(expected));
+    }
 
     private EventService createMockEventService() {
         Event event = new Event();

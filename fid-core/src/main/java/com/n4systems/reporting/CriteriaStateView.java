@@ -1,6 +1,8 @@
 package com.n4systems.reporting;
 
 import com.n4systems.model.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.Serializable;
@@ -21,15 +23,17 @@ public class CriteriaStateView implements Serializable {
 	private String compressedRecommendations;
 	private String compressedDeficiencies;
     private String type;
+    private String help;
 	private List<CriteriaResultImageView> criteriaImages = new ArrayList<CriteriaResultImageView>();
     private String label;
-	
+
 	public CriteriaStateView() {}
 	
-	public CriteriaStateView(CriteriaSection section, Criteria criteria, List<Recommendation> recommendations, List<Deficiency> deficiencies) {
+	public CriteriaStateView(CriteriaSection section, Criteria criteria, List<Recommendation> recommendations, List<Deficiency> deficiencies, String help) {
 		this.section = section.getTitle();
 		this.criteria = criteria.getDisplayText();
 		this.recommendations = recommendations.size();
+        this.help = stripHtml(help);
 		this.deficiencies = deficiencies.size();
 		this.compressedDeficiencies = "";
 		this.compressedRecommendations = "";
@@ -41,6 +45,11 @@ public class CriteriaStateView implements Serializable {
 			this.compressedRecommendations += "-" + recommendation.getText() + "\n";
 		}
 	}
+
+    private String stripHtml(String htmlText) {
+        Document doc = Jsoup.parseBodyFragment(htmlText);
+        return doc.text();
+    }
 
     public void setStateButtonGroup(State state) {
         this.state = state.getDisplayText();
@@ -149,5 +158,24 @@ public class CriteriaStateView implements Serializable {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    @Override
+    public String toString() {
+        return "CriteriaStateView{" +
+                "section='" + section + '\'' +
+                ", criteria='" + criteria + '\'' +
+                ", state='" + state + '\'' +
+                ", stateImage=" + stateImage +
+                ", sectionScoreTotal=" + sectionScoreTotal +
+                ", sectionScorePercentage=" + sectionScorePercentage +
+                ", recommendations=" + recommendations +
+                ", deficiencies=" + deficiencies +
+                ", recommendations='" + compressedRecommendations + '\'' +
+                ", deficiencies='" + compressedDeficiencies + '\'' +
+                ", type='" + type + '\'' +
+                ", help='" + help + '\'' +
+                ", label='" + label + '\'' +
+                '}';
     }
 }

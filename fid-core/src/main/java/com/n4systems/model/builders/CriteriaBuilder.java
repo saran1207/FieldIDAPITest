@@ -6,6 +6,7 @@ public abstract class CriteriaBuilder<K extends Criteria> extends EntityWithTena
 
     protected final String text;
     protected boolean retired;
+    private String instructions;
 
     public CriteriaBuilder(String text, boolean retired) {
         this.text = text;
@@ -17,7 +18,12 @@ public abstract class CriteriaBuilder<K extends Criteria> extends EntityWithTena
         K crit = super.assignAbstractFields(criteria);
         crit.setDisplayText(text);
         crit.setRetired(retired);
+        crit.setInstructions(instructions);
         return crit;
     }
-    
+
+    public CriteriaBuilder<K> withInstructions(String instructions) {
+        this.instructions = instructions;
+        return this;
+    }
 }
