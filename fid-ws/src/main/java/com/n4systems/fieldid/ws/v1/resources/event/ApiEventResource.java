@@ -53,7 +53,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			throw new NullPointerException("ApiEvent has null sid");
 		}
 		
-		Event existingEvent = eventService.findByMobileId(apiEvent.getSid());
+		Event existingEvent = eventService.findByMobileId(apiEvent.getSid(), true);
         if (existingEvent == null || existingEvent.getWorkflowState() == Event.WorkflowState.OPEN) {
         	createEvent(apiEvent, existingEvent);
         } else {

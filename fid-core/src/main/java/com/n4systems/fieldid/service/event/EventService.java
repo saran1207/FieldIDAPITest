@@ -379,7 +379,11 @@ public class EventService extends FieldIdPersistenceService {
     }
     
     public Event findByMobileId(String mobileId) {
-    	QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
+    	return findByMobileId(mobileId, false);
+    }
+    
+    public Event findByMobileId(String mobileId, boolean withArchived) {
+    	QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class, withArchived);
     	builder.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));
     	Event event = persistenceService.find(builder);
     	return event;
