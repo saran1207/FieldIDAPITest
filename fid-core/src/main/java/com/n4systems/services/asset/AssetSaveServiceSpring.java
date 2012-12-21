@@ -1,10 +1,7 @@
 package com.n4systems.services.asset;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +16,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetAttachmentListLoader;
 import com.n4systems.model.asset.AssetAttachmentSaver;
-import com.n4systems.reporting.PathHandler;
+import com.n4systems.model.asset.AssetImageFileSaver;
 
 /**
  * 
@@ -47,8 +44,7 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
             if (asset.getType().isArchived()) {
                 asset.archiveEntity();
             }
-
-			setAssetImageName(asset, imageData != null);
+            
 			asset = assetService.create(asset, getCurrentUser());
 			saveUploadedAttachments(asset, uploadedAttachments);
 			saveAssetImage(asset, imageData);
@@ -61,7 +57,6 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 	@LegacyMethod
 	public Asset update(Asset asset, List<AssetAttachment> existingAttachments, List<AssetAttachment> uploadedAttachments, byte[] imageData) {
 		try {
-			setAssetImageName(asset, imageData != null);
 			asset = assetService.update(asset, getCurrentUser());
 			updateExistingAttachments(asset, existingAttachments);
 			saveUploadedAttachments(asset, uploadedAttachments);
@@ -122,27 +117,18 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 		}
 	}
 	
-	private void setAssetImageName(Asset asset, boolean hasImage) {
-		String imageName = hasImage ? ("Asset.jpg") : null;
-		asset.setImageName(imageName);
-	}
-	
-	private void saveAssetImage(Asset asset, byte[] imageData) {
-		File assetImageFile = PathHandler.getAssetImageFile(asset);
-		
+	private void saveAssetImage(Asset asset, byte[] imageData) {		
 		if(imageData != null) {
-			logger.info("Writing Asset Image " + asset.getIdentifier());
-			try {
-				
-				FileUtils.writeByteArrayToFile(assetImageFile, imageData);
-			} catch (IOException e) {
-				logger.error("Error copying Asset Image", e);
-			}
-		} else {
-			//Remove the file if it exists.
-			if(assetImageFile.exists()) {
-				assetImageFile.delete();
-			}
+			logger.info("Saved Asset Image to Amazon S3 for " + asset.getIdentifier());
+			asset.setImageName("Asset.jpg");
+			AssetImageFileSaver assetImageFileSaver =  new AssetImageFileSaver(asset, "Asset.jpg");
+			assetImageFileSaver.setData(imageData);
+			assetImageFileSaver.save();
+		} else if(asset.getImageName() != null) { // imageData is null but asset has imageName. So we need to remove image.
+			logger.info("Removed Asset Image from Amazon S3 for " + asset.getIdentifier());
+			asset.setImageName(null);
+			AssetImageFileSaver assetImageFileSaver =  new AssetImageFileSaver(asset, "Asset.jpg");
+			assetImageFileSaver.remove();
 		}
 	}
 }

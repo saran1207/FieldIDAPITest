@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
@@ -50,6 +52,7 @@ import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -386,16 +389,15 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 	
 	private byte[] loadAssetImage(Asset asset) {
-		byte[] image = null;
-		
-		File assetImageFile = PathHandler.getAssetImageFile(asset);
-		if (assetImageFile.exists()) {
+		byte[] image = null;		
+		if(asset.getImageName() != null) {
+			S3Service s3Service = ServiceLocator.getS3Service();
 			try {
-				image = FileUtils.readFileToByteArray(assetImageFile);
-			} catch(Exception e) {
-				logger.warn("Unable to load asset image at: " + assetImageFile, e);
+				image = s3Service.downloadAssetProfileMediumImage(asset.getId(), asset.getImageName());
+			} catch (IOException ex) {
+				logger.warn("Unable to load asset image for asset: " + asset.getIdentifier(), ex);
 			}
-		}
+		}		
 		return image;
 	}	
 }
