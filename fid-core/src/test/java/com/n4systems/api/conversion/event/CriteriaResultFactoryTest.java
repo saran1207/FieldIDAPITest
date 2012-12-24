@@ -36,7 +36,7 @@ public class CriteriaResultFactoryTest {
 		assertEquals(TEST_TIMESTAMP, date.getValue().getTime());
 		
 		OneClickCriteriaResult oneClick = (OneClickCriteriaResult) fixture.createCriteriaResult(CriteriaType.ONE_CLICK);
-		assertEquals(EventResult.PASS, oneClick.getState().getEventResult());
+		assertEquals(EventResult.PASS, oneClick.getButton().getEventResult());
 		
 		UnitOfMeasureCriteriaResult um = (UnitOfMeasureCriteriaResult) fixture.createCriteriaResult(CriteriaType.UNIT_OF_MEASURE);
 		assertEquals("primary", um.getPrimaryValue());
@@ -85,7 +85,7 @@ public class CriteriaResultFactoryTest {
 			
 			@Override
 			public CriteriaResult populate(OneClickCriteriaResult result) {
-				result.setState(new State("Pass", EventResult.PASS, "pass"));
+				result.setButton(new Button("Pass", EventResult.PASS, "pass"));
 				return result;
 			}
 			

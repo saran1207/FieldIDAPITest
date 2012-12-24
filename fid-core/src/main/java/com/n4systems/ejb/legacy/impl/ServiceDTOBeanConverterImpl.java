@@ -591,7 +591,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			
 			if (resultDTO.getType() == null || resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_ONE_CLICK)) {
 				result = new OneClickCriteriaResult();
-				((OneClickCriteriaResult)result).setState(persistenceManager.find(State.class, resultDTO.getStateId()));
+				((OneClickCriteriaResult)result).setButton(persistenceManager.find(Button.class, resultDTO.getStateId()));
 			} else if (resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_TEXT_FIELD)) {
 				result = new TextFieldCriteriaResult();
 				((TextFieldCriteriaResult)result).setValue(resultDTO.getTextFieldValue());
@@ -727,7 +727,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		if (criteriaResult instanceof OneClickCriteriaResult) {
 			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_ONE_CLICK);
-			criteriaResultServiceDTO.setStateId(((OneClickCriteriaResult)criteriaResult).getState().getId());
+			criteriaResultServiceDTO.setStateId(((OneClickCriteriaResult)criteriaResult).getButton().getId());
 		} else if (criteriaResult instanceof TextFieldCriteriaResult) {
 			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_TEXT_FIELD);
 			criteriaResultServiceDTO.setTextFieldValue(((TextFieldCriteriaResult)criteriaResult).getValue());

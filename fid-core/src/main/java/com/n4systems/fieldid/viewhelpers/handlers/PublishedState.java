@@ -38,7 +38,7 @@ public enum PublishedState {
 	}
 	
 	/**
-	 * Returns a StringListingPair List of all states for use in select boxes.  Labels are resolved to text using the labelResolver
+	 * Returns a StringListingPair List of all buttons for use in select boxes.  Labels are resolved to text using the labelResolver
 	 * @param labelResolver	TextProvider to resolve labels via {@link TextProvider#getText(String)}
 	 * @return	List of StringListingParis
 	 */

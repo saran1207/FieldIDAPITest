@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.StateSet;
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.CleanStateSetFactory;
@@ -38,24 +38,24 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 	
 	public void importCatalog() throws ImportFailureException {
 		findStateSetsToImport(eventTypeIds);
-		for (StateSet originalStateSet : summary.getStateSetsToCreate()) {
+		for (ButtonGroup originalButtonGroup : summary.getStateSetsToCreate()) {
 			try {
-				importStateSet(originalStateSet);
+				importStateSet(originalButtonGroup);
 			} catch (Exception e) {
                 logger.error("Error importing state sets", e);
-				summary.setFailure(originalStateSet.getName(), FailureType.COULD_NOT_CREATE, e);
+				summary.setFailure(originalButtonGroup.getName(), FailureType.COULD_NOT_CREATE, e);
 				throw new ImportFailureException(e);
 			}
 		}
 	}
 	
-	private void importStateSet(StateSet originalStateSet) {
-		Long originalId = originalStateSet.getId();
-		new CleanStateSetFactory(originalStateSet, tenant).clean();
-		originalStateSet.setCreatedBy(importUser);
-		persistenceManager.save(originalStateSet);
-		summary.getImportMapping().put(originalId, originalStateSet);
-		summary.createdStateSet(originalStateSet);
+	private void importStateSet(ButtonGroup originalButtonGroup) {
+		Long originalId = originalButtonGroup.getId();
+		new CleanStateSetFactory(originalButtonGroup, tenant).clean();
+		originalButtonGroup.setCreatedBy(importUser);
+		persistenceManager.save(originalButtonGroup);
+		summary.getImportMapping().put(originalId, originalButtonGroup);
+		summary.createdStateSet(originalButtonGroup);
 	}
 	
 	public BaseImportSummary getSummaryForImport(Set<Long> eventTypeIds) {
@@ -65,31 +65,31 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 
 
 	private void findStateSetsToImport(Set<Long> eventTypeIds) {
-		Collection<StateSet> originalStateSets = getUsedStateSets(eventTypeIds);
-		List<StateSet> currentStateSets = persistenceManager.findAll(StateSet.class, tenant.getId());
+		Collection<ButtonGroup> originalButtonGroups = getUsedStateSets(eventTypeIds);
+		List<ButtonGroup> currentButtonGroups = persistenceManager.findAll(ButtonGroup.class, tenant.getId());
 			
-		for (StateSet originalStateSet : originalStateSets) {
-			int index = currentStateSets.indexOf(originalStateSet);
+		for (ButtonGroup originalButtonGroup : originalButtonGroups) {
+			int index = currentButtonGroups.indexOf(originalButtonGroup);
 			if (index == -1) {
-				summary.getStateSetsToCreate().add(originalStateSet);
+				summary.getStateSetsToCreate().add(originalButtonGroup);
 			} else {
-				summary.getImportMapping().put(originalStateSet.getId(), currentStateSets.get(index));
+				summary.getImportMapping().put(originalButtonGroup.getId(), currentButtonGroups.get(index));
 			}
 		}
 	}
 
 
-	private Collection<StateSet> getUsedStateSets(Set<Long> eventTypeIds) {
+	private Collection<ButtonGroup> getUsedStateSets(Set<Long> eventTypeIds) {
 		return importCatalog.getStateSetsUsedIn(eventTypeIds);
 	}
 
-	public Map<Long, StateSet> getImportMapping() {
+	public Map<Long, ButtonGroup> getImportMapping() {
 		return summary.getImportMapping();
 	}
 	
 	public void rollback() {
-		for (StateSet stateSetToRemove : summary.getCreatedStateSets()) {
-			persistenceManager.delete(stateSetToRemove);
+		for (ButtonGroup buttonGroupToRemove : summary.getCreatedButtonGroups()) {
+			persistenceManager.delete(buttonGroupToRemove);
 		}
 	}
 

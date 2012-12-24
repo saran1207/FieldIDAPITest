@@ -490,8 +490,8 @@ public class EventCreationService extends FieldIdPersistenceService {
 			OneClickCriteriaResult oneClickResult;
 			if (result instanceof OneClickCriteriaResult) {
 				oneClickResult = (OneClickCriteriaResult)result;
-				if (oneClickResult.getState() == null) {
-					oneClickResult.setState(((OneClickCriteria) oneClickResult.getCriteria()).getStates().getStates().get(0));
+				if (oneClickResult.getButton() == null) {
+					oneClickResult.setButton(((OneClickCriteria) oneClickResult.getCriteria()).getButtonGroup().getButtons().get(0));
 				}
 			}
 		}

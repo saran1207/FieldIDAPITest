@@ -20,11 +20,11 @@
 		<div class="criteriaContent" id="criteria_${section_index}_${criteriaList_index}" style="display:none;">
 			<span class="criteriaContentLabel"><@s.text name="label.buttongroup" onchange="changeToForm()"/></span>
 			<span>
-				<#if (criteriaSections[section_index].criteria[criteriaList_index].states.name)?exists >
-					<span class="criteraStateName" onmouseover="toggleStateSetHighlight(${criteriaSections[section_index].criteria[criteriaList_index].states.id})" onmouseout="toggleStateSetHighlight(${criteriaSections[section_index].criteria[criteriaList_index].states.id})" >${criteriaSections[section_index].criteria[criteriaList_index].states.name}</span>
-					<@s.hidden name="criteriaSections[${section_index}].criteria[${criteriaList_index}].states.iD" theme="simple"/>
+				<#if (criteriaSections[section_index].criteria[criteriaList_index].buttonGroup.name)?exists >
+					<span class="criteraStateName" onmouseover="toggleStateSetHighlight(${criteriaSections[section_index].criteria[criteriaList_index].buttons.id})" onmouseout="toggleStateSetHighlight(${criteriaSections[section_index].criteria[criteriaList_index].buttons.id})" >${criteriaSections[section_index].criteria[criteriaList_index].buttons.name}</span>
+					<@s.hidden name="criteriaSections[${section_index}].criteria[${criteriaList_index}].buttons.iD" theme="simple"/>
 				<#else>	
-					<@s.select name="criteriaSections[${section_index}].criteria[${criteriaList_index}].states.iD" list="stateSets" listKey="id" listValue="name" headerKey="" headerValue="${action.getText( 'label.selectanoption' ) }" theme="simple" onchange="changeToForm()"/>
+					<@s.select name="criteriaSections[${section_index}].criteria[${criteriaList_index}].buttons.iD" list="stateSets" listKey="id" listValue="name" headerKey="" headerValue="${action.getText( 'label.selectanoption' ) }" theme="simple" onchange="changeToForm()"/>
 				</#if>
 			</span>
 			<span class="criteriaContentLabel"><@s.checkbox name="criteriaSections[${section_index}].criteria[${criteriaList_index}].principal" theme="simple" onchange="changeToForm()"/><@s.text name="label.setsresult" onchange="changeToForm()"/></span>

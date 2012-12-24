@@ -4,13 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.EventType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
@@ -49,7 +44,7 @@ public interface CatalogService {
 	
 	public EventType getPublishedEventType(Long eventTypeId);
 	
-	public Collection<StateSet> getStateSetsUsedIn(Set<Long> eventTypeIds);
+	public Collection<ButtonGroup> getStateSetsUsedIn(Set<Long> eventTypeIds);
 	
 	public AutoAttributeCriteria getCriteriaFor(Long assetTypeId);
 	

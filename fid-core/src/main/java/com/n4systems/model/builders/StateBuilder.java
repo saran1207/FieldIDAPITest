@@ -1,9 +1,9 @@
 package com.n4systems.model.builders;
 
+import com.n4systems.model.Button;
 import com.n4systems.model.EventResult;
-import com.n4systems.model.State;
 
-public class StateBuilder extends EntityWithTenantBuilder<State> {
+public class StateBuilder extends EntityWithTenantBuilder<Button> {
 
     private String displayText;
     private String buttonName;
@@ -44,8 +44,8 @@ public class StateBuilder extends EntityWithTenantBuilder<State> {
     }
 
     @Override
-    public State createObject() {
-        State s = super.assignAbstractFields(new State());
+    public Button createObject() {
+        Button s = super.assignAbstractFields(new Button());
         s.setDisplayText(displayText);
         s.setButtonName(buttonName);
         s.setEventResult(eventResult);

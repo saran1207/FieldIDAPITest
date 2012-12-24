@@ -3,6 +3,7 @@ package com.n4systems.handlers.creator.signup;
 import static com.n4systems.model.builders.TenantBuilder.*;
 import static org.easymock.EasyMock.*;
 
+import com.n4systems.model.*;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,12 +11,7 @@ import org.junit.Test;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.TestUsesTransactionBase;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.TagOption;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.stateset.StateSetSaver;
@@ -54,7 +50,7 @@ public class BaseSystemSetupDataCreateHandlerImplTest extends TestUsesTransactio
 		replay(mockEventTypeGroupSaver);
 
 		StateSetSaver mockStateSetSaver = createMock(StateSetSaver.class);
-		mockStateSetSaver.save(same(mockTransaction), isA(StateSet.class));
+		mockStateSetSaver.save(same(mockTransaction), isA(ButtonGroup.class));
 		expectLastCall().times(2);
 		replay(mockStateSetSaver);
 		

@@ -72,8 +72,8 @@ public class SaverMap {
         classToSaverMap.put(ComboBoxCriteria.class, new CriteriaSaver());
         classToSaverMap.put(DateFieldCriteria.class, new CriteriaSaver());
         classToSaverMap.put(NumberFieldCriteria.class, new CriteriaSaver());
-        classToSaverMap.put(StateSet.class, new StateSetSaver());
-        classToSaverMap.put(State.class, new StateSaver());
+        classToSaverMap.put(ButtonGroup.class, new StateSetSaver());
+        classToSaverMap.put(Button.class, new StateSaver());
         classToSaverMap.put(AssetTypeGroup.class, new AssetTypeGroupSaver());
 
         classToSaverMap.put(Project.class, new ProjectSaver());

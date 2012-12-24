@@ -5,28 +5,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.n4systems.model.StateSet;
+import com.n4systems.model.ButtonGroup;
 
 public class StateSetImportSummary extends BaseImportSummary {
 
-	private Map<Long, StateSet> importMapping = new HashMap<Long, StateSet>();
-	private List<StateSet> stateSetsToCreate = new ArrayList<StateSet>();
-	private List<StateSet> createdStateSets = new ArrayList<StateSet>();
+	private Map<Long, ButtonGroup> importMapping = new HashMap<Long, ButtonGroup>();
+	private List<ButtonGroup> stateSetsToCreate = new ArrayList<ButtonGroup>();
+	private List<ButtonGroup> createdButtonGroups = new ArrayList<ButtonGroup>();
 
-	public Map<Long, StateSet> getImportMapping() {
+	public Map<Long, ButtonGroup> getImportMapping() {
 		return importMapping;
 	}
 
-	public List<StateSet> getStateSetsToCreate() {
+	public List<ButtonGroup> getStateSetsToCreate() {
 		return stateSetsToCreate;
 	}
 
-	public List<StateSet> getCreatedStateSets() {
-		return createdStateSets;
+	public List<ButtonGroup> getCreatedButtonGroups() {
+		return createdButtonGroups;
 	}
 	
-	public void createdStateSet(StateSet stateSet) {
-		createdStateSets.add(stateSet);
+	public void createdStateSet(ButtonGroup buttonGroup) {
+		createdButtonGroups.add(buttonGroup);
 	}
 
 }

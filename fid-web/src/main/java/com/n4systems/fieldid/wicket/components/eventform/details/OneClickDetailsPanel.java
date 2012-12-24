@@ -3,8 +3,9 @@ package com.n4systems.fieldid.wicket.components.eventform.details;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.ButtonGroupDisplayPanel;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.StateSet;
 import com.n4systems.model.stateset.StateSetLoader;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -13,9 +14,10 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
+
+import static ch.lambdaj.Lambda.on;
 
 public class OneClickDetailsPanel extends Panel {
 
@@ -24,7 +26,7 @@ public class OneClickDetailsPanel extends Panel {
     public OneClickDetailsPanel(String id, IModel<OneClickCriteria> oneClickCriteria) {
         super(id, oneClickCriteria);
         add(new StateSetForm("stateSetForm"));
-        add(buttonGroupDisplayPanel = new ButtonGroupDisplayPanel("buttonGroupDetailsPanel", new PropertyModel<StateSet>(getCriteriaModel(), "states")));
+        add(buttonGroupDisplayPanel = new ButtonGroupDisplayPanel("buttonGroupDetailsPanel", ProxyModel.of(getCriteriaModel(), on(OneClickCriteria.class).getButtonGroup())));
     }
 
     protected IModel<OneClickCriteria> getCriteriaModel() {
@@ -36,46 +38,46 @@ public class OneClickDetailsPanel extends Panel {
         public StateSetForm(String id) {
             super(id);
 
-            List<StateSet> stateSetList = getStateSetList();
-            DropDownChoice<StateSet> stateChoice;
+            List<ButtonGroup> buttonGroupList = getStateSetList();
+            DropDownChoice<ButtonGroup> stateChoice;
 
-            add(stateChoice = new DropDownChoice<StateSet>("stateSetSelect", new PropertyModel<StateSet>(getCriteriaModel(), "states"), stateSetList, createChoiceRenderer()));
+            add(stateChoice = new DropDownChoice<ButtonGroup>("stateSetSelect", ProxyModel.of(getCriteriaModel(), on(OneClickCriteria.class).getButtonGroup()), buttonGroupList, createChoiceRenderer()));
             stateChoice.setNullValid(false);
             stateChoice.add(new UpdateComponentOnChange() {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
-                    onStateSetSelected(getCriteriaModel().getObject().getStates());
+                    onStateSetSelected(getCriteriaModel().getObject().getButtonGroup());
                     target.add(buttonGroupDisplayPanel);
                 }
             });
-            add(new AjaxCheckBox("setsResultCheckbox", new PropertyModel<Boolean>(getCriteriaModel(), "principal")) {
+            add(new AjaxCheckBox("setsResultCheckbox", ProxyModel.of(getCriteriaModel(), on(OneClickCriteria.class).isPrincipal())) {
                 @Override protected void onUpdate(AjaxRequestTarget target) {
                     boolean setsResult = getCriteriaModel().getObject().isPrincipal();
                     onSetsResultSelected(setsResult);
                 }});
         }
 
-        private List<StateSet> getStateSetList() {
+        private List<ButtonGroup> getStateSetList() {
             StateSetLoader stateSetLoader = new StateSetLoader(FieldIDSession.get().getSessionUser().getSecurityFilter());
             return stateSetLoader.load();
         }
     }
 
-    private IChoiceRenderer<StateSet> createChoiceRenderer() {
-        return new IChoiceRenderer<StateSet>() {
+    private IChoiceRenderer<ButtonGroup> createChoiceRenderer() {
+        return new IChoiceRenderer<ButtonGroup>() {
             @Override
-            public Object getDisplayValue(StateSet stateSet) {
-                return stateSet.getDisplayName();
+            public Object getDisplayValue(ButtonGroup buttonGroup) {
+                return buttonGroup.getDisplayName();
             }
 
             @Override
-            public String getIdValue(StateSet stateSet, int index) {
-                return stateSet.getId()+"";
+            public String getIdValue(ButtonGroup buttonGroup, int index) {
+                return buttonGroup.getId()+"";
             }
         };
     }
 
-    protected void onStateSetSelected(StateSet stateSet) { }
+    protected void onStateSetSelected(ButtonGroup buttonGroup) { }
 
     protected void onSetsResultSelected(boolean setsResult) { }
 

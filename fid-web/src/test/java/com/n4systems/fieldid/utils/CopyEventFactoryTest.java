@@ -16,7 +16,7 @@ import org.junit.Test;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.Recommendation;
-import com.n4systems.model.State;
+import com.n4systems.model.Button;
 
 
 public class CopyEventFactoryTest {
@@ -37,9 +37,9 @@ public class CopyEventFactoryTest {
 		
 		Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 		OneClickCriteriaResult criteriaResult = new OneClickCriteriaResult();
-		State state = new State();
-		state.setId( STATE_ID );
-		criteriaResult.setState( state );
+		Button button = new Button();
+		button.setId( STATE_ID );
+		criteriaResult.setButton(button);
 		criteriaResult.setId( 2L );
 		results.add( criteriaResult );
 		
@@ -53,7 +53,7 @@ public class CopyEventFactoryTest {
 		
 		assertEquals( results.size(), copiedResults.size() );
 		CriteriaResult copiedResult = copiedResults.iterator().next();
-		assertEquals( criteriaResult.getState(), ((OneClickCriteriaResult)copiedResult).getState() );
+		assertEquals( criteriaResult.getButton(), ((OneClickCriteriaResult)copiedResult).getButton() );
 		assertEquals( criteriaResult, copiedResult );
 		assertEquals( criteriaResult.getRecommendations().size(), copiedResult.getRecommendations().size() );
 		

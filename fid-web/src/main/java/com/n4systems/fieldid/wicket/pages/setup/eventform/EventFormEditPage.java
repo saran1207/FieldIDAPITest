@@ -11,7 +11,7 @@ import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.ScoreGroup;
-import com.n4systems.model.StateSet;
+import com.n4systems.model.ButtonGroup;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
@@ -118,8 +118,8 @@ public class EventFormEditPage extends EventTypePage {
                 criteriaPanel.setPreviouslySelectedScoreGroup(scoreGroup);
             }
 
-            @Override protected void setPreviouslySelectedStateSet(StateSet stateSet) {
-                criteriaPanel.setPreviouslySelectedStateSet(stateSet);
+            @Override protected void setPreviouslySelectedStateSet(ButtonGroup buttonGroup) {
+                criteriaPanel.setPreviouslySelectedButtonGroup(buttonGroup);
             }
 
             @Override

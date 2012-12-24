@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.event;
 
 import java.util.Hashtable;
 
+import com.n4systems.model.*;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,24 +10,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.DateFieldCriteriaResult;
-import com.n4systems.model.Deficiency;
-import com.n4systems.model.Event;
-import com.n4systems.model.NumberFieldCriteriaResult;
-import com.n4systems.model.Observation;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.Recommendation;
-import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.State;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.Button;
 
 public class ApiExistingEventFormResultResource extends FieldIdPersistenceService {
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
@@ -48,8 +32,8 @@ public class ApiExistingEventFormResultResource extends FieldIdPersistenceServic
 	private void convertApiCriteriaResult(ApiCriteriaResult apiResult, CriteriaResult result, AbstractEvent event) {
 		switch (result.getCriteria().getCriteriaType()) {
 			case ONE_CLICK:
-				State state = persistenceService.find(State.class, apiResult.getOneClickValue());
-				((OneClickCriteriaResult) result).setState(state);
+				Button button = persistenceService.find(Button.class, apiResult.getOneClickValue());
+				((OneClickCriteriaResult) result).setButton(button);
 				break;
 			case TEXT_FIELD:
 				((TextFieldCriteriaResult) result).setValue(apiResult.getTextValue());

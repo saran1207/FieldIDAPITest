@@ -3,12 +3,7 @@ package com.n4systems.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.IndexColumn;
 
@@ -18,8 +13,8 @@ import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
-@Table(name = "statesets")
-public class StateSet extends EntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
+@Table(name = "button_groups")
+public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(nullable=false)
@@ -30,9 +25,10 @@ public class StateSet extends EntityWithTenant implements NamedEntity, Listable<
 	
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@IndexColumn(name="orderIdx")
-	private List<State> states = new ArrayList<State>();
+    @JoinTable(name="button_groups_buttons", joinColumns = @JoinColumn(name = "button_group_id"), inverseJoinColumns = @JoinColumn(name = "button_id"))
+	private List<Button> buttons = new ArrayList<Button>();
 
-	public StateSet() {}
+	public ButtonGroup() {}
 	
 	@Override
 	protected void onCreate() {
@@ -61,12 +57,12 @@ public class StateSet extends EntityWithTenant implements NamedEntity, Listable<
 		this.name = name;
 	}
 
-	public List<State> getStates() {
-		return states;
+	public List<Button> getButtons() {
+		return buttons;
 	}
 
-	public void setStates(List<State> states) {
-		this.states = states;
+	public void setButtons(List<Button> buttons) {
+		this.buttons = buttons;
 	}
 	
 	public boolean isRetired() {
@@ -82,41 +78,41 @@ public class StateSet extends EntityWithTenant implements NamedEntity, Listable<
 		return getName();
 	}
 	
-	public int countOfAvailableStates() {
-		return getAvailableStates().size();
+	public int countOfAvailableButtons() {
+		return getAvailableButtons().size();
 	}
 	
-	public List<String> getAvailableStateStrings() {
+	public List<String> getAvailableButtonStrings() {
 		List<String> result = new ArrayList<String>();
-		for (State state:getAvailableStates()) { 
-			result.add(state.getDisplayText());
+		for (Button button : getAvailableButtons()) {
+			result.add(button.getDisplayText());
 		}
 		return result;
 	}
 	
-	public List<State> getAvailableStates() {
-		List<State> availableState = new ArrayList<State>();
-		for( State state : states ) {
-			if( !state.isRetired() ) {
-				availableState.add( state );
+	public List<Button> getAvailableButtons() {
+		List<Button> availableButton = new ArrayList<Button>();
+		for( Button button : buttons) {
+			if( !button.isRetired() ) {
+				availableButton.add(button);
 			}
 		}
-		return availableState;
+		return availableButton;
 	}
 	
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || this.getId() == null || !(obj instanceof StateSet)) {
+		if (obj == null || this.getId() == null || !(obj instanceof ButtonGroup)) {
 			return super.equals(obj);
 		} else {
-			return equals((StateSet) obj);
+			return equals((ButtonGroup) obj);
 		} 
 	}
 	
 	
-	public boolean equals(StateSet stateSet) {
-		return (getId().equals(stateSet.getId())) ? true : getAvailableStates().equals(stateSet.getAvailableStates());
+	public boolean equals(ButtonGroup buttonGroup) {
+		return (getId().equals(buttonGroup.getId())) ? true : getAvailableButtons().equals(buttonGroup.getAvailableButtons());
 	}
 
     @Override
@@ -124,10 +120,10 @@ public class StateSet extends EntityWithTenant implements NamedEntity, Listable<
         return id == null ? 0 : id.intValue();
     }
 
-	public State getState(String stateName) {
-		for (State state:getAvailableStates() ) {
-			if (state.getDisplayName().equalsIgnoreCase(stateName)) {
-				return state;
+	public Button getButton(String buttonName) {
+		for (Button button : getAvailableButtons() ) {
+			if (button.getDisplayName().equalsIgnoreCase(buttonName)) {
+				return button;
 			}
 		}
 		return null;

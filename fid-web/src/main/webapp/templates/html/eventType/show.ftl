@@ -92,7 +92,7 @@ ${action.setPageType('event_type', 'show')!}
                                         <td class="criteriaName"><label>${criteria.displayName}</label></td>
                                         <td class="buttonGroupIcons">
                                             <#if criteria.criteriaType.name() == 'ONE_CLICK'>
-                                                <#assign states=criteria.states.states/>
+                                                <#assign buttons=criteria.buttonGroup.buttons/>
                                                 <#include "../buttonGroupCrud/_buttonGroup.ftl"/>
                                             </#if>
                                             <#if criteria.criteriaType.name() == 'SELECT'>

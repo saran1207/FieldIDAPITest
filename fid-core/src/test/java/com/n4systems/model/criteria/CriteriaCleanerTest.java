@@ -5,19 +5,18 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.builders.OneClickCriteriaBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import org.junit.Test;
 
-import com.n4systems.model.Criteria;
-import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.TenantBuilder;
 
 public class CriteriaCleanerTest {
 	private static final String displayText = "display_text";
-	private static final StateSet states = new StateSet();
+	private static final ButtonGroup STATES = new ButtonGroup();
 	private static final boolean principal = true;
 	private static final boolean retired = false;
 	private static final List<String> recommendations = Arrays.asList("rec 1", "rec 2");
@@ -44,7 +43,7 @@ public class CriteriaCleanerTest {
 		
 		assertSame(newTenant, criteria.getTenant());
 		assertSame(displayText, criteria.getDisplayText());
-		assertSame(states, criteria.getStates());
+		assertSame(STATES, criteria.getButtonGroup());
 		assertSame(principal, criteria.isPrincipal());
 		assertSame(retired, criteria.isRetired());
 		
@@ -58,7 +57,7 @@ public class CriteriaCleanerTest {
 	private OneClickCriteria buildCriteria() {
 		OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().build();
 		criteria.setDisplayText(displayText);
-		criteria.setStates(states);
+		criteria.setButtonGroup(STATES);
 		criteria.setPrincipal(principal);
 		criteria.setRetired(retired);
 		criteria.setRecommendations(recommendations);

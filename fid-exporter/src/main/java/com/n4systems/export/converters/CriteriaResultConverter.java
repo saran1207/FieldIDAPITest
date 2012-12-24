@@ -36,7 +36,7 @@ public class CriteriaResultConverter extends ExportConverter {
 		} else if (result instanceof SelectCriteriaResult) {
 			value = ((SelectCriteriaResult) result).getValue();
 		} else if (result instanceof OneClickCriteriaResult) {
-			value = ((OneClickCriteriaResult) result).getState().getDisplayText();
+			value = ((OneClickCriteriaResult) result).getButton().getDisplayText();
 		} else if (result instanceof ComboBoxCriteriaResult) {
 			value = ((ComboBoxCriteriaResult) result).getValue();
 		}

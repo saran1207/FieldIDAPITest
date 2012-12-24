@@ -143,19 +143,19 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 			@Override 
 			public CriteriaResult populate(OneClickCriteriaResult result) {
 				checkArgument(criteria.getCriteriaType() == CriteriaType.ONE_CLICK);
-				StateSet states = ((OneClickCriteria)criteria).getStates();
+				ButtonGroup buttonGroup = ((OneClickCriteria)criteria).getButtonGroup();
 
                 // Find the default state for a one click if result isn't provided to match web interface behavior
-                State state = null;
+                Button button = null;
                 if (StringUtils.isBlank(criteriaResultView.getResultString())) {
-                    if (states.getAvailableStates().size() > 0)
-                        state = states.getAvailableStates().get(0);
+                    if (buttonGroup.getAvailableButtons().size() > 0)
+                        button = buttonGroup.getAvailableButtons().get(0);
                 } else {
-                    state = states.getState(criteriaResultView.getResultString());
+                    button = buttonGroup.getButton(criteriaResultView.getResultString());
                 }
 
-				checkNotNull(state, "Can't find state " + criteriaResultView.getResultString() + " for criteria " + criteria.getDisplayName() + ".  expected one of " + states.getAvailableStates());
-				result.setState(state);	
+				checkNotNull(button, "Can't find button " + criteriaResultView.getResultString() + " for criteria " + criteria.getDisplayName() + ".  expected one of " + buttonGroup.getAvailableButtons());
+				result.setButton(button);
 				return result;
 			}
 

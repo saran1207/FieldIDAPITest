@@ -26,11 +26,11 @@ ${action.setPageType('event_type', 'button_groups')!}
 </div>
 <div class="viewSection" />
 	<table class="simpleTable" id="buttonGroups" >
-			<#list stateSets as stateSet >
-			<tr id="stateRow_${stateSet_index}">
+			<#list buttonGroups as buttonGroup >
+			<tr id="stateRow_${buttonGroup_index}">
 				<td colspan="2"> 
-					<#assign states=stateSet.states />
-					<#assign buttonGroupIndex = stateSet_index />
+					<#assign buttons=buttonGroup.buttons />
+					<#assign buttonGroupIndex = buttonGroup_index />
 					<#include "_form.ftl"/>
 				</td>
 			</tr>

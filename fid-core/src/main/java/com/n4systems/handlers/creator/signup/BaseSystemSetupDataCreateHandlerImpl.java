@@ -92,29 +92,29 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		stateSetSaver.save(transaction, createNAPassFailSet());
 	}
 
-	private StateSet createPassFailSet() {
-		StateSet passFail = new StateSet();
+	private ButtonGroup createPassFailSet() {
+		ButtonGroup passFail = new ButtonGroup();
 		passFail.setName("Pass, Fail");
 		passFail.setTenant(tenant);
 
-		passFail.getStates().add(createPassState());
-		passFail.getStates().add(createFailState());
+		passFail.getButtons().add(createPassState());
+		passFail.getButtons().add(createFailState());
 		return passFail;
 	}
 
-	private StateSet createNAPassFailSet() {
-		StateSet naPassFail = new StateSet();
+	private ButtonGroup createNAPassFailSet() {
+		ButtonGroup naPassFail = new ButtonGroup();
 		naPassFail.setName("NA, Pass, Fail");
 		naPassFail.setTenant(tenant);
 
-		naPassFail.getStates().add(createNAState());
-		naPassFail.getStates().add(createPassState());
-		naPassFail.getStates().add(createFailState());
+		naPassFail.getButtons().add(createNAState());
+		naPassFail.getButtons().add(createPassState());
+		naPassFail.getButtons().add(createFailState());
 		return naPassFail;
 	}
 
-	private State createNAState() {
-		State na = new State();
+	private Button createNAState() {
+		Button na = new Button();
 		na.setTenant(tenant);
 		na.setButtonName("btn2");
 		na.setDisplayText("NA");
@@ -122,8 +122,8 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		return na;
 	}
 
-	private State createFailState() {
-		State fail = new State();
+	private Button createFailState() {
+		Button fail = new Button();
 		fail.setTenant(tenant);
 		fail.setButtonName("btn1");
 		fail.setDisplayText("Fail");
@@ -131,8 +131,8 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		return fail;
 	}
 
-	private State createPassState() {
-		State pass = new State();
+	private Button createPassState() {
+		Button pass = new Button();
 		pass.setTenant(tenant);
 		pass.setButtonName("btn0");
 		pass.setDisplayText("Pass");

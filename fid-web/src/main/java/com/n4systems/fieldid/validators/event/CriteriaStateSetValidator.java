@@ -25,7 +25,7 @@ public class CriteriaStateSetValidator extends FieldValidatorSupport {
 					for( Criteria criteria : section.getCriteria() ) {
                         if (criteria instanceof OneClickCriteria) {
                             OneClickCriteria oneClickCriteria = (OneClickCriteria) criteria;
-                            if( oneClickCriteria.getStates() == null || oneClickCriteria.getStates().getId() == null ) {
+                            if( oneClickCriteria.getButtonGroup() == null || oneClickCriteria.getButtonGroup().getId() == null ) {
                                 addFieldError( fieldName, action );
                                 return;
                             }

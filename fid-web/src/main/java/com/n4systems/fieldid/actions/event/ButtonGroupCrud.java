@@ -31,12 +31,12 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ButtonGroupCrud.class);
 	
-	private StateSet stateSet;
+	private ButtonGroup buttonGroup;
 	private Long eventTypeId;
 	private Long buttonGroupIndex;
 	private Long buttonIndex;
 	
-	private List<StateSet> stateSets;
+	private List<ButtonGroup> buttonGroups;
 	
 	private Long maxNumberOfImages;
 	
@@ -46,12 +46,12 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	
 	@Override
 	protected void initMemberFields() {
-		stateSet = new StateSet();
+		buttonGroup = new ButtonGroup();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		stateSet = persistenceManager.find( StateSet.class, uniqueId, getTenantId() );
+		buttonGroup = persistenceManager.find( ButtonGroup.class, uniqueId, getTenantId() );
 	}
 	
 	
@@ -62,7 +62,7 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	
 	@SkipValidation
 	public String doAddButton() {
-		if( stateSet == null ) {
+		if( buttonGroup == null ) {
 			addActionError( getText( "error.statesetnotfound" ) );
 			return MISSING;
 		}
@@ -72,7 +72,7 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	
 	@SkipValidation
 	public String doAdd() {
-		if( stateSet == null ) {
+		if( buttonGroup == null ) {
 			addActionError( getText( "error.statesetnotfound" ) );
 			return MISSING;
 		}
@@ -82,7 +82,7 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	
 	@SkipValidation
 	public String doEdit() {
-		if( stateSet == null || stateSet.getId() == null ) {
+		if( buttonGroup == null || buttonGroup.getId() == null ) {
 			addActionError( getText( "error.statesetnotfound" ) );
 			return MISSING;
 		}
@@ -91,7 +91,7 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	
 	@SkipValidation
 	public String doRetire() {
-		if( stateSet == null || stateSet.getId() == null ) {
+		if( buttonGroup == null || buttonGroup.getId() == null ) {
 			addActionError( getText( "error.statesetnotfound" ) );
 			return MISSING;
 		}
@@ -100,21 +100,22 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	
 	
 	public String doSave() {
-		if( stateSet == null ) {
+		if( buttonGroup == null ) {
 			addActionError( getText( "error.statesetnotfound" ) );
 			return MISSING;
 		}
 		
-		StrutsListHelper.clearNulls( stateSet.getStates() );
-		StrutsListHelper.setTenants( stateSet.getStates(), getTenant() );
+		StrutsListHelper.clearNulls( buttonGroup.getButtons() );
+		StrutsListHelper.setTenants( buttonGroup.getButtons(), getTenant() );
 				
-		stateSet.setTenant( getTenant() );
+		buttonGroup.setTenant( getTenant() );
 		
 		try {
-			stateSet = persistenceManager.update( stateSet );
-			logger.info("Updated StateSet (ButtonGroup): " + stateSet.getName());
-			touchEventTypes(stateSet);			
+			buttonGroup = persistenceManager.update(buttonGroup);
+			logger.info("Updated ButtonGroup (ButtonGroup): " + buttonGroup.getName());
+			touchEventTypes(buttonGroup);
 		} catch (Exception e) {
+            logger.error("Error updating event types?", e);
 			addActionError( getText( "error.failedtosave" ) );
 			return ERROR;
 		}
@@ -131,15 +132,15 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 		this.eventTypeId = eventTypeId;
 	}
 
-	public StateSet getStateSet() {
-			return stateSet;
+	public ButtonGroup getButtonGroup() {
+			return buttonGroup;
 	}
 
-	public List<StateSet> getStateSets() {
-		if( stateSets == null ) {
-			stateSets = persistenceManager.findAll( StateSet.class, getTenantId() );
+	public List<ButtonGroup> getButtonGroups() {
+		if( buttonGroups == null ) {
+			buttonGroups = persistenceManager.findAll( ButtonGroup.class, getTenantId() );
 		}
-		return stateSets;
+		return buttonGroups;
 	}
 
 	public List<EventResult> getButtonStatuses() {
@@ -147,18 +148,18 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	}
 		
 	public String getName() {
-		return stateSet.getName();
+		return buttonGroup.getName();
 	}
 	
 	
 	@RequiredStringValidator( message="", key="error.groupnamerequired")
 	@CustomValidator(type="uniqueValue", message = "", key="error.groupnameunique")
 	public void setName( String name ) {
-		stateSet.setName( name );
+		buttonGroup.setName( name );
 	}
 	
-	public List<State> getStates(){
-		return stateSet.getStates();
+	public List<Button> getButtons(){
+		return buttonGroup.getButtons();
 	}
 	
 	
@@ -168,9 +169,9 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 					@CustomValidator( type="requiredNameSet", message="", key="error.buttonsrequirenames" ) 
 					}
 			)
-	public void setStates( List<State> states ) {
-		if( stateSet != null ){
-			stateSet.setStates( states );
+	public void setButtons(List<Button> buttons) {
+		if( buttonGroup != null ){
+			buttonGroup.setButtons(buttons);
 		}
 	}
 
@@ -190,7 +191,7 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	}
 
 	public boolean duplicateValueExists( String formValue ) {
-		return !persistenceManager.uniqueNameAvailable( StateSet.class, formValue, uniqueID, getTenantId() );
+		return !persistenceManager.uniqueNameAvailable( ButtonGroup.class, formValue, uniqueID, getTenantId() );
 	}
 
 	public Long getButtonIndex() {
@@ -201,14 +202,14 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 		this.buttonIndex = buttonIndex;
 	}
 	
-	// Touch affected EventTypes with criteria that use the modified stateSet.
-	private void touchEventTypes(StateSet stateSet) {
+	// Touch affected EventTypes with criteria that use the modified buttonGroup.
+	private void touchEventTypes(ButtonGroup buttonGroup) {
 		int updateCount = 0;
 		String sql;
 		Query query;
 		OpenSecurityFilter securityFilter = new OpenSecurityFilter();
 		QueryBuilder<OneClickCriteria> criteriaQuery = new QueryBuilder<OneClickCriteria>(OneClickCriteria.class, securityFilter);
-		criteriaQuery.addWhere(WhereClauseFactory.create("states.id", stateSet.getId()));
+		criteriaQuery.addWhere(WhereClauseFactory.create("buttonGroup.id", buttonGroup.getId()));
 		List<OneClickCriteria> criterias = persistenceManager.findAll(criteriaQuery);			
 		for(OneClickCriteria criteria : criterias) {
 			sql = "SELECT cs FROM " + CriteriaSection.class.getName() + " cs JOIN cs.criteria csc WHERE csc.id = :criteriaId";

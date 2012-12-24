@@ -26,10 +26,10 @@ public class CriteriaDetailsPanel extends Panel {
         if (criteria instanceof OneClickCriteria) {
             add(new OneClickDetailsPanel("specificDetailsPanel", new Model<OneClickCriteria>((OneClickCriteria) criteria)) {
                 @Override
-                protected void onStateSetSelected(StateSet stateSet) {
+                protected void onStateSetSelected(ButtonGroup buttonGroup) {
                     // we need to notify when buttons are selected since new one click criteria need to have the previous choice
                     // pre selected as they're created. We could generalize this if it became necessary for other criteria types
-                    CriteriaDetailsPanel.this.onStateSetSelected(stateSet);
+                    CriteriaDetailsPanel.this.onStateSetSelected(buttonGroup);
                 }
 
                 @Override
@@ -62,7 +62,7 @@ public class CriteriaDetailsPanel extends Panel {
         }
     }
 
-    protected void onStateSetSelected(StateSet stateSet) { }
+    protected void onStateSetSelected(ButtonGroup buttonGroup) { }
 
     protected void onSetsResultSelected(boolean setsResult) { }
     

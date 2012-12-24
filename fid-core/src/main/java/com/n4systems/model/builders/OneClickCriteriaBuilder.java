@@ -1,16 +1,16 @@
 package com.n4systems.model.builders;
 
 import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.StateSet;
+import com.n4systems.model.ButtonGroup;
 
 public class OneClickCriteriaBuilder extends CriteriaBuilder<OneClickCriteria> {
 	private final boolean principal;
-    private final StateSet stateSet;
+    private final ButtonGroup buttonGroup;
 	
-	public OneClickCriteriaBuilder(String text, boolean retired, boolean principal, StateSet stateSet) {
+	public OneClickCriteriaBuilder(String text, boolean retired, boolean principal, ButtonGroup buttonGroup) {
         super(text, retired);
 		this.principal = principal;
-        this.stateSet = stateSet;
+        this.buttonGroup = buttonGroup;
 	}
 	
 	public static OneClickCriteriaBuilder aCriteria() {
@@ -18,26 +18,26 @@ public class OneClickCriteriaBuilder extends CriteriaBuilder<OneClickCriteria> {
 	}
 
 	public OneClickCriteriaBuilder withDisplayText(String text) {
-		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, stateSet));
+		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, buttonGroup));
 	}
 
 	public OneClickCriteriaBuilder withRetired(boolean retired) {
-		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, stateSet));
+		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, buttonGroup));
 	}
 
 	public OneClickCriteriaBuilder withPrincipal(boolean principal) {
-		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, stateSet));
+		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, buttonGroup));
 	}
 
-	public OneClickCriteriaBuilder withStateSet(StateSet stateSet) {
-		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, stateSet));
+	public OneClickCriteriaBuilder withButtonGroup(ButtonGroup buttonGroup) {
+		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, buttonGroup));
 	}
 	
 	@Override
 	public OneClickCriteria createObject() {
 		OneClickCriteria criteria = assignAbstractFields(new OneClickCriteria());
 		criteria.setPrincipal(principal);
-        criteria.setStates(stateSet);
+        criteria.setButtonGroup(buttonGroup);
 		return criteria;
 	}
 

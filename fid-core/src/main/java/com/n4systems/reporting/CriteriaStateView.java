@@ -51,9 +51,9 @@ public class CriteriaStateView implements Serializable {
         return doc.text();
     }
 
-    public void setStateButtonGroup(State state) {
-        this.state = state.getDisplayText();
-        this.stateImage = PathHandler.getButtonImageFile(state);
+    public void setStateButtonGroup(Button button) {
+        this.state = button.getDisplayText();
+        this.stateImage = PathHandler.getButtonImageFile(button);
     }
 	
 	public String getCriteria() {

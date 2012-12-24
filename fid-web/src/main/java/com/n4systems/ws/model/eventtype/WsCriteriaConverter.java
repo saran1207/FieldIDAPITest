@@ -11,20 +11,20 @@ import com.n4systems.model.Score;
 import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
-import com.n4systems.model.State;
+import com.n4systems.model.Button;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.ws.model.WsModelConverter;
 
 public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> {
-	private final WsModelConverter<State, WsState> stateConverter;
+	private final WsModelConverter<Button, WsState> stateConverter;
 	private final WsModelConverter<Score, WsScore> scoreConverter;	
 	
 	public WsCriteriaConverter() {
 		this(new WsStateConverter(), new WsScoreConverter());
 	}
 	
-	protected WsCriteriaConverter(WsModelConverter<State, WsState> stateConverter
+	protected WsCriteriaConverter(WsModelConverter<Button, WsState> stateConverter
 			, WsModelConverter<Score, WsScore> scoreConverter) {
 		this.stateConverter = stateConverter;
 		this.scoreConverter = scoreConverter;
@@ -72,7 +72,7 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 	
 	private WsOneClickCriteria convertOneClickCriteria(OneClickCriteria model) {
 		WsOneClickCriteria wsModel = new WsOneClickCriteria();
-		wsModel.setStates(stateConverter.fromModels(model.getStates().getStates()));
+		wsModel.setStates(stateConverter.fromModels(model.getButtonGroup().getButtons()));
         wsModel.setPrincipal(model.isPrincipal());
 		return wsModel;
 	}

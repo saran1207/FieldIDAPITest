@@ -2,16 +2,15 @@ package com.n4systems.ws.model.eventtype;
 
 import static org.junit.Assert.*;
 
+import com.n4systems.model.Button;
 import com.n4systems.model.EventResult;
 import org.junit.Test;
-
-import com.n4systems.model.State;
 
 public class WsStateConverterTest {
 
 	@Test
 	public void from_model_converts_all_fields() {
-		State model = new State();
+		Button model = new Button();
 		model.setId(10L);
 		model.setDisplayText("display text");
 		model.setButtonName("button name");

@@ -2,28 +2,13 @@ package com.n4systems.fieldid.actions.event.viewmodel;
 
 import java.text.ParseException;
 
-import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCriteriaResult;
+import com.n4systems.model.*;
 import rfid.web.helper.SessionUser;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.fieldid.actions.helpers.UserDateConverter;
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaType;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.DateFieldCriteriaResult;
-import com.n4systems.model.NumberFieldCriteria;
-import com.n4systems.model.NumberFieldCriteriaResult;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.State;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.Button;
 
 public class CriteriaResultWebModelConverter {
 
@@ -32,7 +17,7 @@ public class CriteriaResultWebModelConverter {
     	
         CriteriaResultWebModel webModel = new CriteriaResultWebModel();
         if (result instanceof OneClickCriteriaResult) {
-            webModel.setStateId(((OneClickCriteriaResult) result).getState().getId());
+            webModel.setStateId(((OneClickCriteriaResult) result).getButton().getId());
         } else if (result instanceof TextFieldCriteriaResult) {
             webModel.setTextValue(((TextFieldCriteriaResult)result).getValue());
         } else if (result instanceof SelectCriteriaResult) {
@@ -72,7 +57,7 @@ public class CriteriaResultWebModelConverter {
         CriteriaType type = CriteriaType.valueOf(webModel.getType());
         if (CriteriaType.ONE_CLICK.equals(type)) {
             OneClickCriteriaResult result = new OneClickCriteriaResult();
-            result.setState(pm.find(State.class, webModel.getStateId(), tenant));
+            result.setButton(pm.find(Button.class, webModel.getStateId(), tenant));
             criteriaResult = result;
         } else if (CriteriaType.TEXT_FIELD.equals(type)) {
             TextFieldCriteriaResult result = new TextFieldCriteriaResult();

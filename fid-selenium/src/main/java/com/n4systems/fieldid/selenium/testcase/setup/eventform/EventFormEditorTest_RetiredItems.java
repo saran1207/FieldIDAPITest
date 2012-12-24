@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import com.n4systems.model.ButtonGroup;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
@@ -12,7 +13,6 @@ import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.StateSet;
 
 public class EventFormEditorTest_RetiredItems extends FieldIDTestCase {
 
@@ -23,10 +23,10 @@ public class EventFormEditorTest_RetiredItems extends FieldIDTestCase {
                 .withRetired(true)
                 .build();
 
-        StateSet buttonGroup = scenario.buttonGroup(scenario.tenant("test1"), "Pass, Fail");
+        ButtonGroup buttonGroup = scenario.buttonGroup(scenario.tenant("test1"), "Pass, Fail");
 
-        OneClickCriteria retiredCriteria = scenario.aOneClickCriteria().withDisplayText("Retired criteria").withRetired(true).withStateSet(buttonGroup).build();
-        OneClickCriteria activeCriteria = scenario.aOneClickCriteria().withDisplayText("Active criteria").withRetired(false).withStateSet(buttonGroup).build();
+        OneClickCriteria retiredCriteria = scenario.aOneClickCriteria().withDisplayText("Retired criteria").withRetired(true).withButtonGroup(buttonGroup).build();
+        OneClickCriteria activeCriteria = scenario.aOneClickCriteria().withDisplayText("Active criteria").withRetired(false).withButtonGroup(buttonGroup).build();
 
         CriteriaSection nonRetiredSection = scenario.aCriteriaSection()
                 .withTitle("Active section")

@@ -9,11 +9,11 @@
 		</div>
 		<div class="rowName">
 			<p class="groupName">
-				<@s.textfield name="name" value="${stateSet.name!action.getText('label.new_button_group_name')}" onchange="enableGroupSaveButton(${buttonGroupIndex})"/>
-				<@s.hidden name="uniqueID" value="${stateSet.id!}"/>
+				<@s.textfield name="name" value="${buttonGroup.name!action.getText('label.new_button_group_name')}" onchange="enableGroupSaveButton(${buttonGroupIndex})"/>
+				<@s.hidden name="uniqueID" value="${buttonGroup.id!}"/>
 			</p>
 			<p id="buttons_${buttonGroupIndex}" style="display:none">
-				<button id="undo_${buttonGroupIndex}" onclick="undoButtonGroup( ${stateSet.id!"null"}, ${buttonGroupIndex} ); return false;"  ><@s.text name="label.undo_changes"/></button>
+				<button id="undo_${buttonGroupIndex}" onclick="undoButtonGroup( ${buttonGroup.id!"null"}, ${buttonGroupIndex} ); return false;"  ><@s.text name="label.undo_changes"/></button>
 			</p>
 			
 		</div>
@@ -25,16 +25,16 @@
 					<div class="label" ><@s.text name="label.indicates"/>:</div>
 					<div class="label" ><@s.text name="label.options"/>:</div>
 				</li>
-				${action.setStates(states)}
+				${action.setButtons(buttons)}
 				
-				<#list states as state >
-					<#if state?exists>
+				<#list buttons as button >
+					<#if button?exists>
 						<#include "_buttonForm.ftl"/>
 					</#if>
 				</#list>
-				<#assign lastButtonIndex=(states?size - stateSet.countOfAvailableStates()) + 5 >
-				<#if stateSet.countOfAvailableStates() lt 6 >
-					<#list states?size..lastButtonIndex as state_index>
+				<#assign lastButtonIndex=(buttons?size - buttonGroup.countOfAvailableButtons()) + 5 >
+				<#if buttonGroup.countOfAvailableButtons() lt 6 >
+					<#list buttons?size..lastButtonIndex as button_index>
 						<#include "_buttonForm.ftl"/>
 					</#list>
 				</#if>

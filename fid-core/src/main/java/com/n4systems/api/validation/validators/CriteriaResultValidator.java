@@ -115,14 +115,14 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 	}
 
 	private ValidationResult validateOneClick(OneClickCriteria criteria, CriteriaSection section, CriteriaResultView value) {
-		StateSet states = criteria.getStates();
+		ButtonGroup buttonGroup = criteria.getButtonGroup();
 
         // We need to allow for an empty value
         if (StringUtils.isBlank(value.getResultString()))
             return ValidationResult.pass();
 
-		return states.getState(value.getResultString()) == null ?
-			ValidationResult.fail(FieldValidator.CriteriaOneClickFail, value.getResultString(),criteria.getDisplayName(),states.getAvailableStateStrings()) :
+		return buttonGroup.getButton(value.getResultString()) == null ?
+			ValidationResult.fail(FieldValidator.CriteriaOneClickFail, value.getResultString(), criteria.getDisplayName(), buttonGroup.getAvailableButtonStrings()) :
 			ValidationResult.pass();		
 	}
 

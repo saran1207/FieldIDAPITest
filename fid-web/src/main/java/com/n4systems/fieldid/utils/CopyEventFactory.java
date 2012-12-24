@@ -132,7 +132,7 @@ public class CopyEventFactory {
     private static CriteriaResult createBasicCopy(CriteriaResult oldResult) {
         if (oldResult instanceof OneClickCriteriaResult) {
             OneClickCriteriaResult oneClickResult = new OneClickCriteriaResult();
-            oneClickResult.setState(((OneClickCriteriaResult)oldResult).getState());
+            oneClickResult.setButton(((OneClickCriteriaResult) oldResult).getButton());
             return oneClickResult;
         } else if (oldResult instanceof TextFieldCriteriaResult) {
             TextFieldCriteriaResult textFieldResult = new TextFieldCriteriaResult();

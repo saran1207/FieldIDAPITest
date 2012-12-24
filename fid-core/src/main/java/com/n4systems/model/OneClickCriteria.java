@@ -1,11 +1,6 @@
 package com.n4systems.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "oneclick_criteria")
@@ -15,14 +10,15 @@ public class OneClickCriteria extends Criteria {
     private boolean principal;
 
 	@ManyToOne(fetch= FetchType.EAGER, cascade={CascadeType.REFRESH}, optional=false)
-	private StateSet states;
+    @JoinColumn(name="button_group_id")
+	private ButtonGroup buttonGroup;
 
-	public StateSet getStates() {
-		return states;
+	public ButtonGroup getButtonGroup() {
+		return buttonGroup;
 	}
 
-	public void setStates(StateSet states) {
-		this.states = states;
+	public void setButtonGroup(ButtonGroup buttonGroup) {
+		this.buttonGroup = buttonGroup;
 	}
 
 	public boolean isPrincipal() {

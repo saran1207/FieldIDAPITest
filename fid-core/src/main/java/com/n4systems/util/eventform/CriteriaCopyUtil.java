@@ -102,7 +102,7 @@ public class CriteriaCopyUtil {
     private Criteria copyOneClickCriteria(OneClickCriteria oneClickCriteria) {
         OneClickCriteria criteria = new OneClickCriteria();
         criteria.setPrincipal(oneClickCriteria.isPrincipal());
-        criteria.setStates(oneClickCriteria.getStates());
+        criteria.setButtonGroup(oneClickCriteria.getButtonGroup());
         return criteria;
     }
 

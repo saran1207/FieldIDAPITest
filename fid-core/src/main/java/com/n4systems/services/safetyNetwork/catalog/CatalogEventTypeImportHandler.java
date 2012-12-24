@@ -21,7 +21,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
     private static final Logger logger = Logger.getLogger(CatalogEventTypeImportHandler.class);
 
 	private Map<Long, EventTypeGroup> importedGroupMapping;
-	private Map<Long, StateSet> importedStateSetMapping;
+	private Map<Long, ButtonGroup> importedStateSetMapping;
     private Map<Long, ScoreGroup> importedScoreGroupMapping;
 	private Set<Long> originalEventTypeIds;
 	private EventTypeImportSummary summary = new EventTypeImportSummary();
@@ -88,7 +88,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
                 for (Criteria criteria : criteriaSection.getCriteria()) {
                     if (criteria instanceof OneClickCriteria) {
                         OneClickCriteria oneClickCriteria = (OneClickCriteria) criteria;
-                        oneClickCriteria.setStates(importedStateSetMapping.get(oneClickCriteria.getStates().getId()));
+                        oneClickCriteria.setButtonGroup(importedStateSetMapping.get(oneClickCriteria.getButtonGroup().getId()));
                     } else if (criteria instanceof ScoreCriteria) {
                         ScoreCriteria scoreCriteria = (ScoreCriteria) criteria;
                         scoreCriteria.setScoreGroup(importedScoreGroupMapping.get(scoreCriteria.getScoreGroup().getId()));
@@ -146,7 +146,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	}
 
 
-	public CatalogEventTypeImportHandler setImportedStateSetMapping(Map<Long, StateSet> importedStateSetMapping) {
+	public CatalogEventTypeImportHandler setImportedStateSetMapping(Map<Long, ButtonGroup> importedStateSetMapping) {
 		this.importedStateSetMapping = importedStateSetMapping;
 		return this;
 	}

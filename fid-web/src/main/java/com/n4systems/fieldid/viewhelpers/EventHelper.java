@@ -154,7 +154,7 @@ public class EventHelper {
 			
 			realResult.setCriteria(pm.find(Criteria.class, formResult.getCriteriaId(), event.getTenant()));
             if (realResult instanceof OneClickCriteriaResult) {
-                ((OneClickCriteriaResult)realResult).setState(pm.find(State.class, formResult.getStateId(), event.getTenant()));
+                ((OneClickCriteriaResult)realResult).setButton(pm.find(Button.class, formResult.getStateId(), event.getTenant()));
             } else if (realResult instanceof TextFieldCriteriaResult) {
                 ((TextFieldCriteriaResult)realResult).setValue(formResult.getTextValue());
             } else if (realResult instanceof SelectCriteriaResult) {
@@ -214,7 +214,7 @@ public class EventHelper {
 	/**
 	 * Reconstructs a list of 'real' Observations from a list of 'form' Observations.  When finished,
 	 * realObservations will have been updated with new observations from formObservations, had any
-	 * observations removed that did not exist in formObservations and had states and comments 
+	 * observations removed that did not exist in formObservations and had buttons and comments
 	 * updated on existing observations ... it's actually way simpler then I just made it sound ...
 	 * @param realObservations	A list of Observations loaded from a CriteriaResult entity
 	 * @param formObservations	A list of Observations as input from the Action

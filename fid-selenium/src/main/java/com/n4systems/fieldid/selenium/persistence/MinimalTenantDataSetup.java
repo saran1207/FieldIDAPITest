@@ -46,29 +46,29 @@ public class MinimalTenantDataSetup {
     }
 
     private void createPassFailButtonGroup() {
-        StateSet passFailButtonGroup = new StateSet();
+        ButtonGroup passFailButtonGroup = new ButtonGroup();
 
-        State failState = new State();
-        failState.setButtonName("btn1");
-        failState.setDisplayText("Fail");
-        failState.setEventResult(EventResult.FAIL);
-        failState.setTenant(tenant);
+        Button failButton = new Button();
+        failButton.setButtonName("btn1");
+        failButton.setDisplayText("Fail");
+        failButton.setEventResult(EventResult.FAIL);
+        failButton.setTenant(tenant);
 
-        State passState = new State();
-        passState.setButtonName("btn0");
-        passState.setDisplayText("Pass");
-        passState.setEventResult(EventResult.PASS);
-        passState.setTenant(tenant);
+        Button passButton = new Button();
+        passButton.setButtonName("btn0");
+        passButton.setDisplayText("Pass");
+        passButton.setEventResult(EventResult.PASS);
+        passButton.setTenant(tenant);
 
         passFailButtonGroup.setName("Pass, Fail");
-        passFailButtonGroup.getStates().add(passState);
-        passFailButtonGroup.getStates().add(failState);
+        passFailButtonGroup.getButtons().add(passButton);
+        passFailButtonGroup.getButtons().add(failButton);
 
         passFailButtonGroup.setTenant(tenant);
 
         em.persist(passFailButtonGroup);
-        em.persist(failState);
-        em.persist(passState);
+        em.persist(failButton);
+        em.persist(passButton);
     }
 
     private void createN4UserAccountForTenant(PrimaryOrg org) {

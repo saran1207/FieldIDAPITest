@@ -2,17 +2,8 @@ package com.n4systems.ejb.impl;
 
 import com.n4systems.model.*;
 import com.n4systems.model.EventResult;
-import com.n4systems.model.builders.EventBuilder;
-import com.n4systems.model.builders.EventFormBuilder;
-import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.model.builders.OneClickCriteriaBuilder;
-import com.n4systems.model.builders.OneClickCriteriaResultBuilder;
-import com.n4systems.model.builders.ScoreBuilder;
-import com.n4systems.model.builders.ScoreCriteriaBuilder;
-import com.n4systems.model.builders.ScoreCriteriaResultBuilder;
-import com.n4systems.model.builders.ScoreResultRangeBuilder;
-import com.n4systems.model.builders.StateBuilder;
-import com.n4systems.model.builders.StateSetBuilder;
+import com.n4systems.model.builders.*;
+import com.n4systems.model.builders.ButtonGroupBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,10 +12,10 @@ import static org.junit.Assert.assertEquals;
 public class EventResultCalculatorTest {
 
     private EventResultCalculator eventResultCalculator;
-    private State passState;
-    private State failState;
-    private State naState;
-    private StateSet passFailNaStateSet;
+    private Button passButton;
+    private Button failButton;
+    private Button naButton;
+    private ButtonGroup passFailNaButtonGroup;
 
     private ScoreResultRange atLeastTen;
     private ScoreResultRange atMostFive;
@@ -32,10 +23,10 @@ public class EventResultCalculatorTest {
     @Before
     public void setup() {
         eventResultCalculator = new EventResultCalculator();
-        passState = StateBuilder.aState().displayText("Pass").status(EventResult.PASS).build();
-        failState = StateBuilder.aState().displayText("Fail").status(EventResult.FAIL).build();
-        naState = StateBuilder.aState().displayText("NA").status(EventResult.NA).build();
-        passFailNaStateSet = StateSetBuilder.aStateSet().states(passState, failState, naState).build();
+        passButton = StateBuilder.aState().displayText("Pass").status(EventResult.PASS).build();
+        failButton = StateBuilder.aState().displayText("Fail").status(EventResult.FAIL).build();
+        naButton = StateBuilder.aState().displayText("NA").status(EventResult.NA).build();
+        passFailNaButtonGroup = ButtonGroupBuilder.aButtonGroup().buttons(passButton, failButton, naButton).build();
 
         atLeastTen = ScoreResultRangeBuilder.aScoreResultRange().atLeast(10d).build();
         atMostFive = ScoreResultRangeBuilder.aScoreResultRange().atMost(5d).build();
@@ -43,8 +34,8 @@ public class EventResultCalculatorTest {
 
     @Test
     public void simple_single_non_principal_pass() {
-        OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withStateSet(passFailNaStateSet).withPrincipal(false).build();
-        OneClickCriteriaResult result = OneClickCriteriaResultBuilder.aCriteriaResult().state(passState).criteria(criteria).build();
+        OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withButtonGroup(passFailNaButtonGroup).withPrincipal(false).build();
+        OneClickCriteriaResult result = OneClickCriteriaResultBuilder.aCriteriaResult().state(passButton).criteria(criteria).build();
 
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(createEventType()).build();
         setEventForm(event);
@@ -54,8 +45,8 @@ public class EventResultCalculatorTest {
 
     @Test
     public void simple_single_principal_pass() {
-        OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withStateSet(passFailNaStateSet).withPrincipal(true).build();
-        OneClickCriteriaResult result = OneClickCriteriaResultBuilder.aCriteriaResult().state(passState).criteria(criteria).build();
+        OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withButtonGroup(passFailNaButtonGroup).withPrincipal(true).build();
+        OneClickCriteriaResult result = OneClickCriteriaResultBuilder.aCriteriaResult().state(passButton).criteria(criteria).build();
 
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(createEventType()).build();
         setEventForm(event);
@@ -65,14 +56,14 @@ public class EventResultCalculatorTest {
 
     @Test
     public void several_criteria_pass() {
-        OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withStateSet(passFailNaStateSet).withPrincipal(true).build();
-        OneClickCriteriaResult result = OneClickCriteriaResultBuilder.aCriteriaResult().state(passState).criteria(criteria).build();
+        OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withButtonGroup(passFailNaButtonGroup).withPrincipal(true).build();
+        OneClickCriteriaResult result = OneClickCriteriaResultBuilder.aCriteriaResult().state(passButton).criteria(criteria).build();
 
-        OneClickCriteria criteria2 = OneClickCriteriaBuilder.aCriteria().withStateSet(passFailNaStateSet).withPrincipal(true).build();
-        OneClickCriteriaResult result2 = OneClickCriteriaResultBuilder.aCriteriaResult().state(passState).criteria(criteria2).build();
+        OneClickCriteria criteria2 = OneClickCriteriaBuilder.aCriteria().withButtonGroup(passFailNaButtonGroup).withPrincipal(true).build();
+        OneClickCriteriaResult result2 = OneClickCriteriaResultBuilder.aCriteriaResult().state(passButton).criteria(criteria2).build();
 
-        OneClickCriteria criteria3 = OneClickCriteriaBuilder.aCriteria().withStateSet(passFailNaStateSet).withPrincipal(true).build();
-        OneClickCriteriaResult result3 = OneClickCriteriaResultBuilder.aCriteriaResult().state(naState).criteria(criteria3).build();
+        OneClickCriteria criteria3 = OneClickCriteriaBuilder.aCriteria().withButtonGroup(passFailNaButtonGroup).withPrincipal(true).build();
+        OneClickCriteriaResult result3 = OneClickCriteriaResultBuilder.aCriteriaResult().state(naButton).criteria(criteria3).build();
 
         Event event = EventBuilder.anEvent().withCriteriaResults(result, result2, result3).ofType(createEventType()).build();
         setEventForm(event);
@@ -82,14 +73,14 @@ public class EventResultCalculatorTest {
 
     @Test
     public void several_criteria_fail() {
-        OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withStateSet(passFailNaStateSet).withPrincipal(true).build();
-        OneClickCriteriaResult result = OneClickCriteriaResultBuilder.aCriteriaResult().state(passState).criteria(criteria).build();
+        OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withButtonGroup(passFailNaButtonGroup).withPrincipal(true).build();
+        OneClickCriteriaResult result = OneClickCriteriaResultBuilder.aCriteriaResult().state(passButton).criteria(criteria).build();
 
-        OneClickCriteria criteria2 = OneClickCriteriaBuilder.aCriteria().withStateSet(passFailNaStateSet).withPrincipal(true).build();
-        OneClickCriteriaResult result2 = OneClickCriteriaResultBuilder.aCriteriaResult().state(failState).criteria(criteria2).build();
+        OneClickCriteria criteria2 = OneClickCriteriaBuilder.aCriteria().withButtonGroup(passFailNaButtonGroup).withPrincipal(true).build();
+        OneClickCriteriaResult result2 = OneClickCriteriaResultBuilder.aCriteriaResult().state(failButton).criteria(criteria2).build();
 
-        OneClickCriteria criteria3 = OneClickCriteriaBuilder.aCriteria().withStateSet(passFailNaStateSet).withPrincipal(true).build();
-        OneClickCriteriaResult result3 = OneClickCriteriaResultBuilder.aCriteriaResult().state(naState).criteria(criteria3).build();
+        OneClickCriteria criteria3 = OneClickCriteriaBuilder.aCriteria().withButtonGroup(passFailNaButtonGroup).withPrincipal(true).build();
+        OneClickCriteriaResult result3 = OneClickCriteriaResultBuilder.aCriteriaResult().state(naButton).criteria(criteria3).build();
 
         Event event = EventBuilder.anEvent().withCriteriaResults(result, result2, result3).ofType(createEventType()).build();
         setEventForm(event);

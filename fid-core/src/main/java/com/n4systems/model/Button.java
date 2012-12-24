@@ -12,8 +12,8 @@ import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
-@Table(name = "states")
-public class State extends EntityWithTenant implements Listable<Long>, Retirable, NamedEntity {
+@Table(name = "buttons")
+public class Button extends EntityWithTenant implements Listable<Long>, Retirable, NamedEntity {
 	private static final long serialVersionUID = 1L;
 		
 	@Column(nullable=false)
@@ -29,9 +29,9 @@ public class State extends EntityWithTenant implements Listable<Long>, Retirable
 	@Column(nullable=false)
 	private boolean retired = false;
 	
-	public State() {}
+	public Button() {}
 
-	public State(String displayText, EventResult eventResult, String buttonName) {
+	public Button(String displayText, EventResult eventResult, String buttonName) {
 		this.displayText = displayText;
 		this.eventResult = eventResult;
 		this.buttonName = buttonName;
@@ -112,20 +112,20 @@ public class State extends EntityWithTenant implements Listable<Long>, Retirable
     }
 	
 	public boolean equals(Object obj) {
-		if (obj == null || this.getId() == null || !(obj instanceof State)) {
+		if (obj == null || this.getId() == null || !(obj instanceof Button)) {
 			return super.equals(obj);
 		} else {
-			return equals((State) obj);
+			return equals((Button) obj);
 		} 
 	}
 	
-	public boolean equals(State state) {
-		if (getId().equals(state.getId())) {
+	public boolean equals(Button button) {
+		if (getId().equals(button.getId())) {
 			return true;
 		} 
 		
-		return (getDisplayText().equalsIgnoreCase(state.getDisplayText()) && 
-				getEventResult().equals(state.getEventResult()) &&
-				getButtonName().equals(state.getButtonName()));
+		return (getDisplayText().equalsIgnoreCase(button.getDisplayText()) &&
+				getEventResult().equals(button.getEventResult()) &&
+				getButtonName().equals(button.getButtonName()));
 	}
 }

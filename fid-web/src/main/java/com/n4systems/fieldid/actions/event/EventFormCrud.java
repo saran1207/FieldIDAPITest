@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.n4systems.ejb.EventManager;
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.EventType;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -13,7 +14,6 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.StateSet;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
@@ -24,7 +24,7 @@ public class EventFormCrud extends AbstractCrud {
 
 	protected EventManager eventManager;
 	
-	private List<StateSet> stateSets;	
+	private List<ButtonGroup> buttonGroups;
 	protected List<CriteriaSection> criteriaSections;
 	protected EventType eventType;
 	
@@ -76,7 +76,7 @@ public class EventFormCrud extends AbstractCrud {
 		
 		for( Criteria criteria : section.getCriteria() ) {
 			criteria.setTenant( getTenant() );
-//			criteria.setStates( persistenceManager.find( StateSet.class, criteria.getStates().getId(), getTenantId() ) );
+//			criteria.setStates( persistenceManager.find( ButtonGroup.class, criteria.getStates().getId(), getTenantId() ) );
 			
 			StrutsListHelper.clearNulls(criteria.getRecommendations());
 			StrutsListHelper.removeMarkedEntries("--deleted--", criteria.getRecommendations());
@@ -110,11 +110,11 @@ public class EventFormCrud extends AbstractCrud {
 		this.criteriaSections = criteriaSections;
 	}
 
-	public List<StateSet> getStateSets() {
-		if( stateSets == null ) {
-			stateSets = persistenceManager.findAll( StateSet.class, getTenantId() );
+	public List<ButtonGroup> getButtonGroups() {
+		if( buttonGroups == null ) {
+			buttonGroups = persistenceManager.findAll( ButtonGroup.class, getTenantId() );
 		}
-		return stateSets;
+		return buttonGroups;
 	}
 
 	public EventType getEventType() {

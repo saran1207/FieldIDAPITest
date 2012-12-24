@@ -10,12 +10,10 @@ import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.Project;
-import com.n4systems.model.State;
+import com.n4systems.model.Button;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 
@@ -383,8 +381,8 @@ public class PathHandler {
 		return mergePaths(PROOF_TEST_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
-	public static File getButtonImageFile(State state) {
-		return absolutize(mergePaths(BUTTON_IMAGE_PATH_BASE, state.getButtonName()+ BUTTON_IMAGE_EXT));
+	public static File getButtonImageFile(Button button) {
+		return absolutize(mergePaths(BUTTON_IMAGE_PATH_BASE, button.getButtonName()+ BUTTON_IMAGE_EXT));
 	}
 	
 	public static File getCommonImageFile(String fileName) {

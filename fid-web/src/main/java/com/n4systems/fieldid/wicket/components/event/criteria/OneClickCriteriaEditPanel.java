@@ -1,8 +1,9 @@
 package com.n4systems.fieldid.wicket.components.event.criteria;
 
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.State;
+import com.n4systems.model.Button;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -13,9 +14,11 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
 
+import static ch.lambdaj.Lambda.on;
+
 public class OneClickCriteriaEditPanel extends Panel {
 
-    private List<State> states;
+    private List<Button> buttons;
     private int currentStateIndex;
     
     private ContextImage buttonImage;
@@ -27,13 +30,13 @@ public class OneClickCriteriaEditPanel extends Panel {
         super(id);
         this.result = result;
         
-        states = ((OneClickCriteria)result.getObject().getCriteria()).getStates().getAvailableStates();
+        buttons = ((OneClickCriteria)result.getObject().getCriteria()).getButtonGroup().getAvailableButtons();
 
-        if (result.getObject().getState() == null) {
+        if (result.getObject().getButton() == null) {
             currentStateIndex = 0;
-            result.getObject().setState(states.get(0));
+            result.getObject().setButton(buttons.get(0));
         } else {
-            currentStateIndex = states.indexOf(result.getObject().getState());
+            currentStateIndex = buttons.indexOf(result.getObject().getButton());
         }
         
         buttonImage = new ContextImage("buttonImage", new PropertyModel<String>(this, "buttonImageUrl"));
@@ -41,13 +44,13 @@ public class OneClickCriteriaEditPanel extends Panel {
         buttonImage.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                currentStateIndex = (currentStateIndex + 1) % states.size();
-                result.getObject().setState(states.get(currentStateIndex));
+                currentStateIndex = (currentStateIndex + 1) % buttons.size();
+                result.getObject().setButton(buttons.get(currentStateIndex));
                 target.add(buttonImage, buttonLabel);
             }
         });
         
-        buttonLabel = new Label("buttonLabel", new PropertyModel<String>(result, "state.displayText"));
+        buttonLabel = new Label("buttonLabel", ProxyModel.of(result, on(OneClickCriteriaResult.class).getButton().getDisplayText() ));
         buttonLabel.setOutputMarkupId(true);
 
         add(buttonImage);
@@ -55,7 +58,7 @@ public class OneClickCriteriaEditPanel extends Panel {
     }
     
     public String getButtonImageUrl() {
-        return "images/eventButtons/"+result.getObject().getState().getButtonName()+".png";
+        return "images/eventButtons/"+result.getObject().getButton().getButtonName()+".png";
     }
 
 }

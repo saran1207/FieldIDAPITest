@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
-import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiCriteriaResult;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiObservation;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiCriteriaSection;
@@ -24,7 +23,6 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Deficiency;
-import com.n4systems.model.Event;
 import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.Observation;
 import com.n4systems.model.OneClickCriteriaResult;
@@ -105,7 +103,7 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 		switch(criteriaResult.getCriteria().getCriteriaType()) {
 			case ONE_CLICK: 
 				OneClickCriteriaResult oneClickResult = (OneClickCriteriaResult)criteriaResult;
-				apiResult.setOneClickValue(oneClickResult.getState().getId());
+				apiResult.setOneClickValue(oneClickResult.getButton().getId());
 				break;
 			case TEXT_FIELD:
 				TextFieldCriteriaResult textFieldResult = (TextFieldCriteriaResult)criteriaResult;

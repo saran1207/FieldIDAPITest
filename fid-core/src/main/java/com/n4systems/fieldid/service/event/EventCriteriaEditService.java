@@ -26,7 +26,7 @@ public class EventCriteriaEditService extends FieldIdPersistenceService {
 
     private void syncResultData(CriteriaResult realResult, CriteriaResult result) {
         if (realResult instanceof OneClickCriteriaResult) {
-            ((OneClickCriteriaResult)realResult).setState(((OneClickCriteriaResult)result).getState());
+            ((OneClickCriteriaResult)realResult).setButton(((OneClickCriteriaResult) result).getButton());
         } else if (realResult instanceof TextFieldCriteriaResult) {
             ((TextFieldCriteriaResult)realResult).setValue(((TextFieldCriteriaResult)result).getValue());
         } else if (realResult instanceof SelectCriteriaResult) {

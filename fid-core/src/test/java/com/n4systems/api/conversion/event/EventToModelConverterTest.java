@@ -359,8 +359,8 @@ public class EventToModelConverterTest {
 		eventView.setCriteriaResults(criteriaResults);
 
 		EventForm eventForm = new EventForm();
-		StateSet stateSet = StateSetBuilder.aStateSet().states(new State("Pass", EventResult.PASS, "Pass")).build();
-		OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withStateSet(stateSet).build();
+		ButtonGroup buttonGroup = ButtonGroupBuilder.aButtonGroup().buttons(new Button("Pass", EventResult.PASS, "Pass")).build();
+		OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withButtonGroup(buttonGroup).build();
 		
 		CriteriaSection section = CriteriaSectionBuilder.aCriteriaSection().
 										withCriteria(criteria).
@@ -393,7 +393,7 @@ public class EventToModelConverterTest {
 		OneClickCriteriaResult oneClickCriteriaResult = (OneClickCriteriaResult)onlyMemberOfSet;
 
 		assertEquals(criteria, oneClickCriteriaResult.getCriteria());
-		assertEquals(EventResult.PASS, oneClickCriteriaResult.getState().getEventResult());
+		assertEquals(EventResult.PASS, oneClickCriteriaResult.getButton().getEventResult());
 		assertEquals(eventForm, oneClickCriteriaResult.getEvent().getEventForm() );
 		
 		verify(psLoader);

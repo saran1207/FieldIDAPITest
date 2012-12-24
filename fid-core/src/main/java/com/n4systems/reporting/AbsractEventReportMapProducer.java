@@ -201,7 +201,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                         stateView.setSectionScorePercentage(sectionScorePercentageMap.get(stateView.getSection()));
                         CriteriaResult result = resultMap.get(criteria);
                         if (result instanceof OneClickCriteriaResult) {
-                            stateView.setStateButtonGroup(((OneClickCriteriaResult)result).getState());
+                            stateView.setStateButtonGroup(((OneClickCriteriaResult)result).getButton());
                         } else if (result instanceof TextFieldCriteriaResult) {
                             stateView.setState(((TextFieldCriteriaResult)result).getValue());
                         } else if (result instanceof SelectCriteriaResult) {

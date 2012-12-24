@@ -39,7 +39,7 @@ public class CriteriaPanel extends SortableListPanel {
     private SortableAjaxBehavior sortableAjaxBehavior;
     private boolean reorderState = false;
 
-    private StateSet previouslySelectedStateSet;
+    private ButtonGroup previouslySelectedButtonGroup;
     private boolean previousSetsResultValue;
     private ScoreGroup previouslySelectedScoreGroup;
 
@@ -181,16 +181,16 @@ public class CriteriaPanel extends SortableListPanel {
                 }
 
                 private boolean configureDefaultStateSet(AjaxRequestTarget target, OneClickCriteria criteria) {
-                    StateSet stateSet = getDefaultStateSet();
-                    if (stateSet == null) {
+                    ButtonGroup buttonGroup = getDefaultStateSet();
+                    if (buttonGroup == null) {
                         error("You must configure at least one Button Group to use One-Click criteria");
                         target.add(feedbackPanel);
                         return false;
                     }
-                    if (previouslySelectedStateSet != null) {
-                        criteria.setStates(previouslySelectedStateSet);
+                    if (previouslySelectedButtonGroup != null) {
+                        criteria.setButtonGroup(previouslySelectedButtonGroup);
                     } else {
-                        criteria.setStates(stateSet);
+                        criteria.setButtonGroup(buttonGroup);
                     }
                     criteria.setPrincipal(previousSetsResultValue);
                     return true;
@@ -255,21 +255,21 @@ public class CriteriaPanel extends SortableListPanel {
         return criteriaAddForm.addTextField;
     }
 
-    public void setPreviouslySelectedStateSet(StateSet previouslySelectedStateSet) {
-        this.previouslySelectedStateSet = previouslySelectedStateSet;
+    public void setPreviouslySelectedButtonGroup(ButtonGroup previouslySelectedButtonGroup) {
+        this.previouslySelectedButtonGroup = previouslySelectedButtonGroup;
     }
 
     public void setPreviousSetsResultValue(boolean setsResultValue) {
         this.previousSetsResultValue = setsResultValue;
     }
 
-    private StateSet getDefaultStateSet() {
+    private ButtonGroup getDefaultStateSet() {
         StateSetLoader stateSetLoader = new StateSetLoader(FieldIDSession.get().getSessionUser().getSecurityFilter());
-        List<StateSet> stateSetList =  stateSetLoader.load();
-        if (stateSetList.isEmpty()) {
+        List<ButtonGroup> buttonGroupList =  stateSetLoader.load();
+        if (buttonGroupList.isEmpty()) {
             return null;
         }
-        return stateSetList.get(0);
+        return buttonGroupList.get(0);
     }
 
     private ScoreGroup getDefaultScoreGroup() {

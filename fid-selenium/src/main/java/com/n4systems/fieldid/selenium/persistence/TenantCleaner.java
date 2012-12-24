@@ -110,7 +110,7 @@ public class TenantCleaner {
         removeAllForTenants(Project.class, tenantIds);
         removeAllForTenants(LineItem.class, tenantIds);
         removeAllForTenants(Order.class, tenantIds);
-        removeAllForTenants(StateSet.class, tenantIds);
+        removeAllForTenants(ButtonGroup.class, tenantIds);
         removeAllForTenants(NotificationSetting.class, tenantIds);
         removeAllExternalOrgsPointingToTenants(tenantIds);
         removeAllForTenants(EventTypeGroup.class, tenantIds);

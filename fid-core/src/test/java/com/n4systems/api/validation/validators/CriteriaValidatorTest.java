@@ -46,7 +46,7 @@ public class CriteriaValidatorTest {
 		Map<String, Object> validationContext = new HashMap<String, Object>();
 	
 		ComboBoxCriteria comboBoxCriteria = ComboBoxCriteriaBuilder.aComboBoxCriteria().withDisplayText(COMBO_TITLE).build();
-		OneClickCriteria oneClickCriteria = OneClickCriteriaBuilder.aCriteria().withStateSet(StateSetBuilder.aStateSet().build()).withDisplayText(ONE_CLICK_TITLE).build();
+		OneClickCriteria oneClickCriteria = OneClickCriteriaBuilder.aCriteria().withButtonGroup(ButtonGroupBuilder.aButtonGroup().build()).withDisplayText(ONE_CLICK_TITLE).build();
 		DateFieldCriteria dateFieldCriteria = new DateFieldCriteriaBuilder(DATE_TITLE).build();
 		SelectCriteria selectCriteria = new SelectCriteriaBuilder(SELECT_TITLE).withOptions("hello", "goodbye"). build();
 		TextFieldCriteria textFieldCriteria = new TextFieldCriteriaBuilder(TEXT_FIELD_TITLE).build();

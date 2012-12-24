@@ -1,11 +1,6 @@
 package com.n4systems.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "oneclick_criteriaresults")
@@ -13,29 +8,31 @@ import javax.persistence.Table;
 public class OneClickCriteriaResult extends CriteriaResult {
 
 	@ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=false)
-	private State state;
+    @JoinColumn(name="state_id")
+    // Migrating this to button_id would be very difficult due to the size of the data.... consider for later.
+	private Button button;
 
-	public State getState() {
-		return state;
+	public Button getButton() {
+		return button;
 	}
 
-	public void setState(State state) {
-		this.state = state;
+	public void setButton(Button button) {
+		this.button = button;
 	}
 
 	@Override
 	public EventResult getResult() {
-		return ((OneClickCriteria)criteria).isPrincipal() ? state.getEventResult() : null;
+		return ((OneClickCriteria)criteria).isPrincipal() ? button.getEventResult() : null;
 	}
 
 	@Override
 	public String getResultString() {
-		return state != null ? state.getDisplayText() : "";
+		return button != null ? button.getDisplayText() : "";
 	}
 
 	@Override
 	public String toString() {
-		return super.toString() + "[state=" + state + "]";
+		return super.toString() + "[button=" + button + "]";
 	}
 	
 }

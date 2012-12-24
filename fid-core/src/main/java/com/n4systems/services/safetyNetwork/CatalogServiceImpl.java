@@ -7,17 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.EventType;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -205,8 +196,8 @@ public class CatalogServiceImpl implements CatalogService {
 		return persistenceManager.find(EventType.class, eventTypeId, getTenant().getId(), "supportedProofTests", "eventForm.sections", "infoFieldNames");
 	}
 
-	public Collection<StateSet> getStateSetsUsedIn(Set<Long> eventTypeIds) {
-		Set<StateSet> originalStateSets = new HashSet<StateSet>();
+	public Collection<ButtonGroup> getStateSetsUsedIn(Set<Long> eventTypeIds) {
+		Set<ButtonGroup> originalButtonGroups = new HashSet<ButtonGroup>();
 		if (!eventTypeIds.isEmpty()) {
 			QueryBuilder<CriteriaSection> usedSectionsInEventTypesQuery = new QueryBuilder<CriteriaSection>(EventType.class, filter);
             usedSectionsInEventTypesQuery.setSelectArgument(new SimpleSelect("eventForm.sections", true));
@@ -219,12 +210,12 @@ public class CatalogServiceImpl implements CatalogService {
                 for (Criteria criteria : section.getCriteria()) {
                     if (criteria instanceof OneClickCriteria) {
                         OneClickCriteria oneClickCriteria = (OneClickCriteria) criteria;
-                        originalStateSets.add(oneClickCriteria.getStates());
+                        originalButtonGroups.add(oneClickCriteria.getButtonGroup());
                     }
                 }
             }
 		}
-		return originalStateSets;
+		return originalButtonGroups;
 	}
 
 	public AutoAttributeCriteria getCriteriaFor(Long assetTypeId) {

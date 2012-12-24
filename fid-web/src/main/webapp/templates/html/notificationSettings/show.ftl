@@ -54,7 +54,7 @@
 									<tr>
 										<td class="criteriaName"><label>${criteria.displayName}</label></td>
 										<td class="buttonGroupIcons">
-											<#assign states=criteria.states.states/>
+											<#assign buttons=criteria.buttonGroup.buttons/>
 											<#include "../buttonGroupCrud/_buttonGroup.ftl"/>
 										</td>
 										<td>

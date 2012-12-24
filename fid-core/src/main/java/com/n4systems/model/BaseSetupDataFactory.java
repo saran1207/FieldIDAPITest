@@ -50,32 +50,32 @@ public class BaseSetupDataFactory {
 		return eventTypeGroup;
 	}
 	
-	private State createState(String displayText, String buttonName, EventResult eventResult) {
-		State state = new State();
-		state.setTenant(tenant);
-		state.setButtonName(buttonName);
-		state.setDisplayText(displayText);
-		state.setEventResult(eventResult);
-		return state;
+	private Button createState(String displayText, String buttonName, EventResult eventResult) {
+		Button button = new Button();
+		button.setTenant(tenant);
+		button.setButtonName(buttonName);
+		button.setDisplayText(displayText);
+		button.setEventResult(eventResult);
+		return button;
 	}
 	
-	public StateSet createPassFailStateSet() {
-		StateSet stateSet = new StateSet();
-		stateSet.setTenant(tenant);
-		stateSet.setName("Pass, Fail");
-		stateSet.getStates().add(createState("Pass", "btn0", EventResult.PASS));
-		stateSet.getStates().add(createState("Fail", "btn1", EventResult.FAIL));
-		return stateSet;
+	public ButtonGroup createPassFailStateSet() {
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.setTenant(tenant);
+		buttonGroup.setName("Pass, Fail");
+		buttonGroup.getButtons().add(createState("Pass", "btn0", EventResult.PASS));
+		buttonGroup.getButtons().add(createState("Fail", "btn1", EventResult.FAIL));
+		return buttonGroup;
 	}
 	
-	public StateSet createNAPassFailStateSet() {
-		StateSet stateSet = new StateSet();
-		stateSet.setTenant(tenant);
-		stateSet.setName("NA, Pass, Fail");
-		stateSet.getStates().add(createState("NA", "btn2", EventResult.NA));
-		stateSet.getStates().add(createState("Pass", "btn0", EventResult.PASS));
-		stateSet.getStates().add(createState("Fail", "btn1", EventResult.FAIL));
-		return stateSet;
+	public ButtonGroup createNAPassFailStateSet() {
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.setTenant(tenant);
+		buttonGroup.setName("NA, Pass, Fail");
+		buttonGroup.getButtons().add(createState("NA", "btn2", EventResult.NA));
+		buttonGroup.getButtons().add(createState("Pass", "btn0", EventResult.PASS));
+		buttonGroup.getButtons().add(createState("Fail", "btn1", EventResult.FAIL));
+		return buttonGroup;
 	}
 	
 	public List<AssetStatus> createAssetStatuses() {

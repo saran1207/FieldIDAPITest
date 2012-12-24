@@ -163,7 +163,7 @@ public class EventReportMapProducerTest {
         OneClickCriteriaResult criteriaResult = OneClickCriteriaResultBuilder.aCriteriaResult().state(StateBuilder.aState().build()).build();
         String instructionsHtml = "<body><p>invalidHtml<img src=\"http://www.foo.bar\">IMAGE</img></body>";
         String expected = "invalidHtmlIMAGE";
-        OneClickCriteria oneClickCriteria = OneClickCriteriaBuilder.aCriteria().withDisplayText("hello").withStateSet(StateSetBuilder.aStateSet().build()).withDisplayText("").withInstructions(instructionsHtml).build();
+        OneClickCriteria oneClickCriteria = OneClickCriteriaBuilder.aCriteria().withDisplayText("hello").withButtonGroup(ButtonGroupBuilder.aButtonGroup().build()).withDisplayText("").withInstructions(instructionsHtml).build();
         criteriaResult.setCriteria(oneClickCriteria);
 
         CriteriaSection[] sections = {

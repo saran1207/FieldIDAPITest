@@ -257,8 +257,8 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
 
-    public StateSetBuilder aStateSet() {
-        StateSetBuilder builder = StateSetBuilder.aStateSet();
+    public ButtonGroupBuilder aStateSet() {
+        ButtonGroupBuilder builder = ButtonGroupBuilder.aButtonGroup();
         return createPersistentBuilder(builder);
     }
 
@@ -373,11 +373,11 @@ public class Scenario {
         }
     }
 
-    public StateSet buttonGroup(Tenant tenant, String name) {
-        Query query = trans.getEntityManager().createQuery("from " + StateSet.class.getName() + " where tenant.id = :tenantId and name = :name");
+    public ButtonGroup buttonGroup(Tenant tenant, String name) {
+        Query query = trans.getEntityManager().createQuery("from " + ButtonGroup.class.getName() + " where tenant.id = :tenantId and name = :name");
         query.setParameter("tenantId", tenant.getId());
         query.setParameter("name", name);
-        return (StateSet) query.getSingleResult();
+        return (ButtonGroup) query.getSingleResult();
     }
 
     public StateBuilder failState() {

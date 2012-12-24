@@ -1,12 +1,12 @@
 package com.n4systems.ws.model.eventtype;
 
-import com.n4systems.model.State;
+import com.n4systems.model.Button;
 import com.n4systems.ws.model.WsModelConverter;
 
-public class WsStateConverter extends WsModelConverter<State, WsState> {
+public class WsStateConverter extends WsModelConverter<Button, WsState> {
 
 	@Override
-	public WsState fromModel(State model) {
+	public WsState fromModel(Button model) {
 		WsState wsModel = new WsState();
 		wsModel.setId(model.getId());
 		wsModel.setDisplayText(model.getDisplayText());

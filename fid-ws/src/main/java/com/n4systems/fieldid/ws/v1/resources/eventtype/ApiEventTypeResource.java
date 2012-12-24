@@ -34,8 +34,8 @@ import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.ScoreGroup;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
-import com.n4systems.model.State;
-import com.n4systems.model.StateSet;
+import com.n4systems.model.Button;
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasureCriteria;
 
@@ -125,7 +125,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 			apiCriteria = new ApiNumberFieldCriteria(((NumberFieldCriteria) criteria).getDecimalPlaces());
 		} else if (criteria instanceof OneClickCriteria) {
 			OneClickCriteria oneClick = (OneClickCriteria) criteria;
-			apiCriteria = new ApiOneClickCriteria(oneClick.isPrincipal(), convertStateSet(oneClick.getStates()));
+			apiCriteria = new ApiOneClickCriteria(oneClick.isPrincipal(), convertStateSet(oneClick.getButtonGroup()));
 		} else if (criteria instanceof ScoreCriteria) {
 			apiCriteria = new ApiScoreCriteria(convertScoreGroup(((ScoreCriteria) criteria).getScoreGroup()));
 		} else if (criteria instanceof SelectCriteria) {
@@ -144,16 +144,16 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		return apiCriteria;
 	}
 
-	private List<ApiOneClickState> convertStateSet(StateSet stateSet) {
+	private List<ApiOneClickState> convertStateSet(ButtonGroup buttonGroup) {
 		List<ApiOneClickState> apiStates = new ArrayList<ApiOneClickState>();
-		for (State state : stateSet.getStates()) {
+		for (Button button : buttonGroup.getButtons()) {
 			ApiOneClickState apiState = new ApiOneClickState();
-			apiState.setSid(state.getId());
-			apiState.setModified(state.getModified());
-			apiState.setActive(!state.isRetired());
-			apiState.setDisplayText(state.getDisplayText());
-			apiState.setButtonName(state.getButtonName());
-			apiState.setStatus(ApiEventStatus.convert(state.getEventResult()));
+			apiState.setSid(button.getId());
+			apiState.setModified(button.getModified());
+			apiState.setActive(!button.isRetired());
+			apiState.setDisplayText(button.getDisplayText());
+			apiState.setButtonName(button.getButtonName());
+			apiState.setStatus(ApiEventStatus.convert(button.getEventResult()));
 			apiStates.add(apiState);
 		}
 		return apiStates;

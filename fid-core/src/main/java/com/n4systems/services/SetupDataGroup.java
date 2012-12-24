@@ -11,8 +11,8 @@ import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Project;
-import com.n4systems.model.State;
-import com.n4systems.model.StateSet;
+import com.n4systems.model.Button;
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.location.PredefinedLocation;
@@ -35,7 +35,7 @@ public enum SetupDataGroup {
 	 * exception!
 	 */
 	PRODUCT_TYPE	(AssetType.class, AssetStatus.class, AssetTypeGroup.class, AssociatedEventType.class, AssetTypeSchedule.class),
-	INSPECTION_TYPE	(EventType.class, State.class, StateSet.class, EventBook.class, CommentTemplate.class, UnitOfMeasure.class),
+	INSPECTION_TYPE	(EventType.class, Button.class, ButtonGroup.class, EventBook.class, CommentTemplate.class, UnitOfMeasure.class),
 	AUTO_ATTRIBUTES	(AutoAttributeCriteria.class, AutoAttributeDefinition.class),
 	OWNERS			(PrimaryOrg.class, SecondaryOrg.class, CustomerOrg.class, DivisionOrg.class, OrgConnection.class),
 	JOBS			(Project.class),

@@ -1,5 +1,5 @@
 <#escape x as x?j_string >
-<#assign state_index=buttonIndex/>
+<#assign button_index=buttonIndex/>
 
 <#assign html>
 	<#include "/templates/html/buttonGroupCrud/_buttonForm.ftl"/>	

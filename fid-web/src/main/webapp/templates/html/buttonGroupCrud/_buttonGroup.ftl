@@ -1,9 +1,9 @@
 <ul class="buttonGroup">
-	<#list states as state >
-		<#if !state.retired >
+	<#list buttons as button >
+		<#if !button.retired >
 			<li>
-				<div class="eventButton"><img src="<@s.url value="/images/eventButtons/${state.buttonName}.png"/>"/></div> 
-				<div>${state.displayName}</div>
+				<div class="eventButton"><img src="<@s.url value="/images/eventButtons/${button.buttonName}.png"/>"/></div>
+				<div>${button.displayName}</div>
 			</li>
 		</#if>
 	</#list>

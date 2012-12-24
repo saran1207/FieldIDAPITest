@@ -12,18 +12,18 @@ import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
-import com.n4systems.model.StateSet;
+import com.n4systems.model.ButtonGroup;
 
 public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<EventTypeFormPage> {
 
     @Override
     public void setupScenario(Scenario scenario) {
-        StateSet passFail = scenario.buttonGroup(scenario.defaultTenant(), "Pass, Fail");
-        scenario.aStateSet().named("Button Group 1").states(scenario.failState().build(), scenario.passState().build()).build();
-        scenario.aStateSet().named("Button Group 2").states(scenario.naState().build(), scenario.failState().build()).build();
+        ButtonGroup passFail = scenario.buttonGroup(scenario.defaultTenant(), "Pass, Fail");
+        scenario.aStateSet().named("Button Group 1").buttons(scenario.failState().build(), scenario.passState().build()).build();
+        scenario.aStateSet().named("Button Group 2").buttons(scenario.naState().build(), scenario.failState().build()).build();
 
-        Criteria oneClick1 = scenario.aOneClickCriteria().withDisplayText("oneclick1").withStateSet(passFail).build();
-        Criteria oneClick2 = scenario.aOneClickCriteria().withDisplayText("oneclick2").withStateSet(passFail).build();
+        Criteria oneClick1 = scenario.aOneClickCriteria().withDisplayText("oneclick1").withButtonGroup(passFail).build();
+        Criteria oneClick2 = scenario.aOneClickCriteria().withDisplayText("oneclick2").withButtonGroup(passFail).build();
 
         CriteriaSection mainSection = scenario.aCriteriaSection()
                 .withTitle("Main section")

@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.ScoreGroup;
-import com.n4systems.model.StateSet;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -60,8 +60,8 @@ public class CriteriaConfigurationPanel extends Panel {
 
     private CriteriaDetailsPanel createDetailsPanel(final Model<Criteria> criteriaModel) {
         return new CriteriaDetailsPanel("settings", criteriaModel) {
-            @Override protected void onStateSetSelected(StateSet stateSet) {
-                setPreviouslySelectedStateSet(stateSet);
+            @Override protected void onStateSetSelected(ButtonGroup buttonGroup) {
+                setPreviouslySelectedStateSet(buttonGroup);
             }
             @Override protected void onSetsResultSelected(boolean setsResult) {
                 setPreviousSetsResultValue(setsResult);
@@ -76,7 +76,7 @@ public class CriteriaConfigurationPanel extends Panel {
 
     protected void setPreviousSetsResultValue(boolean setsResult) { }
 
-    protected void setPreviouslySelectedStateSet(StateSet stateSet) { }
+    protected void setPreviouslySelectedStateSet(ButtonGroup buttonGroup) { }
 
     private IModel<?> getCssModel(final WebMarkupContainer button) {
         return new Model<String>() {

@@ -1,5 +1,5 @@
-<td>${stateSet.name}</td>
+<td>${buttonGroup.name}</td>
 <td>
-	<#assign states=stateSet.states/>
+	<#assign buttons=buttonGroup.buttons/>
 	<#include "_buttonGroup.ftl"/>
 </td>	
