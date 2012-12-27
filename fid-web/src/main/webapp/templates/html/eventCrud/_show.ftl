@@ -121,7 +121,19 @@
 			<span>${event.comments!}</span>
 		</#escape>
 	</p>
-	
+
+    <p>
+        <label><@s.text name="label.createdby"/></label>
+		<span>
+			<#if event.createdBy?exists >
+                <#assign user=event.createdBy >
+                <#include "_userName.ftl"/>
+                <@s.text name="label.on"/>
+            </#if>
+            ${action.formatDateTime(event.created)}
+		</span>
+    </p>
+
 	<p>
 		<label><@s.text name="label.modifiedby"/></label>
 		<span>
