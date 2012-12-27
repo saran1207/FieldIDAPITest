@@ -63,6 +63,7 @@ public class RichText extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/nicEdit/nicEdit-min.js");
+        response.renderJavaScriptReference("javascript/nicEdit/putSpinnersOverImages.js");
 
         Gson gson = new GsonBuilder().create();
         NicEditOptions o = getOptions();

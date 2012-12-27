@@ -2,12 +2,14 @@ package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.richText.RichText;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Criteria;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+
+import static ch.lambdaj.Lambda.on;
 
 public class InstructionsPanel extends Panel {
 
@@ -23,7 +25,7 @@ public class InstructionsPanel extends Panel {
 
         public InstructionsForm(String id, final Model<Criteria> criteriaModel) {
             super(id, criteriaModel);
-            add(text = new RichText("text", new PropertyModel<String>(criteriaModel, "instructions")) {
+            add(text = new RichText("text", ProxyModel.of(criteriaModel, on(Criteria.class).getInstructions())) {
                 @Override
                 protected String getImagePath() {
                     String path = (criteriaModel.getObject()==null) ? "empty" : criteriaModel.getObject().getId().toString();

@@ -112,6 +112,7 @@ public class CriteriaSectionEditPanel extends Panel {
                             target.add(instructionsContent);
                             String javascript = String.format(INSTRUCTIONS_JS_FORMAT, instructionsDialog.getTextAreaMarkupId(), instructionsContent.getMarkupId(), popup.getMarkupId(), item.getMarkupId(), popup.getMarkupId() );
                             target.appendJavaScript(javascript);
+                            target.appendJavaScript("putSpinnersOverImages();");
                         }
                         });
                     item.add(image);
