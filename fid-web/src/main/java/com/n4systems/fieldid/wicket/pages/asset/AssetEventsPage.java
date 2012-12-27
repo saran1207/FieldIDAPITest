@@ -83,7 +83,7 @@ public class AssetEventsPage extends AssetPage{
             mapLink.setVisible(false);
         }
 
-        add(eventPanel = new EventListPanel("eventPanel", assetModel, getEventStates()));
+        add(eventPanel = new EventListPanel("eventPanel", assetModel, getWorkflowStates()));
         add(mapPanel = new EventMapPanel("mapPanel", assetModel));
         eventPanel.setOutputMarkupPlaceholderTag(true);
         mapPanel.setOutputMarkupPlaceholderTag(true);
@@ -122,14 +122,14 @@ public class AssetEventsPage extends AssetPage{
 	}
 
     private void updateEventListPanel(AjaxRequestTarget target) {
-        eventPanel.getDataProvider().setStates(getEventStates());
+        eventPanel.getDataProvider().setStates(getWorkflowStates());
         eventPanel.getDefaultModel().detach();
         target.add(eventPanel);
         target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
 
     }
     
-    private List<Event.WorkflowState> getEventStates() {
+    private List<Event.WorkflowState> getWorkflowStates() {
         List<Event.WorkflowState> states = new ArrayList<Event.WorkflowState>();
         if(open)
             states.add(Event.WorkflowState.OPEN);

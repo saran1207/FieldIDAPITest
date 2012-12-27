@@ -77,7 +77,7 @@ public class EventBuilder extends BaseBuilder<Event> {
         this.eventStatus = eventStatus;
 	}
 
-    public EventBuilder withEventState(Event.WorkflowState state) {
+    public EventBuilder withWorkflowState(Event.WorkflowState state) {
         return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, state, dueDate, eventStatus));
     }
 

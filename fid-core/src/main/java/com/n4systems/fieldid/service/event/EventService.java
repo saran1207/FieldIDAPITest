@@ -581,8 +581,8 @@ public class EventService extends FieldIdPersistenceService {
         String minDateSelect = String.format("SELECT MIN(iSub.dueDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.asset.id = :iSubAssetId AND iSub.type.id = :iSubTypeId AND iSub.dueDate > :iSubCompletedDate ", Event.class.getName());
 
         if (openOnly) {
-            minDateSelect += " AND iSub.workflowState = :iSubEventState";
-            latestClause.getParams().put("iSubEventState", Event.WorkflowState.OPEN);
+            minDateSelect += " AND iSub.workflowState = :iSubEventWorkflowState";
+            latestClause.getParams().put("iSubEventWorkflowState", Event.WorkflowState.OPEN);
         }
 
         latestClause.setClause(String.format("i.dueDate = (%s)", minDateSelect));

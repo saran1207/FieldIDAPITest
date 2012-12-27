@@ -57,7 +57,7 @@ public class ReportingFilterPanel extends Panel {
             }
         });
 
-        FidDropDownChoice<WorkflowState> workflowStateSelect = new FidDropDownChoice<WorkflowState>("eventStateSelect", workflowStateModel, Arrays.asList(WorkflowState.values()), new ListableLabelChoiceRenderer<WorkflowState>());
+        FidDropDownChoice<WorkflowState> workflowStateSelect = new FidDropDownChoice<WorkflowState>("workflowStateSelect", workflowStateModel, Arrays.asList(WorkflowState.values()), new ListableLabelChoiceRenderer<WorkflowState>());
         workflowStateSelect.setNullValid(false);
         add(workflowStateSelect);
 
@@ -65,7 +65,7 @@ public class ReportingFilterPanel extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 eventStatusAndDateRangePanel.repaintComponents(target);
-                eventStatusAndDateRangePanel.onEventStateChanged(target);
+                eventStatusAndDateRangePanel.onWorkflowStateChanged(target);
             }
         });
 
@@ -109,7 +109,7 @@ public class ReportingFilterPanel extends Panel {
         PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(model, "dateRange");
         PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(model, "dueDateRange");
         return new EventStatusAndDateRangePanel(id, workflowStateModel, includeDueDateRangeModel, completedDateRange, dueDateRange) {
-            @Override protected void onEventStateChanged(AjaxRequestTarget target) {
+            @Override protected void onWorkflowStateChanged(AjaxRequestTarget target) {
                 model.getObject().clearDateRanges();
             }
         };

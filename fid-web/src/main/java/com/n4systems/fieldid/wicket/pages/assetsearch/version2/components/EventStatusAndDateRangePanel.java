@@ -100,6 +100,6 @@ public class EventStatusAndDateRangePanel extends Panel {
         target.add(includeDueDateRangeContainer);
     }
 
-    protected void onEventStateChanged(AjaxRequestTarget target) {}
+    protected void onWorkflowStateChanged(AjaxRequestTarget target) {}
 
 }
