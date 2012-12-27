@@ -1,32 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
@@ -50,12 +23,22 @@ import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.util.*;
 
 @Component
 @Path("asset")
@@ -154,7 +137,25 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 		logger.info("Saved Asset " + asset.getIdentifier());
 	}
-	
+
+	@PUT
+	@Path("multi")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void multiAddAsset(ApiMultiAddAsset multiAddAsset) {
+		ApiAsset assetTemplate = multiAddAsset.getAssetTemplate();
+		for (ApiAssetIdentifiers identifiers: multiAddAsset.getIdentifiers()) {
+			assetTemplate.setIdentifier(identifiers.getIdentifier());
+			assetTemplate.setRfidNumber(identifiers.getRfidNumber());
+			assetTemplate.setCustomerRefNumber(identifiers.getCustomerRefNumber());
+
+			logger.info("Creating Asset " + assetTemplate.getIdentifier());
+			createAsset(assetTemplate);
+		}
+
+		logger.info("Saved " + multiAddAsset.getIdentifiers().size() + " Assets ");
+	}
+
 	private Asset createAsset(ApiAsset apiAsset) {
 		Asset asset = new Asset();
 		converApiAsset(apiAsset, asset);
