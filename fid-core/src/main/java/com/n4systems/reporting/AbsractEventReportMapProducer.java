@@ -221,20 +221,11 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                         	stateView.setState(getDateStringValue((DateFieldCriteriaResult)result));
                         } else if (result instanceof ScoreCriteriaResult) {
                             stateView.setState(getScoreStringValue((ScoreCriteriaResult) result));
-                            stateView.setLabel(((ScoreCriteria)criteria).getScoreGroup().getDisplayName());
+                            stateView.setLabel(((ScoreCriteria) criteria).getScoreGroup().getDisplayName());
                         }
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
-						CriteriaResultImageView criteriaResultImageView;
-						for (CriteriaResultImage resultImage: result.getCriteriaImages()) {
-							try {
-								criteriaResultImageView = new CriteriaResultImageView();
-								criteriaResultImageView.setComments(resultImage.getComments());
-								criteriaResultImageView.setImage(s3Service.openCriteriaResultImageMedium(resultImage));
-								stateView.getCriteriaImages().add(criteriaResultImageView);
-							} catch (IOException e) {
-								throw new RuntimeException(e);
-							}
-						}
+                        populateResultImages(stateView, result);
+                        populateResultActions(stateView, result);
                         criteriaViews.add(stateView);
                     }
                 }
@@ -243,6 +234,32 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
 		return criteriaViews;
 	}
+
+    private void populateResultActions(CriteriaStateView stateView, CriteriaResult result) {
+        for (Event action : result.getActions()) {
+            CriteriaResultActionView actionView = new CriteriaResultActionView();
+            actionView.setAssignee(action.getAssignee() == null ? null : action.getAssignee().getFullName());
+            actionView.setDueDate(action.getDueDate() != null ? null : formatDate(action.getDueDate(), true));
+            actionView.setEventType(action.getEventType().getName());
+            actionView.setWorkflowState(action.getWorkflowState().getLabel());
+            actionView.setNotes(action.getNotes());
+            actionView.setPriority(action.getPriority().getDisplayName());
+            stateView.getCriteriaActions().add(actionView);
+        }
+    }
+
+    private void populateResultImages(CriteriaStateView stateView, CriteriaResult result) {
+        for (CriteriaResultImage resultImage: result.getCriteriaImages()) {
+            try {
+                CriteriaResultImageView criteriaResultImageView = new CriteriaResultImageView();
+                criteriaResultImageView.setComments(resultImage.getComments());
+                criteriaResultImageView.setImage(s3Service.openCriteriaResultImageMedium(resultImage));
+                stateView.getCriteriaImages().add(criteriaResultImageView);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     private Map<String,Double> convertSectionScoreMapToNameScoreMap(Map<CriteriaSection,Double> sectionMap) {
         Map<String,Double> convertedMap = new HashMap<String, Double>();

@@ -25,6 +25,7 @@ public class CriteriaStateView implements Serializable {
     private String type;
     private String help;
 	private List<CriteriaResultImageView> criteriaImages = new ArrayList<CriteriaResultImageView>();
+    private List<CriteriaResultActionView> criteriaActions = new ArrayList<CriteriaResultActionView>();
     private String label;
 
 	public CriteriaStateView() {}
@@ -47,6 +48,9 @@ public class CriteriaStateView implements Serializable {
 	}
 
     private String stripHtml(String htmlText) {
+        if (htmlText == null) {
+            return null;
+        }
         Document doc = Jsoup.parseBodyFragment(htmlText);
         return doc.text();
     }
@@ -143,6 +147,14 @@ public class CriteriaStateView implements Serializable {
 	public void setCriteriaImages(List<CriteriaResultImageView> criteriaImages) {
 		this.criteriaImages = criteriaImages;
 	}
+
+    public List<CriteriaResultActionView> getCriteriaActions() {
+        return criteriaActions;
+    }
+
+    public void setCriteriaActions(List<CriteriaResultActionView> criteriaActions) {
+        this.criteriaActions = criteriaActions;
+    }
 
     public Double getSectionScorePercentage() {
         return sectionScorePercentage;
