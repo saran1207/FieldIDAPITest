@@ -1,17 +1,16 @@
 package com.n4systems.fieldid.service.asset;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.taskscheduling.task.RecurringSchedulesTask;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +22,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
     private static final Logger logger= Logger.getLogger(AssetTypeService.class);
 
     private @Autowired AsyncService asyncService;
+    private @Autowired RecurringScheduleService recurringScheduleService;
 
     public List<AssetTypeGroup> getAssetTypeGroupsByOrder() {
         QueryBuilder<AssetTypeGroup> queryBuilder = createUserSecurityBuilder(AssetTypeGroup.class);
@@ -48,6 +48,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
     // NOTE : typically this call is done synchronously and optionally, scheduleInitialEvents is called after. (typically asynchronously because it can be slow).
     public void addRecurringEvent(AssetType assetType, final RecurringAssetTypeEvent recurringEvent) {
         recurringEvent.setTenant(assetType.getTenant());
+        persistenceService.save(recurringEvent.getRecurrence());
         persistenceService.save(recurringEvent);
         // NOTE that two things happens here.  a RecurringAssetTypeEvent is saved AND some events are initially created.
         // the first part is quick but the second part is done asynchronously because it can be slow.
@@ -78,12 +79,10 @@ public class AssetTypeService extends FieldIdPersistenceService {
         }
 
         List<Asset> assets = persistenceService.findAll(builder);
-        LocalDate endDate = LocalDate.now().plusDays(RecurringSchedulesTask.RECURRING_EVENT_BUFFER_SIZE);
 
         // this code is a candidate for "WEB-3129 : Refactor event creation to common service."
         for (Asset asset:assets) {
-            Recurrence recurrence = recurringEvent.getRecurrence();
-            for (LocalDateTime nextDate:recurrence.getScheduledTimes(LocalDate.now(), endDate)) {
+            for (LocalDateTime nextDate:recurringScheduleService.getBoundedScheduledTimesIterator(recurringEvent.getRecurrence())) {
                 Event event = new Event();
                 event.setDueDate(nextDate.toDate());
                 event.setWorkflowState(Event.WorkflowState.OPEN);

@@ -1,12 +1,15 @@
 package com.n4systems.fieldid.wicket.pages.assettype;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.task.AsyncService;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.model.EntityModel;
@@ -19,6 +22,7 @@ import com.n4systems.fieldid.wicket.util.NullCoverterModel;
 import com.n4systems.model.*;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.services.date.DateService;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -39,13 +43,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
@@ -55,11 +56,11 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
     private @SpringBean AssetTypeService assetTypeService;
     private @SpringBean AsyncService asyncService;
+    private @SpringBean DateService dateService;
 
     protected Long assetTypeId;
     protected IModel<AssetType> assetTypeModel;
     private RefreshingView<RecurringAssetTypeEvent> recurringEventsList;
-    private static final String SHOW_MESSAGE_JS  = "$('.fade-out').show();setTimeout( function(){ $('.fade-out').fadeOut(2000);}, 3000);";
 
     public RecurringAssetTypeEventsPage(PageParameters params) {
         super(params);
@@ -130,14 +131,15 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     private class RecurringEventsForm extends Form {
 
         // private fields used to back form components.
-        private RecurrenceTime time = RecurrenceTime.MIDNIGHT;
+        private RecurrenceTimeOfDay time = RecurrenceTimeOfDay.NINE_AM;
+        private List<RecurrenceTimeOfDay> times = Lists.newArrayList(RecurrenceTimeOfDay.NINE_AM);
         private EventType eventType = null;
         private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
         private BaseOrg owner;
         private PredefinedLocation location;
-        private Date dateTime = LocalDate.now().toDate();
-        Component timePicker;
-        Component dateTimepicker;
+        private Date dateTime = dateService.now().toDate();
+        private TimeContainer timePicker;
+        private Component dateTimepicker;
 
         public RecurringEventsForm(String id) {
             super(id);
@@ -201,7 +203,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                     RecurringAssetTypeEvent event = (RecurringAssetTypeEvent) item.getDefaultModelObject();
                     item.add(new Label("recurrence", new EnumLabelModel(event.getRecurrence().getType())));
                     item.add(new Label("org", new NullCoverterModel(new PropertyModel<String>(item.getDefaultModelObject(), "owner.name"), "---")));
-                    item.add(new Label("time", new PropertyModel<String>(item.getDefaultModelObject(), "recurrence.displayTime")));
+                    item.add(new Label("time", new DisplayTimeModel(new PropertyModel<Set<RecurrenceTime>>(item.getDefaultModelObject(), "recurrence.times"))));
                     item.add(new AjaxLink("remove") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
@@ -230,30 +232,65 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
         private RecurringAssetTypeEvent createNewEventFromForm() {
             Recurrence recurrence = null;
-            if ( type.requiresDate() ) {
-                DateTime date = new DateTime(dateTime);
-                recurrence = new Recurrence(type,date.getHourOfDay(), date.getMinuteOfHour(), new LocalDate(dateTime).toDate());
-            } else {
-                recurrence = new Recurrence(type,time.getHour(),time.getMinutes());
-            }
-            RecurringAssetTypeEvent newEvent = new RecurringAssetTypeEvent(getAssetType(), eventType, recurrence);
+            RecurringAssetTypeEvent newEvent = new RecurringAssetTypeEvent(getAssetType(), eventType, createRecurrence());
             newEvent.setOwner(owner);
             newEvent.setTenant(assetTypeModel.getObject().getTenant());
             return newEvent;
         }
 
-        private Component createTimePicker() {
-            WebMarkupContainer container = (WebMarkupContainer) new WebMarkupContainer("timeContainer").setOutputMarkupId(true);
-            Component dropDown = new FidDropDownChoice<RecurrenceTime>("time", new PropertyModel<RecurrenceTime>(this, "time"), Arrays.asList(RecurrenceTime.values()), new EnumPropertyChoiceRenderer<RecurrenceTime>()).setNullValid(true).setOutputMarkupId(true);
-            container.add(dropDown);
-            container.setOutputMarkupPlaceholderTag(true);
-            return container;
+        private Recurrence createRecurrence() {
+            if ( type.requiresDate() ) {
+                return new Recurrence(type).withDayAndTime(dateTime);
+            } else if (type.canHaveMultipleTimes()) {
+                return new Recurrence(type).withTimes(times);
+            } else {
+                return new Recurrence(type).withTime(time);
+            }
+        }
+
+        private TimeContainer createTimePicker() {
+            return new TimeContainer("timeContainer");
         }
 
         private void updateTimeComponents(RecurrenceType recurrenceType) {
             dateTimepicker.setVisible(recurrenceType.requiresDate());
             timePicker.setVisible(!recurrenceType.requiresDate());
+            timePicker.updateComponents(recurrenceType);
         }
+
+
+        class TimeContainer extends WebMarkupContainer {
+
+            private Component singleTime;
+            private Component multipleTime;
+
+            public TimeContainer(String id) {
+                super(id);
+                setOutputMarkupId(true);
+                setOutputMarkupPlaceholderTag(true);
+
+                singleTime = new FidDropDownChoice<RecurrenceTimeOfDay>("time", new PropertyModel<RecurrenceTimeOfDay>(RecurringEventsForm.this, "time"), Arrays.asList(RecurrenceTimeOfDay.values()), new EnumPropertyChoiceRenderer<RecurrenceTimeOfDay>()).setNullValid(true).setOutputMarkupId(true);
+                add(singleTime);
+                multipleTime = new MultiSelectDropDownChoice<RecurrenceTimeOfDay>("multipleTimes", new PropertyModel<List<RecurrenceTimeOfDay>>(RecurringEventsForm.this, "times"), Arrays.asList(RecurrenceTimeOfDay.values()), new EnumPropertyChoiceRenderer<RecurrenceTimeOfDay>()).setOutputMarkupId(true);
+                add(multipleTime);
+
+                singleTime.add(new UpdateComponentOnChange());
+                multipleTime.add(new UpdateComponentOnChange());
+            }
+
+            public void updateComponents(RecurrenceType recurrenceType) {
+                toggle(recurrenceType.canHaveMultipleTimes());
+            }
+
+            private void toggle(boolean b) {
+                multipleTime.setVisible(b);
+                singleTime.setVisible(!b);
+            }
+
+        }
+
+
+
     }
 
 
@@ -291,6 +328,42 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 result.add(Model.of(recurringEvent));
             }
             return result;
+        }
+
+    }
+
+
+    class DisplayTimeModel extends Model<String> {
+
+        private PropertyModel<Set<RecurrenceTime>> model;
+
+        DisplayTimeModel(PropertyModel<Set<RecurrenceTime>> model) {
+            this.model = model;
+        }
+
+        @Override
+        public String getObject() {
+            List<String> result = Lists.newArrayList();
+            Iterator<RecurrenceTime> iterator = model.getObject().iterator();
+            while (iterator.hasNext()) {
+                result.add(convertTimeToString(iterator.next()));
+            }
+            return Joiner.on(",").join(result);
+        }
+
+        protected String convertTimeToString(RecurrenceTime time) {
+            String monthDay = (time.hasDay()) ?
+                    new LocalDate().withMonthOfYear(time.getMonth()).withDayOfMonth(time.getDayOfMonth()).toString("MMM d") + " " :
+                    "";
+
+            LocalTime localTime = new LocalTime().withHourOfDay(time.getHour()).withMinuteOfHour(time.getMinute());
+
+            String clock = localTime.toString("K:mm a");
+
+            if (time.isMidnight()) {
+                clock = time.hasDay() ? "" : "12:00 AM";  // workaround formatter which is military.
+            }
+            return monthDay + clock;
         }
 
     }

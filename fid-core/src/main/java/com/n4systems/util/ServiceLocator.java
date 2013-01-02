@@ -12,6 +12,7 @@ import com.n4systems.ejb.wrapper.PredefinedLocationManagerEJBContainer;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
+import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.mail.MailManager;
 import com.n4systems.mail.MailManagerFactory;
@@ -31,8 +32,8 @@ public class ServiceLocator implements ApplicationContextAware {
 
 	private static ApplicationContext applicationContext;
 
-	
-	// TODO : make all of these returned values spring objects. 
+
+    // TODO : make all of these returned values spring objects.
 	//  Caveat : all spring beans should NOT be stateful..the previous implementation returned new instances but using getBean() 
 	//   will just return an existing one. 
 	//  currently, the app still uses legacy ejbContainers that handle their transactions themselves but in the future these methods should
@@ -132,7 +133,11 @@ public class ServiceLocator implements ApplicationContextAware {
         return getBean(EventService.class);
     }
 
-	public static SecurityContext getSecurityContext() {
+    public static RecurringScheduleService getRecurringScheduleService() {
+        return getBean(RecurringScheduleService.class);
+    }
+
+    public static SecurityContext getSecurityContext() {
 		return getBean(SecurityContext.class);
 	}
 
@@ -151,7 +156,7 @@ public class ServiceLocator implements ApplicationContextAware {
 		}
 	}
 
-	@Override
+    @Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		ServiceLocator.applicationContext = applicationContext;
 	}

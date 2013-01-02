@@ -1,6 +1,6 @@
 package com.n4systems.util.chart;
 
-import com.n4systems.fieldid.FieldIdUnitTest;
+import com.n4systems.fieldid.junit.FieldIdUnitTest;
 import com.n4systems.model.utils.DateRange;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeUtils;

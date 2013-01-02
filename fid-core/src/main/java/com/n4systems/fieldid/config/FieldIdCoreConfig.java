@@ -36,6 +36,7 @@ import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
+import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.schedule.ScheduleService;
 import com.n4systems.fieldid.service.search.*;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
@@ -433,10 +434,17 @@ public class FieldIdCoreConfig {
     public DateService dateService() {
         return new DateService();
     }
-    
+
     @Bean
     public PriorityCodeService priorityCodeService() {
         return new PriorityCodeService();
     }
+
+    @Bean
+    public RecurringScheduleService recurringScheduleService() {
+        return new RecurringScheduleService();
+    }
+
+
 }
 

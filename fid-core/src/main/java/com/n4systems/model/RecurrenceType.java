@@ -1,11 +1,10 @@
  package com.n4systems.model;
 
  import com.google.common.base.Preconditions;
- import com.google.common.collect.Lists;
-import org.joda.time.*;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
 
- import java.util.Date;
- import java.util.List;
+ import java.util.EnumSet;
 
  public enum RecurrenceType {
 
@@ -20,41 +19,16 @@ import org.joda.time.*;
      MONTHLY_1ST,
      MONTHLY_15TH,
      MONTHLY_LAST,
+     WEEKDAYS,
      ANNUALLY;
 
+     static private EnumSet<RecurrenceType> monthly = EnumSet.of(MONTHLY_1ST,MONTHLY_15TH,MONTHLY_LAST);
+     static private EnumSet<RecurrenceType> weekly = EnumSet.of(WEEKLY_MONDAY,WEEKLY_TUESDAY,WEEKLY_WEDNESDAY,WEEKLY_THURSDAY,WEEKLY_FRIDAY,WEEKLY_SATURDAY,WEEKLY_SUNDAY);
+
      RecurrenceType() {
-
-     }
-
-     public LocalDate getNext(LocalDate day, Date date) {
-         if (date==null || !requiresDate()) {
-             return getNext(day);
-         } else {
-             return getNext(day, new MonthDay(date));
-         }
-     }
-
-     public LocalDate getNext(LocalDate day, MonthDay triggerDate) {
-         Preconditions.checkState(requiresDate() && triggerDate!=null, "use getNext(day) if NO date required for recurrence");
-         // strip away all the stuff we don't need in our date, we are only concerned with month day.
-         //  e.g.   "July 1"...strip away July 1,2012 08:43.89s
-         int year = day.getYear();
-         List<LocalDate> triggerDates = Lists.newArrayList();
-         LocalDate d = new LocalDate().withYear(year).withMonthOfYear(triggerDate.getMonthOfYear()).withDayOfMonth(triggerDate.getDayOfMonth());
-
-         while (true) {
-            List<LocalDate> triggerDatesInYear = getTriggerDatesInYear(year, triggerDate);
-            for (LocalDate triggerDay:triggerDatesInYear) {
-                 if (triggerDay.isAfter(day)) {
-                     return triggerDay;
-                 }
-             }
-             year++;
-         }
      }
 
      public LocalDate getNext(LocalDate day) {
-         Preconditions.checkState(requiresDate()==false, "use getNext(day, MonthDay) if date required for recurrence");
          switch (this) {
              case DAILY :
                  return day.plusDays(1);
@@ -78,27 +52,27 @@ import org.joda.time.*;
                  return nextMonth(day, 15);
              case MONTHLY_LAST:
                  return nextMonth(day,-1);
+             case WEEKDAYS:
+                 return day.getDayOfWeek()==DateTimeConstants.FRIDAY ? day.plusDays(3) :
+                         day.getDayOfWeek()==DateTimeConstants.SATURDAY ? day.plusDays(2) :
+                         day.plusDays(1);
              case ANNUALLY:
-                 return null;
+                 return nextYear(day);
+             // NOTE : ANNUALLY should be handled via getNext(day, triggerDate) method, never via this method!
              default:
                  throw new IllegalStateException("Recurrence " + this.name() + " not supported");
          }
      }
 
-     private List<LocalDate> getTriggerDatesInYear(int thisYear, MonthDay triggerDate) {
-         List<LocalDate> triggerDates = Lists.newArrayList();
-         switch (this) {
-             case ANNUALLY:
-                 return Lists.newArrayList(new LocalDate().withYear(thisYear).withMonthOfYear(triggerDate.getMonthOfYear()).withDayOfMonth(triggerDate.getDayOfMonth()));
-             // SEMI-ANNUALLY:
-             //   return [ triggerDay, triggerDay+6months]
-             default:
-                 throw new IllegalStateException("can't get trigger dates in year for type " + this);
-         }
-
+     private LocalDate nextYear(LocalDate day) {
+         Preconditions.checkState(requiresDate(), "should only call this if a recurring schedules have specific dates");
+         int year = day.getYear();
+         return new LocalDate().withYear(year+1).withDayOfYear(1);
      }
 
+
      private LocalDate nextMonth(LocalDate date, int day) {
+         Preconditions.checkState(!requiresDate(), "should only call this for ");
          if (day==-1) { //-1 means last day of month.   i.e. nextMonth(Jan4,2011) --> Jan31,2011
              day = date.dayOfMonth().getMaximumValue();
              if (date.getDayOfMonth()>=day) {
@@ -111,14 +85,6 @@ import org.joda.time.*;
              }
              return date.withDayOfMonth(day);
          }
-     }
-
-     private LocalDate nextHalfYear(LocalDate date) {
-         return date.plus(new Period(6, PeriodType.months()));
-     }
-
-     private LocalDate nextYear(LocalDate date) {
-         return date.plusYears(1);
      }
 
      private LocalDate nextDay(LocalDate date, int day) {
@@ -140,6 +106,7 @@ import org.joda.time.*;
              case WEEKLY_SUNDAY:
              case MONTHLY_1ST:
              case MONTHLY_15TH:
+             case WEEKDAYS:
              case MONTHLY_LAST:
                  return false;
              case ANNUALLY:
@@ -147,4 +114,35 @@ import org.joda.time.*;
          }
          throw new IllegalStateException("recurrence type " + this + " not supported");
      }
+
+
+     public boolean canHaveMultipleTimes() {
+         switch (this) {
+             case DAILY:
+                 return true;
+             case WEEKLY_MONDAY:
+             case WEEKLY_TUESDAY:
+             case WEEKLY_WEDNESDAY:
+             case WEEKLY_THURSDAY:
+             case WEEKLY_FRIDAY:
+             case WEEKLY_SATURDAY:
+             case WEEKLY_SUNDAY:
+             case MONTHLY_1ST:
+             case MONTHLY_15TH:
+             case WEEKDAYS:
+             case MONTHLY_LAST:
+             case ANNUALLY:
+                 return false;
+         }
+         throw new IllegalStateException("recurrence type " + this + " not supported");
+     }
+
+     public boolean isMonthly() {
+         return monthly.contains(this);
+     }
+
+     public boolean isWeekly() {
+         return weekly.contains(this);
+     }
+
  }

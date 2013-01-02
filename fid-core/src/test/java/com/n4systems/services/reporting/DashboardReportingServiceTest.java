@@ -1,7 +1,7 @@
 package com.n4systems.services.reporting;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.FieldIdServiceTest;
+import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Event;

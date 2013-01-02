@@ -207,7 +207,8 @@
   right: 3px;
   top: 4px;
   width: 12px;
-  height: 13px;
+  /* height: changed from 13px;*/
+  height: 9px;
   font-size: 1px;
   background: url('chosen-sprite.png') right top no-repeat;
 }

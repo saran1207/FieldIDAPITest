@@ -1,6 +1,6 @@
 package com.n4systems.services.dashboard;
 
-import com.n4systems.fieldid.FieldIdServiceTest;
+import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.dashboard.DashboardColumn;

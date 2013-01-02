@@ -1,7 +1,6 @@
 package com.n4systems.model;
 
 import org.joda.time.LocalDate;
-import org.joda.time.MonthDay;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -17,10 +16,11 @@ public class RecurrenceTypeTest {
 
     @Test
     public void test_daily() {
-        assertEquals(new LocalDate(2011, 1,2), RecurrenceType.DAILY.getNext(jan1_2011));
+
         assertEquals(new LocalDate(2012, 1,1), RecurrenceType.DAILY.getNext(dec31_2011));
+        assertEquals(new LocalDate(2011, 1,2), RecurrenceType.DAILY.getNext(jan1_2011));
         assertEquals(new LocalDate(2011, 3,1), RecurrenceType.DAILY.getNext(feb28_2011));
-        assertEquals(new LocalDate(2012, 2,29), RecurrenceType.DAILY.getNext(feb28_2012));
+        assertEquals(new LocalDate(2012, 2,29), RecurrenceType.DAILY.getNext(feb28_2012)); //***LEAP YEAR!
         assertEquals(new LocalDate(2011, 5,1), RecurrenceType.DAILY.getNext(april30_2011));
     }
 
@@ -119,31 +119,25 @@ public class RecurrenceTypeTest {
 
     @Test
     public void test_yearly() {
-        MonthDay jan23 = new MonthDay(1,23);
-        MonthDay dec15 = new MonthDay(12,15);
-        MonthDay july1 = new MonthDay(7,1);
-        MonthDay aug19 = new MonthDay(8,19);
-
-        assertEquals(new LocalDate(2011, 12,15), RecurrenceType.ANNUALLY.getNext(jan1_2011,dec15));
-        assertEquals(new LocalDate(2012, 12,15), RecurrenceType.ANNUALLY.getNext(dec31_2011, dec15));
-        assertEquals(new LocalDate(2011, 12,15), RecurrenceType.ANNUALLY.getNext(feb28_2011,dec15));
-        assertEquals(new LocalDate(2012, 12,15), RecurrenceType.ANNUALLY.getNext(feb28_2012,dec15));
-        assertEquals(new LocalDate(2011, 12,15), RecurrenceType.ANNUALLY.getNext(april30_2011,dec15));
-
-        assertEquals(new LocalDate(2011, 7,1), RecurrenceType.ANNUALLY.getNext(jan1_2011,july1));
-        assertEquals(new LocalDate(2012, 7,1), RecurrenceType.ANNUALLY.getNext(dec31_2011, july1));
-        assertEquals(new LocalDate(2011, 7,1), RecurrenceType.ANNUALLY.getNext(feb28_2011,july1));
-        assertEquals(new LocalDate(2012, 7,1), RecurrenceType.ANNUALLY.getNext(feb28_2012,july1));
-        assertEquals(new LocalDate(2011, 7,1), RecurrenceType.ANNUALLY.getNext(april30_2011,july1));
-
-        assertEquals(new LocalDate(2011, 8,19), RecurrenceType.ANNUALLY.getNext(jan1_2011,aug19));
-        assertEquals(new LocalDate(2012, 8,19), RecurrenceType.ANNUALLY.getNext(dec31_2011, aug19));
-        assertEquals(new LocalDate(2011, 8,19), RecurrenceType.ANNUALLY.getNext(feb28_2011,aug19));
-        assertEquals(new LocalDate(2012, 8,19), RecurrenceType.ANNUALLY.getNext(feb28_2012,aug19));
-        assertEquals(new LocalDate(2011, 8,19), RecurrenceType.ANNUALLY.getNext(april30_2011,aug19));
-
+        assertEquals(new LocalDate(2012, 1,1), RecurrenceType.ANNUALLY.getNext(jan1_2011));
+        assertEquals(new LocalDate(2012, 1,1), RecurrenceType.ANNUALLY.getNext(dec31_2011));
+        assertEquals(new LocalDate(2012, 1,1), RecurrenceType.ANNUALLY.getNext(feb28_2011));
     }
 
+    @Test
+    public void test_weekdays() {
+        // recall : jan1 is a Saturday.
+        assertEquals(new LocalDate(2011, 1,3), RecurrenceType.WEEKDAYS.getNext(jan1_2011));
+        assertEquals(new LocalDate(2011, 1,3), RecurrenceType.WEEKDAYS.getNext(jan1_2011.plusDays(1)));
 
+        assertEquals(new LocalDate(2011, 1,4), RecurrenceType.WEEKDAYS.getNext(jan1_2011.plusDays(2)));
+        assertEquals(new LocalDate(2011, 1,5), RecurrenceType.WEEKDAYS.getNext(jan1_2011.plusDays(3)));
+        assertEquals(new LocalDate(2011, 1,6), RecurrenceType.WEEKDAYS.getNext(jan1_2011.plusDays(4)));
+        assertEquals(new LocalDate(2011, 1,7), RecurrenceType.WEEKDAYS.getNext(jan1_2011.plusDays(5)));
+        assertEquals(new LocalDate(2011, 1,10), RecurrenceType.WEEKDAYS.getNext(jan1_2011.plusDays(6)));
+
+        assertEquals(new LocalDate(2011, 1,10), RecurrenceType.WEEKDAYS.getNext(jan1_2011.plusDays(7)));
+        assertEquals(new LocalDate(2011, 1,10), RecurrenceType.WEEKDAYS.getNext(jan1_2011.plusDays(8)));
+    }
 
 }

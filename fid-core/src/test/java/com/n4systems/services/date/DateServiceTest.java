@@ -1,16 +1,13 @@
 package com.n4systems.services.date;
 
-import com.n4systems.fieldid.FieldIdServiceTest;
+import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import com.n4systems.util.chart.RangeType;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
+import org.joda.time.*;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -53,13 +50,13 @@ public class DateServiceTest extends FieldIdServiceTest {
         LocalDate result = dateService.today();
         assertEquals(jan1_2011, result);
 
-        setCurrentMillisFixed(new DateTime(jan1_2011.toDate()).plusHours(15));
+        setCurrentMillisFixed(new LocalDateTime(jan1_2011.toDate()).plusHours(15));
         result = dateService.today();
         assertEquals(jan1_2011.plusDays(1), result);
 
         // contrast with UTC version which yields different results...
 
-        setCurrentMillisFixed(new DateTime(jan1_2011.toDate()).plusHours(15));
+        setCurrentMillisFixed(new LocalDateTime(jan1_2011.toDate()).plusHours(15));
         result = dateService.todayUTC();
         assertEquals(jan1_2011, result);
 
@@ -80,7 +77,7 @@ public class DateServiceTest extends FieldIdServiceTest {
 
         // loop thru an arbitrary number of hours so we include hours that straddle different dates.
         for (int hour=0;hour<50;hour++) {
-            setCurrentMillisFixed(new DateTime(jan1_2011.toDate()).plusHours(hour));
+            setCurrentMillisFixed(new LocalDateTime(jan1_2011.toDate()).plusHours(hour));
 
             result = dateService.now();
             int expectedDay = 1 + (hour+HOURS_OFFSET)/24;
@@ -114,7 +111,6 @@ public class DateServiceTest extends FieldIdServiceTest {
         result = dateService.calculateFromDate(new DateRange(RangeType.THIS_YEAR));
         assertEquals(jan1_2011.toDate(), result);
     }
-
 
     @Test
     public void test_getDateRange() {

@@ -21,6 +21,7 @@
 
 .new-event .chosen {
     vertical-align: top;
+    display:inline-block;
 }
 
 .new-event p {

@@ -43,30 +43,6 @@ public class EventScheduleService extends FieldIdPersistenceService {
 		return eventSchedule;
 	}
 
-//    @SuppressWarnings("deprecation")
-//    @Transactional
-//    public List<Event> autoSchedule(Asset asset) {
-//        List<Event> schedules = new ArrayList<Event>();
-//
-//        AssetType assetType = persistenceService.find(AssetType.class, asset.getType().getId());
-//        if (assetType != null) {
-//            for (EventType type : assetType.getEventTypes()) {
-//                AssetTypeSchedule schedule = assetType.getSchedule(type, asset.getOwner());
-//                if (schedule != null && schedule.isAutoSchedule()) {
-//                    Event openEvent = new Event();
-//                    openEvent.setAsset(asset);
-//                    openEvent.setType(type);
-//                    openEvent.setDueDate(assetType.getSuggestedNextEventDate(new Date(), type, asset.getOwner()));
-//                    schedules.add(openEvent);
-//                    updateSchedule(openEvent);
-//                }
-//            }
-//        }
-//        logger.info("auto scheduled for asset " + asset);
-//        return schedules;
-//    }
-
-
     @Transactional
     public void create(AssetTypeSchedule schedule) {
         persistenceService.save(schedule);

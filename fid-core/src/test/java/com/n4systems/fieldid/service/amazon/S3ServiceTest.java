@@ -4,7 +4,7 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
-import com.n4systems.fieldid.FieldIdServiceTest;
+import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Tenant;

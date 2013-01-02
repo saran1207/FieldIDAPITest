@@ -1,11 +1,9 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
-import com.n4systems.fieldid.wicket.components.Agenda;
-import com.n4systems.fieldid.wicket.components.Comment;
-import com.n4systems.fieldid.wicket.components.DateTimePicker;
-import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.asset.AutoCompleteSearch;
 import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
@@ -29,9 +27,11 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
@@ -42,6 +42,8 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     private Data data = new Data();
 
 
+    private int id=0;
+    
     public SecretTestPage() {
         Form form = new Form("form", new CompoundPropertyModel(this));
 
@@ -55,6 +57,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         form.add(new AutoCompleteUser("user", ProxyModel.of(data, on(Data.class).getUser())).setVisible(true));
         form.add(new GoogleMap("map").addLocation(43.65, -79.34).addLocation(42.00, -80.00).addLocation(44.0, -79.7).setVisible(true));
         form.add(new OrgLocationPicker("location", ProxyModel.of(data, on(Data.class).getOrg())).setVisible(false));
+        form.add(new MultiSelectDropDownChoice("multiselect", ProxyModel.of(data,on(Data.class).getMultiselect()), Lists.newArrayList(new Foo("a", "b"), new Foo("hello", "goodbye"), new Foo("x", "y"), new Foo("1", "12"))));
 //        form.add(new GoogleMap("map"));
         form.add(new DateTimePicker("dateTimePicker", ProxyModel.of(data, on(Data.class).getDate()), true).setVisible(true));
         form.add(new DateTimePicker("datePicker", ProxyModel.of(data, on(Data.class).getDate()), false).setVisible(true));
@@ -76,7 +79,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         
         add(form);
     }
-
+    
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -97,8 +100,17 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         PredefinedLocation location;
         String comment;
         String richText = "<b>asdfasdf</b>";
+        List<String> multiselect;
 
         public Data() {
+        }
+
+        public List<String> getMultiselect() {
+            return multiselect;
+        }
+
+        public void setMultiselect(List<String> multiselect) {
+            this.multiselect = multiselect;
         }
 
         public Asset getAsset() {
@@ -200,5 +212,38 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
             super.detach();    
         }
     }
+
+
+    class Foo implements Serializable {
+        private String x;
+        private String y;
+
+        public Foo(String x, String y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public String toString() {
+            return "FOO:"+x+y;
+        }
+
+        public String getX() {
+            return x;
+        }
+
+        public void setX(String x) {
+            this.x = x;
+        }
+
+        public String getY() {
+            return y;
+        }
+
+        public void setY(String y) {
+            this.y = y;
+        }
+    }
+
 
 }

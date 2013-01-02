@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.service.schedule;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.FieldIdServiceTest;
+import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.ScheduleSummaryEntry;

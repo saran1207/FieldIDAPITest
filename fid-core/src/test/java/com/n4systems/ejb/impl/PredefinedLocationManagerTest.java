@@ -1,7 +1,7 @@
 package com.n4systems.ejb.impl;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.FieldIdServiceTest;
+import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.PredefinedLocationBuilder;

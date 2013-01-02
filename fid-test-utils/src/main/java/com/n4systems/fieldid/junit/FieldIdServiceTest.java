@@ -1,4 +1,4 @@
-package com.n4systems.fieldid;
+package com.n4systems.fieldid.junit;
 
 import com.google.common.collect.Maps;
 import com.n4systems.test.TestMock;
