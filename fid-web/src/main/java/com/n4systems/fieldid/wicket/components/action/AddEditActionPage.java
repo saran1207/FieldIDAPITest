@@ -19,9 +19,12 @@ import com.n4systems.model.PriorityCode;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -84,7 +87,6 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     if (immediateSaveMode) {
-                        getModelObject();
                         persistenceService.update(getModelObject());
                         setResponsePage(new ActionDetailsPage(criteriaResultModel, eventModel));
 
@@ -120,6 +122,38 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 }
             };
             add(cancelLink);
+
+            AjaxSubmitLink deleteLink = new AjaxSubmitLink("deleteLink") {
+
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    Event deletedAction = getModelObject();
+                    criteriaResultModel.getObject().getActions().remove(deletedAction);
+
+                    if(editMode && deletedAction.getId() != null) {
+                        deletedAction.archiveEntity();
+                        persistenceService.update(deletedAction);
+                    }
+
+                    FieldIDSession.get().setActionsForCriteria(criteriaResultModel.getObject(), criteriaResultModel.getObject().getActions());
+                    setResponsePage(new ActionsListPage(criteriaResultModel));
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    target.add(AddActionForm.this);
+                }
+            };
+            
+            if(editMode) {
+                deleteLink.add(new Behavior() {
+                    @Override
+                    public void onComponentTag(Component component, ComponentTag tag) {
+                        tag.put("onclick", "if(!confirm('" + new FIDLabelModel("label.confirm_delete_action").getObject() +"')) {return false;} " + tag.getAttribute("onclick"));
+                    }
+                });
+            }
+            add(deleteLink);
         }
 
         private void addQuickDateLinks(DateTimePicker scheduledDatePicker, PropertyModel<Date> scheduledDateModel) {

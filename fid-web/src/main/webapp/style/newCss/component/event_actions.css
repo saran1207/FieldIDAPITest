@@ -192,3 +192,22 @@ body {
 .addActionForm .chzn-container .chzn-results {
     max-height:120px;
 }
+
+.addActionForm .actions {
+    padding-top: 20px;
+    float: left;
+    width: 100%;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    font-size: 12px;
+}
+
+.addActionForm .actions .save {
+    margin-right: 10px;
+    width: 40%;
+    position: relative;
+    top: -6px;
+}
+
+.addActionForm .actions .cancel {
+    margin-left: 3px;
+}
