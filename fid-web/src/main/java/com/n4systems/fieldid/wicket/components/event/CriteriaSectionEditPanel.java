@@ -104,18 +104,9 @@ public class CriteriaSectionEditPanel extends Panel {
                 @Override
                 protected void populateItem(final ListItem<CriteriaResult> item) {
                     final CriteriaResult criteriaResult = item.getModel().getObject();
-                    final Component image = new ContextImage("tooltip", "images/tooltip-icon.png").setOutputMarkupId(true).add(new AttributeAppender("class", Model.of("invisible"), " "));
-                    image.setVisible(criteriaResult.getCriteria().getInstructions()!=null);
-                    image.add(new AjaxEventBehavior("onclick") {
-                        @Override protected void onEvent(AjaxRequestTarget target) {
-                            instructionsContent.setDefaultModel(Model.of(criteriaResult.getCriteria().getInstructions()));
-                            target.add(instructionsContent);
-                            String javascript = String.format(INSTRUCTIONS_JS_FORMAT, instructionsDialog.getTextAreaMarkupId(), instructionsContent.getMarkupId(), popup.getMarkupId(), item.getMarkupId(), popup.getMarkupId() );
-                            target.appendJavaScript(javascript);
-                            target.appendJavaScript("putSpinnersOverImages();");
-                        }
-                        });
-                    item.add(image);
+
+                    item.add(createCriteriaHelpTooltip(item, criteriaResult));
+
                     item.add(new Label("criteriaName", new PropertyModel<String>(item.getModel(), "criteria.displayText")));
                     item.add(CriteriaEditorFactory.createEditorFor("criteriaEditor", item.getModel()));
                     final PropertyModel<List<? extends Observation>> recommendations = new PropertyModel<List<? extends Observation>>(item.getModel(), "recommendations");
@@ -216,6 +207,21 @@ public class CriteriaSectionEditPanel extends Panel {
                     });
 
                     showActionsIfAvailable(item);
+                }
+
+                private Component createCriteriaHelpTooltip(final ListItem<CriteriaResult> item, final CriteriaResult criteriaResult) {
+                    Component image = new ContextImage("tooltip", "images/tooltip-icon.png").setOutputMarkupId(true).add(new AttributeAppender("class", Model.of("invisible"), " "));
+                    image.setVisible(criteriaResult.getCriteria().hasNonEmptyInstructions());
+                    image.add(new AjaxEventBehavior("onclick") {
+                        @Override protected void onEvent(AjaxRequestTarget target) {
+                            instructionsContent.setDefaultModel(Model.of(criteriaResult.getCriteria().getInstructions()));
+                            target.add(instructionsContent);
+                            String javascript = String.format(INSTRUCTIONS_JS_FORMAT, instructionsDialog.getTextAreaMarkupId(), instructionsContent.getMarkupId(), popup.getMarkupId(), item.getMarkupId(), popup.getMarkupId() );
+                            target.appendJavaScript(javascript);
+                            target.appendJavaScript("putSpinnersOverImages();");
+                        }
+                        });
+                    return image;
                 }
 
                 private void showActionsIfAvailable(ListItem<CriteriaResult> item) {

@@ -2,7 +2,10 @@ package com.n4systems.model;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.IndexColumn;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -94,5 +97,14 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
     }
 
     public abstract CriteriaType getCriteriaType();
+
+    @Transient
+    public boolean hasNonEmptyInstructions() {
+        if (instructions == null) {
+            return false;
+        }
+        Document doc = Jsoup.parseBodyFragment(instructions);
+        return !StringUtils.isBlank(doc.text());
+    }
 
 }
