@@ -1,7 +1,7 @@
 package com.n4systems.services.reporting;
 
 public enum KpiType {
-    FAILED("failed"), INCOMPLETE("incomplete"), COMPLETED("completed");
+    FAILED("failed"), INCOMPLETE("incomplete"), COMPLETED("completed"), CLOSED("closed"), TOTAL("total");
 
     private String label;
 

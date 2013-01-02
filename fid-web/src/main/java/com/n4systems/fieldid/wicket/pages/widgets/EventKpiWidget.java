@@ -49,6 +49,10 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> implemen
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/dashboard/widgets/eventkpi.css");
+        response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
+        response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
+        response.renderCSSReference("style/tipsy/tipsy.css");
+        response.renderOnDomReadyJavaScript("chartWidgetFactory.updateKpi()");
     }
 
     private List<BaseOrg> getOrgList() {

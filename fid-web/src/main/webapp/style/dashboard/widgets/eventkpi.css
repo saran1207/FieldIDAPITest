@@ -1,66 +1,3 @@
-.eventKpiTable th {
-    background:#666;
-    color:#f7f7f7;
-}
-
-.eventKpiTable .ui-progressbar {
-	height: 15px;
-    margin-top: 5px;
-	width: 80px;
-	float: left;	
-}
-
-.eventKpiTable .ui-widget-content {
-	background: none;
-	background-color: #CAD1DC;
-}
-
-.eventKpiTable .ui-progressbar .ui-progressbar-value {
-	background-color: #32578B;
-	padding: 0;
-}
-
-.eventKpiTable .customerName {
-	max-width: 100px;
-}
-
-.eventKpiTable .progressBar {
-	width: 200px;
-}
-
-.eventKpiTable .completedPercentage, .eventKpiTable .completedSchedules {
-	float: left;
-	padding-top: 3px;	
-}
-
-.eventKpiTable .completedPercentage {
-	padding-left: 3px;
-}
-
-.eventKpiTable .completedSchedules {
-	padding-right: 3px;
-	text-align: right;
-	width: 25px;
-}
-
-.eventKpiTable .ui-corner-left {
-	-moz-border-radius-bottomleft: 0;
-	-moz-border-radius-topleft: 0;
-}
-
-.eventKpiTable .ui-corner-all {
-	-moz-border-radius: 0 0 0 0;
-}
-
-.eventKpiTable .ui-progressbar .ui-progressbar-value {
-	margin: 5px 0 0;
-	height: 30%;
-}
-
-.centeredText {
-	text-align: center;
-}
-
 .configureMessage {
     font-size:13px;
     font-weight:bold;
@@ -71,11 +8,158 @@
 }
 
 .configureArrow {
-	margin-left: 383px;
-	margin-top: -10px;
+    margin-left: 383px;
+    margin-top: -10px;
 }
 
-.simpleTable .eventKpiTable {
-	border-bottom: none;
-    font-size: 11px;
+
+.kpi {
+    position:relative;
+    margin-right: auto;
+    margin-left: auto;
+    height: 70px;
+    padding-bottom:10px;
 }
+
+.kpi .owner {
+    width:100%;
+    text-align: center;
+}
+
+.kpi .bar-chart {
+    width:90%;
+    height:50%;
+    border: 1px solid #ccc;
+    position: relative;
+    background:white;
+    float:left;
+}
+
+.kpi .total {
+    float: right;
+    font-size:17px;
+    text-align: right;
+}
+
+
+.kpi .bar-chart .bars.all-incomplete {
+    margin-top:-2px;
+    padding-top:2px;
+}
+
+.kpi .bar-chart .bar {
+    display:inline-block;
+    float:left;
+    height:100%;
+    opacity:.5;
+    z-index:10;
+}
+
+.kpi .bar-chart .bars.all-incomplete:hover {
+    background:#fdfdfd;
+}
+
+.kpi .bar-chart .bar:hover {
+    opacity: .8;
+}
+
+.kpi .bar-chart .bar.completed:hover {
+    opacity: .8;
+    background:#9DDFA1;
+}
+
+.kpi .bar-label:hover {
+    opacity:.8;
+}
+
+.kpi .bar-label.complete:hover {
+    border-top-color: #595;
+}
+
+.kpi .bar-label.incomplete:hover {
+    border-top-color: #555;
+    border-bottom-color: transparent;
+}
+
+.kpi .bar-chart .bar.completed {
+    background:#BDFFD1;
+    border-right: 1px solid #8DDDAD;
+}
+
+.kpi .bar-chart .bar.closed {
+    background:#75DAD6;
+}
+
+.kpi .bar-chart .bar.failed {
+    background:#D691AA;
+}
+
+.kpi .bar-label {
+    opacity:.35;
+    line-height: 10px;
+    float:left;
+    display:inline-block;
+    position:absolute;
+    color:black;
+    padding-top:3px;
+    font-size:10px;
+    letter-spacing: 2px;
+    border-bottom:1px dotted #999;
+    text-align: right;
+    padding-bottom:2px;
+    border-top:2px solid;
+    border-top-color: transparent;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    margin-top:-2px;
+}
+.kpi .bar-label.complete {
+    text-align: center;
+    left:0;
+    background:#C4D7C4;
+    z-index:111;
+}
+
+.kpi .bar-label.incomplete {
+    color:black;
+    text-align: right;
+    border-bottom: 1px dotted #ddd;
+    right:0;
+}
+
+.kpi .tick {
+    width: 0;
+    height: 0;
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+    border-bottom: 4px solid;
+    position: absolute;
+    font-size:8px;
+    padding-top:5px;
+}
+
+.kpi .tick span {
+    color:#aaa;
+    top:100%;
+}
+
+.kpi .tick.failed span {
+}
+.kpi .tick.failed {
+    border-bottom-color: #E097C4;
+}
+
+.kpi .tick.closed {
+    border-bottom-color: #76BBC0;
+}
+
+.kpi .tick.completed {
+    border-bottom-color: #b5DFb5;
+}
+
+.kpi .bars {
+    height:100%;
+    width:100%;
+    position:absolute;
+}
+

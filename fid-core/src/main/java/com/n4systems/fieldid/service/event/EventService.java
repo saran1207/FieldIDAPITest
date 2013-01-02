@@ -210,9 +210,11 @@ public class EventService extends FieldIdPersistenceService {
 		List<EventScheduleStatusCount> statusCounts = persistenceService.findAll(builder1);
 		
 		for (EventScheduleStatusCount statusCount: statusCounts ) {
-			if(statusCount.state.equals(Event.WorkflowState.COMPLETED))
-				eventKpiRecord.setCompleted(statusCount.count);
-			if(statusCount.state.equals(Event.WorkflowState.OPEN))
+            if (statusCount.state.equals(Event.WorkflowState.CLOSED))
+                eventKpiRecord.setClosed(statusCount.count);
+            if (statusCount.state.equals(Event.WorkflowState.COMPLETED))
+                eventKpiRecord.setCompleted(statusCount.count);
+            if (statusCount.state.equals(Event.WorkflowState.OPEN))
 				eventKpiRecord.setScheduled(statusCount.count);
 		}
 

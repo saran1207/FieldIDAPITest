@@ -9,6 +9,8 @@ public class EventKpiRecord implements Serializable {
 	private Long completed = 0L;
 	
 	private Long inProgress = 0L;
+
+    private Long closed = 0L;
 	
 	private Long scheduled = 0L;
 	
@@ -59,4 +61,46 @@ public class EventKpiRecord implements Serializable {
 	public Long getTotalScheduledEvents() {
 		return completed + inProgress + scheduled;
 	}
+
+    public Long getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Long closed) {
+        this.closed = closed;
+    }
+
+    public Long getCompletedPercentage() {
+        if(getTotalScheduledEvents() > 0L)
+            return Math.round((getCompleted().doubleValue() * 100)/getTotalScheduledEvents().doubleValue());
+        else
+            return 0L;
+    }
+
+    public Long getCompletedExcludingFailedAndClosed() {
+        // TODO : what is the semantics of closed/completed/failed????  should i subtract failed?   ...ask matt.
+        return completed - failed - closed;
+    }
+
+    public Double getCompletedExcludingFailedAndClosedPercentage() {
+        return getTotalScheduledEvents() == 0 ? 0 :
+                getCompletedExcludingFailedAndClosed() * 100 / getTotalScheduledEvents().doubleValue();
+    }
+
+
+    public Double getFailedPercentage() {
+        return getTotalScheduledEvents() == 0 ? 0 :
+                failed * 100 / getTotalScheduledEvents().doubleValue();
+    }
+
+    public Double getClosedPercentage() {
+        return getTotalScheduledEvents() == 0 ? 0 :
+                closed * 100 / getTotalScheduledEvents().doubleValue();
+    }
+
+    public Double getIncompletePercentage() {
+        return getTotalScheduledEvents() == 0 ? 0 :
+                scheduled * 100 / getTotalScheduledEvents().doubleValue();
+    }
+
 }

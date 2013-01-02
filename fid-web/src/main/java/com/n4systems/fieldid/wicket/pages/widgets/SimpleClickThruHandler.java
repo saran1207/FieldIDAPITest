@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.google.common.base.Preconditions;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
+import com.n4systems.util.chart.FlotOptions;
 import org.apache.wicket.Component;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.util.chart.FlotOptions;
 
 public abstract class SimpleClickThruHandler implements ClickThruHandler {
 
@@ -43,11 +43,12 @@ public abstract class SimpleClickThruHandler implements ClickThruHandler {
 	
 	@Override
 	public <X> FlotOptions<X> updateOptions(FlotOptions<X> options) {
+        Preconditions.checkArgument(options.fieldIdOptions!=null );
+        Preconditions.checkArgument(options.grid!=null);
 		options.fieldIdOptions.clickable = true;
 		options.fieldIdOptions.url = getUrl();
-		options.grid.clickable = true;				
+		options.grid.clickable = true;
 		return options;		
 	}
-
 
 }

@@ -1,31 +1,32 @@
 <wicket:panel>
-	<div class="simpleTable decorated">
-		<table class="simpleTable decorated eventKpiTable">
-			<tr class="headers">
-				<th class="customerName"><wicket:message key="label.owner"/></th>
-				<th><wicket:message key="label.scheduled"/></th>
-				<th class="progressBar"><wicket:message key="label.completed"/></th>
-                <th><wicket:message key="label.incomplete"/></th>
-                <th><wicket:message key="label.failed"/></th>
-			</tr>
-			<tr wicket:id="customerEventKpiList">
-				<td><span wicket:id="customerName"></span></td>
-                <td class="centeredText">
-                    <span wicket:id="scheduledEvents"></span></td>
-                <td>
-                    <span class="completedSchedules">
-                        <a wicket:id="completed"><span wicket:id="completedValue"/></a>
-                    </span>
-					<div wicket:id="progressBar"></div>
-					<span class="completedPercentage" wicket:id="completedPercentage"></span>
-				</td>
-                <td class="centeredText">
-                    <a wicket:id="incomplete"><span wicket:id="incompleteValue"/></a>
-                </td>
-                <td class="centeredText">
-                    <a wicket:id="failedSchedules"><span wicket:id="failedValue"/></a>
-                </td>
-			</tr>
-		</table>
-	</div>
+
+    <div wicket:id="customerEventKpiList" class="kpi">
+        <div wicket:id="customerName" class="owner"></div>
+
+        <div wicket:id="barChart" class="bar-chart">
+            <div class="bars all-completed">
+                <div wicket:id="failed" class="bar failed northeast"></div>
+                <div class="tick failed"><span wicket:id="failedTickMark" class="northeast"/></div>
+
+                <div wicket:id="closed" class="bar closed north"></div>
+                <div class="tick closed"><span wicket:id="closedTickMark" class="north"/></div>
+
+                <div wicket:id="completed" class="bar completed northwest"></div>
+                <div class="tick completed"><span wicket:id="completedTickMark" class="northwest" /></div>
+
+                <div wicket:id="completeLabel" class="bar-label complete southeast"/>
+            </div>
+
+            <div class="bars all-incomplete southwest" wicket:id="incomplete">
+                <div wicket:id="incompleteLabel" class="bar-label incomplete"/>
+            </div>
+        </div>
+
+        <div><a wicket:id="total" class="total"><span wicket:id="label"/></a></div>
+
+    </div>
+
 </wicket:panel>
+
+
+

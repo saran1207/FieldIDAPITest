@@ -184,13 +184,44 @@ var chartWidgetFactory = (function() {
 		}
 		widget.update(data);
 		return widget;
-	};	
+	};
+
+	var updateKpi = function() {
+		var delay = 500;
+		$('.eventKpiWidget').find('.southwest[title]').tipsy({gravity: 'sw', fade:true, delayIn:delay});
+		$('.eventKpiWidget').find('.southeast[title]').tipsy({gravity: 'se', fade:true, delayIn:delay});
+		$('.eventKpiWidget').find('.south[title]').tipsy({gravity: 's', fade:true, delayIn:delay});
+		$('.eventKpiWidget').find('.northwest[title]').tipsy({gravity: 'nw', fade:true, delayIn:delay});
+		$('.eventKpiWidget').find('.north[title]').tipsy({gravity: 'n', fade:true, delayIn:delay});
+		$('.eventKpiWidget').find('.northeast[title]').tipsy({gravity: 'ne', fade:true, delayIn:delay});
+
+		$('.widget-content .kpi .bar-chart .tick').each(
+			function(index) {
+				var bar = $(this).prev('.bar');
+				if (!bar || !bar.width() || bar.width()==0) {
+					$(this).hide();
+				} else {
+					$(this).show();
+					$(this).position({my:'top center', at:'bottom', 'of':bar});
+					var offset = '';
+					if ($('.kpi .cozy').length>0) {
+						offset = $(this).hasClass('failed') ? 'right ' :
+							$(this).hasClass('completed') ? 'left ' :
+								'';
+					}
+					var tick = $(this);
+					$(this).children('span:first-child').position({'my':offset+'top','at':'bottom','of':tick});
+				}
+			});
+
+	};
 	
 			
 	return {		
 		horizTooltip : horizLabelTooltipContent,
 		dateTooltip : dateTooltipContent,
 		clickUrl : clickUrl,
+		updateKpi : updateKpi,
 		create : create,
 		createWithData : createWithData
 	};
