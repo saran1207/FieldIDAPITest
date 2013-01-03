@@ -210,7 +210,7 @@ var chartWidgetFactory = (function() {
 								'';
 					}
 					var tick = $(this);
-					$(this).children('span:first-child').position({'my':offset+'top','at':'bottom','of':tick});
+					$(this).next('span').position({'my':offset+'top','at':'bottom','of':tick});
 				}
 			});
 

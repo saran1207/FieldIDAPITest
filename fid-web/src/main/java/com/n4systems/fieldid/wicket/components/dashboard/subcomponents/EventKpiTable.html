@@ -1,18 +1,21 @@
 <wicket:panel>
 
     <div wicket:id="customerEventKpiList" class="kpi">
-        <div wicket:id="customerName" class="owner"></div>
 
         <div wicket:id="barChart" class="bar-chart">
+            <div wicket:id="customerName" class="owner"></div>
             <div class="bars all-completed">
                 <div wicket:id="failed" class="bar failed northeast"></div>
-                <div class="tick failed"><span wicket:id="failedTickMark" class="northeast"/></div>
+                <div class="tick failed"></div>
+                <span wicket:id="failedTickMark" class="tick-label failed northeast"/>
 
                 <div wicket:id="closed" class="bar closed north"></div>
-                <div class="tick closed"><span wicket:id="closedTickMark" class="north"/></div>
+                <div class="tick closed"></div>
+                <span wicket:id="closedTickMark" class="tick-label closed north"/>
 
                 <div wicket:id="completed" class="bar completed northwest"></div>
-                <div class="tick completed"><span wicket:id="completedTickMark" class="northwest" /></div>
+                <div class="tick completed"></div>
+                <span wicket:id="completedTickMark" class="tick-label completed northwest" />
 
                 <div wicket:id="completeLabel" class="bar-label complete southeast"/>
             </div>

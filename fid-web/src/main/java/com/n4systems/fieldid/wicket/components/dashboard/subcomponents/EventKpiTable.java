@@ -49,7 +49,6 @@ public class EventKpiTable extends Panel {
 			@Override
 			protected void populateItem(ListItem<EventKpiRecord> item) {
 				EventKpiRecord eventKpiRecord = item.getModelObject();
-				item.add(new Label("customerName", eventKpiRecord.getCustomer().getDisplayName()));
 				item.add(new BarChart("barChart",item.getModel()));
                 BookmarkablePageLink total = new BookmarkablePageLink("total", RunReportPage.class, getParams(eventKpiRecord,KpiType.TOTAL.getLabel()));
                 total.add(new Label("label", eventKpiRecord.getTotalScheduledEvents()+""));
@@ -105,6 +104,8 @@ public class EventKpiTable extends Panel {
 
         public BarChart(String id, final IModel<EventKpiRecord> model) {
             super(id, model);
+
+            add(new Label("customerName", model.getObject().getCustomer().getDisplayName()));
 
             final EventKpiRecord kpi = model.getObject();
 
