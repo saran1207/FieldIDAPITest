@@ -24,7 +24,6 @@ import com.n4systems.model.*;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.date.DateService;
-import com.n4systems.util.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -149,6 +148,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         private DateTimePicker dateTimepicker;
         private DropDownChoice<RecurrenceType> recurrenceTypeDropDown;
         private final FIDFeedbackPanel feedback;
+        private Object x;
 
         public RecurringEventsForm(String id) {
             super(id);
@@ -293,7 +293,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         public void validate(Form<?> form) {
             switch (recurrenceTypeDropDown.getModel().getObject()) {
                 case DAILY:
-                    if (timePicker.getMultipleTime().getModelObject()!=null) {
+                    if (timePicker.getMultipleTime().getConvertedInput().size()==0) {
                         form.error(getString("label.time.required"));
                     };
                     break;
@@ -308,12 +308,12 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 case MONTHLY_15TH:
                 case MONTHLY_LAST:
                 case WEEKDAYS:
-                    if (StringUtils.isEmpty(timePicker.getSingleTime().getInput())) {
+                    if (timePicker.getSingleTime().getConvertedInput()==null) {
                         form.error(getString("label.time.required"));
                     };
                     break;
                 case ANNUALLY:
-                    if (StringUtils.isEmpty(dateTimepicker.getDateTextField().getInput())) {
+                    if (dateTimepicker.getDateTextField().getConvertedInput()==null) {
                         form.error(getString("label.date.required"));
                     };
                     break;
@@ -323,16 +323,16 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
         class TimeContainer extends WebMarkupContainer {
 
-            private FormComponent singleTime;
-            private FormComponent multipleTime;
+            private FidDropDownChoice singleTime;
+            private MultiSelectDropDownChoice<RecurrenceTimeOfDay> multipleTime;
 
             public TimeContainer(String id) {
                 super(id);
                 setOutputMarkupId(true);
                 setOutputMarkupPlaceholderTag(true);
 
-                singleTime = new FidDropDownChoice<RecurrenceTimeOfDay>("time", new PropertyModel<RecurrenceTimeOfDay>(RecurringEventsForm.this, "time"), Arrays.asList(RecurrenceTimeOfDay.values()), new EnumPropertyChoiceRenderer<RecurrenceTimeOfDay>()).setNullValid(true);
-                add(singleTime.setOutputMarkupId(true));
+                singleTime = new FidDropDownChoice<RecurrenceTimeOfDay>("time", new PropertyModel<RecurrenceTimeOfDay>(RecurringEventsForm.this, "time"), Arrays.asList(RecurrenceTimeOfDay.values()), new EnumPropertyChoiceRenderer<RecurrenceTimeOfDay>());
+                add(singleTime.setNullValid(true).setOutputMarkupId(true));
                 multipleTime = new MultiSelectDropDownChoice<RecurrenceTimeOfDay>("multipleTimes", new PropertyModel<List<RecurrenceTimeOfDay>>(RecurringEventsForm.this, "times"), Arrays.asList(RecurrenceTimeOfDay.values()), new EnumPropertyChoiceRenderer<RecurrenceTimeOfDay>());
                 add(multipleTime.setOutputMarkupId(true));
 
@@ -349,11 +349,11 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 singleTime.setVisible(!b);
             }
 
-            public FormComponent getMultipleTime() {
+            public MultiSelectDropDownChoice<RecurrenceTimeOfDay> getMultipleTime() {
                 return multipleTime;
             }
 
-            public FormComponent getSingleTime() {
+            public FidDropDownChoice getSingleTime() {
                 return singleTime;
             }
         }
