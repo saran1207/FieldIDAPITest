@@ -3,7 +3,7 @@ drop table if exists temp_recurring;
 create table temp_recurring (
   id bigint NOT NULL AUTO_INCREMENT,
   recurrence_type varchar(50) NOT NULL,
-  day bigint NULL,
+  day datetime NULL,
   hour bigint NOT NULL,
   minute bigint NOT NULL,
   PRIMARY KEY (id)
