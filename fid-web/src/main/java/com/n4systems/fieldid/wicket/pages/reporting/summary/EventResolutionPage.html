@@ -14,6 +14,11 @@
         </div>
 
         <div class="summaryEntry">
+            <div class="title"><wicket:message key="label.closed"/></div>
+            <div class="figure" wicket:id="closedEvents"></div>
+        </div>
+
+        <div class="summaryEntry">
             <div class="title"><wicket:message key="label.outstanding"/></div>
             <div class="figure outstanding" wicket:id="eventsOutstanding"></div>
         </div>
@@ -51,6 +56,9 @@
                     <wicket:message key="label.completed"/>
                 </th>
                 <th>
+                    <wicket:message key="label.closed"/>
+                </th>
+                <th>
                     <wicket:message key="label.outstanding"/>
                 </th>
                 <th>
@@ -73,6 +81,9 @@
                 </td>
                 <td>
                     <span wicket:id="eventsCompleted"></span>
+                </td>
+                <td>
+                    <span wicket:id="closedEvents"></span>
                 </td>
                 <td>
                     <a wicket:id="outstandingCriteriaLink">

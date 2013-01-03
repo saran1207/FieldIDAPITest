@@ -7,8 +7,8 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
 import com.n4systems.model.EventResult;
+import com.n4systems.model.EventType;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.WorkflowState;
 import com.n4systems.model.summary.EventResolutionSummary;
@@ -53,6 +53,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         add(new Label("eventsDue", new PropertyModel<String>(eventResolutionSummary.getBaseSummary(), "eventsDue")));
         add(new Label("eventsCompleted", new PropertyModel<String>(eventResolutionSummary.getBaseSummary(), "eventsCompleted")));
         add(new Label("eventsOutstanding", new PropertyModel<String>(eventResolutionSummary.getBaseSummary(), "eventsOutstanding")));
+        add(new Label("closedEvents", new PropertyModel<String>(eventResolutionSummary.getBaseSummary(), "closedEvents")));
         add(new Label("eventsPassed", new PropertyModel<String>(eventResolutionSummary.getBaseSummary(), "eventsPassed")));
         add(new Label("eventsFailed", new PropertyModel<String>(eventResolutionSummary.getBaseSummary(), "eventsFailed")));
 
@@ -97,6 +98,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
                 outstandingLink.add(new FlatLabel("eventsOutstanding", new PropertyModel<String>(item.getModel(), "eventsOutstanding")));
                 item.add(outstandingLink);
 
+                item.add(new FlatLabel("closedEvents", new PropertyModel<String>(item.getModel(), "closedEvents")));
                 item.add(new FlatLabel("eventsPassed", new PropertyModel<String>(item.getModel(), "eventsPassed")));
 
                 Link failedLink = createFailedItemCriteriaLink("failedCriteriaLink", item.getModel());
