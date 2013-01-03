@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.log;
 
-import com.n4systems.fieldid.context.ThreadLocalUserContext;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.model.user.User;
 import org.apache.log4j.helpers.PatternConverter;
 import org.apache.log4j.helpers.PatternParser;
@@ -48,7 +48,7 @@ public class FieldIDPatternParser extends PatternParser {
     static class UserFormatConverter extends PatternConverter {
         @Override
         protected String convert(LoggingEvent event) {
-            User currentUser = ThreadLocalUserContext.getInstance().getCurrentUser();
+            User currentUser = ThreadLocalInteractionContext.getInstance().getCurrentUser();
             return currentUser == null ? "unknown user" : currentUser.getUserID();
         }
     }
@@ -56,7 +56,7 @@ public class FieldIDPatternParser extends PatternParser {
     static class TenantFormatConverter extends PatternConverter {
         @Override
         protected String convert(LoggingEvent event) {
-            User currentUser = ThreadLocalUserContext.getInstance().getCurrentUser();
+            User currentUser = ThreadLocalInteractionContext.getInstance().getCurrentUser();
             return currentUser == null ? "unknown tenant" : currentUser.getOwner().getTenant().getName();
         }
     }

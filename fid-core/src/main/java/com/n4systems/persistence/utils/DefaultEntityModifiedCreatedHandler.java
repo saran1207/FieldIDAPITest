@@ -1,8 +1,8 @@
 package com.n4systems.persistence.utils;
 
-import com.n4systems.fieldid.context.ThreadLocalUserContext;
-import com.n4systems.fieldid.context.UserContext;
-
+import com.n4systems.fieldid.context.InteractionContext;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
+import com.n4systems.model.api.HasPlatformContext;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
 import com.n4systems.util.time.Clock;
@@ -14,15 +14,15 @@ import java.util.Date;
 public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreatedHandler {
     private static final Logger logger = Logger.getLogger(DefaultEntityModifiedCreatedHandler.class);
 
-    private UserContext userContext;
+    private InteractionContext interactionContext;
     private Clock clock;
 
     public DefaultEntityModifiedCreatedHandler() {
         this(null, new SystemClock());
     }
 
-    public DefaultEntityModifiedCreatedHandler(UserContext userContext, Clock clock) {
-        this.userContext = userContext;
+    public DefaultEntityModifiedCreatedHandler(InteractionContext interactionContext, Clock clock) {
+        this.interactionContext = interactionContext;
         this.clock = clock;
     }
 
@@ -39,6 +39,8 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
             entity.setCreatedBy(user);
         }
 
+        storeCreatedPlatform(entity);
+
         onUpdate(entity, time);
     }
 
@@ -52,10 +54,23 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
             entity.setModifiedBy(user);
         }
         entity.setModified(time);
+        storeModifiedPlatform(entity);
+    }
+
+    private void storeModifiedPlatform(AbstractEntity entity) {
+        if (entity instanceof HasPlatformContext) {
+            ((HasPlatformContext) entity).setModifiedPlatform(getInteractionContext().getCurrentPlatform());
+        }
+    }
+
+    private void storeCreatedPlatform(AbstractEntity entity) {
+        if (entity instanceof HasPlatformContext) {
+            ((HasPlatformContext) entity).setCreatedPlatform(getInteractionContext().getCurrentPlatform());
+        }
     }
 
     private User lookupCurrentUser(AbstractEntity entity) {
-        User user = getUserContext().getCurrentUser();
+        User user = getInteractionContext().getCurrentUser();
         if (user == null && shouldWarnOnNullUser(entity)) {
             logger.warn("Entity persisted without current user set in context", new Exception());
         }
@@ -70,11 +85,11 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
         return !(entity instanceof User);
     }
 
-    private UserContext getUserContext() {
-        if (userContext == null) {
-            return ThreadLocalUserContext.getInstance();
+    private InteractionContext getInteractionContext() {
+        if (interactionContext == null) {
+            return ThreadLocalInteractionContext.getInstance();
         }
-        return userContext;
+        return interactionContext;
     }
 
 }

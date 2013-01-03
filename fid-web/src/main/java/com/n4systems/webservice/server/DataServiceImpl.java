@@ -8,8 +8,8 @@ import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.exceptions.*;
-import com.n4systems.fieldid.context.ThreadLocalUserContext;
-import com.n4systems.fieldid.context.UserContext;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
+import com.n4systems.fieldid.context.InteractionContext;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
@@ -433,7 +433,7 @@ public class DataServiceImpl implements DataService {
 		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId );
 		ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 		
-		UserContext uc = ThreadLocalUserContext.getInstance();
+		InteractionContext uc = ThreadLocalInteractionContext.getInstance();
 		User user = null;
 		try {
 			if (request.modifiedByIdExists()) {
@@ -461,7 +461,7 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public RequestResponse updateProductByCustomer(UpdateProductByCustomerRequest request) throws ServiceException {
-		UserContext uc = ThreadLocalUserContext.getInstance();
+		InteractionContext uc = ThreadLocalInteractionContext.getInstance();
 		try {
 			long tenantId = request.getTenantId();
 			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
@@ -615,7 +615,7 @@ public class DataServiceImpl implements DataService {
 
 		testTransactionId(requestInformation);
 
-		UserContext uc = ThreadLocalUserContext.getInstance();
+		InteractionContext uc = ThreadLocalInteractionContext.getInstance();
 		try {
 			if (productDTO.identifiedByExists()) {
 				EntityByIdIncludingArchivedLoader<User> userLoader = createLoaderFactory(requestInformation).createEntityByIdLoader(User.class);
@@ -750,11 +750,11 @@ public class DataServiceImpl implements DataService {
 			}
 
 			
-			UserContext userContext = ThreadLocalUserContext.getInstance();
+			InteractionContext interactionContext = ThreadLocalInteractionContext.getInstance();
 			try {
 				// The performedBy user will be the same for all events in this group.
 				EntityByIdIncludingArchivedLoader<User> userLoader = createLoaderFactory(requestInformation).createEntityByIdLoader(User.class);
-				userContext.setCurrentUser(userLoader.setId(inspectionDTOs.get(0).getPerformedById()).load());
+				interactionContext.setCurrentUser(userLoader.setId(inspectionDTOs.get(0).getPerformedById()).load());
 			
 				Long tenantId = requestInformation.getTenantId();
 				PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
@@ -809,7 +809,7 @@ public class DataServiceImpl implements DataService {
 
 				return response;
 			} finally {
-				userContext.setCurrentUser(null);
+				interactionContext.setCurrentUser(null);
 			}
 		} catch (InspectionException e) {
 			throw e;
@@ -843,7 +843,7 @@ public class DataServiceImpl implements DataService {
 		ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
 		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
 
-		UserContext uc = ThreadLocalUserContext.getInstance();
+		InteractionContext uc = ThreadLocalInteractionContext.getInstance();
 		try {
 
 			User performedBy = persistenceManager.find(User.class, inspectionImageServiceDTO.getPerformedById());
@@ -894,7 +894,7 @@ public class DataServiceImpl implements DataService {
 		RequestResponse response = new RequestResponse();		
 		Long tenantId = requestInformation.getTenantId();
 		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
-		UserContext uc = ThreadLocalUserContext.getInstance();
+		InteractionContext uc = ThreadLocalInteractionContext.getInstance();
 		
 		try {
 			User modifiedBy = persistenceManager.find(User.class, assetImageServiceDTO.getModifiedById());

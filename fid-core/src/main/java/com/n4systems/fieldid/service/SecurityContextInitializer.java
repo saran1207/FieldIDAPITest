@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.service;
 
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.n4systems.fieldid.context.ThreadLocalUserContext;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
@@ -42,13 +42,13 @@ public class SecurityContextInitializer implements ApplicationContextAware {
 		SecurityContext securityContext = getSecurityContext();
 		securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(user.getTenant().getId()));
 		securityContext.setUserSecurityFilter(new UserSecurityFilter(user));
-		ThreadLocalUserContext.getInstance().setCurrentUser(user);
+		ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
 	}
 	
 	public static void resetSecurityContext() {
 		SecurityContext securityContext = getSecurityContext();
 		securityContext.reset();
-		ThreadLocalUserContext.getInstance().setCurrentUser(null);
+		ThreadLocalInteractionContext.getInstance().setCurrentUser(null);
 	}
 
 	private static SecurityContext getSecurityContext() {

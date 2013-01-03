@@ -123,6 +123,13 @@
 	</p>
 
     <p>
+        <label><@s.text name="label.created_on"/></label>
+		<span>
+            ${(event.createdPlatform)!}
+		</span>
+    </p>
+
+    <p>
         <label><@s.text name="label.createdby"/></label>
 		<span>
 			<#if event.createdBy?exists >
@@ -131,6 +138,13 @@
                 <@s.text name="label.on"/>
             </#if>
             ${action.formatDateTime(event.created)}
+		</span>
+    </p>
+
+    <p>
+        <label><@s.text name="label.modified_on"/></label>
+		<span>
+            ${(event.modifiedPlatform)!}
 		</span>
     </p>
 
@@ -145,6 +159,8 @@
             ${action.formatDateTime(event.modified)}
 		</span>
 	</p>
+
+
 	<p>
 		<label><@s.text name="label.assetstatus"/></label>
 		<span>

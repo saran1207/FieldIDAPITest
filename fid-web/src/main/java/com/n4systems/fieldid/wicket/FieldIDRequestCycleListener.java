@@ -1,9 +1,10 @@
 package com.n4systems.fieldid.wicket;
 
-import com.n4systems.fieldid.context.ThreadLocalUserContext;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
 import com.n4systems.fieldid.utils.SessionUserInUse;
+import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -42,7 +43,8 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
             storeFlagIfConcurrentUser(fieldidSession.getId(), sessionUser);
             FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
             User user = userLoader.setId(sessionUser.getId()).load();
-            ThreadLocalUserContext.getInstance().setCurrentUser(user);
+            ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
+            ThreadLocalInteractionContext.getInstance().setCurrentPlatform("Web, Version " + FieldIdVersion.getVersion());
 
             securityContext.setUserSecurityFilter(sessionUser.getSecurityFilter());
         }
@@ -65,7 +67,7 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
 
     @Override
     public void onEndRequest(RequestCycle cycle) {
-        ThreadLocalUserContext.getInstance().setCurrentUser(null);
+        ThreadLocalInteractionContext.getInstance().setCurrentUser(null);
         securityContext.setUserSecurityFilter(null);
         securityContext.setTenantSecurityFilter(null);
     }

@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 
-import com.n4systems.fieldid.context.ThreadLocalUserContext;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.selenium.persistence.MinimalTenantDataSetup;
 import com.n4systems.fieldid.selenium.persistence.PersistenceCallback;
 import com.n4systems.fieldid.selenium.persistence.PersistenceTemplate;
@@ -68,12 +68,12 @@ public abstract class DBTestCase {
             @Override
             public void doInTransaction(Transaction transaction) throws Exception {
                 for (String tenantName : TEST_TENANT_NAMES) {
-                    ThreadLocalUserContext.getInstance().setCurrentUser(null);
+                    ThreadLocalInteractionContext.getInstance().setCurrentUser(null);
                     MinimalTenantDataSetup dataSetup  = new MinimalTenantDataSetup(transaction, tenantName);
                     dataSetup.setupMinimalData();
                     // TODO: Testing whether we need a current user set for these items, might make tenant cleaner easier
-                    ThreadLocalUserContext.getInstance().setCurrentUser(null);
-//                    ThreadLocalUserContext.getInstance().setCurrentUser(dataSetup.getCreatedUser());
+                    ThreadLocalInteractionContext.getInstance().setCurrentUser(null);
+//                    ThreadLocalInteractionContext.getInstance().setCurrentUser(dataSetup.getCreatedUser());
                     dataSetup.createTestAssetTypes(TEST_ASSET_TYPES);
                 }
             }

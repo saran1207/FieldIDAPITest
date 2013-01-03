@@ -1,6 +1,6 @@
 package com.n4systems.persistence.utils;
 
-import com.n4systems.fieldid.context.UserContext;
+import com.n4systems.fieldid.context.InteractionContext;
 import com.n4systems.model.eula.EULA;
 import com.n4systems.model.user.User;
 import com.n4systems.util.time.StoppedClock;
@@ -21,15 +21,15 @@ public class DefaultEntityModifiedCreatedHandlerTest {
     private static final DateFormat TEST_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     private static final String TEST_DATE = "02/05/2011";
 
-    private UserContext mockUserContext;
+    private InteractionContext mockInteractionContext;
     private DefaultEntityModifiedCreatedHandler modifiedCreatedHandler;
     private Date testDate;
 
     @Before
     public void setup() throws Exception {
-        mockUserContext = createMock(UserContext.class);
+        mockInteractionContext = createMock(InteractionContext.class);
         testDate = TEST_DATE_FORMAT.parse(TEST_DATE);
-        modifiedCreatedHandler = new DefaultEntityModifiedCreatedHandler(mockUserContext, new StoppedClock(testDate));
+        modifiedCreatedHandler = new DefaultEntityModifiedCreatedHandler(mockInteractionContext, new StoppedClock(testDate));
     }
 
     @Test
@@ -92,8 +92,8 @@ public class DefaultEntityModifiedCreatedHandlerTest {
         if (user != null)
             user.setUserID("testuser");
 
-        expect(mockUserContext.getCurrentUser()).andReturn(user).anyTimes();
-        replay(mockUserContext);
+        expect(mockInteractionContext.getCurrentUser()).andReturn(user).anyTimes();
+        replay(mockInteractionContext);
     }
 
 }

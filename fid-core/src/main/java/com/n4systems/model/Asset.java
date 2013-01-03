@@ -2,6 +2,7 @@ package com.n4systems.model;
 
 import com.google.common.base.Joiner;
 import com.n4systems.model.api.Exportable;
+import com.n4systems.model.api.HasPlatformContext;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.location.Location;
@@ -20,7 +21,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "assets")
-public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer {
+public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer, HasPlatformContext {
 	private static final long serialVersionUID = 1L;
 	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
 
@@ -92,7 +93,13 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 
     @Column(insertable=false, updatable=false)
     private Long linked_id;
-    
+
+    @Column(name="modified_platform", length = 200)
+    private String modifiedPlatform;
+
+    @Column(name="created_platform", length = 200)
+    private String createdPlatform;
+
     @Embedded
     private GpsLocation gpsLocation = new GpsLocation(); 
     
@@ -512,8 +519,24 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	public void setGpsLocation(GpsLocation gpsLocation) {
 		this.gpsLocation = gpsLocation;
 	}
-	
-	public String getOrderNumber() {
+
+    public String getModifiedPlatform() {
+        return modifiedPlatform;
+    }
+
+    public void setModifiedPlatform(String modifiedPlatform) {
+        this.modifiedPlatform = modifiedPlatform;
+    }
+
+    public String getCreatedPlatform() {
+        return createdPlatform;
+    }
+
+    public void setCreatedPlatform(String createdPlatform) {
+        this.createdPlatform = createdPlatform;
+    }
+
+    public String getOrderNumber() {
 		if (getShopOrder() != null) {
 			return getShopOrder().getOrder().getOrderNumber();
 		} else if (getNonIntergrationOrderNumber() != null) {
@@ -527,4 +550,5 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
         String result = joiner.join(getType().getName(), getIdentifier(), getAssetStatus());
         return result;
     }
+
 }

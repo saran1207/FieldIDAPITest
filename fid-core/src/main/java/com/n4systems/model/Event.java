@@ -26,7 +26,7 @@ import java.util.TimeZone;
 @Entity
 @Table(name = "masterevents")
 @PrimaryKeyJoinColumn(name="event_id")
-public class Event extends AbstractEvent implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<Event>, Exportable, LocationContainer {
+public class Event extends AbstractEvent implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<Event>, Exportable, LocationContainer, HasPlatformContext {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
 	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.modifiedBy", "subEvents.eventForm.sections", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap"};
@@ -153,6 +153,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     @ManyToOne
     @JoinColumn(name="priority_id")
     private PriorityCode priority;
+
+    @Column(name="modified_platform", length = 200)
+    private String modifiedPlatform;
+
+    @Column(name="created_platform", length = 200)
+    private String createdPlatform;
 
 	public Event() {
 	}
@@ -660,4 +666,19 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
         this.scheduleId = scheduleId;
     }
 
+    public String getModifiedPlatform() {
+        return modifiedPlatform;
+    }
+
+    public void setModifiedPlatform(String modifiedPlatform) {
+        this.modifiedPlatform = modifiedPlatform;
+    }
+
+    public String getCreatedPlatform() {
+        return createdPlatform;
+    }
+
+    public void setCreatedPlatform(String createdPlatform) {
+        this.createdPlatform = createdPlatform;
+    }
 }
