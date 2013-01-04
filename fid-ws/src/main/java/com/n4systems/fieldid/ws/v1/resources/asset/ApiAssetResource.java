@@ -145,6 +145,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	public void multiAddAsset(ApiMultiAddAsset multiAddAsset) {
 		ApiAsset assetTemplate = multiAddAsset.getAssetTemplate();
 		for (ApiAssetIdentifiers identifiers: multiAddAsset.getIdentifiers()) {
+			assetTemplate.setSid(identifiers.getSid());
 			assetTemplate.setIdentifier(identifiers.getIdentifier());
 			assetTemplate.setRfidNumber(identifiers.getRfidNumber());
 			assetTemplate.setCustomerRefNumber(identifiers.getCustomerRefNumber());
