@@ -27,8 +27,9 @@ import com.n4systems.services.date.DateService;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -203,7 +204,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
                     target.add(feedback);
                 }
-            });
+            }.add(new AjaxIndicatorAppender()));
             add(inputContainer);
 
             recurringEventsList = new RefreshingView<RecurringAssetTypeEvent>("eventTypes") {
@@ -217,7 +218,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                     item.add(new Label("recurrence", new EnumLabelModel(event.getRecurrence().getType())));
                     item.add(new Label("org", new NullCoverterModel(new PropertyModel<String>(item.getDefaultModelObject(), "owner.name"), "---")));
                     item.add(new Label("time", new DisplayTimeModel(new PropertyModel<Set<RecurrenceTime>>(item.getDefaultModelObject(), "recurrence.times"))));
-                    item.add(new AjaxLink("remove") {
+                    item.add(new IndicatingAjaxLink("remove") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             deleteRecurringEvent(assetType, item.getModelObject());
@@ -425,11 +426,8 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
             LocalTime localTime = new LocalTime().withHourOfDay(time.getHour()).withMinuteOfHour(time.getMinute());
 
-            String clock = localTime.toString("K:mm a");
+            String clock = localTime.toString("hh:mm a");
 
-            if (time.isMidnight()) {
-                clock = time.hasDay() ? "" : "12:00 AM";  // workaround formatter which is military.
-            }
             return monthDay + clock;
         }
 
