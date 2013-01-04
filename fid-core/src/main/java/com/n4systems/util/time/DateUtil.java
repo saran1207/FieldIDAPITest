@@ -9,14 +9,6 @@ import java.util.Date;
 
 public class DateUtil {
 
-	public static long SECONDINMILLIS = 1000;
-	public static long MINUTEINMILLIS = SECONDINMILLIS * 60;
-	public static long HOURINMILLIS = MINUTEINMILLIS * 60;
-	public static long DAYINMILLIS = HOURINMILLIS * 24;
-	public static long WEEKINMILLIS = DAYINMILLIS * 7;
-	public static long YEARINMILLIS = DAYINMILLIS * 365;
-	
-
 	public static LocalDate getLocalDate(Integer year, Integer month, Integer day) {
 		LocalDate date = new LocalDate(year, month, day);
 		return date;

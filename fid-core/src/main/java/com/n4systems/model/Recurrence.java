@@ -17,7 +17,7 @@ public class Recurrence extends BaseEntity {
 
     private static final Logger logger=Logger.getLogger(Recurrence.class);
 
-    @OneToMany(mappedBy = "recurrence", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recurrence", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<RecurrenceTime> times = new HashSet<RecurrenceTime>();
 
     @Enumerated(EnumType.STRING)

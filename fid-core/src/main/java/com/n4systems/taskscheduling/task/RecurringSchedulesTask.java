@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.model.RecurringAssetTypeEvent;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.time.MethodTimer;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 
@@ -24,15 +25,16 @@ public class RecurringSchedulesTask extends ScheduledTask {
 
     @Override
     protected void runTask() throws Exception {
-        logger.info("Starting RecurringSchedulesTask...");
+        MethodTimer timer = new MethodTimer().withLogger(logger).start();
 
         List<RecurringAssetTypeEvent> list = getRecurringScheduleService().getRecurringAssetTypeEvents();
         for(RecurringAssetTypeEvent event: list) {
             for (LocalDateTime dateTime : getRecurringScheduleService().getBoundedScheduledTimesIterator(event.getRecurrence())) {
-                getRecurringScheduleService().scheduleAnEventFor(event, dateTime);            }
+                getRecurringScheduleService().scheduleAnEventFor(event, dateTime);
+            }
         }
 
-        logger.info("...Ending RecurringSchedulesTask");
+        timer.stop();
     }
 
 

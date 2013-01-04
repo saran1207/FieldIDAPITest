@@ -21,7 +21,7 @@ public class RecurringAssetTypeEvent extends ArchivableEntityWithOwner implement
     @JoinColumn(name = "event_type_id", nullable = false)
     private EventType eventType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="recurrence_id")
     private Recurrence recurrence;
 

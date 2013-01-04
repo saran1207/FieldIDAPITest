@@ -10,10 +10,12 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.joda.time.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
 import java.util.List;
 
+@Transactional
 public class RecurringScheduleService extends FieldIdPersistenceService {
 
     public static final int DAILY_EVENT_COUNT = 14;
@@ -46,7 +48,6 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
                 eventScheduleService.createSchedule(schedule);
             }
         }
-
     }
 
     /*package protected for test reasons*/
