@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.dashboard.subcomponents;
 
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
-import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
@@ -16,7 +15,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -49,10 +47,8 @@ public class EventKpiTable extends Panel {
 			@Override
 			protected void populateItem(ListItem<EventKpiRecord> item) {
 				EventKpiRecord eventKpiRecord = item.getModelObject();
-				item.add(new Kpi("kpi",item.getModel()));
-                BookmarkablePageLink total = new BookmarkablePageLink("total", RunReportPage.class, getParams(eventKpiRecord,KpiType.TOTAL.getLabel()));
-                total.add(new Label("label", eventKpiRecord.getTotalScheduledEvents()+""));
-                item.add(total);
+				item.add(new Kpi("kpi", item.getModel()));
+                item.add(new Label("total", eventKpiRecord.getTotalScheduledEvents()+""));
             }
 
 		});
@@ -115,7 +111,9 @@ public class EventKpiTable extends Panel {
             add(incomplete = new KpiBar(kpi, KpiType.INCOMPLETE).withWidth(100 - getRoundedPercentage(kpi)));
             incomplete.add(new KpiLabel("incompleteLabel", ProxyModel.of(kpi, on(EventKpiRecord.class).getScheduled())));
 
-            add(new KpiLabel("completeLabel", ProxyModel.of(kpi, on(EventKpiRecord.class).getCompleted()), getRoundedPercentage(kpi)) {
+            WebMarkupContainer allCompleted;
+            add(allCompleted = new WebMarkupContainer("allCompleted"));
+            allCompleted.add(new KpiLabel("completeLabel", ProxyModel.of(kpi, on(EventKpiRecord.class).getCompleted()), getRoundedPercentage(kpi)) {
                 @Override
                 protected String getTooltip() {
                     return new StringResourceModel("label.kpi_type.completed_all", Model.of(kpi), null).getString();
@@ -251,14 +249,6 @@ public class EventKpiTable extends Panel {
 
     }
 
-
-
-//    add(new AjaxEventBehavior("onclick") {
-//        @Override protected void onEvent(AjaxRequestTarget target) {
-//            // TODO : go to reporting page.
-//            System.out.println("clicked label " + KpiLabel.this.getId());
-//        }
-//    });
 
 
 }

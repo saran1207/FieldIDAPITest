@@ -22,13 +22,17 @@
 }
 
 .kpi .owner {
-    width:70%;
-    text-align: center;
     position:absolute;
-    left:15%;
     text-overflow: ellipsis;
-    z-index:222;
-    margin-top:9px;
+    margin-top:12px;
+    padding:0 2px;
+    opacity:.5;
+    font-style:italic;
+    display:inline-block;
+    z-index:123;
+    background:#fff;
+    height:12px;
+    line-height:10px;
 }
 
 .kpi .bar-chart {
@@ -38,6 +42,7 @@
     position: relative;
     background:white;
     float:left;
+    text-align: center;
 }
 
 .kpi .total {
@@ -69,6 +74,10 @@
     border-top: 1px dotted #666;
     border-right:1px dotted #666;
     border-left:1px dotted #666;
+}
+
+.kpi .bar-label:hover span {
+    color:#555;
 }
 
 
@@ -103,7 +112,7 @@
 .bar-label span {
     background: #f7f7f7;
     letter-spacing: 2px;
-    color:#666;
+    color:#888;
     font-size:10px;
     display:inline-block;
     line-height: 8px;
@@ -150,6 +159,7 @@
     height:100%;
     width:100%;
     position:absolute;
+    text-align:left;
 }
 
 

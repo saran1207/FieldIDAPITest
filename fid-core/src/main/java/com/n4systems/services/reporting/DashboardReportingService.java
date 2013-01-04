@@ -186,7 +186,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
     private EventReportCriteria getCriteriaDefaults(EventKPIWidgetConfiguration config, String series, int orgIndex) {
         Preconditions.checkArgument(orgIndex >= 0 && orgIndex <=config.getOrgs().size());
         EventReportCriteria criteria = getDefaultReportCriteria(config.getOrgs().get(orgIndex));
-
         DateRange dateRange = config.getDateRange();
         criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
         if (dateRange!=null && RangeType.FOREVER.equals(dateRange.getRangeType())) {
@@ -201,6 +200,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
             criteria.setEventResult(EventResult.FAIL);
         } else if (KpiType.COMPLETED.getLabel().equals(series)) {
             criteria.setWorkflowState(WorkflowState.COMPLETE);
+        } else if (KpiType.CLOSED.getLabel().equals(series)) {
+            criteria.setWorkflowState(WorkflowState.CLOSED);
         }
         return criteria;
     }
