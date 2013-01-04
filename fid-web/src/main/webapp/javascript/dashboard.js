@@ -206,13 +206,16 @@ var chartWidgetFactory = (function() {
 					var offset = '';
 					if ($('.kpi .cozy').length>0) {
 						offset = $(this).hasClass('failed') ? 'right ' :
-							$(this).hasClass('completed') ? 'left ' :
-								'';
+							$(this).hasClass('completed') ? 'left ' : '';
 					}
 					var tick = $(this);
 					$(this).next('span').position({'my':offset+'top','at':'bottom','of':tick});
 				}
-			});
+		});
+		$('.widget-content .kpi .bar-chart').each(function(){
+			var completedWidth = $(this).find('.bars.all-incomplete').css('left');
+			$(this).find('.bar-label.complete').css('width',completedWidth);
+		});
 
 	};
 	

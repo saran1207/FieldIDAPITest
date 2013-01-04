@@ -28,7 +28,7 @@
     left:15%;
     text-overflow: ellipsis;
     z-index:222;
-    margin-top:25%;
+    margin-top:9px;
 }
 
 .kpi .bar-chart {
@@ -48,11 +48,6 @@
 }
 
 
-.kpi .bar-chart .bars.all-incomplete {
-    margin-top:-2px;
-    padding-top:2px;
-}
-
 .kpi .bar-chart .bar {
     display:inline-block;
     float:left;
@@ -70,16 +65,12 @@
     background:#9DDFA1;
 }
 
-.kpi .bar-label.complete:hover {
-    border-top-color: #595;
-    opacity:.8;
+.kpi .bar-label:hover .span-line {
+    border-top: 1px dotted #666;
+    border-right:1px dotted #666;
+    border-left:1px dotted #666;
 }
 
-.kpi .bar-label.incomplete:hover {
-    border-top-color: #555;
-    border-bottom-color: transparent;
-    opacity:.8;
-}
 
 .kpi .bar-chart .bar.completed {
     background:#BDFFD1;
@@ -95,36 +86,36 @@
 }
 
 .kpi .bar-label {
-    opacity:.35;
-    line-height: 10px;
-    float:left;
-    display:inline-block;
+    clear:both;
+    height:20px;
+    margin-top:-16px;
     position:absolute;
-    color:black;
-    padding-top:3px;
-    font-size:10px;
-    letter-spacing: 2px;
-    border-bottom:1px dotted #999;
-    text-align: right;
-    padding-bottom:2px;
-    border-top:2px solid;
-    border-top-color: transparent;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    margin-top:-2px;
-}
-.kpi .bar-label.complete {
-    text-align: center;
-    left:0;
-    background:#C4D7C4;
-    z-index:111;
+    top:0;
+    text-align:center;
 }
 
+
 .kpi .bar-label.incomplete {
-    color:black;
-    text-align: right;
-    border-bottom: 1px dotted #ddd;
-    right:0;
+    width:100%;
+    left:0;
+}
+
+.bar-label span {
+    background: #f7f7f7;
+    letter-spacing: 2px;
+    color:#666;
+    font-size:10px;
+    display:inline-block;
+    line-height: 8px;
+}
+
+.bar-label .span-line {
+    border-top: 1px dotted #eee;
+    border-right:1px dotted #ccc;
+    border-left:1px dotted #ccc;
+    margin-top:-8px;
+    height:3px;
+    border-radius:3px;
 }
 
 .kpi .tick {
@@ -160,4 +151,6 @@
     width:100%;
     position:absolute;
 }
+
+
 

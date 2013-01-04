@@ -49,7 +49,7 @@ public class EventKpiTable extends Panel {
 			@Override
 			protected void populateItem(ListItem<EventKpiRecord> item) {
 				EventKpiRecord eventKpiRecord = item.getModelObject();
-				item.add(new BarChart("barChart",item.getModel()));
+				item.add(new Kpi("kpi",item.getModel()));
                 BookmarkablePageLink total = new BookmarkablePageLink("total", RunReportPage.class, getParams(eventKpiRecord,KpiType.TOTAL.getLabel()));
                 total.add(new Label("label", eventKpiRecord.getTotalScheduledEvents()+""));
                 item.add(total);
@@ -93,26 +93,26 @@ public class EventKpiTable extends Panel {
 	}
 
 
-    class BarChart extends WebMarkupContainer {
+    class Kpi extends WebMarkupContainer {
 
         public final Long COZY_THRESHOLD=20L;
 
-        private final KPI completed;
-        private final KPI failed;
-        private final KPI closed;
-        private final KPI incomplete;
+        private final KpiBar completed;
+        private final KpiBar failed;
+        private final KpiBar closed;
+        private final KpiBar incomplete;
 
-        public BarChart(String id, final IModel<EventKpiRecord> model) {
+        public Kpi(String id, final IModel<EventKpiRecord> model) {
             super(id, model);
 
             add(new Label("customerName", model.getObject().getCustomer().getDisplayName()));
 
             final EventKpiRecord kpi = model.getObject();
 
-            add(completed = new KPI(kpi, KpiType.COMPLETED));
-            add(failed = new KPI(kpi, KpiType.FAILED));
-            add(closed = new KPI(kpi, KpiType.CLOSED));
-            add(incomplete = new KPI(kpi, KpiType.INCOMPLETE).withWidth(100 - getRoundedPercentage(kpi)));
+            add(completed = new KpiBar(kpi, KpiType.COMPLETED));
+            add(failed = new KpiBar(kpi, KpiType.FAILED));
+            add(closed = new KpiBar(kpi, KpiType.CLOSED));
+            add(incomplete = new KpiBar(kpi, KpiType.INCOMPLETE).withWidth(100 - getRoundedPercentage(kpi)));
             incomplete.add(new KpiLabel("incompleteLabel", ProxyModel.of(kpi, on(EventKpiRecord.class).getScheduled())));
 
             add(new KpiLabel("completeLabel", ProxyModel.of(kpi, on(EventKpiRecord.class).getCompleted()), getRoundedPercentage(kpi)) {
@@ -133,15 +133,14 @@ public class EventKpiTable extends Panel {
         }
 
 
-        class KPI extends WebMarkupContainer {
+        class KpiBar extends WebMarkupContainer {
 
             private final KpiType type;
             private final EventKpiRecord eventKpiRecord;
-            private Label label;
             private Long width;
             private final String tooltip;
 
-            public KPI(EventKpiRecord eventKpiRecord, KpiType type) {
+            public KpiBar(EventKpiRecord eventKpiRecord, KpiType type) {
                 super(type.getLabel());
                 this.type = type;
                 this.eventKpiRecord = eventKpiRecord;
@@ -187,7 +186,7 @@ public class EventKpiTable extends Panel {
                 tag.put("title", tooltip);
             }
 
-            public KPI withWidth(Long width) {
+            public KpiBar withWidth(Long width) {
                 this.width = width;
                 return this;
             }
@@ -215,7 +214,7 @@ public class EventKpiTable extends Panel {
 
                 @Override protected void onComponentTag(ComponentTag tag) {
                     super.onComponentTag(tag);
-                    tag.put("title", KPI.this.tooltip);
+                    tag.put("title", KpiBar.this.tooltip);
                 }
 
             }
@@ -227,7 +226,6 @@ public class EventKpiTable extends Panel {
     class KpiLabel extends Label {
 
         private final long percentage;
-        private Long offset;
 
         public KpiLabel(String id, IModel<Long> model) {
             this(id,model,100L);
@@ -236,18 +234,10 @@ public class EventKpiTable extends Panel {
         public KpiLabel(String id, IModel<Long> model, Long percentage) {
             super(id, model);
             this.percentage = percentage;
-            add(new AjaxEventBehavior("onclick") {
-                @Override protected void onEvent(AjaxRequestTarget target) {
-                    // TODO : go to reporting page.
-                    System.out.println("clicked label " + KpiLabel.this.getId());
-                }
-            });
         }
 
         @Override protected void onComponentTag(ComponentTag tag) {
             super.onComponentTag(tag);
-            String style = "width:" + percentage + "%;";
-            tag.put("style", style);
             tag.put("title", getTooltip());
         }
 
@@ -263,6 +253,12 @@ public class EventKpiTable extends Panel {
 
 
 
+//    add(new AjaxEventBehavior("onclick") {
+//        @Override protected void onEvent(AjaxRequestTarget target) {
+//            // TODO : go to reporting page.
+//            System.out.println("clicked label " + KpiLabel.this.getId());
+//        }
+//    });
 
 
 }
