@@ -13,6 +13,7 @@ import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToScheduleC
 import com.n4systems.fieldid.actions.helpers.*;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
@@ -54,6 +55,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 
     @Autowired
     protected UserService userService;
+    @Autowired
+    private RecurringScheduleService recurringScheduleService;
 
     // drop down lists
 	private List<CommentTemplate> commentTemplates;
@@ -513,6 +516,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 			if (!asset.getType().equals(oldType)) {
 				eventScheduleManager.removeAllSchedulesFor(asset);
 			}
+
+            recurringScheduleService.verifyAssetOwnerRecurringSchedules(asset);
 
 			AssetSaveService saver = getAssetSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());

@@ -33,6 +33,30 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
+    public List<RecurringAssetTypeEvent> getRecurringAssetTypeEvents(AssetType assetType) {
+        QueryBuilder<RecurringAssetTypeEvent> query = createTenantSecurityBuilder(RecurringAssetTypeEvent.class);
+        query.addSimpleWhere("assetType", assetType);
+        return persistenceService.findAll(query);
+    }
+
+    public List<Event> getRecurringEventsForAsset(Asset asset, RecurringAssetTypeEvent event){
+        QueryBuilder<Event> query = createTenantSecurityBuilder(Event.class);
+        query.addSimpleWhere("asset", asset);
+        query.addSimpleWhere("recurringEvent", event);
+        return persistenceService.findAll(query);
+    }
+
+    public void verifyAssetOwnerRecurringSchedules(Asset asset) {
+        for (RecurringAssetTypeEvent recurringEvent: getRecurringAssetTypeEvents(asset.getType())) {
+            if(recurringEvent.getOwner() != null && !recurringEvent.getOwner().equals(asset.getOwner())) {
+                for(Event event: getRecurringEventsForAsset(asset, recurringEvent)) {
+                    event.archiveEntity();
+                    persistenceService.update(event);
+                }
+            }
+        }
+    }
+
     public void scheduleAnEventFor(RecurringAssetTypeEvent event, LocalDateTime futureDate) {
         List<Asset> assetsToSchedule = getAssetsByAssetType(event);
 
@@ -80,8 +104,6 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
     public Iterable<LocalDateTime> getBoundedScheduledTimesIterator(Recurrence recurrence) {
         return new BoundedScheduleTimeIterator(recurrence);
     }
-
-
 
     class BoundedScheduleTimeIterator implements Iterable<LocalDateTime>, Iterator<LocalDateTime> {
 
