@@ -46,7 +46,7 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 	}
 
 	private String getPermissionYNString(User model, int tag) {
-		return Permissions.hasOneOf(model, Permissions.Tag) ? "Y" : "N";	
+		return Permissions.hasOneOf(model, tag) ? "Y" : "N";
 	}
 
 	protected void convertDirectFields(Event model, EventView view) {
