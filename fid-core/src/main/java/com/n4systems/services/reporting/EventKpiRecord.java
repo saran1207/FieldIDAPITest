@@ -3,18 +3,20 @@ package com.n4systems.services.reporting;
 import com.n4systems.model.orgs.BaseOrg;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class EventKpiRecord implements Serializable {
-	
-	private Long completed = 0L;
-	
-	private Long inProgress = 0L;
 
+    // different workflow states.
+	private Long completed = 0L;
+	private Long incomplete = 0L;
     private Long closed = 0L;
-	
-	private Long scheduled = 0L;
-	
+
+    // different types of Complete...
 	private Long failed = 0L;
+    private Long passed = 0L;
+    private Long na = 0L;
+    private Long voyd = 0L;
 	
 	private BaseOrg customer;
 
@@ -22,32 +24,39 @@ public class EventKpiRecord implements Serializable {
 		return completed;
 	}
 
-	public void setCompleted(Long completed) {
-		this.completed = completed;
+	public void setCompleted(List<CompletedResultRecord> completed) {
+        Long count = 0L;
+        for (CompletedResultRecord result:completed) {
+            Long value = result.getCount();
+            switch (result.getState()) {
+                case PASS:
+                    passed = value;
+                    break;
+                case FAIL:
+                    failed = value;
+                    break;
+                case NA:
+                    na = value;
+                    break;
+                case VOID:
+                    voyd = value;
+                    break;
+            }
+            count+= value;
+        }
+		this.completed = count;
 	}
 
-	public Long getInProgress() {
-		return inProgress;
+	public Long getIncomplete() {
+		return incomplete;
 	}
 
-	public void setInProgress(Long inProgress) {
-		this.inProgress = inProgress;
-	}
-
-	public Long getScheduled() {
-		return scheduled;
-	}
-
-	public void setScheduled(Long scheduled) {
-		this.scheduled = scheduled;
+	public void setIncomplete(Long incomplete) {
+		this.incomplete = incomplete;
 	}
 
 	public long getFailed() {
 		return failed;
-	}
-
-	public void setFailed(long failed) {
-		this.failed = failed;
 	}
 
 	public BaseOrg getCustomer() {
@@ -59,7 +68,7 @@ public class EventKpiRecord implements Serializable {
 	}
 
 	public Long getTotalScheduledEvents() {
-		return completed + inProgress + scheduled;
+		return completed + incomplete + closed;
 	}
 
     public Long getClosed() {
@@ -70,37 +79,16 @@ public class EventKpiRecord implements Serializable {
         this.closed = closed;
     }
 
-    public Long getCompletedPercentage() {
-        if(getTotalScheduledEvents() > 0L)
-            return Math.round((getCompleted().doubleValue() * 100)/getTotalScheduledEvents().doubleValue());
-        else
-            return 0L;
+    public Long getNa() {
+        return na;
     }
 
-    public Long getCompletedExcludingFailedAndClosed() {
-        // TODO : what is the semantics of closed/completed/failed????  should i subtract failed?   ...ask matt.
-        return completed - failed - closed;
+    public Long getPassed() {
+        return passed;
     }
 
-    public Double getCompletedExcludingFailedAndClosedPercentage() {
-        return getTotalScheduledEvents() == 0 ? 0 :
-                getCompletedExcludingFailedAndClosed() * 100 / getTotalScheduledEvents().doubleValue();
-    }
-
-
-    public Double getFailedPercentage() {
-        return getTotalScheduledEvents() == 0 ? 0 :
-                failed * 100 / getTotalScheduledEvents().doubleValue();
-    }
-
-    public Double getClosedPercentage() {
-        return getTotalScheduledEvents() == 0 ? 0 :
-                closed * 100 / getTotalScheduledEvents().doubleValue();
-    }
-
-    public Double getIncompletePercentage() {
-        return getTotalScheduledEvents() == 0 ? 0 :
-                scheduled * 100 / getTotalScheduledEvents().doubleValue();
+    public Long getVoyd() {
+        return voyd;
     }
 
 }

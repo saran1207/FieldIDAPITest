@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.dashboard.subcomponents;
 
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
@@ -43,14 +44,11 @@ public class EventKpiTable extends Panel {
         this.widgetDefinition = widgetDefinition;
 
 		add(new ListView<EventKpiRecord>("customerEventKpiList", getCustomerEventKPIs(orgList)) {
-			
-			@Override
-			protected void populateItem(ListItem<EventKpiRecord> item) {
+			@Override protected void populateItem(ListItem<EventKpiRecord> item) {
 				EventKpiRecord eventKpiRecord = item.getModelObject();
 				item.add(new Kpi("kpi", item.getModel()));
                 item.add(new Label("total", eventKpiRecord.getTotalScheduledEvents()+""));
             }
-
 		});
 	}
 
@@ -59,16 +57,17 @@ public class EventKpiTable extends Panel {
         return Math.max(1L,value * 100 / total);
     }
 
-    private long getRoundedPercentage(EventKpiRecord kpi) {
+    private long getRoundedPercentage(KpiWrapper kpi) {
         // note : i need to account for rounding.
-        // e.g. total = 99.   x = 32, y = 30, z = 12.  (31.??%, 29.??%, 11.??%)    rounded percentage = 31+29+11=71%
-        // as opposed to (32+30+12)/99 = 73+%
+        // e.g. say total = 99.   x = 32, y = 30, z = 12.  (31.??%, 29.??%, 11.??%)    rounded percentage = 31+29+11=71%
+        // as opposed to (x+y+z)/total -> (32+30+12)/99 = 73+%
         return getPercentage(kpi.getFailed(), kpi.getTotalScheduledEvents()) +
                 getPercentage(kpi.getClosed(), kpi.getTotalScheduledEvents()) +
-                getPercentage(kpi.getCompletedExcludingFailedAndClosed(), kpi.getTotalScheduledEvents());
+                getPercentage(kpi.getNa(), kpi.getTotalScheduledEvents()) +
+                getPercentage(kpi.getPassed(), kpi.getTotalScheduledEvents());
     }
 
-    private PageParameters getParams(EventKpiRecord eventKpiRecord, String series) {
+    private PageParameters getParams(KpiWrapper eventKpiRecord, String series) {
         PageParameters params = new PageParameters().add(AbstractSearchPage.SOURCE_PARAMETER, AbstractSearchPage.WIDGET_SOURCE).add(AbstractSearchPage.WIDGET_DEFINITION_PARAMETER, widgetDefinition.getId());
         params.add(AbstractSearchPage.SERIES_PARAMETER, series);
         int orgIndex = widgetDefinition.getConfig().getOrgs().indexOf(eventKpiRecord.getCustomer());
@@ -89,40 +88,45 @@ public class EventKpiTable extends Panel {
 	}
 
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     class Kpi extends WebMarkupContainer {
 
         public final Long COZY_THRESHOLD=20L;
 
-        private final KpiBar completed;
+        private final KpiBar passed;
         private final KpiBar failed;
         private final KpiBar closed;
         private final KpiBar incomplete;
+        private final KpiBar na;
+        private KpiWrapper kpi;
 
         public Kpi(String id, final IModel<EventKpiRecord> model) {
             super(id, model);
 
             add(new Label("customerName", model.getObject().getCustomer().getDisplayName()));
 
-            final EventKpiRecord kpi = model.getObject();
+            kpi = new KpiWrapper(model.getObject());
 
-            add(completed = new KpiBar(kpi, KpiType.COMPLETED));
+            add(passed = new KpiBar(kpi, KpiType.PASSED));
             add(failed = new KpiBar(kpi, KpiType.FAILED));
             add(closed = new KpiBar(kpi, KpiType.CLOSED));
+            add(na = new KpiBar(kpi, KpiType.NA));
             add(incomplete = new KpiBar(kpi, KpiType.INCOMPLETE).withWidth(100 - getRoundedPercentage(kpi)));
-            incomplete.add(new KpiLabel("incompleteLabel", ProxyModel.of(kpi, on(EventKpiRecord.class).getScheduled())));
+            incomplete.add(new KpiLabel("incompleteLabel", KpiType.INCOMPLETE, ProxyModel.of(kpi, on(KpiWrapper.class).getIncomplete())));
 
             WebMarkupContainer allCompleted;
             add(allCompleted = new WebMarkupContainer("allCompleted"));
-            allCompleted.add(new KpiLabel("completeLabel", ProxyModel.of(kpi, on(EventKpiRecord.class).getCompleted()), getRoundedPercentage(kpi)) {
-                @Override
-                protected String getTooltip() {
-                    return new StringResourceModel("label.kpi_type.completed_all", Model.of(kpi), null).getString();
+            allCompleted.add(new KpiLabel("completeLabel", KpiType.PASSED, ProxyModel.of(kpi, on(KpiWrapper.class).getCompletedAndClosed()), getRoundedPercentage(kpi)) {
+                @Override protected String getTooltip() {
+                    return new StringResourceModel("label.kpi_type.completed", Model.of(kpi), null).getString();
                 }
-            }) ;
+            });
 
-            add(completed.createTickMark());
+            add(passed.createTickMark());
             add(closed.createTickMark());
             add(failed.createTickMark());
+            add(na.createTickMark());
 
             if (kpi.getCompletedPercentage()< COZY_THRESHOLD) {
                  add(new AttributeAppender("class", Model.of("cozy"), " "));
@@ -130,19 +134,24 @@ public class EventKpiTable extends Panel {
 
         }
 
-
         class KpiBar extends WebMarkupContainer {
 
             private final KpiType type;
-            private final EventKpiRecord eventKpiRecord;
+            private final KpiWrapper kpi;
             private Long width;
             private final String tooltip;
 
-            public KpiBar(EventKpiRecord eventKpiRecord, KpiType type) {
+            public KpiBar(final KpiWrapper kpi, final KpiType type) {
                 super(type.getLabel());
                 this.type = type;
-                this.eventKpiRecord = eventKpiRecord;
-                this.tooltip = new StringResourceModel("label.kpi_type."+type.getLabel(), Model.of(eventKpiRecord), null).getString();
+                this.kpi = kpi;
+                this.tooltip = new StringResourceModel("label.kpi_type."+type.getLabel(), Model.of(kpi), null).getString();
+                add(new AjaxEventBehavior("onclick") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        EventKpiTable.this.setResponsePage(RunReportPage.class, getParams(kpi, type.getLabel()));
+                    }
+                });
             }
 
             @Override
@@ -158,15 +167,17 @@ public class EventKpiTable extends Panel {
             private Long getValue() {
                 switch (type) {
                     case FAILED:
-                        return eventKpiRecord.getFailed();
+                        return kpi.getFailed();
                     case INCOMPLETE:
-                        return eventKpiRecord.getScheduled();
-                    case COMPLETED:
-                        return eventKpiRecord.getCompletedExcludingFailedAndClosed();
+                        return kpi.getIncomplete();
+                    case PASSED:
+                        return kpi.getPassed();
                     case CLOSED:
-                        return eventKpiRecord.getClosed();
+                        return kpi.getClosed();
                     case TOTAL:
-                        return eventKpiRecord.getTotalScheduledEvents();
+                        return kpi.getTotalScheduledEvents();
+                    case NA:
+                        return kpi.getNa();
                     default:
                         throw new IllegalStateException("invalid kpi type " + type);
                 }
@@ -175,7 +186,7 @@ public class EventKpiTable extends Panel {
             @Override
             protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
-                Long w = width==null ? getPercentage(getValue(), eventKpiRecord.getTotalScheduledEvents()) : width;
+                Long w = width==null ? getPercentage(getValue(), kpi.getTotalScheduledEvents()) : width;
                 String style = "width:" + w + "%;";
                 if (width !=null) {
                     style+=" left:"+(100-width)+"%;";
@@ -197,12 +208,7 @@ public class EventKpiTable extends Panel {
             class KpiTickMark extends Label {
 
                 public KpiTickMark(String id, IModel<Long> model) {
-                    super(id,model);
-                    add(new AjaxEventBehavior("onclick") {
-                        @Override protected void onEvent(AjaxRequestTarget target) {
-                            System.out.println("tick mark clicked " + KpiTickMark.this.getId());
-                        }
-                    });
+                    super(id, model);
                 }
 
                 @Override
@@ -212,42 +218,48 @@ public class EventKpiTable extends Panel {
 
                 @Override protected void onComponentTag(ComponentTag tag) {
                     super.onComponentTag(tag);
-                    tag.put("title", KpiBar.this.tooltip);
                 }
 
             }
 
         }
 
+
+        class KpiLabel extends Label {
+
+            private final long percentage;
+
+            public KpiLabel(String id, KpiType type,IModel<Long> model) {
+                this(id,type,model,100L);
+            }
+
+            public KpiLabel(String id, KpiType type,IModel<Long> model, Long percentage) {
+                super(id, model);
+                this.percentage = percentage;
+            }
+
+            @Override protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.put("title", getTooltip());
+            }
+
+            protected String getTooltip() {
+                return null;
+            }
+
+            @Override public boolean isVisible() {
+                return percentage>0;
+            }
+
+        }
+
+
     }
 
-    class KpiLabel extends Label {
 
-        private final long percentage;
 
-        public KpiLabel(String id, IModel<Long> model) {
-            this(id,model,100L);
-        }
 
-        public KpiLabel(String id, IModel<Long> model, Long percentage) {
-            super(id, model);
-            this.percentage = percentage;
-        }
 
-        @Override protected void onComponentTag(ComponentTag tag) {
-            super.onComponentTag(tag);
-            tag.put("title", getTooltip());
-        }
-
-        protected String getTooltip() {
-            return null;
-        }
-
-        @Override public boolean isVisible() {
-            return percentage>0;
-        }
-
-    }
 
 
 

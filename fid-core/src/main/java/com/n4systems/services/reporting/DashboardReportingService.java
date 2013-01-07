@@ -198,8 +198,10 @@ public class DashboardReportingService extends FieldIdPersistenceService {
             criteria.setWorkflowState(WorkflowState.OPEN);
         } else if (KpiType.FAILED.getLabel().equals(series)) {
             criteria.setEventResult(EventResult.FAIL);
-        } else if (KpiType.COMPLETED.getLabel().equals(series)) {
-            criteria.setWorkflowState(WorkflowState.COMPLETE);
+        } else if (KpiType.NA.getLabel().equals(series)) {
+            criteria.setEventResult(EventResult.NA);
+        } else if (KpiType.PASSED.getLabel().equals(series)) {
+            criteria.setEventResult(EventResult.PASS);
         } else if (KpiType.CLOSED.getLabel().equals(series)) {
             criteria.setWorkflowState(WorkflowState.CLOSED);
         }

@@ -212,23 +212,23 @@ public class EventService extends FieldIdPersistenceService {
 		for (EventScheduleStatusCount statusCount: statusCounts ) {
             if (statusCount.state.equals(Event.WorkflowState.CLOSED))
                 eventKpiRecord.setClosed(statusCount.count);
-            if (statusCount.state.equals(Event.WorkflowState.COMPLETED))
-                eventKpiRecord.setCompleted(statusCount.count);
             if (statusCount.state.equals(Event.WorkflowState.OPEN))
-				eventKpiRecord.setScheduled(statusCount.count);
+				eventKpiRecord.setIncomplete(statusCount.count);
 		}
 
-		QueryBuilder<Event> builder2 = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter());
+		QueryBuilder<CompletedResultRecord> builder2 = new QueryBuilder<CompletedResultRecord>(Event.class, securityContext.getUserSecurityFilter());
 		builder2.applyFilter(new OwnerAndDownFilter(owner));
 		builder2.addSimpleWhere("workflowState", Event.WorkflowState.COMPLETED);
-		builder2.addSimpleWhere("eventResult", EventResult.FAIL);
 		builder2.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
+        builder2.addGroupBy("eventResult");
+
+        builder2.setSelectArgument(new NewObjectSelect(CompletedResultRecord.class, "eventResult", "COUNT(*)"));
+
+        List<CompletedResultRecord> completed = persistenceService.findAll(builder2);
 		
-		Long failedCount = persistenceService.count(builder2);
-		
-		eventKpiRecord.setFailed(failedCount);
-		
-		return eventKpiRecord;
+        eventKpiRecord.setCompleted(completed);
+
+        return eventKpiRecord;
 	}
 
     @Transactional(readOnly = true)
@@ -599,3 +599,6 @@ public class EventService extends FieldIdPersistenceService {
     }
 
 }
+
+
+

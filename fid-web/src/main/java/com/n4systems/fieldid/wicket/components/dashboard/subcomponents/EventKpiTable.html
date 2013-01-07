@@ -13,12 +13,16 @@
                 <div class="tick closed"></div>
                 <span wicket:id="closedTickMark" class="tick-label closed north"/>
 
+                <div wicket:id="na" class="bar na north"></div>
+                <div class="tick na"></div>
+                <span wicket:id="naTickMark" class="tick-label na north"/>
+
                 <div wicket:id="completed" class="bar completed northwest"></div>
                 <div class="tick completed"></div>
                 <span wicket:id="completedTickMark" class="tick-label completed northwest" />
 
-                <div class="bar-label complete southheast" wicket:id="allCompleted">
-                    <span wicket:id="completeLabel"></span>
+                <div class="bar-label complete" wicket:id="allCompleted">
+                    <span wicket:id="completeLabel" class="southeast"></span>
                     <div class="span-line"/>
                 </div>
             </div>

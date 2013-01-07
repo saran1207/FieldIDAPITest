@@ -71,7 +71,7 @@
 }
 
 .kpi .bar-label:hover .span-line {
-    border-top: 1px dotted #666;
+    border-top: 1px dotted #888;
     border-right:1px dotted #666;
     border-left:1px dotted #666;
 }
@@ -88,6 +88,10 @@
 
 .kpi .bar-chart .bar.closed {
     background:#75DAD6;
+}
+
+.kpi .bar-chart .bar.na {
+    background: #e3e83f;
 }
 
 .kpi .bar-chart .bar.failed {
@@ -119,9 +123,9 @@
 }
 
 .bar-label .span-line {
-    border-top: 1px dotted #eee;
-    border-right:1px dotted #ccc;
-    border-left:1px dotted #ccc;
+    border-top: 1px dotted #e8e8e8;
+    border-right:1px dotted #eee;
+    border-left:1px dotted #eee;
     margin-top:-8px;
     height:3px;
     border-radius:3px;
@@ -153,6 +157,10 @@
 
 .kpi .tick.completed {
     border-bottom-color: #b5DFb5;
+}
+
+.kpi .tick.na {
+    border-bottom-color: #b8b828;
 }
 
 .kpi .bars {
