@@ -57,7 +57,7 @@ public class SchedulePickerPanel extends Panel {
         public ScheduleForm(String id, final IModel<Event> eventScheduleModel, final IModel<List<EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
             super(id, eventScheduleModel);
 
-            Date dueDate = eventScheduleModel.getObject().getDate();
+            Date dueDate = eventScheduleModel.getObject().getDueDate();
 
             setDefaultEventType(eventScheduleModel, eventTypeOptions);
 
