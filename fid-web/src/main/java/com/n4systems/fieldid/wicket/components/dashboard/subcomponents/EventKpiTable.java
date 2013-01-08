@@ -43,10 +43,15 @@ public class EventKpiTable extends Panel {
 			@Override protected void populateItem(ListItem<EventKpiRecord> item) {
 				EventKpiRecord eventKpiRecord = item.getModelObject();
                 item.add(new Label("customerName", eventKpiRecord.getCustomer().getDisplayName()));
-                KpiWrapper kpiWrapper = new KpiWrapper(eventKpiRecord);
+                final KpiWrapper kpiWrapper = new KpiWrapper(eventKpiRecord);
                 item.add(new Label("total", new StringResourceModel("label.kpi_total", Model.of(kpiWrapper), null).getString() ));
                 item.add(new AbsoluteKpi("absoluteKpi", item.getModel(), eventKpiRecord.getTotalScheduledEvents()));
                 item.add(new RelativeKpi("relativeKpi", item.getModel(), kpiWrapper.getCompletedAndClosed()));
+                item.add(new WebMarkupContainer("blankSlate") {
+                    @Override public boolean isVisible() {
+                        return kpiWrapper.getTotalScheduledEvents() == 0L;
+                    }
+                });
             }
 		});
 	}
@@ -96,7 +101,7 @@ public class EventKpiTable extends Panel {
         private final KpiBar failed;
         private final KpiBar closed;
         private final KpiBar na;
-        private Long total;
+        protected Long total;
         protected boolean showTooltip = false;
 
         public Kpi(String id, final IModel<EventKpiRecord> model, Long total) {
@@ -125,7 +130,14 @@ public class EventKpiTable extends Panel {
                     return kpi.getNa();
                 }
             });
+
         }
+
+        @Override
+        public boolean isVisible() {
+            return total>0L;
+        }
+
 
         class KpiBar extends WebMarkupContainer {
 
@@ -199,24 +211,23 @@ public class EventKpiTable extends Panel {
     class AbsoluteKpi extends Kpi {
         private final KpiBar incomplete;
 
-        public AbsoluteKpi(String id, IModel<EventKpiRecord> model, Long total) {
+        public AbsoluteKpi(String id, IModel<EventKpiRecord> model, final Long total) {
             super(id, model, total);
 
             add(incomplete = new KpiBar(kpi, KpiType.INCOMPLETE) {
-                @Override
-                protected Long getValue() {
+                @Override protected Long getValue() {
                     return kpi.getIncomplete();
                 }
                 @Override protected boolean showTooltip() {
                     return true;
                 }
             }.withWidth(100 - getRoundedPercentage(kpi)));
+
         }
 
         @Override
         protected void onComponentTag(final ComponentTag tag) {
             super.onComponentTag(tag);
-            //tag.put("title", new StringResourceModel("label.kpi_total", Model.of(kpi), null).getString());
         }
 
     }
