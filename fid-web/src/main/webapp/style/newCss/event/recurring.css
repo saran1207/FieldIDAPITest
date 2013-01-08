@@ -80,3 +80,8 @@
     width:125px;
     color:#555;
 }
+
+.remove + .wicket-ajax-indicator img {
+    padding:5px;
+}
+
