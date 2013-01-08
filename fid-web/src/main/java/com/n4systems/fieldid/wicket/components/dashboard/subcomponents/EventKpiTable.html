@@ -1,41 +1,47 @@
 <wicket:panel>
 
+    <div class="kpi-header">
+        <span class="legend failed"></span>
+        <span><wicket:message key="label.failed"/></span>
+        <span class="legend closed"></span>
+        <span><wicket:message key="label.closed"/></span>
+        <span class="legend na"></span>
+        <span><wicket:message key="label.na"/></span>
+        <span class="legend passed"></span>
+        <span><wicket:message key="label.passed"/></span>
+    </div>
+
     <div wicket:id="customerEventKpiList" class="kpi">
 
-        <div wicket:id="kpi" class="bar-chart">
+        <div class="label">
             <div wicket:id="customerName" class="owner"></div>
-            <div class="bars all-completed">
-                <div wicket:id="failed" class="bar failed northeast"></div>
-                <div class="tick failed"></div>
-                <span wicket:id="failedTickMark" class="tick-label failed northeast"/>
+            <div wicket:id="total" class="total"></div>
+        </div>
 
-                <div wicket:id="closed" class="bar closed north"></div>
-                <div class="tick closed"></div>
-                <span wicket:id="closedTickMark" class="tick-label closed north"/>
-
-                <div wicket:id="na" class="bar na north"></div>
-                <div class="tick na"></div>
-                <span wicket:id="naTickMark" class="tick-label na north"/>
-
-                <div wicket:id="completed" class="bar completed northwest"></div>
-                <div class="tick completed"></div>
-                <span wicket:id="completedTickMark" class="tick-label completed northwest" />
-
-                <div class="bar-label complete" wicket:id="allCompleted">
-                    <span wicket:id="completeLabel" class="southeast"></span>
-                    <div class="span-line"/>
+        <div class="section top">
+            <div wicket:id="absoluteKpi" class="bar-chart">
+                <div class="bars completed">
+                    <div wicket:id="failed" class="bar failed"></div>
+                    <div wicket:id="closed" class="bar closed"></div>
+                    <div wicket:id="na" class="bar na"></div>
+                    <div wicket:id="passed" class="bar passed"></div>
                 </div>
-            </div>
 
-            <div class="bars all-incomplete northwest" wicket:id="incomplete">
-                <div  class="bar-label incomplete">
-                    <span wicket:id="incompleteLabel"></span>
-                    <div class="span-line"/>
+                <div class="bars incomplete southwest" wicket:id="incomplete">
                 </div>
             </div>
         </div>
 
-        <div wicket:id="total" class="total"></div>
+        <div class="section bottom">
+            <div wicket:id="relativeKpi" class="bar-chart relative">
+                <div class="bars completed">
+                    <div wicket:id="failed" class="bar failed northwest"></div>
+                    <div wicket:id="closed" class="bar closed north"></div>
+                    <div wicket:id="na" class="bar na north"></div>
+                    <div wicket:id="passed" class="bar passed northeast"></div>
+                </div>
+            </div>
+        </div>
 
     </div>
 

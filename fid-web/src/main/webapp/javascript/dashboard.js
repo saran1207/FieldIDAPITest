@@ -187,7 +187,7 @@ var chartWidgetFactory = (function() {
 	};
 
 	var updateKpi = function() {
-		var delay = 500;
+		var delay = 250;
 		$('.eventKpiWidget').find('.southwest[title]').tipsy({gravity: 'sw', fade:true, delayIn:delay});
 		$('.eventKpiWidget').find('.southeast[title]').tipsy({gravity: 'se', fade:true, delayIn:delay});
 		$('.eventKpiWidget').find('.south[title]').tipsy({gravity: 's', fade:true, delayIn:delay});
@@ -195,27 +195,33 @@ var chartWidgetFactory = (function() {
 		$('.eventKpiWidget').find('.north[title]').tipsy({gravity: 'n', fade:true, delayIn:delay});
 		$('.eventKpiWidget').find('.northeast[title]').tipsy({gravity: 'ne', fade:true, delayIn:delay});
 
-		$('.widget-content .kpi .bar-chart .tick').each(
-			function(index) {
-				var bar = $(this).prev('.bar');
-				if (!bar || !bar.width() || bar.width()==0) {
-					$(this).hide();
-				} else {
-					$(this).show();
-					$(this).position({my:'top center', at:'bottom', 'of':bar});
-					var offset = '';
-					if ($('.kpi .cozy').length>0) {
-						offset = $(this).hasClass('failed') ? 'right ' :
-							$(this).hasClass('completed') ? 'left ' : '';
-					}
-					var tick = $(this);
-					$(this).next('span').position({'my':offset+'top','at':'bottom','of':tick});
-				}
+		var updateBar = function(k,bar) {
+			var selector = $(bar).hasClass('passed') ? 'passed' :
+				$(bar).hasClass('na') ? 'na' :
+					$(bar).hasClass('closed') ? 'closed' :
+						$(bar).hasClass('failed') ? 'failed' : 'error-huh';
+			$(k).find('.bar.'+selector).addClass(' highlight');
+		};
+
+		var resetBar = function(k,bar) {
+			$(k).find('.bar').removeClass(' highlight');
+		};
+
+		$.each($('.eventKpiWidget .kpi'), function() {
+			var kpi = $(this);
+			$(this).find('.section.top .bars.completed').mouseenter(function() {
+				kpi.find('.section.bottom .bar-chart').animate({height:'25px'},200);
+			});
+			$(this).mouseleave(function() {
+				kpi.find('.section.bottom .bar-chart').animate({height:'0px'},200);
+				resetBar(kpi);
+			});
+			$(this).find('.section.bottom .bar').hover(
+				function() {updateBar(kpi, this);},
+				function() {resetBar(kpi);}
+			)
 		});
-		$('.widget-content .kpi .bar-chart').each(function(){
-			var completedWidth = $(this).find('.bars.all-incomplete').css('left');
-			$(this).find('.bar-label.complete').css('width',completedWidth);
-		});
+
 
 	};
 	

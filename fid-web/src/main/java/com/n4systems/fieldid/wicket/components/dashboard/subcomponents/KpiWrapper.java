@@ -73,7 +73,7 @@ public class KpiWrapper implements Serializable {
 
     public Double getClosedPercentage() {
         return getTotalScheduledEvents() == 0 ? 0 :
-                getFailed() * 100 / getTotalScheduledEvents().doubleValue();
+                getClosed() * 100 / getTotalScheduledEvents().doubleValue();
     }
 
     public Double getIncompletePercentage() {
@@ -83,6 +83,31 @@ public class KpiWrapper implements Serializable {
 
     public Long getCompletedAndClosed() {
         return getCompleted()+getClosed();
+    }
+
+    public Double getCompletedAndClosedPercentage() {
+        return getTotalScheduledEvents() == 0 ? 0 :
+                getCompletedAndClosed() * 100 / getTotalScheduledEvents().doubleValue();
+    }
+
+    public Double getFailedRelativePercentage() {
+        return getCompleted()==0L ? 0.0 :
+                getFailed() * 100 / getCompletedAndClosed();
+    }
+
+    public Double getNaRelativePercentage() {
+        return getCompleted()==0L ? 0.0 :
+                getNa() * 100 / getCompletedAndClosed();
+    }
+
+    public Double getPassedRelativePercentage() {
+        return getCompleted()==0L ? 0.0 :
+                getPassed() * 100 / getCompletedAndClosed();
+    }
+
+    public Double getClosedRelativePercentage() {
+        return getCompleted()==0L ? 0.0 :
+                getClosed() * 100 / getCompletedAndClosed();
     }
 
 }
