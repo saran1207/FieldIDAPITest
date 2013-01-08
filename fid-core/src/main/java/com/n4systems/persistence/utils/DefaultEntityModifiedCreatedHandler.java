@@ -2,7 +2,7 @@ package com.n4systems.persistence.utils;
 
 import com.n4systems.fieldid.context.InteractionContext;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import com.n4systems.model.api.HasPlatformContext;
+import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
 import com.n4systems.util.time.Clock;
@@ -58,14 +58,16 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
     }
 
     private void storeModifiedPlatform(AbstractEntity entity) {
-        if (entity instanceof HasPlatformContext) {
-            ((HasPlatformContext) entity).setModifiedPlatform(getInteractionContext().getCurrentPlatform());
+        if (entity instanceof HasCreatedModifiedPlatform) {
+            ((HasCreatedModifiedPlatform) entity).setModifiedPlatform(getInteractionContext().getCurrentPlatform());
+            ((HasCreatedModifiedPlatform) entity).setModifiedPlatformType(getInteractionContext().getCurrentPlatformType());
         }
     }
 
     private void storeCreatedPlatform(AbstractEntity entity) {
-        if (entity instanceof HasPlatformContext) {
-            ((HasPlatformContext) entity).setCreatedPlatform(getInteractionContext().getCurrentPlatform());
+        if (entity instanceof HasCreatedModifiedPlatform) {
+            ((HasCreatedModifiedPlatform) entity).setCreatedPlatform(getInteractionContext().getCurrentPlatform());
+            ((HasCreatedModifiedPlatform) entity).setCreatedPlatformType(getInteractionContext().getCurrentPlatformType());
         }
     }
 

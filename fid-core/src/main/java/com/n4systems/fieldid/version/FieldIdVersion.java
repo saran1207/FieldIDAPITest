@@ -24,4 +24,8 @@ public class FieldIdVersion {
 	public static String getVersion() {
 		return version;
 	}
+
+    public static String getWebVersionDescription() {
+        return "Web, Version: " + getVersion();
+    }
 }

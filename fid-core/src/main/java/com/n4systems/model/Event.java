@@ -26,7 +26,7 @@ import java.util.TimeZone;
 @Entity
 @Table(name = "masterevents")
 @PrimaryKeyJoinColumn(name="event_id")
-public class Event extends AbstractEvent implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<Event>, Exportable, LocationContainer, HasPlatformContext {
+public class Event extends AbstractEvent implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<Event>, Exportable, LocationContainer, HasCreatedModifiedPlatform {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
 	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.modifiedBy", "subEvents.eventForm.sections", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap"};
@@ -154,8 +154,16 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     @JoinColumn(name="priority_id")
     private PriorityCode priority;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="modified_platform_type")
+    private PlatformType modifiedPlatformType;
+
     @Column(name="modified_platform", length = 200)
     private String modifiedPlatform;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="created_platform_type")
+    private PlatformType createdPlatformType;
 
     @Column(name="created_platform", length = 200)
     private String createdPlatform;
@@ -680,5 +688,21 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
     public void setCreatedPlatform(String createdPlatform) {
         this.createdPlatform = createdPlatform;
+    }
+
+    public PlatformType getModifiedPlatformType() {
+        return modifiedPlatformType;
+    }
+
+    public void setModifiedPlatformType(PlatformType modifiedPlatformType) {
+        this.modifiedPlatformType = modifiedPlatformType;
+    }
+
+    public PlatformType getCreatedPlatformType() {
+        return createdPlatformType;
+    }
+
+    public void setCreatedPlatformType(PlatformType createdPlatformType) {
+        this.createdPlatformType = createdPlatformType;
     }
 }

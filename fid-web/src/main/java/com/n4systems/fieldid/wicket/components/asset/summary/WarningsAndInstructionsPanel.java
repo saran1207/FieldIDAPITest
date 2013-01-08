@@ -8,7 +8,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-public class WarningsAndInstructionsPanel extends Panel {
+public class
+        WarningsAndInstructionsPanel extends Panel {
     
     private Label warning;
     private Label instructions;

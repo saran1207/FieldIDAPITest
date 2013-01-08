@@ -123,13 +123,6 @@
 	</p>
 
     <p>
-        <label><@s.text name="label.created_on"/></label>
-		<span>
-            ${(event.createdPlatform)!}
-		</span>
-    </p>
-
-    <p>
         <label><@s.text name="label.createdby"/></label>
 		<span>
 			<#if event.createdBy?exists >
@@ -138,13 +131,11 @@
                 <@s.text name="label.on"/>
             </#if>
             ${action.formatDateTime(event.created)}
-		</span>
-    </p>
-
-    <p>
-        <label><@s.text name="label.modified_on"/></label>
-		<span>
-            ${(event.modifiedPlatform)!}
+            <#if event.createdPlatformType?exists>
+                <#assign platformType=event.createdPlatformType/>
+                <#assign platform=event.createdPlatform/>
+                <#include "../common/_platformDisplay.ftl">
+            </#if>
 		</span>
     </p>
 
@@ -157,6 +148,11 @@
                 <@s.text name="label.on"/>
 			</#if>
             ${action.formatDateTime(event.modified)}
+            <#if event.modifiedPlatformType?exists>
+                <#assign platformType=event.modifiedPlatformType/>
+                <#assign platform=event.modifiedPlatform/>
+                <#include "../common/_platformDisplay.ftl">
+            </#if>
 		</span>
 	</p>
 

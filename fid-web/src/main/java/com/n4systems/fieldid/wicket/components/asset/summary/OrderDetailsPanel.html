@@ -2,36 +2,36 @@
 
     <h1><wicket:message key="label.orderdetails"/></h1>
 
-    <p wicket:enclosure="orderNumber">
+    <div class="assetDetail" wicket:enclosure="orderNumber">
         <label><wicket:message key="label.onumber"/></label>
         <span wicket:id="orderNumber"/>
-    </p>
+    </div>
 
-    <p wicket:enclosure="connectToOrder">
+    <div class="assetDetail" wicket:enclosure="connectToOrder">
         <label><wicket:message key="label.onumber"/></label>
         <span><a wicket:id="connectToOrder"><wicket:message key="label.connectorder"/></a></span>
-    </p>
+    </div>
 
     <span wicket:enclosure="assetCode">
-        <p>
+        <div class="assetDetail">
             <label><wicket:message key="label.assetcode"/></label>
             <span wicket:id="assetCode"/>
-        </p>
-        <p>
+        </div>
+        <div class="assetDetail">
             <label><wicket:message key="label.quantity"/></label>
             <span wicket:id="quantity"/>
-        </p>
-        <p>
+        </div>
+        <div class="assetDetail">
             <label><wicket:message key="label.orderdate"/></label>
             <span wicket:id="orderDate"/>
-        </p>
-        <p>
+        </div>
+        <div class="assetDetail">
             <label><wicket:message key="label.orderdescription"/></label>
             <span wicket:id="orderDescription"/>
-        </p>
+        </div>
     </span>
-    <p wicket:enclosure="purchaseOrder">
+    <div class="assetDetail" wicket:enclosure="purchaseOrder">
         <label><wicket:message key="label.purchaseorder"/></label>
         <span wicket:id="purchaseOrder"/>
-    </p>
+    </div>
 </wicket:panel>

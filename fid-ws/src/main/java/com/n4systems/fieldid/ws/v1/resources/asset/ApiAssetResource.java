@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
+import com.n4systems.fieldid.service.StorePlatformContext;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
@@ -122,6 +123,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
+    @StorePlatformContext
 	public void saveAsset(ApiAsset apiAsset) {
 		Asset asset;
 		Asset existingAsset = assetService.findByMobileId(apiAsset.getSid());
@@ -142,6 +144,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Path("multi")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
+    @StorePlatformContext
 	public void multiAddAsset(ApiMultiAddAsset multiAddAsset) {
 		ApiAsset assetTemplate = multiAddAsset.getAssetTemplate();
 		for (ApiAssetIdentifiers identifiers: multiAddAsset.getIdentifiers()) {

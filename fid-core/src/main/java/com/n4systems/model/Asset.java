@@ -2,7 +2,7 @@ package com.n4systems.model;
 
 import com.google.common.base.Joiner;
 import com.n4systems.model.api.Exportable;
-import com.n4systems.model.api.HasPlatformContext;
+import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.location.Location;
@@ -21,7 +21,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "assets")
-public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer, HasPlatformContext {
+public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer, HasCreatedModifiedPlatform {
 	private static final long serialVersionUID = 1L;
 	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
 
@@ -111,6 +111,15 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     private String nonIntergrationOrderNumber;
     
     private String imageName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="modified_platform_type")
+    private PlatformType modifiedPlatformType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="created_platform_type")
+    private PlatformType createdPlatformType;
+
     
 	public Asset() {
 		this.identified = new PlainDate();
@@ -551,4 +560,19 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
         return result;
     }
 
+    public PlatformType getModifiedPlatformType() {
+        return modifiedPlatformType;
+    }
+
+    public void setModifiedPlatformType(PlatformType modifiedPlatformType) {
+        this.modifiedPlatformType = modifiedPlatformType;
+    }
+
+    public PlatformType getCreatedPlatformType() {
+        return createdPlatformType;
+    }
+
+    public void setCreatedPlatformType(PlatformType createdPlatformType) {
+        this.createdPlatformType = createdPlatformType;
+    }
 }

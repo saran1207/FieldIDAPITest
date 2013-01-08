@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.config;
 
+import com.n4systems.fieldid.service.StoreWsClientInformationAspect;
 import com.n4systems.fieldid.service.comment.CommentService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
@@ -76,6 +77,11 @@ public class FieldIdAppConfig {
     // as above, make sure bean & servlet names match.
     public ImageDownloadHandler imageDownloadHandler() {
         return new ImageDownloadHandler();
+    }
+
+    @Bean
+    public StoreWsClientInformationAspect testAspect() {
+        return new StoreWsClientInformationAspect();
     }
 
 

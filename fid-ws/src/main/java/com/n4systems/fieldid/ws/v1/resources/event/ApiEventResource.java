@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.event;
 
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.StorePlatformContext;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventCreationService;
@@ -48,6 +49,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
+    @StorePlatformContext
 	public void saveEvent(ApiEvent apiEvent) {
 		if(apiEvent.getSid() == null) {
 			throw new NullPointerException("ApiEvent has null sid");

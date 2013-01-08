@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.utils;
 
 import com.n4systems.fieldid.version.FieldIdVersion;
+import com.n4systems.model.PlatformType;
 import org.apache.struts2.StrutsStatics;
 
 import rfid.web.helper.SessionUser;
@@ -39,7 +40,8 @@ public class SetCurrentUserInterceptor extends AbstractInterceptor implements St
 	            FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
 	            User user = userLoader.setId(userId).load();
 	            interactionContext.setCurrentUser(user);
-                interactionContext.setCurrentPlatform("Web, Version " + FieldIdVersion.getVersion());
+                interactionContext.setCurrentPlatformType(PlatformType.WEB);
+                interactionContext.setCurrentPlatform(FieldIdVersion.getWebVersionDescription());
 	            
 	            securityContext.setUserSecurityFilter(sessionUser.getSecurityFilter());
 	        }
@@ -48,6 +50,7 @@ public class SetCurrentUserInterceptor extends AbstractInterceptor implements St
         } finally {
         	securityContext.setUserSecurityFilter(null);
             interactionContext.setCurrentUser(null);
+            interactionContext.setCurrentPlatformType(null);
             interactionContext.setCurrentPlatform(null);
         }
     }

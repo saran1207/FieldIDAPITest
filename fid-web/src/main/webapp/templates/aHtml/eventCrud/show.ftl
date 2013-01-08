@@ -3,8 +3,13 @@
 	<@n4.includeScript src="googleMaps.js"/>
 		 
 	<@n4.includeScript src="event"/>
+    <@n4.includeScript src="jquery.tools.min.js"/>
+
     <@n4.includeStyle href="newCss/event/event_base" />
     <@n4.includeStyle href="newCss/event/event_show" />
+
+    <@n4.includeScript src="jquery.tools.min.js"/>
+    <@n4.includeStyle href="newCss/behavior/tooltip" />
 	
 </head>
 

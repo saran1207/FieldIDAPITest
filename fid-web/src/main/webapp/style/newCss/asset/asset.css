@@ -162,27 +162,28 @@
     padding-bottom: 20px;
 }
 
-.assetDetails p {
+.assetDetails div.assetDetail {
     padding-top: 10px;
     margin-top: 2px;
+    clear:both;
 }
 
-.assetDetails p, .assetDetails p label, .assetDetails p span  {
+.assetDetails div.assetDetail, .assetDetails div.assetDetail label, .assetDetails div.assetDetail span  {
     display: block;
     float: left;
 }
 
-.assetDetails p label {
-    width: 140px;
+.assetDetails div.assetDetail label {
+    width: 130px;
     color: #777;
 }
 
-.assetDetails p span {
+.assetDetails div.assetDetail span {
     text-align: right;
     width: 135px;
 }
 
-.assetDetails p .wideSpan {
+.assetDetails div.assetDetail .wideSpan {
     width: 275px;
 }
 
@@ -307,4 +308,18 @@
 
 div.wicket-mask-dark {
     opacity: 0.8;
+}
+
+.createdModifiedInfo {
+    text-align:right;
+    float:left;
+    display:block;
+    width:120px;
+}
+
+.platformIcon {
+    float:left;
+    display:block;
+    padding-left:3px;
+    padding-top:6px;
 }

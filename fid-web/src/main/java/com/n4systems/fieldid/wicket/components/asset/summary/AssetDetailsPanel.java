@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.asset.summary;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.platform.PlatformInformationIcon;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
 import com.n4systems.util.FieldIdDateFormatter;
@@ -26,12 +27,17 @@ public class AssetDetailsPanel extends Panel {
 
         add(new Label("created", created));
         add(new Label("createdby", ProxyModel.of(asset, on(Asset.class).getCreatedBy().getFullName())));
-        add(new Label("createdOn", ProxyModel.of(asset, on(Asset.class).getCreatedPlatform())));
+
+        add(new PlatformInformationIcon("createdPlatform",
+                ProxyModel.of(asset, on(Asset.class).getCreatedPlatformType()),
+                ProxyModel.of(asset, on(Asset.class).getCreatedPlatform())));
 
         add(new Label("modified", modified));
         add(new Label("modifiedBy", ProxyModel.of(asset, on(Asset.class).getModifiedBy().getFullName())));
-        add(new Label("modifiedOn", ProxyModel.of(asset, on(Asset.class).getModifiedPlatform())));
 
+        add(new PlatformInformationIcon("modifiedPlatform",
+                ProxyModel.of(asset, on(Asset.class).getModifiedPlatformType()),
+                ProxyModel.of(asset, on(Asset.class).getModifiedPlatform())));
 
         add(new Label("visibility", ProxyModel.of(asset, on(Asset.class).isPublished())));
         add(new Label("identified", identified));

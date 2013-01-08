@@ -1,35 +1,35 @@
 <wicket:panel>
     <h1><wicket:message key="label.other"/></h1>
-    <p>
+    <div class="assetDetail">
         <label><wicket:message key="label.reference_number"/></label>
         <span wicket:id="referenceNumber"/>
-    </p>
-    <p>
+    </div>
+    <div class="assetDetail">
         <label><wicket:message key="label.rfidnumber"/></label>
         <span wicket:id="rfidNumber"/>
-    </p>
-    <p>
+    </div>
+    <div class="assetDetail">
         <label><wicket:message key="label.visibility"/></label>
         <span wicket:id="visibility"/>
-    </p>
-    <p>
-        <label><wicket:message key="label.created_on"/></label>
-        <span wicket:id="createdOn"/>
-    </p>
-    <p>
+    </div>
+    <div class="assetDetail">
         <label><wicket:message key="label.createdby"/></label>
-        <span wicket:id="createdby"/><span class="wideSpan" wicket:id="created"/>
-    </p>
-    <p>
-        <label><wicket:message key="label.modified_on"/></label>
-        <span wicket:id="modifiedOn"/>
-    </p>
-    <p>
+        <div class="createdModifiedInfo">
+            <div wicket:id="createdby"/>
+            <div wicket:id="created"/>
+        </div>
+        <div class="platformIcon" wicket:id="createdPlatform"></div>
+    </div>
+    <div class="assetDetail">
         <label><wicket:message key="label.modifiedby"/></label>
-        <span wicket:id="modifiedBy"/><span class="wideSpan" wicket:id="modified"/>
-    </p>
-    <p>
+        <div class="createdModifiedInfo">
+            <div wicket:id="modifiedBy"/>
+            <div wicket:id="modified"/>
+        </div>
+        <div class="platformIcon" wicket:id="modifiedPlatform"></div>
+    </div>
+    <div class="assetDetail">
         <label><wicket:message key="label.identified"/></label>
         <span wicket:id="identified"/>
-    </p>
+    </div>
 </wicket:panel>

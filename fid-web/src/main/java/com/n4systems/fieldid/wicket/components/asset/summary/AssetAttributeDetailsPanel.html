@@ -1,19 +1,19 @@
 <wicket:panel>
     <h1><wicket:message key="label.details"/></h1>
-    <p wicket:enclosure align="manufactureCertificateLink">
+    <div class="assetDetail" wicket:enclosure align="manufactureCertificateLink">
         <label><wicket:message key="label.manufacturecertificate"/></label>
         <span>
             <img src="/fieldid/images/pdf_small.gif"/><a wicket:id="manufactureCertificateLink"><wicket:message key="label.downloadnow"/></a>
         </span>
-    </p>
-    <p wicket:enclosure align="assignedTo">
+    </div>
+    <div class="assetDetail" wicket:enclosure align="assignedTo">
         <label><wicket:message key="label.assignedto"/></label>
         <span wicket:id="assignedTo"/>
-    </p>
+    </div>
 
-    <p wicket:id="attributeListView">
+    <div class="assetDetail" wicket:id="attributeListView">
         <label wicket:id="attributelabel"/>
         <span wicket:id="attribute" />
-    </p>
+    </div>
 
 </wicket:panel>

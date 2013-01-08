@@ -36,5 +36,9 @@ public class RequestInformation {
 	public boolean hasValidTransactionId() {
 		return !GUIDHelper.isNullGUID( mobileGuid );
 	}
+
+    public String getPlatformDescription() {
+        return "Windows Mobile, Version " + versionNumber;
+    }
 	
 }

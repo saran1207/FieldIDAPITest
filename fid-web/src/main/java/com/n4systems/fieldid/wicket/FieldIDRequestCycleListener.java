@@ -5,6 +5,7 @@ import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
 import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.version.FieldIdVersion;
+import com.n4systems.model.PlatformType;
 import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -44,7 +45,8 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
             FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
             User user = userLoader.setId(sessionUser.getId()).load();
             ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
-            ThreadLocalInteractionContext.getInstance().setCurrentPlatform("Web, Version " + FieldIdVersion.getVersion());
+            ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(PlatformType.WEB);
+            ThreadLocalInteractionContext.getInstance().setCurrentPlatform( FieldIdVersion.getWebVersionDescription());
 
             securityContext.setUserSecurityFilter(sessionUser.getSecurityFilter());
         }
@@ -68,6 +70,8 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
     @Override
     public void onEndRequest(RequestCycle cycle) {
         ThreadLocalInteractionContext.getInstance().setCurrentUser(null);
+        ThreadLocalInteractionContext.getInstance().setCurrentPlatform(null);
+        ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(null);
         securityContext.setUserSecurityFilter(null);
         securityContext.setTenantSecurityFilter(null);
     }

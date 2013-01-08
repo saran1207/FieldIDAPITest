@@ -440,6 +440,8 @@ public class DataServiceImpl implements DataService {
 				user = persistenceManager.find(User.class, request.getModifiedById());
 			}
 			uc.setCurrentUser(user);
+            uc.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
+            uc.setCurrentPlatform(request.getPlatformDescription());
 
 			Asset asset = lookupProduct(lookupInformation, request.getTenantId());
 
@@ -452,8 +454,6 @@ public class DataServiceImpl implements DataService {
 		} catch (Exception e) {
 			logger.error("Exception occured while doing a limited asset update", e);
 			throw new ServiceException();
-		} finally {
-			uc.setCurrentUser(null);
 		}
 
 		return new RequestResponse();
@@ -490,8 +490,6 @@ public class DataServiceImpl implements DataService {
 		} catch (Exception e) {
 			logger.error("Exception occured while doing asset update by customer", e);
 			throw new ServiceException();
-		} finally {
-			uc.setCurrentUser(null);
 		}
 
 		return new RequestResponse();
@@ -620,6 +618,8 @@ public class DataServiceImpl implements DataService {
 			if (productDTO.identifiedByExists()) {
 				EntityByIdIncludingArchivedLoader<User> userLoader = createLoaderFactory(requestInformation).createEntityByIdLoader(User.class);
 				uc.setCurrentUser(userLoader.setId(productDTO.getIdentifiedById()).load());
+                uc.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
+                uc.setCurrentPlatform(requestInformation.getPlatformDescription());
 			}
 			
 			PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
@@ -671,8 +671,6 @@ public class DataServiceImpl implements DataService {
 		} catch (Exception e) {
 			logger.error("failed while processing asset", e);
 			throw new ServiceException("Problem creating asset");
-		} finally {
-			uc.setCurrentUser(null);
 		}
 		return response;
 	}
@@ -751,66 +749,64 @@ public class DataServiceImpl implements DataService {
 
 			
 			InteractionContext interactionContext = ThreadLocalInteractionContext.getInstance();
-			try {
-				// The performedBy user will be the same for all events in this group.
-				EntityByIdIncludingArchivedLoader<User> userLoader = createLoaderFactory(requestInformation).createEntityByIdLoader(User.class);
-				interactionContext.setCurrentUser(userLoader.setId(inspectionDTOs.get(0).getPerformedById()).load());
-			
-				Long tenantId = requestInformation.getTenantId();
-				PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
-				InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
-				LegacyAsset productManager = WsServiceLocator.getLegacyAssetManager(tenantId);
+            // The performedBy user will be the same for all events in this group.
+            EntityByIdIncludingArchivedLoader<User> userLoader = createLoaderFactory(requestInformation).createEntityByIdLoader(User.class);
+            interactionContext.setCurrentUser(userLoader.setId(inspectionDTOs.get(0).getPerformedById()).load());
+            interactionContext.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
+            interactionContext.setCurrentPlatform(requestInformation.getPlatformDescription());
 
-				List<Event> events = new ArrayList<Event>();
-				Map<Event, Date> nextInspectionDates = new HashMap<Event, Date>();
-				Asset asset = null;
+            Long tenantId = requestInformation.getTenantId();
+            PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
+            InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
+            LegacyAsset productManager = WsServiceLocator.getLegacyAssetManager(tenantId);
 
-				EventScheduleByGuidOrIdLoader scheduleLoader = new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
-				for (InspectionServiceDTO inspectionServiceDTO : inspectionDTOs) {
-					asset = findOrCreateAsset(tenantId, inspectionServiceDTO);
-					inspectionServiceDTO.setProductId(asset.getId());
+            List<Event> events = new ArrayList<Event>();
+            Map<Event, Date> nextInspectionDates = new HashMap<Event, Date>();
+            Asset asset = null;
 
-					// lets look up or create all newly attached sub products and
-					// attach to asset
-					List<SubAsset> subAssets = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), asset);
-					updateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets);
+            EventScheduleByGuidOrIdLoader scheduleLoader = new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
+            for (InspectionServiceDTO inspectionServiceDTO : inspectionDTOs) {
+                asset = findOrCreateAsset(tenantId, inspectionServiceDTO);
+                inspectionServiceDTO.setProductId(asset.getId());
 
-					// we also need to get the asset for any sub-inspections
-					if (inspectionServiceDTO.getSubInspections() != null) {
-						Asset subProduct = null;
-						for (SubInspectionServiceDTO subInspection : inspectionServiceDTO.getSubInspections()) {
-							subProduct = findOrCreateAsset(tenantId, subInspection);
-							subInspection.setProductId(subProduct.getId());
-						}
-					}
+                // lets look up or create all newly attached sub products and
+                // attach to asset
+                List<SubAsset> subAssets = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), asset);
+                updateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets);
 
-                    Event schedule = loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO);
+                // we also need to get the asset for any sub-inspections
+                if (inspectionServiceDTO.getSubInspections() != null) {
+                    Asset subProduct = null;
+                    for (SubInspectionServiceDTO subInspection : inspectionServiceDTO.getSubInspections()) {
+                        subProduct = findOrCreateAsset(tenantId, subInspection);
+                        subInspection.setProductId(subProduct.getId());
+                    }
+                }
 
-					Event event = converter.convert(inspectionServiceDTO, schedule);
+                Event schedule = loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO);
 
-					events.add(event);
-					nextInspectionDates.put(event, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
-				}
-	
-				try {
-					EventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
-	
-					EventsInAGroupCreator eventsInAGroupCreator = eventPersistenceFactory.createEventsInAGroupCreator();
-	
-					eventsInAGroupCreator.create(requestInformation.getMobileGuid(), events, nextInspectionDates);
-					logger.info("save inspections on asset " + asset.getIdentifier());
-					populatorLogger.logMessage(tenantId, "Created inspection for asset with identifier " + asset.getIdentifier(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
-				} catch (TransactionAlreadyProcessedException e) {
-					logger.info("Transaction already processed for inspections on asset  " + asset.getIdentifier());
-				} catch (Exception e) {
-					logger.error("failed to save inspections", e);
-					throw new InspectionException("Failed to save inspections");
-				}
+                Event event = converter.convert(inspectionServiceDTO, schedule);
 
-				return response;
-			} finally {
-				interactionContext.setCurrentUser(null);
-			}
+                events.add(event);
+                nextInspectionDates.put(event, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
+            }
+
+            try {
+                EventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
+
+                EventsInAGroupCreator eventsInAGroupCreator = eventPersistenceFactory.createEventsInAGroupCreator();
+
+                eventsInAGroupCreator.create(requestInformation.getMobileGuid(), events, nextInspectionDates);
+                logger.info("save inspections on asset " + asset.getIdentifier());
+                populatorLogger.logMessage(tenantId, "Created inspection for asset with identifier " + asset.getIdentifier(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
+            } catch (TransactionAlreadyProcessedException e) {
+                logger.info("Transaction already processed for inspections on asset  " + asset.getIdentifier());
+            } catch (Exception e) {
+                logger.error("failed to save inspections", e);
+                throw new InspectionException("Failed to save inspections");
+            }
+
+            return response;
 		} catch (InspectionException e) {
 			throw e;
 		} catch (FindAssetFailure e) {
@@ -848,7 +844,9 @@ public class DataServiceImpl implements DataService {
 
 			User performedBy = persistenceManager.find(User.class, inspectionImageServiceDTO.getPerformedById());
 			uc.setCurrentUser(performedBy);
-			
+            uc.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
+            uc.setCurrentPlatform(requestInformation.getPlatformDescription());
+
 			EventAttachmentSaver attachmentSaver = new EventAttachmentSaver();
 			attachmentSaver.setData(inspectionImageServiceDTO.getImage().getImage());
 
@@ -881,8 +879,6 @@ public class DataServiceImpl implements DataService {
 		} catch (Exception e) {
 			logger.error("failed while processing inspection image", e);
 			throw new ServiceException("Problem processing inspection image");
-		} finally {
-			uc.setCurrentUser(null);
 		}
 
 		return response;
@@ -899,6 +895,8 @@ public class DataServiceImpl implements DataService {
 		try {
 			User modifiedBy = persistenceManager.find(User.class, assetImageServiceDTO.getModifiedById());
 			uc.setCurrentUser(modifiedBy);
+            uc.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
+            uc.setCurrentPlatform(requestInformation.getPlatformDescription());
 			
 			AssetByMobileGuidLoader loader = new AssetByMobileGuidLoader(new TenantOnlySecurityFilter(tenantId));
 			Asset asset = loader.setMobileGuid(assetImageServiceDTO.getAssetMobileGuid()).load();
@@ -912,10 +910,7 @@ public class DataServiceImpl implements DataService {
 			logger.error("failed while processing asset image", e);
 			throw new ServiceException("Problem processing inspection image");
 		}
-		finally {
-			uc.setCurrentUser(null);
-		}
-		
+
 		return response;
 	}
 
