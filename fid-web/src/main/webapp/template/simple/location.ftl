@@ -33,7 +33,8 @@
 				$('${parameters.id}_locationSelection').setStyle({left:'-10000px'});
 				
 				var node = jQuery('#${parameters.id}_predefinedLocationSelector').getSelectedNode();
-				$('${parameters.id}_predefinedLocationId').value = node.id;
+                if(node.id != undefined)
+				    $('${parameters.id}_predefinedLocationId').value = node.id;
 				$('${parameters.id}').value = $('${parameters.id}_freeformInput').getValue();
 
 				var parentNameValue = node.parentNames.join(" > ");
