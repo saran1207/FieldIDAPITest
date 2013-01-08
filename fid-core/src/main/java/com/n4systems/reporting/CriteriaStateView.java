@@ -23,7 +23,7 @@ public class CriteriaStateView implements Serializable {
 	private String compressedRecommendations;
 	private String compressedDeficiencies;
     private String type;
-    private String help;
+    private String criteriaHelp;
 	private List<CriteriaResultImageView> criteriaImages = new ArrayList<CriteriaResultImageView>();
     private List<CriteriaResultActionView> criteriaActions = new ArrayList<CriteriaResultActionView>();
     private String label;
@@ -34,7 +34,7 @@ public class CriteriaStateView implements Serializable {
 		this.section = section.getTitle();
 		this.criteria = criteria.getDisplayText();
 		this.recommendations = recommendations.size();
-        this.help = stripHtml(help);
+        this.criteriaHelp = stripHtml(help);
 		this.deficiencies = deficiencies.size();
 		this.compressedDeficiencies = "";
 		this.compressedRecommendations = "";
@@ -172,6 +172,10 @@ public class CriteriaStateView implements Serializable {
         this.label = label;
     }
 
+    public String getCriteriaHelp() {
+        return criteriaHelp;
+    }
+
     @Override
     public String toString() {
         return "CriteriaStateView{" +
@@ -186,7 +190,7 @@ public class CriteriaStateView implements Serializable {
                 ", recommendations='" + compressedRecommendations + '\'' +
                 ", deficiencies='" + compressedDeficiencies + '\'' +
                 ", type='" + type + '\'' +
-                ", help='" + help + '\'' +
+                ", criteriaHelp='" + criteriaHelp + '\'' +
                 ", label='" + label + '\'' +
                 '}';
     }
