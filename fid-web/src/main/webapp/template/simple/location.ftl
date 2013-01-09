@@ -39,8 +39,13 @@
 
 				var parentNameValue = node.parentNames.join(" > ");
 				var freeFormValue = $('${parameters.id}_freeformInput').getValue();
+
+                var nodeName = "";
+                if(node.id != undefined)
+                    nodeName = node.name + ": ";
 				
-				$('${parameters.id}_locationName').value = ((parentNameValue) ? parentNameValue + " > " + node.name: node.name) + ((freeFormValue) ? ": " + freeFormValue : "") 
+				$('${parameters.id}_locationName').value = ((parentNameValue) ? parentNameValue + " > " + nodeName : nodeName) + ((freeFormValue) ? freeFormValue : "");
+
 				$('${parameters.id}').fire("location:change");
 
 			});
