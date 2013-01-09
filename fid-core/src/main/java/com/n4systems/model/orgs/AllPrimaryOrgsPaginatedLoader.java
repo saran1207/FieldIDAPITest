@@ -1,13 +1,12 @@
 package com.n4systems.model.orgs;
 
+import com.n4systems.model.Event;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.chart.RangeType;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.joda.time.LocalDate;
 
@@ -28,9 +27,16 @@ public class AllPrimaryOrgsPaginatedLoader extends Loader<Pager<PrimaryOrg>> {
 	@Override
 	public Pager<PrimaryOrg> load(EntityManager em) {
 		QueryBuilder<PrimaryOrg> builder  =  new QueryBuilder<PrimaryOrg>(PrimaryOrg.class, new OpenSecurityFilter());
-		
+
 		if(nameFilter != null && !nameFilter.isEmpty()) {
-			builder.addWhere(WhereClauseFactory.create(Comparator.LIKE, "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.TRIM | WhereParameter.WILDCARD_BOTH, null));
+            WhereParameterGroup nameGroup = new WhereParameterGroup("nameGroup");
+
+            nameGroup.addClause(WhereClauseFactory.create(Comparator.LIKE, "tenant.name", nameFilter, WhereParameter.TRIM | WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            nameGroup.addClause(WhereClauseFactory.create(Comparator.LIKE, "name", nameFilter, WhereParameter.TRIM | WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+
+//            nameGroup.setChainOperator(WhereClause.ChainOp.OR);
+            builder.addWhere(nameGroup);
+//            builder.addWhere(WhereClauseFactory.create(Comparator.LIKE, "name", nameFilter, WhereParameter.TRIM | WhereParameter.WILDCARD_BOTH, null));
 		}
 		
 		if(order != null && !order.isEmpty()) {
