@@ -34,9 +34,7 @@ public class AllPrimaryOrgsPaginatedLoader extends Loader<Pager<PrimaryOrg>> {
             nameGroup.addClause(WhereClauseFactory.create(Comparator.LIKE, "tenant.name", nameFilter, WhereParameter.TRIM | WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
             nameGroup.addClause(WhereClauseFactory.create(Comparator.LIKE, "name", nameFilter, WhereParameter.TRIM | WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
 
-//            nameGroup.setChainOperator(WhereClause.ChainOp.OR);
             builder.addWhere(nameGroup);
-//            builder.addWhere(WhereClauseFactory.create(Comparator.LIKE, "name", nameFilter, WhereParameter.TRIM | WhereParameter.WILDCARD_BOTH, null));
 		}
 		
 		if(order != null && !order.isEmpty()) {
