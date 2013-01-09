@@ -239,7 +239,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         for (Event action : result.getActions()) {
             CriteriaResultActionView actionView = new CriteriaResultActionView();
             actionView.setAssignee(action.getAssignee() == null ? null : action.getAssignee().getFullName());
-            actionView.setDueDate(action.getDueDate() != null ? null : formatDate(action.getDueDate(), true));
+            actionView.setDueDate(action.getDueDate() == null ? null : formatDate(action.getDueDate(), true));
             actionView.setEventType(action.getEventType().getName());
             actionView.setWorkflowState(action.getWorkflowState().getLabel());
             actionView.setNotes(action.getNotes());
