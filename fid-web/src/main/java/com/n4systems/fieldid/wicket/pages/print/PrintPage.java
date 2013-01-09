@@ -7,7 +7,7 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -32,16 +32,22 @@ public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthent
     }
 
     class RenameDownloadForm extends Form<DownloadLink> {
+        private boolean gotoDownloads=true;
 
         public RenameDownloadForm(String id, IModel<DownloadLink> downloadLink) {
             super(id, downloadLink);
 
             add(new TextField<String>("name", new PropertyModel<String>(downloadLink, "name")));
             add(new Button("saveAndGoToDownloadsButton"));
-            add(new AjaxLink("saveAndCloseLink") {
-                @Override
-                public void onClick(AjaxRequestTarget target) {
+            add(new AjaxSubmitLink("saveAndCloseLink") {
+                @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     target.appendJavaScript("jQuery.colorbox.close();");
+                    gotoDownloads = false;
+                }
+
+                @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    target.appendJavaScript("jQuery.colorbox.close();");
+                    gotoDownloads = false;
                 }
             });
 
@@ -50,7 +56,9 @@ public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthent
         @Override
         protected void onSubmit() {
             persistenceService.update(getModelObject());
-            throw new RedirectToUrlException("/showDownloads.action");
+            if (gotoDownloads) {
+                throw new RedirectToUrlException("/showDownloads.action");
+            }
         }
 
     }
