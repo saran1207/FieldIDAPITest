@@ -314,7 +314,14 @@ div.wicket-mask-dark {
     text-align:right;
     float:left;
     display:block;
+}
+
+.withIcon {
     width:120px;
+}
+
+.withoutIcon {
+    width:135px;
 }
 
 .platformIcon {
