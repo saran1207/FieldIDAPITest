@@ -199,7 +199,6 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
             DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "dueDate"), true).withNoAllDayCheckbox();
 			newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
-			newOrExistingEventBook.setOwner(new PropertyModel<BaseOrg>(event, "owner").getObject());
 
             AttributesEditPanel attributesEditPanel = new AttributesEditPanel("eventAttributes", event);
 
@@ -298,7 +297,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         EventBook book = event.getObject().getBook();
         if (book != null && book.getId() == null) {
             book.setTenant(getCurrentUser().getTenant());
-            book.setOwner(getCurrentUser().getOwner());
+            book.setOwner(event.getObject().getOwner());
             persistenceService.save(book);
         }
     }
