@@ -38,7 +38,8 @@ public class InfoOptionBeanPropertyModel extends PropertyModel<String> {
     private String formatMsStringAsDate(String value) {
         try {
             long ms = Long.parseLong(value);
-            return new FieldIdDateFormatter(new Date(ms),dateTimeDefinition,true, includeTime).format();
+            // Flat date without times should not be timezone converted
+            return new FieldIdDateFormatter(new Date(ms),dateTimeDefinition, includeTime, includeTime).format();
         } catch (NumberFormatException e) {
             logger.error("can't parse date from expected MS string '" + value + "'");
             return value;
