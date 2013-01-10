@@ -1,16 +1,5 @@
 package com.n4systems.fieldid.actions.downloaders;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.mail.MessagingException;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.api.validation.validators.EmailValidator;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
@@ -25,6 +14,15 @@ import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import javax.mail.MessagingException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class DownloadLinkAction extends AbstractDownloadAction {
 	private static final long serialVersionUID = 1L;
@@ -156,15 +154,21 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		
 		return SUCCESS;
 	}
-	
-	public String doSave() {
-		downloadLink = loadDownloadLink();
-		downloadLink.setName(downloadLinkName);
-		downloadLinkSaver.update(downloadLink); 
-		return SUCCESS;	
-	}
-	
-	@SkipValidation
+
+    @SkipValidation
+    public String doUpdate() {
+        return doSave();
+    }
+
+    public String doSave() {
+        downloadLink = loadDownloadLink();
+        downloadLink.setName(downloadLinkName);
+        downloadLinkSaver.update(downloadLink);
+        return SUCCESS;
+    }
+
+
+    @SkipValidation
 	public String doDelete() {
 		downloadLink = loadDownloadLink();
 		downloadLink.setState(DownloadState.DELETED);

@@ -1,3 +1,4 @@
+
 <div id="modalBox_message">
 	<#if actionErrors.isEmpty() >
 		<h3><@s.text name="message.downloadbeinggenerated" /></h3>
@@ -11,7 +12,7 @@
 			<div class="formActions">
 				<@s.submit id="saveDownload" onClick="closeLightbox();" key="hbutton.savetomydownloads" style="text-align:left"/>
 				&nbsp;<@s.text name="label.or" />&nbsp;
-				<a href="javascript:void(0);" onClick="closeLightbox();"><@s.text name="hbutton.saveclosemessage" /></a>
+				<a href="javascript:void(0);" onClick="saveNameAndCloseLightbox();"><@s.text name="hbutton.saveclosemessage" /></a>
 			</div>
 		</@s.form>
 	<#else>
@@ -21,3 +22,13 @@
 		<button style="padding: 2px 5px;" onclick="closeLightbox();"><@s.text name="hbutton.closemessage" /></button>
 	</#if>
 </div>
+
+<script type="text/javascript">
+    function saveNameAndCloseLightbox() {
+        var params = new Object();
+        params.downloadLinkName=$(reportName).value;
+        params.fileId=$(download_name_fileId).value;
+        getResponse('<@s.url action="updateDownloadName" namespace="/ajax"/>', 'post', params);
+        closeLightbox();
+    }
+</script>

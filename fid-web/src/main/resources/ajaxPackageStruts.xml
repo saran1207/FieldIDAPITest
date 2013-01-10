@@ -503,9 +503,13 @@
         </action>
 
         <action name="saveDownloadName" method="save" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
-        	<result name="success" type="freemarker">/templates/ajax/downloads/show.ftl</result>
-        	<result name="error" type="freemarker">/templates/ajax/downloads/edit.ftl</result>
-        	<result name="input" type="freemarker">/templates/ajax/downloads/edit.ftl</result>
+            <result name="success" type="freemarker">/templates/ajax/downloads/show.ftl</result>
+            <result name="error" type="freemarker">/templates/ajax/downloads/edit.ftl</result>
+            <result name="input" type="freemarker">/templates/ajax/downloads/edit.ftl</result>
+        </action>
+
+        <action name="updateDownloadName" method="update" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+            <result name="success" type="freemarker">/templates/ajax/downloads/empty.ftl</result>
         </action>
 
         <action name="cancelDownloadName" method="cancel" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
