@@ -134,6 +134,7 @@
             <#if event.createdPlatformType?exists>
                 <#assign platformType=event.createdPlatformType/>
                 <#assign platform=event.createdPlatform/>
+                <#assign iconIdentifier="createdPlatform"/>
                 <#include "../common/_platformDisplay.ftl">
             </#if>
 		</span>
@@ -151,6 +152,7 @@
             <#if event.modifiedPlatformType?exists>
                 <#assign platformType=event.modifiedPlatformType/>
                 <#assign platform=event.modifiedPlatform/>
+                <#assign iconIdentifier="modifiedPlatform"/>
                 <#include "../common/_platformDisplay.ftl">
             </#if>
 		</span>
