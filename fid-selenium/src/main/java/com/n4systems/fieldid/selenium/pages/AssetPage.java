@@ -243,7 +243,7 @@ public class AssetPage extends WicketFieldIDPage {
 	}
 
     public String getValueForAttribute(String attributeName) {
-        return selenium.getText("//div[@class='assetDetails']/p/label[.='" + attributeName + "']/../span");
+        return selenium.getText("//div[@class='assetDetails']//label[.='" + attributeName + "']/../span");
     }
 
 	public void clickMerge() {
