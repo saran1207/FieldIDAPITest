@@ -260,6 +260,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             }
             event.getObject().setSectionResults(sectionResults);
             event.getObject().setProofTestInfo(proofTestInfo.getObject());
+            saveAssignedToIfNecessary();
+            saveEventBookIfNecessary();
             if (doPostSubmitValidation()) {
                 AbstractEvent savedEvent = doSave();
                 FieldIDSession.get().storeInfoMessageForStruts(getString("message.eventsaved"));

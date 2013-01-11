@@ -70,10 +70,6 @@ public class PerformEventPage extends EventPage {
     protected AbstractEvent doSave() {
         event.getObject().storeTransientCriteriaResults();
 
-        saveEventBookIfNecessary();
-
-        saveAssignedToIfNecessary();
-
         FileDataContainer fileDataContainer = proofTestEditPanel.getFileDataContainer();
 
         Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, fileAttachments, createEventScheduleBundles());
