@@ -6,7 +6,10 @@ import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
+import com.n4systems.model.PriorityCode;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -83,6 +86,23 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		} else {
             logger.warn("(Legacy Client Detected) Failed Updating Completed Scheduled Event" + event.getId());
         }
+	}
+
+	@PUT
+	@Path("multi")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void saveMultipleEventSchedules(ApiMultiEventSchedule apiMultiEventSchedule) {
+		ApiEventSchedule eventScheduleTemplate = apiMultiEventSchedule.getEventScheduleTemplate();
+		for (ApiEventScheduleAssetLink assetLink: apiMultiEventSchedule.getEventSchedules()) {
+			eventScheduleTemplate.setSid(assetLink.getSid());
+			eventScheduleTemplate.setAssetId(assetLink.getAssetId());
+
+			logger.info("Creating Event Schedule " + eventScheduleTemplate.getSid());
+			saveEventSchedule(eventScheduleTemplate);
+		}
+
+		logger.info("Saved " + apiMultiEventSchedule.getEventSchedules().size() + " Schedules");
 	}
 	
 	@DELETE
