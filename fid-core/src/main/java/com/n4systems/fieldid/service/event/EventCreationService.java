@@ -330,7 +330,7 @@ public class EventCreationService extends FieldIdPersistenceService {
     }
 
     private void confirmSubEventsAreAgainstAttachedSubAssets(Event event) throws UnknownSubAsset {
-        Asset asset = persistenceService.find(Asset.class, event.getAsset().getId());
+        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
         List<SubAsset> subAssets = assetService.findSubAssets(asset);
         for (SubEvent subEvent : event.getSubEvents()) {
             if (!subAssets.contains(new SubAsset(subEvent.getAsset(), null))) {
@@ -340,7 +340,7 @@ public class EventCreationService extends FieldIdPersistenceService {
     }
 
     private void setOrderForSubEvents(Event event) {
-        Asset asset = persistenceService.find(Asset.class, event.getAsset().getId());
+        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
         List<SubAsset> subAssets = assetService.findSubAssets(asset);
         List<SubEvent> reorderedSubEvents = new ArrayList<SubEvent>();
         for (SubAsset subAsset : subAssets) {
@@ -377,7 +377,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     private void updateAsset(Event event, Long modifiedById) {
         User modifiedBy = getCurrentUser();
-        Asset asset = persistenceService.find(Asset.class, event.getAsset().getId());
+        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
         asset.setSubAssets(assetService.findSubAssets(asset));
 
         updateAssetLastEventDate(asset);

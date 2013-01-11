@@ -254,6 +254,10 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
         @Override
         protected void onSubmit() {
+            if (persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getObject().getAsset().getId()).isArchived()) {
+                error(getString("error.asset_has_been_archived"));
+                return;
+            }
             event.getObject().setSectionResults(sectionResults);
             event.getObject().setProofTestInfo(proofTestInfo.getObject());
             if (doPostSubmitValidation()) {
