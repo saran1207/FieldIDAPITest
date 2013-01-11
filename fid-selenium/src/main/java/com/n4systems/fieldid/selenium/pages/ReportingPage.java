@@ -136,7 +136,7 @@ public class ReportingPage extends WicketEntitySearchPage {
 			setCheckBoxValue("//input[@name='filters:eventDetailsCriteriaPanel:containedPanel:includeNetworkResultsContainer:includeSafetyNetwork']", criteria.getSafetyNetworkResults());
 		}
 		if(criteria.getResult() != null) {
-			selenium.select("//select[@name='filters:resolutionDetailsCriteriaPanel:containedPanel:result']", criteria.getResult());
+			selenium.select("//select[@name='filters:resolutionDetailsCriteriaPanel:containedPanel:eventResult']", criteria.getResult());
 		}
 	}
 	
