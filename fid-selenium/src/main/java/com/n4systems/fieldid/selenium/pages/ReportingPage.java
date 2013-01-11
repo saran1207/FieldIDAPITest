@@ -239,7 +239,7 @@ public class ReportingPage extends WicketEntitySearchPage {
 	}
 
     public void selectOpenEvents() {
-        selenium.select("//select[@name='filters:eventStateSelect']", "Open");
+        selenium.select("//select[@name='filters:workflowStateSelect']", "Open");
         waitForWicketAjax();
     }
 
