@@ -7,8 +7,7 @@ import com.n4systems.model.Tenant;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ManageEventTypeGroupsTest extends FieldIDTestCase {
 	
@@ -93,9 +92,9 @@ public class ManageEventTypeGroupsTest extends FieldIDTestCase {
 	}	
 	
 	@Test
-	public void test_delete_event_type_group() throws Exception {
+	public void test_archive_event_type_group() throws Exception {
 		assertTrue(manageEventTypeGroupsPage.listItemExists("EventTypeGroup1"));
-		manageEventTypeGroupsPage.deleteListItem("EventTypeGroup1", true);
-		manageEventTypeGroupsPage.verifyEventTypeDeleted();
+		manageEventTypeGroupsPage.archiveListItem("EventTypeGroup1", true);
+        assertFalse(manageEventTypeGroupsPage.listItemExists("EventTypeGroup1"));
 	}
 }

@@ -94,14 +94,9 @@ public class ManageEventTypeGroupsPage extends FieldIDPage {
         waitForPageToLoad();
     }
     
-	public void deleteListItem(String name, boolean confirm) {
-        editListItem(name);
-        confirmNextDialog(confirm);
-		selenium.click("//a[.='Delete']");
-        selenium.getConfirmation();
-        if (confirm) {
-            waitForPageToLoad();
-        }
+	public void archiveListItem(String name, boolean confirm) {
+        selenium.click("//table[@class='list']/tbody//tr//td/a[contains(., '"+name+"')]/../../td/a[.='Archive']");
+        waitForPageToLoad();
 	}
 	
 	public boolean listItemExists(String name) {
@@ -114,9 +109,4 @@ public class ManageEventTypeGroupsPage extends FieldIDPage {
 		assertEquals("Event Type Group saved.", actionMessages.get(0).trim());
 	}
 
-	public void verifyEventTypeDeleted() {
-		List <String> actionMessages = getActionMessages();
-		assertFalse(actionMessages.isEmpty());
-		assertEquals("Event Type Group deleted.", actionMessages.get(0).trim());
-	}
 }
