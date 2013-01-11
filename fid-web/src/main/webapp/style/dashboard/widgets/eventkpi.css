@@ -29,9 +29,9 @@
 
 .kpi .bar-chart {
     width:100%;
-    height:25px;
     position: relative;
     background:white;
+    height: 100%;
     float:left;
 }
 
@@ -44,7 +44,7 @@
 
 .kpi .bar-chart .bar.passed {
     background:#aDFFb1;
-    border-right: 1px solid #8DDDAD;
+    border-right: 1px solid #9DeDb2;
 }
 
 .kpi .bar-chart .bar.closed {
@@ -74,7 +74,6 @@
     height:6px;
     padding-left:6px;
     display:inline-block;
-    margin-bottom:1px;
     opacity:.5;
     border: 1px solid #666;
 }
@@ -95,23 +94,11 @@
     background:#76BBC0;
 }
 
-.kpi .label {
+.kpi .title {
     height:20px;
 }
-.kpi .label .total {
+.kpi .title .total {
     float:right;
-}
-
-
-.kpi .section.bottom .bar {
-    outline:2px solid white;
-}
-
-.kpi .section.bottom .bar-chart {
-    height:0px;
-}
-
-.kpi .section.top .bar-chart {
 }
 
 .bars.incomplete {
@@ -129,9 +116,59 @@
 
 .kpi .blank {
     background:white;
-    height: 25px;
+    line-height: 25px;
     padding-left:5px;
     display:block;
     color:#aaa;
     text-align: center;
+}
+
+.kpi .section.top {
+    height:25px;
+}
+
+.kpi .content {
+    border: 1px solid lightgray;
+}
+
+.kpi .section.bottom {
+    height:0px;
+    overflow:hidden;
+    background: white;
+    padding-left:5px;
+}
+
+.kpi .section.bottom .label div {
+    display:inline-block;
+}
+
+.kpi .section.bottom.opened {
+    border-top:1px dotted lightgray;
+}
+
+.kpi .section.bottom .label .passed.highlight {
+    background:#aDFFb1;
+}
+
+.kpi .section.bottom .label .closed.highlight {
+    background:#75DAD6;
+}
+
+.kpi .section.bottom .label .na.highlight {
+    background: #e3e83f;
+}
+
+.kpi .section.bottom .label .failed.highlight {
+    background:#D691AA;
+}
+
+
+.kpi .section.bottom .label div.highlight {
+    cursor: pointer;
+}
+
+.kpi .section.bottom .label div {
+    line-height:14px;
+    padding:0px 2px;
+    opacity:.7;
 }

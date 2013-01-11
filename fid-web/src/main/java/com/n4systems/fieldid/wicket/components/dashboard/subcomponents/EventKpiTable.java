@@ -45,8 +45,8 @@ public class EventKpiTable extends Panel {
                 item.add(new Label("customerName", eventKpiRecord.getCustomer().getDisplayName()));
                 final KpiWrapper kpiWrapper = new KpiWrapper(eventKpiRecord);
                 item.add(new Label("total", new StringResourceModel("label.kpi_total", Model.of(kpiWrapper), null).getString() ));
-                item.add(new AbsoluteKpi("absoluteKpi", item.getModel(), eventKpiRecord.getTotalScheduledEvents()));
-                item.add(new RelativeKpi("relativeKpi", item.getModel(), kpiWrapper.getCompletedAndClosed()));
+                item.add(new Kpi("kpiBarChart", item.getModel(), eventKpiRecord.getTotalScheduledEvents()));
+                item.add(new KpiLabel("kpiLabel", Model.of(kpiWrapper)));
                 item.add(new WebMarkupContainer("blankSlate") {
                     @Override public boolean isVisible() {
                         return kpiWrapper.getTotalScheduledEvents() == 0L;
@@ -102,7 +102,10 @@ public class EventKpiTable extends Panel {
         private final KpiBar closed;
         private final KpiBar na;
         protected Long total;
-        protected boolean showTooltip = false;
+        protected boolean showTooltip = true;
+        private final KpiBar incomplete;
+
+
 
         public Kpi(String id, final IModel<EventKpiRecord> model, Long total) {
             super(id, model);
@@ -130,7 +133,14 @@ public class EventKpiTable extends Panel {
                     return kpi.getNa();
                 }
             });
-
+            add(incomplete = new KpiBar(kpi, KpiType.INCOMPLETE) {
+                @Override protected Long getValue() {
+                    return kpi.getIncomplete();
+                }
+                @Override protected boolean showTooltip() {
+                    return true;
+                }
+            }.withWidth(100 - getRoundedPercentage(kpi)));
         }
 
         @Override
@@ -180,9 +190,7 @@ public class EventKpiTable extends Panel {
                     style+=" left:"+(100-width)+"%;";
                 }
                 tag.put("style",style);
-                if (showTooltip()) {
-                    tag.put("title", tooltip);
-                }
+//                tag.put("title", tooltip);
             }
 
             protected boolean showTooltip() {
@@ -198,38 +206,29 @@ public class EventKpiTable extends Panel {
 
     }
 
+    class KpiLabel extends WebMarkupContainer {
 
+        private final IModel<KpiWrapper> model;
 
-    class RelativeKpi extends Kpi {
-
-        public RelativeKpi(String id, IModel<EventKpiRecord> model, Long total) {
-            super(id, model, total);
-            showTooltip = true;
+        public KpiLabel(String id, IModel<KpiWrapper> model) {
+            super(id, model);
+            this.model = model;
+            addLabel(KpiType.FAILED);
+            addLabel(KpiType.CLOSED);
+            addLabel(KpiType.NA);
+            addLabel(KpiType.PASSED);
         }
-    }
 
-    class AbsoluteKpi extends Kpi {
-        private final KpiBar incomplete;
-
-        public AbsoluteKpi(String id, IModel<EventKpiRecord> model, final Long total) {
-            super(id, model, total);
-
-            add(incomplete = new KpiBar(kpi, KpiType.INCOMPLETE) {
-                @Override protected Long getValue() {
-                    return kpi.getIncomplete();
+        private void addLabel(final KpiType type) {
+            String name=type.name().toLowerCase();
+            Label label = new Label(name,new StringResourceModel("label.kpi_type."+name,this,model));
+            add(label);
+            label.add(new AjaxEventBehavior("onclick") {
+                @Override protected void onEvent(AjaxRequestTarget target) {
+                    EventKpiTable.this.setResponsePage(RunReportPage.class, getParams(model.getObject(), type.getLabel()));
                 }
-                @Override protected boolean showTooltip() {
-                    return true;
-                }
-            }.withWidth(100 - getRoundedPercentage(kpi)));
-
+            });
         }
-
-        @Override
-        protected void onComponentTag(final ComponentTag tag) {
-            super.onComponentTag(tag);
-        }
-
     }
 
 }

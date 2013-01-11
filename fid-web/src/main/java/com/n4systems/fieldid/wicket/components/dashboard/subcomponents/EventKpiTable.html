@@ -13,37 +13,36 @@
 
     <div wicket:id="customerEventKpiList" class="kpi">
 
-        <div class="label">
+        <div class="title">
             <div wicket:id="customerName" class="owner"></div>
             <div wicket:id="total" class="total"></div>
         </div>
 
-        <div class="section top">
-            <span wicket:id="blankSlate" class="blank"><wicket:message key="label.no_scheduled_events"/></span>
-            <div wicket:id="absoluteKpi" class="bar-chart">
-                <div class="bars completed">
-                    <div wicket:id="failed" class="bar failed"></div>
-                    <div wicket:id="closed" class="bar closed"></div>
-                    <div wicket:id="na" class="bar na"></div>
-                    <div wicket:id="passed" class="bar passed"></div>
-                </div>
+        <div class="content">
+            <div class="section top">
+                <span wicket:id="blankSlate" class="blank"><wicket:message key="label.no_scheduled_events"/></span>
+                <div wicket:id="kpiBarChart" class="bar-chart">
+                    <div class="bars completed">
+                        <div wicket:id="failed" class="bar failed"></div>
+                        <div wicket:id="closed" class="bar closed"></div>
+                        <div wicket:id="na" class="bar na"></div>
+                        <div wicket:id="passed" class="bar passed"></div>
+                    </div>
 
-                <div class="bars incomplete southwest" wicket:id="incomplete">
+                    <div class="bars incomplete southwest" wicket:id="incomplete">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section bottom">
+                <div wicket:id="kpiLabel" class="label">
+                    <div wicket:id="failed" class="failed"></div> /
+                    <div wicket:id="closed" class="closed"></div> /
+                    <div wicket:id="na" class="na"></div> /
+                    <div wicket:id="passed" class="passed"></div>
                 </div>
             </div>
         </div>
-
-        <div class="section bottom">
-            <div wicket:id="relativeKpi" class="bar-chart relative">
-                <div class="bars completed">
-                    <div wicket:id="failed" class="bar failed northwest"></div>
-                    <div wicket:id="closed" class="bar closed north"></div>
-                    <div wicket:id="na" class="bar na north"></div>
-                    <div wicket:id="passed" class="bar passed northeast"></div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
 </wicket:panel>

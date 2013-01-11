@@ -161,9 +161,14 @@ var chartWidgetFactory = (function() {
 			url+="&series="+item.seriesIndex;			
 		}			
 		return url;
-	}	
-	
-	var create = function(id) { 
+	}
+
+	function getLabel(bar) {
+		var type = getBarType(bar);
+		$(bar).parent().find()
+	}
+
+	var create = function(id) {
 		var widget = chartWidget(id);
 		return widget;
 	};
@@ -195,36 +200,54 @@ var chartWidgetFactory = (function() {
 		$('.eventKpiWidget').find('.north[title]').tipsy({gravity: 'n', fade:true, delayIn:delay});
 		$('.eventKpiWidget').find('.northeast[title]').tipsy({gravity: 'ne', fade:true, delayIn:delay});
 
-		var updateBar = function(k,bar) {
-			var selector = $(bar).hasClass('passed') ? 'passed' :
-				$(bar).hasClass('na') ? 'na' :
-					$(bar).hasClass('closed') ? 'closed' :
-						$(bar).hasClass('failed') ? 'failed' : 'error-huh';
-			$(k).find('.bar.'+selector).addClass(' highlight');
-		};
+		var getType = function(bar) {
+			if (bar.hasClass('failed')) return 'failed'
+			else if (bar.hasClass('na')) return 'na'
+			else if (bar.hasClass('passed')) return 'passed'
+			else if (bar.hasClass('closed')) return 'closed'
+		}
 
-		var resetBar = function(k,bar) {
-			$(k).find('.bar').removeClass(' highlight');
-		};
+		var highlightLabelFromBar = function(bar) {
+			$(bar).parents('.kpi').find('.section.bottom .label .'+getType($(bar))).addClass('highlight');
+		}
+
+		var unHighlightLabelFromBar = function(bar) {
+			$(bar).parents('.kpi').find('.section.bottom .label .'+getType($(bar))).removeClass('highlight');
+		}
 
 		$.each($('.eventKpiWidget .kpi'), function() {
 			var kpi = $(this);
 			$(this).find('.section.top .bars.completed').mouseenter(function() {
-				kpi.find('.section.bottom .bar-chart').animate({height:'25px'},200);
+				kpi.find('.section.bottom').addClass('opened').animate({height:'20px'},200);
 			});
 			$(this).mouseleave(function() {
-				kpi.find('.section.bottom .bar-chart').animate({height:'0px'},200);
-				resetBar(kpi);
+				kpi.find('.section.bottom').removeClass('opened').animate({height:'0px'},200);
 			});
-			$(this).find('.section.bottom .bar').hover(
-				function() {updateBar(kpi, this);},
-				function() {resetBar(kpi);}
-			)
+		});
+
+		$.each($('.eventKpiWidget .kpi .section.bottom .label div'), function() {
+			var label = $(this);
+			$(this).mouseenter(function() {
+				label.addClass('highlight');
+			});
+			$(this).mouseleave(function() {
+				label.removeClass('highlight')
+			});
+		});
+
+		$.each($('.eventKpiWidget .kpi .section.top .bar'), function() {
+			$(this).mouseenter(function() {
+				highlightLabelFromBar(this);
+			});
+			$(this).mouseleave(function() {
+				unHighlightLabelFromBar(this);
+			});
 		});
 
 
 	};
-	
+
+
 			
 	return {		
 		horizTooltip : horizLabelTooltipContent,
