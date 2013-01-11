@@ -104,9 +104,11 @@ public class LoginAction extends AbstractAction {
 
 	private String getFailedLoginText(LoginFailureInfo info) {
 		String key;
-		String[] args;
-		
-		if (info.isLocked() || info.requiresLocking()) {			
+		String[] args = {};
+
+        if (info.isUnactivated()) {
+            key = "error.unactivated_account";
+        } else if (info.isLocked() || info.requiresLocking()) {
 			key = info.getDuration()!=0 ? "error.accountlocked_duration" : "error.accountlocked_contact";
 			args = new String[]{info.getDuration()+""};
 		} else {		
@@ -119,7 +121,9 @@ public class LoginAction extends AbstractAction {
 	private void handleFailedLoginAttempt(LoginException e) {
         LoginFailureInfo currentFailureInfo = e.getLoginFailureInfo();
 
-        if (currentFailureInfo.isExistingUser()) {
+        if (currentFailureInfo.isUnactivated()) {
+            addActionError(getFailedLoginText(currentFailureInfo));
+        } else if (currentFailureInfo.isExistingUser()) {
             addActionError(getFailedLoginText(currentFailureInfo));
             //if we find out user has tried N of N times, then lets go back to DB and lock him out.
             if (currentFailureInfo.requiresLocking()) {

@@ -76,7 +76,10 @@ public class EntityManagerBackedUserManager implements UserManager {
 		if (user == null) {
             AccountPolicy accountPolicy = getAccountPolicyForTenantId(tenant.getId());
 			throw new LoginException(new LoginFailureInfo(userID, accountPolicy.getMaxAttempts(), false, accountPolicy.getLockoutDuration(), false));
-		} else {
+		} else if (user.getHashPassword()==null) {
+            // user was created without password and needs to register before successfully logging in.
+            throw new LoginException(LoginFailureInfo.createUnactivatedLoginFailureInfo(user));
+        } else {
             checkIfStillLockedAndUnlockIfNecessary(user);
 
             if (!passwordMatches(plainTextPassword,user) || user.isLocked()) {

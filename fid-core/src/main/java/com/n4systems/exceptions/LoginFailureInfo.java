@@ -14,6 +14,18 @@ public class LoginFailureInfo {
 	private int maxAttempts;
 	private int duration;
     private Date lockedUntil;
+    private boolean unactivated = false;
+
+    public static LoginFailureInfo createUnactivatedLoginFailureInfo(User user) {
+        LoginFailureInfo lfi = new LoginFailureInfo(user);
+        lfi.unactivated = true;
+        return lfi;
+    }
+
+    public LoginFailureInfo(User user) {
+        super();
+        this.userId = user.getUserID();
+    }
 
 	public LoginFailureInfo(User user, int maxAttempts, int duration) {
 		this(user.getUserID().toLowerCase(), user.getFailedLoginAttempts(), maxAttempts, user.isLocked(), duration, true);
@@ -81,5 +93,9 @@ public class LoginFailureInfo {
             locked = false;
             attempts = 0;
         }
+    }
+
+    public boolean isUnactivated() {
+        return unactivated;
     }
 }

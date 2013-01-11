@@ -25,10 +25,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ListHelper;
-import com.n4systems.util.ListingPair;
-import com.n4systems.util.StringListingPair;
-import com.n4systems.util.UserGroup;
+import com.n4systems.util.*;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
@@ -246,7 +243,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		try {
 
 			if (user.getId() == null) {
-				user.updatePassword(passwordEntry.getPassword());
+				user.updatePassword(StringUtils.isEmpty(passwordEntry.getPassword()) ? null:passwordEntry.getPassword());
 				user.assignSecruityCardNumber(securityCardNumber);
                 user.setSavedItems(new ArrayList<SavedItem>());
 				new UserSaver().save(user);
