@@ -49,6 +49,7 @@ public class RichText extends Panel {
     public RichText(String id, IModel<String> model) {
         super(id);
         add(new AttributeAppender("class", Model.of("rich-text"), " "));
+        add(new AttributeAppender("style", "font-size: 10px"));
         add(area = new TextArea<String>("text", model).setOutputMarkupId(true));
         setOutputMarkupId(true);
         options = new NicEditOptions();
