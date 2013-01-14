@@ -49,7 +49,6 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-    @StorePlatformContext
 	public void saveEvent(ApiEvent apiEvent) {
 		if(apiEvent.getSid() == null) {
 			throw new NullPointerException("ApiEvent has null sid");
