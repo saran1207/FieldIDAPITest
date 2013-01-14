@@ -1,18 +1,14 @@
 package com.n4systems.model.asset;
 
-import java.util.UUID;
-
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.Attachment;
 import com.n4systems.model.api.Note;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
+
+import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "assetattachments")
@@ -29,6 +25,9 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 	private Asset asset;
 	private Note note = new Note();
 	private String mobileId;
+
+	@Transient
+	private byte[] data;
 
 	public AssetAttachment() {
 	}
@@ -102,6 +101,14 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 
 	public void setMobileId(String mobileId) {
 		this.mobileId = mobileId;
+	}
+
+	public byte[] getData() {
+		return data;
+	}
+
+	public void setData(byte[] data) {
+		this.data = data;
 	}
 
 }

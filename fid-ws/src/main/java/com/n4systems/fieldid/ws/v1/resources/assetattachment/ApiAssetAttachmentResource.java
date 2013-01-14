@@ -2,8 +2,10 @@ package com.n4systems.fieldid.ws.v1.resources.assetattachment;
 
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetLink;
 import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.asset.AssetAttachmentSaver;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -12,15 +14,10 @@ import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("assetAttachment")
@@ -32,10 +29,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Transactional(readOnly = true)
 	public Response downloadAttachment(@PathParam("attachmentId") String attachmentId) {
-        QueryBuilder<AssetAttachment> query = createUserSecurityBuilder(AssetAttachment.class);
-        query.addWhere(WhereClauseFactory.create("mobileId", attachmentId));
-
-		AssetAttachment attachment = persistenceService.find(query);
+		AssetAttachment attachment = findAttachment(attachmentId);
 		if (attachment == null) {
 			throw new NotFoundException("Asset Attachment", attachmentId);
 		}
@@ -60,7 +54,39 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 				//.header("Content-Disposition", "attachment; filename=\"" + attachment.getFileName() + "\"")
 				.build();
 		return response;
-	}	
+	}
+
+	private AssetAttachment findAttachment(String attachmentId) {
+		QueryBuilder<AssetAttachment> query = createUserSecurityBuilder(AssetAttachment.class);
+		query.addWhere(WhereClauseFactory.create("mobileId", attachmentId));
+		return persistenceService.find(query);
+	}
+
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void saveAssetAttachment(ApiAssetAttachment apiAttachment) {
+		AssetAttachment attachment = convertApiModelToEntity(apiAttachment);
+		AssetAttachmentSaver saver = new AssetAttachmentSaver(getCurrentUser(), attachment.getAsset());
+		saver.save(getEntityManager(), attachment);
+	}
+
+	@PUT
+	@Path("multi")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void multiAddAsset(ApiMultiAssetAttachment multiAssetAttachment) {
+		ApiAssetAttachment assetAttachmentTemplate = multiAssetAttachment.getAssetAttachmentTemplate();
+		for (ApiAssetLink assetLink: multiAssetAttachment.getAttachments()) {
+			assetAttachmentTemplate.setSid(assetLink.getSid());
+			assetAttachmentTemplate.setAssetId(assetLink.getAssetId());
+
+			logger.info("Creating Asset Attachment " + assetAttachmentTemplate.getSid());
+			saveAssetAttachment(assetAttachmentTemplate);
+		}
+
+		logger.info("Saved " + multiAssetAttachment.getAttachments().size() + " Asset Attachments");
+	}
 	
 	public List<ApiAssetAttachment> findAllAttachments(String assetId) {
 		List<AssetAttachment> attachments = findAllAssetAttachments(assetId);
@@ -98,43 +124,30 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		}
 		return apiAttachment;
 	}
-	
-	public List<AssetAttachment> convertApiListToEntityList(List<ApiAssetAttachment> apiAttachments, Asset asset) {
-		List<AssetAttachment> attachments = new ArrayList<AssetAttachment>();
-		
-		for(ApiAssetAttachment apiAttachment : apiAttachments) {
-			if(apiAttachment.getData() != null) {
-				AssetAttachment attachment = convertApiModelToEntity(apiAttachment, asset);
-				attachments.add(attachment);
-			} else {
-				logger.warn("Discarding recieved ApiAssetAttachment with null data for asset: " + asset.getIdentifier());
-			}
-		}
-		
-		return attachments;
-	}
-	
-	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment apiAttachment, Asset asset) {		
+
+	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment apiAttachment, Asset asset) {
 		AssetAttachment attachment = findExistingAttachment(apiAttachment.getSid());
-		
+
 		if(attachment == null) {
-			attachment = new AssetAttachment();		
+			attachment = new AssetAttachment();
 			attachment.setMobileId(apiAttachment.getSid());
 			attachment.setAsset(asset);
 			attachment.setTenant(asset.getTenant());
 		}
-		
 		attachment.setComments(apiAttachment.getComments());
 		attachment.setFileName(apiAttachment.getFileName());
-		
-		try {
-			File attachmentPath = new File(PathHandler.getTempRoot(), attachment.getFileName());
-			FileUtils.writeByteArrayToFile(attachmentPath, apiAttachment.getData());
-		} catch (IOException e) {
-			logger.error("Error writing Asset Attachment", e);
-		}
-		
+		attachment.setData(apiAttachment.getData());
 		return attachment;
+	}
+
+	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment apiAttachment) {
+		QueryBuilder<Asset> assetQuery = createTenantSecurityBuilder(Asset.class, true);
+		assetQuery.addWhere(WhereClauseFactory.create("mobileGUID", apiAttachment.getAssetId()));
+		Asset asset = persistenceService.find(assetQuery);
+		if (asset == null) {
+			throw new NotFoundException("Asset", apiAttachment.getAssetId());
+		}
+		return convertApiModelToEntity(apiAttachment, asset);
 	}
 	
 	public AssetAttachment findExistingAttachment(String mobileId) {

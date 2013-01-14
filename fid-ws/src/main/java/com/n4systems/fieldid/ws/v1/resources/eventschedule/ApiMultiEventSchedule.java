@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 
+import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetLink;
+
 import java.util.List;
 
 public class ApiMultiEventSchedule {
 	private ApiEventSchedule eventScheduleTemplate;
-	private List<ApiEventScheduleAssetLink> eventSchedules;
+	private List<ApiAssetLink> eventSchedules;
 
 	public ApiEventSchedule getEventScheduleTemplate() {
 		return eventScheduleTemplate;
@@ -14,11 +16,11 @@ public class ApiMultiEventSchedule {
 		this.eventScheduleTemplate = eventScheduleTemplate;
 	}
 
-	public List<ApiEventScheduleAssetLink> getEventSchedules() {
+	public List<ApiAssetLink> getEventSchedules() {
 		return eventSchedules;
 	}
 
-	public void setEventSchedules(List<ApiEventScheduleAssetLink> eventSchedules) {
+	public void setEventSchedules(List<ApiAssetLink> eventSchedules) {
 		this.eventSchedules = eventSchedules;
 	}
 }

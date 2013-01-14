@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetLink;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
 import com.n4systems.model.Asset;
@@ -94,7 +95,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Transactional
 	public void saveMultipleEventSchedules(ApiMultiEventSchedule apiMultiEventSchedule) {
 		ApiEventSchedule eventScheduleTemplate = apiMultiEventSchedule.getEventScheduleTemplate();
-		for (ApiEventScheduleAssetLink assetLink: apiMultiEventSchedule.getEventSchedules()) {
+		for (ApiAssetLink assetLink: apiMultiEventSchedule.getEventSchedules()) {
 			eventScheduleTemplate.setSid(assetLink.getSid());
 			eventScheduleTemplate.setAssetId(assetLink.getAssetId());
 

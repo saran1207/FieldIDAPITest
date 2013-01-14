@@ -1,6 +1,6 @@
-package com.n4systems.fieldid.ws.v1.resources.eventschedule;
+package com.n4systems.fieldid.ws.v1.resources.asset;
 
-public class ApiEventScheduleAssetLink {
+public class ApiAssetLink {
 	private String sid;
 	private String assetId;
 

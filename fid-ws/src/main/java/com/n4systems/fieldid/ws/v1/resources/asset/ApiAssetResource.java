@@ -29,6 +29,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachment;
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
@@ -174,16 +175,26 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	private Asset createAsset(ApiAsset apiAsset) {
 		Asset asset = new Asset();
 		converApiAsset(apiAsset, asset);
-		List<AssetAttachment> uploadedAttachments = apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset);		
+		List<AssetAttachment> uploadedAttachments = convertAllAttachmentsForAsset(apiAsset.getAttachments(), asset);
 		return assetSaveService.create(asset, uploadedAttachments, apiAsset.getImage());
 	}
 	
 	private Asset updateAsset(ApiAsset apiAsset, Asset asset) {
 		converApiAsset(apiAsset, asset);		
-		List<AssetAttachment> uploadedAttachments = apiAttachmentResource.convertApiListToEntityList(apiAsset.getAttachments(), asset);		
+		List<AssetAttachment> uploadedAttachments = convertAllAttachmentsForAsset(apiAsset.getAttachments(), asset);
 		List<AssetAttachment> existingAttachments = apiAttachmentResource.findAllAssetAttachments(asset.getMobileGUID());
 		asset.setSubAssets(apiSubAssetResource.findSubAssets(asset)); // So they don't get cleared! - WEB-3031
 		return assetSaveService.update(asset, existingAttachments, uploadedAttachments, apiAsset.getImage());
+	}
+
+	private List<AssetAttachment> convertAllAttachmentsForAsset(List<ApiAssetAttachment> apiAttachments, Asset asset) {
+		List<AssetAttachment> attachments = new ArrayList<AssetAttachment>();
+		for (ApiAssetAttachment apiAttachment: apiAttachments) {
+			if (apiAttachment.getData() != null) {
+				attachments.add(apiAttachmentResource.convertApiModelToEntity(apiAttachment, asset));
+			}
+		}
+		return attachments;
 	}
 	
 	protected List<ApiAsset> convertAllAssetsToApiModels(List<Asset> assets, boolean downloadEvents, SyncDuration syncDuration) {
