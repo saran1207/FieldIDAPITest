@@ -271,7 +271,7 @@ public class AssetService extends FieldIdPersistenceService {
         QueryBuilder<Long> schedules = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(asset.getTenant().getId()))
                 .setSimpleSelect("id")
                 .addSimpleWhere("asset", asset)
-                .addWhere(Comparator.NE, "workflowState", "workflowState", Event.WorkflowState.OPEN);
+                .addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
 
         for (Long id : persistenceService.findAll(schedules)) {
             Event schedule = persistenceService.find(Event.class, id);
