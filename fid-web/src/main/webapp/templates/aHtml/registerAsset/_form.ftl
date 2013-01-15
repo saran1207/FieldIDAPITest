@@ -1,5 +1,7 @@
 <div class="formBody">
-	<@s.form action="saveRegNetworkAsset" namespace="/aHtml/iframe" theme="fieldid" cssClass="fullForm fluidSets" method="post"> 
+	<@s.form action="saveRegNetworkAsset" namespace="/aHtml/iframe" theme="fieldid" cssClass="fullForm fluidSets" method="post">
+
+        <@s.hidden name="uniqueID" value="${uniqueID}"/>
 		
 		<#include '_basicForm.ftl'/>
 		
