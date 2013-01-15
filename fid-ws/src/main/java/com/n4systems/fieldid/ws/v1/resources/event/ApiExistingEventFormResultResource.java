@@ -1,8 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 
 import com.n4systems.model.*;
+
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -67,45 +70,48 @@ public class ApiExistingEventFormResultResource extends FieldIdPersistenceServic
 				throw new InternalErrorException("Unhandled Criteria type: " + result.getCriteria().getCriteriaType().name());
 		}
 		
-		for (ApiObservation apiRecommendation: apiResult.getRecommendations()) {
-			Recommendation recommendation = null;
-			for(Recommendation existingRecommendation : result.getRecommendations()) {
-				if(existingRecommendation.getMobileId().equals(apiRecommendation.getSid())) {
-					recommendation = existingRecommendation;
-					break;
-				}
-			}
-			
-			if(recommendation == null) {
-				recommendation = new Recommendation();
-				convertNewObservation(apiRecommendation, recommendation, event.getTenant());
-				result.getRecommendations().add(recommendation);
-			} else {
-				convertExistingObservation(apiRecommendation, recommendation);
-			}
-		}
-		
-		for (ApiObservation apiDeficiency: apiResult.getDeficiencies()) {
-			Deficiency deficiency = null;
-			for(Deficiency existingDeficiency : result.getDeficiencies()) {
-				if(existingDeficiency.getMobileId().equals(apiDeficiency.getSid())) {
-					deficiency = existingDeficiency;
-					break;
-				}
-			}
-			
-			if(deficiency == null) {
-				deficiency = new Deficiency();
-				convertNewObservation(apiDeficiency, deficiency, event.getTenant());
-				result.getDeficiencies().add(deficiency);
-			} else {
-				convertExistingObservation(apiDeficiency, deficiency);
-			}
+		try {
+			convertObservations(Recommendation.class, apiResult.getRecommendations(), result.getRecommendations(), event.getTenant());
+			convertObservations(Deficiency.class, apiResult.getDeficiencies(), result.getDeficiencies(), event.getTenant());
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 		
 		for(ApiEventSchedule action: apiResult.getActions()) {
 			Event actionEvent = apiEventScheduleResource.converApiEventSchedule(action);
 			result.getActions().add(actionEvent);
+		}
+	}
+	
+	private <T extends Observation> void convertObservations(Class<T> observstionClass, List<ApiObservation> apiObservations, List<T> observations, Tenant tenant) 
+		throws InstantiationException, IllegalAccessException {
+		// Create a Hashtable of apiObservations for easy lookup (to avoid repeated for loops)
+		Hashtable<String, ApiObservation> apiObservationTable = new Hashtable<String, ApiObservation>();
+		for(ApiObservation apiObservation : apiObservations) {
+			apiObservationTable.put(apiObservation.getSid(), apiObservation);
+		}
+		
+		for(int i = 0; i < observations.size(); i++) {
+			Observation observation = observations.get(i);
+			ApiObservation apiObservation = apiObservationTable.get(observation.getMobileId());
+			if(apiObservation == null) {
+				// Delete from observations list since its not in the incoming apiObservations.
+				observations.remove(i);
+				i--;
+			} else {
+				// Convert the apiObservation updates to the existing observation.
+				// Then Remove it from the apiObservationTable.
+				convertExistingObservation(apiObservation, observation);
+				apiObservationTable.remove(observation.getMobileId());
+			}
+		}
+		
+		// Now anything that is left in the apiObservationTable is new observations.
+		Enumeration<ApiObservation> newApiObservations = apiObservationTable.elements();
+		while(newApiObservations.hasMoreElements()) {
+			T observation = observstionClass.newInstance();
+			convertNewObservation(newApiObservations.nextElement(), observation, tenant);
+			observations.add(observation);
 		}
 	}
 	
