@@ -2,10 +2,7 @@ package com.n4systems.exporting.io;
 
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.MapUtils;
-import jxl.Cell;
-import jxl.DateCell;
-import jxl.Sheet;
-import jxl.Workbook;
+import jxl.*;
 import jxl.read.biff.BiffException;
 
 import java.io.IOException;
@@ -25,7 +22,10 @@ public class ExcelMapReader implements MapReader {
 	public ExcelMapReader(InputStream in, TimeZone timeZone) throws IOException {
 		this.timeZone = timeZone;
 		try {
-			workbook = Workbook.getWorkbook(in);
+            WorkbookSettings wbSettings = new WorkbookSettings();
+            //set it to Windows-1252 character encoding
+            wbSettings.setEncoding("CP1252");
+			workbook = Workbook.getWorkbook(in, wbSettings);
 		} catch (BiffException e) {
 			throw new IOException(e);
 		}
