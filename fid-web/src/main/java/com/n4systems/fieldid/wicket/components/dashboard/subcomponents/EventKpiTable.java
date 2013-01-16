@@ -97,14 +97,7 @@ public class EventKpiTable extends Panel {
     class Kpi extends WebMarkupContainer {
 
         protected KpiWrapper kpi;
-        private final KpiBar passed;
-        private final KpiBar failed;
-        private final KpiBar closed;
-        private final KpiBar na;
         protected Long total;
-        protected boolean showTooltip = true;
-        private final KpiBar incomplete;
-
 
 
         public Kpi(String id, final IModel<EventKpiRecord> model, Long total) {
@@ -113,32 +106,29 @@ public class EventKpiTable extends Panel {
 
             kpi = new KpiWrapper(model.getObject());
 
-            add(passed = new KpiBar(kpi,KpiType.PASSED) {
+            add(new KpiBar(kpi,KpiType.PASSED) {
                 @Override protected Long getValue() {
                     return kpi.getPassed();
                 }
             });
-            add(failed = new KpiBar(kpi,KpiType.FAILED) {
+            add(new KpiBar(kpi,KpiType.FAILED) {
                 @Override protected Long getValue() {
                     return kpi.getFailed();
                 }
             });
-            add(closed = new KpiBar(kpi,KpiType.CLOSED) {
+            add(new KpiBar(kpi,KpiType.CLOSED) {
                 @Override protected Long getValue() {
                     return kpi.getClosed();
                 }
             });
-            add(na = new KpiBar(kpi,KpiType.NA) {
+            add(new KpiBar(kpi,KpiType.NA) {
                 @Override protected Long getValue() {
                     return kpi.getNa();
                 }
             });
-            add(incomplete = new KpiBar(kpi, KpiType.INCOMPLETE) {
+            add(new KpiBar(kpi, KpiType.INCOMPLETE) {
                 @Override protected Long getValue() {
                     return kpi.getIncomplete();
-                }
-                @Override protected boolean showTooltip() {
-                    return true;
                 }
             }.withWidth(100 - getRoundedPercentage(kpi)));
         }
@@ -151,15 +141,10 @@ public class EventKpiTable extends Panel {
 
         class KpiBar extends WebMarkupContainer {
 
-            private final KpiWrapper kpi;
             private Long width;
-            private final String tooltip;
-            private KpiType type;
 
             public KpiBar(final KpiWrapper kpi, final KpiType type) {
                 super(type.getLabel());
-                this.kpi = kpi;
-                this.tooltip = new StringResourceModel("label.kpi_type."+type.getLabel(), Model.of(kpi), null).getString();
                 add(new AjaxEventBehavior("onclick") {
                     @Override protected void onEvent(AjaxRequestTarget target) {
                         EventKpiTable.this.setResponsePage(RunReportPage.class, getParams(kpi, type.getLabel()));
@@ -190,11 +175,6 @@ public class EventKpiTable extends Panel {
                     style+=" left:"+(100-width)+"%;";
                 }
                 tag.put("style",style);
-//                tag.put("title", tooltip);
-            }
-
-            protected boolean showTooltip() {
-                return showTooltip;
             }
 
             public KpiBar withWidth(Long width) {

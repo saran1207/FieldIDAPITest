@@ -215,16 +215,6 @@ var chartWidgetFactory = (function() {
 			$(bar).parents('.kpi').find('.section.bottom .label .'+getType($(bar))).removeClass('highlight');
 		}
 
-		$.each($('.eventKpiWidget .kpi'), function() {
-			var kpi = $(this);
-			$(this).find('.section.top .bars.completed').mouseenter(function() {
-				kpi.find('.section.bottom').addClass('opened').animate({height:'20px'},200);
-			});
-			$(this).mouseleave(function() {
-				kpi.find('.section.bottom').removeClass('opened').animate({height:'0px'},200);
-			});
-		});
-
 		$.each($('.eventKpiWidget .kpi .section.bottom .label div'), function() {
 			var label = $(this);
 			$(this).mouseenter(function() {
