@@ -8,8 +8,8 @@ import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.exceptions.*;
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.context.InteractionContext;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
@@ -433,17 +433,14 @@ public class DataServiceImpl implements DataService {
 		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId );
 		ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 		
-		InteractionContext uc = ThreadLocalInteractionContext.getInstance();
 		User user = null;
 		try {
-			if (request.modifiedByIdExists()) {
-				user = persistenceManager.find(User.class, request.getModifiedById());
-			}
-			uc.setCurrentUser(user);
-            uc.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
-            uc.setCurrentPlatform(request.getPlatformDescription());
+            if (request.modifiedByIdExists()) {
+                user = persistenceManager.find(User.class, request.getModifiedById());
+            }
+            storeInteractionContext(request, user);
 
-			Asset asset = lookupProduct(lookupInformation, request.getTenantId());
+            Asset asset = lookupProduct(lookupInformation, request.getTenantId());
 
 			LocationConverter locationConverter = new LocationServiceToContainerConverter(createLoaderFactory(request));
 			locationConverter.convert(request, asset);
@@ -461,7 +458,6 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public RequestResponse updateProductByCustomer(UpdateProductByCustomerRequest request) throws ServiceException {
-		InteractionContext uc = ThreadLocalInteractionContext.getInstance();
 		try {
 			long tenantId = request.getTenantId();
 			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
@@ -471,7 +467,7 @@ public class DataServiceImpl implements DataService {
 			if (request.modifiedByIdExists()) {
 				user = persistenceManager.find(User.class, request.getModifiedById());
 			}
-			uc.setCurrentUser(user);
+            storeInteractionContext(request, request.getModifiedById());
 			
 			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 
@@ -582,6 +578,8 @@ public class DataServiceImpl implements DataService {
 				throw new ServiceException();
 			}
 
+            storeInteractionContext(requestInformation, productDTO.getModifiedById());
+
 			productDTO = fixModifyByFromOldVersionsOfMobile(productDTO);
 			productDTO.unsetIdentifedById();
 
@@ -613,13 +611,10 @@ public class DataServiceImpl implements DataService {
 
 		testTransactionId(requestInformation);
 
-		InteractionContext uc = ThreadLocalInteractionContext.getInstance();
 		try {
 			if (productDTO.identifiedByExists()) {
 				EntityByIdIncludingArchivedLoader<User> userLoader = createLoaderFactory(requestInformation).createEntityByIdLoader(User.class);
-				uc.setCurrentUser(userLoader.setId(productDTO.getIdentifiedById()).load());
-                uc.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
-                uc.setCurrentPlatform(requestInformation.getPlatformDescription());
+                storeInteractionContext(requestInformation, userLoader.setId(productDTO.getIdentifiedById()).load());
 			}
 			
 			PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
@@ -748,12 +743,7 @@ public class DataServiceImpl implements DataService {
 			}
 
 			
-			InteractionContext interactionContext = ThreadLocalInteractionContext.getInstance();
-            // The performedBy user will be the same for all events in this group.
-            EntityByIdIncludingArchivedLoader<User> userLoader = createLoaderFactory(requestInformation).createEntityByIdLoader(User.class);
-            interactionContext.setCurrentUser(userLoader.setId(inspectionDTOs.get(0).getPerformedById()).load());
-            interactionContext.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
-            interactionContext.setCurrentPlatform(requestInformation.getPlatformDescription());
+            storeInteractionContext(requestInformation, inspectionDTOs.get(0).getPerformedById());
 
             Long tenantId = requestInformation.getTenantId();
             PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
@@ -837,15 +827,11 @@ public class DataServiceImpl implements DataService {
 		Long tenantId = requestInformation.getTenantId();
 
 		ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
-		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
+        PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
 
-		InteractionContext uc = ThreadLocalInteractionContext.getInstance();
 		try {
-
-			User performedBy = persistenceManager.find(User.class, inspectionImageServiceDTO.getPerformedById());
-			uc.setCurrentUser(performedBy);
-            uc.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
-            uc.setCurrentPlatform(requestInformation.getPlatformDescription());
+            User performedBy = persistenceManager.find(User.class, inspectionImageServiceDTO.getPerformedById());
+            storeInteractionContext(requestInformation, inspectionImageServiceDTO.getPerformedById());
 
 			EventAttachmentSaver attachmentSaver = new EventAttachmentSaver();
 			attachmentSaver.setData(inspectionImageServiceDTO.getImage().getImage());
@@ -890,14 +876,11 @@ public class DataServiceImpl implements DataService {
 		RequestResponse response = new RequestResponse();		
 		Long tenantId = requestInformation.getTenantId();
 		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
-		InteractionContext uc = ThreadLocalInteractionContext.getInstance();
-		
+
 		try {
 			User modifiedBy = persistenceManager.find(User.class, assetImageServiceDTO.getModifiedById());
-			uc.setCurrentUser(modifiedBy);
-            uc.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
-            uc.setCurrentPlatform(requestInformation.getPlatformDescription());
-			
+            storeInteractionContext(requestInformation, assetImageServiceDTO.getModifiedById());
+
 			AssetByMobileGuidLoader loader = new AssetByMobileGuidLoader(new TenantOnlySecurityFilter(tenantId));
 			Asset asset = loader.setMobileGuid(assetImageServiceDTO.getAssetMobileGuid()).load();
 			
@@ -1114,5 +1097,21 @@ public class DataServiceImpl implements DataService {
 	private int getSetupDataPageSize() {
 		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA).intValue();
 	}
+
+    private void storeInteractionContext(RequestInformation request, Long modifiedById) {
+        PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(request.getTenantId());
+        User user = null;
+        if (MobileDTOHelper.isValidServerId(modifiedById)) {
+            user = persistenceManager.find(User.class, modifiedById);
+        }
+        storeInteractionContext(request, user);
+    }
+
+    private void storeInteractionContext(RequestInformation request, User user) {
+        InteractionContext uc = ThreadLocalInteractionContext.getInstance();
+        uc.setCurrentUser(user);
+        uc.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
+        uc.setCurrentPlatform(request.getPlatformDescription());
+    }
 
 }

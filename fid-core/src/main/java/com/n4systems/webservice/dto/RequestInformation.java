@@ -1,6 +1,7 @@
 package com.n4systems.webservice.dto;
 
 import com.n4systems.util.GUIDHelper;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * This service DTO packages up the information the client will send up, including their API version and tenant id.
@@ -13,6 +14,7 @@ public class RequestInformation {
 	private long tenantId;
 	private long versionNumber;
 	private String mobileGuid;
+    private String appVersion;
 	
 	public long getTenantId() {
 		return tenantId;
@@ -38,7 +40,14 @@ public class RequestInformation {
 	}
 
     public String getPlatformDescription() {
-        return "Windows Mobile, Version " + versionNumber;
+        return StringUtils.isBlank(appVersion) ? "Windows Mobile" : "Windows Mobile, Version: " + appVersion;
     }
-	
+
+    public String getAppVersion() {
+        return appVersion;
+    }
+
+    public void setAppVersion(String appVersion) {
+        this.appVersion = appVersion;
+    }
 }
