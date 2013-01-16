@@ -20,8 +20,8 @@ public class AssetDetailsPanel extends Panel {
         
         Asset asset = model.getObject();
 
-        String created = new FieldIdDateFormatter(asset.getCreated(), FieldIDSession.get().getSessionUser(), false, true).format();
-        String modified = new FieldIdDateFormatter(asset.getModified(), FieldIDSession.get().getSessionUser(), false, true).format();
+        String created = new FieldIdDateFormatter(asset.getCreated(), FieldIDSession.get().getSessionUser(), true, true).format();
+        String modified = new FieldIdDateFormatter(asset.getModified(), FieldIDSession.get().getSessionUser(), true, true).format();
         String identified = new FieldIdDateFormatter(asset.getIdentified(), FieldIDSession.get().getSessionUser(), false, false).format();
 
         add(new Label("referenceNumber", ProxyModel.of(asset, on(Asset.class).getCustomerRefNumber())));
