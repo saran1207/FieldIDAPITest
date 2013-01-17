@@ -13,17 +13,11 @@
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>**/*.java</include>
+                </includes>
+                <targetPath>${basedir}/src/main/resources/</targetPath>
             </resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
         </resources>
     </build>
     <dependencies>
