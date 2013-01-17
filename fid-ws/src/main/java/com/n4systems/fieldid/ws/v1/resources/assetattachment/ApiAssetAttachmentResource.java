@@ -70,6 +70,23 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		AssetAttachmentSaver saver = new AssetAttachmentSaver(getCurrentUser(), attachment.getAsset());
 		saver.save(getEntityManager(), attachment);
 	}
+	
+	@DELETE
+	@Path("{attachmentId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void deleteAssetAttachment(@PathParam("attachmentId") String attachmentId) {
+		QueryBuilder<AssetAttachment> query = createTenantSecurityBuilder(AssetAttachment.class, true);
+		query.addWhere(WhereClauseFactory.create("mobileId", attachmentId));
+		AssetAttachment attachment = persistenceService.find(query);
+		if(attachment != null) {
+			AssetAttachmentSaver saver = new AssetAttachmentSaver(getCurrentUser(), attachment.getAsset());
+			saver.remove(attachment);
+			logger.info("Deleted Attachment for Asset: " + attachment.getAsset().getIdentifier());
+		} else {
+			logger.warn("Failed Deleting Asset Attachment for mobileId: " + attachmentId);
+		}
+	}
 
 	@PUT
 	@Path("multi")

@@ -110,7 +110,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Path("{eventScheduleId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public void DeleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
+	public void deleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
 		logger.info("Attempting to archive Scheduled Event with mobileId " + eventScheduleId);
 		Event event = eventScheduleService.findByMobileId(eventScheduleId);
         event.archiveEntity();
