@@ -148,7 +148,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                 @Override
                 protected void onOrgSelected(AjaxRequestTarget target) {
                     doAutoSchedule();
-					BaseOrg selectedOrg = (BaseOrg) getDefaultModel().getObject();
+                    target.add(schedulesContainer);
+                    BaseOrg selectedOrg = (BaseOrg) getDefaultModel().getObject();
                     locationPicker.setOwner(selectedOrg);
 					newOrExistingEventBook.setOwner(selectedOrg);
 					target.add(newOrExistingEventBook);
