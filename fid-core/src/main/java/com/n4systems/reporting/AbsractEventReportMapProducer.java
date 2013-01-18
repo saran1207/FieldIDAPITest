@@ -49,14 +49,18 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		
 		add("product", new AssetReportMapProducer(getEvent().getAsset(), dateTimeDefinition, s3Service).produceMap());
 		
-		List<CriteriaStateView> createCriteriaViews = createCriteriaViews();
+		List<CriteriaStateView> criteriaViews = createCriteriaViews();
         populateTotalsAndPercentages();
-		add("resultsBeanList", createCriteriaViews);
-		add("results", new JRBeanCollectionDataSource(createCriteriaViews));
+		add("resultsBeanList", criteriaViews);
+		add("results", new JRBeanCollectionDataSource(criteriaViews));
 
-        List<ObservationView> createObservationViews = createObservationViews();
-        add("observationsBeanList", createObservationViews);
-        add("observations", new JRBeanCollectionDataSource(createObservationViews));
+        // WEB-3577 Unfortunately we are having issues resetting data sources in our ireports. Our data source is
+        // rewindable but apparently it's not working. We should remove this soon(tm) and figure out the right way to do it
+        add("resultsCopy", new JRBeanCollectionDataSource(createCriteriaViews()));
+
+        List<ObservationView> observationViews = createObservationViews();
+        add("observationsBeanList", observationViews);
+        add("observations", new JRBeanCollectionDataSource(observationViews));
 
 		add("images", createEventImages());
 		add("ownerLogo", getCustomerLogo(getEvent().getAsset().getOwner()));
