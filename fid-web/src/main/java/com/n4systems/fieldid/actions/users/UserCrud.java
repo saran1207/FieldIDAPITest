@@ -243,15 +243,15 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		try {
 
 			if (user.getId() == null) {
+                user.updatePassword(StringUtils.isEmpty(passwordEntry.getPassword()) ? null:passwordEntry.getPassword());
 				user.assignSecruityCardNumber(securityCardNumber);
                 user.setSavedItems(new ArrayList<SavedItem>());
 				new UserSaver().save(user);
 				uniqueID = user.getId();
 				if(!isAssignPassword()) {
-					createAndAssignPassword();
+					createUnactivatedUser();
 					sendWelcomeEmail(getPasswordWelcomeNotifier());
 				} else {
-    				user.updatePassword(StringUtils.isEmpty(passwordEntry.getPassword()) ? null:passwordEntry.getPassword());
 					sendWelcomeEmail(getWelcomeNotifier());
 				}
 			} else {
@@ -274,7 +274,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return "saved";
 	}
 
-	private void createAndAssignPassword() {
+	private void createUnactivatedUser() {
         user.updatePassword(null);
 		user.createResetPasswordKey();
 		new UserSaver().update(user);
