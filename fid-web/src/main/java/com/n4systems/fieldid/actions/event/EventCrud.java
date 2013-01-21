@@ -1107,7 +1107,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
     
     public Asset getLinkedAsset() {
         QueryBuilder<Asset> query = new QueryBuilder<Asset>(Asset.class, getSecurityFilter());
-        query.addSimpleWhere("networkId", asset.getId());
+        if (asset.getNetworkId() != null && !asset.getNetworkId().equals(asset.getId())) {
+            query.addSimpleWhere("id", asset.getNetworkId());
+        } else {
+            query.addSimpleWhere("networkId", asset.getId());
+        }
         return persistenceManager.find(query);
     }
 
