@@ -290,7 +290,10 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
     private Link createDeleteLink(String linkId) {
         return new Link(linkId) {
-            { add(new JavaScriptAlertConfirmBehavior(new FIDLabelModel("label.confirm_event_delete"))); }
+            {
+                add(new JavaScriptAlertConfirmBehavior(new FIDLabelModel("label.confirm_event_delete")));
+                setVisible(!event.getObject().isNew());
+            }
             @Override
             public void onClick() {
                 eventService.retireEvent(event.getObject());
