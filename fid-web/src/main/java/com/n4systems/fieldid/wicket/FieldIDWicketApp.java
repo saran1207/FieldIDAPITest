@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunLastSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchOpenEventsForJobPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
 import com.n4systems.fieldid.wicket.pages.assettype.RecurringAssetTypeEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
@@ -126,6 +127,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("criteriaImageList", CriteriaImageViewListPage.class);
 
         mountPage("viewActionsList", ViewActionsListPage.class);
+
+        mountPage("searchOpenEventsForJob", SearchOpenEventsForJobPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
