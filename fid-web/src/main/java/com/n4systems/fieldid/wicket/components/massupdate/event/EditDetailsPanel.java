@@ -186,9 +186,9 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
             add(eventBooks);
 
             massUpdateEventModel.getEvent().setEventResult(null);
-            final CheckBox resultCheck = new CheckBox("resultCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[result]"));
+            final CheckBox resultCheck = new CheckBox("resultCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[eventResult]"));
             resultCheck.setOutputMarkupId(true);
-            FormComponent<EventResult> results = new DropDownChoice<EventResult>("result", new PropertyModel<EventResult>(massUpdateEventModel, "event.eventResult"), EventResult.getValidEventResults(), new StatusChoiceRenderer()).setNullValid(true);
+            FormComponent<EventResult> results = new DropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(massUpdateEventModel, "event.eventResult"), EventResult.getValidEventResults(), new StatusChoiceRenderer()).setNullValid(true);
             results.add(createCheckOnChangeEvent(resultCheck));
             add(resultCheck);
             add(results);

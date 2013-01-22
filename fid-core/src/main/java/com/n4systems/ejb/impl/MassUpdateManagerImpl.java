@@ -241,7 +241,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 					changeTarget.setDate(eventChanges.getDate());
 				}
 				
-				if (updateKey.equals("result")) {
+				if (updateKey.equals("eventResult")) {
                     audit.setResult(eventChanges.getEventResult().getDisplayName());
 					changeTarget.setEventResult(eventChanges.getEventResult());
 				}
