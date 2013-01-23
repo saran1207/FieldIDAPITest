@@ -9,6 +9,9 @@ public class FieldIdUnitTest {
 
     protected final LocalDate firstMonIn2011 = new LocalDate(getTimeZone()).withYear(2011).withDayOfYear(3);
     protected final LocalDate jan1_2011 = new LocalDate(getTimeZone()).withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
+    protected final LocalDate jan31_2011 = new LocalDate(getTimeZone()).withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(31);
+    protected final LocalDate feb1_2011 = new LocalDate(getTimeZone()).withYear(2011).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(1);
+    protected final LocalDate mar1_2011 = new LocalDate(getTimeZone()).withYear(2011).withMonthOfYear(DateTimeConstants.MARCH).withDayOfMonth(1);
     protected final LocalDate jan1_2015 = new LocalDate(getTimeZone()).withYear(2015).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
     protected final LocalDate feb28_2012 = new LocalDate(2012, 2, 28);
     protected final LocalDate feb29_2012 = new LocalDate(getTimeZone()).withYear(2012).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(29);

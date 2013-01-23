@@ -2,13 +2,23 @@ package com.n4systems.services.reporting;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.junit.FieldIdServiceTest;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventResult;
-import com.n4systems.model.builders.OrgBuilder;
+import com.n4systems.fieldid.service.event.EventTypeGroupService;
+import com.n4systems.fieldid.service.event.PriorityCodeService;
+import com.n4systems.model.*;
+import com.n4systems.model.builders.*;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.WidgetType;
+import com.n4systems.model.dashboard.widget.*;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
 import com.n4systems.test.TestMock;
@@ -16,11 +26,11 @@ import com.n4systems.test.TestTarget;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
 import com.n4systems.util.chart.RangeType;
-import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,21 +50,43 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 	private static final String STATUS_BAR = "bar";
 	private static final String STATUS_HELLO = "hello";
 	private static final String STATUS_WORLD = "world";
-	
-	@TestTarget private DashboardReportingService dashboardService; 
+
+	@TestTarget private DashboardReportingService dashboardService;
 	@TestMock private AssetService assetService;
 	@TestMock private EventService eventService;
     @TestMock private DateService dateService;
+    @TestMock private PersistenceService persistenceService;
+    @TestMock private AssetStatusService assetStatusService;
+    @TestMock private EventTypeGroupService eventTypeGroupService;
+    @TestMock private PriorityCodeService priorityCodeService;
 
 	private LocalDate jan1 = new LocalDate(2011, 1, 1);
 	private LocalDate jan2 = new LocalDate(2011, 1, 2);
 	private LocalDate jan5 = new LocalDate(2011, 1, 5);
 	
 	private BaseOrg owner;
-	private LocalDate jan1_2011 = new LocalDate().withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(1);
+    private AssetSearchCriteria assetSearchCriteria;
+    private EventReportCriteria reportCriteria;
 
-	
-	@Override
+
+    @Override
+    protected Object createSut(Field sutField) throws Exception {
+        return new DashboardReportingService() {
+            @Override public AssetSearchCriteria getDefaultAssetSearchCritieria() {
+                return assetSearchCriteria;
+            }
+            @Override public EventReportCriteria getDefaultReportCriteria() {
+                return reportCriteria;
+            }
+            @Override EventReportCriteria getDefaultReportCriteria(BaseOrg org) {
+                EventReportCriteria reportCriteria = getDefaultReportCriteria();
+                reportCriteria.setOwner(org);
+                return reportCriteria;
+            }
+        };
+    }
+
+    @Override
 	@Before 
 	public void setUp() {
 		super.setUp();
@@ -63,7 +95,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 
 	@Test
 	public void test_getUpcomingScheduledEvents() {
-        setCurrentMillisFixed(jan1.toDate().getTime());
+        setCurrentMillisFixed(jan1);
 
         BaseOrg owner = OrgBuilder.aCustomerOrg().build();
 		Integer period = 7;
@@ -159,7 +191,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 
 	@Test
 	public void test_getAssetsIdentified() {
-        setCurrentMillisFixed(jan1.toDate().getTime());
+        setCurrentMillisFixed(jan1);
 
         BaseOrg owner = OrgBuilder.aCustomerOrg().build();
 		ChartGranularity granularity = ChartGranularity.MONTH;
@@ -219,10 +251,39 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 
 		verify(eventService,assetService);
 	}
-		
-	@Test 
+
+    @Test
+    public void test_kpi_forever() {
+        DateRange dateRange = new DateRange(RangeType.FOREVER);
+        BaseOrg org = OrgBuilder.aDivisionOrg().build();
+
+        EventKpiRecord kpi = new EventKpiRecord();
+        expect(eventService.getEventKpi(null,null,org)).andReturn(kpi);
+        replay(eventService);
+
+        EventKpiRecord result = dashboardService.getEventKpi(org, dateRange);
+
+        verifyTestMocks();
+    }
+
+    @Test
+    public void test_kpi_thisyear() {
+        setCurrentMillisFixed(jan1_2011);
+        DateRange dateRange = new DateRange(RangeType.THIS_YEAR);
+        BaseOrg org = OrgBuilder.aDivisionOrg().build();
+
+        EventKpiRecord kpi = new EventKpiRecord();
+        expect(eventService.getEventKpi(jan1_2011.toDate(),jan1_2011.plusYears(1).toDate(),org)).andReturn(kpi);
+        replay(eventService);
+
+        EventKpiRecord result = dashboardService.getEventKpi(org, dateRange);
+
+        verifyTestMocks();
+    }
+
+    @Test
 	public void test_EventCompleteness() {
-		setCurrentMillisFixed(jan1_2011.toDate().getTime());
+        setCurrentMillisFixed(jan1_2011);
 		ChartGranularity granularity = ChartGranularity.WEEK;
         DateRange dateRange = new DateRange(RangeType.LAST_MONTH);
 		BaseOrg org = OrgBuilder.aDivisionOrg().build();
@@ -264,7 +325,275 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 		List<ChartSeries<LocalDate>> results = dashboardService.getCompletedEvents(null, ChartGranularity.DAY, owner);		
 	}	
 
-	private List<CompletedEventsReportRecord> createCompletedEventsResults(EventResult fail, int count) {
+    @Test
+    public void test_convertWidgetDefinitionToAssetIdentifiedCriteria() {
+        Long xAsDateInMs = jan1_2011.toDate().getTime();
+        String y = "helloY";
+        String series = "series";
+        Long id = -1L;
+        assetSearchCriteria = new AssetSearchCriteria();
+
+        AssetsIdentifiedWidgetConfiguration config = new AssetsIdentifiedWidgetConfiguration();
+        config.setGranularity(ChartGranularity.MONTH);
+
+        WidgetDefinition widgetDefinition = new WidgetDefinition();
+        widgetDefinition.setWidgetType(WidgetType.ASSETS_IDENTIFIED);
+        widgetDefinition.setConfig(config);
+
+        expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition);
+        replay(persistenceService);
+
+        AssetSearchCriteria result = dashboardService.convertWidgetDefinitionToAssetCriteria(id, xAsDateInMs, y, series);
+
+        LocalDate date = new LocalDate(xAsDateInMs);
+        assertEquals(jan1_2011, result.getDateRange().getFrom() );
+        assertEquals(jan31_2011, result.getDateRange().getTo() );
+
+        verifyTestMocks();
+    }
+
+    @Test
+    public void test_convertWidgetDefinitionToAssetStatusCriteria() {
+        Long xAsDateInMs = jan1_2011.toDate().getTime();
+        String y = "helloY";
+        String statusString = "SomeStatus";
+        Long id = -1L;
+        assetSearchCriteria = new AssetSearchCriteria();
+        BaseOrg org = OrgBuilder.aPrimaryOrg().build();
+        AssetStatus status = AssetStatusBuilder.anAssetStatus().named(statusString).build();
+
+        AssetsStatusWidgetConfiguration config = new AssetsStatusWidgetConfiguration();
+        config.setOrg(org);
+        config.setRangeType(RangeType.THIS_MONTH);
+
+        WidgetDefinition widgetDefinition = new WidgetDefinition();
+        widgetDefinition.setWidgetType(WidgetType.ASSETS_STATUS);
+        widgetDefinition.setConfig(config);
+
+        expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition);
+        replay(persistenceService);
+
+        expect(assetStatusService.getStatusByName(statusString)).andReturn(status);
+        replay(assetStatusService);
+
+        AssetSearchCriteria result = dashboardService.convertWidgetDefinitionToAssetCriteria(id, xAsDateInMs, statusString, "unusedParameter");
+
+        LocalDate date = new LocalDate(xAsDateInMs);
+        assertEquals(new DateRange(RangeType.THIS_MONTH), result.getDateRange() );
+        assertEquals(org, result.getOwner() );
+        assertEquals(status, result.getAssetStatus());
+
+        verifyTestMocks();
+    }
+
+    @Test
+    public void test_convertWidgetDefinitionToReportCompletedCriteria() {
+        Long xAsDateInMs = jan1_2011.toDate().getTime();
+        String statusString = "pass";
+        Long id = -1L;
+        reportCriteria = new EventReportCriteria();
+
+        BaseOrg org = OrgBuilder.aPrimaryOrg().build();
+        AssetStatus status = AssetStatusBuilder.anAssetStatus().named(statusString).build();
+
+        CompletedEventsWidgetConfiguration config = new CompletedEventsWidgetConfiguration();
+        config.setOrg(org);
+        config.setGranularity(ChartGranularity.MONTH);
+
+        WidgetDefinition widgetDefinition = new WidgetDefinition();
+        widgetDefinition.setWidgetType(WidgetType.COMPLETED_EVENTS);
+        widgetDefinition.setConfig(config);
+
+        expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition);
+        replay(persistenceService);
+
+        EventReportCriteria result = dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, "unusedParameter", statusString );
+
+        assertEquals(EventResult.PASS,result.getEventResult());
+        assertEquals(jan1_2011, result.getDateRange().getFrom());
+        assertEquals(jan31_2011, result.getDateRange().getTo());
+
+        verifyTestMocks();
+    }
+
+    @Test
+    public void test_convertWidgetDefinitionToReportScheduledCriteria() {
+        Long xAsDateInMs = jan1_2011.toDate().getTime();
+        String statusString = "pass";
+        Long id = -1L;
+        reportCriteria = new EventReportCriteria();
+
+        BaseOrg org = OrgBuilder.aPrimaryOrg().build();
+
+        UpcomingEventsWidgetConfiguration config = new UpcomingEventsWidgetConfiguration();
+        config.setOrg(org);
+        config.setPeriod(30);
+        config.setRangeType(RangeType.THIS_MONTH);
+
+        WidgetDefinition widgetDefinition = new WidgetDefinition();
+        widgetDefinition.setWidgetType(WidgetType.UPCOMING_SCHEDULED_EVENTS);
+        widgetDefinition.setConfig(config);
+
+        expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition);
+        replay(persistenceService);
+
+        EventReportCriteria result = dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, "unusedParameter", statusString );
+
+        assertEquals(jan1_2011, result.getDueDateRange().getFrom());
+        assertEquals(jan1_2011, result.getDueDateRange().getTo());
+        assertEquals(WorkflowState.OPEN, result.getWorkflowState());
+
+        verifyTestMocks();
+    }
+
+    @Test
+    public void test_convertWidgetDefinitionToReportKpiCriteria() {
+        Long xIndex = 1L;
+        Long id = -1L;
+        reportCriteria = new EventReportCriteria();
+
+        BaseOrg org1 = OrgBuilder.aPrimaryOrg().build();
+        BaseOrg org2 = OrgBuilder.aSecondaryOrg().build();
+
+        EventKPIWidgetConfiguration config = new EventKPIWidgetConfiguration();
+        config.setOrgs(Lists.newArrayList(org1, org2));
+        config.setRangeType(RangeType.THIS_MONTH);
+
+        WidgetDefinition widgetDefinition = new WidgetDefinition();
+        widgetDefinition.setWidgetType(WidgetType.EVENT_KPI);
+        widgetDefinition.setConfig(config);
+
+        expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition).anyTimes();
+        replay(persistenceService);
+
+        EventReportCriteria result = dashboardService.convertWidgetDefinitionToReportCriteria(id, xIndex, "unusedParameter", KpiType.NA.getLabel() );
+
+        assertEquals(org2, result.getOwner());
+        assertEquals(IncludeDueDateRange.SELECT_DUE_DATE_RANGE, result.getIncludeDueDateRange());
+        assertEquals(jan1_2011, result.getDueDateRange().getFrom());
+        assertEquals(feb1_2011, result.getDueDateRange().getTo());
+        assertEquals(new DateRange(RangeType.FOREVER), result.getDateRange());
+        assertEquals(EventResult.NA, result.getEventResult());
+
+        result = dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.CLOSED.getLabel() );
+        assertEquals(org1, result.getOwner());
+        assertEquals(IncludeDueDateRange.SELECT_DUE_DATE_RANGE, result.getIncludeDueDateRange());
+        assertEquals(jan1_2011, result.getDueDateRange().getFrom());
+        assertEquals(feb1_2011, result.getDueDateRange().getTo());
+        assertEquals(new DateRange(RangeType.FOREVER), result.getDateRange());
+        assertEquals(WorkflowState.CLOSED, result.getWorkflowState());
+
+
+        result = dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.FAILED.getLabel() );
+        assertEquals(org1, result.getOwner());
+        assertEquals(IncludeDueDateRange.SELECT_DUE_DATE_RANGE, result.getIncludeDueDateRange());
+        assertEquals(jan1_2011, result.getDueDateRange().getFrom());
+        assertEquals(feb1_2011, result.getDueDateRange().getTo());
+        assertEquals(new DateRange(RangeType.FOREVER), result.getDateRange());
+        assertEquals(EventResult.FAIL, result.getEventResult());
+
+
+        result = dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.INCOMPLETE.getLabel() );
+        assertEquals(org1, result.getOwner());
+        assertEquals(IncludeDueDateRange.SELECT_DUE_DATE_RANGE, result.getIncludeDueDateRange());
+        assertEquals(jan1_2011, result.getDueDateRange().getFrom());
+        assertEquals(feb1_2011, result.getDueDateRange().getTo());
+        assertEquals(new DateRange(RangeType.FOREVER), result.getDateRange());
+        assertEquals(WorkflowState.OPEN, result.getWorkflowState());
+
+
+        result = dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.PASSED.getLabel() );
+        assertEquals(org1, result.getOwner());
+        assertEquals(IncludeDueDateRange.SELECT_DUE_DATE_RANGE, result.getIncludeDueDateRange());
+        assertEquals(jan1_2011, result.getDueDateRange().getFrom());
+        assertEquals(feb1_2011, result.getDueDateRange().getTo());
+        assertEquals(new DateRange(RangeType.FOREVER), result.getDateRange());
+        assertEquals(EventResult.PASS, result.getEventResult());
+
+        verifyTestMocks();
+    }
+
+    @Test
+    public void test_convertWidgetDefinitionToReportWorkCriteria() {
+        Long xAsDateInMs = jan1_2011.toDate().getTime();
+        String statusString = "pass";
+        Long id = -1L;
+        reportCriteria = new EventReportCriteria();
+
+        BaseOrg org = OrgBuilder.aPrimaryOrg().build();
+        AssetType assetType = AssetTypeBuilder.anAssetType().named("assetType").build();
+        EventType eventType = EventTypeBuilder.anEventType().named("eventType").build();
+        User user = UserBuilder.aFullUser().withId(33L).build();
+
+        WorkWidgetConfiguration config = new WorkWidgetConfiguration();
+        config.setOrg(org);
+        config.setAssetType(assetType);
+        config.setEventType(eventType);
+        config.setUser(user);
+
+        WidgetDefinition widgetDefinition = new WidgetDefinition();
+        widgetDefinition.setWidgetType(WidgetType.WORK);
+        widgetDefinition.setConfig(config);
+
+        expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition);
+        replay(persistenceService);
+
+        EventReportCriteria result = dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, "unusedParameter", statusString);
+
+        assertEquals(assetType, result.getAssetType());
+        assertEquals(eventType, result.getEventType());
+        assertEquals(WorkflowState.OPEN, result.getWorkflowState());
+        assertEquals(user.getId(), result.getAssigneeId());
+
+        verifyTestMocks();
+    }
+
+    @Test
+    public void test_convertWidgetDefinitionToReportActionsCriteria() {
+        Long xAsDateInMs = jan1_2011.toDate().getTime();
+        String priorityString = "priority";
+        Long id = -1L;
+        reportCriteria = new EventReportCriteria();
+
+        BaseOrg org = OrgBuilder.aPrimaryOrg().build();
+        EventTypeGroup eventTypeGroup = EventTypeGroupBuilder.anEventTypeGroup().withName("eventTypeGroup").build();
+        EventType eventType = EventTypeBuilder.anEventType().named("eventType").withGroup(eventTypeGroup).build();
+        User user = UserBuilder.aFullUser().withId(33L).build();
+        PriorityCode priority = new PriorityCode();
+        priority.setName("priority");
+
+        ActionsWidgetConfiguration config = new ActionsWidgetConfiguration();
+        config.setOrg(org);
+        config.setActionType(eventType);
+        config.setUser(user);
+        config.setRangeType(RangeType.THIS_MONTH);
+
+        WidgetDefinition widgetDefinition = new WidgetDefinition();
+        widgetDefinition.setWidgetType(WidgetType.ACTIONS);
+        widgetDefinition.setConfig(config);
+
+        expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition);
+        replay(persistenceService);
+
+        expect(eventTypeGroupService.getDefaultActionGroup()).andReturn(eventTypeGroup);
+        replay(eventTypeGroupService);
+
+        expect(priorityCodeService.getPriorityCodeByName(priorityString)).andReturn(priority);
+        replay(priorityCodeService);
+
+        EventReportCriteria result = dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, priorityString, "OVERDUE");
+
+        assertEquals(jan1_2011, result.getDueDateRange().getFrom());
+        assertEquals(feb1_2011, result.getDueDateRange().getTo());
+        assertEquals(priority, result.getPriority());
+        assertEquals(WorkflowState.OPEN, result.getWorkflowState());
+        assertEquals(user.getId(), result.getAssigneeId());
+        assertEquals(eventTypeGroup, result.getEventTypeGroup());
+
+        verifyTestMocks();
+    }
+
+    private List<CompletedEventsReportRecord> createCompletedEventsResults(EventResult fail, int count) {
 		List<CompletedEventsReportRecord> results = Lists.newArrayList();
 		for (int i=0; i<count; i++) {
 			results.add(new CompletedEventsReportRecord(34L, ChartGranularity.MONTH.toString(), 2011, 1, 1+count));

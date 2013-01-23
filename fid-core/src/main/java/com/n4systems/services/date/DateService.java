@@ -5,10 +5,7 @@ import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.chart.RangeType;
-import org.joda.time.DateMidnight;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
+import org.joda.time.*;
 
 import java.util.Date;
 import java.util.TimeZone;
@@ -83,10 +80,32 @@ public class DateService extends FieldIdPersistenceService {
         return new DateTime(DateTimeZone.forTimeZone(getUserTimeZone()));
     }
 
+    @Deprecated
     public Long getDaysFromToday(Date date) {
         return DateHelper.millisToDays(date.getTime() - todayAsDate().getTime());
     }
 
+    public int getDaysFromToday(LocalDate date) {
+        return Days.daysBetween(today(),date).getDays();
+    }
+
+    public int getDaysFromToday(LocalDateTime date) {
+        return Days.daysBetween(today(),new LocalDate(date)).getDays();
+    }
+
+    public boolean isPastDue(LocalDate dueDate) {
+        // note that this is only a daily granularity.  so if the current time is 2:00 and some events are due at 1:00 and 3:00, both
+        // will be considered due today (.: NOT past due).
+        return getDaysFromToday(dueDate)<0;
+    }
+
+    public boolean isPastDue(LocalDateTime dueDate) {
+        // note that this is only a daily granularity.  so if the current time is 2:00 and some events are due at 1:00 and 3:00, both
+        // will be considered due today (.: NOT past due).
+        return getDaysFromToday(dueDate)<0;
+    }
+
+    @Deprecated //use JODA implementation
     public boolean isPastDue(Date dueDate) {
         return todayAsDate().after(dueDate);
     }

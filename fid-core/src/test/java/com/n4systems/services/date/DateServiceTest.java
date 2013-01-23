@@ -14,6 +14,8 @@ import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.TimeZone;
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class DateServiceTest extends FieldIdServiceTest {
@@ -21,12 +23,12 @@ public class DateServiceTest extends FieldIdServiceTest {
     public static final int HOURS_OFFSET = 9;
 
     private TimeZone timeZoneGMT_9 = DateTimeZone.forOffsetHours(HOURS_OFFSET).toTimeZone();
+    private TimeZone timeZone = timeZoneGMT_9;
 
     @TestTarget private DateService dateService;
 
     @TestMock private PersistenceService persistenceService;
     @TestMock private SecurityContext securityContext;
-
 
     @Override
     protected Object createSut(Field sutField) throws Exception {
@@ -34,7 +36,7 @@ public class DateServiceTest extends FieldIdServiceTest {
             // extract and override method that, in production, will be fed by securityContext spring bean
             // that contains users context & timezone.
             @Override public TimeZone getUserTimeZone() {
-                return timeZoneGMT_9;
+                return timeZone;
             }
         };
     }
@@ -116,6 +118,59 @@ public class DateServiceTest extends FieldIdServiceTest {
     public void test_getDateRange() {
         DateRange result = dateService.getDateRange(RangeType.LAST_YEAR);
         assertEquals(timeZoneGMT_9, result.getTimeZone());
+    }
+
+    @Test
+    public void test_nowUTC() {
+        DateTime now = dateService.nowUTC();
+        assertEquals(jan1_2011.toDate(),now.toDate());
+    }
+
+    @Test
+    public void test_now_timezone() {
+        timeZone = DateTimeZone.forOffsetHours(5).toTimeZone();
+        DateTime now = dateService.now();
+        assertEquals(5,now.getHourOfDay());
+        assertEquals(1,now.getDayOfYear());
+
+        timeZone = DateTimeZone.forOffsetHours(13).toTimeZone();
+        now = dateService.now();
+        assertEquals(13,now.getHourOfDay());
+        assertEquals(1,now.getDayOfYear());
+
+        timeZone = DateTimeZone.forOffsetHours(-4).toTimeZone();
+        now = dateService.now();
+        assertEquals(24-4,now.getHourOfDay());
+        assertEquals(31,now.getDayOfMonth());
+        assertEquals(DateTimeConstants.DECEMBER,now.getMonthOfYear());
+    }
+
+    @Test
+    public void test_daysFromToday() {
+        LocalDateTime t1 = new LocalDateTime().withYear(2011).withDayOfYear(43).withHourOfDay(10).withMinuteOfHour(39);
+        int result = dateService.getDaysFromToday(t1);
+        assertEquals(42, result);
+
+        LocalDateTime t2 = new LocalDateTime().withYear(2010).withMonthOfYear(DateTimeConstants.DECEMBER).withDayOfMonth(31).withHourOfDay(20).withMinuteOfHour(11);
+        result = dateService.getDaysFromToday(t2);
+        assertEquals(-1,result);
+
+        LocalDateTime t3 = new LocalDateTime().withYear(2012).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(29).withHourOfDay(20);
+        result = dateService.getDaysFromToday(t3);
+        assertEquals(424, result);
+    }
+
+    @Test
+    public void test_pastDue() {
+        setCurrentMillisFixed(jan1_2011);
+
+        LocalDateTime t1 = new LocalDateTime().withYear(2011).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(12).withHourOfDay(10).withMinuteOfHour(7);
+        LocalDateTime t2 = new LocalDateTime().withYear(2010).withMonthOfYear(DateTimeConstants.DECEMBER).withDayOfMonth(31).withHourOfDay(20).withMinuteOfHour(11);
+        LocalDateTime t3 = new LocalDateTime().withYear(2012).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(29).withHourOfDay(20);
+
+        assertFalse(dateService.isPastDue(t1));
+        assertTrue(dateService.isPastDue(t2));
+        assertFalse(dateService.isPastDue(t3));
     }
 
 }

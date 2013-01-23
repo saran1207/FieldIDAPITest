@@ -238,13 +238,9 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         return criteria;
     }
 
-    private EventReportCriteria getDefaultReportCriteria(BaseOrg org) {
-		EventReportCriteria criteria = new EventReportCriteria();
-        ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
-        criteria.setColumnGroups(reportConfiguration.getColumnGroups());
-        criteria.setSortColumn(reportConfiguration.getSortColumn());
-        criteria.setSortDirection(reportConfiguration.getSortDirection());
-        criteria.setReportAlreadyRun(true);
+    /*package protected for testing purposes */
+    EventReportCriteria getDefaultReportCriteria(BaseOrg org) {
+		EventReportCriteria criteria = getDefaultReportCriteria();
         criteria.setOwner(org);
         return criteria;
 	}
@@ -283,8 +279,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 			LocalDate from = localDate;
 			LocalDate to = from.plus(config.getGranularity().getPeriod().minusDays(1));
 			criteria.setDateRange(new DateRange(from, to));
-            criteria.setOwner(config.getOrg());
 		}
+        criteria.setOwner(config.getOrg());
 		return criteria;
 	}
 
