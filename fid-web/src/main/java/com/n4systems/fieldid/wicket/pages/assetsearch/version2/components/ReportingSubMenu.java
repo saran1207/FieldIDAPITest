@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
+import com.n4systems.fieldid.wicket.pages.massupdate.AssignEventsToJobPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
 import com.n4systems.fieldid.wicket.pages.print.ExportReportToExcelPage;
@@ -37,7 +38,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
         actions = new WebMarkupContainer("actions");
         // note that only one of these mass update links will be shown at a time - depends on the context.
-        actions.add(assignJobLink = new ReportingMassActionLink("assignJobLink", "/selectJobToAssignEventsTo.action?searchId=%s&reportType=OBSERVATION_CERT", model));
+        actions.add(assignJobLink = new MassActionLink<AssignEventsToJobPage>("assignJobLink", AssignEventsToJobPage.class, model));
 
         actions.add(updateLink = new Link("massUpdateLink") {
             @Override
