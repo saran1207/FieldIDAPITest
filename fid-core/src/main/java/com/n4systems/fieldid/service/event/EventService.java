@@ -44,6 +44,7 @@ public class EventService extends FieldIdPersistenceService {
     @Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private AssetService assetService;
     @Autowired private DateService dateService;
+    @Autowired private PriorityCodeService priorityCodeService;
 
     @Transactional(readOnly = true)
 	public List<Event> getEventsByType(Long eventTypeId) {
@@ -420,7 +421,7 @@ public class EventService extends FieldIdPersistenceService {
         /** if you specify a date range that is >=today there will, by definition be no overdue actions so skip this step. */
         List<? extends Chartable<String>> upcomingActions = Lists.newArrayList();
         if (to==null || !to.before(now)) {
-            QueryBuilder<ActionsReportRecord> query = createActionsQuery(owner, assignee, actionType,ActionBar.UPCOMING);
+            QueryBuilder<ActionsReportRecord> query = createActionsQuery(owner, assignee, actionType, ActionBar.UPCOMING);
             if (from==null || from.before(now)) {
                 from = now;
             }
@@ -428,7 +429,7 @@ public class EventService extends FieldIdPersistenceService {
             query.addNullSafeWhere(Comparator.LT, "to", "dueDate", to);
             upcomingActions = persistenceService.findAll(query);
         }
-        return new ChartSeries<String>(ActionBar.UPCOMING, "Upcoming", upcomingActions);
+        return new ChartSeries<String>(ActionBar.UPCOMING, "Upcoming", getPaddedResults(upcomingActions, ActionBar.UPCOMING));
     }
 
     public ChartSeries<String> getOverdueActions(Date from, Date to, BaseOrg owner, User assignee, EventType actionType) {
@@ -442,9 +443,29 @@ public class EventService extends FieldIdPersistenceService {
             }
             query.addWhere(Comparator.LT, "to", "dueDate", to);
             query.addNullSafeWhere(Comparator.GE, "from", "dueDate", from);
+
             overdueActions = persistenceService.findAll(query);
         }
-        return new ChartSeries<String>(ActionBar.OVERDUE, "Overdue ", overdueActions);
+
+        return new ChartSeries<String>(ActionBar.OVERDUE, "Overdue ", getPaddedResults(overdueActions, ActionBar.OVERDUE));
+    }
+
+    private List<Chartable<String>> getPaddedResults(List<? extends Chartable<String>> resultActions, ActionBar barType) {
+        List<PriorityCode> priorityCodes = priorityCodeService.getActivePriorityCodes();
+        List<PriorityCode> differenceList = Lists.newArrayList(priorityCodes);
+        for(PriorityCode priorityCode: priorityCodes) {
+            for(Chartable<String> record: resultActions) {
+                if (priorityCode.getName().equals(record.getX()))
+                    differenceList.remove(priorityCode);
+            }
+        }
+        List<Chartable<String>> paddedList = Lists.newArrayList();
+        for(PriorityCode priorityCode: priorityCodes) {
+            ActionsReportRecord paddingRecord = new ActionsReportRecord(priorityCode.getName(), 0L, barType.getDisplayName());
+            paddedList.add(paddingRecord);
+        }
+        paddedList.addAll(resultActions);
+        return paddedList;
     }
 
     private QueryBuilder<ActionsReportRecord> createActionsQuery(BaseOrg owner, User assignee, EventType actionType, ActionBar barType) {

@@ -61,7 +61,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         Preconditions.checkArgument(dateRange!=null);
         List<ChartSeries<String>> results = Lists.newArrayList();
         results.add(eventService.getOverdueActions(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), owner, assignee, actionType));
-        results.add( eventService.getUpcomingActions(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), owner, assignee, actionType));
+        results.add(eventService.getUpcomingActions(dateService.calculateFromDate(dateRange), dateService.calculateToDate(dateRange), owner, assignee, actionType));
         return results;
     }
 
