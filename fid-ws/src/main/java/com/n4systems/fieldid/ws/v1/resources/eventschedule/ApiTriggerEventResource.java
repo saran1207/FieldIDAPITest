@@ -36,7 +36,9 @@ public class ApiTriggerEventResource extends ApiResource<ApiTriggerEvent, Event>
 		for(CriteriaResultImage criteriaResultImage: criteriaResultImages) {
 			try {
 				byte[] image = s3Service.downloadCriteriaResultImageMedium(criteriaResultImage);
-				images.add(image);
+				if(image != null) {
+					images.add(image);
+				}
 			} catch (IOException e) {
 				logger.error("Error Fetching EventSchedule.images data for criteriaResultImage" 
 						+ criteriaResultImage.getId(), e);
