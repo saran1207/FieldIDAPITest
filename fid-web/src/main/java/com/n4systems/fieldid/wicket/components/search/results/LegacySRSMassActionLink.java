@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.components.search.results;
 
-import com.n4systems.fieldid.viewhelpers.SearchContainer;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.search.SearchCriteria;
+import com.n4systems.model.search.SearchCriteriaContainer;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.markup.html.link.Link;
@@ -12,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Deprecated
-public abstract class LegacySRSMassActionLink<MODEL, LEGACY extends SearchContainer> extends Link {
+public abstract class LegacySRSMassActionLink<MODEL extends SearchCriteria> extends Link {
 
     private String url;
     private IModel<MODEL> reportCriteriaModel;
@@ -28,14 +30,14 @@ public abstract class LegacySRSMassActionLink<MODEL, LEGACY extends SearchContai
         HttpServletRequest httpServletRequest = ((ServletWebRequest) getRequest()).getContainerRequest();
         HttpSession session = httpServletRequest.getSession();
 
-        LEGACY searchContainer = convertAndStoreCriteria(reportCriteriaModel.getObject(), session);
+        SearchCriteriaContainer<MODEL> container = convertAndStoreCriteria(reportCriteriaModel.getObject(), session);
 
-        String formattedUrl = String.format(url, searchContainer.getSearchId());
+        String formattedUrl = String.format(url, container.getSearchId());
         String destination = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://" + httpServletRequest.getServerName() + httpServletRequest.getContextPath() + formattedUrl;
 
         getRequestCycle().replaceAllRequestHandlers(new RedirectRequestHandler(destination));
     }
 
-    protected abstract LEGACY convertAndStoreCriteria(MODEL model, HttpSession session);
+    protected abstract SearchCriteriaContainer<MODEL> convertAndStoreCriteria(MODEL searchCriteriaModel, HttpSession session);
 
 }

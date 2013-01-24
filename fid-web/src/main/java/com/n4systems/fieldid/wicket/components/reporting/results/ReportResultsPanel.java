@@ -32,12 +32,6 @@ public class ReportResultsPanel extends SRSResultsPanel<EventReportCriteria> {
     }
 
     @Override
-    protected void storeCriteriaIfNecessary() {
-        HttpSession session = ((ServletWebRequest) getRequest()).getContainerRequest().getSession();
-        new LegacyReportCriteriaStorage().storeCriteria(criteriaModel.getObject(), session);
-    }
-
-    @Override
     protected void onRowItemCreated(Item<RowView> rowItem, IModel<RowView> rowModel) {
         rowItem.add(new HighlightPastDueSchedulesBehavior(rowModel));
     }

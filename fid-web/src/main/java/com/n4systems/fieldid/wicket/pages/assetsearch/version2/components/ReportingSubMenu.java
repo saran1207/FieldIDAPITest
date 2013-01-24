@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.reporting.results.ReportingMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
 import com.n4systems.fieldid.wicket.pages.massupdate.AssignEventsToJobPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;

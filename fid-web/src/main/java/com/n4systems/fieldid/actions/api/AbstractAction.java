@@ -15,7 +15,6 @@ import com.n4systems.fieldid.utils.CookieFactory;
 import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.viewhelpers.BaseActionHelper;
-import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.handlers.creator.CreateHandlerFactory;
 import com.n4systems.model.ExtendedFeature;
@@ -161,11 +160,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
 	public SecurityFilter getSecurityFilter() {
 		return getSessionUser().getSecurityFilter();
-	}
-
-	public boolean isReportActive(){
-		SearchContainer searchContainer = getSession().getReportCriteria();
-		return ( searchContainer != null && searchContainer.getSearchId() != null );
 	}
 
 	@Override

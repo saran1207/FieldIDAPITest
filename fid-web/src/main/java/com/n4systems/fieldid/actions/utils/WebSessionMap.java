@@ -23,9 +23,6 @@ import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
-import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
-import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
-import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.util.HashCode;
 import com.n4systems.util.selection.MultiIdSelection;
@@ -120,22 +117,6 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 		put(KEY_EULA_ACCEPTANCE, sessionEulaAcceptance);
 	}
 	
-	
-	public EventSearchContainer getReportCriteria() {
-		return get(REPORT_CRITERIA, EventSearchContainer.class);
-	}
-	
-	public EventScheduleSearchContainer getScheduleCriteria() {
-		return get(SCHEDULE_CRITERIA, EventScheduleSearchContainer.class);
-	}
-	
-	public void setReportCriteria(SearchContainer container) {
-		put(REPORT_CRITERIA, container);
-	}
-	
-	public void clearReportCriteria() {
-		remove(REPORT_CRITERIA);
-	}
 	
 	public Map<String, String> getTenantLanguageOverrides() {
 		return get(KEY_TENANT_LANG_OVERRIDES, Map.class);

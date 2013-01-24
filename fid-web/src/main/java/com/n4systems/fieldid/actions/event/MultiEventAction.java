@@ -15,7 +15,6 @@ import com.n4systems.fieldid.collection.helpers.CommonAssetValuesFinder;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.util.EventFormHelper;
-import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.CommonEventTypeHandler;
 import com.n4systems.handlers.LoaderBackedCommonEventTypeHandler;
 import com.n4systems.model.*;
@@ -25,6 +24,8 @@ import com.n4systems.model.eventtype.CommonAssetTypeDatabaseLoader;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.search.SearchCriteriaContainer;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
@@ -199,11 +200,11 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 	public List<Asset> getAssets() {
 		if (assets == null) {
             if (searchContainerKey != null && getSession().get(searchContainerKey) != null) {
-                SearchContainer container = (SearchContainer) getSession().get(searchContainerKey);
+                SearchCriteriaContainer<AssetSearchCriteria> container = (SearchCriteriaContainer) getSession().get(searchContainerKey);
                 if (container.getSearchId().equals(searchId)) {
-                    assets = persistenceManager.findAll(new QueryBuilder<Asset>(Asset.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", container.getMultiIdSelection().getSelectedIds()).addPostFetchPaths("infoOptions"));
+                    assets = persistenceManager.findAll(new QueryBuilder<Asset>(Asset.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", container.getSearchCriteria().getSelection().getSelectedIds()).addPostFetchPaths("infoOptions"));
                     this.assetIds = new ArrayList<Long>();
-                    this.assetIds.addAll(container.getMultiIdSelection().getSelectedIds());
+                    this.assetIds.addAll(container.getSearchCriteria().getSelection().getSelectedIds());
                 }
             } else if (!assetIds.isEmpty()) {
 				assets = persistenceManager.findAll(new QueryBuilder<Asset>(Asset.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", assetIds).addPostFetchPaths("infoOptions"));

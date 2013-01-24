@@ -44,12 +44,7 @@ public class ExtendedFeatureService extends FieldIdPersistenceService {
     }
 
     private void tearDownAssignedTo(PrimaryOrg primaryOrg) {
-        QueryBuilder<SavedReport> query = new QueryBuilder<SavedReport>(SavedReport.class, new TenantOnlySecurityFilter(primaryOrg.getTenant()));
-        List<SavedReport> reportsToRemove = SavedReportAssignedToTrimmer.extractAssignedToReferences(persistenceService.findAll(query));
-
-        for (SavedReport report : reportsToRemove) {
-            persistenceService.remove(report);
-        }
+        // WEB-3598 This is where the code to remove legacy SavedReports was.
 
         QueryBuilder<EventType> eventTypeQuery = new QueryBuilder<EventType>(EventType.class, new TenantOnlySecurityFilter(primaryOrg.getTenant()));
         List<EventType> eventTypes = persistenceService.findAll(eventTypeQuery);

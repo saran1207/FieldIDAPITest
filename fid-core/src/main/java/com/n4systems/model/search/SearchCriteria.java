@@ -7,10 +7,7 @@ import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @MappedSuperclass
 public abstract class SearchCriteria extends AbstractEntity {

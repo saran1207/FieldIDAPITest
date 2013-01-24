@@ -289,48 +289,6 @@
 			<result name="error" type="redirectAction">notificationSettings</result>
 		</action>
 
-		<action name="search" method="searchCriteria" class="com.n4systems.fieldid.actions.search.AssetSearchAction">
-			<result name="input" type="freemarker">/templates/html/search/form.ftl</result>
-			<result name="blankslate" type="freemarker">/templates/html/search/blankslate.ftl</result>
-			<result name="error" type="freemarker">/templates/html/search/form.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">searchResults</param>
-				<param name="searchId">${searchId}</param>
-			</result>
-		</action>
-
-		<action name="searchResults" method="search" class="com.n4systems.fieldid.actions.search.AssetSearchAction">
-			<result name="input" type="redirectAction">search</result>
-			<result name="error" type="redirectAction">search</result>
-			<result name="success" type="freemarker">/templates/html/search/list.ftl</result>
-		</action>
-
-
-		<action name="report" method="reportCriteria" class="com.n4systems.fieldid.actions.search.EventReportAction">
-			<result name="input" type="freemarker">/templates/html/report/form.ftl</result>
-			<result name="blankslate" type="freemarker">/templates/html/report/blankslate.ftl</result>
-			<result name="error" type="freemarker">/templates/html/report/form.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">reportResults</param>
-				<param name="searchId">${searchId}</param>
-			</result>
-		</action>
-
-		<action name="returnToReport" method="returnToReport" class="com.n4systems.fieldid.actions.search.EventReportAction">
-			<result name="success" type="redirectAction">
-				<param name="actionName">reportResults</param>
-				<param name="searchId">${searchId}</param>
-				<param name="currentPage">${currentPage}</param>
-			</result>
-		</action>
-
-		<action name="reportResults" method="search" class="com.n4systems.fieldid.actions.search.EventReportAction">
-			<result name="input" type="redirectAction">report</result>
-			<result name="error" type="redirectAction">report</result>
-			<result name="success" type="freemarker">/templates/html/report/list.ftl</result>
-		</action>
-
-
 
 		<action name="assetCodeMappingEdit" method="edit" class="com.n4systems.fieldid.actions.AssetCodeMappingCrud">
 			<result name="input" type="freemarker">/templates/html/assetCodeMappingCrud/form.ftl</result>
@@ -855,44 +813,6 @@
 			</result>
 		</action>
 
-		<action name="schedule" method="searchCriteria" class="com.n4systems.fieldid.actions.search.EventScheduleAction">
-			<result name="input" type="freemarker">/templates/html/schedule/form.ftl</result>
-			<result name="blankslate" type="freemarker">/templates/html/schedule/blankslate.ftl</result>
-			<result name="error" type="freemarker">/templates/html/schedule/form.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">scheduleResults</param>
-				<param name="searchId">${searchId}</param>
-			</result>
-		</action>
-
-		<action name="scheduleResults" method="search" class="com.n4systems.fieldid.actions.search.EventScheduleAction">
-			<result name="input" type="redirectAction">schedule</result>
-			<result name="error" type="redirectAction">schedule</result>
-			<result name="success" type="freemarker">/templates/html/schedule/list.ftl</result>
-		</action>
-
-
-		<action name="startAssignSchedulesToJob" method="startSearch"
-			class="com.n4systems.fieldid.actions.search.EventScheduleJobAssignment">
-			<result name="input" type="redirectAction">
-				<param name="actionName">jobs</param>
-			</result>
-			<result name="error" type="redirectAction">
-				<param name="actionName">jobs</param>
-			</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">assignSchedulesToJob</param>
-				<param name="searchId">${searchId}</param>
-			</result>
-		</action>
-		<action name="assignSchedulesToJob" method="search"
-			class="com.n4systems.fieldid.actions.search.EventScheduleJobAssignment">
-			<result name="input" type="freemarker">/templates/html/projectEvents/edit.ftl</result>
-			<result name="error" type="freemarker">/templates/html/projectEvents/edit.ftl</result>
-			<result name="success" type="freemarker">/templates/html/projectEvents/edit.ftl</result>
-		</action>
-
-
 		<action name="selectEventTypes" method="list"
 			class="com.n4systems.fieldid.actions.asset.AssociatedEventTypeCrud">
 			<result name="error" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
@@ -922,69 +842,6 @@
 			<result name="success" type="redirectAction">
 				<param name="actionName">selectAssetTypes</param>
 				<param name="eventTypeId">${eventTypeId}</param>
-			</result>
-		</action>
-
-		<action name="massUpdateAssets" method="edit" class="com.n4systems.fieldid.actions.AssetMassUpdate">
-			<result name="error" type="redirectAction">search</result>
-			<result name="success" type="freemarker">/templates/html/massUpdate/asset/form.ftl</result>
-		</action>
-
-		<action name="massUpdateAssetsSave" method="save" class="com.n4systems.fieldid.actions.AssetMassUpdate">
-			<result name="error" type="redirectAction">search</result>
-			<result name="input" type="freemarker">/templates/html/massUpdate/asset/form.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">searchResults</param>
-				<param name="searchId">${searchId}</param>
-			</result>
-		</action>
-		
-		<action name="massAssetConfirmDelete" method="confirmDelete" class="com.n4systems.fieldid.actions.AssetMassUpdate">
-			<result name="error" type="redirectAction">search</result>
-			<result name="success" type="freemarker">/templates/html/massUpdate/asset/confirmDelete.ftl</result>
-		</action>
-		
-		<action name="massAssetDelete" method="delete" class="com.n4systems.fieldid.actions.AssetMassUpdate">
-			<result name="error" type="redirectAction">
-				<param name="actionName">searchResults</param>
-				<param name="searchId">${searchId}</param>
-			</result>
-			<result name="input" type="redirectAction">
-				<param name="actionName">massUpdateAssets</param>
-				<param name="searchId">${searchId}</param>
-			</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">searchResults</param>
-				<param name="searchId">${searchId}</param>
-			</result>
-		</action>
-
-
-		<action name="selectJobToAssignTo" method="edit" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
-			<result name="error" type="redirectAction">schedule</result>
-			<result name="success" type="freemarker">/templates/html/assignToJob/form.ftl</result>
-		</action>
-
-		<action name="assignToJob" method="save" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
-			<result name="error" type="redirectAction">schedule</result>
-			<result name="input" type="freemarker">/templates/html/assignToJob/form.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">scheduleResults</param>
-				<param name="searchId">${searchId}</param>
-			</result>
-		</action>
-
-		<action name="selectJobToAssignEventsTo" method="editEvents"
-			class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
-			<result name="error" type="redirectAction">report</result>
-			<result name="success" type="freemarker">/templates/html/assignToJob/formEvents.ftl</result>
-		</action>
-
-		<action name="assignEventsToJob" method="saveEvents" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
-			<result name="error" type="redirectAction">report</result>
-			<result name="input" type="freemarker">/templates/html/assignToJob/formEvents.ftl</result>
-			<result name="success" type="redirect">
-				<param name="location">w/returnToReport</param>
 			</result>
 		</action>
 
@@ -1276,11 +1133,6 @@
 			<result name="success" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
 			<result name="error" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
 			<result name="sessionBooted" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
-		</action>
-
-		<action name="summaryReport" method="show" class="com.n4systems.fieldid.actions.reports.AggregateReportAction">
-			<result name="error" type="redirectAction">report</result>
-			<result name="success" type="freemarker">/templates/html/aggregateReport/show.ftl</result>
 		</action>
 
 		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction">
@@ -2309,11 +2161,6 @@
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/networkAsset/events.ftl</result>
 		</action>
-		
-		<action name="summaryReport" method="show" class="com.n4systems.fieldid.actions.reports.AggregateReportAction">
-			<result name="error" type="redirectAction">report</result>
-			<result name="success" type="freemarker">/templates/html/aggregateReport/show.ftl</result>
-		</action>
 
 		<action name="networkEventScheduleList" method="schedules" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
@@ -2335,12 +2182,6 @@
             <param name="layoutType">SCHEDULE</param>
         </action>
 
-		<action name="saveDownloadName" method="confirmDownloadName" class="com.n4systems.fieldid.actions.search.EventReportAction">
-			<result name="success" type="redirectAction">
-				<param name="actionName">showDownloads</param>
-			</result>
-		</action>
-		
 		<action name="sign" method="sign" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
             <result name="success" type="freemarker">/templates/html/signature/sign2.ftl</result>
         </action>

@@ -5,7 +5,6 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Project;
@@ -42,7 +41,7 @@ public class AssignEventsToJobPage extends FieldIDFrontEndPage {
             super(id, new Model<AssignEventsToJobModel>(new AssignEventsToJobModel()));
             PropertyModel<Project> projectModel = ProxyModel.of(getModel(), on(AssignEventsToJobModel.class).getJob());
             add(new DropDownChoice<Project>("job", projectModel, new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
-            add(new BookmarkablePageLink<Void>("returnToReportLink", ReturnToReportPage.class));
+            add(new BookmarkablePageLink<Void>("returnToReportLink", RunLastReportPage.class));
             add(new Button("assignButton"));
         }
 

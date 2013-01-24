@@ -17,11 +17,18 @@
         <div id="formErrors" wicket:id="feedbackPanel"></div>
         <div wicket:id = "autocompletesearch"/>
         <div class="formActions">
-            <a class="mattButton addLinkedAssetButton" wicket:id="saveLink"><wicket:message key="label.add"/></a>
+
+            <input type="hidden" wicket:id="override">
+
+            <a class="mattButton addLinkedAssetButton" wicket:id="saveLink">
+                <wicket:message key="label.add"/>
+            </a>
+
             <span class="cancelLink">
                 <wicket:message key="label.or"/>
                 <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
             </span>
+
         </div>
     </form>
 

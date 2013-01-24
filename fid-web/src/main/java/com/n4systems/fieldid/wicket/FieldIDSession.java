@@ -6,7 +6,6 @@ import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
-import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldidadmin.utils.Constants;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
@@ -107,10 +106,6 @@ public class FieldIDSession extends WebSession {
 
     public Collection<String> getFlashErrors() {
         return (Collection<String>) getHttpSession().getAttribute(FlashScopeMarshaller.FLASH_ERRORS);
-    }
-
-    public SearchContainer getSearchContainer(String key) {
-        return (SearchContainer) getHttpSession().getAttribute(key);
     }
 
     public Tenant getTenant() {

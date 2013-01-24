@@ -20,6 +20,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
@@ -79,7 +80,6 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
                 ColumnMappingView columnView = new ColumnMappingConverter().convert(column);
                 criteriaModel.getObject().setSortColumn(columnView);
                 criteriaModel.getObject().setSortDirection(sortDirection);
-                storeCriteriaIfNecessary();
             }
 
             @Override protected void onRowItemCreated(Item<RowView> rowItem, IModel<RowView> rowModel) {
@@ -98,7 +98,6 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
 
     protected void updateSelectionStatus(AjaxRequestTarget target) {
         dataTable.updateSelectionStatus(target);
-        storeCriteriaIfNecessary();
     }
 
     public boolean isCurrentPageSelected() {
@@ -110,7 +109,6 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
         return true;
     }
 
-    protected void storeCriteriaIfNecessary() {}
     protected abstract IColumn<RowView> createActionsColumn();
     protected abstract FieldIdAPIDataProvider createDataProvider(IModel<T> criteriaModel);
     protected void onRowItemCreated(Item<RowView> rowItem, IModel<RowView> rowModel) {}
