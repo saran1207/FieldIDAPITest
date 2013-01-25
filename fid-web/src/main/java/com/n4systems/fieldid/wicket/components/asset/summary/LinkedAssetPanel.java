@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.user.User;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -46,6 +47,7 @@ public class LinkedAssetPanel extends Panel {
     private IModel<Asset> assetModel;
     private AjaxLink addLink;
     private FIDFeedbackPanel feedbackPanel;
+    private AjaxSubmitLink saveLink;
 
     public LinkedAssetPanel(String id, final IModel<Asset> assetModel) {
         super(id);
@@ -132,12 +134,24 @@ public class LinkedAssetPanel extends Panel {
         addLink.setVisible(isEditevent);
 
         AutoCompleteSearch autoCompleteSearch;
-        form.add(autoCompleteSearch = new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "assetForLinking")));
+        form.add(autoCompleteSearch = (AutoCompleteSearch) new AutoCompleteSearch("autocompletesearch", new PropertyModel<Asset>(this, "assetForLinking")) {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target, String hiddenInput, String fieldInput) {
+                if(assetForLinking != null && assetService.parentAsset(assetForLinking) != null) {
+                    target.appendJavaScript("$('#showAlreadyLinkedConfirm').val('true'); ");
+                }
+                //This is a bit of a hack, the onUpdate gets triggered again when the autocomplete input field loses
+                // focus when the submit button is clicked but submit ajax event gets tiggered first and it changes the form
+                // visibility so the second update call is left in limbo because the component is gone. So we force the
+                // input to lose focus before the submit button can be clicked.
+                target.appendJavaScript("$('#searchText').focus();");
+            }
+        }.withAutoUpdate(true));
         autoCompleteSearch.getAutocompleteField().setRequired(true);
         ValidationBehavior.addValidationBehaviorToComponent(autoCompleteSearch.getAutocompleteField());
         autoCompleteSearch.getAutocompleteField().setMarkupId("linkedAssetAutoComplete");
 
-        form.add(new AjaxSubmitLink("saveLink", form) {
+        saveLink = new AjaxSubmitLink("saveLink", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
@@ -173,7 +187,18 @@ public class LinkedAssetPanel extends Panel {
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(feedbackPanel);
             }
-        });
+
+        };
+
+        saveLink.setOutputMarkupId(true);
+
+        saveLink.add(AttributeModifier.prepend("onclick",
+                "if($('#showAlreadyLinkedConfirm').val() == 'true') { "
+                + "if(!confirm('"
+                + new FIDLabelModel("massage.warn_linked_asset").getObject()
+                + "')) { return false; }} "));
+
+        form.add(saveLink);
 
         form.add(new AjaxLink<Void>("cancelLink") {
             @Override
@@ -202,4 +227,17 @@ public class LinkedAssetPanel extends Panel {
             }
         };
     }
+
+
 }
+
+/*
+if($('#showAlreadyLinkedConfirm').val() == "true") {
+        if(!confirm('" + new FIDLabelModel("label.confirm_delete_action").getObject() + "')) {
+        return false;
+}
+        } else {
+        return false;
+}
+*/
+
