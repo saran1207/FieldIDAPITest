@@ -73,13 +73,18 @@ public class EventFormHelper {
 	}
 
     public Double calculateMaxScoreForEvent(AbstractEvent event) {
-        List<CriteriaSection> sections = getAvailableSections(event);
+        Map<CriteriaSection, List<CriteriaResult>> visibleResults = getVisibleResults(event);
+
         double maxPossibleScore = 0.0;
-        for (CriteriaSection section : sections) {
+        for (CriteriaSection section : visibleResults.keySet()) {
+            int critIndex = 0;
             for (Criteria criteria : section.getAvailableCriteria()) {
                 if (criteria instanceof ScoreCriteria) {
-                    maxPossibleScore += getMaxScoreValue(((ScoreCriteria)criteria).getScoreGroup());
+                    if(!((ScoreCriteriaResult)visibleResults.get(section).get(critIndex)).getScore().isNa()) {
+                        maxPossibleScore += getMaxScoreValue(((ScoreCriteria)criteria).getScoreGroup());
+                    }
                 }
+                critIndex++;
             }
         }
         return maxPossibleScore;
@@ -121,13 +126,18 @@ public class EventFormHelper {
         Map<CriteriaSection, Double> sectionsScores = getScoresForSections(event);
         Map<CriteriaSection, Double> sectionsScorePercentages = new HashMap<CriteriaSection, Double>();
 
-        List<CriteriaSection> criteriaSections = getAvailableSections(event);
-        for (CriteriaSection section : criteriaSections) {
+        Map<CriteriaSection, List<CriteriaResult>> visibleResults = getVisibleResults(event);
+
+        for (CriteriaSection section : visibleResults.keySet()) {
             double total = 0.0;
+            int critIndex= 0;
             for(Criteria criteria: section.getAvailableCriteria()) {
                 if(criteria instanceof ScoreCriteria) {
-                    total += getMaxScoreValue(((ScoreCriteria)criteria).getScoreGroup());
+                    if(!((ScoreCriteriaResult)visibleResults.get(section).get(critIndex)).getScore().isNa()) {
+                        total += getMaxScoreValue(((ScoreCriteria)criteria).getScoreGroup());
+                    }
                 }
+                critIndex++;
             }
             if (total > 0.0) {
                 double percentage = sectionsScores.get(section) / total;
