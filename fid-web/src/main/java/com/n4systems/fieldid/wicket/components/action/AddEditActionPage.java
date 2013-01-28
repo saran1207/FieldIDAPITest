@@ -10,7 +10,7 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
-import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
+import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
@@ -69,7 +69,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             scheduledDatePicker.getDateTextField().setRequired(true);
 
             add(scheduledDatePicker);
-            add(new FidDropDownChoice<User>("assignee", new PropertyModel<User>(getModel(), "assignee"), new ExaminersModel(), new ListableChoiceRenderer<User>()).setNullValid(true).setRequired(true));
+            add(new FidDropDownChoice<User>("assignee", new PropertyModel<User>(getModel(), "assignee"), new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true).setRequired(true));
             add(new DropDownChoice<EventType>("type", new PropertyModel<EventType>(getModel(), "type"), new ActionTypesForTenantModel(), new ListableChoiceRenderer<EventType>()).setNullValid(true).setRequired(true));
 
             addQuickDateLinks(scheduledDatePicker, scheduledDateModel);
