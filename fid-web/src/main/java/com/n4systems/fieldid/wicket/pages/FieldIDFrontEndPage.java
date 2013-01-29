@@ -17,6 +17,7 @@ import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
+import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.columns.ReportType;
@@ -314,6 +315,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         container.add(new WebMarkupContainer("manageCustomersContainer").setVisible(getSessionUser().hasAccess("manageendusers")));
         container.add(new WebMarkupContainer("manageUsersContainer").setVisible(canManageSystemUsers));
+        container.add(new BookmarkablePageLink<Void>("userGroupsLink", UserGroupsPage.class).setVisible(canManageSystemUsers));
         container.add(new WebMarkupContainer("manageUserRegistrationsContainer").setVisible(canManageSystemUsers && userLimitService.isReadOnlyUsersEnabled()));
         container.add(new WebMarkupContainer("managePredefinedLocationsContainer").setVisible(getSessionUser().hasAccess("managesystemconfig") && advancedLocationEnabled));
 

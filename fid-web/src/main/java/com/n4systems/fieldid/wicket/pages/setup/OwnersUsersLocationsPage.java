@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.model.ExtendedFeature;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.n4systems.fieldid.service.user.UserLimitService;
@@ -18,6 +20,7 @@ public class OwnersUsersLocationsPage extends SetupPage {
 
 	    add(new WebMarkupContainer("manageCustomersContainer").setVisible(getSessionUser().hasAccess("manageendusers")));
 	    add(new WebMarkupContainer("manageUsersContainer").setVisible(canManageSystemUsers));
+        add(new BookmarkablePageLink<Void>("userGroupsLink", UserGroupsPage.class).setVisible(canManageSystemUsers));
 	    add(new WebMarkupContainer("manageUserRegistrationsContainer").setVisible(canManageSystemUsers && userLimitService.isReadOnlyUsersEnabled()));
         add(new WebMarkupContainer("managePredefinedLocationsContainer").setVisible(getSessionUser().hasAccess("managesystemconfig") && advancedLocationEnabled));
 	}

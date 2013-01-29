@@ -1,13 +1,13 @@
 package com.n4systems.util;
 
-public enum UserGroup {
+public enum UserBelongsToFilter {
 	ALL( "All" ),
 	EMPLOYEE( "Employee" ),
 	CUSTOMER( "Customer" );
 	
 	public String label;
 	
-	UserGroup( String label ) {
+	UserBelongsToFilter(String label) {
 		this.label = label;
 	}
 	

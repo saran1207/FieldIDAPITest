@@ -121,6 +121,7 @@
 											<#if sessionUser.hasAccess("manageendusers") >
 												<li><a href="<@s.url action='customerList' namespace='/' />" ><@s.text name="label.customers"/></a></li>
 												<li><a href="<@s.url action='userList' namespace='/' />" ><@s.text name="label.users"/></a></li>
+                                                <li><a href="/fieldid/w/setup/userGroups" ><@s.text name="label.user_groups"/></a></li>
 												<#if sessionUser.tenant.settings.userLimits.maxReadOnlyUsers != 0>
 													<li><a href="<@s.url action='userRequestList' namespace='/' />" ><@s.text name="title.manage_user_registrations.plural"/></a></li>
 												</#if>

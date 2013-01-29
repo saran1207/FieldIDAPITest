@@ -58,7 +58,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private String sortDirection;
 	
 	private UserType userType = UserType.ALL;
-	private UserGroup userGroup = UserGroup.ALL;
+	private UserBelongsToFilter userBelongsToFilter = UserBelongsToFilter.ALL;
 	private ArrayList<StringListingPair> userTypes;
 	private String securityCardNumber;
 	private Country country;
@@ -422,7 +422,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		if (page == null) {
 			UserPaginatedLoader loader = new UserPaginatedLoader(getSecurityFilter())
 							               .withUserType(userType)
-							               .withUserGroup(userGroup)
+							               .withUserGroup(userBelongsToFilter)
 							               .withNameFilter(listFilter)
 										   .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : true);
 			setOrgFilter(loader);
@@ -438,7 +438,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 			UserPaginatedLoader loader =  new UserPaginatedLoader(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true))
 						                   .withArchivedOnly()
 							               .withUserType(userType)
-							               .withUserGroup(userGroup)
+							               .withUserGroup(userBelongsToFilter)
 							               .withNameFilter(listFilter)
 							               .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : true);
 			setOrgFilter(loader);
@@ -502,9 +502,9 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return userTypes;
 	}
 
-	public List<StringListingPair> getUserGroups() {
+	public List<StringListingPair> getUserBelongsToFilters() {
 		List<StringListingPair> userGroups = new ArrayList<StringListingPair>();
-		for (UserGroup group: UserGroup.values()) {
+		for (UserBelongsToFilter group: UserBelongsToFilter.values()) {
 			userGroups.add(new StringListingPair(group.name(), group.getLabel()));
 		}
 		return userGroups;
@@ -578,12 +578,12 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return (session != null) ? session.getDateCreated() : null;
 	}
 
-	public String getUserGroup() {
-		return userGroup.name();
+	public String getUserBelongsToFilter() {
+		return userBelongsToFilter.name();
 	}
 
-	public void setUserGroup(String userGroup) {
-		this.userGroup = UserGroup.valueOf(userGroup);
+	public void setUserBelongsToFilter(String userBelongsToFilter) {
+		this.userBelongsToFilter = UserBelongsToFilter.valueOf(userBelongsToFilter);
 	}
 
 	public void setUserTypes(ArrayList<StringListingPair> userTypes) {

@@ -41,6 +41,8 @@ import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.ReassignEventType
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.AddUserGroupPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
@@ -79,6 +81,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/scoreResults", ScoreResultConfigurationPage.class);
         mountPage("setup/priorityCodes", PriorityCodePage.class);
         mountPage("setup/reassignEventTypeGroups", ReassignEventTypeGroupPage.class);
+        mountPage("setup/userGroups", UserGroupsPage.class);
+        mountPage("setup/addUserGroup", AddUserGroupPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 

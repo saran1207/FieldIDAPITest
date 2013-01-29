@@ -50,6 +50,10 @@
     position: relative;
 }
 
+.mattBar {
+    float:left;
+}
+
 .openForm {
     padding-right: 20px;
 }
@@ -158,7 +162,7 @@
 }
 
 .list input {
-    width: 200px;
+    width: 100px;
     margin: 5px 0 10px 0;
     border: 1px solid #9C9C9C;
     padding: 4px;
@@ -172,4 +176,33 @@
 .tooltip {
    vertical-align: middle;
    margin-left: 10px;
+}
+
+.filterDescription {
+    background: #eee;
+    display:block;
+    float:left;
+    margin-top:5px;
+    margin-bottom:5px;
+    height:11px;
+    padding:6px;
+    font-size:11px;
+    border-left:1px solid #9c9c9c;
+    border-top:1px solid #9c9c9c;
+    border-bottom:1px solid #9c9c9c;
+    font-weight:bold;
+}
+
+.filterInput {
+    padding:5px;
+    width:300px;
+    font-size:11px;
+    margin-top:5px;
+    margin-bottom:5px;
+    float:left;
+    border:1px solid #9c9c9c;
+}
+
+.description {
+    font-style:italic;
 }

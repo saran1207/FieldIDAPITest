@@ -76,6 +76,10 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
     @JoinTable(name="users_saved_items", joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name="item_id"))
     @IndexColumn(name="orderIdx")
     private List<SavedItem> savedItems;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private UserGroup group;
 	
 	private boolean registered = false;
 	

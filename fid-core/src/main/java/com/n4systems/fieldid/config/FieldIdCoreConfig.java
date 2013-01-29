@@ -47,6 +47,7 @@ import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.transaction.TransactionService;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.services.ConfigService;
@@ -445,6 +446,9 @@ public class FieldIdCoreConfig {
         return new RecurringScheduleService();
     }
 
+    @Bean
+    public UserGroupService userGroupService() {
+        return new UserGroupService();
+    }
 
 }
-

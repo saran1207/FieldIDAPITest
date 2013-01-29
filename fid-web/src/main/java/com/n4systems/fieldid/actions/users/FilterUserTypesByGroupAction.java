@@ -6,7 +6,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.security.UserType;
 import com.n4systems.util.StringListingPair;
-import com.n4systems.util.UserGroup;
+import com.n4systems.util.UserBelongsToFilter;
 
 public class FilterUserTypesByGroupAction extends AbstractAction {
 
@@ -20,9 +20,9 @@ public class FilterUserTypesByGroupAction extends AbstractAction {
 	public String doFilterUserTypes() {
 
 		userTypes = new ArrayList<StringListingPair>();
-		if (userGroup.equals(UserGroup.EMPLOYEE.toString()) || userGroup.equals(UserGroup.ALL.toString())) {
+		if (userGroup.equals(UserBelongsToFilter.EMPLOYEE.toString()) || userGroup.equals(UserBelongsToFilter.ALL.toString())) {
 			userTypes = getEmployeeUserTypes();
-		}else if (userGroup.equals(UserGroup.CUSTOMER.toString())){
+		}else if (userGroup.equals(UserBelongsToFilter.CUSTOMER.toString())){
 			userTypes = getCustomerUserTypes();
 		}
 

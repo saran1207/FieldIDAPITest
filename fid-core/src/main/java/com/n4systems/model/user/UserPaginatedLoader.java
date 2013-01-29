@@ -7,7 +7,7 @@ import com.n4systems.model.orgs.InternalOrgFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.PaginatedLoader;
 import com.n4systems.security.UserType;
-import com.n4systems.util.UserGroup;
+import com.n4systems.util.UserBelongsToFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.JoinClause.JoinType;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
@@ -24,7 +24,7 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 	private CustomerOrg customer;
 	private Long orgFilter;
 	private UserType userType;
-	private UserGroup userGroup = UserGroup.ALL;
+	private UserBelongsToFilter userBelongsToFilter = UserBelongsToFilter.ALL;
 	private String nameFilter;
 	private boolean archivedOnly = false;
 	private boolean filterOnPrimaryOrg;
@@ -64,9 +64,9 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 			builder.addSimpleWhere("userType", userType);
 		}
 		
-		if (userGroup == UserGroup.CUSTOMER) {
+		if (userBelongsToFilter == UserBelongsToFilter.CUSTOMER) {
 			builder.applyFilter(new ExternalOrgFilter("owner"));
-		} else if (userGroup == UserGroup.EMPLOYEE) {
+		} else if (userBelongsToFilter == UserBelongsToFilter.EMPLOYEE) {
 			builder.applyFilter(new InternalOrgFilter("owner"));
 		}
 
@@ -130,8 +130,8 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 		return this;
 	}
 
-	public UserPaginatedLoader withUserGroup(UserGroup userGroup) {
-		this.userGroup = userGroup;
+	public UserPaginatedLoader withUserGroup(UserBelongsToFilter userBelongsToFilter) {
+		this.userBelongsToFilter = userBelongsToFilter;
 		return this;
 	}
 	

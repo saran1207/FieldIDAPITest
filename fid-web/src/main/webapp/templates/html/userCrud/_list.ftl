@@ -4,7 +4,7 @@
 	<script type="text/javascript">
 			function clearForm() {
 			$('nameFilter').value = ''
-			$('userGroup').selectedIndex = 0;	
+			$('userBelongsToFilter').selectedIndex = 0;
 			$('userType').selectedIndex = 0;	
 			$('orgFilter').selectedIndex = 0;
 			$('listFilterForm').submit();	
@@ -22,7 +22,7 @@
 
 		<@s.textfield id="nameFilter" name="listFilter" key="label.name" labelposition="left"/>
 
-		<@s.select id="userGroup" name="userGroup" list="userGroups" listKey="id" listValue="name" key="label.usergroup" labelposition="left"/>
+		<@s.select id="userBelongsToFilter" name="userBelongsToFilter" list="userBelongsToFilters" listKey="id" listValue="name" key="label.belongs_to" labelposition="left"/>
 		
 		<#if userLimitService.readOnlyUsersEnabled>
 			<@s.select cssClass="userTypeSelect" id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>

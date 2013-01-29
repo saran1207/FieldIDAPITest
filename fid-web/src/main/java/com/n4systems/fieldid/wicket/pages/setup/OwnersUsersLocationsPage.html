@@ -12,6 +12,13 @@
 			<p><wicket:message key="label.manage_users_msg"/></p>
 		</div>
 
+        <wicket:enclosure>
+            <div class="setupOption users">
+                <h1><a wicket:id="userGroupsLink" ><wicket:message key="label.user_groups"/></a></h1>
+                <p><wicket:message key="label.manage_user_groups_msg"/></p>
+            </div>
+        </wicket:enclosure>
+
         <div wicket:id="manageUserRegistrationsContainer" class="setupOption userRegistrations">
             <h1><a href="/fieldid/userRequestList.action" ><wicket:message key="title.manage_user_registrations.plural"/></a></h1>
             <p><wicket:message key="label.manage_user_registrations_msg"/></p>

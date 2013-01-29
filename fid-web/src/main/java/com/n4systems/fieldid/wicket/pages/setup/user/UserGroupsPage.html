@@ -1,0 +1,103 @@
+<wicket:extend>
+
+    <div class="header">
+
+        <h2><wicket:message key="label.user_groups"/><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/></h2>
+
+        <div wicket:id="activeOrArchivedSelector"></div>
+
+        <div class="openForm">
+            <a class="mattButton blueButton" wicket:id="addGroupLink"><wicket:message key="label.add_user_group"/></a>
+        </div>
+
+        <form class="form" wicket:id="addGroupForm">
+            <div class="formContainer" style="position:absolute;top:40px;left:-223px;">
+                <h2>
+                    <wicket:message key="label.add_user_group"/>
+                    <a wicket:id="cancelLink" class="cancelLink"><img src="/fieldid/images/modal-close.png"/></a>
+                </h2>
+                <div wicket:id="feedbackPanel"/>
+                <label><wicket:message key="label.name"/></label>
+                <input type="text" wicket:id="name">
+                <label><wicket:message key="label.id"/></label>
+                <input type="text" wicket:id="id">
+                <div class="formActions">
+                    <a class="mattButton blueButton" wicket:id="saveButton"><wicket:message key="label.save"/></a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="pageSection">
+
+    <form wicket:id="filterForm">
+        <div class="filterDescription">
+            <wicket:message key="label.filter_user_groups"/>
+        </div>
+        <input wicket:id="nameFilter" type="text" class="filterInput">
+    </form>
+
+    <table wicket:id="userGroupsTable" class="list">
+
+        <tr>
+            <th>
+                <wicket:message key="label.group_name"/>
+            </th>
+            <th>
+                <wicket:message key="label.id"/>
+            </th>
+            <th>
+                <wicket:message key="label.members"/>
+            </th>
+            <th>
+                <wicket:message key="label.created"/>
+            </th>
+            <th>
+                <wicket:message key="label.last_modified"/>
+            </th>
+            <th> </th>
+        </tr>
+
+        <tr wicket:id="userGroups">
+            <wicket:enclosure child="name">
+                <td>
+                    <span wicket:id="name"></span>
+                </td>
+                <td>
+                    <span wicket:id="groupId"></span>
+                </td>
+            </wicket:enclosure>
+            <wicket:enclosure child="nameEditForm">
+                <td colspan="2">
+                    <form wicket:id="nameEditForm">
+                        <input type="text" wicket:id="groupNameField">
+                        <input type="text" wicket:id="groupIdField" style="margin-left:20px;">
+                        <a wicket:id="saveButton" class="mattButton"><wicket:message key="label.save"/></a>
+                    </form>
+                </td>
+            </wicket:enclosure>
+            <td>
+                <span wicket:id="members"></span>
+            </td>
+            <td>
+                <span wicket:id="created"></span>
+            </td>
+            <td>
+                <span wicket:id="modified"></span>
+            </td>
+            <td>
+                <div wicket:id="actionsForActiveGroups">
+                    <a class="mattButton tipsy-tooltip" wicket:id="archiveLink"><img src="/fieldid/images/archive.png"/></a>
+                    <a class="mattButton tipsy-tooltip" wicket:id="editLink"><img src="/fieldid/images/edit.png"/></a>
+                </div>
+                <div wicket:id="actionsForArchivedGroups">
+                    <a class="mattButton tipsy-tooltip" wicket:id="unArchiveLink"><img src="/fieldid/images/unarchive.png"/></a>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+
+    </div>
+
+</wicket:extend>

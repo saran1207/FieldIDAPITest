@@ -46,10 +46,7 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
                 viewArchived.add(new AttributeModifier("class", "mattButtonRight"));
                 priorityCodeListPanel.setVisible(true);
                 priorityCodeArchivedListPanel.setVisible(false);
-                target.add(viewAll);
-                target.add(viewArchived);
-                target.add(priorityCodeListPanel);
-                target.add(priorityCodeArchivedListPanel);
+                target.add(viewAll, viewArchived, priorityCodeListPanel, priorityCodeArchivedListPanel);
                 target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
 
             }
@@ -63,10 +60,7 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
                 viewAll.add(new AttributeModifier("class", "mattButtonLeft"));
                 priorityCodeListPanel.setVisible(false);
                 priorityCodeArchivedListPanel.setVisible(true);
-                target.add(viewAll);
-                target.add(viewArchived);
-                target.add(priorityCodeListPanel);
-                target.add(priorityCodeArchivedListPanel);
+                target.add(viewAll, viewArchived, priorityCodeListPanel, priorityCodeArchivedListPanel);
                 target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
             }
         });
@@ -160,7 +154,7 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
 
-        response.renderCSSReference("style/newCss/setup/prioritycodes.css");
+        response.renderCSSReference("style/newCss/setup/prettyItemList.css");
 
         response.renderCSSReference("style/tipsy/tipsy.css");
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
