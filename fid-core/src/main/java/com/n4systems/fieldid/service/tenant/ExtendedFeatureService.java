@@ -2,12 +2,14 @@ package com.n4systems.fieldid.service.tenant;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.search.SavedReportService;
+import com.n4systems.fieldid.service.search.SavedSearchRemoveFilter;
 import com.n4systems.model.EventType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.savedreports.SavedReport;
-import com.n4systems.model.savedreports.SavedReportAssignedToTrimmer;
+import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.util.List;
 public class ExtendedFeatureService extends FieldIdPersistenceService {
 
     @Autowired private OrgService orgService;
+    @Autowired private SavedReportService savedReportService;
 
     @Transactional
     public void setExtendedFeatureEnabled(Long tenantId, ExtendedFeature extendedFeature, boolean enabled) {
@@ -44,7 +47,7 @@ public class ExtendedFeatureService extends FieldIdPersistenceService {
     }
 
     private void tearDownAssignedTo(PrimaryOrg primaryOrg) {
-        // WEB-3598 This is where the code to remove legacy SavedReports was.
+        deleteSavedReportWithAssignedToCriteria();
 
         QueryBuilder<EventType> eventTypeQuery = new QueryBuilder<EventType>(EventType.class, new TenantOnlySecurityFilter(primaryOrg.getTenant()));
         List<EventType> eventTypes = persistenceService.findAll(eventTypeQuery);
@@ -53,6 +56,19 @@ public class ExtendedFeatureService extends FieldIdPersistenceService {
             eventType.removeAssignedTo();
             persistenceService.save(eventType);
         }
+    }
+
+    private void deleteSavedReportWithAssignedToCriteria() {
+        savedReportService.deleteAllSavedSearchesMatching(new SavedSearchRemoveFilter() {
+            @Override
+            public boolean removeThisSearch(SearchCriteria searchCriteria) {
+                if (searchCriteria instanceof EventReportCriteria) {
+                    EventReportCriteria searchCriteria1 = (EventReportCriteria) searchCriteria;
+                    return searchCriteria1.getAssignedTo() != null;
+                }
+                return false;
+            }
+        });
     }
 
     private void tearDownEmailAlerts(PrimaryOrg primaryOrg) {

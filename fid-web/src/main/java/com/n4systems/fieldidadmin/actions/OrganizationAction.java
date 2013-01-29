@@ -2,6 +2,7 @@ package com.n4systems.fieldidadmin.actions;
 
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
+import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.fieldidadmin.utils.TenantPathUpdater;
@@ -20,32 +21,19 @@ import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.UserLimits;
-import com.n4systems.model.tenant.extendedfeatures.ExendedFeatureToggler;
-import com.n4systems.persistence.PersistenceManager;
-import com.n4systems.persistence.Transaction;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.chart.RangeType;
 import com.opensymphony.xwork2.Preparable;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.Validations;
+import com.opensymphony.xwork2.validator.annotations.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Validations
 public class OrganizationAction extends AbstractCrud implements Preparable, HasDuplicateValueValidator {
@@ -92,6 +80,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	
 	@Autowired
 	private TenantSettingsService tenantSettingsService;
+    @Autowired
+    private ExtendedFeatureService extendedFeatureService;
 	
 	@Override
 	protected void loadMemberFields(Long uniqueId) {}
@@ -145,28 +135,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
 	@SkipValidation
 	public String doUpdateExtendedFeature() throws Exception {
-		OrgSaver orgSaver = new OrgSaver();
-
-		Transaction transaction = PersistenceManager.startTransaction();
-
-		try {
-			if (primaryOrg.getId() != null) {
-				processFeature(featureName, featureOn, transaction);
-				extendedFeatures.put(featureName, featureOn);
-			}
-
-			orgSaver.update(transaction, primaryOrg);
-
-			PersistenceManager.finishTransaction(transaction);
-
-		} catch (Exception e) {
-			PersistenceManager.rollbackTransaction(transaction);
-
-			logger.error("Failed creating tenant", e);
-			addActionError("Failed Creating Tenant: " + e.getMessage());
-			return INPUT;
-
-		}
+        ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
+        extendedFeatureService.setExtendedFeatureEnabled(primaryOrg.getTenant().getId(), feature, featureOn);
 
 		return SUCCESS;
 	}
@@ -274,21 +244,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
 	private void updateTenant() {
 		new TenantSaver().update(tenant);
-	}
-
-	private void processFeature(String featureName, boolean featureOn, Transaction transaction) {
-
-		try {
-			ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
-
-			new ExendedFeatureToggler(feature, featureOn).applyTo(primaryOrg, transaction);
-
-		} catch (IllegalArgumentException e) {
-			addFieldError("extendedFeatures", "incorrect type of extended feature");
-		} catch (Exception e) {
-			addFieldError("extendedFeatures", "could not setup");
-			throw new RuntimeException("problem while switching on or off an extended feature", e);
-		}
 	}
 
 	public Long getId() {
