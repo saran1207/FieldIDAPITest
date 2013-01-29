@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
+import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetLink;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
@@ -112,10 +113,19 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Transactional
 	public void deleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
 		logger.info("Attempting to archive Scheduled Event with mobileId " + eventScheduleId);
-		Event event = eventScheduleService.findByMobileId(eventScheduleId);
-        event.archiveEntity();
-        persistenceService.update(event);
-		logger.info("Archived Scheduled Event for " + event.getEventType().getName() + " on asset " + event.getMobileGUID());
+		Event event = eventScheduleService.findByMobileId(eventScheduleId, true);
+		if(event != null) {
+			if(event.isActive()) {
+		        event.archiveEntity();
+		        persistenceService.update(event);
+				logger.info("Archived Scheduled Event for " + event.getEventType().getName() + " on Event " + event.getMobileGUID());
+			} else {
+				logger.warn("Failed Deleting Event Schedule. Inative Event " + eventScheduleId);
+			}
+		} else {
+			logger.error("Failed Deleting Event Schedule. Unable to find Event " + eventScheduleId);
+        	throw new NotFoundException("Event",eventScheduleId);
+		}
 	}
 
 	@Override
