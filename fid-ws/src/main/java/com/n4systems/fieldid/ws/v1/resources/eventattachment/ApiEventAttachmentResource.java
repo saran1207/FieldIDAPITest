@@ -70,6 +70,19 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceService {
         	throw new NotFoundException("Event", apiAttachment.getEventSid());
         }
 	}
+
+	@PUT
+	@Path("multi")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	// Unlike Multi Add Asset, Here we only have one image but multiple events.
+	public void multiAddEventAttachment(ApiMultiEventAttachment multiEventAttachment) throws IOException {
+		for(String eventSid : multiEventAttachment.getEvents()) {
+			multiEventAttachment.setEventSid(eventSid);
+			saveEventAttachment(multiEventAttachment);
+		}
+		logger.info("Saved Multi Event Attachment for Events: " + multiEventAttachment.getEvents().size());
+	}
 	
 	public List<FileAttachment> convert(List<ApiEventAttachment> apiAttachments, Tenant tenant, User user) {
 		List<FileAttachment> attachments = new ArrayList<FileAttachment>();

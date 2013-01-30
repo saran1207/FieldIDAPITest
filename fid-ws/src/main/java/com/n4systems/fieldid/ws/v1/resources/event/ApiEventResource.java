@@ -68,6 +68,25 @@ public class ApiEventResource extends FieldIdPersistenceService {
         }		
 	}	
 	
+	@PUT
+	@Path("multi")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void multiAddEvent(ApiMultiAddEvent multiAddEvent) {
+		ApiEvent eventTemplate = multiAddEvent.getEventTemplate();
+		for(ApiMultiAddEventItem eventItem : multiAddEvent.getItems()) {
+			eventTemplate.setAssetId(eventItem.getAssetId());
+			eventTemplate.setEventScheduleId(eventItem.getEventScheduleId());
+			
+			Event existingEvent = null;
+			if(eventTemplate.getEventScheduleId() != null) {
+				existingEvent = eventService.findByMobileId(eventTemplate.getEventScheduleId(), true);
+			}
+			
+			createEvent(eventTemplate, existingEvent);
+		}
+	}
+	
 	@GET
 	@Path("downloadReport")
 	@Consumes(MediaType.TEXT_PLAIN)
