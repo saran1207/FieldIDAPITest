@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.users;
 
+import com.n4systems.fieldid.service.user.UserGroupService;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.web.helper.Constants;
@@ -22,8 +23,8 @@ public class CustomersUserCrud extends ReadOnlyUserCrud {
 	
 	private CustomerOrg customer;
 	
-	public CustomersUserCrud( UserManager userManager, PersistenceManager persistenceManager ) {
-		super( userManager, persistenceManager);
+	public CustomersUserCrud( UserManager userManager, UserGroupService userGroupService, PersistenceManager persistenceManager ) {
+		super( userManager, userGroupService, persistenceManager);
 	}
 	
 	

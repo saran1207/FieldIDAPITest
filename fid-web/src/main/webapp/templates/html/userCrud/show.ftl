@@ -46,6 +46,14 @@ ${action.setPageType('user','view')!}
 				</#if>
 			</span>
 		</p>
+        <p>
+            <label for="group"><@s.text name="label.user_group"/></label>
+            <span class="fieldValue">
+                <#if user.group?exists>
+                    ${user.group.name?html}
+                </#if>
+            </span>
+        </p>
 		<p>
 			<label for="email"><@s.text name="label.emailaddress"/></label>
 			<span class="fieldValue"><a href="mailto:${emailAddress}">${emailAddress}</a></span>

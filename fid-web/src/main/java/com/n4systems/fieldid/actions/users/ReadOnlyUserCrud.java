@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.users;
 
 
+import com.n4systems.fieldid.service.user.UserGroupService;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -14,8 +15,8 @@ import com.n4systems.security.UserType;
 public class ReadOnlyUserCrud extends UserCrud {
 	private static final long serialVersionUID = 1L;
 	
-	public ReadOnlyUserCrud( UserManager userManager, PersistenceManager persistenceManager ) {
-		super(userManager, persistenceManager);
+	public ReadOnlyUserCrud( UserManager userManager, UserGroupService userGroupService, PersistenceManager persistenceManager ) {
+		super(userManager, userGroupService, persistenceManager);
 	}
 	
 	@Override

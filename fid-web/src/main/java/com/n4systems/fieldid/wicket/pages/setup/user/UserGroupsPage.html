@@ -70,6 +70,7 @@
             <wicket:enclosure child="nameEditForm">
                 <td colspan="2">
                     <form wicket:id="nameEditForm">
+                        <div wicket:id="feedbackPanel"></div>
                         <input type="text" wicket:id="groupNameField">
                         <input type="text" wicket:id="groupIdField" style="margin-left:20px;">
                         <a wicket:id="saveButton" class="mattButton"><wicket:message key="label.save"/></a>
@@ -77,7 +78,9 @@
                 </td>
             </wicket:enclosure>
             <td>
-                <span wicket:id="members"></span>
+                <a wicket:id="linkToUsersListPage">
+                    <span wicket:id="members"></span>
+                </a>
             </td>
             <td>
                 <span wicket:id="created"></span>

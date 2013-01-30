@@ -2,10 +2,11 @@ package com.n4systems.fieldid.actions.users;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.fieldid.service.user.UserGroupService;
 
 public class UserCrudSelection extends UserCrud {
-	protected UserCrudSelection(UserManager userManager, PersistenceManager persistenceManager) {
-		super(userManager, persistenceManager);
+	protected UserCrudSelection(UserManager userManager, UserGroupService userGroupService, PersistenceManager persistenceManager) {
+		super(userManager, userGroupService, persistenceManager);
 	}
 
 	private static final long serialVersionUID = 1L;

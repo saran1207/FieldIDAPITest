@@ -2,14 +2,15 @@
 	<tr>
 		<@s.text id="usernamelabel" name="label.username"/>
     	<@s.text id="namelabel" name="label.name_first_last"/>
+        <@s.text id="usergrouplabel" name="label.user_group"/>
     	<@s.text id="orglabel" name="label.organization"/>
 		<@s.text id="customerlabel" name="label.customer"/>
 		<@s.text id="divisionlabel" name="label.division"/>
   		<@s.text id="emaillabel" name="label.emailaddress"/>
 
 		<#if !isArchivedPage>
-			<#assign columns = ["userID", "", "owner", "owner.customerOrg", "owner.divisionOrg", "emailAddress"]>
-			<#assign labels = ["${usernamelabel}", "${namelabel}", "${orglabel}", "${customerlabel}", "${divisionlabel}", "${emaillabel}"]>
+			<#assign columns = ["userID", "", "group", "owner", "owner.customerOrg", "owner.divisionOrg", "emailAddress"]>
+			<#assign labels = ["${usernamelabel}", "${namelabel}", "${usergrouplabel}", "${orglabel}", "${customerlabel}", "${divisionlabel}", "${emaillabel}"]>
 			<#assign sortAction = "userList" >
 		<#else>
 			<#assign columns = ["","owner", "owner.customerOrg", "owner.divisionOrg", "emailAddress"]>
@@ -40,6 +41,13 @@
 				</td>
 			</#if>
 			<td>${user.userLabel?html! }</td>
+            <#if !isArchivedPage>
+            <td>
+                <#if user.group?exists>
+                    ${user.group.name?html! }
+                </#if>
+            </td>
+            </#if>
 			<td>${(user.owner.getInternalOrg().name?html)!}</td>
 			<td>${(user.owner.customerOrg.name?html)!}&nbsp;</td>
 			<td>${(user.owner.divisionOrg.name?html)!}&nbsp;</td>			

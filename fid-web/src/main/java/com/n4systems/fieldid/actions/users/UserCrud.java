@@ -8,6 +8,7 @@ import com.n4systems.fieldid.actions.user.UserPasswordWelcomeNotificationProduce
 import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.actions.utils.PasswordEntry;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.activesession.ActiveSession;
@@ -18,6 +19,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.user.UserPaginatedLoader;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -46,20 +48,23 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	protected OwnerPicker ownerPicker;
 
 	protected UserManager userManager;
+    private UserGroupService userGroupService;
 
-	private final PasswordEntry passwordEntry = new PasswordEntry();
+    private final PasswordEntry passwordEntry = new PasswordEntry();
 	private boolean assignPassword = true;
 	protected Pager<User> page;
 	protected Pager<User> archivedPage;
 
 	private String listFilter;
 	private Long orgFilter;
+    private Long userGroupFilter;
 	private String sortColumn;
 	private String sortDirection;
 	
 	private UserType userType = UserType.ALL;
 	private UserBelongsToFilter userBelongsToFilter = UserBelongsToFilter.ALL;
 	private ArrayList<StringListingPair> userTypes;
+    private List<ListingPair> userGroups;
 	private String securityCardNumber;
 	private Country country;
 	private Region region;
@@ -74,10 +79,11 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private DownloadLink downloadLink;
 	
 
-	protected UserCrud(UserManager userManager, PersistenceManager persistenceManager) {
+	protected UserCrud(UserManager userManager, UserGroupService userGroupService, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
-	}
+        this.userGroupService = userGroupService;
+    }
 
 	@Override
 	protected void initMemberFields() {
@@ -363,6 +369,18 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
         user.setIdentifier(identifier);
     }
 
+    public Long getUserGroup() {
+        return user.getGroup() == null ? null : user.getGroup().getId();
+    }
+
+    public void setUserGroup(Long userGroup) {
+        if (userGroup == null) {
+            user.setGroup(null);
+        } else {
+            user.setGroup(persistenceManager.find(UserGroup.class, Long.valueOf(userGroup)));
+        }
+    }
+
 	public String getTimeZoneID() {
 		return region.getId();
 	}
@@ -422,7 +440,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		if (page == null) {
 			UserPaginatedLoader loader = new UserPaginatedLoader(getSecurityFilter())
 							               .withUserType(userType)
-							               .withUserGroup(userBelongsToFilter)
+							               .withUserBelongsTo(userBelongsToFilter)
+							               .withUserGroup(userGroupFilter)
 							               .withNameFilter(listFilter)
 										   .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : true);
 			setOrgFilter(loader);
@@ -438,7 +457,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 			UserPaginatedLoader loader =  new UserPaginatedLoader(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true))
 						                   .withArchivedOnly()
 							               .withUserType(userType)
-							               .withUserGroup(userBelongsToFilter)
+							               .withUserBelongsTo(userBelongsToFilter)
+							               .withUserGroup(userGroupFilter)
 							               .withNameFilter(listFilter)
 							               .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : true);
 			setOrgFilter(loader);
@@ -501,6 +521,14 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		}
 		return userTypes;
 	}
+
+    public List<ListingPair> getUserGroups() {
+        if (userGroups == null) {
+            List<UserGroup> activeUserGroups = userGroupService.getActiveUserGroups();
+            userGroups = ListHelper.longListableToListingPair(activeUserGroups);
+        }
+        return userGroups;
+    }
 
 	public List<StringListingPair> getUserBelongsToFilters() {
 		List<StringListingPair> userGroups = new ArrayList<StringListingPair>();
@@ -628,5 +656,13 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	public String getReportName() {
 		return reportName;
-	}		
+	}
+
+    public Long getUserGroupFilter() {
+        return userGroupFilter;
+    }
+
+    public void setUserGroupFilter(Long userGroupFilter) {
+        this.userGroupFilter = userGroupFilter;
+    }
 }

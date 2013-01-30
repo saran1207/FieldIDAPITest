@@ -4,6 +4,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.security.Permissions;
@@ -26,8 +27,8 @@ public class EmployeeCrud extends UserCrud {
 	protected List<ListingPair> permissions;
 	protected List<ListingPair> litePermissions;
 	
-	public EmployeeCrud(UserManager userManager, PersistenceManager persistenceManager) {
-		super(userManager, persistenceManager);
+	public EmployeeCrud(UserManager userManager, UserGroupService userGroupService, PersistenceManager persistenceManager) {
+		super(userManager, userGroupService, persistenceManager);
 	}
 
 	private void setupPermissions() {

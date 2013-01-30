@@ -18,12 +18,17 @@
 	<div class="multiColumn">
 		<div class="fieldGroup fieldGroupGap">
 			<h2><@s.text name="label.identifiers"/></h2>
-			
+
 			<div class="infoSet">
 				 <label class="label" for="owner"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
 				<@n4.orgPicker name="owner" required="true" orgType="all"/>
 			</div>
-			
+
+            <div class="infoSet">
+                <label class="label" for="group"><@s.text name="label.user_group"/></label>
+                <@s.select id="userGroup" name="userGroup" list="userGroups" listKey="id" listValue="name" key="label.user_group" labelposition="left" headerKey="" headerValue="None" />
+            </div>
+
 			<div class="infoSet">
 				 <label class="label" for="emailAddress"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.emailaddress"/></label>
 				<@s.textfield key="label.emailaddress" name="emailAddress"  required="true"/>

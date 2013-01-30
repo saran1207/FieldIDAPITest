@@ -4,9 +4,12 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TextFieldHintBehavior;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.api.Archivable;
@@ -25,6 +28,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -82,7 +86,10 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
                 final Label nameLabel = new Label("name", ProxyModel.of(item.getModel(), on(UserGroup.class).getName()));
                 item.add(nameLabel.setOutputMarkupPlaceholderTag(true));
                 item.add(new Label("groupId", ProxyModel.of(item.getModel(), on(UserGroup.class).getGroupId())));
-                item.add(new Label("members", ProxyModel.of(item.getModel(), on(UserGroup.class).getMembers().size())));
+
+                NonWicketLink linkToUsersList = new NonWicketLink("linkToUsersListPage", "userList.action?userGroupFilter="+item.getModelObject().getId());
+                linkToUsersList.add(new Label("members", ProxyModel.of(item.getModel(), on(UserGroup.class).getMembers().size())));
+                item.add(linkToUsersList);
 
                 String created = new FieldIdDateFormatter(item.getModelObject().getCreated(), FieldIDSession.get().getSessionUser(), true, true).format();
                 String modified = new FieldIdDateFormatter(item.getModelObject().getModified(), FieldIDSession.get().getSessionUser(), true, true).format();
@@ -93,8 +100,11 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
                 final WebMarkupContainer actionsForActiveGroups = new WebMarkupContainer("actionsForActiveGroups");
                 final WebMarkupContainer actionsForArchivedGroups = new WebMarkupContainer("actionsForArchivedGroups");
 
-                actionsForActiveGroups.add(createArchiveLink(item.getModel()));
+                Component archiveLink = createArchiveLink(item.getModel());
+                archiveLink.add(new TipsyBehavior(getString("label.archive")));
+                actionsForActiveGroups.add(archiveLink);
                 actionsForActiveGroups.add(new AjaxLink<Void>("editLink") {
+                    { add(new TipsyBehavior(getString("label.edit"))); }
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         actionsForActiveGroups.setVisible(false);
@@ -116,7 +126,10 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
             super(id, model);
             setVisible(false);
             setOutputMarkupPlaceholderTag(true);
-            add(new TextField<String>("groupNameField", ProxyModel.of(model, on(UserGroup.class).getName())));
+            final FIDFeedbackPanel feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
+            add(feedbackPanel);
+            add(new RequiredTextField<String>("groupNameField", ProxyModel.of(model, on(UserGroup.class).getName()))
+                    .add(new UserGroupUniqueNameValidator(model.getObject().getId())));
             add(new TextField<String>("groupIdField", ProxyModel.of(model, on(UserGroup.class).getGroupId())));
             add(new AjaxSubmitLink("saveButton") {
                 @Override
@@ -128,6 +141,7 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    target.add(feedbackPanel);
                 }
             });
         }
@@ -142,7 +156,8 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
             setOutputMarkupPlaceholderTag(true);
             final FIDFeedbackPanel feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
             add(feedbackPanel);
-            add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "groupName")));
+            add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "groupName"))
+                .add(new UserGroupUniqueNameValidator()));
             add(new TextField<String>("id", new PropertyModel<String>(this, "groupId")));
             add(new AjaxLink<Void>("cancelLink") {
                 @Override
@@ -173,17 +188,23 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
     }
 
     private Component createArchiveLink(final IModel<UserGroup> model) {
-        return new AjaxLink<Void>("archiveLink") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                userGroupService.archiveGroup(model.getObject());
-                redrawTable(target);
-            }
-        };
+        if (model.getObject().getMembers().size() > 0) {
+            return new BookmarkablePageLink<Void>("archiveLink", ArchiveUserGroupPage.class, PageParametersBuilder.id(model.getObject().getId()));
+        } else {
+            return new AjaxLink<Void>("archiveLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+
+                    userGroupService.archiveGroup(model.getObject());
+                    redrawTable(target);
+                }
+            };
+        }
     }
 
     private Component createUnarchiveLink(final IModel<UserGroup> model) {
         return new AjaxLink<Void>("unArchiveLink") {
+            { add(new TipsyBehavior(getString("label.unarchive"))); }
             @Override
             public void onClick(AjaxRequestTarget target) {
                 userGroupService.unArchiveGroup(model.getObject());
@@ -191,7 +212,6 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
             }
         };
     }
-
 
     private Component createActiveOrArchivedSelector(String id) {
         return new MattBar(id) {
@@ -241,10 +261,14 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/setup/prettyItemList.css");
+        response.renderCSSReference("style/tipsy/tipsy.css");
+//        response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
+//        response.renderOnDomReadyJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
     }
 
     private void redrawTable(AjaxRequestTarget target) {
         groupsModel.detach();
         target.add(userGroupsTable);
+        target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
     }
 }

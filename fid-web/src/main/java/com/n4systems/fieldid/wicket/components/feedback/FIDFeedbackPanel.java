@@ -14,7 +14,7 @@ public class FIDFeedbackPanel extends Panel {
 
     public FIDFeedbackPanel(String id) {
         super(id);
-        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
         final IFeedbackMessageFilter filter = new ErrorLevelFeedbackMessageFilter(FeedbackMessage.ERROR);
         WebMarkupContainer feedbackPanelContainer = new WebMarkupContainer("feedbackPanelContainer") {
             @Override

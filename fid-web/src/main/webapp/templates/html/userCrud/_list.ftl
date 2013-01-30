@@ -7,6 +7,7 @@
 			$('userBelongsToFilter').selectedIndex = 0;
 			$('userType').selectedIndex = 0;	
 			$('orgFilter').selectedIndex = 0;
+                $('userGroupFilter');.selectedIndex = 0;
 			$('listFilterForm').submit();	
 		}
 	</script>
@@ -23,10 +24,12 @@
 		<@s.textfield id="nameFilter" name="listFilter" key="label.name" labelposition="left"/>
 
 		<@s.select id="userBelongsToFilter" name="userBelongsToFilter" list="userBelongsToFilters" listKey="id" listValue="name" key="label.belongs_to" labelposition="left"/>
-		
+
 		<#if userLimitService.readOnlyUsersEnabled>
 			<@s.select cssClass="userTypeSelect" id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>
 		</#if>
+
+        <@s.select id="userGroupFilter" name="userGroupFilter" list="userGroups" listKey="id" listValue="name" key="label.user_group" labelposition="left" headerKey="" headerValue="All" />
 		
 		<@s.select key="label.organization" name="orgFilter" id="orgFilter" list="parentOrgs" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
 		

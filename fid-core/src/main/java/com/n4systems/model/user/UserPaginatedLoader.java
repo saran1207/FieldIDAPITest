@@ -23,6 +23,7 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 	private BaseOrg owner;
 	private CustomerOrg customer;
 	private Long orgFilter;
+    private Long groupFilter;
 	private UserType userType;
 	private UserBelongsToFilter userBelongsToFilter = UserBelongsToFilter.ALL;
 	private String nameFilter;
@@ -51,7 +52,7 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 		if (customer != null) {
 			builder.addSimpleWhere("owner.customerOrg", customer);
 		}
-		
+
 		if(filterOnPrimaryOrg) {
 			builder.addWhere(WhereClauseFactory.createIsNull("owner.secondaryOrg"));
 		}
@@ -69,6 +70,10 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 		} else if (userBelongsToFilter == UserBelongsToFilter.EMPLOYEE) {
 			builder.applyFilter(new InternalOrgFilter("owner"));
 		}
+
+        if (groupFilter != null) {
+            builder.addSimpleWhere("group.id", groupFilter);
+        }
 
 		if (nameFilter != null && !nameFilter.isEmpty()) {
 			WhereParameterGroup whereGroup = new WhereParameterGroup();
@@ -130,10 +135,15 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 		return this;
 	}
 
-	public UserPaginatedLoader withUserGroup(UserBelongsToFilter userBelongsToFilter) {
+	public UserPaginatedLoader withUserBelongsTo(UserBelongsToFilter userBelongsToFilter) {
 		this.userBelongsToFilter = userBelongsToFilter;
 		return this;
 	}
+
+    public UserPaginatedLoader withUserGroup(Long userGroup) {
+        this.groupFilter = userGroup;
+        return this;
+    }
 	
 	public UserPaginatedLoader withNameFilter(String nameFilter) {
 		this.nameFilter = nameFilter;

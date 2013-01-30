@@ -535,4 +535,12 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
+
+    public UserGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(UserGroup group) {
+        this.group = group;
+    }
 }

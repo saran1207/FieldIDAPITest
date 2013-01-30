@@ -1,17 +1,15 @@
 package com.n4systems.model.user;
 
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
 @Table(name="user_groups")
-public class UserGroup extends ArchivableEntityWithTenant {
+public class UserGroup extends ArchivableEntityWithTenant implements Listable<Long> {
 
     @Column(name = "name", length = 255)
     private String name;
@@ -44,5 +42,15 @@ public class UserGroup extends ArchivableEntityWithTenant {
 
     public void setMembers(Collection<User> members) {
         this.members = members;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
+
+    @Transient
+    public int getNumMembers() {
+        return getMembers().size();
     }
 }
