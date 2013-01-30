@@ -462,8 +462,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     public void setResultFromCriteriaAvailable(boolean resultFromCriteriaAvailable) {
         this.resultFromCriteriaAvailable = resultFromCriteriaAvailable;
     }
-    
-    public void setInitialResultBasedOnScoreOrOneClicksBeingAvailable() {
+
+    public void setResultFromCriteriaAvailable() {
         resultFromCriteriaAvailable = false;
         if (getType().getEventForm() != null) {
             if (getType().getEventForm().isUseScoreForResult()) {
@@ -479,6 +479,10 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
                 }
             }
         }
+    }
+    
+    public void setInitialResultBasedOnScoreOrOneClicksBeingAvailable() {
+        setResultFromCriteriaAvailable();
 
         if (resultFromCriteriaAvailable) {
             eventResult = EventResult.VOID;
@@ -486,6 +490,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
             eventResult = EventResult.PASS;
         }
     }
+
+
 
     public Date getDueDate() {
         return dueDate;

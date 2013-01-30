@@ -7,7 +7,6 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.ProofTestInfo;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -27,6 +26,7 @@ public class EditEventPage extends EventPage {
     public EditEventPage(PageParameters parameters) {
         uniqueId = parameters.get("uniqueID").toLong();
         event = Model.of(loadExistingEvent());
+        event.getObject().setResultFromCriteriaAvailable();
 
         fileAttachments = new ArrayList<FileAttachment>(event.getObject().getAttachments());
     }

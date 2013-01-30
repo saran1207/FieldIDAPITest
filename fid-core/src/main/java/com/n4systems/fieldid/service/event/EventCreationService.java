@@ -353,28 +353,6 @@ public class EventCreationService extends FieldIdPersistenceService {
         event.setSubEvents(reorderedSubEvents);
     }
 
-//    private EventSchedule findOrCreateSchedule(Event event, Long scheduleId) {
-//        EventSchedule eventSchedule = null;
-//        if (scheduleId == -1) {
-//            // This means the user selected 'create new schedule'
-//            // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
-//            eventSchedule = new EventSchedule();
-//            eventSchedule.copyDataFrom(event);
-//            eventSchedule.setNextDate(event.getDate());
-//            persistenceService.save(eventSchedule);
-//            event.setSchedule(eventSchedule);
-//        } else if (scheduleId > 0) {
-//            // There was an existing schedule selected.
-//            eventSchedule = persistenceService.find(EventSchedule.class, scheduleId);
-//            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED) {
-//                event.setSchedule(null);
-//            } else {
-//                event.setSchedule(eventSchedule);
-//            }
-//        }
-//        return eventSchedule;
-//    }
-
     private void updateAsset(Event event, Long modifiedById) {
         User modifiedBy = getCurrentUser();
         Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
@@ -448,7 +426,11 @@ public class EventCreationService extends FieldIdPersistenceService {
     @Transactional
     public Event updateEvent(Event event, FileDataContainer fileData, List<FileAttachment> attachments) {
 
-        calculateEventResultAndScore(event);
+        EventResult calculatedEventResult = calculateEventResultAndScore(event);
+
+        if (event.getEventResult() == null) {
+            event.setEventResult(calculatedEventResult);
+        }
 
         setProofTestData(event, fileData);
         saveProofTestFiles(event, fileData);
