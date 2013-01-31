@@ -1,8 +1,9 @@
 package com.n4systems.fieldid.wicket.components;
 
-import com.n4systems.fieldid.wicket.pages.AmountWithString;
+
 import com.n4systems.fieldid.wicket.util.AmountParser;
 import com.n4systems.model.UnitType;
+import com.n4systems.model.common.AmountWithString;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;

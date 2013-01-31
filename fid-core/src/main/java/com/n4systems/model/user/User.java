@@ -77,6 +77,14 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
     @IndexColumn(name="orderIdx")
     private List<SavedItem> savedItems;
 
+    /**
+     * for DEBUGGING ONLY!
+     * just for testing, i threw this object here to try out the custom hibernate user type.
+    @Type(type = "com.n4systems.persistence.utils.AmountWithStringUserType")
+    @Columns(columns={@Column(name="text"), @Column(name="value"), @Column(name="unit")})
+    private AmountWithString<Length> amountWithString;
+     */
+
     @ManyToOne
     @JoinColumn(name = "group_id")
     private UserGroup group;

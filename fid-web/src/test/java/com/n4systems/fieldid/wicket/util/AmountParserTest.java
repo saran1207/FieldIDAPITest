@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.util;
 
-import com.n4systems.fieldid.wicket.pages.AmountWithString;
 import com.n4systems.model.UnitType;
+import com.n4systems.model.common.AmountWithString;
 import junit.framework.Assert;
 import org.junit.Test;
 

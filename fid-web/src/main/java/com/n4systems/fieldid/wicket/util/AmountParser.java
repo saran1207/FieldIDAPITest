@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.wicket.util;
 
 import com.google.common.collect.Sets;
-import com.n4systems.fieldid.wicket.pages.AmountWithString;
 import com.n4systems.model.UnitType;
+import com.n4systems.model.common.AmountWithString;
 import com.n4systems.util.StringUtils;
 import org.jscience.mathematics.number.Rational;
 import org.jscience.physics.amount.Amount;
