@@ -68,24 +68,5 @@ public class SerializableSecurityGuardTest {
 			return null;
 		}
 	}
-	
-	@Test
-	public void should_show_that_plans_and_pricing_is_available_when_the_primary_org_does_has_the_partner_center_and_plans_and_pricing_available_set_to_true() throws Exception {
-		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withPlansAndPricingAvailable().build();
-		
-		SerializableSecurityGuard sut = new SerializableSecurityGuard(primaryOrg.getTenant(), primaryOrg);
-		
-		assertTrue(sut.isPlansAndPricingAvailable());
-	}
-	
-	
-	@Test
-	public void should_show_that_plans_and_pricing_is_not_available_when_the_primary_org_does_has_the_partner_center() throws Exception {
-		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().build();
-		primaryOrg.getTenant().getSettings().getUserLimits().setMaxReadOnlyUsers(-1);
-		SerializableSecurityGuard sut = new SerializableSecurityGuard(primaryOrg.getTenant(), primaryOrg);
-		
-		assertTrue(!sut.isPlansAndPricingAvailable());
-	}		
 
 }

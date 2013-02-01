@@ -1,13 +1,10 @@
 package com.n4systems.persistence.loaders;
 
 import com.n4systems.model.BaseEntity;
+import com.n4systems.model.asset.LastEventDateLoader;
 import com.n4systems.model.downloadlink.AllDownloadLinksByDateLoader;
 import com.n4systems.model.event.EventBySubEventLoader;
-import com.n4systems.model.asset.LastEventDateLoader;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
-import com.n4systems.model.signuppackage.ContractPricingByExternalIdLoader;
-import com.n4systems.model.signuppackage.SignUpPackageListLoader;
-import com.n4systems.model.signuppackage.SignUpPackageLoader;
 
 public class NonSecureLoaderFactory {
 
@@ -18,10 +15,6 @@ public class NonSecureLoaderFactory {
 
 	public AllDownloadLinksByDateLoader createAllDownloadLinksByDateLoader() {
 		return new AllDownloadLinksByDateLoader();
-	}
-
-	public ContractPricingByExternalIdLoader createContractPricingByNsRecordIdLoader() {
-		return new ContractPricingByExternalIdLoader();
 	}
 
 	public EventBySubEventLoader createEventBySubEventLoader() {
@@ -39,12 +32,5 @@ public class NonSecureLoaderFactory {
 	public OrgConnectionExistsLoader createOrgConnectionExistsLoader() {
 		return new OrgConnectionExistsLoader();
 	}
-	
-	public SignUpPackageListLoader createSignUpPackageListLoader() {
-		return new SignUpPackageListLoader();
-	}
-	
-	public SignUpPackageLoader createSignUpPackageLoader() {
-		return new SignUpPackageLoader();
-	}
+
 }

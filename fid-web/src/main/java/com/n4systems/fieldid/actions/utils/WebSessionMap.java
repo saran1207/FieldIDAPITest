@@ -1,31 +1,20 @@
 package com.n4systems.fieldid.actions.utils;
 
-import java.io.Serializable;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpSession;
-
 import com.n4systems.exceptions.LoginFailureInfo;
-import org.apache.struts2.ServletActionContext;
-
-import rfid.web.helper.SessionEulaAcceptance;
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
-import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.util.HashCode;
 import com.n4systems.util.selection.MultiIdSelection;
+import org.apache.struts2.ServletActionContext;
+import rfid.web.helper.SessionEulaAcceptance;
+import rfid.web.helper.SessionUser;
+
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
+import java.util.*;
 
 @SuppressWarnings({ "unchecked", "serial" })
 public class WebSessionMap extends AbstractMap<String, Object> implements Serializable {
@@ -35,7 +24,6 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	public static final String KEY_SECURITY_GUARD = "securityGaurd";
 	public static final String KEY_USER_SECURITY_GUARD = "userSecurityGuard";
 	public static final String KEY_TENANT_LANG_OVERRIDES = "TENANT_LANG_OVERRIDES";
-	public static final String KEY_SIGNUP = "signUp";
 	public static final String KEY_EULA_ACCEPTANCE = "eula_acceptance";
 	public static final String KEY_SEEN_IT_REGISTRY = "seenItRegistry";
     public static final String KEY_MULTI_SELECTION = "multiSelection";
@@ -128,18 +116,6 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	
 	public void clearTenantLanguageOverrides() {
 		remove(KEY_TENANT_LANG_OVERRIDES);
-	}
-	
-	public SignUpRequest getSignUpRequest() {
-		return get(KEY_SIGNUP, SignUpRequest.class);
-	}
-	
-	public void setSignUpRequest(SignUpRequest request) {
-		put(KEY_SIGNUP, request);
-	}
-	
-	public void clearSignUpRequest() {
-		remove(KEY_SIGNUP);
 	}
 	
 	public void setVendorContext(Long vendorContext) {

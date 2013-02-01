@@ -4,7 +4,6 @@ import com.n4systems.model.autoattribute.AutoAttributeDefinitionSaver;
 import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.model.orders.NonIntegrationLineItemSaver;
 import com.n4systems.model.orgs.OrgSaver;
-import com.n4systems.model.signuppackage.ContractPricingSaver;
 import com.n4systems.model.user.UserSaver;
 
 public class SaverFactory {
@@ -17,10 +16,6 @@ public class SaverFactory {
 	
 	public AutoAttributeDefinitionSaver createAutoAttributeDefinitionSaver() {
 		return new AutoAttributeDefinitionSaver();
-	}
-	
-	public ContractPricingSaver createContractPricingSaver() {
-		return new ContractPricingSaver();
 	}
 	
 	public DownloadLinkSaver createDownloadLinkSaver() {

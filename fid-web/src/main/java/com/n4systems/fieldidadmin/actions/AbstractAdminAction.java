@@ -1,12 +1,10 @@
 package com.n4systems.fieldidadmin.actions;
 
-import java.util.Map;
-
+import com.n4systems.ejb.PersistenceManager;
+import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.interceptor.SessionAware;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.handlers.creator.CreateHandlerFactory;
-import com.opensymphony.xwork2.ActionSupport;
+import java.util.Map;
 
 public class AbstractAdminAction extends ActionSupport implements SessionAware {
 
@@ -15,7 +13,6 @@ public class AbstractAdminAction extends ActionSupport implements SessionAware {
 	protected  PersistenceManager persistenceEJBContainer;
 	
 	private Map<String, Object> session;
-	private CreateHandlerFactory createHandlerFactory;
     private String pageName;
 
 	@SuppressWarnings("unchecked")
@@ -29,14 +26,6 @@ public class AbstractAdminAction extends ActionSupport implements SessionAware {
 
 	public void setPersistenceEJBContainer(PersistenceManager persistenceManager) {
 		this.persistenceEJBContainer = persistenceManager;
-	}
-
-	protected CreateHandlerFactory getCreateHandlerFactory() {
-		if (createHandlerFactory == null) {
-			createHandlerFactory = new CreateHandlerFactory();
-		}
-		
-		return createHandlerFactory;
 	}
 
     public void setPageName(String pageName) {

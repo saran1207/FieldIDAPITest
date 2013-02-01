@@ -16,7 +16,6 @@ import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.viewhelpers.BaseActionHelper;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
-import com.n4systems.handlers.creator.CreateHandlerFactory;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.activesession.ActiveSessionLoader;
@@ -67,7 +66,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private NavOptionsController navOptions;
 	private String redirectUrl;
 	private NonSecureLoaderFactory nonSecureLoaderFactory;
-	private CreateHandlerFactory createHandlerFactory;
 	private DownloadCoordinator downloadCoordinator;
 	private boolean useContext = false;
     private String pageName;
@@ -469,14 +467,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public String getHumanReadableFileSize(Long fileSize) {
 		String byteCountToDisplaySize = FileUtils.byteCountToDisplaySize(fileSize);
 		return byteCountToDisplaySize;
-	}
-
-	protected CreateHandlerFactory getCreateHandlerFactory() {
-		if (createHandlerFactory == null) {
-			createHandlerFactory = new CreateHandlerFactory();
-		}
-
-		return createHandlerFactory;
 	}
 
 	public String getHouseAccountName() {

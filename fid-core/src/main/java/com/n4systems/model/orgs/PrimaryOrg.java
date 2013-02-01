@@ -1,32 +1,20 @@
 package com.n4systems.model.orgs;
 
-import java.text.SimpleDateFormat;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.api.ExternalCredentialProvider;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
-import com.n4systems.model.signuppackage.SignUpPackageDetails;
+
+import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "org_primary")
 @PrimaryKeyJoinColumn(name="org_id")
-public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvider {
+public class PrimaryOrg extends InternalOrg {
 	private static final long serialVersionUID = 1L;
 
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -57,22 +45,12 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 	@Column(name="externalid", nullable = true)
 	private Long externalId;
 	
-	@Column(name="externalpassword")
-	private String externalPassword;	
-
-	@Column(name="externalusername")
-	private String externalUserName;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name="signuppackage")
-    private SignUpPackageDetails signUpPackage = SignUpPackageDetails.Legacy;
-	
 	@Column(name="autopublish", nullable=false)
 	private boolean autoPublish;
 	
 	@Column(name="autoaccept", nullable=false)
 	private boolean autoAcceptConnections;
-	
+
 	@Column(nullable=false)
 	private boolean plansAndPricingAvailable;
 
@@ -180,24 +158,6 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 		this.externalId = externalId;
 	}
 
-	@Override
-	public String getExternalPassword() {
-		return externalPassword;
-	}
-
-	public void setExternalPassword(String externalPassword) {
-		this.externalPassword = externalPassword;
-	}
-
-	@Override
-	public String getExternalUserName() {
-		return externalUserName;
-	}
-
-	public void setExternalUserName(String externalUserName) {
-		this.externalUserName = externalUserName;
-	}
-
 	public boolean isAutoPublish() {
 		return autoPublish;
 	}
@@ -242,13 +202,5 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 
     public void setIdentifierLabel(String identifierLabel) {
         this.identifierLabel = identifierLabel;
-    }
-
-    public SignUpPackageDetails getSignUpPackage() {
-        return signUpPackage;
-    }
-
-    public void setSignUpPackage(SignUpPackageDetails signUpPackage) {
-        this.signUpPackage = signUpPackage;
     }
 }

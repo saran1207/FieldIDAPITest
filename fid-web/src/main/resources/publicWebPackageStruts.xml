@@ -30,27 +30,6 @@
 		
 		<action name="publicDownloadExpired" method="show" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="success" type="freemarker">/templates/html/public/downloads/downloadExpired.ftl</result>
-		</action>	
-
-		<action name="signUpAdd" method="add" class="com.n4systems.fieldid.actions.subscriptions.SignUpCrud">
-			<result name="success" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
-		</action>
-
-		<action name="signUpCreate" method="create"	class="com.n4systems.fieldid.actions.subscriptions.SignUpCrud">
-			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/subscriptions/signUp/add.ftl</result>
-			<result name="serious_error" type="redirectAction">
-				<param name="actionName">signUpComplete</param>
-			</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">signUpComplete</param>
-			</result>
-		</action>
-		
-		<action name="signUpComplete" method="show" class="com.n4systems.fieldid.actions.subscriptions.SignUpCrud">
-			<result name="success" type="freemarker">/templates/html/subscriptions/signUp/show.ftl</result>
-			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/show.ftl</result>
 		</action>
 		
 	</package>
@@ -63,13 +42,6 @@
 			<result name="missing" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 			<result name="input" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 		</global-results>
-	
-		<action name="signUpPackagePrice" method="show" class="com.n4systems.fieldid.actions.subscriptions.SignUpPackagePriceCrud">
-			<result name="success" type="freemarker">/templates/ajax/subscriptions/signUpPackagePrice/show.ftl</result>
-		</action>
-		<action name="validPromoCode" method="show" class="com.n4systems.fieldid.actions.subscriptions.ValidPromoCodeCrud">
-			<result name="success" type="freemarker">/templates/ajax/subscriptions/validPromoCode/show.ftl</result>
-		</action>
 		
 		<action name="getRegions" method="list" class="com.n4systems.fieldid.actions.user.RegionListAction">
 			<result name="success" type="freemarker">/templates/ajax/userCrud/regions.ftl</result>

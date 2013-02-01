@@ -1,7 +1,6 @@
 package com.n4systems.fieldidadmin.actions;
 
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
 import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
@@ -16,8 +15,6 @@ import com.n4systems.model.orgs.AllPrimaryOrgsPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.model.signuppackage.SignUpPackageDetails;
-import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.UserLimits;
@@ -49,7 +46,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private Long id;
 	private Tenant tenant;
 	private PrimaryOrg primaryOrg;
-	private AccountHelper accountHelper;
 	private TenantNameAvailabilityChecker tenantNameAvailablityChecker = new TenantNameAvailabilityChecker();
     private String inactiveSince;
     private boolean activeOnly;
@@ -99,8 +95,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
 				extendedFeatures.put(feature.name(), true);
 			}
-			accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg(),
-					getNonSecureLoaderFactory().createSignUpPackageListLoader());
 		} else {
 			for (PrimaryOrg org : getPage().getList()) {
 				total30DayAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), true));
@@ -416,10 +410,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		this.nameFilter = nameFilter;
 	}
 
-	public UpgradePackageFilter currentPackageFilter() {
-		return accountHelper.currentPackageFilter();
-	}
-
 	public String getFeatureName() {
 		return featureName;
 	}
@@ -464,18 +454,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public void setShowReminder(boolean showReminder) {
 		this.showReminder = showReminder;
 	}
-
-    public List<SignUpPackageDetails> getSignUpPackages() {
-        return Arrays.asList(SignUpPackageDetails.values());
-    }
-
-    public String getSignUpPlan() {
-        return primaryOrg.getSignUpPackage().getName();
-    }
-
-    public void setSignUpPlan(String signUpPlan) {
-        primaryOrg.setSignUpPackage(SignUpPackageDetails.valueOf(signUpPlan));
-    }
 
     public Collection<RangeType> getDateRanges() {
         return new ArrayList<RangeType>(Arrays.asList(RangeType.THIRTY_DAYS, RangeType.SIXTY_DAYS, RangeType.NINETY_DAYS));

@@ -43,10 +43,6 @@
 	<div id="orgStatus">
 		<#include "_status.ftl"/>
 	</div>
-
-    <div id="signUpDetails" style="padding-top:20px;">
-        <#include "_signUpDetails.ftl"/>
-    </div>
 </div>
 
 <div id="orgPlan">

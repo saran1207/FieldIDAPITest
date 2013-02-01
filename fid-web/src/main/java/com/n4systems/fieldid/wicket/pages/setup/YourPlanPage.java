@@ -12,7 +12,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.progressbar.ProgressBar;
 import rfid.web.helper.SessionUser;
@@ -29,7 +28,6 @@ public class YourPlanPage extends FieldIDFrontEndPage {
 		PrimaryOrg primaryOrg = getSecurityGuard().getPrimaryOrg();
 		
 		add(new Label("companyId", sessionUser.getTenant().getDisplayName()));
-		add(new Label("planName", primaryOrg.getSignUpPackage().getDisplayName()));
 		add(new Label("createDate", new SimpleDateFormat(sessionUser.getDateFormat()).format(primaryOrg.getCreated())));
 		
 		add(new ProgressBar("fullUsersUsage").setValue(getUsage(userLimitService.getEmployeeUsersCount(), userLimitService.getMaxEmployeeUsers())));

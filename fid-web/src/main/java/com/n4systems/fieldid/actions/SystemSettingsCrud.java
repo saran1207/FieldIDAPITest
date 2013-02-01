@@ -1,24 +1,13 @@
 package com.n4systems.fieldid.actions;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.n4systems.fieldid.service.amazon.S3Service;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.extendedfeatures.ExendedFeatureToggler;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -28,12 +17,18 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.UrlValidator;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })
 public class SystemSettingsCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
-
-	private AccountHelper accountHelper;
 
 	private PrimaryOrg primaryOrg;
 
@@ -76,7 +71,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 	@Override
 	protected void postInit() {
 		super.postInit();
-		accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg(), getNonSecureLoaderFactory().createSignUpPackageListLoader());
 	}
 
 	@SkipValidation
@@ -283,10 +277,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 		}
 
 		return true;
-	}
-
-	public UpgradePackageFilter currentPackageFilter() {
-		return accountHelper.currentPackageFilter();
 	}
 
 	public boolean isProofTestIntegration() {
