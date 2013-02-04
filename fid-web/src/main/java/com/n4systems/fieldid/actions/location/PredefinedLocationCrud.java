@@ -225,4 +225,9 @@ public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicate
         ownerPicker.setOwnerId(owner.getId());
     }
 
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE8";
+    }
+
 }

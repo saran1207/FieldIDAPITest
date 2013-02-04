@@ -58,4 +58,8 @@ public class BaseOrgCrud extends AbstractCrud {
 		this.orgTypeFilter = orgTypeFilter;
 	}
 
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE8";
+    }
 }
