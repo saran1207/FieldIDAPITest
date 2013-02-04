@@ -200,6 +200,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
             DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "dueDate"), true).withNoAllDayCheckbox();
 			newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
+            newOrExistingEventBook.setOwner(event.getObject().getOwner());
 
             AttributesEditPanel attributesEditPanel = new AttributesEditPanel("eventAttributes", event);
 
