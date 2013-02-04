@@ -37,6 +37,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.net.MalformedURLException;
+import java.util.Collections;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
@@ -81,8 +82,10 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	public void testRender() throws MalformedURLException {
         expectingConfig();
         expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(2);	//extra invocation for assertion using getList().
-		replay(dashboardService);
+		expectLastCall().times(3);	//extra invocation for assertion using getList().
+        expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
+        expectLastCall().times(1);
+        replay(dashboardService);
 		expect(widgetFactory.createWidget(testWidgetDefinition)).andReturn(testWidget);
 		replay(widgetFactory);
 
@@ -104,8 +107,10 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	public void testAddWidget() throws MalformedURLException {
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(4);  // have to add some expectations because our asserts actually trigger calls...yecccch. 
-		dashboardService.saveLayout(layout);
+		expectLastCall().times(5);  // have to add some expectations because our asserts actually trigger calls...yecccch.
+        expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
+        expectLastCall().times(2);
+        dashboardService.saveLayout(layout);
         expect(dashboardService.createWidgetDefinition(WidgetType.NEWS)).andReturn(new WidgetDefinition(WidgetType.NEWS));
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(testWidgetDefinition)).andReturn(testWidget);
@@ -139,7 +144,9 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(2);
+		expectLastCall().times(3);
+        expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
+        expectLastCall().times(2);
         expect(dashboardService.createWidgetDefinition(WidgetType.JOBS_ASSIGNED)).andReturn(new WidgetDefinition(WidgetType.JOBS_ASSIGNED));
         dashboardService.saveLayout(layout);
 		replay(dashboardService);
@@ -168,8 +175,10 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	public void testRemoveWidget() throws MalformedURLException {
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(2);
-		dashboardService.saveLayout(layout);		
+		expectLastCall().times(3);
+        expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
+        expectLastCall().times(2);
+        dashboardService.saveLayout(layout);
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(testWidgetDefinition)).andReturn(testWidget);
 		replay(widgetFactory);
@@ -193,8 +202,10 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		layout = createNewDashboardLayout();
 		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(2); 
-		dashboardService.saveLayout(layout);
+		expectLastCall().times(3);
+        expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
+        expectLastCall().times(2);
+        dashboardService.saveLayout(layout);
         expect(dashboardService.createWidgetDefinition(WidgetType.NEWS)).andReturn(new WidgetDefinition(WidgetType.NEWS));
         replay(dashboardService);
 
