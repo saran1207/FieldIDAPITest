@@ -2,14 +2,23 @@ package com.n4systems.fieldid.ws.v1.resources.eventattachment;
 
 import java.util.List;
 
-public class ApiMultiEventAttachment extends ApiEventAttachment{
-	private List<String> events;
+public class ApiMultiEventAttachment{
+	private ApiEventAttachment eventAttachmentTemplate;
+	private List<String> eventIds;	
 	
-	public List<String> getEvents() {
-		return events;
+	public ApiEventAttachment getEventAttachmentTemplate() {
+		return eventAttachmentTemplate;
+	}
+
+	public void setEventAttachmentTemplate(ApiEventAttachment eventAttachmentTemplate) {
+		this.eventAttachmentTemplate = eventAttachmentTemplate;
+	}
+
+	public List<String> getEventIds() {
+		return eventIds;
 	}	
 
-	public void setEvents(List<String> events) {
-		this.events = events;
-	}	
+	public void setEventIds(List<String> eventIds) {
+		this.eventIds = eventIds;
+	}
 }
