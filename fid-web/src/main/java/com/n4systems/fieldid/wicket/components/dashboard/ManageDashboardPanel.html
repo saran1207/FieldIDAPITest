@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:panel>
+    <div class="header">
+        <img src="/fieldid/images/manage-dashboard-large.png"/>
+        <h2><wicket:message key="label.manage_dashboard"/></h2>
+    </div>
+
+    <div wicket:id="layoutListView" class="layoutListView">
+        <div class="layoutView">
+            <label wicket:id="name"/>
+            <span wicket:id="widgetCount"/>
+        </div>
+        <form class="form" wicket:id="editForm">
+            <div wicket:id="feedbackPanel"/>
+            <input type="text" wicket:id="nameField">
+            <a class="mattButton" wicket:id="saveButton"><wicket:message key="label.save"/></a>
+        </form>
+        <a class="mattButton" wicket:id="edit"><wicket:message key="label.rename"/></a>
+        <a class="mattButton" wicket:id="delete"><wicket:message key="label.delete"/></a>
+    </div>
+
+    <div class="addAction">
+        <form class="form" wicket:id="addForm">
+            <div wicket:id="feedbackPanel"/>
+            <input type="text" wicket:id="nameField">
+            <a class="mattButton" wicket:id="add"><img src="/fieldid/images/add-dashboard-plus.png"/><wicket:message key="label.add_new_dashboard"/></a>
+        </form>
+    </div>
+
+
+</wicket:panel>
+
+</html>

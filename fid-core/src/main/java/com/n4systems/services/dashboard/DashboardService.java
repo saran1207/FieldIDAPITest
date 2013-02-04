@@ -1,16 +1,16 @@
 package com.n4systems.services.dashboard;
 
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.WidgetType;
-import com.n4systems.model.dashboard.widget.WorkWidgetConfiguration;
-import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithUser;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.WidgetType;
+import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithUser;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public class DashboardService extends FieldIdPersistenceService {
 
@@ -38,8 +38,28 @@ public class DashboardService extends FieldIdPersistenceService {
     private DashboardLayout findCurrentLayout() {
         QueryBuilder<DashboardLayout> query = createUserSecurityBuilder(DashboardLayout.class);
         query.addSimpleWhere("user.id", securityContext.getUserSecurityFilter().getUserId());
+        query.addSimpleWhere("selected", true);
 
         return persistenceService.find(query);
+    }
+
+    public List<DashboardLayout> findDashboardLayouts(boolean excludeSelected) {
+        QueryBuilder<DashboardLayout> query = createUserSecurityBuilder(DashboardLayout.class);
+        query.addSimpleWhere("user.id", securityContext.getUserSecurityFilter().getUserId());
+
+        if(excludeSelected) {
+            query.addSimpleWhere("selected", false);
+        }
+
+        return persistenceService.findAll(query);
+    }
+
+    public DashboardLayout getDashboardLayout(Long id) {
+        return persistenceService.find(DashboardLayout.class, id);
+    }
+
+    public void delete(DashboardLayout layout) {
+        persistenceService.remove(layout);
     }
 
     private User findCurrentUser() {
@@ -55,6 +75,9 @@ public class DashboardService extends FieldIdPersistenceService {
         DashboardColumn secondColumn = new DashboardColumn();
         layout.getColumns().add(firstColumn);
         layout.getColumns().add(secondColumn);
+        layout.setName(getCurrentUser().getDisplayName());
+        layout.setSelected(true);
+
         return layout;
     }
 

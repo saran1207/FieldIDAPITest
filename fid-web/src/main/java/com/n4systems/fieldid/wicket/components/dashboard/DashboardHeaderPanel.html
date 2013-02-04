@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:panel>
+
+    <div class="selectLayout">
+        <h2><wicket:message key="label.dashboard"/> /
+            <a id="layoutListLink" href="javascript:void(0);">
+                <span wicket:id="name"/> <img class="downArrow" src="/fieldid/images/down-arrow.png">
+            </a>
+        </h2>
+    </div>
+
+    <div class="configureLayout">
+        <a wicket:id="manageDashboardLink"><img src="/fieldid/images/manage-dashboard-small.png"/></a>
+    </div>
+
+    <div id="layoutList" class="layoutList" style="display: none">
+        <div class="layoutItem" wicket:id="layoutList">
+            <a wicket:id="link"><span wicket:id="name"/></a>
+        </div>
+    </div>
+</wicket:panel>
+
+</html>

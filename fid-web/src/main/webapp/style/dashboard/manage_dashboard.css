@@ -1,0 +1,65 @@
+.header {
+    margin: 0 auto;
+    width: 50%;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.header h2 {
+    font-size: 2em;
+    margin-left: 25px;
+    padding: 10px 0;
+;
+}
+
+.layoutListView {
+    margin: 0 15px;
+    padding: 20px 5px;
+    border-bottom: #CCC solid 1px;
+}
+
+.layoutListView * {
+    float: left;
+}
+
+.layoutListView label {
+   font-size: 1.3em;
+}
+
+.layoutListView a.mattButton, .addAction a.mattButton{
+    float: none;
+    margin-left: 5px;
+}
+
+.form input[type="text"] {
+    border: 1px solid #9C9C9C;
+    color: #555555;
+    padding: 5px;
+}
+
+.layoutListView .form input[type="text"] {
+    width: 250px;
+}
+
+.addAction {
+    padding: 20px 5px 0 5px;
+    margin: 0 15px;
+}
+
+.addAction .form input[type="text"] {
+    width: 430px;
+    margin-top: 3px;
+}
+
+.addAction a img{
+    vertical-align: middle;
+    padding-right: 5px;
+}
+
+.layoutView, .layoutView label, .layoutView span {
+    width: 475px;
+}
+
+.layoutListView a.rename_only {
+    margin-left: 70px;
+}

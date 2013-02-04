@@ -1,22 +1,12 @@
 package com.n4systems.model.dashboard;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.IndexColumn;
-
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
+import org.hibernate.annotations.IndexColumn;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "dashboard_layouts")
@@ -32,6 +22,12 @@ public class DashboardLayout extends EntityWithTenant {
     @ManyToOne(fetch= FetchType.EAGER, optional=false)
     @JoinColumn(name="user_id", nullable=false)
     private User user;
+
+    @Column(nullable=false)
+    private String name;
+
+    @Column(nullable=false)
+    private Boolean selected;
 
     public List<DashboardColumn> getColumns() {
         return columns;
@@ -58,4 +54,19 @@ public class DashboardLayout extends EntityWithTenant {
         return widgetCount;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(Boolean selected) {
+        this.selected = selected;
+    }
 }

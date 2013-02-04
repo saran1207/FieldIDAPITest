@@ -4,7 +4,9 @@ import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
+import com.n4systems.fieldid.wicket.components.dashboard.DashboardHeaderPanel;
+import com.n4systems.fieldid.wicket.components.dashboard.ManageDashboardPanel;
+import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.dashboard.CurrentLayoutModel;
 import com.n4systems.fieldid.wicket.pages.widgets.Widget;
@@ -54,7 +56,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
     IModel<DashboardLayout> currentLayoutModel;
 
-    private ModalWindow configurationWindow;
+    private DialogModalWindow configurationWindow;
+    private ModalWindow widgetConfigurationWindow;
     
     private BaseOrg org;
 
@@ -90,13 +93,26 @@ public class DashboardPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/widget.js");
 
         response.renderCSSReference("style/dashboard/dashboard.css");
+        response.renderCSSReference("style/dashboard/manage_dashboard.css");
+        response.renderCSSReference("style/dashboard/header.css");
         response.renderCSSReference("style/dashboard/widgetconfig.css");
         response.renderCSSReference("style/chosen/chosen.css");
+        response.renderCSSReference("style/newCss/component/matt_buttons.css");
     }
 
     private WebMarkupContainer addContent(String id) {
 		WebMarkupContainer content = new WebMarkupContainer(id);
 		content.setOutputMarkupId(true);
+
+        final DashboardHeaderPanel headerPanel;
+        content.add(headerPanel = new DashboardHeaderPanel("headerPanel") {
+            @Override
+            protected void onManageDashboard(AjaxRequestTarget target) {
+                configurationWindow.setContent(new ManageDashboardPanel(configurationWindow.getContentId()));
+                configurationWindow.show(target);
+            }
+        });
+        headerPanel.setMarkupId("dashboardHeaderPanel");
 
         content.add(addWidgetPanel = new AddWidgetPanel("addWidgetPanel", currentLayoutModel) {
             @Override
@@ -110,11 +126,24 @@ public class DashboardPage extends FieldIDFrontEndPage {
         columnsContainer = new WebMarkupContainer("columnsContainer");
         columnsContainer.add(createColumnContainer("sortableColumn", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[0].widgets"), 0));
         columnsContainer.add(createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[1].widgets"), 1));
-        columnsContainer.add(configurationWindow = new FIDModalWindow("configWindow"));
-        configurationWindow.setInitialWidth(500);
-        configurationWindow.setInitialHeight(390);
 
-        configurationWindow.setTitle(new FIDLabelModel("label.widget_configuration"));
+        columnsContainer.add(configurationWindow = new DialogModalWindow("configWindow"));
+        configurationWindow.setInitialWidth(700);
+        configurationWindow.setInitialHeight(500);
+
+        configurationWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
+            @Override
+            public void onClose(AjaxRequestTarget target) {
+                target.add(headerPanel);
+                target.appendJavaScript("listenForLayoutListClick()");
+            }
+        });
+
+        columnsContainer.add(widgetConfigurationWindow = new ModalWindow("widgetConfigWindow"));
+        widgetConfigurationWindow.setInitialWidth(500);
+        widgetConfigurationWindow.setInitialHeight(390);
+
+        widgetConfigurationWindow.setTitle(new FIDLabelModel("label.widget_configuration"));
 
         columnsContainer.setOutputMarkupId(true);
         content.add(columnsContainer);
@@ -159,8 +188,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
                 widget.setConfigureBehavior(new AjaxEventBehavior("onclick") {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
-                        configurationWindow.setContent(widget.createConfigPanel(configurationWindow.getContentId()));
-                        configurationWindow.show(target);
+                        widgetConfigurationWindow.setContent(widget.createConfigPanel(widgetConfigurationWindow.getContentId()));
+                        widgetConfigurationWindow.show(target);
                     }
                 });
                 item.add(widget);
@@ -264,7 +293,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
     }
 
     public void closeConfigWindow(AjaxRequestTarget target) {
-        configurationWindow.close(target);
+        widgetConfigurationWindow.close(target);
         target.add(columnsContainer);
     }
 
