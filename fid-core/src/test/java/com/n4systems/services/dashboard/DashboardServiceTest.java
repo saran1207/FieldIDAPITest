@@ -41,9 +41,10 @@ public class DashboardServiceTest extends FieldIdServiceTest {
 	@Test 
 	public void test_findLayout_firstTime() {
 		expect(persistenceService.find(anyObject(QueryBuilder.class))).andReturn(null);
+        expect(persistenceService.find(User.class, securityFilter.getUserId())).andReturn(new User());
 		replay(persistenceService);
 		expect(securityContext.getUserSecurityFilter()).andReturn(securityFilter);
-		expectLastCall().times(2);
+		expectLastCall().times(3);
 		replay(securityContext);
 		
 		DashboardLayout actual = dashboardService.findLayout();
