@@ -14,6 +14,7 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -322,10 +323,24 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		valueMap.put(PO_NUMBER, asset.getPurchaseOrder());
 		valueMap.put(IDENTIFIER, asset.getIdentifier());
 		for(InfoOptionBean option: infoOptions) {
-			valueMap.put(option.getInfoField().getName(), option.getName());
+			valueMap.put(option.getInfoField().getName(), getFormattedValue(option));
 		}
 		return valueMap;
 	}
+
+    private String getFormattedValue(InfoOptionBean option) {
+        if (InfoFieldBean.InfoFieldType.DateField.equals(option.getInfoField().getType())) {
+            try {
+                Long ms = Long.parseLong(option.getName());
+                Date date = new Date(ms);
+                return new SimpleDateFormat("yyyy-MM-dd").format(date);
+            } catch (NumberFormatException e) {
+                return option.getName();
+            }
+        } else {
+            return option.getName();
+        }
+    }
 	
 	public boolean isDescriptionTemplateValid() {
 		List<String> fieldNames = new ArrayList<String>();
