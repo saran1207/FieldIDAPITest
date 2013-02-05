@@ -364,23 +364,29 @@ public class EventService extends FieldIdPersistenceService {
 
         SubSelectInClause insideSafetyNetworkSubClause = new SubSelectInClause("asset.owner.tenant", connectedTenantsQuery);
 
-        WhereParameterGroup wpg = new WhereParameterGroup();
-        wpg.addClause(insideSafetyNetworkSubClause);
-        wpg.addClause(WhereClauseFactory.create(Comparator.EQ, "asset.owner.tenant.id", filter.getTenantId(), ChainOp.OR));
 
-        QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+        QueryBuilder<Event> builder;
+        if (getCurrentUser().getGroup() == null) {
+            // Users without groups can pull in safety network events
+            builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+            WhereParameterGroup wpg = new WhereParameterGroup();
+            wpg.addClause(insideSafetyNetworkSubClause);
+            wpg.addClause(WhereClauseFactory.create(Comparator.EQ, "asset.owner.tenant.id", filter.getTenantId(), ChainOp.OR));
+            builder.addWhere(wpg);
+        } else {
+            // Users in groups can pull in only local events of their group. Group filtering is done in the user security filter.
+            builder = createUserSecurityBuilder(Event.class);
+        }
+
         builder.addWhere(WhereClauseFactory.create("asset.networkId", networkId));
-        builder.addWhere(wpg);
 
         if(states!= null && !states.isEmpty()) {
-            builder.addWhere(WhereClauseFactory.create(Comparator.IN, "workflowState", states));
-        } else {
-            builder.addWhere(WhereClauseFactory.createIsNull("workflowState"));
+            builder.addWhere(WhereClauseFactory.create(Comparator.IN, "workflowStatesList", "workflowState", states));
         }
 
         return builder;
     }
-    
+
     public Event findByMobileId(String mobileId) {
     	return findByMobileId(mobileId, false);
     }

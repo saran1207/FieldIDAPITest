@@ -1,9 +1,12 @@
 package com.n4systems.model.security;
 
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.search.JoinTerm;
+import com.n4systems.util.persistence.search.terms.completedordue.WithinUserGroupTerm;
 
 import javax.persistence.Query;
 import java.util.TimeZone;
@@ -16,19 +19,19 @@ import java.util.TimeZone;
 public class UserSecurityFilter extends AbstractSecurityFilter {
 	
 	private final BaseOrg filterOrg;
-	private final Long filterUserId;
+    private User user;
     private TimeZone timeZone;
-    private boolean showArchived = false; //TODO May be we should consider moving this up the class heirachery as it is also used by TenantOnlySecurityFilter - Kumana.
+    private boolean showArchived = false; //TODO May be we should consider moving this up the class hierarchy as it is also used by TenantOnlySecurityFilter - Kumana.
 
 
-    public UserSecurityFilter(BaseOrg filterOrg, Long filterUserId, TimeZone timeZone) {
+    public UserSecurityFilter(BaseOrg filterOrg, User user, TimeZone timeZone) {
 		this.filterOrg = filterOrg;
-		this.filterUserId = filterUserId;
+		this.user = user;
         this.timeZone = timeZone;
 	}
 	
 	public UserSecurityFilter(User user) {
-		this(user.getOwner(), user.getId(), user.getTimeZone());
+		this(user.getOwner(), user, user.getTimeZone());
 	}
 
 	@Override
@@ -41,9 +44,9 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 			// The tenant filter is almost always applied along with the user/owner filter as a safety precaution
 			addFilterParameter(builder, definer.getTenantPath(), getTenantId());
 			
-			if (definer.isUserFiltered() && filterUserId != null) {
+			if (definer.isUserFiltered() && user != null) {
 				// we check to see if this is user filtered first since you can't get more specific then a user filter
-				addFilterParameter(builder, definer.getUserPath(), filterUserId);
+				addFilterParameter(builder, definer.getUserPath(), user.getId());
 				
 			} else if (definer.isOwnerFiltered()) {
 				// we don't need to add an owner filter for a PrimaryOrg since it's 1 to 1 with the tenant
@@ -54,6 +57,12 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 				}
 			}
 		}
+
+        if (definer.isEventUserGroupFiltered() && user != null && user.getGroup() != null) {
+            new WithinUserGroupTerm(null, user.getGroup())
+                    .applyToQuery(builder);
+        }
+
 	}
 
 	@Override
@@ -65,8 +74,8 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 		if (definer.isTenantFiltered()) {
 			setParameter(query, definer.getTenantPath(), getTenantId());
 			
-			if (definer.isUserFiltered()) {
-				setParameter(query, definer.getUserPath(), filterUserId);
+			if (definer.isUserFiltered() && user != null) {
+				setParameter(query, definer.getUserPath(), user.getId());
 				
 			} else if (definer.isOwnerFiltered() && !filterOrg.isPrimary()) {
 				setParameter(query, prepareFullOwnerPath(definer, filterOrg), filterOrg.getId());
@@ -116,7 +125,7 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 	}
 	
 	public Long getUserId() {
-		return filterUserId;
+		return user == null ? null : user.getId();
 	}
 
 	public boolean hasOwner() {
@@ -129,6 +138,10 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 
     public void setTimeZone(TimeZone timeZone) {
         this.timeZone = timeZone;
+    }
+
+    public User getUser() {
+        return user;
     }
     
     public UserSecurityFilter setShowArchived(boolean showArchived) {

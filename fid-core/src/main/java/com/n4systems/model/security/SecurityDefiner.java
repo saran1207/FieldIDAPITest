@@ -21,6 +21,7 @@ public class SecurityDefiner implements Serializable {
 	private String ownerPath;
 	private final String userPath;
 	private final String statePath;
+    private final boolean eventUserGroupFiltering;
 	
 	/**
 	 * Constructs a SecurityDefiner using custom fields.  Using null for a field will turn off filtering on that field.  Fields are 
@@ -36,12 +37,17 @@ public class SecurityDefiner implements Serializable {
 	 * @param userPath		path to the User id
 	 * @param statePath		path to the State
 	 */
-	public SecurityDefiner(String tenantPath, String ownerPath, String userPath, String statePath) {
+	public SecurityDefiner(String tenantPath, String ownerPath, String userPath, String statePath, boolean eventUserGroupFiltering) {
 		this.tenantPath = tenantPath;
 		this.ownerPath = ownerPath;
 		this.userPath = userPath;
 		this.statePath = statePath;
-	}
+        this.eventUserGroupFiltering = eventUserGroupFiltering;
+    }
+
+    public SecurityDefiner(String tenantPath, String ownerPath, String userPath, String statePath) {
+        this(tenantPath, ownerPath, userPath, statePath, false);
+    }
 
 	/**
 	 * Constructs a SecurityDefiner using default fields.  The boolean arguments turn filtering for each field on when true
@@ -124,5 +130,9 @@ public class SecurityDefiner implements Serializable {
 
     public void prependToOwnerPath(String prependString) {
         ownerPath = prependString + ownerPath;
+    }
+
+    public boolean isEventUserGroupFiltered() {
+        return eventUserGroupFiltering;
     }
 }

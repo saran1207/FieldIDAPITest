@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.Event;
-import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -55,7 +54,7 @@ public class EventScheduleService extends FieldIdPersistenceService {
 
     @Transactional
     public List<Event> getAvailableSchedulesFor(Asset asset) {
-        QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+        QueryBuilder<Event> query = createUserSecurityBuilder(Event.class);
         query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
         query.addOrder("dueDate");
 

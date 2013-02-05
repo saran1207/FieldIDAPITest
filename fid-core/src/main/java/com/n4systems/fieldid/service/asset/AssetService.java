@@ -491,6 +491,12 @@ public class AssetService extends FieldIdPersistenceService {
             query = "SELECT event " + query;
         }
 
+        User user = persistenceService.find(User.class, securityFilter.getUserId());
+
+        if (user.getGroup() != null) {
+            query += " AND event.performedBy.group.id = :groupId ";
+        }
+
         if (!count)
             query += " ORDER BY event.completedDate DESC, event.created ASC";
 
@@ -500,10 +506,15 @@ public class AssetService extends FieldIdPersistenceService {
             eventQuery.setMaxResults(1);
         }
 
+
         eventQuery.setParameter("asset", asset);
         securityFilter.applyParameters(eventQuery, Event.class);
         eventQuery.setParameter("activeState", Archivable.EntityState.ACTIVE);
         eventQuery.setParameter("completed", Event.WorkflowState.COMPLETED);
+
+        if (user.getGroup() != null) {
+            eventQuery.setParameter("groupId", user.getGroup().getId());
+        }
 
         return eventQuery;
     }
