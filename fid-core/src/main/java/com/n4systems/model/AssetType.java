@@ -3,12 +3,15 @@ package com.n4systems.model;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.model.api.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.user.User;
+import com.n4systems.util.time.DateUtil;
 import org.apache.log4j.Logger;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -267,6 +270,8 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	 * 
 	 * This method is complex because it has been highly optimized.  Please ensure any
 	 * refactors conform to the same standard of performance as it is used heavily by reporting
+	 *
+	 * TODO : all this code should not exist in entity.  preferred to use some spring based formatter.
 	 */
 	public String prepareDescription(Asset asset, Collection<InfoOptionBean> infoOptions) {
 		if( descriptionTemplate == null ) { 
@@ -333,7 +338,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
             try {
                 Long ms = Long.parseLong(option.getName());
                 Date date = new Date(ms);
-                return new SimpleDateFormat("yyyy-MM-dd").format(date);
+                return formatDate(date);
             } catch (NumberFormatException e) {
                 return option.getName();
             }
@@ -341,8 +346,20 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
             return option.getName();
         }
     }
-	
-	public boolean isDescriptionTemplateValid() {
+
+    // uggh.  entities should be dumb.  not have all this conditional stuff relying on session etc...
+    private String formatDate(Date date) {
+        User user = ThreadLocalInteractionContext.getInstance().getCurrentUser();
+        String format = null;
+        if (DateUtil.isMidnight(date)) {
+            format = user!=null&&user.getDateFormat()!=null ? "yyyy-MM-dd" : user.getDateFormat();
+        } else {
+            format = user!=null&&user.getDateTimeFormat()!=null ? "yyyy-MM-dd HH:mm" : user.getDateTimeFormat();
+        }
+        return new SimpleDateFormat(format).format(date);
+    }
+
+    public boolean isDescriptionTemplateValid() {
 		List<String> fieldNames = new ArrayList<String>();
 		for(InfoFieldBean field: infoFields) {
 			fieldNames.add(field.getName());
