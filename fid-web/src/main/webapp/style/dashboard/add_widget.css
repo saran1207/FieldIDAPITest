@@ -1,0 +1,81 @@
+.add_widget_title {
+    margin: 0 auto;
+    width: 50%;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.add_widget_title h2 {
+    font-size: 2em;
+    margin-left: 50px;
+    padding: 10px 0;
+}
+
+.widget_details {
+    padding: 20px 10px;
+    width: 300px;
+    height: 25px;
+    float: left;
+}
+
+.widget_details label, .widget_details span {
+    float: left;
+    padding-left: 5px;
+    width: 230px;
+}
+
+.widget_details span.mattButton{
+    width: auto;
+}
+
+.widget_details label {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.widget_details span {
+    font-size: 1.1em;
+}
+
+.widget_details a {
+    margin-top: 2px;
+    margin-right: 5px;
+    width: 37px;
+    margin-bottom: 20px;
+}
+
+.widget_details a em {
+    text-decoration: none;
+}
+
+.widget_details span.mattButton {
+    background: #ececec;
+    background: -moz-linear-gradient(top, #ececec 0%, #dadada 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ececec), color-stop(100%,#dadada));
+    background: -webkit-linear-gradient(top, #ececec 0%,#dadada 100%);
+    background: -o-linear-gradient(top, #ececec 0%,#dadada 100%);
+    background: -ms-linear-gradient(top, #ececec 0%,#dadada 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ececec', endColorstr='#dadada',GradientType=0 );
+    background: linear-gradient(top, #ececec 0%,#dadada 100%);
+    border: 1px solid #ababab;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .8) inset;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .8) inset;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1), 0 1px 1px rgba(255, 255, 255, .8) inset;
+    color: #999999;
+    font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    margin: 2px 5px 20px 0;
+    outline: none;
+    padding: 5px 10px;
+    float: left;
+    text-align: center;
+}
+
+.widget_details span.mattButton em{
+    text-decoration:none;
+}

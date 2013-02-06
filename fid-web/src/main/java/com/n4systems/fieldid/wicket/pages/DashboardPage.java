@@ -48,8 +48,6 @@ public class DashboardPage extends FieldIDFrontEndPage {
     @SpringBean
     private WidgetFactory widgetFactory;
 
-    private AddWidgetPanel addWidgetPanel;
-
     private WebMarkupContainer columnsContainer;
     private WebMarkupContainer blankSlatePanel;
 	private WebMarkupContainer content;
@@ -93,8 +91,6 @@ public class DashboardPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/widget.js");
 
         response.renderCSSReference("style/dashboard/dashboard.css");
-        response.renderCSSReference("style/dashboard/manage_dashboard.css");
-        response.renderCSSReference("style/dashboard/header.css");
         response.renderCSSReference("style/dashboard/widgetconfig.css");
         response.renderCSSReference("style/chosen/chosen.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
@@ -111,23 +107,27 @@ public class DashboardPage extends FieldIDFrontEndPage {
                 configurationWindow.setContent(new ManageDashboardPanel(configurationWindow.getContentId()));
                 configurationWindow.show(target);
             }
-        });
-        headerPanel.setMarkupId("dashboardHeaderPanel");
 
-        content.add(addWidgetPanel = new AddWidgetPanel("addWidgetPanel", currentLayoutModel) {
             @Override
-            protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) {
-                WidgetDefinition definition = dashboardService.createWidgetDefinition(type);
-                currentLayoutModel.getObject().getColumns().get(0).getWidgets().add(0, definition);
-                saveAndRepaintDashboard(target);
+            protected void onAddWidgets(AjaxRequestTarget target) {
+                configurationWindow.setContent(new AddWidgetPanel(configurationWindow.getContentId(), currentLayoutModel){
+                    @Override
+                    protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) {
+                        WidgetDefinition definition = dashboardService.createWidgetDefinition(type);
+                        currentLayoutModel.getObject().getColumns().get(0).getWidgets().add(0, definition);
+                        saveAndRepaintDashboard(target);
+                    }
+                });
+                configurationWindow.show(target);
             }
         });
+        headerPanel.setMarkupId("dashboardHeaderPanel");
 
         columnsContainer = new WebMarkupContainer("columnsContainer");
         columnsContainer.add(createColumnContainer("sortableColumn", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[0].widgets"), 0));
         columnsContainer.add(createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[1].widgets"), 1));
 
-        columnsContainer.add(configurationWindow = new DialogModalWindow("configWindow"));
+        add(configurationWindow = new DialogModalWindow("configWindow"));
         configurationWindow.setInitialWidth(700);
         configurationWindow.setInitialHeight(500);
 
@@ -250,8 +250,9 @@ public class DashboardPage extends FieldIDFrontEndPage {
     private void saveAndRepaintDashboard(AjaxRequestTarget target) {
         currentLayoutModel.getObject().setTenant(getTenant());
         dashboardService.saveLayout(currentLayoutModel.getObject());
-        setContentVisibility();            	
+        setContentVisibility();
         target.add(content);
+        target.appendJavaScript("listenForLayoutListClick();");
     }
 
     private void removeWidgetFromColumn(WidgetDefinition widgetToRemove, int columnIndex) {

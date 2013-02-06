@@ -1,61 +1,96 @@
 package com.n4systems.fieldid.wicket.components.dashboard;
 
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
+import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 
-@SuppressWarnings("serial")
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class AddWidgetPanel extends Panel {
 
-    private IModel<DashboardLayout> currentLayoutModel;
+    private List<WidgetType> selectedTypes;
 
-    public AddWidgetPanel(String id, IModel<DashboardLayout> currentLayoutModel) {
+    public AddWidgetPanel(String id, final IModel<DashboardLayout> currentLayoutModel) {
         super(id);
-        this.currentLayoutModel = currentLayoutModel;
-        setOutputMarkupId(true);
 
-        add(new AddWidgetForm("addWidgetForm"));
+        DashboardLayout layout = currentLayoutModel.getObject();
+        selectedTypes = getSelectedWidgets(layout);
+
+        final WebMarkupContainer widgetsContainer = new WebMarkupContainer("widgets");
+
+        ListView<WidgetType> widgetList = new ListView<WidgetType>("widgetList", createWidgetListModel()) {
+            @Override
+            protected void populateItem(ListItem<WidgetType> item) {
+                final WidgetType type = item.getModelObject();
+
+                item.add(new Label("name", new PropertyModel<WidgetType>(type, "name")));
+                item.add(new Label("description", new PropertyModel<WidgetType>(type, "description")));
+
+                final AjaxLink addLink = new AjaxLink<Void>("add") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        onWidgetTypeSelected(target, type);
+                        selectedTypes.add(type);
+                        target.add(widgetsContainer);
+                    }
+                };
+                addLink.setOutputMarkupId(true);
+                item.add(addLink);
+
+                if(selectedTypes.contains(type)) {
+                    addLink.setEnabled(false);
+                    addLink.add(new Label("addLabel", new FIDLabelModel("label.added")));
+                } else {
+                    addLink.add(new Label("addLabel", new FIDLabelModel("label.add")));
+                }
+            }
+        };
+        widgetsContainer.setOutputMarkupId(true);
+
+        widgetsContainer.add(widgetList);
+        add(widgetsContainer);
+
     }
 
-    class AddWidgetForm extends Form {
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/dashboard/add_widget.css");
+    }
 
-        private WidgetType selectedType;
+    private List<WidgetType> getSelectedWidgets(DashboardLayout layout) {
+        List<WidgetType> selectedTypes = new ArrayList<WidgetType>();
 
-        public AddWidgetForm(String id) {
-            super(id);
-
-            final UnusedWidgetsModel unusedWidgetsModel = new UnusedWidgetsModel(currentLayoutModel);
-
-            add(new Label("displayingWidgets", new PropertyModel<Integer>(currentLayoutModel, "widgetCount")));
-            add(new Label("totalWidgets", unusedWidgetsModel.getAvailableWidgetTypes().size()+""));
-
-            DropDownChoice<WidgetType> widgetTypeSelect;
-            add(widgetTypeSelect = new DropDownChoice<WidgetType>("widgetTypeSelect", new PropertyModel<WidgetType>(this, "selectedType"), unusedWidgetsModel, new ListableChoiceRenderer<WidgetType>()));
-
-            widgetTypeSelect.add(new OnChangeAjaxBehavior() {
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    if (selectedType != null) {
-                        onWidgetTypeSelected(target, selectedType);
-                        unusedWidgetsModel.detach();
-                        target.add(AddWidgetPanel.this);
-                        selectedType = null;
-                    }
-                }
-            });
-            widgetTypeSelect.setNullValid(true);
+        for (DashboardColumn column: layout.getColumns()) {
+            for (WidgetDefinition widgetDef : column.getWidgets()) {
+                selectedTypes.add(widgetDef.getWidgetType());
+            }
         }
+        return selectedTypes;
+    }
+
+    private LoadableDetachableModel<List<WidgetType>> createWidgetListModel() {
+        return new LoadableDetachableModel<List<WidgetType>>() {
+            @Override
+            protected List<WidgetType> load() {
+                return Arrays.asList(WidgetType.values());
+            }
+        };
     }
 
     protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) { }
-
 }

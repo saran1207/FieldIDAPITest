@@ -1,5 +1,5 @@
 .selectLayout {
-    width: 960px;
+    width: 945px;
 }
 
 .selectLayout h2{
@@ -15,8 +15,16 @@
     float:left;
 }
 
+.headerPanel{
+    padding-bottom: 15px;
+}
+
 .configureLayout {
-    width: 40px;
+    width: 55px;
+}
+
+.configureLayout a{
+    margin-left: 5px;
 }
 
 .downArrow {

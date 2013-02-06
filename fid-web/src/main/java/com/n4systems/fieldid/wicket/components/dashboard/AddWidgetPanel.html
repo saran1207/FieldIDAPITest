@@ -1,18 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
 <wicket:panel>
+    <div class="add_widget_title">
+        <img src="/fieldid/images/widget-large.png"/>
+        <h2><wicket:message key="label.select_your_widgets"/></h2>
+    </div>
 
-    <div class="addWidgetForm">
-
-        <form wicket:id="addWidgetForm">
-
-            Displaying
-            <span style="font-weight:bold" wicket:id="displayingWidgets"></span>
-            of
-            <span style="font-weight:bold" wicket:id="totalWidgets"></span>
-            Widgets
-
-            <select wicket:id="widgetTypeSelect"></select>
-        </form>
-
+    <div wicket:id="widgets">
+        <div class="widget_details" wicket:id="widgetList">
+            <a class="mattButton" wicket:id="add"><em wicket:id="addLabel"/></a>
+            <label wicket:id="name"/>
+            <span wicket:id="description"/>
+        </div>
     </div>
 
 </wicket:panel>
+</html>

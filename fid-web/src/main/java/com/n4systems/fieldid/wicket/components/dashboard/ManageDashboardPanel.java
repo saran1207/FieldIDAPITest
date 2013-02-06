@@ -11,6 +11,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -42,9 +43,6 @@ public class ManageDashboardPanel extends Panel {
                 name.setOutputMarkupId(true);
 
                 item.add(new Label("widgetCount", new FIDLabelModel("label.widget_count", layout.getWidgetCount(), WidgetType.values().length)));
-
-
-
                 final FIDFeedbackPanel feedbackPanel;
 
                 final Form<Void> editForm = new Form("editForm");
@@ -139,6 +137,11 @@ public class ManageDashboardPanel extends Panel {
 
         add(addLayoutForm);
 
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/dashboard/manage_dashboard.css");
     }
 
     private DashboardLayout createNewDasboardLayout(String name) {

@@ -51,6 +51,12 @@ public class DashboardHeaderPanel extends Panel {
         layoutListView.setOutputMarkupPlaceholderTag(true);
         add(layoutListView);
 
+        add(new AjaxLink<Void>("addWidgetsLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onAddWidgets(target);
+            }
+        });
 
         add(new AjaxLink<Void>("manageDashboardLink") {
             @Override
@@ -64,9 +70,11 @@ public class DashboardHeaderPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/dashboard_layout_list.js");
+        response.renderCSSReference("style/dashboard/header.css");
     }
 
     protected void onManageDashboard(AjaxRequestTarget target) { }
+    protected void onAddWidgets(AjaxRequestTarget target) { }
 
     private LoadableDetachableModel<List<DashboardLayout>> createDashboardLayoutsModel() {
         return new LoadableDetachableModel<List<DashboardLayout>>() {

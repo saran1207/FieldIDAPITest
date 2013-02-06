@@ -27,7 +27,7 @@ public class PriorityCodeArchivedListPanel extends Panel {
         super(id);
 
 
-        ListView<PriorityCode> priorityCodes = new ListView<PriorityCode>("priorityCode", createActionTypesModel()) {
+        ListView<PriorityCode> priorityCodes = new ListView<PriorityCode>("priorityCode", createPriorityCodesModel()) {
             @Override
             protected void populateItem(ListItem<PriorityCode> item) {
 
@@ -61,7 +61,7 @@ public class PriorityCodeArchivedListPanel extends Panel {
 
     }
 
-   private LoadableDetachableModel<List<PriorityCode>> createActionTypesModel() {
+   private LoadableDetachableModel<List<PriorityCode>> createPriorityCodesModel() {
        return new LoadableDetachableModel<List<PriorityCode>>() {
            @Override
            protected List<PriorityCode> load() {
