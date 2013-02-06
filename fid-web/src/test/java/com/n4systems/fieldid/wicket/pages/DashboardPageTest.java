@@ -4,8 +4,7 @@ import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.wicket.*;
 import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner.WithUsers;
-import com.n4systems.fieldid.wicket.components.dashboard.AddWidgetPanel;
-import com.n4systems.fieldid.wicket.model.dashboard.UnusedWidgetsModel;
+import com.n4systems.fieldid.wicket.components.dashboard.DashboardHeaderPanel;
 import com.n4systems.fieldid.wicket.pages.DashboardPageTest.DashboardHarness;
 import com.n4systems.fieldid.wicket.pages.widgets.JobsAssignedWidget;
 import com.n4systems.fieldid.wicket.pages.widgets.NewsWidget;
@@ -22,6 +21,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.services.dashboard.DashboardService;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -32,7 +32,6 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -44,7 +43,6 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-@Ignore
 @RunWith(FieldIdWicketTestRunner.class)
 public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, DashboardPage> implements IFixtureFactory<DashboardPage> {
 
@@ -92,7 +90,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 
 		renderFixture(this);
 		
-		assertVisible(getHarness().getWidgetPanel());
+		assertVisible(getHarness().getHeaderPanel());
 		assertVisible(getHarness().getSortableColumn(0));
 		assertVisible(getHarness().getSortableColumn(1));
 		
@@ -108,7 +106,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	public void testAddWidget() throws MalformedURLException {
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(5);  // have to add some expectations because our asserts actually trigger calls...yecccch.
+		expectLastCall().times(4);  // have to add some expectations because our asserts actually trigger calls...yecccch.
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
         expectLastCall().times(2);
         dashboardService.saveLayout(layout);
@@ -128,7 +126,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		assertEquals(available, getHarness().getAddWidgetsDropDown().getChoices().size());
 */
 
-		getHarness().addWidget(WidgetType.NEWS, layout);
+		getHarness().addWidget(WidgetType.NEWS);
 		
 		IVisitor<ListItem<WidgetDefinition<?>>, Void> visitor = new WidgetVisitor(NewsWidget.class, TestWidget.class);
 		
@@ -150,7 +148,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(3);
+		expectLastCall().times(4);
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
         expectLastCall().times(2);
         expect(dashboardService.createWidgetDefinition(WidgetType.JOBS_ASSIGNED)).andReturn(new WidgetDefinition(WidgetType.JOBS_ASSIGNED));
@@ -170,7 +168,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 
 		renderFixture(this);
 
-		getHarness().addWidget(WidgetType.JOBS_ASSIGNED, layout);
+		getHarness().addWidget(WidgetType.JOBS_ASSIGNED);
 		
 		getHarness().getSortableColumn(0).visitChildren(ListItem.class, new WidgetVisitor(JobsAssignedWidget.class, TestWidget.class));
 
@@ -208,7 +206,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		layout = createNewDashboardLayout();
 		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(3);
+		expectLastCall().times(4);
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
         expectLastCall().times(2);
         dashboardService.saveLayout(layout);
@@ -225,7 +223,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		assertInvisible(getHarness().getSortableColumn(0));
 		assertInvisible(getHarness().getSortableColumn(1));
 				
-		getHarness().addWidget(WidgetType.NEWS, layout);
+		getHarness().addWidget(WidgetType.NEWS);
 		
 		assertEquals(1, layout.getWidgetCount());
 		assertInvisible(getHarness().getBlankSlatePanel());
@@ -317,7 +315,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		
 		public DashboardHarness(String pathContext, IWicketTester tester) {
 			super(pathContext, tester);	
-			appendPathContext("content");
+			//appendPathContext("content");
 		}
 		
 		public Component getGoogleAnalytics() {
@@ -325,43 +323,44 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		}
 
 		public WebMarkupContainer getBlankSlatePanel() {
-			return (WebMarkupContainer) get("blankSlate");
+			return (WebMarkupContainer) get("content", "blankSlate");
 		}
 
-/*		public DropDownChoice<WidgetType> getAddWidgetsDropDown() {
-			return (DropDownChoice<WidgetType>) get("addWidgetPanel", "addWidgetForm","widgetTypeSelect");
-		}*/
-		
-		public void addWidget(WidgetType widgetType, DashboardLayout currentLayout) {
-			UnusedWidgetsModel widgetsModel = new UnusedWidgetsModel(new Model<DashboardLayout>(currentLayout));
-			int index = widgetsModel.indexOf(widgetType);
-			getAddWidgetFormTester().select("widgetTypeSelect", index);
-			getWicketTester().executeAjaxEvent(getPathFor("addWidgetPanel","addWidgetForm","widgetTypeSelect"), "onchange"); 		
-		}
+		public void addWidget(WidgetType widgetType) {
+            getWicketTester().executeAjaxEvent(get("content", "headerPanel", "addWidgetsLink"), "onclick");
+            assertVisible(get("configWindow"));
+            getWicketTester().executeAjaxEvent(getAddWidgetLink(widgetType), "onclick");
 
-		public AddWidgetPanel getWidgetPanel() {
-			return (AddWidgetPanel) get("addWidgetPanel");
+        }
+
+		public DashboardHeaderPanel getHeaderPanel() {
+			return (DashboardHeaderPanel) get("content", "headerPanel");
 		}
 
 		public ListView<?> getSortableColumn(int i) {
-			MarkupContainer container = (MarkupContainer) get("columnsContainer", "sortableColumn" + ((i==0)?"":"2"));
+			MarkupContainer container = (MarkupContainer) get("content", "columnsContainer", "sortableColumn" + ((i==0)?"":"2"));
 			return container==null? null : (ListView<?>) container.get("widgets");
 		}
-		
+
+        private AjaxLink getAddWidgetLink(WidgetType widgetType) {
+            ListView<WidgetType> widgets = (ListView<WidgetType>) get("configWindow", "content", "widgets", "widgetList");
+            return (AjaxLink) widgets.get(widgetType.ordinal()).get("add");
+        }
+
 		private FormTester getAddWidgetFormTester() {
 			return getFormTester("addWidgetPanel","addWidgetForm");
 		}
 		
 		private Widget getWidget(int col, int index) {
 			String sortableColumnId = "sortableColumn" + (col==0?"":"2");
-			WebMarkupContainer sortableColumns = (WebMarkupContainer) get("columnsContainer", sortableColumnId);
+			WebMarkupContainer sortableColumns = (WebMarkupContainer) get("content", "columnsContainer", sortableColumnId);
 			ListView<WidgetDefinition> listView = (ListView<WidgetDefinition>) sortableColumns.get("widgets");
 			ListItem<WidgetDefinition> c = (ListItem<WidgetDefinition>) listView.get(index);
 			return (Widget) c.get("widget");
 		}
 
 		public void removeWidget(int col, int index) {
-			getWicketTester().executeAjaxEvent(getWidget(col,index).get("removeButton"), "onclick"); 					
+			getWicketTester().executeAjaxEvent(getWidget(col,index).get("removeButton"), "onclick");
 		}
 		
 	}
