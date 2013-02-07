@@ -1,0 +1,2 @@
+update column_mappings set path_expression = "assigneeName", join_expression="assignedGroup,assignee,assignee",
+  sort_expression="assignedGroup.name,assignee.firstName,assignee.lastName"  where name="event_search_assignee";

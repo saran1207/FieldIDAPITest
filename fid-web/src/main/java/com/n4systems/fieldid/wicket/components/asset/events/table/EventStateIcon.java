@@ -34,13 +34,13 @@ public class EventStateIcon extends Panel {
                 image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", eventResult.getDisplayName()).getObject()));
             }
         } else if(state.equals(Event.WorkflowState.OPEN)) {
-            if(event.getAssignee() != null) {
+            if (event.getAssignedUserOrGroup() != null) {
                 if(isPastDue(event)) {
                     add(image = new ContextImage("resultIcon", "images/event-open-assigned-overdue.png"));
-                    image.add(new AttributeAppender("title", new FIDLabelModel("label.open_assigned_overdue", event.getAssignee().getDisplayName())));
+                    image.add(new AttributeAppender("title", new FIDLabelModel("label.open_assigned_overdue", event.getAssigneeName())));
                 } else {
                     add(image = new ContextImage("resultIcon", "images/event-open-assigned.png"));
-                    image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", event.getAssignee().getDisplayName())));
+                    image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", event.getAssigneeName())));
                 }
             }else {
                 if(isPastDue(event)) {

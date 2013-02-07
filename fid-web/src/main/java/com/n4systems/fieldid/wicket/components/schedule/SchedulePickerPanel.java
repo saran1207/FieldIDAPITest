@@ -5,13 +5,13 @@ import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
-import com.n4systems.model.user.User;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.time.DateUtil;
 import org.apache.commons.lang.time.DateUtils;
@@ -31,6 +31,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
 import java.util.List;
+
+import static ch.lambdaj.Lambda.on;
 
 public class SchedulePickerPanel extends Panel {
 
@@ -81,9 +83,9 @@ public class SchedulePickerPanel extends Panel {
 
             add(jobSelectContainer);
 
-            DropDownChoice<User> assigneeChoice = new FidDropDownChoice<User>("assignee", new PropertyModel<User>(eventScheduleModel, "assignee"), new ExaminersModel(), new ListableChoiceRenderer<User>());
-            assigneeChoice.setNullValid(true);
-            add(assigneeChoice);
+            add(new AssignedUserOrGroupSelect("assignee",
+                    ProxyModel.of(eventScheduleModel, on(Event.class).getAssignedUserOrGroup()),
+                    true));
 
             AjaxSubmitLink addScheduleButton =  new AjaxSubmitLink("addScheduleButton") {
                 @Override

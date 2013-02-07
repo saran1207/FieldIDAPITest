@@ -11,6 +11,7 @@ import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToScheduleC
 import com.n4systems.fieldid.actions.helpers.*;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.viewhelpers.handlers.PublishedState;
 import com.n4systems.model.*;
@@ -25,6 +26,7 @@ import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.uitags.views.HierarchicalNode;
@@ -49,6 +51,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private static Logger logger = Logger.getLogger(MultiAddAssetCrud.class);
 
     @Autowired private UserService userService;
+    @Autowired private UserGroupService userGroupService;
 
 	protected final LegacyAsset legacyAssetManager;
 	protected final OrderManager orderManager;
@@ -521,6 +524,10 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 
     public List<User> getAssignees() {
         return userService.getExaminers();
+    }
+
+    public List<UserGroup> getUserGroups() {
+        return userGroupService.getActiveUserGroups();
     }
 
     public List<HierarchicalNode> getPredefinedLocationTree() {

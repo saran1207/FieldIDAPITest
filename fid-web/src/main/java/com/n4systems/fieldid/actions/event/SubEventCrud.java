@@ -17,12 +17,14 @@ import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.model.*;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
 import com.n4systems.uitags.views.HierarchicalNode;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -38,6 +40,8 @@ public class SubEventCrud extends EventCrud {
 
     @Autowired
     protected UserService userService;
+    @Autowired
+    protected UserGroupService userGroupService;
 
 	private String token;
 	private Asset parentAsset;
@@ -422,5 +426,8 @@ public class SubEventCrud extends EventCrud {
         return userService.getExaminers();
     }
 
+    public List<UserGroup> getUserGroups() {
+        return userGroupService.getActiveUserGroups();
+    }
 
 }

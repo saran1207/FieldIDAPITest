@@ -9,7 +9,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name="user_groups")
-public class UserGroup extends ArchivableEntityWithTenant implements Listable<Long> {
+public class UserGroup extends ArchivableEntityWithTenant implements Listable<Long>, CanHaveEventsAssigned {
 
     @Column(name = "name", length = 255)
     private String name;
@@ -52,5 +52,9 @@ public class UserGroup extends ArchivableEntityWithTenant implements Listable<Lo
     @Transient
     public int getNumMembers() {
         return getMembers().size();
+    }
+
+    public String getKeyForStruts() {
+        return "G"+getId();
     }
 }

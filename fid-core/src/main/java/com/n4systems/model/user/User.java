@@ -25,7 +25,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "users")
-public class User extends ArchivableEntityWithOwner implements Listable<Long>, Saveable, SecurityEnhanced<User>, Exportable, DateTimeDefinition {
+public class User extends ArchivableEntityWithOwner implements Listable<Long>, Saveable, SecurityEnhanced<User>, Exportable, DateTimeDefinition, CanHaveEventsAssigned {
 	private static final long serialVersionUID = 1L;
 	public static final int REFERRAL_KEY_LENGTH = 10;
 	
@@ -550,5 +550,9 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
     public void setGroup(UserGroup group) {
         this.group = group;
+    }
+
+    public String getKeyForStruts() {
+        return "U"+ getId();
     }
 }

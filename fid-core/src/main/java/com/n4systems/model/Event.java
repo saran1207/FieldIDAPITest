@@ -10,7 +10,9 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.user.CanHaveEventsAssigned;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.ActionDescriptionUtil;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.DateHelper;
@@ -104,6 +106,10 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     @ManyToOne
     @JoinColumn(name="assignee_id")
     private User assignee;
+
+    @ManyToOne
+    @JoinColumn(name="assigned_group_id")
+    private UserGroup assignedGroup;
 
     @ManyToOne(fetch=FetchType.EAGER, optional=false)
 	@JoinColumn(name="owner_id", nullable = false)
@@ -615,6 +621,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     }
 
     public void setAssignee(User assignee) {
+        this.assignedGroup = null;
         this.assignee = assignee;
     }
 
@@ -710,5 +717,38 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
     public void setCreatedPlatformType(PlatformType createdPlatformType) {
         this.createdPlatformType = createdPlatformType;
+    }
+
+    public UserGroup getAssignedGroup() {
+        return assignedGroup;
+    }
+
+    public void setAssignedGroup(UserGroup assignedGroup) {
+        this.assignee = null;
+        this.assignedGroup = assignedGroup;
+    }
+
+    @Transient
+    public String getAssigneeName() {
+        // Used as a path_expression in reporting for column event_search_assignee
+        if (assignedGroup != null) {
+            return assignedGroup.getName();
+        } else if (assignee != null) {
+            return assignee.getFullName();
+        }
+        return null;
+    }
+
+    @Transient
+    public CanHaveEventsAssigned getAssignedUserOrGroup() {
+        return assignee != null ?  assignee : assignedGroup;
+    }
+
+    public void setAssignedUserOrGroup(CanHaveEventsAssigned assignee) {
+        if (assignee instanceof User) {
+            setAssignee((User) assignee);
+        } else if (assignee instanceof UserGroup) {
+            setAssignedGroup((UserGroup) assignee);
+        }
     }
 }

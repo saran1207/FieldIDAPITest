@@ -4,6 +4,9 @@ import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.Event;
+import com.n4systems.model.user.CanHaveEventsAssigned;
+import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 
 import java.util.Date;
 
@@ -39,9 +42,19 @@ public class ScheduleToWebEventScheduleConverter {
 		
 		webEventSchedule.setType(openEvent.getType().getId());
 		webEventSchedule.setTypeName(openEvent.getType().getName());
-		webEventSchedule.setAssignee(openEvent.getAssignee()!=null ? openEvent.getAssignee().getId() : null);
+		webEventSchedule.setAssignee(createAssigneeeString(openEvent));
 		webEventSchedule.setDate(dateConverter.convertDate(openEvent.getDueDate()));
 		
 		return webEventSchedule;
-	}	
+	}
+
+    private String createAssigneeeString(Event openEvent) {
+        CanHaveEventsAssigned assignedUserOrGroup = openEvent.getAssignedUserOrGroup();
+        if (assignedUserOrGroup instanceof User) {
+            return "U" + assignedUserOrGroup.getId();
+        } else if (assignedUserOrGroup instanceof UserGroup) {
+            return "G" + assignedUserOrGroup.getId();
+        }
+        return null;
+    }
 }

@@ -14,6 +14,7 @@ import com.n4systems.fieldid.actions.helpers.*;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
@@ -28,6 +29,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.asset.AssetSaveService;
@@ -55,6 +57,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 
     @Autowired
     protected UserService userService;
+    @Autowired
+    protected UserGroupService userGroupService;
     @Autowired
     private RecurringScheduleService recurringScheduleService;
 
@@ -1118,6 +1122,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 
     public List<User> getAssignees() {
         return userService.getExaminers();
+    }
+
+    public List<UserGroup> getUserGroups() {
+        return userGroupService.getActiveUserGroups();
     }
 
 	public boolean isUseAjaxPagination() {

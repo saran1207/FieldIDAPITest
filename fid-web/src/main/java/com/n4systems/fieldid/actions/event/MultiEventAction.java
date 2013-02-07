@@ -13,6 +13,7 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValues;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValuesFinder;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.handlers.CommonEventTypeHandler;
@@ -28,6 +29,7 @@ import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteriaContainer;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
 import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.ConfigContext;
@@ -79,6 +81,8 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 
     @Autowired
     protected UserService userService;
+    @Autowired
+    protected UserGroupService userGroupService;
 
     public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
@@ -433,5 +437,8 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
         return userService.getExaminers();
     }
 
+    public List<UserGroup> getUserGroups() {
+        return userGroupService.getActiveUserGroups();
+    }
 
 }

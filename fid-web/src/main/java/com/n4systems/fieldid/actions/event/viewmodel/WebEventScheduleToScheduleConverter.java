@@ -4,6 +4,7 @@ import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.model.*;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
 import java.util.Date;
@@ -36,9 +37,14 @@ public class WebEventScheduleToScheduleConverter {
         openEvent.setDueDate(scheduledDate);
         openEvent.setOwner(asset.getOwner());
         openEvent.setEventResult(EventResult.VOID);
-        if (webSchedule.getAssignee()!=null) {
-            User user = loaderFactory.createFilteredIdLoader(User.class).setId(webSchedule.getAssignee()).load();
-            openEvent.setAssignee(user);
+        if (webSchedule.getAssignee() != null) {
+            if (webSchedule.getAssignee().startsWith("U")) {
+                User user = loaderFactory.createFilteredIdLoader(User.class).setId(Long.valueOf(webSchedule.getAssignee().substring(1))).load();
+                openEvent.setAssignedUserOrGroup(user);
+            } else if(webSchedule.getAssignee().startsWith("G")) {
+                UserGroup userGroup = loaderFactory.createFilteredIdLoader(UserGroup.class).setId(Long.valueOf(webSchedule.getAssignee().substring(1))).load();
+                openEvent.setAssignedUserOrGroup(userGroup);
+            }
         }
 		
 		if (webSchedule.getJob() != null) {

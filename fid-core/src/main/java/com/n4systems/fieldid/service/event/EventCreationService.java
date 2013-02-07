@@ -52,7 +52,7 @@ public class EventCreationService extends FieldIdPersistenceService {
             openEvent.setOwner(eventScheduleBundle.getAsset().getOwner());
             openEvent.setProject(eventScheduleBundle.getJob());
             openEvent.setDueDate(eventScheduleBundle.getScheduledDate());
-            openEvent.setAssignee(eventScheduleBundle.getAssginee());
+            openEvent.setAssignedUserOrGroup(eventScheduleBundle.getAssginee());
             nextEventScheduleService.createNextSchedule(openEvent);
         }
         return savedEvent;

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.asset.summary;
 
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
+import com.n4systems.fieldid.wicket.components.asset.events.table.EventStateIcon;
 import com.n4systems.fieldid.wicket.components.asset.events.table.OpenActionsCell;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -8,9 +9,7 @@ import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.services.date.DateService;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -29,27 +28,7 @@ public class UpcomingEventsPanel extends Panel {
             protected void populateItem(ListItem<Event> item) {
                 Event schedule = item.getModelObject();
 
-                ContextImage scheduleIcon;
-                if(schedule.getAssignee() != null) {
-
-                    if (isPastDue(schedule)) {
-                        item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-assigned-overdue.png"));
-                        scheduleIcon.add(new AttributeAppender("title",  new FIDLabelModel("label.open_assigned_overdue", schedule.getAssignee().getDisplayName())));
-                    } else {
-                        item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-assigned.png"));
-                        scheduleIcon.add(new AttributeAppender("title",  new FIDLabelModel("label.assignee_is", schedule.getAssignee().getDisplayName())));
-                    }
-                    scheduleIcon.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
-                } else {
-                    if (isPastDue(schedule)) {
-                        item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open-overdue.png"));
-                        scheduleIcon.add(new AttributeAppender("title", new FIDLabelModel("label.open_overdue").getObject()));
-                    } else {
-                        item.add(scheduleIcon = new ContextImage("scheduleIcon", "images/event-open.png"));
-                        scheduleIcon.add(new AttributeAppender("title", new FIDLabelModel("label.event_open").getObject()));
-                    }
-                    scheduleIcon.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
-                }
+                item.add(new EventStateIcon("scheduleIcon", item.getModel()).setRenderBodyOnly(true));
 
                 item.add(new Label("upcomingEventType", schedule.getType().getName()));
                 

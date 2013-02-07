@@ -69,7 +69,12 @@
 
         <div class="infoSet">
             <label class="label"><@s.text name="label.assignee"/></label>
-            <@s.select name="assignee" id="assignee" list="assignees" listKey="id" listValue="displayName" emptyOption="true" theme="fieldid"/>
+            <@s.select name="assignee" id="assignee" emptyOption="true" theme="fieldid">
+                <#if !userGroups.isEmpty()>
+                    <@s.optgroup label="Users Groups" list="userGroups" listKey="keyForStruts" listValue="name" />
+                </#if>
+                <@s.optgroup label="Users" list="assignees" listKey="keyForStruts" listValue="displayName" />
+            </@s.select>
         </div>
 
         <div class="blockSeparated">

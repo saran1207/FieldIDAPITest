@@ -10,7 +10,7 @@ public class WebEventSchedule {
 
 	private String typeName;
 	private String jobName;
-    private Long assignee;
+    private String assignee;
     private String assigneeName;
 
 	private boolean autoScheduled;
@@ -64,11 +64,11 @@ public class WebEventSchedule {
 		this.autoScheduled = autoScheduled;
 	}
 
-    public Long getAssignee() {
+    public String getAssignee() {
         return assignee;
     }
 
-    public void setAssignee(Long assignee) {
+    public void setAssignee(String assignee) {
         this.assignee = assignee;
     }
 
