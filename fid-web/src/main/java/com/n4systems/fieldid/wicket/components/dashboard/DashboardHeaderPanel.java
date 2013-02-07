@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.wicket.components.dashboard;
 
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.services.dashboard.DashboardService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -51,19 +53,23 @@ public class DashboardHeaderPanel extends Panel {
         layoutListView.setOutputMarkupPlaceholderTag(true);
         add(layoutListView);
 
-        add(new AjaxLink<Void>("addWidgetsLink") {
+        AjaxLink addWidgetsLink;
+        add(addWidgetsLink = new AjaxLink<Void>("addWidgetsLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 onAddWidgets(target);
             }
         });
+        addWidgetsLink.add(new AttributeAppender("title", new FIDLabelModel("label.tooltip.add_new_widget")));
 
-        add(new AjaxLink<Void>("manageDashboardLink") {
+        AjaxLink manageDashboardLink;
+        add(manageDashboardLink = new AjaxLink<Void>("manageDashboardLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 onManageDashboard(target);
             }
         });
+        manageDashboardLink.add(new AttributeAppender("title", new FIDLabelModel("label.tooltip.manage_dashboard")));
 
     }
 
@@ -71,6 +77,11 @@ public class DashboardHeaderPanel extends Panel {
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/dashboard_layout_list.js");
         response.renderCSSReference("style/dashboard/header.css");
+        response.renderCSSReference("style/tipsy/tipsy.css");
+        response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
+        // CAVEAT : https://github.com/jaz303/tipsy/issues/19
+        // after ajax call, tipsy tooltips will remain around so need to remove them explicitly.
+        response.renderOnDomReadyJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
     }
 
     protected void onManageDashboard(AjaxRequestTarget target) { }
