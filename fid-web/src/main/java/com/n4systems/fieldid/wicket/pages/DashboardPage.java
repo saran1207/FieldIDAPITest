@@ -128,8 +128,8 @@ public class DashboardPage extends FieldIDFrontEndPage {
         columnsContainer.add(createColumnContainer("sortableColumn2", new PropertyModel<List<WidgetDefinition>>(currentLayoutModel, "columns[1].widgets"), 1));
 
         add(configurationWindow = new DialogModalWindow("configWindow"));
-        configurationWindow.setInitialWidth(700);
-        configurationWindow.setInitialHeight(500);
+        configurationWindow.setInitialWidth(800);
+        configurationWindow.setInitialHeight(600);
 
         configurationWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
             @Override

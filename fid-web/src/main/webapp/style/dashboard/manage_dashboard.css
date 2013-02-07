@@ -7,7 +7,7 @@
 
 .manage_title h2 {
     font-size: 2em;
-    margin-left: 25px;
+    margin-left: 55px;
     padding: 10px 0;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .addAction .form input[type="text"] {
-    width: 430px;
+    width: 530px;
     margin-top: 3px;
 }
 
@@ -55,8 +55,8 @@
     padding-right: 5px;
 }
 
-.layoutView, .layoutView label, .layoutView span {
-    width: 475px;
+.layoutView, .layoutView label {
+    width: 575px;
 }
 
 .layoutListView a.rename_only {

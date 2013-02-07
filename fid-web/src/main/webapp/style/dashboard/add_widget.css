@@ -7,13 +7,13 @@
 
 .add_widget_title h2 {
     font-size: 2em;
-    margin-left: 50px;
+    margin-left: 80px;
     padding: 10px 0;
 }
 
 .widget_details {
     padding: 20px 10px;
-    width: 300px;
+    width: 350px;
     height: 25px;
     float: left;
 }
@@ -21,7 +21,7 @@
 .widget_details label, .widget_details span {
     float: left;
     padding-left: 5px;
-    width: 230px;
+    width: 280px;
 }
 
 .widget_details span.mattButton{
