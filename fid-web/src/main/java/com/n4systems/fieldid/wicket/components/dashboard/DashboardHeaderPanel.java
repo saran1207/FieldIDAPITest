@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.dashboard;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.dashboard.CurrentLayoutModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.services.dashboard.DashboardService;
@@ -24,12 +25,11 @@ public class DashboardHeaderPanel extends Panel {
     @SpringBean
     private DashboardService dashboardService;
 
+
     public DashboardHeaderPanel(String id) {
         super(id);
 
-        final DashboardLayout selectedLayout = dashboardService.findLayout();
-
-        add(new Label("name", new PropertyModel<DashboardLayout>(selectedLayout, "name")));
+        add(new Label("name", new PropertyModel<DashboardLayout>(new CurrentLayoutModel(), "name")));
 
         ListView<DashboardLayout> layoutListView = new ListView<DashboardLayout>("layoutList", createDashboardLayoutsModel()) {
             @Override
@@ -38,6 +38,7 @@ public class DashboardHeaderPanel extends Panel {
                 Link<Void> selectLink = new Link<Void>("link") {
                     @Override
                     public void onClick() {
+                        DashboardLayout selectedLayout = dashboardService.findLayout();
                         selectedLayout.setSelected(false);
                         layout.setSelected(true);
                         dashboardService.saveLayout(selectedLayout);
@@ -60,6 +61,7 @@ public class DashboardHeaderPanel extends Panel {
                 onAddWidgets(target);
             }
         });
+        addWidgetsLink.setMarkupId("addWidgetsLink");
         addWidgetsLink.add(new AttributeAppender("title", new FIDLabelModel("label.tooltip.add_new_widget")));
 
         AjaxLink manageDashboardLink;

@@ -42,7 +42,20 @@ public class ManageDashboardPanel extends Panel {
                 item.add(name = new Label("name", new PropertyModel<DashboardLayout>(layout, "name")));
                 name.setOutputMarkupId(true);
 
-                item.add(new Label("widgetCount", new FIDLabelModel("label.widget_count", layout.getWidgetCount(), WidgetType.values().length)));
+                AjaxLink widgetsLink;
+                item.add(widgetsLink = new AjaxLink<Void>("widgetsLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        DashboardLayout selectedLayout = dashboardService.findLayout();
+                        selectedLayout.setSelected(false);
+                        layout.setSelected(true);
+                        dashboardService.saveLayout(selectedLayout);
+                        dashboardService.saveLayout(layout);
+                        onSelectedWidgetConfig(target);
+                    }
+                });
+                widgetsLink.add(new Label("widgetCount", new FIDLabelModel("label.widget_count", layout.getWidgetCount(), WidgetType.values().length)));
+
                 final FIDFeedbackPanel feedbackPanel;
 
                 final Form<Void> editForm = new Form("editForm");
@@ -95,7 +108,6 @@ public class ManageDashboardPanel extends Panel {
                         deleteLink.setVisible(true);
                         feedbackPanel.setVisible(false);
                         target.add(ManageDashboardPanel.this);
-                        onAddNewDashboard(target);
                     }
 
                     @Override
@@ -137,7 +149,19 @@ public class ManageDashboardPanel extends Panel {
 
         add(addLayoutForm);
 
+        add(new AjaxLink<Void>("closeLink") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onCloseWindow(target);
+            }
+        });
+
     }
+
+    protected void onSelectedWidgetConfig(AjaxRequestTarget target) {}
+
+    protected void onCloseWindow(AjaxRequestTarget target) {}
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -164,6 +188,4 @@ public class ManageDashboardPanel extends Panel {
             }
         };
     }
-
-    public void onAddNewDashboard(AjaxRequestTarget target) {}
 }

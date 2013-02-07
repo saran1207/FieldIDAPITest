@@ -46,7 +46,7 @@
 }
 
 .addAction .form input[type="text"] {
-    width: 530px;
+    width: 525px;
     margin-top: 3px;
 }
 
@@ -56,9 +56,25 @@
 }
 
 .layoutView, .layoutView label {
-    width: 575px;
+    width: 560px;
 }
 
 .layoutListView a.rename_only {
     margin-left: 70px;
+}
+
+.closeLink {
+    font-size: 1.2em;
+    position: absolute;
+    bottom: 10px;
+    right: 35px;
+}
+
+.listViewContainer{
+    overflow-y: auto;
+    max-height: 400px
+}
+
+* .listViewContainer {
+   height: expression( this.scrollHeight > 399 ? "400px" : "auto" ); /* sets max-height for IE */
 }

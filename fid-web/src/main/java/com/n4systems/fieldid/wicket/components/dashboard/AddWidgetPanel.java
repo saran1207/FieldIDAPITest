@@ -65,6 +65,14 @@ public class AddWidgetPanel extends Panel {
         widgetsContainer.add(widgetList);
         add(widgetsContainer);
 
+        add(new AjaxLink<Void>("closeLink") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onCloseWindow(target);
+            }
+        });
+
     }
 
     @Override
@@ -93,4 +101,6 @@ public class AddWidgetPanel extends Panel {
     }
 
     protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) { }
+
+    protected void onCloseWindow(AjaxRequestTarget target) {}
 }

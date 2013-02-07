@@ -55,7 +55,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
     IModel<DashboardLayout> currentLayoutModel;
 
     private DialogModalWindow configurationWindow;
-    private ModalWindow widgetConfigurationWindow;
+    private DialogModalWindow widgetConfigurationWindow;
     
     private BaseOrg org;
 
@@ -104,7 +104,19 @@ public class DashboardPage extends FieldIDFrontEndPage {
         content.add(headerPanel = new DashboardHeaderPanel("headerPanel") {
             @Override
             protected void onManageDashboard(AjaxRequestTarget target) {
-                configurationWindow.setContent(new ManageDashboardPanel(configurationWindow.getContentId()));
+                configurationWindow.setContent(new ManageDashboardPanel(configurationWindow.getContentId()){
+                    @Override
+                    public void onSelectedWidgetConfig(AjaxRequestTarget target) {
+                        repaintDashboard(target);
+                        configurationWindow.close(target);
+                        target.appendJavaScript("$('#addWidgetsLink').trigger('click');");
+                    }
+
+                    @Override
+                    protected void onCloseWindow(AjaxRequestTarget target) {
+                        configurationWindow.close(target);
+                    }
+                });
                 configurationWindow.show(target);
             }
 
@@ -116,6 +128,11 @@ public class DashboardPage extends FieldIDFrontEndPage {
                         WidgetDefinition definition = dashboardService.createWidgetDefinition(type);
                         currentLayoutModel.getObject().getColumns().get(0).getWidgets().add(0, definition);
                         saveAndRepaintDashboard(target);
+                    }
+
+                    @Override
+                    protected void onCloseWindow(AjaxRequestTarget target) {
+                        configurationWindow.close(target);
                     }
                 });
                 configurationWindow.show(target);
@@ -139,7 +156,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
             }
         });
 
-        columnsContainer.add(widgetConfigurationWindow = new ModalWindow("widgetConfigWindow"));
+        columnsContainer.add(widgetConfigurationWindow = new DialogModalWindow("widgetConfigWindow"));
         widgetConfigurationWindow.setInitialWidth(500);
         widgetConfigurationWindow.setInitialHeight(390);
 
@@ -250,6 +267,10 @@ public class DashboardPage extends FieldIDFrontEndPage {
     private void saveAndRepaintDashboard(AjaxRequestTarget target) {
         currentLayoutModel.getObject().setTenant(getTenant());
         dashboardService.saveLayout(currentLayoutModel.getObject());
+        repaintDashboard(target);
+    }
+
+    private void repaintDashboard(AjaxRequestTarget target) {
         setContentVisibility();
         target.add(content);
         target.appendJavaScript("listenForLayoutListClick();");

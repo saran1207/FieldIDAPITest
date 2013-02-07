@@ -9,19 +9,20 @@
         <img src="/fieldid/images/manage-dashboard-large.png"/>
         <h2><wicket:message key="label.manage_dashboard"/></h2>
     </div>
-
-    <div wicket:id="layoutListView" class="layoutListView">
-        <div class="layoutView">
-            <label wicket:id="name"/>
-            <span wicket:id="widgetCount"/>
+    <div class="listViewContainer">
+        <div wicket:id="layoutListView" class="layoutListView">
+            <div class="layoutView">
+                <label wicket:id="name"/>
+                <a wicket:id="widgetsLink"><span wicket:id="widgetCount"/></a>
+            </div>
+            <form class="form" wicket:id="editForm">
+                <div wicket:id="feedbackPanel"/>
+                <input type="text" wicket:id="nameField">
+                <a class="mattButton" wicket:id="saveButton"><wicket:message key="label.save"/></a>
+            </form>
+            <a class="mattButton" wicket:id="edit"><wicket:message key="label.rename"/></a>
+            <a class="mattButton" wicket:id="delete"><wicket:message key="label.delete"/></a>
         </div>
-        <form class="form" wicket:id="editForm">
-            <div wicket:id="feedbackPanel"/>
-            <input type="text" wicket:id="nameField">
-            <a class="mattButton" wicket:id="saveButton"><wicket:message key="label.save"/></a>
-        </form>
-        <a class="mattButton" wicket:id="edit"><wicket:message key="label.rename"/></a>
-        <a class="mattButton" wicket:id="delete"><wicket:message key="label.delete"/></a>
     </div>
 
     <div class="addAction">
@@ -32,6 +33,9 @@
         </form>
     </div>
 
+    <div class="closeLink">
+        <a wicket:id="closeLink" class="blue-submit"><wicket:message key="label.finished"/></a>
+    </div>
 
 </wicket:panel>
 
