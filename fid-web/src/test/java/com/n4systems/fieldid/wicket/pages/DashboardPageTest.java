@@ -106,7 +106,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	public void testAddWidget() throws MalformedURLException {
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(4);  // have to add some expectations because our asserts actually trigger calls...yecccch.
+		expectLastCall().times(5);  // have to add some expectations because our asserts actually trigger calls...yecccch.
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
         expectLastCall().times(2);
         dashboardService.saveLayout(layout);
@@ -148,7 +148,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(4);
+		expectLastCall().times(5);
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
         expectLastCall().times(2);
         expect(dashboardService.createWidgetDefinition(WidgetType.JOBS_ASSIGNED)).andReturn(new WidgetDefinition(WidgetType.JOBS_ASSIGNED));
@@ -179,7 +179,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	public void testRemoveWidget() throws MalformedURLException {
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(3);
+		expectLastCall().times(4);
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
         expectLastCall().times(2);
         dashboardService.saveLayout(layout);
@@ -206,7 +206,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		layout = createNewDashboardLayout();
 		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(4);
+		expectLastCall().times(5);
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
         expectLastCall().times(2);
         dashboardService.saveLayout(layout);
