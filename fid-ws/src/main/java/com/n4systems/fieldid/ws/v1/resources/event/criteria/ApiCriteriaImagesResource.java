@@ -46,4 +46,17 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 		
 		logger.info("Saved Criteria Image for CriteriaResult: " + apiCriteriaImage.getCriteriaResultSid());
 	}
+	
+	@PUT
+	@Path("multi")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void saveMultiAddEventCriteriaImage(ApiMultiEventCriteriaImage multiEventCriteriaImage) {
+		ApiCriteriaImage apiCriteriaImage = multiEventCriteriaImage.getCriteriaImageTemplate();
+		for(String criteriaResultId : multiEventCriteriaImage.getCriteriaResultIds()) {
+			apiCriteriaImage.setCriteriaResultSid(criteriaResultId);
+			saveCriteriaImage(apiCriteriaImage);
+		}
+		logger.info("Saved Multi Event Attachment for Events: " + multiEventCriteriaImage.getCriteriaResultIds().size());
+	}
 }

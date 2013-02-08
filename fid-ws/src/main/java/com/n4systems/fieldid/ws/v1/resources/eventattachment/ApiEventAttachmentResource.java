@@ -75,7 +75,6 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceService {
 	@Path("multi")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	// Unlike Multi Add Asset, Here we only have one image but multiple events.
 	public void multiAddEventAttachment(ApiMultiEventAttachment multiEventAttachment) throws IOException {
 		ApiEventAttachment apiEventAttachment = multiEventAttachment.getEventAttachmentTemplate();
 		for(String eventId : multiEventAttachment.getEventIds()) {

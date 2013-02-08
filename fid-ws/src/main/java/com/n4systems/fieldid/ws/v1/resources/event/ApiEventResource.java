@@ -91,6 +91,16 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			apiEvent.setSid(eventItem.getEventId());
 			apiEvent.setAssetId(eventItem.getAssetId());
 			
+			int resultIndex = -1;
+			if(apiEvent.getForm() != null) {
+				for(ApiCriteriaSectionResult sectionResult : apiEvent.getForm().getSections()) {
+					for(ApiCriteriaResult criteriaResult : sectionResult.getCriteria()) {
+						criteriaResult.setSid(eventItem.getResults().remove(0).getSid());
+						// NOTE: In the future we can set recommendations, deficiencies collection's sids too if we want.
+					}
+				}
+			}
+			
 			Event existingEvent = null;
 			if(eventItem.isScheduled()) {
 				apiEvent.setEventScheduleId(eventItem.getEventId());
