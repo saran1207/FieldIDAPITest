@@ -25,6 +25,7 @@ import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
+import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.CriteriaResult;
@@ -95,7 +96,15 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			if(apiEvent.getForm() != null) {
 				for(ApiCriteriaSectionResult sectionResult : apiEvent.getForm().getSections()) {
 					for(ApiCriteriaResult criteriaResult : sectionResult.getCriteria()) {
+						// Set sid to eventItem's results and remove it from the list.
+						// These sids are sent by client so it can be used to look up when sending criteria images later.
 						criteriaResult.setSid(eventItem.getResults().remove(0).getSid());
+						
+						// Set actions' assetId to eventItem's assetId.
+						for(ApiEventSchedule action : criteriaResult.getActions()) {
+							action.setAssetId(eventItem.getAssetId());
+						}
+						
 						// NOTE: In the future we can set recommendations, deficiencies collection's sids too if we want.
 					}
 				}
