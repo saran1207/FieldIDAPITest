@@ -13,11 +13,11 @@
 
 .layoutListView {
     margin: 0 15px;
-    padding: 20px 5px;
+    padding: 20px 5px 10px;
     border-bottom: #CCC solid 1px;
 }
 
-.layoutListView * {
+.layoutListView, .layoutListView * {
     float: left;
 }
 
@@ -26,7 +26,6 @@
 }
 
 .layoutListView a.mattButton, .addAction a.mattButton{
-    float: none;
     margin-left: 5px;
 }
 
@@ -38,6 +37,10 @@
 
 .layoutListView .form input[type="text"] {
     width: 250px;
+}
+
+.layoutListView a.saveButton {
+    margin-top: -2px;
 }
 
 .addAction {
@@ -53,6 +56,10 @@
 .addAction a img{
     vertical-align: middle;
     padding-right: 5px;
+}
+
+.addAction a {
+    float: none;
 }
 
 .layoutView, .layoutView label {
