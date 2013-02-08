@@ -185,7 +185,7 @@
     margin-top:5px;
     margin-bottom:5px;
     height:11px;
-    padding:6px;
+    padding:7px;
     font-size:11px;
     border-left:1px solid #9c9c9c;
     border-top:1px solid #9c9c9c;
@@ -194,11 +194,10 @@
 }
 
 .filterInput {
-    padding:5px;
+    padding: 5px;
     width:300px;
     font-size:11px;
-    margin-top:5px;
-    margin-bottom:5px;
+    margin: 5px 0 5px 0;
     float:left;
     border:1px solid #9c9c9c;
 }

@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 public class TipsyBehavior extends Behavior {
 
     private static final String TIPSY_JS  = "$('%s').tipsy({gravity: '%s', fade:true, delayIn:250, live:true})";
+    private boolean hideTooltipsOnLinkClick = false;
     private String selector = null;
     private Gravity gravity;
     private String title = null;
@@ -45,9 +46,17 @@ public class TipsyBehavior extends Behavior {
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         response.renderCSSReference("style/tipsy/tipsy.css");
         response.renderOnDomReadyJavaScript(String.format(TIPSY_JS, getSelector(component), gravity.toString().toLowerCase()));
+        if (hideTooltipsOnLinkClick) {
+            response.renderOnDomReadyJavaScript("$('a.tipsy-tooltip').click(function() { $('.tipsy').remove(); })");
+        }
     }
 
     private String getSelector(Component component) {
         return selector==null ? "#"+component.getMarkupId() : selector;
+    }
+
+    public TipsyBehavior hideTooltipsOnLinkClick() {
+        hideTooltipsOnLinkClick = true;
+        return this;
     }
 }

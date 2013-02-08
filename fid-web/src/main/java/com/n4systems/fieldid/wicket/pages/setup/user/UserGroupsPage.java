@@ -101,10 +101,10 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
                 final WebMarkupContainer actionsForArchivedGroups = new WebMarkupContainer("actionsForArchivedGroups");
 
                 Component archiveLink = createArchiveLink(item.getModel());
-                archiveLink.add(new TipsyBehavior(getString("label.archive")));
+                archiveLink.add(new TipsyBehavior(getString("label.archive")).hideTooltipsOnLinkClick());
                 actionsForActiveGroups.add(archiveLink);
                 actionsForActiveGroups.add(new AjaxLink<Void>("editLink") {
-                    { add(new TipsyBehavior(getString("label.edit"))); }
+                    { add(new TipsyBehavior(getString("label.edit")).hideTooltipsOnLinkClick()); }
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         actionsForActiveGroups.setVisible(false);
@@ -204,7 +204,7 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
 
     private Component createUnarchiveLink(final IModel<UserGroup> model) {
         return new AjaxLink<Void>("unArchiveLink") {
-            { add(new TipsyBehavior(getString("label.unarchive"))); }
+            { add(new TipsyBehavior(getString("label.unarchive")).hideTooltipsOnLinkClick()); }
             @Override
             public void onClick(AjaxRequestTarget target) {
                 userGroupService.unArchiveGroup(model.getObject());
