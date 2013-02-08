@@ -108,6 +108,7 @@
 
 .kpi .bar {
     opacity:.6;
+    cursor: pointer;
 }
 
 .kpi .bar-chart .bar:hover {
