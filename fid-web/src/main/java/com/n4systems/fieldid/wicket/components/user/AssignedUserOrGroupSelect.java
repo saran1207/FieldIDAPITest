@@ -1,49 +1,67 @@
 package com.n4systems.fieldid.wicket.components.user;
 
 import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
+import com.n4systems.fieldid.wicket.components.renderer.BlankOptionChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.select.GroupedDropDownChoice;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.UserGroupsModel;
 import com.n4systems.model.user.CanHaveEventsAssigned;
+import com.n4systems.model.user.UnassignedIndicator;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import java.util.List;
+
 public class AssignedUserOrGroupSelect extends Panel {
 
-    public AssignedUserOrGroupSelect(String id, IModel<CanHaveEventsAssigned> assigneeModel, boolean allowGroupSelection) {
+    public AssignedUserOrGroupSelect(String id, IModel<CanHaveEventsAssigned> assigneeModel,
+             IModel<List<User>> usersModel, IModel<List<UserGroup>> userGroupsModel,
+             IModel<List<CanHaveEventsAssigned>> assigneesModel) {
+
         super(id);
 
-        ExaminersModel examinersModel = new ExaminersModel();
-        UserGroupsModel userGroupsModel = new UserGroupsModel();
+        IChoiceRenderer<CanHaveEventsAssigned> unassignedOrAssigneeRenderer =
+                new BlankOptionChoiceRenderer<CanHaveEventsAssigned>(new FIDLabelModel("label.unassigned"),
+                        new ListableChoiceRenderer<CanHaveEventsAssigned>(), UnassignedIndicator.UNASSIGNED);
 
-        AssigneesModel assigneesModel = new AssigneesModel(userGroupsModel, examinersModel);
-
-        if (allowGroupSelection && !userGroupsModel.getObject().isEmpty()) {
-            add(new GroupedDropDownChoice<CanHaveEventsAssigned, Class>("assigneeSelect", assigneeModel, assigneesModel, new ListableChoiceRenderer<CanHaveEventsAssigned>()) {
+        if (!userGroupsModel.getObject().isEmpty()) {
+            add(new GroupedDropDownChoice<CanHaveEventsAssigned, Class>("assigneeSelect", assigneeModel, assigneesModel, unassignedOrAssigneeRenderer) {
                 {
                     setNullValid(true);
                     add(new JChosenBehavior());
                 }
+
                 @Override
                 protected Class getGroup(CanHaveEventsAssigned choice) {
-                    return choice.getClass();
+                    // Unfortunately some of these items may be security enhanced. Could we figure out a better way to group these?
+                    if (User.class.isAssignableFrom(choice.getClass())) {
+                        return User.class;
+                    } else if (UserGroup.class.isAssignableFrom(choice.getClass())) {
+                        return UserGroup.class;
+                    }
+                    return UnassignedIndicator.class;
                 }
 
                 @Override
                 protected String getGroupLabel(Class group) {
-                    if (group.equals(User.class)) {
+                    if (group == User.class) {
                         return getString("label.user");
+                    } else if (group == UserGroup.class) {
+                        return getString("label.user_group");
                     }
-                    return getString("label.user_group");
+                    return "";
                 }
             });
         } else {
-            add(new DropDownChoice<CanHaveEventsAssigned>("assigneeSelect", new PropertyModel<CanHaveEventsAssigned>(this, "assignee"), examinersModel, new ListableChoiceRenderer<CanHaveEventsAssigned>())
+            add(new DropDownChoice<CanHaveEventsAssigned>("assigneeSelect", new PropertyModel<CanHaveEventsAssigned>(this, "assignee"), usersModel, unassignedOrAssigneeRenderer)
                     .setNullValid(true)
                     .add(new JChosenBehavior()));
         }

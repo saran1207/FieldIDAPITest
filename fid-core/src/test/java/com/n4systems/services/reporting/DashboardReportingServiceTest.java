@@ -543,7 +543,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         assertEquals(assetType, result.getAssetType());
         assertEquals(eventType, result.getEventType());
         assertEquals(WorkflowState.OPEN, result.getWorkflowState());
-        assertEquals(user.getId(), result.getAssigneeId());
+        assertEquals(user.getId(), result.getAssignee());
 
         verifyTestMocks();
     }
@@ -587,7 +587,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         assertEquals(feb1_2011, result.getDueDateRange().getTo());
         assertEquals(priority, result.getPriority());
         assertEquals(WorkflowState.OPEN, result.getWorkflowState());
-        assertEquals(user.getId(), result.getAssigneeId());
+        assertEquals(user.getId(), result.getAssignee());
         assertEquals(eventTypeGroup, result.getEventTypeGroup());
 
         verifyTestMocks();

@@ -172,7 +172,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         Preconditions.checkArgument(bar != null, "must pass in one of " + EventService.ActionBar.values());
         EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
         if (config.getUser()!=null) {
-            criteria.setAssigneeId(config.getUser().getId());
+            criteria.setAssignee(config.getUser());
         }
 
         criteria.setDueDateRange(config.getDateRange());
@@ -233,7 +233,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
         criteria.setAssetType(config.getAssetType());
         criteria.setEventType(config.getEventType());
-        criteria.setAssigneeId(config.getUser()!=null ? config.getUser().getId() : null);
+        criteria.setAssignee(config.getUser());
         criteria.setWorkflowState(WorkflowState.OPEN);
         return criteria;
     }

@@ -1,23 +1,25 @@
 package com.n4systems.fieldid.wicket.components.renderer;
 
-import com.n4systems.model.api.Listable;
-import com.n4systems.util.GroupedListingPair;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
-public class BlankOptionChoiceRenderer<T extends GroupedListingPair> implements IChoiceRenderer<T> {
+import java.io.Serializable;
+
+public class BlankOptionChoiceRenderer<T extends Serializable> implements IChoiceRenderer<T> {
 
     private IModel<String> blankLabel;
     private IChoiceRenderer<T> wrappedRenderer;
+    private T referenceToConsiderBlank;
 
-    public BlankOptionChoiceRenderer(IModel<String> blankLabel, IChoiceRenderer<T> wrappedRenderer) {
+    public BlankOptionChoiceRenderer(IModel<String> blankLabel, IChoiceRenderer<T> wrappedRenderer, T referenceToConsiderBlank) {
         this.blankLabel = blankLabel;
         this.wrappedRenderer = wrappedRenderer;
+        this.referenceToConsiderBlank = referenceToConsiderBlank;
     }
 
     @Override
     public Object getDisplayValue(T object) {
-        if (object.getId().equals(0L)) {
+        if (referenceToConsiderBlank == object) {
             return blankLabel.getObject();
         }
         return wrappedRenderer.getDisplayValue(object);

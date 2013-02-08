@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class GroupedUsersForTenantModel extends FieldIDSpringModel<List<User>> {
+public class GroupedVisibleUsersModel extends FieldIDSpringModel<List<User>> {
 
     @SpringBean
     private UserService userService;

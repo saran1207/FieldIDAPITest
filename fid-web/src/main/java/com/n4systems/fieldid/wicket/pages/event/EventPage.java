@@ -30,7 +30,7 @@ import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
-import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.*;
@@ -140,7 +140,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             add(new Label("referenceNumber", new PropertyModel<String>(event, "asset.customerRefNumber")));
 
             GroupedUserPicker groupedUserPicker;
-            add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(EventPage.this, "assignedTo"), new GroupedUsersForTenantModel()));
+            add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(EventPage.this, "assignedTo"), new GroupedVisibleUsersModel()));
             groupedUserPicker.setNullValid(true);
             groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 

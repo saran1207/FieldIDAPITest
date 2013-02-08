@@ -2,7 +2,10 @@ package com.n4systems.model.search;
 
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.user.CanHaveEventsAssigned;
+import com.n4systems.model.user.UnassignedIndicator;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
 import org.hibernate.annotations.IndexColumn;
@@ -37,7 +40,14 @@ public class EventReportCriteria extends SearchCriteria {
     private User assignedTo;
 
     @Column(name="assignee")
-    private Long assigneeId;
+    private User assignee;
+
+    @ManyToOne
+    @JoinColumn(name="assignedUserGroup")
+    private UserGroup assignedUserGroup;
+
+    @Column(name="unassignedOnly")
+    private boolean unassignedOnly;
 
     @ManyToOne
     @JoinColumn(name="eventTypeId")
@@ -319,12 +329,13 @@ public class EventReportCriteria extends SearchCriteria {
         this.eventStatus = eventStatus;
     }
 
-    public Long getAssigneeId() {
-        return assigneeId;
+    public User getAssignee() {
+        return assignee;
     }
 
-    public void setAssigneeId(Long assigneeId) {
-        this.assigneeId = assigneeId;
+    public void setAssignee(User assignee) {
+        this.assignedUserGroup = null;
+        this.assignee = assignee;
     }
 
     public PriorityCode getPriority() {
@@ -334,4 +345,47 @@ public class EventReportCriteria extends SearchCriteria {
     public void setPriority(PriorityCode priority) {
         this.priority = priority;
     }
+
+    public UserGroup getAssignedUserGroup() {
+        return assignedUserGroup;
+    }
+
+    public void setAssignedUserGroup(UserGroup assignedUserGroup) {
+        this.assignee = null;
+        this.assignedUserGroup = assignedUserGroup;
+    }
+
+    public boolean isUnassignedOnly() {
+        return unassignedOnly;
+    }
+
+    public void setUnassignedOnly(boolean unassignedOnly) {
+        this.unassignedOnly = unassignedOnly;
+    }
+
+    public void setAssignedUserOrGroup(CanHaveEventsAssigned assignee) {
+        if (assignee instanceof User) {
+            setUnassignedOnly(false);
+            setAssignee((User) assignee);
+        } else if (assignee instanceof UserGroup) {
+            setUnassignedOnly(false);
+            setAssignedUserGroup((UserGroup) assignee);
+        } else if (assignee == UnassignedIndicator.UNASSIGNED) {
+            setUnassignedOnly(true);
+            setAssignee(null);
+            setAssignedUserGroup(null);
+        } else if (assignee == null) {
+            setUnassignedOnly(false);
+            setAssignee(null);
+            setAssignedUserGroup(null);
+        }
+    }
+
+    public CanHaveEventsAssigned getAssignedUserOrGroup() {
+        if (getAssignee() != null) {
+            return getAssignee();
+        }
+        return getAssignedUserGroup();
+    }
+
 }

@@ -61,7 +61,13 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
         addSimpleTerm(searchTerms, "priority.id", getId(criteriaModel.getPriority()));
         addSimpleTerm(searchTerms, "eventResult", criteriaModel.getEventResult());
         addSimpleTerm(searchTerms, "eventStatus", criteriaModel.getEventStatus());
-        addSimpleTermOrBlank(searchTerms, "assignee.id", criteriaModel.getAssigneeId());
+        if (criteriaModel.isUnassignedOnly()) {
+            addNullTerm(searchTerms, "assignee");
+            addNullTerm(searchTerms, "assignedGroup");
+        } else {
+            addSimpleTerm(searchTerms, "assignee", criteriaModel.getAssignee());
+            addSimpleTerm(searchTerms, "assignedGroup", criteriaModel.getAssignedUserGroup());
+        }
 
         if (criteriaModel.getWorkflowState() == WorkflowState.COMPLETE) {
             addSimpleTerm(searchTerms, "workflowState", Event.WorkflowState.COMPLETED);

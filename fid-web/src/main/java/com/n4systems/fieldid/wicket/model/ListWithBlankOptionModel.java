@@ -1,34 +1,27 @@
 package com.n4systems.fieldid.wicket.model;
 
-import com.n4systems.util.GroupedListingPair;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListWithBlankOptionModel extends LoadableDetachableModel<List<GroupedListingPair>> {
+public class ListWithBlankOptionModel<T> extends LoadableDetachableModel<List<T>> {
 
-    private IModel<List<GroupedListingPair>> wrappedModel;
+    private IModel<List<T>> wrappedModel;
+    private T blankOption;
 
-    public ListWithBlankOptionModel(IModel<List<GroupedListingPair>> wrappedModel) {
+    public ListWithBlankOptionModel(IModel<List<T>> wrappedModel, T blankOption) {
         this.wrappedModel = wrappedModel;
+        this.blankOption = blankOption;
     }
 
     @Override
-    protected List<GroupedListingPair> load() {
-        try {
-            GroupedListingPair blankOption = new GroupedListingPair();
-            blankOption.setId(0L);
-            blankOption.setGroup("");
+    protected List<T> load() {
+        List<T> list = new ArrayList<T>(wrappedModel.getObject());
+        list.add(0, blankOption);
 
-            List<GroupedListingPair> list = new ArrayList<GroupedListingPair>(wrappedModel.getObject());
-            list.add(0, blankOption);
-
-            return list;
-        } catch (Exception e) {
-            throw new RuntimeException("could not instantiate list item class", e);
-        }
+        return list;
     }
 
 }

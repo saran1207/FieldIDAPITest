@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
 import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
-import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.model.EventType;
 import com.n4systems.model.dashboard.widget.ActionsWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
@@ -18,7 +18,7 @@ public class ActionsConfigPanel extends OrgDateWidgetConfigPanel<ActionsWidgetCo
 
     public ActionsConfigPanel(String id, final IModel<ActionsWidgetConfiguration> configModel) {
         super(id, configModel);
-        addConfigElement(new GroupedUserPicker("user", new PropertyModel<User>(configModel, "user"), new GroupedUsersForTenantModel(), false).setNullValid(true));
+        addConfigElement(new GroupedUserPicker("user", new PropertyModel<User>(configModel, "user"), new GroupedVisibleUsersModel(), false).setNullValid(true));
         addConfigElement(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(configModel,"actionType"), new ActionTypesForTenantModel(), new EventTypeChoiceRenderer()).setNullValid(true));
     }
 

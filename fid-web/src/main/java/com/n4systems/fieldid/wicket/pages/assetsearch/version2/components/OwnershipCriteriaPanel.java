@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.version2.components;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
-import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -31,7 +31,7 @@ public class OwnershipCriteriaPanel extends Panel {
         add(locationPicker = new ModalLocationPicker("location", locationModel).setOwner(ownerModel.getObject()));
 
         WebMarkupContainer assignedUserContainer = new WebMarkupContainer("assignedToContainer");
-        GroupedUserPicker groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(getDefaultModel(), "assignedTo"), new GroupedUsersForTenantModel());
+        GroupedUserPicker groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(getDefaultModel(), "assignedTo"), new GroupedVisibleUsersModel());
         groupedUserPicker.setNullValid(true);
         groupedUserPicker.add(new AttributeAppender("data-placeholder", " "));
         assignedUserContainer.add(groupedUserPicker);

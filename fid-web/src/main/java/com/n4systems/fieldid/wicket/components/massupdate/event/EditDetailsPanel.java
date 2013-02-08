@@ -16,7 +16,7 @@ import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantMode
 import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
 import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventstatus.EventStatusesForTenantModel;
-import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.EventBook;
@@ -122,7 +122,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 
 			CheckBox assignedUserCheck = new CheckBox("assignedUserCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[assignedUser]"));
 			GroupedUserPicker groupedUserPicker = new GroupedUserPicker("assignedTo", 
-					new PropertyModel<User>(massUpdateEventModel, "assignedTo"), new GroupedUsersForTenantModel());
+					new PropertyModel<User>(massUpdateEventModel, "assignedTo"), new GroupedVisibleUsersModel());
 			groupedUserPicker.setNullValid(true);
 			groupedUserPicker.add(createCheckOnChangeEvent(assignedUserCheck));
 			WebMarkupContainer assignedUserContainer = new WebMarkupContainer("assignedUserContainer");
