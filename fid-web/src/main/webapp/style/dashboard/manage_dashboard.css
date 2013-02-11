@@ -85,3 +85,7 @@
 * .listViewContainer {
    height: expression( this.scrollHeight > 399 ? "400px" : "auto" ); /* sets max-height for IE */
 }
+
+.closeLink .blue-submit {
+    color: #FFFFFF;
+}

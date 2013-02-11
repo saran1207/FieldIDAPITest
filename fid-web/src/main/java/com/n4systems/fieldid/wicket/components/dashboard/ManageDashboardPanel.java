@@ -58,7 +58,12 @@ public class ManageDashboardPanel extends Panel {
 
                 final FIDFeedbackPanel feedbackPanel;
 
-                final Form<Void> editForm = new Form("editForm");
+                final Form<Void> editForm = new Form("editForm") {
+                    @Override
+                    public boolean isRootForm() {
+                        return false;
+                    }
+                };
                 final AjaxLink editLink;
                 final AjaxLink deleteLink;
 
@@ -124,7 +129,12 @@ public class ManageDashboardPanel extends Panel {
         };
         add(layoutListView);
 
-        Form<Void> addLayoutForm = new Form<Void>("addForm");
+        Form<Void> addLayoutForm = new Form<Void>("addForm") {
+            @Override
+            public boolean isRootForm() {
+                return false;
+            }
+        };
         final FIDFeedbackPanel feedbackPanel;
         addLayoutForm.add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
