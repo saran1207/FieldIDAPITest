@@ -36,13 +36,13 @@ public class ManageDashboardPanel extends Panel {
 
         ListView<DashboardLayout> layoutListView = new ListView<DashboardLayout>("layoutListView", createDashboardLayoutsModel()) {
             @Override
-            protected void populateItem(ListItem<DashboardLayout> item) {
+            protected void populateItem(final ListItem<DashboardLayout> item) {
                 final DashboardLayout layout = item.getModelObject();
                 final Label name;
                 item.add(name = new Label("name", new PropertyModel<DashboardLayout>(layout, "name")));
                 name.setOutputMarkupId(true);
 
-                AjaxLink widgetsLink;
+                final AjaxLink widgetsLink;
                 item.add(widgetsLink = new AjaxLink<Void>("widgetsLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -82,10 +82,8 @@ public class ManageDashboardPanel extends Panel {
                         name.setVisible(false);
                         setVisible(false);
                         deleteLink.setVisible(false);
-                        target.add(name);
-                        target.add(editForm);
-                        target.add(this);
-                        target.add(deleteLink);
+                        widgetsLink.setVisible(false);
+                        target.add(item);
                     }
                 });
 
@@ -106,8 +104,9 @@ public class ManageDashboardPanel extends Panel {
                         name.setVisible(true);
                         editLink.setVisible(true);
                         deleteLink.setVisible(true);
+                        widgetsLink.setVisible(true);
                         feedbackPanel.setVisible(false);
-                        target.add(ManageDashboardPanel.this);
+                        target.add(item);
                     }
 
                     @Override
@@ -120,6 +119,7 @@ public class ManageDashboardPanel extends Panel {
                 editForm.setVisible(false);
                 editForm.setOutputMarkupPlaceholderTag(true);
                 item.add(editForm);
+                item.setOutputMarkupId(true);
             }
         };
         add(layoutListView);
