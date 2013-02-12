@@ -82,6 +82,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     private IModel<ProofTestInfo> proofTestInfo;
     private SchedulePicker schedulePicker;
 
+    protected EventResult eventResult;
+
     private WebMarkupContainer schedulesContainer;
 
     @Override
@@ -229,7 +231,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             if (event.getObject() instanceof Event) {
                 Event masterEvent = (Event) event.getObject();
-                DropDownChoice resultSelect = new DropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(event, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
+                DropDownChoice resultSelect = new DropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(EventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
                 resultSelect.add(new UpdateComponentOnChange());
                 resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
                 add(resultSelect);
@@ -380,4 +382,11 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         }
     }
 
+    public EventResult getEventResult() {
+        return eventResult;
+    }
+
+    public void setEventResult(EventResult eventResult) {
+        this.eventResult = eventResult;
+    }
 }

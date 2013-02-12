@@ -38,6 +38,7 @@ public class PerformEventPage extends EventPage {
                 event = Model.of(newMasterEvent);
             }
 
+            setEventResult(event.getObject().getEventResult());
             fileAttachments = new ArrayList<FileAttachment>();
 
             doAutoSchedule();
@@ -69,6 +70,7 @@ public class PerformEventPage extends EventPage {
     @Override
     protected AbstractEvent doSave() {
         event.getObject().storeTransientCriteriaResults();
+        event.getObject().setEventResult(getEventResult());
 
         FileDataContainer fileDataContainer = proofTestEditPanel.getFileDataContainer();
 

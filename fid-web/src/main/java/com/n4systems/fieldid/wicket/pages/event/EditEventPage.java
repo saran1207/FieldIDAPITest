@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventResult;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
@@ -27,7 +28,11 @@ public class EditEventPage extends EventPage {
         uniqueId = parameters.get("uniqueID").toLong();
         event = Model.of(loadExistingEvent());
         event.getObject().setResultFromCriteriaAvailable();
-
+        if(event.getObject().isResultFromCriteriaAvailable()) {
+            setEventResult(EventResult.VOID);
+        } else {
+            setEventResult(event.getObject().getEventResult());
+        }
         fileAttachments = new ArrayList<FileAttachment>(event.getObject().getAttachments());
     }
 
@@ -47,6 +52,7 @@ public class EditEventPage extends EventPage {
         saveEventBookIfNecessary();
 
         Event editedEvent = event.getObject();
+        editedEvent.setEventResult(getEventResult());
         criteriaEditService.storeCriteriaChanges(editedEvent);
         editedEvent.storeTransientCriteriaResults();
         return eventCreationService.updateEvent(editedEvent, proofTestEditPanel.getFileDataContainer(), fileAttachments);
