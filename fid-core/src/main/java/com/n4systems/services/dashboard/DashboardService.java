@@ -54,6 +54,12 @@ public class DashboardService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
+    public Long countDashboardLayouts() {
+        QueryBuilder<DashboardLayout> query = createUserSecurityBuilder(DashboardLayout.class);
+        query.addSimpleWhere("user.id", securityContext.getUserSecurityFilter().getUserId());
+        return persistenceService.count(query);
+    }
+
     public DashboardLayout getDashboardLayout(Long id) {
         return persistenceService.find(DashboardLayout.class, id);
     }

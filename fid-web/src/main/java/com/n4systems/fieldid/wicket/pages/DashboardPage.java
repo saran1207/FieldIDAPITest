@@ -101,7 +101,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
 		content.setOutputMarkupId(true);
 
         final DashboardHeaderPanel headerPanel;
-        content.add(headerPanel = new DashboardHeaderPanel("headerPanel") {
+        add(headerPanel = new DashboardHeaderPanel("headerPanel") {
             @Override
             protected void onManageDashboard(AjaxRequestTarget target) {
                 configurationWindow.setContent(new ManageDashboardPanel(configurationWindow.getContentId()){

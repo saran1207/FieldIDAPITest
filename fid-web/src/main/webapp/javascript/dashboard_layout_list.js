@@ -1,8 +1,10 @@
 var layoutListShown = false;
 
 function showList() {
-    jQuery('#layoutList').slideDown(100);
-    layoutListShown = true;
+    if ($('#layoutCount').val() > 1) {
+        jQuery('#layoutList').slideDown(100);
+        layoutListShown = true;
+    }
 }
 
 function hideList() {
@@ -21,6 +23,9 @@ function toggleList() {
 function listenForLayoutListClick() {
     jQuery('#layoutListLink').click(toggleList);
     jQuery('#layoutList').mouseleave(hideList);
+    if ($('#layoutCount').val() == 1) {
+        $('#downArrow').hide();
+    }
 }
 
 jQuery(document).ready(function() { listenForLayoutListClick(); });

@@ -108,7 +108,9 @@ public class ManageDashboardPanel extends Panel {
                         editForm.setVisible(false);
                         name.setVisible(true);
                         editLink.setVisible(true);
-                        deleteLink.setVisible(true);
+                        if(item.getIndex() > 0) {
+                            deleteLink.setVisible(true);
+                        }
                         widgetsLink.setVisible(true);
                         feedbackPanel.setVisible(false);
                         target.add(item);

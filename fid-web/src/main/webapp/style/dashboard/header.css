@@ -1,5 +1,9 @@
+.headerPanel {
+    padding-bottom: 15px;
+}
+
 .selectLayout {
-    width: 944px;
+    width: 860px;
 }
 
 .selectLayout h2{
@@ -15,30 +19,29 @@
     float:left;
 }
 
-.headerPanel{
-    padding-bottom: 15px;
-}
-
 .configureLayout {
-    width: 56px;
+    width: 165px;
 }
 
-.configureLayout a{
-    margin-left: 5px;
+.configureLayout a.mattButton {
+    margin-right: 5px;
 }
 
 .downArrow {
     vertical-align: middle;
+    margin-left: 3px;
 }
 
 .layoutList {
-    margin-left: 130px;
+    margin-left: 132px;
     padding: 10px;
-    border: 1px solid #A0A0A0;
+    border: 1px solid #DDDDDD;
+    box-shadow:5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
     width: 220px;
     position: absolute;
-    top: 50px;
+    top: 30px;
     background: white;
+    z-index: 10;
 }
 
 .layoutList label {
@@ -46,7 +49,7 @@
 }
 
 .layoutItem {
-    padding-bottom: 5px;
+    line-height: 30px;
 }
 
 

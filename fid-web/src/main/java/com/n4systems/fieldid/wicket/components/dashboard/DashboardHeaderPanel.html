@@ -9,14 +9,16 @@
     <div class="selectLayout">
         <h2><wicket:message key="label.dashboard"/> /
             <a id="layoutListLink" href="javascript:void(0);">
-                <span wicket:id="name"/> <img class="downArrow" src="/fieldid/images/down-arrow.png">
+                <span wicket:id="name"/><img id="downArrow" class="downArrow" src="/fieldid/images/down-arrow.png">
             </a>
         </h2>
     </div>
 
+    <input type="hidden" wicket:id="layoutCount"/>
+
     <div class="configureLayout">
-        <a class="tipsy-tooltip" wicket:id="addWidgetsLink"><img src="/fieldid/images/widget-small.png"/></a>
-        <a class="tipsy-tooltip" wicket:id="manageDashboardLink"><img src="/fieldid/images/manage-dashboard-small.png"/></a>
+        <a class="tipsy-tooltip mattButton" wicket:id="addWidgetsLink"><wicket:message key="label.widgets"/></a>
+        <a class="tipsy-tooltip mattButton" wicket:id="manageDashboardLink"><wicket:message key="label.dashboards"/></a>
     </div>
 
     <div id="layoutList" class="layoutList" style="display: none">

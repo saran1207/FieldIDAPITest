@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -54,6 +55,10 @@ public class DashboardHeaderPanel extends Panel {
         layoutListView.setOutputMarkupPlaceholderTag(true);
         add(layoutListView);
 
+        HiddenField<Long> layoutCount;
+        add(layoutCount = new HiddenField<Long>("layoutCount", createDashboardLayoutCountModel()));
+        layoutCount.setMarkupId("layoutCount");
+
         AjaxLink addWidgetsLink;
         add(addWidgetsLink = new AjaxLink<Void>("addWidgetsLink") {
             @Override
@@ -94,6 +99,15 @@ public class DashboardHeaderPanel extends Panel {
             @Override
             protected List<DashboardLayout> load() {
                 return dashboardService.findDashboardLayouts(true);
+            }
+        };
+    }
+
+    private LoadableDetachableModel<Long> createDashboardLayoutCountModel() {
+        return new LoadableDetachableModel<Long>() {
+            @Override
+            protected Long load() {
+                return dashboardService.countDashboardLayouts();
             }
         };
     }

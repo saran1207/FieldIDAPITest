@@ -30,11 +30,11 @@
 
 .widget_details label {
     font-size: 1.4em;
-    font-weight: bold;
 }
 
 .widget_details span {
     font-size: 1.1em;
+    color: #666666
 }
 
 .widget_details a {
