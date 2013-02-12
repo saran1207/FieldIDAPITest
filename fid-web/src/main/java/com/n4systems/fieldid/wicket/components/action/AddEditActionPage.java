@@ -7,11 +7,17 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
 import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
+import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
+import com.n4systems.fieldid.wicket.model.user.UserGroupsModel;
 import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
@@ -38,6 +44,8 @@ import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import static ch.lambdaj.Lambda.on;
 
 public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
@@ -69,7 +77,14 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             scheduledDatePicker.getDateTextField().setRequired(true);
 
             add(scheduledDatePicker);
-            add(new FidDropDownChoice<User>("assignee", new PropertyModel<User>(getModel(), "assignee"), new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true).setRequired(true));
+
+            ExaminersModel usersModel = new ExaminersModel();
+            UserGroupsModel userGroupsModel = new UserGroupsModel();
+            add(new AssignedUserOrGroupSelect("assignee",
+                    ProxyModel.of(eventModel, on(Event.class).getAssignedUserOrGroup()),
+                    usersModel, userGroupsModel,
+                    new AssigneesModel(userGroupsModel, usersModel)).setRequired(true));
+
             add(new DropDownChoice<EventType>("type", new PropertyModel<EventType>(getModel(), "type"), new ActionTypesForTenantModel(), new ListableChoiceRenderer<EventType>()).setNullValid(true).setRequired(true));
 
             addQuickDateLinks(scheduledDatePicker, scheduledDateModel);

@@ -1,22 +1,26 @@
 package com.n4systems.fieldid.wicket.components.massupdate.openevent;
 
-import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
+import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
+import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
+import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
+import com.n4systems.fieldid.wicket.model.user.UserGroupsModel;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
+
+import static ch.lambdaj.Lambda.on;
 
 public class AssignDetailsPanel extends AbstractMassUpdatePanel {
     
@@ -33,10 +37,12 @@ public class AssignDetailsPanel extends AbstractMassUpdatePanel {
         public AssignEventForm(String id, MassUpdateEventModel massUpdateEventModel) {
             super(id, new CompoundPropertyModel<MassUpdateEventModel>(massUpdateEventModel));
 
-            add( new FidDropDownChoice<User>("assignee",
-                    new PropertyModel<User>(massUpdateEventModel, "event.assignee"),
-                    getUsers(),
-                    new ChoiceRenderer<User>("assignToDisplayName")).setNullValid(false).setRequired(true));
+            ExaminersModel usersModel = new ExaminersModel();
+            UserGroupsModel userGroupsModel = new UserGroupsModel();
+            add(new AssignedUserOrGroupSelect("assignee",
+                    ProxyModel.of(massUpdateEventModel, on(MassUpdateEventModel.class).getEvent().getAssignedUserOrGroup()),
+                    usersModel, userGroupsModel,
+                    new AssigneesModel(userGroupsModel, usersModel)).setRequired(true));
 
             add(new Button("assignButton"));
 
@@ -65,8 +71,8 @@ public class AssignDetailsPanel extends AbstractMassUpdatePanel {
         String errorMessage = "";
         Event event = model.getEvent();
 
-        if(event.getAssignee() == null) {
-            return new FIDLabelModel("errors.required",new FIDLabelModel("title.assignee").getObject()).getObject();
+        if (event.getAssignedUserOrGroup() == null) {
+            return new FIDLabelModel("errors.required",new FIDLabelModel("label.assignee").getObject()).getObject();
         }
 
         return errorMessage;

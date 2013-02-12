@@ -69,6 +69,9 @@ public class EventAudit extends BaseEntity {
     @Column(name="assignee", nullable = true)
     private String assignee;
 
+    @Column(name="assigned_group_id", nullable = true)
+    private Long assignedGroupId;
+
     public EventAudit() {
     }
 
@@ -210,6 +213,14 @@ public class EventAudit extends BaseEntity {
 
     public void setAssignee(String assignee) {
         this.assignee = assignee;
+    }
+
+    public Long getAssignedGroupId() {
+        return assignedGroupId;
+    }
+
+    public void setAssignedGroupId(Long assignedGroupId) {
+        this.assignedGroupId = assignedGroupId;
     }
 }
 

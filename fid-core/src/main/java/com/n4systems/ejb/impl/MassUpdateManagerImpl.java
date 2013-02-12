@@ -262,8 +262,9 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
                 }
 
                 if(updateKey.equals("assignee")) {
-                    audit.setAssignee(eventChanges.getAssignee().getUserID());
-                    changeTarget.setAssignee(eventChanges.getAssignee());
+                    audit.setAssignee(eventChanges.getAssignee() == null ? null : eventChanges.getAssignee().getUserID());
+                    audit.setAssignedGroupId(eventChanges.getAssignedGroup() == null ? null : eventChanges.getAssignedGroup().getId());
+                    changeTarget.setAssignedUserOrGroup(eventChanges.getAssignedUserOrGroup());
                 }
 			}
 

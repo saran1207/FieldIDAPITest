@@ -5,14 +5,13 @@ import com.n4systems.fieldid.wicket.components.renderer.BlankOptionChoiceRendere
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.select.GroupedDropDownChoice;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
-import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
-import com.n4systems.fieldid.wicket.model.user.UserGroupsModel;
 import com.n4systems.model.user.CanHaveEventsAssigned;
 import com.n4systems.model.user.UnassignedIndicator;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -65,6 +64,12 @@ public class AssignedUserOrGroupSelect extends Panel {
                     .setNullValid(true)
                     .add(new JChosenBehavior()));
         }
+    }
+
+    public Component setRequired(boolean required) {
+        FormComponent assigneeSelect = (FormComponent) get("assigneeSelect");
+        assigneeSelect.setRequired(required);
+        return this;
     }
 
 }

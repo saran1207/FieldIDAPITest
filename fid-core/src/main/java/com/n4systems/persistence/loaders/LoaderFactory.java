@@ -364,6 +364,10 @@ public class LoaderFactory implements Serializable {
 		return new OrgByNameLoader(filter);
 	}
 
+    public UserGroupForNameLoader createUserGroupForNameLoader() {
+        return new UserGroupForNameLoader(filter);
+    }
+
 	public Loader<Pager<TypedOrgConnection>> createPaginatedConnectionListLoader() {
 		return new PaginatedConnectionListLoader(filter);
 	}

@@ -37,7 +37,11 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
     public ActionDetailsPage(final IModel<CriteriaResult> criteriaResultModel, final IModel<Event> actionModel) {
         add(new Label("priority", new PropertyModel<String>(actionModel, "priority.name")));
         add(new Label("notes", new PropertyModel<String>(actionModel, "notes")));
-        add(new Label("assignee", new PropertyModel<String>(actionModel, "assignee.fullName")));
+        if (actionModel.getObject().getAssignee() != null) {
+            add(new Label("assignee", new PropertyModel<String>(actionModel, "assignee.fullName")));
+        } else {
+            add(new Label("assignee", new PropertyModel<String>(actionModel, "assignedGroup.name")));
+        }
         add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(actionModel, "dueDate"),getCurrentUser().getTimeZone()));
         Link actionsListLink = new Link("actionsListLink") {
             @Override public void onClick() {
