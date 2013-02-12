@@ -84,6 +84,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		expectLastCall().times(3);	//extra invocation for assertion using getList().
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
         expectLastCall().times(1);
+        expect(dashboardService.countDashboardLayouts()).andReturn(1L);
         replay(dashboardService);
 		expect(widgetFactory.createWidget(testWidgetDefinition)).andReturn(testWidget);
 		replay(widgetFactory);
@@ -106,9 +107,10 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	public void testAddWidget() throws MalformedURLException {
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(5);  // have to add some expectations because our asserts actually trigger calls...yecccch.
+		expectLastCall().times(4);  // have to add some expectations because our asserts actually trigger calls...yecccch.
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
-        expectLastCall().times(2);
+        expectLastCall().times(1);
+        expect(dashboardService.countDashboardLayouts()).andReturn(1L);
         dashboardService.saveLayout(layout);
         expect(dashboardService.createWidgetDefinition(WidgetType.NEWS)).andReturn(new WidgetDefinition(WidgetType.NEWS));
 		replay(dashboardService);
@@ -148,9 +150,10 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(5);
+		expectLastCall().times(4);
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
-        expectLastCall().times(2);
+        expectLastCall().times(1);
+        expect(dashboardService.countDashboardLayouts()).andReturn(1L);
         expect(dashboardService.createWidgetDefinition(WidgetType.JOBS_ASSIGNED)).andReturn(new WidgetDefinition(WidgetType.JOBS_ASSIGNED));
         dashboardService.saveLayout(layout);
 		replay(dashboardService);
@@ -179,9 +182,10 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	public void testRemoveWidget() throws MalformedURLException {
         expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(4);
+		expectLastCall().times(3);
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
-        expectLastCall().times(2);
+        expectLastCall().times(1);
+        expect(dashboardService.countDashboardLayouts()).andReturn(1L);
         dashboardService.saveLayout(layout);
 		replay(dashboardService);
 		expect(widgetFactory.createWidget(testWidgetDefinition)).andReturn(testWidget);
@@ -206,9 +210,10 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		layout = createNewDashboardLayout();
 		expectingConfig();
 		expect(dashboardService.findLayout()).andReturn(layout);
-		expectLastCall().times(5);
+		expectLastCall().times(4);
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
-        expectLastCall().times(2);
+        expectLastCall().times(1);
+        expect(dashboardService.countDashboardLayouts()).andReturn(1L);
         dashboardService.saveLayout(layout);
         expect(dashboardService.createWidgetDefinition(WidgetType.NEWS)).andReturn(new WidgetDefinition(WidgetType.NEWS));
         replay(dashboardService);
@@ -327,14 +332,14 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		}
 
 		public void addWidget(WidgetType widgetType) {
-            getWicketTester().executeAjaxEvent(get("content", "headerPanel", "addWidgetsLink"), "onclick");
+            getWicketTester().executeAjaxEvent(get("headerPanel", "addWidgetsLink"), "onclick");
             assertVisible(get("configWindow"));
             getWicketTester().executeAjaxEvent(getAddWidgetLink(widgetType), "onclick");
 
         }
 
 		public DashboardHeaderPanel getHeaderPanel() {
-			return (DashboardHeaderPanel) get("content", "headerPanel");
+			return (DashboardHeaderPanel) get("headerPanel");
 		}
 
 		public ListView<?> getSortableColumn(int i) {
