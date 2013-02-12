@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "recurrence_time")
-public class RecurrenceTime extends BaseEntity {
+public class RecurrenceTime extends BaseEntity implements Comparable<RecurrenceTime> {
 
     private Integer month;
     private Integer day;
@@ -76,7 +76,7 @@ public class RecurrenceTime extends BaseEntity {
         return month;
     }
 
-    public int getDayOfMonth() {
+    public int getDay() {
         return day;
     }
 
@@ -123,5 +123,19 @@ public class RecurrenceTime extends BaseEntity {
             period = period.withMonths(month-1).withDays(day-1);
         }
         return period;
+    }
+
+
+    public int getMonthOfYear() {
+        return month==null ? 0 : month;
+    }
+
+    public int getDayOfMonth() {
+        return day==null ? 0 : day;
+    }
+
+    @Override
+    public int compareTo(RecurrenceTime other) {
+        return getMonthOfYear()*10000000-other.getMonthOfYear()*10000000 + getDayOfMonth()*10000-other.getDayOfMonth()*10000 + getHour()*100-other.getHour()*100 + getMinute()-other.getMinute();
     }
 }

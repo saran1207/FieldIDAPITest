@@ -1,15 +1,16 @@
 package com.n4systems.model;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "recurrence")
@@ -18,7 +19,7 @@ public class Recurrence extends BaseEntity {
     private static final Logger logger=Logger.getLogger(Recurrence.class);
 
     @OneToMany(mappedBy = "recurrence", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<RecurrenceTime> times = new HashSet<RecurrenceTime>();
+    private Set<RecurrenceTime> times = new TreeSet<RecurrenceTime>();
 
     @Enumerated(EnumType.STRING)
     @Column(name="recurrence_type")
@@ -74,7 +75,7 @@ public class Recurrence extends BaseEntity {
     }
 
     public void setTimes(Set<RecurrenceTime> times) {
-        this.times = times;
+        this.times = Sets.newTreeSet(times);
     }
 
     @Override

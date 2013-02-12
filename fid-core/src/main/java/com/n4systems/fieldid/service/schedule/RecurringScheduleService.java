@@ -167,11 +167,16 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
     class ScheduleTimeIterator implements Iterable<LocalDateTime>, Iterator<LocalDateTime> {
 
         private Recurrence recurrence;
-        private LocalDate fromDate = LocalDate.now().minusDays(1);
+        private LocalDate fromDate;
         private Iterator<LocalDateTime> times = null;
 
         public ScheduleTimeIterator(Recurrence recurrence) {
             this.recurrence = recurrence;
+            fromDate = initializeStartDate();
+        }
+
+        private LocalDate initializeStartDate() {
+            return recurrence.getType().previous();
         }
 
         @Override public boolean hasNext() {
@@ -185,17 +190,22 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         @Override
         public LocalDateTime next() {
             if (times!=null && times.hasNext()) {
-                return times.next();
-            } else {
-                fromDate = recurrence.getType().getNext(fromDate);
-                times = getTimesForDay(fromDate).iterator();
-                return next();
+                while (times.hasNext()) {
+                    LocalDateTime next = times.next();
+                    if (!next.isBefore(LocalDateTime.now())) {
+                        return next;
+                    }
+                }
             }
+            fromDate = recurrence.getType().getNext(fromDate);
+            times = getTimesForDay(fromDate).iterator();
+            return next();
         }
 
         public List<LocalDateTime> getTimesForDay(LocalDate nextDate) {
             LocalDateTime base = new LocalDateTime(nextDate.toDate());
             List<LocalDateTime> result = Lists.newArrayList();
+            // only add times after today!
             for (RecurrenceTime time:recurrence.getTimes()) {
                 result.add(base.plus(time.toPeriod()));
             }

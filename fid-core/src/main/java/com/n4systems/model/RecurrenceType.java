@@ -1,8 +1,9 @@
  package com.n4systems.model;
 
  import com.google.common.base.Preconditions;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.LocalDate;
+ import org.joda.time.DateTimeConstants;
+ import org.joda.time.LocalDate;
+ import org.joda.time.LocalDateTime;
 
  import java.util.EnumSet;
 
@@ -145,4 +146,41 @@ import org.joda.time.LocalDate;
          return weekly.contains(this);
      }
 
+     public LocalDate previous() {
+         LocalDate now = LocalDate.now();
+         switch (this) {
+             case ANNUALLY:
+                 return now.minusYears(1);
+             case DAILY:
+             case WEEKLY_MONDAY:
+             case WEEKLY_TUESDAY:
+             case WEEKLY_WEDNESDAY:
+             case WEEKLY_THURSDAY:
+             case WEEKLY_FRIDAY:
+             case WEEKLY_SATURDAY:
+             case WEEKLY_SUNDAY:
+             case WEEKDAYS:
+                 return now.minusDays(1);
+             case MONTHLY_1ST:
+                 return now.getDayOfMonth()>1?now.withDayOfMonth(1) : now.minusDays(2);
+             case MONTHLY_15TH:
+                 return now.withDayOfMonth(1);
+             case MONTHLY_LAST:
+                 return now.withDayOfMonth(1);
+         }
+         throw new IllegalStateException("recurrence type " + this + " not supported");
+
+     }
+
+     public int getMonthlyDay(LocalDateTime d) {
+         switch (this) {
+             case MONTHLY_1ST:
+                 return 1;
+             case MONTHLY_15TH:
+                 return 15;
+             case MONTHLY_LAST:
+                 return d.monthOfYear().getMaximumValue();
+         }
+         throw new IllegalArgumentException("MonthlyDay only applicable on monthly types = Monthly 1st/15th/last");
+     }
  }

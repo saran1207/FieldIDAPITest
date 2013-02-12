@@ -3,7 +3,6 @@ package com.n4systems.fieldid.service.schedule;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.junit.FieldIdServiceTest;
-import com.n4systems.testutils.QueryMatcher;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.model.*;
@@ -11,10 +10,9 @@ import com.n4systems.model.builders.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
+import com.n4systems.testutils.QueryMatcher;
 import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
-import org.easymock.internal.ClassExtensionHelper;
-import org.easymock.internal.IMocksControlState;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDateTime;
@@ -51,6 +49,11 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
     @Override
     public void setUp() {
         super.setUp();
+    }
+
+    @Override
+    protected LocalDateTime getTestTime() {
+        return new LocalDateTime(april2_2011.toDate());
     }
 
     @Test
@@ -106,7 +109,7 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
 
     @Test
     public void test_annually() {
-        LocalDateTime when = new LocalDateTime().withYear(2011).withMonthOfYear(DateTimeConstants.FEBRUARY).withDayOfMonth(28).withHourOfDay(12).withMinuteOfHour(43);
+        LocalDateTime when = new LocalDateTime().withYear(2012).withMonthOfYear(DateTimeConstants.APRIL).withDayOfMonth(1).withHourOfDay(12).withMinuteOfHour(43);
 
         Recurrence recurrence = new Recurrence(RecurrenceType.ANNUALLY).withDayAndTime(when.toDate());
         Iterator<LocalDateTime> times = recurringScheduleService.getScheduledTimesIterator(recurrence).iterator();
@@ -115,8 +118,6 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
         for (int i = 0; i < 10; i++) {
             LocalDateTime actual = times.next();
             assertEquals(expected, actual);
-            System.out.println(actual);
-            System.out.println(expected);
             expected = expected.plusYears(1);
         }
     }
@@ -126,7 +127,10 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
         Recurrence recurrence = new Recurrence(RecurrenceType.WEEKDAYS).withTime(new LocalTime(hour = 7, minute = 27));
         Iterator<LocalDateTime> times = recurringScheduleService.getScheduledTimesIterator(recurrence).iterator();
 
-        LocalDateTime expected = new LocalDateTime(firstMonIn2011.toDate()).withHourOfDay(hour).withMinuteOfHour(minute);
+        LocalDateTime expected = new LocalDateTime(getTestTime().plusDays(1)).withHourOfDay(hour).withMinuteOfHour(minute);
+        if (getTestTime().getDayOfWeek()>=DateTimeConstants.FRIDAY) {
+            expected = expected.plusDays(DateTimeConstants.SUNDAY-getTestTime().getDayOfWeek());
+        }
         for (int i = 0; i < 100; i++) {
             assertWeekdays(expected, times);
             expected = expected.plusWeeks(1);
@@ -156,23 +160,29 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
         Iterator<LocalDateTime> times = recurringScheduleService.getScheduledTimesIterator(recurrence).iterator();
 
         assertMultipleTimes(expected, times);
-
     }
 
     @Test
     public void test_multipleDaysAnnual() {
         Recurrence recurrence = new Recurrence(RecurrenceType.ANNUALLY);
 
-        recurrence.withDayAndTime(DateTimeConstants.FEBRUARY, 29, 10, 15);
+        recurrence.withDayAndTime(DateTimeConstants.FEBRUARY, 29, 10, 15);  // note leap year implications!
         recurrence.withDayAndTime(DateTimeConstants.MARCH, 1, 18, 9);
-        recurrence.withDayAndTime(DateTimeConstants.DECEMBER, 15, 22, 59);
         recurrence.withDayAndTime(DateTimeConstants.AUGUST, 31, 7, 1);
+        recurrence.withDayAndTime(DateTimeConstants.DECEMBER, 15, 22, 59);
 
         List<LocalDateTime> expected = Lists.newArrayList(
-                    new LocalDateTime().withDate(2011,3,1).withTime(10, 15, 0, 0),
-                    new LocalDateTime().withDate(2011,3,1).withTime(18, 9, 0, 0),
-                    new LocalDateTime().withDate(2011,12,15).withTime(22,59,0,0),
-                    new LocalDateTime().withDate(2011,8,31).withTime(7, 1, 0, 0)
+                new LocalDateTime().withDate(2011,8,31).withTime(7, 1, 0, 0),
+                new LocalDateTime().withDate(2011,12,15).withTime(22,59,0,0),
+
+                new LocalDateTime().withDate(2012,2,29).withTime(10, 15, 0, 0),
+                new LocalDateTime().withDate(2012,3,1).withTime(18, 9, 0, 0),
+                new LocalDateTime().withDate(2012,8,31).withTime(7, 1, 0, 0),
+                new LocalDateTime().withDate(2012,12,15).withTime(22,59,0,0),
+
+                new LocalDateTime().withDate(2013,3,1).withTime(10, 15, 0, 0),
+                new LocalDateTime().withDate(2013,3,1).withTime(18, 9, 0, 0)
+
                 );
 
         Iterator<LocalDateTime> times = recurringScheduleService.getScheduledTimesIterator(recurrence).iterator();
@@ -189,9 +199,10 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
         LocalDateTime expectedFeb = new LocalDateTime().withDate(2012, 2, 29);
         LocalDateTime expectedMarch = new LocalDateTime().withDate(2012, 3, 1);
 
-        for (int year = getTestTime().getYear(); year<2100; year++) {
-            LocalDateTime expect = (isLeapYear(year) ? expectedFeb : expectedMarch).withYear(year);
-            assertEquals(expect,times.next());
+        for (int year = getTestTime().getYear(); year<2050; year++) {
+            LocalDateTime actual = times.next();
+            LocalDateTime expect = (isLeapYear(actual.getYear()) ? expectedFeb : expectedMarch).withYear(actual.getYear());
+            assertEquals(expect,actual);
         }
     }
 
@@ -253,9 +264,6 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
 
     @Test
     public void test_boundaries() {
-        IMocksControlState state = ClassExtensionHelper.getControl(persistenceService).getState();
-        System.out.println(state);
-
         Recurrence recurrence = new Recurrence(RecurrenceType.DAILY).withTime(new LocalTime(hour = 7, minute = 27));
         Iterable<LocalDateTime> times = recurringScheduleService.getBoundedScheduledTimesIterator(recurrence);
         assertBoundedIterator(times, RecurringScheduleService.DAILY_EVENT_COUNT);
@@ -268,7 +276,15 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
         times = recurringScheduleService.getBoundedScheduledTimesIterator(recurrence);
         assertBoundedIterator(times, RecurringScheduleService.MONTHLY_EVENT_COUNT);
 
-        recurrence = new Recurrence(RecurrenceType.ANNUALLY).withDayAndTime(1, 2, 10, 15);
+        recurrence = new Recurrence(RecurrenceType.ANNUALLY).withDayAndTime(getTestTime().minusMonths(1).toDate());
+        times = recurringScheduleService.getBoundedScheduledTimesIterator(recurrence);
+        assertBoundedIterator(times,RecurringScheduleService.ANNUAL_EVENT_COUNT-1);
+
+        recurrence = new Recurrence(RecurrenceType.ANNUALLY).withDayAndTime(getTestTime().plusMonths(7).toDate());
+        times = recurringScheduleService.getBoundedScheduledTimesIterator(recurrence);
+        assertBoundedIterator(times,RecurringScheduleService.ANNUAL_EVENT_COUNT-1);
+
+        recurrence = new Recurrence(RecurrenceType.ANNUALLY).withDayAndTime(getTestTime().plusMonths(1).toDate());
         times = recurringScheduleService.getBoundedScheduledTimesIterator(recurrence);
         assertBoundedIterator(times,RecurringScheduleService.ANNUAL_EVENT_COUNT);
 
@@ -310,14 +326,14 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
     private void assertWeekly(int day, RecurrenceType type) {
         Recurrence recurrence = new Recurrence(type).withTime(new LocalTime(hour=7,minute=27));
 
-        int jan1Day = jan1_2011.getDayOfWeek();
-        int dayDelta = day - jan1Day;
+        int testTimeDay = getTestTime().getDayOfWeek();
+        int dayDelta = day - testTimeDay;
         if (dayDelta<0) {
             dayDelta = 7+dayDelta;
         }
 
         List<LocalDateTime> expected = Lists.newArrayList();
-        LocalDateTime localDateTime = new LocalDateTime(jan1_2011.toDate()).plusDays(dayDelta).withHourOfDay(hour).withMinuteOfHour(minute);
+        LocalDateTime localDateTime = new LocalDateTime(getTestTime().toDate()).plusDays(dayDelta).withHourOfDay(hour).withMinuteOfHour(minute);
         for (int i = 0; i<100; i++) {
             expected.add(localDateTime);
             localDateTime = localDateTime.plusWeeks(1);
@@ -346,9 +362,13 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
         Recurrence recurrence = new Recurrence(type).withTime(new LocalTime(hour = 15, minute = 53));
 
         List<LocalDateTime> expected = Lists.newArrayList();
+        LocalDateTime time_midnight = new LocalDateTime(getTestTime().toDate());
         for (int i = 0; i<50; i++) {
-            LocalDateTime expect = getExpectedWithDayOfMonth(type, new LocalDateTime(jan1_2011_midnight.plusMonths(i).withHourOfDay(hour).withMinuteOfHour(minute)));
-            expected.add(expect);
+            // monthly 1st delete 0 condition because it's before "now".
+            LocalDateTime expect = getExpectedWithDayOfMonth(type, new LocalDateTime(time_midnight.withHourOfDay(hour).plusMonths(i).withMinuteOfHour(minute)));
+            if (!expect.isBefore(getTestTime())) {
+                expected.add(expect);
+            }
         }
 
         Iterator<LocalDateTime> times = recurringScheduleService.getScheduledTimesIterator(recurrence).iterator();
@@ -364,7 +384,7 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
             results.add(times.next());
         }
         for (LocalDateTime expect:expected) {
-            assertTrue(results.contains(expect));
+            assertTrue("expected time " + expect, results.contains(expect));
         }
     }
 
@@ -375,7 +395,6 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
         }
         for (LocalTime time:expected) {
             LocalDateTime expect = getTestTime().withHourOfDay(time.getHourOfDay()).withMinuteOfHour(time.getMinuteOfHour());
-            System.out.println(expect);
             assertTrue(results.contains(expect));
         }
     }
