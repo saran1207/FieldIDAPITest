@@ -7,6 +7,8 @@ import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
+import com.n4systems.model.user.UserGroupForNameLoader;
 import com.n4systems.persistence.loaders.GlobalIdLoader;
 import com.n4systems.security.UserType;
 
@@ -14,11 +16,13 @@ import java.util.Date;
 
 public class UserToModelConverter extends AbstractViewToModelConverter<User, UserView> {
 	private final OrgByNameLoader orgLoader;
+    private final UserGroupForNameLoader userGroupForNameLoader;
 
-	public UserToModelConverter(GlobalIdLoader<User> externalIdLoader, OrgByNameLoader orgLoader) {
+	public UserToModelConverter(GlobalIdLoader<User> externalIdLoader, OrgByNameLoader orgLoader, UserGroupForNameLoader userGroupForNameLoader) {
 		super(externalIdLoader);
 		this.orgLoader = orgLoader;
-	}
+        this.userGroupForNameLoader = userGroupForNameLoader;
+    }
 
 	@Override
 	public void copyProperties(UserView from, User to, boolean isEdit) throws ConversionException {
@@ -26,6 +30,10 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 							setCustomerName(from.getCustomer()).
 							setDivision(from.getDivision()).
 							load();
+        if (from.getUserGroup() != null) {
+            UserGroup userGroup = userGroupForNameLoader.setName(from.getUserGroup()).load();
+            to.setGroup(userGroup);
+        }
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
 		to.setGlobalId(from.getGlobalId());

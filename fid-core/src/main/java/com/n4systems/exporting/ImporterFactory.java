@@ -59,7 +59,7 @@ public class ImporterFactory {
 	}
 	
 	private UserToModelConverter createUserToModelConverter() {
-		return new UserToModelConverter(loaderFactory.createGlobalIdLoader(User.class), loaderFactory.createOrgByNameLoader());
+		return new UserToModelConverter(loaderFactory.createGlobalIdLoader(User.class), loaderFactory.createOrgByNameLoader(), loaderFactory.createUserGroupForNameLoader());
 	}
 
 	protected AutoAttributeToModelConverter createAutoAttributeToModelConverter(AutoAttributeCriteria criteria) {

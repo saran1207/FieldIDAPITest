@@ -9,6 +9,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import com.n4systems.model.user.UserGroupForNameLoader;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
@@ -32,10 +33,11 @@ public class UserToModelConverterTest {
 		Transaction trans = new DummyTransaction();
 		GlobalIdLoader<User> globalIdLoader = createMock(GlobalIdLoader.class);
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
+        UserGroupForNameLoader groupLoader = createMock(UserGroupForNameLoader.class);
 		
 		UserView user = new UserViewBuilder().withDefaultValues().withGuid(null).build();
 		
-		UserToModelConverter converter = new UserToModelConverter(globalIdLoader, orgLoader);
+		UserToModelConverter converter = new UserToModelConverter(globalIdLoader, orgLoader, groupLoader);
 
 		BaseOrg parentOrg = new PrimaryOrg();
 		parentOrg.setName("resultOf<N4>search");
@@ -62,13 +64,14 @@ public class UserToModelConverterTest {
 		Transaction trans = new DummyTransaction();
 		GlobalIdLoader<User> globalIdLoader = createMock(GlobalIdLoader.class);
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
+        UserGroupForNameLoader groupLoader = createMock(UserGroupForNameLoader.class);
 
 		String password = "somePassword";
 		// leave GUID on so will try to find & update user 
 		UserView user = new UserViewBuilder().withDefaultValues().withAssignPassword("N").withPassword(null).build();
 		User userToBeUpdated = UserBuilder.aFullUser().withFirstName("OLD"+user.getFirstName()).withLastName("OLD"+user.getLastName()).withPassword(password).build();
 
-		UserToModelConverter converter = new UserToModelConverter(globalIdLoader, orgLoader);
+		UserToModelConverter converter = new UserToModelConverter(globalIdLoader, orgLoader, groupLoader);
 
 		BaseOrg parentOrg = new PrimaryOrg();
 		parentOrg.setName("resultOf<N4>search");

@@ -34,6 +34,7 @@ public class UserView extends ExternalModelView {
 	public static final String EMAIL_ADDRESS_FIELD = "Email Address";
 	public static final String ORGANIZATION_FIELD = "Organization";
 	public static final String CUSTOMER_FIELD = "Customer/Job Site";
+    public static final String USER_GROUP = "User Group";
     public static final String IDENTIFIER ="ID";
 	
 	public static UserView newUser() {
@@ -61,6 +62,9 @@ public class UserView extends ExternalModelView {
 
 	@SerializableField(title = "", order = 0, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
 	private final String[] owners = new String[3];
+
+    @SerializableField(title=USER_GROUP, order = 50, validators = {UserGroupExistsValidator.class})
+    private String userGroup;
 	
 	@SerializableField(title=EMAIL_ADDRESS_FIELD, order = 100, validators = {NotNullValidator.class, EmailValidator.class})
 	private String emailAddress;
@@ -125,8 +129,8 @@ public class UserView extends ExternalModelView {
 	private String sendWelcomeEmail;
 	
 	@SerializableField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalUserGlobalIdValidator.class})
-	private String globalId;	
-	
+	private String globalId;
+
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -361,4 +365,11 @@ public class UserView extends ExternalModelView {
 		return owners;
 	}
 
+    public String getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(String userGroup) {
+        this.userGroup = userGroup;
+    }
 }
