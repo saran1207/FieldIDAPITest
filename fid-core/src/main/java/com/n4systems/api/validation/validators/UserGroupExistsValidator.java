@@ -16,7 +16,7 @@ public class UserGroupExistsValidator implements FieldValidator {
             return ValidationResult.pass();
         }
 
-        if (createUserGroupExistsLoader(filter).load()) {
+        if (createUserGroupExistsLoader(filter).setName(fieldValue.toString()).load()) {
             return ValidationResult.pass();
         } else {
             return ValidationResult.fail(UserGroupNotFoundValidatorFail, fieldValue);

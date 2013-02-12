@@ -18,7 +18,7 @@ public class UserGroupForNameExistsLoader extends SecurityFilteredLoader<Boolean
 
     @Override
     protected Boolean load(EntityManager em, SecurityFilter filter) {
-        QueryBuilder<UserGroup> builder = new QueryBuilder<UserGroup>(AssetStatus.class, filter);
+        QueryBuilder<UserGroup> builder = new QueryBuilder<UserGroup>(UserGroup.class, filter);
         builder.addWhere(WhereClauseFactory.create("name", name));
         return builder.entityExists(em);
     }

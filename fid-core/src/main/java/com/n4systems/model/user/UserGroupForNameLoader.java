@@ -18,7 +18,7 @@ public class UserGroupForNameLoader extends SecurityFilteredLoader<UserGroup> {
 
     @Override
     protected UserGroup load(EntityManager em, SecurityFilter filter) {
-        QueryBuilder<UserGroup> builder = new QueryBuilder<UserGroup>(AssetStatus.class, filter);
+        QueryBuilder<UserGroup> builder = new QueryBuilder<UserGroup>(UserGroup.class, filter);
         builder.addWhere(WhereClauseFactory.create("name", name));
         return builder.getSingleResult(em);
     }
