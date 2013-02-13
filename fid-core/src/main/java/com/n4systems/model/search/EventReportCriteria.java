@@ -39,7 +39,8 @@ public class EventReportCriteria extends SearchCriteria {
     @JoinColumn(name="assignedUser")
     private User assignedTo;
 
-    @Column(name="assignee")
+    @ManyToOne
+    @JoinColumn(name="assignee")
     private User assignee;
 
     @ManyToOne

@@ -60,7 +60,7 @@ public class AssignedUserOrGroupSelect extends Panel {
                 }
             });
         } else {
-            add(new DropDownChoice<CanHaveEventsAssigned>("assigneeSelect", new PropertyModel<CanHaveEventsAssigned>(this, "assignee"), usersModel, unassignedOrAssigneeRenderer)
+            add(new DropDownChoice<CanHaveEventsAssigned>("assigneeSelect", assigneeModel, usersModel, unassignedOrAssigneeRenderer)
                     .setNullValid(true)
                     .add(new JChosenBehavior()));
         }
