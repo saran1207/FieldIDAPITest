@@ -39,6 +39,7 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.event.AssignedToUpdate;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -110,15 +111,42 @@ public class ApiEventResource extends FieldIdPersistenceService {
 				}
 			}
 			
-			Event existingEvent = null;
+			Event event = null;
 			if(eventItem.isScheduled()) {
 				apiEvent.setEventScheduleId(eventItem.getEventId());
-				existingEvent = eventService.findByMobileId(eventItem.getEventId(), true);
+				event = eventService.findByMobileId(eventItem.getEventId(), true);
 			} else {
 				apiEvent.setEventScheduleId(null);
 			}
 			
-			createEvent(apiEvent, existingEvent);
+			if(event == null) {
+				event = new Event();
+			}
+			
+			event.setAsset(assetService.findByMobileId(apiEvent.getAssetId(), true));
+			
+			if(multiAddEvent.isCopyAssignedTo()) {
+				User user = event.getAsset().getAssignedUser();
+				apiEvent.setAssignedUserId(user != null ? user.getId() : null);
+			}
+			
+			if(multiAddEvent.isCopyOwner()) {
+				BaseOrg owner = event.getAsset().getOwner();
+				apiEvent.setOwnerId(owner != null ? owner.getId() : null);
+			}
+			
+			if(multiAddEvent.isCopyLocation()) {
+				Location location = event.getAsset().getAdvancedLocation();
+				if(location != null) {
+					apiEvent.setPredefinedLocationId(location.getPredefinedLocation() != null ? location.getPredefinedLocation().getId() : null);
+					apiEvent.setFreeformLocation(location.getFreeformLocation());
+				} else {
+					apiEvent.setPredefinedLocationId(null);
+					apiEvent.setFreeformLocation(null);
+				}
+			}				
+			
+			createEvent(apiEvent, event);
 		}
 	}
 	
@@ -263,9 +291,12 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		event.setCreated(apiEvent.getModified());
 		event.setModified(apiEvent.getModified());		
 		event.setComments(apiEvent.getComments());		
-		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));
-		event.setAsset(assetService.findByMobileId(apiEvent.getAssetId(), true));
+		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));		
 		event.setModifiedBy(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getModifiedById()));
+		
+		if(event.getAsset() == null) { // In the case of MultiEvent, we set event.asset much early on.
+			event.setAsset(assetService.findByMobileId(apiEvent.getAssetId(), true));
+		}
 
 		if (apiEvent.getAssetStatusId() != null) {
 			event.setAssetStatus(persistenceService.findUsingTenantOnlySecurityWithArchived(AssetStatus.class, apiEvent.getAssetStatusId()));
