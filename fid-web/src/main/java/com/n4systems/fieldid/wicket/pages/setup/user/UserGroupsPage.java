@@ -48,6 +48,7 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
     private WebMarkupContainer userGroupsTable;
     private IModel<List<UserGroup>> groupsModel;
     private AddGroupForm addGroupForm;
+    private FilterForm filterForm;
 
     private String nameFilter = null;
     private Archivable.EntityState entityStateFilter = Archivable.EntityState.ACTIVE;
@@ -56,7 +57,7 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
     protected void onInitialize() {
         super.onInitialize();
 
-        add(new FilterForm("filterForm"));
+        add(filterForm = new FilterForm("filterForm"));
         add(addGroupForm = new AddGroupForm("addGroupForm"));
         add(createActiveOrArchivedSelector("activeOrArchivedSelector"));
 
@@ -175,8 +176,9 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
                     userGroup.setName(groupName);
                     userGroup.setTenant(getCurrentUser().getTenant());
                     persistenceService.save(userGroup);
-                    groupId = groupName = null;
-                    target.add(AddGroupForm.this, userGroupsTable);
+                    groupId = groupName = nameFilter = null;
+                    target.add(AddGroupForm.this);
+                    redrawTable(target);
                 }
 
                 @Override
@@ -231,6 +233,7 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
     class FilterForm extends Form {
         public FilterForm(String id) {
             super(id);
+            setOutputMarkupId(true);
             TextField<String> filterField = new TextField<String>("nameFilter", new PropertyModel<String>(UserGroupsPage.this, "nameFilter"));
             filterField.add(new AjaxFormComponentUpdatingBehavior("onkeyup") {
                 @Override
@@ -266,7 +269,7 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
 
     private void redrawTable(AjaxRequestTarget target) {
         groupsModel.detach();
-        target.add(userGroupsTable);
+        target.add(userGroupsTable, filterForm);
         target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
     }
 }

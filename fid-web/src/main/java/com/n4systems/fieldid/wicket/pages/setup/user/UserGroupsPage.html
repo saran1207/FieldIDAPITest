@@ -30,11 +30,11 @@
 
     <div class="pageSection">
 
-    <form wicket:id="filterForm">
+    <form wicket:id="filterForm" autocomplete="off">
         <div class="filterDescription">
             <wicket:message key="label.filter_user_groups"/>
         </div>
-        <input wicket:id="nameFilter" type="text" class="filterInput">
+        <input wicket:id="nameFilter" type="text" class="filterInput" autocomplete="off" onkeypress="if (event.keyCode == 13) { return false; }">
     </form>
 
     <table wicket:id="userGroupsTable" class="list">
