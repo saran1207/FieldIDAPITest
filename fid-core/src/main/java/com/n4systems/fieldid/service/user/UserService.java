@@ -56,6 +56,11 @@ public class UserService extends FieldIdPersistenceService {
         if (!includeSystem) {
             builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "userType", UserType.SYSTEM));
         }
+
+        if (getCurrentUser().getGroup() != null) {
+            builder.addSimpleWhere("group.id", getCurrentUser().getGroup().getId());
+        }
+
         return builder.addOrder("firstName").addOrder("lastName");
     }
 
@@ -140,11 +145,17 @@ public class UserService extends FieldIdPersistenceService {
         SecurityFilter filter = securityContext.getUserSecurityFilter();
         SecurityFilter justTenantFilter = securityContext.getTenantSecurityFilter();
         String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
-                + filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )"
-                + " ORDER BY ub.firstName, ub.lastName";
+                + filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )";
+
+        if (getCurrentUser().getGroup() != null) {
+            queryString += " AND ub.group.id = " + getCurrentUser().getGroup().getId();
+        }
+
+        queryString += " ORDER BY ub.firstName, ub.lastName";
         Query query = getEntityManager().createQuery(queryString);
         filter.applyParameters(query, User.class);
         justTenantFilter.applyParameters(query, User.class);
+
 
         // get the userlist and filter out users not having the create/edit
         return Permissions.filterHasOneOf((List<User>) query.getResultList(), Permissions.ALLEVENT);
