@@ -20,7 +20,8 @@
 }
 
 .configureLayout {
-    width: 165px;
+    position:absolute;
+    right: 0;
 }
 
 .configureLayout a.mattButton {
@@ -57,4 +58,9 @@
     color: #777;
     font-size: 1.2em;
     text-decoration: none;
+}
+
+.printIcon {
+    float:left;
+    padding:5px 10px 0 0;
 }
