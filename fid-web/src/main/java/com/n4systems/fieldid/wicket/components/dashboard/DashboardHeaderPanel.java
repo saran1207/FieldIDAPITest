@@ -11,6 +11,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.HiddenField;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -29,6 +30,8 @@ public class DashboardHeaderPanel extends Panel {
 
     public DashboardHeaderPanel(String id) {
         super(id);
+
+        add(new ContextImage("printIcon", "images/print-icon.png"));
 
         add(new Label("name", new PropertyModel<DashboardLayout>(new CurrentLayoutModel(), "name")));
 
