@@ -43,6 +43,8 @@ import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
+import com.n4systems.fieldid.wicket.pages.user.AddPersonPage;
+import com.n4systems.fieldid.wicket.pages.user.EditPersonPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
@@ -131,6 +133,10 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("viewActionsList", ViewActionsListPage.class);
 
         mountPage("searchOpenEventsForJob", SearchOpenEventsForJobPage.class);
+
+        mountPage("addPerson", AddPersonPage.class);
+        mountPage("editPerson", EditPersonPage.class);
+
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

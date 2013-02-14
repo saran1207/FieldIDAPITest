@@ -12,6 +12,7 @@ ${action.setPageType('user','adduser')!}
 <@s.url id="addFullUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addEmployeeUser"/>
 <@s.url id="addLiteUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addLiteUser"/>
 <@s.url id="addReadOnlyUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addReadOnlyUser"/>
+<@s.url id="addPersonUrl" namespace="/" value="w/addPerson"/>
 
 <div class="horizontalGrouping">
 	
@@ -85,4 +86,6 @@ ${action.setPageType('user','adduser')!}
 			</#if>
 		</div>
 	</#if>
+
+    <input id="addPerson" type="button" value="<@s.text name="label.add_new_person" />" onclick="return redirect('${addPersonUrl}');"/>
 </div>

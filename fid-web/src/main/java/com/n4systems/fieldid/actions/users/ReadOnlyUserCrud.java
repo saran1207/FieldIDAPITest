@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.actions.users;
 
 
-import com.n4systems.fieldid.service.user.UserGroupService;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class ReadOnlyUserCrud extends UserCrud {
@@ -68,6 +67,11 @@ public class ReadOnlyUserCrud extends UserCrud {
 	@Override
 	public boolean isReadOnlyUser() {
 		return true;
-	}	
+	}
+
+    @Override
+    public boolean isPerson() {
+        return false;
+    }
 
 }

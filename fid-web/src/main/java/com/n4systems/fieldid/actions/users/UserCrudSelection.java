@@ -40,4 +40,8 @@ public class UserCrudSelection extends UserCrud {
 		return false;
 	}
 
+    @Override
+    public boolean isPerson() {
+        return false;
+    }
 }

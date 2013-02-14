@@ -179,4 +179,13 @@ public class UserService extends FieldIdPersistenceService {
     public List<User> search(int threshold) {
         return search("",threshold);
     }
+
+    public void create(User user) {
+        persistenceService.save(user);
+    }
+
+    public void update(User user) {
+        persistenceService.update(user);
+    }
+
 }

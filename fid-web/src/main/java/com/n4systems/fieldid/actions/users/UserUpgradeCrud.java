@@ -62,6 +62,11 @@ public class UserUpgradeCrud extends UserCrud {
 		return user.getUserType().equals(UserType.READONLY);
 	}
 
+    @Override
+    public boolean isPerson() {
+        return user.getUserType().equals(UserType.PERSON);
+    }
+
 	@Override
 	protected int processPermissions() {
 		return Permissions.NO_PERMISSIONS;

@@ -1,7 +1,8 @@
 <table class="list" id="userList">
 	<tr>
-		<@s.text id="usernamelabel" name="label.username"/>
-    	<@s.text id="namelabel" name="label.name_first_last"/>
+
+        <@s.text id="usernamelabel" name="label.username"/>
+        <@s.text id="namelabel" name="label.name_first_last"/>
         <@s.text id="usergrouplabel" name="label.user_group"/>
     	<@s.text id="orglabel" name="label.organization"/>
 		<@s.text id="customerlabel" name="label.customer"/>
@@ -9,8 +10,8 @@
   		<@s.text id="emaillabel" name="label.emailaddress"/>
 
 		<#if !isArchivedPage>
-			<#assign columns = ["userID", "", "group", "owner", "owner.customerOrg", "owner.divisionOrg", "emailAddress"]>
-			<#assign labels = ["${usernamelabel}", "${namelabel}", "${usergrouplabel}", "${orglabel}", "${customerlabel}", "${divisionlabel}", "${emaillabel}"]>
+			<#assign columns = ["", "userID", "group", "owner", "owner.customerOrg", "owner.divisionOrg", "emailAddress"]>
+			<#assign labels = ["${namelabel}", "${usernamelabel}", "${usergrouplabel}", "${orglabel}", "${customerlabel}", "${divisionlabel}", "${emaillabel}"]>
 			<#assign sortAction = "userList" >
 		<#else>
 			<#assign columns = ["","owner", "owner.customerOrg", "owner.divisionOrg", "emailAddress"]>
@@ -35,12 +36,16 @@
 	<#assign count=0 >
 	<#list page.list as user>
 		<tr id="user_${user.id!}" >
+            <td>${user.userLabel?html! }</td>
 			<#if !isArchivedPage>
 				<td>
-					<a href="<@s.url action="viewUser" uniqueID="${user.id!}" />" >${(user.userID?html)! }</a>
+                    <#if user.userID?exists>
+					    <a href="<@s.url action="viewUser" uniqueID="${user.id!}" />" >${(user.userID?html)! }</a>
+                    <#else>
+                        &nbsp;
+                    </#if>
 				</td>
 			</#if>
-			<td>${user.userLabel?html! }</td>
             <#if !isArchivedPage>
             <td>
                 <#if user.group?exists>
@@ -74,9 +79,12 @@
 						<#elseif user.liteUser>
 							<@s.url id="archiveUrl" action="liteUserArchive" uniqueID="${(user.id)!}" />
 							<@s.url id="editUrl" action="liteUserEdit" uniqueID="${(user.id)!}" />
-						<#else>
+						<#elseif user.readOnly>
 							<@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
 							<@s.url  id="editUrl" action="readOnlyUserEdit" uniqueID="${(user.id)!}" />
+                        <#else>
+                            <@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
+                            <@s.url  id="editUrl" namespace="/" value="w/editPerson?uniqueID=${(user.id)!}" />
 						</#if>
 						<#if user.id != sessionUser.id>
 							<a href="${editUrl}"/><@s.text name="label.edit"/></a>

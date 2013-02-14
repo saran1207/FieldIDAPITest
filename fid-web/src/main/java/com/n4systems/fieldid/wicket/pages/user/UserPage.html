@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+    <div wicket:id="feedbackPanel"/>
+
+    <form class="fullForm fluidSets" wicket:id="addUserForm">
+        <div class="multiColumn">
+            <div class="fieldGroup fieldGroupGap">
+                <h2><wicket:message key="label.identifiers"/></h2>
+
+                <div class="infoSet">
+                    <label class="label">* <wicket:message key="label.owner"/></label>
+                    <span wicket:id="orgPicker"/>
+                </div>
+
+                <div class="infoSet">
+                    <label class="label">* <wicket:message key="label.emailaddress"/></label>
+                    <span class="fieldHolder">
+                        <input type="text" wicket:id="email"/>
+                    </span>
+                </div>
+
+                <div class="infoSet">
+                    <label class="label">* <wicket:message key="label.firstname"/></label>
+                    <span class="fieldHolder">
+                        <input type="text" wicket:id="firstname">
+                    </span>
+                </div>
+
+                <div class="infoSet">
+                    <label class="label">* <wicket:message key="label.lastname"/></label>
+                    <span class="fieldHolder">
+                        <input type="text" wicket:id="lastname">
+                    </span>
+                </div>
+
+                <div class="infoSet">
+                    <label class="label"><wicket:message key="label.initials"/></label>
+                    <span class="fieldHolder">
+                        <input type="text" wicket:id="initials">
+                    </span>
+                </div>
+
+                <div class="infoSet">
+                    <label class="label"><wicket:message key="label.id"/></label>
+                    <span class="fieldHolder">
+                        <input type="text" wicket:id="identifier">
+                    </span>
+                </div>
+
+                <div class="infoSet">
+                    <label class="label"><wicket:message key="label.position"/></label>
+                    <span class="fieldHolder">
+                        <input type="text" wicket:id="position">
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="fieldGroup fieldGroupGap clearLeft">
+            <h2><wicket:message key="label.localization"/></h2>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.country"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="country"/>
+                </span>
+            </div>
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.timezone"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="timezone"/>
+                </span>
+            </div>
+        </div>
+
+        <div class="formAction">
+            <input type="submit" wicket:id="save" value="Save"/>
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+</wicket:extend>
+</html>

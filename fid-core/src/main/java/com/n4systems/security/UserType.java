@@ -1,13 +1,8 @@
 package com.n4systems.security;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
+
+import java.util.*;
 
 
 public enum UserType {
@@ -16,7 +11,8 @@ public enum UserType {
 	SYSTEM( "System", PermissionType.allPermissions() ),
 	FULL( "Full", PermissionType.values() ),
 	LITE( "Lite", PermissionType.CreateEvent, PermissionType.EditEvent ),
-	READONLY( "Read-Only" /*no permissions*/ );
+	READONLY( "Read-Only" /*no permissions*/ ),
+    PERSON("Person" /*no permissions*/);
 
 	
 	private String label;
