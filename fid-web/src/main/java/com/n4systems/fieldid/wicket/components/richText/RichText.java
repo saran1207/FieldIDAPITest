@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.n4systems.services.SecurityContext;
-import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -37,7 +36,6 @@ public class RichText extends Panel {
 
     private static final String INIT_NICEDIT_JS = "richTextFactory.create('%s',%s)";
 
-    private static final Logger logger= Logger.getLogger(RichText.class);
     public static final String RTF_IMAGE_PATH = "rtf/images";
 
     private @SpringBean SecurityContext securityContext;
@@ -110,7 +108,7 @@ public class RichText extends Panel {
     }
 
     protected String getImagePath() {
-        logger.warn("using default path '" + RTF_IMAGE_PATH + "'for RTF editor images...override to specify a custom path");
+		// Implementers of this class should override this path
         return RTF_IMAGE_PATH;
     }
 
