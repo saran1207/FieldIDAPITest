@@ -9,6 +9,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.FieldIdDateFormatter;
 import com.n4systems.util.mail.TemplateMailMessage;
@@ -30,6 +31,26 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
     @Transactional
     public void sendNotifications() {
+        notifyUserAssignees();
+        notifyGroupAssignees();
+
+        removeNotificationsWithoutAssignees();
+    }
+
+    private void notifyGroupAssignees() {
+        QueryBuilder<AssigneeNotification> assigneeQuery = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
+        assigneeQuery.addWhere(WhereParameter.Comparator.NOTNULL, "event.assignedGroup", "event.assignedGroup", "");
+
+        List<AssigneeNotification> assigneeRecords = persistenceService.findAll(assigneeQuery);
+
+        Set<UserGroup> groups = aggregateAssignedGroups(assigneeRecords);
+
+        for (UserGroup assignee : groups) {
+            sendNotificationsFor(assignee);
+        }
+    }
+
+    private void notifyUserAssignees() {
         QueryBuilder<AssigneeNotification> assigneeQuery = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.addWhere(WhereParameter.Comparator.NOTNULL, "event.assignee", "event.assignee", "");
 
@@ -40,8 +61,16 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         for (User assignee : assignees) {
             sendNotificationsFor(assignee);
         }
+    }
 
-        removeNotificationsWithoutAssignees();
+    private Set<UserGroup> aggregateAssignedGroups(List<AssigneeNotification> assigneeRecords) {
+        Set<UserGroup> assignees = new HashSet<UserGroup>();
+        for (AssigneeNotification assigneeRecord : assigneeRecords) {
+            if (assigneeRecord.getEvent().getWorkflowState() == Event.WorkflowState.OPEN && assigneeRecord.getEvent().getAssignedGroup() != null) {
+                assignees.add(assigneeRecord.getEvent().getAssignedGroup());
+            }
+        }
+        return assignees;
     }
 
     private Set<User> aggregateAssignees(List<AssigneeNotification> assigneeRecords) {
@@ -59,14 +88,46 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         assigneeQuery.setSimpleSelect("event");
         assigneeQuery.addSimpleWhere("event.assignee", assignee);
         List<Event> notificationEvents = persistenceService.findAll(assigneeQuery);
-        notifyEventAssignee(notificationEvents);
+        notifyEventAssignee(notificationEvents, assignee);
         removeNotificationsForAssignee(assignee);
     }
 
-    private void notifyEventAssignee(List<Event> events) {
+    private void sendNotificationsFor(UserGroup assignedGroup) {
+        QueryBuilder<Event> assigneeQuery = new QueryBuilder<Event>(AssigneeNotification.class, new OpenSecurityFilter());
+        assigneeQuery.setSimpleSelect("event");
+        assigneeQuery.addSimpleWhere("event.assignedGroup", assignedGroup);
+        List<Event> notificationEvents = persistenceService.findAll(assigneeQuery);
+        notifyEventAssignee(notificationEvents, assignedGroup);
+        removeNotificationsForAssignedGroup(assignedGroup);
+    }
+
+    private void notifyEventAssignee(List<Event> events, UserGroup assignedGroup) {
         try {
 
-            TemplateMailMessage message = createMultiNotifications(events);
+            for (User member : assignedGroup.getMembers()) {
+                // Instead of sending a multi message, since users can define their own date
+                // formats and we want our notificatino to reflect this, we send an individual email to each member.
+                TemplateMailMessage message = createMultiNotifications(events, member);
+
+                message.getToAddresses().add(member.getEmailAddress());
+
+                message.getTemplateMap().put("assignedGroup", assignedGroup);
+                mailService.sendMessage(message);
+            }
+
+
+        } catch (Exception e) {
+            logger.error("Could not notify assigned group", e);
+        }
+    }
+
+    private void notifyEventAssignee(List<Event> events, User assignee) {
+        try {
+
+            TemplateMailMessage message = createMultiNotifications(events, assignee);
+
+            message.getToAddresses().add(assignee.getEmailAddress());
+            message.getTemplateMap().put("assignee", assignee);
 
             mailService.sendMessage(message);
 
@@ -75,20 +136,24 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         }
     }
 
-    private TemplateMailMessage createMultiNotifications(List<Event> events) {
-        String subject = "Work Assigned: " + events.size() + " Events";
-        Map<Long, String> dueDateStringMap = createDateStringMap(events);
-        Map<Long, String> criteriaImageMap = createCriteriaImageMap(events);
+    private TemplateMailMessage createMultiNotifications(List<Event> events, User assignee) {
+        TemplateMailMessage msg = createMailMessage(events, assignee);
 
+        return msg;
+    }
+
+    private TemplateMailMessage createMailMessage(List<Event> events, User assignee) {
+        String subject = "Work Assigned: " + events.size() + " Events";
         TemplateMailMessage msg = new TemplateMailMessage(subject, ASSIGNEE_TEMPLATE_MULTI);
-        msg.getToAddresses().add(events.get(0).getAssignee().getEmailAddress());
+
+        Map<Long, String> dueDateStringMap = createDateStringMap(events, assignee);
+        Map<Long, String> criteriaImageMap = createCriteriaImageMap(events);
 
         msg.getTemplateMap().put("systemUrl", SystemUrlUtil.getSystemUrl(events.get(0).getTenant()));
         msg.getTemplateMap().put("events", events);
         msg.getTemplateMap().put("subject", subject);
         msg.getTemplateMap().put("dueDateStringMap", dueDateStringMap);
         msg.getTemplateMap().put("criteriaImageMap", criteriaImageMap);
-
         return msg;
     }
 
@@ -109,12 +174,12 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         return criteriaImageMap;
     }
 
-    private Map<Long, String> createDateStringMap(List<Event> events) {
+    private Map<Long, String> createDateStringMap(List<Event> events, User assignee) {
         Map<Long, String> dueDateStringMap = new HashMap<Long,String>();
         for (Event event : events) {
             Date dueDate = event.getDueDate();
             boolean showTime = !new PlainDate(dueDate).equals(dueDate);
-            String dueDateString = new FieldIdDateFormatter(dueDate, event.getAssignee(), false, showTime).format();
+            String dueDateString = new FieldIdDateFormatter(dueDate, assignee, false, showTime).format();
             dueDateStringMap.put(event.getId(), dueDateString);
         }
         return dueDateStringMap;
@@ -122,12 +187,25 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
 
     private void removeNotificationsWithoutAssignees() {
-        removeNotificationsForAssignee(null);
+        QueryBuilder<AssigneeNotification> builder = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
+        builder.addSimpleWhere("event.assignee", null);
+        builder.addSimpleWhere("event.assignedGroup", null);
+        removeNotifications(builder);
     }
 
     private void removeNotificationsForAssignee(User assignee) {
         QueryBuilder<AssigneeNotification> builder = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
         builder.addSimpleWhere("event.assignee", assignee);
+        removeNotifications(builder);
+    }
+
+    private void removeNotificationsForAssignedGroup(UserGroup assignedGroup) {
+        QueryBuilder<AssigneeNotification> builder = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
+        builder.addSimpleWhere("event.assignedGroup", assignedGroup);
+        removeNotifications(builder);
+    }
+
+    private void removeNotifications(QueryBuilder<AssigneeNotification> builder) {
         List<AssigneeNotification> resultList = persistenceService.findAll(builder);
         for (AssigneeNotification o : resultList) {
             o.getEvent().setAssigneeNotification(null);

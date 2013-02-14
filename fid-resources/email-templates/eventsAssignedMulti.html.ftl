@@ -60,7 +60,11 @@
 <div class="notificationMessage">
 
     <div class="subject">
-        <div class="title">${events.get(0).assignee.fullName}, you've been assigned work</div>
+        <#if assignee?exists>
+            <div class="title">${assignee.fullName}, you've been assigned work</div>
+        <#elseif assignedGroup?exists>
+            <div class="title">A group you are a member of, ${assignedGroup.name}, has been assigned work</div>
+        </#if>
         <div class="message">
             This is an automated email to let you know that you have been assigned work to do. <a href="${systemUrl}/fieldid/w/dashboard">Login</a> to view these on your Field ID Dashboard.
         </div>
