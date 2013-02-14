@@ -7,14 +7,14 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 
-public class UserGroupsModel extends FieldIDSpringModel<List<UserGroup>> {
+public class VisibleUserGroupsModel extends FieldIDSpringModel<List<UserGroup>> {
 
     @SpringBean
     private UserGroupService userGroupService;
 
     @Override
     protected List<UserGroup> load() {
-        return userGroupService.getActiveUserGroups();
+        return userGroupService.getVisibleActiveUserGroups();
     }
 
 }

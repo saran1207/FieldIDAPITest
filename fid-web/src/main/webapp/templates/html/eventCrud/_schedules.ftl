@@ -71,9 +71,9 @@
             <label class="label"><@s.text name="label.assignee"/></label>
             <@s.select name="assignee" id="assignee" emptyOption="true" theme="fieldid">
                 <#if !userGroups.isEmpty()>
-                    <@s.optgroup label="Users Groups" list="userGroups" listKey="keyForStruts" listValue="name" />
+                    <@s.optgroup label="User Group" list="userGroups" listKey="keyForStruts" listValue="name" />
                 </#if>
-                <@s.optgroup label="Users" list="assignees" listKey="keyForStruts" listValue="displayName" />
+                <@s.optgroup label="User" list="assignees" listKey="keyForStruts" listValue="displayName" />
             </@s.select>
         </div>
 

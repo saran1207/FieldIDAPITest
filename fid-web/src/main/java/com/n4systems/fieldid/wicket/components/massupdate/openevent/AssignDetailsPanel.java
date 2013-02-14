@@ -7,7 +7,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
-import com.n4systems.fieldid.wicket.model.user.UserGroupsModel;
+import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.search.EventReportCriteria;
@@ -38,7 +38,7 @@ public class AssignDetailsPanel extends AbstractMassUpdatePanel {
             super(id, new CompoundPropertyModel<MassUpdateEventModel>(massUpdateEventModel));
 
             ExaminersModel usersModel = new ExaminersModel();
-            UserGroupsModel userGroupsModel = new UserGroupsModel();
+            VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
             add(new AssignedUserOrGroupSelect("assignee",
                     ProxyModel.of(massUpdateEventModel, on(MassUpdateEventModel.class).getEvent().getAssignedUserOrGroup()),
                     usersModel, userGroupsModel,

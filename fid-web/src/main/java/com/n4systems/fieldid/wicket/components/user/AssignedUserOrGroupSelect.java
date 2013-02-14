@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.user;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.renderer.BlankOptionChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;

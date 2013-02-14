@@ -527,7 +527,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
     }
 
     public List<UserGroup> getUserGroups() {
-        return userGroupService.getActiveUserGroups();
+        return userGroupService.getVisibleActiveUserGroups();
     }
 
     public List<HierarchicalNode> getPredefinedLocationTree() {

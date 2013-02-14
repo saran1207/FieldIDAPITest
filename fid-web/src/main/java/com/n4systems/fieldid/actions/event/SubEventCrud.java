@@ -427,7 +427,7 @@ public class SubEventCrud extends EventCrud {
     }
 
     public List<UserGroup> getUserGroups() {
-        return userGroupService.getActiveUserGroups();
+        return userGroupService.getVisibleActiveUserGroups();
     }
 
 }

@@ -3,26 +3,22 @@ package com.n4systems.fieldid.wicket.components.action;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
-import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
 import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
-import com.n4systems.fieldid.wicket.model.user.UserGroupsModel;
-import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.PriorityCode;
-import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.wicket.Component;
@@ -79,7 +75,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             add(scheduledDatePicker);
 
             ExaminersModel usersModel = new ExaminersModel();
-            UserGroupsModel userGroupsModel = new UserGroupsModel();
+            VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
             add(new AssignedUserOrGroupSelect("assignee",
                     ProxyModel.of(eventModel, on(Event.class).getAssignedUserOrGroup()),
                     usersModel, userGroupsModel,

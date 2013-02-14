@@ -1125,7 +1125,7 @@ public class AssetCrud extends UploadAttachmentSupport {
     }
 
     public List<UserGroup> getUserGroups() {
-        return userGroupService.getActiveUserGroups();
+        return userGroupService.getVisibleActiveUserGroups();
     }
 
 	public boolean isUseAjaxPagination() {

@@ -7,12 +7,21 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.util.persistence.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Transactional
 public class UserGroupService extends FieldIdPersistenceService {
 
     public List<UserGroup> getActiveUserGroups() {
+        return findUserGroupsLike(null, Archivable.EntityState.ACTIVE);
+    }
+
+    public List<UserGroup> getVisibleActiveUserGroups() {
+        if (getCurrentUser().getGroup() != null) {
+            // We can only see our group if we're in one
+            return Arrays.asList(getCurrentUser().getGroup());
+        }
         return findUserGroupsLike(null, Archivable.EntityState.ACTIVE);
     }
 

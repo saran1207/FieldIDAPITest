@@ -438,7 +438,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
     }
 
     public List<UserGroup> getUserGroups() {
-        return userGroupService.getActiveUserGroups();
+        return userGroupService.getVisibleActiveUserGroups();
     }
 
 }

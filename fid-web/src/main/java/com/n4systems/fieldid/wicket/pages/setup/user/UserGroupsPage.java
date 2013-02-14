@@ -262,8 +262,6 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/setup/prettyItemList.css");
         response.renderCSSReference("style/tipsy/tipsy.css");
-//        response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
-//        response.renderOnDomReadyJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
     }
 
     private void redrawTable(AjaxRequestTarget target) {

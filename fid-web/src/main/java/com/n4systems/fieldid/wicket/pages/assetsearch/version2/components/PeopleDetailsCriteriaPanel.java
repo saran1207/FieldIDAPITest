@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.ListWithBlankOptionModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
-import com.n4systems.fieldid.wicket.model.user.UserGroupsModel;
+import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
 import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUsersModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
@@ -29,7 +29,7 @@ public class PeopleDetailsCriteriaPanel extends Panel {
 
         IModel<CanHaveEventsAssigned> assigneeModel = ProxyModel.of(criteriaModel, on(EventReportCriteria.class).getAssignedUserOrGroup());
 
-        UserGroupsModel userGroupsModel = new UserGroupsModel();
+        VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
         VisibleUsersModel usersModel = new VisibleUsersModel();
         IModel<List<CanHaveEventsAssigned>> assigneesModel = new AssigneesModel(userGroupsModel, usersModel);
 
