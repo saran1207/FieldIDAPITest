@@ -129,6 +129,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 		}
 		options.xaxis.minTickSize = null;
 		options.xaxis.monthNames = FlotOptions.MONTH_NAMES;
+        int days = getDateRange().getDuration().toStandardDays().getDays();
 		switch (granularity) { 
 		case DAY:
 			options.xaxis.minTickSize = new String[]{"3","day"};

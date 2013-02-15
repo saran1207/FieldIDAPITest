@@ -1,6 +1,7 @@
 package com.n4systems.util.chart;
 
 import com.n4systems.util.chart.FlotOptions.Lines;
+import com.n4systems.util.chart.FlotOptions.Bars;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class ChartSeries<X extends Comparable> implements Serializable {
 	private String label;
 	private Object id;
 	private Lines lines = new Lines();
+    private Bars bars = new Bars();
 	
 	public ChartSeries(Object id, String label, List<? extends Chartable<X>> chartables) {
         this.data = createChartableMap();
@@ -139,10 +141,6 @@ public class ChartSeries<X extends Comparable> implements Serializable {
 		return color;
 	}
 
-    public void setClickable(boolean clickable) {
-        this.lines.clickable = clickable;
-    }
-
 	@Override
 	public String toString() { 
 		return data.toString();
@@ -150,7 +148,8 @@ public class ChartSeries<X extends Comparable> implements Serializable {
 
 	public Object getId() {
 		return id;
-	}	
-}	 
+	}
+
+}
 
 

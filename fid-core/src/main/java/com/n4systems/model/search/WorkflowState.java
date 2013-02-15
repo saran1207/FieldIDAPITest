@@ -5,6 +5,7 @@ import com.n4systems.util.EnumUtils;
 
 import java.util.EnumSet;
 
+// TODO : rename this to avoid confusion.  WorkflowStateCriteria or something???
 public enum WorkflowState implements Listable {
 
     COMPLETE("label.complete"), OPEN("label.open"), CLOSED("label.closed"), ALL("label.all");

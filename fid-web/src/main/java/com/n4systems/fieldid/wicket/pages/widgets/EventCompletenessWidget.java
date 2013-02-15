@@ -28,8 +28,6 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
         addGranularityButton(ChartGranularity.MONTH);
         addGranularityButton(ChartGranularity.WEEK);        	
         addGranularityButton(ChartGranularity.DAY);
-        // NOTE : since what reporting & dashboard widget display for ALL series are fundamentally different at this time, we shouldn't allow
-        //   clickThru.  (June 2012).
         setClickThruHandler(new ReportClickThruHandler(this,widgetDefinition.getId()));
 	}
 
@@ -53,9 +51,21 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
 	
 	@Override
 	protected FlotOptions<LocalDate> createOptions() {
-		FlotOptions<LocalDate> options = super.createOptions();
-		options.xaxis.timeformat = "%b %d";
-		return options;		
+		FlotOptions<LocalDate> options = new BarChartOptions<LocalDate>();
+        options.bars.lineWidth = 0;
+        options.series = new FlotOptions.Series();
+        options.series.stack = true;
+        options.points = null;
+        options.bars.show = true;
+        options.bars.align = "center";
+        options.fieldIdOptions.clickable = true;
+
+        options.xaxis.min = Long.MAX_VALUE;
+        options.xaxis.mode = "time";
+        options.xaxis.timeformat = "%y/%m";
+        options.xaxis.monthNames = FlotOptions.MONTH_NAMES;
+
+		return options;
 	}
 
 	@Override

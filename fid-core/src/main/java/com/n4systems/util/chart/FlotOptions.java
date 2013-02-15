@@ -2,7 +2,6 @@ package com.n4systems.util.chart;
 
 import java.io.Serializable;
 
-
 /**
  *  NOTE : don't use primitives for fields....use objects so they can be null.
  *  
@@ -28,7 +27,6 @@ import java.io.Serializable;
  * if you add values to this field that aren't part of the options, then MARK THEM AS TRANSIENT. 
  * e.g.   public int tempCounter = 0;         		BOO!      
  * 		  public transient int tempCounter = 0;     YAY!      
- *     
  */
 
 @SuppressWarnings("serial")
@@ -63,7 +61,6 @@ public class FlotOptions<X> implements Serializable {
 		public String fillColor;
 		public Boolean steps;
 		public Integer lineWidth;
-        public Boolean clickable;  // custom attribute. handled by dashboard.js, not by FLOT engine.
     }
 	
 	public static class Points  implements Serializable { 
@@ -103,9 +100,6 @@ public class FlotOptions<X> implements Serializable {
 	
 	public static class Series implements Serializable {
 		public Boolean stack;
-		public Lines lines = new Lines();
-		public Bars bars = new Bars();
-		public Points points = new Points();
 		public Integer shadowSize;
 	}
 	
@@ -117,6 +111,7 @@ public class FlotOptions<X> implements Serializable {
 		public Integer lineWidth;
 		public Boolean clickable;
         public Double fill;
+        public String fillColor;
     }
 	
 	public static class Legend implements Serializable { 
@@ -135,7 +130,7 @@ public class FlotOptions<X> implements Serializable {
 		public Boolean clickable = false;
 		public String url;
 		public Long widgetConfigId;
-		public String clicked;		
+		public String clicked;
 	}
 	
 	// ------------------------------------------------------------------------------------

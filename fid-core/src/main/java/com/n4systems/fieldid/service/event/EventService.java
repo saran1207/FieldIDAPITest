@@ -233,13 +233,7 @@ public class EventService extends FieldIdPersistenceService {
 	}
 
     @Transactional(readOnly = true)
-	public List<EventCompletenessReportRecord> getEventCompleteness(ChartGranularity granularity, Date fromDate, Date toDate, BaseOrg org) {
-		return getEventCompleteness(null, granularity, fromDate, toDate, org); 
-	}
-
-    @Transactional(readOnly = true)
-	public List<EventCompletenessReportRecord> getEventCompleteness(Event.WorkflowState excludedState, ChartGranularity granularity,
-			Date fromDate, Date toDate, BaseOrg org) {
+	public List<EventCompletenessReportRecord> getEventCompleteness(ChartGranularity granularity,Date fromDate, Date toDate, BaseOrg org) {
 
         // CAVEAT : currently there is a discrepancy across the app w.r.t. COMPLETED events.   some places (like dashboard) consider a CLOSED event completed,
         // while others (like reporting) consider CLOSED & COMPLETED as different.   for example, a dashboard widget might report that there are
@@ -251,7 +245,7 @@ public class EventService extends FieldIdPersistenceService {
 		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 
         NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);
-		List<String> args = Lists.newArrayList("COUNT(*)");
+		List<String> args = Lists.newArrayList("COUNT(*)","workflowState");
 		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity(granularity, "dueDate"));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
@@ -259,10 +253,8 @@ public class EventService extends FieldIdPersistenceService {
 		builder.addWhere(whereFromTo(fromDate,toDate,"dueDate"));
         Date sampleDate = fromDate;
         builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"dueDate", null, sampleDate));
+        builder.addGroupBy("workflowState");
 		builder.applyFilter(new OwnerAndDownFilter(org));
-		if (excludedState != null) {
-            builder.addWhere(Comparator.NE, "excludedEventState", "workflowState", excludedState);
-		}
 
 		builder.addOrder("dueDate");
 		

@@ -293,15 +293,15 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 		allEvents.addAll(completedEvents);
 		allEvents.addAll(createEventCompletenessResults(granularity, 888L, 574L, 924L));
 		expect(eventService.getEventCompleteness(granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(allEvents);
-		expect(eventService.getEventCompleteness(Event.WorkflowState.OPEN, granularity, granularity.roundDown(dateRange.getFrom()).toDate(), granularity.roundUp(jan1_2011).toDate(), org)).andReturn(completedEvents);
 		replay(eventService);
 		replay(assetService);
 		
 		List<ChartSeries<LocalDate>> results = dashboardService.getEventCompletenessEvents(granularity, dateRange, org);
 		
-		assertEquals(2, results.size());
-		assertEquals(Event.WorkflowState.COMPLETED.getLabel(), results.get(0).getLabel());
-		assertEquals(WorkflowState.ALL_STATES.getLabel(), results.get(1).getLabel());
+		assertEquals(3, results.size());
+		assertEquals(Event.WorkflowState.CLOSED.getLabel(), results.get(0).getLabel());
+        assertEquals(Event.WorkflowState.COMPLETED.getLabel(), results.get(1).getLabel());
+        assertEquals(Event.WorkflowState.OPEN.getLabel(), results.get(2).getLabel());
 
 		verifyTestMocks();		
 	}
@@ -309,7 +309,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 	private List<EventCompletenessReportRecord> createEventCompletenessResults(ChartGranularity granularity, Long... values) {
 		List<EventCompletenessReportRecord> results = Lists.newArrayList();
 		for (Long value:values) { 
-			EventCompletenessReportRecord record = new EventCompletenessReportRecord(value, granularity.toString(),2011,1,1);
+			EventCompletenessReportRecord record = new EventCompletenessReportRecord(value, Event.WorkflowState.COMPLETED, granularity.toString(),2011,1,1);
 			results.add(record);
 		}
 		return results;

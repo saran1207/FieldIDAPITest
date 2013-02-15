@@ -3,9 +3,7 @@ package com.n4systems.util.chart;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.util.EnumUtils;
 import com.n4systems.util.time.DateUtil;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
+import org.joda.time.*;
 
 public enum ChartGranularity {
 	
@@ -145,5 +143,13 @@ public enum ChartGranularity {
 	public ChartGranularity coarser() {
 		return EnumUtils.previous(this);
 	}
+
+    // CAVEAT : this is only an *approximation*.  for example, 1 year could be 365 or 366 days.
+    // other things like variable days in months, daylight savings time also contribute to error.
+    // this value is good enough if you need a millisecond value for approximation reasons, otherwise i'd suggest you stick to using getPeriod() for any real date math.
+    // this will always return the same value. i.e. error does not vary with value of LocaleDate.now()
+    public Duration getStandardDuration() {
+        return new Duration(new DateTime(0L),new DateTime(0L).plus(getPeriod()));
+    }
 
 }

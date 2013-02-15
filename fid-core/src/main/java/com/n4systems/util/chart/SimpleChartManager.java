@@ -3,6 +3,8 @@ package com.n4systems.util.chart;
 import com.n4systems.util.math.MathUtil;
 
 
+// note that this class is really intended for simple LINE charts.  if you start using any other fancy schmancy flot chart types
+// you may want to extend this.
 public class SimpleChartManager<X extends Comparable> implements ChartManager<X> {
 
 
@@ -47,7 +49,9 @@ public class SimpleChartManager<X extends Comparable> implements ChartManager<X>
     public void updateOptions(ChartData<X> data, FlotOptions<X> options) {
         options.legend.noColumns = data.size();
         options.xaxis.min = getMin(data);
-        options.points.radius = getMaxPointsInASeries(data) > POINTS_THRESHOLD ? ChartManager.SMALL_RADIUS : LARGE_RADIUS;
+        if (options.points!=null) {
+            options.points.radius = getMaxPointsInASeries(data) > POINTS_THRESHOLD ? ChartManager.SMALL_RADIUS : LARGE_RADIUS;
+        }
         if (Boolean.TRUE.equals(options.pan.interactive)) {
             options.xaxis.panRange=new Long[2];
             options.xaxis.panRange[0] = getPanMin(data);

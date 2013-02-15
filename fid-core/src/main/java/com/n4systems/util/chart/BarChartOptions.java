@@ -7,7 +7,9 @@ public class BarChartOptions<X> extends FlotOptions<X> {
 	public BarChartOptions() {
 		series = null;
 		bars.barWidth = 0.5;
+        // is this needed?  just use fieldId clickable?
 		bars.clickable = true;
+        bars.horizontal = false;
 		bars.show = true;
 		bars.lineWidth = 0;
 		yaxis.tickLength = 0;

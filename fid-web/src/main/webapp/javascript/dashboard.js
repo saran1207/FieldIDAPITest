@@ -17,8 +17,21 @@ var chartWidgetFactory = (function() {
 		var id = widgetId;
 		var previousPoint = null;	
 		var options = opts;
-		var tooltipContent = null; 
-		
+		var tooltipContent = null;
+		var totals ={};
+
+		function calculateTotals(newData) {
+			$.each(newData,
+				function(index,value) {
+					// each element is a chartseries.  iterate over each chartseries adding up.
+					var series = value.data;
+					$.each(series,function(index,value) {
+						var v = totals[index];
+						totals[index] = v ? v+value[1] : value[1];
+					})
+				});
+		}
+
 		function bindTootlips(id) {
 			$('#'+id).bind("plothover", function (event, pos, item) {
 			        if (item) {
@@ -27,7 +40,7 @@ var chartWidgetFactory = (function() {
 			                
 			                $("#tooltip").remove();
 			                if (tooltipContent) {
-			                	showTooltip(item.pageX, item.pageY, tooltipContent(item, options));
+			                	showTooltip(item.pageX, item.pageY, tooltipContent(item, options, totals[item.dataIndex]));
 			                }
 			            }
 			        }
@@ -47,7 +60,7 @@ var chartWidgetFactory = (function() {
 		};		
 		
 		/* public methods exposed */
-		return { 	
+		return {
 			setTooltip : function(fn) { 
 				tooltipContent = fn;
 			},
@@ -55,7 +68,8 @@ var chartWidgetFactory = (function() {
 				$('#'+id).unbind("plothover");
 				if (show) {	bindTootlips(id);}
 			},
-			update : function(newData) {				
+			update : function(newData) {
+				calculateTotals(newData);
 			    $.plot($('#'+id), newData, options);				
 			}
 		};
@@ -67,15 +81,13 @@ var chartWidgetFactory = (function() {
 	 */
 	var MS_PER_DAY = 1000*60*60*24;
 		
-	var dateTooltipContent = function(item, options) {
-		var datapoint = item.datapoint;
-		var y = datapoint[1].toFixed(options.yaxis.tickDecimals);
-        var map = createTooltipVariablesMap(datapoint, options);
+	var dateTooltipContent = function(item, options, total) {
+        var map = createTooltipVariablesMap(item, options,total);
         var tooltip = formatTooltip(map, options.tooltipFormat);
 	    return tooltip;
 	};
 	
-	var horizLabelTooltipContent = function(item, options) {
+	var horizLabelTooltipContent = function(item, options, total) {
 		var datapoint = item.datapoint;
 		var value = datapoint[0].toFixed(0);
 	    var index = datapoint[1].toFixed(0);
@@ -97,11 +109,12 @@ var chartWidgetFactory = (function() {
         return tooltip;
     }
 
-    function createTooltipVariablesMap(datapoint, options) {
-        var monthNames = options.xaxis.monthNames;
+    function createTooltipVariablesMap(item, options, total) {
+		var datapoint = item.datapoint;
+		var monthNames = options.xaxis.monthNames;
         var dateObj = new Date(datapoint[0]);
         var date2Obj = new Date(datapoint[0]+6*MS_PER_DAY);
-        var y = datapoint[1].toFixed(options.yaxis.decimals);
+        var y = datapoint[1].toFixed(options.yaxis.decimals) - datapoint[2].toFixed(options.yaxis.decimals);
         var weekEndDay = '';
         if (date2Obj.getUTCMonth()!=dateObj.getUTCMonth()) {
         	weekEndDay = monthNames[date2Obj.getUTCMonth()] + ' ';
@@ -112,6 +125,7 @@ var chartWidgetFactory = (function() {
             month: monthNames[dateObj.getUTCMonth()],
             day: dateObj.getUTCDate(),
             weekEndDay : weekEndDay,
+			total : total,
             y: y
         };
     }
@@ -146,7 +160,7 @@ var chartWidgetFactory = (function() {
 		//  longX
 		url += "&longX="+item.datapoint[xIndex];
 		//  y
-		if(options.bars.show) {  // for horizontal bar charts we pass the label, not the numeric value.
+		if(options.bars.show && options.bars.horizontal) {  // for horizontal bar charts we pass the label, not the numeric value.
 			var index = item.datapoint[1];
 			url+="&y="+(transposed?item.series.yaxis.ticks[index].label:item.series.xaxis.ticks[index].label); 
 		} else {

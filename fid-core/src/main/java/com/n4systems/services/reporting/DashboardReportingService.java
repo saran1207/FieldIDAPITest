@@ -23,6 +23,7 @@ import com.n4systems.services.date.DateService;
 import com.n4systems.util.EnumUtils;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
+import com.n4systems.util.chart.EventCompletenessChartSeries;
 import com.n4systems.util.chart.RangeType;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,23 +99,19 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	public List<ChartSeries<LocalDate>> getEventCompletenessEvents(ChartGranularity granularity, DateRange dateRange, BaseOrg org) {
 		Preconditions.checkArgument(dateRange !=null);
 
-		List<EventCompletenessReportRecord> allScheduledEvents = eventService.getEventCompleteness(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange),  org);
-		List<EventCompletenessReportRecord> completedScheduledEvents = eventService.getEventCompleteness(Event.WorkflowState.OPEN, granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
+		List<EventCompletenessReportRecord> events = eventService.getEventCompleteness(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
 
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
-		ChartSeries<LocalDate> completedChartSeries = new ChartSeries<LocalDate>(WorkflowState.COMPLETE, Event.WorkflowState.COMPLETED.getLabel(), completedScheduledEvents);
-        results.add(completedChartSeries);
-		ChartSeries<LocalDate> allChartSeries = new ChartSeries<LocalDate>(WorkflowState.ALL_STATES, WorkflowState.ALL_STATES.getLabel(), allScheduledEvents);
-		results.add(allChartSeries);
-        // hack. because ALL isn't the exact same on reporting, we will just disable the click thru on it now.
-        //  COMPLETED is still clickable though by default.
-        allChartSeries.setClickable(false);
+        results.add(new EventCompletenessChartSeries(Event.WorkflowState.CLOSED, events));
+        results.add(new EventCompletenessChartSeries(Event.WorkflowState.COMPLETED, events));
+        results.add(new EventCompletenessChartSeries(Event.WorkflowState.OPEN, events));
 
         return results;
 	}
 
-	private Date getTo(ChartGranularity granularity, DateRange dateRange) {
+    private Date getTo(ChartGranularity granularity, DateRange dateRange) {
 		LocalDate to = dateRange.getTo();
+
 		return (to==null) ? null : granularity.roundUp(to).toDate();
 	}
 
@@ -217,14 +214,23 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 	private EventReportCriteria getCriteriaDefaults(EventCompletenessWidgetConfiguration config, String series, LocalDate localDate) {
 		EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
-        WorkflowState state = EnumUtils.valueOf(WorkflowState.class, series);
-        if (WorkflowState.COMPLETE.equals(state)) {
-            criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
-            criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
-            criteria.setWorkflowState(WorkflowState.COMPLETE);
-        } else {
-            criteria.setWorkflowState(WorkflowState.ALL);
-            criteria.setDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
+        Event.WorkflowState state = EnumUtils.valueOf(Event.WorkflowState.class, series);
+        switch (state) {
+            case OPEN:
+                criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
+                criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
+                criteria.setWorkflowState(WorkflowState.OPEN);
+                break;
+            case COMPLETED:
+                criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
+                criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
+                criteria.setWorkflowState(WorkflowState.COMPLETE);
+                break;
+            case CLOSED:
+                criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
+                criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
+                criteria.setWorkflowState(WorkflowState.CLOSED);
+                break;
         }
 		return criteria;
 	}
