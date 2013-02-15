@@ -67,8 +67,10 @@
 								<@s.url id="unarchiveUrl" action="employeeUserUnarchive" uniqueID="${(user.id)!}" />
 							<#elseif user.liteUser>
 								<@s.url id="unarchiveUrl" action="liteUserUnarchive" uniqueID="${(user.id)!}" />
-							<#else>
+							<#elseif user.readOnly>
 								<@s.url  id="unarchiveUrl" action="readOnlyUserUnarchive" uniqueID="${(user.id)!}" />
+                            <#else>
+                                <@s.url  id="unarchiveUrl" action="personUnarchive" uniqueID="${(user.id)!}" />
 							</#if>
 							<a href="${unarchiveUrl}"/><@s.text name="label.unarchive"/></a>
 						</#if>				
@@ -83,7 +85,7 @@
 							<@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
 							<@s.url  id="editUrl" action="readOnlyUserEdit" uniqueID="${(user.id)!}" />
                         <#else>
-                            <@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
+                            <@s.url  id="archiveUrl" action="personArchive" uniqueID="${(user.id)!}" />
                             <@s.url  id="editUrl" namespace="/" value="w/editPerson?uniqueID=${(user.id)!}" />
 						</#if>
 						<#if user.id != sessionUser.id>

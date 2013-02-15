@@ -775,8 +775,21 @@
 				<param name="listFilter">${listFilter}</param>
 			</result>						
 		</action>
-		
-		
+
+        <action name="personArchive" method="archive" class="com.n4systems.fieldid.actions.users.PersonCrud">
+            <result name="success" type="redirectAction">
+                <param name="actionName">userList</param>
+                <param name="currentPage">${currentPage}</param>
+                <param name="listFilter">${listFilter}</param>
+            </result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">userList</param>
+                <param name="currentPage">${currentPage}</param>
+                <param name="listFilter">${listFilter}</param>
+            </result>
+        </action>
+
+
 		<action name="employeeUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">employeeUserEdit</param>
@@ -790,7 +803,6 @@
 				<param name="actionName">liteUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="error" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
 		</action>
 		
 		<action name="readOnlyUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
@@ -800,6 +812,15 @@
 			</result>
 			<result name="error" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
 		</action>
+
+        <action name="personUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.PersonCrud">
+            <result name="success" type="redirectAction">
+                <param name="actionName">userList</param>
+                <param name="currentPage">${currentPage}</param>
+                <param name="listFilter">${listFilter}</param>
+            </result>
+            <result name="error" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
+        </action>
 		
 
 		<action name="sendWelcomeEmail" method="sendWelcomeMessage" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
