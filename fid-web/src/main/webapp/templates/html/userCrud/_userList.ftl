@@ -36,15 +36,9 @@
 	<#assign count=0 >
 	<#list page.list as user>
 		<tr id="user_${user.id!}" >
-            <td>${user.userLabel?html! }</td>
+            <td><a href="<@s.url action="viewUser" uniqueID="${user.id!}" />" >${user.userLabel?html! }</a></td>
 			<#if !isArchivedPage>
-				<td>
-                    <#if user.userID?exists>
-					    <a href="<@s.url action="viewUser" uniqueID="${user.id!}" />" >${(user.userID?html)! }</a>
-                    <#else>
-                        &nbsp;
-                    </#if>
-				</td>
+				<td>${(user.userID?html)! }</td>
 			</#if>
             <#if !isArchivedPage>
             <td>

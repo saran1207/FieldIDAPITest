@@ -86,6 +86,7 @@ ${action.setPageType('user','adduser')!}
 			</#if>
 		</div>
 	</#if>
-
-    <input id="addPerson" type="button" value="<@s.text name="label.add_new_person" />" onclick="return redirect('${addPersonUrl}');"/>
+    <div class="addUserAction">
+        <input id="addPerson" type="button" value="<@s.text name="label.add_new_person" />" onclick="return redirect('${addPersonUrl}');"/>
+    </div>
 </div>

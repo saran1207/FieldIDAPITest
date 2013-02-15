@@ -5,13 +5,15 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 public class UserUpgradeCrud extends UserCrud {
 
 	protected UserUpgradeCrud(UserManager userManager, UserGroupService userGroupService, PersistenceManager persistenceManager) {
 		super(userManager, userGroupService, persistenceManager);
 	}
-	
+
+    @SkipValidation
 	public String doChangeToFull() {
 		if(!userLimitService.isEmployeeUsersAtMax()) {
 			user.setUserType(UserType.FULL);
@@ -22,7 +24,8 @@ public class UserUpgradeCrud extends UserCrud {
 			return ERROR;
 		}
 	}
-	
+
+    @SkipValidation
 	public String doChangeToLite() {
 		if(!userLimitService.isLiteUsersAtMax()) {
 			user.setUserType(UserType.LITE);
@@ -33,7 +36,8 @@ public class UserUpgradeCrud extends UserCrud {
 			return ERROR;
 		}
 	}
-	
+
+    @SkipValidation
 	public String doChangeToReadOnly() {
 		if(!userLimitService.isReadOnlyUsersAtMax()) {
 			user.setUserType(UserType.READONLY);
@@ -44,6 +48,14 @@ public class UserUpgradeCrud extends UserCrud {
 			return ERROR;
 		}
 	}
+
+    @SkipValidation
+    public String doChangeToPerson() {
+        user.setUserType(UserType.PERSON);
+        user.setUserID(null);
+        save();
+        return SUCCESS;
+    }
 
 	@Override
 	public boolean isEmployee() {

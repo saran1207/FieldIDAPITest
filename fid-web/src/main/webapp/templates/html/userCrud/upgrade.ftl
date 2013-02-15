@@ -8,7 +8,7 @@ ${action.setPageType('user','change')!}
 	<h2>
 		<@s.text name="label.upgrade_user_heading">
 			<@s.param>${user.userType.label}</@s.param>
-			<@s.param>${userId}</@s.param>
+			<@s.param>${user.userLabel}</@s.param>
 		</@s.text>
 	</h2>
 
@@ -100,4 +100,15 @@ ${action.setPageType('user','change')!}
 				</#if>
 			</#if>
 	</#if>
-</div>	
+</div>
+
+<#if person >
+    <div class="upgradeUserAction center">
+        <input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
+    </div>
+<#else>
+    <div class="upgradeUserAction center">
+    <@s.url id="changeToPerson" action="changeToPerson" uniqueID="${uniqueID}"/>
+    <input type="button" value="<@s.text name='hbutton.change_to_person'/>" onclick="return redirect('${changeToPerson}');"/>
+    </div>
+</#if>

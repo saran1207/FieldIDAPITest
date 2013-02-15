@@ -11,12 +11,14 @@ ${action.setPageType('user','view')!}
 			<@s.url id="archiveUrl" action="employeeUserArchive" uniqueID="${(user.id)!}" />
 		<#elseif user.liteUser>
 			<@s.url id="archiveUrl" action="liteUserArchive" uniqueID="${(user.id)!}" />
-		<#else>
+		<#elseif user.readOnly>
 			<@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
+        <#else>
+            <@s.url  id="archiveUrl" action="personArchive" uniqueID="${(user.id)!}" />
 		</#if>
 	<div class="useractions delete">
 		<p>
-			<a href="${archiveUrl}" onclick="return confirm('${action.getText( 'warning.archiveuser',"", user.userID )}');">
+			<a href="${archiveUrl}" onclick="return confirm('${action.getText( 'warning.archiveuser',"", user.userLabel )}');">
 				<@s.text name="label.archive_account"/>
 			</a>
 		<p>
@@ -46,14 +48,16 @@ ${action.setPageType('user','view')!}
 				</#if>
 			</span>
 		</p>
-        <p>
-            <label for="group"><@s.text name="label.user_group"/></label>
-            <span class="fieldValue">
-                <#if user.group?exists>
-                    ${user.group.name?html}
-                </#if>
-            </span>
-        </p>
+        <#if !user.person>
+            <p>
+                <label for="group"><@s.text name="label.user_group"/></label>
+                <span class="fieldValue">
+                    <#if user.group?exists>
+                        ${user.group.name?html}
+                    </#if>
+                </span>
+            </p>
+        </#if>
 		<p>
 			<label for="email"><@s.text name="label.emailaddress"/></label>
 			<span class="fieldValue"><a href="mailto:${emailAddress}">${emailAddress}</a></span>
@@ -91,30 +95,31 @@ ${action.setPageType('user','view')!}
 			<label for="accountType"><@s.text name="label.accounttype"/></label>
 			<span class="fieldValue">${user.userType.label}</span>
 		</p>
-		<p>
-			<label for="lastlogin"><@s.text name="label.lastlogin"/></label>
-			<span class="fieldValue">${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</span>
-		</p>
-		<p>
-			<label for="username"><@s.text name="label.username"/></label>
-			<span class="fieldValue username">${userId}</span>
-		</p>
-		<p>
-			<label for="failedLoginAttempts"><@s.text name="label.failedLoginAttempts"/></label>
-			<span class="fieldValue">${user.failedLoginAttempts}</span>
-		</p>
-		<p>
-			<label for="status"><@s.text name="label.status"/></label>
-			<#if user.isLocked()>
-				<span class="fieldValue">
-					<@s.text name="label.locked"/>
-					<a href="<@s.url action="unlockUser" uniqueID="${user.id}"/>"><@s.text name="label.unlock_user"/></a>
-				</span>				
-			<#else>
-				<span class="fieldValue"><@s.text name="label.unlocked"/></span> 
-			</#if>
-		</p>
-		
+        <#if !user.person>
+            <p>
+                <label for="lastlogin"><@s.text name="label.lastlogin"/></label>
+                <span class="fieldValue">${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</span>
+            </p>
+            <p>
+                <label for="username"><@s.text name="label.username"/></label>
+                <span class="fieldValue username">${userId!}</span>
+            </p>
+            <p>
+                <label for="failedLoginAttempts"><@s.text name="label.failedLoginAttempts"/></label>
+                <span class="fieldValue">${user.failedLoginAttempts}</span>
+            </p>
+            <p>
+                <label for="status"><@s.text name="label.status"/></label>
+                <#if user.isLocked()>
+                    <span class="fieldValue">
+                        <@s.text name="label.locked"/>
+                        <a href="<@s.url action="unlockUser" uniqueID="${user.id}"/>"><@s.text name="label.unlock_user"/></a>
+                    </span>
+                <#else>
+                    <span class="fieldValue"><@s.text name="label.unlocked"/></span>
+                </#if>
+            </p>
+        </#if>
 		
 	</div>
 
