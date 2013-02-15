@@ -37,6 +37,8 @@ import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationR
 import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenantResource;
 import com.n4systems.fieldid.ws.v1.resources.unit.ApiUnitResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
+import com.n4systems.fieldid.ws.v1.resources.usergroup.ApiUserGroupResource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -63,6 +65,11 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiUserResource apiUserResource() {
 		return new ApiUserResource();
+	}
+	
+	@Bean
+	public ApiUserGroupResource apiUserGroupResource() {
+		return new ApiUserGroupResource();
 	}
 
 	@Bean

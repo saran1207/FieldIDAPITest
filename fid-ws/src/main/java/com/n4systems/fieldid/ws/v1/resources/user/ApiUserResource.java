@@ -59,6 +59,7 @@ public class ApiUserResource extends SetupDataResource<ApiUser, User> {
 		apiUser.setIdentifyEnabled(Permissions.hasOneOf(user, Permissions.Tag));
 		apiUser.setTenant(apiTenantResource.convertEntityToApiModel(user.getOwner().getPrimaryOrg()));
 		apiUser.setIdentifier(user.getIdentifier());
+		apiUser.setGroupId(user.getGroup() != null ? user.getGroup().getId() : null);
 		
 		OfflineProfile offlineProfile = offlineProfileService.find(user);
 		if (offlineProfile != null) {

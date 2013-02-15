@@ -17,6 +17,7 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private ApiOfflineProfile offlineProfile;
 	private ApiTenant tenant;
 	private String identifier;
+	private Long groupId;
 	
 	public String getUserId() {
 		return userId;
@@ -113,4 +114,12 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
+	
+	public Long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
+	}	
 }
