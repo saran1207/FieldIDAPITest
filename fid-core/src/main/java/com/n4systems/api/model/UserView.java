@@ -6,6 +6,7 @@ import com.n4systems.exporting.beanutils.MaskedSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.security.Permissions;
+import com.n4systems.security.UserType;
 
 public class UserView extends ExternalModelView {
 	public static final long serialVersionUID = 1L;
@@ -86,13 +87,14 @@ public class UserView extends ExternalModelView {
 
 	// NOTE : this field is also tested in conjunction with GlobalId.  (ie. if globalId=null, userId must not exist in DB and vice versa).
 	//   userId is limited (currently to 15) by schema.rb definition.  if schema changes, alter this meta-data.
-	@SerializableField(title=USER_NAME_FIELD, order = 425, maxLength = 15, validators = {NotNullValidator.class,StringLengthValidator.class})	
+	@SerializableField(title=USER_NAME_FIELD, order = 425, maxLength = 15, validators = {UserIdNotNullValidator.class, UserIdStringLengthValidator.class})
 	private String userID;
 
 	@SerializableField(title=ACCOUNT_TYPE_FIELD, order = 450, validators = {NotNullValidator.class, AccountTypeValidator.class})
 	private String accountType;	
 	
 	@SerializableField(title=IDENTIFY_ASSETS_FIELD, order = 560, validators = {PermissionValidator.class})
+
 	private String identifyAssets;
 	
 	@SerializableField(title=MANAGE_SYSTEM_CONFIGURATION_FIELD, order = 570, validators = {PermissionValidator.class})
@@ -371,5 +373,9 @@ public class UserView extends ExternalModelView {
 
     public void setUserGroup(String userGroup) {
         this.userGroup = userGroup;
+    }
+
+    public boolean isPerson() {
+        return UserType.valueFromLabel(getAccountType()).equals(UserType.PERSON);
     }
 }

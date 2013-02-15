@@ -1,13 +1,5 @@
 package com.n4systems.exporting;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.users.UserToModelConverter;
 import com.n4systems.api.model.ExternalModelView;
@@ -25,6 +17,8 @@ import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.UserType;
 import com.n4systems.utils.email.WelcomeNotifier;
+
+import java.util.*;
 
 public class UserImporter extends AbstractImporter<UserView> {
 	private final UserLimits userLimits;
@@ -75,6 +69,7 @@ public class UserImporter extends AbstractImporter<UserView> {
 		Set<UserView> liteUsers = new HashSet<UserView>();
 		Set<UserView> fullUsers = new HashSet<UserView>();
 		Set<UserView> readOnlyUsers = new HashSet<UserView>();
+        Set<UserView> personUsers = new HashSet<UserView>();
 
 		for (UserView userView : views) {
 			UserType userType = UserType.valueFromLabel(userView.getAccountType());
@@ -91,6 +86,9 @@ public class UserImporter extends AbstractImporter<UserView> {
 				case READONLY:
 					readOnlyUsers.add(userView);
 					break;
+                case PERSON:
+                    personUsers.add(userView);
+                    break;
 				default:
 					throw new IllegalStateException("illegal user account type '" + userView.getAccountType() + "' ");
 				}

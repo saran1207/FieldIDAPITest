@@ -30,9 +30,11 @@ ${action.setPageType('user','view')!}
 		
 	</div>
 	</#if>
+    <#if !user.person>
 	<div class="useractions email">
 		<p><a href="<@s.url action="sendWelcomeEmail" uniqueID="${user.id!}" />"><@s.text name="label.send_welcome_email"/></a></p>
 	</div>
+    </#if>
 </div>
 
 <div class="viewRow">

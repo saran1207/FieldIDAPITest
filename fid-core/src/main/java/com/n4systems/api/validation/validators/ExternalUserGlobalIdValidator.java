@@ -1,7 +1,5 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.Map;
-
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.UserView;
 import com.n4systems.api.validation.ValidationResult;
@@ -10,6 +8,8 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByUserIdLoader;
 import com.n4systems.persistence.loaders.GlobalIdExistsLoader;
+
+import java.util.Map;
 
 public class ExternalUserGlobalIdValidator implements FieldValidator {
 	
@@ -23,7 +23,11 @@ public class ExternalUserGlobalIdValidator implements FieldValidator {
 		
 		UserView userView = (UserView) view;
 		if (globalId == null) {
-			if (userView.getUserID()==null) { 
+            if (userView.isPerson()) {
+                return ValidationResult.pass();
+            }
+
+			if (userView.getUserID() == null) {
 				return ValidationResult.fail(ExternalUserIdMissingValidatorFail, userView.getFirstName(), userView.getLastName());
 			}
 			// A null globalId just means it's an add

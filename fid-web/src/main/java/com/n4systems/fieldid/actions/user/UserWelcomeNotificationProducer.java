@@ -28,9 +28,11 @@ public class UserWelcomeNotificationProducer implements WelcomeNotifier {
 
 
 	private void sendNotification(User user, String personalMessage) {
-		UserWelcomeEmail notification = new UserWelcomeEmail(user, loginUrl, forgotPasswordUrl);
-		notification.setPersonalMessage(personalMessage);
-		notifier.notify(notification );
+        if(!user.isPerson()) {
+            UserWelcomeEmail notification = new UserWelcomeEmail(user, loginUrl, forgotPasswordUrl);
+            notification.setPersonalMessage(personalMessage);
+            notifier.notify(notification );
+        }
 	}
 	
 	@Override
