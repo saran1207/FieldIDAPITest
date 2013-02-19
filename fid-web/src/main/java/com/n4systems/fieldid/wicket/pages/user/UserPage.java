@@ -4,7 +4,7 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.timezone.TimeZoneSelectorPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
@@ -15,15 +15,16 @@ import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import java.util.ArrayList;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
@@ -79,24 +80,13 @@ public abstract class UserPage extends FieldIDFrontEndPage{
             super(id);
 
             add(new OrgPicker("orgPicker", new PropertyModel<BaseOrg>(user, "owner")));
-
             add(new RequiredTextField<String>("email", new PropertyModel<String>(user, "emailAddress")));
-
             add(new RequiredTextField<String>("firstname", new PropertyModel<String>(user, "firstName")));
-
             add(new RequiredTextField<String>("lastname", new PropertyModel<String>(user, "lastName")));
-
             add(new TextField<String>("initials", new PropertyModel<String>(user, "initials")));
-
             add(new TextField<String>("identifier", new PropertyModel<String>(user, "identifier")));
-
             add(new TextField<String>("position", new PropertyModel<String>(user, "position")));
-
-            add(new DropDownChoice<Country>("country", new PropertyModel<Country>(UserPage.this, "country"), new ArrayList<Country>(CountryList.getInstance().getCountries()), new ListableChoiceRenderer<Country>()));
-
-            ArrayList timezones = country != null ? new ArrayList(country.getRegions()) : new ArrayList();
-
-            add(new DropDownChoice<Region>("timezone", new PropertyModel<Region>(UserPage.this, "region"), timezones, new ListableChoiceRenderer<Region>()));
+            add(new TimeZoneSelectorPanel("timeZoneContainer", new PropertyModel<String>(user, "timeZoneID")));
 
             add(new Button("save"));
 

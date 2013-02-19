@@ -63,19 +63,7 @@
 
         <div class="fieldGroup fieldGroupGap clearLeft">
             <h2><wicket:message key="label.localization"/></h2>
-
-            <div class="infoSet">
-                <label class="label"><wicket:message key="label.country"/></label>
-                <span class="fieldHolder">
-                    <select wicket:id="country"/>
-                </span>
-            </div>
-            <div class="infoSet">
-                <label class="label"><wicket:message key="label.timezone"/></label>
-                <span class="fieldHolder">
-                    <select wicket:id="timezone"/>
-                </span>
-            </div>
+            <div wicket:id="timeZoneContainer"></div>
         </div>
 
         <div class="formAction">

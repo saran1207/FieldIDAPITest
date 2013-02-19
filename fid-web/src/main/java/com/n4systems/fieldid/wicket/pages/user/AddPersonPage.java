@@ -16,8 +16,6 @@ public class AddPersonPage extends UserPage {
     @Override
     protected User doSave() {
         User person = user.getObject();
-        person.setTimeZoneID(country.getFullName(region));
-
         userService.create(person);
 
         return person;
