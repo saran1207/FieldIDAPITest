@@ -245,7 +245,7 @@ public class EventService extends FieldIdPersistenceService {
 		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(Event.class, securityContext.getUserSecurityFilter());
 
         NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);
-		List<String> args = Lists.newArrayList("COUNT(*)","workflowState");
+		List<String> args = Lists.newArrayList("COUNT(*)", QueryBuilder.defaultAlias+ ".workflowState");
 		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity(granularity, "dueDate"));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);

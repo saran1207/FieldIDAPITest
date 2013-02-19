@@ -68,7 +68,7 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
  * @author Mark Frederiksen
  */
 public class QueryBuilder<E> {
-	private static final String defaultAlias = "obj";
+	public static final String defaultAlias = "obj";
 	
 	private SelectClause selectArgument;
 	private FromTable fromArgument;
