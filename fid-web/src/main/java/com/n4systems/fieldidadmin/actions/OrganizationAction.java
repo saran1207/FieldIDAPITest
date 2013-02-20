@@ -90,11 +90,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			tenant = TenantFinder.getInstance().findTenant(id);
 			
 			getSecurityContext().setTenantSecurityFilter(new TenantOnlySecurityFilter(id));
-			
-			primaryOrg = TenantFinder.getInstance().findPrimaryOrg(id);
-			for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
-				extendedFeatures.put(feature.name(), true);
-			}
+
+            loadExtendedFeatures();
 		} else {
 			for (PrimaryOrg org : getPage().getList()) {
 				total30DayAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), true));
@@ -104,7 +101,14 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		}
 	}
 
-	@SkipValidation
+    private void loadExtendedFeatures() {
+        primaryOrg = TenantFinder.getInstance().findPrimaryOrg(id);
+        for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
+            extendedFeatures.put(feature.name(), true);
+        }
+    }
+
+    @SkipValidation
 	public String doList() {
 		return SUCCESS;
 	}
@@ -131,6 +135,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public String doUpdateExtendedFeature() throws Exception {
         ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
         extendedFeatureService.setExtendedFeatureEnabled(primaryOrg.getTenant().getId(), feature, featureOn);
+        loadExtendedFeatures();
 
 		return SUCCESS;
 	}
