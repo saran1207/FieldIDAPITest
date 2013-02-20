@@ -605,8 +605,4 @@ public class AssetService extends FieldIdPersistenceService {
         return persistenceService.exists(builder);
     }
 
-    public Asset updateAssetLastEventDate(Asset asset) {
-        asset.setLastEventDate(lastEventDateService.findLastEventDate(asset));
-        return asset;
-    }
 }

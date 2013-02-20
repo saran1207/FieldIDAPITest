@@ -41,42 +41,11 @@ public class AllEventsOfTypeRemovalService extends FieldIdPersistenceService {
 		List<Long> ids = getEventIds(eventType);
 
 		archiveEvents(ids);
-		updateAssetsLastEventDate(ids);
 	}
 
 	private void archiveEvents(List<Long> ids) {
 		EventListArchiver archiver = new EventListArchiver(new TreeSet<Long>(ids));
 		archiver.archive(entityManager);
-	}
-
-	private void updateAssetsLastEventDate(List<Long> ids) {
-		List<Long> assetsToUpdateEventDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Event.class, new OpenSecurityFilter())
-				.setSimpleSelect("asset.id", true)
-				.addSimpleWhere("asset.state", Archivable.EntityState.ACTIVE),
-		  ids,
-		  entityManager).getResultList();
-
-		for (Long assetId : new HashSet<Long>(assetsToUpdateEventDate)) {
-			Asset asset = entityManager.find(Asset.class, assetId);
-
-
-			QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter(), "i");
-			qBuilder.setMaxSelect("completedDate");
-			qBuilder.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
-			qBuilder.addSimpleWhere("asset", asset);
-
-
-			Date lastEventDate = null;
-			try {
-				lastEventDate = qBuilder.getSingleResult(entityManager);
-			} catch (Exception e) {
-				throw new ProcessFailureException("could not archive the events", e);
-			}
-
-			asset.setLastEventDate(lastEventDate);
-
-			entityManager.merge(asset);
-		}
 	}
 
 	private List<Long> getEventIds(EventType eventType) {

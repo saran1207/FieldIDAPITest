@@ -28,6 +28,7 @@ import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.BitField;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.webservice.dto.*;
 import com.n4systems.webservice.dto.ObservationResultServiceDTO.ObservationState;
 import com.n4systems.webservice.dto.ObservationResultServiceDTO.ObservationType;
@@ -207,7 +208,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setId(asset.getId());
 		productDTO.setCustomerRefNumber(asset.getCustomerRefNumber());
 		productDTO.setIdentified(dateToString(asset.getIdentified()));
-		productDTO.setLastInspectionDate(dateToString(asset.getLastEventDate()));
+
+        Date lastEventDate = ServiceLocator.getLastEventDateService().findLastEventDate(asset.getId());
+		productDTO.setLastInspectionDate(dateToString(lastEventDate));
+
 		productDTO.setMobileGuid(asset.getMobileGUID());
 		productDTO.setProductStatusId(asset.getAssetStatus() != null ? asset.getAssetStatus().getId() : 0);
 		productDTO.setProductTypeId(asset.getType().getId());

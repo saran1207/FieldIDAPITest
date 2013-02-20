@@ -1,0 +1,1 @@
+update column_mappings set  sortable = 0, path_expression = "", output_handler = "com.n4systems.fieldid.viewhelpers.handlers.LastEventDateHandler" where name = "asset_search_lasteventdate";

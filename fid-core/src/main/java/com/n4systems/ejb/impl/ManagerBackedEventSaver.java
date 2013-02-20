@@ -179,35 +179,6 @@ public class ManagerBackedEventSaver implements EventSaver {
 		
 		event = persistenceManager.update(event, userId);
 
-        // TODO: Schedule is deprecated and these fields are now stored in the event (and editable there).
-
-//        event.getSchedule().setCompletedDate(event.getDate());
-//        event.getSchedule().setOwner(event.getOwner());
-//        event.getSchedule().setAdvancedLocation(event.getAdvancedLocation());
-
-//        persistenceManager.update(event.getSchedule(), userId);
-        
-//        EventSchedule newEventSchedule = null;
-//        if (!event.getSchedule().wasScheduled()) {
-//            if (scheduleId == -1) {
-//                EventSchedule oldSchedule = event.getSchedule();
-//
-//                newEventSchedule = new EventSchedule(event);
-//                persistenceManager.save(newEventSchedule);
-//
-//                newEventSchedule.getAsset().touch();
-//                persistenceManager.update(newEventSchedule.getAsset());
-//                persistenceManager.update(event);
-//                persistenceManager.delete(oldSchedule);
-//            } else if (scheduleId > 0 && !scheduleId.equals(event.getSchedule().getId())) {
-//                newEventSchedule = persistenceManager.find(EventSchedule.class, scheduleId);
-//                newEventSchedule.completed(event);
-//                persistenceManager.update(newEventSchedule);
-//                persistenceManager.update(event);
-//            }
-//        }
-
-		updateAssetLastEventDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
 		saveProofTestFiles(event, fileData);
 		processUploadedFiles(event, uploadedFiles);
@@ -270,8 +241,6 @@ public class ManagerBackedEventSaver implements EventSaver {
 	private void updateAsset(Event event, Long modifiedById) {
 		User modifiedBy = em.find(User.class, modifiedById);
 		Asset asset = em.find(Asset.class, event.getAsset().getId());
-
-		updateAssetLastEventDate(asset);
 
 		// pushes the location and the ownership to the asset based on the
 		// events data.
@@ -458,11 +427,6 @@ public class ManagerBackedEventSaver implements EventSaver {
 			throw new ProcessingProofTestException(e);
 		}
 
-	}
-
-	public Asset updateAssetLastEventDate(Asset asset) {
-		asset.setLastEventDate(lastEventDateFinder.findLastEventDate(asset));
-		return asset;
 	}
 
 

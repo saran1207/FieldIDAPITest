@@ -139,7 +139,6 @@ public class EventManagerImpl implements EventManager {
 	public Event retireEvent(Event event, Long userId) {
 		event.retireEntity();
 		event = persistenceManager.update(event, userId);
-		eventSaver.updateAssetLastEventDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
         persistenceManager.update(event);
 		return event;

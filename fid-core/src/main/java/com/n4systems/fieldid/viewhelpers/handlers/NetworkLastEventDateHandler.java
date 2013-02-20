@@ -1,14 +1,12 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.fieldid.service.download.TableGenerationContext;
-import com.n4systems.model.asset.LastEventDateLoader;
+import com.n4systems.util.ServiceLocator;
 
 import java.util.Date;
 
 public class NetworkLastEventDateHandler extends DateTimeHandler {
 
-	private LastEventDateLoader lastDateLoader = new LastEventDateLoader();
-	
 	public NetworkLastEventDateHandler(TableGenerationContext action) {
 		super(action);
 	}
@@ -16,8 +14,8 @@ public class NetworkLastEventDateHandler extends DateTimeHandler {
 	@Override
 	public String handleWeb(Long entityId, Object cell) {
 		Long networkId = (Long)cell;
-		
-		Date lastDate = getLastDate(networkId);
+
+        Date lastDate = getLastDate(networkId);
 		
 		return super.handleWeb(entityId, lastDate);
 	}
@@ -29,7 +27,7 @@ public class NetworkLastEventDateHandler extends DateTimeHandler {
 	}
 
 	private Date getLastDate(Long networkId) {
-		Date lastDate = lastDateLoader.setNetworkId(networkId).load();
+		Date lastDate = ServiceLocator.getLastEventDateService().findNetworkLastEventDate(networkId);
 		return lastDate;
 	}
 

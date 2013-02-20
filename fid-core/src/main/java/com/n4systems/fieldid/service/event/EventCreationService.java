@@ -358,8 +358,6 @@ public class EventCreationService extends FieldIdPersistenceService {
         Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
         asset.setSubAssets(assetService.findSubAssets(asset));
 
-        updateAssetLastEventDate(asset);
-
         // pushes the location and the ownership to the asset based on the
         // events data.
         ownershipUpdates(event, asset);
@@ -388,11 +386,6 @@ public class EventCreationService extends FieldIdPersistenceService {
     private void ownershipUpdates(Event event, Asset asset) {
         asset.setOwner(event.getOwner());
         asset.setAdvancedLocation(event.getAdvancedLocation());
-    }
-
-    public Asset updateAssetLastEventDate(Asset asset) {
-        asset.setLastEventDate(lastEventDateService.findLastEventDate(asset));
-        return asset;
     }
 
     private void writeSignatureImagesToDisk(Event event) {

@@ -47,10 +47,6 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date identified;
 
-	@Temporal(TemporalType.TIMESTAMP)
-    @Column(name="lasteventdate")
-	private Date lastEventDate;
-	
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "shoporder_id")
 	private LineItem shopOrder;	// was orderMaster
@@ -329,15 +325,6 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		Collections.sort(orderedList);
 
 		return orderedList;
-	}
-
-	@AllowSafetyNetworkAccess
-	public Date getLastEventDate() {
-		return lastEventDate;
-	}
-
-	public void setLastEventDate(Date lastEventDate) {
-		this.lastEventDate = lastEventDate;
 	}
 
 	@AllowSafetyNetworkAccess

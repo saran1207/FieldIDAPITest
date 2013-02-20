@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.util.DateTimeDefinition;
+import com.n4systems.util.ServiceLocator;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -39,7 +40,8 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("productIdentified", formatDate(asset.getIdentified(), false));
 		add("currentProductStatus", assetStatusName());
 		add("infoOptionMap", produceInfoOptionMap());
-		add("lastInspectionDate", formatDate(asset.getLastEventDate(), true));
+        java.util.Date lastEventDate = ServiceLocator.getLastEventDateService().findLastEventDate(asset);
+		add("lastInspectionDate", formatDate(lastEventDate, true));
 		add("infoOptionBeanList", asset.getOrderedInfoOptionList());
 		add("infoOptionDataSource", new JRBeanCollectionDataSource(asset.getOrderedInfoOptionList()));
 		add("assignedUserName", assignedUserName());

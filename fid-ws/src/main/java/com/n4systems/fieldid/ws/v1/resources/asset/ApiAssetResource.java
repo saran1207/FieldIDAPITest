@@ -17,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.n4systems.fieldid.service.event.LastEventDateService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -67,6 +68,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Autowired private ApiAssetAttachmentResource apiAttachmentResource;
 	@Autowired private ApiSubAssetResource apiSubAssetResource;
 	@Autowired private ApiSavedEventResource apiSavedEventResource;
+    @Autowired private LastEventDateService lastEventDateService;
 	
 	
 	@GET
@@ -227,7 +229,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		apiAsset.setPurchaseOrder(asset.getPurchaseOrder());
 		apiAsset.setComments(asset.getComments());
 		apiAsset.setIdentified(asset.getIdentified());
-		apiAsset.setLastEventDate(asset.getLastEventDate());
+		apiAsset.setLastEventDate(lastEventDateService.findLastEventDate(asset));
 		apiAsset.setTypeId(asset.getType().getId());
 		apiAsset.setNonIntergrationOrderNumber(asset.getNonIntergrationOrderNumber());
 		apiAsset.setImage(loadAssetImage(asset));
