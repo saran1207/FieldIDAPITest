@@ -28,7 +28,9 @@ public class EventCompletenessChartManager extends DateChartManager {
 
         options.bars.barWidth = BAR_RATIO * getGranularity().getStandardDuration().getMillis();
         // note : because of the fat bar width, we need to pull back the xaxis otherwise it will crop left half of first bar.
-        options.xaxis.min -= (long)((BAR_RATIO/4) * getGranularity().getStandardDuration().getMillis());
+        if (options.xaxis.min!=null) {
+            options.xaxis.min -= (long)((BAR_RATIO/4) * getGranularity().getStandardDuration().getMillis());
+        }
     }
 
     private void setColor(ChartSeries<LocalDate> chartSeries) {
