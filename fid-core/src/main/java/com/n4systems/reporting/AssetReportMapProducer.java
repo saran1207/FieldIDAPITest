@@ -1,10 +1,10 @@
 package com.n4systems.reporting;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.util.DateTimeDefinition;
-import com.n4systems.util.ServiceLocator;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -18,11 +18,13 @@ public class AssetReportMapProducer extends ReportMapProducer {
 
 	private static final String UNASSIGNED_USER_NAME = "Unassigned";
 	private final Asset asset;
+    private LastEventDateService lastEventDateService;
 
-	public AssetReportMapProducer(Asset asset, DateTimeDefinition dateTimeDefinition, S3Service s3Service) {
+    public AssetReportMapProducer(Asset asset, LastEventDateService lastEventDateService, DateTimeDefinition dateTimeDefinition, S3Service s3Service) {
 		super(dateTimeDefinition, s3Service);
 		this.asset = asset;
-	}
+        this.lastEventDateService = lastEventDateService;
+    }
 
 	@Override
 	protected void addParameters() {
@@ -40,7 +42,7 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("productIdentified", formatDate(asset.getIdentified(), false));
 		add("currentProductStatus", assetStatusName());
 		add("infoOptionMap", produceInfoOptionMap());
-        java.util.Date lastEventDate = ServiceLocator.getLastEventDateService().findLastEventDate(asset);
+        java.util.Date lastEventDate = lastEventDateService.findLastEventDate(asset);
 		add("lastInspectionDate", formatDate(lastEventDate, true));
 		add("infoOptionBeanList", asset.getOrderedInfoOptionList());
 		add("infoOptionDataSource", new JRBeanCollectionDataSource(asset.getOrderedInfoOptionList()));

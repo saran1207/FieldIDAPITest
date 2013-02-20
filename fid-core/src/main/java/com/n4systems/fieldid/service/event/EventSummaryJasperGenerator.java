@@ -43,6 +43,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
     private @Autowired EventService eventService;
     private @Autowired OrgService orgService;
     private @Autowired DateService dateService;
+    private @Autowired LastEventDateService lastEventDateService;
 
 
     @Autowired
@@ -113,7 +114,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                         ? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 
-                Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService).produceMap();
+                Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService).produceMap();
                 eventMap.put("mainInspection", eventReportMap);
                 eventMap.put("product", eventReportMap.get("product"));
 
@@ -121,7 +122,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                 inspectionResultMaps.add(eventReportMap);
 
                 for (SubEvent subEvent : event.getSubEvents()) {
-                    inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service).produceMap());
+                    inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service, lastEventDateService).produceMap());
                 }
 
                 eventMap.put("allInspections", inspectionResultMaps);
