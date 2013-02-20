@@ -11,7 +11,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
-import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
+import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
@@ -74,7 +74,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
             add(scheduledDatePicker);
 
-            ExaminersModel usersModel = new ExaminersModel();
+            UsersForTenantModel usersModel = new UsersForTenantModel();
             VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
             add(new AssignedUserOrGroupSelect("assignee",
                     ProxyModel.of(eventModel, on(Event.class).getAssignedUserOrGroup()),
