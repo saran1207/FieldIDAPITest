@@ -15,6 +15,7 @@ import com.n4systems.model.PriorityCode;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -83,6 +84,9 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			event.setDueDate(apiEventSchedule.getNextDate());
             event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
             event.setAssignee(getAssigneeUser(apiEventSchedule));
+            if(event.getAssignee() == null)
+            	event.setAssignedGroup(getAssigneeUserGroup(apiEventSchedule));
+            
 			persistenceService.update(event);
 			logger.warn("(Legacy Client Detected) Updated Scheduled Event for " + event.getEventType().getName() + " on Asset " + event.getMobileGUID());
 		} else {
@@ -170,6 +174,8 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
         event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
         event.setOwner(asset.getOwner());
         event.setAssignee(getAssigneeUser(apiEventSchedule));
+        if(event.getAssignee() == null)
+        	event.setAssignedGroup(getAssigneeUserGroup(apiEventSchedule));
         
         if(event.getEventType().getGroup().isAction()) {
         	event.setPriority(persistenceService.find(PriorityCode.class, apiEventSchedule.getPriorityId()));
@@ -186,6 +192,15 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		if(apiEventSchedule.getAssigneeUserId() != null && apiEventSchedule.getAssigneeUserId() > 0) {
         	User assigneeUser = persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEventSchedule.getAssigneeUserId());
         	return assigneeUser;
+        }
+		
+		return null;
+	}
+	
+	private UserGroup getAssigneeUserGroup(ApiEventSchedule apiEventSchedule) {
+		if(apiEventSchedule.getAssigneeUserGroupId() != null && apiEventSchedule.getAssigneeUserGroupId() > 0) {
+			UserGroup assigneeUserGroup = persistenceService.findUsingTenantOnlySecurityWithArchived(UserGroup.class, apiEventSchedule.getAssigneeUserGroupId());
+        	return assigneeUserGroup;
         }
 		
 		return null;

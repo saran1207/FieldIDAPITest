@@ -12,6 +12,7 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 	private String owner;
 	private Date nextDate;
 	private Long assigneeUserId;
+	private Long assigneeUserGroupId;
 	private boolean action;
 	private Long priorityId;	
 	private String notes;
@@ -73,6 +74,14 @@ public class ApiEventSchedule extends ApiReadWriteModelWithOwner {
 		this.assigneeUserId = assigneeUserId;
 	}
 	
+	public Long getAssigneeUserGroupId() {
+		return assigneeUserGroupId;
+	}
+	
+	public void setAssigneeUserGroupId(Long assigneeUserGroupId) {
+		this.assigneeUserGroupId = assigneeUserGroupId;
+	}	
+
 	public boolean isAction() {
 		return action;
 	}
