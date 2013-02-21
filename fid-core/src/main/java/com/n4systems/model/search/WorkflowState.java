@@ -28,12 +28,14 @@ public enum WorkflowState implements Listable {
         return labelKey;
     }
 
+    // For the purposes of reporting, closed events are considered incomplete.
+    // (Search parameters apply to the asset rather than the completed event).
     public boolean includesIncomplete() {
-        return this == ALL || this == OPEN;
+        return this == ALL || this == OPEN || this == CLOSED;
     }
 
     public boolean includesComplete() {
-        return this == ALL || this == COMPLETE || this == CLOSED;
+        return this == ALL || this == COMPLETE;
     }
 
 }
