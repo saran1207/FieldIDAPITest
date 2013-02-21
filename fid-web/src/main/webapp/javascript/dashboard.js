@@ -114,7 +114,10 @@ var chartWidgetFactory = (function() {
 		var monthNames = options.xaxis.monthNames;
         var dateObj = new Date(datapoint[0]);
         var date2Obj = new Date(datapoint[0]+6*MS_PER_DAY);
-        var y = datapoint[1].toFixed(options.yaxis.decimals) - datapoint[2].toFixed(options.yaxis.decimals);
+		// note that for stacked bar charts, the offset will be stored in the [2] item.   e.g.    datapoint {xxx, 100, 49} means this section has a size of 51, starting at position 49.
+		var offset = datapoint.length<=2 ? 0 : datapoint[2].toFixed(options.yaxis.decimals);
+        var y = datapoint[1].toFixed(options.yaxis.decimals) - offset;
+
         var weekEndDay = '';
         if (date2Obj.getUTCMonth()!=dateObj.getUTCMonth()) {
         	weekEndDay = monthNames[date2Obj.getUTCMonth()] + ' ';
