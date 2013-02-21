@@ -1,0 +1,101 @@
+#page {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.options {
+    border-bottom: none;
+}
+
+.viewLinks {
+    position: absolute;
+    right: 17px;
+    top: 3px;
+}
+
+.viewLinks .padLeft {
+    margin-left: 5px;
+}
+
+.horizontalGrouping {
+    background: none repeat scroll 0 0 #FFFFFF;
+    box-shadow: 5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
+    float: left;
+    margin-bottom: 20px;
+}
+.horizontalGrouping h2{
+    padding: 10px;
+    font-size: 1.3em;
+    margin-bottom: 20px;
+}
+
+.horizontalGroup h2{
+    text-align: center;
+}
+
+.horizontalGroup p{
+    font-size: 13px;
+    padding: 5px;
+}
+
+.horizontalGroup img{
+    margin: 20px 0 10px 75px;
+
+}
+
+.horizontalGroup .addUserAction, .horizontalGroup .upgradeUserAction {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 60px;
+    width: 180px;
+    text-align: center;
+}
+
+.addUserAction input, .upgradeUserAction input{
+    padding: 5px;
+    font-size: 14px;
+    overflow: visible;
+}
+
+div.groupContents{
+    height: 250px;
+}
+
+.horizontalGrouping .horizontalGroup{
+    width: 225px;
+    float: left;
+    height: 400px;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.rightBorder {
+    border-right: 1px solid #999;
+}
+
+.horizontalGroup .permissionListing{
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.permissionListing li{
+    text-align: center;
+    padding: 5px;
+    font-size: 13px;
+}
+
+.permissionListing label{
+    padding-top: 5px;
+    position: relative;
+    top: -5px;
+    color: #666
+}
+
+div.userLimitWarning{
+    font-size: 13px;
+    padding: 45px 0px 0px 15px;
+    background: no-repeat scroll 90px 0 transparent url('/fieldid/images/warning-icon.png');
+    margin-top: 35px;
+}

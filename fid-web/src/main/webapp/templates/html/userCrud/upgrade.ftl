@@ -1,22 +1,22 @@
-${action.setPageType('user','change')!}
 <head>
-	<@n4.includeStyle href="user" type="page"/>
+    <@n4.includeStyle href="../newCss/user/user_select" type="page"/>
+    <@n4.includeStyle href="../newCss/component/matt_buttons" type="page"/>
+    <title><@s.text name="label.add_user" /></title>
 </head>
+
+<div class="viewLinks">
+    <a class="mattButtonLeft" href="<@s.url action='userList'/>"><@s.text name="nav.view_all"/></a>
+    <a class="mattButtonRight" href="<@s.url action='archivedUserList'/>"><@s.text name="nav.archived"/></a>
+    <a class="mattButton padLeft" href="<@s.url action='userImportExport'/>"><@s.text name="nav.import"/></a>
+</div>
 
 <div class="horizontalGrouping">
 
-	<h2>
-		<@s.text name="label.upgrade_user_heading">
-			<@s.param>${user.userType.label}</@s.param>
-			<@s.param>${user.userLabel}</@s.param>
-		</@s.text>
-	</h2>
-
-	<div class="horizontalGroup <#if !userLimitService.readOnlyUsersEnabled> twoGroup </#if> ">
+	<div class="horizontalGroup rightBorder">
 		<div class="groupContents">
-			<h2><@s.text name="label.full_user" /></h2>
-			<p><@s.text name="label.employees_that_may" /></p>
-			
+            <img src="<@s.url value="/images/icon-full.png"/>">
+            <h2><@s.text name="label.full_user" /></h2>
+
 			<ul class="permissionListing">
 				<li><label><@s.text name="label.add_new_data" /></label></li>
 				<li><label><@s.text name="label.perform_events" /></label></li>
@@ -43,11 +43,11 @@ ${action.setPageType('user','change')!}
 		</#if>
 	</div>
 		
-	<div class="horizontalGroup <#if !userLimitService.readOnlyUsersEnabled> increasedMargins <#else> leftRightMargins </#if> ">
+	<div class="horizontalGroup rightBorder">
 		<div class="groupContents">
+            <img src="<@s.url value="/images/icon-lite.png"/>">
 			<h2><@s.text name="label.lite_user" /></h2>
-			<p><@s.text name="label.employees_that_may" /></p>
-			
+
 			<ul class="permissionListing">
 				<li><label><@s.text name="label.perform_events" /></label></li>
 				<li><label><@s.text name="label.run_searches" /></label></li>
@@ -72,43 +72,53 @@ ${action.setPageType('user','change')!}
 		</#if>
 	</div>
 	
-	<#if userLimitService.readOnlyUsersEnabled>
-		<div class="horizontalGroup">
-			<div class="groupContents">
-				<h2><@s.text name="label.ready_only_user" /></h2>
-				<p><@s.text name="label.lite_users_that_may" /></p>
-				
-				<ul class="permissionListing">
-					<li><label><@s.text name="label.view_their_assets" /></label></li>
-					<li><label><@s.text name="label.run_searches" /></label></li>
-				</ul>
-			</div>
-			<#if readOnlyUser >
-				<div class="upgradeUserAction center">
-					<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
-				</div>
-			<#else>
-				<#if userLimitService.readOnlyUsersAtMax>
-					<div class="userLimitWarning">
-						<@s.text name="label.readonly_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
-					</div>
-				<#else>	
-					<div class="upgradeUserAction center">
-						<@s.url id="changeToReadOnly" action="changeToReadOnly" uniqueID="${uniqueID}"/>
-						<input type="button" value="<@s.text name='hbutton.change_to_readonly'/>" onclick="return redirect('${changeToReadOnly}');"/>
-					</div>
-				</#if>
-			</#if>
-	</#if>
-</div>
+    <div class="horizontalGroup rightBorder">
+        <div class="groupContents">
+            <img src="<@s.url value="/images/icon-readonly.png"/>">
+            <h2><@s.text name="label.ready_only_user" /></h2>
 
-<#if person >
-    <div class="upgradeUserAction center">
-        <input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
+            <ul class="permissionListing">
+                <li><label><@s.text name="label.view_their_assets" /></label></li>
+                <li><label><@s.text name="label.run_searches" /></label></li>
+            </ul>
+        </div>
+        <#if readOnlyUser >
+            <div class="upgradeUserAction center">
+                <input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
+            </div>
+        <#else>
+            <#if userLimitService.readOnlyUsersAtMax>
+                <div class="userLimitWarning">
+                    <@s.text name="label.readonly_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>
+                </div>
+            <#else>
+                <div class="upgradeUserAction center">
+                    <@s.url id="changeToReadOnly" action="changeToReadOnly" uniqueID="${uniqueID}"/>
+                    <input type="button" value="<@s.text name='hbutton.change_to_readonly'/>" onclick="return redirect('${changeToReadOnly}');"/>
+                </div>
+            </#if>
+        </#if>
     </div>
-<#else>
-    <div class="upgradeUserAction center">
-    <@s.url id="changeToPerson" action="changeToPerson" uniqueID="${uniqueID}"/>
-    <input type="button" value="<@s.text name='hbutton.change_to_person'/>" onclick="return redirect('${changeToPerson}');"/>
+
+    <div class="horizontalGroup">
+        <div class="groupContents">
+            <img src="<@s.url value="/images/icon-person.png"/>">
+            <h2><@s.text name="label.person" /></h2>
+
+            <ul class="permissionListing">
+                <li><label><@s.text name="label.no_fid_login" /></label></li>
+                <li><label><@s.text name="label.track_assets" /></label></li>
+            </ul>
+        </div>
+        <#if person >
+            <div class="upgradeUserAction center">
+                <input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
+            </div>
+        <#else>
+            <div class="upgradeUserAction center">
+                <@s.url id="changeToPerson" action="changeToPerson" uniqueID="${uniqueID}"/>
+                <input type="button" value="<@s.text name='hbutton.change_to_person'/>" onclick="return redirect('${changeToPerson}');"/>
+            </div>
+        </#if>
     </div>
-</#if>
+

@@ -111,17 +111,24 @@ td.permissionName{
 
 .horizontalGroup h2{
 	padding: 0px;
+    text-align: center;
 }
  
 .horizontalGroup p{
 	font-size: 13px; 
 	padding: 5px;
 }
+
+.horizontalGroup img{
+    margin: 20px 0 10px 75px;
+
+}
  
 .horizontalGroup .addUserAction, .horizontalGroup .upgradeUserAction {
  	margin-left: auto;
  	margin-right: auto;
  	width: 180px;
+    text-align: center;
 }
 
 .addUserAction input, .upgradeUserAction input{
@@ -136,20 +143,11 @@ div.groupContents{
  
 .horizontalGrouping .horizontalGroup{
 	border: 1px solid #999;
-    width: 290px;
+    width: 225px;
     float: left;
     height: 300px;
     overflow: hidden;
     padding: 10px;
-}
-
-.horizontalGrouping .increasedMargins{
-	margin-left: 30px;
-}
-
-.horizontalGrouping .leftRightMargins{
-	margin-left: 30px;
-	margin-right: 30px;
 }
 
 .horizontalGroup .permissionListing{
@@ -158,9 +156,7 @@ div.groupContents{
 }
 
 .permissionListing li{
-	list-style-image: url(/fieldid/images/links-arrow.png);
-	list-style-type: square;
-	list-style-position: inside;
+    text-align: center;
 	padding: 5px;
 	font-size: 13px;
 }
@@ -177,7 +173,7 @@ div.userLimitWarning{
 	padding: 5px 0px 0px 45px;
 	height: 50px;
 	background: no-repeat url(../../images/warning-icon.png);
-	}
+}
 
 .viewRow {
 	float : left;

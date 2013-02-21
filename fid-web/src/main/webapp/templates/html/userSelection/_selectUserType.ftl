@@ -1,28 +1,28 @@
-${action.setPageType('user','adduser')!}
+<#--${action.setPageType('user','adduser')!}-->
 
 <head>
-	<@n4.includeStyle href="user" type="page"/>
-	<title><@s.text name="label.add_user" /></title>
+	<@n4.includeStyle href="../newCss/user/user_select" type="page"/>
+    <@n4.includeStyle href="../newCss/component/matt_buttons" type="page"/>
+	<title><@s.text name="label.upgrade" /></title>
 </head>
-
-<#assign backToList>
-	<a href="<@s.url action="userList" currentPage="${currentPage!}" listFilter="${listFilter!}" />"><@s.text name="label.cancel" /></a>
-</#assign>
 
 <@s.url id="addFullUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addEmployeeUser"/>
 <@s.url id="addLiteUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addLiteUser"/>
 <@s.url id="addReadOnlyUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addReadOnlyUser"/>
 <@s.url id="addPersonUrl" namespace="/" value="w/addPerson"/>
 
+<div class="viewLinks">
+    <a class="mattButtonLeft" href="<@s.url action='userList'/>"><@s.text name="nav.view_all"/></a>
+    <a class="mattButtonRight" href="<@s.url action='archivedUserList'/>"><@s.text name="nav.archived"/></a>
+    <a class="mattButton padLeft" href="<@s.url action='userImportExport'/>"><@s.text name="nav.import"/></a>
+</div>
+
 <div class="horizontalGrouping">
-	
-	<h2><@s.text name="label.add_user_heading" /></h2>
-	
-	<div class="horizontalGroup">
+	<div class="horizontalGroup rightBorder">
 		<div class="groupContents ">
+            <img src="<@s.url value="/images/icon-full.png"/>">
 			<h2><@s.text name="label.full_user" /></h2>
-			<p><@s.text name="label.employees_that_may" /></p>
-			
+
 			<ul class="permissionListing">
 				<li><label><@s.text name="label.add_new_data" /></label></li>
 				<li><label><@s.text name="label.perform_events" /></label></li>
@@ -41,52 +41,63 @@ ${action.setPageType('user','adduser')!}
 		</#if>
 	</div>
 	
-	<#if userLimitService.liteUsersEnabled>
-		<div class="horizontalGroup increasedMargins">
-			<div class="groupContents">
-				<h2><@s.text name="label.lite_user" /></h2>
-				<p><@s.text name="label.employees_that_may" /></p>
-				
-				<ul class="permissionListing">
-					<li><label><@s.text name="label.perform_events" /></label></li>
-					<li><label><@s.text name="label.run_searches" /></label></li>
-				</ul>
-			</div>
-	
-			<#if userLimitService.liteUsersAtMax>
-				<div class="userLimitWarning">
-					<@s.text name="label.lite_user_limit_reached"/>	
-				</div>		
-			<#else>
-				<div class="addUserAction">
-					<input id="addLiteUser"  type="button" value="<@s.text name="label.add_new_lite_user" />" onclick="return redirect('${addLiteUserUrl}');" />
-				</div>
-			</#if>
-		</div>
-	</#if>
-	<#if userLimitService.readOnlyUsersEnabled>
-		<div class="horizontalGroup increasedMargins ">
-			<div class="groupContents">
-				<h2><@s.text name="label.ready_only_user" /></h2>
-				<p><@s.text name="label.lite_users_that_may" /></p>
-				
-				<ul class="permissionListing">
-					<li><label><@s.text name="label.view_their_assets" /></label></li>
-					<li><label><@s.text name="label.run_searches" /></label></li>
-				</ul>
-			</div>	
-			<#if userLimitService.readOnlyUsersAtMax>
-				<div class="userLimitWarning">
-					<@s.text name="label.readonly_user_limit_reached"/>	
-				</div>		
-			<#else>
-				<div class="addUserAction">
-					<input id="addReadOnlyUser" type="button" value="<@s.text name="label.add_new_read_only_user" />" onclick="return redirect('${addReadOnlyUserUrl}');"/>
-				</div>
-			</#if>
-		</div>
-	</#if>
-    <div class="addUserAction">
-        <input id="addPerson" type="button" value="<@s.text name="label.add_new_person" />" onclick="return redirect('${addPersonUrl}');"/>
+    <div class="horizontalGroup rightBorder">
+        <div class="groupContents">
+            <img src="<@s.url value="/images/icon-lite.png"/>">
+            <h2><@s.text name="label.lite_user" /></h2>
+
+            <ul class="permissionListing">
+                <li><label><@s.text name="label.perform_events" /></label></li>
+                <li><label><@s.text name="label.run_searches" /></label></li>
+            </ul>
+        </div>
+
+        <#if userLimitService.liteUsersAtMax>
+            <div class="userLimitWarning">
+                <@s.text name="label.lite_user_limit_reached"/>
+            </div>
+        <#else>
+            <div class="addUserAction">
+                <input id="addLiteUser"  type="button" value="<@s.text name="label.add_new_lite_user" />" onclick="return redirect('${addLiteUserUrl}');" />
+            </div>
+        </#if>
     </div>
+
+    <div class="horizontalGroup rightBorder ">
+        <div class="groupContents">
+            <img src="<@s.url value="/images/icon-readonly.png"/>">
+            <h2><@s.text name="label.ready_only_user" /></h2>
+
+            <ul class="permissionListing">
+                <li><label><@s.text name="label.view_their_assets" /></label></li>
+                <li><label><@s.text name="label.run_searches" /></label></li>
+            </ul>
+        </div>
+        <#if userLimitService.readOnlyUsersAtMax>
+            <div class="userLimitWarning">
+                <@s.text name="label.readonly_user_limit_reached"/>
+            </div>
+        <#else>
+            <div class="addUserAction">
+                <input id="addReadOnlyUser" type="button" value="<@s.text name="label.add_new_read_only_user" />" onclick="return redirect('${addReadOnlyUserUrl}');"/>
+            </div>
+        </#if>
+    </div>
+
+    <div class="horizontalGroup">
+        <div class="groupContents ">
+            <img src="<@s.url value="/images/icon-person.png"/>">
+            <h2><@s.text name="label.person"/></h2>
+
+            <ul class="permissionListing">
+                <li><label><@s.text name="label.no_fid_login" /></label></li>
+                <li><label><@s.text name="label.track_assets" /></label></li>
+            </ul>
+        </div>
+        <div class="addUserAction">
+            <input id="addPerson" type="button" value="<@s.text name="label.add_new_person" />" onclick="return redirect('${addPersonUrl}');"/>
+        </div>
+    </div>
+
+
 </div>
