@@ -142,23 +142,29 @@ ${action.setPageType('asset', 'edit')!}
 				<@s.text name="instruction.confirm_merger"/>
 			</p>
 			<table id="mergeSummary" class="list">
-				<tr>
-					<th></th>
-					<th>${identifierLabel}</th>
-					<th><@s.text name="label.rfidnumber"/></th>
-					<th><@s.text name="label.customername"/></th>
-					<th><@s.text name="label.assettype"/></th>
-					<th><@s.text name="label.identifieddate"/></th>
-					<th><@s.text name="label.referencenumber"/></th>
-				</tr>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th><@s.text name="label.assettype"/></th>
+                    <th>${identifierLabel}</th>
+                    <th><@s.text name="label.rfidnumber"/></th>
+                    <th><@s.text name="label.reference_number"/></th>
+                    <th><@s.text name="label.owner"/></th>
+                    <th><@s.text name="label.assetstatus"/></th>
+                    <th><@s.text name="label.nextscheduleddate"/></th>
+                </tr>
 				<tr>
 					<td><@s.text name="label.loser"/></td>
+                    <td>${losingAsset.type.name?html}</td>
+                    <td>${(losingAsset.rfidNumber?html)!}</td>
+                    <td>${(losingAsset.customerRefNumber?html)!}</td>
 					<td>${losingAsset.identifier?html}</td>
-					<td>${(losingAsset.rfidNumber?html)!}</td>
 					<td>${(losingAsset.owner.name?html)!}</td>
-					<td>${losingAsset.type.name?html}</td>
-					<td>${action.formatDate(losingAsset.identified, false)}</td>
-					<td>&nbsp;</td>   <!-- without this placeholder, top border won't show up on cell -->
+                    <#if asset.assetStatus??>
+                        <td>${(asset.assetStatus.name)!}</td>
+                    <#else>
+                        <td></td>
+                    </#if>
+                    <td>${action.formatDate(action.getNextScheduledEventDate(asset.id),false)}</td>
 				</tr>
 				<tr id="winningAsset">
 				</tr>

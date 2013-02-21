@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.asset;
 
+import java.util.Date;
 import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
@@ -7,6 +8,7 @@ import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.fieldid.actions.helpers.AllEventHelper;
 import com.n4systems.model.Asset;
+import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
@@ -144,5 +146,10 @@ public class AssetMergeAction extends AbstractCrud {
     @Override
     public String getIEHeader() {
         return "EmulateIE8";
+    }
+
+    public Date getNextScheduledEventDate(Long id) {
+        Event schedule = new NextEventScheduleLoader().setAssetId(id).load();
+        return schedule==null ? null : schedule.getDueDate();
     }
 }

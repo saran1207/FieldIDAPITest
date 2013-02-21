@@ -16,6 +16,7 @@
 						<th>&nbsp;</th>
                         <th><@s.text name="label.assettype"/></th>
 						<th>${identifierLabel}</th>
+                        <th><@s.text name="label.rfidnumber"/></th>
 						<th><@s.text name="label.reference_number"/></th>
                         <th><@s.text name="label.owner"/></th>
                         <th><@s.text name="label.assetstatus"/></th>
@@ -26,6 +27,7 @@
 							<td class="selectAction"><button class="assetLink" assetId="${asset.id}"><@s.text name="label.select"/></button></td>
                             <td>${asset.type.name}</td>
                             <td>${asset.identifier}</td>
+                            <td>${(asset.rfidNumber?html)!}</td>
 							<td>${(asset.customerRefNumber?html)!}</td>
 							<td>${(asset.owner.name?html)!}</td>
                             <#if asset.assetStatus??>
