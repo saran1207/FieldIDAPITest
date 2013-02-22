@@ -168,6 +168,7 @@
 		<action name="downloadSubAttachedFile" method="downloadSubEvent" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
 		<action name="downloadProofTestChart" method="downloadChart" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
 		<action name="downloadJobNoteFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProjectNoteFile" />
+        <action name="downloadEventCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadEventCert" />
 		<action name="downloadAssetTypeAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeAttachedFile" />
 		<action name="downloadAssetTypeAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetTypeAttachedFile" />
 		<action name="downloadAssetTypeImage" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeImage" />
