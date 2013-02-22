@@ -150,4 +150,8 @@ public class ProjectAssetCrud extends AbstractCrud {
 		return asset;
 	}
 
+    @Override
+    public String getIEHeader() {
+        return "EmulateIE8";
+    }
 }
