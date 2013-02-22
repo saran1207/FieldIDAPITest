@@ -749,6 +749,9 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
             setAssignee((User) assignee);
         } else if (assignee instanceof UserGroup) {
             setAssignedGroup((UserGroup) assignee);
+        } else if (assignee == null) {
+            this.assignee = null;
+            this.assignedGroup = null;
         }
     }
 }

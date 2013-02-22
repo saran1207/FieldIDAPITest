@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.asset;
 
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -17,6 +18,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.UserGroup;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -31,14 +33,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class HeaderPanel extends Panel {
 
-    @SpringBean
-    protected AssetService assetService;
+    @SpringBean protected UserService userService;
+    @SpringBean protected AssetService assetService;
+    @SpringBean private EventScheduleService eventScheduleService;
 
-    @SpringBean
-    private EventScheduleService eventScheduleService;
-    
     private Boolean useContext;
-
     private Event scheduleToAdd;
 
     public HeaderPanel(String id, IModel<Asset> assetModel, Boolean isView, Boolean useContext) {
@@ -114,6 +113,10 @@ public class HeaderPanel extends Panel {
         Event schedule = new Event();
         schedule.setEventResult(EventResult.VOID);
         schedule.setAsset(asset);
+        UserGroup currentUserGroup = userService.getUser(FieldIDSession.get().getSessionUser().getId()).getGroup();
+        if (currentUserGroup != null) {
+            schedule.setAssignedUserOrGroup(currentUserGroup);
+        }
         return schedule;
     }
 
