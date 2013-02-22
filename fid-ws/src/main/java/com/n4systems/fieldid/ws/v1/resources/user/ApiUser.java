@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.user;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModelWithOwner;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfile;
 import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenant;
+import com.n4systems.security.UserType;
 
 public class ApiUser extends ApiReadonlyModelWithOwner {
 	private String userId;
@@ -121,5 +122,9 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 
 	public void setGroupId(Long groupId) {
 		this.groupId = groupId;
-	}	
+	}
+
+    public boolean isPerson() {
+        return userType.equals(UserType.PERSON.name());
+    }
 }
