@@ -102,6 +102,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	}
 
     private void loadExtendedFeatures() {
+        extendedFeatures.clear();
         primaryOrg = TenantFinder.getInstance().findPrimaryOrg(id);
         for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
             extendedFeatures.put(feature.name(), true);
