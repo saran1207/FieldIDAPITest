@@ -150,6 +150,10 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		if (event.getAssignee() != null) {
 			apiSchedule.setAssigneeUserId(event.getAssignee().getId());
 		}
+		if(event.getAssignedGroup() != null) {
+			apiSchedule.setAssigneeUserGroupId(event.getAssignedGroup().getId());
+		}
+		
 		
 		if (event.isAction()) {
 			apiSchedule.setAction(true);
