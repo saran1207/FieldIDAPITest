@@ -1,13 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.savedEvent;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiCriteriaResult;
@@ -16,23 +8,15 @@ import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiCriteriaSection;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventForm;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiCriteria;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.DateFieldCriteriaResult;
-import com.n4systems.model.Deficiency;
-import com.n4systems.model.NumberFieldCriteriaResult;
-import com.n4systems.model.Observation;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.Recommendation;
-import com.n4systems.model.ScoreCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.*;
 import com.n4systems.services.signature.SignatureService;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 	private static Logger logger = Logger.getLogger(ApiSavedEventFormResource.class);
@@ -66,17 +50,24 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 		apiSection.setActive(!section.isRetired());
 		apiSection.setModified(section.getModified());
 		apiSection.setTitle(section.getTitle());
-		
+
+		ApiCriteria criteriaResult;
 		for (Criteria criteria : section.getCriteria()) {
-			apiSection.getCriteria().add(convertCriteria(criteria, results, eventId));
+			criteriaResult = convertCriteria(criteria, results, eventId);
+			if (criteriaResult != null)
+				apiSection.getCriteria().add(criteriaResult);
 		}
 		
 		return apiSection;
 	}
 	
 	private ApiCriteria convertCriteria(Criteria criteria, Set<CriteriaResult> results, Long eventId) {
+		// findResult can return null in cases of retired criteria.  In that case we should not send or convert the criteria at all
+		ApiCriteriaResult result = findResult(criteria, results, eventId);
+		if (result == null) return null;
+
 		ApiCriteria apiCriteria = eventTypeResource.convertCriteria(criteria);
-		apiCriteria.setResult(findResult(criteria, results, eventId));
+		apiCriteria.setResult(result);
 		return apiCriteria;
 	}
 	
