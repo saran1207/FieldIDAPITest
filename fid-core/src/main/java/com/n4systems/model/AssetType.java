@@ -348,13 +348,14 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
     }
 
     // uggh.  entities should be dumb.  not have all this conditional stuff relying on session etc...
+    // Is this used outside of the report results table? This could be moved into a service and used from there. -NC
     private String formatDate(Date date) {
         User user = ThreadLocalInteractionContext.getInstance().getCurrentUser();
         String format = null;
         if (DateUtil.isMidnight(date)) {
-            format = user!=null&&user.getDateFormat()!=null ? "yyyy-MM-dd" : user.getDateFormat();
+            format = user != null && user.getDateFormat() != null ? user.getDateFormat() : "yyyy-MM-dd";
         } else {
-            format = user!=null&&user.getDateTimeFormat()!=null ? "yyyy-MM-dd HH:mm" : user.getDateTimeFormat();
+            format = user !=null && user.getDateTimeFormat() != null ? user.getDateTimeFormat() : "yyyy-MM-dd HH:mm";
         }
         return new SimpleDateFormat(format).format(date);
     }
