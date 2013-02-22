@@ -14,6 +14,8 @@ import com.n4systems.security.UserType;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
@@ -85,6 +87,7 @@ public class UserService extends FieldIdPersistenceService {
 		builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
 		builder.addWhere(WhereClauseFactory.createCaseInsensitive("userID", userId));
 		builder.addWhere(WhereClauseFactory.create("hashPassword", User.hashPassword(password)));
+		builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.PERSON));
 		
 		User user = persistenceService.find(builder);
 		return user;
@@ -100,6 +103,7 @@ public class UserService extends FieldIdPersistenceService {
 		
 		builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
 		builder.addWhere(WhereClauseFactory.create("hashSecurityCardNumber", User.hashSecurityCardNumber(cardNumber)));
+		builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.PERSON));
 
 		List<User> users = persistenceService.findAll(builder);
 		return (users.size() != 1) ? null : users.get(0);
