@@ -7,7 +7,7 @@
 			$('userBelongsToFilter').selectedIndex = 0;
 			$('userType').selectedIndex = 0;	
 			$('orgFilter').selectedIndex = 0;
-                $('userGroupFilter');.selectedIndex = 0;
+            $('userGroupFilter').selectedIndex = 0;
 			$('listFilterForm').submit();	
 		}
 	</script>
