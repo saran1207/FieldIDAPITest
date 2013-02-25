@@ -60,7 +60,7 @@
             <@s.text name="label.assetsummary"/>
         </a>
 
-        <#if userSecurityGuard.allowedEditEvent>
+        <#if userSecurityGuard.allowedEditEvent && event.tenant.id == sessionUser.tenant.id>
             <a class="mattButton edit" href="<@s.url action="selectEventEdit" uniqueID="${event.id}"/>">
                 <@s.text name="label.edit"/>
             </a>
