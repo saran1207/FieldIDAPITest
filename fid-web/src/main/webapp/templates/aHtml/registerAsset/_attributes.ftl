@@ -31,8 +31,8 @@
 		</@s.else>
 		
 		<#if !infoField.retired || infoOptionIsNull == false>
-			<div style="overflow:visible;" class="infoSet  <#if infoField.fieldType == 'datefield'>increasedWidthFieldHolder</#if>" infoFieldName="${infoField.name?j_string}>		
-				<@s.hidden name="assetInfoOptions[${stat.index}].infoFieldId"  value="${infoField.uniqueID}"/>
+			<div style="overflow:visible;" class="infoSet  <#if infoField.fieldType == 'datefield'>increasedWidthFieldHolder</#if>" infoFieldName="${infoField.name?j_string}">
+				<input type="hidden" name="assetInfoOptions[${stat.index}].infoFieldId"  value="${infoField.uniqueID}"/>
 
 				<#if infoField.retired >
 					<label class="label">${infoField.name?html} (<@s.text name="label.retired"/>)</label>
