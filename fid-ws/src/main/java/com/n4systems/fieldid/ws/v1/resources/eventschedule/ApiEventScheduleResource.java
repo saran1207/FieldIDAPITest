@@ -100,9 +100,15 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Transactional
 	public void saveMultipleEventSchedules(ApiMultiEventSchedule apiMultiEventSchedule) {
 		ApiEventSchedule eventScheduleTemplate = apiMultiEventSchedule.getEventScheduleTemplate();
+		boolean copyOwner = eventScheduleTemplate.getOwnerId() == null; //If client had copyOwner, we will have ownerId = null.
 		for (ApiAssetLink assetLink: apiMultiEventSchedule.getEventSchedules()) {
 			eventScheduleTemplate.setSid(assetLink.getSid());
 			eventScheduleTemplate.setAssetId(assetLink.getAssetId());
+			
+			if(copyOwner) {
+				Asset asset = assetService.findByMobileId(assetLink.getAssetId(), true);
+				eventScheduleTemplate.setOwnerId(asset.getOwner() != null ? asset.getOwner().getId() : null);
+			}
 
 			logger.info("Creating Event Schedule " + eventScheduleTemplate.getSid());
 			saveEventSchedule(eventScheduleTemplate);
