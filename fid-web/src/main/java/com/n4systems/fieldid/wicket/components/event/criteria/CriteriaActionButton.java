@@ -2,7 +2,9 @@ package com.n4systems.fieldid.wicket.components.event.criteria;
 
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.util.OneClickOnlyDecorator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -27,6 +29,11 @@ public abstract class CriteriaActionButton extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 CriteriaActionButton.this.onClick(target);
+            }
+
+            @Override
+            protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new OneClickOnlyDecorator();
             }
         });
         link.add(new AttributeAppender("class", Model.of(style), " "));
