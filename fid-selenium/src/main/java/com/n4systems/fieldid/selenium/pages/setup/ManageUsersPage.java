@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.selenium.pages.setup;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
 import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
@@ -13,6 +7,12 @@ import com.n4systems.fieldid.selenium.datatypes.SystemUser;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.n4systems.security.UserType;
 import com.thoughtworks.selenium.Selenium;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 public class ManageUsersPage extends FieldIDPage {
 	
@@ -168,7 +168,7 @@ public class ManageUsersPage extends FieldIDPage {
 		List<String> userIds = new ArrayList<String>();
 		int numRows = selenium.getXpathCount("//table[@id='userList']/tbody/tr").intValue();
 		for (int i = 2; i <= numRows; i++ ) {
-            String userID = selenium.getText("//table[@id='userList']/tbody/tr[" + i + "]/td[1]//a");
+            String userID = selenium.getText("//table[@id='userList']/tbody/tr[" + i + "]/td[2]");
             userIds.add(userID.trim());
 		}
 		return userIds;
@@ -196,7 +196,7 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 
 	public void clickUserID(String userID){
-		selenium.click("//a[contains(text(), '" + userID + "')]");
+		selenium.click("//td[contains(text(), '" + userID + "')]/../td[1]//a");
 		waitForPageToLoad();
 	}
 	
@@ -238,7 +238,7 @@ public class ManageUsersPage extends FieldIDPage {
 
 	public void archiveUser(String userid, boolean confirm) {
 		confirmNextDialog(confirm);
-		selenium.click("//a[contains(text(),'" + userid + "')]/../..//a[contains(text(),'Archive')]");
+		selenium.click("//td[contains(text(),'" + userid + "')]/../..//a[contains(text(),'Archive')]");
 		selenium.getConfirmation();
 	}
 
