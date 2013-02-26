@@ -18,7 +18,7 @@ public class Popup extends Panel {
 
     public Popup(String id) {
         super(id);
-        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
         add(new ContextImage("close", "images/x-black.gif").add(createClosePopupBehavior()));
         add(createContent("content"));
         add(new AttributeAppender("class", Model.of("popup")," "));

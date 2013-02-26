@@ -9,12 +9,11 @@ import com.n4systems.fieldid.wicket.components.event.observations.Recommendation
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.popup.Popup;
-import com.n4systems.fieldid.wicket.components.richText.RichText;
+import com.n4systems.fieldid.wicket.components.richText.RichTextDisplay;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageListPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
-import com.n4systems.model.Observation;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -26,7 +25,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -35,23 +33,17 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CriteriaSectionEditPanel extends Panel {
-
-    private static final String INSTRUCTIONS_JS_FORMAT = "richTextFactory.update('%s','%s');" +
-            "$('#%s').appendTo('#%s');" +
-            "$('#%s').css('visibility','visible').show();";
 
     private IModel<List<CriteriaResult>> results;
     private DialogModalWindow criteriaImagesModalWindow;
     private FIDModalWindow criteriaModalWindow;
     private DialogModalWindow actionsWindow;
-    private TextArea instructionsContent;
     private WebMarkupContainer instructionsViewer;
-    private RichText instructionsDialog;
     private Popup popup;
+    private RichTextDisplay richTextDisplay;
 
     public CriteriaSectionEditPanel(String id, IModel<List<CriteriaResult>> results) {
         super(id);
@@ -80,12 +72,10 @@ public class CriteriaSectionEditPanel extends Panel {
         actionsWindow.setInitialWidth(350);
         actionsWindow.setInitialHeight(600);
 
-        add(instructionsContent = new TextArea("instructionsContent", Model.of("")));
-        instructionsContent.setOutputMarkupId(true);
-
         add(popup = new Popup("instructionsDialog") {
+            { setVisible(false); }
             @Override protected WebMarkupContainer createContent(String id) {
-                return instructionsDialog = new RichText(id, Model.of("")).withButtonList(new ArrayList<String>()).withWidth("310px").disabled();
+                return richTextDisplay =  new RichTextDisplay(id, Model.of(""));
             }
         });
     }
@@ -109,7 +99,6 @@ public class CriteriaSectionEditPanel extends Panel {
 
                     item.add(new Label("criteriaName", new PropertyModel<String>(item.getModel(), "criteria.displayText")));
                     item.add(CriteriaEditorFactory.createEditorFor("criteriaEditor", item.getModel()));
-                    final PropertyModel<List<? extends Observation>> recommendations = new PropertyModel<List<? extends Observation>>(item.getModel(), "recommendations");
                     item.add(new CriteriaActionButton("recommendationsButton", "images/rec-icon.png", criteriaResult.getRecommendations().size(), "label.recommendations", "mattButtonLeft") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
@@ -124,7 +113,6 @@ public class CriteriaSectionEditPanel extends Panel {
                             criteriaModalWindow.show(target);
                         }
                     });
-                    final PropertyModel<List<? extends Observation>> deficiencies = new PropertyModel<List<? extends Observation>>(item.getModel(), "deficiencies");
                     item.add(new CriteriaActionButton("deficienciesButton", "images/def-icon.png", criteriaResult.getDeficiencies().size(), "label.deficiencies", "mattButtonMiddle") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
@@ -214,10 +202,10 @@ public class CriteriaSectionEditPanel extends Panel {
                     image.setVisible(criteriaResult.getCriteria().hasNonEmptyInstructions());
                     image.add(new AjaxEventBehavior("onclick") {
                         @Override protected void onEvent(AjaxRequestTarget target) {
-                            instructionsContent.setDefaultModel(Model.of(criteriaResult.getCriteria().getInstructions()));
-                            target.add(instructionsContent);
-                            String javascript = String.format(INSTRUCTIONS_JS_FORMAT, instructionsDialog.getTextAreaMarkupId(), instructionsContent.getMarkupId(), popup.getMarkupId(), item.getMarkupId(), popup.getMarkupId() );
-                            target.appendJavaScript(javascript);
+                            richTextDisplay.setText(Model.of(criteriaResult.getCriteria().getInstructions()));
+                            popup.setVisible(true);
+                            target.add(popup);
+                            target.appendJavaScript(String.format("$('#%s').appendTo('#%s')", popup.getMarkupId(), item.getMarkupId()));
                             target.appendJavaScript("putSpinnersOverImages();");
                         }
                         });
