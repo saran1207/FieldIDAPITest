@@ -59,11 +59,8 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
         createTenantPage.enterLastName("Last");
         createTenantPage.enterEmailAddress("at@dot.com");
 
-        createTenantPage.selectPackage("Unlimited");
         createTenantPage.enterNumEmployeeUsers(2);
         createTenantPage.enterPrimaryOrgName("POrgName");
-        createTenantPage.enterPrimaryNetsuiteUser("nsuser");
-        createTenantPage.enterPrimaryNetsuitePassword("nspassword");
         createTenantPage.enterPrimaryOrgCountry(TEST_COUNTRY);
         createTenantPage.enterPrimaryOrgCity(TEST_CITY);
         createTenantPage.enterPrimaryOrgState(TEST_STATE);
