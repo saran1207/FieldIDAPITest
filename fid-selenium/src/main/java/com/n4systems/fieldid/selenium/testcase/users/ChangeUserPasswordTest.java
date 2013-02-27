@@ -1,17 +1,14 @@
 package com.n4systems.fieldid.selenium.testcase.users;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class ChangeUserPasswordTest extends PageNavigatingTestCase<ManageUsersPage> {
 	
@@ -44,7 +41,7 @@ public class ChangeUserPasswordTest extends PageNavigatingTestCase<ManageUsersPa
 		page.clickCancelChangePassword();
 		
 		assertEquals("Edit", page.getCurrentTab());
-		assertEquals(userName, page.getUserId());
+		assertEquals(userName, page.getUserFullName());
 	}
 	
 	@Test

@@ -191,6 +191,10 @@ public class ManageUsersPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
+    public String getUserFullName() {
+        return (selenium.getValue("//input[@id='firstname']").trim() + " " + selenium.getValue("//input[@id='lastname']").trim()).trim();
+    }
+
 	public String getUserId() {
 		return selenium.getValue("//input[@name='userId']").trim();
 	}
