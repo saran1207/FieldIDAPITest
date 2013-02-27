@@ -62,6 +62,7 @@ public class EventPage extends FieldIDPage {
 	}
 
 	public void clickSubStartEventLink(String eventType) {
+        waitForElementToBePresent("//a[contains(.,'"+ eventType+"')]");
 		selenium.click("//a[contains(.,'"+ eventType+"')]");
 		waitForPageToLoad();
 	}
