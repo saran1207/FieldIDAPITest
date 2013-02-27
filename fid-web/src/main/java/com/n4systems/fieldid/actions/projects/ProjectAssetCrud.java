@@ -21,7 +21,7 @@ import com.n4systems.tools.Pager;
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
 public class ProjectAssetCrud extends AbstractCrud {
 
-	private static final Logger logger = Logger.getLogger(ProjectNoteCrud.class);
+	private static final Logger logger = Logger.getLogger(ProjectAssetCrud.class);
 	private static final long serialVersionUID = 1L;
 
 	private ProjectManager projectManager;
