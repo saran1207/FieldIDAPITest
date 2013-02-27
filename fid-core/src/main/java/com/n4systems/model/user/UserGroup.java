@@ -49,11 +49,6 @@ public class UserGroup extends ArchivableEntityWithTenant implements Listable<Lo
         return name;
     }
 
-    @Transient
-    public int getNumMembers() {
-        return getMembers().size();
-    }
-
     public String getKeyForStruts() {
         return "G"+getId();
     }

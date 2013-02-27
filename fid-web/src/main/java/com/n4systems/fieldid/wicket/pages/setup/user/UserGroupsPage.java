@@ -89,7 +89,7 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
                 item.add(new Label("groupId", ProxyModel.of(item.getModel(), on(UserGroup.class).getGroupId())));
 
                 NonWicketLink linkToUsersList = new NonWicketLink("linkToUsersListPage", "userList.action?userGroupFilter="+item.getModelObject().getId());
-                linkToUsersList.add(new Label("members", ProxyModel.of(item.getModel(), on(UserGroup.class).getMembers().size())));
+                linkToUsersList.add(new Label("members", String.valueOf(userGroupService.getUsersInGroup(item.getModelObject().getId()).size())));
                 item.add(linkToUsersList);
 
                 String created = new FieldIdDateFormatter(item.getModelObject().getCreated(), FieldIDSession.get().getSessionUser(), true, true).format();
@@ -190,18 +190,17 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
     }
 
     private Component createArchiveLink(final IModel<UserGroup> model) {
-        if (model.getObject().getMembers().size() > 0) {
-            return new BookmarkablePageLink<Void>("archiveLink", ArchiveUserGroupPage.class, PageParametersBuilder.id(model.getObject().getId()));
-        } else {
             return new AjaxLink<Void>("archiveLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-
-                    userGroupService.archiveGroup(model.getObject());
-                    redrawTable(target);
+                    if (model.getObject().getMembers().size() > 0) {
+                        setResponsePage(ArchiveUserGroupPage.class, PageParametersBuilder.id(model.getObject().getId()));
+                    } else {
+                        userGroupService.archiveGroup(model.getObject());
+                        redrawTable(target);
+                    }
                 }
             };
-        }
     }
 
     private Component createUnarchiveLink(final IModel<UserGroup> model) {

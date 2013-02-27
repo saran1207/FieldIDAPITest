@@ -44,7 +44,10 @@ public class UserGroupService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public void archiveGroupInto(UserGroup groupToArchive, UserGroup newGroup) {
+    public void archiveGroupInto(Long groupToArchiveId, Long newGroupId) {
+        UserGroup newGroup = persistenceService.find(UserGroup.class, newGroupId);
+        UserGroup groupToArchive  = persistenceService.find(UserGroup.class, groupToArchiveId);
+
         for (User user : groupToArchive.getMembers()) {
             user.setGroup(newGroup);
             persistenceService.update(user);
@@ -72,4 +75,11 @@ public class UserGroupService extends FieldIdPersistenceService {
         }
         return !userGroups.get(0).getId().equals(id);
     }
+
+    public List<User> getUsersInGroup(Long userGroup) {
+        QueryBuilder<User> query = createUserSecurityBuilder(User.class);
+        query.addSimpleWhere("group.id", userGroup);
+        return persistenceService.findAll(query);
+    }
+
 }

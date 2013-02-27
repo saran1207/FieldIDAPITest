@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.download.SystemUrlUtil;
 import com.n4systems.fieldid.service.mail.MailService;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.notification.AssigneeNotification;
@@ -28,6 +29,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
     @Autowired private MailService mailService;
     @Autowired private S3Service s3Service;
+    @Autowired private UserGroupService userGroupService;
 
     @Transactional
     public void sendNotifications() {
@@ -104,7 +106,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private void notifyEventAssignee(List<Event> events, UserGroup assignedGroup) {
         try {
 
-            for (User member : assignedGroup.getMembers()) {
+            for (User member : userGroupService.getUsersInGroup(assignedGroup.getId())) {
                 // Instead of sending a multi message, since users can define their own date
                 // formats and we want our notificatino to reflect this, we send an individual email to each member.
                 TemplateMailMessage message = createMultiNotifications(events, member);

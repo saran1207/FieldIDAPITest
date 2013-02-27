@@ -32,7 +32,7 @@ public class ArchiveUserGroupPage extends FieldIDFrontEndPage {
         Long groupId = params.get("id").toLong();
         groupToArchive = new EntityModel<UserGroup>(UserGroup.class, groupId);
 
-        add(new Label("instructions", new FIDLabelModel("msg.archive_user_group_instructions", groupToArchive.getObject().getNumMembers(), groupToArchive.getObject().getName())));
+        add(new Label("instructions", new FIDLabelModel("msg.archive_user_group_instructions", userGroupService.getUsersInGroup(groupId).size(), groupToArchive.getObject().getName())));
         add(new SelectNewGroupForm("selectNewGroupForm"));
     }
 
@@ -48,7 +48,7 @@ public class ArchiveUserGroupPage extends FieldIDFrontEndPage {
 
         @Override
         protected void onSubmit() {
-            userGroupService.archiveGroupInto(groupToArchive.getObject(), newGroup);
+            userGroupService.archiveGroupInto(groupToArchive.getObject().getId(), newGroup.getId());
             getSession().info(getString("msg.user_group_archive_successful"));
             setResponsePage(UserGroupsPage.class);
         }
