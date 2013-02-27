@@ -62,7 +62,7 @@ public class EventMassUpdatePage extends WicketFieldIDPage {
     }
 
     public void selectAssignee(String assignee) {
-        selenium.select("//select[@name='assignee']", assignee);
+        selenium.select("//select[@name='assignee:assigneeSelect']", assignee);
     }
 
     public void clickAssign() {

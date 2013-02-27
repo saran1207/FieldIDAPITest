@@ -7,7 +7,9 @@ import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.pages.event.EventMassUpdatePage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.*;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.security.Permissions;
 import org.junit.Test;
 
 import java.util.Date;
@@ -24,6 +26,10 @@ public class MassUpdateOpenEventsTest extends PageNavigatingTestCase<ReportingPa
 
 	@Override
 	public void setupScenario(Scenario scenario) {
+
+        User defaultUser = scenario.defaultUser();
+        defaultUser.setPermissions(Permissions.ALL);
+        scenario.save(defaultUser);
 
 		EventTypeGroup group = scenario.anEventTypeGroup()
 									   .forTenant(scenario.tenant(COMPANY))
