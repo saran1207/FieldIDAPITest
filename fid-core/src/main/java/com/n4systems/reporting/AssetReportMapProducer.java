@@ -6,11 +6,12 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.util.DateTimeDefinition;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.io.FileUtils;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.File;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,8 +77,11 @@ public class AssetReportMapProducer extends ReportMapProducer {
             return null;
 
         try {
-            return new File(s3Service.getAssetProfileImageMediumURL(asset.getId(), asset.getImageName()).toURI());
-        } catch (URISyntaxException e) {
+            URL imageURL = s3Service.getAssetProfileImageMediumURL(asset.getId(), asset.getImageName());
+            File image = PathHandler.getTempFile();
+            FileUtils.copyURLToFile(imageURL, image);
+            return image;
+        } catch (Exception e) {
             return null;
         }
     }
