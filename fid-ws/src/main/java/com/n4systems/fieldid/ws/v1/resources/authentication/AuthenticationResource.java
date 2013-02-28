@@ -1,17 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.authentication;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
@@ -21,6 +9,13 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 @Path("/authenticate")
 @Component

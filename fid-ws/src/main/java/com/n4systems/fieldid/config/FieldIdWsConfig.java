@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.config;
 
 import com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode.ApiPriorityCodeResource;
+import com.n4systems.fieldid.ws.v1.resources.user.ApiPersonResource;
+import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -36,12 +38,8 @@ import com.n4systems.fieldid.ws.v1.resources.smartsearch.ApiSmartSearchResource;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
 import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenantResource;
 import com.n4systems.fieldid.ws.v1.resources.unit.ApiUnitResource;
-import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
+import com.n4systems.fieldid.ws.v1.resources.user.AbstractUserResource;
 import com.n4systems.fieldid.ws.v1.resources.usergroup.ApiUserGroupResource;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class FieldIdWsConfig {
@@ -66,6 +64,11 @@ public class FieldIdWsConfig {
 	public ApiUserResource apiUserResource() {
 		return new ApiUserResource();
 	}
+
+    @Bean
+    public ApiPersonResource apiPersonResource() {
+        return new ApiPersonResource();
+    }
 	
 	@Bean
 	public ApiUserGroupResource apiUserGroupResource() {

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 import javax.ws.rs.Path;
 
 @Component
-@Path("user")
-public class ApiUserResource extends AbstractUserResource {
+@Path("person")
+public class ApiPersonResource extends AbstractUserResource {
 
     @Override
     protected void addUserTypeTermToQuery(QueryBuilder<User> query) {
-        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "userType", UserType.PERSON));
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "userType", UserType.PERSON));
     }
 
 }
