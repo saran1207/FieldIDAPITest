@@ -1,14 +1,5 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
 import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
@@ -20,6 +11,12 @@ import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class ManageUsersTest extends FieldIDTestCase {
 
@@ -97,8 +94,16 @@ public class ManageUsersTest extends FieldIDTestCase {
 		EmployeeUser user = addALiteUser(manageUsersPage);
 		verifyUserWasAdded(manageUsersPage, user);
 	}
-	
-	@Test
+
+    @Test
+    public void should_be_able_to_add_a_person_user() throws Exception {
+        manageUsersPage.clickAddUserTab();
+        manageUsersPage.clickAddPersonUser();
+        CustomerUser user = addAPersonUser(manageUsersPage);
+        verifyUserWasAdded(manageUsersPage, user, true);
+    }
+
+    @Test
 	public void filter_for_full_users_test() throws Exception {
 		manageUsersPage.selectSearchUserType(ManageUsersPage.USER_TYPE_FULL);
 		manageUsersPage.clickSearchButton();
@@ -124,6 +129,14 @@ public class ManageUsersTest extends FieldIDTestCase {
 		assertTrue(users.size() > 0);
 		assertTrue(users.contains(READ_ONLY_USER));
 	}
+
+    @Test
+    public void filter_for_person_users_test() throws Exception {
+        manageUsersPage.selectSearchUserType(ManageUsersPage.USER_TYPE_PERSON);
+        manageUsersPage.clickSearchButton();
+        List<String> users = manageUsersPage.getListOfUserIDsOnCurrentPage();
+        assertTrue(users.isEmpty());
+    }
 	
 	@Test
 	public void remove_user_test() throws Exception {
@@ -223,22 +236,42 @@ public class ManageUsersTest extends FieldIDTestCase {
 		manageUsersPage.setReadOnlyUserFormFields(user);
 		manageUsersPage.clickSave();
 		return user;
-	}	
+	}
 
-	private void verifyUserWasAdded(ManageUsersPage page, SystemUser user) {
+    private CustomerUser addAPersonUser(ManageUsersPage manageUsersPage) {
+        CustomerUser user = new CustomerUser(null, "selenium@fieldid.com", null, null, new Owner(COMPANY), "Person", "User");
+        manageUsersPage.setPersonUserFormFields(user);
+        manageUsersPage.clickSave();
+        return user;
+    }
+
+    private void verifyUserWasAdded(ManageUsersPage page, SystemUser user) {
+        verifyUserWasAdded(page, user, false);
+    }
+
+    private void verifyUserWasAdded(ManageUsersPage page, SystemUser user, boolean isWicketForm) {
 		assertTrue(user != null);
 		
 		List<String> errors = page.getFormErrorMessages();
 		assertTrue("There were errors on the page: " + errors, errors.size() == 0);
-		
-		assertTrue(page.getActionMessages().contains("User Saved"));
+
+        if(!isWicketForm)
+		    assertTrue(page.getActionMessages().contains("User Saved"));
 		
 		page.clickViewAllTab();
 		page.selectSearchUserType(ManageUsersPage.USER_TYPE_ALL);
-		page.enterSearchNameFilter(user.getUserid());
+        if(user.getUserid() != null) {
+		    page.enterSearchNameFilter(user.getUserid());
+        } else {
+            page.enterSearchNameFilter(user.getFirstName());
+        }
 		page.clickSearchButton();
 		List<String> users = page.getListOfUserIDsOnCurrentPage();
-		assertTrue("Did not find the newly created user in the list of users: " + user, users.contains(user.getUserid()));
+        if(user.getUserid() != null) {
+		    assertTrue("Did not find the newly created user in the list of users: " + user, users.contains(user.getUserid()));
+        } else {
+            assertFalse("Did not find the newly created user in the list of users: " + user, users.isEmpty());
+        }
 	}
 
 }

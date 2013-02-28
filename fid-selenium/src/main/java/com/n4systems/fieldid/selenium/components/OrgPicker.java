@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.selenium.components;
 
-import static org.junit.Assert.fail;
-
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
 import com.n4systems.fieldid.selenium.util.ConditionWaiter;
 import com.n4systems.fieldid.selenium.util.Predicate;
 import com.thoughtworks.selenium.Selenium;
+
+import static org.junit.Assert.fail;
 
 public class OrgPicker extends WebEntity {
 	
@@ -28,6 +28,7 @@ public class OrgPicker extends WebEntity {
 	}
 	
 	public void setOwner(Owner owner) {
+        waitForElementToBePresent("//select[@id='orgList']");
 		if (!owner.specifiesOrg()) {
 			selenium.select(selectOwnerOrganizationSelectListLocator, "index=0");
 			waitForOrgPickerLoadingToFinish();
@@ -72,7 +73,10 @@ public class OrgPicker extends WebEntity {
 	}
 
 	public void clickSelectOwner() {
-		selenium.click("xpath=//input[@id='selectOrg']");
+        if (selenium.isElementPresent("//input[@id='selectOrg']"))
+		    selenium.click("//input[@id='selectOrg']");
+        else
+            selenium.click("//button[@name='orgPicker:orgPickerContainer:tabbedPanel:panel:orgForm:selectButton']");
 	}
 
 	public Owner getOwner() {

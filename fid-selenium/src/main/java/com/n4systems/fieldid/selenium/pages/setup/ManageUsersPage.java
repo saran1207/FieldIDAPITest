@@ -20,6 +20,7 @@ public class ManageUsersPage extends FieldIDPage {
 	public final static String USER_TYPE_READONLY = UserType.READONLY.getLabel();
 	public final static String USER_TYPE_LITE = UserType.LITE.getLabel();
 	public final static String USER_TYPE_FULL = UserType.FULL.getLabel();
+    public final static String USER_TYPE_PERSON = UserType.PERSON.getLabel();
 
 	public ManageUsersPage(Selenium selenium) {
 		super(selenium);
@@ -52,9 +53,19 @@ public class ManageUsersPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
+    public void clickAddPersonUser() {
+        selenium.click("//input[@id='addPerson']");
+        waitForPageToLoad();
+    }
+
 	public void clickViewAllTab() {
 		clickNavOption("View All");
 	}
+
+    public void setPersonUserFormFields(CustomerUser user) {
+        assertNotNull(user);
+        setCommonUserFields(user, "person");
+    }
 
 	public void setReadOnlyUserFormFields(CustomerUser user) {
 		assertNotNull(user);
@@ -81,19 +92,19 @@ public class ManageUsersPage extends FieldIDPage {
 
 	private void setCommonUserFields(SystemUser user, String prefix) {
 		if (user.getUserid() != null) {
-			selenium.type("//INPUT[@id='" + prefix + "UserCreate_userId']", user.getUserid());
+			selenium.type("//input[@name='userId']", user.getUserid());
 		}
 		if (user.getEmail() != null) {
-			selenium.type("//INPUT[@id='" + prefix + "UserCreate_emailAddress']", user.getEmail());
+			selenium.type("//input[contains(@name, 'email')]", user.getEmail());
 		}
 		if (user.getSecurityRFIDNumber() != null) {
-			selenium.type("//INPUT[@id='" + prefix + "UserCreate_securityRfidNumber']", user.getSecurityRFIDNumber());
+			selenium.type("//input[@name='securityRfidNumber']", user.getSecurityRFIDNumber());
 		}
 		if (user.getPassword() != null) {
-			selenium.type("//INPUT[@id='" + prefix + "UserCreate_passwordEntry_password']", user.getPassword());
+			selenium.type("//input[@name='passwordEntry.password']", user.getPassword());
 		}
 		if (user.getVerifyPassword() != null) {
-			selenium.type("//INPUT[@id='" + prefix + "UserCreate_passwordEntry_passwordVerify']", user.getVerifyPassword());
+			selenium.type("//input[@name='passwordEntry.passwordVerify']", user.getVerifyPassword());
 		}
 		if (user.getOwner() != null) {
 			OrgPicker orgPicker = getOrgPicker();
@@ -102,28 +113,28 @@ public class ManageUsersPage extends FieldIDPage {
 			orgPicker.clickSelectOwner();
 		}
 		if (user.getFirstName() != null) {
-			selenium.type("//INPUT[@id='firstname']", user.getFirstName());
+			selenium.type("//input[@name='firstname'] | //input[@name='firstName']", user.getFirstName());
 		}
 		if (user.getLastName() != null) {
-			selenium.type("//INPUT[@id='lastname']", user.getLastName());
+			selenium.type("//input[@name='lastname'] | //input[@name='lastName']", user.getLastName());
 		}
 		if (user.getInitials() != null) {
-			selenium.type("//INPUT[@id='initials']", user.getInitials());
+			selenium.type("//input[@name='initials']", user.getInitials());
 		}
 		if (user.getPosition() != null) {
-			selenium.type("//INPUT[@id='" + prefix + "UserCreate_position']", user.getPosition());
+			selenium.type("//input[@name='position']", user.getPosition());
 		}
 		if (user.getCountry() != null) {
-			if (isOptionPresent("//SELECT[@id='" + prefix + "UserCreate_countryId']", user.getCountry())) {
-				selenium.select("//SELECT[@id='" + prefix + "UserCreate_countryId']", user.getCountry());
+			if (isOptionPresent("//select[contains(@name, 'country')]", user.getCountry())) {
+				selenium.select("//select[contains(@name, 'country')]", user.getCountry());
 				waitForAjax();
 			} else {
 				fail("The country '" + user.getCountry() + "' does not exist on the select list");
 			}
 		}
 		if (user.getTimeZone() != null) {
-			if (isOptionPresent("//SELECT[@id='tzlist']", user.getTimeZone())) {
-				selenium.select("//SELECT[@id='tzlist']", user.getTimeZone());
+			if (isOptionPresent("//select[contains(@name, 'timeZone')]", user.getTimeZone())) {
+				selenium.select("//select[contains(@name, 'timeZone')]", user.getTimeZone());
 			} else {
 				fail("The time zone '" + user.getTimeZone() + "' does not exist on the select list");
 			}
@@ -139,7 +150,7 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 
 	public void clickSave() {
-		selenium.click("//INPUT[@value='Save']");
+		selenium.click("//input[@value='Save']");
 		waitForPageToLoad();
 	}
 
@@ -148,11 +159,11 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 
 	public void enterSearchNameFilter(String filter) {
-		selenium.type("//INPUT[@id='nameFilter']", filter);
+		selenium.type("//input[@id='nameFilter']", filter);
 	}
 
 	public void clickSearchButton() {
-		selenium.click("//INPUT[@id='listFilterForm_search']");
+		selenium.click("//input[@id='listFilterForm_search']");
 		waitForPageToLoad();
 	}
 
@@ -255,7 +266,7 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 	
 	public void enterName(String name) {
-		selenium.type("//INPUT[@id='firstname']", name);
+		selenium.type("//input[@id='firstname']", name);
 	}
 	
 	public void clickSortColumn(String name) {

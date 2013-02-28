@@ -17,7 +17,6 @@ public class AddPersonPage extends UserPage {
     protected User doSave() {
         User person = user.getObject();
         userService.create(person);
-
         return person;
     }
 
