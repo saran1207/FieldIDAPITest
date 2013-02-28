@@ -31,9 +31,13 @@ import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameterGroup;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Path("/synchronize")
@@ -96,12 +100,24 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 		Date endDate = profile == null 
 			? getSyncEndDate(OfflineProfile.DEFAULT_SYNC_DURATION, startDate)
 			: getSyncEndDate(profile.getSyncDuration(), startDate);
+		User user = getCurrentUser();
 		
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 		.addOrder("dueDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
-        .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "dueDate", startDate));
+		
+		if(user.getGroup() == null) {
+			query.addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", user.getId()));
+		} else {
+			// WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )				
+			WhereParameterGroup group = new WhereParameterGroup();
+	        group.setChainOperator(WhereClause.ChainOp.AND);
+	        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
+	        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignedGroup.id", user.getGroup().getId(), WhereClause.ChainOp.OR)); 
+	        query.addWhere(group);				
+		}		
+		
 		if(endDate != null) {
 			query.addWhere(WhereClauseFactory.create(Comparator.LE, "dueDate", endDate));
 		}
