@@ -33,6 +33,7 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 			builder.addWhere(WhereClauseFactory.create(Comparator.GT, "modified", after));
 		}
 		builder.addOrder("id");
+        addUserTypeTermToQuery(builder);
 		return builder;
 	}
 	
