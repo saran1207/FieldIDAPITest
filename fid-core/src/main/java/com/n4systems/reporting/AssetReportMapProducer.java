@@ -10,6 +10,7 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +72,14 @@ public class AssetReportMapProducer extends ReportMapProducer {
 	}
 
     private File assetProfileImagePath(Asset asset) {
-        return (asset.getImageName() != null) ? PathHandler.getAssetImageFile(asset) : null;
+        if ((asset.getImageName() != null))
+            return null;
+
+        try {
+            return new File(s3Service.getAssetProfileImageMediumURL(asset.getId(), asset.getImageName()).toURI());
+        } catch (URISyntaxException e) {
+            return null;
+        }
     }
 
 	private Map<String, Object> produceInfoOptionMap() {
