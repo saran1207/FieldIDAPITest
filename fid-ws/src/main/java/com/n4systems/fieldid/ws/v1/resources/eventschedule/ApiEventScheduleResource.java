@@ -17,8 +17,12 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.util.persistence.WhereParameterGroup;
+
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -226,12 +230,24 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			@QueryParam("endDate") Date endDate,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("25") @QueryParam("pageSize") int pageSize) {
+		User user = getCurrentUser();
+		
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 		.addOrder("dueDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
-        .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
 		.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
+		
+		if(user.getGroup() == null) {
+			query.addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", user.getId()));
+		} else {
+			// WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )				
+			WhereParameterGroup group = new WhereParameterGroup();
+	        group.setChainOperator(WhereClause.ChainOp.AND);
+	        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
+	        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignedGroup.id", user.getGroup().getId(), WhereClause.ChainOp.OR)); 
+	        query.addWhere(group);				
+		}
 		
 		List<Event> events = persistenceService.findAll(query, page, pageSize);
 		Long total = persistenceService.count(query);
@@ -257,14 +273,26 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 		for(int i = 1; i <= days; i++) {
 			Date startDate = new DateTime(year, month + 1, i, 0, 0).toDate();
-			Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();
+			Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();			
+			User user = getCurrentUser();
 			
 			QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 			.addOrder("dueDate")
-	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
-	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", getCurrentUser().getId()))
+	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))	        
 			.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
 			.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));
+			
+			if(user.getGroup() == null) {
+				query.addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", user.getId()));
+			} else {
+				// WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )				
+				WhereParameterGroup group = new WhereParameterGroup();
+		        group.setChainOperator(WhereClause.ChainOp.AND);
+		        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
+		        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignedGroup.id", user.getGroup().getId(), WhereClause.ChainOp.OR)); 
+		        query.addWhere(group);				
+			}
+			
 			Long count = persistenceService.count(query);
 			counts.add(count);
 		}		
