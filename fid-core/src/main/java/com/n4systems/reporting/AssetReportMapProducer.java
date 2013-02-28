@@ -72,7 +72,7 @@ public class AssetReportMapProducer extends ReportMapProducer {
 	}
 
     private File assetProfileImagePath(Asset asset) {
-        if ((asset.getImageName() != null))
+        if ((asset.getImageName() == null))
             return null;
 
         try {
