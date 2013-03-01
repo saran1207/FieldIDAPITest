@@ -81,6 +81,11 @@
     #nodeList {
         height:600px;
     }
+
+    .blanknode {
+        height: 100%;
+    }
+
 </style>
   
   <ul class="menu hide" id="${parameters.id}">
@@ -89,6 +94,7 @@
 	<#list nodesList as entry>
 		<@createTree entry=entry/>
 	</#list>
+    <li><p class="blanknode"></p></li>
   </ul> 
   
   <@n4.includeScript>

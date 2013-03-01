@@ -23,6 +23,10 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 		   	jQuery('#addLocation').click(function(){
 		       		jQuery('#parent').val(jQuery('#nodeList').getSelectedNode().id);
 	      	});
+
+           jQuery('.blanknode').click(function(){
+               jQuery('.active').removeClass("active");
+           });
 	      
 	      });
 	</script>
