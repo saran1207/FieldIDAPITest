@@ -1,3 +1,7 @@
+.options {
+    display: none;
+}
+
 #initialSetup {
 	background: no-repeat url(../../images/predefined-locations-logo.png) 0px 5px;
 	background-color:#EAEAEA;
