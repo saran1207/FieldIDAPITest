@@ -317,7 +317,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         container.add(new WebMarkupContainer("manageUsersContainer").setVisible(canManageSystemUsers));
         container.add(new BookmarkablePageLink<Void>("userGroupsLink", UserGroupsPage.class).setVisible(canManageSystemUsers));
         container.add(new WebMarkupContainer("manageUserRegistrationsContainer").setVisible(canManageSystemUsers && userLimitService.isReadOnlyUsersEnabled()));
-        container.add(new WebMarkupContainer("managePredefinedLocationsContainer").setVisible(getSessionUser().hasAccess("managesystemconfig") && advancedLocationEnabled));
+        container.add(new WebMarkupContainer("managePredefinedLocationsContainer").setVisible(getSessionUser().hasAccess("manageendusers") && advancedLocationEnabled));
 
     	return container;
     }

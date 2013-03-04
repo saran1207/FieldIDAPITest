@@ -126,7 +126,7 @@
 													<li><a href="<@s.url action='userRequestList' namespace='/' />" ><@s.text name="title.manage_user_registrations.plural"/></a></li>
 												</#if>
 											</#if>
-											<#if sessionUser.hasAccess("managesystemconfig") && locationHeirarchyFeatureEnabled>
+											<#if sessionUser.hasAccess("manageendusers") && locationHeirarchyFeatureEnabled>
 												<li><a href="<@s.url action='predefinedLocations' namespace='/' />" ><@s.text name="title.manage_predefined_locations.plural"/></a></li>
 											</#if>
 										</ul>
