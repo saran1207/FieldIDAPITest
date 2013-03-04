@@ -14,7 +14,7 @@
 <@n4.includeStyle href="site_wide"/>
 <@n4.includeStyle href="branding/default"/>
 <link rel="shortcut icon" href="<@s.url value="/images/favicon.ico" />" type="image/x-icon" />		
-<@n4.includeScript src="prototype"/>
+<@n4.includeScript src="${action.getProtoypeVersion()}"/>
 <@n4.includeScript src="json2" />
 <@n4.includeScript src="common" />
 <!--[if IE 6]>

@@ -1,26 +1,24 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import com.n4systems.model.AssetType;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AutoAttributeCriteriaCrud extends AbstractCrud {
@@ -335,5 +333,10 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	public List<StringListingPair> getLookUpOutputs() {
 		return lookUpOutputs;
 	}
+
+    @Override
+    public String getProtoypeVersion() {
+        return "prototype_1.7.1";
+    }
 
 }

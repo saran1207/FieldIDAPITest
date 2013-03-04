@@ -638,6 +638,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
         return "Edge";
     }
 
+    public String getProtoypeVersion() {
+        return "prototype";
+    }
+
     public String getVersion() {
         return FieldIdVersion.getVersion();
     }
