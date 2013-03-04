@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket.components.autocomplete;
 
 import com.google.gson.Gson;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -21,7 +23,7 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.TextRequestHandler;
-import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
@@ -42,7 +44,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AutoComplete<T> extends FormComponentPanel<T> {
+public abstract class AutoComplete<T extends EntityWithTenant> extends FormComponentPanel<T> {
     
     public static final WiQueryJavaScriptResourceReference WIQUERY_AUTOCOMPLETE_JS =
             new WiQueryJavaScriptResourceReference(AutocompleteAjaxComponent.class,
@@ -60,9 +62,13 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     protected int threshold = 15;
     private String[] containers;
 
+    @SpringBean
+    private PersistenceService persistenceService;
+    private Class<T> entityClass;
 
-    public AutoComplete(String id, final IModel<T> model) {
+    public AutoComplete(String id, final Class<T> entityClass, final IModel<T> model) {
         super(id, model);
+        this.entityClass = entityClass;
         setOutputMarkupPlaceholderTag(true);
         setOutputMarkupId(true);
 
@@ -80,21 +86,12 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
             public String getObject() {
                 T modelObject = AutoComplete.this.getModelObject();
                 if (modelObject != null) {
-                    T objectValue = (T) getChoiceRenderer().getDisplayValue(modelObject);
-                    Class<T> objectClass =
-                            (Class<T>) (objectValue == null ? null : objectValue.getClass());
-                    
-                    String displayValue = "";
-                      if (objectClass != null) {
-                        final IConverter<T> converter = getConverter(objectClass);
-                        displayValue = converter.convertToString(objectValue, getLocale());
-                    } else if (objectValue != null) {
-                        displayValue = objectValue.toString();
+                    Object object = getChoiceRenderer().getDisplayValue(modelObject);
+                    if (object != null) {
+                        return object.toString();
                     }
-                    return displayValue;
-                } else {
-                    return null;
                 }
+                return null;
             }
 
             public void setObject(String object) {
@@ -251,21 +248,14 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         if (NOT_ENTERED.equals(valueId))
             valueId = null;
         
-        if (valueId == null || Strings.isEmpty(input)) {
+        if (Strings.isEmpty(valueId) || Strings.isEmpty(input)) {
             setConvertedInput(null);
         } else if (object == null || (selectedValueId!=null && !selectedValueId.equals(valueId))) {
-            final List<T> choices = getChoices();
-            boolean found = false;
-            for (int index = 0; index < choices.size(); index++) {
-                final T choice = choices.get(index);
-                final String idValue = renderer.getIdValue(choice, index);
-                if (idValue.equals(valueId)) {
-                    setConvertedInput(choice);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
+            long entityId = Long.valueOf(valueId);
+            T entity = persistenceService.find(entityClass, entityId);
+            if (entity != null) {
+                setConvertedInput(entity);
+            } else {
                 // if it is still not entered, then it means this field was not touched
                 // so keep the original value
                 if (valueId.equals(NOT_ENTERED)) {
@@ -401,7 +391,6 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
             return jsStatement;
         }
     }
-
 
 }
 

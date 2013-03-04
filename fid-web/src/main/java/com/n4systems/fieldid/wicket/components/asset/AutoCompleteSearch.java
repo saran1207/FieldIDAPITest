@@ -21,7 +21,7 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
     private HashSet<AssetType> categories = new HashSet<AssetType>();
     
     public AutoCompleteSearch(String id, final IModel<Asset> model) {
-        super(id, model);
+        super(id, Asset.class, model);
     }
 
     @Override

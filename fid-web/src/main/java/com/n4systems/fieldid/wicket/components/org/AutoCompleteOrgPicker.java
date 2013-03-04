@@ -23,7 +23,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
     private HashSet<OrgLocationEnum> categories = new HashSet<OrgLocationEnum>();
 
     public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> model) {
-        super(id, model);
+        super(id, BaseOrg.class, model);
         withAutoUpdate(false);
     }
 

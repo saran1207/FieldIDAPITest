@@ -18,7 +18,7 @@ public class AutoCompleteUser extends AutoComplete<User> {
     private HashSet<String> categories = new HashSet<String>();
     
     public AutoCompleteUser(String id, final IModel<User> model) {
-        super(id, model);
+        super(id, User.class, model);
     }
 
     @Override
