@@ -88,7 +88,7 @@ public class WhereClauseFactory {
 		return create(Comparator.NOTNULL, null, param, null, null, null);
 	}
 	
-	public static WhereClause<String> createNoVariable(String leftSize, String rightSide) {
-		return new NoVariableClause(leftSize+rightSide, Comparator.EQ, leftSize, rightSide, ChainOp.AND);
+	public static NoVariableClause createNoVariable(String leftSide, String rightSide) {
+		return new NoVariableClause(leftSide+rightSide, Comparator.EQ, leftSide, rightSide, ChainOp.AND);
 	}
 }

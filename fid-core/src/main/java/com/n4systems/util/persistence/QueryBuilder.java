@@ -78,6 +78,7 @@ public class QueryBuilder<E> {
 	private Set<OrderClause> orderArguments = new LinkedHashSet<OrderClause>();
 	private List<String> postFetchPaths = new ArrayList<String>();
     private Integer limit;
+    private String queryAlias;
 
     /** 
      * Constructs a <tt>QueryBuilder</tt> for an UnsecuredEntity.  No SecurityFilter will
@@ -554,7 +555,8 @@ public class QueryBuilder<E> {
 	}
 
     public QueryBuilder<E> bindParams(Query query) throws InvalidQueryException {
-		for(WhereClause<?> whereClause: whereParameters.values()) {
+        getSelectArgument().bind(query);
+        for(WhereClause<?> whereClause: whereParameters.values()) {
 			whereClause.bind(query);
 		}
 		return this;
@@ -643,4 +645,11 @@ public class QueryBuilder<E> {
 		return (count != null && count > 0);
 	}
 
+    public String getQueryAlias() {
+        return queryAlias;
+    }
+
+    public void setQueryAlias(String queryAlias) {
+        this.queryAlias = queryAlias;
+    }
 }

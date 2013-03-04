@@ -166,10 +166,6 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
         }
     }
 
-//    private Date nextDay(Date date) {
-//        return date == null ? null : DateUtils.addDays(date, 1);
-//    }
-
     @Override
     protected void addSortTerms(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
         // Reporting has a few special case sorts that are more complicated due to displaying two types of data. ie sorting on two columns.

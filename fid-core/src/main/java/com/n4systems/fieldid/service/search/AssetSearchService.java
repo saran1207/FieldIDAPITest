@@ -1,12 +1,17 @@
 package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.user.User;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.JoinTerm;
+import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -67,5 +72,48 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 			addSimpleTerm(search, "assignedUser.id", assignedUserId);
 		}
 	}
+
+    @Override
+    protected void addSortTerms(AssetSearchCriteria criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
+        if (criteriaModel.sortingByLastEventDate()) {
+
+            // Adjust the query.
+            QueryBuilder<Event> subQuery = createUserSecurityBuilder(Event.class);
+            subQuery.setMaxSelect("completedDate");
+            subQuery.addSimpleWhere("workflowState", Event.WorkflowState.COMPLETED);
+            NoVariableClause eventMatchesOuterAssetClause = new NoVariableClause("outerAssetClause", WhereParameter.Comparator.EQ, "evt.asset", "obj", WhereClause.ChainOp.AND);
+            eventMatchesOuterAssetClause.setDropAlias(true);
+            subQuery.addWhere(eventMatchesOuterAssetClause);
+            subQuery.setQueryAlias("lastEventDate");
+            subQuery.getFromArgument().setAlias("evt");
+
+
+            OrderClause orderClause = new OrderClause("lastEventDate", sortDirection.equals(SortDirection.ASC));
+            orderClause.setAlwaysDropAlias(true);
+
+            searchBuilder.getOrderArguments().add(orderClause);
+
+            MultipleSelectClause multiSelect = new MultipleSelectClause();
+            multiSelect.addSimpleSelect("obj");
+            multiSelect.addSubQuery(subQuery);
+
+            searchBuilder.setSelectArgument(multiSelect);
+        } else {
+            super.addSortTerms(criteriaModel, searchBuilder, sortColumn, sortDirection);
+        }
+    }
+
+    @Override
+    protected List<Asset> convertResults(AssetSearchCriteria criteriaModel, List results) {
+        if (criteriaModel.sortingByLastEventDate() && !results.isEmpty() && results.iterator().next() instanceof Object[]) {
+            List<Asset> convertedResults = new ArrayList<Asset>();
+            for (Object result : results) {
+                Object[] objectArray = (Object[]) result;
+                convertedResults.add((Asset) objectArray[0]);
+            }
+            return convertedResults;
+        }
+        return super.convertResults(criteriaModel, results);
+    }
 
 }

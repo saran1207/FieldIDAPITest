@@ -1,0 +1,1 @@
+update column_mappings set sortable = 1 where name = "asset_search_lasteventdate";

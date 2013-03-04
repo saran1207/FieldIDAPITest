@@ -14,6 +14,7 @@ public class NoVariableClause implements WhereClause<String> {
 	private String left;
 	private String right;
 	private ChainOp op;
+    private boolean dropAlias;
 	
 	public NoVariableClause(String name, Comparator comparator, String left, String right, ChainOp op) {
 		this.name = name;
@@ -39,7 +40,9 @@ public class NoVariableClause implements WhereClause<String> {
 	
 	@Override
 	public String getClause(FromTable table) throws InvalidQueryException {
-		String comparison = table.prepareField(left) + " " + comparator.getOperator() + " " + table.prepareField(right);
+		String comparison = table.prepareField(left, dropAlias)
+                + " " + comparator.getOperator()
+                + " " + table.prepareField(right, dropAlias);
 		return comparison;
 	}
 
@@ -50,4 +53,8 @@ public class NoVariableClause implements WhereClause<String> {
 	public String getValue() {
 		return null;
 	}
+
+    public void setDropAlias(boolean dropAlias) {
+        this.dropAlias = dropAlias;
+    }
 }

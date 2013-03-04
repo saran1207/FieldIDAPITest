@@ -2,6 +2,8 @@ package com.n4systems.util.persistence;
 
 import com.n4systems.exceptions.InvalidQueryException;
 
+import javax.persistence.Query;
+
 @SuppressWarnings("serial")
 public abstract class SelectClause implements ClauseArgument {
 	private boolean distinct = false;
@@ -24,4 +26,7 @@ public abstract class SelectClause implements ClauseArgument {
 	}
 	
 	abstract protected String getClauseArgument(FromTable table) throws InvalidQueryException;
+
+    public void bind(Query query) {}
+
 }

@@ -16,6 +16,8 @@ import java.util.List;
 @Table(name="saved_searches")
 public class AssetSearchCriteria extends SearchCriteria {
 
+    private static final String LAST_EVENT_DATE_COLUMN = "asset_search_lasteventdate";
+
     @Column
     private String rfidNumber;
 
@@ -150,4 +152,11 @@ public class AssetSearchCriteria extends SearchCriteria {
     public void setColumns(List<String> columns) {
         this.columns = columns;
     }
+
+    @Transient
+    public boolean sortingByLastEventDate() {
+        ColumnMappingView sortColumn = getSortColumn();
+        return sortColumn != null && LAST_EVENT_DATE_COLUMN.equals(sortColumn.getId());
+    }
+
 }

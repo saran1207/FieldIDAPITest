@@ -92,8 +92,17 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
 
         SearchResult<M> searchResult = new SearchResult<M>();
         searchResult.setTotalResultCount(totalResultCount);
-        searchResult.setResults(persistenceService.findAll(searchBuilder.setSimpleSelect(), pageNumber, pageSize));
+
+        List<M> queryResults = persistenceService.findAll(searchBuilder, pageNumber, pageSize);
+
+        queryResults = convertResults(criteriaModel, queryResults);
+
+        searchResult.setResults(queryResults);
         return searchResult;
+    }
+
+    protected List<M> convertResults(T criteriaModel, List results) {
+        return results;
     }
 
     private Long findCount(QueryBuilder<?> searchBuilder) {
@@ -173,6 +182,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
     }
 
     protected void addSortTerms(T criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
+        searchBuilder.setSimpleSelect();
         if (sortColumn.getJoinExpression() == null) {
             String[] sortExpressions = sortColumn.getSortExpression().split(",");
             for (String sortExpression : sortExpressions) {
