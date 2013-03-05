@@ -1,26 +1,40 @@
 package com.n4systems.fieldid.wicket.components.asset.summary;
 
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
+import com.n4systems.fieldid.wicket.util.ZipFileUtil;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.user.User;
+import com.n4systems.reporting.PathHandler;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 public class AssetAttachmentsPanel extends Panel {
 
@@ -28,6 +42,9 @@ public class AssetAttachmentsPanel extends Panel {
 
     @SpringBean
     protected AssetService assetService;
+
+    @SpringBean
+    private UserService userService;
 
     public AssetAttachmentsPanel(String id, IModel<Asset> model) {
         super(id, model);
@@ -88,6 +105,46 @@ public class AssetAttachmentsPanel extends Panel {
                 item.add(new Label("attachmentNote", attachment.getComments()));
             }
         });
+        DownloadLink downloadAllLink;
+        String fileName = asset.getIdentifier() + "-Attachments.zip";
+        add(downloadAllLink = new DownloadLink("downloadAllLink", getAllFiles(assetAttachments, typeAttachments, fileName, asset.getType()), fileName));
+        downloadAllLink.setDeleteAfterDownload(true);
+    }
+
+    private LoadableDetachableModel<File> getAllFiles(final List<AssetAttachment> assetAttachments, final List<FileAttachment> typeAttachments, final String filename, final AssetType assetType) {
+        return new LoadableDetachableModel<File>() {
+            @Override
+            protected File load() {
+
+                try {
+                    ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(getFile(filename)));
+                    for (AssetAttachment assetAttachment: assetAttachments) {
+                        ZipFileUtil.addToZipFile(PathHandler.getAssetAttachmentFile(assetAttachment), zipOut);
+                    }
+                    for (FileAttachment fileAttachment: typeAttachments) {
+                        ZipFileUtil.addToZipFile(PathHandler.getAssetTypeAttachmentFile(fileAttachment, assetType.getId()), zipOut);
+                    }
+
+                    IOUtils.closeQuietly(zipOut);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    return null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
+                return getFile(filename);
+            }
+        };
+    }
+
+    private File getFile(String filename) {
+        return new File(getCurrentUser().getPrivateDir(), filename);
+    }
+
+    private User getCurrentUser() {
+        return userService.getUser(FieldIDSession.get().getSessionUser().getId());
     }
 
 }
