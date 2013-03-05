@@ -12,6 +12,7 @@ import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -75,9 +76,9 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 
     @Override
     protected void addSortTerms(AssetSearchCriteria criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
-        if (criteriaModel.sortingByLastEventDate()) {
+        if (criteriaModel.sortingByOrIncludingLastEventDate()) {
 
-            // Adjust the query.
+            // Adjust the query. We need to insert a subquery to find a derived column: the last event date.
             QueryBuilder<Event> subQuery = createUserSecurityBuilder(Event.class);
             subQuery.setMaxSelect("completedDate");
             subQuery.addSimpleWhere("workflowState", Event.WorkflowState.COMPLETED);
@@ -88,10 +89,12 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
             subQuery.getFromArgument().setAlias("evt");
 
 
-            OrderClause orderClause = new OrderClause("lastEventDate", sortDirection.equals(SortDirection.ASC));
-            orderClause.setAlwaysDropAlias(true);
+            if (criteriaModel.sortingByLastEventDate()) {
+                OrderClause orderClause = new OrderClause("lastEventDate", sortDirection.equals(SortDirection.ASC));
+                orderClause.setAlwaysDropAlias(true);
 
-            searchBuilder.getOrderArguments().add(orderClause);
+                searchBuilder.getOrderArguments().add(orderClause);
+            }
 
             MultipleSelectClause multiSelect = new MultipleSelectClause();
             multiSelect.addSimpleSelect("obj");
@@ -105,11 +108,13 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 
     @Override
     protected List<Asset> convertResults(AssetSearchCriteria criteriaModel, List results) {
-        if (criteriaModel.sortingByLastEventDate() && !results.isEmpty() && results.iterator().next() instanceof Object[]) {
+        if (criteriaModel.sortingByOrIncludingLastEventDate() && !results.isEmpty() && results.iterator().next() instanceof Object[]) {
             List<Asset> convertedResults = new ArrayList<Asset>();
             for (Object result : results) {
                 Object[] objectArray = (Object[]) result;
-                convertedResults.add((Asset) objectArray[0]);
+                Asset asset = (Asset) objectArray[0];
+                asset.setLastEventDate((Date)objectArray[1]);
+                convertedResults.add(asset);
             }
             return convertedResults;
         }

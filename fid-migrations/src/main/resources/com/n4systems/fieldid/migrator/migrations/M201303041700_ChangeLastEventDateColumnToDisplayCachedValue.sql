@@ -1,0 +1,1 @@
+update column_mappings set output_handler = "com.n4systems.fieldid.viewhelpers.handlers.DateTimeHandler",path_expression = "lastEventDate" where name = "asset_search_lasteventdate";

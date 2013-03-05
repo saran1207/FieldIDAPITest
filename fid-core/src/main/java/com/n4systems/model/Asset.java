@@ -116,6 +116,9 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     @Column(name="created_platform_type")
     private PlatformType createdPlatformType;
 
+    @Transient
+    private Date lastEventDate;
+
     
 	public Asset() {
 		this.identified = new PlainDate();
@@ -561,5 +564,13 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 
     public void setCreatedPlatformType(PlatformType createdPlatformType) {
         this.createdPlatformType = createdPlatformType;
+    }
+
+    public Date getLastEventDate() {
+        return lastEventDate;
+    }
+
+    public void setLastEventDate(Date lastEventDate) {
+        this.lastEventDate = lastEventDate;
     }
 }

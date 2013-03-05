@@ -159,4 +159,17 @@ public class AssetSearchCriteria extends SearchCriteria {
         return sortColumn != null && LAST_EVENT_DATE_COLUMN.equals(sortColumn.getId());
     }
 
+    @Transient
+    public boolean sortingByOrIncludingLastEventDate() {
+        if (sortingByLastEventDate()) {
+            return true;
+        }
+        for (ColumnMappingView columnMappingView : getSortedStaticAndDynamicColumns()) {
+            if (columnMappingView.getId().equals(LAST_EVENT_DATE_COLUMN)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
