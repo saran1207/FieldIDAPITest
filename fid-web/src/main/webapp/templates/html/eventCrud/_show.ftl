@@ -169,9 +169,8 @@
 	<#if !linkedEvent >
 		<#assign downloadAction="downloadAttachedFile"/>
 		<#assign attachments=event.attachments/>
-		
+        <#assign showDownloadAll=true/>
 		<#include "/templates/html/common/_attachedFilesShow.ftl"/>
-        <#include "/templates/html/common/_attachedFilesDownloadAll.ftl"/>
     </#if>
 	
 	
