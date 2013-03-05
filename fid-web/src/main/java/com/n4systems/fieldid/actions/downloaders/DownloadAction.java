@@ -1,18 +1,15 @@
 package com.n4systems.fieldid.actions.downloaders;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import javax.activation.FileTypeMap;
-import javax.servlet.http.HttpServletResponse;
-
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.util.ContentTypeUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.api.AbstractAction;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 @SuppressWarnings("serial")
 public abstract class DownloadAction extends AbstractAction {
@@ -41,6 +38,7 @@ public abstract class DownloadAction extends AbstractAction {
 			IOUtils.copy(stream, ouputStream);
 			ouputStream.flush();
 			ouputStream.close();
+            postSendActions();
 		} catch (IOException e) {
 			logger.error("Problem outputting for file " + fileName, e);
 			throw e;
@@ -71,5 +69,7 @@ public abstract class DownloadAction extends AbstractAction {
 	public void setAttachmentID(Long attachmentID) {
 		this.attachmentID = attachmentID;
 	}
+
+    public void postSendActions() {}
 
 }

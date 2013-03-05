@@ -1,16 +1,17 @@
 package com.n4systems.fieldid.actions.downloaders;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.wicket.util.ZipFileUtil;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.SubEvent;
 import com.n4systems.reporting.PathHandler;
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.zip.ZipOutputStream;
 
 public class DownloadAttachedEventFile extends DownloadAction {
 	private static final long serialVersionUID = 1L;
@@ -160,5 +161,57 @@ public class DownloadAttachedEventFile extends DownloadAction {
 		
 		return (failure) ? ERROR : null;
 	}
-	
+
+
+    public String doDownloadAll() {
+        // load the event
+        event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
+
+        if( event == null ) {
+            addActionError( getText( "error.noevent" ) );
+            return MISSING;
+        }
+
+        String filename = event.getAsset().getIdentifier() + "-" + new SimpleDateFormat("mm-dd-yy").format(event.getCompletedDate()) + "-Attachments.zip";
+        setFileName(filename);
+        boolean failure = false;
+
+        try {
+            ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(getFile(fileName)));
+            for(FileAttachment attachment: event.getAttachments()) {
+
+                File attachedFile = new File( PathHandler.getAttachmentFile(event), attachment.getFileName());
+                ZipFileUtil.addToZipFile(attachedFile, zipOut);
+            }
+            IOUtils.closeQuietly(zipOut);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            failure = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            failure = true;
+        }
+        File downloadFile = getFile(fileName);
+        // stream the file back to the browser
+        fileSize = new Long( downloadFile.length() ).intValue();
+        InputStream input = null;
+        try {
+            input = new FileInputStream( downloadFile );
+            return sendFile( input );
+        } catch( IOException e ) {
+        } finally {
+            failure = true;
+        }
+
+        return (failure) ? ERROR : null;
+    }
+
+    private File getFile(String filename) {
+        return new File(getCurrentUser().getPrivateDir(), filename);
+    }
+
+    @Override
+    public void postSendActions() {
+        getFile(fileName).delete();
+    }
 }

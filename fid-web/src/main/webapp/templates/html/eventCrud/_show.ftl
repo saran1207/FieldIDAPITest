@@ -171,7 +171,8 @@
 		<#assign attachments=event.attachments/>
 		
 		<#include "/templates/html/common/_attachedFilesShow.ftl"/>
-	</#if>
+        <#include "/templates/html/common/_attachedFilesDownloadAll.ftl"/>
+    </#if>
 	
 	
 	<#if subEvents?exists >

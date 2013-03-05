@@ -165,6 +165,7 @@
 			</result>
 		</global-results>
 		<action name="downloadAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
+        <action name="downloadAllAttachedFiles" method="downloadAll" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
 		<action name="downloadSubAttachedFile" method="downloadSubEvent" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
 		<action name="downloadProofTestChart" method="downloadChart" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
 		<action name="downloadJobNoteFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProjectNoteFile" />
