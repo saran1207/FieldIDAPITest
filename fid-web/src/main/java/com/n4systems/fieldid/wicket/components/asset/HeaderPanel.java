@@ -83,9 +83,11 @@ public class HeaderPanel extends Panel {
         else
             add(new NonWicketLink("editAssetLink", "customerInformationEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
 
+        boolean hasAssociatedEventTypes = !asset.getType().getAssociatedEventTypes().isEmpty();
+
         NonWicketLink startEventLink;
         add(startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton blueButton")));
-        startEventLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent"));
+        startEventLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && hasAssociatedEventTypes);
 
         scheduleToAdd = createNewSchedule(asset);
 
@@ -104,7 +106,7 @@ public class HeaderPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 schedulePicker.show(target);
             }
-        }.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent")));
+        }.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && hasAssociatedEventTypes));
 
         add(schedulePicker);
     }
