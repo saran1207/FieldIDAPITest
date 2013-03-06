@@ -10,9 +10,7 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 public class LastEventDateService extends FieldIdPersistenceService {
     
@@ -63,18 +61,10 @@ public class LastEventDateService extends FieldIdPersistenceService {
     }
 
     public Date findLastEventDate(Long assetId) {
-        return findLastEventDate(persistenceService.find(Asset.class, assetId));
-    }
-
-    public List<Event> findLastEvents(Asset asset) {
-        Date lastEventDate = findLastEventDate(asset);
-        if (lastEventDate == null) {
-            return Collections.emptyList();
-        }
-
-        QueryBuilder<Event> query = createUserSecurityBuilder(Event.class);
-        query.addSimpleWhere("completedDate", lastEventDate);
-        return persistenceService.findAll(query);
+        // As this is called from the data service in calls that don't know which user we are,
+        // we must use tenant security here. WEB-3668.
+        QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class).addSimpleWhere("id", assetId);
+        return findLastEventDate(persistenceService.find(query));
     }
 
 }
