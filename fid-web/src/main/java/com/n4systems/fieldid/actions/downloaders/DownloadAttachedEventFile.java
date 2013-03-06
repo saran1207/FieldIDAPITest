@@ -172,7 +172,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
             return MISSING;
         }
 
-        String filename = event.getAsset().getIdentifier() + "-" + new SimpleDateFormat("mm-dd-yy").format(event.getCompletedDate()) + "-Attachments.zip";
+        String filename = event.getAsset().getIdentifier() + "-" + new SimpleDateFormat("MM-dd-yy").format(event.getCompletedDate()) + "-Attachments.zip";
         setFileName(filename);
         boolean failure = false;
 
