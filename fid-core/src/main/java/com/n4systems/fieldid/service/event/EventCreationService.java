@@ -421,7 +421,8 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         EventResult calculatedEventResult = calculateEventResultAndScore(event);
 
-        if (event.getEventResult() == null) {
+        if (event.getEventResult() == null || event.getEventResult() == EventResult.VOID) {
+            // Mobile sets the result to void to indicate that it should be recalculated.
             event.setEventResult(calculatedEventResult);
         }
 
