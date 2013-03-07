@@ -31,8 +31,8 @@
 .actionButtons {
     padding: 10px 0;
     float: left;
-    width: 270px;
-    *width: 310px;
+    width: 395px;
+    *width: 435px;
 }
 
 .actionButtons .mattButton {
@@ -62,8 +62,8 @@
 
 .viewButtons {
     float : left;
-    width: 730px;
-    *width: 690px;
+    width: 605px;
+    *width: 565px;
     padding: 10px 0;
 }
 .viewButtons .three_button {

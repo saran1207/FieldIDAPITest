@@ -11,7 +11,8 @@ public enum ExtendedFeature {
 	AssignedTo("feature.assigned_to"),
 	AdvancedLocation("feature.advanced_location"),
 	ProofTestIntegration("feature.proof_test_integration"), 
-	OrderDetails("feature.order_details");
+	OrderDetails("feature.order_details"),
+    LotoProcedures("feature.loto_procedures");
 	
 	private String label;
 	
