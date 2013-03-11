@@ -22,4 +22,5 @@ public interface SystemSecurityGuard {
 	public boolean isPlansAndPricingAvailable();
 	public boolean isManufacturerCertificateEnabled();
 	public boolean isOrderDetailsEnabled();
+    public boolean isLotoProceduresEnabled();
 }

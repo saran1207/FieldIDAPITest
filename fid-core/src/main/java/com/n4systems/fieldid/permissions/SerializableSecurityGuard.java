@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.permissions;
 
-import static com.google.common.base.Preconditions.*;
-
-import java.io.Serializable;
-
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.services.TenantFinder;
+
+import java.io.Serializable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SerializableSecurityGuard implements SystemSecurityGuard, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -106,5 +106,9 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	public boolean isOrderDetailsEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.OrderDetails);
 	}
-	
+
+    @Override
+    public boolean isLotoProceduresEnabled() {
+        return primaryOrg.hasExtendedFeature(ExtendedFeature.LotoProcedures);
+    }
 }
