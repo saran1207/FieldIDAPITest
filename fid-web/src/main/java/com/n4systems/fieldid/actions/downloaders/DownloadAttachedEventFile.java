@@ -10,6 +10,7 @@ import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.zip.ZipOutputStream;
 
@@ -173,10 +174,10 @@ public class DownloadAttachedEventFile extends DownloadAction {
         }
 
         String filename = event.getAsset().getIdentifier() + "-" + new SimpleDateFormat("MM-dd-yy").format(event.getCompletedDate()) + "-Attachments.zip";
-        setFileName(filename);
         boolean failure = false;
 
         try {
+            setFileName(URLEncoder.encode(filename, "UTF-8"));
             ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(getFile(fileName)));
             for(FileAttachment attachment: event.getAttachments()) {
 
