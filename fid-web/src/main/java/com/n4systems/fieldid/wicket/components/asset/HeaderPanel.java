@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresPage;
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
@@ -23,7 +24,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -108,11 +108,8 @@ public class HeaderPanel extends Panel {
 
         add(schedulePicker);
 
-        add(new Link("lotoProceduresLink") {
-            @Override
-            public void onClick() {
-            }
-        }.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures)));
+        add(new BookmarkablePageLink<ProceduresPage>("lotoProceduresLink", ProceduresPage.class, PageParametersBuilder.uniqueId(asset.getId()))
+                .setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures)));
     }
 
     private Event createNewSchedule(Asset asset) {

@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+    <div class="navHeader">
+        <a wicket:id="versionsLink" class="mattButton"><wicket:message key="label.all_versions"/></a>
+        <a id="newProcedureLink" class="mattButton" href="javascript:void(0);"><wicket:message key="label.new"/></a>
+        <div id="addNewContainer" style="display: none">
+            <a wicket:id="copyExisitingLink"><wicket:message key="label.copy_existing"/></a>
+            <a wicket:id="startBlankLink"><wicket:message key="label.start_blank"/></a>
+        </div>
+    </div>
+    <div class="content">
+        <table class="list">
+            <tbody>
+                <tr>
+                    <th>Name</th>
+                    <th>Created</th>
+                    <th>Last Modified</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <tr>
+                    <td>ABC-123</td>
+                    <td>SomeUser, 2013-01-07 3:28 PM EDT</td>
+                    <td>SomeUser, 2013-03-03 4:15 PM EDT</td>
+                    <td><a href="javascript:void(0);">View</a> | <a href="javascript:void(0);">Edit</a></td>
+                </tr>
+                <tr>
+                    <td>JKL-456</td>
+                    <td>OtherUser, 2013-02-15 11:22 AM EDT</td>
+                    <td>-</td>
+                    <td><a href="javascript:void(0);">View</a> | <a href="javascript:void(0);">Edit</a></td>
+                </tr>
+                <tr>
+                    <td>ZXY-789</td>
+                    <td>OtherUser, 2012-11-04 1:43 PM EDT</td>
+                    <td>OtherUser, 2013-11-19 5:32 PM EDT</td>
+                    <td><a href="javascript:void(0);">View</a> | <a href="javascript:void(0);">Edit</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</wicket:extend>
+
+</html>

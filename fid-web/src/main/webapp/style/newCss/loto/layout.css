@@ -1,0 +1,45 @@
+#page {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    box-shadow: none;
+    font-size: 11px;
+    padding: 0;
+}
+
+#contentHeader {
+    margin-bottom: 0;
+}
+
+#contentHeader h1 {
+    font-size: 21px;
+    font-weight: normal;
+    text-shadow: 1px 1px rgba(255, 255, 255, 0.4);
+    margin-bottom: 10px;
+}
+
+.options {
+    display: none;
+}
+
+.navHeader, .content {
+    width: 100%;
+    float: left;
+}
+
+.navHeader {
+    border-bottom: 1px solid #CCCCCC;
+    float: left;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+.content {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
+    padding: 20px;
+    position: relative;
+    width: 958px;
+    height: 560px;
+}

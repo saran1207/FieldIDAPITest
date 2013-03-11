@@ -1,0 +1,23 @@
+#newProcedureLink{
+    float: right;
+}
+
+#addNewContainer {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #DDDDDD;
+    box-shadow: 5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
+    right: 0;
+    padding: 10px 20px;
+    position: absolute;
+    top: 78px;
+    width: 100px;
+    z-index: 10;
+}
+
+#addNewContainer a {
+    display: block;
+    line-height: 2em;
+    color: #777777;
+    font-size: 1.2em;
+    text-decoration: none;
+}
