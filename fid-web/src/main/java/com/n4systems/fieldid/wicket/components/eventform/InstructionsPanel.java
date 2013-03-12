@@ -32,7 +32,7 @@ public class InstructionsPanel extends Panel {
                     return String.format("/criteria/%s/instructions/images/", path);
                 }
             }.withAutoUpdate().withWidth("310px"));
-        }
+       }
     }
 
 }

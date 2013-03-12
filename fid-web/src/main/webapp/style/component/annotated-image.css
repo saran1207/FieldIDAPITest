@@ -1,0 +1,241 @@
+
+  /*z-index notes :   READONLY NOTES -->  EDITABLE NOTES --> NOTE POPUP MENU   (lowest to highest )*/
+
+.note.readonly {
+    z-index:2;
+}
+
+.note input {
+    padding:2px;
+    /*max-width:60px;*/
+    background-color:#fafad2;
+    outline: 1px solid #DDDD99;
+    border: none;
+    margin-top:4px;
+}
+
+.note.readonly input {
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
+ .note .icon {
+     background: url(../../images/calendar-icon.png) no-repeat 3px 6px;
+     height: 24px;
+     width: 20px;
+     float:left;
+ }
+
+
+ .note {
+     background-color: #fff0a0;
+     background-image: -webkit-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+     background-image:    -moz-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+     background-image:     -ms-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+     background-image:      -o-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+     background-image:         linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+     border-radius: 5px;
+     box-shadow: inset 0 1px 1px hsla(0,0%,100%,.5),
+     3px 3px 0 hsla(0,0%,0%,.1);
+     color: #333;
+     display: inline-block;
+     font: 12px;
+     position: relative;
+     text-shadow: 0 1px 1px hsla(0,0%,100%,.5);
+     margin-top:-10px;
+     margin-left:10px;
+     z-index:10;
+     padding:3px;
+ }
+
+.note .menu {
+    background: url(../../images/action/expand-arrow.png) no-repeat 3px 6px;
+    height: 16px;
+    width: 12px;
+    float:right;
+    background-size:8px;
+}
+
+ .note .menu:hover {
+     cursor:hand;cursor:pointer;
+ }
+
+.direction-menu {
+    position: absolute;
+    z-index:20;
+    background: #fff0a0;
+    border-radius: 0px 0px 4px 4px;
+    border-width: 0;
+    border-top: none;
+    box-shadow: inset 0 1px 1px hsla(0,0%,100%,.5),3px 3px 0 hsla(0,0%,0%,.1);
+    text-shadow: 0 1px 1px hsla(0,0%,100%,.5);
+}
+
+ .direction-menu.west {
+     margin-left:9px;
+     margin-top:13px;
+ }
+
+ .direction-menu.east {
+     margin-left:9px;
+     margin-top:13px;
+ }
+
+ .direction-menu.south {
+     margin-left:-19px;
+     margin-top:-3px;
+ }
+
+ .direction-menu.north {
+     margin-left:-19px;
+     margin-top:46px;
+ }
+
+
+ .direction-menu li {
+     padding:4px;
+ }
+
+ .direction-menu li:hover {
+     background-color:white;
+     border-radius:4px;
+ }
+
+ .direction-menu li p {
+     margin-left:5px;
+     display:inline-block;
+ }
+
+ .direction-menu li span {
+     display:inline-block;
+     height:24px;
+     width:24px;
+     margin-top:-4px;
+ }
+
+ .direction-menu li.west span {
+     background: url(../../images/west.png) no-repeat 3px 6px;
+ }
+
+ .direction-menu li.north span {
+     background: url(../../images/north.png) no-repeat 3px 6px;
+ }
+
+ .direction-menu li.east span {
+     background: url(../../images/north.png) no-repeat 3px 6px;
+ }
+
+ .direction-menu li.south span {
+     background: url(../../images/south.png) no-repeat 3px 6px;
+ }
+
+ .note .icon {
+     background: url(../../images/calendar-icon.png) no-repeat 3px 6px;
+     height: 24px;
+     width: 20px;
+     float:left;
+ }
+
+
+ .note {
+     background-color: #fff0a0;
+     background-image: -webkit-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+     background-image:    -moz-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+     background-image:     -ms-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+     background-image:      -o-linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+     background-image:         linear-gradient(top, hsla(0,0%,100%,.5), hsla(0,0%,100%,0));
+     border-radius: 5px;
+     color: #333;
+     display: inline-block;
+     font: 12px;
+     position: relative;
+     box-shadow: inset 0 1px 1px hsla(0,0%,100%,.5),3px 3px 0 hsla(0,0%,0%,.1);
+     text-shadow: 0 1px 1px hsla(0,0%,100%,.5);
+     z-index:5;
+     padding:3px;
+ }
+
+
+ /* WEST */
+
+.note.west  {
+    margin-top:-12px;
+    margin-left:9px;
+}
+
+ .note.west:after, .note.west:before {
+     border-left: 10px solid transparent;
+     border-bottom: 10px solid #fff0a0;
+     bottom: 7px;
+     content: '';
+     position: absolute;
+     left:-10px;
+ }
+ .note.west:before {
+     border-bottom: 10px solid hsla(0,0%,0%,.1);
+     bottom: 3px;
+     left:-10px;
+ }
+
+ /* EAST*/
+
+ .note.east {
+     margin-top:2px;
+     margin-left:-52px;
+ }
+ .note.east:after, .note.east:before {
+     border-right: 10px solid transparent;
+     border-top: 10px solid #fff0a0;
+     bottom: 10px;
+     content: '';
+     position: absolute;
+     right:-9px;
+ }
+.note.east:before {
+    border-top: 10px solid hsla(0,0%,0%,.1);
+    bottom: 6px;
+    right:-9px;
+}
+
+
+/* SOUTH*/
+
+.note.south {
+    margin-top:-28px;
+    margin-left:-19px;
+}
+.note.south:after, .note.south:before {
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #fff0a0;
+    bottom: -9px;
+    content: '';
+    position: absolute;
+    left:9px;
+}
+.note.south:before {
+    border-right: 10px solid hsla(0,0%,0%,.1);
+    bottom: -12px;
+    left:12px;
+}
+
+
+ /* NORTH*/
+
+ .note.north {
+     margin-top:20px;
+     margin-left:-19px;
+ }
+ .note.north:after, .note.north:before {
+     border-top: 10px solid transparent;
+     border-right: 10px solid #fff0a0;
+     top: -10px;
+     content: '';
+     position: absolute;
+     left:9px;
+ }
+ .note.north:before {
+     border-right: 10px solid hsla(0,0%,0%,.1);
+     top: -10px;
+     left:12px;
+ }

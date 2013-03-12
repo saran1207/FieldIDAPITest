@@ -1,23 +1,23 @@
 package com.n4systems.util.json;
 
+import com.google.gson.*;
+import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.common.ImageAnnotationType;
+import com.n4systems.util.chart.Chartable;
+import com.n4systems.util.chart.ChartableMap;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Iterator;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.n4systems.util.chart.Chartable;
-import com.n4systems.util.chart.ChartableMap;
-
 @SuppressWarnings("serial")
 public class JsonRenderer implements Serializable {
 
-	private Gson gson = new GsonBuilder().registerTypeAdapter(ChartableMap.class, new ChartableMapSerializer()).create();
+	private Gson gson = new GsonBuilder().
+                                registerTypeAdapter(ChartableMap.class, new ChartableMapSerializer()).
+                                registerTypeAdapter(ImageAnnotationType.class, new ImageAnnotationTypeSerializer()).
+                                registerTypeAdapter(ImageAnnotation.class, new ImageAnnotationSerializer()).
+                                create();
 
 	public String render(Object bean) {		
 		String json = gson.toJson(bean);
@@ -40,5 +40,30 @@ public class JsonRenderer implements Serializable {
 			}
 	        return data;
 		}
-	}	
+	}
+
+    class ImageAnnotationTypeSerializer implements JsonSerializer<ImageAnnotationType> {
+
+        @Override
+        public JsonElement serialize(ImageAnnotationType type, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject object = new JsonObject();
+            object.addProperty("class", "electrical");   // TODO : IMPLEMENT THIS...needs to return css class
+            return object;
+        }
+    }
+    class ImageAnnotationSerializer implements JsonSerializer<ImageAnnotation> {
+
+        @Override
+        public JsonElement serialize(ImageAnnotation annotation, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject object = new JsonObject();
+            object.addProperty("id",annotation.getId());
+            object.addProperty("type", "note");  // should return css class name. or possibly inline style.  e.g. "electrical" or "background:1px solid red;border 1px solid white;"
+            object.addProperty("text",annotation.getText());
+            object.addProperty("direction",annotation.getDirection().getCss());
+            object.addProperty("x",annotation.getX());
+            object.addProperty("y",annotation.getY());
+            return object;
+        }
+    }
+
 }

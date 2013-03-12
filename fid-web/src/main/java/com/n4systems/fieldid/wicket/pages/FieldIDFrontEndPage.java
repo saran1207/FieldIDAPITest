@@ -354,7 +354,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         response.renderJavaScriptReference(CoreJavaScriptResourceReference.get());
 
         response.renderJavaScriptReference("javascript/common-jquery.js");
-        response.renderJavaScriptReference("javascript/jquery.at_intervals.js");
         response.renderJavaScriptReference("javascript/sessionTimeout-jquery.js");
         response.renderJavaScriptReference("javascript/json2.js");
         response.renderJavaScriptReference("javascript/jquery.at_intervals.js");
