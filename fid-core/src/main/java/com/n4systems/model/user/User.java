@@ -85,10 +85,13 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
     private AmountWithString<Length> amountWithString;
      */
 
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private UserGroup group;
-	
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable (name = "users_user_groups",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_group_id"))
+    @OrderBy( "id" )
+    private Set<UserGroup> groups = new HashSet<UserGroup>();
+
 	private boolean registered = false;
 	
 	// XXX : refactor this to use PermissionType.
@@ -548,15 +551,15 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
         this.identifier = identifier;
     }
 
-    public UserGroup getGroup() {
-        return group;
-    }
-
-    public void setGroup(UserGroup group) {
-        this.group = group;
-    }
-
     public String getKeyForStruts() {
         return "U"+ getId();
+    }
+
+    public Set<UserGroup> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<UserGroup> groups) {
+        this.groups = groups;
     }
 }

@@ -16,11 +16,13 @@ public class UserGroupExistsValidator implements FieldValidator {
             return ValidationResult.pass();
         }
 
-        if (createUserGroupExistsLoader(filter).setName(fieldValue.toString()).load()) {
-            return ValidationResult.pass();
-        } else {
-            return ValidationResult.fail(UserGroupNotFoundValidatorFail, fieldValue);
+        String[] groups = fieldValue.toString().split(",");
+        for (String group : groups) {
+            if (!createUserGroupExistsLoader(filter).setName(group).load()) {
+                return ValidationResult.fail(UserGroupNotFoundValidatorFail, group);
+            }
         }
+        return ValidationResult.pass();
     }
 
     protected UserGroupForNameExistsLoader createUserGroupExistsLoader(SecurityFilter filter) {

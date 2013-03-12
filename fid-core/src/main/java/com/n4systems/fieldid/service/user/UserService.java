@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.user;
 
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.orgs.BaseOrg;
@@ -15,20 +16,20 @@ import com.n4systems.util.StringUtils;
 import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Transactional
 public class UserService extends FieldIdPersistenceService {
 
     public List<User> getUsers(boolean registered, boolean includeSystem) {
         QueryBuilder<User> builder = createUserQueryBuilder(registered, includeSystem);
+
+        if (!getCurrentUser().getGroups().isEmpty()) {
+            return new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
+        }
 
         return persistenceService.findAll(builder);
     }
@@ -57,10 +58,6 @@ public class UserService extends FieldIdPersistenceService {
 
         if (!includeSystem) {
             builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "userType", UserType.SYSTEM));
-        }
-
-        if (getCurrentUser().getGroup() != null) {
-            builder.addSimpleWhere("group.id", getCurrentUser().getGroup().getId());
         }
 
         return builder.addOrder("firstName").addOrder("lastName");
@@ -151,12 +148,19 @@ public class UserService extends FieldIdPersistenceService {
         String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
                 + filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )";
 
-        if (getCurrentUser().getGroup() != null) {
-            queryString += " AND ub.group.id = " + getCurrentUser().getGroup().getId();
+        if (!getCurrentUser().getGroups().isEmpty()) {
+            queryString += " AND ub in (:visibleUsers) ";
         }
 
         queryString += " ORDER BY ub.firstName, ub.lastName";
+
         Query query = getEntityManager().createQuery(queryString);
+
+        if (!getCurrentUser().getGroups().isEmpty()) {
+            Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
+            query.setParameter("visibleUsers", visibleUsers);
+        }
+
         filter.applyParameters(query, User.class);
         justTenantFilter.applyParameters(query, User.class);
 

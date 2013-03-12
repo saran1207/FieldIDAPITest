@@ -29,6 +29,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Set;
+
 public class HeaderPanel extends Panel {
 
     @SpringBean protected UserService userService;
@@ -116,9 +118,9 @@ public class HeaderPanel extends Panel {
         Event schedule = new Event();
         schedule.setEventResult(EventResult.VOID);
         schedule.setAsset(asset);
-        UserGroup currentUserGroup = userService.getUser(FieldIDSession.get().getSessionUser().getId()).getGroup();
-        if (currentUserGroup != null) {
-            schedule.setAssignedUserOrGroup(currentUserGroup);
+        Set<UserGroup> groups = userService.getUser(FieldIDSession.get().getSessionUser().getId()).getGroups();
+        if (!groups.isEmpty()) {
+            schedule.setAssignedUserOrGroup(groups.iterator().next());
         }
         return schedule;
     }

@@ -20,7 +20,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 	public enum Comparator {
 		// TODO: add support for BETWEEN's
 		EQ("="), NE("<>"), GT(">"), LT("<"), GE(">="), LE("<="), LIKE("LIKE"), NOTLIKE("NOT LIKE"), NULL("IS NULL"), NOTNULL("IS NOT NULL"), EMPTY("IS EMPTY"), NOTEMPTY("IS NOT EMPTY"), IN("IN"), NOTIN(
-				"NOT IN"), EQ_OR_NULL("=", true);
+				"NOT IN"), EQ_OR_NULL("=", true), IN_ELEMENTS("IN ELEMENTS");
 
 		private String operator;
 		private boolean combination;
@@ -46,7 +46,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 	private String name;
 	private String param;
 	private T value;
-	private Comparator comparator = Comparator.EQ;
+	protected Comparator comparator = Comparator.EQ;
 	private ChainOp chainOp = ChainOp.AND;
 	private int options = 0;
 	private boolean dropAlias = false;
@@ -181,6 +181,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 			break;
 		case IN:
 		case NOTIN:
+        case IN_ELEMENTS:
 			query.setParameter(getName(), value);
 			break;
 
@@ -194,7 +195,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 		return clausePrefix() + getComparison(table) + clauseSuffix();
 	}
 
-	private String getComparison(FromTable table) {
+	protected String getComparison(FromTable table) {
 		String comparison = prepareParam(table) + " " + comparator.getOperator();
 
 		switch (comparator) {
@@ -229,7 +230,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 		return (comparator.combination) ? ")" : "";
 	}
 
-	private String prepareParam(FromTable table) {
+	protected String prepareParam(FromTable table) {
 		BitField bits = new BitField(options);
 		String param = table.prepareField(this.param, dropAlias);
 

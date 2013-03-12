@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -14,6 +15,8 @@ import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import java.util.Collection;
 
 @Service
 @Scope("singleton")
@@ -42,22 +45,25 @@ public class SecurityContextInitializer implements ApplicationContextAware {
 		SecurityContext securityContext = getSecurityContext();
 		securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(user.getTenant().getId()));
 		securityContext.setUserSecurityFilter(new UserSecurityFilter(user));
-		ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
+
+        Collection<User> visibleUsers = applicationContext.getBean(UserGroupService.class).findUsersVisibleTo(user);
+        ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
+        ThreadLocalInteractionContext.getInstance().setVisibleUsers(visibleUsers);
 	}
 	
 	public static void resetSecurityContext() {
 		SecurityContext securityContext = getSecurityContext();
 		securityContext.reset();
-		ThreadLocalInteractionContext.getInstance().setCurrentUser(null);
+		ThreadLocalInteractionContext.getInstance().clear();
 	}
 
 	private static SecurityContext getSecurityContext() {
-		SecurityContext securityContext = (SecurityContext) applicationContext.getBean(SecurityContext.class);
+		SecurityContext securityContext = applicationContext.getBean(SecurityContext.class);
 		return securityContext;
 	}
 	
 	private static PersistenceService getPersistenceService() {
-		PersistenceService persistenceService = (PersistenceService) applicationContext.getBean(PersistenceService.class);
+		PersistenceService persistenceService = applicationContext.getBean(PersistenceService.class);
 		return persistenceService;
 	}
 }

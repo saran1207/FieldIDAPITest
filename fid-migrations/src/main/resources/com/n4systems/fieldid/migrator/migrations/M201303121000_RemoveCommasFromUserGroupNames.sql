@@ -1,0 +1,1 @@
+update user_groups set name=replace(name, ",", " ") where name like "%,%";

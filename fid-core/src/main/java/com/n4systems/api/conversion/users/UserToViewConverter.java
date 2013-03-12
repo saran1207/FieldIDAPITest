@@ -32,7 +32,7 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 		view.setPosition(model.getPosition());
 		view.setUserID(model.getUserID());
 		view.setGlobalId(model.getGlobalId());
-        view.setUserGroup(model.getGroup() == null ? null : model.getGroup().getName());
+        view.setUserGroup(model.getGroups().isEmpty() ? null : UserView.getUserGroupNames(model.getGroups()));
 		// permissions...
 		view.setIdentifyAssets(getPermissionYNString(model, Permissions.Tag));
 		view.setManageSystemConfiguration(getPermissionYNString(model, Permissions.ManageSystemConfig));

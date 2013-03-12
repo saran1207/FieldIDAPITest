@@ -1109,6 +1109,8 @@ public class DataServiceImpl implements DataService {
 
     private void storeInteractionContext(RequestInformation request, User user) {
         InteractionContext uc = ThreadLocalInteractionContext.getInstance();
+        Collection<User> visibleUsers = ServiceLocator.getUserGroupService().findUsersVisibleTo(user);
+        uc.setVisibleUsers(visibleUsers);
         uc.setCurrentUser(user);
         uc.setCurrentPlatformType(PlatformType.WINDOWS_MOBILE);
         uc.setCurrentPlatform(request.getPlatformDescription());

@@ -2,9 +2,14 @@
 	<@n4.includeStyle href="user" type="page"/>
 	<@n4.includeScript src="timezone" />
 	<@n4.includeScript src="user" />
+    <@n4.includeStyle href="chosen/chosen.css" />
+    <@n4.includeScript src="chosen/chosen.jquery.js" />
 	<@n4.includeScript>
 		countryChangeUrl = "<@s.url action="getRegions" namespace="/public/ajax" />";
 		signatureUploadUrl = "<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" typeOfUpload="userSignature"/>";
+        jQuery(document).ready(function(){
+            jQuery(".chzn-select").chosen({placeholder_text_multiple:"Select some groups"});
+        });
 	</@n4.includeScript>
 </head>
 <#include "/templates/html/common/_orgPicker.ftl"/>
@@ -24,9 +29,9 @@
 				<@n4.orgPicker name="owner" required="true" orgType="all"/>
 			</div>
 
-            <div class="infoSet">
+            <div class="infoSet" style="overflow:visible">
                 <label class="label" for="group"><@s.text name="label.user_group"/></label>
-                <@s.select id="userGroup" name="userGroup" list="userGroups" listKey="id" listValue="name" key="label.user_group" labelposition="left" headerKey="" headerValue="None" />
+                <@s.select id="userGroups" name="userGroups" value="currentUserGroups" list="availableUserGroups" listKey="id" listValue="name" key="label.user_group" labelposition="left" multiple="true" cssClass="chzn-select" />
             </div>
 
 			<div class="infoSet">

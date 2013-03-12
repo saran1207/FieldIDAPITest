@@ -42,9 +42,7 @@
 			</#if>
             <#if !isArchivedPage>
             <td>
-                <#if user.group?exists>
-                    ${user.group.name?html! }
-                </#if>
+                ${action.formatUserGroups(user)}
             </td>
             </#if>
 			<td>${(user.owner.getInternalOrg().name?html)!}</td>

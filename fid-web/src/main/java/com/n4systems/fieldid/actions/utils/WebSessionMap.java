@@ -6,6 +6,7 @@ import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
+import com.n4systems.model.user.User;
 import com.n4systems.util.HashCode;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.struts2.ServletActionContext;
@@ -30,6 +31,7 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	public static final String VENDOR_CONTEXT = "vendor_context";
 	public static final String KEY_QUICK_SETUP_WIZARD_IMPORTS = "qsw_import";
 	public static final String IMPORT_TASK_ID = "import_task_id";
+    public static final String VISIBLE_USERS_LIST = "visibleUsersList";
 	
 	public static final String REPORT_CRITERIA = "reportCriteria";
     public static final String NEW_REPORT_CRITERIA = "newReportCriteria";
@@ -133,6 +135,14 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	public String getImportTaskId() {
 		return get(IMPORT_TASK_ID, String.class);
 	}
+
+    public Collection<User> getVisibleUsers() {
+        return get(VISIBLE_USERS_LIST, Collection.class);
+    }
+
+    public void setVisibleUsers(Collection<User> visibleUsers) {
+        put(VISIBLE_USERS_LIST, visibleUsers);
+    }
 	
 	public void clearImportTaskId() {
 		remove(IMPORT_TASK_ID);

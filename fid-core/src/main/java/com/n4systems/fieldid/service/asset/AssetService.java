@@ -5,6 +5,7 @@ import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.fieldid.LegacyMethod;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.event.LastEventDateService;
@@ -495,8 +496,11 @@ public class AssetService extends FieldIdPersistenceService {
 
         User user = persistenceService.find(User.class, securityFilter.getUserId());
 
-        if (user.getGroup() != null) {
-            query += " AND event.performedBy.group.id = :groupId ";
+        Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
+
+        if (!user.getGroups().isEmpty()) {
+            query += " AND event.performedBy  in (:visibleUsers) ";
+            query += " AND (event.assignedGroup is null or event.assignedGroup in (:groupList) ) ";
         }
 
         if (!count)
@@ -514,8 +518,9 @@ public class AssetService extends FieldIdPersistenceService {
         eventQuery.setParameter("activeState", Archivable.EntityState.ACTIVE);
         eventQuery.setParameter("completed", Event.WorkflowState.COMPLETED);
 
-        if (user.getGroup() != null) {
-            eventQuery.setParameter("groupId", user.getGroup().getId());
+        if (!user.getGroups().isEmpty()) {
+            eventQuery.setParameter("visibleUsers", visibleUsers);
+            eventQuery.setParameter("groupList", user.getGroups());
         }
 
         return eventQuery;

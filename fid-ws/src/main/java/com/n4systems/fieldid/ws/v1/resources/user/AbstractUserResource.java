@@ -1,7 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources.user;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
+import com.n4systems.model.user.UserGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
@@ -55,7 +59,7 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 		apiUser.setIdentifyEnabled(Permissions.hasOneOf(user, Permissions.Tag));
 		apiUser.setTenant(apiTenantResource.convertEntityToApiModel(user.getOwner().getPrimaryOrg()));
 		apiUser.setIdentifier(user.getIdentifier());
-		apiUser.setGroupId(user.getGroup() != null ? user.getGroup().getId() : null);
+		apiUser.setGroupIds(convertGroups(user.getGroups()));
 		
 		OfflineProfile offlineProfile = offlineProfileService.find(user);
 		if (offlineProfile != null) {
@@ -64,6 +68,14 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 		
 		return apiUser;
 	}
+
+    private List<Long> convertGroups(Set<UserGroup> groups) {
+        List<Long> groupIds = new ArrayList<Long>();
+        for (UserGroup group : groups) {
+            groupIds.add(group.getId());
+        }
+        return groupIds;
+    }
 
     protected abstract void addUserTypeTermToQuery(QueryBuilder<User> query);
 

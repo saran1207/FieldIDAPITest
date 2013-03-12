@@ -4,10 +4,13 @@ import com.n4systems.model.PlatformType;
 import com.n4systems.model.user.User;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 public class ThreadLocalInteractionContext implements InteractionContext, Serializable {
 
     private ThreadLocal<User> userThreadLocal = new ThreadLocal<User>();
+    private ThreadLocal<Collection<User>> visibleUsersThreadLocal = new ThreadLocal<Collection<User>>();
     private ThreadLocal<String> platformThreadLocal = new ThreadLocal<String>();
     private ThreadLocal<PlatformType> platformTypeThreadLocal = new ThreadLocal<PlatformType>();
 
@@ -47,10 +50,19 @@ public class ThreadLocalInteractionContext implements InteractionContext, Serial
         return platformThreadLocal.get();
     }
 
+    public Collection<User> getVisibleUsers() {
+        return visibleUsersThreadLocal.get();
+    }
+
+    public void setVisibleUsers(Collection<User> visibleUsers) {
+        visibleUsersThreadLocal.set(visibleUsers);
+    }
+
     public void clear() {
         platformThreadLocal.remove();
         platformTypeThreadLocal.remove();
         userThreadLocal.remove();
+        visibleUsersThreadLocal.remove();
     }
 
 }

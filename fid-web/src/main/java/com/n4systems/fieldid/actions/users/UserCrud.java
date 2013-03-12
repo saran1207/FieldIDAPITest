@@ -57,7 +57,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	private String listFilter;
 	private Long orgFilter;
-    private Long userGroupFilter;
+    private UserGroup userGroupFilter;
 	private String sortColumn;
 	private String sortDirection;
 	
@@ -371,16 +371,32 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
         user.setIdentifier(identifier);
     }
 
-    public Long getUserGroup() {
-        return user.getGroup() == null ? null : user.getGroup().getId();
+    public List<String> getCurrentUserGroups() {
+        Set<UserGroup> groups = user.getGroups();
+        List<String> groupsString = new ArrayList<String>();
+        for (UserGroup group : groups) {
+            groupsString.add(group.getId().toString());
+        }
+        return groupsString;
     }
 
-    public void setUserGroup(Long userGroup) {
-        if (userGroup == null) {
-            user.setGroup(null);
-        } else {
-            user.setGroup(persistenceManager.find(UserGroup.class, Long.valueOf(userGroup)));
+    public String[] getUserGroups() {
+        Set<UserGroup> groups = user.getGroups();
+        String[] groupsArray = new String[groups.size()];
+        int i = 0;
+        for (UserGroup group : groups) {
+            groupsArray[i++] = group.getId().toString();
         }
+        return groupsArray;
+    }
+
+    public void setUserGroups(String[] userGroupIdStrings) {
+        List<Long> userGroupIds = new ArrayList<Long>();
+        for (String userGroupIdString : userGroupIdStrings) {
+            userGroupIds.add(Long.valueOf(userGroupIdString));
+        }
+        HashSet<UserGroup> newGroups = new HashSet<UserGroup>(userGroupService.getUserGroups(userGroupIds));
+        user.setGroups(newGroups);
     }
 
 	public String getTimeZoneID() {
@@ -524,7 +540,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return userTypes;
 	}
 
-    public List<ListingPair> getUserGroups() {
+    public List<ListingPair> getAvailableUserGroups() {
         if (userGroups == null) {
             List<UserGroup> activeUserGroups = userGroupService.getActiveUserGroups();
             userGroups = ListHelper.longListableToListingPair(activeUserGroups);
@@ -661,10 +677,28 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
     public Long getUserGroupFilter() {
-        return userGroupFilter;
+        return userGroupFilter == null ? null : userGroupFilter.getId();
     }
 
     public void setUserGroupFilter(Long userGroupFilter) {
-        this.userGroupFilter = userGroupFilter;
+        if (userGroupFilter != null) {
+            this.userGroupFilter = persistenceManager.find(UserGroup.class, userGroupFilter);
+        } else {
+            this.userGroupFilter = null;
+        }
+
     }
+
+    public String formatUserGroups(User user) {
+        if (user.getGroups().isEmpty()) {
+            return "";
+        }
+        StringBuffer userGroupList = new StringBuffer();
+        for (UserGroup group : user.getGroups()) {
+            userGroupList.append(group.getName()).append(", ");
+        }
+        userGroupList.setLength(userGroupList.length() - 2);
+        return userGroupList.toString();
+    }
+
 }

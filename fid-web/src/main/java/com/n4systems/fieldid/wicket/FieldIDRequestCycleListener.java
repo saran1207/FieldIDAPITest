@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
 import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.version.FieldIdVersion;
@@ -30,6 +31,9 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
 
 	@SpringBean
 	private SecurityContext securityContext;
+
+    @SpringBean
+    private UserGroupService userGroupService;
 	
     public FieldIDRequestCycleListener() {
         Injector.get().inject(this);
@@ -44,6 +48,8 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
             storeFlagIfConcurrentUser(fieldidSession.getId(), sessionUser);
             FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
             User user = userLoader.setId(sessionUser.getId()).load();
+            Collection<User> visibleUsers = userGroupService.findUsersVisibleTo(user);
+            ThreadLocalInteractionContext.getInstance().setVisibleUsers(visibleUsers);
             ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
             ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(PlatformType.WEB);
             ThreadLocalInteractionContext.getInstance().setCurrentPlatform( FieldIdVersion.getWebVersionDescription());
@@ -69,9 +75,7 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
 
     @Override
     public void onEndRequest(RequestCycle cycle) {
-        ThreadLocalInteractionContext.getInstance().setCurrentUser(null);
-        ThreadLocalInteractionContext.getInstance().setCurrentPlatform(null);
-        ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(null);
+        ThreadLocalInteractionContext.getInstance().clear();
         securityContext.setUserSecurityFilter(null);
         securityContext.setTenantSecurityFilter(null);
     }

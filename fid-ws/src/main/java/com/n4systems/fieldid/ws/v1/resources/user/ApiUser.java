@@ -5,6 +5,8 @@ import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfile;
 import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenant;
 import com.n4systems.security.UserType;
 
+import java.util.List;
+
 public class ApiUser extends ApiReadonlyModelWithOwner {
 	private String userId;
 	private String name;
@@ -18,7 +20,7 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private ApiOfflineProfile offlineProfile;
 	private ApiTenant tenant;
 	private String identifier;
-	private Long groupId;
+	private List<Long> groupIds;
 	
 	public String getUserId() {
 		return userId;
@@ -116,15 +118,15 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 		this.identifier = identifier;
 	}
 	
-	public Long getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
-
     public boolean isPerson() {
         return userType.equals(UserType.PERSON.name());
+    }
+
+    public List<Long> getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(List<Long> groupIds) {
+        this.groupIds = groupIds;
     }
 }

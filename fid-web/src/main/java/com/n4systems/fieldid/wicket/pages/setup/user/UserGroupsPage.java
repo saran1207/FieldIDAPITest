@@ -35,6 +35,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.PatternValidator;
 
 import java.util.List;
 
@@ -158,7 +159,8 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
             final FIDFeedbackPanel feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
             add(feedbackPanel);
             add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "groupName"))
-                .add(new UserGroupUniqueNameValidator()));
+                .add(new UserGroupUniqueNameValidator())
+                .add(new PatternValidator(".*,.*").setReverse(true)));
             add(new TextField<String>("id", new PropertyModel<String>(this, "groupId")));
             add(new AjaxLink<Void>("cancelLink") {
                 @Override

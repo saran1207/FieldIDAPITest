@@ -8,22 +8,17 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.PaginatedLoader;
 import com.n4systems.security.UserType;
 import com.n4systems.util.UserBelongsToFilter;
-import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.JoinClause.JoinType;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
-import com.n4systems.util.persistence.JoinClause;
-import com.n4systems.util.persistence.OrderClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
-import com.n4systems.util.persistence.WhereParameterGroup;
 
 public class UserPaginatedLoader extends PaginatedLoader<User> {
 
 	private BaseOrg owner;
 	private CustomerOrg customer;
 	private Long orgFilter;
-    private Long groupFilter;
+    private UserGroup groupFilter;
 	private UserType userType;
 	private UserBelongsToFilter userBelongsToFilter = UserBelongsToFilter.ALL;
 	private String nameFilter;
@@ -72,7 +67,7 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 		}
 
         if (groupFilter != null) {
-            builder.addSimpleWhere("group.id", groupFilter);
+            builder.addWhere(new InElementsParameter<UserGroup>("groups", groupFilter));
         }
 
 		if (nameFilter != null && !nameFilter.isEmpty()) {
@@ -140,7 +135,7 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 		return this;
 	}
 
-    public UserPaginatedLoader withUserGroup(Long userGroup) {
+    public UserPaginatedLoader withUserGroup(UserGroup userGroup) {
         this.groupFilter = userGroup;
         return this;
     }

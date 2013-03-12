@@ -15,6 +15,7 @@ import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.mail.MailManager;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.notifiers.EmailNotifier;
@@ -145,6 +146,10 @@ public class ServiceLocator implements ApplicationContextAware {
     public static SecurityContext getSecurityContext() {
 		return getBean(SecurityContext.class);
 	}
+
+    public static UserGroupService getUserGroupService() {
+        return getBean(UserGroupService.class);
+    }
 
 	@SuppressWarnings("unchecked")
 	public static <T> T getBean(String name, Class<T> type) {

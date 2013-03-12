@@ -10,6 +10,7 @@ import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.utils.CookieFactory;
 import com.n4systems.fieldid.utils.SessionUserInUse;
@@ -74,6 +75,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
     protected UserLimitService userLimitService;
 
     @Autowired
+    protected UserGroupService userGroupService;
+
+    @Autowired
     protected SecurityContext securityContext;
 
     @Autowired
@@ -132,8 +136,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private void setupSessionUser(User user) {
 		getSession().setSessionUser(new SessionUser(user));
 		getSession().setUserSecurityGuard(new SessionUserSecurityGuard(user));
+        getSession().setVisibleUsers(userGroupService.findUsersVisibleTo(user));
 		new AbstractActionTenantContextInitializer(this).refreshSecurityGaurd();
-
 	}
 
 	public Long getTenantId() {

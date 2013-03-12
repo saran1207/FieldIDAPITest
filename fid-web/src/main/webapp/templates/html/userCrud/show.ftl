@@ -54,9 +54,7 @@ ${action.setPageType('user','view')!}
             <p>
                 <label for="group"><@s.text name="label.user_group"/></label>
                 <span class="fieldValue">
-                    <#if user.group?exists>
-                        ${user.group.name?html}
-                    </#if>
+                    ${action.formatUserGroups(user)}
                 </span>
             </p>
         </#if>

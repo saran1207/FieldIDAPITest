@@ -238,14 +238,14 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
 		.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
 		
-		if(user.getGroup() == null) {
+		if (user.getGroups().isEmpty()) {
 			query.addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", user.getId()));
 		} else {
 			// WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )				
 			WhereParameterGroup group = new WhereParameterGroup();
 	        group.setChainOperator(WhereClause.ChainOp.AND);
 	        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
-	        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignedGroup.id", user.getGroup().getId(), WhereClause.ChainOp.OR)); 
+	        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
 	        query.addWhere(group);				
 		}
 		
@@ -282,14 +282,14 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
 			.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));
 			
-			if(user.getGroup() == null) {
+			if (user.getGroups().isEmpty()) {
 				query.addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", user.getId()));
 			} else {
 				// WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )				
 				WhereParameterGroup group = new WhereParameterGroup();
 		        group.setChainOperator(WhereClause.ChainOp.AND);
 		        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
-		        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignedGroup.id", user.getGroup().getId(), WhereClause.ChainOp.OR)); 
+		        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
 		        query.addWhere(group);				
 			}
 			

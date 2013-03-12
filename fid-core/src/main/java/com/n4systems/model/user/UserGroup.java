@@ -17,7 +17,7 @@ public class UserGroup extends ArchivableEntityWithTenant implements Listable<Lo
     @Column(name = "group_id", length = 255)
     private String groupId;
 
-    @OneToMany(mappedBy = "group")
+    @ManyToMany(mappedBy = "groups")
     private Collection<User> members = new ArrayList<User>();
 
     public String getName() {
@@ -51,5 +51,13 @@ public class UserGroup extends ArchivableEntityWithTenant implements Listable<Lo
 
     public String getKeyForStruts() {
         return "G"+getId();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof UserGroup)) {
+            return false;
+        }
+        return getId() != null && getId().equals(((UserGroup) obj).getId());
     }
 }

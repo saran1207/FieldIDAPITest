@@ -31,8 +31,11 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 							setDivision(from.getDivision()).
 							load();
         if (from.getUserGroup() != null) {
-            UserGroup userGroup = userGroupForNameLoader.setName(from.getUserGroup()).load();
-            to.setGroup(userGroup);
+            String[] groupNames = from.getUserGroup().split(",");
+            for (String groupName : groupNames) {
+                UserGroup userGroup = userGroupForNameLoader.setName(groupName).load();
+                to.getGroups().add(userGroup);
+            }
         }
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());

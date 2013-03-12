@@ -1,26 +1,38 @@
 package com.n4systems.fieldid.service.user;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.Event;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.util.persistence.*;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 @Transactional
 public class UserGroupService extends FieldIdPersistenceService {
+
+    public Collection<User> findUsersVisibleTo(User user) {
+        Collection<User> friends = new HashSet<User>();
+        for (UserGroup userGroup : user.getGroups()) {
+            friends.addAll(getUsersInGroup(userGroup));
+        }
+        return friends;
+    }
 
     public List<UserGroup> getActiveUserGroups() {
         return findUserGroupsLike(null, Archivable.EntityState.ACTIVE);
     }
 
     public List<UserGroup> getVisibleActiveUserGroups() {
-        if (getCurrentUser().getGroup() != null) {
+        if (!getCurrentUser().getGroups().isEmpty()) {
             // We can only see our group if we're in one
-            return Arrays.asList(getCurrentUser().getGroup());
+            return new ArrayList<UserGroup>(getCurrentUser().getGroups());
         }
         return findUserGroupsLike(null, Archivable.EntityState.ACTIVE);
     }
@@ -49,7 +61,8 @@ public class UserGroupService extends FieldIdPersistenceService {
         UserGroup groupToArchive  = persistenceService.find(UserGroup.class, groupToArchiveId);
 
         for (User user : groupToArchive.getMembers()) {
-            user.setGroup(newGroup);
+            user.getGroups().remove(groupToArchive);
+            user.getGroups().add(newGroup);
             persistenceService.update(user);
         }
         groupToArchive.setState(Archivable.EntityState.ARCHIVED);
@@ -76,9 +89,20 @@ public class UserGroupService extends FieldIdPersistenceService {
         return !userGroups.get(0).getId().equals(id);
     }
 
-    public List<User> getUsersInGroup(Long userGroup) {
-        QueryBuilder<User> query = createUserSecurityBuilder(User.class);
-        query.addSimpleWhere("group.id", userGroup);
+    public List<User> getUsersInGroup(UserGroup userGroup) {
+        QueryBuilder<User> query = new QueryBuilder<User>(User.class, new TenantOnlySecurityFilter(userGroup.getTenant().getId()));
+        query.addWhere(new InElementsParameter<UserGroup>("groups", userGroup));
+        return persistenceService.findAll(query);
+    }
+
+    public List<User> getUsersInGroup(Long userGroupId) {
+        UserGroup userGroup = persistenceService.find(UserGroup.class, userGroupId);
+        return getUsersInGroup(userGroup);
+    }
+
+    public List<UserGroup> getUserGroups(List<Long> ids) {
+        QueryBuilder<UserGroup> query = createUserSecurityBuilder(UserGroup.class);
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "id", ids));
         return persistenceService.findAll(query);
     }
 

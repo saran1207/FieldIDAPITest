@@ -5,8 +5,11 @@ import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.exporting.beanutils.MaskedSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 import com.n4systems.exporting.beanutils.SerializableField;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
+
+import java.util.Collection;
 
 public class UserView extends ExternalModelView {
 	public static final long serialVersionUID = 1L;
@@ -377,5 +380,13 @@ public class UserView extends ExternalModelView {
 
     public boolean isPerson() {
         return UserType.valueFromLabel(getAccountType()).equals(UserType.PERSON);
+    }
+
+    public static String getUserGroupNames(Collection<UserGroup> groups) {
+        StringBuffer sb = new StringBuffer();
+        for (UserGroup group : groups) {
+            sb.append(group.getName()).append(",");
+        }
+        return sb.deleteCharAt(sb.length()-1).toString();
     }
 }

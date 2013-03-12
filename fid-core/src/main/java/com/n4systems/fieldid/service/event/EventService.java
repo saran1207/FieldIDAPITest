@@ -358,7 +358,7 @@ public class EventService extends FieldIdPersistenceService {
 
 
         QueryBuilder<Event> builder;
-        if (getCurrentUser().getGroup() == null) {
+        if (getCurrentUser().getGroups().isEmpty()) {
             // Users without groups can pull in safety network events
             builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
             WhereParameterGroup wpg = new WhereParameterGroup();
