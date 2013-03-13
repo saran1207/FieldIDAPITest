@@ -48,12 +48,12 @@ public class WithinUserGroupTerm extends CompleteOrIncompleteTerm {
 
         WhereParameterGroup performerIsInMyGroupAndWasntAssignedOutsideMyGroup = new WhereParameterGroup("performerIsInMyGroupAndWasntAssignedOutsideMyGroup");
         performerIsInMyGroupAndWasntAssignedOutsideMyGroup.setChainOperator(WhereClause.ChainOp.OR);
-        completeGroup.addClause(new WhereParameter<Collection>(WhereParameter.Comparator.IN, "groupOfThePerformerFilter", "assignee", visibleUsers, null, false, WhereClause.ChainOp.AND));
+        completeGroup.addClause(new WhereParameter<Collection>(WhereParameter.Comparator.IN, "assigneeIsVisibleToMeFilter", "assignee", visibleUsers, null, false, WhereClause.ChainOp.AND));
 
         WhereParameterGroup wasntAssignedOutsideMyGroup = new WhereParameterGroup("wasntAssignedOutsideMyGroup");
         wasntAssignedOutsideMyGroup.setChainOperator(WhereClause.ChainOp.AND);
-        wasntAssignedOutsideMyGroup.addClause(new WhereParameter<Collection>(WhereParameter.Comparator.NULL, "nullAssignee", "assignee", null, null, false, WhereClause.ChainOp.OR));
-        wasntAssignedOutsideMyGroup.addClause(new WhereParameter<Collection>(WhereParameter.Comparator.IN, "assigneeWhoICanSee", "assignee", visibleUsers, null, false, WhereClause.ChainOp.OR));
+        wasntAssignedOutsideMyGroup.addClause(new WhereParameter<Collection>(WhereParameter.Comparator.NULL, "nullAssignee", "assignedGroup", null, null, false, WhereClause.ChainOp.OR));
+        wasntAssignedOutsideMyGroup.addClause(new WhereParameter<Collection>(WhereParameter.Comparator.IN, "assignedGroupWhoICanSee", "assignedGroup", user.getGroups(), null, false, WhereClause.ChainOp.OR));
 
         performerIsInMyGroupAndWasntAssignedOutsideMyGroup.addClause(wasntAssignedOutsideMyGroup);
         doneByMeOrGroupVisibleByMe.addClause(performerIsInMyGroupAndWasntAssignedOutsideMyGroup);
@@ -69,8 +69,6 @@ public class WithinUserGroupTerm extends CompleteOrIncompleteTerm {
 
     public static void applyJoinTerms(QueryBuilder queryBuilder) {
         queryBuilder.addJoin(new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER,  ASSIGNED_GROUP_JOIN_EXPRESSION, ASSIGNED_GROUP_JOIN_ALIAS, true).toJoinClause());
-//        queryBuilder.addJoin(new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, GROUP_OF_THE_ASSIGNEE_JOIN_EXPRESSION, GROUP_OF_THE_ASSIGNEE_JOIN_ALIAS, true).toJoinClause());
-//        queryBuilder.addJoin(new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, GROUP_OF_THE_PERFORMER_JOIN_EXPRESSION, GROUP_OF_THE_PERFORMER_JOIN_ALIAS, true).toJoinClause());
     }
 
 }
