@@ -300,6 +300,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		
 		if(apiAsset.getAssignedUserId() > 0) {
 			asset.setAssignedUser(findEntity(User.class, apiAsset.getAssignedUserId()));
+		} else {
+			asset.setAssignedUser(null);
 		}
 		
 		if(apiAsset.getGpsLatitude() != null && apiAsset.getGpsLongitude() != null) {
