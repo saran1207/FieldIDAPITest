@@ -11,8 +11,10 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.notifiers.notifications.AssetImportFailureNotification;
 import com.n4systems.notifiers.notifications.AssetImportSuccessNotification;
@@ -90,8 +92,10 @@ public class AssetImportAction extends AbstractImportAction {
 		example.setRfidNumber(getText("example.asset.rfidNumber"));
 		example.setCustomerRefNumber(getText("example.asset.customerRefNumber"));
 		example.setOwner(getCurrentUser().getOwner());
-		example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.asset.location")));
-		example.setPurchaseOrder(getText("example.asset.purchaseOrder"));
+
+        setExampleLocation(example);
+
+        example.setPurchaseOrder(getText("example.asset.purchaseOrder"));
 		example.setComments(getText("example.asset.comments"));
 		example.setIdentified(new Date());
 		
@@ -112,8 +116,24 @@ public class AssetImportAction extends AbstractImportAction {
 		
 		return example;
 	}
-	
-	private AssetStatus getExampleAssetStatus() {
+
+    private void setExampleLocation(Asset example) {
+        if (getSessionUserOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.AdvancedLocation)) {
+            PredefinedLocation location1 = new PredefinedLocation();
+            location1.setName("Location 1");
+            PredefinedLocation location2 = new PredefinedLocation();
+            location2.setName("Location 2");
+            location2.setParent(location1);
+            PredefinedLocation location3 = new PredefinedLocation();
+            location3.setName("Location 3");
+            location3.setParent(location2);
+            example.setAdvancedLocation(new Location(location3, getText("label.freeform_location")));
+        } else {
+            example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.asset.location")));
+        }
+    }
+
+    private AssetStatus getExampleAssetStatus() {
 		List<AssetStatus> statuses = getLoaderFactory().createAssetStatusListLoader().load();
 		
 		return (statuses.isEmpty()) ? null : statuses.get(0);

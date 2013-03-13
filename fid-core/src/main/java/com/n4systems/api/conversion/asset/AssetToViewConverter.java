@@ -30,7 +30,7 @@ public class AssetToViewConverter implements ModelToViewConverter<Asset, AssetVi
 		view.setIdentifier(model.getIdentifier());
 		view.setRfidNumber(model.getRfidNumber());
 		view.setCustomerRefNumber(model.getCustomerRefNumber());
-		view.setLocation(model.getAdvancedLocation().getFreeformLocation());
+        view.setLocation(model.getAdvancedLocation().getFullName());
 		view.setPurchaseOrder(model.getPurchaseOrder());
 		view.setComments(model.getComments());
 		view.setIdentified(model.getIdentified());
