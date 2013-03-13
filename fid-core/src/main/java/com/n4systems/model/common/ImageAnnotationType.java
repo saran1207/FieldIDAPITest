@@ -2,6 +2,7 @@ package com.n4systems.model.common;
 
 import com.n4systems.model.BaseEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -11,34 +12,66 @@ public class ImageAnnotationType extends BaseEntity {
 
     public static final ImageAnnotationType DEFAULT = new ImageAnnotationType();
 
-// TODO : turn this into an ENUMERATION = ELECTRICAL, WATER, ETC.... field id wide definitions.  can restrict with join table if needed.
-    String url;//s3 url key.
-    String color;
-    String borderColor = "black";
-    String borderRadius;
-    String background = "white";
+    private String name;
 
+    private String identifier;
 
-    public ImageAnnotationType() {
+    @Column(name="font_color")
+    private String fontColor;
+
+    @Column(name="background_color")
+    private String backgroundColor;
+
+    @Column(name="border_color")
+    private String borderColor;
+
+    private String icon;
+
+    public String getName() {
+        return name;
     }
 
-    public String getCss() {
-        // TODO : implement this...join all parameters into a single style string.
-        return "padding:4px; background:"+background+";border:4px dotted " + borderColor+ ";color:black";
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public ImageAnnotationType withBorderColor(String color) {
-        this.borderColor = normalizedString(color);
-        return this;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public ImageAnnotationType withBackground(String color) {
-        this.background = normalizedString(color);
-        return this;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
-    private String normalizedString(String s) {
-        // TODO strip off any trailing semi-colons.
-        return s.trim();
+    public String getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(String fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public String getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public String getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(String borderColor) {
+        this.borderColor = borderColor;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }
