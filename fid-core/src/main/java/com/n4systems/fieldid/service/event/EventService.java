@@ -469,7 +469,7 @@ public class EventService extends FieldIdPersistenceService {
         //Preconditions.checkArgument(actionType==null || actionType.getGroup().isAction(), "given event type [ " + actionType + " ] is not a valid 'Action'.");
         QueryBuilder<ActionsReportRecord> query = new QueryBuilder<ActionsReportRecord>(Event.class, securityContext.getUserSecurityFilter());
         NewObjectSelect select = new NewObjectSelect(ActionsReportRecord.class);
-        select.setConstructorArgs(Lists.newArrayList("priority.name", "COUNT(*)", "'"+barType.getDisplayName()+"'"));
+        select.setConstructorArgs(Lists.newArrayList("obj.priority.name", "COUNT(*)", "'"+barType.getDisplayName()+"'"));
         query.setSelectArgument(select);
 
         query.addNullSafeWhere(Comparator.EQ, "owner", "owner", owner);
