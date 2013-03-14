@@ -48,7 +48,7 @@ public class ArchiveUserGroupPage extends FieldIDFrontEndPage {
 
         @Override
         protected void onSubmit() {
-            userGroupService.archiveGroupInto(groupToArchive.getObject().getId(), newGroup.getId());
+            userGroupService.archiveGroupInto(groupToArchive.getObject().getId(), newGroup == null ? null : newGroup.getId());
             getSession().info(getString("msg.user_group_archive_successful"));
             setResponsePage(UserGroupsPage.class);
         }

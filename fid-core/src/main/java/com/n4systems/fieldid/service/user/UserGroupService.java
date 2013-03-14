@@ -57,12 +57,14 @@ public class UserGroupService extends FieldIdPersistenceService {
     }
 
     public void archiveGroupInto(Long groupToArchiveId, Long newGroupId) {
-        UserGroup newGroup = persistenceService.find(UserGroup.class, newGroupId);
+        UserGroup newGroup = newGroupId == null ? null : persistenceService.find(UserGroup.class, newGroupId);
         UserGroup groupToArchive  = persistenceService.find(UserGroup.class, groupToArchiveId);
 
         for (User user : groupToArchive.getMembers()) {
             user.getGroups().remove(groupToArchive);
-            user.getGroups().add(newGroup);
+            if (newGroup != null) {
+                user.getGroups().add(newGroup);
+            }
             persistenceService.update(user);
         }
         groupToArchive.setState(Archivable.EntityState.ARCHIVED);
