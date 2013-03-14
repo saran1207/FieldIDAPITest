@@ -336,6 +336,14 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
         assetType.setLinkable(linkable);
     }
 
+    public boolean isLotoDevice() {
+        return assetType.isLotoDevice();
+    }
+
+    public void setLotoDevice(boolean lotoDevice) {
+        this.assetType.setLotoDevice(lotoDevice);
+    }
+
 	public String getWarnings() {
 		return assetType.getWarnings();
 	}

@@ -1,0 +1,1 @@
+ALTER TABLE assettypes ADD COLUMN loto_device TINYINT(1) NOT NULL;

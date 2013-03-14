@@ -112,10 +112,18 @@
 	</div>
     <div class="infoSet">
         <label class="label"><@s.text name="label.linkable"/></label>
-            <span class="fieldHolder">
-                <@s.checkbox name="linkable"/>
-            </span>
+        <span class="fieldHolder">
+            <@s.checkbox name="linkable"/>
+        </span>
     </div>
+    <#if securityGuard.lotoProceduresEnabled>
+        <div class="infoSet">
+            <label class="label"><@s.text name="label.loto_device"/></label>
+            <span class="fieldHolder">
+                <@s.checkbox name="lotoDevice"/>
+            </span>
+        </div>
+    </#if>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.warnings"/></label>
 		<span class="fieldHolder">

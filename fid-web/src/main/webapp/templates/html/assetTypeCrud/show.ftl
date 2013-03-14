@@ -15,7 +15,12 @@ ${action.setPageType('asset_type', 'show')!}
         <label><@s.text name="label.linkable"/></label>
         <span class="fieldValue">${assetType.linkable?string("Yes", "No")}</span>
     </p>
-
+    <#if securityGuard.lotoProceduresEnabled>
+        <p>
+            <label><@s.text name="label.loto_device"/></label>
+            <span class="fieldValue">${assetType.lotoDevice?string("Yes", "No")}</span>
+        </p>
+    </#if>
 	<p>
 		<label><@s.text name="label.warnings"/></label>
 		<span class="fieldValue">${assetType.warnings!}</span>
