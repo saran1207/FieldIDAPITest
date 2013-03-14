@@ -6,7 +6,13 @@ ${action.setPageType('asset_type_group', 'show')!}
 			<label for="name"><@s.text name="label.name"/></label>
 			<span>${(group.name?html) !}</span>
 		</div>
-	</div>
+        <#if securityGuard.lotoProceduresEnabled>
+            <div class="infoSet">
+                <label><@s.text name="label.loto_device"/></label>
+                <span class="fieldValue">${group.lotoDevice?string("Yes", "No")}</span>
+            </div>
+        </#if>
+    </div>
 </div>
 
 <div class="pageSection">

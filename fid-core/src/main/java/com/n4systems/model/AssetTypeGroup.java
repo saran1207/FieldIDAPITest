@@ -1,12 +1,12 @@
 package com.n4systems.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="assettypegroups")
@@ -15,8 +15,12 @@ public class AssetTypeGroup extends EntityWithTenant implements NamedEntity, Lis
 	
 	@Column(nullable=false, length=40)
 	private String name;
-	
-	@Column(nullable=false)
+
+    @Column(name= "loto_device", nullable = false)
+    private boolean lotoDevice = false;
+
+
+    @Column(nullable=false)
 	private Long orderIdx;
 	
 	@Override
@@ -57,5 +61,14 @@ public class AssetTypeGroup extends EntityWithTenant implements NamedEntity, Lis
 	public void setName(String name) {
 		this.name = name;
 	}
+
+    public boolean isLotoDevice() {
+        return lotoDevice;
+    }
+
+    public void setLotoDevice(boolean lotoDevice) {
+        this.lotoDevice = lotoDevice;
+    }
+
 
 }

@@ -1,25 +1,24 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.ejb.AssetManager;
-import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.util.AssetTypeGroupRemovalSummary;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.AssetTypeGroupRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValueValidator {
@@ -194,7 +193,15 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 		group.setName(name);
 	}
 
-	public boolean duplicateValueExists(String formValue) {
+    public boolean isLotoDevice() {
+        return group.isLotoDevice();
+    }
+
+    public void setLotoDevice(boolean lotoDevice) {
+        this.group.setLotoDevice(lotoDevice);
+    }
+
+    public boolean duplicateValueExists(String formValue) {
 		return !persistenceManager.uniqueNameAvailable(AssetTypeGroup.class, formValue.trim(), uniqueID, getTenantId());
 	}
 

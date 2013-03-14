@@ -93,9 +93,6 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 
     private boolean linkable = false;
 
-    @Column(name= "loto_device")
-    private boolean lotoDevice = false;
-
     public AssetType() {
 		this(null);
 	}
@@ -564,14 +561,6 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 
     public void setLinkable(boolean linkable) {
         this.linkable = linkable;
-    }
-
-    public boolean isLotoDevice() {
-        return lotoDevice;
-    }
-
-    public void setLotoDevice(boolean lotoDevice) {
-        this.lotoDevice = lotoDevice;
     }
 
     @Transient
