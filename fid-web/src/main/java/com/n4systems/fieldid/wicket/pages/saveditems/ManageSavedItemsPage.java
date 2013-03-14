@@ -13,7 +13,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AbstractSearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;

@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.EventType;

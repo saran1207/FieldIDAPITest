@@ -2,8 +2,8 @@ package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.pages.PageFactory;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchBridgePage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.SearchBridgePage;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.services.reporting.DashboardReportingService;

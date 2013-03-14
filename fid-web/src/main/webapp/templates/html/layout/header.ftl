@@ -83,9 +83,12 @@
 					<li>
 						<a href="/fieldid/w/wicket/search2" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" /></a>
 					</li>
-					<li>
-						<a href="/fieldid/w/wicket/reporting2" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
-					</li>
+                    <li>
+                        <a href="/fieldid/w/wicket/reporting2" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
+                    </li>
+                    <li>
+                        <a href="/fieldid/w/wicket/procedure" class="speedLink textLink" id="menuProcedure"><@s.text name="speed.reporting" /></a>
+                    </li>
 
 					<#if userSecurityGuard.allowedManageSafetyNetwork>
 						<li>

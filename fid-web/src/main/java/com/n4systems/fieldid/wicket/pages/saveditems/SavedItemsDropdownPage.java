@@ -7,7 +7,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AbstractSearchPage;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.saveditem.SavedSearchItem;
@@ -24,7 +24,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 
-import static com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage.SOURCE_PARAMETER;
+import static com.n4systems.fieldid.wicket.pages.assetsearch.AbstractSearchPage.SOURCE_PARAMETER;
 
 public class SavedItemsDropdownPage extends FieldIDAuthenticatedPage {
 

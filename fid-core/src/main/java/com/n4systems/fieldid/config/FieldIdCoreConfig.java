@@ -246,6 +246,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public ProcedureService procedureService() {
+        return new ProcedureService();
+    }
+
+    @Bean
     public AssetSearchService assetSearchService() {
         return new AssetSearchService();
     }

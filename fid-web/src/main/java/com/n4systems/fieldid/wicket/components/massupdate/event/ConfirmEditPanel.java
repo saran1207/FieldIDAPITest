@@ -4,7 +4,7 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.MassUpdateEventsTask;

@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.components.dashboard.subcomponents;
 
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AbstractSearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;

@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
 import com.n4systems.fieldid.wicket.pages.widgets.config.AssetsIdentifiedConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;

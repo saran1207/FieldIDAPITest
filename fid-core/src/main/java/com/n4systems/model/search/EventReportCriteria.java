@@ -18,7 +18,7 @@ import java.util.List;
 
 @Entity
 @Table(name="saved_reports")
-public class EventReportCriteria extends SearchCriteria {
+public class EventReportCriteria extends SearchCriteria implements PeopleCriteria {
 
     private static final String EVENT_LOCATION_COLUMN = "event_search_location";
     private static final String EVENT_DIVISION_COLUMN = "event_search_division";

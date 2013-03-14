@@ -9,7 +9,7 @@ import com.n4systems.fieldid.wicket.components.massupdate.event.ConfirmEditPanel
 import com.n4systems.fieldid.wicket.components.massupdate.event.DeleteDetailsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.MassUpdateEventModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.markup.html.link.Link;

@@ -7,7 +7,7 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.search.EventReportCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;

@@ -6,7 +6,7 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.Button;

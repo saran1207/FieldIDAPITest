@@ -6,7 +6,7 @@ import com.n4systems.fieldid.wicket.components.massupdate.MassUpdateOperation;
 import com.n4systems.fieldid.wicket.components.massupdate.SelectOperationPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.markup.html.link.Link;

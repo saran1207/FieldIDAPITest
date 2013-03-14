@@ -13,7 +13,7 @@ import com.n4systems.fieldid.wicket.model.eventtype.CommonEventTypesModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
@@ -111,7 +111,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
                 }
                 massScheduleService.performSchedules(scheduleSummary, duplicateDetection);
                 FieldIDSession.get().info(new FIDLabelModel("message.mass_schedule_success").getObject());
-                setResponsePage(new com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage(criteriaModel.getObject()));
+                setResponsePage(new com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage(criteriaModel.getObject()));
             }
         };
         add(submitForm);

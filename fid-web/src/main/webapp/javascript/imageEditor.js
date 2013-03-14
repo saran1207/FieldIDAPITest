@@ -2,6 +2,18 @@
 // uses ZURB plugin.   http://www.zurb.com/playground/javascript-annotation-plugin
 
 
+// TODO :
+//on click = remove any "new" notes.  (when you create one, it gets a 'unsaved' css class that is outer glow L&F).
+// store current name as default (do this after blur too).
+// add new note with default name & style.
+// attach listener to div if it isn't already there.
+
+// on new image loaded... remove all notes from div.
+// re-annotate div.
+// pass image index (Galleria.getIndex()) via ajax call.   maybe pass the div index (0 or 1) as well?
+// or dynamically assign id to the img....e.g. <img id="123"..../>    onclick(function() { img.id = loadedEntityId; });
+//
+
 var imageEditor = (function() {
 
 	function editor(selector,options) {

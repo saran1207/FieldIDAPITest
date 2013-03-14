@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper.SubTitleModelInfo;
 import com.n4systems.fieldid.wicket.pages.widgets.config.ActionsConfigPanel;
 import com.n4systems.model.EventType;

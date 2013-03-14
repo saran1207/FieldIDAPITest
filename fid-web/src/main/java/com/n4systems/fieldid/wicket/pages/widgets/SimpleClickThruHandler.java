@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.AbstractSearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.AbstractSearchPage;
 import com.n4systems.util.chart.FlotOptions;
 import org.apache.wicket.Component;
 import org.apache.wicket.request.Url;

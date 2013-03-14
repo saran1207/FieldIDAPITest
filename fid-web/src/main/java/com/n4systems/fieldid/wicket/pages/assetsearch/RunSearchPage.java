@@ -2,8 +2,8 @@ package com.n4systems.fieldid.wicket.pages.assetsearch;
 
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.wicket.pages.PageFactory;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchBridgePage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.SearchPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.SearchBridgePage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.services.reporting.DashboardReportingService;

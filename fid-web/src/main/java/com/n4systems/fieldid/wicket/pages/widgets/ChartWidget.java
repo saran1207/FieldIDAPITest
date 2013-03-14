@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.version2.ReportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
