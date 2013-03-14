@@ -1,6 +1,26 @@
 .image-gallery {
-    width:800px;
+    width:600px;
     height:400px;
-    border:1px solid black;
+    /*border:1px solid black;*/
 }
 
+.galleria-container .submit {
+    background: grey;
+    border-radius: 4px;
+    color:white;
+    font-size:14px;
+    padding:8px;
+    z-index:5;
+    position: absolute;
+    top: 5px;
+    left:5px;
+}
+
+.galleria-container .submit:hover {
+    cursor:pointer;
+    cursor:hand;
+}
+
+.galleria-thumbnails .galleria-image{
+    /*height:100px*/
+}

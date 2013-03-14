@@ -23,7 +23,6 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
 
     enum ImageEditorAction { LABEL };
 
-    private static final String IMAGE_ANNOTATING_JS = "imageEditor.init('%s',%s);";
 
     @Override
     protected void respond(AjaxRequestTarget target) {
@@ -71,7 +70,6 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
 
     @Override
     protected void onBind() {
-        System.out.println(getComponent().getId());
         super.onBind();
     }
 
@@ -123,11 +121,7 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
         return new AnnotatedImageOptions(getEditableImage().getAnnotations());
     }
 
-    public String getInitJs() {
-        return String.format(IMAGE_ANNOTATING_JS,getImageSelector(),jsonRenderer.render(getImageAnnotationOptions()));
-    }
-
-    protected abstract String getImageSelector();
+    protected abstract String getInitJs();
 
     // ----------------------------------------------------------------------------------------------
 

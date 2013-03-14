@@ -41,6 +41,10 @@ var imageEditor = (function() {
 			return ul;
 		}
 
+		function getDirectionMenu() {
+			return $(selector +' .direction-menu');
+		}
+
 		function createLabel() {
 			var span = $(document.createElement('span')).addClass('readonly').addClass(options.direction).addClass(options.type).attr('id',options.id);
 			var icon = $('<span/>').addClass('icon').appendTo(span);
@@ -52,7 +56,11 @@ var imageEditor = (function() {
 				// TODO : get background color from note.  yellow for now.
 				// subtract to accommodate for border we're going to add.
 				var width = parseInt(note.outerWidth());
-				$(selector +' .direction-menu').css('top',note.css('top')).css('left',note.css('left')).width(width).prop('note',note).removeClass(directions.join(' ')).addClass(getDirection(note)).toggle();
+
+				// TODO : if note is close to bottom, then make it appear above note, not below.
+				// .: need to adjust
+				getDirectionMenu().css('top',note.css('top')).css('left',note.css('left')).width(width).data('note',note).removeClass(directions.join(' ')).addClass(getDirection(note));
+				getDirectionMenu().toggle();
 				e.stopPropagation();
 			});
 
@@ -84,15 +92,15 @@ var imageEditor = (function() {
 		}
 
 		function addNewLabel() {
+			// hacky way of turning off annotation plugin...ugh.
+			// once you create a note, we automatically leave Label mode.
+			$(selector).unbind('mousedown');
+
 			var label = createLabel();
 
 			setTimeout(function() {
 				$('.note input').focus();
 			},100);
-
-			// hacky way of turning off annotation plugin...ugh.
-			// once you create a note, we automatically leave Label mode.
-			$(selector).unbind('mousedown');
 
 			return label;
 		}
@@ -155,7 +163,7 @@ var imageEditor = (function() {
 		}
 
 		function closeDirectionMenu() {
-			$('.direction-menu').prop('note', '').hide();
+			getDirectionMenu().data('note', '').hide();
 		}
 
 		function initPopupMenu() {
@@ -172,15 +180,13 @@ var imageEditor = (function() {
 				}
 			});
 
-			$('.direction-menu li').click(function(e) {
-				var note = $('.direction-menu').prop('note');
+			$(selector + ' .direction-menu li').click(function(e) {
+				var note = getDirectionMenu().data('note');
 				changeDirection(note, e.target);
 			});
 		}
 
-
 		var init = function() {
-
 			initPopupMenu();
 			if (options.centerImage) {
 				centerImage();
@@ -205,10 +211,12 @@ var imageEditor = (function() {
 
 	// ----------------------------------------------------------------------------------------------------------
 
+
 	var init = function(selector,options) {
+		if ($(selector).data('editor')) return;
 		var e = editor(selector,options);
 		e.init();
-		$(selector + '.image-editor').prop('editor',e);
+		$(selector).data('editor',e);
 		return e;
 	};
 

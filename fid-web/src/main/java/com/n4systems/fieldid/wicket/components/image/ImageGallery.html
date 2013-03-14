@@ -1,9 +1,9 @@
-
 <wicket:panel>
 
+    <!--NOTE : This is hidden because JS code creates a button that delegates to this one for aesthetic reasons. -->
+    <form wicket:id="uploadForm" class="uploadForm" style="display:none">
+        <input type="file" wicket:id="fileUpload" class="submit"/>
+    </form>
+
     <div wicket:id="images"/>
-
-
-    <!--add image editor here...?-->
-
 </wicket:panel>

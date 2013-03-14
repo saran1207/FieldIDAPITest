@@ -1,23 +1,24 @@
 package com.n4systems.model.common;
 
 import com.google.common.collect.Lists;
-import com.n4systems.model.BaseEntity;
+import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "editable_images")
-public class EditableImage extends BaseEntity implements S3Image {
+
+public class EditableImage extends EntityWithTenant implements S3Image {
 
     @OneToMany(mappedBy = "image", cascade=CascadeType.ALL)
     private List<ImageAnnotation> annotations = Lists.newArrayList();
 
-    // TODO
-    // add crop, rotation data here.  rotation = degrees, crop ={x,y,width,height};
-
     @Column(name = "filename", nullable = false)
     private String fileName;
+
+    @Column(name = "thumbnail")
+    private String thumbnail;
 
     //    TODO : this might not be needed
     @Column(name="original_filename")
@@ -28,6 +29,11 @@ public class EditableImage extends BaseEntity implements S3Image {
 
     @Transient
     private String contentType;
+
+
+    public EditableImage() {
+
+    }
 
 
     public EditableImage(String originalFile) {

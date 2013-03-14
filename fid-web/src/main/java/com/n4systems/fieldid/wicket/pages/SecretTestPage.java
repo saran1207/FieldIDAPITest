@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.components.image.EditableImageGallery;
 import com.n4systems.model.Asset;
@@ -9,8 +10,6 @@ import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 
@@ -22,23 +21,24 @@ import java.util.List;
 public class SecretTestPage extends FieldIDAuthenticatedPage {
 
     @SpringBean private OrgService orgService;
+
+    @SpringBean private PersistenceService persistenceService;
     
     private Data data = new Data();
 
-    private EditableImage editableImage = new EditableImage( "tenants/15511493/assets/16430585/profile/asset-3C88F91D-1525-4BEC-BC1A-CDFECD548B75.jpg");
-    private EditableImage editableImage2 = new EditableImage("tenants/15511493/assets/16028360/profile/Project-5.jpg");
-    private EditableImage editableImage3 = new EditableImage("tenants/15511493/assets/16430585/profile/asset-3C88F91D-1525-4BEC-BC1A-CDFECD548B75.jpg");
+//    private EditableImage editableImage = new EditableImage( "tenants/15511493/assets/16430585/profile/asset-3C88F91D-1525-4BEC-BC1A-CDFECD548B75.jpg");
+//    private EditableImage editableImage2 = new EditableImage("tenants/15511493/assets/16028360/profile/Project-5.jpg");
+//    private EditableImage editableImage3 = new EditableImage("tenants/15511493/assets/16430585/profile/asset-3C88F91D-1525-4BEC-BC1A-CDFECD548B75.jpg");
 
     public SecretTestPage() {
-        Form form = new Form("form", new CompoundPropertyModel(this));
+//        Form form = new Form("form", new CompoundPropertyModel(this));
 
-        editableImage.setId(123L);
-        editableImage2.setId(456L);
-        editableImage3.setId(789L);
-        form.add(new EditableImageGallery("imageGallery", editableImage, editableImage2) {
-        //form.add(new EditableImageGallery("imageGallery", editableImage, editableImage2, editableImage3) {
+//        editableImage.setId(123L);
+//        editableImage2.setId(456L);
+//        editableImage3.setId(789L);
 
-        });
+        List<EditableImage> images = persistenceService.findAll(EditableImage.class);
+        add(new EditableImageGallery("imageGallery", images));
 
 //        form.add(new ImageEditor("annotatedImage", new PropertyModel(this,"editableImage")));
 
@@ -73,7 +73,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 //            }
 //        });
         
-        add(form);
+        //add(form);
     }
     
     @Override

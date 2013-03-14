@@ -7,8 +7,8 @@
  */
 (function($){
 
-
 	$.fn.annotatableImage = function(annotationCallback, options) {
+		$(this).annotatable = true;
 		var defaults = {
 			xPosition: 'middle',
 			yPosition: 'middle'
@@ -18,12 +18,6 @@
 		var annotations = [];
 		var date = new Date();
 		var startTime = date.getTime();
-
-		//CAVEAT : bug fix.
-		if ($(this).annotatable) return;
-		$(this).annotatable = true;
-
-
 
 		this.mousedown(function(event){
 			var image = $('img', this)[0];
@@ -61,7 +55,6 @@
 			$(container).append(element);
 
 			var left = (this.x * $(container).width()) - ($(element).xOffset(options.xPosition));
-			var top = (this.y * options.height) - ($(element).yOffset(options.yPosition));
 			if (this.width && this.height) {
 				var width = (this.width * $(container).width());
 				var height = (this.height * $(container).height());
