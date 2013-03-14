@@ -5,8 +5,8 @@
 	<@s.textfield name="name" required="true"/>
 </div>
 <#if securityGuard.lotoProceduresEnabled>
-    <div for="lotoDevice">
-        <label class="label"><@s.text name="label.loto_device"/></label>
+    <div class="infoSet">
+        <label for="lotoDevice"><@s.text name="label.loto_device"/></label>
         <@s.checkbox name="lotoDevice"/>
     </div>
 </#if>
