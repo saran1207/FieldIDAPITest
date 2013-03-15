@@ -6,6 +6,7 @@ import com.n4systems.model.Score;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -33,12 +34,15 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     public ProcedureDefinitionPage(PageParameters params) {
         super(params);
 
+        add(new Label("title",Model.of("Asset Name : Author Procedure")));
         add(navigation = new Navigation("navigation", new PropertyModel<Score>(this, "currentSection")));
         add(form = new ProcedureDefinitionForm("form"));
+
+        add(new AttributeAppender("class", Model.of("procedure-definition")));
     }
 
      protected Label createTitleLabel(String labelId) {
-        return new Label(labelId,Model.of("Asset Name : Author Procedure"));
+        return new Label(labelId,Model.of("HIDE ME!"));
     }
 
     @Override
