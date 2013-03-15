@@ -106,26 +106,14 @@ public class ImageGallery<T extends S3Image> extends Panel {
         return new AbstractDefaultAjaxBehavior() {
             @Override protected void respond(AjaxRequestTarget target) {
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-                System.out.println("image Id = " + getImageId(params));
-                currentImageIndex = getImageIndexById(getImageId(params));
+                currentImageIndex = params.getParameterValue("index").toInt();
                 imageClicked(target, getAction(params), getCurrentImage());
             }
         };
     }
 
-    protected int getImageIndexById(Long id) {
-        int index = 0;
-        for (T image:images) {
-            if (image.getId().equals(id)) {
-                return index;
-            }
-            index++;
-        }
-        throw new IllegalStateException("can't find image for id " + id);
-    }
-
     protected void imageClicked(AjaxRequestTarget target, String action, T image) {
-        System.out.println("clicked image " +  image.getId());
+
     }
 
     private String getAction(IRequestParameters params) {
@@ -147,7 +135,11 @@ public class ImageGallery<T extends S3Image> extends Panel {
         response.renderJavaScriptReference("javascript/imageGallery.js");
         response.renderCSSReference("style/component/imageGallery.css");
 
-        response.renderOnDomReadyJavaScript(String.format(GALLERY_JS,gallery.getMarkupId(),jsonRenderer.render(new GalleryOptions(getJsonDataSource()))));
+        response.renderOnDomReadyJavaScript(String.format(GALLERY_JS,gallery.getMarkupId(),jsonRenderer.render(createGalleryOptions(getJsonDataSource()))));
+    }
+
+    protected GalleryOptions createGalleryOptions(List<GalleryImageJson> images) {
+        return new GalleryOptions(images);
     }
 
     private List<GalleryImageJson> getJsonDataSource() {

@@ -36,7 +36,7 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
             switch (action) {
                 case LABEL:
                     doLabel(getNullSafeLongParameter(params, "id"),
-                            getNullSafeLongParameter(params, "image"),
+                            getNullSafeLongParameter(params, "imageId"),
                             params.getParameterValue("x").toDouble(),
                             params.getParameterValue("y").toDouble(),
                             params.getParameterValue("text").toString(),
@@ -120,8 +120,6 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
     protected AnnotatedImageOptions getImageAnnotationOptions() {
         return new AnnotatedImageOptions(getEditableImage().getAnnotations());
     }
-
-    protected abstract String getInitJs();
 
     // ----------------------------------------------------------------------------------------------
 

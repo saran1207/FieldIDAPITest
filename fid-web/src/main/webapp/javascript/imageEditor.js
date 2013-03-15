@@ -12,12 +12,12 @@
 // re-annotate div.
 // pass image index (Galleria.getIndex()) via ajax call.   maybe pass the div index (0 or 1) as well?
 // or dynamically assign id to the img....e.g. <img id="123"..../>    onclick(function() { img.id = loadedEntityId; });
-//
+
 
 var imageEditor = (function() {
 
-	function editor(selector,options) {
-		var id = selector;
+	function editor(el,options) {
+		var ed = el;
 		var directions = ['north','south','east','west'];
 		var defaults = {
 			direction: 'west',
@@ -54,10 +54,10 @@ var imageEditor = (function() {
 		}
 
 		function getDirectionMenu() {
-			return $(selector +' .direction-menu');
+			return ed.find('.direction-menu');
 		}
 
-		function createLabel() {
+		function createNote() {
 			var span = $(document.createElement('span')).addClass('readonly').addClass(options.direction).addClass(options.type).attr('id',options.id);
 			var icon = $('<span/>').addClass('icon').appendTo(span);
 			var editor = $('<input/>').attr({type:'text', value:options.text}).appendTo(span).width('60px');
@@ -89,7 +89,7 @@ var imageEditor = (function() {
 
 			editor.blur(function(e) {
 				$(this).parent().addClass('readonly');
-				doLabel($(e.target));
+				doNote($(e.target));
 			});
 
 			return span;
@@ -103,32 +103,25 @@ var imageEditor = (function() {
 			}
 		}
 
-		function addNewLabel() {
-			// hacky way of turning off annotation plugin...ugh.
-			// once you create a note, we automatically leave Label mode.
-			$(selector).unbind('mousedown');
+		function removeOtherUnsavedNotes() {
+			ed.parent().find('.note.unsaved').remove();
+		}
 
-			var label = createLabel();
+		function addNewNote() {
+			// remove any other "unsaved" notes. only allowed one each time.
+			// this is a very specific LOTO requirement.
+			removeOtherUnsavedNotes();
+//			// hacky way of turning off annotation plugin...ugh.
+//			// once you create a note, we automatically leave Label mode.
+//			$(selector).unbind('mousedown');
+
+			var note = createNote().addClass('unsaved');
 
 			setTimeout(function() {
 				$('.note input').focus();
 			},100);
 
-			return label;
-		}
-
-		function centerImage() {
-			var img = $(selector + ' img');
-			var container = $(selector +' .container');  // container will have specific width/height set.
-			var width = img.width();
-			var height = img.height();
-			var aspect = width/height;
-			var containerAspect = container.width()/container.height();
-			if (containerAspect<aspect) {
-				img.width('100%');
-			} else {
-				img.height('100%');
-			}
+			return note;
 		}
 
 		function save() {
@@ -137,7 +130,7 @@ var imageEditor = (function() {
 			wicketAjaxGet(url, function() {}, function() {});
 		}
 
-		function updateLabel(note) {
+		function updateNote(note) {
 			var loc = note.seralizeAnnotations()[0];   // X,Y will be in relative:  0...1
 			var style = note.attr('class');
 			var text = note.find('input').val();
@@ -149,16 +142,17 @@ var imageEditor = (function() {
 				'&id='+(id?id:'') +
 				'&x='+loc.x +
 				'&y='+loc.y +
-				'&image='+(imageId?imageId:'') +
+				'&imageId='+(imageId?imageId:'') +
 				'&style='+style +
 				'&dir='+direction +
 				'&text='+text;
 			wicketAjaxGet(url, function() {}, function() {});
 		}
 
-		function doLabel(input) {
+		function doNote(input) {
 			var note = $(input).parent();
-			updateLabel(note);
+			options.text = note.text();
+			updateNote(note);
 		}
 
 		function changeDirection(note,li) {
@@ -169,7 +163,7 @@ var imageEditor = (function() {
 			var direction = $(li).attr('class');
 			note.removeClass(getDirection(note)).addClass(direction);
 
-			updateLabel(note);
+			updateNote(note);
 
 			closeDirectionMenu();
 		}
@@ -179,9 +173,8 @@ var imageEditor = (function() {
 		}
 
 		function initPopupMenu() {
-
 			// just create it myself here from options values.
-			createPopupMenu().appendTo($(selector));
+			createPopupMenu().appendTo(ed);
 
 			// hide context source menu when you click any where else on page.
 			$(document).click(function(e) {
@@ -192,25 +185,30 @@ var imageEditor = (function() {
 				}
 			});
 
-			$(selector + ' .direction-menu li').click(function(e) {
+			ed.find('.direction-menu li').click(function(e) {
 				var note = getDirectionMenu().data('note');
 				changeDirection(note, e.target);
 			});
 		}
+
+		function initAnnotations(reset) {
+			if (reset) {
+				// erase all current unsaved labels.
+			}
+//			$(selector).addAnnotations(function(annotation) {
+//					return createLabel(annotation);
+//				},options.annotations,options);
+		}
+
 
 		var init = function() {
 			initPopupMenu();
 			if (options.centerImage) {
 				centerImage();
 			}
-
-//			$(selector).addAnnotations(function(annotation) {
-//					return createLabel(annotation);
-//				},options.annotations,options);
-			$(selector).annotatableImage(function(annotation) {
-				return addNewLabel();
+			ed.annotatableImage(function(annotation) {
+				return addNewNote();
 			}, options);
-
 		}
 
 
@@ -223,17 +221,25 @@ var imageEditor = (function() {
 
 	// ----------------------------------------------------------------------------------------------------------
 
-
-	var init = function(selector,options) {
-		if ($(selector).data('editor')) return;
-		var e = editor(selector,options);
-		e.init();
-		$(selector).data('editor',e);
+	var init = function(el,options) {
+		var e = $(el).data('editor');
+		if (!e) {
+			e = editor($(el),options);
+			e.init();
+			$(el).data('editor',e);
+		}
+		initAnnotations(options.reset);
 		return e;
-	};
+	}
+
+	var reset = function(el,options) {
+		options.reset = true;
+		init(el,options);
+	}
 
 	return {
-		init : init
+		init : init,
+		reset : reset
 	}
 
 })();

@@ -20,6 +20,7 @@ var imageGallery = (function() {
 			var imageData = e.galleriaData;
 			var url = new String(callback) +
 				'&action='+'SELECT' +
+				'&index=' + galleria.getIndex() +
 				'&id='+(imageData.id?imageData.id:'');
 			wicketAjaxGet(url, function() {}, function() {});
 		}
@@ -36,13 +37,13 @@ var imageGallery = (function() {
 			});
 		}
 
-		var enableEditor = function(imageIndex, options) {
-			var imageSelector = '#' + id + ' .galleria-images .galleria-image:eq('+imageIndex+')';
-			imageEditor.init(imageSelector,options);
-		}
-
 		var add = function(imageData) {
 			galleria.push(imageData);
+		}
+
+		var edit = function(annotationOptions) {
+			var target = $(galleria.getActiveImage()).parent();
+			imageEditor.init(target,annotationOptions);
 		}
 
 		var init = function() {
@@ -60,13 +61,13 @@ var imageGallery = (function() {
 				galleryImageClicked(e);
 			});
 
-			setTimeout(initUploadButton,500);
+			setTimeout(initUploadButton,300);
 		}
 
 		return {
 			init : init,
 			add : add,
-			enableEditor : enableEditor
+			edit : edit
 		}
 	}
 
@@ -84,17 +85,14 @@ var imageGallery = (function() {
 		$('#'+id).data('gallery').add(imageData);
 	}
 
-	var enableEditor = function(id,imageIndex,options) {
-		// TODO : use variable instead of passing around id.
-		// e.g.   var editor=init(id,options);  editor.add(imageData);
-
-		$('#'+id).data('gallery').enableEditor(imageIndex,options);
+	var edit = function(id,options) {
+		$('#'+id).data('gallery').edit(options);
 	}
 
 	return {
 		init : init,
 		add : add,
-		enableEditor : enableEditor
+		edit : edit
 	}
 
 })();

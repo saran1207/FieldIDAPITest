@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.image;
 
-import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
@@ -10,10 +9,7 @@ import java.util.List;
 
 public class EditableImageGallery extends ImageGallery<EditableImage> {
 
-    // this is very loose but it's the only handle i have for finding the currently displayed image in the galleria widget
-    // TODO : test this on IE.
-    private static final String SELECTOR_FORMAT = "#%s .galleria-image:eq(%d)";
-    private static final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.enableEditor('%s',%d,%s)";
+    private static final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.edit('%s',%s)";
 
     private ImageAnnotatingBehavior imageAnnotatingBehavior;
 
@@ -30,21 +26,13 @@ public class EditableImageGallery extends ImageGallery<EditableImage> {
                 return options;
             }
 
-            @Override
-            protected String getInitJs() {
-                return String.format(IMAGE_EDITOR_ENABLE_JS,gallery.getMarkupId(),currentImageIndex,jsonRenderer.render(getImageAnnotationOptions()));
-            }
-
         });
     }
 
-    private String getImageSelector() {
-        return String.format(SELECTOR_FORMAT,getMarkupId(),currentImageIndex);
+    private String getImageEditorJs() {
+        return String.format(IMAGE_EDITOR_ENABLE_JS,gallery.getMarkupId(),jsonRenderer.render(imageAnnotatingBehavior.getImageAnnotationOptions()));
     }
 
-    public EditableImageGallery(String id, EditableImage... images) {
-        this(id, Lists.newArrayList(images));
-    }
 
     @Override
     protected EditableImage saveImage(S3Service.S3ImagePath path) {
@@ -56,7 +44,7 @@ public class EditableImageGallery extends ImageGallery<EditableImage> {
     @Override
     protected void imageClicked(AjaxRequestTarget target, String action, EditableImage image) {
         super.imageClicked(target, action, image);
-        target.appendJavaScript(imageAnnotatingBehavior.getInitJs());
+        target.appendJavaScript(getImageEditorJs());
     }
 
     @Override
