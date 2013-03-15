@@ -17,6 +17,7 @@ import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProceduresPage;
 import com.n4systems.fieldid.wicket.pages.loto.VersionsPage;
+import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
@@ -89,8 +90,9 @@ public class FieldIDWicketApp extends WebApplication {
         //uggh: colorbox doesn't render absolute urls so we have to give it this url to make sense.  i.e. the "/wicket" prefix
         //  a preferred solution would be to put colorbox in iframe (which requires CSS love) or to force absolute urls to be rendered by wicket.
         mountPage("wicket/reporting2", ReportPage.class);
-
         mountPage("wicket/procedure", ProcedurePage.class);
+
+        mountPage("procedureDef", ProcedureDefinitionPage.class);
 
         mountPage("performEvent", PerformEventPage.class);
         mountPage("editEvent", EditEventPage.class);

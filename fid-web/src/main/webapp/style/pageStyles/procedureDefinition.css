@@ -1,0 +1,42 @@
+/* hacks to work around existing css */
+.emptyOptions {
+    display:none;
+}
+
+#contentTitle h1 {
+    color:#999;
+    font-size:14px;
+}
+
+.navigation {
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+    width:300px;
+}
+
+.navigation label {
+
+}
+
+
+.buttons {
+    position:absolute;
+    bottom:95px;
+    right:50px;
+}
+
+
+.publish-message {
+    font-size:15px;
+    color: #999;
+    padding-top:200px;
+    display:block;
+    text-align:center;
+}
+
+
+
+
+
+
