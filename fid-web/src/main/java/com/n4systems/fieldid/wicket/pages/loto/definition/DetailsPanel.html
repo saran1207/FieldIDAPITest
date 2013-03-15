@@ -1,6 +1,50 @@
 <wicket:panel>
 
-    DETAILS
+    <!-- should these be UL/LI's instead?  a parent css class of "details" is applied here-->
+
+    <div class="lhs">
+        <div>
+            <span wicket:id="procedureCodeLabel"/>
+            <input wicket:id="procedureCode" type="text"/>
+        </div>
+
+        <div>
+            <label wicket:id="identifierLabel"/>
+            <input wicket:id="identifier" type="text"/>
+        </div>
+
+        <div>
+            <label wicket:id="revisionLabel"/>
+            <input wicket:id="revision" type="text"/>
+        </div>
+    </div>
+
+    <div>
+        <label wicket:id="warningsLabel"/>
+        <textarea wicket:id="warnings" type="text"/>
+    </div>
+
+    <div class="rhs"> <!-- these should all be on right -->
+        <div>
+            <label wicket:id="userLabel"/>
+            <span wicket:id="user" type="text"/>
+        </div>
+
+        <div>
+            <label wicket:id="equipmentNumberLabel"/>
+            <input wicket:id="equipmentNumber" type="text"/>
+        </div>
+
+        <div>
+            <label wicket:id="equipmentLocationLabel"/>
+            <input wicket:id="equipmentLocation" type="text"/>
+        </div>
+
+        <div>
+            <label wicket:id="equipmentDescriptionLabel"/>
+            <input wicket:id="equipmentDescription" type="text"/>
+        </div>
+    </div>
 
     <div class="buttons">
         <a wicket:id="cancel"  class="blue-submit">Cancel</a>
