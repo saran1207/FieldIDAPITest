@@ -98,7 +98,7 @@ public class UserGroupService extends FieldIdPersistenceService {
     }
 
     public List<User> getUsersInGroup(Long userGroupId) {
-        UserGroup userGroup = persistenceService.find(UserGroup.class, userGroupId);
+        UserGroup userGroup = persistenceService.findUsingTenantOnlySecurityWithArchived(UserGroup.class, userGroupId);
         return getUsersInGroup(userGroup);
     }
 
