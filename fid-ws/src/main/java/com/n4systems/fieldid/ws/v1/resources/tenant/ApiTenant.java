@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.tenant;
 
 public class ApiTenant {
 	private String serialNumberLabel;
+	private String serialNumberFormat;
 	private boolean usingAssignedTo;
 	private boolean usingJobSites;
 	private boolean usingAdvancedLocation;
@@ -55,6 +56,12 @@ public class ApiTenant {
 	public boolean isUsingGpsCapture() {
 		return usingGpsCapture;
 	}
-	
-	
+
+	public void setSerialNumberFormat(String serialNumberFormat) {
+		this.serialNumberFormat = serialNumberFormat;
+	}
+
+	public String getSerialNumberFormat() {
+		return serialNumberFormat;
+	}	
 }

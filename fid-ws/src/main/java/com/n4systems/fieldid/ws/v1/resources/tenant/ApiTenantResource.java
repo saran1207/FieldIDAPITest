@@ -10,6 +10,7 @@ public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
 	public ApiTenant convertEntityToApiModel(PrimaryOrg primaryOrg) {
 		ApiTenant apiTenant = new ApiTenant();
 		apiTenant.setSerialNumberLabel(primaryOrg.getIdentifierLabel());
+		apiTenant.setSerialNumberFormat(primaryOrg.getIdentifierFormat());
 		apiTenant.setUsingAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
 		apiTenant.setUsingJobSites(primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));
 		apiTenant.setUsingAdvancedLocation(primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedLocation));
