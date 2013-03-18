@@ -1,0 +1,1 @@
+alter table procedure_definitions add column revision_number varchar(255) not null;

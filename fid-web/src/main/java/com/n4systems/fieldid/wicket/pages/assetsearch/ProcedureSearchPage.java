@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch;
 
 import com.n4systems.fieldid.service.search.ProcedureService;
+import com.n4systems.fieldid.wicket.components.proceduresearch.results.ProcedureResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.components.ProcedureCriteriaPanel;
@@ -16,20 +17,20 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class ProcedurePage extends AbstractSearchPage<ProcedureCriteria> {
+public class ProcedureSearchPage extends AbstractSearchPage<ProcedureCriteria> {
 
-    private @SpringBean
-    ProcedureService procedureService;
+    @SpringBean
+    private ProcedureService procedureService;
 
-    public ProcedurePage(PageParameters params) {
+    public ProcedureSearchPage(PageParameters params) {
         super(params);
     }
 
-    public ProcedurePage(ProcedureCriteria procedureCriteria) {
+    public ProcedureSearchPage(ProcedureCriteria procedureCriteria) {
         this(procedureCriteria, null);
     }
 
-    public ProcedurePage(ProcedureCriteria procedureCriteria, SavedItem<ProcedureCriteria> savedItem) {
+    public ProcedureSearchPage(ProcedureCriteria procedureCriteria, SavedItem<ProcedureCriteria> savedItem) {
         super(new PageParameters(), procedureCriteria, savedItem);
     }
 
@@ -49,7 +50,7 @@ public class ProcedurePage extends AbstractSearchPage<ProcedureCriteria> {
 
     @Override
     protected SavedItem<ProcedureCriteria> createSavedItemFromCriteria(ProcedureCriteria procedureCriteriaModel) {
-        return null;    //not supported in this page...just return null for now.
+        return null;
     }
 
     @Override
@@ -61,7 +62,7 @@ public class ProcedurePage extends AbstractSearchPage<ProcedureCriteria> {
     protected Component createCriteriaPanel(String id, final Model<ProcedureCriteria> model) {
         return new ProcedureCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
-                setResponsePage(new ProcedurePage(model.getObject(), savedItem));
+                setResponsePage(new ProcedureSearchPage(model.getObject()));
             }
             @Override protected void onSearchError() {
                 resetPageOnError();
@@ -76,23 +77,15 @@ public class ProcedurePage extends AbstractSearchPage<ProcedureCriteria> {
 
     @Override
     protected Component createResultsPanel(String id, Model<ProcedureCriteria> criteriaModel) {
-        return null;
-// TODO DD : implement search here...
-//                new ReportResultsPanel(id, criteriaModel) {
-//            @Override protected void updateSelectionStatus(AjaxRequestTarget target) {
-//                super.updateSelectionStatus(target);
-//                target.add(searchMenu);
-//            };
-//        };
+        return new ProcedureResultsPanel(id, criteriaModel);
     }
 
     @Override
     protected void saveLastSearch(ProcedureCriteria searchCriteria) {
-        //  TODO : savedProcedureService.save(searchCriteria);
     }
 
     @Override
-    protected Page createSaveReponsePage(boolean overwrite) {
+    protected Page createSaveResponsePage(boolean overwrite) {
         return new DashboardPage();
     }
 

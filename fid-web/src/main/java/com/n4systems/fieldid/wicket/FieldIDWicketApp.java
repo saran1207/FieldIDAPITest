@@ -90,7 +90,7 @@ public class FieldIDWicketApp extends WebApplication {
         //uggh: colorbox doesn't render absolute urls so we have to give it this url to make sense.  i.e. the "/wicket" prefix
         //  a preferred solution would be to put colorbox in iframe (which requires CSS love) or to force absolute urls to be rendered by wicket.
         mountPage("wicket/reporting2", ReportPage.class);
-        mountPage("wicket/procedure", ProcedurePage.class);
+        mountPage("wicket/procedure", ProcedureSearchPage.class);
 
         mountPage("procedureDef", ProcedureDefinitionPage.class);
 

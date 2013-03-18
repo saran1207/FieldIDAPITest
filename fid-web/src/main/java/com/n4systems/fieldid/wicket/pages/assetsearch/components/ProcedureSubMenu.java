@@ -55,7 +55,7 @@ public class ProcedureSubMenu extends SubMenu<ProcedureCriteria> {
 
     @Override
     protected String getNoneSelectedMsgKey() {
-        return "label.select_events";
+        return "label.select_procedures";
     }
 
     @Override protected IModel<String> getHeaderModel() {

@@ -107,7 +107,7 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
     }
 
     @Override
-    protected Page createSaveReponsePage(boolean overwrite) {
+    protected Page createSaveResponsePage(boolean overwrite) {
         return new SaveReportPage((SavedReportItem) savedItem, overwrite) {
             @Override protected FieldIDFrontEndPage createCancelResponsePage() {
                 return ReportPage.this;

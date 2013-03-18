@@ -122,16 +122,11 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         response.renderOnDomReadyJavaScript("fieldIdWidePage.init(" + showLeftPanel + ")");
     }
 
-    @Override
-    protected void onBeforeRender() {
-        super.onBeforeRender();
-    }
-
     protected Link createSaveLink(String linkId, final boolean overwrite) {
         Link link = new Link(linkId) {
             @Override
             public void onClick() {
-                setResponsePage(createSaveReponsePage(overwrite));
+                setResponsePage(createSaveResponsePage(overwrite));
             }
         };
         if (!overwrite) {
@@ -172,7 +167,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
 
     protected abstract void saveLastSearch(T searchCriteria);
 
-    protected abstract Page createSaveReponsePage(boolean overwrite);
+    protected abstract Page createSaveResponsePage(boolean overwrite);
 
     protected abstract T createCriteria();
 }

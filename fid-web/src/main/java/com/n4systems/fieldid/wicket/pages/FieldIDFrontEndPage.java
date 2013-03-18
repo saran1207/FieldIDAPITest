@@ -11,7 +11,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
-import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedurePage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
@@ -105,7 +105,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class));
         add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
-        add(new BookmarkablePageLink<Void>("procedureLink", ProcedurePage.class));
+        add(new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class));
 
         add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));

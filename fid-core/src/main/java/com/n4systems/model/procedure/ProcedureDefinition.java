@@ -1,5 +1,6 @@
 package com.n4systems.model.procedure;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
@@ -9,7 +10,12 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "procedure_definitions")
 public class ProcedureDefinition extends EntityWithTenant {
+
+    @ManyToOne
+    @JoinColumn(name = "asset_id")
+    private Asset asset;
 
     @Column(name="procedure_code")
     private String procedureCode;
@@ -17,7 +23,7 @@ public class ProcedureDefinition extends EntityWithTenant {
     @Column(name="electronic_identifier")
     private String electronicIdentifier;
 
-    @Column(name="revisionNumber")
+    @Column(name="revision_number")
     private String revisionNumber;
 
     @Column(name="warnings")

@@ -2,12 +2,10 @@ package com.n4systems.model.procedure;
 
 import com.n4systems.model.parents.EntityWithTenant;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
+@Table(name="procedure_definition_images")
 public class ProcedureDefinitionImage extends EntityWithTenant {
 
     @ManyToOne

@@ -98,7 +98,7 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     }
 
     @Override
-    protected Page createSaveReponsePage(boolean overwrite) {
+    protected Page createSaveResponsePage(boolean overwrite) {
         return new SaveAssetSearchPage((SavedSearchItem) savedItem, overwrite) {
             @Override protected FieldIDFrontEndPage createCancelResponsePage() {
                 return SearchPage.this;
