@@ -77,6 +77,12 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	private String reportName;
 	private DownloadLink downloadLink;
+
+    // SIGH. We don't get notified by struts when no objects are selected in a multi select.
+    // (seems it's not actually part of the http request!).
+    // We need to remember if struts called setUserGroups or not. If not, no userGroups were selected, and we need
+    // to clear the list in the user we're editing.
+    private boolean userGroupsListSet;
 	
 
 	protected UserCrud(UserManager userManager, UserGroupService userGroupService, PersistenceManager persistenceManager) {
@@ -212,6 +218,9 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	public String doUpdate() {
 		testRequiredEntities(true);
+        if (!userGroupsListSet) {
+            user.getGroups().clear();
+        }
 		save();
 		return SUCCESS;
 	}
@@ -391,6 +400,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
     }
 
     public void setUserGroups(String[] userGroupIdStrings) {
+        userGroupsListSet = true;
         List<Long> userGroupIds = new ArrayList<Long>();
         for (String userGroupIdString : userGroupIdStrings) {
             userGroupIds.add(Long.valueOf(userGroupIdString));
