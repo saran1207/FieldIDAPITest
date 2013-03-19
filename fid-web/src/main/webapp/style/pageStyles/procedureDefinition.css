@@ -8,6 +8,12 @@
     font-size:14px;
 }
 
+.header {
+    color:#999;
+    font-size:14px;
+    padding:10px 0 10px;
+}
+
 .navigation {
     margin-left:auto;
     margin-right:auto;
