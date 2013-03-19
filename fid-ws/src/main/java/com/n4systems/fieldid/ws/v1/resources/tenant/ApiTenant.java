@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.tenant;
 public class ApiTenant {
 	private String serialNumberLabel;
 	private String serialNumberFormat;
+	private String serialNumberDecimalFormat;
 	private boolean usingAssignedTo;
 	private boolean usingJobSites;
 	private boolean usingAdvancedLocation;
@@ -16,7 +17,15 @@ public class ApiTenant {
 	public String getSerialNumberLabel() {
 		return serialNumberLabel;
 	}
-	
+
+	public String getSerialNumberDecimalFormat() {
+		return serialNumberDecimalFormat;
+	}
+
+	public void setSerialNumberDecimalFormat(String serialNumberDecimalFormat) {
+		this.serialNumberDecimalFormat = serialNumberDecimalFormat;
+	}
+
 	public void setUsingAssignedTo(boolean usingAssignedTo) {
 		this.usingAssignedTo = usingAssignedTo;
 	}

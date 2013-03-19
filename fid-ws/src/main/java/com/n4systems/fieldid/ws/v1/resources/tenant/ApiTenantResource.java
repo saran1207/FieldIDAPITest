@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.tenant;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
+import rfid.ejb.entity.IdentifierCounterBean;
 
 public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
 
@@ -11,6 +12,10 @@ public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
 		ApiTenant apiTenant = new ApiTenant();
 		apiTenant.setSerialNumberLabel(primaryOrg.getIdentifierLabel());
 		apiTenant.setSerialNumberFormat(primaryOrg.getIdentifierFormat());
+
+		IdentifierCounterBean identifierCounter = persistenceService.find(createTenantSecurityBuilder(IdentifierCounterBean.class));
+		apiTenant.setSerialNumberDecimalFormat(identifierCounter.getDecimalFormat());
+
 		apiTenant.setUsingAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
 		apiTenant.setUsingJobSites(primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));
 		apiTenant.setUsingAdvancedLocation(primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedLocation));
