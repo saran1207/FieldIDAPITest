@@ -1,0 +1,31 @@
+
+
+.image-list .image {
+    position:relative;
+    width:200px;
+    height:300px;
+    overflow:hidden;
+    margin:2px;
+    float:left;
+    /* to be set via java code. */
+    background-image:url(http://google.com);
+    background-position:center;
+    background-size:cover;
+    border:1px dotted #d3d3d3;
+    padding: 2px;
+}
+
+.image-list {
+    overflow-x:auto;
+}
+
+
+.image-list-container {
+    /*need to figure out how to give this proper width. could use javascript and sum(imageWidth); */
+    width:2000px;
+}
+
+
+
+
+

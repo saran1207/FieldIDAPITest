@@ -6,10 +6,14 @@ import com.n4systems.fieldid.wicket.components.image.EditableImageGallery;
 import com.n4systems.model.Asset;
 import com.n4systems.model.common.AmountWithString;
 import com.n4systems.model.common.EditableImage;
+import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 
@@ -30,6 +34,13 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 //    private EditableImage editableImage2 = new EditableImage("tenants/15511493/assets/16028360/profile/Project-5.jpg");
 //    private EditableImage editableImage3 = new EditableImage("tenants/15511493/assets/16430585/profile/asset-3C88F91D-1525-4BEC-BC1A-CDFECD548B75.jpg");
 
+    class ImageModel extends LoadableDetachableModel<List<EditableImage>> {
+        @Override
+        protected List<EditableImage> load() {
+            return persistenceService.findAll(EditableImage.class);
+        }
+    }
+
     public SecretTestPage() {
 //        Form form = new Form("form", new CompoundPropertyModel(this));
 
@@ -37,8 +48,18 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 //        editableImage2.setId(456L);
 //        editableImage3.setId(789L);
 
-        List<EditableImage> images = persistenceService.findAll(EditableImage.class);
-        add(new EditableImageGallery("imageGallery", images));
+        QueryBuilder<ImageAnnotationType> builder = new QueryBuilder<ImageAnnotationType>(ImageAnnotationType.class, new OpenSecurityFilter());
+        List<ImageAnnotationType> types = persistenceService.findAll(builder);
+
+
+        List<EditableImage> all = persistenceService.findAll(EditableImage.class);
+//        for (EditableImage image:all) {
+//            ImageAnnotation annotation = new ImageAnnotation(.5, .6, image.getId() + "", types.get(0));
+//            annotation.setImage(image);
+//            image.getAnnotations().add(annotation);
+//            persistenceService.save(image);
+//        }
+        add(new EditableImageGallery("imageGallery", all));
 
 //        form.add(new ImageEditor("annotatedImage", new PropertyModel(this,"editableImage")));
 

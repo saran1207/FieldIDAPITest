@@ -108,7 +108,7 @@ public class ImageEditor extends Panel {
 
     private void save() {
 //        s3Service.saveEditableImage(imageModel.getObject());
-//        persistenceService.save(imageModel.getObject());
+   //     persistenceService.save(imageModel.getObject());
     }
 
     private void doLabel(Long id, Long imageId, Number x, Number y,  String text, String direction, String type) {

@@ -57,40 +57,48 @@ var imageEditor = (function() {
 			return ed.find('.direction-menu');
 		}
 
-		function createNote() {
-			var span = $(document.createElement('span')).addClass('readonly').addClass(options.direction).addClass(options.type).attr('id',options.id);
+		function createNote(annotation) {
+			var value = annotation?annotation.text:options.text;
+			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(options.direction).addClass(options.type).attr('id',options.id);
 			var icon = $('<span/>').addClass('icon').appendTo(span);
-			var editor = $('<input/>').attr({type:'text', value:options.text}).appendTo(span).width('60px');
-			var direction = $('<span/>').attr({class:'menu'}).appendTo(span);
+			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');
+			var direction = $('<span/>').attr({class:'menu'}).appendTo(span).hide();
 
-			direction.click(function(e) {
-				var note = $(e.target).parents('.note');
-				// TODO : get background color from note.  yellow for now.
-				// subtract to accommodate for border we're going to add.
-				var width = parseInt(note.outerWidth());
+			editor.css('width',(editor.val().length + 1) * 6 + 'px');
 
-				// TODO : if note is close to bottom, then make it appear above note, not below.
-				// .: need to adjust
-				getDirectionMenu().css('top',note.css('top')).css('left',note.css('left')).width(width).data('note',note).removeClass(directions.join(' ')).addClass(getDirection(note));
-				getDirectionMenu().toggle();
-				e.stopPropagation();
-			});
+			if (options.editable) {
+				direction.show();
+				direction.click(function(e) {
+					var note = $(e.target).parents('.note');
+					// TODO : get background color from note.  yellow for now.
+					// subtract to accommodate for border we're going to add.
+					var width = parseInt(note.outerWidth());
 
-			editor.focus(function(e) {
-				this.select();
-				$(this).parent().removeClass('readonly');
-			});
+					// TODO : if note is close to bottom, then make it appear above note, not below.
+					// .: need to adjust
+					getDirectionMenu().css('top',note.css('top')).css('left',note.css('left')).width(width).data('note',note).removeClass(directions.join(' ')).addClass(getDirection(note));
+					getDirectionMenu().toggle();
+					e.stopPropagation();
+				});
 
-			editor.keypress(function(e) {
-//					TODO  : need to accommodate for EAST labels.  have to move them back to left?
-//					if (style==east) { this.style.margin-left = -52-(Math.max(12,(this.value.length + 1) * 6)) + 'px' ;} else...
-				this.style.width = Math.max(12,(this.value.length + 1) * 6) + 'px'; }
-			);
+				editor.focus(function(e) {
+					this.select();
+					$(this).parent().removeClass('readonly');
+				});
 
-			editor.blur(function(e) {
-				$(this).parent().addClass('readonly');
-				doNote($(e.target));
-			});
+				editor.keypress(function(e) {
+	//					TODO  : need to accommodate for EAST labels.  have to move them back to left?
+	//					if (style==east) { this.style.margin-left = -52-(Math.max(12,(this.value.length + 1) * 6)) + 'px' ;} else...
+						this.style.width = Math.max(12,(this.value.length + 1) * 6) + 'px'; }
+				);
+
+				editor.blur(function(e) {
+					$(this).parent().addClass('readonly');
+					doNote($(e.target));
+				});
+			} else {
+				editor.attr('disabled',true);
+			}
 
 			return span;
 		}
@@ -111,9 +119,6 @@ var imageEditor = (function() {
 			// remove any other "unsaved" notes. only allowed one each time.
 			// this is a very specific LOTO requirement.
 			removeOtherUnsavedNotes();
-//			// hacky way of turning off annotation plugin...ugh.
-//			// once you create a note, we automatically leave Label mode.
-//			$(selector).unbind('mousedown');
 
 			var note = createNote().addClass('unsaved');
 
@@ -194,26 +199,30 @@ var imageEditor = (function() {
 		function initAnnotations(reset) {
 			if (reset) {
 				// erase all current unsaved labels.
+				ed.find('.note').remove;
 			}
-//			$(selector).addAnnotations(function(annotation) {
-//					return createLabel(annotation);
-//				},options.annotations,options);
+			ed.addAnnotations(function(annotation) {
+					return createNote(annotation);
+				},options.annotations,options);
 		}
 
 
 		var init = function() {
-			initPopupMenu();
 			if (options.centerImage) {
 				centerImage();
 			}
-			ed.annotatableImage(function(annotation) {
-				return addNewNote();
-			}, options);
+		//	if (options.editable) { }
+				initPopupMenu();
+				ed.annotatableImage(function(annotation) {
+					return addNewNote();
+				}, options);
 		}
 
 
+
 		return {
-			init : init
+			init : init,
+			initAnnotations : initAnnotations
 		};
 
 	}
@@ -221,15 +230,19 @@ var imageEditor = (function() {
 
 	// ----------------------------------------------------------------------------------------------------------
 
-	var init = function(el,options) {
-		var e = $(el).data('editor');
-		if (!e) {
-			e = editor($(el),options);
-			e.init();
-			$(el).data('editor',e);
+	var init = function(selector,options) {
+		var el = $(selector);
+		if (el.is('img')) {
+			el = el.parent();
 		}
-		initAnnotations(options.reset);
-		return e;
+		var ed = el.data('editor');
+		if (!ed) {
+			ed = editor(el,options);
+			ed.init();
+			$(selector).data('editor',ed);
+		}
+		ed.initAnnotations(options.reset);
+		return ed;
 	}
 
 	var reset = function(el,options) {

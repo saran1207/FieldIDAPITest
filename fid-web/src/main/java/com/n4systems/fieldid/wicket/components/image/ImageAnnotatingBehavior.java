@@ -20,9 +20,13 @@ import java.util.List;
 public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavior {
 
     private @SpringBean JsonRenderer jsonRenderer;
+    private boolean editable = false;
 
     enum ImageEditorAction { LABEL };
 
+
+    protected ImageAnnotatingBehavior() {
+    }
 
     @Override
     protected void respond(AjaxRequestTarget target) {
@@ -117,11 +121,31 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
         response.renderJavaScriptReference("javascript/imageEditor.js");
     }
 
+    protected final Object getJsonImageAnnotationOptions() {
+        return jsonRenderer.render(getImageAnnotationOptions());
+    }
+
     protected AnnotatedImageOptions getImageAnnotationOptions() {
         return new AnnotatedImageOptions(getEditableImage().getAnnotations());
     }
 
+    protected Boolean isEditable() {
+        return editable;
+    }
+
+    public ImageAnnotatingBehavior withNoEditing() {
+        editable = false;
+        return this;
+    }
+
+    public ImageAnnotatingBehavior withEditing() {
+        editable = true;
+        return this;
+    }
+
+
     // ----------------------------------------------------------------------------------------------
+
 
     public class AnnotatedImageOptions {
         String type = "note";
@@ -129,10 +153,12 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
         String text = "a label";
         String callback = ImageAnnotatingBehavior.this.getCallbackUrl().toString();
         List<ImageAnnotation> annotations = Lists.newArrayList();
+        Boolean editable = isEditable();
 
         AnnotatedImageOptions(List<ImageAnnotation> annotations) {
             this.annotations = annotations;
         }
     }
+
 
 }

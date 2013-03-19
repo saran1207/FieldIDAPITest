@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.image;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class EditableImageGallery extends ImageGallery<EditableImage> {
 
-    private static final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.edit('%s',%s)";
+    private static final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.edit('#%s',%s)";
 
     private ImageAnnotatingBehavior imageAnnotatingBehavior;
 
@@ -17,16 +18,11 @@ public class EditableImageGallery extends ImageGallery<EditableImage> {
         super(id, images);
         setOutputMarkupId(true);
         add(imageAnnotatingBehavior = new ImageAnnotatingBehavior() {
-            @Override protected EditableImage getEditableImage() {
+            @Override
+            protected EditableImage getEditableImage() {
                 return getCurrentImage();
             }
-
-            @Override protected AnnotatedImageOptions getImageAnnotationOptions() {
-                AnnotatedImageOptions options = super.getImageAnnotationOptions();
-                return options;
-            }
-
-        });
+        }.withEditing());
     }
 
     private String getImageEditorJs() {
@@ -35,8 +31,9 @@ public class EditableImageGallery extends ImageGallery<EditableImage> {
 
 
     @Override
-    protected EditableImage saveImage(S3Service.S3ImagePath path) {
+    protected EditableImage saveImage(S3Service.S3ImagePath path, Tenant tenant) {
         EditableImage image = new EditableImage(path.getMediumPath());
+        image.setTenant(tenant);
         persistenceService.save(image);
         return image;
     }

@@ -3,7 +3,7 @@
     display:none;
 }
 
-#contentTitle h1 {
+.title  {
     color:#999;
     font-size:14px;
 }
@@ -13,12 +13,20 @@
     margin-right:auto;
     text-align:center;
     width:300px;
+    padding-top:10px;
+    padding-bottom:40px;
 }
 
-.navigation label {
-
+.navigation span {
+    position:relative;
+    padding: 0px 20px 30px 20px;
 }
 
+.navigation span label {
+    position:absolute;
+    top: 12px;
+    left:7px;
+}
 
 .buttons {
     position:absolute;

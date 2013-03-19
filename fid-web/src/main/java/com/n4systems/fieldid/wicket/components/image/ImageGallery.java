@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.common.S3Image;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.Component;
@@ -61,7 +62,7 @@ public class ImageGallery<T extends S3Image> extends Panel {
                 if (fileUpload != null) {
                     S3Service.S3ImagePath path = s3Service.uploadImage(fileUpload.getBytes(), fileUpload.getContentType(), getFileName(fileUpload.getClientFileName()), FieldIDSession.get().getSessionUser().getTenant().getId());
                     System.out.println(path);
-                    T image = saveImage(path);
+                    T image = saveImage(path,getTenant());
                     if (image!=null) {
                         images.add(image);
                     }
@@ -80,21 +81,21 @@ public class ImageGallery<T extends S3Image> extends Panel {
         add(gallery = new WebMarkupContainer("images").setOutputMarkupId(true));
     }
 
+    protected Tenant getTenant() {
+        return FieldIDSession.get().getSessionUser().getTenant();
+    }
+
     protected String getImageUrl(T image, S3Service.S3ImagePath path) {
         // TODO : make this cacheable...expiry date is months? or NEVER?
         return s3Service.generateResourceUrl(path.getMediumPath()).toString();
     }
 
-    protected T saveImage(S3Service.S3ImagePath path) {
+    protected T saveImage(S3Service.S3ImagePath path, Tenant tenant) {
         return null;
     }
 
     private String getFileName(String fileName) {
-        return "foo/bar/stuff/"+fileName;
-    }
-
-    public ImageGallery(String id, T... images) {
-        this(id, Lists.newArrayList(images));
+        return "/foo/bar/stuff/"+fileName;
     }
 
     protected T getCurrentImage() {

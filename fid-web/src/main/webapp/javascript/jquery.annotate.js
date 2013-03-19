@@ -8,7 +8,6 @@
 (function($){
 
 	$.fn.annotatableImage = function(annotationCallback, options) {
-		$(this).annotatable = true;
 		var defaults = {
 			xPosition: 'middle',
 			yPosition: 'middle'
@@ -16,12 +15,11 @@
 		var options = $.extend(defaults, options);
 
 		var annotations = [];
+		var image = $('img', this)[0];
 		var date = new Date();
 		var startTime = date.getTime();
 
 		this.mousedown(function(event){
-			var image = $('img', this)[0];
-
 			if (event.target == image) {
 				event.preventDefault();
 
@@ -35,7 +33,6 @@
 				element.data('responseTime', date.getTime() - startTime);
 			}
 		});
-
 	};
 
 	$.fn.addAnnotations = function(annotationCallback, annotations, options) {
@@ -55,6 +52,7 @@
 			$(container).append(element);
 
 			var left = (this.x * $(container).width()) - ($(element).xOffset(options.xPosition));
+			var top = (this.y * options.height) - ($(element).yOffset(options.yPosition));
 			if (this.width && this.height) {
 				var width = (this.width * $(container).width());
 				var height = (this.height * $(container).height());

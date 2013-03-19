@@ -43,7 +43,7 @@ var imageGallery = (function() {
 
 		var edit = function(annotationOptions) {
 			var target = $(galleria.getActiveImage()).parent();
-			imageEditor.init(target,annotationOptions);
+			imageEditor.init('#'+target.attr(id),annotationOptions);
 		}
 
 		var init = function() {

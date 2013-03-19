@@ -211,12 +211,13 @@
     bottom: -9px;
     content: '';
     position: absolute;
-    left:9px;
+    left:29px;
 }
+
 .note.south:before {
     border-right: 10px solid hsla(0,0%,0%,.1);
-    bottom: -12px;
-    left:12px;
+    bottom: -13px;
+    left:32px;
 }
 
 
@@ -232,10 +233,10 @@
      top: -10px;
      content: '';
      position: absolute;
-     left:9px;
+     left:28px;
  }
  .note.north:before {
      border-right: 10px solid hsla(0,0%,0%,.1);
      top: -10px;
-     left:12px;
+     left:31px;
  }
