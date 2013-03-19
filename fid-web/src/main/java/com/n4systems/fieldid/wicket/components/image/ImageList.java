@@ -7,6 +7,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -27,6 +28,7 @@ public class ImageList<T extends S3Image> extends Panel {
         super(id);
         this.images = images;
         setOutputMarkupId(true);
+        boolean hasImages = images.getObject().size()>0;
         add(new AttributeAppender("class", "image-list"));
         ListView<T> listView = new ListView<T>("list", images) {
             @Override protected void populateItem(final ListItem<T> item) {
@@ -34,7 +36,8 @@ public class ImageList<T extends S3Image> extends Panel {
                 item.setRenderBodyOnly(true);
             }
         };
-        add(listView);
+        add(listView.setVisible(hasImages));
+        add(new WebMarkupContainer("blankSlate").setVisible(!hasImages));
     }
 
     protected Component addImage(ListItem<T> item) {

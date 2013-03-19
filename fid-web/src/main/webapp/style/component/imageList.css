@@ -15,6 +15,14 @@
     padding: 2px;
 }
 
+.blank-slate {
+    height:100px;
+    width:95%;
+    background:#eee;
+    border: 1px solid #bbb;
+    display:block;
+}
+
 .image-list {
     overflow-x:auto;
 }
@@ -22,7 +30,7 @@
 
 .image-list-container {
     /*need to figure out how to give this proper width. could use javascript and sum(imageWidth); */
-    width:2000px;
+    width:1200px;
 }
 
 

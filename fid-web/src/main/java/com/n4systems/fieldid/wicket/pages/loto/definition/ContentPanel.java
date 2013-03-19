@@ -49,6 +49,7 @@ public class ContentPanel extends Panel {
     class ImageModel extends LoadableDetachableModel<List<EditableImage>> {
         @Override
         protected List<EditableImage> load() {
+//            return Lists.newArrayList();
             List<EditableImage> all = persistenceService.findAll(EditableImage.class);
             return all;
         }
