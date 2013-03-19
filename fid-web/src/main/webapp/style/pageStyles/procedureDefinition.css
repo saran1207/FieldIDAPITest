@@ -1,11 +1,28 @@
-/* hacks to work around existing css */
-.emptyOptions {
-    display:none;
+/* WORK AROUND FOR EXISTING CSS
+***************************************/
+#page {
+    background: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: none;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+
+}
+#contentHeader {
+    display: none;
 }
 
 .title  {
     color:#999;
     font-size:14px;
+
+/* PROCEDURE STYLES
+*****************************************/
+h2 {
+    color: #999;
+    font-size: 21px;
+    font-weight: 300
 }
 
 .header {
@@ -14,31 +31,124 @@
     padding:10px 0 10px;
 }
 
+h2 span {
+    color: #666;
+}
+
+.procedure-wrapper {
+    -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    -webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    border: 1px solid #CCC;
+    padding: 38px;
+    background: #FFF;
+    overflow: hidden;
+}
+
+
+/* navigation */
+.navigation {
+    text-align: center;
+}
+    .navigation span {
+        display: inline-block;
+        width: 135px;
+        margin-bottom: 55px;
+    }
+    .navigation label {
+        display: block;
+        font-size: 14px;
+        font-weight: 400;
+        margin-top: 10px
+    }
+
+
+
+/* form styles */
+.column {
+    width: 460px;
+    float: left;
+    text-align: right;
+    font-size: 12px;
+    line-height: 30px;
+}
+
+.details label {
+    display: inline-block;
+    margin-bottom: 12px;
+    vertical-align: top;
+}
+.details input {
+    width: 285px;
+    height: 34px;
+    float: right;
+    margin-left: 12px;]
+}
+.details textarea {
+    width: 285px;
+    height: 152px;
+    margin-left: 12px;
+}
+
+
+/* Button styles */
+.buttons {
+    clear: both;
+    border-top: 1px solid #cccccc;
+    padding-top: 10px;
+}
+a.btn {
+    display: inline-block;
+    padding: 15px 0;
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+}
+    .btn.green {
+        background: #009966;
+        width: 175px;
+    }
+    .btn.gray {
+        background: #cccccc;
+        width: 85px;
+    }
+
+
+
+.temp {
+    display: none;
+}
+.publish-message {
+    font-size:15px;
+    color: #999;
+    padding-top:200px;
+    display:block;
+    text-align:center;
+}
+
+/*.emptyOptions {
+    display:none;
+}
+
 .navigation {
     margin-left:auto;
     margin-right:auto;
     text-align:center;
     width:300px;
-    padding-top:10px;
-    padding-bottom:40px;
 }
 
-.navigation span {
-    position:relative;
-    padding: 0px 20px 30px 20px;
+.navigation label {
+
 }
 
-.navigation span label {
-    position:absolute;
-    top: 12px;
-    left:7px;
-}
 
 .buttons {
     position:absolute;
     bottom:95px;
     right:50px;
 }
+*/
 
 
 .publish-message {
