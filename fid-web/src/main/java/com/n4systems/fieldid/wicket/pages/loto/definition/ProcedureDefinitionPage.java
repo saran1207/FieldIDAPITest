@@ -42,7 +42,9 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     }
 
      protected Label createTitleLabel(String labelId) {
-        return new Label(labelId,Model.of("HIDE ME!"));
+         Label label = new Label(labelId, Model.of("THIS SHOULDN'T BE SHOWN"));
+         label.setVisible(false);
+         return label;
     }
 
     @Override
