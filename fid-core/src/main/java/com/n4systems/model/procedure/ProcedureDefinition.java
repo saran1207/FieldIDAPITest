@@ -140,4 +140,12 @@ public class ProcedureDefinition extends EntityWithTenant {
     public void setImages(List<ProcedureDefinitionImage> images) {
         this.images = images;
     }
+
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
 }

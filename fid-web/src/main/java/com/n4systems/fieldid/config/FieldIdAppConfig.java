@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.comment.CommentService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
-import com.n4systems.fieldid.service.search.columns.ScheduleColumnsService;
+import com.n4systems.fieldid.service.search.columns.ProcedureColumnsService;
 import com.n4systems.fieldid.servlets.ImageDownloadHandler;
 import com.n4systems.fieldid.servlets.ImageUploadHandler;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgDateRangeSubtitleHelper;
@@ -51,13 +51,13 @@ public class FieldIdAppConfig {
     public EventColumnsService eventColumnsService() { 
     	return new EventColumnsService();
     }
-    
-    @Bean 
-    public ScheduleColumnsService scheduleColumnsService() { 
-    	return new ScheduleColumnsService();
+
+    @Bean
+    public ProcedureColumnsService procedureColumnsService() {
+        return new ProcedureColumnsService();
     }
     
-    @Bean 
+    @Bean
     public DynamicColumnsService dynamicColumnsService() { 
     	return new DynamicColumnsService();
     }

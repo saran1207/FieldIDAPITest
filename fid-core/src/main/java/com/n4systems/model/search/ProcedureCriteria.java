@@ -165,11 +165,13 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
 
     @Override
     public List<String> getColumns() {
+        System.out.println("get colunns");
         return null;
     }
 
     @Override
     public void setColumns(List<String> columns) {
+        System.out.println("set column");
     }
 
     public AssetTypeGroup getAssetTypeGroup() {

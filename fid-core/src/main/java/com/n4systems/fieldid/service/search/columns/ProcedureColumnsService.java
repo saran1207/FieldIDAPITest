@@ -2,11 +2,11 @@ package com.n4systems.fieldid.service.search.columns;
 
 import com.n4systems.model.columns.ReportType;
 
-public class EventToJobColumnsService extends ColumnsService {
+public class ProcedureColumnsService extends ColumnsService {
 
     @Override
     protected ReportType getReportType() {
-        return ReportType.EVENT_TO_JOB;
+        return ReportType.PROCEDURE;
     }
 
     @Override

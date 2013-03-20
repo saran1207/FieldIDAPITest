@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch;
 
-import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.components.table.JumpableNavigationBar;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
@@ -8,7 +7,6 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
-import com.n4systems.services.reporting.DashboardReportingService;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -17,7 +15,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public abstract class AbstractSearchPage<T extends SearchCriteria> extends FieldIDFrontEndPage {
 
@@ -33,10 +30,6 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     public static final String Y_PARAMETER = "y";
     public static final String RESULTS_PANEL_ID = "resultsPanel";
     public static final String SCROLL_JS = "var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('#%s'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}";
-
-
-    private @SpringBean DashboardReportingService dashboardReportingService;
-    private @SpringBean SavedAssetSearchService savedAssetSearchService;
 
     protected SavedItem<T> savedItem;
     protected T searchCriteria;

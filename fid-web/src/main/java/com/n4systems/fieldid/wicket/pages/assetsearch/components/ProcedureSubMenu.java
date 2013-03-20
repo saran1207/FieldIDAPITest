@@ -59,7 +59,7 @@ public class ProcedureSubMenu extends SubMenu<ProcedureCriteria> {
     }
 
     @Override protected IModel<String> getHeaderModel() {
-        return new FIDLabelModel("title.procedure");
+        return new FIDLabelModel("label.procedures");
     }
 
 
