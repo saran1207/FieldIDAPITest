@@ -2,8 +2,8 @@
 
 .image-list .image {
     position:relative;
-    width:200px;
-    height:300px;
+    width:120px;
+    height:160px;
     overflow:hidden;
     margin:2px;
     float:left;
@@ -30,10 +30,6 @@
 
 .image-list-container {
     /*need to figure out how to give this proper width. could use javascript and sum(imageWidth); */
-    width:1200px;
+    /*width:1200px;*/
 }
-
-
-
-
 

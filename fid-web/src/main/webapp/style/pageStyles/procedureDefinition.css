@@ -16,6 +16,7 @@
 .title  {
     color:#999;
     font-size:14px;
+}
 
 /* PROCEDURE STYLES
 *****************************************/
@@ -43,6 +44,7 @@ h2 span {
     padding: 38px;
     background: #FFF;
     overflow: hidden;
+
 }
 
 
@@ -50,17 +52,17 @@ h2 span {
 .navigation {
     text-align: center;
 }
-    .navigation span {
-        display: inline-block;
-        width: 135px;
-        margin-bottom: 55px;
-    }
-    .navigation label {
-        display: block;
-        font-size: 14px;
-        font-weight: 400;
-        margin-top: 10px
-    }
+.navigation span {
+    display: inline-block;
+    width: 135px;
+    margin-bottom: 55px;
+}
+.navigation label {
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 10px
+}
 
 
 
@@ -105,14 +107,14 @@ a.btn {
     font-size: 14px;
     text-align: center;
 }
-    .btn.green {
-        background: #009966;
-        width: 175px;
-    }
-    .btn.gray {
-        background: #cccccc;
-        width: 85px;
-    }
+.btn.green {
+    background: #009966;
+    width: 175px;
+}
+.btn.gray {
+    background: #cccccc;
+    width: 85px;
+}
 
 
 
@@ -136,6 +138,7 @@ a.btn {
     margin-right:auto;
     text-align:center;
     width:300px;
+    padding-bottom:20px;
 }
 
 .navigation label {
@@ -150,7 +153,6 @@ a.btn {
 }
 */
 
-
 .publish-message {
     font-size:15px;
     color: #999;
@@ -159,7 +161,52 @@ a.btn {
     text-align:center;
 }
 
+.sections .content {
+    overflow:hidden;
+    position:relative;
+    /*note to christina : i just hacked this for now to get some elbow room...will discuss later to fix. :derek */
+    height:500px;
+    /* --- */
+}
 
+/* note to christina : this is to override wonky "blue-submit" styling which is too page specific. maybe we can start over and do it right with
+    a new button styling?
+*/
+.add-isolation-point {
+    float:right;
+    margin-top:-32px;
+}
+
+.isolation-point-editor {
+    margin-left:120%;
+    width:95%;
+    position: absolute;
+    background:white;
+}
+
+.isolation-point-list {
+    margin-left:0;
+    width:95%;
+    position: absolute;
+    background:white;
+}
+
+.isolation-point-editor .inputs {
+    padding-bottom:50px;
+}
+
+.isolation-point-editor .inputs li span {
+    width:100px;
+    text-align: right;
+    display:inline-block;
+    padding-right:10px;
+    padding-top:20px;
+}
+
+.isolation-point-editor .inputs li input {
+    width:150px;
+    height:34px;
+}
 
 
 

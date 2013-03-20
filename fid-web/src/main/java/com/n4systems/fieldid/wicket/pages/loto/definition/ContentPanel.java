@@ -1,17 +1,14 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
-import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.wicket.components.image.EditableImageList;
 import com.n4systems.model.common.EditableImage;
-import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.IsolationPoint;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
@@ -21,31 +18,41 @@ public class ContentPanel extends Panel {
     private @SpringBean PersistenceService persistenceService;
 
     private List<EditableImage> images;
-    List<ProcedureDefinition> procedures = Lists.newArrayList();
+    private List<IsolationPoint> isolationPoints;
+    private final Component editor;
+    private final IsolationPointListPanel list;
+    private IsolationPoint newIsolationPoint = new IsolationPoint();
 
     public ContentPanel(String id) {
         super(id);
 
-        // for debugging only...
-       // images = persistenceService.findAll(EditableImage.class);
-        //...............
+        setOutputMarkupId(true);
 
-        setOutputMarkupPlaceholderTag(true);
-        add(new EditableImageList("images", new ImageModel() ));
+        newIsolationPoint.setCheck("check");
+        newIsolationPoint.setIdentifier("E-1");
+        newIsolationPoint.setLocation("locsdfsd");
+        newIsolationPoint.setMethod("isopMethod");
+        newIsolationPoint.setSource("electrical");
 
-        //add(new ProcedureList("procedures", new PropertyModel(this,"procedures")));
+        add(new AttributeAppender("class", "content"));
 
-        add(new AjaxLink("cancel") {
+        add(list = new IsolationPointListPanel("isolationPoints", new PropertyModel(this,"isolationPoints")) {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                doCancel(target);
+            protected void doAdd(AjaxRequestTarget target) {
+                target.appendJavaScript("procedureDefinitionPage.openIsolationPointEditor('"+ContentPanel.this.getMarkupId()+"');");
             }
         });
-        add(new AjaxLink("continue") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                doContinue(target);
+
+        add(editor = new IsolationPointEditor("isolationPointEditor", new PropertyModel(this,"newIsolationPoint")) {
+            @Override protected void doDone(AjaxRequestTarget target, Model<IsolationPoint> isolationPoint) {
+                // update list....add new isolation point
+                target.appendJavaScript("procedureDefinitionPage.closeIsolationPointEditor('"+ContentPanel.this.getMarkupId()+"');");
             }
+            @Override protected void doCancel(AjaxRequestTarget target) {
+                // do NOT update model. cancel out.
+                target.appendJavaScript("procedureDefinitionPage.closeIsolationPointEditor('"+ContentPanel.this.getMarkupId()+"');");
+            }
+
         });
 
     }
@@ -54,26 +61,5 @@ public class ContentPanel extends Panel {
 
     protected void doContinue(AjaxRequestTarget target) { }
 
-
-    class ImageModel extends LoadableDetachableModel<List<EditableImage>> {
-        @Override
-        protected List<EditableImage> load() {
-//            return Lists.newArrayList();
-            List<EditableImage> all = persistenceService.findAll(EditableImage.class);
-            return all;
-        }
-    }
-
-    class ProcedureList extends ListView<ProcedureDefinition> {
-
-        public ProcedureList(String id, IModel<List<? extends ProcedureDefinition>> model) {
-            super(id, model);
-        }
-
-        @Override
-        protected void populateItem(ListItem<ProcedureDefinition> item) {
-
-        }
-    }
 
 }

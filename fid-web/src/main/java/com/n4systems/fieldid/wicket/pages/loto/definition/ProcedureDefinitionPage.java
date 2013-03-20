@@ -23,7 +23,6 @@ import java.util.List;
 
 public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
 
-
     enum ProcedureDefinitionSection { Details, Content, Publish };
 
     private final Navigation navigation;
@@ -51,6 +50,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/pageStyles/procedureDefinition.css");
+        response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
     }
 
     private void sectionChanged(AjaxRequestTarget target) {
