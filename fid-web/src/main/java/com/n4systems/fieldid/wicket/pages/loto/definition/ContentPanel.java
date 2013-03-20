@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.common.EditableImage;
+import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,21 +21,21 @@ public class ContentPanel extends Panel {
     private @SpringBean PersistenceService persistenceService;
 
     private List<EditableImage> images;
-    private List<IsolationPoint> isolationPoints;
+    private List<IsolationPoint> isolationPoints = Lists.newArrayList();
     private final Component editor;
     private final IsolationPointListPanel list;
-    private IsolationPoint newIsolationPoint = new IsolationPoint();
+    private IsolationPoint newIsolationPoint = createIsolationPoint();
+    private int index=1;
 
     public ContentPanel(String id) {
         super(id);
 
         setOutputMarkupId(true);
 
-        newIsolationPoint.setCheck("check");
-        newIsolationPoint.setIdentifier("E-1");
-        newIsolationPoint.setLocation("locsdfsd");
-        newIsolationPoint.setMethod("isopMethod");
-        newIsolationPoint.setSource("electrical");
+        isolationPoints.add(createIsolationPoint());
+        isolationPoints.add(createIsolationPoint());
+        isolationPoints.add(createIsolationPoint());
+        isolationPoints.add(createIsolationPoint());
 
         add(new AttributeAppender("class", "content"));
 
@@ -55,6 +58,19 @@ public class ContentPanel extends Panel {
 
         });
 
+    }
+
+    private IsolationPoint createIsolationPoint() {
+        IsolationDeviceDescription device = new IsolationDeviceDescription();
+        device.setAssetType(AssetTypeBuilder.anAssetType().named("assetType"+index).build());
+        IsolationPoint isolationPoint = new IsolationPoint();
+        isolationPoint.setCheck("CHECK this is some very very very very very very very very very very very very very very very very  long text blah blah blah ");
+        isolationPoint.setIdentifier("E-" + index++);
+        isolationPoint.setDeviceDefinition(device);
+        isolationPoint.setLocation("locsdfsd");
+        isolationPoint.setMethod("isopMethod this is some very very very very very very very very very very very very very very very very  long text blah blah blah ");
+        isolationPoint.setSource("electrical");
+        return isolationPoint;
     }
 
     protected void doCancel(AjaxRequestTarget target) { }

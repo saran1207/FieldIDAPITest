@@ -32,7 +32,7 @@ public class IsolationPointListPanel extends Panel {
 
         add(new EditableImageList("images", new ImageModel() ));
 
-        add(new ListView<IsolationPoint>("list") {
+        add(new ListView<IsolationPoint>("list",model) {
             @Override protected void populateItem(ListItem<IsolationPoint> item) {
                 addIsolationPoint(item);
             }
