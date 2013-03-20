@@ -19,7 +19,6 @@ public class AssetTypeGroup extends EntityWithTenant implements NamedEntity, Lis
     @Column(name= "loto_device", nullable = false)
     private boolean lotoDevice = false;
 
-
     @Column(nullable=false)
 	private Long orderIdx;
 	

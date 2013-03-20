@@ -1,0 +1,10 @@
+.attributePicker select {
+    width: 150px;
+}
+
+.attributePicker {
+    padding: 20px 10px;
+    margin: 10px;
+    border: #AAA solid 1px;
+    width: 500px;
+}

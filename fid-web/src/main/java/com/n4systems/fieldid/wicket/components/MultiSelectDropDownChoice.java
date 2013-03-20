@@ -22,6 +22,10 @@ public class MultiSelectDropDownChoice<T extends Serializable> extends ListMulti
         super(id,model,choices,renderer);
     }
 
+    public MultiSelectDropDownChoice(String id, IModel<List<T>> model, IModel<List<T>> choices, IChoiceRenderer<T> renderer) {
+        super(id,model,choices,renderer);
+    }
+
     @Override
     protected void onInitialize() {
         super.onInitialize();

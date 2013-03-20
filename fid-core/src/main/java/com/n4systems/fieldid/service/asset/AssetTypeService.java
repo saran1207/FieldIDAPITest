@@ -142,4 +142,10 @@ public class AssetTypeService extends FieldIdPersistenceService {
         recurringEvent.archiveEntity();
         persistenceService.update(recurringEvent);
     }
+
+    public List<AssetType> getLotoAssetTypes() {
+        QueryBuilder<AssetType> query = createTenantSecurityBuilder(AssetType.class);
+        query.addSimpleWhere("group.lotoDevice", true);
+        return persistenceService.findAll(query);
+    }
 }
