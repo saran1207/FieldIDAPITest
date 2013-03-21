@@ -33,7 +33,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     public ProcedureDefinitionPage(PageParameters params) {
         super(params);
 
-        add(new Label("title",Model.of("Asset Name : <span>Author Procedure</span>")));
+        add(new Label("title",Model.of("Asset Name : Author Procedure")));
         add(navigation = new Navigation("navigation", new PropertyModel<Score>(this, "currentSection")));
         add(form = new ProcedureDefinitionForm("form"));
 

@@ -35,20 +35,38 @@
  	<div class="column">
     	<label>Procedure Code<input type="text" /></label>
     	<label>Electronic Identifier<input type="text" /></label>
+       
+        <label>Revision Number
+            <select class="chzn-select">
+                <option>12345</option>
+                <option>67890</option>
+                <option>39570</option>
+            </select>
+        </label>
+        
     	<label>Warnings
     		<textarea></textarea>
     	</label>
    	</div>
    	<div class="column">
-    	<label>test<input type="text" /></label>
-    	<label>test 2<input type="text" /></label>
+    	<label>Developed By<input type="text" /></label>
+    	<label>Equipment Description<input type="text" /></label>
+        <label>Test<input type="text" /></label>
    	</div> 
    	<!-- end temp -->
 
 
     <div class="buttons">
-        <a wicket:id="cancel" class="btn gray">Cancel</a>
-        <a wicket:id="continue" class="btn green">Continue</a>
+        <div class="button-wrap">
+            <a wicket:id="cancel" class="btn gray">Cancel</a>
+            <a wicket:id="continue" class="btn green">Continue</a>
+        </div>
     </div>
+
+    <script>
+        $(document).ready(function(){
+            $(".chzn-select").chosen({disable_search_threshold: 15});
+        });
+    </script>
 
 </wicket:panel>

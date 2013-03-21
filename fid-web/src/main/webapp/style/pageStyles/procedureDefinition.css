@@ -1,3 +1,5 @@
+@import url('/fieldid/style/chosen/chosen.css');
+
 /* WORK AROUND FOR EXISTING CSS
 ***************************************/
 #page {
@@ -18,6 +20,7 @@
     font-size:14px;
 }
 
+
 /* PROCEDURE STYLES
 *****************************************/
 h2 {
@@ -37,16 +40,14 @@ h2 span {
 }
 
 .procedure-wrapper {
-    -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
-    -webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
-    box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    -webkit-box-shadow: 0px 2px 4px 0px #CCC;
+    box-shadow: 0px 2px 4px 0px #CCC;
     border: 1px solid #CCC;
-    padding: 38px;
+    padding: 28px;
+    margin: 5px;
     background: #FFF;
     overflow: hidden;
-
 }
-
 
 /* navigation */
 .navigation {
@@ -61,10 +62,8 @@ h2 span {
     display: block;
     font-size: 14px;
     font-weight: 400;
-    margin-top: 10px
+    margin-top: 10px;
 }
-
-
 
 /* form styles */
 .column {
@@ -84,11 +83,19 @@ h2 span {
     width: 285px;
     height: 34px;
     float: right;
-    margin-left: 12px;]
+    margin-left: 12px;
+}
+.details select {
+    width: 290px;
 }
 .details textarea {
-    width: 285px;
+    width: 286px;
     height: 152px;
+    margin-left: 12px;
+    resize: none;
+}
+
+.chzn-container {
     margin-left: 12px;
 }
 
@@ -99,7 +106,11 @@ h2 span {
     border-top: 1px solid #cccccc;
     padding-top: 10px;
 }
-a.btn {
+.button-wrap {
+    float:right;
+}
+
+.btn {
     display: inline-block;
     padding: 15px 0;
     text-decoration: none;
@@ -107,14 +118,16 @@ a.btn {
     font-size: 14px;
     text-align: center;
 }
+.btn.gray {
+    background: #cccccc;
+    width: 85px;
+    margin-right: 3px;
+}
 .btn.green {
     background: #009966;
     width: 175px;
 }
-.btn.gray {
-    background: #cccccc;
-    width: 85px;
-}
+
 
 
 
