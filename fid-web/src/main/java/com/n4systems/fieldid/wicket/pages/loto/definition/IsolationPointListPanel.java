@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.image.EditableImageList;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.procedure.IsolationPoint;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -34,11 +35,15 @@ public class IsolationPointListPanel extends Panel {
 
         add(new ListView<IsolationPoint>("list",model) {
             @Override protected void populateItem(ListItem<IsolationPoint> item) {
-                addIsolationPoint(item);
+                populateIsolationPoint(item);
             }
         });
 
-        add(new AddIsolationPointButton("addButton"));
+        add(new AddIsolationPointButton("addButton") {
+            @Override protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
+                IsolationPointListPanel.this.doAdd(target, sourceType);
+            }
+        });
 
         add(new AjaxLink("cancel") {
             @Override
@@ -59,9 +64,9 @@ public class IsolationPointListPanel extends Panel {
 
     private void doCancel(AjaxRequestTarget target) { }
 
-    protected void doAdd(AjaxRequestTarget target) { }
+    protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) { }
 
-    protected void addIsolationPoint(ListItem<IsolationPoint> item) {
+    protected void populateIsolationPoint(ListItem<IsolationPoint> item) {
         IsolationPoint isolationPoint = item.getModelObject();
         item.add(new Label("id", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getIdentifier())));
         item.add(new Label("source", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getSource())));

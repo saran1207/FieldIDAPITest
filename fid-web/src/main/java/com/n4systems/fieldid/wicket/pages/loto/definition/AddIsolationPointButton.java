@@ -21,12 +21,15 @@ public class AddIsolationPointButton extends MenuButton<IsolationPointSourceType
 
     @Override
     protected void buttonClicked(AjaxRequestTarget target) {
-        System.out.println("button clicked!");
+        doAdd(target, getDefaultSourceType());
     }
 
-    @Override
-    protected void dropDownClicked(AjaxRequestTarget target) {
-        System.out.println("dropdown clicked!");
+    protected IsolationPointSourceType getDefaultSourceType() {
+        return IsolationPointSourceType.values()[0];
+    }
+
+    protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
+
     }
 
     @Override
@@ -35,7 +38,7 @@ public class AddIsolationPointButton extends MenuButton<IsolationPointSourceType
         item.add(new ContextImage("icon","images/x.gif"));
         item.add(new AjaxLink("sourceType") {
             @Override public void onClick(AjaxRequestTarget target) {
-                System.out.println("clicked! " + type.getIdentifier());
+                doAdd(target,type);
             }
         }.add(new Label("name", Model.of(type.getIdentifier()))));
     }
