@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.model.AssetType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class DeviceLockPicker extends Panel {
 
-    private IModel<AssetType> deviceType;
+    private IModel<AssetType> selectedDeviceType;
 
     private List<InfoFieldBean> attributeList = new ArrayList<InfoFieldBean>();
 
@@ -29,32 +29,43 @@ public class DeviceLockPicker extends Panel {
 
     private IModel<List<InfoOptionBean>> optionList;
 
-    private AssetType selectedDevice = new AssetType();
-
     @SpringBean
     private AssetTypeService assetTypeService;
 
     public DeviceLockPicker(String id, final IModel<List<InfoOptionBean>> optionList) {
-        super(id);
+        super(id, optionList);
         this.optionList = optionList;
-        deviceType = Model.of(new AssetType());
+        selectedDeviceType = Model.of(new AssetType());
         attributeList.add(new InfoFieldBean());
 
         FidDropDownChoice assetTypes;
-        add(assetTypes = new FidDropDownChoice<AssetType>("assetTypes", deviceType, new DeviceListModel(), new ListableChoiceRenderer<AssetType>()));
-        assetTypes.setNullValid(true);
-
-        assetTypes.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        add(assetTypes = new FidDropDownChoice<AssetType>("assetTypes", Model.of(new AssetType()), new DeviceListModel(), new ListableChoiceRenderer<AssetType>()) {
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                deviceAttributePanel.setVisible(deviceType.getObject() != null);
+            protected boolean wantOnSelectionChangedNotifications() {
+                return true;
+            }
+
+            @Override
+            protected void onSelectionChanged(AssetType newSelection) {
+                selectedDeviceType.setObject(newSelection);
+                if(newSelection == null) {
+                    deviceAttributePanel.setVisible(false);
+                }
                 resetAttributeList();
                 deviceAttributePanel.resetAttributeAndOptions();
+            }
+        });
+        assetTypes.setNullValid(true);
+
+        add(new AjaxLink<Void>("refineLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                deviceAttributePanel.setVisible(true);
                 target.add(deviceAttributePanel);
             }
         });
 
-        add(deviceAttributePanel = new DeviceAttributePanel("attributeSelector", deviceType, new PropertyModel<List<InfoOptionBean>>(this, "attributeList")){
+        add(deviceAttributePanel = new DeviceAttributePanel("attributeSelector", selectedDeviceType, new PropertyModel<List<InfoOptionBean>>(this, "attributeList")){
             @Override
             public void onAddAttribute(AjaxRequestTarget target) {
                 attributeList.add(new InfoFieldBean());
@@ -69,18 +80,28 @@ public class DeviceLockPicker extends Panel {
 
             @Override
             public void onOptionSelected(List<IModel<List<InfoOptionBean>>> selectedOptions) {
-                List<InfoOptionBean> newList = new ArrayList<InfoOptionBean>();
+                updateOptions(selectedOptions);
+            }
 
-                for (IModel<List<InfoOptionBean>> list : selectedOptions) {
-                    newList.addAll(list.getObject());
-                }
-
-                optionList.setObject(newList);
+            @Override
+            public void onDeleteAttribute(AjaxRequestTarget target, int index, List<IModel<List<InfoOptionBean>>> selectedOptions) {
+                attributeList.remove(index);
+                updateOptions(selectedOptions);
+                target.add(deviceAttributePanel);
             }
         });
         deviceAttributePanel.setOutputMarkupPlaceholderTag(true);
         deviceAttributePanel.setVisible(false);
 
+    }
+
+    private void updateOptions(List<IModel<List<InfoOptionBean>>> selectedOptions) {
+        List<InfoOptionBean> newList = new ArrayList<InfoOptionBean>();
+
+        for (IModel<List<InfoOptionBean>> list : selectedOptions) {
+            newList.addAll(list.getObject());
+        }
+        optionList.setObject(newList);
     }
 
     private void resetAttributeList() {

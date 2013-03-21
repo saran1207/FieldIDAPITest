@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.loto;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.model.AssetType;
@@ -14,6 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -30,6 +32,9 @@ public class DeviceAttributePanel extends Panel {
     private List<IModel<List<InfoOptionBean>>> selectedOptions = new ArrayList<IModel<List<InfoOptionBean>>>();
 
     private AjaxLink addLink;
+
+    @SpringBean
+    private PersistenceService persistenceService;
 
     public DeviceAttributePanel(String id, final IModel<AssetType> deviceType, IModel<List<InfoOptionBean>> optionList) {
         super(id, optionList);
@@ -82,6 +87,16 @@ public class DeviceAttributePanel extends Panel {
                 });
                 attributesChoice.setNullValid(true);
 
+                item.add(new AjaxLink<Void>("deleteLink") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        selectedAttributes.remove(index);
+                        selectedOptions.remove(index);
+                        onDeleteAttribute(target, index, selectedOptions);
+                    }
+                });
+
             }
         });
 
@@ -94,9 +109,10 @@ public class DeviceAttributePanel extends Panel {
 
             @Override
             public boolean isVisible() {
-                if (deviceType.getObject() != null)
+                if (deviceType.getObject() != null) {
+                    persistenceService.reattach(deviceType.getObject());
                     return selectedAttributes.size() < deviceType.getObject().getInfoFields().size();
-                else
+                } else
                     return false;
             }
         });
@@ -119,6 +135,8 @@ public class DeviceAttributePanel extends Panel {
     public void onAttributeSelected(int index, InfoFieldBean newSelection) {};
 
     public void onOptionSelected(List<IModel<List<InfoOptionBean>>> selectedOptions) {};
+
+    public void onDeleteAttribute(AjaxRequestTarget target, int index, List<IModel<List<InfoOptionBean>>> selectedOptions) {};
 
     private IModel<List<InfoFieldBean>> getListModel() {
         return (IModel<List<InfoFieldBean>>) getDefaultModel();
