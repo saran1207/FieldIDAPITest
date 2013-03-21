@@ -19,7 +19,7 @@ import rfid.ejb.entity.InfoOptionBean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeviceLockPicker2 extends Panel {
+public class DeviceLockPicker extends Panel {
 
     private IModel<AssetType> deviceType;
 
@@ -34,7 +34,7 @@ public class DeviceLockPicker2 extends Panel {
     @SpringBean
     private AssetTypeService assetTypeService;
 
-    public DeviceLockPicker2(String id, final IModel<List<InfoOptionBean>> optionList) {
+    public DeviceLockPicker(String id, final IModel<List<InfoOptionBean>> optionList) {
         super(id);
         this.optionList = optionList;
         deviceType = Model.of(new AssetType());
