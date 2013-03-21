@@ -299,9 +299,9 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 		List<ChartSeries<LocalDate>> results = dashboardService.getEventCompletenessEvents(granularity, dateRange, org);
 		
 		assertEquals(3, results.size());
-		assertEquals(Event.WorkflowState.CLOSED.getLabel(), results.get(0).getLabel());
-        assertEquals(Event.WorkflowState.COMPLETED.getLabel(), results.get(1).getLabel());
-        assertEquals(Event.WorkflowState.OPEN.getLabel(), results.get(2).getLabel());
+		assertEquals(com.n4systems.model.WorkflowState.CLOSED.getLabel(), results.get(0).getLabel());
+        assertEquals(com.n4systems.model.WorkflowState.COMPLETED.getLabel(), results.get(1).getLabel());
+        assertEquals(com.n4systems.model.WorkflowState.OPEN.getLabel(), results.get(2).getLabel());
 
 		verifyTestMocks();		
 	}
@@ -309,7 +309,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 	private List<EventCompletenessReportRecord> createEventCompletenessResults(ChartGranularity granularity, Long... values) {
 		List<EventCompletenessReportRecord> results = Lists.newArrayList();
 		for (Long value:values) { 
-			EventCompletenessReportRecord record = new EventCompletenessReportRecord(value, Event.WorkflowState.COMPLETED, granularity.toString(),2011,1,1);
+			EventCompletenessReportRecord record = new EventCompletenessReportRecord(value, com.n4systems.model.WorkflowState.COMPLETED, granularity.toString(),2011,1,1);
 			results.add(record);
 		}
 		return results;

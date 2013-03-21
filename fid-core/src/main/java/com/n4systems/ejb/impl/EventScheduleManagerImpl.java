@@ -115,7 +115,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 
     public List<Event> getAvailableSchedulesFor(Asset asset, String... postFetchFields) {
         QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-        query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
+        query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
         query.addPostFetchPaths(postFetchFields);
         query.addOrder("dueDate");
 
@@ -124,7 +124,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 
     public List<Event> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType) {
 		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-		query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
+		query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
 		query.addSimpleWhere("type.id", eventType.getId());
 		query.addOrder("dueDate");
 		
@@ -136,7 +136,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 		QueryBuilder<Date> builder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("dueDate");
 		builder.addSimpleWhere("id", scheduleId);
-        builder.addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
+        builder.addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
 
 		Date dueDate = persistenceManager.find(builder);
 		
@@ -154,7 +154,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	public Long getEventTypeIdForSchedule(Long scheduleId) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("type.id");
-        builder.addSimpleWhere("workflowState", Event.WorkflowState.OPEN);
+        builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
         builder.addSimpleWhere("id", scheduleId);
 		
 		return persistenceManager.find(builder);

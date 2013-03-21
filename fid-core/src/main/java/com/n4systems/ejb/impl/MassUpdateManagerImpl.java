@@ -59,7 +59,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
     private Set<Long> createOpenEventBuilder(String selectClause, Set<Long> openEventIds) {
         QueryBuilder<Long> openEventBuilder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
         openEventBuilder.setSimpleSelect(selectClause, true);
-        openEventBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "workflowState", Event.WorkflowState.OPEN));
+        openEventBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "workflowState", WorkflowState.OPEN));
 
         // we will leave our id list empty for now as, the
         // LargeInListQueryExecutor will handle setting this
@@ -334,7 +334,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
             Asset asset = changeTarget.getAsset();
             changeTarget.setEventResult(EventResult.VOID);
-            changeTarget.setWorkflowState(Event.WorkflowState.CLOSED);
+            changeTarget.setWorkflowState(WorkflowState.CLOSED);
             changeTarget.setDate(new Date());
             changeTarget.setPerformedBy(eventChanges.getPerformedBy());
             changeTarget.setEventStatus(eventChanges.getEventStatus());

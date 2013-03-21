@@ -1,6 +1,5 @@
 package com.n4systems.util.persistence.search.terms.completedordue;
 
-import com.n4systems.model.Event;
 import com.n4systems.model.search.WorkflowState;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
@@ -44,13 +43,13 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
     private void createAndPopulateCompleteAndIncompleteOuterGroup(WhereParameterGroup outerGroup) {
         WhereParameterGroup completedGroup = new WhereParameterGroup(getClass().getName()+".completed");
         completedGroup.setChainOperator(WhereClause.ChainOp.OR);
-        completedGroup.addClause(WhereClauseFactory.create("workflowState", Event.WorkflowState.COMPLETED, WhereClause.ChainOp.AND, "completedWorkflowState"));
+        completedGroup.addClause(WhereClauseFactory.create("workflowState", com.n4systems.model.WorkflowState.COMPLETED, WhereClause.ChainOp.AND, "completedWorkflowState"));
 
         populateCompletedTerm(completedGroup);
 
         WhereParameterGroup incompleteGroup = new WhereParameterGroup(getClass().getName()+".incomplete");
         incompleteGroup.setChainOperator(WhereClause.ChainOp.OR);
-        incompleteGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE, "workflowState", Event.WorkflowState.COMPLETED, WhereClause.ChainOp.AND, "nonCompletedWorkflowState"));
+        incompleteGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE, "workflowState", com.n4systems.model.WorkflowState.COMPLETED, WhereClause.ChainOp.AND, "nonCompletedWorkflowState"));
 
         populateIncompleteTerm(incompleteGroup);
 

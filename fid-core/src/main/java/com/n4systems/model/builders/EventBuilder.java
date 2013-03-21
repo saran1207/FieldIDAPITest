@@ -31,7 +31,7 @@ public class EventBuilder extends BaseBuilder<Event> {
     private final AssetStatus assetStatus;
     private final Set<CriteriaResult> results;
     private final Date dueDate;
-    private final Event.WorkflowState workflowState;
+    private final WorkflowState workflowState;
     private final EventStatus eventStatus;
 
     public static EventBuilder anEvent() {
@@ -47,18 +47,18 @@ public class EventBuilder extends BaseBuilder<Event> {
     }
 
     public static EventBuilder anEvent(EventTypeBuilder eventTypeBuilder) {
-		return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.PASS, null, new HashSet<CriteriaResult>(), Event.WorkflowState.COMPLETED, null, null);
+		return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.PASS, null, new HashSet<CriteriaResult>(), WorkflowState.COMPLETED, null, null);
 	}
 
     public static EventBuilder anOpenEvent(EventTypeBuilder eventTypeBuilder) {
-        return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.PASS, null, new HashSet<CriteriaResult>(), Event.WorkflowState.OPEN, null, null);
+        return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.PASS, null, new HashSet<CriteriaResult>(), WorkflowState.OPEN, null, null);
     }
 
     public static EventBuilder aFailedEvent(EventTypeBuilder eventTypeBuilder) {
-		return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.FAIL, null, new HashSet<CriteriaResult>(), Event.WorkflowState.COMPLETED, null, null);
+		return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.FAIL, null, new HashSet<CriteriaResult>(), WorkflowState.COMPLETED, null, null);
 	}
 
-	protected EventBuilder(EventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, EventResult eventResult, AssetStatus assetStatus, Set<CriteriaResult> results, Event.WorkflowState workflowState, Date dueDate, EventStatus eventStatus) {
+	protected EventBuilder(EventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, EventResult eventResult, AssetStatus assetStatus, Set<CriteriaResult> results, WorkflowState workflowState, Date dueDate, EventStatus eventStatus) {
 		this.eventType = type;
 		this.asset = asset;
 		this.subEvents = subEvents;
@@ -77,7 +77,7 @@ public class EventBuilder extends BaseBuilder<Event> {
         this.eventStatus = eventStatus;
 	}
 
-    public EventBuilder withWorkflowState(Event.WorkflowState state) {
+    public EventBuilder withWorkflowState(WorkflowState state) {
         return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, state, dueDate, eventStatus));
     }
 

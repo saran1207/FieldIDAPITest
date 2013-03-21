@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.data;
 
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -17,9 +18,9 @@ public class EventByNetworkIdProvider extends FieldIDDataProvider<Event> {
 
     private Long networkId;
     private String order;
-    private List<Event.WorkflowState> states;
+    private List<WorkflowState> states;
 
-    public EventByNetworkIdProvider(Long networkId, String order, SortOrder sortOrder, List<Event.WorkflowState> states) {
+    public EventByNetworkIdProvider(Long networkId, String order, SortOrder sortOrder, List<WorkflowState> states) {
         this.networkId = networkId;
         this.order = order;
         this.states = states;
@@ -49,7 +50,7 @@ public class EventByNetworkIdProvider extends FieldIDDataProvider<Event> {
         };
     }
 
-    public void setStates(List<Event.WorkflowState> states) {
+    public void setStates(List<WorkflowState> states) {
         this.states = states;
     }
 }

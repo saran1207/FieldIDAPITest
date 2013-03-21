@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.services.date.DateService;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -19,9 +20,9 @@ public class EventStateIcon extends Panel {
         super(id);
 
         Event event = eventModel.getObject();
-        Event.WorkflowState state = event.getWorkflowState();
+        WorkflowState state = event.getWorkflowState();
         ContextImage image;
-        if(state.equals(Event.WorkflowState.COMPLETED)) {
+        if(state.equals(WorkflowState.COMPLETED)) {
             EventResult eventResult = event.getEventResult();
             if(eventResult.equals(EventResult.FAIL)) {
                 add(image = new ContextImage("resultIcon", "images/event-completed-fail.png"));
@@ -33,7 +34,7 @@ public class EventStateIcon extends Panel {
                 add(image = new ContextImage("resultIcon", "images/event-completed-na.png"));
                 image.add(new AttributeAppender("title", new FIDLabelModel("label.event_completed", eventResult.getDisplayName()).getObject()));
             }
-        } else if(state.equals(Event.WorkflowState.OPEN)) {
+        } else if(state.equals(WorkflowState.OPEN)) {
             if (event.getAssignedUserOrGroup() != null) {
                 if(isPastDue(event)) {
                     add(image = new ContextImage("resultIcon", "images/event-open-assigned-overdue.png"));
@@ -58,6 +59,6 @@ public class EventStateIcon extends Panel {
     }
 
     private boolean isPastDue(Event event) {
-        return event.getWorkflowState() == Event.WorkflowState.OPEN && dateService.isPastDue(event.getDueDate());
+        return event.getWorkflowState() == WorkflowState.OPEN && dateService.isPastDue(event.getDueDate());
     }
 }

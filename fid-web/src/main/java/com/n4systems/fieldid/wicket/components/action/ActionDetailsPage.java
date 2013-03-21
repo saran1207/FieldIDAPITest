@@ -9,10 +9,10 @@ import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -57,7 +57,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
                 // setting a response page just loads that page inside the window which is not the expected behavior
 
                 String url = null;
-                if (actionModel.getObject().getWorkflowState() == Event.WorkflowState.OPEN) {
+                if (actionModel.getObject().getWorkflowState() == WorkflowState.OPEN) {
                     url = String.format("/fieldid/w/performEvent?type=%d&assetId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getId(), actionModel.getObject().getId());
                 } else {
                     url = String.format("/fieldid/event.action?uniqueID=%d", actionModel.getObject().getId());
@@ -68,13 +68,13 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
 
             @Override
             public boolean isVisible() {
-                return actionModel.getObject().getWorkflowState() != Event.WorkflowState.CLOSED &&
+                return actionModel.getObject().getWorkflowState() != WorkflowState.CLOSED &&
                         (assetSummaryContext || ( actionModel.getObject().isActive() && isStartable(criteriaResultModel)));
             }
         };
         add(startOrViewEventLink);
-        startOrViewEventLink.setVisible(actionModel.getObject().getWorkflowState() == Event.WorkflowState.COMPLETED || actionModel.getObject().getWorkflowState() == Event.WorkflowState.OPEN);
-        IModel<String> startOrViewLabel = actionModel.getObject().getWorkflowState() ==  Event.WorkflowState.OPEN ? new FIDLabelModel("label.start_action") : new FIDLabelModel("label.view_completed_action");
+        startOrViewEventLink.setVisible(actionModel.getObject().getWorkflowState() == WorkflowState.COMPLETED || actionModel.getObject().getWorkflowState() == WorkflowState.OPEN);
+        IModel<String> startOrViewLabel = actionModel.getObject().getWorkflowState() ==  WorkflowState.OPEN ? new FIDLabelModel("label.start_action") : new FIDLabelModel("label.view_completed_action");
         startOrViewEventLink.add(new Label("startOrViewEventLabel", startOrViewLabel));
 
         Link editLink = new Link("editLink") {

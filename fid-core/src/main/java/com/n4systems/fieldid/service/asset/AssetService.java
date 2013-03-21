@@ -272,7 +272,7 @@ public class AssetService extends FieldIdPersistenceService {
         QueryBuilder<Long> schedules = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(asset.getTenant().getId()))
                 .setSimpleSelect("id")
                 .addSimpleWhere("asset", asset)
-                .addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
+                .addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
 
         for (Long id : persistenceService.findAll(schedules)) {
             // We must find with tenant here otherwise users in groups may not be able to update some schedules ownership
@@ -516,7 +516,7 @@ public class AssetService extends FieldIdPersistenceService {
         eventQuery.setParameter("asset", asset);
         securityFilter.applyParameters(eventQuery, Event.class);
         eventQuery.setParameter("activeState", Archivable.EntityState.ACTIVE);
-        eventQuery.setParameter("completed", Event.WorkflowState.COMPLETED);
+        eventQuery.setParameter("completed", WorkflowState.COMPLETED);
 
         if (!user.getGroups().isEmpty()) {
             eventQuery.setParameter("visibleUsers", visibleUsers);

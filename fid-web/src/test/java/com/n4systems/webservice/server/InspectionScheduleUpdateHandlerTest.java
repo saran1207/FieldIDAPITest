@@ -1,6 +1,7 @@
 package com.n4systems.webservice.server;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
 import com.n4systems.model.utils.PlainDate;
@@ -118,7 +119,7 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void do_not_update_when_schedule_is_completed() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
-		openEvent.setWorkflowState(Event.WorkflowState.COMPLETED);
+		openEvent.setWorkflowState(WorkflowState.COMPLETED);
 		
 		createInspectionScheduleByMobileGuidLoaderMock();
 		
@@ -147,7 +148,7 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void do_not_remove_when_schedule_is_completed() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
-		openEvent.setWorkflowState(Event.WorkflowState.COMPLETED);
+		openEvent.setWorkflowState(WorkflowState.COMPLETED);
 
 		createInspectionScheduleByMobileGuidLoaderMock();
 		

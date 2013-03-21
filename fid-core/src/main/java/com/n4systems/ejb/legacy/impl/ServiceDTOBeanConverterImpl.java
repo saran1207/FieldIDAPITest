@@ -445,7 +445,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
         if (schedule!=null) {
             // As long as this scheduled event's corresponding open event hasn't been completed or archived, we're going to use it
-            if (schedule.getWorkflowState()== Event.WorkflowState.OPEN && schedule.getState() == Archivable.EntityState.ACTIVE) {
+            if (schedule.getWorkflowState()== WorkflowState.OPEN && schedule.getState() == Archivable.EntityState.ACTIVE) {
                 event = persistenceManager.find(Event.class, schedule.getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
             }
         }
@@ -994,7 +994,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		scheduleService.setProductId(event.getAsset().getId());
 		scheduleService.setInspectionTypeId(event.getType().getId());
 		scheduleService.setJobId(event.getProject() != null ? event.getProject().getId() : NULL_ID);
-		scheduleService.setCompleted(event.getWorkflowState() == Event.WorkflowState.COMPLETED);
+		scheduleService.setCompleted(event.getWorkflowState() == WorkflowState.COMPLETED);
 
 		return scheduleService;
 	}

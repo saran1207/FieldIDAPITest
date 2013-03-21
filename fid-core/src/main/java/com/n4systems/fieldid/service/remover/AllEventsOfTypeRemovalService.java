@@ -1,16 +1,13 @@
 package com.n4systems.fieldid.service.remover;
 
-import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.handlers.remover.summary.EventArchiveSummary;
-import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable;
-import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.archivers.EventListArchiver;
-import com.n4systems.persistence.utils.LargeInClauseSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleSelect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -70,7 +65,7 @@ public class AllEventsOfTypeRemovalService extends FieldIdPersistenceService {
 		Query query = persistenceService.createQuery(archiveQuery);
 		query.setParameter("eventType", eventType);
 		query.setParameter("active", Archivable.EntityState.ACTIVE);
-        query.setParameter("workflowState", Event.WorkflowState.COMPLETED);
+        query.setParameter("workflowState", WorkflowState.COMPLETED);
 
 		return (Long)query.getSingleResult();
 	}

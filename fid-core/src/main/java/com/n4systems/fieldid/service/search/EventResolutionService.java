@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.search;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.summary.EventResolutionSummary;
 import com.n4systems.model.summary.EventSetSummary;
@@ -43,7 +44,7 @@ public class EventResolutionService extends FieldIdPersistenceService {
     private void addResultToSet(EventSetSummary eventSetSummary, Event event) {
         eventSetSummary.incrementEventsDue();
 
-        if (event.getWorkflowState() == Event.WorkflowState.COMPLETED) {
+        if (event.getWorkflowState() == WorkflowState.COMPLETED) {
             eventSetSummary.incrementEventsCompleted();
 
             if (event.getEventResult() == EventResult.PASS) {
@@ -52,9 +53,9 @@ public class EventResolutionService extends FieldIdPersistenceService {
             if (event.getEventResult() == EventResult.FAIL) {
                 eventSetSummary.incrementFailedEvents();
             }
-        } else if (event.getWorkflowState() == Event.WorkflowState.OPEN) {
+        } else if (event.getWorkflowState() == WorkflowState.OPEN) {
             eventSetSummary.incrementOutstandingEvents();
-        } else if (event.getWorkflowState() == Event.WorkflowState.CLOSED) {
+        } else if (event.getWorkflowState() == WorkflowState.CLOSED) {
             eventSetSummary.incrementClosedEvents();
         }
     }

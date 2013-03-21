@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.table;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.Component;
@@ -28,7 +29,7 @@ public class HighlightPastDueSchedulesBehavior extends AttributeAppender {
             return false;
         }
         Event event = (Event) ((RowView) object).getEntity();
-        return event.getWorkflowState() == Event.WorkflowState.OPEN && dateService.isPastDue(event.getDueDate());
+        return event.getWorkflowState() == WorkflowState.OPEN && dateService.isPastDue(event.getDueDate());
     }
 
 }

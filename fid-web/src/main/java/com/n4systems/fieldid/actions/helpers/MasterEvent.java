@@ -382,6 +382,6 @@ public class MasterEvent {
         if (event==null) {
             return false;
         }
-        return Event.WorkflowState.OPEN.equals(event.getWorkflowState()) ||  event.isNew();
+        return WorkflowState.OPEN.equals(event.getWorkflowState()) ||  event.isNew();
     }
 }

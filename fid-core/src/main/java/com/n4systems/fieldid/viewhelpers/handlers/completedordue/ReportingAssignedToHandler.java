@@ -3,6 +3,7 @@ package com.n4systems.fieldid.viewhelpers.handlers.completedordue;
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.user.User;
 
 public class ReportingAssignedToHandler extends WebOutputHandler {
@@ -22,7 +23,7 @@ public class ReportingAssignedToHandler extends WebOutputHandler {
     }
 
     private String displayUserName(Event event) {
-        if (event.getWorkflowState() == Event.WorkflowState.COMPLETED  && event.getAssignedTo() != null) {
+        if (event.getWorkflowState() == WorkflowState.COMPLETED  && event.getAssignedTo() != null) {
             return getDisplayUserName(event.getAssignedTo().getAssignedUser());
         }
 

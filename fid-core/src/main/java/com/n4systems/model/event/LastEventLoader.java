@@ -1,6 +1,7 @@
 package com.n4systems.model.event;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -32,7 +33,7 @@ public class LastEventLoader extends ListLoader<Event> {
 		latestClause.setClause(String.format("i.completedDate IN (%s)", maxDateSelect));
 		latestClause.getParams().put("iSubAssetId", assetId);
 		latestClause.getParams().put("iSubState", EntityState.ACTIVE);
-        latestClause.getParams().put("workflowState", Event.WorkflowState.COMPLETED);
+        latestClause.getParams().put("workflowState", WorkflowState.COMPLETED);
 		builder.addWhere(latestClause);
 		
 		List<Event> lastEvents = builder.getResultList(em);

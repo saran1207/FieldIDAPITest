@@ -70,7 +70,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         User user = getCurrentUser();
 
-        event.setWorkflowState(Event.WorkflowState.COMPLETED);
+        event.setWorkflowState(WorkflowState.COMPLETED);
 
         setProofTestData(event, fileData);
 

@@ -6,10 +6,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
@@ -77,13 +74,13 @@ public class ProjectManagerImpl implements ProjectManager {
 		return new Page<Asset>(selectQuery, countQuery, page, pageSize);
 	}
 	
-	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<Event.WorkflowState> statuses) {
+	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<WorkflowState> statuses) {
 		Query countQuery = scheduleCountQuery(project, filter, statuses);
 		Query selectQuery = scheduleSelectQuery(project, filter, statuses);
 		return new Page<Event>(selectQuery, countQuery, page, pageSize, Lists.newArrayList("asset"));
 	}
 	
-	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<Event.WorkflowState> statuses) {
+	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<WorkflowState> statuses) {
 		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "event");
 		String countQueryStr = "SELECT count( event ) FROM " + Project.class.getName() + " p , IN( p.events ) event where p = :project and " + filter.produceWhereClause();
 		
@@ -107,7 +104,7 @@ public class ProjectManagerImpl implements ProjectManager {
 		return filter;
 	}
 	
-	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<Event.WorkflowState> statuses) {
+	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<WorkflowState> statuses) {
 		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "event");
 		String queryStr = "SELECT event FROM " + Project.class.getName() + " p , IN( p.events ) event where p = :project AND " + filter.produceWhereClause();
 		if (statuses != null && !statuses.isEmpty()) {
@@ -125,12 +122,12 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 	
 	public Long getIncompleteSchedules(Project project, SecurityFilter filter) {
-		Query countQuery = scheduleCountQuery(project, filter, Arrays.asList(Event.WorkflowState.OPEN));
+		Query countQuery = scheduleCountQuery(project, filter, Arrays.asList(WorkflowState.OPEN));
 		return (Long)(countQuery.getSingleResult());
 	}
 	
 	public Long getCompleteSchedules(Project project, SecurityFilter filter) {
-        Query countQuery = scheduleCountQuery(project, filter, Arrays.asList(Event.WorkflowState.COMPLETED));
+        Query countQuery = scheduleCountQuery(project, filter, Arrays.asList(WorkflowState.COMPLETED));
 		return (Long)(countQuery.getSingleResult());
 	}
 

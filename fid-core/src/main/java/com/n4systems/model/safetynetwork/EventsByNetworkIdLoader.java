@@ -2,6 +2,7 @@ package com.n4systems.model.safetynetwork;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -48,7 +49,7 @@ public class EventsByNetworkIdLoader extends ListLoader<Event> {
         	}
         }
 
-        builder.addSimpleWhere("workflowState", Event.WorkflowState.COMPLETED);
+        builder.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
 
 		List<Event> unsecuredEvents = builder.getResultList(em);
 		

@@ -70,11 +70,11 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
         }
 
         if (criteriaModel.getWorkflowState() == WorkflowState.COMPLETE) {
-            addSimpleTerm(searchTerms, "workflowState", Event.WorkflowState.COMPLETED);
+            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.COMPLETED);
         } else if (criteriaModel.getWorkflowState() == WorkflowState.OPEN) {
-            addSimpleTerm(searchTerms, "workflowState", Event.WorkflowState.OPEN);
+            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.OPEN);
         } else if (criteriaModel.getWorkflowState() == WorkflowState.CLOSED) {
-            addSimpleTerm(searchTerms, "workflowState", Event.WorkflowState.CLOSED);
+            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.CLOSED);
         }
 
         if (IncludeDueDateRange.HAS_NO_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {

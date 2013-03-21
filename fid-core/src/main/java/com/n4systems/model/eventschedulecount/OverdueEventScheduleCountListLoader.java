@@ -1,7 +1,7 @@
 package com.n4systems.model.eventschedulecount;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -18,7 +18,7 @@ public class OverdueEventScheduleCountListLoader extends NotificationSettingEven
 	@Override
 	protected void applyNotificationTypeFilters(QueryBuilder<EventScheduleCount> builder) {
 		guard();
-		builder.addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
+		builder.addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
 		builder.addWhere(Comparator.LT, "toDate", "dueDate", clock.currentTime());
 	}
 

@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -129,14 +129,14 @@ public class AssetEventsPage extends AssetPage{
 
     }
     
-    private List<Event.WorkflowState> getWorkflowStates() {
-        List<Event.WorkflowState> states = new ArrayList<Event.WorkflowState>();
+    private List<WorkflowState> getWorkflowStates() {
+        List<WorkflowState> states = new ArrayList<WorkflowState>();
         if(open)
-            states.add(Event.WorkflowState.OPEN);
+            states.add(WorkflowState.OPEN);
         if(completed)
-            states.add(Event.WorkflowState.COMPLETED);
+            states.add(WorkflowState.COMPLETED);
         if(closed)
-            states.add(Event.WorkflowState.CLOSED);
+            states.add(WorkflowState.CLOSED);
         return states;
     }
 

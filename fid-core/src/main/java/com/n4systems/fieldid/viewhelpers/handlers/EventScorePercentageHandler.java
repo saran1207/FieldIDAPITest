@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.ServiceLocator;
@@ -38,7 +39,7 @@ public class EventScorePercentageHandler extends WebOutputHandler {
     private String getEventScorePercentage(Object value) {
         Event event = (Event) value;
 
-        if(event.getWorkflowState() == Event.WorkflowState.COMPLETED) {
+        if(event.getWorkflowState() == WorkflowState.COMPLETED) {
             if(event.getScore() != null) {
                 String[] fields = new String[] {"eventForm.sections","results"};
                 QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());

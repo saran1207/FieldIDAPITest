@@ -37,24 +37,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
 	}
 
-    public enum WorkflowState implements DisplayEnum {
-        OPEN("Open"), COMPLETED("Completed"), CLOSED("Closed");
-
-        private String label;
-
-        private WorkflowState(String label) {
-            this.label = label;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-
-        public String getName() {
-            return name();
-        }
-    }
-
     public enum WorkflowStateGrouping {
         NON_COMPLETE(WorkflowState.OPEN, WorkflowState.CLOSED), COMPLETE(WorkflowState.COMPLETED);
 

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, Event>
 	
 	public List<ApiEventHistory> findAllEventHistory(String assetId) {
 		QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
-        builder.addWhere(WhereClauseFactory.create("workflowState", Event.WorkflowState.COMPLETED));
+        builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
 		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
 		builder.addOrder("completedDate", false);
 

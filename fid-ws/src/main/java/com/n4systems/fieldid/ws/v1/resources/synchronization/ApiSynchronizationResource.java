@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.n4systems.model.WorkflowState;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -21,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
-import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
@@ -104,7 +104,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 		
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 		.addOrder("dueDate")
-        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
+        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "dueDate", startDate));
 		
 		if (user.getGroups().isEmpty()) {

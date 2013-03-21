@@ -22,6 +22,17 @@ public class ProcedureFilterPanel extends Panel {
 	public ProcedureFilterPanel(final String id, final IModel<ProcedureCriteria> model) {
 		super(id,model);
 
+        final PropertyModel<WorkflowState> workflowStateModel = new PropertyModel<WorkflowState>(model, "workflowState");
+        FidDropDownChoice<WorkflowState> workflowStateSelect = new FidDropDownChoice<WorkflowState>("workflowStateSelect", workflowStateModel, Arrays.asList(WorkflowState.values()), new ListableLabelChoiceRenderer<WorkflowState>());
+        workflowStateSelect.setNullValid(false);
+        add(workflowStateSelect);
+
+        add( new CollapsiblePanel("dateDetailsCriteriaPanel", new StringResourceModel("label.identifiers",this,null)) {
+            @Override protected Panel createContainedPanel(String id) {
+                return new ProcedureDateRangeCriteriaPanel(id, model);
+            }
+        });
+
         add(new CollapsiblePanel("assetDetailsCriteriaPanel", new StringResourceModel("label.asset_details", this, null)) {
             @Override
             protected Panel createContainedPanel(String id) {
@@ -32,11 +43,6 @@ public class ProcedureFilterPanel extends Panel {
                 };
             }
         });
-
-        final PropertyModel<WorkflowState> workflowStateModel = new PropertyModel<WorkflowState>(model, "workflowState");
-        FidDropDownChoice<WorkflowState> workflowStateSelect = new FidDropDownChoice<WorkflowState>("workflowStateSelect", workflowStateModel, Arrays.asList(WorkflowState.values()), new ListableLabelChoiceRenderer<WorkflowState>());
-        workflowStateSelect.setNullValid(false);
-        add(workflowStateSelect);
 
 
         add( new CollapsiblePanel("identifiersCriteriaPanel", new StringResourceModel("label.identifiers",this,null)) {

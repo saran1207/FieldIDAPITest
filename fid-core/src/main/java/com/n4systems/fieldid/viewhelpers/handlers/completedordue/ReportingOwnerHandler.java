@@ -3,6 +3,7 @@ package com.n4systems.fieldid.viewhelpers.handlers.completedordue;
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.orgs.BaseOrg;
 
@@ -26,7 +27,7 @@ public abstract class ReportingOwnerHandler extends WebOutputHandler {
         BaseOrg org;
         Event event = (Event) value;
 
-        if (event.getWorkflowState() == Event.WorkflowState.COMPLETED) {
+        if (event.getWorkflowState() == WorkflowState.COMPLETED) {
             org = getOrg(event);
         } else {
             org = getOrg(event.getAsset());

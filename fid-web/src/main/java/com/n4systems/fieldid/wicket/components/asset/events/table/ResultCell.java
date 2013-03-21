@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
+import com.n4systems.model.WorkflowState;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -14,12 +15,12 @@ public class ResultCell extends Panel {
         super(id);
 
         Event event = eventModel.getObject();
-        Event.WorkflowState state = event.getWorkflowState();
+        WorkflowState state = event.getWorkflowState();
         EventResult eventResult = event.getEventResult();
         
         Label statusLabel;
         
-        if(state.equals(Event.WorkflowState.COMPLETED)) {
+        if(state.equals(WorkflowState.COMPLETED)) {
             add(statusLabel = new Label("result", new PropertyModel<Object>(eventResult, "displayName")));
 
             if(eventResult.equals(EventResult.FAIL))

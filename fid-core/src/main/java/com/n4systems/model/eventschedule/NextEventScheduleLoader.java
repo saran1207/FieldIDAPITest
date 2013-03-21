@@ -1,6 +1,7 @@
 package com.n4systems.model.eventschedule;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -22,7 +23,7 @@ public class NextEventScheduleLoader extends Loader<Event> {
 		Event schedule = null;
 		
 		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-		query.addSimpleWhere("asset.id", assetId).addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
+		query.addSimpleWhere("asset.id", assetId).addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
 		if (typeId != null)
 			query.addSimpleWhere("type.id", typeId);
 		query.addOrder("dueDate");

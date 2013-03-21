@@ -85,7 +85,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
             for (LocalDateTime nextDate:recurringScheduleService.getBoundedScheduledTimesIterator(recurringEvent.getRecurrence())) {
                 Event event = new Event();
                 event.setDueDate(nextDate.toDate());
-                event.setWorkflowState(Event.WorkflowState.OPEN);
+                event.setWorkflowState(WorkflowState.OPEN);
                 event.setAsset(asset);
                 event.setEventResult(EventResult.VOID);
                 event.setOwner(asset.getOwner());
@@ -107,7 +107,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
     private void removeScheduledEvents(RecurringAssetTypeEvent recurringEvent) {
         QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
 
-        builder.addSimpleWhere("workflowState", Event.WorkflowState.OPEN);
+        builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
         builder.addSimpleWhere("recurringEvent", recurringEvent);
         if (recurringEvent.getOwner()!=null) {
             builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner", "owner", recurringEvent.getOwner(), null, WhereClause.ChainOp.AND));

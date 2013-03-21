@@ -1,18 +1,12 @@
 package com.n4systems.fieldid.service.massupdate;
 
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventResult;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.user.User;
 import com.n4systems.util.AssetRemovalSummary;
 import com.n4systems.util.EventRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -22,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,7 +37,7 @@ public class MassUpdateService extends FieldIdPersistenceService {
 			summary.setEventsToDelete(persistenceService.count(eventCount));
 
 			QueryBuilder<Event> scheduleCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-			scheduleCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("workflowState", Event.WorkflowState.OPEN);
+			scheduleCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("workflowState", WorkflowState.OPEN);
 			summary.setSchedulesToDelete(persistenceService.count(scheduleCount));
 
 			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset = :asset AND event.state = :activeState ";

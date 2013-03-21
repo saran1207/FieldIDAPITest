@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.services.date.DateService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -51,7 +52,7 @@ public class UpcomingEventsPanel extends Panel {
     }
     
     private boolean isPastDue(Event schedule) {
-        return schedule.getWorkflowState() == Event.WorkflowState.OPEN && dateService.isPastDue(schedule.getDueDate());
+        return schedule.getWorkflowState() == WorkflowState.OPEN && dateService.isPastDue(schedule.getDueDate());
     }
 
 }

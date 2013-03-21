@@ -1,15 +1,10 @@
 package com.n4systems.fieldid.service.search;
 
-import com.n4systems.model.Event;
 import com.n4systems.model.procedure.Procedure;
-import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.ProcedureCriteria;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.services.date.DateService;
-import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.search.JoinTerm;
-import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +17,6 @@ public class ProcedureService extends SearchService<ProcedureCriteria, Procedure
     private DateService dateService;
 
     public ProcedureService() {
-        // TODO : change EVENT.class to Procedure.class
         super(Procedure.class);
     }
 
@@ -31,19 +25,23 @@ public class ProcedureService extends SearchService<ProcedureCriteria, Procedure
         addSimpleTerm(searchTerms, "type.asset.type", criteriaModel.getAssetType());
         addSimpleTerm(searchTerms, "type.asset.type.group", criteriaModel.getAssetTypeGroup());
         addSimpleTerm(searchTerms, "assignee", criteriaModel.getAssignee());
+        addSimpleTerm(searchTerms, "assignedGroup", criteriaModel.getAssignedUserGroup());
         addSimpleTerm(searchTerms, "performedBy", criteriaModel.getPerformedBy());
+
+        if (criteriaModel.getWorkflowState() == WorkflowState.COMPLETE) {
+            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.COMPLETED);
+        } else if (criteriaModel.getWorkflowState() == WorkflowState.OPEN) {
+            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.OPEN);
+        } else if (criteriaModel.getWorkflowState() == WorkflowState.CLOSED) {
+            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.CLOSED);
+        }
+
 
         DateRangeTerm completedRangeTerm = new DateRangeTerm("completedDate", dateService.calculateFromDate(criteriaModel.getDateRange()), dateService.calculateToDate(criteriaModel.getDateRange()));
         DateRangeTerm dueRangeTerm = new DateRangeTerm("dueDate", dateService.calculateFromDate(criteriaModel.getDueDateRange()), dateService.calculateToDate(criteriaModel.getDueDateRange()));
 
         searchTerms.add(completedRangeTerm);
         searchTerms.add(dueRangeTerm);
-    }
-
-    private void addAssignedUserTerm(Long assignedUserId, ProcedureCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
-    }
-
-    private void addAssetStatusTerm(ProcedureCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
     }
 
     public boolean hasProcedures() {

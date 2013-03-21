@@ -354,7 +354,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 
 	public List<Event> getSchedules() {
 		if (schedulesPaged == null) {
-			schedulesPaged = projectManager.getSchedulesPaged(project, getSecurityFilter(), 1, Constants.SUMMARY_SIZE, Arrays.asList(Event.WorkflowState.OPEN, Event.WorkflowState.COMPLETED));
+			schedulesPaged = projectManager.getSchedulesPaged(project, getSecurityFilter(), 1, Constants.SUMMARY_SIZE, Arrays.asList(WorkflowState.OPEN, WorkflowState.COMPLETED));
 		}
 		return schedulesPaged.getList();
 	}

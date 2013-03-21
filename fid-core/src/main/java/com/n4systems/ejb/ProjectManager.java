@@ -15,7 +15,7 @@ public interface ProjectManager {
 
 	public Pager<Asset> getAssetsPaged(Project project, SecurityFilter filter, int page, int pageSize);
 
-	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<Event.WorkflowState> statuses);
+	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<WorkflowState> statuses);
 	
 	public Long getIncompleteSchedules(Project project, SecurityFilter filter);
 	

@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -23,7 +24,7 @@ public class EventScheduleService extends FieldIdPersistenceService {
 	public Event getNextEventSchedule(Long assetId, Long eventTypeId) {
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 				.addOrder("dueDate")
-				.addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
+				.addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
 				.addWhere(WhereClauseFactory.create("asset.id", assetId));
 
 		if (eventTypeId != null) {
@@ -55,7 +56,7 @@ public class EventScheduleService extends FieldIdPersistenceService {
     @Transactional
     public List<Event> getAvailableSchedulesFor(Asset asset) {
         QueryBuilder<Event> query = createUserSecurityBuilder(Event.class);
-        query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", Event.WorkflowState.OPEN);
+        query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
         query.addOrder("dueDate");
 
         return persistenceService.findAll(query);

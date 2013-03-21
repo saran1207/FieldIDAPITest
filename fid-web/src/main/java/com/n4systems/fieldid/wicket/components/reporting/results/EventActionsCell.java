@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -52,8 +53,8 @@ public class EventActionsCell extends Panel {
         WebMarkupContainer safetyNetworkActionsList;
         safetyNetworkActionsList = createSafetyNetworkActionsList(event, localEvent);
 
-        completeEventActionsList.setVisible(localEvent && event.getWorkflowState() == Event.WorkflowState.COMPLETED);
-        incompleteEventActionsList.setVisible(localEvent && event.getWorkflowState() != Event.WorkflowState.COMPLETED);
+        completeEventActionsList.setVisible(localEvent && event.getWorkflowState() == WorkflowState.COMPLETED);
+        incompleteEventActionsList.setVisible(localEvent && event.getWorkflowState() != WorkflowState.COMPLETED);
         safetyNetworkActionsList.setVisible(!localEvent);
 
         add(completeEventActionsList);
@@ -80,9 +81,9 @@ public class EventActionsCell extends Panel {
 
         NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+event.getAsset().getId());
 
-        resolveEventLink.setVisible(!isReadOnly && Event.WorkflowState.OPEN.equals(event.getWorkflowState()));
+        resolveEventLink.setVisible(!isReadOnly && WorkflowState.OPEN.equals(event.getWorkflowState()));
         deleteScheduleLink.setVisible(!isReadOnly);
-        startEventLink.setVisible(hasCreateEvent && Event.WorkflowState.OPEN.equals(event.getWorkflowState()));
+        startEventLink.setVisible(hasCreateEvent && WorkflowState.OPEN.equals(event.getWorkflowState()));
         editAssetLink.setVisible(hasTag);
 
         incompleteEventActionsList.add(startEventLink);
@@ -140,7 +141,7 @@ public class EventActionsCell extends Panel {
         Asset networkAsset = event.getAsset();
 
         NonWicketLink viewLink = new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getId());
-        viewLink.setVisible(event.getWorkflowState() == Event.WorkflowState.COMPLETED);
+        viewLink.setVisible(event.getWorkflowState() == WorkflowState.COMPLETED);
         safetyNetworkActionsList.add(viewLink);
 
         Asset localAsset = assetService.findLocalAssetFor(networkAsset);

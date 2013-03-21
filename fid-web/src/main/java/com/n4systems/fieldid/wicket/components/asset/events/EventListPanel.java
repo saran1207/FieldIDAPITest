@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.data.EventByNetworkIdProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -26,7 +27,7 @@ public class EventListPanel extends Panel {
 
     private EventByNetworkIdProvider dataProvider;
 
-    public EventListPanel(String id, IModel<Asset> assetModel, List<Event.WorkflowState> states) {
+    public EventListPanel(String id, IModel<Asset> assetModel, List<WorkflowState> states) {
         super(id, assetModel);
 
         Asset asset = assetModel.getObject();
@@ -41,7 +42,7 @@ public class EventListPanel extends Panel {
 
     }
 
-    private IModel<String> getTableStyle(final Asset asset, final List<Event.WorkflowState> states, final SimpleDefaultDataTable table) {
+    private IModel<String> getTableStyle(final Asset asset, final List<WorkflowState> states, final SimpleDefaultDataTable table) {
 
         return  new Model<String>() {
             @Override

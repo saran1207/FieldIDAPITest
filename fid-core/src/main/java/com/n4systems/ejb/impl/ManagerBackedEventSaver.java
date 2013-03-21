@@ -65,7 +65,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 
         parameterObject.event.setDate(completedDate);
 
-        parameterObject.event.setWorkflowState(Event.WorkflowState.COMPLETED);
+        parameterObject.event.setWorkflowState(WorkflowState.COMPLETED);
 
         Map<Long, byte[]> rememberedSignatureImages = collectSignatureImageData(parameterObject.event);
 

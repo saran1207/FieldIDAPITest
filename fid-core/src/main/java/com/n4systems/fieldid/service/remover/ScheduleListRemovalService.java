@@ -5,6 +5,7 @@ import com.n4systems.handlers.remover.summary.ScheduleListRemovalSummary;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -40,7 +41,7 @@ public class ScheduleListRemovalService extends FieldIdPersistenceService {
 
     private List<Long> eventIds(AssetType assetType, EventType eventType) {
         QueryBuilder<Long> query = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(assetType.getTenant()));
-        query.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("workflowState", Event.WorkflowState.OPEN).addSimpleWhere("type", eventType);
+        query.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("workflowState", WorkflowState.OPEN).addSimpleWhere("type", eventType);
 
         if (assetType != null) {
             query.addSimpleWhere("asset.type", assetType);

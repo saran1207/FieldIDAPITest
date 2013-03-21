@@ -8,10 +8,7 @@ import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetLink;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
-import com.n4systems.model.PriorityCode;
+import com.n4systems.model.*;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -52,7 +49,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 		.addOrder("dueDate")
-        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
+        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
 		.addWhere(WhereClauseFactory.create("asset.id", assetId));
 		
 		if(syncDuration != SyncDuration.ALL) {
@@ -84,7 +81,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			persistenceService.save(event);
 			logger.info("Saved New Scheduled Event("  + event.getMobileGUID() + ") for " + 
 					event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
-		} else if (event.getWorkflowState() == Event.WorkflowState.OPEN) {
+		} else if (event.getWorkflowState() == WorkflowState.OPEN) {
 			event.setDueDate(apiEventSchedule.getNextDate());
             event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
             event.setAssignee(getAssigneeUser(apiEventSchedule));
@@ -234,7 +231,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		
 		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 		.addOrder("dueDate")
-        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))
+        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
 		.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
 		
@@ -278,7 +275,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			
 			QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
 			.addOrder("dueDate")
-	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", Event.WorkflowState.OPEN))	        
+	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
 			.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
 			.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));
 			

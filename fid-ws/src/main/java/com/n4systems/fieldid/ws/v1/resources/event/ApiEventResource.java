@@ -13,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.n4systems.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,18 +27,6 @@ import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventResult;
-import com.n4systems.model.EventStatus;
-import com.n4systems.model.EventType;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.GpsLocation;
-import com.n4systems.model.SubEvent;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
@@ -76,7 +65,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
             existingEvent = eventService.findByMobileId(apiEvent.getSid(), true);
         }
 
-        if (existingEvent == null || existingEvent.getWorkflowState() == Event.WorkflowState.OPEN) {
+        if (existingEvent == null || existingEvent.getWorkflowState() == WorkflowState.OPEN) {
         	createEvent(apiEvent, existingEvent);
         } else {
         	updateEvent(apiEvent, existingEvent);
@@ -208,7 +197,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	}
 
 	private void convertApiEvent(ApiEvent apiEvent, Event event, boolean isUpdate) {
-        event.setWorkflowState(Event.WorkflowState.COMPLETED);
+        event.setWorkflowState(WorkflowState.COMPLETED);
 		
 		// Step 1: Convert abstract-event fields first.
 		convertApiEventForAbstractEvent(apiEvent, event, isUpdate);

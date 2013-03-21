@@ -375,7 +375,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			
 			processProofTestFile();
 
-			if (event.getWorkflowState() == Event.WorkflowState.OPEN) {
+			if (event.getWorkflowState() == WorkflowState.OPEN) {
 				// the criteriaResults from the form must be processed before setting them on the event
 				eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy, getSessionUser());
 
@@ -994,7 +994,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
     public boolean isOpen() {
-        return event != null && Event.WorkflowState.OPEN.equals(event.getWorkflowState());
+        return event != null && WorkflowState.OPEN.equals(event.getWorkflowState());
     }
 
 	public AssignedToUserGrouper getUserGrouper() {

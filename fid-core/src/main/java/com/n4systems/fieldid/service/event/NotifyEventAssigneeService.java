@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
@@ -68,7 +69,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private Set<UserGroup> aggregateAssignedGroups(List<AssigneeNotification> assigneeRecords) {
         Set<UserGroup> assignees = new HashSet<UserGroup>();
         for (AssigneeNotification assigneeRecord : assigneeRecords) {
-            if (assigneeRecord.getEvent().getWorkflowState() == Event.WorkflowState.OPEN && assigneeRecord.getEvent().getAssignedGroup() != null) {
+            if (assigneeRecord.getEvent().getWorkflowState() == WorkflowState.OPEN && assigneeRecord.getEvent().getAssignedGroup() != null) {
                 assignees.add(assigneeRecord.getEvent().getAssignedGroup());
             }
         }
@@ -78,7 +79,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private Set<User> aggregateAssignees(List<AssigneeNotification> assigneeRecords) {
         Set<User> assignees = new HashSet<User>();
         for (AssigneeNotification assigneeRecord : assigneeRecords) {
-            if (assigneeRecord.getEvent().getWorkflowState() == Event.WorkflowState.OPEN && assigneeRecord.getEvent().getAssignee() != null) {
+            if (assigneeRecord.getEvent().getWorkflowState() == WorkflowState.OPEN && assigneeRecord.getEvent().getAssignee() != null) {
                 assignees.add(assigneeRecord.getEvent().getAssignee());
             }
         }

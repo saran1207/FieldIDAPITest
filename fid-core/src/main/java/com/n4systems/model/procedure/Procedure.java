@@ -1,11 +1,13 @@
 package com.n4systems.model.procedure;
 
 import com.n4systems.model.GpsLocation;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,6 +20,10 @@ public class Procedure extends EntityWithTenant implements NetworkEntity<Procedu
     @JoinColumn(name = "type_id")
     private ProcedureDefinition type;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="workflow_state", nullable=false)
+    private WorkflowState workflowState;
+
     @ManyToOne
     @JoinColumn(name = "assignee_id")
     private User assignee;
@@ -25,6 +31,10 @@ public class Procedure extends EntityWithTenant implements NetworkEntity<Procedu
     @ManyToOne
     @JoinColumn(name = "performedby_id")
     private User performedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "assigned_group_id")
+    private UserGroup assignedGroup;
 
     @Column(name="completed_date")
     private Date completedDate;
@@ -48,6 +58,7 @@ public class Procedure extends EntityWithTenant implements NetworkEntity<Procedu
     }
 
     public void setAssignee(User assignee) {
+        this.assignedGroup = null;
         this.assignee = assignee;
     }
 
@@ -92,4 +103,14 @@ public class Procedure extends EntityWithTenant implements NetworkEntity<Procedu
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
+
+    public UserGroup getAssignedGroup() {
+        return assignedGroup;
+    }
+
+    public void setAssignedGroup(UserGroup assignedGroup) {
+        this.assignee = null;
+        this.assignedGroup = assignedGroup;
+    }
+
 }

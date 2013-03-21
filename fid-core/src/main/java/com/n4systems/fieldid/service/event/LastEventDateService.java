@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -48,7 +49,7 @@ public class LastEventDateService extends FieldIdPersistenceService {
 
         qBuilder.setMaxSelect("completedDate");
         qBuilder.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
-        qBuilder.addSimpleWhere("workflowState", Event.WorkflowState.COMPLETED);
+        qBuilder.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
         return qBuilder;
     }
 

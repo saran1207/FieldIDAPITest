@@ -2,6 +2,7 @@ package com.n4systems.webservice.server;
 
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
@@ -64,7 +65,7 @@ public class InspectionScheduleUpdateHandler {
 			Event event) {
 		
 		//update only when it is not completed
-		if (event.getWorkflowState() == Event.WorkflowState.OPEN) {
+		if (event.getWorkflowState() == WorkflowState.OPEN) {
             event.setDueDate(stringToDate(inspectionScheduleServiceDTO.getNextDate()));
 			saver.saveOrUpdate(event);
 		}
@@ -76,7 +77,7 @@ public class InspectionScheduleUpdateHandler {
 		try {
 			//remove only when it is still open
 
-			if (eventSchedule.getWorkflowState() == Event.WorkflowState.OPEN) {
+			if (eventSchedule.getWorkflowState() == WorkflowState.OPEN) {
 				saver.remove(eventSchedule);
 			}
 		} catch (EntityStillReferencedException e) {

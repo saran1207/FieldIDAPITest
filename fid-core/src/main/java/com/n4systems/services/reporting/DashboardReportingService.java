@@ -10,13 +10,12 @@ import com.n4systems.fieldid.service.event.EventTypeGroupService;
 import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventResult;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.*;
+import com.n4systems.model.search.WorkflowState;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
@@ -102,9 +101,9 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		List<EventCompletenessReportRecord> events = eventService.getEventCompleteness(granularity, getFrom(granularity, dateRange), getTo(granularity, dateRange), org);
 
 		List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
-        results.add(new EventCompletenessChartSeries(Event.WorkflowState.CLOSED, events));
-        results.add(new EventCompletenessChartSeries(Event.WorkflowState.COMPLETED, events));
-        results.add(new EventCompletenessChartSeries(Event.WorkflowState.OPEN, events));
+        results.add(new EventCompletenessChartSeries(com.n4systems.model.WorkflowState.CLOSED, events));
+        results.add(new EventCompletenessChartSeries(com.n4systems.model.WorkflowState.COMPLETED, events));
+        results.add(new EventCompletenessChartSeries(com.n4systems.model.WorkflowState.OPEN, events));
 
         return results;
 	}
@@ -214,7 +213,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 	private EventReportCriteria getCriteriaDefaults(EventCompletenessWidgetConfiguration config, String series, LocalDate localDate) {
 		EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
-        Event.WorkflowState state = EnumUtils.valueOf(Event.WorkflowState.class, series);
+        com.n4systems.model.WorkflowState state = EnumUtils.valueOf(com.n4systems.model.WorkflowState.class, series);
         switch (state) {
             case OPEN:
                 criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);

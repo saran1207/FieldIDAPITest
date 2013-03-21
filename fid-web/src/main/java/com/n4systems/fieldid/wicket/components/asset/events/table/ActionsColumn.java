@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
@@ -21,13 +22,13 @@ public class ActionsColumn extends PropertyColumn<Event> {
 
     @Override
     public void populateItem(Item<ICellPopulator<Event>> item, String id, IModel<Event> eventModel) {
-        Event.WorkflowState state = eventModel.getObject().getWorkflowState();
+        WorkflowState state = eventModel.getObject().getWorkflowState();
 
         if (isFromSafetyNetwork(eventModel)) {
             item.add(new SafetyNetworkActionsCell(id, eventModel));
-        } else if (state.equals(Event.WorkflowState.COMPLETED)) {
+        } else if (state.equals(WorkflowState.COMPLETED)) {
             item.add(new EventActionsCell(id, eventModel));
-        } else if (state.equals(Event.WorkflowState.OPEN)) {
+        } else if (state.equals(WorkflowState.OPEN)) {
             item.add(new OpenActionsCell(id, eventModel, eventListPanel));
         } else {
             item.add(new ClosedActionsCell(id, eventModel, eventListPanel));
