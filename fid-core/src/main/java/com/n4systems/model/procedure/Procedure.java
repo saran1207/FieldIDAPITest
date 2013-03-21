@@ -113,4 +113,11 @@ public class Procedure extends EntityWithTenant implements NetworkEntity<Procedu
         this.assignedGroup = assignedGroup;
     }
 
+    public WorkflowState getWorkflowState() {
+        return workflowState;
+    }
+
+    public void setWorkflowState(WorkflowState workflowState) {
+        this.workflowState = workflowState;
+    }
 }
