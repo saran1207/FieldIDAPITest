@@ -49,7 +49,7 @@ public class IsolationPointEditor extends Panel {
     }
 
     private String getDeviceDescription(IsolationDeviceDescription deviceDefinition) {
-        return deviceDefinition==null ? "no device" : deviceDefinition.toString();
+        return deviceDefinition==null ? "no device" : deviceDefinition.getAssetType().getDisplayName();
     }
 
 

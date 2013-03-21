@@ -182,7 +182,7 @@ a[class^="btn"] {
 .sections .content {
     overflow:hidden;
     position:relative;
-    height:500px;
+    height:600px;
     /*note to christina : i just hacked this for now to get some elbow room...will discuss later to fix. :derek */
     
     /* --- */
@@ -200,7 +200,7 @@ a[class^="btn"] {
     margin-left:120%;
     width:95%;
     position: absolute;
-    background:white;
+    background:#f8f8f8;
 }
 
 .isolation-point-list {
@@ -227,28 +227,35 @@ a[class^="btn"] {
     height:34px;
 }
 
-
-.isolation-point-row {
-    background:#eee;
-    line-height:40px;
-    padding:0px 15px;
-    margin-bottom:10px;
-    margin-top:10px;
-    border:1px solid #ccc;
+.isolation-point-table {
+    background:#f8f8f8;
+    width:100%;
+    margin-top:25px;
 }
 
-.isolation-point-row .small-text {
+.isolation-point-table td, .isolation-point-table th {
+    padding:5px;
+}
+
+.isolation-point-table .actions {
+    width:75px;
+}
+
+
+
+.small-text {
     width:35px;
     display:inline-block;
 }
 
-.isolation-point-row .medium-text {
+.medium-text {
     width:75px;
     display:inline-block;
 }
 
-.isolation-point-row .large-text {
-    width:150px;
+.large-text {
+    width:200px;
+    line-height: 15px;
     display:inline-block;
 }
 

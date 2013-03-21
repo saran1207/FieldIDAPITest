@@ -38,11 +38,7 @@ public class IsolationPointListPanel extends Panel {
             }
         });
 
-        add(new AjaxLink("addButton") {
-            @Override public void onClick(AjaxRequestTarget target) {
-                doAdd(target);
-            }
-        });
+        add(new AddIsolationPointButton("addButton"));
 
         add(new AjaxLink("cancel") {
             @Override
@@ -55,7 +51,6 @@ public class IsolationPointListPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 doContinue(target);
             }
-
         });
 
     }
