@@ -35,8 +35,10 @@ h2 {
 h3 {
     color: #666;
     font-size: 20px;
-    line-height: 24px;
+    line-height: 32px;
     font-weight: 300;
+
+    display:inline;  /** Derek - christina, i did this so ADD button would be on same line.  you can remove it you want (..there's prolly a better way to style button).   */
 }
 
 
@@ -188,12 +190,9 @@ a[class^="btn"] {
     /* --- */
 }
 
-/* note to christina : this is to override wonky "blue-submit" styling which is too page specific. maybe we can start over and do it right with
-    a new button styling?
-*/
+
 .add-isolation-point {
     float:right;
-    margin-top:-32px;
 }
 
 .isolation-point-editor {
