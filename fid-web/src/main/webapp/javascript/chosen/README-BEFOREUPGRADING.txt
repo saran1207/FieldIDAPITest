@@ -11,3 +11,6 @@ see https://github.com/harvesthq/chosen/issues/763
 css was also modified to fix positioning of clear selection button
 
 
+VERSION 0.9.12
+Upgrading due to https://github.com/harvesthq/chosen/issues/700
+Problems with the previous versions appear to be fixed
