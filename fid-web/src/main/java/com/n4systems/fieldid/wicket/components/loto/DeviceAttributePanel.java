@@ -36,7 +36,7 @@ public class DeviceAttributePanel extends Panel {
     @SpringBean
     private PersistenceService persistenceService;
 
-    public DeviceAttributePanel(String id, final IModel<AssetType> deviceType, IModel<List<InfoOptionBean>> optionList) {
+    public DeviceAttributePanel(String id, final IModel<AssetType> deviceType, final IModel<List<InfoOptionBean>> optionList) {
         super(id, optionList);
         this.deviceType = deviceType;
         this.optionList = optionList;
@@ -111,7 +111,7 @@ public class DeviceAttributePanel extends Panel {
             public boolean isVisible() {
                 if (deviceType.getObject() != null) {
                     persistenceService.reattach(deviceType.getObject());
-                    return selectedAttributes.size() < deviceType.getObject().getInfoFields().size();
+                    return optionList.getObject().size() < deviceType.getObject().getInfoFields().size();
                 } else
                     return false;
             }
