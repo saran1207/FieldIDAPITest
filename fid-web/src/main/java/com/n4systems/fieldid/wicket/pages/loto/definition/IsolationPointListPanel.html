@@ -5,17 +5,40 @@
 
     <div wicket:id="images"/>
 
-
-    <div wicket:id="list" class="isolation-point-row">
-        <span wicket:id="id" class="small-text"/>
-        <span wicket:id="source" class="medium-text"/>
-        <span wicket:id="device" class="device"/>
-        <span wicket:id="location" class="large-text"/>
-        <span wicket:id="method" class="large-text"/>
-        <span wicket:id="check" class="large-text"/>
-        <a wicket:id="edit" class="action-link"/>
-        <a wicket:id="delete" class="action-link"/>
-    </div>
+    <table class="isolation-point-table">
+        <tr>
+            <th>
+                <wicket:message key="label.identifier"/>
+            </th>
+            <th>
+                <wicket:message key="label.source"/>
+            </th>
+            <th>
+                <wicket:message key="label.device"/>
+            </th>
+            <th>
+                <wicket:message key="label.location"/>
+            </th>
+            <th>
+                <wicket:message key="label.method"/>
+            </th>
+            <th>
+                <wicket:message key="label.check"/>
+            </th>
+        </tr>
+        <tr wicket:id="list">
+            <td><span wicket:id="id" class="small-text"/></td>
+            <td><span wicket:id="source" class="medium-text"/></td>
+            <td><span wicket:id="device" class="medium-text"/></td>
+            <td><span wicket:id="location" class="medium-text"/></td>
+            <td><span wicket:id="method" class="large-text"/></td>
+            <td><span wicket:id="check" class="large-text"/></td>
+            <td class="actions">
+                <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+                <a wicket:id="delete"><wicket:message key="label.delete"/></a>
+            </td>
+        </tr>
+    </table>
 
     <div class="buttons">
         <a wicket:id="cancel" class="blue-submit"><wicket:message key="label.cancel"/></a>
