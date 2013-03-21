@@ -13,7 +13,10 @@ import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachmentR
 import com.n4systems.fieldid.ws.v1.resources.assetcount.ApiAssetCountResource;
 import com.n4systems.fieldid.ws.v1.resources.assetstatus.ApiAssetStatusResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.ApiAssetTypeResource;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValueResource;
 import com.n4systems.fieldid.ws.v1.resources.authentication.AuthenticationResource;
+import com.n4systems.fieldid.ws.v1.resources.autoattribute.ApiAutoAttributeCriteriaResource;
+import com.n4systems.fieldid.ws.v1.resources.autoattribute.ApiAutoAttributeDefinitionResource;
 import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventFormResultResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventResource;
@@ -98,6 +101,16 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiPriorityCodeResource apiPriorityCodeResource() {
 		return new ApiPriorityCodeResource();
+	}
+	
+	@Bean
+	public ApiAutoAttributeCriteriaResource apiAutoAttributeCriteriaResource() {
+		return new ApiAutoAttributeCriteriaResource();
+	}
+	
+	@Bean
+	public ApiAutoAttributeDefinitionResource apiAutoAttributeDefinitionResource() {
+		return new ApiAutoAttributeDefinitionResource();
 	}
 
 	@Bean
@@ -223,5 +236,10 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiCriteriaImagesResource apiCriteriaImagesResource() {
 		return new ApiCriteriaImagesResource();
+	}
+	
+	@Bean
+	public ApiAttributeValueResource apiAttributeValueResource() {
+		return new ApiAttributeValueResource();
 	}
 }

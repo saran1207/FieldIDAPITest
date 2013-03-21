@@ -33,6 +33,7 @@ import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachment;
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValueResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
@@ -68,6 +69,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Autowired private ApiAssetAttachmentResource apiAttachmentResource;
 	@Autowired private ApiSubAssetResource apiSubAssetResource;
 	@Autowired private ApiSavedEventResource apiSavedEventResource;
+	@Autowired private ApiAttributeValueResource apiAttributeValueResource;
     @Autowired private LastEventDateService lastEventDateService;
 	
 	
@@ -326,13 +328,11 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		asset.setInfoOptions(convertAttributeValues(apiAsset.getAttributeValues(), asset));
 	}
 
-
-
     private List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
 		List<ApiAttributeValue> apiAttributeValues = new ArrayList<ApiAttributeValue>();
 		
 		for (InfoOptionBean option: asset.getInfoOptions()) {
-			apiAttributeValues.add(convertInfoOption(option));
+			apiAttributeValues.add(apiAttributeValueResource.convertInfoOption(option));
 		}
 		
 		return apiAttributeValues;
@@ -346,20 +346,6 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		}
 		
 		return infoOptions;
-	}
-	
-	private ApiAttributeValue convertInfoOption(InfoOptionBean infoOption) {
-		ApiAttributeValue attribValue = new ApiAttributeValue();
-		attribValue.setAttributeId(infoOption.getInfoField().getUniqueID());
-		
-		if (infoOption.getInfoField().isDateField()) {
-			if (infoOption.getName() != null) {
-				attribValue.setValue(new Date(Long.parseLong(infoOption.getName())));
-			}
-		} else {
-			attribValue.setValue(infoOption.getName());
-		}
-		return attribValue;
 	}
 	
 	// Convert a given attributevalue into InfoOptionBean of date, static(select, combobox) or text type.
