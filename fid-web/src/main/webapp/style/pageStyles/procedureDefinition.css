@@ -9,7 +9,8 @@
     border: none;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
-
+    width: 1010px; /* Added 10px here to make the .procedure-wrapper
+    area equal 1000px since 5px of margin was added. */
 }
 #contentHeader {
     display: none;
@@ -26,24 +27,23 @@
 h2 {
     color: #999;
     font-size: 21px;
-    font-weight: 300
+    font-weight: 300;
 }
-
-.header {
-    color:#999;
-    font-size:14px;
-    padding:10px 0 10px;
-}
-
-h2 span {
+/*h2 span {
     color: #666;
+}*/
+h3 {
+    color: #666;
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 300;
 }
+
 
 .procedure-wrapper {
     -webkit-box-shadow: 0px 2px 4px 0px #CCC;
     box-shadow: 0px 2px 4px 0px #CCC;
     border: 1px solid #CCC;
-    padding: 28px;
     margin: 5px;
     background: #FFF;
     overflow: hidden;
@@ -52,11 +52,12 @@ h2 span {
 /* navigation */
 .navigation {
     text-align: center;
+    margin-top: 25px;
 }
 .navigation span {
     display: inline-block;
     width: 135px;
-    margin-bottom: 55px;
+    margin-bottom: 35px;
 }
 .navigation label {
     display: block;
@@ -81,7 +82,7 @@ h2 span {
 }
 .details input {
     width: 285px;
-    height: 34px;
+    height: 30px;
     float: right;
     margin-left: 12px;
 }
@@ -103,30 +104,53 @@ h2 span {
 /* Button styles */
 .buttons {
     clear: both;
+    overflow: hidden;
     border-top: 1px solid #cccccc;
     padding-top: 10px;
+    margin-bottom: 25px;
 }
 .button-wrap {
     float:right;
 }
 
-.btn {
+
+/* Targets all classes that start with "btn" 
+to create a global style. Need to add fallback for IE6 */
+a[class^="btn"] {  
     display: inline-block;
     padding: 15px 0;
     text-decoration: none;
     color: #fff;
     font-size: 14px;
-    text-align: center;
-}
-.btn.gray {
+    text-align: center;  
+}  
+.btn-gray {
     background: #cccccc;
+}
+.btn-green {
+    background: #009966;
+}
+.btn-blue {
+    background: #0099ff;
+}
+
+
+/* DETAILS SECTION */
+.procedure-wrapper .details {
+    padding: 28px;
+}
+.details .btn-gray {
     width: 85px;
     margin-right: 3px;
 }
-.btn.green {
-    background: #009966;
+.details .btn-green {
     width: 175px;
 }
+   
+
+
+/* CONTENT SECTION */
+
 
 
 
@@ -145,25 +169,6 @@ h2 span {
 /*.emptyOptions {
     display:none;
 }
-
-.navigation {
-    margin-left:auto;
-    margin-right:auto;
-    text-align:center;
-    width:300px;
-    padding-bottom:20px;
-}
-
-.navigation label {
-
-}
-
-
-.buttons {
-    position:absolute;
-    bottom:95px;
-    right:50px;
-}
 */
 
 .publish-message {
@@ -177,8 +182,9 @@ h2 span {
 .sections .content {
     overflow:hidden;
     position:relative;
-    /*note to christina : i just hacked this for now to get some elbow room...will discuss later to fix. :derek */
     height:500px;
+    /*note to christina : i just hacked this for now to get some elbow room...will discuss later to fix. :derek */
+    
     /* --- */
 }
 

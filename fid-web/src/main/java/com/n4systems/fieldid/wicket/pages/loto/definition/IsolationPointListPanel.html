@@ -1,7 +1,7 @@
 <wicket:panel>
 
-    <p class="header"><wicket:message key="label.images"/></p>
-    <a wicket:id="addButton" class="blue-submit add-isolation-point"><wicket:message key="label.add_isolation_point"/></a>
+    <h3><wicket:message key="label.images"/></h3>
+    <a wicket:id="addButton" class="btn btn-blue add-isolation-point"><wicket:message key="label.add_isolation_point"/></a>
 
     <div wicket:id="images"/>
 
@@ -18,8 +18,10 @@
     </div>
 
     <div class="buttons">
-        <a wicket:id="cancel" class="blue-submit"><wicket:message key="label.cancel"/></a>
-        <a wicket:id="continue" class="blue-submit"><wicket:message key="label.continue"/></a>
+        <div class="button-wrap">
+            <a wicket:id="cancel" class="btn-blue"><wicket:message key="label.cancel"/></a>
+            <a wicket:id="continue" class="btn-blue"><wicket:message key="label.continue"/></a>
+        </div>
     </div>
 
 
