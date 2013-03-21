@@ -29,12 +29,15 @@ public class DeviceLockPicker extends Panel {
 
     private IModel<List<InfoOptionBean>> optionList;
 
+    private boolean isDevicePicker;
+
     @SpringBean
     private AssetTypeService assetTypeService;
 
-    public DeviceLockPicker(String id, final IModel<List<InfoOptionBean>> optionList) {
+    public DeviceLockPicker(String id, final IModel<List<InfoOptionBean>> optionList, boolean isDevicePicker) {
         super(id, optionList);
         this.optionList = optionList;
+        this.isDevicePicker = isDevicePicker;
         selectedDeviceType = Model.of(new AssetType());
         attributeList.add(new InfoFieldBean());
 
@@ -113,7 +116,11 @@ public class DeviceLockPicker extends Panel {
     private class DeviceListModel extends LoadableDetachableModel<List<AssetType>> {
         @Override
         protected List<AssetType> load() {
-            return assetTypeService.getLotoAssetTypes();
+            if (isDevicePicker) {
+                return assetTypeService.getLotoDevices();
+            } else {
+                return assetTypeService.getLotoLocks();
+            }
         }
     }
 

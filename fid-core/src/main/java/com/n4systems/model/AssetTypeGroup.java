@@ -19,6 +19,9 @@ public class AssetTypeGroup extends EntityWithTenant implements NamedEntity, Lis
     @Column(name= "loto_device", nullable = false)
     private boolean lotoDevice = false;
 
+    @Column(name= "loto_lock", nullable = false)
+    private boolean lotoLock = false;
+
     @Column(nullable=false)
 	private Long orderIdx;
 	
@@ -67,6 +70,14 @@ public class AssetTypeGroup extends EntityWithTenant implements NamedEntity, Lis
 
     public void setLotoDevice(boolean lotoDevice) {
         this.lotoDevice = lotoDevice;
+    }
+
+    public boolean isLotoLock() {
+        return lotoLock;
+    }
+
+    public void setLotoLock(boolean lotoLock) {
+        this.lotoLock = lotoLock;
     }
 
 

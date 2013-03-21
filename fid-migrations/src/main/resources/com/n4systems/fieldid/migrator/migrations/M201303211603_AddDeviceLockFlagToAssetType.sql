@@ -1,0 +1,1 @@
+ALTER TABLE assettypegroups ADD COLUMN loto_lock TINYINT(1) NOT NULL;

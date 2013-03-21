@@ -11,6 +11,10 @@ ${action.setPageType('asset_type_group', 'show')!}
                 <label><@s.text name="label.loto_device"/></label>
                 <span class="fieldValue">${group.lotoDevice?string("Yes", "No")}</span>
             </div>
+            <div class="infoSet">
+                <label><@s.text name="label.loto_lock"/></label>
+                <span class="fieldValue">${group.lotoLock?string("Yes", "No")}</span>
+            </div>
         </#if>
     </div>
 </div>

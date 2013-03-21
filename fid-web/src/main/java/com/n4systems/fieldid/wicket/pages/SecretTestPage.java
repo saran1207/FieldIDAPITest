@@ -20,29 +20,30 @@ import java.util.List;
 
 public class SecretTestPage extends FieldIDAuthenticatedPage {
 
-    private WebMarkupContainer selectedList;
+    private WebMarkupContainer selectedDeviceList;
+    private WebMarkupContainer selectedLockList;
 
     public SecretTestPage() {
 
-        IModel<List<InfoOptionBean>> optionList = new ListModel(new ArrayList<InfoOptionBean>());
-        Form form = new Form("form");
-        form.add(new DeviceLockPicker("picker", optionList));
-        form.add(new AjaxSubmitLink("save") {
+        IModel<List<InfoOptionBean>> deviceOptionList = new ListModel(new ArrayList<InfoOptionBean>());
+        Form deviceForm = new Form("deviceForm");
+        deviceForm.add(new DeviceLockPicker("picker", deviceOptionList, true));
+        deviceForm.add(new AjaxSubmitLink("save") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                target.add(selectedList);
+                target.add(selectedDeviceList);
             }
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
             }
         });
-        add(form);
+        add(deviceForm);
 
-        add(selectedList = new WebMarkupContainer("selectedList"));
-        selectedList.setOutputMarkupPlaceholderTag(true);
+        add(selectedDeviceList = new WebMarkupContainer("selectedDeviceList"));
+        selectedDeviceList.setOutputMarkupPlaceholderTag(true);
 
-        selectedList.add(new ListView<InfoOptionBean>("list", optionList) {
+        selectedDeviceList.add(new ListView<InfoOptionBean>("list", deviceOptionList) {
             @Override
             protected void populateItem(ListItem<InfoOptionBean> item) {
                 item.add(new Label("name", new PropertyModel<InfoOptionBean>(item.getModelObject(), "infoField.name")));
@@ -50,6 +51,31 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
             }
         });
 
+        IModel<List<InfoOptionBean>> lockOptionList = new ListModel(new ArrayList<InfoOptionBean>());
+        Form lockForm = new Form("lockForm");
+        lockForm.add(new DeviceLockPicker("picker", deviceOptionList, false));
+        lockForm.add(new AjaxSubmitLink("save") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                target.add(selectedLockList);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            }
+        });
+        add(lockForm);
+
+        add(selectedLockList = new WebMarkupContainer("selectedLockList"));
+        selectedLockList.setOutputMarkupPlaceholderTag(true);
+
+        selectedLockList.add(new ListView<InfoOptionBean>("list", deviceOptionList) {
+            @Override
+            protected void populateItem(ListItem<InfoOptionBean> item) {
+                item.add(new Label("name", new PropertyModel<InfoOptionBean>(item.getModelObject(), "infoField.name")));
+                item.add(new Label("option", new PropertyModel<InfoOptionBean>(item.getModelObject(), "name")));
+            }
+        });
     }
     
     @Override

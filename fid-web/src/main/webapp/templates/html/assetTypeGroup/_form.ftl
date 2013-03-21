@@ -9,6 +9,10 @@
         <label for="lotoDevice"><@s.text name="label.loto_device"/></label>
         <@s.checkbox name="lotoDevice"/>
     </div>
+    <div class="infoSet">
+        <label for="lotoLock"><@s.text name="label.loto_lock"/></label>
+        <@s.checkbox name="lotoLock"/>
+    </div>
 </#if>
 
 

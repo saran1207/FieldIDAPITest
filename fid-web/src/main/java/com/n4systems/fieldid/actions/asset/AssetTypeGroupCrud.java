@@ -201,6 +201,14 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
         this.group.setLotoDevice(lotoDevice);
     }
 
+    public boolean isLotoLock() {
+        return group.isLotoLock();
+    }
+
+    public void setLotoLock(boolean lotoLock) {
+        this.group.setLotoLock(lotoLock);
+    }
+
     public boolean duplicateValueExists(String formValue) {
 		return !persistenceManager.uniqueNameAvailable(AssetTypeGroup.class, formValue.trim(), uniqueID, getTenantId());
 	}
