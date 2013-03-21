@@ -3,10 +3,11 @@ package com.n4systems.model.tenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.PasswordPolicy;
+import com.n4systems.model.user.Assignable;
+import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @SuppressWarnings("serial")
 @Entity
@@ -24,10 +25,18 @@ public class TenantSettings extends EntityWithTenant {
 	private PasswordPolicy passwordPolicy = new PasswordPolicy();
 	
 	private boolean gpsCapture;
-	
+
 	private String supportUrl;
     
     private String logoutUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "approval_user_id")
+    private User approvalUser;
+
+    @ManyToOne
+    @JoinColumn(name = "approval_user_group_id")
+    private UserGroup approvalUserGroup;
 
     public boolean isSecondaryOrgsEnabled() {
 		return secondaryOrgsEnabled;
@@ -85,6 +94,37 @@ public class TenantSettings extends EntityWithTenant {
         this.logoutUrl = logoutUrl;
     }
 
+    public User getApprovalUser() {
+        return approvalUser;
+    }
 
+    public void setApprovalUser(User approvalUser) {
+        this.approvalUserGroup = null;
+        this.approvalUser = approvalUser;
+    }
 
+    public UserGroup getApprovalUserGroup() {
+        return approvalUserGroup;
+    }
+
+    public void setApprovalUserGroup(UserGroup approvalUserGroup) {
+        this.approvalUser = null;
+        this.approvalUserGroup = approvalUserGroup;
+    }
+
+    @Transient
+    public Assignable getApprovalUserOrGroup() {
+        return approvalUser != null ?  approvalUser : approvalUserGroup;
+    }
+
+    public void setApprovalUserOrGroup(Assignable assignee) {
+        if (assignee instanceof User) {
+            setApprovalUser((User) assignee);
+        } else if (assignee instanceof UserGroup) {
+            setApprovalUserGroup((UserGroup) assignee);
+        } else if (assignee == null) {
+            this.approvalUser = null;
+            this.approvalUserGroup = null;
+        }
+    }
 }

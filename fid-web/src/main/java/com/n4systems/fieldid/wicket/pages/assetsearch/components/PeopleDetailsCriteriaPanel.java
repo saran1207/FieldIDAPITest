@@ -11,7 +11,7 @@ import com.n4systems.fieldid.wicket.model.user.VisibleUsersModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.PeopleCriteria;
-import com.n4systems.model.user.CanHaveEventsAssigned;
+import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.UnassignedIndicator;
 import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -28,11 +28,11 @@ public class PeopleDetailsCriteriaPanel extends Panel {
 
         UsersForTenantModel usersForTenantModel = new UsersForTenantModel();
 
-        IModel<CanHaveEventsAssigned> assigneeModel = ProxyModel.of(criteriaModel, on(EventReportCriteria.class).getAssignedUserOrGroup());
+        IModel<Assignable> assigneeModel = ProxyModel.of(criteriaModel, on(EventReportCriteria.class).getAssignedUserOrGroup());
 
         VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
         VisibleUsersModel usersModel = new VisibleUsersModel();
-        IModel<List<CanHaveEventsAssigned>> assigneesModel = new AssigneesModel(userGroupsModel, usersModel);
+        IModel<List<Assignable>> assigneesModel = new AssigneesModel(userGroupsModel, usersModel);
 
         ListWithBlankOptionModel blankOptionUserList = new ListWithBlankOptionModel(assigneesModel, UnassignedIndicator.UNASSIGNED);
 
@@ -44,10 +44,10 @@ public class PeopleDetailsCriteriaPanel extends Panel {
         add(new FidDropDownChoice<User>("performedBy", usersForTenantModel, new ListableChoiceRenderer<User>()).setNullValid(true));
     }
 
-    private IModel<CanHaveEventsAssigned> createWrappedModel(final IModel<? extends PeopleCriteria> criteriaModel, final IModel<CanHaveEventsAssigned> assigneeModel) {
-        return new IModel<CanHaveEventsAssigned>() {
+    private IModel<Assignable> createWrappedModel(final IModel<? extends PeopleCriteria> criteriaModel, final IModel<Assignable> assigneeModel) {
+        return new IModel<Assignable>() {
             @Override
-            public CanHaveEventsAssigned getObject() {
+            public Assignable getObject() {
                 if (criteriaModel.getObject().isUnassignedOnly()) {
                     return UnassignedIndicator.UNASSIGNED;
                 }
@@ -55,7 +55,7 @@ public class PeopleDetailsCriteriaPanel extends Panel {
             }
 
             @Override
-            public void setObject(CanHaveEventsAssigned object) {
+            public void setObject(Assignable object) {
                 assigneeModel.setObject(object);
             }
 

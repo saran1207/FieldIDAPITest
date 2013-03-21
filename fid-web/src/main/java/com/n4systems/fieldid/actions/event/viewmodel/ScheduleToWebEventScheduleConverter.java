@@ -4,7 +4,7 @@ import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.Event;
-import com.n4systems.model.user.CanHaveEventsAssigned;
+import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 
@@ -49,7 +49,7 @@ public class ScheduleToWebEventScheduleConverter {
 	}
 
     private String createAssigneeeString(Event openEvent) {
-        CanHaveEventsAssigned assignedUserOrGroup = openEvent.getAssignedUserOrGroup();
+        Assignable assignedUserOrGroup = openEvent.getAssignedUserOrGroup();
         if (assignedUserOrGroup instanceof User) {
             return "U" + assignedUserOrGroup.getId();
         } else if (assignedUserOrGroup instanceof UserGroup) {

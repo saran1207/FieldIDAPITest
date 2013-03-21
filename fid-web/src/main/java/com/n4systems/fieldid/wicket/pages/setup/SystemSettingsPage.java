@@ -1,14 +1,20 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import ch.lambdaj.Lambda;
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.renderer.DateFormatSampleChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
+import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
+import com.n4systems.fieldid.wicket.model.user.UserGroupsModel;
+import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.tenant.SystemSettings;
 import com.n4systems.util.ConfigurationProvider;
@@ -85,6 +91,13 @@ public class SystemSettingsPage extends FieldIDFrontEndPage {
             add(new Button("submitButton"));
             add(new BookmarkablePageLink<Void>("cancelLink", SettingsPage.class));
 
+            WebMarkupContainer procedureApprovalContainer = new WebMarkupContainer("procedureApprovalContainer");
+            procedureApprovalContainer.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
+            add(procedureApprovalContainer);
+
+            UsersForTenantModel usersModel = new UsersForTenantModel();
+            UserGroupsModel userGroupsModel = new UserGroupsModel();
+            procedureApprovalContainer.add(new AssignedUserOrGroupSelect("procedureApprover", ProxyModel.of(getModel(), Lambda.on(SystemSettings.class).getProcedureApprover()), usersModel, userGroupsModel, new AssigneesModel(userGroupsModel, usersModel)));
         }
 
         @Override

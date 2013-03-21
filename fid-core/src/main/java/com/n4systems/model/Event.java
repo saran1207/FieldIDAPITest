@@ -10,7 +10,7 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
-import com.n4systems.model.user.CanHaveEventsAssigned;
+import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.ActionDescriptionUtil;
@@ -722,11 +722,11 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     }
 
     @Transient
-    public CanHaveEventsAssigned getAssignedUserOrGroup() {
+    public Assignable getAssignedUserOrGroup() {
         return assignee != null ?  assignee : assignedGroup;
     }
 
-    public void setAssignedUserOrGroup(CanHaveEventsAssigned assignee) {
+    public void setAssignedUserOrGroup(Assignable assignee) {
         if (assignee instanceof User) {
             setAssignee((User) assignee);
         } else if (assignee instanceof UserGroup) {

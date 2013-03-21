@@ -9,7 +9,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name="user_groups")
-public class UserGroup extends ArchivableEntityWithTenant implements Listable<Long>, CanHaveEventsAssigned {
+public class UserGroup extends ArchivableEntityWithTenant implements Listable<Long>, Assignable {
 
     @Column(name = "name", length = 255)
     private String name;

@@ -38,7 +38,7 @@ public class UserGroupService extends FieldIdPersistenceService {
     }
 
     public List<UserGroup> findUserGroupsLike(String nameFilter, Archivable.EntityState entityState) {
-        QueryBuilder<UserGroup> query = createTenantSecurityBuilder(UserGroup.class, !entityState.equals(Archivable.EntityState.ACTIVE));
+        QueryBuilder<UserGroup> query = createTenantSecurityBuilder(UserGroup.class, !Archivable.EntityState.ACTIVE.equals(entityState));
 
         if (!entityState.equals(Archivable.EntityState.ACTIVE)) {
             query.addSimpleWhere("state", entityState);

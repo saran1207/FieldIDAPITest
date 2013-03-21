@@ -86,9 +86,12 @@
                     <li>
                         <a href="/fieldid/w/wicket/reporting2" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
                     </li>
-                    <li>
-                        <a href="/fieldid/w/wicket/procedure" class="speedLink textLink" id="menuProcedure"><@s.text name="speed.procedures" /></a>
-                    </li>
+
+                    <#if securityGuard.lotoProceduresEnabled>
+                        <li>
+                            <a href="/fieldid/w/wicket/procedure" class="speedLink textLink" id="menuProcedure"><@s.text name="speed.procedures" /></a>
+                        </li>
+                    </#if>
 
 					<#if userSecurityGuard.allowedManageSafetyNetwork>
 						<li>

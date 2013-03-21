@@ -6,6 +6,7 @@ import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.tenant.UserLimits;
+import com.n4systems.model.user.Assignable;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -50,11 +51,12 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 		persistenceService.update(tenantSettings);
 	}
 
-	public void updateGpsCaptureAndUrls(boolean gpsCapture, String supportUrl, String logoutUrl) {
+	public void updateGpsCaptureAndUrls(boolean gpsCapture, String supportUrl, String logoutUrl, Assignable approver) {
 		TenantSettings tenantSettings = getTenantSettings();
 		tenantSettings.setGpsCapture(gpsCapture);
 		tenantSettings.setSupportUrl(supportUrl);
         tenantSettings.setLogoutUrl(logoutUrl);
+        tenantSettings.setApprovalUserOrGroup(approver);
 		persistenceService.update(tenantSettings);				
 	}
 

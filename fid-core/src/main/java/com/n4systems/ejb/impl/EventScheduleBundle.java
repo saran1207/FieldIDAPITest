@@ -3,7 +3,7 @@ package com.n4systems.ejb.impl;
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Project;
-import com.n4systems.model.user.CanHaveEventsAssigned;
+import com.n4systems.model.user.Assignable;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -15,13 +15,13 @@ public class EventScheduleBundle {
 	private final EventType type;
 	private final Project job;
 	private final Date scheduledDate;
-    private final CanHaveEventsAssigned assginee;
+    private final Assignable assginee;
 	
 	public EventScheduleBundle(Asset asset, EventType type, Project job, Date scheduledDate) {
         this(asset, type, job, scheduledDate, null);
     }
 
-    public EventScheduleBundle(Asset asset, EventType type, Project job, Date scheduledDate, CanHaveEventsAssigned assignee) {
+    public EventScheduleBundle(Asset asset, EventType type, Project job, Date scheduledDate, Assignable assignee) {
         this.asset = asset;
         this.type = type;
         this.job = job;
@@ -61,7 +61,7 @@ public class EventScheduleBundle {
 		return scheduledDate;
 	}
 
-    public CanHaveEventsAssigned getAssginee() {
+    public Assignable getAssginee() {
         return assginee;
     }
 

@@ -2,7 +2,7 @@ package com.n4systems.model.search;
 
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
-import com.n4systems.model.user.CanHaveEventsAssigned;
+import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.UnassignedIndicator;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -364,7 +364,7 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
         this.unassignedOnly = unassignedOnly;
     }
 
-    public void setAssignedUserOrGroup(CanHaveEventsAssigned assignee) {
+    public void setAssignedUserOrGroup(Assignable assignee) {
         if (assignee instanceof User) {
             setUnassignedOnly(false);
             setAssignee((User) assignee);
@@ -382,7 +382,7 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
         }
     }
 
-    public CanHaveEventsAssigned getAssignedUserOrGroup() {
+    public Assignable getAssignedUserOrGroup() {
         if (getAssignee() != null) {
             return getAssignee();
         }

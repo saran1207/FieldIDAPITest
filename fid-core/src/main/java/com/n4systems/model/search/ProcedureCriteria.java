@@ -3,7 +3,7 @@ package com.n4systems.model.search;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.user.CanHaveEventsAssigned;
+import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.UnassignedIndicator;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -182,7 +182,7 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
         this.assetTypeGroup = assetTypeGroup;
     }
 
-    public void setAssignedUserOrGroup(CanHaveEventsAssigned assignee) {
+    public void setAssignedUserOrGroup(Assignable assignee) {
         if (assignee instanceof User) {
             setUnassignedOnly(false);
             setAssignee((User) assignee);
@@ -200,7 +200,7 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
         }
     }
 
-    public CanHaveEventsAssigned getAssignedUserOrGroup() {
+    public Assignable getAssignedUserOrGroup() {
         if (getAssignee() != null) {
             return getAssignee();
         }

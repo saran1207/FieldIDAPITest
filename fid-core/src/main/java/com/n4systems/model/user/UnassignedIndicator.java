@@ -2,7 +2,7 @@ package com.n4systems.model.user;
 
 import java.io.Serializable;
 
-public class UnassignedIndicator implements CanHaveEventsAssigned, Serializable {
+public class UnassignedIndicator implements Assignable, Serializable {
 
     public static UnassignedIndicator UNASSIGNED = new UnassignedIndicator();
 

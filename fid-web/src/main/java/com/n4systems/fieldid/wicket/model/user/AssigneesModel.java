@@ -1,8 +1,7 @@
 package com.n4systems.fieldid.wicket.model.user;
 
 import com.n4systems.fieldid.wicket.model.FieldIDSpringModel;
-import com.n4systems.model.user.CanHaveEventsAssigned;
-import com.n4systems.model.user.UnassignedIndicator;
+import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import org.apache.wicket.model.IModel;
@@ -10,7 +9,7 @@ import org.apache.wicket.model.IModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssigneesModel extends FieldIDSpringModel<List<CanHaveEventsAssigned>> {
+public class AssigneesModel extends FieldIDSpringModel<List<Assignable>> {
 
     private IModel<List<UserGroup>> userGroupsModel;
     private IModel<List<User>> examinersModel;
@@ -21,8 +20,8 @@ public class AssigneesModel extends FieldIDSpringModel<List<CanHaveEventsAssigne
     }
 
     @Override
-    protected List<CanHaveEventsAssigned> load() {
-        List<CanHaveEventsAssigned> assignees = new ArrayList<CanHaveEventsAssigned>();
+    protected List<Assignable> load() {
+        List<Assignable> assignees = new ArrayList<Assignable>();
         assignees.addAll(userGroupsModel.getObject());
         assignees.addAll(examinersModel.getObject());
         return assignees;

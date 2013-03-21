@@ -1,5 +1,7 @@
 package com.n4systems.model.tenant;
 
+import com.n4systems.model.user.Assignable;
+
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
@@ -15,6 +17,7 @@ public class SystemSettings implements Serializable {
 	public boolean gpsCapture;
 	public String supportUrl;
     public String logoutUrl;
+    public Assignable procedureApprover;
 
 	public void setSupportUrl(String supportUrl) {
 		this.supportUrl = supportUrl;
@@ -94,5 +97,13 @@ public class SystemSettings implements Serializable {
 
     public void setLogoutUrl(String logoutUrl) {
         this.logoutUrl = logoutUrl;
+    }
+
+    public Assignable getProcedureApprover() {
+        return procedureApprover;
+    }
+
+    public void setProcedureApprover(Assignable procedureApprover) {
+        this.procedureApprover = procedureApprover;
     }
 }

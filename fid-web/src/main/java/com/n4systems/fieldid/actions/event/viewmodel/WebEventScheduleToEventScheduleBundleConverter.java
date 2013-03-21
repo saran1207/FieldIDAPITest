@@ -6,7 +6,7 @@ import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Project;
-import com.n4systems.model.user.CanHaveEventsAssigned;
+import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -27,7 +27,7 @@ public class WebEventScheduleToEventScheduleBundleConverter {
 		Date scheduleDate;
 		EventType scheduleType;
 		Project scheduleJob;
-		CanHaveEventsAssigned assignee = null;
+		Assignable assignee = null;
         
 		scheduleDate = dateConverter.convertDate(nextSchedule.getDate());
 		scheduleType = loaderFactory.createFilteredIdLoader(EventType.class).setId(nextSchedule.getType()).load();
