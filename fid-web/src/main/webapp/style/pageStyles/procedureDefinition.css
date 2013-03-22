@@ -1,37 +1,33 @@
 @import url('/fieldid/style/chosen/chosen.css');
 
 /* WORK AROUND FOR EXISTING CSS
-***************************************/
+**********************************************************/
 #page {
     background: transparent;
     -webkit-box-shadow: none;
     box-shadow: none;
     border: none;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 300;
-    width: 1010px; /* Added 10px here to make the .procedure-wrapper
-    area equal 1000px since 5px of margin was added. */
+    font-weight: 400;
+    width: 1010px; /* Added 10px here to make the .procedure-wrapper equal 1000px since 5px of margin was added. */
 }
 #contentHeader {
     display: none;
 }
 
-.title  {
-    color:#999;
-    font-size:14px;
-}
 
-
-/* PROCEDURE STYLES
-*****************************************/
-h2 {
+/* PROCEDURE/LOTO
+**********************************************************/
+.title {
     color: #999;
-    font-size: 21px;
+    font-size: 23px;
     font-weight: 300;
 }
-/*h2 span {
-    color: #666;
-}*/
+    .title .page-title {
+        color: #666;
+    }
+
+
 h3 {
     color: #666;
     font-size: 20px;
@@ -40,8 +36,6 @@ h3 {
 
     display:inline;  /** Derek - christina, i did this so ADD button would be on same line.  you can remove it you want (..there's prolly a better way to style button).   */
 }
-
-
 .procedure-wrapper {
     -webkit-box-shadow: 0px 2px 4px 0px #CCC;
     box-shadow: 0px 2px 4px 0px #CCC;
@@ -51,24 +45,36 @@ h3 {
     overflow: hidden;
 }
 
-/* navigation */
+/* NAVIGATION */
 .navigation {
     text-align: center;
     margin-top: 25px;
+    position: relative;
 }
-.navigation span {
-    display: inline-block;
-    width: 135px;
-    margin-bottom: 35px;
-}
-.navigation label {
-    display: block;
-    font-size: 14px;
-    font-weight: 400;
-    margin-top: 10px;
+    .navigation span {
+        display: inline-block;
+        width: 135px;
+        margin-bottom: 35px;
+        position: relative;
+        z-index: 2;
+    }
+    .navigation label {
+        display: block;
+        font-size: 14px;
+        font-weight: 400;
+        margin-top: 10px;
+    }
+
+hr {
+    width: 256px;
+    position: absolute;
+    left: 370px;
+    top: 0;
+    z-index: 1;
 }
 
-/* form styles */
+
+/* FORM STYLES */
 .column {
     width: 460px;
     float: left;
@@ -97,17 +103,17 @@ h3 {
     margin-left: 12px;
     resize: none;
 }
-
+/* chosen plugin overrides */
 .chzn-container {
     margin-left: 12px;
 }
 
 
-/* Button styles */
+/* BUTTON STYLES */
 .buttons {
     clear: both;
     overflow: hidden;
-    border-top: 1px solid #cccccc;
+    border-top: 1px solid #c2c2c2;
     padding-top: 10px;
     margin-bottom: 25px;
 }
@@ -115,9 +121,7 @@ h3 {
     float:right;
 }
 
-
-/* Targets all classes that start with "btn" 
-to create a global style. Need to add fallback for IE6 */
+/* Targets all classes that start with "btn" to create a global style. Need to add fallback for IE6 */
 a[class^="btn"] {  
     display: inline-block;
     padding: 15px 0;
@@ -128,35 +132,38 @@ a[class^="btn"] {
 }  
 .btn-gray {
     background: #cccccc;
+
+    width: 85px;
+    margin-right: 3px;
 }
 .btn-green {
     background: #009966;
+
+    width: 175px;
 }
 .btn-blue {
     background: #0099ff;
 }
 
 
-/* DETAILS SECTION */
+
+/* DETAILS SECTION SPECIFIC STYLES
+**********************************************************/
 .procedure-wrapper .details {
     padding: 28px;
-}
-.details .btn-gray {
-    width: 85px;
-    margin-right: 3px;
-}
-.details .btn-green {
-    width: 175px;
 }
    
 
 
-/* CONTENT SECTION */
+/* CONTENT SECTION SPECIFIC STYLES
+**********************************************************/
+.procedure-wrapper .content {
+    padding: 0 12px;
+}
 
 
 
-
-
+/* DEREK'S CSS - will incorporate it into the main css */
 .temp {
     display: none;
 }
@@ -181,20 +188,74 @@ a[class^="btn"] {
     text-align:center;
 }
 
-.sections .content {
-    overflow:hidden;
-    position:relative;
-    height:600px;
-    /*note to christina : i just hacked this for now to get some elbow room...will discuss later to fix. :derek */
-    
-    /* --- */
+
+
+/* container */
+.isolation-point-list {
+
 }
 
 
+/* dropdown list */
 .add-isolation-point {
     float:right;
 }
 
+/* table */
+.isolation-point-table {
+    width:100%;
+    margin: 45px 0;
+}
+    .isolation-point-table tr {
+        margin-bottom: 5px;
+        display: block;
+        border: 1px solid #c2c2c2;
+    }
+    .isolation-point-table th {
+        border-right: #fff;
+        border-left: #fff;
+        /*text-align: center;*/
+        font-weight: 600;
+    }
+    .isolation-point-table td {
+        background: #f6f6f6;
+    }
+    .isolation-point-table td, .isolation-point-table th {
+        padding: 5px 10px;
+    }
+
+    .isolation-point-table .actions {
+        width: 5px;
+    }
+    .isolation-point-table .identifier {
+        width: 52px ;
+    }
+    .isolation-point-table .source {
+        width: 70px;
+    }
+    .isolation-point-table .device {
+        width: 90px;
+    }
+    .isolation-point-table .location {
+        width: 100px;
+    }
+    .isolation-point-table .method {
+        width: 200px;
+    }
+    .isolation-point-table .check {
+        width: 170px;
+    }
+    .isolation-point-table .actions {
+        width: 60px;
+    }
+   /* .isolation-point-table .identifier,
+    .isolation-point-table .source,
+    .isolation-point-table .device {
+        text-align: center;
+    }
+*/
+
+/* edit screen */
 .isolation-point-editor {
     margin-left:120%;
     width:95%;
@@ -208,14 +269,6 @@ a[class^="btn"] {
     box-shadow: -11px 11px 4px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     border: 1px solid #ccc;
 }
-
-.isolation-point-list {
-    margin-left:0;
-    width:95%;
-    position: absolute;
-    background:white;
-}
-
 .isolation-point-editor .inputs {
     padding-bottom:50px;
 }
@@ -231,39 +284,5 @@ a[class^="btn"] {
 .isolation-point-editor .inputs li input {
     width:150px;
     height:34px;
-}
-
-.isolation-point-table {
-    background:#f8f8f8;
-    width:100%;
-    height:300px;
-    overflow-y:auto;
-    margin-top:25px;
-}
-
-.isolation-point-table td, .isolation-point-table th {
-    padding:5px;
-}
-
-.isolation-point-table .actions {
-    width:75px;
-}
-
-
-
-.small-text {
-    width:35px;
-    display:inline-block;
-}
-
-.medium-text {
-    width:75px;
-    display:inline-block;
-}
-
-.large-text {
-    width:200px;
-    line-height: 15px;
-    display:inline-block;
 }
 

@@ -1,51 +1,41 @@
 <wicket:panel>
 
     <h3><wicket:message key="label.images"/></h3>
-    <div wicket:id="addButton" class="btn btn-blue add-isolation-point"/>
+    <div wicket:id="addButton" class="btn-blue add-isolation-point"/>
 
     <div wicket:id="images"/>
 
-    <div class="isolation-point-table">
-        <table >
-            <tr>
-                <th>
-                    <wicket:message key="label.identifier"/>
-                </th>
-                <th>
-                    <wicket:message key="label.source"/>
-                </th>
-                <th>
-                    <wicket:message key="label.device"/>
-                </th>
-                <th>
-                    <wicket:message key="label.location"/>
-                </th>
-                <th>
-                    <wicket:message key="label.method"/>
-                </th>
-                <th>
-                    <wicket:message key="label.check"/>
-                </th>
-            </tr>
-            <tr wicket:id="list">
-                <td><span wicket:id="id" class="small-text"/></td>
-                <td><span wicket:id="source" class="medium-text"/></td>
-                <td><span wicket:id="device" class="medium-text"/></td>
-                <td><span wicket:id="location" class="medium-text"/></td>
-                <td><span wicket:id="method" class="large-text"/></td>
-                <td><span wicket:id="check" class="large-text"/></td>
-                <td class="actions">
-                    <a wicket:id="edit"><wicket:message key="label.edit"/></a>
-                    <a wicket:id="delete"><wicket:message key="label.delete"/></a>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="buttons">
-        <a wicket:id="cancel" class="blue-submit"><wicket:message key="label.cancel"/></a>
-        <a wicket:id="continue" class="blue-submit"><wicket:message key="label.continue"/></a>
-    </div>
+    <table class="isolation-point-table">
+        <tr>
+            <th class="identifier"><wicket:message key="label.identifier"/></th>
+            <th class="source"><wicket:message key="label.source"/></th>
+            <th class="device"><wicket:message key="label.device"/></th>
+            <th class="location"><wicket:message key="label.location"/></th>
+            <th class="method"><wicket:message key="label.method"/></th>
+            <th class="check" colspan="2"><wicket:message key="label.check"/></th>
+        </tr>
+        <tr wicket:id="list">
+            <td wicket:id="id" class="identifier"></td>
+            <td wicket:id="source" class="source"></td>
+            <td wicket:id="device" class="device"></td>
+            <td wicket:id="location" class="location"></td>
+            <td wicket:id="method" class="method"></td>
+            <td wicket:id="check" class="check"></td>
+            <td class="thumbnail"><img src="http://placehold.it/30/30" /></td>
+            <td class="actions">
+                <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+                <a wicket:id="delete"><wicket:message key="label.delete"/></a>
+            </td>
+            <td class="move"><img src="/fieldid/images/list.png/"></td>
+        </tr>
+    </table>
 
+    <div class="buttons">
+        <div class="button-wrap">
+            <a wicket:id="cancel" class="btn-gray"><wicket:message key="label.cancel"/></a>
+            <a wicket:id="continue" class="btn-green"><wicket:message key="label.continue"/></a>
+        </div>
+    </div>
 
 
 </wicket:panel>
