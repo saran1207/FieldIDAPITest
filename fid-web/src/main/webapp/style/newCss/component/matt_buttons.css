@@ -129,6 +129,7 @@ a.mattButtonPressed {
     left:1%;
     width:98%;
     top:100%;
+    z-index:100;
 }
 
 .menu-button .menu-items li a {
