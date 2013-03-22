@@ -58,7 +58,13 @@ public class ContentPanel extends Panel {
 
         add(editor = new IsolationPointEditor("isolationPointEditor", new PropertyModel(this,"newIsolationPoint")) {
             @Override protected void doDone(AjaxRequestTarget target, Model<IsolationPoint> isolationPoint) {
-                // update list....add new isolation point
+                // detect if new or not?
+                IsolationPoint editedIsolationPoint = (IsolationPoint) editor.getDefaultModelObject();
+                if (!isolationPoints.contains(editedIsolationPoint)) {
+                    isolationPoints.add(editedIsolationPoint);
+                } else {
+                    // do i need to persist the new one?  or should that be done later???  (yes, handle that in service imo).
+                }
                 closeEditor(target);
             }
             @Override protected void doCancel(AjaxRequestTarget target) {
@@ -70,6 +76,7 @@ public class ContentPanel extends Panel {
     }
 
     private void closeEditor(AjaxRequestTarget target) {
+        target.add(list);
         target.appendJavaScript("procedureDefinitionPage.closeIsolationPointEditor('"+ this.getMarkupId()+"');");
     }
 

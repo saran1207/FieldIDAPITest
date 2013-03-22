@@ -229,6 +229,8 @@ a[class^="btn"] {
 .isolation-point-table {
     background:#f8f8f8;
     width:100%;
+    height:300px;
+    overflow-y:auto;
     margin-top:25px;
 }
 

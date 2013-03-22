@@ -5,45 +5,47 @@
 
     <div wicket:id="images"/>
 
-    <table class="isolation-point-table">
-        <tr>
-            <th>
-                <wicket:message key="label.identifier"/>
-            </th>
-            <th>
-                <wicket:message key="label.source"/>
-            </th>
-            <th>
-                <wicket:message key="label.device"/>
-            </th>
-            <th>
-                <wicket:message key="label.location"/>
-            </th>
-            <th>
-                <wicket:message key="label.method"/>
-            </th>
-            <th>
-                <wicket:message key="label.check"/>
-            </th>
-        </tr>
-        <tr wicket:id="list">
-            <td><span wicket:id="id" class="small-text"/></td>
-            <td><span wicket:id="source" class="medium-text"/></td>
-            <td><span wicket:id="device" class="medium-text"/></td>
-            <td><span wicket:id="location" class="medium-text"/></td>
-            <td><span wicket:id="method" class="large-text"/></td>
-            <td><span wicket:id="check" class="large-text"/></td>
-            <td class="actions">
-                <a wicket:id="edit"><wicket:message key="label.edit"/></a>
-                <a wicket:id="delete"><wicket:message key="label.delete"/></a>
-            </td>
-        </tr>
-    </table>
-
+    <div class="isolation-point-table">
+        <table >
+            <tr>
+                <th>
+                    <wicket:message key="label.identifier"/>
+                </th>
+                <th>
+                    <wicket:message key="label.source"/>
+                </th>
+                <th>
+                    <wicket:message key="label.device"/>
+                </th>
+                <th>
+                    <wicket:message key="label.location"/>
+                </th>
+                <th>
+                    <wicket:message key="label.method"/>
+                </th>
+                <th>
+                    <wicket:message key="label.check"/>
+                </th>
+            </tr>
+            <tr wicket:id="list">
+                <td><span wicket:id="id" class="small-text"/></td>
+                <td><span wicket:id="source" class="medium-text"/></td>
+                <td><span wicket:id="device" class="medium-text"/></td>
+                <td><span wicket:id="location" class="medium-text"/></td>
+                <td><span wicket:id="method" class="large-text"/></td>
+                <td><span wicket:id="check" class="large-text"/></td>
+                <td class="actions">
+                    <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+                    <a wicket:id="delete"><wicket:message key="label.delete"/></a>
+                </td>
+            </tr>
+        </table>
+    </div>
     <div class="buttons">
         <a wicket:id="cancel" class="blue-submit"><wicket:message key="label.cancel"/></a>
         <a wicket:id="continue" class="blue-submit"><wicket:message key="label.continue"/></a>
     </div>
+
 
 
 </wicket:panel>

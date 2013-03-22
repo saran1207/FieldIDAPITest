@@ -1,17 +1,19 @@
 <wicket:panel>
 
-    <ul class="inputs">
-        <li><span><wicket:message key="label.identifier"/></span><input type="text" wicket:id="identifier" class="small-text"/></li>
-        <li><span><wicket:message key="label.source"/></span><input type="text" wicket:id="source" class="small-text"/></li>
-        <li><span><wicket:message key="label.device"/></span><a type="text" wicket:id="device"><span wicket:id="description" class="medium-text"/></a></li>
-        <li><span><wicket:message key="label.check"/></span><input type="text" wicket:id="check" class="large-text"/></li>
-        <li><span><wicket:message key="label.location"/></span><input type="text" wicket:id="location" class="large-text"/></li>
-        <li><span><wicket:message key="label.method"/></span><input type="text" wicket:id="method" class="large-text"/></li>
-    </ul>
+    <form wicket:id="form">
+        <ul class="inputs">
+            <li><span><wicket:message key="label.identifier"/></span><input type="text" wicket:id="identifier" class="small-text"/></li>
+            <li><span><wicket:message key="label.source"/></span><input type="text" wicket:id="source" class="small-text"/></li>
+            <li><span><wicket:message key="label.device"/></span><a type="text" wicket:id="device"><span wicket:id="description" class="medium-text"/></a></li>
+            <li><span><wicket:message key="label.check"/></span><input type="text" wicket:id="check" class="large-text"/></li>
+            <li><span><wicket:message key="label.location"/></span><input type="text" wicket:id="location" class="large-text"/></li>
+            <li><span><wicket:message key="label.method"/></span><input type="text" wicket:id="method" class="large-text"/></li>
+        </ul>
 
-    <div class="buttons">
-        <a wicket:id="back" class="blue-submit"><wicket:message key="label.back"/></a>
-        <a wicket:id="done" class="blue-submit"><wicket:message key="label.done"/></a>
-    </div>
+        <div class="buttons">
+            <a wicket:id="back" class="blue-submit"><wicket:message key="label.back"/></a>
+            <a wicket:id="done" class="blue-submit"><wicket:message key="label.done"/></a>
+        </div>
+    </form>
 
 </wicket:panel>
