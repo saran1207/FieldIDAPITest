@@ -5,8 +5,14 @@ import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.*;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.wicket.model.EmptyListModel;
+import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
+import org.apache.commons.collections.set.ListOrderedSet;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +29,8 @@ import com.n4systems.model.tenant.SystemSettings;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(FieldIdWicketTestRunner.class)
 public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageHarness, SystemSettingsPage> implements IFixtureFactory<SystemSettingsPage> {	
@@ -68,7 +76,17 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 	
 	@Override
 	public SystemSettingsPage createFixture(String id) {
-		return new SystemSettingsPage(getConfigurationProvider());
+		return new SystemSettingsPage(getConfigurationProvider()) {
+            @Override
+            protected IModel<List<User>> createUsersModel() {
+                return new EmptyListModel<User>();
+            }
+
+            @Override
+            protected IModel<List<UserGroup>> createUserGroupsModel() {
+                return new EmptyListModel<UserGroup>();
+            }
+        };
 	}
 
 	@Override
