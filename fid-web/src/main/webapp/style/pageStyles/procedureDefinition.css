@@ -200,6 +200,13 @@ a[class^="btn"] {
     width:95%;
     position: absolute;
     background:#f8f8f8;
+    /* needs to be above labels and images in procedure list.*/
+    z-index:10;
+    height:95%;
+    -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    -webkit-box-shadow: -5px 5px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    box-shadow: -11px 11px 4px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    border: 1px solid #ccc;
 }
 
 .isolation-point-list {

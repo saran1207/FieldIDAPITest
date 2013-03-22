@@ -7,7 +7,6 @@ import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -23,7 +22,7 @@ public class ContentPanel extends Panel {
 
     private List<EditableImage> images;
     private List<IsolationPoint> isolationPoints = Lists.newArrayList();
-    private final Component editor;
+    private final IsolationPointEditor editor;
     private final IsolationPointListPanel list;
     private IsolationPoint newIsolationPoint = createIsolationPoint(IsolationPointSourceType.W);
     private int index=1;
@@ -42,17 +41,17 @@ public class ContentPanel extends Panel {
         add(list = new IsolationPointListPanel("isolationPoints", new PropertyModel(this,"isolationPoints")) {
             @Override protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
                 newIsolationPoint = createIsolationPoint(sourceType);
-                openEditor(target);
+                editor.openEditor(target);
             }
 
             @Override protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
                 newIsolationPoint = isolationPoint;
-                openEditor(target);
+                editor.openEditor(target);
             }
 
             @Override protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) {
                 isolationPoints.remove(isolationPoint);
-                openEditor(target);
+                editor.openEditor(target);
             }
         });
 
@@ -65,24 +64,11 @@ public class ContentPanel extends Panel {
                 } else {
                     // do i need to persist the new one?  or should that be done later???  (yes, handle that in service imo).
                 }
-                closeEditor(target);
             }
             @Override protected void doCancel(AjaxRequestTarget target) {
-                // do NOT update model. cancel out.
-                closeEditor(target);
             }
         });
 
-    }
-
-    private void closeEditor(AjaxRequestTarget target) {
-        target.add(list);
-        target.appendJavaScript("procedureDefinitionPage.closeIsolationPointEditor('"+ this.getMarkupId()+"');");
-    }
-
-    private void openEditor(AjaxRequestTarget target) {
-        target.add(editor);
-        target.appendJavaScript("procedureDefinitionPage.openIsolationPointEditor('" + this.getMarkupId() + "');");
     }
 
     private IsolationPoint createIsolationPoint(IsolationPointSourceType sourceType) {

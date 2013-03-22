@@ -60,8 +60,13 @@ public class IsolationPointEditor extends Panel {
         });
     }
 
-    private void closeEditor(AjaxRequestTarget target) {
+    public void closeEditor(AjaxRequestTarget target) {
         target.appendJavaScript("procedureDefinitionPage.closeIsolationPointEditor();");
+    }
+
+    public void openEditor(AjaxRequestTarget target) {
+        target.add(this);
+        target.appendJavaScript("procedureDefinitionPage.openIsolationPointEditor();");
     }
 
     private String getDeviceDescription(IsolationDeviceDescription deviceDefinition) {
