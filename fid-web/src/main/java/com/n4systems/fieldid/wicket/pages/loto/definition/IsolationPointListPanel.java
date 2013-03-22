@@ -60,14 +60,8 @@ public class IsolationPointListPanel extends Panel {
 
     }
 
-    private void doContinue(AjaxRequestTarget target) { }
-
-    private void doCancel(AjaxRequestTarget target) { }
-
-    protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) { }
-
     protected void populateIsolationPoint(ListItem<IsolationPoint> item) {
-        IsolationPoint isolationPoint = item.getModelObject();
+        final IsolationPoint isolationPoint = item.getModelObject();
         item.add(new Label("id", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getIdentifier())));
         item.add(new Label("source", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getSource())));
         item.add(new Label("device", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getDeviceDefinition().getAssetType().getName())));
@@ -77,21 +71,32 @@ public class IsolationPointListPanel extends Panel {
         // UI : suggestion, don't have edit next to delete.
         item.add(new AjaxLink("edit") {
             @Override public void onClick(AjaxRequestTarget target) {
-                // TODO : edit isolation point.
+                doEdit(target, isolationPoint);
             }
         });
         item.add(new AjaxLink("delete") {
             @Override public void onClick(AjaxRequestTarget target) {
-                // TODO : delete isolation point.
+                doDelete(target,isolationPoint);
             }
         });
     }
 
+
+    protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) { }
+
+    protected void doContinue(AjaxRequestTarget target) { }
+
+    protected void doCancel(AjaxRequestTarget target) { }
+
+    protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) { }
+
+    protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) { }
+
+
     class ImageModel extends LoadableDetachableModel<List<EditableImage>> {
         @Override
         protected List<EditableImage> load() {
-//            return Lists.newArrayList();
-            List<EditableImage> all = persistenceService.findAll(EditableImage.class);
+            List<EditableImage> all = persistenceService.findAll(EditableImage.class);   /// need to add filtering for procedure
             return all;
         }
     }

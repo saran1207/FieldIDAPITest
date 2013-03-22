@@ -6,28 +6,30 @@
 
 <wicket:extend>
 
-        <h2 wicket:id="title" class="title"/>
-        
-        <div class="procedure-wrapper">
-          <div wicket:id="navigation" class="navigation">
-              <span wicket:id="sections">
-                  <input wicket:id="section" type="radio">
-                  <label wicket:id="label"/>
-              </span>
-          </div>
+    <h2>
+        <span wicket:id="assetName" class="title"/> : <span wicket:id="pageTitle" class="title"/>   <span wicket:id="isolationPoint" class="title"/>
+    </h2>
 
-          <form wicket:id="form" class="sections">
+    <div class="procedure-wrapper">
+      <div wicket:id="navigation" class="navigation">
+          <span wicket:id="sections">
+              <input wicket:id="section" type="radio">
+              <label wicket:id="label"/>
+          </span>
+      </div>
 
-              <div wicket:id="details"/>
+      <form wicket:id="form" class="sections">
 
-              <div wicket:id="content"/>
+          <div wicket:id="details"/>
 
-              <div wicket:id="publish"/>
+          <div wicket:id="content"/>
 
-          </form>
-        </div>
+          <div wicket:id="publish"/>
 
-  <script type="text/javascript" src="/fieldid/javascript/chosen/chosen.jquery.js"></script>
+      </form>
+    </div>
+
+    <script type="text/javascript" src="/fieldid/javascript/chosen/chosen.jquery.js"></script>
 
 </wicket:extend>
 </html>

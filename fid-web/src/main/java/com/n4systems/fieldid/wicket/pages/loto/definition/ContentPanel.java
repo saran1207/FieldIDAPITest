@@ -42,22 +42,40 @@ public class ContentPanel extends Panel {
         add(list = new IsolationPointListPanel("isolationPoints", new PropertyModel(this,"isolationPoints")) {
             @Override protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
                 newIsolationPoint = createIsolationPoint(sourceType);
-                target.add(editor);
-                target.appendJavaScript("procedureDefinitionPage.openIsolationPointEditor('"+ContentPanel.this.getMarkupId()+"');");
+                openEditor(target);
+            }
+
+            @Override protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
+                newIsolationPoint = isolationPoint;
+                openEditor(target);
+            }
+
+            @Override protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) {
+                isolationPoints.remove(isolationPoint);
+                openEditor(target);
             }
         });
 
         add(editor = new IsolationPointEditor("isolationPointEditor", new PropertyModel(this,"newIsolationPoint")) {
             @Override protected void doDone(AjaxRequestTarget target, Model<IsolationPoint> isolationPoint) {
                 // update list....add new isolation point
-                target.appendJavaScript("procedureDefinitionPage.closeIsolationPointEditor('"+ContentPanel.this.getMarkupId()+"');");
+                closeEditor(target);
             }
             @Override protected void doCancel(AjaxRequestTarget target) {
                 // do NOT update model. cancel out.
-                target.appendJavaScript("procedureDefinitionPage.closeIsolationPointEditor('"+ContentPanel.this.getMarkupId()+"');");
+                closeEditor(target);
             }
         });
 
+    }
+
+    private void closeEditor(AjaxRequestTarget target) {
+        target.appendJavaScript("procedureDefinitionPage.closeIsolationPointEditor('"+ this.getMarkupId()+"');");
+    }
+
+    private void openEditor(AjaxRequestTarget target) {
+        target.add(editor);
+        target.appendJavaScript("procedureDefinitionPage.openIsolationPointEditor('" + this.getMarkupId() + "');");
     }
 
     private IsolationPoint createIsolationPoint(IsolationPointSourceType sourceType) {
