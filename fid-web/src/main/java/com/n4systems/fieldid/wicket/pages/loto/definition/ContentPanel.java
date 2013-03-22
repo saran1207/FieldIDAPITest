@@ -36,13 +36,15 @@ public class ContentPanel extends Panel {
             isolationPoints.add(createIsolationPoint(type));
         }
 
+        add(new AddIsolationPointButton("addButton") {
+            @Override protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
+                ContentPanel.this.doAdd(target, sourceType);
+            }
+        });
+
         add(new AttributeAppender("class", "content"));
 
         add(list = new IsolationPointListPanel("isolationPoints", new PropertyModel(this,"isolationPoints")) {
-            @Override protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
-                newIsolationPoint = createIsolationPoint(sourceType);
-                editor.openEditor(target);
-            }
 
             @Override protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
                 newIsolationPoint = isolationPoint;
@@ -51,7 +53,7 @@ public class ContentPanel extends Panel {
 
             @Override protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) {
                 isolationPoints.remove(isolationPoint);
-                editor.openEditor(target);
+                target.add(list);
             }
         });
 
@@ -69,6 +71,11 @@ public class ContentPanel extends Panel {
             }
         });
 
+    }
+
+    protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
+        newIsolationPoint = createIsolationPoint(sourceType);
+        editor.openEditor(target);
     }
 
     private IsolationPoint createIsolationPoint(IsolationPointSourceType sourceType) {

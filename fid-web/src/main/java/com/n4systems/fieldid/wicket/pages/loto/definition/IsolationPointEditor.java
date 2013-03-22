@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
@@ -24,8 +25,9 @@ public class IsolationPointEditor extends Panel {
         super(id, model);
         setOutputMarkupPlaceholderTag(true);
 
-
         add(new AttributeAppender("class","isolation-point-editor"));
+
+        add(new Label("title", getTitleModel(model)));
 
         add(form = new Form("form"));
 
@@ -58,6 +60,16 @@ public class IsolationPointEditor extends Panel {
             }
 
         });
+    }
+
+    private IModel<String> getTitleModel(IModel<IsolationPoint> model) {
+        // TODO : clean this up using parameterized properties....e.g.   "New Isolation Point {identifier} of type {type}" etc...
+        IsolationPoint isolationPoint = model.getObject();
+        if (isolationPoint.isNew()) {
+            return new FIDLabelModel("label.new_procedure");
+        } else {
+            return Model.of("Isolation Point : " + isolationPoint.getIdentifier());
+        }
     }
 
     public void closeEditor(AjaxRequestTarget target) {

@@ -1,7 +1,7 @@
 @import url('/fieldid/style/chosen/chosen.css');
 
 /* WORK AROUND FOR EXISTING CSS
-**********************************************************/
+***************************************/
 #page {
     background: transparent;
     -webkit-box-shadow: none;
@@ -152,7 +152,7 @@ a[class^="btn"] {
 .procedure-wrapper .details {
     padding: 28px;
 }
-   
+
 
 
 /* CONTENT SECTION SPECIFIC STYLES
@@ -188,17 +188,20 @@ a[class^="btn"] {
     text-align:center;
 }
 
-
-
-/* container */
-.isolation-point-list {
-
+.sections .content {
+    overflow:hidden;
+    position:relative;
+    height:600px;
+    padding-left:3%;
+    /*note to christina : i just hacked this for now to get some elbow room...will discuss later to fix. :derek */
+    
+    /* --- */
 }
 
 
-/* dropdown list */
 .add-isolation-point {
-    float:right;
+    position:absolute;
+    right:5%;
 }
 
 /* table */
@@ -258,19 +261,30 @@ a[class^="btn"] {
 /* edit screen */
 .isolation-point-editor {
     margin-left:120%;
-    width:95%;
+    width:92%;
     position: absolute;
     background:#f8f8f8;
     /* needs to be above labels and images in procedure list.*/
     z-index:10;
-    height:95%;
+    height:90%;
     -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     -webkit-box-shadow: -5px 5px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     box-shadow: -11px 11px 4px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     border: 1px solid #ccc;
+    top:5%;
 }
+
+.isolation-point-list {
+    margin-left:0;
+    width:90%;
+    position: absolute;
+    background:white;
+    top:5%;
+}
+
 .isolation-point-editor .inputs {
     padding-bottom:50px;
+    float:left;
 }
 
 .isolation-point-editor .inputs li span {
@@ -286,3 +300,58 @@ a[class^="btn"] {
     height:34px;
 }
 
+.isolation-point-editor .inputs li input.large-text {
+    width:350px;
+}
+
+.isolation-point-table {
+    background:#f8f8f8;
+    width:100%;
+    height:300px;
+    overflow-y:auto;
+    margin-top:25px;
+}
+
+.isolation-point-table td, .isolation-point-table th {
+    padding:5px;
+}
+
+.isolation-point-table .actions {
+    width:75px;
+}
+
+
+
+.small-text {
+    width:35px;
+    display:inline-block;
+}
+
+.medium-text {
+    width:75px;
+    display:inline-block;
+}
+
+.large-text {
+    width:200px;
+    line-height: 15px;
+    display:inline-block;
+}
+
+
+
+/*hacks*/
+/*temporary hack to move buttons just for test/debugging*/
+.isolation-point-editor .buttons {
+    position: absolute;
+    margin:0;
+    bottom:5%;
+    right:5%;
+    border:none;
+    overflow:visible;
+}
+.isolation-point-editor .title {
+    padding-top:40px;
+    padding-bottom:10px;
+    padding-left:20px;
+}
