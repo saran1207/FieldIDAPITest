@@ -9,7 +9,7 @@ var fieldIdWidgets = (function() {
 			items.slideDown(100);
 		}
 		function hideItems() {
-			items.fadeOut(200);
+			items.fadeOut(150);
 		}
 
 		function toggleList() {

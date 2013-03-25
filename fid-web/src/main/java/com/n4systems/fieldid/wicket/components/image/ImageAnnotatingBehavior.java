@@ -99,9 +99,7 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
 
     protected ImageAnnotationType getAnnotationType(String typeId) {
         ///TODO FIX THIS.   make it look up image types used in this.annotationTypes.  for now i'll just create/save a new one every time.
-        ImageAnnotationType type = new ImageAnnotationType();
-        //persistenceService.save(type);
-        return type;
+        return ImageAnnotationType.valueOf(typeId);
     }
 
     @Override

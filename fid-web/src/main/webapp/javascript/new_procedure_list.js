@@ -1,12 +1,12 @@
 var newProcedureList = false;
 
 function showList() {
-    jQuery('#addNewContainer').slideDown(100);
+    jQuery('.new-procedure-types').slideDown(100);
     newProcedureList = true;
 }
 
 function hideList() {
-    jQuery('#addNewContainer').fadeOut();
+    jQuery('.new-procedure-types').fadeOut();
     newProcedureList = false;
 }
 
@@ -19,8 +19,8 @@ function toggleList() {
 }
 
 function listenForNewProcedureListClick() {
-    jQuery('#newProcedureLink').click(toggleList);
-    jQuery('#addNewContainer').mouseleave(hideList);
+    jQuery('.new-procedure').click(toggleList);
+    jQuery('.new-procedure-types').mouseleave(hideList);
 }
 
 jQuery(document).ready(function() { listenForNewProcedureListClick(); });

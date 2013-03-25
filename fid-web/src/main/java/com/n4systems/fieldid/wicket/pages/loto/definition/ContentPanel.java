@@ -66,6 +66,7 @@ public class ContentPanel extends Panel {
                 } else {
                     // do i need to persist the new one?  or should that be done later???  (yes, handle that in service imo).
                 }
+                target.add(list);
             }
             @Override protected void doCancel(AjaxRequestTarget target) {
             }

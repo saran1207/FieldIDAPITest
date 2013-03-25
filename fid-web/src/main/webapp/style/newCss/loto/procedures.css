@@ -1,8 +1,8 @@
-#newProcedureLink{
+.navHeader .new-procedure {
     float: right;
 }
 
-#addNewContainer {
+.new-procedure-types {
     background: none repeat scroll 0 0 white;
     border: 1px solid #DDDDDD;
     box-shadow: 5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
@@ -14,7 +14,7 @@
     z-index: 10;
 }
 
-#addNewContainer a {
+.new-procedure-types a {
     display: block;
     line-height: 2em;
     color: #777777;

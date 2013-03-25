@@ -50,7 +50,7 @@ public class ImageEditor extends Panel {
         annotation.setText("hello");
         annotation.setX(.5);
         annotation.setY(.5);
-        annotation.setType(new ImageAnnotationType());
+        annotation.setType(ImageAnnotationType.W);
         model.getObject().getAnnotations().add(annotation);
         // ------------------------
 
@@ -137,9 +137,7 @@ public class ImageEditor extends Panel {
     }
 
     private ImageAnnotationType getAnnotationType(String typeId) {
-        ///TODO FIX THIS.   make it look up image types used in this.annotationTypes.  for now i'll just create/save a new one every time.
-        ImageAnnotationType type = new ImageAnnotationType();
-        persistenceService.save(type);
+        ImageAnnotationType type = ImageAnnotationType.valueOf(typeId);
         return type;
     }
 

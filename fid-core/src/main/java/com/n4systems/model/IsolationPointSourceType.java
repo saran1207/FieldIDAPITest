@@ -12,4 +12,5 @@ public enum IsolationPointSourceType {
     public String getIdentifier() {
         return identifier;
     }
+
 }

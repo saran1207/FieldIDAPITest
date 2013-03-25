@@ -8,9 +8,15 @@ import javax.persistence.*;
 @Table(name="image_annotation")
 public class ImageAnnotation extends BaseEntity {
 
-    @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=false)
-    @JoinColumn(name = "type_id")
-    private ImageAnnotationType type = ImageAnnotationType.DEFAULT;
+    public enum Direction {
+        N("north"), S("south"), W("west"), E("east");
+        String css;
+        Direction(String css) { this.css = css; }
+        public String getCss() { return css; }
+    };
+
+    @Enumerated(EnumType.STRING)
+    private ImageAnnotationType type = ImageAnnotationType.W;
 
     @Column(name="text")
     private String text;
@@ -25,13 +31,6 @@ public class ImageAnnotation extends BaseEntity {
     private double x;
 
     private double y;
-
-    public enum Direction {
-        N("north"), S("south"), W("west"), E("east");
-        String css;
-        Direction(String css) { this.css = css; }
-        public String getCss() { return css; }
-    };
 
     public ImageAnnotation() {
     }

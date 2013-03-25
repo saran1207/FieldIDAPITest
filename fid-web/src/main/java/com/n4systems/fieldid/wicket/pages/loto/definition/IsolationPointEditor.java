@@ -66,7 +66,7 @@ public class IsolationPointEditor extends Panel {
         // TODO : clean this up using parameterized properties....e.g.   "New Isolation Point {identifier} of type {type}" etc...
         IsolationPoint isolationPoint = model.getObject();
         if (isolationPoint.isNew()) {
-            return new FIDLabelModel("label.new_procedure");
+            return new FIDLabelModel("label.new_isolation_point");
         } else {
             return Model.of("Isolation Point : " + isolationPoint.getIdentifier());
         }

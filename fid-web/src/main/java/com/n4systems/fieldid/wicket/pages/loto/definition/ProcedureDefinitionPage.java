@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.Score;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -25,14 +26,27 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
 
     enum ProcedureDefinitionSection { Details, Content, Publish };
 
-    private final Navigation navigation;
+    private Navigation navigation;
     private ProcedureDefinitionSection currentSection = ProcedureDefinitionSection.Details;
-    private final ProcedureDefinitionForm form;
+    private ProcedureDefinitionForm form;
     private boolean contentFinished = false;
+
+    public ProcedureDefinitionPage(ProcedureDefinition procedureDefinition) {
+        super();
+        init(procedureDefinition);
+    }
 
     public ProcedureDefinitionPage(PageParameters params) {
         super(params);
+        init(getProcedureDefinition(params));
+    }
 
+    private ProcedureDefinition getProcedureDefinition(PageParameters params) {
+        // TODO : load procedure definition by ID.   for now i'm just handling new ones.
+        return new ProcedureDefinition();
+    }
+
+    private void init(ProcedureDefinition procedureDefinition) {
         add(new Label("assetName",Model.of("Big Machine")));
         add(new Label("pageTitle",Model.of("Author Procedure")));
         add(new Label("isolationPoint",Model.of(": Isolation Point E-1")));
@@ -43,7 +57,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         add(new AttributeAppender("class", Model.of("procedure-definition")));
     }
 
-     protected Label createTitleLabel(String labelId) {
+    protected Label createTitleLabel(String labelId) {
          Label label = new Label(labelId, Model.of("THIS SHOULDN'T BE SHOWN"));
          label.setVisible(false);
          return label;

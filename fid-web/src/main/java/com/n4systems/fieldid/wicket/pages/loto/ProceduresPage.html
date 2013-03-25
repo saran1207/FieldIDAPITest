@@ -7,11 +7,7 @@
 <wicket:extend>
     <div class="navHeader">
         <a wicket:id="versionsLink" class="mattButton"><wicket:message key="label.all_versions"/></a>
-        <a id="newProcedureLink" class="mattButton" href="javascript:void(0);"><wicket:message key="label.new"/></a>
-        <div id="addNewContainer" style="display: none">
-            <a wicket:id="copyExisitingLink"><wicket:message key="label.copy_existing"/></a>
-            <a wicket:id="startBlankLink"><wicket:message key="label.start_blank"/></a>
-        </div>
+        <div wicket:id="newProcedure" class="new-procedure mattButton"/>
     </div>
     <div class="content">
         <table class="list">
