@@ -95,19 +95,19 @@ h3 {
     float: left;
     text-align: right;
     font-size: 12px;
-    line-height: 30px;
+    line-height: 34px;
 }
-
 .sections label {
     display: block;
-    margin-bottom: 12px;
-    vertical-align: top;
+    margin-bottom: 8px;
+    vertical-align: top;  
 }
 .sections input {
     width: 285px;
     height: 30px;
     float: right;
     margin-left: 12px;
+    padding: 0 5px;
 }
 .sections select {
     width: 290px;
@@ -117,6 +117,7 @@ h3 {
     height: 152px;
     margin-left: 12px;
     resize: none;
+    padding: 5px;
 }
 /* chosen plugin overrides */
 .chzn-container {
@@ -172,6 +173,8 @@ a[class^="btn"] {
 .procedure-wrapper .content {
     padding: 0 12px;
     position: relative;
+    overflow: hidden;
+    padding-bottom: 28px;
 }
 .image-list-container .blank-slate {
     width: 99.8%;
@@ -248,11 +251,44 @@ a[class^="btn"] {
     position: absolute;
     background: #f8f8f8;
     z-index: 10;
-    height: 111%;
+    height: 97.5%;
     -webkit-box-shadow: 0px 2px 4px 0px #CCC;
     box-shadow: 0px 2px 4px 0px #CCC;
     border: 1px solid #ccc;
     top: 0;
+}
+
+.isolation-point-editor h3 {
+    padding: 30px 45px;
+    font-size: 20px;
+}
+.isolation-point-editor .column.left {
+    width: 443px;
+}
+.isolation-point-editor .column.right {
+    width: 480px;
+}
+/* Form styles */
+.isolation-point-editor input {
+    width: 325px;
+}
+.isolation-point-editor label.textarea {
+    margin-bottom: 0;
+}
+.isolation-point-editor textarea {
+    height: 75px;
+    width: 327px;
+}
+.isolation-point-editor a.asset-type {
+    width: 300px;
+    display: block;
+    float: right;
+    margin-left: 12px;
+    text-align: left;
+}
+
+.isolation-point-editor .buttons {
+    margin-right: 50px;
 }
 
 
@@ -282,79 +318,3 @@ a[class^="btn"] {
     text-align:center;
 }
 
-.sections .content {
-    /*overflow:hidden;
-    position:relative;
-    height:600px;
-    padding-left:3%;*/
-    /*note to christina : i just hacked this for now to get some elbow room...will discuss later to fix. :derek */
-    
-    /* --- */
-}
-
-
-
-
-/*.isolation-point-list {
-    margin-left:0;
-    width:90%;
-    position: absolute;
-    background:white;
-    top:5%;
-}*/
-
-/*.isolation-point-editor .inputs {
-    padding-bottom:50px;
-    float:left;
-}
-
-.isolation-point-editor .inputs li span {
-    width:100px;
-    text-align: right;
-    display:inline-block;
-    padding-right:10px;
-    padding-top:20px;
-}
-
-.isolation-point-editor .inputs li input {
-    width:150px;
-    height:34px;
-}
-
-.isolation-point-editor .inputs li input.large-text {
-    width:350px;
-}
-
-.isolation-point-table {
-    width:100%;
-    height:300px;
-    overflow-y:auto;
-    margin-top:25px;
-}
-
-.isolation-point-table td, .isolation-point-table th {
-    padding:5px;
-}
-
-.isolation-point-table .actions {
-    width:75px;
-}*/
-
-
-
-
-/*hacks*/
-/*temporary hack to move buttons just for test/debugging*/
-.isolation-point-editor .buttons {
-    position: absolute;
-    margin:0;
-    bottom:5%;
-    right:5%;
-    border:none;
-    overflow:visible;
-}
-.isolation-point-editor .title {
-    padding-top:40px;
-    padding-bottom:10px;
-    padding-left:20px;
-}
