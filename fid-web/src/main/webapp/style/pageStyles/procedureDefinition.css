@@ -31,7 +31,8 @@ hr {
     font-size: 23px;
     font-weight: 300;
 }
-    .title .page-title {
+    .title .page-title,
+    .title .isolation-point {
         color: #666;
     }
 
@@ -40,7 +41,6 @@ h3 {
     font-size: 20px;
     line-height: 32px;
     font-weight: 300;
-    display:inline;
 }
 
 .procedure-wrapper {
@@ -158,7 +158,7 @@ a[class^="btn"] {
 
 
 
-/* DETAILS SECTION SPECIFIC STYLES
+/* DETAILS SECTION
 **********************************************************/
 .procedure-wrapper .details {
     padding: 28px;
@@ -167,56 +167,28 @@ a[class^="btn"] {
 
 
 
-/* CONTENT SECTION SPECIFIC STYLES
+/* CONTENT SECTION
 **********************************************************/
 .procedure-wrapper .content {
     padding: 0 12px;
 }
-
-
-
-/* DEREK'S CSS - will incorporate it into the main css */
-.temp {
-    display: none;
-}
-.publish-message {
-    font-size:15px;
-    color: #999;
-    padding-top:200px;
-    display:block;
-    text-align:center;
-}
-
-/*.emptyOptions {
-    display:none;
-}
-*/
-
-.publish-message {
-    font-size:15px;
-    color: #999;
-    padding-top:200px;
-    display:block;
-    text-align:center;
-}
-
-.sections .content {
-    overflow:hidden;
-    position:relative;
-    height:600px;
-    padding-left:3%;
-    /*note to christina : i just hacked this for now to get some elbow room...will discuss later to fix. :derek */
-    
-    /* --- */
+.image-list-container .blank-slate {
+    width: 99.8%;
 }
 
 
 .add-isolation-point {
-    position:absolute;
-    right:5%;
+    float: right;
+    position: relative;
+    z-index: 5; /* makes the dropdown go over the iamges */
+}
+.isolation-point-list {
+    position: relative;
+    z-index: 1;
 }
 
-/* table */
+/* ISOLATION POINTS TABLE
+--------------------------*/
 .isolation-point-table {
     width:100%;
     margin: 45px 0;
@@ -265,12 +237,44 @@ a[class^="btn"] {
         text-align: center;
     }
 
-   /* .isolation-point-table .identifier,
-    .isolation-point-table .source,
-    .isolation-point-table .device {
-        text-align: center;
-    }
+
+
+
+/* DEREK'S CSS - will incorporate it into the main css */
+.temp {
+    display: none;
+}
+.publish-message {
+    font-size:15px;
+    color: #999;
+    padding-top:200px;
+    display:block;
+    text-align:center;
+}
+
+/*.emptyOptions {
+    display:none;
+}
 */
+
+.publish-message {
+    font-size:15px;
+    color: #999;
+    padding-top:200px;
+    display:block;
+    text-align:center;
+}
+
+.sections .content {
+    /*overflow:hidden;
+    position:relative;
+    height:600px;
+    padding-left:3%;*/
+    /*note to christina : i just hacked this for now to get some elbow room...will discuss later to fix. :derek */
+    
+    /* --- */
+}
+
 
 /* edit screen */
 .isolation-point-editor {
