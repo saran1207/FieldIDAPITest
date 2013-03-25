@@ -1,7 +1,7 @@
 @import url('/fieldid/style/chosen/chosen.css');
 
 /* WORK AROUND FOR EXISTING CSS
-***************************************/
+**********************************************************/
 #page {
     background: transparent;
     -webkit-box-shadow: none;
@@ -18,6 +18,14 @@
 
 /* PROCEDURE/LOTO
 **********************************************************/
+hr {
+    clear: both;
+    height: 1px;
+    border: none;
+    border-top: 1px solid #c2c2c2;
+    margin: 0;
+}
+
 .title {
     color: #999;
     font-size: 23px;
@@ -27,15 +35,14 @@
         color: #666;
     }
 
-
 h3 {
     color: #666;
     font-size: 20px;
     line-height: 32px;
     font-weight: 300;
-
-    display:inline;  /** Derek - christina, i did this so ADD button would be on same line.  you can remove it you want (..there's prolly a better way to style button).   */
+    display:inline;
 }
+
 .procedure-wrapper {
     -webkit-box-shadow: 0px 2px 4px 0px #CCC;
     box-shadow: 0px 2px 4px 0px #CCC;
@@ -45,14 +52,21 @@ h3 {
     overflow: hidden;
 }
 
-/* NAVIGATION */
+
+/* NAVIGATION 
+---------------*/
 .navigation {
     text-align: center;
     margin-top: 25px;
     position: relative;
 }
-    .navigation span {
+.navigation ul {
+    margin: 0;
+    padding: 0;
+}
+    .navigation ul li {
         display: inline-block;
+        list-style-type: none;
         width: 135px;
         margin-bottom: 35px;
         position: relative;
@@ -65,16 +79,17 @@ h3 {
         margin-top: 10px;
     }
 
-hr {
+.navigation hr {
     width: 256px;
     position: absolute;
-    left: 370px;
-    top: 0;
+    left: 371px;
+    top: 6px;
     z-index: 1;
 }
 
 
-/* FORM STYLES */
+/* FORM STYLES 
+---------------*/
 .column {
     width: 460px;
     float: left;
@@ -109,16 +124,12 @@ hr {
 }
 
 
-/* BUTTON STYLES */
+
+/* BUTTON STYLES 
+-----------------*/
 .buttons {
-    clear: both;
-    overflow: hidden;
-    border-top: 1px solid #c2c2c2;
-    padding-top: 10px;
-    margin-bottom: 25px;
-}
-.button-wrap {
-    float:right;
+    padding: 10px 0;
+    float: right;
 }
 
 /* Targets all classes that start with "btn" to create a global style. Need to add fallback for IE6 */
@@ -151,6 +162,7 @@ a[class^="btn"] {
 **********************************************************/
 .procedure-wrapper .details {
     padding: 28px;
+    overflow: hidden;
 }
 
 
@@ -226,10 +238,6 @@ a[class^="btn"] {
     .isolation-point-table td, .isolation-point-table th {
         padding: 5px 10px;
     }
-
-    .isolation-point-table .actions {
-        width: 5px;
-    }
     .isolation-point-table .identifier {
         width: 52px ;
     }
@@ -251,6 +259,12 @@ a[class^="btn"] {
     .isolation-point-table .actions {
         width: 60px;
     }
+    .isolation-point-table .reorder {
+        width: 35px;
+        background: #fff;
+        text-align: center;
+    }
+
    /* .isolation-point-table .identifier,
     .isolation-point-table .source,
     .isolation-point-table .device {
@@ -274,13 +288,13 @@ a[class^="btn"] {
     top:5%;
 }
 
-.isolation-point-list {
+/*.isolation-point-list {
     margin-left:0;
     width:90%;
     position: absolute;
     background:white;
     top:5%;
-}
+}*/
 
 .isolation-point-editor .inputs {
     padding-bottom:50px;
@@ -305,7 +319,6 @@ a[class^="btn"] {
 }
 
 .isolation-point-table {
-    background:#f8f8f8;
     width:100%;
     height:300px;
     overflow-y:auto;
@@ -320,23 +333,6 @@ a[class^="btn"] {
     width:75px;
 }
 
-
-
-.small-text {
-    width:35px;
-    display:inline-block;
-}
-
-.medium-text {
-    width:75px;
-    display:inline-block;
-}
-
-.large-text {
-    width:200px;
-    line-height: 15px;
-    display:inline-block;
-}
 
 
 
