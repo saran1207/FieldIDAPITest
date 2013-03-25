@@ -4,16 +4,27 @@
     <div wicket:id="title" class="title"/>
 
     <form wicket:id="form">
-        <ul class="inputs">
+        <div class="column">
+            <label><wicket:message key="label.identifier"/><input type="text" wicket:id="identifier"/></label>
+            <label><wicket:message key="label.source"/><input type="text" wicket:id="source"/></label>
+            <label><wicket:message key="label.device"/><a type="text" wicket:id="device"><span wicket:id="description"/></a></label>
+        </div>
+        <!-- <ul class="inputs">
             <li><span><wicket:message key="label.identifier"/></span><input type="text" wicket:id="identifier" class="small-text"/></li>
             <li><span><wicket:message key="label.source"/></span><input type="text" wicket:id="source" class="small-text"/></li>
             <li><span><wicket:message key="label.device"/></span><a type="text" wicket:id="device"><span wicket:id="description" class="medium-text"/></a></li>
-        </ul>
-        <ul class="inputs">
+        </ul> -->
+
+        <div class="column">
+            <label><wicket:message key="label.check"/><input type="text" wicket:id="check" /></label>
+            <label><wicket:message key="label.location"/><input type="text" wicket:id="location"/></label>
+            <label><wicket:message key="label.method"/><input type="text" wicket:id="method"/></label>
+        </div>
+        <!-- <ul class="inputs">
             <li><span><wicket:message key="label.check"/></span><input type="text" wicket:id="check" class="large-text"/></li>
             <li><span><wicket:message key="label.location"/></span><input type="text" wicket:id="location" class="large-text"/></li>
             <li><span><wicket:message key="label.method"/></span><input type="text" wicket:id="method" class="large-text"/></li>
-        </ul>
+        </ul> -->
         
         <hr />
         <div class="buttons">

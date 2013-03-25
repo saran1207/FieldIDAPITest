@@ -90,7 +90,7 @@ h3 {
 
 /* FORM STYLES 
 ---------------*/
-.column {
+.sections .column {
     width: 460px;
     float: left;
     text-align: right;
@@ -98,21 +98,21 @@ h3 {
     line-height: 30px;
 }
 
-.details label {
-    display: inline-block;
+.sections label {
+    display: block;
     margin-bottom: 12px;
     vertical-align: top;
 }
-.details input {
+.sections input {
     width: 285px;
     height: 30px;
     float: right;
     margin-left: 12px;
 }
-.details select {
+.sections select {
     width: 290px;
 }
-.details textarea {
+.sections textarea {
     width: 286px;
     height: 152px;
     margin-left: 12px;
@@ -171,6 +171,7 @@ a[class^="btn"] {
 **********************************************************/
 .procedure-wrapper .content {
     padding: 0 12px;
+    position: relative;
 }
 .image-list-container .blank-slate {
     width: 99.8%;
@@ -180,7 +181,7 @@ a[class^="btn"] {
 .add-isolation-point {
     float: right;
     position: relative;
-    z-index: 5; /* makes the dropdown go over the iamges */
+    z-index: 5; /* makes the dropdown go over the images */
 }
 .isolation-point-list {
     position: relative;
@@ -192,6 +193,9 @@ a[class^="btn"] {
 .isolation-point-table {
     width:100%;
     margin: 45px 0;
+    height: 300px;
+    overflow-y: auto;
+    margin-top: 25px;
 }
     .isolation-point-table tr {
         margin-bottom: 5px;
@@ -201,7 +205,6 @@ a[class^="btn"] {
     .isolation-point-table th {
         border-right: #fff;
         border-left: #fff;
-        /*text-align: center;*/
         font-weight: 600;
     }
     .isolation-point-table td {
@@ -237,6 +240,20 @@ a[class^="btn"] {
         text-align: center;
     }
 
+
+/* ISOLATION POINTS EDITOR
+---------------------------*/
+.isolation-point-editor {
+    width: 97.5%;
+    position: absolute;
+    background: #f8f8f8;
+    z-index: 10;
+    height: 111%;
+    -webkit-box-shadow: 0px 2px 4px 0px #CCC;
+    box-shadow: 0px 2px 4px 0px #CCC;
+    border: 1px solid #ccc;
+    top: 0;
+}
 
 
 
@@ -276,21 +293,7 @@ a[class^="btn"] {
 }
 
 
-/* edit screen */
-.isolation-point-editor {
-    margin-left:120%;
-    width:92%;
-    position: absolute;
-    background:#f8f8f8;
-    /* needs to be above labels and images in procedure list.*/
-    z-index:10;
-    height:90%;
-    -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
-    -webkit-box-shadow: -5px 5px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
-    box-shadow: -11px 11px 4px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
-    border: 1px solid #ccc;
-    top:5%;
-}
+
 
 /*.isolation-point-list {
     margin-left:0;
@@ -300,7 +303,7 @@ a[class^="btn"] {
     top:5%;
 }*/
 
-.isolation-point-editor .inputs {
+/*.isolation-point-editor .inputs {
     padding-bottom:50px;
     float:left;
 }
@@ -335,7 +338,7 @@ a[class^="btn"] {
 
 .isolation-point-table .actions {
     width:75px;
-}
+}*/
 
 
 
