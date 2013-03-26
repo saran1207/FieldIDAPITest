@@ -2,37 +2,29 @@
 
     <!-- A parent css class of "details" is applied here-->
     <!-- temporarily hiding this section to do static html/css tests with the .temp class. -->
-    <div class="column temp">
-        <label wicket:id="procedureCodeLabel" />
-        <input wicket:id="procedureCode" type="text" />
+    <div class="column">
+        <div wicket:id="procedureCode"/>
 
-        <label wicket:id="identifierLabel" />
-        <input wicket:id="identifier" type="text" />
+        <div wicket:id="identifier"/>
 
-        <label wicket:id="revisionLabel" for="revision" />
-        <input wicket:id="revision" type="text" id="revision" />
-     
-        <label wicket:id="warningsLabel"/>
-        <textarea wicket:id="warnings" type="text"/>
+        <label wicket:id="revision"/>
+
+        <div wicket:id="warnings"/>
     </div>
 
-    <div class="column temp">
-        <label wicket:id="userLabel" />
-        <span wicket:id="user" type="text" />
+    <div class="column">
+        <div wicket:id="user"/>
 
-        <label wicket:id="equipmentNumberLabel" />
-        <input wicket:id="equipmentNumber" type="text" />
+        <div wicket:id="equipmentNumber"/>
 
-        <label wicket:id="equipmentLocationLabel" />
-        <input wicket:id="equipmentLocation" type="text" />
+        <div wicket:id="equipmentLocation"/>
 
-        <label wicket:id="equipmentDescriptionLabel" />
-        <input wicket:id="equipmentDescription" type="text" />
+        <div wicket:id="equipmentDescription"/>
     </div>
 
 	<!-- temp ... just for css test with label wrapping the input.
 	Can delete when the java is updated.  -->
- 	<div class="column">
+ 	<div class="column temp">
     	<label>Procedure Code<input type="text" /></label>
     	<label>Electronic Identifier<input type="text" /></label>
        
@@ -48,7 +40,7 @@
     		<textarea></textarea>
     	</label>
    	</div>
-   	<div class="column">
+   	<div class="column temp">
     	<label>Developed By<input type="text" /></label>
     	<label>Equipment Description<input type="text" /></label>
         <label>Test<input type="text" /></label>
@@ -61,10 +53,10 @@
         <a wicket:id="continue" class="btn-green">Continue</a>
     </div>
 
-    <script>
-        $(document).ready(function(){
-            $(".chzn-select").chosen({disable_search_threshold: 15});
-        });
-    </script>
+    <!--<script>-->
+        <!--$(document).ready(function(){-->
+            <!--$(".chzn-select").chosen({disable_search_threshold: 15});-->
+        <!--});-->
+    <!--</script>-->
 
 </wicket:panel>

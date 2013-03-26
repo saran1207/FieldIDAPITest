@@ -31,9 +31,9 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     private ProcedureDefinitionForm form;
     private boolean contentFinished = false;
 
-    public ProcedureDefinitionPage(ProcedureDefinition procedureDefinition) {
-        super();
-        init(procedureDefinition);
+    public ProcedureDefinitionPage(IModel<ProcedureDefinition> model) {
+        super(new PageParameters().add("id",model.getObject().getId()==null?"":model.getObject().getId()));
+        init(model);
     }
 
     public ProcedureDefinitionPage(PageParameters params) {
@@ -41,21 +41,23 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         init(getProcedureDefinition(params));
     }
 
-    private ProcedureDefinition getProcedureDefinition(PageParameters params) {
+    private IModel<ProcedureDefinition> getProcedureDefinition(PageParameters params) {
         // TODO : load procedure definition by ID.   for now i'm just handling new ones.
-        return new ProcedureDefinition();
+        return Model.of(new ProcedureDefinition());
     }
 
-    private void init(ProcedureDefinition procedureDefinition) {
-        add(new Label("assetName",Model.of("Big Machine")));
+    private void init(IModel<ProcedureDefinition> model) {
+        add(new Label("assetName", Model.of("Big Machine")));
         add(new Label("pageTitle",Model.of("Author Procedure")));
         add(new Label("isolationPoint",Model.of(": Isolation Point E-1")));
 
         add(navigation = new Navigation("navigation", new PropertyModel<Score>(this, "currentSection")));
-        add(form = new ProcedureDefinitionForm("form"));
+        add(form = new ProcedureDefinitionForm("form", model));
 
         add(new AttributeAppender("class", Model.of("procedure-definition")));
     }
+
+
 
     protected Label createTitleLabel(String labelId) {
          Label label = new Label(labelId, Model.of("THIS SHOULDN'T BE SHOWN"));
@@ -81,9 +83,10 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         private final Component content;
         private final Component publish;
 
-        ProcedureDefinitionForm(String id) {
-            super(id);
-            add(details = new DetailsPanel("details") {
+        ProcedureDefinitionForm(String id, IModel<ProcedureDefinition> model) {
+            super(id,model);
+
+            add(details = new DetailsPanel("details",model) {
                 @Override protected void doCancel(AjaxRequestTarget target) {
                 }
                 @Override protected void doContinue(AjaxRequestTarget target) {
@@ -92,7 +95,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
                 }
             }.setVisible(true));
 
-            add(content = new ContentPanel("content") {
+            add(content = new ContentPanel("content",model) {
                     @Override protected void doCancel(AjaxRequestTarget target) {
                 }
                 @Override protected void doContinue(AjaxRequestTarget target) {
@@ -102,7 +105,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
             }.setVisible(false));
 
 
-            add(publish = new PublishPanel("publish") {
+            add(publish = new PublishPanel("publish",model) {
                 @Override protected void doCancel(AjaxRequestTarget target) {
                 }
                 @Override protected void doPublish(AjaxRequestTarget target) {

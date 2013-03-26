@@ -182,8 +182,8 @@ a[class^="btn"] {
 
 
 .add-isolation-point {
-    float: right;
-    position: relative;
+    display:inline-block;
+    margin-left:84%;
     z-index: 5; /* makes the dropdown go over the images */
 }
 .isolation-point-list {
@@ -267,6 +267,7 @@ a[class^="btn"] {
     box-shadow: 0px 2px 4px 0px #CCC;
     border: 1px solid #ccc;
     top: 0;
+    margin-left:100%;
 }
 
 .isolation-point-editor h3 {

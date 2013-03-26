@@ -23,6 +23,7 @@ var fieldIdWidgets = (function() {
 		var init = function() {
 			mb.find('.imageButton').click(toggleList);
 			mb.mouseleave(hideItems);
+			items.find('a').click(hideItems);
 		}
 
 		return {

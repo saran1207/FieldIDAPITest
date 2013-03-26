@@ -109,6 +109,8 @@ public class ProcedureDefinition extends EntityWithTenant {
         this.equipmentNumber = equipmentNumber;
     }
 
+
+    // TODO : note.  i don't think this is "old school fieldid" location.  should be just a string.
     public Location getEquipmentLocation() {
         return equipmentLocation;
     }

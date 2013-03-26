@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class ProceduresPage extends LotoPage {
@@ -51,10 +52,10 @@ public class ProceduresPage extends LotoPage {
         switch (mode) {
             case COPY_EXISTING:
                 // TODO : copy from existing page.  for now i'll just do brand new procDefs.
-                setResponsePage(new ProcedureDefinitionPage(new ProcedureDefinition()));
+                setResponsePage(new ProcedureDefinitionPage(Model.of(new ProcedureDefinition())));
                 break;
             case FROM_SCRATCH:
-                setResponsePage(new ProcedureDefinitionPage(new ProcedureDefinition()));
+                setResponsePage(new ProcedureDefinitionPage(Model.of(new ProcedureDefinition())));
                 break;
         }
     }

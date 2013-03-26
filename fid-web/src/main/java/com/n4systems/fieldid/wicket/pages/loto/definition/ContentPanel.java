@@ -7,9 +7,11 @@ import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -27,7 +29,7 @@ public class ContentPanel extends Panel {
     private IsolationPoint newIsolationPoint = createIsolationPoint(IsolationPointSourceType.W);
     private int index=1;
 
-    public ContentPanel(String id) {
+    public ContentPanel(String id, IModel<ProcedureDefinition> model) {
         super(id);
 
         setOutputMarkupId(true);
@@ -44,7 +46,7 @@ public class ContentPanel extends Panel {
 
         add(new AttributeAppender("class", "content"));
 
-        add(list = new IsolationPointListPanel("isolationPoints", new PropertyModel(this,"isolationPoints")) {
+        add(list = new IsolationPointListPanel("isolationPoints", new PropertyModel(model,"isolationPoints")) {
 
             @Override protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
                 newIsolationPoint = isolationPoint;

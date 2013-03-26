@@ -87,6 +87,7 @@ public class IsolationPointListPanel extends Panel {
     class ImageModel extends LoadableDetachableModel<List<EditableImage>> {
         @Override
         protected List<EditableImage> load() {
+            // TODO : temporary...should load only images associated with this procedure.
             List<EditableImage> all = persistenceService.findAll(EditableImage.class);   /// need to add filtering for procedure
             return all;
         }
