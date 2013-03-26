@@ -1,7 +1,6 @@
 <wicket:panel>
 
     <!-- A parent css class of "details" is applied here-->
-    <!-- temporarily hiding this section to do static html/css tests with the .temp class. -->
     <div class="column">
         <div wicket:id="procedureCode"/>
 
@@ -22,41 +21,10 @@
         <div wicket:id="equipmentDescription"/>
     </div>
 
-	<!-- temp ... just for css test with label wrapping the input.
-	Can delete when the java is updated.  -->
- 	<div class="column temp">
-    	<label>Procedure Code<input type="text" /></label>
-    	<label>Electronic Identifier<input type="text" /></label>
-       
-        <label>Revision Number
-            <select class="chzn-select">
-                <option>12345</option>
-                <option>67890</option>
-                <option>39570</option>
-            </select>
-        </label>
-        
-    	<label>Warnings
-    		<textarea></textarea>
-    	</label>
-   	</div>
-   	<div class="column temp">
-    	<label>Developed By<input type="text" /></label>
-    	<label>Equipment Description<input type="text" /></label>
-        <label>Test<input type="text" /></label>
-   	</div> 
-   	<!-- end temp -->
-
     <hr />
     <div class="buttons">
         <a wicket:id="cancel" class="btn-gray">Cancel</a>
         <a wicket:id="continue" class="btn-green">Continue</a>
     </div>
-
-    <!--<script>-->
-        <!--$(document).ready(function(){-->
-            <!--$(".chzn-select").chosen({disable_search_threshold: 15});-->
-        <!--});-->
-    <!--</script>-->
 
 </wicket:panel>

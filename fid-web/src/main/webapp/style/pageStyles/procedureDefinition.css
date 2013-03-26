@@ -110,7 +110,7 @@ h3 {
     padding: 0 5px;
 }
 .sections select {
-    width: 290px;
+    width: 300px;
 }
 .sections textarea {
     width: 286px;
@@ -175,6 +175,7 @@ a[class^="btn"] {
     position: relative;
     overflow: hidden;
     padding-bottom: 28px;
+    min-height: 425px;
 }
 .image-list-container .blank-slate {
     width: 99.8%;
@@ -220,9 +221,21 @@ a[class^="btn"] {
     .isolation-point-table td, .isolation-point-table th {
         padding: 5px 10px;
     }
+    
+    /* column widths */
+    .isolation-point-table .delete {
+        width: 30px;
+    } 
+    .isolation-point-table .thumbnail {
+        width: 30px;
+        padding-left: 0;
+    }
     .isolation-point-table .identifier {
         width: 30px ;
     }
+        .isolation-point-table .headings .identifier {
+            width: 120px;
+        }
     .isolation-point-table .source {
         width: 75px;
     }
@@ -239,7 +252,6 @@ a[class^="btn"] {
         width: 160px;
     }
     .isolation-point-table .actions {
-        /*width: 60px;*/
         width: 35px;
     }
     .isolation-point-table .reorder {
@@ -247,12 +259,8 @@ a[class^="btn"] {
         background: #fff;
         text-align: center;
     }
-    .isolation-point-table .delete {
-        width: 30px;
-    } 
-    .isolation-point-table .thumbnail {
-        width: 30px;
-    }
+    
+
 
 
 /* ISOLATION POINTS EDITOR
@@ -321,12 +329,4 @@ a[class^="btn"] {
     display:none;
 }
 */
-
-.publish-message {
-    font-size:15px;
-    color: #999;
-    padding-top:200px;
-    display:block;
-    text-align:center;
-}
 
