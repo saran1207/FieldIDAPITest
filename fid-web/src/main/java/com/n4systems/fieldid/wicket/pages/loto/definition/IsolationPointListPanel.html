@@ -6,7 +6,7 @@
 
     <div class="isolation-point-table">
         <table>
-            <tr>
+            <tr class="headings">
                 <th class="identifier"><wicket:message key="label.identifier"/></th>
                 <th class="source"><wicket:message key="label.source"/></th>
                 <th class="device"><wicket:message key="label.device"/></th>
@@ -15,6 +15,8 @@
                 <th class="check"><wicket:message key="label.check"/></th>
             </tr>
             <tr wicket:id="list">
+                <td class="delete"><img src="/fieldid/images/delete.gif"></td>
+                <td class="thumbnail"><img src="/fieldid/images/add-photo-slate.png" height="28" width="28"></td>
                 <td wicket:id="id" class="identifier"></td>
                 <td wicket:id="source" class="source"></td>
                 <td wicket:id="device" class="device"></td>
@@ -23,9 +25,10 @@
                 <td wicket:id="check" class="check"></td>
                 <td class="actions">
                     <a wicket:id="edit"><wicket:message key="label.edit"/></a>
-                    <a wicket:id="delete"><wicket:message key="label.delete"/></a>
+                    <a style="display:none;" wicket:id="delete"><wicket:message key="label.delete"/></a>
                 </td>
                 <td class="reorder"><img src="/fieldid/images/icon-reorder.gif"></td>
+                
             </tr>
         </table>
     </div>

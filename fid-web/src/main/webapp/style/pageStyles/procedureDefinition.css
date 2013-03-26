@@ -196,14 +196,18 @@ a[class^="btn"] {
 .isolation-point-table {
     width:100%;
     margin: 45px 0;
-    height: 300px;
-    overflow-y: auto;
+    /*height: 300px;
+    overflow-y: auto;*/
     margin-top: 25px;
 }
     .isolation-point-table tr {
         margin-bottom: 5px;
         display: block;
         border: 1px solid #c2c2c2;
+    }
+    .isolation-point-table tr.headings {
+        border-right: none;
+        border-left: none;
     }
     .isolation-point-table th {
         border-right: #fff;
@@ -217,30 +221,37 @@ a[class^="btn"] {
         padding: 5px 10px;
     }
     .isolation-point-table .identifier {
-        width: 52px ;
+        width: 30px ;
     }
     .isolation-point-table .source {
-        width: 70px;
+        width: 75px;
     }
     .isolation-point-table .device {
-        width: 90px;
+        width: 62px;
     }
     .isolation-point-table .location {
-        width: 100px;
+        width: 140px;
     }
     .isolation-point-table .method {
-        width: 200px;
+        width: 182px;
     }
     .isolation-point-table .check {
-        width: 170px;
+        width: 160px;
     }
     .isolation-point-table .actions {
-        width: 60px;
+        /*width: 60px;*/
+        width: 35px;
     }
     .isolation-point-table .reorder {
-        width: 35px;
+        width: 20px;
         background: #fff;
         text-align: center;
+    }
+    .isolation-point-table .delete {
+        width: 30px;
+    } 
+    .isolation-point-table .thumbnail {
+        width: 30px;
     }
 
 
@@ -280,7 +291,7 @@ a[class^="btn"] {
     width: 327px;
 }
 .isolation-point-editor a.asset-type {
-    width: 300px;
+    width: 340px;
     display: block;
     float: right;
     margin-left: 12px;
