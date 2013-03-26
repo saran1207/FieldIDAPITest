@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.search.ProcedureService;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.Score;
 import com.n4systems.model.procedure.ProcedureDefinition;
@@ -19,10 +20,17 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 
 public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
+
+    private @SpringBean ProcedureService procedureService;
+    protected Label assetNameLabel;
+    protected Label pageTileLabel;
+    protected Label isolationPointLabel;
+    private IModel<ProcedureDefinition> model;
 
     enum ProcedureDefinitionSection { Details, Content, Publish };
 
@@ -47,17 +55,16 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     }
 
     private void init(IModel<ProcedureDefinition> model) {
-        add(new Label("assetName", Model.of("Big Machine")));
-        add(new Label("pageTitle",Model.of("Author Procedure")));
-        add(new Label("isolationPoint",Model.of(": Isolation Point E-1")));
+        this.model = model;
+        add(assetNameLabel = new Label("assetName", Model.of("Big Machine")));
+        add(pageTileLabel = new Label("pageTitle",Model.of("Author Procedure")));
+        add(isolationPointLabel = new Label("isolationPoint",Model.of(": Isolation Point E-1")));
 
         add(navigation = new Navigation("navigation", new PropertyModel<Score>(this, "currentSection")));
         add(form = new ProcedureDefinitionForm("form", model));
 
         add(new AttributeAppender("class", Model.of("procedure-definition")));
     }
-
-
 
     protected Label createTitleLabel(String labelId) {
          Label label = new Label(labelId, Model.of("THIS SHOULDN'T BE SHOWN"));
@@ -77,6 +84,12 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     }
 
 
+    protected ProcedureDefinition getProcedureDefinition() {
+        return model.getObject();
+    }
+
+
+
     class ProcedureDefinitionForm extends Form {
 
         private final Component details;
@@ -86,10 +99,13 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         ProcedureDefinitionForm(String id, IModel<ProcedureDefinition> model) {
             super(id,model);
 
-            add(details = new DetailsPanel("details",model) {
-                @Override protected void doCancel(AjaxRequestTarget target) {
+            add(details = new DetailsPanel("details", model) {
+                @Override
+                protected void doCancel(AjaxRequestTarget target) {
                 }
-                @Override protected void doContinue(AjaxRequestTarget target) {
+
+                @Override
+                protected void doContinue(AjaxRequestTarget target) {
                     currentSection = ProcedureDefinitionSection.Content;
                     updateSection(target);
                 }
@@ -107,8 +123,12 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
 
             add(publish = new PublishPanel("publish",model) {
                 @Override protected void doCancel(AjaxRequestTarget target) {
+                    if (!getProcedureDefinition().isNew()) {
+                        procedureService.resetProcedureDefinition(getProcedureDefinition());
+                    }
                 }
                 @Override protected void doPublish(AjaxRequestTarget target) {
+                    procedureService.saveProcedureDefinition(getProcedureDefinition());
                 }
             }.setVisible(false));
         }
@@ -139,7 +159,6 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         }
 
     }
-
 
     class Navigation extends RadioGroup<ProcedureDefinitionSection> {
 

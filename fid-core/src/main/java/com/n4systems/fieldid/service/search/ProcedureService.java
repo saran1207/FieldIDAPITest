@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.search.ProcedureCriteria;
 import com.n4systems.model.search.WorkflowState;
 import com.n4systems.services.date.DateService;
@@ -49,4 +50,12 @@ public class ProcedureService extends SearchService<ProcedureCriteria, Procedure
         return persistenceService.count(countProcedures) > 0;
     }
 
+    public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) {
+        persistenceService.save(procedureDefinition);
+    }
+
+
+    public ProcedureDefinition resetProcedureDefinition(ProcedureDefinition procedureDefinition) {
+        return persistenceService.reattach(procedureDefinition,true);
+    }
 }

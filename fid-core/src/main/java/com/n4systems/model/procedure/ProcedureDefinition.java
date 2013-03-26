@@ -1,5 +1,6 @@
 package com.n4systems.model.procedure;
 
+import com.google.common.collect.Lists;
 import com.n4systems.model.Asset;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -48,10 +49,10 @@ public class ProcedureDefinition extends EntityWithTenant {
     @OneToMany
     @IndexColumn(name="orderIdx")
     @JoinTable(name="procedure_definitions_isolation_points", joinColumns = @JoinColumn(name = "procedure_definition_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_id"))
-    private List<IsolationPoint> isolationPoints;
+    private List<IsolationPoint> isolationPoints = Lists.newArrayList();
 
     @OneToMany(mappedBy = "procedureDefinition")
-    private List<ProcedureDefinitionImage> images;
+    private List<ProcedureDefinitionImage> images = Lists.newArrayList();
 
     public String getProcedureCode() {
         return procedureCode;

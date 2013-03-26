@@ -13,4 +13,8 @@ public enum IsolationPointSourceType {
         return identifier;
     }
 
+    public static IsolationPointSourceType getDefault() {
+        return W;
+    }
+
 }

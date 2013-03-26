@@ -13,7 +13,14 @@ public class LabelledAutoCompleteUser extends LabelledComponent<AutoComplete<Use
 
     @Override
     protected AutoComplete<User> createLabelledComponent(String id, IModel<User> model) {
-        return new AutoCompleteUser(id,model);
+        AutoCompleteUser autoCompleteUser = new AutoCompleteUser(id, model);
+        autoCompleteUser.setRenderBodyOnly(true);
+        return autoCompleteUser;
+    }
+
+    @Override
+    protected String getComponentMarkupId(AutoComplete<User> component) {
+        return component.getAutocompleteField().getMarkupId();
     }
 
 }

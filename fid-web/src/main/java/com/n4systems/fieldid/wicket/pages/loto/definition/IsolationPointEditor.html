@@ -1,6 +1,5 @@
 <wicket:panel>
 
-    <!-- christina : just using temporary class here...you can probably reuse something.  feel free to change as you see fit.-->
     <h3 wicket:id="title" class="title"/>
 
     <form wicket:id="form">
@@ -10,20 +9,12 @@
             <label><wicket:message key="label.device"/><a class="asset-type" type="text" wicket:id="device"><span wicket:id="description"/></a></label>
         </div>
     
-        <!-- added class of .temp to temporarily hide this. Got an error when I changed the input to a textarea -->
-        <div class="column right temp">
-            <label><wicket:message key="label.check"/><input type="text" wicket:id="check" /></label>
-            <label><wicket:message key="label.location"/><input type="text" wicket:id="location"/></label>
-            <label><wicket:message key="label.method"/><input type="text" wicket:id="method"/></label>
-        </div>
-        
-        <!-- DEREK: This is temp static HTML to change the Check and Method fields to textarea -->
         <div class="column right">
-            <label>Location<input type="text"/></label>
-            <label class="textarea">Checks<textarea></textarea></label>
-            <label class="textarea">Method<textarea></textarea></label>
+            <label><wicket:message key="label.location"/><input type="text" wicket:id="location"/></label>
+            <label><wicket:message key="label.check"/><textarea wicket:id="check" rows="4" cols="80" /></label>
+            <label><wicket:message key="label.method"/><textarea wicket:id="method" rows="4" cols="80"/></label>
         </div>
-        
+
         <div class="buttons">
             <a wicket:id="back" class="btn-gray"><wicket:message key="label.back"/></a>
             <a wicket:id="done" class="btn-green"><wicket:message key="label.done"/></a>

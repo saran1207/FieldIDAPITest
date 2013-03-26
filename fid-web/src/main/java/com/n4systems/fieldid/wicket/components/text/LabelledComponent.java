@@ -27,7 +27,11 @@ public abstract class LabelledComponent<T extends LabeledWebMarkupContainer/*sic
         add(label);
 
         component.setOutputMarkupId(true);
-        label.add(new AttributeModifier("for", Model.of(component.getMarkupId())));
+        label.add(new AttributeModifier("for", Model.of(getComponentMarkupId(component))));
+    }
+
+    protected String getComponentMarkupId(T component) {
+        return component.getMarkupId();
     }
 
     protected abstract T createLabelledComponent(String id, IModel<M> model);
