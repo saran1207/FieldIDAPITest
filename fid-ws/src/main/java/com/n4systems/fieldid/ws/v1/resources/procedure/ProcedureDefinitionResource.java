@@ -1,0 +1,50 @@
+package com.n4systems.fieldid.ws.v1.resources.procedure;
+
+import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
+import com.n4systems.model.procedure.IsolationDeviceDescription;
+import com.n4systems.model.procedure.IsolationPoint;
+import com.n4systems.model.procedure.ProcedureDefinition;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProcedureDefinitionResource extends SetupDataResource<ApiProcedureDefinition, ProcedureDefinition> {
+
+    protected ProcedureDefinitionResource() {
+        super(ProcedureDefinition.class, false);
+    }
+
+    @Override
+    protected ApiProcedureDefinition convertEntityToApiModel(ProcedureDefinition entityModel) {
+        ApiProcedureDefinition apiProcedureDef = new ApiProcedureDefinition();
+        apiProcedureDef.setSid(entityModel.getId());
+        apiProcedureDef.setCompleteIsolationPointInOrder(entityModel.isCompleteIsolationPointInOrder());
+        apiProcedureDef.setElectronicIdentifier(entityModel.getElectronicIdentifier());
+        apiProcedureDef.setEquipmentDescription(entityModel.getEquipmentDescription());
+        apiProcedureDef.setIsolationPoints(convertIsolationPoints(entityModel.getIsolationPoints()));
+        apiProcedureDef.setEquipmentNumber(entityModel.getEquipmentNumber());
+        apiProcedureDef.setRevisionNumber(entityModel.getRevisionNumber());
+        apiProcedureDef.setProcedureCode(entityModel.getProcedureCode());
+        apiProcedureDef.setWarnings(entityModel.getWarnings());
+        return apiProcedureDef;
+    }
+
+    private List<ApiIsolationPoint> convertIsolationPoints(List<IsolationPoint> isolationPoints) {
+        List<ApiIsolationPoint> apiIsolationPoints = new ArrayList<ApiIsolationPoint>();
+        for (IsolationPoint isolationPoint : isolationPoints) {
+            ApiIsolationPoint apiIsolationPoint = new ApiIsolationPoint();
+            apiIsolationPoint.setSid(isolationPoint.getId());
+            apiIsolationPoint.setCheck(isolationPoint.getCheck());
+            apiIsolationPoint.setDeviceDefinition(convertDefinition(isolationPoint.getDeviceDefinition()));
+            apiIsolationPoints.add(apiIsolationPoint);
+        }
+        return apiIsolationPoints;
+    }
+
+    private ApiDeviceDescription convertDefinition(IsolationDeviceDescription deviceDefinition) {
+        ApiDeviceDescription apiDescription = new ApiDeviceDescription();
+        apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
+        // TODO: Attribute criteria
+        return apiDescription;
+    }
+}
