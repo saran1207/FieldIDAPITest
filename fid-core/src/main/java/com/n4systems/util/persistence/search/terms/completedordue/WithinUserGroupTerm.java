@@ -48,7 +48,7 @@ public class WithinUserGroupTerm extends CompleteOrIncompleteTerm {
 
         WhereParameterGroup performerIsInMyGroupAndWasntAssignedOutsideMyGroup = new WhereParameterGroup("performerIsInMyGroupAndWasntAssignedOutsideMyGroup");
         performerIsInMyGroupAndWasntAssignedOutsideMyGroup.setChainOperator(WhereClause.ChainOp.OR);
-        completeGroup.addClause(new WhereParameter<Collection>(WhereParameter.Comparator.IN, "assigneeIsVisibleToMeFilter", "assignee", visibleUsers, null, false, WhereClause.ChainOp.AND));
+        performerIsInMyGroupAndWasntAssignedOutsideMyGroup.addClause(new WhereParameter<Collection>(WhereParameter.Comparator.IN, "assigneeIsVisibleToMeFilter", "assignee", visibleUsers, null, false, WhereClause.ChainOp.AND));
 
         WhereParameterGroup wasntAssignedOutsideMyGroup = new WhereParameterGroup("wasntAssignedOutsideMyGroup");
         wasntAssignedOutsideMyGroup.setChainOperator(WhereClause.ChainOp.AND);
