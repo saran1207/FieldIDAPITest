@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class DetailsPanel extends Panel {
         setOutputMarkupPlaceholderTag(true);
         add(new AttributeAppender("class", Model.of("details")));
 
-        add(new LabelledTextField<String>("procedureCode", "label.procedure_code", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureCode())));
+        add(new LabelledTextField<String>("procedureCode", "label.procedure_code", new PropertyModel<String>(model, "procedureCode")));
 
         add(new LabelledTextField<String>("identifier", "label.identifier", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier())));
 
@@ -61,10 +62,15 @@ public class DetailsPanel extends Panel {
                 doContinue(target);
             }
         });
+
     }
 
-    protected void doCancel(AjaxRequestTarget target) { }
+    protected void doContinue(AjaxRequestTarget target) {
 
-    protected void doContinue(AjaxRequestTarget target) { }
+    }
+
+    protected void doCancel(AjaxRequestTarget target) {
+
+    }
 
 }

@@ -131,6 +131,7 @@ h3 {
 .buttons {
     padding: 10px 0;
     float: right;
+    margin-right:10px;
 }
 
 /* Targets all classes that start with "btn" to create a global style. Need to add fallback for IE6 */
@@ -176,6 +177,7 @@ a[class^="btn"] {
     overflow: hidden;
     padding-bottom: 28px;
     min-height: 425px;
+    /*display:none;*/
 }
 .image-list-container .blank-slate {
     width: 99.8%;
@@ -307,11 +309,9 @@ a[class^="btn"] {
     text-align: left;
 }
 
-.isolation-point-editor .buttons {
-    margin-right: 50px;
+.procedure-wrapper .publish {
+    /*display:none;*/
 }
-
-
 
 /* DEREK'S CSS - will incorporate it into the main css */
 .temp {

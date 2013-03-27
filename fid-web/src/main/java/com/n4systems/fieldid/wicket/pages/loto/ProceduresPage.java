@@ -45,19 +45,25 @@ public class ProceduresPage extends LotoPage {
                 }.add(new Label(labelId, new FIDLabelModel(mode.getLabel())));
             }
         });
-
     }
 
     private void doNewProcedureDef(NewMode mode) {
         switch (mode) {
             case COPY_EXISTING:
                 // TODO : copy from existing page.  for now i'll just do brand new procDefs.
-                setResponsePage(new ProcedureDefinitionPage(Model.of(new ProcedureDefinition())));
+                setResponsePage(new ProcedureDefinitionPage(assetModel,Model.of(newProcedureDefinition())));
                 break;
             case FROM_SCRATCH:
-                setResponsePage(new ProcedureDefinitionPage(Model.of(new ProcedureDefinition())));
+                setResponsePage(new ProcedureDefinitionPage(assetModel, Model.of(newProcedureDefinition())));
                 break;
         }
+    }
+
+    private ProcedureDefinition newProcedureDefinition() {
+        ProcedureDefinition pd = new ProcedureDefinition();
+        pd.setAsset(assetModel.getObject());
+        pd.setTenant(assetModel.getObject().getTenant());
+        return pd;
     }
 
     @Override

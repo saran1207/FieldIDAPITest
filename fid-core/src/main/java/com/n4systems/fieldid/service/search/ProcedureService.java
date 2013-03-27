@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.service.search;
 
+import com.google.common.base.Preconditions;
+import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.search.ProcedureCriteria;
@@ -37,7 +39,6 @@ public class ProcedureService extends SearchService<ProcedureCriteria, Procedure
             addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.CLOSED);
         }
 
-
         DateRangeTerm completedRangeTerm = new DateRangeTerm("completedDate", dateService.calculateFromDate(criteriaModel.getDateRange()), dateService.calculateToDate(criteriaModel.getDateRange()));
         DateRangeTerm dueRangeTerm = new DateRangeTerm("dueDate", dateService.calculateFromDate(criteriaModel.getDueDateRange()), dateService.calculateToDate(criteriaModel.getDueDateRange()));
 
@@ -50,12 +51,27 @@ public class ProcedureService extends SearchService<ProcedureCriteria, Procedure
         return persistenceService.count(countProcedures) > 0;
     }
 
-    public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) {
+    public void save(ProcedureDefinition procedureDefinition) {
         persistenceService.save(procedureDefinition);
     }
 
 
-    public ProcedureDefinition resetProcedureDefinition(ProcedureDefinition procedureDefinition) {
+    public ProcedureDefinition reset(ProcedureDefinition procedureDefinition) {
         return persistenceService.reattach(procedureDefinition,true);
+    }
+
+    public IsolationPoint copyIsolationPoint(IsolationPoint from, IsolationPoint to) {
+        Preconditions.checkArgument(from!=null && to!=null, "can't use null isolation points when copying.");
+
+        to.setId(from.getId());
+        to.setIdentifier(from.getIdentifier());
+        to.setLocation(from.getLocation());
+        to.setMethod(from.getMethod());
+        to.setCheck(from.getCheck());
+        to.setSource(from.getSource());
+        to.setDeviceDefinition(from.getDeviceDefinition());
+        to.setLockDefinition(from.getLockDefinition());
+
+        return to;
     }
 }

@@ -37,20 +37,6 @@ public class IsolationPointListPanel extends Panel {
                 populateIsolationPoint(item);
             }
         });
-
-        add(new AjaxLink("cancel") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                doCancel(target);
-            }
-        });
-        add(new AjaxLink("continue") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                doContinue(target);
-            }
-        });
-
     }
 
     protected void populateIsolationPoint(ListItem<IsolationPoint> item) {

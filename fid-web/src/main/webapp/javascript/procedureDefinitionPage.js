@@ -4,7 +4,6 @@ var procedureDefinitionPage = (function() {
 
 	var closeIsolationPointEditor = function() {
 		$('.isolation-point-editor').animate({'margin-left':'105%'},400);
-
 	}
 
 	var openIsolationPointEditor = function() {

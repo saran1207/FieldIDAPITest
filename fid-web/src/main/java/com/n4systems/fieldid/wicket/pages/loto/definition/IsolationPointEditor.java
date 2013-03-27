@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
+import com.n4systems.fieldid.service.search.ProcedureService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
@@ -17,11 +18,14 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class IsolationPointEditor extends Panel {
 
+    private @SpringBean ProcedureService procedureService;
+
     private Form form;
-    private boolean editing = false;
+    private IsolationPoint editedIsolationPoint;
 
     public IsolationPointEditor(String id) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
@@ -120,30 +124,32 @@ public class IsolationPointEditor extends Panel {
     protected void doCancel(AjaxRequestTarget target) { }
 
     public void edit(IsolationPoint isoPoint) {
-        editing = true;
-        update(isoPoint);
+        editedIsolationPoint = isoPoint;
+        copyIntoModel(isoPoint);
     }
 
-    public void createNew(IsolationPoint isoPoint) {
-        editing = false;
-        update(isoPoint);
+    public void editNew(IsolationPoint isoPoint) {
+        editedIsolationPoint = null;
+        copyIntoModel(isoPoint);
     };
 
-    private void update(IsolationPoint isoPoint) {
+    private IsolationPoint copyIntoModel(IsolationPoint isolationPoint) {
         // TODO : proper cloning here.
-        IsolationPoint isolationPoint = (IsolationPoint) getDefaultModelObject();
-        isolationPoint.setIdentifier(isoPoint.getIdentifier());
-        isolationPoint.setId(isoPoint.getId());
-        isolationPoint.setLocation(isoPoint.getLocation());
-        isolationPoint.setMethod(isoPoint.getMethod());
-        isolationPoint.setCheck(isoPoint.getCheck());
-        isolationPoint.setSource(isoPoint.getSource());
-        isolationPoint.setDeviceDefinition(isoPoint.getDeviceDefinition());
-        isolationPoint.setLockDefinition(isoPoint.getLockDefinition());
+        IsolationPoint ip = (IsolationPoint) getDefaultModelObject();
+        procedureService.copyIsolationPoint(isolationPoint, ip);
+        return isolationPoint;
     }
 
     public IsolationPoint getEditedIsolationPoint() {
-        return (IsolationPoint) getDefaultModelObject();
+        if (isEditing()) {
+            return procedureService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), editedIsolationPoint);
+        } else {
+            return procedureService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(),new IsolationPoint());
+        }
+    }
+
+    public boolean isEditing() {
+        return editedIsolationPoint != null;
     }
 
 }

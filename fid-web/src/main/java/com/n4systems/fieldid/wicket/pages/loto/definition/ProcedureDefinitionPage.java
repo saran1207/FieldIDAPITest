@@ -3,15 +3,18 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.search.ProcedureService;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Score;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -21,16 +24,21 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 import java.util.List;
 
-public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
+public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVisitor<FormComponent,Void> {
 
     private @SpringBean ProcedureService procedureService;
+
     protected Label assetNameLabel;
     protected Label pageTileLabel;
     protected Label isolationPointLabel;
     private IModel<ProcedureDefinition> model;
+    private IModel<Asset> assetModel;
+
 
     enum ProcedureDefinitionSection { Details, Content, Publish };
 
@@ -39,23 +47,30 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     private ProcedureDefinitionForm form;
     private boolean contentFinished = false;
 
-    public ProcedureDefinitionPage(IModel<ProcedureDefinition> model) {
-        super(new PageParameters().add("id",model.getObject().getId()==null?"":model.getObject().getId()));
-        init(model);
+    public ProcedureDefinitionPage(IModel<Asset> assetModel,IModel<ProcedureDefinition> model) {
+        super(new PageParameters());
+        init(assetModel,model);
     }
 
     public ProcedureDefinitionPage(PageParameters params) {
         super(params);
-        init(getProcedureDefinition(params));
+        throw new IllegalStateException("not implemented yet....need to read params ");
+//        init(getAsset(params),getProcedureDefinition(params));
     }
 
-    private IModel<ProcedureDefinition> getProcedureDefinition(PageParameters params) {
-        // TODO : load procedure definition by ID.   for now i'm just handling new ones.
-        return Model.of(new ProcedureDefinition());
-    }
+//    private IModel<Asset> getAsset(PageParameters params) {
+//        // TODO : implement this...load asset via params.
+//        return null;
+//    }
 
-    private void init(IModel<ProcedureDefinition> model) {
+//    private IModel<ProcedureDefinition> getProcedureDefinition(PageParameters params) {
+//        // TODO : load procedure definition by ID.   for now i'm just handling new ones.
+//        return Model.of(new ProcedureDefinition());
+//    }
+
+    private void init(IModel<Asset> assetModel,IModel<ProcedureDefinition> model) {
         this.model = model;
+        this.assetModel = assetModel;
         add(assetNameLabel = new Label("assetName", Model.of("Big Machine")));
         add(pageTileLabel = new Label("pageTitle",Model.of("Author Procedure")));
         add(isolationPointLabel = new Label("isolationPoint",Model.of(": Isolation Point E-1")));
@@ -64,6 +79,18 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         add(form = new ProcedureDefinitionForm("form", model));
 
         add(new AttributeAppender("class", Model.of("procedure-definition")));
+
+        visitChildren(FormComponent.class, this);
+    }
+
+    @Override  // part of IVisitor interface.  to avoid serialization issues, don't make anonymous class.
+    public void component(FormComponent formComponent, IVisit<Void> visit) {
+        formComponent.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override protected void onUpdate(AjaxRequestTarget target) {
+                // TODO : this is hook to save draft mode when anything changes...
+                System.out.println("updated...");
+            }
+        });
     }
 
     protected Label createTitleLabel(String labelId) {
@@ -83,11 +110,9 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         form.updateSection(target);
     }
 
-
     protected ProcedureDefinition getProcedureDefinition() {
         return model.getObject();
     }
-
 
 
     class ProcedureDefinitionForm extends Form {
@@ -97,40 +122,44 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         private final Component publish;
 
         ProcedureDefinitionForm(String id, IModel<ProcedureDefinition> model) {
-            super(id,model);
+            super(id, model);
 
             add(details = new DetailsPanel("details", model) {
-                @Override
-                protected void doCancel(AjaxRequestTarget target) {
+                @Override protected void doCancel(AjaxRequestTarget target) {
+                    ProcedureDefinitionPage.this.doCancel(target);
                 }
 
-                @Override
-                protected void doContinue(AjaxRequestTarget target) {
+                @Override protected void doContinue(AjaxRequestTarget target) {
                     currentSection = ProcedureDefinitionSection.Content;
                     updateSection(target);
                 }
-            }.setVisible(true));
+            });
 
             add(content = new ContentPanel("content",model) {
-                    @Override protected void doCancel(AjaxRequestTarget target) {
+                @Override protected void doCancel(AjaxRequestTarget target) {
+                    ProcedureDefinitionPage.this.doCancel(target);
                 }
+
                 @Override protected void doContinue(AjaxRequestTarget target) {
                     currentSection = ProcedureDefinitionSection.Publish;
                     updateSection(target);
                 }
             }.setVisible(false));
 
-
-            add(publish = new PublishPanel("publish",model) {
-                @Override protected void doCancel(AjaxRequestTarget target) {
+            add(publish = new PublishPanel("publish", model) {
+                @Override
+                protected void doCancel(AjaxRequestTarget target) {
                     if (!getProcedureDefinition().isNew()) {
-                        procedureService.resetProcedureDefinition(getProcedureDefinition());
+                        procedureService.reset(getProcedureDefinition());
                     }
                 }
-                @Override protected void doPublish(AjaxRequestTarget target) {
-                    procedureService.saveProcedureDefinition(getProcedureDefinition());
+
+                @Override
+                protected void doPublish(AjaxRequestTarget target) {
+                    procedureService.save(getProcedureDefinition());
                 }
             }.setVisible(false));
+
         }
 
         public void updateSection(AjaxRequestTarget target) {
@@ -157,6 +186,10 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
             }
             target.add(form,navigation);
         }
+
+    }
+
+    private void doCancel(AjaxRequestTarget target) {
 
     }
 

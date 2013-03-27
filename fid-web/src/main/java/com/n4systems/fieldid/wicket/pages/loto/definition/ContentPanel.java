@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
-import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.search.ProcedureService;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class ContentPanel extends Panel {
 
-    private @SpringBean PersistenceService persistenceService;
+    private @SpringBean ProcedureService procedureService;
 
     private List<EditableImage> images;
     private IsolationPointEditor editor;
@@ -26,8 +27,7 @@ public class ContentPanel extends Panel {
     private int index=1;
 
     public ContentPanel(String id, final IModel<ProcedureDefinition> model) {
-        super(id,model);
-
+        super(id, model);
         setOutputMarkupId(true);
 
         add(new AddIsolationPointButton("addButton") {
@@ -53,11 +53,10 @@ public class ContentPanel extends Panel {
 
         add(editor = new IsolationPointEditor("isolationPointEditor") {
             @Override protected void doDone(AjaxRequestTarget target,Form<?> form) {
-                IsolationPoint editedIsolationPoint = editor.getEditedIsolationPoint();
-                if (!editedIsolationPoint.isNew()) {
-                    updateIsolationPoint(editedIsolationPoint);
+                if (editor.isEditing()) {
+                    updateIsolationPoint();
                 } else {
-                    addIsolationPoint(editedIsolationPoint);
+                    addIsolationPoint();
                 }
                 target.add(list);
             }
@@ -65,24 +64,30 @@ public class ContentPanel extends Panel {
             @Override protected void doCancel(AjaxRequestTarget target) {
             }
         });
+
+        add(new AjaxLink("cancel") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                doCancel(target);
+            }
+        });
+        add(new AjaxLink("continue") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                doContinue(target);
+            }
+        });
+
     }
 
-    private void updateIsolationPoint(IsolationPoint editedIsolationPoint) {
-        for (IsolationPoint isolationPoint: getProcedureDefinition().getIsolationPoints()) {
-           if (isolationPoint.getId().equals(editedIsolationPoint.getId())) {
-               isolationPoint.setIdentifier(editedIsolationPoint.getIdentifier());
-               isolationPoint.setCheck(editedIsolationPoint.getCheck());
-               isolationPoint.setMethod(editedIsolationPoint.getMethod());
-               isolationPoint.setSource(editedIsolationPoint.getSource());
-               isolationPoint.setLocation(editedIsolationPoint.getLocation());
-               return;
-           }
-       }
-       throw new IllegalStateException("can't find isolation point with id '" + editedIsolationPoint.getId() + "'");
+    protected void doContinue(AjaxRequestTarget target) { }
+
+    protected void doCancel(AjaxRequestTarget target) { }
+
+    private IsolationPoint updateIsolationPoint() {
+        return editor.getEditedIsolationPoint();
     }
 
-    private void addIsolationPoint(IsolationPoint editedIsolationPoint) {
-        getProcedureDefinition().getIsolationPoints().add(editedIsolationPoint);
+    private void addIsolationPoint() {
+        getProcedureDefinition().getIsolationPoints().add(editor.getEditedIsolationPoint());
     }
 
     private ProcedureDefinition getProcedureDefinition() {
@@ -90,28 +95,19 @@ public class ContentPanel extends Panel {
     }
 
     protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
-        editor.createNew(createIsolationPoint(sourceType));
+        editor.editNew(createIsolationPoint(sourceType));
         editor.openEditor(target);
     }
 
     private IsolationPoint createIsolationPoint(IsolationPointSourceType sourceType) {
-//        IsolationDeviceDescription device = new IsolationDeviceDescription();
-//        device.setAssetType(AssetTypeBuilder.anAssetType().named("assetType" + index).build());
         IsolationPoint isolationPoint = new IsolationPoint();
-        // TODO : proper name generation!!!
-        isolationPoint.setIdentifier(sourceType.name() + "-"+ index++);
-//        isolationPoint.setCheck("CHECK this is some very very very very very very very very very very very very very very very very  long text blah blah blah ");
-//        isolationPoint.setDeviceDefinition(device);
-//        isolationPoint.setLocation("locsdfsd");
-//        isolationPoint.setMethod("isopMethod this is some very very very very very very very very very very very very very very very very  long text blah blah blah ");
-//        isolationPoint.setSource(sourceType.getIdentifier());
+        isolationPoint.setIdentifier(getNextIdentifier(sourceType));
         return isolationPoint;
     }
 
-    protected void doCancel(AjaxRequestTarget target) { }
-
-    protected void doContinue(AjaxRequestTarget target) { }
-
-
+    private String getNextIdentifier(IsolationPointSourceType sourceType) {
+        // TODO : proper name generation!!!
+        return sourceType.name() + "-"+ index++;
+    }
 
 }

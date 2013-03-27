@@ -14,10 +14,12 @@ public abstract class LabelledComponent<T extends LabeledWebMarkupContainer/*sic
 
     private static final String INPUT_ID = "input";
 
+    protected T component;
+
     public LabelledComponent(String id, String key, IModel<M> model) {
         super(id, model);
 
-        T component = createLabelledComponent(INPUT_ID,model);
+        component = createLabelledComponent(INPUT_ID,model);
         Preconditions.checkState(component!=null && component.getId().equals(INPUT_ID), "you must use id of '"+INPUT_ID+"' for labelled component.");
 
         FormComponentLabel label = new FormComponentLabel("label",component);
