@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.model.common.EditableImage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.net.URL;
@@ -8,11 +9,16 @@ import java.net.URL;
 public class ExternalS3Image extends ExternalImage {
 
     private @SpringBean S3Service s3Service;
-    private final String s3Path;
+
+    private String s3Path;
 
     public ExternalS3Image(String id, String s3Path) {
         super(id, s3Path);
         this.s3Path = s3Path;
+    }
+
+    public ExternalS3Image(String id, EditableImage image) {
+        this(id, image.getOriginalFile());
     }
 
     @Override
@@ -23,4 +29,5 @@ public class ExternalS3Image extends ExternalImage {
         }
         return url.toString();
     }
+
 }

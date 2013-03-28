@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Table(name="image_annotation")
 public class ImageAnnotation extends BaseEntity {
 
+    // TODO : make this handled by javascript automatically.
     public enum Direction {
         N("north"), S("south"), W("west"), E("east");
         String css;

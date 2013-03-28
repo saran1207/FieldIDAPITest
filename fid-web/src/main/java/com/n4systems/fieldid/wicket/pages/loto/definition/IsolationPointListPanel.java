@@ -8,6 +8,7 @@ import com.n4systems.model.procedure.IsolationPoint;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -47,6 +48,9 @@ public class IsolationPointListPanel extends Panel {
         item.add(new Label("location", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getLocation())));
         item.add(new Label("method", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getMethod())));
         item.add(new Label("check", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getCheck())));
+//        item.add(new Label("image"), new ExternalS3Image("image",isolationPoint.getImage()));
+        item.add(new WebMarkupContainer("image"));
+
         // UI : suggestion, don't have edit next to delete.
         item.add(new AjaxLink("edit") {
             @Override public void onClick(AjaxRequestTarget target) {

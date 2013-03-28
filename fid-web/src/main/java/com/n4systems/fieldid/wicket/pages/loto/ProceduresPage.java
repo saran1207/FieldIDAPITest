@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.search.ProcedureService;
 import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -13,10 +14,16 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.List;
 
 public class ProceduresPage extends LotoPage {
+
+    private @SpringBean ProcedureService procedureService;
 
     enum NewMode {
         COPY_EXISTING("label.copy_existing"), FROM_SCRATCH("label.start_blank");
@@ -45,16 +52,37 @@ public class ProceduresPage extends LotoPage {
                 }.add(new Label(labelId, new FIDLabelModel(mode.getLabel())));
             }
         });
+
+        add(new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
+
+            @Override
+            protected void populateItem(ListItem<ProcedureDefinition> item) {
+                final ProcedureDefinition procedureDefinition = item.getModelObject();
+                item.add(new Label("name",procedureDefinition.getProcedureCode()));
+                // TODO : convert dates into friendly format.
+                item.add(new Label("created", procedureDefinition.getCreated().toString()));
+                item.add(new Label("lastModified", procedureDefinition.getModified().toString()));
+                item.add(new Link("edit") {
+                    @Override public void onClick() {
+                        editProcedureDefinition(procedureDefinition);
+                    }
+                });
+            }
+        });
+    }
+
+    private void editProcedureDefinition(ProcedureDefinition procedureDefinition) {
+        setResponsePage(new ProcedureDefinitionPage(new PageParameters().add("id",procedureDefinition.getId())));
     }
 
     private void doNewProcedureDef(NewMode mode) {
         switch (mode) {
             case COPY_EXISTING:
                 // TODO : copy from existing page.  for now i'll just do brand new procDefs.
-                setResponsePage(new ProcedureDefinitionPage(assetModel,Model.of(newProcedureDefinition())));
+                setResponsePage(new ProcedureDefinitionPage(newProcedureDefinition()));
                 break;
             case FROM_SCRATCH:
-                setResponsePage(new ProcedureDefinitionPage(assetModel, Model.of(newProcedureDefinition())));
+                setResponsePage(new ProcedureDefinitionPage(newProcedureDefinition()));
                 break;
         }
     }
@@ -77,6 +105,15 @@ public class ProceduresPage extends LotoPage {
     @Override
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("label.procedures"));
+    }
+
+
+    class ProcedureDefinitionModel extends LoadableDetachableModel<List<ProcedureDefinition>> {
+
+        @Override
+        protected List<ProcedureDefinition> load() {
+            return procedureService.getProceduresForAsset(assetModel.getObject());
+        }
     }
 
 }

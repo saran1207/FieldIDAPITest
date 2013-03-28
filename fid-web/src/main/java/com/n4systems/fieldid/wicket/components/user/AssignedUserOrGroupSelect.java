@@ -34,6 +34,11 @@ public class AssignedUserOrGroupSelect extends Panel {
             add(new GroupedDropDownChoice<Assignable, Class>("assigneeSelect", assigneeModel, assigneesModel, unassignedOrAssigneeRenderer) {
                 {
                     setNullValid(true);
+                }
+
+                @Override
+                protected void onInitialize() {
+                    super.onInitialize();
                     add(new JChosenBehavior());
                 }
 
