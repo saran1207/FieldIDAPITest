@@ -87,7 +87,10 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
 		// get/set the total result count now before the sort terms get added
 		int totalResultCount = findCount(searchBuilder).intValue();
 
-		// now we can add in our sort terms
+		// Set builder back to simple select after finding count
+        searchBuilder.setSimpleSelect();
+
+        // now we can add in our sort terms
 		addSortTermsToBuilder(searchBuilder, criteriaModel);
 
         SearchResult<M> searchResult = new SearchResult<M>();
@@ -182,7 +185,6 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
     }
 
     protected void addSortTerms(T criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
-        searchBuilder.setSimpleSelect();
         if (sortColumn.getJoinExpression() == null) {
             String[] sortExpressions = sortColumn.getSortExpression().split(",");
             for (String sortExpression : sortExpressions) {
