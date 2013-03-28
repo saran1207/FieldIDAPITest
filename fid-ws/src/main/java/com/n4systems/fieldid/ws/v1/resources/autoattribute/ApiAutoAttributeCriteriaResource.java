@@ -28,6 +28,10 @@ public class ApiAutoAttributeCriteriaResource extends SetupDataResource<ApiAutoA
 			apiCriteria.getInputs().add(field.getUniqueID());
 		}
 		
+		for(InfoFieldBean field: criteria.getOutputs()) {
+			apiCriteria.getOutputs().add(field.getUniqueID());
+		}
+		
 		return apiCriteria;
 	}
 }

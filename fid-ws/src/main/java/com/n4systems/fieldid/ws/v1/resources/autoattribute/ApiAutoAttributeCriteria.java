@@ -8,6 +8,7 @@ import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 public class ApiAutoAttributeCriteria extends ApiReadonlyModel {
 	private long assetTypeId;
 	private List<Long> inputs = new ArrayList<Long>();
+	private List<Long> outputs = new ArrayList<Long>();
 	
 	public long getAssetTypeId() {
 		return assetTypeId;
@@ -24,4 +25,12 @@ public class ApiAutoAttributeCriteria extends ApiReadonlyModel {
 	public void setInputs(List<Long> inputs) {
 		this.inputs = inputs;
 	}
+	
+	public List<Long> getOutputs() {
+		return outputs;
+	}
+
+	public void setOutputs(List<Long> outputs) {
+		this.outputs = outputs;
+	}	
 }
