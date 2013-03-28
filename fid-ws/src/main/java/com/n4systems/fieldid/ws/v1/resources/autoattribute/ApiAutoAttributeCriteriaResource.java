@@ -22,6 +22,7 @@ public class ApiAutoAttributeCriteriaResource extends SetupDataResource<ApiAutoA
 		ApiAutoAttributeCriteria apiCriteria = new ApiAutoAttributeCriteria();
 		apiCriteria.setSid(criteria.getId());
 		apiCriteria.setAssetTypeId(criteria.getAssetType().getId());
+		apiCriteria.setModified(criteria.getModified());
 		
 		for (InfoFieldBean field : criteria.getInputs()) {
 			apiCriteria.getInputs().add(field.getUniqueID());
