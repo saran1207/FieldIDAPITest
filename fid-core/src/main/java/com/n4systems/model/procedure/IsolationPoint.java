@@ -8,10 +8,6 @@ import javax.persistence.*;
 @Table(name = "isolation_points")
 public class IsolationPoint extends BaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name="procedure_definition_id")
-    private ProcedureDefinition procedureDefinition;
-
     @Column(name="identifier")
     private String identifier;
 
