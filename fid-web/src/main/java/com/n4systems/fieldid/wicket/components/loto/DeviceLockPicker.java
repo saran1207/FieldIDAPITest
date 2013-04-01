@@ -4,13 +4,13 @@ import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.procedure.IsolationDeviceDescription;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.ejb.entity.InfoFieldBean;
@@ -34,15 +34,15 @@ public class DeviceLockPicker extends Panel {
     @SpringBean
     private AssetTypeService assetTypeService;
 
-    public DeviceLockPicker(String id, final IModel<List<InfoOptionBean>> optionList, boolean isDevicePicker) {
-        super(id, optionList);
-        this.optionList = optionList;
+    public DeviceLockPicker(String id, IModel<IsolationDeviceDescription> deviceDescriptionModel, boolean isDevicePicker) {
+        super(id, deviceDescriptionModel);
+        this.selectedDeviceType = new PropertyModel<AssetType>(deviceDescriptionModel.getObject(), "assetType");
+        this.optionList = new PropertyModel<List<InfoOptionBean>>(deviceDescriptionModel.getObject(), "attributeValues");
         this.isDevicePicker = isDevicePicker;
-        selectedDeviceType = Model.of(new AssetType());
-        attributeList.add(new InfoFieldBean());
+        this.attributeList.add(new InfoFieldBean());
 
         FidDropDownChoice assetTypes;
-        add(assetTypes = new FidDropDownChoice<AssetType>("assetTypes", Model.of(new AssetType()), new DeviceListModel(), new ListableChoiceRenderer<AssetType>()) {
+        add(assetTypes = new FidDropDownChoice<AssetType>("assetTypes", selectedDeviceType, new DeviceListModel(), new ListableChoiceRenderer<AssetType>()) {
             @Override
             protected boolean wantOnSelectionChangedNotifications() {
                 return true;
@@ -50,7 +50,6 @@ public class DeviceLockPicker extends Panel {
 
             @Override
             protected void onSelectionChanged(AssetType newSelection) {
-                selectedDeviceType.setObject(newSelection);
                 if(newSelection == null) {
                     deviceAttributePanel.setVisible(false);
                 }

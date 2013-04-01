@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
-import com.n4systems.fieldid.service.search.ProcedureSearchService;
+import com.n4systems.fieldid.service.search.ProcedureService;
+import com.n4systems.fieldid.wicket.components.loto.DeviceLockPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
@@ -23,10 +24,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class IsolationPointEditor extends Panel {
 
     private @SpringBean
-    ProcedureSearchService procedureSearchService;
+    ProcedureService procedureService;
 
     private Form form;
     private IsolationPoint editedIsolationPoint;
+
+    private DeviceLockPicker isolationDevicePicker;
 
     public IsolationPointEditor(String id) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
@@ -40,12 +43,21 @@ public class IsolationPointEditor extends Panel {
 
         form.add(new TextField("identifier"));
         form.add(new TextField("source", new PropertyModel(getDefaultModel(),"source")));
-        form.add(new AjaxLink("device") {
+        form.add(new AjaxLink<Void>("device", new Model()) {
             @Override
             public void onClick(AjaxRequestTarget target) {
+                isolationDevicePicker.setVisible(true);
+                target.add(isolationDevicePicker);
+
             }
         }.add(new Label("description", getDeviceDescriptionModel())));
 
+        if(editedIsolationPoint == null) {
+            getIsolationPointModel().getObject().setDeviceDefinition(new IsolationDeviceDescription());
+        }
+        form.add(isolationDevicePicker = new DeviceLockPicker("devicePicker", new PropertyModel<IsolationDeviceDescription>(getDefaultModel(), "deviceDefinition"), true));
+        isolationDevicePicker.setOutputMarkupPlaceholderTag(true);
+        isolationDevicePicker.setVisible(false);
 
         form.add(new TextField("location", new PropertyModel(getDefaultModel(),"location")));
         form.add(new TextArea("check"));
@@ -137,15 +149,15 @@ public class IsolationPointEditor extends Panel {
     private IsolationPoint copyIntoModel(IsolationPoint isolationPoint) {
         // TODO : proper cloning here.
         IsolationPoint ip = (IsolationPoint) getDefaultModelObject();
-        procedureSearchService.copyIsolationPoint(isolationPoint, ip);
+        procedureService.copyIsolationPoint(isolationPoint, ip);
         return isolationPoint;
     }
 
     public IsolationPoint getEditedIsolationPoint() {
         if (isEditing()) {
-            return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), editedIsolationPoint);
+            return procedureService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), editedIsolationPoint);
         } else {
-            return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(),new IsolationPoint());
+            return procedureService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(),new IsolationPoint());
         }
     }
 
