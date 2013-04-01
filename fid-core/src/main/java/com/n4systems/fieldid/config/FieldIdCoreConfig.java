@@ -246,8 +246,8 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
-    public ProcedureService procedureService() {
-        return new ProcedureService();
+    public ProcedureSearchService procedureService() {
+        return new ProcedureSearchService();
     }
 
     @Bean

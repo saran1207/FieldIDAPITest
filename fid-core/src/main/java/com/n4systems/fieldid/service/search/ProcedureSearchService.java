@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class ProcedureService extends SearchService<ProcedureCriteria, Procedure> {
+public class ProcedureSearchService extends SearchService<ProcedureCriteria, Procedure> {
 
     @Autowired
     private DateService dateService;
 
-    public ProcedureService() {
+    public ProcedureSearchService() {
         super(Procedure.class);
     }
 

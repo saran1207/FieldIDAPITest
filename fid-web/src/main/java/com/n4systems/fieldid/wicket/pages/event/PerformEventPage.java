@@ -84,4 +84,9 @@ public class PerformEventPage extends EventPage {
         return new Label(labelId, new FIDLabelModel("title.perform_event"));
     }
 
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        System.out.println("PerformEventPage before render");
+    }
 }

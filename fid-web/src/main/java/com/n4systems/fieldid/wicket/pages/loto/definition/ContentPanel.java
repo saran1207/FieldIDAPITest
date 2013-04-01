@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
-import com.n4systems.fieldid.service.search.ProcedureService;
+import com.n4systems.fieldid.service.search.ProcedureSearchService;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.procedure.IsolationPoint;
@@ -18,7 +18,8 @@ import java.util.List;
 
 public class ContentPanel extends Panel {
 
-    private @SpringBean ProcedureService procedureService;
+    private @SpringBean
+    ProcedureSearchService procedureSearchService;
 
     private List<EditableImage> images;
     private IsolationPointEditor editor;

@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.search.ProcedureService;
+import com.n4systems.fieldid.service.search.ProcedureSearchService;
 import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ProceduresPage extends LotoPage {
 
-    private @SpringBean ProcedureService procedureService;
+    private @SpringBean ProcedureSearchService procedureService;
 
     enum NewMode {
         COPY_EXISTING("label.copy_existing"), FROM_SCRATCH("label.start_blank");

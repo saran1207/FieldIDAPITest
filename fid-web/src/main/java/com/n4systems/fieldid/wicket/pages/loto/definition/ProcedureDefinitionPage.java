@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.search.ProcedureService;
+import com.n4systems.fieldid.service.search.ProcedureSearchService;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.Score;
@@ -34,7 +34,7 @@ import java.util.List;
 
 public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVisitor<FormComponent,Void> {
 
-    private @SpringBean ProcedureService procedureService;
+    private @SpringBean ProcedureSearchService procedureService;
     private @SpringBean PersistenceService persistenceService;
 
     protected Label assetNameLabel;

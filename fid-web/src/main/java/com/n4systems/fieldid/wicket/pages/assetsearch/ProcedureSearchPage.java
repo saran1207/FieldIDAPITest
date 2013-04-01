@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch;
 
-import com.n4systems.fieldid.service.search.ProcedureService;
+import com.n4systems.fieldid.service.search.ProcedureSearchService;
 import com.n4systems.fieldid.wicket.components.proceduresearch.results.ProcedureResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
@@ -20,7 +20,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class ProcedureSearchPage extends AbstractSearchPage<ProcedureCriteria> {
 
     @SpringBean
-    private ProcedureService procedureService;
+    private ProcedureSearchService procedureSearchService;
 
     public ProcedureSearchPage(PageParameters params) {
         super(params);
@@ -40,7 +40,7 @@ public class ProcedureSearchPage extends AbstractSearchPage<ProcedureCriteria> {
     }
 
     private boolean tenantHasProcedures() {
-        return procedureService.hasProcedures();
+        return procedureSearchService.hasProcedures();
     }
 
     @Override
