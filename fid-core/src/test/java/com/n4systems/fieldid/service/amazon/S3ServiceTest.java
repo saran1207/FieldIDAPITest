@@ -163,6 +163,7 @@ public class S3ServiceTest extends FieldIdServiceTest {
         final Long tenantId = 73L;
         String fileName = "image.png";
         String contentType = "png";
+        String tempFileName = "0fea31509bc";
 
         TextFieldCriteriaResult result = new TextFieldCriteriaResult() {
             @Override public Tenant getTenant() {
@@ -184,30 +185,34 @@ public class S3ServiceTest extends FieldIdServiceTest {
             }
         };
 
-        final CriteriaResultImage criteriaResultImage = new CriteriaResultImage() {
-            @Override public byte[] getImageData() {
-                return imageData;
-            }
-        };
+        final CriteriaResultImage criteriaResultImage = new CriteriaResultImage();
+        criteriaResultImage.setTempFileName(tempFileName);
         criteriaResultImage.setFileName(fileName);
         criteriaResultImage.setContentType(contentType);
         criteriaResultImage.setCriteriaResult(result);
 
-        expect(imageService.generateThumbnail(imageData)).andReturn(thumbnail);
-        expect(imageService.generateMedium(imageData)).andReturn(medium);
+        expect(imageService.generateThumbnail(aryEq(imageData))).andReturn(thumbnail);
+        expect(imageService.generateMedium(aryEq(imageData))).andReturn(medium);
         replay(imageService);
 
-        expect(configService.getString(ConfigEntry.AMAZON_S3_BUCKET)).andReturn(bucket).times(3);
+        expect(configService.getString(ConfigEntry.AMAZON_S3_BUCKET)).andReturn(bucket).times(5);
         replay(configService);
 
         String key1 = String.format(S3Service.TENANTS_PREFIX + tenantId + S3Service.CRITERIA_RESULT_IMAGE_PATH_THUMB,eventId,resultId,fileName);
         String key2 = String.format(S3Service.TENANTS_PREFIX + tenantId + S3Service.CRITERIA_RESULT_IMAGE_PATH_MEDIUM,eventId,resultId,fileName);
         String key3 = String.format(S3Service.TENANTS_PREFIX + tenantId + S3Service.CRITERIA_RESULT_IMAGE_PATH_ORIG,eventId,resultId,fileName);
+        String key4 = String.format(S3Service.TENANTS_PREFIX + tenantId + S3Service.CRITERIA_RESULT_IMAGE_TEMP, tempFileName);
 
+        S3Object s3Object = createMock(S3Object.class);
+        S3ObjectInputStream s3ObjectInputStream = new S3ObjectInputStream(new ByteArrayInputStream(imageData), null);
+        expect(s3Object.getObjectContent()).andReturn(s3ObjectInputStream);
+
+        expect(s3client.getObject(bucket, key4)).andReturn(s3Object);
+        /*expect*/s3client.deleteObject(bucket, key4);
         expect(s3client.putObject(PutObjectRequestMatcher.eq(bucket, key1,thumbnail.length,contentType))).andReturn(new PutObjectResult()/*ignored*/);
         expect(s3client.putObject(PutObjectRequestMatcher.eq(bucket, key2,medium.length,contentType))).andReturn(new PutObjectResult()/*ignored*/);
         expect(s3client.putObject(PutObjectRequestMatcher.eq(bucket, key3,imageData.length,contentType))).andReturn(new PutObjectResult()/*ignored*/);
-        replay(s3client);
+        replay(s3client, s3Object);
 
         s3Service.uploadCriteriaResultImage(criteriaResultImage);
 

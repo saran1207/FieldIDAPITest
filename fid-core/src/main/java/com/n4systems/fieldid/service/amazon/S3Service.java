@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
@@ -39,6 +40,10 @@ public class S3Service extends FieldIdPersistenceService {
 	public static final String CRITERIA_RESULT_IMAGE_PATH_ORIG = "/events/%d/criteria_results/%d/criteria_images/%s";
 	public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
+
+    public static final String CRITERIA_RESULT_IMAGE_TEMP = "/temp_criteria_result_images/%s";
+    public static final String CRITERIA_RESULT_THUMB_IMAGE_TEMP = "/temp_criteria_result_images/%s.thumbnail";
+    public static final String CRITERIA_RESULT_MEDIUM_IMAGE_TEMP = "/temp_criteria_result_images/%s.medium";
 
     public static final String ASSET_PROFILE_IMAGE_PATH = "/assets/%d/profile/";
     public static final String ASSET_PROFILE_IMAGE_PATH_ORIG = "/assets/%d/profile/%s";
@@ -210,43 +215,86 @@ public class S3Service extends FieldIdPersistenceService {
         removeResource(null, ASSET_PROFILE_IMAGE_PATH_THUMB, assetId, imageName);
     }
 
+    public String uploadTempCriteriaResultImage(CriteriaResultImage criteriaResultImage, byte[] imageData) {
+        Long tenantId = criteriaResultImage.getCriteriaResult().getTenant().getId();
+        String uuid = UUID.randomUUID().toString();
+
+        byte[] mediumImage = imageService.generateMedium(imageData);
+        byte[] thumbImage = imageService.generateThumbnail(imageData);
+
+        uploadResource(imageData, criteriaResultImage.getContentType(), tenantId,
+                CRITERIA_RESULT_IMAGE_TEMP, uuid);
+        uploadResource(mediumImage, criteriaResultImage.getContentType(), tenantId,
+                CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, uuid);
+        uploadResource(thumbImage, criteriaResultImage.getContentType(), tenantId,
+                CRITERIA_RESULT_THUMB_IMAGE_TEMP, uuid);
+
+        return uuid;
+    }
+
 	public void uploadCriteriaResultImage(CriteriaResultImage criteriaResultImage) {
-		byte[] thumbnailImage = imageService.generateThumbnail(criteriaResultImage.getImageData());
-		byte[] mediumImage = imageService.generateMedium(criteriaResultImage.getImageData());
+        Long tenantId = criteriaResultImage.getCriteriaResult().getTenant().getId();
+        String tempFileName = criteriaResultImage.getTempFileName();
 
-		uploadResource(
-				thumbnailImage,
-				criteriaResultImage.getContentType(),
-				criteriaResultImage.getCriteriaResult().getTenant().getId(),
-				CRITERIA_RESULT_IMAGE_PATH_THUMB,
-				criteriaResultImage.getCriteriaResult().getEvent().getId(),
-				criteriaResultImage.getCriteriaResult().getId(),
-				criteriaResultImage.getFileName());
+        copyTemporaryCriteriaResultImageToFinal(criteriaResultImage, CRITERIA_RESULT_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_ORIG);
+        copyTemporaryCriteriaResultImageToFinal(criteriaResultImage, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_MEDIUM);
+        copyTemporaryCriteriaResultImageToFinal(criteriaResultImage, CRITERIA_RESULT_THUMB_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_THUMB);
 
-		uploadResource(
-				mediumImage,
-				criteriaResultImage.getContentType(),
-				criteriaResultImage.getCriteriaResult().getTenant().getId(),
-				CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
-				criteriaResultImage.getCriteriaResult().getEvent().getId(),
-				criteriaResultImage.getCriteriaResult().getId(),
-				criteriaResultImage.getFileName());
+        removeResource(tenantId, CRITERIA_RESULT_IMAGE_TEMP, tempFileName);
+        removeResource(tenantId, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, tempFileName);
+        removeResource(tenantId, CRITERIA_RESULT_THUMB_IMAGE_TEMP, tempFileName);
+    }
 
-		uploadResource(
-				criteriaResultImage.getImageData(),
-				criteriaResultImage.getContentType(),
-				criteriaResultImage.getCriteriaResult().getTenant().getId(),
-				CRITERIA_RESULT_IMAGE_PATH_ORIG,
-				criteriaResultImage.getCriteriaResult().getEvent().getId(),
-				criteriaResultImage.getCriteriaResult().getId(),
-				criteriaResultImage.getFileName());
-	}
+    private void copyTemporaryCriteriaResultImageToFinal(CriteriaResultImage criteriaResultImage, String tempFileNameTemplate, String finalFileNameTemplate) {
+        Long tenantId = criteriaResultImage.getCriteriaResult().getTenant().getId();
+        String tempFileName = criteriaResultImage.getTempFileName();
+        CopyObjectRequest copyObjectRequest = new CopyObjectRequest(getBucket(),
+                createResourcePath(tenantId, tempFileNameTemplate, tempFileName), getBucket(),
+                createResourcePath(tenantId, finalFileNameTemplate,
+                    criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                    criteriaResultImage.getCriteriaResult().getId(),
+                    criteriaResultImage.getFileName()));
 
-	public URL getCriteriaResultImageOriginalURL(CriteriaResultImage criteriaResultImage) {
-		return generateResourceUrl(null, CRITERIA_RESULT_IMAGE_PATH_ORIG,
-				criteriaResultImage.getCriteriaResult().getEvent().getId(),
-				criteriaResultImage.getCriteriaResult().getId(),
-				criteriaResultImage.getFileName());
+        getClient().copyObject(copyObjectRequest);
+    }
+
+    public void uploadCriteriaResultImage(CriteriaResultImage criteriaResultImage, byte[] imageData) {
+        byte[] thumbnailImage = imageService.generateThumbnail(imageData);
+        byte[] mediumImage = imageService.generateMedium(imageData);
+
+        Long tenantId = criteriaResultImage.getCriteriaResult().getTenant().getId();
+
+        uploadResource(
+                thumbnailImage,
+                criteriaResultImage.getContentType(),
+                tenantId,
+                CRITERIA_RESULT_IMAGE_PATH_THUMB,
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
+
+        uploadResource(
+                mediumImage,
+                criteriaResultImage.getContentType(),
+                tenantId,
+                CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
+
+        uploadResource(
+                imageData,
+                criteriaResultImage.getContentType(),
+                tenantId,
+                CRITERIA_RESULT_IMAGE_PATH_ORIG,
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
+    }
+
+    public URL getCriteriaResultImageMediumTempURL(CriteriaResultImage criteriaResultImage) {
+		return generateResourceUrl(null, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP,
+				criteriaResultImage.getTempFileName());
 	}
 
 	public URL getCriteriaResultImageMediumURL(CriteriaResultImage criteriaResultImage) {
@@ -272,9 +320,9 @@ public class S3Service extends FieldIdPersistenceService {
 	
 	public byte[] downloadCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
 		return downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
-				criteriaResultImage.getCriteriaResult().getEvent().getId(),
-				criteriaResultImage.getCriteriaResult().getId(),
-				criteriaResultImage.getFileName());
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
 	}
 
     public InputStream openCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {

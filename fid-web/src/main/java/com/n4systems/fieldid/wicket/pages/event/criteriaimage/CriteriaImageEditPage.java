@@ -14,11 +14,8 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.image.NonCachingImage;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
@@ -45,22 +42,10 @@ public class CriteriaImageEditPage extends FieldIDAuthenticatedPage {
 
             final CriteriaResultImage image = model.getObject().getCriteriaImages().get(imageIndex);
             
-            if(image.getImageData() == null) {
+            if (image.getTempFileName() == null) {
                 add(new ExternalImage("image", s3Service.getCriteriaResultImageMediumURL(image).toString()));
-            }else {
-                add(new NonCachingImage("image", new AbstractReadOnlyModel<DynamicImageResource>() {
-                    @Override
-                    public DynamicImageResource getObject() {
-                        DynamicImageResource imageResource = new DynamicImageResource() {
-                            @Override
-                            protected byte[] getImageData(Attributes attributes) {
-                                return imageService.scaleImage(image.getImageData(), 510, 510);
-                            }
-                        };
-                        imageResource.setFormat(image.getContentType());
-                        return imageResource;
-                    }
-                }));
+            } else {
+                add(new ExternalImage("image", s3Service.getCriteriaResultImageMediumTempURL(image).toString()));
             }
             add(new TextArea("comments", new PropertyModel(image, "comments")));
 

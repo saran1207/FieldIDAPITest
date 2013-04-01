@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.event.criteriaimages;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -9,8 +10,11 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class CriteriaImagesPanel extends Panel {
+
+    private @SpringBean S3Service s3Service;
 
 	public CriteriaImagesPanel(String id, final IModel<CriteriaResult> model) {
 		super(id, model);
@@ -35,8 +39,12 @@ public class CriteriaImagesPanel extends Panel {
                         CriteriaResultImage criteriaResultImage = new CriteriaResultImage();
                         criteriaResultImage.setCriteriaResult(criteriaResult);
                         criteriaResultImage.setFileName(fileUpload.getClientFileName());
-                        criteriaResultImage.setImageData(fileUpload.getBytes());
                         criteriaResultImage.setContentType(fileUpload.getContentType());
+
+                        byte[] imageData = fileUpload.getBytes();
+
+                        String tempFileName = s3Service.uploadTempCriteriaResultImage(criteriaResultImage, imageData);
+                        criteriaResultImage.setTempFileName(tempFileName);
 
                         criteriaResult.getCriteriaImages().add(criteriaResultImage);
                     }

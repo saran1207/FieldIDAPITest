@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.event.criteriaimage;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
@@ -16,6 +17,7 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
@@ -23,6 +25,8 @@ import org.apache.wicket.validation.validator.AbstractValidator;
 import java.util.List;
 
 public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
+
+    private @SpringBean S3Service s3Service;
 
     private FIDFeedbackPanel feedbackPanel;
     
@@ -67,13 +71,18 @@ public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
                     if (fileUpload != null) {
                         CriteriaResult criteriaResult = getModelObject();
 
+                        byte[] imageData = fileUpload.getBytes();
+
                         CriteriaResultImage criteriaResultImage = new CriteriaResultImage();
                         criteriaResultImage.setCriteriaResult(criteriaResult);
                         criteriaResultImage.setFileName(fileUpload.getClientFileName());
-                        criteriaResultImage.setImageData(fileUpload.getBytes());
                         criteriaResultImage.setContentType(fileUpload.getContentType());
 
                         criteriaResultImage.setComments(comments);
+
+                        String tempFileName = s3Service.uploadTempCriteriaResultImage(criteriaResultImage, imageData);
+
+                        criteriaResultImage.setTempFileName(tempFileName);
 
                         criteriaResult.getCriteriaImages().add(criteriaResultImage);
 

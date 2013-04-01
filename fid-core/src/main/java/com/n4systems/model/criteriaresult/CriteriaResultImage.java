@@ -21,10 +21,10 @@ public class CriteriaResultImage extends BaseEntity {
 	private String comments;
 
 	@Transient
-	private byte[] imageData;
-
-	@Transient
 	private String contentType;
+
+    @Transient
+    private String tempFileName;
 
 	public CriteriaResult getCriteriaResult() {
 		return criteriaResult;
@@ -50,14 +50,6 @@ public class CriteriaResultImage extends BaseEntity {
 		this.comments = comments;
 	}
 
-	public byte[] getImageData() {
-		return imageData;
-	}
-
-	public void setImageData(byte[] imageData) {
-		this.imageData = imageData;
-	}
-
 	public String getContentType() {
 		return contentType;
 	}
@@ -65,4 +57,12 @@ public class CriteriaResultImage extends BaseEntity {
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 	}
+
+    public String getTempFileName() {
+        return tempFileName;
+    }
+
+    public void setTempFileName(String tempFileName) {
+        this.tempFileName = tempFileName;
+    }
 }

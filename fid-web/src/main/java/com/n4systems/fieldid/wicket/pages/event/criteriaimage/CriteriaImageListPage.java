@@ -11,13 +11,10 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
@@ -47,22 +44,10 @@ public class CriteriaImageListPage extends FieldIDAuthenticatedPage {
                     }
                 });
 
-                if(image.getImageData() == null) {
+                if (image.getTempFileName() == null) {
                     editLink.add(new ExternalImage("thumbnail", s3Service.getCriteriaResultImageThumbnailURL(image).toString()));
                 } else {
-                    editLink.add(new NonCachingImage("thumbnail", new AbstractReadOnlyModel<DynamicImageResource>() {
-                        @Override 
-                        public DynamicImageResource getObject() {
-                            DynamicImageResource imageResource = new DynamicImageResource() {
-                                @Override
-                                protected byte[] getImageData(Attributes attributes) {
-                                    return imageService.generateThumbnail(image.getImageData());
-                                }
-                            };
-                            imageResource.setFormat(image.getContentType());
-                            return imageResource;
-                        }
-                    }));
+                    editLink.add(new ExternalImage("thumbnail", s3Service.getCriteriaResultImageMediumTempURL(image).toString()));
                 }
                 item.add(new Label("comments", new PropertyModel<String>(image, "comments")));
             }
