@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
-import com.n4systems.fieldid.service.search.ProcedureService;
+import com.n4systems.fieldid.service.search.ProcedureSearchService;
 import com.n4systems.fieldid.wicket.components.loto.DeviceLockPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
@@ -24,7 +24,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class IsolationPointEditor extends Panel {
 
     private @SpringBean
-    ProcedureService procedureService;
+    ProcedureSearchService procedureSearchService;
 
     private Form form;
     private IsolationPoint editedIsolationPoint;
@@ -149,15 +149,15 @@ public class IsolationPointEditor extends Panel {
     private IsolationPoint copyIntoModel(IsolationPoint isolationPoint) {
         // TODO : proper cloning here.
         IsolationPoint ip = (IsolationPoint) getDefaultModelObject();
-        procedureService.copyIsolationPoint(isolationPoint, ip);
+        procedureSearchService.copyIsolationPoint(isolationPoint, ip);
         return isolationPoint;
     }
 
     public IsolationPoint getEditedIsolationPoint() {
         if (isEditing()) {
-            return procedureService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), editedIsolationPoint);
+            return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), editedIsolationPoint);
         } else {
-            return procedureService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(),new IsolationPoint());
+            return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(),new IsolationPoint());
         }
     }
 

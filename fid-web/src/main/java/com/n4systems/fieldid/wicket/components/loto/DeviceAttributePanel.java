@@ -74,7 +74,6 @@ public class DeviceAttributePanel extends Panel {
                     @Override
                     protected void onSelectionChanged(InfoFieldBean newSelection) {
                         if (newSelection != null) {
-                            selectedAttributes.get(index).setObject(newSelection);
                             options.setModel(getOptionListModel(newSelection));
                             options.setVisible(true);
                             onAttributeSelected(index, newSelection);
