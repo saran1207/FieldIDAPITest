@@ -1,18 +1,14 @@
-
-
-.image-list .image {
-    position:relative;
-    width:120px;
-    height:160px;
-    overflow:hidden;
-    margin:2px;
+.image-list li {
+    width: 235px;
+    height: 200px;
+    margin: 4px;
     float:left;
-    /* to be set via java code. */
-    background-image:url(http://google.com);
-    background-position:center;
-    background-size:cover;
-    border:1px dotted #d3d3d3;
-    padding: 2px;
+
+    /* Derek: Just background-image to be set via java code but the rest can stay here. Currently it's added inline in the HTML. I still need to find a hack for IE8 and below. */
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50%;
+    background-color: #000;
 }
 
 .blank-slate {
@@ -29,7 +25,7 @@
 
 
 .image-list-container {
+    overflow: hidden;
     /*need to figure out how to give this proper width. could use javascript and sum(imageWidth); */
     /*width:1200px;*/
 }
-

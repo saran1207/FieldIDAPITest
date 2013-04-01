@@ -1,13 +1,28 @@
 <wicket:panel>
 
-    <div class="image-list-container">
-        <ul wicket:id="list">
-            <li><div wicket:id="image" class="image"/></li>
-        </ul>
-        <div wicket:id="blankSlate" class="blank-slate">
-            <wicket:message key="label.no_images"/>
-        </div>
-    </div>
+	<div class="image-list-container">
+		<ul wicket:id="list">
+			<li><div wicket:id="image" class="image"/></li>
+		</ul>
+		
+		<!-- temp static HTML and inline background images for testing CSS -->
+		<ul>
+			<li style="background-image:url(http://placeimg.com/233/233/nature);"></li>
+			<li style="background-image:url(http://placeimg.com/233/186/arch);"></li>
+			<li style="background-image:url(http://placeimg.com/233/174/arch);"></li>
+			<li style="background-image:url(http://placeimg.com/233/155/nature);"></li>
+			<li style="background-image:url(http://placeimg.com/233/145/tech);"></li>
+			<li style="background-image:url(http://placeimg.com/233/131/tech);"></li>
 
-
+			<li style="background-image:url(http://placeimg.com/131/233/tech);"></li>  
+			<li style="background-image:url(http://placeimg.com/145/233/tech);"></li>  
+			<li style="background-image:url(http://placeimg.com/155/233/arch);"></li>  
+			<li style="background-image:url(http://placeimg.com/174/233/nature);"></li>  
+			<li style="background-image:url(http://placeimg.com/186/233/arch);"></li>  
+		</ul>
+			
+		<div style="display:none;" wicket:id="blankSlate" class="blank-slate">
+			<wicket:message key="label.no_images"/>
+		</div>
+	</div>
 </wicket:panel>
