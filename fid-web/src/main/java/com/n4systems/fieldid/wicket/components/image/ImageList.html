@@ -1,13 +1,18 @@
 <wicket:panel>
 
-	<div id="carousel" class="image-list-container">
+	<div id="carousel">
 		<ul wicket:id="list">
 			<li><div wicket:id="image" class="image"/></li>
 		</ul>
 		
 		<!-- temp static HTML and inline background images for testing CSS -->
 		<ul>
-			<li style="background-image:url(http://placeimg.com/233/233/nature);"></li>
+			<li style="background-image:url(http://placeimg.com/233/233/nature);">
+				<div class="isolation-points">
+					<span class="electrical point-1">E-1</span>
+					<span class="water point-2">W-2</span>
+				</div>
+			</li>
 			<li style="background-image:url(http://placeimg.com/233/186/arch);"></li>
 			<li style="background-image:url(http://placeimg.com/233/174/arch);"></li>
 			<li style="background-image:url(http://placeimg.com/233/155/nature);"></li>
@@ -37,10 +42,9 @@
 			var numberOfImages = $('#carousel ul li').length;
 			var imageWidth = $('#carousel ul li').outerWidth(true);
 			var carouselWidth = numberOfImages * imageWidth;
-			$('#carousel ul').css('width', carouselWidth);
+			$('#carousel > ul').css('width', carouselWidth);
 
-
-			//Prev navigation button
+			//navigation buttons
 			$('.prev').click(function(){
 				$("#carousel ul").animate({
 					marginLeft: imageWidth
@@ -51,7 +55,6 @@
 		            $(this).css({marginLeft: 0});
 		        })
 			});
-			//Next navigation button
 			$('.next').click(function(){
 				$("#carousel ul").animate({
 					marginLeft: -imageWidth

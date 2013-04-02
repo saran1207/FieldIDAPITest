@@ -8,18 +8,7 @@
     margin: 0;
     overflow: hidden;
 }
-
-#carousel .navigation {
-    text-align: right;
-    margin-top: 6px;
-}
-
-#carousel .navigation span {
-    cursor: pointer;
-    padding: 8px 0 8px 10px;
-}
-
-.image-list li {
+#carousel ul li {
     position: relative;
     width: 239px;
     height: 200px;
@@ -32,6 +21,47 @@
     background-position: 50%;
     background-color: #000;
 }
+
+#carousel .navigation {
+    text-align: right;
+    margin-top: 6px;
+}
+    #carousel .navigation span {
+        cursor: pointer;
+        padding: 8px 0 8px 10px;
+    }
+
+
+.isolation-points {
+    position: relative;
+}
+.isolation-points span {
+    background: white;
+    -webkit-border-radius: 4px;
+    border-radius: 4px; 
+    display: inline-block;
+    padding: 1px 4px;
+    border: 1px solid;
+
+    position: absolute; /* for positioning isolation points */
+}
+    /* Temp class names & CSS for testing positioning */
+    .isolation-points .point-1 {
+        top: 50px;
+        left: 65px;
+    }
+    .isolation-points .point-2 {
+        top: 30px;
+        right: 35px;
+    }
+
+.isolation-points .water {
+    color: #009966; /* red */
+}
+.isolation-points .electrical {
+    color: #ff0000; /* green */
+}
+
 
 .blank-slate {
     height:100px;
