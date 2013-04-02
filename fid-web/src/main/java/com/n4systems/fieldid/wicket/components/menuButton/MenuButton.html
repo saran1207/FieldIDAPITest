@@ -1,13 +1,13 @@
 <wicket:panel>
-    <li class="menu-button">
-        <a wicket:id="button" class="mattButton mattButtonLeft button"><span wicket:id="label"/></a>
-        <a wicket:id="dropDown" class="mattButton mattButtonRight imageButton"><img src="/fieldid/images/menu-down.png"></a>
-        <ul  class="menu-items">
-            <li wicket:id="items">
-                <img wicket:id="icon"/>
-                <a wicket:id="link"><span wicket:id="label"/></a>
-            </li>
-        </ul>
-    </li>
+    <!-- wrapped in a div called .add-isolation-point and .menu-button -->
+    <a wicket:id="button" class="mattButton mattButtonLeft button"><span wicket:id="label"/></a>
+    <a wicket:id="dropDown" class="mattButton mattButtonRight imageButton"><img src="/fieldid/images/menu-down.png"></a>
+    <ul  class="menu-items">
+        <li wicket:id="items">
+            <!-- Derek, can you wrap the <a> around the icon image? -->
+            <img wicket:id="icon"/>
+            <a wicket:id="link"><span wicket:id="label"/></a>
+        </li>
+    </ul>
 </wicket:panel>
 

@@ -184,24 +184,47 @@ a[class^="btn"] {
 }
 
 
-.add-isolation-point {
-    display:inline-block;
-    margin-left:84%;
+/* ISOLATION POINT DROPDOWN
+----------------------------*/
+.add-isolation-point.menu-button {
+    float: right;
     z-index: 5; /* makes the dropdown go over the images */
 }
+.menu-button .imageButton img {
+    vertical-align: middle;
+}
+.add-isolation-point .menu-items {
+    left: 0;
+    width: 99%;
+    top: 94%;
+}
+.add-isolation-point .menu-items li {
+    padding: 4px 0;
+}
+.add-isolation-point .menu-items li a {
+    width: 70%;
+    display: inline-block;
+}
+.add-isolation-point .menu-items li:hover {
+    background: #fff;
+}
+.add-isolation-point .menu-items img {
+    vertical-align: bottom;
+    padding: 0 5px;
+}
+
+
 .isolation-point-list {
     position: relative;
     z-index: 1;
 }
 
+
 /* ISOLATION POINTS TABLE
 --------------------------*/
 .isolation-point-table {
     width:100%;
-    margin: 45px 0;
-    /*height: 300px;
-    overflow-y: auto;*/
-    margin-top: 25px;
+    margin: 25px 0 45px;
 }
     .isolation-point-table tr {
         margin-bottom: 5px;
@@ -308,6 +331,10 @@ a[class^="btn"] {
     margin-left: 12px;
     text-align: left;
 }
+.isolation-point-editor .buttons {
+    margin-right: 50px;
+}
+
 
 .procedure-wrapper .publish {
     /*display:none;*/
