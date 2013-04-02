@@ -47,15 +47,20 @@ public class IsolationPointEditor extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 isolationDevicePicker.setVisible(true);
+                this.setVisible(false);
+                target.add(this);
                 target.add(isolationDevicePicker);
 
             }
         }.add(new Label("description", getDeviceDescriptionModel())));
 
-        if(editedIsolationPoint == null) {
-            getIsolationPointModel().getObject().setDeviceDefinition(new IsolationDeviceDescription());
-        }
-        form.add(isolationDevicePicker = new DeviceLockPicker("devicePicker", new PropertyModel<IsolationDeviceDescription>(getDefaultModel(), "deviceDefinition"), true));
+        final IModel<IsolationDeviceDescription> deviceDescriptionModel = Model.of(new IsolationDeviceDescription());
+        form.add(isolationDevicePicker = new DeviceLockPicker("devicePicker", deviceDescriptionModel, true) {
+            @Override
+            public void onPickerUpdated() {
+                getIsolationPointModel().getObject().setDeviceDefinition((IsolationDeviceDescription) getDefaultModelObject());
+            }
+        });
         isolationDevicePicker.setOutputMarkupPlaceholderTag(true);
         isolationDevicePicker.setVisible(false);
 
@@ -157,7 +162,7 @@ public class IsolationPointEditor extends Panel {
         if (isEditing()) {
             return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), editedIsolationPoint);
         } else {
-            return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(),new IsolationPoint());
+            return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), new IsolationPoint());
         }
     }
 

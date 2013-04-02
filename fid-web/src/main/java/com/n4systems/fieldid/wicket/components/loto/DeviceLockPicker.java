@@ -36,6 +36,11 @@ public class DeviceLockPicker extends Panel {
 
     public DeviceLockPicker(String id, IModel<IsolationDeviceDescription> deviceDescriptionModel, boolean isDevicePicker) {
         super(id, deviceDescriptionModel);
+
+        if(deviceDescriptionModel.getObject() == null) {
+            deviceDescriptionModel.setObject(new IsolationDeviceDescription());
+        }
+
         this.selectedDeviceType = new PropertyModel<AssetType>(deviceDescriptionModel.getObject(), "assetType");
         this.optionList = new PropertyModel<List<InfoOptionBean>>(deviceDescriptionModel.getObject(), "attributeValues");
         this.isDevicePicker = isDevicePicker;
@@ -62,7 +67,11 @@ public class DeviceLockPicker extends Panel {
         add(new AjaxLink<Void>("refineLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                deviceAttributePanel.setVisible(true);
+                if(selectedDeviceType.getObject() != null) {
+                    deviceAttributePanel.setVisible(true);
+                }else {
+                    deviceAttributePanel.setVisible(false);
+                }
                 target.add(deviceAttributePanel);
             }
         });
@@ -75,14 +84,17 @@ public class DeviceLockPicker extends Panel {
             }
 
             @Override
-            public void onAttributeSelected(int index, InfoFieldBean newSelection) {
+            public void onAttributeSelected(int index, InfoFieldBean newSelection, AjaxRequestTarget target) {
                 attributeList.remove(index);
                 attributeList.add(index, newSelection);
+                target.add(deviceAttributePanel);
             }
 
             @Override
-            public void onOptionSelected(List<IModel<List<InfoOptionBean>>> selectedOptions) {
+            public void onOptionSelected(List<IModel<List<InfoOptionBean>>> selectedOptions, AjaxRequestTarget target) {
                 updateOptions(selectedOptions);
+                target.add(deviceAttributePanel);
+                onPickerUpdated();
             }
 
             @Override
@@ -128,4 +140,6 @@ public class DeviceLockPicker extends Panel {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/device_lock_picker.css");
     }
+
+    public void onPickerUpdated() {}
 }

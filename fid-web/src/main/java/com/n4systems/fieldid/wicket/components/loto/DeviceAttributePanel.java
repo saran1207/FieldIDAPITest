@@ -57,7 +57,7 @@ public class DeviceAttributePanel extends Panel {
                 options.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
-                        onOptionSelected(selectedOptions);
+                        onOptionSelected(selectedOptions, target);
                     }
                 });
                 if(selectedAttributes.get(index).getObject() != null)
@@ -65,25 +65,24 @@ public class DeviceAttributePanel extends Panel {
                 else
                     options.setVisible(false);
 
-                item.add(attributesChoice = new FidDropDownChoice<InfoFieldBean>("attributes", selectedAttributes.get(index), new AvailableAttributeListModel(index), new InfoFieldChoiceRenderer()) {
-                    @Override
-                    protected boolean wantOnSelectionChangedNotifications() {
-                        return true;
-                    }
+                item.add(attributesChoice = new FidDropDownChoice<InfoFieldBean>("attributes", selectedAttributes.get(index), new AvailableAttributeListModel(index), new InfoFieldChoiceRenderer()));
 
+                attributesChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
-                    protected void onSelectionChanged(InfoFieldBean newSelection) {
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        InfoFieldBean newSelection = selectedAttributes.get(index).getObject();
                         if (newSelection != null) {
                             options.setModel(getOptionListModel(newSelection));
                             options.setVisible(true);
-                            onAttributeSelected(index, newSelection);
+                            onAttributeSelected(index, newSelection, target);
                         } else {
                             selectedOptions.get(index).setObject(new ArrayList<InfoOptionBean>());
                             options.setVisible(false);
-                            onOptionSelected(selectedOptions);
+                            onOptionSelected(selectedOptions, target);
                         }
                     }
                 });
+
                 attributesChoice.setNullValid(true);
 
                 item.add(new AjaxLink<Void>("deleteLink") {
@@ -131,9 +130,9 @@ public class DeviceAttributePanel extends Panel {
 
     public void onAddAttribute(AjaxRequestTarget target) {};
 
-    public void onAttributeSelected(int index, InfoFieldBean newSelection) {};
+    public void onAttributeSelected(int index, InfoFieldBean newSelection, AjaxRequestTarget target) {};
 
-    public void onOptionSelected(List<IModel<List<InfoOptionBean>>> selectedOptions) {};
+    public void onOptionSelected(List<IModel<List<InfoOptionBean>>> selectedOptions, AjaxRequestTarget target) {};
 
     public void onDeleteAttribute(AjaxRequestTarget target, int index, List<IModel<List<InfoOptionBean>>> selectedOptions) {};
 
