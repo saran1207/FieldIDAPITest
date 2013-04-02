@@ -34,6 +34,8 @@ public class TenantCreationService extends FieldIdPersistenceService {
 
     public static String DEFAULT_ACTIONS_GROUP_NAME = "Actions";
 
+    private enum DefaultPriorityCodes { Critical, High, Normal, Low; }
+
     @Transactional(rollbackFor = {MessagingException.class, RuntimeException.class })
 	public void createTenant(Tenant tenant, PrimaryOrg primaryOrg, User adminUser) throws MessagingException {
         checkNameUniqueness(tenant);
@@ -44,10 +46,20 @@ public class TenantCreationService extends FieldIdPersistenceService {
 		createDefaultSetupData(tenant);
 		createFieldIDCatalogConnection(primaryOrg);
         createBasicAction(tenant);
+        createDefaultPriorityCode(tenant);
         s3Service.uploadDefaultBrandingLogo(tenant.getId());
 
 		sendWelcomeMessage(adminUser);
 	}
+
+    private void createDefaultPriorityCode(Tenant tenant) {
+        for (DefaultPriorityCodes code: DefaultPriorityCodes.values()) {
+            PriorityCode priorityCode = new PriorityCode();
+            priorityCode.setTenant(tenant);
+            priorityCode.setName(code.name());
+            persistenceService.save(priorityCode);
+        }
+    }
 
     private void createBasicAction(Tenant tenant) {
         EventTypeGroup actionGroup = new EventTypeGroup();
