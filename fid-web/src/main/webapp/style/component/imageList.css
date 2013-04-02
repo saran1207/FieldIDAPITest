@@ -1,7 +1,29 @@
+#carousel {
+    width: 100%;
+    overflow: hidden;
+}
+
+#carousel ul {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+#carousel .navigation {
+    text-align: right;
+    margin-top: 6px;
+}
+
+#carousel .navigation span {
+    cursor: pointer;
+    padding: 8px 0 8px 10px;
+}
+
 .image-list li {
-    width: 235px;
+    position: relative;
+    width: 239px;
     height: 200px;
-    margin: 4px;
+    margin-right: 6px;
     float:left;
 
     /* Derek: Just background-image to be set via java code but the rest can stay here. Currently it's added inline in the HTML. I still need to find a hack for IE8 and below. */
@@ -17,15 +39,4 @@
     background:#eee;
     border: 1px solid #bbb;
     display:block;
-}
-
-.image-list {
-    overflow-x:auto;
-}
-
-
-.image-list-container {
-    overflow: hidden;
-    /*need to figure out how to give this proper width. could use javascript and sum(imageWidth); */
-    /*width:1200px;*/
 }

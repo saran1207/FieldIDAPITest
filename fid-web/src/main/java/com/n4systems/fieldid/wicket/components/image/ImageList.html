@@ -1,6 +1,6 @@
 <wicket:panel>
 
-	<div class="image-list-container">
+	<div id="carousel" class="image-list-container">
 		<ul wicket:id="list">
 			<li><div wicket:id="image" class="image"/></li>
 		</ul>
@@ -20,9 +20,50 @@
 			<li style="background-image:url(http://placeimg.com/174/233/nature);"></li>  
 			<li style="background-image:url(http://placeimg.com/186/233/arch);"></li>  
 		</ul>
-			
+
+		<div class="navigation">
+			<span class="prev"><img src="/fieldid/images/arrow-prev.png"></span>
+			<span class="next"><img src="/fieldid/images/arrow-next.png"></span>
+		</div>
+
 		<div style="display:none;" wicket:id="blankSlate" class="blank-slate">
 			<wicket:message key="label.no_images"/>
 		</div>
+
+		<script type="text/javascript">
+		$(document).ready(function(){
+
+			//Setting width of carousel dynamically
+			var numberOfImages = $('#carousel ul li').length;
+			var imageWidth = $('#carousel ul li').outerWidth(true);
+			var carouselWidth = numberOfImages * imageWidth;
+			$('#carousel ul').css('width', carouselWidth);
+
+
+			//Prev navigation button
+			$('.prev').click(function(){
+				$("#carousel ul").animate({
+					marginLeft: imageWidth
+				}, 500,
+				function(){
+					//Place first image after the last to create a continuous loop
+		            $(this).find("li:first").before($(this).find("li:last"));
+		            $(this).css({marginLeft: 0});
+		        })
+			});
+			//Next navigation button
+			$('.next').click(function(){
+				$("#carousel ul").animate({
+					marginLeft: -imageWidth
+				}, 500,
+				function(){
+					//Place last image before the first to create a continuous loop
+		            $(this).find("li:last").after($(this).find("li:first"));
+		            $(this).css({marginLeft: 0});
+		        })
+			});
+
+		});
+		</script>
 	</div>
 </wicket:panel>
