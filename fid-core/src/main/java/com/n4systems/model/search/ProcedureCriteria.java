@@ -42,7 +42,7 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
 
     private User performedBy;
 
-    private WorkflowState workflowState = WorkflowState.COMPLETE;
+    private ProcedureWorkflowStateCriteria workflowState = ProcedureWorkflowStateCriteria.OPEN;
 
     public AssetStatus getAssetStatus() {
         return assetStatus;
@@ -108,12 +108,12 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
 		return dateRange;
 	}
 
-    public WorkflowState getWorkflowState() {
+    public ProcedureWorkflowStateCriteria getWorkflowState() {
         return workflowState;
     }
 
-    public void setWorkflowState(WorkflowState workflowState) {
-        this.workflowState = workflowState;
+    public void setWorkflowState(ProcedureWorkflowStateCriteria workflowStateCriteria) {
+        this.workflowState = workflowStateCriteria;
     }
 
     public DateRange getDueDateRange() {

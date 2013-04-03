@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRende
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.search.ProcedureCriteria;
-import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.search.ProcedureWorkflowStateCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -22,8 +22,8 @@ public class ProcedureFilterPanel extends Panel {
 	public ProcedureFilterPanel(final String id, final IModel<ProcedureCriteria> model) {
 		super(id,model);
 
-        final PropertyModel<WorkflowState> workflowStateModel = new PropertyModel<WorkflowState>(model, "workflowState");
-        FidDropDownChoice<WorkflowState> workflowStateSelect = new FidDropDownChoice<WorkflowState>("workflowStateSelect", workflowStateModel, Arrays.asList(WorkflowState.values()), new ListableLabelChoiceRenderer<WorkflowState>());
+        final PropertyModel<ProcedureWorkflowStateCriteria> workflowStateModel = new PropertyModel<ProcedureWorkflowStateCriteria>(model, "workflowState");
+        FidDropDownChoice<ProcedureWorkflowStateCriteria> workflowStateSelect = new FidDropDownChoice<ProcedureWorkflowStateCriteria>("workflowStateSelect", workflowStateModel, Arrays.asList(ProcedureWorkflowStateCriteria.values()), new ListableLabelChoiceRenderer<ProcedureWorkflowStateCriteria>());
         workflowStateSelect.setNullValid(false);
         add(workflowStateSelect);
 

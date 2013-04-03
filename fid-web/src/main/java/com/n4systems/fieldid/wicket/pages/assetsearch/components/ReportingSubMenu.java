@@ -12,7 +12,7 @@ import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.summary.EventResolutionPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
@@ -94,10 +94,10 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
         boolean searchIncludesSafetyNetwork = model.getObject().isIncludeSafetyNetwork();
-        WorkflowState state = model.getObject().getWorkflowState();
+        WorkflowStateCriteria state = model.getObject().getWorkflowState();
         
-        updateLink.setVisible(state == WorkflowState.COMPLETE && sessionUser.hasAccess("editevent"));
-        updateSchedulesLink.setVisible(state == WorkflowState.OPEN && sessionUser.hasAccess("editevent"));
+        updateLink.setVisible(state == WorkflowStateCriteria.COMPLETE && sessionUser.hasAccess("editevent"));
+        updateSchedulesLink.setVisible(state == WorkflowStateCriteria.OPEN && sessionUser.hasAccess("editevent"));
 
         assignJobLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork);
 
@@ -105,7 +105,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
     }
 
     private boolean isSearchForClosed(EventReportCriteria criteria) {
-        return WorkflowState.CLOSED.equals(criteria.getWorkflowState());
+        return WorkflowStateCriteria.CLOSED.equals(criteria.getWorkflowState());
     }
 
     @Override

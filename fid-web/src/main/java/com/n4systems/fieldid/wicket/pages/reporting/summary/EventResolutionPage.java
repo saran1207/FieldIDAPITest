@@ -10,7 +10,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.EventType;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.summary.EventResolutionSummary;
 import com.n4systems.model.summary.EventSetSummary;
 import com.n4systems.util.chart.RangeType;
@@ -162,10 +162,10 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
     }
 
     private void populateOutstandingInto(EventReportCriteria criteriaModel) {
-        if (criteriaModel.getWorkflowState() != WorkflowState.OPEN) {
+        if (criteriaModel.getWorkflowState() != WorkflowStateCriteria.OPEN) {
             criteriaModel.setDueDateRange(criteria.getDateRange());
         }
-        criteriaModel.setWorkflowState(WorkflowState.OPEN);
+        criteriaModel.setWorkflowState(WorkflowStateCriteria.OPEN);
     }
 
     private void populateFailedInto(EventReportCriteria criteriaModel) {

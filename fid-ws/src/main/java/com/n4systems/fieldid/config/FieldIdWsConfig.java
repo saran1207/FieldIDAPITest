@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.config;
 
 import com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode.ApiPriorityCodeResource;
+import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureDefinitionResource;
+import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiPersonResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 import org.springframework.context.annotation.Bean;
@@ -187,6 +189,16 @@ public class FieldIdWsConfig {
 	public ApiEventResource apiEventResource() {
 		return new ApiEventResource();
 	}
+
+    @Bean
+    public ApiProcedureDefinitionResource apiProcedureDefinitionResource() {
+        return new ApiProcedureDefinitionResource();
+    }
+
+    @Bean
+    public ApiProcedureResource apiProcedureResource() {
+        return new ApiProcedureResource();
+    }
 	
 	@Bean
 	public ApiSavedEventResource apiSavedEventResource() {

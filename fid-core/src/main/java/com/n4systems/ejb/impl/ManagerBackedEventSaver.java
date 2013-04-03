@@ -134,7 +134,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 //            eventSchedule = persistenceManager.find(EventSchedule.class, scheduleId, event.getTenant());
 //            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED || eventSchedule.getEvent().getButton() == null) {
 //                event.setSchedule(null);
-//            } else if (eventSchedule.getEvent() != null && (eventSchedule.getEvent().getButton() != Archivable.EntityState.ACTIVE || eventSchedule.getEvent().getWorkflowState() != Event.WorkflowState.OPEN)) {
+//            } else if (eventSchedule.getEvent() != null && (eventSchedule.getEvent().getButton() != Archivable.EntityState.ACTIVE || eventSchedule.getEvent().getWorkflowState() != Event.WorkflowStateCriteria.OPEN)) {
 //                event.setSchedule(null);
 //            } else{
 //                event.setSchedule(eventSchedule);

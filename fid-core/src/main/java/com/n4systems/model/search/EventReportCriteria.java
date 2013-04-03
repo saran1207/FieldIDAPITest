@@ -108,7 +108,7 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
 
     @Column(name="workflow_state")
     @Enumerated(EnumType.STRING)
-    private WorkflowState workflowState = WorkflowState.COMPLETE;
+    private WorkflowStateCriteria workflowState = WorkflowStateCriteria.COMPLETE;
 
     @Column(name="includeDueDateRange")
     @Enumerated(EnumType.STRING)
@@ -272,12 +272,12 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
         this.columns = columns;
     }
 
-    public WorkflowState getWorkflowState() {
+    public WorkflowStateCriteria getWorkflowState() {
         return workflowState;
     }
 
-    public void setWorkflowState(WorkflowState workflowState) {
-        this.workflowState = workflowState;
+    public void setWorkflowState(WorkflowStateCriteria workflowStateCriteria) {
+        this.workflowState = workflowStateCriteria;
     }
 
     public DateRange getDueDateRange() {

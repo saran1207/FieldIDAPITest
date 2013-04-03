@@ -1,6 +1,6 @@
 package com.n4systems.util.persistence.search.terms.completedordue;
 
-import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
@@ -9,13 +9,13 @@ import java.util.List;
 
 public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
 
-    private WorkflowState state;
+    private WorkflowStateCriteria state;
 
     public CompleteOrIncompleteTerm() {
-        this(WorkflowState.ALL);
+        this(WorkflowStateCriteria.ALL);
     }
 
-    public CompleteOrIncompleteTerm(WorkflowState state) {
+    public CompleteOrIncompleteTerm(WorkflowStateCriteria state) {
         this.state = state;
     }
 
@@ -25,9 +25,9 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
 
         WhereParameterGroup outerGroup = new WhereParameterGroup(getClass().getName()+".outer");
 
-        if (state == null || state == WorkflowState.ALL) {
+        if (state == null || state == WorkflowStateCriteria.ALL) {
             createAndPopulateCompleteAndIncompleteOuterGroup(outerGroup);
-        } else if (state == WorkflowState.COMPLETE) {
+        } else if (state == WorkflowStateCriteria.COMPLETE) {
             populateCompletedTerm(outerGroup);
         } else {
             // Either it's OPEN or CLOSED, which are treated the same for reporting purposes for now

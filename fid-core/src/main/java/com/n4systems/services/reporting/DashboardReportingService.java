@@ -15,7 +15,7 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.*;
-import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
@@ -147,7 +147,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
     private EventReportCriteria getCriteriaDefaults() {
     	EventReportCriteria criteria = getDefaultReportCriteria();
-    	criteria.setWorkflowState(WorkflowState.OPEN);
+    	criteria.setWorkflowState(WorkflowStateCriteria.OPEN);
 		return criteria;
 	}
 
@@ -159,7 +159,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         EventReportCriteria criteria = getDefaultReportCriteria(config.getOrg());
         // this widget displays day by day.  .: when you click on a pt the date range is always a single day.
         criteria.setDueDateRange(new DateRange(localDate, localDate));
-        criteria.setWorkflowState(WorkflowState.OPEN);
+        criteria.setWorkflowState(WorkflowStateCriteria.OPEN);
         return criteria;
 	}
 
@@ -173,7 +173,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
         criteria.setDueDateRange(config.getDateRange());
         criteria.setPriority(priorityCodeService.getPriorityCodeByName(priorityName));
-        criteria.setWorkflowState(WorkflowState.OPEN);
+        criteria.setWorkflowState(WorkflowStateCriteria.OPEN);
         criteria.setEventType(config.getActionType());
         criteria.setEventTypeGroup(eventTypeGroupService.getDefaultActionGroup());
         return criteria;
@@ -191,7 +191,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         criteria.setDateRange(new DateRange(RangeType.FOREVER));
 
         if (KpiType.INCOMPLETE.getLabel().equals(series)) {
-            criteria.setWorkflowState(WorkflowState.OPEN);
+            criteria.setWorkflowState(WorkflowStateCriteria.OPEN);
         } else if (KpiType.FAILED.getLabel().equals(series)) {
             criteria.setEventResult(EventResult.FAIL);
         } else if (KpiType.NA.getLabel().equals(series)) {
@@ -199,7 +199,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         } else if (KpiType.PASSED.getLabel().equals(series)) {
             criteria.setEventResult(EventResult.PASS);
         } else if (KpiType.CLOSED.getLabel().equals(series)) {
-            criteria.setWorkflowState(WorkflowState.CLOSED);
+            criteria.setWorkflowState(WorkflowStateCriteria.CLOSED);
         }
         return criteria;
     }
@@ -218,17 +218,17 @@ public class DashboardReportingService extends FieldIdPersistenceService {
             case OPEN:
                 criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
                 criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
-                criteria.setWorkflowState(WorkflowState.OPEN);
+                criteria.setWorkflowState(WorkflowStateCriteria.OPEN);
                 break;
             case COMPLETED:
                 criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
                 criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
-                criteria.setWorkflowState(WorkflowState.COMPLETE);
+                criteria.setWorkflowState(WorkflowStateCriteria.COMPLETE);
                 break;
             case CLOSED:
                 criteria.setIncludeDueDateRange(IncludeDueDateRange.SELECT_DUE_DATE_RANGE);
                 criteria.setDueDateRange(new DateRange(localDate, localDate.plus(config.getGranularity().getPeriod()).minusDays(1)));
-                criteria.setWorkflowState(WorkflowState.CLOSED);
+                criteria.setWorkflowState(WorkflowStateCriteria.CLOSED);
                 break;
         }
 		return criteria;
@@ -239,7 +239,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         criteria.setAssetType(config.getAssetType());
         criteria.setEventType(config.getEventType());
         criteria.setAssignee(config.getUser());
-        criteria.setWorkflowState(WorkflowState.OPEN);
+        criteria.setWorkflowState(WorkflowStateCriteria.OPEN);
         return criteria;
     }
 

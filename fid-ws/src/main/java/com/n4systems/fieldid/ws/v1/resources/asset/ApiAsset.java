@@ -9,6 +9,7 @@ import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttrib
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistory;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
+import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedure;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEvent;
 
 public class ApiAsset extends ApiReadWriteModelWithOwner {
@@ -36,6 +37,7 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	private List<ApiAssetAttachment> attachments;
 	private List<ApiEventHistory> eventHistory;
 	private List<ApiSavedEvent> events;
+    private List<ApiProcedure> procedures;
 
 	public String getIdentifier() {
 		return identifier;
@@ -227,5 +229,13 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 
 	public void setEvents(List<ApiSavedEvent> events) {
 		this.events = events;
-	}	
+	}
+
+    public List<ApiProcedure> getProcedures() {
+        return procedures;
+    }
+
+    public void setProcedures(List<ApiProcedure> procedures) {
+        this.procedures = procedures;
+    }
 }

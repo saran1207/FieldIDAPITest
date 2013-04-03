@@ -18,6 +18,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -71,8 +72,9 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Autowired private ApiSavedEventResource apiSavedEventResource;
 	@Autowired private ApiAttributeValueResource apiAttributeValueResource;
     @Autowired private LastEventDateService lastEventDateService;
-	
-	
+    @Autowired private ApiProcedureResource procedureResource;
+
+
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -212,7 +214,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, SyncDuration syncDuration) {
 		ApiAsset apiAsset = convertEntityToApiModel(asset);		
 		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId(), syncDuration));
-		if(downloadEvents) {
+        apiAsset.setProcedures(procedureResource.getProcedures(asset.getId()));
+		if (downloadEvents) {
 			apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));
 		}		
 		return apiAsset;

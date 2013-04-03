@@ -17,7 +17,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.IncludeDueDateRange;
-import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
@@ -441,7 +441,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 
         assertEquals(jan1_2011, result.getDueDateRange().getFrom());
         assertEquals(jan1_2011, result.getDueDateRange().getTo());
-        assertEquals(WorkflowState.OPEN, result.getWorkflowState());
+        assertEquals(WorkflowStateCriteria.OPEN, result.getWorkflowState());
 
         verifyTestMocks();
     }
@@ -481,7 +481,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         assertEquals(jan1_2011, result.getDueDateRange().getFrom());
         assertEquals(feb1_2011, result.getDueDateRange().getTo());
         assertEquals(new DateRange(RangeType.FOREVER), result.getDateRange());
-        assertEquals(WorkflowState.CLOSED, result.getWorkflowState());
+        assertEquals(WorkflowStateCriteria.CLOSED, result.getWorkflowState());
 
 
         result = dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.FAILED.getLabel() );
@@ -499,7 +499,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         assertEquals(jan1_2011, result.getDueDateRange().getFrom());
         assertEquals(feb1_2011, result.getDueDateRange().getTo());
         assertEquals(new DateRange(RangeType.FOREVER), result.getDateRange());
-        assertEquals(WorkflowState.OPEN, result.getWorkflowState());
+        assertEquals(WorkflowStateCriteria.OPEN, result.getWorkflowState());
 
 
         result = dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.PASSED.getLabel() );
@@ -542,7 +542,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 
         assertEquals(assetType, result.getAssetType());
         assertEquals(eventType, result.getEventType());
-        assertEquals(WorkflowState.OPEN, result.getWorkflowState());
+        assertEquals(WorkflowStateCriteria.OPEN, result.getWorkflowState());
         assertEquals(user, result.getAssignee());
 
         verifyTestMocks();
@@ -586,7 +586,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         assertEquals(jan1_2011, result.getDueDateRange().getFrom());
         assertEquals(feb1_2011, result.getDueDateRange().getTo());
         assertEquals(priority, result.getPriority());
-        assertEquals(WorkflowState.OPEN, result.getWorkflowState());
+        assertEquals(WorkflowStateCriteria.OPEN, result.getWorkflowState());
         assertEquals(user, result.getAssignee());
         assertEquals(eventTypeGroup, result.getEventTypeGroup());
 

@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRende
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.search.IncludeDueDateRange;
 import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -49,7 +49,7 @@ public class ReportingFilterPanel extends Panel {
             }
         });
 
-        final PropertyModel<WorkflowState> workflowStateModel = new PropertyModel<WorkflowState>(model, "workflowState");
+        final PropertyModel<WorkflowStateCriteria> workflowStateModel = new PropertyModel<WorkflowStateCriteria>(model, "workflowState");
 
         add( new CollapsiblePanel("eventStatusAndDateRangePanel", new StringResourceModel("label.dates_and_times",this,null)) {
             @Override protected Panel createContainedPanel(String id) {
@@ -57,7 +57,7 @@ public class ReportingFilterPanel extends Panel {
             }
         });
 
-        FidDropDownChoice<WorkflowState> workflowStateSelect = new FidDropDownChoice<WorkflowState>("workflowStateSelect", workflowStateModel, Arrays.asList(WorkflowState.values()), new ListableLabelChoiceRenderer<WorkflowState>());
+        FidDropDownChoice<WorkflowStateCriteria> workflowStateSelect = new FidDropDownChoice<WorkflowStateCriteria>("workflowStateSelect", workflowStateModel, Arrays.asList(WorkflowStateCriteria.values()), new ListableLabelChoiceRenderer<WorkflowStateCriteria>());
         workflowStateSelect.setNullValid(false);
         add(workflowStateSelect);
 
@@ -104,7 +104,7 @@ public class ReportingFilterPanel extends Panel {
         });
 	}
 
-    private EventStatusAndDateRangePanel getEventStatusAndDateRangePanel(String id, final IModel<EventReportCriteria> model, PropertyModel<WorkflowState> workflowStateModel) {
+    private EventStatusAndDateRangePanel getEventStatusAndDateRangePanel(String id, final IModel<EventReportCriteria> model, PropertyModel<WorkflowStateCriteria> workflowStateModel) {
         PropertyModel<IncludeDueDateRange> includeDueDateRangeModel = new PropertyModel<IncludeDueDateRange>(model, "includeDueDateRange");
         PropertyModel<DateRange> completedDateRange = new PropertyModel<DateRange>(model, "dateRange");
         PropertyModel<DateRange> dueDateRange = new PropertyModel<DateRange>(model, "dueDateRange");

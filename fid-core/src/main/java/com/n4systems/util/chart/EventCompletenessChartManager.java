@@ -1,6 +1,6 @@
 package com.n4systems.util.chart;
 
-import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.utils.DateRange;
 import org.joda.time.LocalDate;
 
@@ -57,10 +57,10 @@ public class EventCompletenessChartManager extends DateChartManager {
         }
 
         public int ordinal(Object id) {
-            if (WorkflowState.ALL_STATES.equals(id)) {
+            if (WorkflowStateCriteria.ALL_STATES.equals(id)) {
                 return com.n4systems.model.WorkflowState.values().length;
-            } else if (id instanceof WorkflowState) {
-                WorkflowState status = (WorkflowState)id;
+            } else if (id instanceof WorkflowStateCriteria) {
+                WorkflowStateCriteria status = (WorkflowStateCriteria)id;
                 return status.ordinal();
             } else {
                 return 0;

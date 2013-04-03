@@ -1,16 +1,19 @@
 package com.n4systems.model.procedure;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.GpsLocation;
-import com.n4systems.model.WorkflowState;
+import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "procedures")
@@ -18,11 +21,16 @@ public class Procedure extends EntityWithTenant implements NetworkEntity<Procedu
 
     @ManyToOne
     @JoinColumn(name = "type_id")
+    @Deprecated // Do we need this??
     private ProcedureDefinition type;
+
+    @ManyToOne
+    @JoinColumn(name = "asset_id")
+    private Asset asset;
 
     @Enumerated(EnumType.STRING)
     @Column(name="workflow_state", nullable=false)
-    private WorkflowState workflowState;
+    private ProcedureWorkflowState workflowState;
 
     @ManyToOne
     @JoinColumn(name = "assignee_id")
@@ -44,11 +52,30 @@ public class Procedure extends EntityWithTenant implements NetworkEntity<Procedu
 
     private GpsLocation gpsLocation;
 
+    @OneToMany
+    @IndexColumn(name="orderIdx")
+    @JoinTable(name="procedures_lock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
+    private List<IsolationPointResult> lockResults;
 
+    @OneToMany
+    @IndexColumn(name="orderIdx")
+    @JoinTable(name="procedures_unlock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
+    private List<IsolationPointResult> unlockResults;
+
+    public List<IsolationPointResult> getLockResults() {
+        return lockResults;
+    }
+
+    public void setLockResults(List<IsolationPointResult> lockResults) {
+        this.lockResults = lockResults;
+    }
+
+    @Deprecated
     public ProcedureDefinition getType() {
         return type;
     }
 
+    @Deprecated
     public void setType(ProcedureDefinition type) {
         this.type = type;
     }
@@ -113,11 +140,27 @@ public class Procedure extends EntityWithTenant implements NetworkEntity<Procedu
         this.assignedGroup = assignedGroup;
     }
 
-    public WorkflowState getWorkflowState() {
+    public ProcedureWorkflowState getWorkflowState() {
         return workflowState;
     }
 
-    public void setWorkflowState(WorkflowState workflowState) {
+    public void setWorkflowState(ProcedureWorkflowState workflowState) {
         this.workflowState = workflowState;
+    }
+
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
+
+    public List<IsolationPointResult> getUnlockResults() {
+        return unlockResults;
+    }
+
+    public void setUnlockResults(List<IsolationPointResult> unlockResults) {
+        this.unlockResults = unlockResults;
     }
 }

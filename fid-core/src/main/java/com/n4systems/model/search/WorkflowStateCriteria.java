@@ -5,16 +5,15 @@ import com.n4systems.util.EnumUtils;
 
 import java.util.EnumSet;
 
-// TODO : rename this to avoid confusion.  WorkflowStateCriteria or something???
-public enum WorkflowState implements Listable {
+public enum WorkflowStateCriteria implements Listable {
 
     COMPLETE("label.complete"), OPEN("label.open"), CLOSED("label.closed"), ALL("label.all");
 
-    public static EnumUtils.LabelledEnumSet ALL_STATES = new EnumUtils.LabelledEnumSet<WorkflowState>("All", EnumSet.allOf(WorkflowState.class));
+    public static EnumUtils.LabelledEnumSet ALL_STATES = new EnumUtils.LabelledEnumSet<WorkflowStateCriteria>("All", EnumSet.allOf(WorkflowStateCriteria.class));
 
     private String labelKey;
 
-    WorkflowState(String labelKey) {
+    WorkflowStateCriteria(String labelKey) {
         this.labelKey = labelKey;
     }
 

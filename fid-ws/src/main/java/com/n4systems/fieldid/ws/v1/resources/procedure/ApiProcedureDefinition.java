@@ -7,6 +7,7 @@ import java.util.List;
 public class ApiProcedureDefinition extends ApiReadonlyModel {
 
     private List<ApiIsolationPoint> isolationPoints;
+    private String assetId;
     private String procedureCode;
     private String electronicIdentifier;
     private String revisionNumber;
@@ -77,5 +78,13 @@ public class ApiProcedureDefinition extends ApiReadonlyModel {
 
     public void setEquipmentDescription(String equipmentDescription) {
         this.equipmentDescription = equipmentDescription;
+    }
+
+    public String getAssetId() {
+        return assetId;
+    }
+
+    public void setAssetId(String assetId) {
+        this.assetId = assetId;
     }
 }

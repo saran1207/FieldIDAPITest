@@ -2,11 +2,12 @@ package com.n4systems.fieldid.service.search;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.model.Asset;
+import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.search.ProcedureCriteria;
-import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.search.ProcedureWorkflowStateCriteria;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
@@ -32,12 +33,12 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
         addSimpleTerm(searchTerms, "assignedGroup", criteriaModel.getAssignedUserGroup());
         addSimpleTerm(searchTerms, "performedBy", criteriaModel.getPerformedBy());
 
-        if (criteriaModel.getWorkflowState() == WorkflowState.COMPLETE) {
-            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.COMPLETED);
-        } else if (criteriaModel.getWorkflowState() == WorkflowState.OPEN) {
-            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.OPEN);
-        } else if (criteriaModel.getWorkflowState() == WorkflowState.CLOSED) {
-            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.CLOSED);
+        if (criteriaModel.getWorkflowState() == ProcedureWorkflowStateCriteria.LOCKED) {
+            addSimpleTerm(searchTerms, "workflowState", ProcedureWorkflowState.LOCKED);
+        } else if (criteriaModel.getWorkflowState() == ProcedureWorkflowStateCriteria.UNLOCKED) {
+            addSimpleTerm(searchTerms, "workflowState", ProcedureWorkflowState.UNLOCKED);
+        } else if (criteriaModel.getWorkflowState() == ProcedureWorkflowStateCriteria.OPEN) {
+            addSimpleTerm(searchTerms, "workflowState", ProcedureWorkflowState.OPEN);
         }
 
         DateRangeTerm completedRangeTerm = new DateRangeTerm("completedDate", dateService.calculateFromDate(criteriaModel.getDateRange()), dateService.calculateToDate(criteriaModel.getDateRange()));

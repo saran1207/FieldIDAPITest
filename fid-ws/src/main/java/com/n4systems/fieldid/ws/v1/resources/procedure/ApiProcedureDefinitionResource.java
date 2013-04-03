@@ -4,13 +4,17 @@ import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import org.springframework.stereotype.Component;
 
+import javax.ws.rs.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProcedureDefinitionResource extends SetupDataResource<ApiProcedureDefinition, ProcedureDefinition> {
+@Component
+@Path("procedureDefinition")
+public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedureDefinition, ProcedureDefinition> {
 
-    protected ProcedureDefinitionResource() {
+    public ApiProcedureDefinitionResource() {
         super(ProcedureDefinition.class, false);
     }
 
@@ -18,6 +22,7 @@ public class ProcedureDefinitionResource extends SetupDataResource<ApiProcedureD
     protected ApiProcedureDefinition convertEntityToApiModel(ProcedureDefinition entityModel) {
         ApiProcedureDefinition apiProcedureDef = new ApiProcedureDefinition();
         apiProcedureDef.setSid(entityModel.getId());
+        apiProcedureDef.setAssetId(entityModel.getAsset().getMobileGUID());
         apiProcedureDef.setCompleteIsolationPointInOrder(entityModel.isCompleteIsolationPointInOrder());
         apiProcedureDef.setElectronicIdentifier(entityModel.getElectronicIdentifier());
         apiProcedureDef.setEquipmentDescription(entityModel.getEquipmentDescription());

@@ -1,12 +1,12 @@
 package com.n4systems.model.procedure;
 
-import com.n4systems.model.BaseEntity;
+import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "isolation_points")
-public class IsolationPoint extends BaseEntity {
+public class IsolationPoint extends EntityWithTenant {
 
     @Column(name="identifier")
     private String identifier;

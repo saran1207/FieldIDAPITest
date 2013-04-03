@@ -1,9 +1,8 @@
 package com.n4systems.util.persistence.search.terms.completedordue;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import com.n4systems.model.search.WorkflowState;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.user.User;
-import com.n4systems.model.user.UserGroup;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.JoinTerm;
 
@@ -18,8 +17,8 @@ public class WithinUserGroupTerm extends CompleteOrIncompleteTerm {
 
     private User user;
 
-    public WithinUserGroupTerm(WorkflowState workflowState, User user) {
-        super(workflowState);
+    public WithinUserGroupTerm(WorkflowStateCriteria workflowStateCriteria, User user) {
+        super(workflowStateCriteria);
         this.user = user;
     }
 
