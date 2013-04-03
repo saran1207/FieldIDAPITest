@@ -1,14 +1,14 @@
-#carousel {
+.carousel {
     width: 100%;
     overflow: hidden;
 }
 
-#carousel ul {
+.carousel ul {
     padding: 0;
     margin: 0;
     overflow: hidden;
 }
-#carousel ul li {
+.carousel ul li {
     position: relative;
     width: 239px;
     height: 200px;
@@ -22,11 +22,11 @@
     background-color: #000;
 }
 
-#carousel .navigation {
+.carousel .navigation {
     text-align: right;
     margin-top: 6px;
 }
-    #carousel .navigation span {
+    .carousel .navigation span {
         cursor: pointer;
         padding: 8px 0 8px 10px;
     }

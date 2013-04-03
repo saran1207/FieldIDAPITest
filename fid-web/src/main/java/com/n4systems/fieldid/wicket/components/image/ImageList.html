@@ -1,6 +1,6 @@
 <wicket:panel>
 
-	<div id="carousel">
+	<div class="carousel">
 		<ul wicket:id="list">
 			<li><div wicket:id="image" class="image"/></li>
 		</ul>
@@ -39,14 +39,14 @@
 		$(document).ready(function(){
 
 			//Setting width of carousel dynamically
-			var numberOfImages = $('#carousel ul li').length;
-			var imageWidth = $('#carousel ul li').outerWidth(true);
+			var numberOfImages = $('.image-list ul li').length;
+			var imageWidth = $('.image-list ul li').outerWidth(true);
 			var carouselWidth = numberOfImages * imageWidth;
-			$('#carousel > ul').css('width', carouselWidth);
+			$('.image-list ul').css('width', carouselWidth);
 
 			//navigation buttons
 			$('.prev').click(function(){
-				$("#carousel ul").animate({
+				$(".image-list ul").animate({
 					marginLeft: imageWidth
 				}, 500,
 				function(){
@@ -56,7 +56,7 @@
 		        })
 			});
 			$('.next').click(function(){
-				$("#carousel ul").animate({
+				$(".image-list ul").animate({
 					marginLeft: -imageWidth
 				}, 500,
 				function(){
