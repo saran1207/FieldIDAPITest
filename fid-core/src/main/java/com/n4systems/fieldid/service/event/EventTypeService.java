@@ -3,10 +3,8 @@ package com.n4systems.fieldid.service.event;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,4 +76,9 @@ public class EventTypeService extends FieldIdPersistenceService {
 			update(eventType, modifiedBy);
 		}
 	}
+
+    public boolean hasEventTypes() {
+        QueryBuilder<EventType> countEventTypes = createTenantSecurityBuilder(EventType.class);
+        return persistenceService.count(countEventTypes) > 0;
+    }
 }

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.asset;
 
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
+import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
@@ -22,6 +23,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -36,6 +38,7 @@ public class HeaderPanel extends Panel {
     @SpringBean protected UserService userService;
     @SpringBean protected AssetService assetService;
     @SpringBean private EventScheduleService eventScheduleService;
+    @SpringBean private EventTypeService eventTypeService;
 
     private Boolean useContext;
     private Event scheduleToAdd;
@@ -63,14 +66,14 @@ public class HeaderPanel extends Panel {
         BookmarkablePageLink summaryLink;
         BookmarkablePageLink eventHistoryLink;
         
-        add(summaryLink = new BookmarkablePageLink("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
+        add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
         NonWicketIframeLink traceabilityLink;
         add(traceabilityLink = new NonWicketIframeLink("traceabilityLink", "aHtml/iframe/assetTraceability.action?uniqueID=" + asset.getId() + "&useContext=false", false, 1000, 600, new AttributeModifier("class", "mattButtonMiddle")));
         traceabilityLink.setVisible(assetService.hasLinkedAssets(asset) || isInVendorContext());
 
         
-        add(eventHistoryLink = new BookmarkablePageLink("eventHistoryLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId())));
+        add(eventHistoryLink = new BookmarkablePageLink<Void>("eventHistoryLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
         if (isView) {
             summaryLink.add(new AttributeAppender("class", " mattButtonPressed"));
@@ -84,6 +87,8 @@ public class HeaderPanel extends Panel {
             add(new NonWicketLink("editAssetLink", "customerInformationEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
 
         boolean hasAssociatedEventTypes = !asset.getType().getAssociatedEventTypes().isEmpty();
+        boolean isLotoEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures);
+        final boolean hasEventTypes = eventTypeService.hasEventTypes();
 
         NonWicketLink startEventLink;
         add(startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton blueButton")));
@@ -104,9 +109,31 @@ public class HeaderPanel extends Panel {
         add(new AjaxLink("scheduleEventLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
+                if(hasEventTypes) {
+                    schedulePicker.show(target);
+                }//else open procedure picker
+            }
+        }.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && !isLotoEnabled && !hasEventTypes));
+
+        WebMarkupContainer scheduleMenu = new WebMarkupContainer("scheduleMenu");
+
+        scheduleMenu.add(new AjaxLink("menuStartEventLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
                 schedulePicker.show(target);
             }
-        }.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && hasAssociatedEventTypes));
+        });
+
+        scheduleMenu.add(new AjaxLink("menuStartProcedureLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                schedulePicker.show(target);
+            }
+        });
+
+        scheduleMenu.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && isLotoEnabled && hasEventTypes);
+
+        add(scheduleMenu);
 
         add(schedulePicker);
 
@@ -128,13 +155,13 @@ public class HeaderPanel extends Panel {
     protected void refreshContentPanel(AjaxRequestTarget target) {};
 
     private String getOwnerLabel(BaseOrg owner, Location advancedLocation) {
-        StringBuffer buff = new StringBuffer();
-        buff.append(owner.getHierarchicalDisplayName());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(owner.getHierarchicalDisplayName());
 
         if(advancedLocation != null && !advancedLocation.getFullName().isEmpty()) {
-            buff.append(", ").append(advancedLocation.getFullName());
+            stringBuilder.append(", ").append(advancedLocation.getFullName());
         }
-        return buff.toString();
+        return stringBuilder.toString();
     }
 
     @Override

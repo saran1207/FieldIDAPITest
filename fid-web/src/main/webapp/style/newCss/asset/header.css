@@ -56,6 +56,31 @@
     border: 1px solid #6699FF;
 }
 
+.actionButtons .actions {
+    float:right;
+    padding-top: 0;
+    margin-top: 0;
+    width: 95px;
+}
+
+.actionButtons .actions .mattButton {
+    font-size: 12px;
+    width: 65px;
+}
+
+.actionButtons .actions .mattButton img{
+    vertical-align: middle;
+    padding-left: 5px;
+}
+
+.actionButtons .actions .menu-items {
+    left: 0;
+}
+
+.actionButtons .actions ul{
+    width: 85px;
+}
+
 .greyText{
     color: #888888;
 }
