@@ -51,9 +51,6 @@ public class ProcedureDefinition extends EntityWithTenant {
     @JoinTable(name="procedure_definitions_isolation_points", joinColumns = @JoinColumn(name = "procedure_definition_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_id"))
     private List<IsolationPoint> isolationPoints = Lists.newArrayList();
 
-
-    // TODO DD : move this to isolation point.  each point will have 0..1 images.
-
     @OneToMany(mappedBy = "procedureDefinition")
     private List<ProcedureDefinitionImage> images = Lists.newArrayList();
 

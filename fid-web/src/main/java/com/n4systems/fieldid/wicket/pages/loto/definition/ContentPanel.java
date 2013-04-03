@@ -39,7 +39,7 @@ public class ContentPanel extends Panel {
 
         add(new AttributeAppender("class", "content"));
 
-        add(list = new IsolationPointListPanel("isolationPoints", new PropertyModel(model,"isolationPoints")) {
+        add(list = new IsolationPointListPanel("isolationPoints", model) {
 
             @Override protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
                 editor.edit(isolationPoint);

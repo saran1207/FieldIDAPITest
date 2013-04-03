@@ -6,9 +6,11 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="image_annotation")
-public class ImageAnnotation extends BaseEntity {
 
-    // TODO : make this handled by javascript automatically.
+public class ImageAnnotation extends BaseEntity /* TODO : Change to EntityWithTenant */ {
+
+    // TODO : make this handled by javascript automatically.  shouldn't need this column.
+    // i.e. if X>.50 direction = W etc...
     public enum Direction {
         N("north"), S("south"), W("west"), E("east");
         String css;

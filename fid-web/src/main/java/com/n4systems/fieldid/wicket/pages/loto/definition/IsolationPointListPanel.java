@@ -3,8 +3,8 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.image.EditableImageList;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
-import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.procedure.IsolationPoint;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -14,10 +14,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
@@ -25,20 +23,21 @@ public class IsolationPointListPanel extends Panel {
 
     private @SpringBean PersistenceService persistenceService;
 
-    public IsolationPointListPanel(String id, IModel<List<IsolationPoint>> model) {
+    public IsolationPointListPanel(String id, IModel<ProcedureDefinition> model) {
         super(id, model);
         setOutputMarkupPlaceholderTag(true);
 
         add(new AttributeAppender("class", "isolation-point-list"));
 
-        add(new EditableImageList("images", new ImageModel() ));
+        add(new EditableImageList("images", new PropertyModel(model,"images")));
 
-        add(new ListView<IsolationPoint>("list",model) {
+        add(new ListView<IsolationPoint>("list",new PropertyModel(model,"isolationPoints")) {
             @Override protected void populateItem(ListItem<IsolationPoint> item) {
                 populateIsolationPoint(item);
             }
         });
     }
+
 
     protected void populateIsolationPoint(ListItem<IsolationPoint> item) {
         final IsolationPoint isolationPoint = item.getModelObject();
@@ -51,7 +50,7 @@ public class IsolationPointListPanel extends Panel {
 //        item.add(new Label("image"), new ExternalS3Image("image",isolationPoint.getImage()));
         item.add(new WebMarkupContainer("image"));
 
-        // UI : suggestion, don't have edit next to delete.
+        // UI : suggestion, don't have edit next to delete button.
         item.add(new AjaxLink("edit") {
             @Override public void onClick(AjaxRequestTarget target) {
                 doEdit(target, isolationPoint);
@@ -72,18 +71,6 @@ public class IsolationPointListPanel extends Panel {
     protected void doCancel(AjaxRequestTarget target) { }
 
     protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) { }
-
-
-    class ImageModel extends LoadableDetachableModel<List<EditableImage>> {
-        @Override
-        protected List<EditableImage> load() {
-            // TODO : temporary...should load only images associated with this procedure.
-            List<EditableImage> all = persistenceService.findAll(EditableImage.class);   /// need to add filtering for procedure
-            return all;
-        }
-    }
-
-
 
 
 }

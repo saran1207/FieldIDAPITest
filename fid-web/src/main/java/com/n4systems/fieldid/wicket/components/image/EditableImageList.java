@@ -8,17 +8,17 @@ import org.apache.wicket.model.IModel;
 
 import java.util.List;
 
-public class EditableImageList extends ImageList<EditableImage> {
+public class EditableImageList<T extends EditableImage> extends ImageList<T> {
 
     private final String INIT_JS = "imageEditor.init('#%s',%s);";
     private StringBuffer initJs = new StringBuffer();
 
-    public EditableImageList(String id, IModel<List<EditableImage>> imageModel) {
+    public EditableImageList(String id, IModel<List<T>> imageModel) {
         super(id,imageModel);
     }
 
     @Override
-    protected Component addImage(final ListItem<EditableImage> item) {
+    protected Component addImage(final ListItem<T> item) {
         Component image = super.addImage(item);
         ImageAnnotatingBehavior behavior;
         item.add(behavior = new ImageAnnotatingBehavior() {

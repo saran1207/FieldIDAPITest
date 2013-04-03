@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "editable_images")
-
+@Inheritance(strategy= InheritanceType.JOINED)
 public class EditableImage extends EntityWithTenant implements S3Image {
 
     @OneToMany(mappedBy = "image", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
@@ -19,10 +19,6 @@ public class EditableImage extends EntityWithTenant implements S3Image {
 
     @Column(name = "thumbnail")
     private String thumbnail;
-
-    //    TODO : this might not be needed
-    @Column(name="original_filename")
-    private String originalFile;
 
     @Transient
     private byte[] imageData;
@@ -35,9 +31,7 @@ public class EditableImage extends EntityWithTenant implements S3Image {
 
     }
 
-
     public EditableImage(String originalFile) {
-        this.originalFile = originalFile;
         this.fileName = originalFile;
     }
 
@@ -71,14 +65,6 @@ public class EditableImage extends EntityWithTenant implements S3Image {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
-    }
-
-    public String getOriginalFile() {
-        return originalFile;
-    }
-
-    public void setOriginalFile(String originalFile) {
-        this.originalFile = originalFile;
     }
 
     @Override

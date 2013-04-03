@@ -18,7 +18,7 @@ public class ExternalS3Image extends ExternalImage {
     }
 
     public ExternalS3Image(String id, EditableImage image) {
-        this(id, image.getOriginalFile());
+        this(id, image.getFileName());
     }
 
     @Override

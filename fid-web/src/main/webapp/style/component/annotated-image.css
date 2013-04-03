@@ -12,6 +12,8 @@
     outline: 1px solid #DDDD99;
     border: none;
     margin-top:4px;
+    height:16px;
+    margin-left:0px;
 }
 
 .note.readonly input {

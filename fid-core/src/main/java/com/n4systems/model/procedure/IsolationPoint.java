@@ -22,8 +22,6 @@ public class IsolationPoint extends BaseEntity {
     @JoinColumn(name="lock_definition_id")
     private IsolationDeviceDescription lockDefinition;
 
-    // TODO : add ImageAnnotation here...
-
     @Column(name="location")
     private String location;
 
@@ -89,11 +87,4 @@ public class IsolationPoint extends BaseEntity {
         this.check = check;
     }
 
-//    public EditableImage getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(EditableImage image) {
-//        this.image = image;
-//    }
 }

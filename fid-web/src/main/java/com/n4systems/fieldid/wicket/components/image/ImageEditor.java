@@ -58,7 +58,7 @@ public class ImageEditor extends Panel {
         container = new WebMarkupContainer("container");
         add(container);
         container.add(new AttributeAppender("style",Model.of("position:relative"), ";"));
-        container.add(new ExternalImage("image",s3Service.generateResourceUrl(model.getObject().getOriginalFile()).toString()));
+        container.add(new ExternalImage("image",s3Service.generateResourceUrl(model.getObject().getFileName()).toString()));
 
         container.add(behavior = createBehavior());
 
