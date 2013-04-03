@@ -20,6 +20,7 @@ import java.util.List;
 public class ImageList<T extends S3Image> extends Panel {
 
     private static final String INIT_JS = "$('#%s').css('overflow-x','auto')";
+
     private @SpringBean S3Service s3Service;
 
     private IModel<List<T>> images;
@@ -74,7 +75,6 @@ public class ImageList<T extends S3Image> extends Panel {
         }
 
     }
-
 
 }
 

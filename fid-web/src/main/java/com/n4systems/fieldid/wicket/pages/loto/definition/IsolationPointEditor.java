@@ -23,13 +23,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class IsolationPointEditor extends Panel {
 
-    private @SpringBean
-    ProcedureSearchService procedureSearchService;
+    private @SpringBean ProcedureSearchService procedureSearchService;
 
     private Form form;
     private IsolationPoint editedIsolationPoint;
 
     private DeviceLockPicker isolationDevicePicker;
+    private DeviceLockPicker isolationLockPicker;
 
     public IsolationPointEditor(String id) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
@@ -43,14 +43,21 @@ public class IsolationPointEditor extends Panel {
 
         form.add(new TextField("identifier"));
         form.add(new TextField("source", new PropertyModel(getDefaultModel(),"source")));
+        form.add(new AjaxLink<Void>("lock", new Model()) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                isolationLockPicker.setVisible(true);
+                this.setVisible(false);
+                target.add(isolationLockPicker,this);
+            }
+        }.add(new Label("description", getLockDescriptionModel())));
+
         form.add(new AjaxLink<Void>("device", new Model()) {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 isolationDevicePicker.setVisible(true);
                 this.setVisible(false);
-                target.add(this);
-                target.add(isolationDevicePicker);
-
+                target.add(isolationDevicePicker,this);
             }
         }.add(new Label("description", getDeviceDescriptionModel())));
 
@@ -63,6 +70,16 @@ public class IsolationPointEditor extends Panel {
         });
         isolationDevicePicker.setOutputMarkupPlaceholderTag(true);
         isolationDevicePicker.setVisible(false);
+
+        final IModel<IsolationDeviceDescription> lockDescriptionModel = Model.of(new IsolationDeviceDescription());
+        form.add(isolationLockPicker = new DeviceLockPicker("lockPicker", lockDescriptionModel, true) {
+            @Override
+            public void onPickerUpdated() {
+                getIsolationPointModel().getObject().setDeviceDefinition((IsolationDeviceDescription) getDefaultModelObject());
+            }
+        });
+        isolationLockPicker.setOutputMarkupPlaceholderTag(true);
+        isolationLockPicker.setVisible(false);
 
         form.add(new TextField("location", new PropertyModel(getDefaultModel(),"location")));
         form.add(new TextArea("check"));
@@ -102,6 +119,24 @@ public class IsolationPointEditor extends Panel {
                     }
                 }
                 return "no device";  // TODO : put this in properties file.
+            }
+        };
+    }
+
+    private IModel<String> getLockDescriptionModel() {
+        return new Model<String>() {
+            @Override public String getObject() {
+                IsolationPoint isolationPoint = getIsolationPointModel().getObject();
+                if (isolationPoint!=null) {
+                    IsolationDeviceDescription lockDefinition = isolationPoint.getLockDefinition();
+                    if (lockDefinition!=null) {
+                        AssetType assetType = lockDefinition.getAssetType();
+                        if (assetType!=null) {
+                            return assetType.getDisplayName();
+                        }
+                    }
+                }
+                return "no lock";  // TODO : put this in properties file.
             }
         };
     }
