@@ -15,12 +15,11 @@
     height: 200px;
     margin-right: 6px;
     float:left;
-
-    /* Derek: Just background-image to be set via java code but the rest can stay here. Currently it's added inline in the HTML. I still need to find a hack for IE8 and below. */
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: 50%;
     background-color: #000;
+    text-align: center;
+}
+.carousel ul li img {
+    max-width: 100%;
 }
 
 .image-list .navigation {
@@ -31,8 +30,6 @@
         cursor: pointer;
         padding: 8px 0 8px 10px;
     }
-
-
 .isolation-points {
     position: relative;
 }
