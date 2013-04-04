@@ -2,11 +2,9 @@ package com.n4systems.fieldid.wicket.components.image;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.common.S3Image;
-import org.apache.wicket.Component;
+import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -15,15 +13,18 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class ImageList<T extends S3Image> extends Panel {
 
-    private static final String INIT_JS = "$('#%s').css('overflow-x','auto')";
+    private static final String INIT_JS = "fieldIdWidgets.createImageList('%s',%s);";
 
+    private @SpringBean JsonRenderer jsonRenderer;
     private @SpringBean S3Service s3Service;
 
-    private IModel<List<T>> images;
+    protected IModel<List<T>> images;
+    private final ListView<T> listView;
 
     public ImageList(String id, final IModel<List<T>> images) {
         super(id);
@@ -31,49 +32,45 @@ public class ImageList<T extends S3Image> extends Panel {
         setOutputMarkupId(true);
         boolean hasImages = images.getObject().size()>0;
         add(new AttributeAppender("class", "image-list"));
-        ListView<T> listView = new ListView<T>("list", images) {
+        listView = new ListView<T>("list", images) {
             @Override protected void populateItem(final ListItem<T> item) {
-                addImage(item);
-                item.setRenderBodyOnly(true);
+                createImage(item, getImageUrl(item));
             }
         };
         add(listView.setVisible(hasImages));
         add(new WebMarkupContainer("blankSlate").setVisible(!hasImages));
     }
 
-    protected Component addImage(ListItem<T> item) {
-        Component image;
-        item.add(image = new S3ImageContainer("image", item.getModel().getObject().getS3Path()).setOutputMarkupId(true));
-        return image;
+    protected String getImageUrl(ListItem<T> item) {
+        String path = item.getModelObject().getS3Path();
+        String imageUrl = s3Service.generateResourceUrl(path).toString();
+        return imageUrl;
+    }
+
+    protected void createImage(ListItem<T> item, String path) {
+        item.add(new AttributeAppender("style", Model.of("background-image:url("+path+")"),";"));
+        item.setRenderBodyOnly(false);
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/component/imageList.css");
-        response.renderOnDomReadyJavaScript(String.format(INIT_JS,getMarkupId()));
+        response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
+        response.renderOnLoadJavaScript(String.format(INIT_JS, getMarkupId(), jsonRenderer.render(getOptions())));
     }
 
+    protected ImageListOptions getOptions() {
+        return new ImageListOptions();
+    }
 
-    public class S3ImageContainer extends WebComponent {
+    class ImageListOptions implements Serializable {
+        String defaultDirection = "west";
+        String yPosition = "middle";
+        String xPosition ="left";
+        Boolean centerImage = false;
 
-        private final String imageUrl;
-
-        public S3ImageContainer(String id, String path) {
-            super(id);
-            this.imageUrl = s3Service.generateResourceUrl(path).toString();
+        ImageListOptions() {
         }
-
-        @Override
-        protected void onInitialize() {
-            super.onInitialize();
-            add(new AttributeAppender("style", Model.of("background-image:url("+imageUrl+")"),";"));
-        }
-
-        protected void onComponentTag(ComponentTag tag) {
-            super.onComponentTag(tag);
-            checkComponentTag(tag, "div");
-        }
-
     }
 
 }

@@ -1,14 +1,15 @@
-.carousel {
+.image-list {
     width: 100%;
     overflow: hidden;
 }
 
-.carousel ul {
+.image-list ul {
     padding: 0;
     margin: 0;
     overflow: hidden;
+    width:9000px;  /*to be overridden via javascript */
 }
-.carousel ul li {
+.image-list ul li {
     position: relative;
     width: 239px;
     height: 200px;
@@ -22,11 +23,11 @@
     background-color: #000;
 }
 
-.carousel .navigation {
+.image-list .navigation {
     text-align: right;
     margin-top: 6px;
 }
-    .carousel .navigation span {
+    .image-list .navigation span {
         cursor: pointer;
         padding: 8px 0 8px 10px;
     }

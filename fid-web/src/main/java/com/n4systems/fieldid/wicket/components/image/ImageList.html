@@ -1,30 +1,30 @@
 <wicket:panel>
 
-	<div class="carousel">
-		<ul wicket:id="list">
-			<li><div wicket:id="image" class="image"/></li>
+	<div>
+		<ul>
+			<li wicket:id="list" class="image"></li>
 		</ul>
 		
 		<!-- temp static HTML and inline background images for testing CSS -->
-		<ul>
-			<li style="background-image:url(http://placeimg.com/233/233/nature);">
-				<div class="isolation-points">
-					<span class="electrical point-1">E-1</span>
-					<span class="water point-2">W-2</span>
-				</div>
-			</li>
-			<li style="background-image:url(http://placeimg.com/233/186/arch);"></li>
-			<li style="background-image:url(http://placeimg.com/233/174/arch);"></li>
-			<li style="background-image:url(http://placeimg.com/233/155/nature);"></li>
-			<li style="background-image:url(http://placeimg.com/233/145/tech);"></li>
-			<li style="background-image:url(http://placeimg.com/233/131/tech);"></li>
+		<!--<ul>-->
+			<!--<li style="background-image:url(http://placeimg.com/233/233/nature);">-->
+				<!--<div class="isolation-points">-->
+					<!--<span class="electrical point-1">E-1</span>-->
+					<!--<span class="water point-2">W-2</span>-->
+				<!--</div>-->
+			<!--</li>-->
+			<!--<li style="background-image:url(http://placeimg.com/233/186/arch);"></li>-->
+			<!--<li style="background-image:url(http://placeimg.com/233/174/arch);"></li>-->
+			<!--<li style="background-image:url(http://placeimg.com/233/155/nature);"></li>-->
+			<!--<li style="background-image:url(http://placeimg.com/233/145/tech);"></li>-->
+			<!--<li style="background-image:url(http://placeimg.com/233/131/tech);"></li>-->
 
-			<li style="background-image:url(http://placeimg.com/131/233/tech);"></li>  
-			<li style="background-image:url(http://placeimg.com/145/233/tech);"></li>  
-			<li style="background-image:url(http://placeimg.com/155/233/arch);"></li>  
-			<li style="background-image:url(http://placeimg.com/174/233/nature);"></li>  
-			<li style="background-image:url(http://placeimg.com/186/233/arch);"></li>  
-		</ul>
+			<!--<li style="background-image:url(http://placeimg.com/131/233/tech);"></li>  -->
+			<!--<li style="background-image:url(http://placeimg.com/145/233/tech);"></li>  -->
+			<!--<li style="background-image:url(http://placeimg.com/155/233/arch);"></li>  -->
+			<!--<li style="background-image:url(http://placeimg.com/174/233/nature);"></li>  -->
+			<!--<li style="background-image:url(http://placeimg.com/186/233/arch);"></li>  -->
+		<!--</ul>-->
 
 		<div class="navigation">
 			<span class="prev"><img src="/fieldid/images/arrow-prev.png"></span>
@@ -38,33 +38,6 @@
 		<script type="text/javascript">
 		$(document).ready(function(){
 
-			//Setting width of carousel dynamically
-			var numberOfImages = $('.image-list ul li').length;
-			var imageWidth = $('.image-list ul li').outerWidth(true);
-			var carouselWidth = numberOfImages * imageWidth;
-			$('.image-list ul').css('width', carouselWidth);
-
-			//navigation buttons
-			$('.prev').click(function(){
-				$(".image-list ul").animate({
-					marginLeft: imageWidth
-				}, 500,
-				function(){
-					//Place first image after the last to create a continuous loop
-		            $(this).find("li:first").before($(this).find("li:last"));
-		            $(this).css({marginLeft: 0});
-		        })
-			});
-			$('.next').click(function(){
-				$(".image-list ul").animate({
-					marginLeft: -imageWidth
-				}, 500,
-				function(){
-					//Place last image before the first to create a continuous loop
-		            $(this).find("li:last").after($(this).find("li:first"));
-		            $(this).css({marginLeft: 0});
-		        })
-			});
 
 		});
 		</script>

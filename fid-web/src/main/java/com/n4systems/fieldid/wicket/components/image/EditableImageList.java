@@ -1,41 +1,71 @@
 package com.n4systems.fieldid.wicket.components.image;
 
+import com.google.common.collect.Lists;
 import com.n4systems.model.common.EditableImage;
-import org.apache.wicket.Component;
+import com.n4systems.model.common.ImageAnnotation;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.IModel;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class EditableImageList<T extends EditableImage> extends ImageList<T> {
-
-    private final String INIT_JS = "imageEditor.init('#%s',%s);";
-    private StringBuffer initJs = new StringBuffer();
 
     public EditableImageList(String id, IModel<List<T>> imageModel) {
         super(id,imageModel);
     }
 
     @Override
-    protected Component addImage(final ListItem<T> item) {
-        Component image = super.addImage(item);
-        ImageAnnotatingBehavior behavior;
-        item.add(behavior = new ImageAnnotatingBehavior() {
-            @Override
-            protected EditableImage getEditableImage() {
-                return item.getModelObject();
-            }
-        });
-        initJs.append(String.format(INIT_JS, image.getMarkupId(), behavior.getJsonImageAnnotationOptions()));
-        return image;
+    protected void createImage(final ListItem<T> item, String url) {
+        super.createImage(item,url);
+    }
+
+    @Override
+    protected ImageListOptions getOptions() {
+        return new EditableImageOptions();
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/component/imageList.css");
-        response.renderOnLoadJavaScript(initJs.toString());
+        super.renderHead(response);
+        response.renderCSSReference("style/component/annotated-image.css");
+        response.renderJavaScriptReference("javascript/jquery.annotate.js");
+
     }
+
+
+    class EditableImageOptions extends ImageListOptions {
+
+        List<List<AnnotationOptions>> annotationOptions = Lists.newArrayList();
+
+        EditableImageOptions() {
+            super();
+            for (EditableImage image:images.getObject()) {
+                List<AnnotationOptions> options = Lists.newArrayList();
+                for (ImageAnnotation annotation:image.getAnnotations()) {
+                    options.add(new AnnotationOptions(annotation));
+                }
+                annotationOptions.add(options);
+            }
+        }
+    }
+
+
+    class AnnotationOptions implements Serializable {
+        double x;
+        double y;
+        String text;
+        String cssStyle;
+
+        public AnnotationOptions(ImageAnnotation annotation) {
+            this.x = annotation.getX();
+            this.y = annotation.getY();
+            this.text = annotation.getText();
+            this.cssStyle = annotation.getType().getCssClass();
+        }
+    }
+
 
 }
 

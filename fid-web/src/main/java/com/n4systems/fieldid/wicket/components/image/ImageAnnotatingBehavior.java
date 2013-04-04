@@ -20,6 +20,7 @@ import java.util.List;
 public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavior {
 
     private @SpringBean JsonRenderer jsonRenderer;
+
     private boolean editable = false;
 
     enum ImageEditorAction { LABEL };
@@ -106,14 +107,7 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
         response.renderJavaScriptReference(WicketAjaxReference.INSTANCE);
-
-        // CAVEAT : the reason a special (datepicker only) version of jquery ui was brought in
-        //  is because if you referenced the entire ui library it would conflict the use of some
-        //  wiquery ui things.  (AutoComplete in this case).
-        // the best situation would be just to have all components use the predefined wiquery js references
-        //  i.e. renderJavaScriptReference(CoreUIJavaScriptResourceReference.get());
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
-
         response.renderCSSReference("style/component/annotated-image.css");
         response.renderJavaScriptReference("javascript/jquery.annotate.js");
         response.renderJavaScriptReference("javascript/imageEditor.js");

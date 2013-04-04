@@ -20,6 +20,8 @@
     border: none;
     background-color: transparent;
     outline: none;
+    height:16px;
+    margin-left:0px;
 }
 
  .note .icon {
