@@ -32,7 +32,7 @@ public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetT
 	private static Logger logger = Logger.getLogger(ApiAssetTypeResource.class);
 	
 	public ApiAssetTypeResource() {
-		super(AssetType.class, false);
+		super(AssetType.class, true);
 	}
 
 	@Override
