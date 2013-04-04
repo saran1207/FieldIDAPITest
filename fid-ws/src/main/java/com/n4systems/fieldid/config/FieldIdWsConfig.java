@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.config;
 
+import com.n4systems.fieldid.ws.v1.resources.asset.ApiDeviceLockResource;
 import com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode.ApiPriorityCodeResource;
 import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureDefinitionResource;
 import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
@@ -198,6 +199,11 @@ public class FieldIdWsConfig {
     @Bean
     public ApiProcedureResource apiProcedureResource() {
         return new ApiProcedureResource();
+    }
+
+    @Bean
+    public ApiDeviceLockResource apiDeviceLockResource() {
+        return new ApiDeviceLockResource();
     }
 	
 	@Bean

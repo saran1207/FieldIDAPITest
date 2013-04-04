@@ -4,6 +4,8 @@ import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.PublishedState;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
@@ -56,5 +58,10 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
         apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
         // TODO: Attribute criteria
         return apiDescription;
+    }
+
+    @Override
+    protected void addTermsToBuilder(QueryBuilder<ProcedureDefinition> builder) {
+        builder.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
     }
 }

@@ -331,7 +331,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		asset.setInfoOptions(convertAttributeValues(apiAsset.getAttributeValues(), asset));
 	}
 
-    private List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
+    protected List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
 		List<ApiAttributeValue> apiAttributeValues = new ArrayList<ApiAttributeValue>();
 		
 		for (InfoOptionBean option: asset.getInfoOptions()) {

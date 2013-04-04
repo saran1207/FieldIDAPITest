@@ -39,14 +39,18 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 			builder.addWhere(WhereClauseFactory.create(Comparator.GT, "modified", after));
 		}
 		builder.addOrder("id");
+        addTermsToBuilder(builder);
 		return builder;
 	}
 
 	protected QueryBuilder<E> createFindSingleBuilder(String id) {
 		QueryBuilder<E> builder = createTenantSecurityBuilder(entityClass, true);
 		builder.addWhere(WhereClauseFactory.create("id", Long.valueOf(id)));
+        addTermsToBuilder(builder);
 		return builder;
 	}
+
+    protected void addTermsToBuilder(QueryBuilder<E> builder) {}
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)

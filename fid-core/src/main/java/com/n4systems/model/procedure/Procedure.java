@@ -6,7 +6,6 @@ import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
-import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -62,6 +61,10 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     @IndexColumn(name="orderIdx")
     @JoinTable(name="procedures_unlock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
     private List<IsolationPointResult> unlockResults;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="procedure_definition_state")
+    private PublishedState publishedState = PublishedState.DRAFT;
 
     public List<IsolationPointResult> getLockResults() {
         return lockResults;
@@ -163,5 +166,13 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
 
     public void setUnlockResults(List<IsolationPointResult> unlockResults) {
         this.unlockResults = unlockResults;
+    }
+
+    public PublishedState getPublishedState() {
+        return publishedState;
+    }
+
+    public void setPublishedState(PublishedState publishedState) {
+        this.publishedState = publishedState;
     }
 }

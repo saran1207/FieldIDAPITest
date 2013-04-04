@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.n4systems.model.Asset;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
-import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
 import org.hibernate.annotations.IndexColumn;
 
@@ -46,6 +45,10 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     @Column(name="equipment_description")
     private String equipmentDescription;
+
+    @Column(name="published_state")
+    @Enumerated(EnumType.STRING)
+    private PublishedState publishedState;
 
     @OneToMany
     @IndexColumn(name="orderIdx")
@@ -155,5 +158,13 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     public String getDisplayName() {
         return procedureCode;
+    }
+
+    public PublishedState getPublishedState() {
+        return publishedState;
+    }
+
+    public void setPublishedState(PublishedState publishedState) {
+        this.publishedState = publishedState;
     }
 }
