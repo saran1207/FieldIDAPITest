@@ -42,6 +42,7 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
             apiIsolationPoint.setSid(isolationPoint.getId());
             apiIsolationPoint.setCheck(isolationPoint.getCheck());
             apiIsolationPoint.setDeviceDefinition(convertDefinition(isolationPoint.getDeviceDefinition()));
+            apiIsolationPoint.setActive(true);
             apiIsolationPoints.add(apiIsolationPoint);
         }
         return apiIsolationPoints;
