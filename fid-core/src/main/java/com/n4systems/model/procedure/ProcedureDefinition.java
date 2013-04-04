@@ -3,6 +3,7 @@ package com.n4systems.model.procedure;
 import com.google.common.collect.Lists;
 import com.n4systems.model.Asset;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
 import org.hibernate.annotations.IndexColumn;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "procedure_definitions")
-public class ProcedureDefinition extends EntityWithTenant {
+public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     @ManyToOne
     @JoinColumn(name = "asset_id")

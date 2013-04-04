@@ -107,6 +107,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         convertedProcedure.setAssigneeUserId(procedure.getAssignee() == null ? null : procedure.getAssignee().getId());
         convertedProcedure.setCompletedDate(procedure.getCompletedDate());
         convertedProcedure.setDueDate(procedure.getDueDate());
+        convertedProcedure.setActive(procedure.isActive());
         return convertedProcedure;
     }
 

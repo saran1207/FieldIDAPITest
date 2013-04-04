@@ -5,6 +5,7 @@ import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "procedures")
-public class Procedure extends EntityWithTenant implements NetworkEntity<Procedure> {
+public class Procedure extends ArchivableEntityWithTenant implements NetworkEntity<Procedure> {
 
     @ManyToOne
     @JoinColumn(name = "type_id")

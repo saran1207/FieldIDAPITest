@@ -31,6 +31,7 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
         apiProcedureDef.setRevisionNumber(entityModel.getRevisionNumber());
         apiProcedureDef.setProcedureCode(entityModel.getProcedureCode());
         apiProcedureDef.setWarnings(entityModel.getWarnings());
+        apiProcedureDef.setActive(entityModel.isActive());
         return apiProcedureDef;
     }
 
