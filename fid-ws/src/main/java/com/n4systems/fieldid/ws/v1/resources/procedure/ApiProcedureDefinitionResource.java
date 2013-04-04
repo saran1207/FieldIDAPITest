@@ -48,6 +48,9 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
     }
 
     private ApiDeviceDescription convertDefinition(IsolationDeviceDescription deviceDefinition) {
+        if (deviceDefinition == null) {
+            return null;
+        }
         ApiDeviceDescription apiDescription = new ApiDeviceDescription();
         apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
         // TODO: Attribute criteria
