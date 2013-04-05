@@ -41,28 +41,32 @@ public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetT
 		apiType.setSid(type.getId());
 		apiType.setActive(type.isActive());
 		apiType.setModified(type.getModified());
-		apiType.setName(type.isActive() ? type.getName() : type.getArchivedName());
-		apiType.setWarnings(type.getWarnings());
-		apiType.setInstructions(type.getInstructions());
-		apiType.setCautionUrl(type.getCautionUrl());
-		apiType.setDescriptionTemplate(type.getDescriptionTemplate());
-		apiType.setIdentifierFormat(type.getIdentifierFormat());
-		apiType.setIdentifierLabel(type.getIdentifierLabel());
-		apiType.setIdentifierOverridden(type.isIdentifierOverridden());
-		apiType.setImage(loadAssetTypeImage(type));
-		apiType.setGroup(convertAssetTypeGroup(type));
-		apiType.setLinkable(type.isLinkable());
 		
-		for (AssociatedEventType associatedEventType: type.getAssociatedEventTypes()) {
-			apiType.getAllowedEventTypes().add(associatedEventType.getEventType().getId());
-		}
-		
-		for (AssetTypeSchedule schedule: type.getSchedules()) {
-			apiType.getSchedules().add(convertAssetTypeSchedule(schedule));
-		}
-		
-		for (InfoFieldBean field: type.getInfoFields()) {
-			apiType.getAttributes().add(convertInfoFieldBean(field));
+		// We only set the rest of the fields if the entity is active.
+		if(type.isActive()) {
+			apiType.setName(type.isActive() ? type.getName() : type.getArchivedName());
+			apiType.setWarnings(type.getWarnings());
+			apiType.setInstructions(type.getInstructions());
+			apiType.setCautionUrl(type.getCautionUrl());
+			apiType.setDescriptionTemplate(type.getDescriptionTemplate());
+			apiType.setIdentifierFormat(type.getIdentifierFormat());
+			apiType.setIdentifierLabel(type.getIdentifierLabel());
+			apiType.setIdentifierOverridden(type.isIdentifierOverridden());
+			apiType.setImage(loadAssetTypeImage(type));
+			apiType.setGroup(convertAssetTypeGroup(type));
+			apiType.setLinkable(type.isLinkable());
+			
+			for (AssociatedEventType associatedEventType: type.getAssociatedEventTypes()) {
+				apiType.getAllowedEventTypes().add(associatedEventType.getEventType().getId());
+			}
+			
+			for (AssetTypeSchedule schedule: type.getSchedules()) {
+				apiType.getSchedules().add(convertAssetTypeSchedule(schedule));
+			}
+			
+			for (InfoFieldBean field: type.getInfoFields()) {
+				apiType.getAttributes().add(convertInfoFieldBean(field));
+			}
 		}
 		
 		return apiType;

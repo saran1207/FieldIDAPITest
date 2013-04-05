@@ -53,22 +53,26 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		apiEventType.setSid(eventType.getId());
 		apiEventType.setActive(eventType.isActive());
 		apiEventType.setModified(eventType.getModified());
-		apiEventType.setAssignedToAvailable(eventType.isAssignedToAvailable());
-		apiEventType.setDescription(eventType.getDescription());
-		apiEventType.setMaster(eventType.isMaster());
-		apiEventType.setName(eventType.getName());
-		apiEventType.setAction(eventType.getGroup().isAction());
-		apiEventType.setPrintable(eventType.isPrintable());
-		apiEventType.setHasPrintOut(eventType.getGroup().hasPrintOut());
-		apiEventType.setHasObservationPrintOut(eventType.getGroup().hasObservationPrintOut());
-		apiEventType.getAttributes().addAll(eventType.getInfoFieldNames());
-
-		if (eventType.getGroup() != null) {
-			apiEventType.setGroupName(eventType.getGroup().getName());
-		}
-
-		if (eventType.getEventForm() != null) {
-			apiEventType.setForm(convertEventForm(eventType.getEventForm()));
+		
+		// We only set the rest of the fields if the entity is active.
+		if(eventType.isActive()) {
+			apiEventType.setAssignedToAvailable(eventType.isAssignedToAvailable());
+			apiEventType.setDescription(eventType.getDescription());
+			apiEventType.setMaster(eventType.isMaster());
+			apiEventType.setName(eventType.getName());
+			apiEventType.setAction(eventType.getGroup().isAction());
+			apiEventType.setPrintable(eventType.isPrintable());
+			apiEventType.setHasPrintOut(eventType.getGroup().hasPrintOut());
+			apiEventType.setHasObservationPrintOut(eventType.getGroup().hasObservationPrintOut());
+			apiEventType.getAttributes().addAll(eventType.getInfoFieldNames());
+	
+			if (eventType.getGroup() != null) {
+				apiEventType.setGroupName(eventType.getGroup().getName());
+			}
+	
+			if (eventType.getEventForm() != null) {
+				apiEventType.setForm(convertEventForm(eventType.getEventForm()));
+			}
 		}
 
 		return apiEventType;
