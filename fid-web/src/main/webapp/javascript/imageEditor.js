@@ -31,11 +31,10 @@ var imageEditor = (function() {
 		var callback = options.callback;  // MANDATORY!
 
 		function createNote(annotation) {
-			var value = annotation?annotation.text:options.text;
+			var value = annotation && annotation.text ? annotation.text : options.text;
 			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(options.direction).addClass(options.type).attr('id',options.id);
 			var icon = $('<span/>').addClass('icon').appendTo(span);
 			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');
-			var direction = $('<span/>').attr({class:'menu'}).appendTo(span).hide();
 
 			editor.css('width',(editor.val().length + 1) * 6 + 'px');
 
@@ -56,6 +55,13 @@ var imageEditor = (function() {
 					$(this).parent().addClass('readonly');
 					doNote($(e.target));
 				});
+
+				editor.keypress(function(event) {
+					var keycode = (event.keyCode ? event.keyCode : event.which);
+					if (keycode=='13') {
+						editor.blur();
+					}
+				});
 			} else {
 				editor.attr('disabled',true);
 			}
@@ -75,7 +81,7 @@ var imageEditor = (function() {
 			var note = createNote().addClass('unsaved');
 
 			setTimeout(function() {
-				$('.note input').focus();
+				note.find('input').focus();
 			},100);
 
 			return note;
@@ -92,7 +98,6 @@ var imageEditor = (function() {
 			var style = note.attr('class');
 			var text = note.find('input').val();
 			var id = note.attr('id');
-			var direction = getDirection(note);
 			var imageId = note.parents('image-editor').attr('id');
 			var url = new String(callback) +
 				'&action='+'LABEL' +
@@ -101,32 +106,14 @@ var imageEditor = (function() {
 				'&y='+loc.y +
 				'&imageId='+(imageId?imageId:'') +
 				'&style='+style +
-				'&dir='+direction +
 				'&text='+text;
 			wicketAjaxGet(url, function() {}, function() {});
 		}
 
 		function doNote(input) {
 			var note = $(input).parent();
-			options.text = note.text();
+			options.text = input.val();
 			updateNote(note);
-		}
-
-		function changeDirection(note,li) {
-			if (!$(li).is('li')) {
-				li = $(li).parents('li');
-			}
-
-			var direction = $(li).attr('class');
-			note.removeClass(getDirection(note)).addClass(direction);
-
-			updateNote(note);
-
-			closeDirectionMenu();
-		}
-
-		function closeDirectionMenu() {
-			getDirectionMenu().data('note', '').hide();
 		}
 
 		function initAnnotations(reset) {
@@ -163,7 +150,7 @@ var imageEditor = (function() {
 	// ----------------------------------------------------------------------------------------------------------
 
 	var init = function(selector,options) {
-		var el = $(selector);
+		var el = selector instanceof jQuery ? selector : $(selector);
 		if (el.is('img')) {
 			el = el.parent();
 		}

@@ -8,13 +8,13 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import java.util.List;
 
-public class EditableImageGallery extends ImageGallery<EditableImage> {
+public abstract class EditableImageGallery<T extends EditableImage> extends ImageGallery<T> {
 
-    private static final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.edit('#%s',%s)";
+    private static final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.edit('%s',%s)";
 
     private ImageAnnotatingBehavior imageAnnotatingBehavior;
 
-    public EditableImageGallery(String id, List<EditableImage> images) {
+    public EditableImageGallery(String id, List<T> images) {
         super(id, images);
         setOutputMarkupId(true);
         add(imageAnnotatingBehavior = new ImageAnnotatingBehavior() {
@@ -29,23 +29,22 @@ public class EditableImageGallery extends ImageGallery<EditableImage> {
         return String.format(IMAGE_EDITOR_ENABLE_JS,gallery.getMarkupId(),jsonRenderer.render(imageAnnotatingBehavior.getImageAnnotationOptions()));
     }
 
-
     @Override
-    protected EditableImage saveImage(S3Service.S3ImagePath path, Tenant tenant) {
-        EditableImage image = new EditableImage(path.getMediumPath());
+    protected T saveImage(S3Service.S3ImagePath path, Tenant tenant) {
+        T image = createImage(path, tenant);
         image.setTenant(tenant);
         persistenceService.save(image);
         return image;
     }
 
     @Override
-    protected void imageClicked(AjaxRequestTarget target, String action, EditableImage image) {
+    protected void imageClicked(AjaxRequestTarget target, String action, T image) {
         super.imageClicked(target, action, image);
         target.appendJavaScript(getImageEditorJs());
     }
 
     @Override
-    protected GalleryImageJson createImageJson(EditableImage image) {
+    protected GalleryImageJson createImageJson(T image) {
         return new GalleryEditableImageJson(image);
     }
 
@@ -53,7 +52,7 @@ public class EditableImageGallery extends ImageGallery<EditableImage> {
     class GalleryEditableImageJson extends GalleryImageJson {
         private List<ImageAnnotation> annotations;
 
-        GalleryEditableImageJson(EditableImage image) {
+        GalleryEditableImageJson(T image) {
             super(image);
             annotations = image.getAnnotations();
         }

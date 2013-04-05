@@ -45,7 +45,6 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
                             params.getParameterValue("x").toDouble(),
                             params.getParameterValue("y").toDouble(),
                             params.getParameterValue("text").toString(),
-                            params.getParameterValue("dir").toString(),
                             params.getParameterValue("style").toString().toUpperCase());
                     break;
                 default:
@@ -64,10 +63,10 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
         return params.getParameterValue(p).isEmpty() ? null : params.getParameterValue(p).toLong();
     }
 
-    private void doLabel(Long id, Long imageId, Number x, Number y,  String text, String direction, String type) {
+    private void doLabel(Long id, Long imageId, Number x, Number y,  String text, String type) {
         // TODO : allow for remove, restyle, etc...  check if id already exists.
         //if (StringUtils.isNotEmpty(id)) {annotation = getAnnotationWithIdFromEditableImage(id);}  else...
-        ImageAnnotation annotation = getAnnotationTypeWithId(id, x, y, text, direction, type);
+        ImageAnnotation annotation = getAnnotationTypeWithId(id, x, y, text, type);
 
         //if (imageId is different, then what to do???)
         getEditableImage().getAnnotations().add(annotation);
@@ -80,7 +79,7 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
 
     protected abstract EditableImage getEditableImage();
 
-    private ImageAnnotation getAnnotationTypeWithId(Long id, Number x, Number y, String text, String direction, String type) {
+    private ImageAnnotation getAnnotationTypeWithId(Long id, Number x, Number y, String text, String type) {
         ImageAnnotation annotation = new ImageAnnotation();
         if (id!=null) {
             for (ImageAnnotation value:getEditableImage().getAnnotations()) {
@@ -92,15 +91,13 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
         // Preconditions.checkState(if id not null, you must find one!);
         annotation.setX(x.doubleValue());
         annotation.setY(y.doubleValue());
-        annotation.withDirection(direction);
         annotation.setText(text);
         annotation.setType(getAnnotationType(type));
         return annotation;
     }
 
     protected ImageAnnotationType getAnnotationType(String typeId) {
-        ///TODO FIX THIS.   make it look up image types used in this.annotationTypes.  for now i'll just create/save a new one every time.
-        return ImageAnnotationType.valueOf(typeId);
+        return ImageAnnotationType.getDefault();
     }
 
     @Override

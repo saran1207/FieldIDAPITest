@@ -31,8 +31,8 @@ public class EditableImage extends EntityWithTenant implements S3Image {
 
     }
 
-    public EditableImage(String originalFile) {
-        this.fileName = originalFile;
+    public EditableImage(String fileName) {
+        this.fileName = fileName;
     }
 
     public byte[] getImageData() {

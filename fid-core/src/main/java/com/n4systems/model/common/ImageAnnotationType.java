@@ -7,14 +7,14 @@ public enum ImageAnnotationType {
     // currently, the annotation types match up with IsolationPointSourceTypes.
     //  they don't have to, it's just the only need now.
 
-    // TODO : need to get proper images from matt here. these are placeholders.
+    // TODO DD : need to get proper images from matt here. these are placeholders.
     CP("control-pane","#D68741","#FFFFFF",	"#D68741","images/proof_test.jpg"),
     E("electrical", "#D52029","#FFFFFF","#D52029","images/setup-wizard-gear.png"),
-    G("gas", "#7C4075","#FFFFFF","#7C4075","images/small-help-logo.png"),
+    G("gas", "#7C4075","#FFFFFF","#7C4075","images/loto/gas.jpg"),
     P("pneumatic","#FFFFFF","#144B8F","#FFFFFF","images/single-event.png"),
-    S("steam","#FFFFFF","#D83E37","#FFFFFF","images/tip-icon.png"),
-    V("valve","#000000","#FFFFFF","#000000","images/user-icon.png"),
-    W("water", "#FFFFFF","#099C4F","#FFFFFF","images/www.png");
+    S("steam","#FFFFFF","#D83E37","#FFFFFF","images/loto/steam.jpg"),
+    V("valve","#000000","#FFFFFF","#000000","images/loto/valve.jpg"),
+    W("water", "#FFFFFF","#099C4F","#FFFFFF","images/loto/water.jpg");
 
     private String cssClass;
     private String fontColor;
@@ -22,7 +22,7 @@ public enum ImageAnnotationType {
     private String borderColor;
     private String icon;
 
-    private ImageAnnotationType(String cssClass,String backgroundColor, String borderColor, String fontColor, String icon) {
+    private ImageAnnotationType(String cssClass,String borderColor, String backgroundColor, String fontColor, String icon) {
         this.cssClass = cssClass;
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;

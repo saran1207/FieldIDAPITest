@@ -6,11 +6,11 @@ import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.Serializable;
@@ -48,7 +48,7 @@ public class ImageList<T extends S3Image> extends Panel {
     }
 
     protected void createImage(ListItem<T> item, String path) {
-        item.add(new AttributeAppender("style", Model.of("background-image:url("+path+")"),";"));
+        item.add(new ContextImage("image",path));
         item.setRenderBodyOnly(false);
     }
 

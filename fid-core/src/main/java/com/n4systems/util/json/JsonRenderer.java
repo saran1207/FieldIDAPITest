@@ -51,6 +51,7 @@ public class JsonRenderer implements Serializable {
             return object;
         }
     }
+
     class ImageAnnotationSerializer implements JsonSerializer<ImageAnnotation> {
 
         @Override
@@ -59,7 +60,6 @@ public class JsonRenderer implements Serializable {
             object.addProperty("id",annotation.getId());
             object.addProperty("type", "note");  // should return css class name. or possibly inline style.  e.g. "electrical" or "background:1px solid red;border 1px solid white;"
             object.addProperty("text",annotation.getText());
-            object.addProperty("direction",annotation.getDirection().getCss());
             object.addProperty("x",annotation.getX());
             object.addProperty("y",annotation.getY());
             return object;

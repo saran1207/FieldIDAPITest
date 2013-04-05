@@ -130,7 +130,6 @@ public class ImageEditor extends Panel {
         // Preconditions.checkState(if id not null, you must find one!);
         annotation.setX(x.doubleValue());
         annotation.setY(y.doubleValue());
-        annotation.withDirection(direction);
         annotation.setText(text);
         annotation.setType(getAnnotationType(type));
         return annotation;

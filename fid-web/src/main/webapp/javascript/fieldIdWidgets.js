@@ -14,19 +14,26 @@ var fieldIdWidgets = (function() {
 		var options = $.extend(defaults, options);
 
 		var init = function() {
-			//Setting width of carousel dynamically
 			var numberOfImages = $('.image-list ul li').length;
 			var imageWidthContainer = $('.image-list ul li').outerWidth(true);
 			var carouselWidth = numberOfImages * imageWidthContainer;
 			$('.image-list ul').css('width', carouselWidth);
 
 			//Set height of images to fit in the image list without cropping
-			$(".image-list img").each(function(){
-				imageHeight = $(this).height();
-				imageContainerHeight = $('.image-list ul li').height();
+			il.find('img').each(function(){
+				var imageHeight = $(this).height();
+				var imageWidth = $(this).width();
+				var imageContainerHeight = $(this).parent().parent().height();
+				var imageContainerWidth = $(this).parent().parent().width();
 
-				if (imageHeight >= imageContainerHeight) {
-					$(this).css("height", "100%");
+				if (imageHeight/imageWidth >= imageContainerHeight/imageContainerWidth) {
+					var newWidth = imageWidth * (imageContainerHeight/imageHeight);
+					$(this).parent().css('height', imageContainerHeight).css('width',newWidth);
+					$(this).parent().css('margin-left',(imageContainerWidth-newWidth)/2);
+				} else {
+					var newHeight = imageHeight * (imageContainerWidth/imageWidth);
+					$(this).parent().css('margin-top',(imageContainerHeight-newHeight)/2);
+					$(this).parent().css('width', imageContainerWidth).css('height',newHeight);
 				}
 			});
 
@@ -54,7 +61,7 @@ var fieldIdWidgets = (function() {
 			});	
 
 			if (options.annotationOptions) {
-				il.find('ul li').each(
+				il.find('ul li div').each(
 					function(index) {
 						$(this).addAnnotations(
 							function(annotation) {
@@ -67,7 +74,8 @@ var fieldIdWidgets = (function() {
 
 		function createNote(annotation) {
 			var value = annotation?annotation.text:options.text;
-			var direction = annotation.x<.5 ? 'west' : annotation.y>.5 ? 'north':'south';
+//			var direction = annotation.x<.5 ? 'west' : annotation.y<.5 ? 'north':'south';
+			var direction = 'west';
 			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(options.type);
 			var icon = $('<span/>').addClass('icon').appendTo(span);
 			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');

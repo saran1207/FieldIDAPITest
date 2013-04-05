@@ -25,7 +25,7 @@ import org.apache.wicket.util.string.StringValue;
 
 import java.util.List;
 
-public class ImageGallery<T extends S3Image> extends Panel {
+public abstract class ImageGallery<T extends S3Image> extends Panel {
 
     public static final String IMAGE_ID_PARAMETER = "id";
     public static final String ACTION = "action";
@@ -61,7 +61,6 @@ public class ImageGallery<T extends S3Image> extends Panel {
                 FileUpload fileUpload = uploadField.getFileUpload();
                 if (fileUpload != null) {
                     S3Service.S3ImagePath path = s3Service.uploadImage(fileUpload.getBytes(), fileUpload.getContentType(), getFileName(fileUpload.getClientFileName()), FieldIDSession.get().getSessionUser().getTenant().getId());
-                    System.out.println(path);
                     T image = saveImage(path,getTenant());
                     if (image!=null) {
                         images.add(image);
@@ -90,9 +89,9 @@ public class ImageGallery<T extends S3Image> extends Panel {
         return s3Service.generateResourceUrl(path.getMediumPath()).toString();
     }
 
-    protected T saveImage(S3Service.S3ImagePath path, Tenant tenant) {
-        return null;
-    }
+    protected abstract T saveImage(S3Service.S3ImagePath path, Tenant tenant);
+
+    protected abstract T createImage(S3Service.S3ImagePath path, Tenant tenant);
 
     private String getFileName(String fileName) {
         return "/foo/bar/stuff/"+fileName;
