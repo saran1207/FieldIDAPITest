@@ -62,10 +62,6 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     @JoinTable(name="procedures_unlock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
     private List<IsolationPointResult> unlockResults;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name="procedure_definition_state")
-    private PublishedState publishedState = PublishedState.DRAFT;
-
     public List<IsolationPointResult> getLockResults() {
         return lockResults;
     }
@@ -168,11 +164,4 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
         this.unlockResults = unlockResults;
     }
 
-    public PublishedState getPublishedState() {
-        return publishedState;
-    }
-
-    public void setPublishedState(PublishedState publishedState) {
-        this.publishedState = publishedState;
-    }
 }

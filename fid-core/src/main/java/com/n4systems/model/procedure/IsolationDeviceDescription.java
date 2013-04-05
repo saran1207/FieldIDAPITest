@@ -12,6 +12,9 @@ import java.util.List;
 @Table(name="isolation_device_descriptions")
 public class IsolationDeviceDescription extends BaseEntity {
 
+    @Column(name="freeform_description")
+    private String freeformDescription;
+
     @ManyToOne
     @JoinColumn(name="asset_type_id")
     private AssetType assetType;
@@ -35,5 +38,13 @@ public class IsolationDeviceDescription extends BaseEntity {
 
     public void setAttributeValues(List<InfoOptionBean> attributeValues) {
         this.attributeValues = attributeValues;
+    }
+
+    public String getFreeformDescription() {
+        return freeformDescription;
+    }
+
+    public void setFreeformDescription(String freeformDescription) {
+        this.freeformDescription = freeformDescription;
     }
 }

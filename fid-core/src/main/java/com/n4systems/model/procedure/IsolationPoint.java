@@ -1,5 +1,6 @@
 package com.n4systems.model.procedure;
 
+import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;
@@ -11,16 +12,17 @@ public class IsolationPoint extends EntityWithTenant {
     @Column(name="identifier")
     private String identifier;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="source")
-    private String source;
+    private IsolationPointSourceType source = IsolationPointSourceType.getDefault();
 
     @OneToOne
     @JoinColumn(name="device_definition_id")
-    private IsolationDeviceDescription deviceDefinition;
+    private IsolationDeviceDescription deviceDefinition = new IsolationDeviceDescription();
 
     @OneToOne
     @JoinColumn(name="lock_definition_id")
-    private IsolationDeviceDescription lockDefinition;
+    private IsolationDeviceDescription lockDefinition = new IsolationDeviceDescription();
 
     @Column(name="location")
     private String location;
@@ -39,11 +41,11 @@ public class IsolationPoint extends EntityWithTenant {
         this.identifier = identifier;
     }
 
-    public String getSource() {
+    public IsolationPointSourceType getSource() {
         return source;
     }
 
-    public void setSource(String source) {
+    public void setSource(IsolationPointSourceType source) {
         this.source = source;
     }
 

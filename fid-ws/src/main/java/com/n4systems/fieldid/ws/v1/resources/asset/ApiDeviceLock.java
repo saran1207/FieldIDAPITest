@@ -1,10 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
+import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModel;
 
 import java.util.List;
 
-public class ApiDeviceLock {
+public class ApiDeviceLock extends ApiReadWriteModel {
 
     private String identifier;
     private String rfidNumber;

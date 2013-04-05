@@ -21,11 +21,15 @@ public class ApiDeviceLockResource extends SetupDataResource<ApiDeviceLock,Asset
     @Override
     protected ApiDeviceLock convertEntityToApiModel(Asset asset) {
         ApiDeviceLock apiDeviceLock = new ApiDeviceLock();
+        apiDeviceLock.setActive(asset.isActive());
+        apiDeviceLock.setModified(asset.getModified());
+        apiDeviceLock.setSid(asset.getMobileGUID());
         apiDeviceLock.setIdentifier(asset.getIdentifier());
         apiDeviceLock.setRfidNumber(asset.getRfidNumber());
         apiDeviceLock.setAttributeValues(apiAssetResource.findAllAttributeValues(asset));
         apiDeviceLock.setDevice(asset.getType().getGroup().isLotoDevice());
         apiDeviceLock.setLock(asset.getType().getGroup().isLotoLock());
+        apiDeviceLock.setTypeId(asset.getType().getId());
         return apiDeviceLock;
     }
 

@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValueResource;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
@@ -15,6 +17,8 @@ import java.util.List;
 @Component
 @Path("procedureDefinition")
 public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedureDefinition, ProcedureDefinition> {
+
+    @Autowired private ApiAttributeValueResource attrResource;
 
     public ApiProcedureDefinitionResource() {
         super(ProcedureDefinition.class, false);
@@ -41,22 +45,25 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
         List<ApiIsolationPoint> apiIsolationPoints = new ArrayList<ApiIsolationPoint>();
         for (IsolationPoint isolationPoint : isolationPoints) {
             ApiIsolationPoint apiIsolationPoint = new ApiIsolationPoint();
+            apiIsolationPoint.setActive(true);
             apiIsolationPoint.setSid(isolationPoint.getId());
             apiIsolationPoint.setCheck(isolationPoint.getCheck());
             apiIsolationPoint.setDeviceDefinition(convertDefinition(isolationPoint.getDeviceDefinition()));
-            apiIsolationPoint.setActive(true);
+            apiIsolationPoint.setSource(isolationPoint.getSource().name());
             apiIsolationPoints.add(apiIsolationPoint);
         }
         return apiIsolationPoints;
     }
 
     private ApiDeviceDescription convertDefinition(IsolationDeviceDescription deviceDefinition) {
-        if (deviceDefinition == null) {
-            return null;
-        }
         ApiDeviceDescription apiDescription = new ApiDeviceDescription();
-        apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
-        // TODO: Attribute criteria
+        apiDescription.setActive(true);
+        if (deviceDefinition != null) {
+            // Really device definition cannot be null but may be in some initial dev data. Remove check after release of loto.
+            apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
+            apiDescription.setAttributes(attrResource.convertInfoOptions(deviceDefinition.getAttributeValues()));
+            apiDescription.setFreeformDescription(deviceDefinition.getFreeformDescription());
+        }
         return apiDescription;
     }
 
