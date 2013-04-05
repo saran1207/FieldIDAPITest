@@ -2,25 +2,26 @@
     width: 100%;
     overflow: hidden;
 }
-
+.image-list img {
+    max-width: 100%;
+    vertical-align: middle;
+}
 .image-list ul {
     padding: 0;
     margin: 0;
     overflow: hidden;
     width:9000px;  /*to be overridden via javascript */
 }
-.image-list ul li {
-    position: relative;
-    width: 239px;
-    height: 200px;
-    margin-right: 6px;
-    float:left;
-    background-color: #000;
-    text-align: center;
-}
-.carousel ul li img {
-    max-width: 100%;
-}
+    .image-list ul li {
+        position: relative;
+        width: 239px;
+        height: 200px;
+        line-height: 200px; /* to vertically center image */
+        margin-right: 6px;
+        float:left;
+        background-color: #000;
+        text-align: center;
+    }
 
 .image-list .navigation {
     text-align: right;
@@ -30,6 +31,7 @@
         cursor: pointer;
         padding: 8px 0 8px 10px;
     }
+
 .isolation-points {
     position: relative;
 }

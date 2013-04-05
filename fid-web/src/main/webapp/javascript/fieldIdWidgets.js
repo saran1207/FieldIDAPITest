@@ -21,7 +21,7 @@ var fieldIdWidgets = (function() {
 			$('.image-list ul').css('width', carouselWidth);
 
 			//Set height of images to fit in the image list without cropping
-			$(".image-list img").load(function(){
+			$(".image-list img").each(function(){
 				imageHeight = $(this).height();
 				imageContainerHeight = $('.image-list ul li').height();
 
@@ -32,7 +32,7 @@ var fieldIdWidgets = (function() {
 
 			// TODO DD : hide nav if < 4 images? need some max to compare against.
 			//navigation buttons
-			$('.prev').click(function(){
+			$('.image-list .prev').click(function(){
 				$(".image-list ul").animate({
 					marginLeft: imageWidthContainer
 				}, 500,
@@ -42,7 +42,7 @@ var fieldIdWidgets = (function() {
 					$(this).css({marginLeft: 0});
 				})
 			});
-			$('.next').click(function(){
+			$('.image-list .next').click(function(){
 				$(".image-list ul").animate({
 					marginLeft: -imageWidthContainer
 				}, 500,

@@ -1,45 +1,37 @@
 <wicket:panel>
 
-	<div>
-		<ul>
-			<li wicket:id="list" class="image"></li>
-		</ul>
-		
-		<!-- temp static HTML and inline background images for testing CSS -->
-		<!-- <ul>
-			<li>
-				<img src="http://placeimg.com/250/233/nature" />
-				<div class="isolation-points">
-					<span class="electrical point-1">E-1</span>
-					<span class="water point-2">W-2</span>
-				</div>
-			</li>
-			<li><img src="http://placeimg.com/233/186/arch" /></li>
-			<li><img src="http://placeimg.com/300/174/arch" /></li>
-			<li><img src="http://placeimg.com/233/155/nature" /></li>
-			<li><img src="http://placeimg.com/233/145/tech" /></li>
-			<li><img src="http://placeimg.com/300/131/tech" /></li>
-			<li><img src="http://placeimg.com/186/233/arch" /></li>
-			<li><img src="http://placeimg.com/174/233/arch" /></li>
-			<li><img src="http://placeimg.com/155/233/nature" /></li>
-			<li><img src="http://placeimg.com/145/233/tech" /></li>
-			<li><img src="http://placeimg.com/131/233/tech" /></li>
-		</ul>-->
+	<ul>
+		<li wicket:id="list" class="image"></li>
+	</ul>
+	
+	<!-- temp static HTML and inline background images for testing CSS -->
+	<!-- <ul>
+		<li>
+			<img src="http://placeimg.com/250/233/nature" />
+			<div class="isolation-points">
+				<span class="electrical point-1">E-1</span>
+				<span class="water point-2">W-2</span>
+			</div>
+		</li>
+		<li><img src="http://placeimg.com/233/186/arch" /></li>
+		<li><img src="http://placeimg.com/300/174/arch" /></li>
+		<li><img src="http://placeimg.com/233/155/nature" /></li>
+		<li><img src="http://placeimg.com/233/145/tech" /></li>
+		<li><img src="http://placeimg.com/300/131/tech" /></li>
+		<li><img src="http://placeimg.com/186/233/arch" /></li>
+		<li><img src="http://placeimg.com/174/233/arch" /></li>
+		<li><img src="http://placeimg.com/155/233/nature" /></li>
+		<li><img src="http://placeimg.com/145/233/tech" /></li>
+		<li><img src="http://placeimg.com/131/233/tech" /></li>
+	</ul> -->
 
-		<div class="navigation">
-			<span class="prev"><img src="/fieldid/images/arrow-prev.png"></span>
-			<span class="next"><img src="/fieldid/images/arrow-next.png"></span>
-		</div>
-
-		<div style="display:none;" wicket:id="blankSlate" class="blank-slate">
-			<wicket:message key="label.no_images"/>
-		</div>
-
-		<script type="text/javascript">
-		$(document).ready(function(){
-
-
-		});
-		</script>
+	<div class="navigation">
+		<span class="prev"><img src="/fieldid/images/arrow-prev.png"></span>
+		<span class="next"><img src="/fieldid/images/arrow-next.png"></span>
 	</div>
+
+	<div style="display:none;" wicket:id="blankSlate" class="blank-slate">
+		<wicket:message key="label.no_images"/>
+	</div>
+
 </wicket:panel>
