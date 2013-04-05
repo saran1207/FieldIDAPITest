@@ -20,7 +20,7 @@ var fieldIdWidgets = (function() {
 			$('.image-list ul').css('width', carouselWidth);
 
 			//Set height of images to fit in the image list without cropping
-			il.find('img').each(function(){
+			il.find('ul li img').each(function(){
 				var imageHeight = $(this).height();
 				var imageWidth = $(this).width();
 				var imageContainerHeight = $(this).parent().parent().height();

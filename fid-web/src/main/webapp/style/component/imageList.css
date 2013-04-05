@@ -3,7 +3,7 @@
     overflow: hidden;
 }
 
-.image-list img {
+.image-list ul li img {
     width:100%;
     height:100%;
 }
