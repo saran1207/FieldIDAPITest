@@ -102,12 +102,13 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
     private ApiProcedure convert(Procedure procedure) {
         ApiProcedure convertedProcedure = new ApiProcedure();
+        convertedProcedure.setSid(procedure.getId());
+        convertedProcedure.setActive(procedure.isActive());
         convertedProcedure.setModified(procedure.getModified());
         convertedProcedure.setAssigneeUserGroupId(procedure.getAssignedGroup() == null ? null : procedure.getAssignedGroup().getId());
         convertedProcedure.setAssigneeUserId(procedure.getAssignee() == null ? null : procedure.getAssignee().getId());
         convertedProcedure.setCompletedDate(procedure.getCompletedDate());
         convertedProcedure.setDueDate(procedure.getDueDate());
-        convertedProcedure.setActive(procedure.isActive());
         return convertedProcedure;
     }
 
