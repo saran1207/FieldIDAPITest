@@ -4,7 +4,7 @@ var fieldIdWidgets = (function() {
 	function imageList(el,options) {
 		var il = el instanceof jQuery ? el : $(el);
 		var defaults = {
-			direction: 'west',
+			direction: 'bottom-left',
 			text: 'a label',
 			type: 'note',
 			yPosition:'middle',
@@ -74,8 +74,14 @@ var fieldIdWidgets = (function() {
 
 		function createNote(annotation) {
 			var value = annotation?annotation.text:options.text;
-//			var direction = annotation.x<.5 ? 'west' : annotation.y<.5 ? 'north':'south';
-			var direction = 'west';
+			var direction = 'bottom-left';
+			if (annotation.x<.5) {
+				direction = annotation.y<.5 ? 'top-left' : 'bottom-left';
+			} else {
+				direction = annotation.y<.5 ? 'top-right' : 'bottom-right';
+			}
+
+			var direction = annotation.x<.5 ? 'west' : annotation.y<.5 ? 'north':'south';
 			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(options.type);
 			var icon = $('<span/>').addClass('icon').appendTo(span);
 			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');

@@ -1,25 +1,28 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.search.ProcedureSearchService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.user.User;
+import com.n4systems.services.date.DateService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Date;
 import java.util.List;
 
 public class ContentPanel extends Panel {
 
-    private @SpringBean
-    ProcedureSearchService procedureSearchService;
+    private @SpringBean ProcedureSearchService procedureSearchService;
+    private @SpringBean DateService dateService;
 
     private List<EditableImage> images;
     private IsolationPointEditor editor;
@@ -103,6 +106,13 @@ public class ContentPanel extends Panel {
     private IsolationPoint createIsolationPoint(IsolationPointSourceType sourceType) {
         IsolationPoint isolationPoint = new IsolationPoint();
         isolationPoint.setIdentifier(getNextIdentifier(sourceType));
+        User user = FieldIDSession.get().getSessionUser().getSecurityFilter().getUser();
+        isolationPoint.setCreatedBy(user);
+        isolationPoint.setModifiedBy(user);
+        isolationPoint.setTenant(getProcedureDefinition().getTenant());
+        Date now = dateService.now().toDate();
+        isolationPoint.setCreated(now);
+        isolationPoint.setModified(now);
         return isolationPoint;
     }
 

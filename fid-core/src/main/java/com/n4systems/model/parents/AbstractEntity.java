@@ -1,22 +1,15 @@
 package com.n4systems.model.parents;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.HasModifiedBy;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.DefaultEntityModifiedCreatedHandler;
 import com.n4systems.persistence.utils.EntityModifiedCreatedHandler;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 @SuppressWarnings("serial")
 @MappedSuperclass

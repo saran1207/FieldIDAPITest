@@ -17,14 +17,9 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     @Column(name = "filename", nullable = false)
     private String fileName;
 
+    // TODO DD : remove this.
     @Column(name = "thumbnail")
     private String thumbnail;
-
-    @Transient
-    private byte[] imageData;
-
-    @Transient
-    private String contentType;
 
 
     public EditableImage() {
@@ -33,22 +28,6 @@ public class EditableImage extends EntityWithTenant implements S3Image {
 
     public EditableImage(String fileName) {
         this.fileName = fileName;
-    }
-
-    public byte[] getImageData() {
-        return imageData;
-    }
-
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
     }
 
     public List<ImageAnnotation> getAnnotations() {

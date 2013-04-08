@@ -5,7 +5,7 @@ import com.google.common.base.Joiner;
 public enum ImageAnnotationType {
 
     // currently, the annotation types match up with IsolationPointSourceTypes.
-    //  they don't have to, it's just the only need now.
+    //  they don't have to, but it's just the only need now.
 
     // TODO DD : need to get proper images from matt here. these are placeholders.
     CP("control-pane","#D68741","#FFFFFF",	"#D68741","images/proof_test.jpg"),

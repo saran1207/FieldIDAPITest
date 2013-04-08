@@ -1,9 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.search.ProcedureSearchService;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.loto.DeviceLockPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -12,6 +14,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -21,13 +24,14 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Arrays;
+
 public class IsolationPointEditor extends Panel {
 
     private @SpringBean ProcedureSearchService procedureSearchService;
 
     private Form form;
     private IsolationPoint editedIsolationPoint;
-
     private DeviceLockPicker isolationDevicePicker;
     private DeviceLockPicker isolationLockPicker;
 
@@ -42,7 +46,17 @@ public class IsolationPointEditor extends Panel {
         add(form = new Form("form"));
 
         form.add(new TextField("identifier"));
-        form.add(new TextField("source", new PropertyModel(getDefaultModel(),"source")));
+        form.add(new FidDropDownChoice<IsolationPointSourceType>("source", new PropertyModel(getDefaultModel(),"source"), Arrays.asList(IsolationPointSourceType.values()),new IChoiceRenderer<IsolationPointSourceType>() {
+            @Override public Object getDisplayValue(IsolationPointSourceType type) {
+                return type.getIdentifier();
+            }
+
+            @Override
+            public String getIdValue(IsolationPointSourceType type, int index) {
+                return type.name();
+            }
+        }));
+        form.add(new TextField("sourceText", new PropertyModel(getDefaultModel(),"sourceText")));
         form.add(new AjaxLink<Void>("lock", new Model()) {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -91,7 +105,8 @@ public class IsolationPointEditor extends Panel {
                 closeEditor(target);
             }
             @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
-                // TODO : not sure what to do here...
+                System.out.println("hmmm....");
+                // TODO DD : not sure what to do here...
             }
         });
 
@@ -187,7 +202,7 @@ public class IsolationPointEditor extends Panel {
     };
 
     private IsolationPoint copyIntoModel(IsolationPoint isolationPoint) {
-        // TODO : proper cloning here.
+        // TODO DD : proper cloning here.
         IsolationPoint ip = (IsolationPoint) getDefaultModelObject();
         procedureSearchService.copyIsolationPoint(isolationPoint, ip);
         return isolationPoint;
@@ -195,6 +210,7 @@ public class IsolationPointEditor extends Panel {
 
     public IsolationPoint getEditedIsolationPoint() {
         if (isEditing()) {
+            // TODO DD : move this to soon to be created procedureDefinitionService.
             return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), editedIsolationPoint);
         } else {
             return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), new IsolationPoint());

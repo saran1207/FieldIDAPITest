@@ -54,12 +54,14 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
     }
 
     public void save(ProcedureDefinition procedureDefinition) {
-        persistenceService.save(procedureDefinition);
+        persistenceService.update(procedureDefinition);
     }
 
-
     public ProcedureDefinition reset(ProcedureDefinition procedureDefinition) {
-        return persistenceService.reattach(procedureDefinition,true);
+        if (procedureDefinition!=null && !procedureDefinition.isNew()) {
+            return persistenceService.reattach(procedureDefinition,true);
+        }
+        return procedureDefinition;
     }
 
     public IsolationPoint copyIsolationPoint(IsolationPoint from, IsolationPoint to) {
@@ -71,6 +73,8 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
         to.setMethod(from.getMethod());
         to.setCheck(from.getCheck());
         to.setSource(from.getSource());
+        to.setTenant(from.getTenant());
+        to.setSourceText(from.getSourceText());
         to.setDeviceDefinition(from.getDeviceDefinition());
         to.setLockDefinition(from.getLockDefinition());
 

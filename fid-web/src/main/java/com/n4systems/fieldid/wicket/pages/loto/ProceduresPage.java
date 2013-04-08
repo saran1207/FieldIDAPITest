@@ -1,21 +1,21 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
-import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.search.ProcedureSearchService;
-import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -38,19 +38,10 @@ public class ProceduresPage extends LotoPage {
 
         add(new BookmarkablePageLink<VersionsPage>("versionsLink", VersionsPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
-        add(new MenuButton<NewMode>("newProcedure", new FIDLabelModel("label.new"), Lists.newArrayList(NewMode.values())) {
-            @Override protected void buttonClicked(AjaxRequestTarget target) {
-                doNewProcedureDef(NewMode.FROM_SCRATCH);
-            }
-
-            @Override protected Component populateLink(String linkId, String labelId, ListItem<NewMode> item) {
-                final NewMode mode = item.getModelObject();
-                return new Link(linkId) {
-                    @Override public void onClick() {
-                        doNewProcedureDef(mode);
-                    }
-                }.add(new Label(labelId, new FIDLabelModel(mode.getLabel())));
-            }
+        add(new AjaxLink("newProcedure") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                    doNewProcedureDef(NewMode.FROM_SCRATCH);
+                }
         });
 
         add(new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
@@ -77,21 +68,20 @@ public class ProceduresPage extends LotoPage {
 
     private void doNewProcedureDef(NewMode mode) {
         switch (mode) {
-            case COPY_EXISTING:
-                // TODO : copy from existing page.  for now i'll just do brand new procDefs.
-                setResponsePage(new ProcedureDefinitionPage(newProcedureDefinition()));
-                break;
             case FROM_SCRATCH:
                 setResponsePage(new ProcedureDefinitionPage(newProcedureDefinition()));
+                break;
+            default:
+                // currently only one mode supported.
                 break;
         }
     }
 
-    private ProcedureDefinition newProcedureDefinition() {
+    private IModel<ProcedureDefinition> newProcedureDefinition() {
         ProcedureDefinition pd = new ProcedureDefinition();
         pd.setAsset(assetModel.getObject());
         pd.setTenant(assetModel.getObject().getTenant());
-        return pd;
+        return Model.of(pd);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.n4systems.model.procedure;
 
 import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;
@@ -12,17 +13,25 @@ public class IsolationPoint extends EntityWithTenant {
     @Column(name="identifier")
     private String identifier;
 
+
+    @Column(name="source_text")
+    private String sourceText;
+
     @Enumerated(EnumType.STRING)
     @Column(name="source")
     private IsolationPointSourceType source = IsolationPointSourceType.getDefault();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="device_definition_id")
     private IsolationDeviceDescription deviceDefinition = new IsolationDeviceDescription();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="lock_definition_id")
     private IsolationDeviceDescription lockDefinition = new IsolationDeviceDescription();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_annotation_id")
+    private ImageAnnotation annotation;
 
     @Column(name="location")
     private String location;
@@ -89,4 +98,19 @@ public class IsolationPoint extends EntityWithTenant {
         this.check = check;
     }
 
+    public ImageAnnotation getAnnotation() {
+        return annotation;
+    }
+
+    public void setAnnotation(ImageAnnotation annotation) {
+        this.annotation = annotation;
+    }
+
+    public String getSourceText() {
+        return sourceText;
+    }
+
+    public void setSourceText(String sourceText) {
+        this.sourceText = sourceText;
+    }
 }

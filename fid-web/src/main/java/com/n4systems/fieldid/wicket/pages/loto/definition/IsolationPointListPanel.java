@@ -47,6 +47,7 @@ public class IsolationPointListPanel extends Panel {
         item.add(new Label("location", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getLocation())));
         item.add(new Label("method", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getMethod())));
         item.add(new Label("check", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getCheck())));
+        // TODO DD : add images to row.
 //        item.add(new Label("image"), new ExternalS3Image("image",isolationPoint.getImage()));
         item.add(new WebMarkupContainer("image"));
 
@@ -66,11 +67,6 @@ public class IsolationPointListPanel extends Panel {
 
     protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) { }
 
-    protected void doContinue(AjaxRequestTarget target) { }
-
-    protected void doCancel(AjaxRequestTarget target) { }
-
     protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) { }
-
 
 }

@@ -50,7 +50,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
     @Enumerated(EnumType.STRING)
     private PublishedState publishedState;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @IndexColumn(name="orderIdx")
     @JoinTable(name="procedure_definitions_isolation_points", joinColumns = @JoinColumn(name = "procedure_definition_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_id"))
     private List<IsolationPoint> isolationPoints = Lists.newArrayList();

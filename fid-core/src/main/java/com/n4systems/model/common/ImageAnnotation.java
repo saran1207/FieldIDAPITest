@@ -36,7 +36,7 @@ public class ImageAnnotation extends EntityWithTenant {
         return image;
     }
 
-    public void setImage(EditableImage image) {
+    public void setImage(EditableImage  image) {
         this.image = image;
     }
 

@@ -3,30 +3,25 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.search.ProcedureSearchService;
-import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.model.Score;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
@@ -34,8 +29,7 @@ import java.util.List;
 
 public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVisitor<FormComponent,Void> {
 
-    private @SpringBean ProcedureSearchService procedureService;
-    private @SpringBean PersistenceService persistenceService;
+    private @SpringBean PersistenceService procedureDefinitionService;
 
     protected Label assetNameLabel;
     protected Label pageTileLabel;
@@ -52,17 +46,12 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
 
     public ProcedureDefinitionPage(IModel<ProcedureDefinition> model) {
         super(new PageParameters());
-        init(createEntityModel(model.getObject().getId()));
+        init(model);
     }
 
     public ProcedureDefinitionPage(PageParameters params) {
         super(params);
         init(createEntityModel());
-    }
-
-    public ProcedureDefinitionPage(ProcedureDefinition procedureDefinition) {
-        super(new PageParameters());
-        init(Model.of(procedureDefinition));
     }
 
     private IModel<ProcedureDefinition> createEntityModel() {
@@ -71,13 +60,8 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
     }
 
     private IModel<ProcedureDefinition> createEntityModel(Long id) {
-        return new EntityModel<ProcedureDefinition>(ProcedureDefinition.class,id) {
-            @Override protected ProcedureDefinition load() {
-                ProcedureDefinition entity = super.load();
-                entity.getIsolationPoints();
-                return entity;
-            }
-        };
+        ProcedureDefinition procedureDefinition = procedureDefinitionService.find(ProcedureDefinition.class, id);
+        return Model.of(procedureDefinition);
     }
 
     private void init(IModel<ProcedureDefinition> model) {
@@ -86,7 +70,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
         add(pageTileLabel = new Label("pageTitle",Model.of("Author Procedure")));
         add(isolationPointLabel = new Label("isolationPoint",Model.of(": Isolation Point E-1")));
 
-        add(navigation = new Navigation("navigation", new PropertyModel<Score>(this, "currentSection")));
+        add(navigation = new Navigation("navigation"));
         add(form = new ProcedureDefinitionForm("form", model));
 
         add(new AttributeAppender("class", Model.of("procedure-definition")));
@@ -94,14 +78,19 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
         visitChildren(FormComponent.class, this);
     }
 
-    @Override  // part of IVisitor interface.  to avoid serialization issues, don't make anonymous class.
+    @Override  // part of IVisitor interface.  to avoid serialization issues, don't make anonymous IVisistor class, implement here.
     public void component(FormComponent formComponent, IVisit<Void> visit) {
-        formComponent.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            @Override protected void onUpdate(AjaxRequestTarget target) {
-                // TODO : this is hook to save draft mode when anything changes...for now it's just here so model is updated.
-                // makes the form very chatty but gives you lots of saving options.
-            }
-        });
+        if (formComponent.getForm().equals(form)) {
+            formComponent.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                @Override protected void onUpdate(AjaxRequestTarget target) {
+                    // TODO DD : this is hook to save draft mode when anything changes...for now it's just here so model is updated.
+                    // makes the form very chatty but gives you lots of saving options.
+                    // don't include components in nested forms.
+                }
+            });
+        } else {
+            System.out.println("skip visiting " + formComponent.getId());
+        }
     }
 
     protected Label createTitleLabel(String labelId) {
@@ -121,12 +110,6 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
         form.updateSection(target);
     }
 
-    private ProcedureDefinition getProcedureDefinition() {
-        StringValue idParam = getPageParameters().get("id");
-        Preconditions.checkState(idParam!=null && idParam.toString()!=null,"must pass id of procedure definition for page creation.");
-        return persistenceService.find(ProcedureDefinition.class, idParam.toLong());
-    }
-
 
     class ProcedureDefinitionForm extends Form {
 
@@ -134,7 +117,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
         private final Component content;
         private final Component publish;
 
-        ProcedureDefinitionForm(String id, IModel<ProcedureDefinition> model) {
+        ProcedureDefinitionForm(String id, final IModel<ProcedureDefinition> model) {
             super(id, model);
 
             add(details = new DetailsPanel("details", model) {
@@ -160,16 +143,14 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
             }.setVisible(false));
 
             add(publish = new PublishPanel("publish", model) {
-                @Override
-                protected void doCancel(AjaxRequestTarget target) {
-                    if (!getProcedureDefinition().isNew()) {
-                        procedureService.reset(getProcedureDefinition());
-                    }
+                @Override protected void doCancel(AjaxRequestTarget target) {
+                    // leave the model as a detached object....don't save it.   nothing to "undo".
+                    ProcedureDefinitionPage.this.doCancel(target);
                 }
 
-                @Override
-                protected void doPublish(AjaxRequestTarget target) {
-                    procedureService.save(getProcedureDefinition());
+                @Override protected void doPublish(AjaxRequestTarget target) {
+                    procedureDefinitionService.saveProcedureDefinition(model.getObject());
+                    gotoProceduresPage();
                 }
             }.setVisible(false));
 
@@ -202,32 +183,40 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
 
     }
 
-    private void doCancel(AjaxRequestTarget target) {
-
+    private void gotoProceduresPage() {
+        setResponsePage(new ProceduresPage(new PageParameters().add("uniqueID", model.getObject().getAsset().getId())));
     }
 
-    class Navigation extends RadioGroup<ProcedureDefinitionSection> {
+    private void doCancel(AjaxRequestTarget target) {
+        gotoProceduresPage();
+    }
 
-        public Navigation(String id, IModel model) {
-            super(id, model);
-            add(new AjaxFormChoiceComponentUpdatingBehavior() {
-                @Override protected void onUpdate(AjaxRequestTarget target) {
-                    sectionChanged(target);
-                }
-            });
+    class Navigation extends Form {
+
+        public Navigation(String id) {
+            super(id);
             List<ProcedureDefinitionSection> sections = Lists.newArrayList(ProcedureDefinitionSection.values());
             add(new ListView<ProcedureDefinitionSection>("sections", sections) {
                 @Override
-                protected void populateItem(ListItem<ProcedureDefinitionSection> item) {
-                    Radio<ProcedureDefinitionSection> radio = new Radio<ProcedureDefinitionSection>("section", item.getModel());
-                    item.add(radio);
+                protected void populateItem(final ListItem<ProcedureDefinitionSection> item) {
+                    // TODO DD : if (currentSection==this button), add(attributeAppender("class", "enabled");
+                    Button button = new AjaxButton("section") {
+                        @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                            currentSection = item.getModelObject();
+                            sectionChanged(target);
+                        }
+
+                        @Override protected void onError(AjaxRequestTarget target, Form<?> form) { }
+                    };
+                    button.setMarkupId(item.getModelObject().name());
+                    item.add(button);
                     if (!contentFinished && ProcedureDefinitionSection.Publish.equals(item.getModel().getObject())) {
-                        radio.setEnabled(false);
+                        button.setEnabled(false);
                     }
                     item.add(new Label("label", Model.of(item.getModel().getObject().name())));
                 }
             });
-        }
+            }
 
     }
 
