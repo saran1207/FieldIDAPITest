@@ -15,6 +15,7 @@ import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.fieldid.wicket.pages.event.EditEventPage;
 import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProcedureResultsPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProceduresPage;
 import com.n4systems.fieldid.wicket.pages.loto.VersionsPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
@@ -142,6 +143,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("procedures", ProceduresPage.class);
         mountPage("versions", VersionsPage.class);
 
+        mountPage("procedureResults", ProcedureResultsPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

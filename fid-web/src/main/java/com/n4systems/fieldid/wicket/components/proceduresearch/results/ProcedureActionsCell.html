@@ -1,5 +1,19 @@
 <wicket:panel>
+<ul class="floatingDropdown">
+        <li>
+            <a href="javascript:void(0);" class="dropDownLink" wicket:id="actionsLink">
+                <wicket:message key="label.actions"/>
+                <img wicket:id="dropwDownArrow"/>
+            </a>
 
+            <ul class="sub_menu" wicket:id="actionsList">
 
+                <li>
+                    <a wicket:id="viewLink"><wicket:message key="label.view"/></a>
+                </li>
 
+            </ul>
+
+        </li>
+    </ul>
 </wicket:panel>

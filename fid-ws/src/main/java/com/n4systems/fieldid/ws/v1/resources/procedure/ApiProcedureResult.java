@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +9,8 @@ public class ApiProcedureResult {
     private Date completedDate;
     private Long procedureId;
     private List<ApiIsolationPointResult> isolationPointResults;
+    private BigDecimal gpsLatitude;
+    private BigDecimal gpsLongitude;
 
     public Date getCompletedDate() {
         return completedDate;
@@ -31,5 +34,21 @@ public class ApiProcedureResult {
 
     public void setIsolationPointResults(List<ApiIsolationPointResult> isolationPointResults) {
         this.isolationPointResults = isolationPointResults;
+    }
+
+    public BigDecimal getGpsLatitude() {
+        return gpsLatitude;
+    }
+
+    public void setGpsLatitude(BigDecimal gpsLatitude) {
+        this.gpsLatitude = gpsLatitude;
+    }
+
+    public BigDecimal getGpsLongitude() {
+        return gpsLongitude;
+    }
+
+    public void setGpsLongitude(BigDecimal gpsLongitude) {
+        this.gpsLongitude = gpsLongitude;
     }
 }

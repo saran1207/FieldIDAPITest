@@ -1,0 +1,1 @@
+alter table procedures modify column tenant_id bigint not null;

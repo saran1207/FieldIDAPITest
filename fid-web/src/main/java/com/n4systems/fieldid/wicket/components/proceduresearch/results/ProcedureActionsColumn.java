@@ -15,7 +15,7 @@ public class ProcedureActionsColumn extends AbstractColumn<RowView> {
 
     @Override
     public void populateItem(Item<ICellPopulator<RowView>> cellItem, String componentId, IModel<RowView> rowModel) {
-        cellItem.add(new ProcedureActionsCell(componentId));
+        cellItem.add(new ProcedureActionsCell(componentId, rowModel));
     }
 
 }

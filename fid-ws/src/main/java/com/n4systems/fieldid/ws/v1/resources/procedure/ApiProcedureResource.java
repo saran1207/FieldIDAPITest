@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.procedure;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
+import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.IsolationPointResult;
@@ -39,6 +40,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         List<IsolationPointResult> convertedResults = convert(apiProcedure.getIsolationPointResults());
         procedure.setLockResults(convertedResults);
         procedure.setWorkflowState(ProcedureWorkflowState.LOCKED);
+        convertGpsLocation(apiProcedure, procedure);
 
         persistenceService.update(procedure);
     }
@@ -62,8 +64,19 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         procedure.setUnlockResults(convertedResults);
         procedure.setCompletedDate(apiProcedure.getCompletedDate());
         procedure.setWorkflowState(ProcedureWorkflowState.UNLOCKED);
+        convertGpsLocation(apiProcedure, procedure);
 
         persistenceService.update(procedure);
+    }
+
+    private void convertGpsLocation(ApiProcedureResult procedureResult, Procedure procedure) {
+        if (procedureResult.getGpsLatitude() != null && procedureResult.getGpsLongitude() != null) {
+            GpsLocation gpsLocation = new GpsLocation(procedureResult.getGpsLatitude(), procedureResult.getGpsLongitude());
+
+            if (gpsLocation.isValid()) {
+                procedure.setGpsLocation(gpsLocation);
+            }
+        }
     }
 
     private List<IsolationPointResult> convert(List<ApiIsolationPointResult> isolationPointResults) {
