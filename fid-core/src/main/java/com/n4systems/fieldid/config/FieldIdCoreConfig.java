@@ -34,6 +34,8 @@ import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
@@ -246,8 +248,18 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
-    public ProcedureSearchService procedureService() {
+    public ProcedureSearchService procedureSearchService() {
         return new ProcedureSearchService();
+    }
+
+    @Bean
+    public ProcedureService procedureService() {
+        return new ProcedureService();
+    }
+
+    @Bean
+    public ProcedureDefinitionService procedureDefinitionService() {
+        return new ProcedureDefinitionService();
     }
 
     @Bean

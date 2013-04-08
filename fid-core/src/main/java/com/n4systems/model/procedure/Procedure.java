@@ -7,6 +7,7 @@ import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import org.hibernate.annotations.IndexColumn;
@@ -164,4 +165,20 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
         this.unlockResults = unlockResults;
     }
 
+
+    @Transient
+    public Assignable getAssignedUserOrGroup() {
+        return assignee != null ?  assignee : assignedGroup;
+    }
+
+    public void setAssignedUserOrGroup(Assignable assignee) {
+        if (assignee instanceof User) {
+            setAssignee((User) assignee);
+        } else if (assignee instanceof UserGroup) {
+            setAssignedGroup((UserGroup) assignee);
+        } else if (assignee == null) {
+            this.assignee = null;
+            this.assignedGroup = null;
+        }
+    }
 }

@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:panel>
+
+    <form class="newProcedureForm" wicket:id="procedureForm">
+
+        <div class="newScheduleForm schedulesAdd">
+
+            <div wicket:id="feedbackPanel"></div>
+
+            <div class="schedulePickerTitle">
+                <wicket:message key="label.schedule_procedure"/>
+            </div>
+
+            <div class="scheduleRow">
+
+                <label class="label">
+                    <wicket:message key="label.set_the_due_date"/>
+                </label>
+
+                <div wicket:id="datePicker"></div>
+
+                <span class="dateQuickLinks">
+                    <a wicket:id="quickLinkToday"><wicket:message key="label.today"/></a> |
+                    <a wicket:id="quickLinkTomorrow"><wicket:message key="label.tomorrow"/></a> |
+                    <a wicket:id="quickLinkNextMonth"><wicket:message key="label.next_month"/></a> |
+                    <a wicket:id="quickLinkSixMonths"><wicket:message key="label.in_6_months"/></a> |
+                    <a wicket:id="quickLinkNextYear"><wicket:message key="label.next_year"/></a>
+                </span>
+
+            </div>
+
+            <div class="assignmentSection">
+
+                <span class="assignmentSectionTitle"><wicket:message key="label.assignee"/></span>
+
+                <wicket:message key="message.person_assigned_will_be_notified_by_email"/><br/>
+
+                <div wicket:id="assignee"></div>
+
+            </div>
+
+            <div class="formActions blockSeparated">
+                <a wicket:id="addScheduleButton" class="mattButton blueButton"><span wicket:id="saveScheduleLabel"/></a>
+                <div style="display:block;float:left;padding-top:5px;">
+                    <wicket:message key="label.or"/>
+                    <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+    <div wicket:id="noActiveProcedureDefinitionMessage">
+        <div class="schedulePickerTitle">
+            <wicket:message key="label.schedule_procedure"/>
+        </div>
+        <p><wicket:message key="message.no_active_procedure_definitions"/></p>
+    </div>
+    <div wicket:id="scheduledProcedureExistsMessage">
+        <div class="schedulePickerTitle">
+            <wicket:message key="label.schedule_procedure"/>
+        </div>
+        <p><wicket:message key="message.scheduled_procedure_exists"/></p>
+    </div>
+
+</wicket:panel>
+
+</html>

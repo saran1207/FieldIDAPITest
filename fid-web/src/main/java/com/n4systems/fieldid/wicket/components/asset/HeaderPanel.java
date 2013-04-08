@@ -3,10 +3,12 @@ package com.n4systems.fieldid.wicket.components.asset;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventTypeService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.components.schedule.ProcedurePicker;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
@@ -17,6 +19,7 @@ import com.n4systems.fieldid.wicket.pages.loto.ProceduresPage;
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.user.UserGroup;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -39,9 +42,11 @@ public class HeaderPanel extends Panel {
     @SpringBean protected AssetService assetService;
     @SpringBean private EventScheduleService eventScheduleService;
     @SpringBean private EventTypeService eventTypeService;
+    @SpringBean private ProcedureService procedureService;
 
     private Boolean useContext;
     private Event scheduleToAdd;
+    private Procedure procedureToSchedule;
 
     public HeaderPanel(String id, IModel<Asset> assetModel, Boolean isView, Boolean useContext) {
         super(id, assetModel);
@@ -106,12 +111,26 @@ public class HeaderPanel extends Panel {
             }
         };
 
+        procedureToSchedule = createNewProcedure(asset);
+
+
+        final ProcedurePicker procedurePicker = new ProcedurePicker("procedurePicker", new PropertyModel<Procedure>(HeaderPanel.this, "procedureToSchedule")) {
+            @Override
+            protected void onPickComplete(AjaxRequestTarget target) {
+                procedureService.createSchedule(procedureToSchedule);
+                refreshContentPanel(target);
+                procedureToSchedule = createNewProcedure(asset);
+            }
+        };
+
         add(new AjaxLink("scheduleEventLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 if(hasEventTypes) {
                     schedulePicker.show(target);
-                }//else open procedure picker
+                }else {
+                    procedurePicker.show(target);
+                }
             }
         }.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && !isLotoEnabled && !hasEventTypes));
 
@@ -127,7 +146,7 @@ public class HeaderPanel extends Panel {
         scheduleMenu.add(new AjaxLink("menuStartProcedureLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                schedulePicker.show(target);
+                procedurePicker.show(target);
             }
         });
 
@@ -136,9 +155,18 @@ public class HeaderPanel extends Panel {
         add(scheduleMenu);
 
         add(schedulePicker);
+        add(procedurePicker);
 
         add(new BookmarkablePageLink<ProceduresPage>("lotoProceduresLink", ProceduresPage.class, PageParametersBuilder.uniqueId(asset.getId()))
                 .setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures)));
+    }
+
+    private Procedure createNewProcedure(Asset asset) {
+        Procedure procedure = new Procedure();
+        procedure.setAsset(asset);
+        procedure.setTenant(FieldIDSession.get().getTenant());
+        procedure.setWorkflowState(ProcedureWorkflowState.OPEN);
+        return procedure;
     }
 
     private Event createNewSchedule(Asset asset) {

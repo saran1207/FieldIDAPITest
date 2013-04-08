@@ -111,3 +111,9 @@ div.wicket-modal div.w_caption {
     height:150px !important;
     overflow-y: auto;
 }
+
+.newProcedureForm .newScheduleForm {
+    overflow:hidden;
+    width:320px;
+    height:360px;
+}
