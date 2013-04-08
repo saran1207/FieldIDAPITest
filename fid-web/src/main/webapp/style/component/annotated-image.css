@@ -4,18 +4,16 @@
     position: relative;  
 }
 
-
 /* notes / speech bubbles
 ----------------------------------*/
 .note {
     padding: 6px 8px;
 	background-color: #fff0a0;
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 	-webkit-box-shadow: 2px 2px 10px -3px #888;
-	-moz-box-shadow: 2px 2px 10px -3px #888;
-	box-shadow: 2px 2px 10px -3px #888; 
+	box-shadow: 2px 2px 10px -3px #888;
+	z-index:10;
 	
 	position: absolute;
 }
@@ -54,20 +52,19 @@
 		    border-left-color: #fff0a0;
 		    border-width: 0 0 15px 20px;
 		}
-	
+
+.note.readonly {
+    z-index: 2;
+}
+
 /* note inputs */
 .notes-container .note input {
-    padding:2px;
     width: 30px; /* temp, generated dynamically via JS */
-    background-color:#fafad2;
+    background-color: #fafad2;
     outline: 1px solid #DDDD99;
     border: none;
-    margin-top:4px;
-    height:16px;
-    margin-left:0px;
-}
-.note.readonly {
-    z-index:2;
+    height: 16px;
+    margin-left: 0px;
 }
 .notes-container .note.readonly input {
     border: none;
@@ -79,12 +76,49 @@
 
 /* isolation points icons */
 .note .icon {
-	background: url(../../images/loto/water.jpg) no-repeat 3px 6px;
-	background-size: 16px 20px;
-	height: 24px;
+	background-repeat: no-repeat;
+	background-size: 16px auto;
+	height: 16px;
 	width: 20px;
 	float:left;
 }
+	.water .icon {
+		background-image: url(/fieldid/images/loto/water.jpg);
+	}
+	.valve .icon {
+		background-image: url(/fieldid/images/loto/valve.jpg);
+	}
+	.steam .icon {
+		background-image: url(/fieldid/images/loto/steam.jpg);
+	}
+	.pneumatic .icon {
+		background-image: url(/fieldid/images/single-event.png);
+	}
+	.gas .icon {
+		background-image: url(/fieldid/images/loto/gas.jpg);
+	}
+	.electrical .icon {
+		background-image: url(/fieldid/images/setup-wizard-gear.png);
+	}
+	.control-pane .icon {
+		background-image: url(/fieldid/images/proof_test.jpg);
+	}
+
+/* isolation types - color schemes */
+.control-pane {
+	color: #F5901A;
+	background: #fff;
+}
+
+/*
+#F5901A - control pain - orange w/white bg
+#E81F27 - electrical - red w/white bg
+#AA3B99 - gas - purple w/white bg
+#0255A5 - pneumatic -white w/ blue bg
+#EF3C37 - steam - white w/red bg
+#000000 - valve - black w/white bg
+#02A650 - water - white w/green bg
+*/
 
 
 /* positioning for notes - left & right values can't be less
