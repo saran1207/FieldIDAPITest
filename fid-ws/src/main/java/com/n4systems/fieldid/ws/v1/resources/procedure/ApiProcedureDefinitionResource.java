@@ -28,6 +28,7 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
     protected ApiProcedureDefinition convertEntityToApiModel(ProcedureDefinition entityModel) {
         ApiProcedureDefinition apiProcedureDef = new ApiProcedureDefinition();
         apiProcedureDef.setSid(entityModel.getId());
+        apiProcedureDef.setModified(entityModel.getModified());
         apiProcedureDef.setAssetId(entityModel.getAsset().getMobileGUID());
         apiProcedureDef.setCompleteIsolationPointInOrder(entityModel.isCompleteIsolationPointInOrder());
         apiProcedureDef.setElectronicIdentifier(entityModel.getElectronicIdentifier());
