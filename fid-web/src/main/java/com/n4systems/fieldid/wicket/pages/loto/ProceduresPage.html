@@ -7,28 +7,33 @@
 <wicket:extend>
     <div class="navHeader">
         <a wicket:id="versionsLink" class="mattButton"><wicket:message key="label.all_versions"/></a>
-        <a wicket:id="newProcedure" class="new-procedure mattButton"><wicket:message key="label.new_draft"/></a>
+        <a wicket:id="newProcedure" class="new-procedure mattButton"><wicket:message key="label.new"/></a>
     </div>
     <div class="content">
         <table class="list">
             <tbody>
                 <tr>
-                    <!--TODO DD : put into property files-->
-                    <th>Name</th>
-                    <th>Created</th>
-                    <th>Last Modified</th>
+                    <th><wicket:message key="label.name"/></th>
+                    <th><wicket:message key="label.revision_number"/></th>
+                    <th><wicket:message key="label.developed_by"/></th>
+                    <th><wicket:message key="label.created"/></th>
+                    <th><wicket:message key="label.last_modified"/></th>
+                    <th><wicket:message key="label.published_state"/></th>
                     <th>&nbsp;</th>
                 </tr>
                 <tr wicket:id="list">
                     <td wicket:id="name"/>
+                    <td wicket:id="revisionNumber"/>
+                    <td wicket:id="developedBy"/>
                     <td wicket:id="created"/>
                     <td wicket:id="lastModified"/>
                     <td wicket:id="publishedState"/>
                     <td>
                         <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+                        <a wicket:id="print"><wicket:message key="label.print"/></a>
                     </td>
                 </tr>
-            </tbody>
+     </tbody>
         </table>
     </div>
 </wicket:extend>

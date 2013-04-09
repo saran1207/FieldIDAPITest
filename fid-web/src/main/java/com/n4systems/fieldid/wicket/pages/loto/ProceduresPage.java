@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
-import com.n4systems.fieldid.service.search.ProcedureSearchService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
@@ -17,14 +18,17 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProceduresPage extends LotoPage {
 
-    private @SpringBean ProcedureSearchService procedureService;
+    private @SpringBean
+    ProcedureDefinitionService procedureDefinitionService;
 
     enum NewMode {
         COPY_EXISTING("label.copy_existing"), FROM_SCRATCH("label.start_blank");
@@ -50,16 +54,22 @@ public class ProceduresPage extends LotoPage {
             @Override
             protected void populateItem(ListItem<ProcedureDefinition> item) {
                 final ProcedureDefinition procedureDefinition = item.getModelObject();
-                item.add(new Label("name",procedureDefinition.getProcedureCode()));
-                // TODO : convert dates into friendly format.
-                item.add(new Label("created", procedureDefinition.getCreated().toString()));
-                item.add(new Label("lastModified", procedureDefinition.getModified().toString()));
-                item.add(new Label("publishedState", procedureDefinition.getPublishedState().name()));
+                item.add(new Label("name", new PropertyModel<String>(procedureDefinition, "procedureCode")));
+                item.add(new Label("revisionNumber", new PropertyModel<String>(procedureDefinition, "revisionNumber")));
+                item.add(new Label("developedBy", new PropertyModel<String>(procedureDefinition, "developedBy.displayName")));
+                item.add(new Label("created", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "created"), true, getCurrentUser().getTimeZone())));
+                item.add(new Label("lastModified", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "modified"), true, getCurrentUser().getTimeZone())));
+                item.add(new Label("publishedState", new PropertyModel<String>(procedureDefinition, "publishedState.label")));
                 item.add(new Link("edit") {
                     @Override public void onClick() {
                         editProcedureDefinition(procedureDefinition);
                     }
                 }.setVisible(procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)));
+                item.add(new Link("print") {
+                    @Override public void onClick() {
+
+                    }
+                }.setVisible(!procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)));
             }
         });
     }
@@ -106,7 +116,7 @@ public class ProceduresPage extends LotoPage {
 
         @Override
         protected List<ProcedureDefinition> load() {
-            return procedureService.getProceduresForAsset(assetModel.getObject());
+            return procedureDefinitionService.getActiveProceduresForAsset(assetModel.getObject());
         }
     }
 

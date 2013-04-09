@@ -7,7 +7,9 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.util.persistence.MaxSelect;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereParameter;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ProcedureDefinitionService extends FieldIdPersistenceService {
@@ -49,6 +51,22 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         for (IsolationPoint isolationPoint:isolationPoints) {
             persistenceService.saveOrUpdate(isolationPoint);
         }
+    }
+
+    public List<ProcedureDefinition> getActiveProceduresForAsset(Asset asset) {
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        query.addSimpleWhere("asset", asset);
+        query.addWhere(WhereParameter.Comparator.IN, "publishedState", "publishedState", Arrays.asList(PublishedState.ACTIVE_STATES));
+
+        return persistenceService.findAll(query);
+    }
+
+    public List<ProcedureDefinition> getPreviouslyPublishedProceduresForAsset(Asset asset) {
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        query.addSimpleWhere("asset", asset);
+        query.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
+
+        return persistenceService.findAll(query);
     }
 
 }

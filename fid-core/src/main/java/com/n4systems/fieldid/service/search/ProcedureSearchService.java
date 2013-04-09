@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.service.search;
 
 import com.google.common.base.Preconditions;
-import com.n4systems.model.Asset;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.Procedure;
@@ -79,11 +78,5 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
         to.setLockDefinition(from.getLockDefinition());
 
         return to;
-    }
-
-    public List<ProcedureDefinition> getProceduresForAsset(Asset asset) {
-        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
-        query.addSimpleWhere("asset", asset);
-        return persistenceService.findAll(query);
     }
 }
