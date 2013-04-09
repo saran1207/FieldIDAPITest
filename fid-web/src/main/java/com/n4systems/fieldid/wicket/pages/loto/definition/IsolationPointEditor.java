@@ -72,6 +72,7 @@ public class IsolationPointEditor extends Panel {
                 isolationDevicePicker.setVisible(true);
                 this.setVisible(false);
                 target.add(isolationDevicePicker,this);
+
             }
         }.add(new Label("description", getDeviceDescriptionModel())));
 
@@ -86,7 +87,7 @@ public class IsolationPointEditor extends Panel {
         isolationDevicePicker.setVisible(false);
 
         final IModel<IsolationDeviceDescription> lockDescriptionModel = Model.of(new IsolationDeviceDescription());
-        form.add(isolationLockPicker = new DeviceLockPicker("lockPicker", lockDescriptionModel, true) {
+        form.add(isolationLockPicker = new DeviceLockPicker("lockPicker", lockDescriptionModel, false) {
             @Override
             public void onPickerUpdated() {
                 getIsolationPointModel().getObject().setDeviceDefinition((IsolationDeviceDescription) getDefaultModelObject());

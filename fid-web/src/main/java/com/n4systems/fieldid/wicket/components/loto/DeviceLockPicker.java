@@ -8,6 +8,8 @@ import com.n4systems.model.procedure.IsolationDeviceDescription;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -24,10 +26,10 @@ public class DeviceLockPicker extends Panel {
     private IModel<AssetType> selectedDeviceType;
 
     private List<InfoFieldBean> attributeList = new ArrayList<InfoFieldBean>();
-
-    private DeviceAttributePanel deviceAttributePanel;
-
     private IModel<List<InfoOptionBean>> optionList;
+
+    private TextField<String> freeformDescription;
+    private DeviceAttributePanel deviceAttributePanel;
 
     private boolean isDevicePicker;
 
@@ -41,13 +43,26 @@ public class DeviceLockPicker extends Panel {
             deviceDescriptionModel.setObject(new IsolationDeviceDescription());
         }
 
-        this.selectedDeviceType = new PropertyModel<AssetType>(deviceDescriptionModel.getObject(), "assetType");
-        this.optionList = new PropertyModel<List<InfoOptionBean>>(deviceDescriptionModel.getObject(), "attributeValues");
+        this.selectedDeviceType = new PropertyModel<AssetType>(deviceDescriptionModel, "assetType");
+        this.optionList = new PropertyModel<List<InfoOptionBean>>(deviceDescriptionModel, "attributeValues");
         this.isDevicePicker = isDevicePicker;
         this.attributeList.add(new InfoFieldBean());
 
-        FidDropDownChoice assetTypes;
-        add(assetTypes = new FidDropDownChoice<AssetType>("assetTypes", selectedDeviceType, new DeviceListModel(), new ListableChoiceRenderer<AssetType>()) {
+        final WebMarkupContainer freeformContainer = new WebMarkupContainer("freeformContainer");
+        final WebMarkupContainer pickerContainer = new WebMarkupContainer("pickerContainer");
+
+        freeformContainer.add(freeformDescription = new TextField<String>("freeformDescription", new PropertyModel<String>(deviceDescriptionModel, "freeformDescription")));
+        freeformContainer.add(new AjaxLink<Void>("specifyLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                freeformContainer.setVisible(false);
+                pickerContainer.setVisible(true);
+                freeformDescription.setDefaultModelObject(null);
+                target.add(DeviceLockPicker.this);
+            }
+        });
+
+        pickerContainer.add(new FidDropDownChoice<AssetType>("assetTypes", selectedDeviceType, new DeviceListModel(), new ListableChoiceRenderer<AssetType>()) {
             @Override
             protected boolean wantOnSelectionChangedNotifications() {
                 return true;
@@ -61,22 +76,32 @@ public class DeviceLockPicker extends Panel {
                 resetAttributeList();
                 deviceAttributePanel.resetAttributeAndOptions();
             }
-        });
-        assetTypes.setNullValid(true);
+        }.setNullValid(true));
 
-        add(new AjaxLink<Void>("refineLink") {
+        pickerContainer.add(new AjaxLink<Void>("refineLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if(selectedDeviceType.getObject() != null) {
+                if (selectedDeviceType.getObject() != null) {
                     deviceAttributePanel.setVisible(true);
-                }else {
+                } else {
                     deviceAttributePanel.setVisible(false);
                 }
                 target.add(deviceAttributePanel);
             }
         });
 
-        add(deviceAttributePanel = new DeviceAttributePanel("attributeSelector", selectedDeviceType, new PropertyModel<List<InfoOptionBean>>(this, "attributeList")){
+        pickerContainer.add(new AjaxLink<Void>("cancelLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                freeformContainer.setVisible(true);
+                pickerContainer.setVisible(false);
+                selectedDeviceType.setObject(null);
+                resetAttributeList();
+                target.add(DeviceLockPicker.this);
+            }
+        });
+
+        pickerContainer.add(deviceAttributePanel = new DeviceAttributePanel("attributeSelector", selectedDeviceType, new PropertyModel<List<InfoOptionBean>>(this, "attributeList")) {
             @Override
             public void onAddAttribute(AjaxRequestTarget target) {
                 attributeList.add(new InfoFieldBean());
@@ -107,6 +132,11 @@ public class DeviceLockPicker extends Panel {
         deviceAttributePanel.setOutputMarkupPlaceholderTag(true);
         deviceAttributePanel.setVisible(false);
 
+        pickerContainer.setVisible(false);
+
+        add(freeformContainer);
+        add(pickerContainer);
+        setOutputMarkupId(true);
     }
 
     private void updateOptions(List<IModel<List<InfoOptionBean>>> selectedOptions) {

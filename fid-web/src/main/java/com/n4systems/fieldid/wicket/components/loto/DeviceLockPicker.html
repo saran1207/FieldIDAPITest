@@ -5,10 +5,16 @@
       lang="en">
 
 <wicket:panel>
-    <select wicket:id="assetTypes"/>
-    <a wicket:id="refineLink"><wicket:message key="label.refine_further"/></a>
-    <div wicket:id="attributeSelector"/>
-
+    <div wicket:id="freeformContainer">
+        <input wicket:id="freeformDescription"/>
+        <a wicket:id="specifyLink"><wicket:message key="label.specify"/></a>
+    </div>
+    <div wicket:id="pickerContainer">
+        <select wicket:id="assetTypes"/>
+        <a wicket:id="refineLink"><wicket:message key="label.refine_further"/></a>
+        <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        <div wicket:id="attributeSelector"/>
+    </div>
 </wicket:panel>
 
 </html>
