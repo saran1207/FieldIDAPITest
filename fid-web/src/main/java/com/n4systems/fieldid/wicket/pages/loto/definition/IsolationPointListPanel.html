@@ -4,34 +4,23 @@
 
     <div wicket:id="images"/>
 
-    <div class="isolation-point-table">
-        <table>
-            <tr class="headings">
-                <th/>
-                <th class="identifier"><wicket:message key="label.identifier"/></th>
-                <th class="source"><wicket:message key="label.source"/></th>
-                <th class="device"><wicket:message key="label.device"/></th>
-                <th class="location"><wicket:message key="label.location"/></th>
-                <th class="method"><wicket:message key="label.method"/></th>
-                <th class="check"><wicket:message key="label.check"/></th>
-                <th/>
-            </tr>
-            <tr wicket:id="list">
-                <td><a wicket:id ="delete"><img src="/fieldid/images/delete.gif"/></a></td>
-                <td class="thumbnail"><img src="/fieldid/images/add-photo-slate.png" height="28" width="28"></td>
-                <td wicket:id="id" class="identifier"></td>
-                <td wicket:id="source" class="source"></td>
-                <td wicket:id="device" class="device"></td>
-                <td wicket:id="location" class="location"></td>
-                <td wicket:id="method" class="method"></td>
-                <td wicket:id="check" class="check"></td>
-                <td><img wicket:id="image" class="image"/></td>
-                <td class="actions">
+    <!-- CHRISTINA : changed from table to ul/li 'cause i need a container around elements. ("sortableList" thingy) can prolly change to div/span etc... if need be. -->
+    <ul wicket:id="sortableList" class="isolation-point-table">
+        <li wicket:id="list">
+                <a wicket:id ="delete"><img src="/fieldid/images/delete.gif"/></a>
+                <img src="/fieldid/images/add-photo-slate.png" height="28" width="28"/>
+                <span wicket:id="id" class="identifier"/>
+                <span wicket:id="source" class="source"/>
+                <span wicket:id="device" class="device"/>
+                <span wicket:id="location" class="location"/>
+                <span wicket:id="method" class="method"/>
+                <span wicket:id="check" class="check"/>
+                <img wicket:id="image" class="image"/>
+                <span class="actions">
                     <a wicket:id="edit"><wicket:message key="label.edit"/></a>
-                </td>
-                <td class="reorder"><img src="/fieldid/images/icon-reorder.gif"></td>
-            </tr>
-        </table>
-    </div>
+                </span>
+                <span class="reorder"><img src="/fieldid/images/icon-reorder.gif"/></span>
+        </li>
+    </ul>
 
 </wicket:panel>

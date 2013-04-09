@@ -4,8 +4,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProceduresPage;
+import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.Component;
@@ -22,6 +24,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.visit.IVisit;
@@ -71,9 +74,8 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
         // this business requirement may change, but for now only edit DRAFT. even WAITING_FOR_AUTHORIZATION shouldn't be done.
         Preconditions.checkState(model.getObject().getPublishedState().equals(PublishedState.DRAFT), "you are only allowed to edit DRAFT copies!");
         this.model = model;
-        add(assetNameLabel = new Label("assetName", Model.of("Big Machine")));
-        add(pageTileLabel = new Label("pageTitle",Model.of("Author Procedure")));
-        add(isolationPointLabel = new Label("isolationPoint",Model.of(": Isolation Point E-1")));
+        add(assetNameLabel = new Label("assetName", new PropertyModel(model,"asset.displayName")));
+        add(pageTileLabel = new Label("pageTitle",new FIDLabelModel("label.author_procedure")));
 
         add(navigation = new Navigation("navigation"));
         add(form = new ProcedureDefinitionForm("form", model));
@@ -143,6 +145,11 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
                 @Override protected void doContinue(AjaxRequestTarget target) {
                     currentSection = ProcedureDefinitionSection.Publish;
                     updateSection(target);
+                }
+
+                @Override
+                protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
+                    super.doAdd(target, sourceType);
                 }
             }.setVisible(false));
 

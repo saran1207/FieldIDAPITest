@@ -58,6 +58,13 @@ public class ContentPanel extends Panel {
                 model.getObject().getIsolationPoints().remove(isolationPoint);
                 target.add(list);
             }
+
+            @Override protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint isolationPoint, int index) {
+                super.reorderIsolationPoint(target, isolationPoint, index);
+                List<IsolationPoint> isolationPoints = model.getObject().getIsolationPoints();
+                isolationPoints.remove(isolationPoint);
+                isolationPoints.add(index,isolationPoint);
+            }
         });
 
         add(editor = new IsolationPointEditor("isolationPointEditor") {
@@ -106,6 +113,7 @@ public class ContentPanel extends Panel {
     protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
         editor.editNew(createIsolationPoint(sourceType));
         editor.openEditor(target);
+
     }
 
     private IsolationPoint createIsolationPoint(IsolationPointSourceType sourceType) {
