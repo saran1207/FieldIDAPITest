@@ -6,10 +6,10 @@
 	position: relative;  
 }
 .note {
-	padding: 6px 8px;
+	padding: 2px;
 	/*background-color: #fff0a0;*/
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
 	-webkit-box-shadow: 2px 2px 10px -3px #888;
 	box-shadow: 2px 2px 10px -3px #888;
 	z-index: 10;
@@ -17,11 +17,11 @@
 	position: absolute;
 }
 	.note:before {
-		content: ' ';
+		/*content: ' ';*/
 		position: absolute;
-		width: 0;
+		/*width: 0;
 		height: 0;
-		border: 15px solid transparent;	
+		border: 15px solid transparent;	*/
 	}
 		/* bottom left */
 		.note.bottom-left:before {
@@ -38,18 +38,20 @@
 			border-width: 15px 0 0 20px;
 		}	
 		/* top left */
-		.note.top-left:before {
-			left: -15px;
-			top: 0;
-			border-right-color: #fff0a0;
-			border-width: 0 20px 15px 0;
+		.note.arrow-left:before {
+			content: url('/fieldid/images/loto/arrow-left.png');
+			left: -28px;
+			top: 4px;
+			/*border-right-color: #fff0a0;
+			border-width: 0 20px 15px 0;*/
 		}
 		/* top right */
-		.note.top-right:before {
-			right: -15px;
-			top: 0;
-			border-left-color: #fff0a0;
-			border-width: 0 0 15px 20px;
+		.note.arrow-right:before {
+			content: url('/fieldid/images/loto/arrow-right.png');
+			right: -28px;
+			top: 4px;
+			/*border-left-color: #fff0a0;
+			border-width: 0 0 15px 20px;*/
 		}
 
 
@@ -139,22 +141,23 @@
 
 /* positioning for notes - left & right values can't be less
 than 15px or the point will be cropped. */
-.note.bottom-left {
+.note.arrow-left {
+	top: 0;
+	left: 28px;
+}
+.note.arrow-right {
+	bottom: 0;
+	right: 28px;
+}
+/*.note.bottom-left {
 	bottom: 0;
 	left: 15px;
 }
 .note.bottom-right {
 	bottom: 0;
 	right: 15px;
-}
-.note.top-left {
-	top: 0;
-	left: 15px;
-}
-.note.top-right {
-	top: 0;
-	right: 15px;
-}
+}*/
+
 
 
 
@@ -251,87 +254,3 @@ than 15px or the point will be cropped. */
 	 padding:3px;
  }
 */
-
- /* WEST */
-
-.note.west  {
-	margin-top:-12px;
-	margin-left:9px;
-}
-
- .note.west:after, .note.west:before {
-	 border-left: 10px solid transparent;
-	 border-bottom: 10px solid #fff0a0;
-	 bottom: 7px;
-	 content: '';
-	 position: absolute;
-	 left:-10px;
- }
- .note.west:before {
-	 border-bottom: 10px solid hsla(0,0%,0%,.1);
-	 bottom: 3px;
-	 left:-10px;
- }
-
- /* EAST*/
-
- .note.east {
-	 margin-top:2px;
-	 margin-left:-52px;
- }
- .note.east:after, .note.east:before {
-	 border-right: 10px solid transparent;
-	 border-top: 10px solid #fff0a0;
-	 bottom: 10px;
-	 content: '';
-	 position: absolute;
-	 right:-9px;
- }
-.note.east:before {
-	border-top: 10px solid hsla(0,0%,0%,.1);
-	bottom: 6px;
-	right:-9px;
-}
-
-
-/* SOUTH*/
-
-.note.south {
-	margin-top:-28px;
-	margin-left:-19px;
-}
-.note.south:after, .note.south:before {
-	border-bottom: 10px solid transparent;
-	border-right: 10px solid #fff0a0;
-	bottom: -9px;
-	content: '';
-	position: absolute;
-	left:29px;
-}
-
-.note.south:before {
-	border-right: 10px solid hsla(0,0%,0%,.1);
-	bottom: -13px;
-	left:32px;
-}
-
-
- /* NORTH*/
-
- .note.north {
-	 margin-top:20px;
-	 margin-left:-19px;
- }
- .note.north:after, .note.north:before {
-	 border-top: 10px solid transparent;
-	 border-right: 10px solid #fff0a0;
-	 top: -10px;
-	 content: '';
-	 position: absolute;
-	 left:28px;
- }
- .note.north:before {
-	 border-right: 10px solid hsla(0,0%,0%,.1);
-	 top: -10px;
-	 left:31px;
- }
