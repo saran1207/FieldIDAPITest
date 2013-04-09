@@ -15,6 +15,7 @@ import org.hibernate.annotations.IndexColumn;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "procedures")
@@ -62,6 +63,9 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     @IndexColumn(name="orderIdx")
     @JoinTable(name="procedures_unlock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
     private List<IsolationPointResult> unlockResults;
+
+    @Column(name="mobileguid")
+    private String mobileGuid;
 
     public List<IsolationPointResult> getLockResults() {
         return lockResults;
@@ -165,6 +169,13 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
         this.unlockResults = unlockResults;
     }
 
+    public String getMobileGuid() {
+        return mobileGuid;
+    }
+
+    public void setMobileGuid(String mobileGuid) {
+        this.mobileGuid = mobileGuid;
+    }
 
     @Transient
     public Assignable getAssignedUserOrGroup() {
@@ -179,6 +190,25 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
         } else if (assignee == null) {
             this.assignee = null;
             this.assignedGroup = null;
+        }
+    }
+
+    // This check may be better refactored into a listener in persistence.xml - NC
+    @Override
+    protected void onCreate() {
+        super.onCreate();
+        ensureMobileGuidIsSet();
+    }
+
+    @Override
+    protected void onUpdate() {
+        super.onUpdate();
+        ensureMobileGuidIsSet();
+    }
+
+    private void ensureMobileGuidIsSet() {
+        if (mobileGuid == null) {
+            mobileGuid = UUID.randomUUID().toString();
         }
     }
 }

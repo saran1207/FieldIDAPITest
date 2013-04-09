@@ -73,7 +73,8 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 	public AbstractEvent(Tenant tenant) {
 		super(tenant);
 	}
-	
+
+    // This check may be better refactored into a listener in persistence.xml - NC
 	@Override
 	protected void onCreate() {
 		super.onCreate();

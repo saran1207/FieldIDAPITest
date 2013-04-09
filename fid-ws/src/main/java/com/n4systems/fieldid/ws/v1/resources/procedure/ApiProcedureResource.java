@@ -64,7 +64,6 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         procedure.setUnlockResults(convertedResults);
         procedure.setCompletedDate(apiProcedure.getCompletedDate());
         procedure.setWorkflowState(ProcedureWorkflowState.UNLOCKED);
-        convertGpsLocation(apiProcedure, procedure);
 
         persistenceService.update(procedure);
     }
@@ -115,7 +114,8 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
     private ApiProcedure convert(Procedure procedure) {
         ApiProcedure convertedProcedure = new ApiProcedure();
-        convertedProcedure.setSid(procedure.getId());
+        convertedProcedure.setSid(procedure.getMobileGuid());
+        convertedProcedure.setAssetId(procedure.getAsset().getMobileGUID());
         convertedProcedure.setActive(procedure.isActive());
         convertedProcedure.setModified(procedure.getModified());
         convertedProcedure.setAssigneeUserGroupId(procedure.getAssignedGroup() == null ? null : procedure.getAssignedGroup().getId());
